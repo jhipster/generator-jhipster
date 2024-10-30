@@ -26,7 +26,7 @@ export class FilterOption implements IFilterOption {
   }
 
   nameAsQueryParam(): string {
-    return 'filter[' + this.name + ']';
+    return `filter[${this.name}]`;
   }
 
   isSet(): boolean {
@@ -67,7 +67,7 @@ export class FilterOption implements IFilterOption {
 }
 
 export class FilterOptions implements IFilterOptions {
-  readonly filterChanges: Subject<FilterOption[]> = new Subject();
+  readonly filterChanges = new Subject<FilterOption[]>();
   private _filterOptions: FilterOption[];
 
   constructor(filterOptions: FilterOption[] = []) {
@@ -146,8 +146,7 @@ export class FilterOptions implements IFilterOptions {
   }
 
   protected getFilterOptionByName(name: string, add: true): FilterOption;
-  protected getFilterOptionByName(name: string, add: false): FilterOption | null;
-  protected getFilterOptionByName(name: string): FilterOption | null;
+  protected getFilterOptionByName(name: string, add?: false): FilterOption | null;
   protected getFilterOptionByName(name: string, add = false): FilterOption | null {
     const addOption = (option: FilterOption): FilterOption => {
       this._filterOptions.push(option);

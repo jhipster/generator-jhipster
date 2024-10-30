@@ -22,10 +22,7 @@ import dayjs from 'dayjs/esm';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { provideRouter } from '@angular/router';
-import { registerLocaleData } from '@angular/common';
 import locale from '@angular/common/locales/<%= angularLocaleId %>';
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import dayjs from 'dayjs/esm';
 import appRoutes from './app.routes';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 
@@ -49,12 +46,12 @@ import { TrackerService } from './core/tracker/tracker.service';
   ],
 })
 export default class AppComponent {
-  private applicationConfigService = inject(ApplicationConfigService);
-  private iconLibrary = inject(FaIconLibrary);
+  private readonly applicationConfigService = inject(ApplicationConfigService);
+  private readonly iconLibrary = inject(FaIconLibrary);
 <%_ if (communicationSpringWebsocket) { _%>
-  private trackerService = inject(TrackerService);
+  private readonly trackerService = inject(TrackerService);
 <%_ } _%>
-  private dpConfig = inject(NgbDatepickerConfig);
+  private readonly dpConfig = inject(NgbDatepickerConfig);
 
   constructor() {
 <%_ if (communicationSpringWebsocket) { _%>

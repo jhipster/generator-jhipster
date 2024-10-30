@@ -1,19 +1,9 @@
-import type { ConfigSpec, JHipsterConfigs, JHipsterOption } from '../../generators/base/api.js';
+import type { JHipsterConfigs } from '../../lib/command/index.js';
 import type CoreGenerator from '../../generators/base-core/index.js';
-import { upperFirstCamelCase } from '../../generators/base/support/string.js';
+import { upperFirstCamelCase } from '../utils/string.js';
 
-export const convertConfigToOption = (name: string, config?: ConfigSpec): JHipsterOption | undefined => {
-  if (!config?.cli?.type) return undefined;
-  const choices = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value)) as any;
-  return {
-    name,
-    description: config.description,
-    choices,
-    scope: config.scope ?? 'storage',
-    ...config.cli,
-  };
-};
-
+export function loadConfig(this: CoreGenerator, configsDef: JHipsterConfigs | undefined, data: { application: any });
+export function loadConfig(configsDef: JHipsterConfigs | undefined, data: { application: any; config?: any });
 export function loadConfig(
   this: CoreGenerator | void,
   configsDef: JHipsterConfigs | undefined,
@@ -25,19 +15,20 @@ export function loadConfig(
       if (value === undefined || value === null) {
         let source = config;
         if (!source) {
-          if (def.scope === 'generator') {
-            // eslint-disable-next-line @typescript-eslint/no-this-alias
-            source = this;
+          if (def.scope === 'context') {
+            source = (this as CoreGenerator).context!;
           } else if (def.scope === 'blueprint') {
             source = (this as any).blueprintStorage.getAll();
-          } else {
-            source = (this as any).jhipsterConfigWithDefaults;
+          } else if (def.scope === 'storage' || def.scope === undefined) {
+            source = (this as CoreGenerator).jhipsterConfigWithDefaults;
           }
         }
 
-        value = application[name] = source[name] ?? undefined;
-        if (value === undefined && def.default) {
-          application[name] = typeof def.default === 'function' ? def.default.call(this, source) : def.default;
+        if (source) {
+          value = application[name] = source[name] ?? undefined;
+          if (value === undefined && def.default !== undefined) {
+            application[name] = typeof def.default === 'function' ? def.default.call(this, source) : def.default;
+          }
         }
       }
     }
@@ -47,7 +38,7 @@ export function loadConfig(
 export const loadDerivedConfig = (configsDef: JHipsterConfigs | undefined, { application }) => {
   if (configsDef) {
     for (const [name, def] of Object.entries(configsDef)) {
-      if (def.choices) {
+      if ((def.scope === undefined || ['storage', 'blueprint', 'context'].includes(def.scope)) && def.choices) {
         const configVal = application[name];
         for (const choice of def.choices) {
           const choiceVal = typeof choice === 'string' ? choice : choice.value;

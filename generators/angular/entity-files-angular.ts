@@ -16,11 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { GeneratorDefinition } from '../base-application/generator.js';
 import { clientApplicationTemplatesBlock } from '../client/support/files.js';
-import CoreGenerator from '../base-core/index.js';
-import { WriteFileSection } from '../base/api.js';
-import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import type { WriteFileSection } from '../base/api.js';
+import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/index.js';
 
 const entityModelFiles = clientApplicationTemplatesBlock({
   templates: ['entities/_entityFolder_/_entityFile_.model.ts', 'entities/_entityFolder_/_entityFile_.test-samples.ts'],
@@ -95,10 +93,7 @@ export const userManagementFiles: WriteFileSection = {
   ],
 };
 
-export const writeEntitiesFiles = asWritingEntitiesTask(async function (
-  this: CoreGenerator,
-  { control, application, entities }: GeneratorDefinition['writingEntitiesTaskParam'],
-) {
+export const writeEntitiesFiles = asWritingEntitiesTask(async function ({ control, application, entities }) {
   for (const entity of (control.filterEntitiesAndPropertiesForClient ?? (entities => entities))(entities)) {
     if (entity.builtInUser) {
       await this.writeFiles({
@@ -111,7 +106,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask(async function (
         },
       });
 
-      if (application.generateUserManagement && application.userManagement.skipClient) {
+      if (application.generateUserManagement && application.userManagement!.skipClient) {
         await this.writeFiles({
           sections: userManagementFiles,
           context: {
@@ -132,18 +127,15 @@ export const writeEntitiesFiles = asWritingEntitiesTask(async function (
   }
 });
 
-export async function postWriteEntitiesFiles(this: CoreGenerator, taskParam: GeneratorDefinition['postWritingEntitiesTaskParam']) {
-  const { control, source, application } = taskParam;
+export const postWriteEntitiesFiles = asPostWritingEntitiesTask(async function (this, taskParam) {
+  const { control, source } = taskParam;
   const entities = (control.filterEntitiesForClient ?? (entities => entities))(taskParam.entities).filter(
     entity => !entity.builtInUser && !entity.embedded && !entity.entityClientModelOnly,
   );
-  source.addEntitiesToClient({ application, entities });
-}
+  source.addEntitiesToClient({ ...taskParam, entities });
+});
 
-export function cleanupEntitiesFiles(
-  this: CoreGenerator,
-  { control, application, entities }: GeneratorDefinition['writingEntitiesTaskParam'],
-) {
+export const cleanupEntitiesFiles = asWritingEntitiesTask(function ({ control, application, entities }) {
   for (const entity of (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtIn)) {
     const { entityFolderName, entityFileName, name: entityName } = entity;
     if (this.isJhipsterVersionLessThan('5.0.0')) {
@@ -189,4 +181,4 @@ export function cleanupEntitiesFiles(
       this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/route/${entityFileName}-routing.module.ts`);
     }
   }
-}
+});

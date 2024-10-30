@@ -28,11 +28,11 @@ export default (javaCompatibleVersions: string[]): ValidationResult & { javaVers
   try {
     const { exitCode, stderr } = execaCommandSync('java -version', { stdio: 'pipe' });
     if (exitCode === 0 && stderr) {
-      const matchResult = stderr.match(/(?:java|openjdk)(?: version)? "?(.*)"? /s);
+      const matchResult = /(?:java|openjdk)(?: version)? "?(.*)"? /s.exec(stderr);
       if (matchResult && matchResult.length > 0) {
         const javaVersion = matchResult[1];
         const debug = `Detected java version ${javaVersion}`;
-        if (javaCompatibleVersions && !javaVersion.match(new RegExp(`(${javaCompatibleVersions.map(ver => `^${ver}`).join('|')})`))) {
+        if (javaCompatibleVersions && !new RegExp(`(${javaCompatibleVersions.map(ver => `^${ver}`).join('|')})`).exec(javaVersion)) {
           const [latest, ...others] = javaCompatibleVersions.concat().reverse();
           const humanizedVersions = `${others.reverse().join(', ')} or ${latest}`;
           const warning = `Java ${humanizedVersions} are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`;

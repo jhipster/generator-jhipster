@@ -1,6 +1,6 @@
 import { camelCase, kebabCase, startCase, upperFirst } from 'lodash-es';
 import { NODE_VERSION } from '../../generator-constants.js';
-import { applicationTypes, authenticationTypes, databaseTypes, testFrameworkTypes } from '../../../jdl/index.js';
+import { applicationTypes, authenticationTypes, databaseTypes, testFrameworkTypes } from '../../../lib/jhipster/index.js';
 import { getHipster, mutateData, pickFields, upperFirstCamelCase } from '../../base/support/index.js';
 import { getDBTypeFromDBValue } from '../../server/support/index.js';
 import detectLanguage from '../../languages/support/detect-language.js';

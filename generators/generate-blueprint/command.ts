@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_INIT } from '../generator-list.js';
 import {
   ADDITIONAL_SUB_GENERATORS,
@@ -31,8 +31,36 @@ import {
   SUB_GENERATORS,
 } from './constants.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   configs: {
+    caret: {
+      cli: {
+        description: 'Use caret in package.json engines',
+        type: Boolean,
+      },
+      scope: 'storage',
+    },
+    recreatePackageLock: {
+      description: 'Recreate package lock',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'generator',
+    },
+    skipWorkflows: {
+      description: 'Skip github workflows',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'generator',
+    },
+    ignoreExistingGenerators: {
+      description: 'Ignore existing generators',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'generator',
+    },
     githubRepository: {
       cli: {
         description: 'Github Repository',
@@ -99,6 +127,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [GENERATOR_INIT],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

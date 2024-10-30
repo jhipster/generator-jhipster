@@ -19,6 +19,8 @@
 
 name: Blueprint Generator
 on: [workflow_call]
+env:
+  FORCE_COLOR: 2
 jobs:
   check-generator-generate-blueprint:
     runs-on: ubuntu-20.04

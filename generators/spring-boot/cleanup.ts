@@ -18,14 +18,14 @@
  */
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 
-import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import { asWritingTask } from '../base-application/support/index.js';
 import cleanupOauth2 from './cleanup-oauth2.js';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default asWritingTask(function cleanupTask(this, taskParam) {
+export default asWritingTask(async function cleanupTask(this, taskParam) {
   const { application, control } = taskParam;
   if (application.authenticationTypeOauth2) {
     cleanupOauth2.call(this, taskParam);
@@ -209,7 +209,7 @@ export default asWritingTask(function cleanupTask(this, taskParam) {
     this.removeFile(`${application.javaPackageSrcDir}config/LocaleConfiguration.java`);
   }
 
-  control.cleanupFiles({
+  await control.cleanupFiles({
     '8.6.1': [[application.authenticationTypeOauth2!, `${application.javaPackageSrcDir}security/oauth2/JwtGrantedAuthorityConverter.java`]],
   });
 });

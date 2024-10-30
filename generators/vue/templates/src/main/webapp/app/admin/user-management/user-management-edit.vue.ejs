@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-content-center">
     <div class="col-8">
-      <form name="editForm" novalidate v-on:submit.prevent="save()" v-if="userAccount">
+      <form name="editForm" novalidate @submit.prevent="save()" v-if="userAccount">
         <h2 id="myUserLabel" v-text="t$('userManagement.home.createOrEditLabel')">Create or edit a User</h2>
         <div>
           <div class="form-group" :hidden="!userAccount.id">
@@ -44,7 +44,7 @@
               class="form-control"
               id="firstName"
               name="firstName"
-              v-bind:placeholder="t$('settings.form[\'firstname.placeholder\']')"
+              :placeholder="t$('settings.form[\'firstname.placeholder\']')"
               :class="{ valid: !v$.userAccount.firstName.$invalid, invalid: v$.userAccount.firstName.$invalid }"
               v-model="v$.userAccount.firstName.$model"
             />
@@ -65,7 +65,7 @@
               class="form-control"
               id="lastName"
               name="lastName"
-              v-bind:placeholder="t$('settings.form[\'lastname.placeholder\']')"
+              :placeholder="t$('settings.form[\'lastname.placeholder\']')"
               :class="{ valid: !v$.userAccount.lastName.$invalid, invalid: v$.userAccount.lastName.$invalid }"
               v-model="v$.userAccount.lastName.$model"
             />
@@ -86,7 +86,7 @@
               class="form-control"
               id="email"
               name="email"
-              v-bind:placeholder="t$('global.form[\'email.placeholder\']')"
+              :placeholder="t$('global.form[\'email.placeholder\']')"
               :class="{ valid: !v$.userAccount.email.$invalid, invalid: v$.userAccount.email.$invalid }"
               v-model="v$.userAccount.email.$model"
               email
@@ -149,7 +149,7 @@
           </div>
         </div>
         <div>
-          <button type="button" class="btn btn-secondary" v-on:click="previousState()">
+          <button type="button" class="btn btn-secondary" @click="previousState()">
             <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.cancel')">Cancel</span>
           </button>
           <button type="submit" :disabled="v$.userAccount.$invalid || isSaving" class="btn btn-primary">

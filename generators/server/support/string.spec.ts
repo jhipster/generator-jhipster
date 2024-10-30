@@ -1,4 +1,4 @@
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { hibernateSnakeCase } from './string.js';
 
 describe('generator - server - support - string', () => {

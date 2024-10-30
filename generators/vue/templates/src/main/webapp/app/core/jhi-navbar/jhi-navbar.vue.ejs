@@ -11,8 +11,9 @@
       data-toggle="collapse"
       target="header-tabs"
       aria-expanded="false"
-      aria-label="Toggle navigation">
-        <font-awesome-icon icon="bars" />
+      aria-label="Toggle navigation"
+    >
+      <font-awesome-icon icon="bars" />
     </b-navbar-toggle>
 
     <b-collapse is-nav id="header-tabs">
@@ -106,9 +107,13 @@
             <font-awesome-icon icon="flag" />
             <span class="no-bold" v-text="t$('global.menu.language')">Language</span>
           </template>
-          <b-dropdown-item v-for="(value, key) in languages" :key="`lang-${key}`" v-on:click="changeLanguage(key);"
-              :class="{ active: isActiveLanguage(key)}">
-            {{value.name}}
+          <b-dropdown-item
+            v-for="(value, key) in languages"
+            :key="`lang-${key}`"
+            @click="changeLanguage(key)"
+            :class="{ active: isActiveLanguage(key) }"
+          >
+            {{ value.name }}
           </b-dropdown-item>
         </b-nav-item-dropdown>
 <%_ } _%>
@@ -116,16 +121,15 @@
           right
           href="javascript:void(0);"
           id="account-menu"
-          :class="{'router-link-active': subIsActive('/account')}"
+          :class="{ 'router-link-active': subIsActive('/account') }"
           active-class="active"
           class="pointer"
-          data-cy="accountMenu">
+          data-cy="accountMenu"
+        >
           <template #button-content>
             <span class="navbar-dropdown-menu">
               <font-awesome-icon icon="user" />
-              <span class="no-bold" v-text="t$('global.menu.account.main')">
-                Account
-              </span>
+              <span class="no-bold" v-text="t$('global.menu.account.main')"> Account </span>
             </span>
           </template>
 <%_ if (generateUserManagement) { _%>
@@ -144,11 +148,11 @@
             <span v-text="t$('global.menu.account.sessions')">Sessions</span>
           </b-dropdown-item>
 <%_ } _%>
-          <b-dropdown-item data-cy="logout" v-if="authenticated"  v-on:click="logout()" id="logout" active-class="active">
+          <b-dropdown-item data-cy="logout" v-if="authenticated"  @click="logout()" id="logout" active-class="active">
             <font-awesome-icon icon="sign-out-alt" />
             <span v-text="t$('global.menu.account.logout')">Sign out</span>
           </b-dropdown-item>
-          <b-dropdown-item data-cy="login" v-if="!authenticated"  v-on:click="openLogin()" id="login" active-class="active">
+          <b-dropdown-item data-cy="login" v-if="!authenticated" @click="openLogin()" id="login" active-class="active">
             <font-awesome-icon icon="sign-in-alt" />
             <span v-text="t$('global.menu.account.login')">Sign in</span>
           </b-dropdown-item>
@@ -164,8 +168,7 @@
   </b-navbar>
 </template>
 
-<script lang="ts" src="./jhi-navbar.component.ts">
-</script>
+<script lang="ts" src="./jhi-navbar.component.ts"></script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

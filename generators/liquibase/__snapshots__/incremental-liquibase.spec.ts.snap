@@ -4,16 +4,16 @@ exports[`generator - app - --incremental-changelog entities with/without byte fi
 {
   "src/main/resources/config/liquibase/fake-data/20200101000100_entity_smarty.csv": {
     "contents": "id;name;price;description;picture;picture_content_type;specification;specification_content_type;category;inventory
-1;so;27689.83;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Desktop;28870
-2;night;13757.31;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Desktop;27257
-3;left as;20119.26;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Accessory;4484
-4;who pressu;13543.06;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Accessory;12192
-5;justify lo;31004.02;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Accessory;12654
-6;incidental;10025.34;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Laptop;6701
-7;judgementa;987.58;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Accessory;19506
-8;pish;16423.03;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Desktop;30984
-9;whine conc;0.94;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Tablet;20142
-10;meager hit;3205.08;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Tablet;31836
+1;haul;22475.22;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Phone;13021
+2;distorted ;3290.96;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Tablet;31772
+3;loftily op;21967.32;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Phone;31546
+4;whose befo;864.8;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Tablet;15362
+5;mad vista;14038.24;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Phone;51
+6;sustenance;17923.05;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Desktop;11558
+7;monthly;27992.5;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Accessory;11447
+8;yet while ;19566.22;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Tablet;2955
+9;mobilize;19005.21;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Laptop;4530
+10;unlucky ja;15852.55;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.png;image/png;Laptop;12544
 ",
     "stateCleared": "modified",
   },
@@ -24,16 +24,16 @@ exports[`generator - app - --incremental-changelog entities with/without byte fi
 {
   "src/main/resources/config/liquibase/fake-data/20200101000100_entity_smarty.csv": {
     "contents": "id;name;age;height;income;expense;savings;category;happy;dob;exact_time;travel_time;moment
-1;so;27690;9228;28869.91;1523.27;11029.18;Laptop;true;2019-12-31;2019-12-31T07:33:17;8479;2019-12-31T09:44:59
-2;snow up;17956;196;6635.36;20119.26;30119.44;Laptop;true;2019-12-31;2019-12-31T05:33:26;27663;2019-12-31T02:26:03
-3;bubble loot;32476;6693;16764.28;2360.94;25178.99;Phone;true;2019-12-31;2019-12-31T22:43:36;21699;2019-12-31T18:00:55
-4;clear-cut vacant;20511;6897;13046.9;2776.1;11256.8;Accessory;false;2019-12-31;2019-12-31T16:07:42;13697;2019-12-31T20:36:00
-5;hedge supposing;1132;30538;4436.81;2931.45;12681.2;Laptop;true;2019-12-31;2019-12-31T11:59:15;7932;2019-12-31T01:19:21
-6;whine concerning pile;0;25903;20141.92;26507.48;24530.15;Phone;false;2019-12-31;2019-12-31T02:06:08;29017;2019-12-31T11:33:28
-7;thousand carelessly tasty;51;20191;8823.52;20755.4;26916.74;Tablet;true;2019-12-31;2019-12-31T17:46:32;12337;2019-12-31T10:52:56
-8;ugh revel shuck;11812;31986;30809.45;16008.41;1218.05;Phone;false;2019-12-31;2019-12-31T20:08:02;27053;2019-12-31T03:28:55
-9;hunch wonderfully;20533;32520;17780.32;14238.39;24671.07;Phone;true;2019-12-31;2019-12-31T19:23:49;24752;2019-12-31T13:02:54
-10;continent madly;25891;12035;16138.39;18899.17;13902.14;Phone;false;2019-12-31;2019-12-31T16:17:43;2955;2019-12-31T04:43:49
+1;haul;22475;19478;13020.74;12384.67;21292.79;Accessory;false;2019-12-31;2019-12-31T09:32:54;17956;2019-12-31T04:52:35
+2;calculating bleak underpants;12654;25637;20510.69;13046.9;11256.8;Phone;true;2019-12-31;2019-12-31T07:21:34;6701;2019-12-31T16:06:22
+3;evenly newsprint;11215;3484;864.8;25400.64;15361.81;Tablet;false;2019-12-31;2019-12-31T12:45:08;25434;2019-12-31T21:16:09
+4;along fax flood;11558;2143;27778.87;32012.96;4034.84;Tablet;false;2019-12-31;2019-12-31T11:47:33;27993;2019-12-31T19:49:52
+5;wash hm;29032;22472;4268.13;27926.7;8191.94;Phone;true;2019-12-31;2019-12-31T14:20:51;20105;2019-12-31T02:10:51
+6;mobilize;19005;1912;4530.43;25028.76;7467.08;Accessory;true;2019-12-31;2019-12-31T15:38:38;19139;2019-12-31T21:32:37
+7;coolly lock;3394;12544;6548.85;2431.98;11956.86;Phone;true;2019-12-31;2019-12-31T01:39:11;28606;2019-12-31T18:05:06
+8;anti baptise fooey;17804;154;15061.95;12875.59;14224.71;Desktop;true;2019-12-31;2019-12-31T01:10:26;25120;2019-12-31T09:37:22
+9;duh;28128;29585;16392.39;31787.99;8992.52;Accessory;false;2019-12-31;2019-12-31T13:36:54;26171;2019-12-31T20:55:47
+10;commonly carefully;17915;30132;27586.52;13849.5;18150.54;Tablet;true;2019-12-31;2019-12-31T04:38:50;14937;2019-12-31T21:01:44
 ",
     "stateCleared": "modified",
   },
@@ -173,16 +173,16 @@ ROLE_USER
   },
   "src/main/resources/config/liquibase/fake-data/20200102000100_entity_customer.csv": {
     "contents": "id;foo
-1;yuck
-2;for atop
-3;uncurl
-4;elaborate through weep
-5;hopelessly
-6;easily almost obvious
-7;unionize joyously gah
-8;half ink
-9;psst majestically swiftly
-10;ragged
+1;an
+2;ick
+3;same incidentally
+4;scarcely
+5;violin
+6;specific authorized under
+7;preregister
+8;rightfully
+9;replicate newsletter deeply
+10;although
 ",
     "stateCleared": "modified",
   },
@@ -299,16 +299,16 @@ ROLE_USER
   },
   "src/main/resources/config/liquibase/fake-data/20200102000100_entity_customer.csv": {
     "contents": "id;foo
-1;yuck
-2;for atop
-3;uncurl
-4;elaborate through weep
-5;hopelessly
-6;easily almost obvious
-7;unionize joyously gah
-8;half ink
-9;psst majestically swiftly
-10;ragged
+1;an
+2;ick
+3;same incidentally
+4;scarcely
+5;violin
+6;specific authorized under
+7;preregister
+8;rightfully
+9;replicate newsletter deeply
+10;although
 ",
     "stateCleared": "modified",
   },
@@ -331,6 +331,174 @@ ROLE_USER
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <include file="config/liquibase/changelog/20200102000100_updated_entity_Customer.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_migrate_Customer.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+</databaseChangeLog>
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - app - --incremental-changelog when adding a many-to-many relationship should match snapshot 1`] = `
+{
+  "src/main/resources/config/liquibase/changelog/20200102000100_updated_entity_One.xml": {
+    "contents": "<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added relationships to the entity One.
+    -->
+    <changeSet id="20200102000100-1-add-relationships" author="jhipster">
+
+
+        <createTable tableName="rel_one__another">
+            <column name="another_another_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="one_one_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="one_one_id, another_another_id" tableName="rel_one__another"/>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+</databaseChangeLog>
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml": {
+    "contents": "<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <!--
+        Added the relationship constraints for entity One.
+    -->
+    <changeSet id="20200102000100-relationship-foreign-keys" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="one_one_id"
+                                 baseTableName="rel_one__another"
+                                 constraintName="fk_rel_one__another__one_id"
+                                 referencedColumnNames="one_id"
+                                 referencedTableName="one"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="another_another_id"
+                                 baseTableName="rel_one__another"
+                                 constraintName="fk_rel_one__another__another_id"
+                                 referencedColumnNames="another_id"
+                                 referencedTableName="another"
+                                 />
+    </changeSet>
+</databaseChangeLog>
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20200102000100_updated_entity_migrate_One.xml": {
+    "contents": "<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20200102000100-columns-faker" author="jhipster" context="faker">
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+        <loadUpdateData
+                  file="config/liquibase/fake-data/20200102000100_entity_one.csv"
+                  separator=";"
+                  onlyUpdate="true"
+                  primaryKey="id"
+                  tableName="one">
+            <column name="id" type="numeric"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadUpdateData>
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+</databaseChangeLog>
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/data/authority.csv": {
+    "contents": "name
+ROLE_ADMIN
+ROLE_USER
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/data/user.csv": {
+    "contents": "id;login;password_hash;first_name;last_name;email;image_url;activated;lang_key;created_by;last_modified_by
+1;admin;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;admin@localhost;;true;en;system;system
+2;user;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;User;User;user@localhost;;true;en;system;system
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/data/user_authority.csv": {
+    "contents": "user_id;authority_name
+1;ROLE_ADMIN
+1;ROLE_USER
+2;ROLE_USER
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/fake-data/20200102000100_entity_one.csv": {
+    "contents": "one_id
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/master.xml": {
+    "contents": "<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="floatType" value="float4" dbms="postgresql"/>
+    <property name="clobType" value="clob" dbms="postgresql"/>
+    <property name="blobType" value="blob" dbms="postgresql"/>
+    <property name="uuidType" value="uuid" dbms="postgresql"/>
+    <property name="datetimeType" value="datetime" dbms="postgresql"/>
+
+    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200101000200_added_entity_Another.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20200102000100_updated_entity_One.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200102000100_updated_entity_migrate_One.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
 ",
@@ -389,10 +557,11 @@ exports[`generator - app - --incremental-changelog when adding a relationship sh
         Added the relationship constraints for entity One.
     -->
     <changeSet id="20200102000100-relationship-foreign-keys" author="jhipster">
-        <addForeignKeyConstraint baseColumnNames="another_id"
+
+        <addForeignKeyConstraint baseColumnNames="another_another_id"
                                  baseTableName="one"
                                  constraintName="fk_one__another_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="another_id"
                                  referencedTableName="another"
                                  />
     </changeSet>
@@ -542,10 +711,11 @@ exports[`generator - app - --incremental-changelog when adding a relationship wi
         Added the relationship constraints for entity One.
     -->
     <changeSet id="20200102000100-relationship-foreign-keys" author="jhipster">
-        <addForeignKeyConstraint baseColumnNames="another_id"
+
+        <addForeignKeyConstraint baseColumnNames="another_another_id"
                                  baseTableName="one"
                                  constraintName="fk_one__another_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="another_id"
                                  referencedTableName="another"
                                  onDelete="CASCADE"
                                  onUpdate="SET NULL"
@@ -1028,31 +1198,31 @@ ROLE_USER
   },
   "src/main/resources/config/liquibase/fake-data/20200101000100_entity_one.csv": {
     "contents": "uuid;active;some_long;some_date
-a1df19f5-8443-40a3-8e7a-19565b40d496;true;22836;2019-12-31T15:06:18
-2c50c94b-7c95-4335-8cb9-118919bd4336;true;21605;2019-12-31T01:33:52
-b5f092aa-099b-490c-8c7c-07af81e531ef;false;14477;2019-12-31T06:33:30
-46457939-a951-4564-a1d4-d5d3b4dfec2f;true;18697;2019-12-31T17:28:06
-1e4e93b3-c2b8-4a6d-88e6-1a9b656300e5;false;11256;2019-12-31T00:06:24
-9e95158c-941f-41e8-bc32-202a03207d0a;true;19187;2019-12-31T10:13:10
-4b7a589a-4d97-4922-9d1e-62602b821ad1;true;16257;2019-12-31T14:34:15
-fc96da86-95ae-4017-9b20-ec7f7014e317;true;17776;2019-12-31T19:36:49
-308aac48-4491-45c0-a000-32f7c840f617;false;32679;2019-12-31T07:26:53
-6f25a7bc-f876-4d99-9f7a-93ea6a721621;false;18344;2019-12-31T06:30:28
+ad1f8403-7155-44d9-92b2-5c47935b181b;true;7522;2019-12-31T15:50:26
+bf9a099c-70a8-4e3e-b174-473a554dddbd;true;20835;2019-12-31T13:42:40
+149bcbad-e196-460e-9259-918911832202;true;26238;2019-12-31T14:04:11
+47594992-1662-481d-b77f-9d89a072e771;true;14017;2019-12-31T13:02:12
+38a44950-03fc-44f1-89f6-2abf7d979e67;true;11962;2019-12-31T13:27:08
+548f4e98-d56e-4e9c-a31d-92725cd9ec7e;true;4563;2019-12-31T00:39:58
+f4d7cebb-36aa-4812-9c05-b9abb67ab7ee;false;3133;2019-12-31T18:41:05
+9338c0a2-6859-435c-aed6-882773fbdeea;true;27540;2019-12-31T02:57:52
+77153484-72f6-467d-94e4-ee92ef130dbd;false;27514;2019-12-31T00:34:10
+29e2791d-01d5-48f1-bd2b-41ff5db5cc5f;true;27187;2019-12-31T21:03:21
 ",
     "stateCleared": "modified",
   },
   "src/main/resources/config/liquibase/fake-data/20200101000200_entity_two.csv": {
     "contents": "id;comment;computed_date
-1;costly save gadzooks;2019-12-31T14:53:42
-2;of;2019-12-31T00:41:01
-3;drat;2019-12-31T20:58:51
-4;frown mini;2019-12-31T05:16:55
-5;insignificant wherever;2019-12-31T01:06:06
-6;rarely;2019-12-31T06:03:13
-7;until horsewhip;2019-12-31T09:19:14
-8;peace forenenst;2019-12-31T00:07:12
-9;sport boo;2019-12-31T03:46:22
-10;until;2019-12-31T06:13:57
+1;whenever unsung soon;2019-12-31T08:10:02
+2;roughly uncomfortable jaunty;2019-12-31T12:10:01
+3;characterization;2019-12-31T06:32:30
+4;upright qua;2019-12-31T14:12:45
+5;huddle but newsletter;2019-12-31T23:02:30
+6;um;2019-12-31T05:09:23
+7;incidentally phew;2019-12-31T23:59:15
+8;aha;2019-12-31T11:41:06
+9;yum welcome handover;2019-12-31T16:52:15
+10;subdued;2019-12-31T14:23:51
 ",
     "stateCleared": "modified",
   },
@@ -1584,10 +1754,11 @@ exports[`generator - app - --incremental-changelog when modifying a relationship
         Added the relationship constraints for entity One.
     -->
     <changeSet id="20200103000100-relationship-foreign-keys" author="jhipster">
-        <addForeignKeyConstraint baseColumnNames="another_id"
+
+        <addForeignKeyConstraint baseColumnNames="another_another_id"
                                  baseTableName="one"
                                  constraintName="fk_one__another_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="another_id"
                                  referencedTableName="another"
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
@@ -1686,10 +1857,11 @@ exports[`generator - app - --incremental-changelog when modifying an existing re
         Added the relationship constraints for entity One.
     -->
     <changeSet id="20200103000100-relationship-foreign-keys" author="jhipster">
-        <addForeignKeyConstraint baseColumnNames="another_ent_id"
+
+        <addForeignKeyConstraint baseColumnNames="another_ent_another_id"
                                  baseTableName="one"
                                  constraintName="fk_one__another_ent_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="another_id"
                                  referencedTableName="another"
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
@@ -1987,10 +2159,11 @@ exports[`generator - app - --incremental-changelog when modifying default values
         Added the relationship constraints for entity Two.
     -->
     <changeSet id="20200102000400-relationship-foreign-keys" author="jhipster">
-        <addForeignKeyConstraint baseColumnNames="one_id"
+
+        <addForeignKeyConstraint baseColumnNames="one_uuid"
                                  baseTableName="two"
                                  constraintName="fk_two__one_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="uuid"
                                  referencedTableName="one"
                                  />
     </changeSet>
@@ -2057,16 +2230,16 @@ ROLE_USER
   },
   "src/main/resources/config/liquibase/fake-data/20200102000100_entity_one.csv": {
     "contents": "uuid;another_boolean
-7b52c50c-94b7-4c95-8335-cb9118919bd4;
-3633aeb5-f092-4aa0-b99b-90cc7c07af81;
-531ef1f7-b464-4579-839a-9515641d4d5d;
-b4dfec2f-a394-41e4-8e93-b3c2b8a6d8e6;
-a9b65630-0e52-4a5f-b9e9-5158c941f1e8;
-32202a03-207d-40ac-a599-4b7a589a4d97;
-22d1e626-02b8-421a-9d17-376fc96da869;
-ae017b20-ec7f-4701-94e3-176382308aac;
-844915c0-0003-42f7-9c84-0f6179cfb6f2;
-a7bcf876-d99f-47a9-93ea-6a721621598b;
+33abf9a0-99c7-40a8-be3e-174473a554dd;
+bde2a914-9bcb-4ade-a196-60e259918911;
+3220270c-9475-4949-a921-66281d77f9d8;
+a072e771-e168-438a-8449-5003fc4f19f6;
+abf7d979-e671-4258-8548-f4e98d56ee9c;
+1d92725c-d9ec-47ea-a520-f4d7cebb36aa;
+12c05b9a-bb67-4ab7-aee4-e1c9338c0a26;
+5935ced6-8827-473f-abde-ea86d1771534;
+472f667d-4e4e-4e92-8ef1-30dbd7dd029e;
+791d01d5-8f1d-42b4-a1ff-5db5cc5fe5de;
 ",
     "stateCleared": "modified",
   },
@@ -2087,16 +2260,16 @@ a7bcf876-d99f-47a9-93ea-6a721621598b;
   },
   "src/main/resources/config/liquibase/fake-data/20200102000300_entity_one.csv": {
     "contents": "uuid
-7b52c50c-94b7-4c95-8335-cb9118919bd4
-3633aeb5-f092-4aa0-b99b-90cc7c07af81
-531ef1f7-b464-4579-839a-9515641d4d5d
-b4dfec2f-a394-41e4-8e93-b3c2b8a6d8e6
-a9b65630-0e52-4a5f-b9e9-5158c941f1e8
-32202a03-207d-40ac-a599-4b7a589a4d97
-22d1e626-02b8-421a-9d17-376fc96da869
-ae017b20-ec7f-4701-94e3-176382308aac
-844915c0-0003-42f7-9c84-0f6179cfb6f2
-a7bcf876-d99f-47a9-93ea-6a721621598b
+33abf9a0-99c7-40a8-be3e-174473a554dd
+bde2a914-9bcb-4ade-a196-60e259918911
+3220270c-9475-4949-a921-66281d77f9d8
+a072e771-e168-438a-8449-5003fc4f19f6
+abf7d979-e671-4258-8548-f4e98d56ee9c
+1d92725c-d9ec-47ea-a520-f4d7cebb36aa
+12c05b9a-bb67-4ab7-aee4-e1c9338c0a26
+5935ced6-8827-473f-abde-ea86d1771534
+472f667d-4e4e-4e92-8ef1-30dbd7dd029e
+791d01d5-8f1d-42b4-a1ff-5db5cc5fe5de
 ",
     "stateCleared": "modified",
   },
@@ -2318,10 +2491,11 @@ exports[`generator - app - --incremental-changelog when modifying fields and rel
         Added the relationship constraints for entity Another.
     -->
     <changeSet id="20200102000400-relationship-foreign-keys" author="jhipster">
-        <addForeignKeyConstraint baseColumnNames="one_id"
+
+        <addForeignKeyConstraint baseColumnNames="one_one_id"
                                  baseTableName="another"
                                  constraintName="fk_another__one_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="one_id"
                                  referencedTableName="one"
                                  />
     </changeSet>

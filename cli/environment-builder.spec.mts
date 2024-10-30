@@ -22,7 +22,7 @@ import fs from 'fs';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { before, it, describe, after, expect as jestExpect, beforeEach } from 'esmocha';
-import { defaultHelpers as helpers, createBlueprintFiles } from '../testing/index.js';
+import { defaultHelpers as helpers, createBlueprintFiles } from '../lib/testing/index.js';
 
 import EnvironmentBuilder from './environment-builder.mjs';
 

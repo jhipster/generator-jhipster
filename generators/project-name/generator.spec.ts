@@ -18,9 +18,10 @@
  */
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { basicTests, testBlueprintSupport } from '../../test/support/tests.js';
 import { GENERATOR_PROJECT_NAME } from '../generator-list.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/helpers.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -40,5 +41,28 @@ describe(`generator - ${generator}`, () => {
       baseName: 'BeautifulProject',
     },
     generatorPath,
+  });
+  describe('run', () => {
+    before(async () => {
+      await helpers.runJHipster(generator);
+    });
+    it('should apply default baseName', () => {
+      expect(runResult.askedQuestions).toMatchInlineSnapshot(`
+[
+  {
+    "answer": "jhipster",
+    "name": "baseName",
+  },
+]
+`);
+    });
+  });
+  describe('with defaultBaseName option', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withOptions({ defaults: true, defaultBaseName: () => 'foo' });
+    });
+    it('should apply default baseName', () => {
+      runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { baseName: 'foo' } });
+    });
   });
 });

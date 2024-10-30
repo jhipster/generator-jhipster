@@ -18,7 +18,6 @@
  */
 import BaseApplicationGenerator from '../base-application/index.js';
 import { createNeedleCallback } from '../base/support/needles.js';
-import { JavaDependency, JavaDependencyVersion } from '../java/types.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import { getCacheProviderMavenDefinition } from './internal/dependencies.js';
@@ -34,8 +33,32 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
     }
   }
 
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      configure() {
+        const { databaseType, reactive, cacheProvider } = this.jhipsterConfigWithDefaults;
+        if (this.jhipsterConfig.enableHibernateCache && (reactive || databaseType !== 'sql')) {
+          this.log.verboseInfo(`Disabling hibernate cache for ${reactive ? 'reactive application' : 'non-SQL databases'}`);
+          this.jhipsterConfig.enableHibernateCache = undefined;
+        }
+        if (reactive && cacheProvider !== 'no') {
+          this.log.error(`Cache provider is not supported in reactive application`);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
   get preparing() {
     return this.asPreparingTaskGroup({
+      cancel() {
+        if (this.jhipsterConfigWithDefaults.cacheProvider === 'no') {
+          this.cancelCancellableTasks();
+        }
+      },
       loadDependabot({ application }) {
         this.loadJavaDependenciesFromGradleCatalog(application.javaDependencies!, true);
       },
@@ -137,18 +160,20 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
         const { javaDependencies } = application;
         const { cacheProvider, enableHibernateCache } = application as any;
 
-        const dependencies: JavaDependency[] = [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-cache' }];
-        const versions: JavaDependencyVersion[] = [];
         const definition = getCacheProviderMavenDefinition(cacheProvider, javaDependencies);
-        versions.push(...(definition.base.versions ?? []));
-        dependencies.push(...definition.base.dependencies!);
-        if (enableHibernateCache && definition.hibernateCache) {
-          versions.push(...(definition.hibernateCache.versions ?? []));
-          dependencies.push(...definition.hibernateCache.dependencies!);
-        }
-        source.addJavaDefinition?.(
-          { dependencies, versions },
+        source.addJavaDefinitions?.(
           { gradleFile: 'buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle' },
+          {
+            ...definition.base,
+            dependencies: [
+              { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-cache' },
+              ...definition.base.dependencies,
+            ],
+          },
+          {
+            condition: Boolean(enableHibernateCache && definition.hibernateCache),
+            ...definition.hibernateCache,
+          },
         );
       },
     });
@@ -164,8 +189,8 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
         if (application.databaseTypeSql) {
           for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtInUser)) {
             source.addEntityToCache?.({
-              entityAbsoluteClass: (entity as any).entityAbsoluteClass,
-              relationships: entity.relationships,
+              entityAbsoluteClass: entity.entityAbsoluteClass,
+              relationships: entity.relationships as any,
             });
           }
         }

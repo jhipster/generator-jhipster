@@ -1,12 +1,12 @@
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers, runResult } from '../../testing/index.js';
-import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
+import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
 
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_REACT } from '../generator-list.js';
@@ -16,7 +16,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.ts');
 
 const { REACT: clientFramework } = clientFrameworkTypes;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
@@ -59,7 +58,7 @@ describe(`generator - ${clientFramework}`, () => {
     describe(name, () => {
       before(async () => {
         await helpers
-          .run(generatorFile)
+          .runJHipster(generator)
           .withJHipsterConfig(sampleConfig, entities)
           .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
           .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
@@ -99,7 +98,7 @@ describe(`generator - ${clientFramework}`, () => {
             assertion(
               `${clientSrcDir}app/modules/administration/administration.reducer.ts`,
               'logs: {\n' +
-                '    loggers: [] as any[]\n' +
+                '    loggers: [] as any[],\n' +
                 '  },\n' +
                 '  health: {} as any,\n' +
                 '  metrics: {} as any,\n' +

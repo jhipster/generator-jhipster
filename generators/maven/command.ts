@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const command: JHipsterCommandDefinition = {
   options: {},
@@ -26,6 +26,7 @@ const command: JHipsterCommandDefinition = {
       cli: {
         type: Boolean,
         hide: true,
+        default: true,
       },
       scope: 'generator',
     },

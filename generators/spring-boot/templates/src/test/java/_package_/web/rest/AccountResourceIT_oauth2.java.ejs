@@ -1,0 +1,218 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.web.rest;
+
+import static <%= packageName %>.test.util.OAuth2TestUtil.TEST_USER_LOGIN;
+import static <%= packageName %>.test.util.OAuth2TestUtil.registerAuthenticationToken;
+<%_ if (reactive) { _%>
+import static <%= packageName %>.test.util.OAuth2TestUtil.authenticationToken;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*;
+<%_ } else { _%>
+import static <%= packageName %>.test.util.OAuth2TestUtil.testAuthenticationToken;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+  <%_ if (searchEngineElasticsearch) { _%>
+import static org.mockito.Mockito.*;
+  <%_ } _%>
+<%_ } _%>
+
+import <%= packageName %>.IntegrationTest;
+import <%= packageName %>.security.AuthoritiesConstants;
+<%_ if (syncUserWithIdp) { _%>
+import <%= packageName %>.repository.UserRepository;
+<%_ } _%>
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+<%_ if (authenticationTypeOauth2) { _%>
+import org.junit.jupiter.api.AfterEach;
+<%_ } _%>
+<%_ if (reactive) { _%>
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.test.web.reactive.server.WebTestClient;
+  <%_ if (searchEngineElasticsearch) { _%>
+import reactor.core.publisher.Mono;
+  <%_ } _%>
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+<%_ } else { _%>
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.test.context.TestSecurityContextHolder;
+import org.springframework.test.web.servlet.MockMvc;
+  <%_ if (databaseTypeSql && !reactive) { _%>
+import org.springframework.transaction.annotation.Transactional;
+  <%_ } _%>
+
+<%_ } _%>
+
+/**
+ * Integration tests for the {@link AccountResource} REST controller.
+ */
+<%_ if (reactive) { _%>
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
+<%_ } else { _%>
+@AutoConfigureMockMvc
+<%_ } _%>
+@IntegrationTest
+class AccountResourceIT {
+<%_ if (syncUserWithIdp) { _%>
+
+    @Autowired
+    private UserRepository userRepository;
+<%_ } _%>
+
+<%_ if (reactive) { _%>
+    private Map<String, Object> claims;
+
+    @Autowired
+    private WebTestClient webTestClient;
+
+    @Autowired
+    private ReactiveOAuth2AuthorizedClientService authorizedClientService;
+
+    @Autowired
+    private ClientRegistration clientRegistration;
+<%_ } else { _%>
+    @Autowired
+    private MockMvc restAccountMockMvc;
+
+    @Autowired
+    OAuth2AuthorizedClientService authorizedClientService;
+
+    @Autowired
+    ClientRegistration clientRegistration;
+<%_ } _%>
+
+<%_ if (reactive) { _%>
+    @BeforeEach
+    public void setup() {
+        claims = new HashMap<>();
+        claims.put("groups", Collections.singletonList(AuthoritiesConstants.ADMIN));
+        claims.put("sub", "jane");
+        claims.put("email", "jane.doe@jhipster.com");
+    }
+
+<%_ } _%>
+<%_ if (syncUserWithIdp) { _%>
+    @AfterEach
+    public void cleanup() {
+        // Remove syncUserWithIdp users
+    <%_ if (databaseTypeSql && reactive) { _%>
+        userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
+    <%_ } _%>
+        userRepository.deleteAll()<%- reactorBlock %>;
+    }
+
+<%_ } _%>
+    @Test
+<%_ if (databaseTypeSql && !reactive) { _%>
+    @Transactional
+<%_ } _%>
+    void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
+<%_ if (reactive) { _%>
+        webTestClient
+            .mutateWith(mockAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims))))
+            .mutateWith(csrf())
+            .get().uri("/api/account")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+            .expectBody()
+            .jsonPath("$.login").isEqualTo("jane")
+  <%_ if (generateBuiltInUserEntity) { _%>
+            .jsonPath("$.email").isEqualTo("jane.doe@jhipster.com")
+  <%_ } _%>
+            .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
+<%_ } else { _%>
+        TestSecurityContextHolder
+            .getContext()
+            .setAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, testAuthenticationToken()));
+
+        restAccountMockMvc.perform(get("/api/account")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.login").value(TEST_USER_LOGIN))
+  <%_ if (generateBuiltInUserEntity) { _%>
+            .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
+  <%_ } _%>
+            .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
+<%_ } _%>
+    }
+
+    @Test
+    void testGetUnknownAccount() <% if (!reactive) { %>throws Exception <% } %>{
+<%_ if (reactive) { _%>
+        webTestClient.get().uri("/api/account")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().is3xxRedirection();
+<%_ } else { _%>
+        restAccountMockMvc.perform(get("/api/account")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnauthorized());
+<%_ } _%>
+    }
+
+    @Test
+    @WithUnauthenticatedMockUser
+    void testNonAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
+<%_ if (reactive) { _%>
+        webTestClient.get().uri("/api/authenticate")
+            .accept(MediaType.TEXT_PLAIN)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody().isEmpty();
+<%_ } else { _%>
+        restAccountMockMvc.perform(get("/api/authenticate")
+            .accept(MediaType.TEXT_PLAIN))
+            .andExpect(status().isOk())
+            .andExpect(content().string(""));
+<%_ } _%>
+    }
+
+    @Test
+    @WithMockUser(TEST_USER_LOGIN)
+    void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
+<%_ if (reactive) { _%>
+        webTestClient
+            .get().uri("/api/authenticate")
+            .accept(MediaType.TEXT_PLAIN)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(String.class).isEqualTo(TEST_USER_LOGIN);
+<%_ } else { _%>
+        restAccountMockMvc.perform(get("/api/authenticate")
+            .with(request -> request)
+            .accept(MediaType.TEXT_PLAIN))
+            .andExpect(status().isOk())
+            .andExpect(content().string(TEST_USER_LOGIN));
+<%_ } _%>
+    }
+}

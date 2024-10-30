@@ -33,7 +33,10 @@ export default defineComponent({
     };
 
     onMounted(() => loadLanguage());
-    watch(() => i18n.locale, () => loadLanguage());
+    watch(
+      () => i18n.locale,
+      () => loadLanguage(),
+    );
 
   <%_ } _%>
     return {

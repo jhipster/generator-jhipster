@@ -39,37 +39,46 @@ exports[`generator - spring-cache caffeine-gradle should match source calls 1`] 
       "id": "jhipster.spring-cache-conventions",
     },
   ],
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-cache",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "cache-api",
-          "groupId": "javax.cache",
-        },
-        {
-          "artifactId": "jcache",
-          "groupId": "com.github.ben-manes.caffeine",
-        },
-        {
-          "artifactId": "caffeine",
-          "groupId": "com.github.ben-manes.caffeine",
-        },
-        {
-          "artifactId": "config",
-          "groupId": "com.typesafe",
-          "version": "'TYPESAFE-VERSION'",
-        },
-        {
-          "artifactId": "hibernate-jcache",
-          "groupId": "org.hibernate.orm",
-        },
-      ],
-      "versions": [],
-    },
+  "addJavaDefinitions": [
+    [
+      {
+        "gradleFile": "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle",
+      },
+      {
+        "dependencies": [
+          {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
+            "artifactId": "cache-api",
+            "groupId": "javax.cache",
+          },
+          {
+            "artifactId": "jcache",
+            "groupId": "com.github.ben-manes.caffeine",
+          },
+          {
+            "artifactId": "caffeine",
+            "groupId": "com.github.ben-manes.caffeine",
+          },
+          {
+            "artifactId": "config",
+            "groupId": "com.typesafe",
+            "version": "'TYPESAFE-VERSION'",
+          },
+        ],
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "hibernate-jcache",
+            "groupId": "org.hibernate.orm",
+          },
+        ],
+      },
+    ],
   ],
 }
 `;
@@ -93,37 +102,46 @@ exports[`generator - spring-cache caffeine-maven should match source calls 1`] =
       "relationships": [],
     },
   ],
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-cache",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "cache-api",
-          "groupId": "javax.cache",
-        },
-        {
-          "artifactId": "jcache",
-          "groupId": "com.github.ben-manes.caffeine",
-        },
-        {
-          "artifactId": "caffeine",
-          "groupId": "com.github.ben-manes.caffeine",
-        },
-        {
-          "artifactId": "config",
-          "groupId": "com.typesafe",
-          "version": "'TYPESAFE-VERSION'",
-        },
-        {
-          "artifactId": "hibernate-jcache",
-          "groupId": "org.hibernate.orm",
-        },
-      ],
-      "versions": [],
-    },
+  "addJavaDefinitions": [
+    [
+      {
+        "gradleFile": "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle",
+      },
+      {
+        "dependencies": [
+          {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
+            "artifactId": "cache-api",
+            "groupId": "javax.cache",
+          },
+          {
+            "artifactId": "jcache",
+            "groupId": "com.github.ben-manes.caffeine",
+          },
+          {
+            "artifactId": "caffeine",
+            "groupId": "com.github.ben-manes.caffeine",
+          },
+          {
+            "artifactId": "config",
+            "groupId": "com.typesafe",
+            "version": "'TYPESAFE-VERSION'",
+          },
+        ],
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "hibernate-jcache",
+            "groupId": "org.hibernate.orm",
+          },
+        ],
+      },
+    ],
   ],
 }
 `;
@@ -155,29 +173,38 @@ exports[`generator - spring-cache ehcache-gradle should match source calls 1`] =
       "id": "jhipster.spring-cache-conventions",
     },
   ],
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-cache",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "cache-api",
-          "groupId": "javax.cache",
-        },
-        {
-          "artifactId": "ehcache",
-          "classifier": "jakarta",
-          "groupId": "org.ehcache",
-        },
-        {
-          "artifactId": "hibernate-jcache",
-          "groupId": "org.hibernate.orm",
-        },
-      ],
-      "versions": [],
-    },
+  "addJavaDefinitions": [
+    [
+      {
+        "gradleFile": "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle",
+      },
+      {
+        "dependencies": [
+          {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
+            "artifactId": "cache-api",
+            "groupId": "javax.cache",
+          },
+          {
+            "artifactId": "ehcache",
+            "classifier": "jakarta",
+            "groupId": "org.ehcache",
+          },
+        ],
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "hibernate-jcache",
+            "groupId": "org.hibernate.orm",
+          },
+        ],
+      },
+    ],
   ],
 }
 `;
@@ -201,29 +228,38 @@ exports[`generator - spring-cache ehcache-maven should match source calls 1`] = 
       "relationships": [],
     },
   ],
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-cache",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "cache-api",
-          "groupId": "javax.cache",
-        },
-        {
-          "artifactId": "ehcache",
-          "classifier": "jakarta",
-          "groupId": "org.ehcache",
-        },
-        {
-          "artifactId": "hibernate-jcache",
-          "groupId": "org.hibernate.orm",
-        },
-      ],
-      "versions": [],
-    },
+  "addJavaDefinitions": [
+    [
+      {
+        "gradleFile": "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle",
+      },
+      {
+        "dependencies": [
+          {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
+            "artifactId": "cache-api",
+            "groupId": "javax.cache",
+          },
+          {
+            "artifactId": "ehcache",
+            "classifier": "jakarta",
+            "groupId": "org.ehcache",
+          },
+        ],
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "hibernate-jcache",
+            "groupId": "org.hibernate.orm",
+          },
+        ],
+      },
+    ],
   ],
 }
 `;
@@ -275,30 +311,39 @@ exports[`generator - spring-cache hazelcast-gradle should match source calls 1`]
       "id": "jhipster.spring-cache-conventions",
     },
   ],
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-cache",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "cache-api",
-          "groupId": "javax.cache",
-        },
-        {
-          "artifactId": "hazelcast-spring",
-          "groupId": "com.hazelcast",
-          "version": "'HAZELCAST-SPRING-VERSION'",
-        },
-        {
-          "artifactId": "hazelcast-hibernate53",
-          "groupId": "com.hazelcast",
-          "version": "'HAZELCAST-HIBERNATE-53-VERSION'",
-        },
-      ],
-      "versions": [],
-    },
+  "addJavaDefinitions": [
+    [
+      {
+        "gradleFile": "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle",
+      },
+      {
+        "dependencies": [
+          {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
+            "artifactId": "cache-api",
+            "groupId": "javax.cache",
+          },
+          {
+            "artifactId": "hazelcast-spring",
+            "groupId": "com.hazelcast",
+            "version": "'HAZELCAST-SPRING-VERSION'",
+          },
+        ],
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "hazelcast-hibernate53",
+            "groupId": "com.hazelcast",
+            "version": "'HAZELCAST-HIBERNATE-53-VERSION'",
+          },
+        ],
+      },
+    ],
   ],
 }
 `;
@@ -322,30 +367,39 @@ exports[`generator - spring-cache hazelcast-maven should match source calls 1`] 
       "relationships": [],
     },
   ],
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-cache",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "cache-api",
-          "groupId": "javax.cache",
-        },
-        {
-          "artifactId": "hazelcast-spring",
-          "groupId": "com.hazelcast",
-          "version": "'HAZELCAST-SPRING-VERSION'",
-        },
-        {
-          "artifactId": "hazelcast-hibernate53",
-          "groupId": "com.hazelcast",
-          "version": "'HAZELCAST-HIBERNATE-53-VERSION'",
-        },
-      ],
-      "versions": [],
-    },
+  "addJavaDefinitions": [
+    [
+      {
+        "gradleFile": "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle",
+      },
+      {
+        "dependencies": [
+          {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
+            "artifactId": "cache-api",
+            "groupId": "javax.cache",
+          },
+          {
+            "artifactId": "hazelcast-spring",
+            "groupId": "com.hazelcast",
+            "version": "'HAZELCAST-SPRING-VERSION'",
+          },
+        ],
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "hazelcast-hibernate53",
+            "groupId": "com.hazelcast",
+            "version": "'HAZELCAST-HIBERNATE-53-VERSION'",
+          },
+        ],
+      },
+    ],
   ],
 }
 `;
@@ -380,41 +434,48 @@ exports[`generator - spring-cache infinispan-gradle should match source calls 1`
       "id": "jhipster.spring-cache-conventions",
     },
   ],
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-cache",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "cache-api",
-          "groupId": "javax.cache",
-        },
-        {
-          "artifactId": "infinispan-hibernate-cache-v62",
-          "groupId": "org.infinispan",
-        },
-        {
-          "artifactId": "infinispan-spring-boot3-starter-embedded",
-          "groupId": "org.infinispan",
-        },
-        {
-          "artifactId": "infinispan-commons",
-          "groupId": "org.infinispan",
-        },
-        {
-          "artifactId": "infinispan-core",
-          "groupId": "org.infinispan",
-        },
-        {
-          "artifactId": "infinispan-component-annotations",
-          "groupId": "org.infinispan",
-          "scope": "compile",
-        },
-      ],
-      "versions": [],
-    },
+  "addJavaDefinitions": [
+    [
+      {
+        "gradleFile": "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle",
+      },
+      {
+        "dependencies": [
+          {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
+            "artifactId": "cache-api",
+            "groupId": "javax.cache",
+          },
+          {
+            "artifactId": "infinispan-hibernate-cache-v62",
+            "groupId": "org.infinispan",
+          },
+          {
+            "artifactId": "infinispan-spring-boot3-starter-embedded",
+            "groupId": "org.infinispan",
+          },
+          {
+            "artifactId": "infinispan-commons",
+            "groupId": "org.infinispan",
+          },
+          {
+            "artifactId": "infinispan-core",
+            "groupId": "org.infinispan",
+          },
+          {
+            "artifactId": "infinispan-component-annotations",
+            "groupId": "org.infinispan",
+            "scope": "compile",
+          },
+        ],
+      },
+      {
+        "condition": false,
+      },
+    ],
   ],
 }
 `;
@@ -441,41 +502,48 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
       "relationships": [],
     },
   ],
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-cache",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "cache-api",
-          "groupId": "javax.cache",
-        },
-        {
-          "artifactId": "infinispan-hibernate-cache-v62",
-          "groupId": "org.infinispan",
-        },
-        {
-          "artifactId": "infinispan-spring-boot3-starter-embedded",
-          "groupId": "org.infinispan",
-        },
-        {
-          "artifactId": "infinispan-commons",
-          "groupId": "org.infinispan",
-        },
-        {
-          "artifactId": "infinispan-core",
-          "groupId": "org.infinispan",
-        },
-        {
-          "artifactId": "infinispan-component-annotations",
-          "groupId": "org.infinispan",
-          "scope": "compile",
-        },
-      ],
-      "versions": [],
-    },
+  "addJavaDefinitions": [
+    [
+      {
+        "gradleFile": "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle",
+      },
+      {
+        "dependencies": [
+          {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
+            "artifactId": "cache-api",
+            "groupId": "javax.cache",
+          },
+          {
+            "artifactId": "infinispan-hibernate-cache-v62",
+            "groupId": "org.infinispan",
+          },
+          {
+            "artifactId": "infinispan-spring-boot3-starter-embedded",
+            "groupId": "org.infinispan",
+          },
+          {
+            "artifactId": "infinispan-commons",
+            "groupId": "org.infinispan",
+          },
+          {
+            "artifactId": "infinispan-core",
+            "groupId": "org.infinispan",
+          },
+          {
+            "artifactId": "infinispan-component-annotations",
+            "groupId": "org.infinispan",
+            "scope": "compile",
+          },
+        ],
+      },
+      {
+        "condition": false,
+      },
+    ],
   ],
 }
 `;
@@ -507,40 +575,48 @@ exports[`generator - spring-cache memcached-gradle should match source calls 1`]
       "id": "jhipster.spring-cache-conventions",
     },
   ],
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-cache",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "cache-api",
-          "groupId": "javax.cache",
-        },
-        {
-          "artifactId": "spring-cache",
-          "groupId": "com.google.code.simple-spring-memcached",
-          "versionRef": "xmemcached-provider",
-        },
-        {
-          "artifactId": "xmemcached-provider",
-          "groupId": "com.google.code.simple-spring-memcached",
-          "versionRef": "xmemcached-provider",
-        },
-        {
-          "artifactId": "xmemcached",
-          "groupId": "com.googlecode.xmemcached",
-          "version": "'XMEMCACHED-VERSION'",
-        },
-      ],
-      "versions": [
-        {
-          "name": "xmemcached-provider",
-          "version": "'XMEMCACHED-PROVIDER-VERSION'",
-        },
-      ],
-    },
+  "addJavaDefinitions": [
+    [
+      {
+        "gradleFile": "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle",
+      },
+      {
+        "dependencies": [
+          {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
+            "artifactId": "cache-api",
+            "groupId": "javax.cache",
+          },
+          {
+            "artifactId": "spring-cache",
+            "groupId": "com.google.code.simple-spring-memcached",
+            "versionRef": "xmemcached-provider",
+          },
+          {
+            "artifactId": "xmemcached-provider",
+            "groupId": "com.google.code.simple-spring-memcached",
+            "versionRef": "xmemcached-provider",
+          },
+          {
+            "artifactId": "xmemcached",
+            "groupId": "com.googlecode.xmemcached",
+            "version": "'XMEMCACHED-VERSION'",
+          },
+        ],
+        "versions": [
+          {
+            "name": "xmemcached-provider",
+            "version": "'XMEMCACHED-PROVIDER-VERSION'",
+          },
+        ],
+      },
+      {
+        "condition": false,
+      },
+    ],
   ],
 }
 `;
@@ -564,40 +640,48 @@ exports[`generator - spring-cache memcached-maven should match source calls 1`] 
       "relationships": [],
     },
   ],
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-cache",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "cache-api",
-          "groupId": "javax.cache",
-        },
-        {
-          "artifactId": "spring-cache",
-          "groupId": "com.google.code.simple-spring-memcached",
-          "versionRef": "xmemcached-provider",
-        },
-        {
-          "artifactId": "xmemcached-provider",
-          "groupId": "com.google.code.simple-spring-memcached",
-          "versionRef": "xmemcached-provider",
-        },
-        {
-          "artifactId": "xmemcached",
-          "groupId": "com.googlecode.xmemcached",
-          "version": "'XMEMCACHED-VERSION'",
-        },
-      ],
-      "versions": [
-        {
-          "name": "xmemcached-provider",
-          "version": "'XMEMCACHED-PROVIDER-VERSION'",
-        },
-      ],
-    },
+  "addJavaDefinitions": [
+    [
+      {
+        "gradleFile": "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle",
+      },
+      {
+        "dependencies": [
+          {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
+            "artifactId": "cache-api",
+            "groupId": "javax.cache",
+          },
+          {
+            "artifactId": "spring-cache",
+            "groupId": "com.google.code.simple-spring-memcached",
+            "versionRef": "xmemcached-provider",
+          },
+          {
+            "artifactId": "xmemcached-provider",
+            "groupId": "com.google.code.simple-spring-memcached",
+            "versionRef": "xmemcached-provider",
+          },
+          {
+            "artifactId": "xmemcached",
+            "groupId": "com.googlecode.xmemcached",
+            "version": "'XMEMCACHED-VERSION'",
+          },
+        ],
+        "versions": [
+          {
+            "name": "xmemcached-provider",
+            "version": "'XMEMCACHED-PROVIDER-VERSION'",
+          },
+        ],
+      },
+      {
+        "condition": false,
+      },
+    ],
   ],
 }
 `;
@@ -638,35 +722,44 @@ exports[`generator - spring-cache redis-gradle should match source calls 1`] = `
       "id": "jhipster.spring-cache-conventions",
     },
   ],
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-cache",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "junit-jupiter",
-          "groupId": "org.testcontainers",
-          "scope": "test",
-        },
-        {
-          "artifactId": "testcontainers",
-          "groupId": "org.testcontainers",
-          "scope": "test",
-        },
-        {
-          "artifactId": "redisson",
-          "groupId": "org.redisson",
-          "version": "'REDISSON-VERSION'",
-        },
-        {
-          "artifactId": "hibernate-jcache",
-          "groupId": "org.hibernate.orm",
-        },
-      ],
-      "versions": [],
-    },
+  "addJavaDefinitions": [
+    [
+      {
+        "gradleFile": "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle",
+      },
+      {
+        "dependencies": [
+          {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
+            "artifactId": "junit-jupiter",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+          {
+            "artifactId": "testcontainers",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+          {
+            "artifactId": "redisson",
+            "groupId": "org.redisson",
+            "version": "'REDISSON-VERSION'",
+          },
+        ],
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "hibernate-jcache",
+            "groupId": "org.hibernate.orm",
+          },
+        ],
+      },
+    ],
   ],
   "addTestSpringFactory": [
     {
@@ -705,35 +798,44 @@ exports[`generator - spring-cache redis-maven should match source calls 1`] = `
       "relationships": [],
     },
   ],
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-cache",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "junit-jupiter",
-          "groupId": "org.testcontainers",
-          "scope": "test",
-        },
-        {
-          "artifactId": "testcontainers",
-          "groupId": "org.testcontainers",
-          "scope": "test",
-        },
-        {
-          "artifactId": "redisson",
-          "groupId": "org.redisson",
-          "version": "'REDISSON-VERSION'",
-        },
-        {
-          "artifactId": "hibernate-jcache",
-          "groupId": "org.hibernate.orm",
-        },
-      ],
-      "versions": [],
-    },
+  "addJavaDefinitions": [
+    [
+      {
+        "gradleFile": "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle",
+      },
+      {
+        "dependencies": [
+          {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
+            "artifactId": "junit-jupiter",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+          {
+            "artifactId": "testcontainers",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+          {
+            "artifactId": "redisson",
+            "groupId": "org.redisson",
+            "version": "'REDISSON-VERSION'",
+          },
+        ],
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "hibernate-jcache",
+            "groupId": "org.hibernate.orm",
+          },
+        ],
+      },
+    ],
   ],
   "addTestSpringFactory": [
     {

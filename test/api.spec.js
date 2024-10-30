@@ -16,12 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 
 describe('public api', () => {
   it('generator-jhipster/generators should match snapshot', async () => {
-    // eslint-disable-next-line import/no-unresolved
     expect(await import('generator-jhipster/generators')).toMatchSnapshot();
+  });
+
+  it('generator-jhipster/generators should match snapshot', async () => {
+    expect(Object.keys(await import('generator-jhipster/testing'))).toMatchSnapshot();
   });
 
   it('should import neasted sub-generators', async () => {

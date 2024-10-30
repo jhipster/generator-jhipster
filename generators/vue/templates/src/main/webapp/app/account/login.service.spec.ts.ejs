@@ -18,7 +18,7 @@ describe('Login Service test suite', () => {
 
 <%_ if (authenticationTypeOauth2) { _%>
   it('should build url for login', () => {
-    const loc = {href: '', hostname: 'localhost', pathname: '/'};
+    const loc = { href: '', hostname: 'localhost', pathname: '/' };
 
     loginService.login(loc);
 

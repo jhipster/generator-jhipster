@@ -27,7 +27,7 @@ import TranslationService from '@/locale/translation.service';
 import { useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
 
-const pinia = createPinia()
+const pinia = createPinia();
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
@@ -60,6 +60,7 @@ Vue.configureCompat({
   OPTIONS_DESTROYED: 'suppress-warning',
   RENDER_FUNCTION: 'suppress-warning',
   WATCH_ARRAY: 'suppress-warning',
+  PRIVATE_APIS: 'suppress-warning',
 });
 
 <%_ if (enableTranslation) { _%>
@@ -101,14 +102,14 @@ const app = createApp({
         if (!translationService.getLocalStoreLanguage()) {
           await changeLanguage(value.langKey);
         }
-      }
+      },
     );
 
     watch(
       () => translationStore.currentLanguage,
       value => {
         translationService.setLocale(value);
-      }
+      },
     );
 
     onMounted(async () => {
@@ -166,12 +167,15 @@ const app = createApp({
       },
       error => {
         return Promise.reject(error);
-      }
+      },
     );
 
     const { authenticated } = storeToRefs(store);
     provide('authenticated', authenticated);
-    provide('currentUsername', computed(() => store.account?.login));
+    provide(
+      'currentUsername',
+      computed(() => store.account?.login),
+    );
 
 <%_ if (enableTranslation) { _%>
     provide('translationService', translationService);
@@ -182,7 +186,7 @@ const app = createApp({
 
     provide('trackerService', useTrackerService({ authenticated }));
 <%_ } _%>
-<%_ if (applicationTypeMicroservice && microfrontend) { _%>
+<%_ if (enableTranslation && applicationTypeMicroservice && microfrontend) { _%>
     provide('microfrontendI18n', false);
 <%_ } _%>
   },

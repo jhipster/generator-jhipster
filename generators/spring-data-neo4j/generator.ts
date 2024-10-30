@@ -147,21 +147,26 @@ export default class Neo4jGenerator extends BaseApplicationGenerator {
         });
       },
       addDependencies({ application, source }) {
-        source.addJavaDependencies?.([
-          { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-neo4j' },
-          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
-          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
-          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'neo4j' },
-        ]);
-        if (!application.databaseMigrationLiquibase) {
-          source.addJavaDependencies?.([
-            {
-              groupId: 'eu.michael-simons.neo4j',
-              artifactId: 'neo4j-migrations-spring-boot-starter',
-              version: application.javaDependencies!['neo4j-migrations-spring-boot-starter'],
-            },
-          ]);
-        }
+        source.addJavaDefinitions?.(
+          {
+            dependencies: [
+              { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-neo4j' },
+              { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
+              { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
+              { scope: 'test', groupId: 'org.testcontainers', artifactId: 'neo4j' },
+            ],
+          },
+          {
+            condition: !application.databaseMigrationLiquibase,
+            dependencies: [
+              {
+                groupId: 'eu.michael-simons.neo4j',
+                artifactId: 'neo4j-migrations-spring-boot-starter',
+                version: application.javaDependencies!['neo4j-migrations-spring-boot-starter'],
+              },
+            ],
+          },
+        );
       },
     });
   }

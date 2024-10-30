@@ -52,7 +52,9 @@ describe('<%= entityClass %> e2e test', () => {
   const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityPage %>(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? '<%- adminEntity ? 'admin' : 'user' %>';
   const password = Cypress.env('E2E_PASSWORD') ?? '<%- adminEntity ? 'admin' : 'user' %>';
+<%_ if (!readOnly) { _%>
   <% if (skipCreateTest) { %>// <% } %>const <%= entityInstance %>Sample = <%- JSON.stringify(this.generateTestEntity(sampleFields.map(field => field.reference))) %>;
+<%_ } _%>
 
   let <%= entityInstance %>;
 <%_ for (otherEntity of requiredOtherEntities) { _%>
@@ -179,7 +181,7 @@ describe('<%= entityClass %> e2e test', () => {
 
 <%_ } _%>
     describe('with existing value', () => {
-<% if (!readOnly) { %>
+<%_ if (!readOnly) { _%>
   <%_ if (skipCreateTest) { _%>
       /* Disabled due to incompatibility
   <%_ } _%>

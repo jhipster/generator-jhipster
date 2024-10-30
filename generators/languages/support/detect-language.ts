@@ -18,9 +18,10 @@
  */
 
 import { osLocaleSync } from 'os-locale';
-import { findLanguageForTag, Language, supportedLanguages } from './languages.js';
+import type { Language } from './languages.js';
+import { findLanguageForTag, supportedLanguages } from './languages.js';
 
-const detectLanguage = (languages: ReadonlyArray<Language> = supportedLanguages) => {
+const detectLanguage = (languages: readonly Language[] = supportedLanguages) => {
   const locale = osLocaleSync();
   if (locale) {
     const language = findLanguageForTag(locale.toLowerCase(), languages) ?? findLanguageForTag(locale.split('-')[0], languages);

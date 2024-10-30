@@ -1,0 +1,241 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.service.mapper;
+
+import <%= user.entityAbsoluteClass %>;
+import <%= packageName %>.security.AuthoritiesConstants;
+import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
+import <%= packageName %>.service.dto.<%= user.dtoClass %>;
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+import <%= packageName %>.domain.Authority;
+<%_ } else { _%>
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
+import org.apache.commons.lang3.RandomStringUtils;
+<%_ } _%>
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+<%_ if (generateSpringAuditor) { _%>
+import java.time.Instant;
+<%_ } _%>
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+<%_ if (user.primaryKey.hasUUID) { _%>
+import java.util.UUID;
+<%_ } _%>
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * Unit tests for {@link UserMapper}.
+ */
+class UserMapperTest {
+
+    private static final String DEFAULT_LOGIN = "johndoe";
+<%_ if (databaseTypeCouchbase) { _%>
+    private static final String DEFAULT_ID = DEFAULT_LOGIN;
+<%_ } else { _%>
+    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- this.getPrimaryKeyValue(user.primaryKey.type) %>;
+<%_ } _%>
+
+    private UserMapper userMapper;
+    private <%= user.persistClass %> user;
+    private <%= user.adminUserDto %> userDto;
+
+    @BeforeEach
+    public void init() {
+        userMapper = new UserMapper();
+        user = new <%= user.persistClass %>();
+        user.setLogin(DEFAULT_LOGIN);
+<%_ if (!authenticationTypeOauth2) { _%>
+        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
+<%_ } _%>
+        user.setActivated(true);
+        user.setEmail("johndoe@localhost");
+        user.setFirstName("john");
+        user.setLastName("doe");
+<%_ if (!databaseTypeCassandra) { _%>
+        user.setImageUrl("image_url");
+<%_ } _%>
+<%_ if (generateSpringAuditor) { _%>
+        user.setCreatedBy(DEFAULT_LOGIN);
+        user.setCreatedDate(Instant.now());
+        user.setLastModifiedBy(DEFAULT_LOGIN);
+        user.setLastModifiedDate(Instant.now());
+<%_ } _%>
+        user.setLangKey("en");
+
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+        Set<Authority> authorities = new HashSet<>();
+        Authority authority = new Authority();
+        authority.setName(AuthoritiesConstants.USER);
+        authorities.add(authority);
+        user.setAuthorities(authorities);
+<%_ } else { _%>
+        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
+<%_ } _%>
+
+        userDto = new <%= user.adminUserDto %>(user);
+    }
+
+    @Test
+    void testUserToUserDTO() {
+        <%= user.adminUserDto %> convertedUserDto = userMapper.userToAdminUserDTO(user);
+
+        assertThat(convertedUserDto.getId()).isEqualTo(user.getId());
+        assertThat(convertedUserDto.getLogin()).isEqualTo(user.getLogin());
+        assertThat(convertedUserDto.getFirstName()).isEqualTo(user.getFirstName());
+        assertThat(convertedUserDto.getLastName()).isEqualTo(user.getLastName());
+        assertThat(convertedUserDto.getEmail()).isEqualTo(user.getEmail());
+        assertThat(convertedUserDto.isActivated()).isEqualTo(user.isActivated());
+<%_ if (!databaseTypeCassandra) { _%>
+        assertThat(convertedUserDto.getImageUrl()).isEqualTo(user.getImageUrl());
+<%_ } _%>
+<%_ if (generateSpringAuditor) { _%>
+        assertThat(convertedUserDto.getCreatedBy()).isEqualTo(user.getCreatedBy());
+        assertThat(convertedUserDto.getCreatedDate()).isEqualTo(user.getCreatedDate());
+        assertThat(convertedUserDto.getLastModifiedBy()).isEqualTo(user.getLastModifiedBy());
+        assertThat(convertedUserDto.getLastModifiedDate()).isEqualTo(user.getLastModifiedDate());
+<%_ } _%>
+        assertThat(convertedUserDto.getLangKey()).isEqualTo(user.getLangKey());
+        assertThat(convertedUserDto.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
+    }
+
+    @Test
+    void testUserDTOtoUser() {
+        <%= user.persistClass %> convertedUser = userMapper.userDTOToUser(userDto);
+
+        assertThat(convertedUser.getId()).isEqualTo(userDto.getId());
+        assertThat(convertedUser.getLogin()).isEqualTo(userDto.getLogin());
+        assertThat(convertedUser.getFirstName()).isEqualTo(userDto.getFirstName());
+        assertThat(convertedUser.getLastName()).isEqualTo(userDto.getLastName());
+        assertThat(convertedUser.getEmail()).isEqualTo(userDto.getEmail());
+        assertThat(convertedUser.isActivated()).isEqualTo(userDto.isActivated());
+<%_ if (!databaseTypeCassandra) { _%>
+        assertThat(convertedUser.getImageUrl()).isEqualTo(userDto.getImageUrl());
+<%_ } _%>
+        assertThat(convertedUser.getLangKey()).isEqualTo(userDto.getLangKey());
+<%_ if (generateSpringAuditor) { _%>
+        assertThat(convertedUser.getCreatedBy()).isEqualTo(userDto.getCreatedBy());
+        assertThat(convertedUser.getCreatedDate()).isEqualTo(userDto.getCreatedDate());
+        assertThat(convertedUser.getLastModifiedBy()).isEqualTo(userDto.getLastModifiedBy());
+        assertThat(convertedUser.getLastModifiedDate()).isEqualTo(userDto.getLastModifiedDate());
+<%_ } _%>
+        assertThat(convertedUser.getAuthorities())<% if (!databaseTypeCassandra && !databaseTypeCouchbase) { %>.extracting("name")<%_ } _%>.containsExactly(AuthoritiesConstants.USER);
+    }
+
+    @Test
+    void usersToUserDTOsShouldMapOnlyNonNullUsers() {
+        List<<%= user.persistClass %>> users = new ArrayList<>();
+        users.add(user);
+        users.add(null);
+
+        List<<%= user.dtoClass %>> userDTOS = userMapper.usersToUserDTOs(users);
+
+        assertThat(userDTOS).isNotEmpty().size().isEqualTo(1);
+    }
+
+    @Test
+    void userDTOsToUsersShouldMapOnlyNonNullUsers() {
+        List<<%= user.adminUserDto %>> usersDto = new ArrayList<>();
+        usersDto.add(userDto);
+        usersDto.add(null);
+
+        List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
+
+        assertThat(users).isNotEmpty().size().isEqualTo(1);
+    }
+
+    @Test
+    void userDTOsToUsersWithAuthoritiesStringShouldMapToUsersWithAuthoritiesDomain() {
+        Set<String> authoritiesAsString = new HashSet<>();
+        authoritiesAsString.add("ADMIN");
+        userDto.setAuthorities(authoritiesAsString);
+
+        List<<%= user.adminUserDto %>> usersDto = new ArrayList<>();
+        usersDto.add(userDto);
+
+        List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
+
+        assertThat(users).isNotEmpty().size().isEqualTo(1);
+        assertThat(users.get(0).getAuthorities()).isNotNull();
+        assertThat(users.get(0).getAuthorities()).isNotEmpty();
+<%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
+        assertThat(users.get(0).getAuthorities().iterator().next().getName()).isEqualTo("ADMIN");
+<%_ } _%>
+<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
+        assertThat(users.get(0).getAuthorities().iterator().next()).isEqualTo("ADMIN");
+<%_ } _%>
+    }
+
+    @Test
+    void userDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
+        userDto.setAuthorities(null);
+
+        List<<%= user.adminUserDto %>> usersDto = new ArrayList<>();
+        usersDto.add(userDto);
+
+        List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
+
+        assertThat(users).isNotEmpty().size().isEqualTo(1);
+        assertThat(users.get(0).getAuthorities()).isNotNull();
+        assertThat(users.get(0).getAuthorities()).isEmpty();
+    }
+
+    @Test
+    void userDTOToUserMapWithAuthoritiesStringShouldReturnUserWithAuthorities() {
+        <%= user.persistClass %> convertedUser = userMapper.userDTOToUser(userDto);
+
+        assertThat(convertedUser).isNotNull();
+        assertThat(convertedUser.getAuthorities()).isNotNull();
+        assertThat(convertedUser.getAuthorities()).isNotEmpty();
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+        assertThat(convertedUser.getAuthorities().iterator().next().getName()).isEqualTo(AuthoritiesConstants.USER);
+<%_ } else { _%>
+        assertThat(convertedUser.getAuthorities().iterator().next()).isEqualTo(AuthoritiesConstants.USER);
+<%_ } _%>
+    }
+
+    @Test
+    void userDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
+        userDto.setAuthorities(null);
+
+        <%= user.persistClass %> persistUser = userMapper.userDTOToUser(userDto);
+
+        assertThat(persistUser).isNotNull();
+        assertThat(persistUser.getAuthorities()).isNotNull();
+        assertThat(persistUser.getAuthorities()).isEmpty();
+    }
+
+    @Test
+    void userDTOToUserMapWithNullUserShouldReturnNull() {
+        assertThat(userMapper.userDTOToUser(null)).isNull();
+    }
+
+    @Test
+    void testUserFromId() {
+        assertThat(userMapper.userFromId(DEFAULT_ID).getId()).isEqualTo(DEFAULT_ID);
+        assertThat(userMapper.userFromId(null)).isNull();
+    }
+}

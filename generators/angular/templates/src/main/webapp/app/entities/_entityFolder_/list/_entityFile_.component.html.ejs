@@ -103,7 +103,7 @@
                 </tr>
             </thead>
             <tbody<% if (paginationInfiniteScroll) { %> infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0"<% } %>>
-            @for (<%= entityInstance %> of <%= entityInstancePlural %>; track track<%= primaryKey.nameCapitalized %>) {
+            @for (<%= entityInstance %> of <%= entityInstancePlural %>; track track<%= primaryKey.nameCapitalized %>(<%= entityInstance %>)) {
                 <tr data-cy="entityTable">
 <%_
 const routerLink = ` [routerLink]="['/${ entityPage }', ${entityInstance}.${primaryKey.name}, 'view']"`;

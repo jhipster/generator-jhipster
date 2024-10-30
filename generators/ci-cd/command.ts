@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { kebabCase, intersection } from 'lodash-es';
-import type { JHipsterCommandDefinition } from '../base/api.js';
+import { intersection, kebabCase } from 'lodash-es';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const includesValue = (prop, values) => answers => answers[prop] && intersection(answers[prop], values).length > 0;
 
@@ -41,7 +41,7 @@ const command: JHipsterCommandDefinition = {
         { name: 'Travis CI', value: 'travis' },
         { name: 'CircleCI', value: 'circle' },
       ],
-      scope: 'generator',
+      scope: 'context',
     },
     ciCdIntegrations: {
       prompt: {
@@ -73,7 +73,7 @@ const command: JHipsterCommandDefinition = {
           value: 'cypressDashboard',
         },
       ],
-      scope: 'generator',
+      scope: 'context',
     },
     insideDocker: {
       prompt: {
@@ -82,7 +82,7 @@ const command: JHipsterCommandDefinition = {
         message: 'Would you like to perform the build in a Docker container ?',
         default: false,
       },
-      scope: 'generator',
+      scope: 'context',
     },
     sendBuildToGitlab: {
       prompt: {
@@ -91,7 +91,7 @@ const command: JHipsterCommandDefinition = {
         message: 'Would you like to send build status to GitLab ?',
         default: false,
       },
-      scope: 'generator',
+      scope: 'context',
     },
     artifactorySnapshotsId: {
       prompt: {
@@ -100,7 +100,7 @@ const command: JHipsterCommandDefinition = {
         message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for snapshots ?`,
       },
       default: 'snapshots',
-      scope: 'generator',
+      scope: 'context',
     },
     artifactorySnapshotsUrl: {
       prompt: {
@@ -109,7 +109,7 @@ const command: JHipsterCommandDefinition = {
         message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for snapshots ?`,
       },
       default: 'http://artifactory:8081/artifactory/libs-snapshot',
-      scope: 'generator',
+      scope: 'context',
     },
     artifactoryReleasesId: {
       prompt: {
@@ -118,7 +118,7 @@ const command: JHipsterCommandDefinition = {
         message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for releases ?`,
       },
       default: 'releases',
-      scope: 'generator',
+      scope: 'context',
     },
     artifactoryReleasesUrl: {
       prompt: {
@@ -127,7 +127,7 @@ const command: JHipsterCommandDefinition = {
         message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for releases ?`,
       },
       default: 'http://artifactory:8081/artifactory/libs-release',
-      scope: 'generator',
+      scope: 'context',
     },
     sonarName: {
       prompt: {
@@ -136,7 +136,7 @@ const command: JHipsterCommandDefinition = {
         message: `${chalk.yellow('*Sonar*')}: what is the name of the Sonar server ?`,
       },
       default: 'sonar',
-      scope: 'generator',
+      scope: 'context',
     },
     sonarUrl: {
       prompt: {
@@ -147,7 +147,7 @@ const command: JHipsterCommandDefinition = {
         message: `${chalk.yellow('*Sonar*')}: what is the URL of the Sonar server ?`,
       },
       default: 'https://sonarcloud.io',
-      scope: 'generator',
+      scope: 'context',
     },
     sonarOrga: {
       prompt: {
@@ -157,7 +157,7 @@ const command: JHipsterCommandDefinition = {
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the Organization of the Sonar server ?`,
       },
-      scope: 'generator',
+      scope: 'context',
     },
     dockerImage: {
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
@@ -166,7 +166,7 @@ const command: JHipsterCommandDefinition = {
         message: `${chalk.yellow('*Docker*')}: what is the name of the image ?`,
         default: () => `jhipster/${config.dasherizedBaseName}`,
       }),
-      scope: 'generator',
+      scope: 'context',
     },
     herokuAppName: {
       prompt: {
@@ -174,8 +174,10 @@ const command: JHipsterCommandDefinition = {
         type: 'input',
         message: `${chalk.yellow('*Heroku*')}: name of your Heroku Application ?`,
       },
-      scope: 'generator',
-      default: gen => kebabCase(gen.jhipsterConfigWithDefaults.baseName),
+      scope: 'context',
+      default() {
+        return kebabCase(this.jhipsterConfigWithDefaults.baseName);
+      },
     },
   },
 };

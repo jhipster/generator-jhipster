@@ -1,12 +1,11 @@
-import { before, it, describe } from 'esmocha';
-import { defaultHelpers as helpers, result as runResult, getGenerator } from '../../testing/index.js';
+import { before, describe, it } from 'esmocha';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import LanguagesGenerator from './index.js';
 
-const generatorPath = getGenerator('languages');
+const generator = 'languages';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends LanguagesGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
@@ -31,14 +30,14 @@ const mockBlueprintSubGen: any = class extends LanguagesGenerator {
 describe('needle API i18n: JHipster language generator with blueprint', () => {
   before(async () => {
     await helpers
-      .run(generatorPath)
+      .runJHipster(generator)
       .withJHipsterConfig({ baseName: 'jhipster' })
       .withOptions({ ignoreNeedlesError: true })
       .withOptions({
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
       })

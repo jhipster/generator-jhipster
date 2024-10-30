@@ -1,0 +1,165 @@
+#
+# Copyright the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: Incremental Changelog
+on: [workflow_call]
+env:
+  FORCE_COLOR: 2
+jobs:
+  build-matrix:
+    runs-on: ubuntu-latest
+    if: >-
+      !contains(github.event.head_commit.message, '[ci skip]') &&
+      !contains(github.event.head_commit.message, '[skip ci]') &&
+      !contains(github.event.pull_request.title, '[skip ci]') &&
+      !contains(github.event.pull_request.title, '[ci skip]') &&
+      github.event.action != 'closed' &&
+      (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci'))
+    outputs:
+      matrix: ${{ steps.build.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci --ignore-scripts
+      - id: build
+        run: bin/jhipster.cjs github-build-matrix graalvm --event-name ${{ github.event_name }}
+  applications:
+    name: ${{ matrix.job-name }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/app
+    timeout-minutes: 40
+    needs: build-matrix
+    if: fromJson(needs.build-matrix.outputs.matrix).include[0] != null
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
+    steps:
+      #----------------------------------------------------------------------
+      # Install all tools and check configuration
+      #----------------------------------------------------------------------
+      - name: 'SETUP: Checkout generator-jhipster'
+        uses: actions/checkout@v4
+        with:
+          path: generator-jhipster
+          fetch-depth: 2
+      - uses: jhipster/actions/setup-runner@v0
+        with:
+          node-version: ${{ matrix.node-version }}
+          java-version: ${{ matrix.java-version }}
+          npm-version: ${{ matrix.npm-version }}
+          maven-cache: true
+          gradle-cache: ${{ matrix.gradle-cache }}
+          binary-dir: ${{ github.workspace }}/generator-jhipster/bin
+      #----------------------------------------------------------------------
+      # Install JHipster and generate project+entities
+      #----------------------------------------------------------------------
+      - run: npm ci --ignore-scripts
+        working-directory: ${{ github.workspace }}/generator-jhipster
+      - name: 'GENERATION: project'
+        run: jhipster.cjs jdl --skip-jhipster-dependencies --skip-install
+        env:
+          JHI_FOLDER_APP: ${{ github.workspace }}/app
+          JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
+          JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
+          JHI_JDL: ${{ matrix.jdl }}
+      - run: jhipster.cjs info
+      #----------------------------------------------------------------------
+      # Detect changes against base commit
+      #----------------------------------------------------------------------
+      - uses: jhipster/actions/compare-sample@v0
+        id: compare
+        if: >-
+          github.event.pull_request &&
+          !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
+        with:
+          generator-path: generator-jhipster
+          cmd: jhipster.cjs jdl --skip-jhipster-dependencies --skip-install
+        env:
+          # generate-sample uses JHI_FOLDER_APP to generate the application.
+          JHI_FOLDER_APP: ${{ github.workspace }}/base/app
+          JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
+          JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
+          JHI_JDL: ${{ matrix.jdl-base || matrix.jdl }}
+      #----------------------------------------------------------------------
+      # Launch tests
+      #----------------------------------------------------------------------
+      - name: 'SETUP: setup graalvm'
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'graalvm-community'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          native-image-job-reports: 'true'
+      - uses: jhipster/actions/build-jhipster-bom@v0
+        if: matrix.build-jhipster-bom && steps.compare.outputs.equals != 'true'
+        with:
+          jhipster-bom-ref: ${{ matrix.jhipster-bom-branch }}
+      - run: npm run native-package
+        if: steps.compare.outputs.equals != 'true'
+        id: packaging
+        timeout-minutes: 20
+      - run: npm run services:up
+        if: steps.compare.outputs.equals != 'true'
+      - run: npm run native-e2e --if-present
+        id: e2e
+        if: steps.compare.outputs.equals != 'true'
+      - name: Store the application
+        uses: actions/upload-artifact@v4
+        if: always() && (steps.e2e.outcome == 'failure' || steps.packaging.outcome == 'failure')
+        with:
+          name: app-${{ matrix.sample }}
+          include-hidden-files: true
+          path: |
+            ${{ github.workspace }}/app/**/*
+            !**/app/build/**
+            !**/app/*/build/**
+            !**/app/.gradle/**
+            !**/app/*/.gradle/**
+            !**/app/target/**
+            !**/app/*/target/**
+            !**/node_modules/**
+      - name: 'E2E: Store failure screenshots'
+        uses: actions/upload-artifact@v4
+        if: always() && steps.e2e.outcome == 'failure'
+        with:
+          name: screenshots-${{ matrix.sample }}
+          path: ${{ github.workspace }}/app/**/cypress/screenshots
+      - name: Dump docker logs
+        if: always() && contains(matrix.os, 'ubuntu')
+        uses: jwalton/gh-docker-logs@v2
+
+  check-graalvm:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: [applications]
+    if: always()
+    steps:
+      - run: |
+          echo '${{ toJSON(needs) }}'
+          if [ 'skipped' == '${{ needs.applications.result }}' ] || [ 'success' == '${{ needs.applications.result }}' ] || [ 'closed' == '${{ github.event.action }}' ]; then
+            exit 0
+          fi
+          exit 1

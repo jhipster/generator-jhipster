@@ -18,19 +18,19 @@
  */
 import { extname } from 'path';
 import { readFile } from 'fs/promises';
-import { QueuedAdapter } from '@yeoman/adapter';
 import { upperFirst } from 'lodash-es';
-import { create as createMemFs, type Store as MemFs } from 'mem-fs';
-import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
+import { type Store as MemFs, create as createMemFs } from 'mem-fs';
+import { type MemFsEditor, create as createMemFsEditor } from 'mem-fs-editor';
 
 import BaseGenerator from '../base/index.js';
 import { downloadJdlFile } from '../../cli/download.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { CLI_NAME } from '../../cli/utils.mjs';
 import { GENERATOR_APP, GENERATOR_ENTITIES, GENERATOR_WORKSPACES } from '../generator-list.js';
-import { ApplicationWithEntities, createImporterFromContent } from '../../jdl/jdl-importer.js';
+import type { ApplicationWithEntities } from '../../lib/jdl/jdl-importer.js';
+import { createImporterFromContent } from '../../lib/jdl/jdl-importer.js';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { mergeYoRcContent } from '../../jdl/index.js';
+import { mergeYoRcContent } from '../../lib/utils/yo-rc.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.js';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
@@ -134,7 +134,7 @@ export default class JdlGenerator extends BaseGenerator {
           skipUserManagement: this.options.skipUserManagement,
         };
 
-        const importer = createImporterFromContent(this.jdlContents.join('\n'), configuration);
+        const importer = createImporterFromContent(this.jdlContents.join('\n'), configuration, this.options.jdlDefinition);
 
         const importState = importer.import();
 
@@ -270,7 +270,7 @@ export default class JdlGenerator extends BaseGenerator {
       applications.map(async application => {
         const rootCwd = this.destinationPath();
         const cwd = application.folder ? this.destinationPath(application.folder) : rootCwd;
-        const adapter = (this.env.adapter as QueuedAdapter).newAdapter();
+        const adapter = this.env.adapter.newAdapter();
         const envOptions: any = { cwd, logCwd: rootCwd, sharedFs: application.sharedFs, adapter };
         const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
 

@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
-import { stringHashCode, createFaker } from '../base/support/index.js';
+import { createFaker, stringHashCode } from '../base/support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
 import { generateTestEntity as entityWithFakeValues } from '../client/support/index.js';
-import { cypressFiles, cypressEntityFiles } from './files.js';
+import { cypressEntityFiles, cypressFiles } from './files.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
@@ -110,7 +110,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      cleanup({ application: { authenticationTypeOauth2, generateUserManagement, cypressDir } }) {
+      async cleanup({ control, application: { authenticationTypeOauth2, generateUserManagement, cypressDir } }) {
         if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
           this.removeFile(`${cypressDir}support/keycloak-oauth2.ts`);
           this.removeFile(`${cypressDir}fixtures/users/user.json`);
@@ -131,6 +131,8 @@ export default class CypressGenerator extends BaseApplicationGenerator {
             this.removeFile(`${cypressDir}integration/account/reset-password-page.spec.ts`);
           }
         }
+
+        await control.cleanupFiles({ '8.6.1': [`${cypressDir}.eslintrc.json`] });
       },
       async writeFiles({ application }) {
         const faker = await createFaker();
@@ -213,9 +215,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
           scripts: {
             'cypress:audits': 'cypress open --e2e --config-file cypress-audits.config.js',
             'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --config-file cypress-audits.config.js',
-            'e2e:cypress:audits':
-              // eslint-disable-next-line no-template-curly-in-string
-              'cypress run --e2e --browser chrome --config-file cypress-audits.config.js',
+            'e2e:cypress:audits': 'cypress run --e2e --browser chrome --config-file cypress-audits.config.js',
           },
         });
       },

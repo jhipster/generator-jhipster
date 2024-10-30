@@ -18,10 +18,10 @@
  */
 import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
-import { extendMatrix, fromMatrix, defaultHelpers as helpers, result } from '../../../../testing/index.js';
+import { extendMatrix, fromMatrix, defaultHelpers as helpers, result } from '../../../../lib/testing/index.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -57,7 +57,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with generators', () => {
-        expect(result.composedMockedGenerators).toHaveLength(0);
+        expect(result.getComposedGenerators()).toHaveLength(2);
       });
     });
   }

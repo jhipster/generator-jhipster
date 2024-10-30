@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Directive, Host, HostListener, Input, contentChild, effect } from '@angular/core';
+import { Directive, HostListener, Input, contentChild, effect, inject } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faSort, faSortDown, faSortUp, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
@@ -35,7 +35,9 @@ export class SortByDirective {
   protected sortAscIcon = faSortUp;
   protected sortDescIcon = faSortDown;
 
-  constructor(@Host() private sort: SortDirective) {
+  private readonly sort = inject(SortDirective, { host: true });
+
+  constructor() {
     effect(() => {
       if (this.iconComponent()) {
         let icon: IconDefinition = this.sortIcon;

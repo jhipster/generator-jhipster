@@ -329,24 +329,25 @@ if (field.fieldTypeString || field.blobContentTypeText) {
     // Generate Strings, using pattern
     try {
       const patternRegExp = new RegExp(field.fieldValidateRulesPattern);
-      const randExp = field.createRandexp();
       // set infinite repetitions max range
       if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-        sampleTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        const value = field.generateFakeDataFromPattern();
+        sampleTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
       }
       if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-        updatedTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        const value = field.generateFakeDataFromPattern();
+        updatedTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
       }
     } catch (error) {
-      log(this.chalkRed('Error generating test value for entity "' + entityClass +
+      this.log.warn('Error generating test value for entity "' + entityClass +
         '" field "' + field.fieldName + '" with pattern "' + field.fieldValidateRulesPattern +
-        '", generating default values for this field. Detailed error message: "' + error.message + '".'));
+        '", generating default values for this field. Detailed error message: "' + error.message + '".');
     }
     if (sampleTextString === updatedTextString) {
       updatedTextString = updatedTextString + "B";
-      log(this.chalkRed('Randomly generated first and second test values for entity "' + entityClass +
+      this.log.warn('Randomly generated first and second test values for entity "' + entityClass +
         '" field "' + field.fieldName + '" with pattern "' + field.fieldValidateRulesPattern +
-        '" in file "' + entityClass + 'ResourceIT" where equal, added symbol "B" to second value.'));
+        '" in file "' + entityClass + 'ResourceIT" where equal, added symbol "B" to second value.');
     }
   } _%>
 
@@ -516,42 +517,51 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
 <%_ });
 }_%>
 <%_ ['DEFAULT_', 'UPDATED_'].forEach((fieldStatus) => { _%>
+<%_   const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance;  _%>
     /**
      * Create an <% if (fieldStatus === 'UPDATED_') { %>updated <% } %>entity for this test.
      *
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static <%= persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql) { %>EntityManager em<% } %>) {
+    public static <%= persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>EntityManager em<% } %>) {
   <%_ if (fluentMethods) { _%>
-        <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>()
+        <% if (!anyRelationshipIsRequired) { %>return <% } else { %><%= persistClass %> <%= createInstance %> = <% } %>new <%= persistClass %>()
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
             .<%= primaryKey.name %>(UUID.randomUUID())
     <%_ } _%>
     <%_ if (primaryKey.typeString && !isUsingMapsId && !primaryKey.autoGenerate) { _%>
             .<%= primaryKey.name %>(UUID.randomUUID().toString())
     <%_ } _%>
-    <% for (field of fieldsToTest) { %>
-            .<%= field.fieldName %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>
-            .<%= field.fieldName %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
+    <%_ for (field of fieldsToTest) { _%>
+            .<%= field.fieldName %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>)
+      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+            .<%= field.fieldName %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)
+      <%_ } _%>
+    <%_ } _%>;
+    <%_ if (!anyRelationshipIsRequired) { _%>
+    }
+    <%_   return; _%>
+    <%_ } _%>
   <%_ } else { _%>
-        <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>();
+        <%= persistClass %> <%= createInstance %> = new <%= persistClass %>();
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
-        <%= persistInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID());
+        <%= createInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID());
     <%_ } _%>
     <%_ if (primaryKey.typeString && !isUsingMapsId && !primaryKey.autoGenerate) { _%>
-        <%= persistInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID().toString());
+        <%= createInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID().toString());
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
-        <%= persistInstance %>.set<%= field.fieldInJavaBeanMethod %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
+        <%= createInstance %>.set<%= field.fieldInJavaBeanMethod %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        <%= persistInstance %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
+        <%= createInstance %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
   <%_
   const alreadyGeneratedEntities = [];
   for (relationship of persistableRelationships) {
+    const otherEntity = relationship.otherEntity;
     const relationshipValidate = relationship.relationshipValidate;
     const otherEntityName = relationship.otherEntityName;
     const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
@@ -562,7 +572,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
         // Add required entity
       <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
         <%_ if (relationship.otherEntityUser) { /* TODO or other entity has no unique fields */ _%>
-        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (databaseTypeSql) { %>em<% } %>)<%= createEntityPostfix %>;
+        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%= createEntityPostfix %>;
           <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%= otherEntityName %>);
         em.flush();
@@ -576,7 +586,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
             <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
         if (TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).isEmpty()) {
             <%_ } _%>
-            <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(em)<%= createEntityPostfix %>;
+            <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%= createEntityPostfix %>;
             em.persist(<%= otherEntityName %>);
             em.flush();
             <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
@@ -585,7 +595,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
         }
             <%_ } _%>
           <%_ } else { _%>
-        <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql') { %>em<% } %>)<%= createEntityPostfix %>;
+        <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql' && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%= createEntityPostfix %>;
           <%_ } _%>
           <%_ if (databaseTypeMongodb) { _%>
         <%= otherEntityName %>.set<%= primaryKey.nameCapitalized %>("fixed-id-for-tests");
@@ -593,14 +603,14 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
         <%_ } _%>
       <%_ } _%>
       <%_ if (relationship.relationshipManyToMany || relationship.relationshipOneToMany) { _%>
-        <%= persistInstance %>.get<%= relationshipNameCapitalizedPlural %>().add(<%= otherEntityName %>);
+        <%= createInstance %>.get<%= relationshipNameCapitalizedPlural %>().add(<%= otherEntityName %>);
       <%_ } else { _%>
-        <%= persistInstance %>.set<%= relationshipNameCapitalized %>(<%= otherEntityName %>);
+        <%= createInstance %>.set<%= relationshipNameCapitalized %>(<%= otherEntityName %>);
       <%_ } _%>
         <%_ alreadyGeneratedEntities.push(otherEntityName) _%>
     <%_ } _%>
   <%_ } _%>
-        return <%= persistInstance %>;
+        return <%= createInstance %>;
     }
 <%_ }); _%>
 
@@ -636,7 +646,7 @@ _%>
 <%_ } _%>
     @BeforeEach
     public void initTest() {
-        <%= persistInstance %> = createEntity(<% if (databaseTypeSql) { %>em<% } %>);
+        <%= persistInstance %> = createEntity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>em<% } %>);
     }
 
     @AfterEach
@@ -789,13 +799,14 @@ _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
     <%_ } _%>
     <%_ for (relationship of relationships) {
+      const otherEntity = relationship.otherEntity;
       const otherEntityName = relationship.otherEntityName;
       const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
       const mapsIdUse = relationship.id;
       if (mapsIdUse) { _%>
         // Add a new parent entity
         <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
-        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (!relationship.otherEntityUser) { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql) { %>em<% } %>);
+        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (!relationship.otherEntityUser) { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
           <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%= otherEntityName %>);
         em.flush();
@@ -1232,12 +1243,12 @@ _%>
         <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %>;
         if (TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).isEmpty()) {
             <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
-            <%= relationship.relationshipFieldName %> = <%= createEntityPrefix %><%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
+            <%= relationship.relationshipFieldName %> = <%= createEntityPrefix %><%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
         } else {
             <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).get(0);
         }
       <%_ } else { _%>
-        <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
+        <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
       <%_ } _%>
       <%_ if(reactive) { _%>
         <%= relationship.otherEntity.persistInstance %>Repository.<%= saveMethod %>(<%= relationship.relationshipFieldName %>)<%= callBlock %>;
@@ -1889,7 +1900,7 @@ _%>
     }
 
     protected void assertSameRepositoryCount(long countBefore) {
-      assertThat(countBefore).isEqualTo(getRepositoryCount());
+        assertThat(countBefore).isEqualTo(getRepositoryCount());
     }
 
     protected <%- persistClass %> getPersisted<%- persistClass %>(<%- persistClass %> <%- entityInstance %>) {

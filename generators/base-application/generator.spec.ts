@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -19,11 +18,11 @@
  */
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect, esmocha } from 'esmocha';
+import { before, describe, esmocha, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-import { defaultHelpers as helpers } from '../../testing/index.js';
+import { defaultHelpers as helpers } from '../../lib/testing/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import Generator from './index.js';
 
@@ -158,27 +157,30 @@ describe(`generator - ${generator}`, () => {
     }
 
     before(async () => {
-      await helpers.run(CustomGenerator).withJHipsterConfig({}, [
-        {
-          name: 'One',
-          fields: [{ fieldName: 'id', fieldType: 'Long' }],
-          relationships: [{ relationshipName: 'two', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
-        },
-        {
-          name: 'Two',
-          fields: [
-            { fieldName: 'id', fieldType: 'Long' },
-            { fieldName: 'name', fieldType: 'String' },
-          ],
-          relationships: [
-            { relationshipName: 'one', otherEntityName: 'One', relationshipType: 'many-to-one' },
-            { relationshipName: 'three', otherEntityName: 'Three', relationshipType: 'many-to-one' },
-          ],
-        },
-        {
-          name: 'Three',
-        },
-      ]);
+      await helpers
+        .run(CustomGenerator as any)
+        .withJHipsterGenerators({ useDefaultMocks: true })
+        .withJHipsterConfig({}, [
+          {
+            name: 'One',
+            fields: [{ fieldName: 'id', fieldType: 'Long' }],
+            relationships: [{ relationshipName: 'two', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
+          },
+          {
+            name: 'Two',
+            fields: [
+              { fieldName: 'id', fieldType: 'Long' },
+              { fieldName: 'name', fieldType: 'String' },
+            ],
+            relationships: [
+              { relationshipName: 'one', otherEntityName: 'One', relationshipType: 'many-to-one' },
+              { relationshipName: 'three', otherEntityName: 'Three', relationshipType: 'many-to-one' },
+            ],
+          },
+          {
+            name: 'Three',
+          },
+        ]);
     });
 
     it('should call priorities with correct arguments', async () => {
@@ -397,7 +399,8 @@ describe(`generator - ${generator}`, () => {
 
     before(async () => {
       await helpers
-        .run(CustomGenerator)
+        .run(CustomGenerator as any)
+        .withJHipsterGenerators({ useDefaultMocks: true })
         .withJHipsterConfig({}, [
           {
             name: 'One',

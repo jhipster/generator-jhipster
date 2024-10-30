@@ -71,7 +71,7 @@
         </tr>
       </thead>
       <tbody>
-      @for (user of users(); track trackIdentity) {
+      @for (user of users(); track trackIdentity(user)) {
         <tr>
           <td>
             <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>

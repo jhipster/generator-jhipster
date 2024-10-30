@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 export type Account = Record<string, string | boolean | number>;
 
 Cypress.Commands.add('getAccount', () => {

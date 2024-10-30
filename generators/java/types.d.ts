@@ -1,8 +1,14 @@
-import { RequireOneOrNone } from 'type-fest';
-import { BaseApplication } from '../base-application/types.js';
-import { GradleApplication, GradleNeedleOptions } from '../gradle/types.js';
-import { EditFileCallback } from '../base/api.js';
-import { JavaAnnotation } from './support/add-java-annotation.ts';
+import type { RequireOneOrNone } from 'type-fest';
+import type { GradleApplication, GradleNeedleOptions } from '../gradle/types.js';
+import type { EditFileCallback } from '../base/api.js';
+import type { MavenDefinition } from '../maven/types.js';
+import type { ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
+import type { JavaAnnotation } from './support/add-java-annotation.ts';
+import type { default as OpenapiGeneratorCommand } from './generators/openapi-generator/command.js';
+import type { default as BootstrapCommand } from './generators/bootstrap/command.js';
+
+type JavaBootstrapStorageProperties = ExportStoragePropertiesFromCommand<typeof BootstrapCommand>;
+type JavaOpenapiGeneratorStorageProperties = ExportStoragePropertiesFromCommand<typeof OpenapiGeneratorCommand>;
 
 export type JavaDependencyVersion = {
   name: string;
@@ -22,20 +28,23 @@ export type JavaArtifact = {
 
 export type JavaArtifactVersion = RequireOneOrNone<{ version?: string; versionRef?: string }, 'version' | 'versionRef'>;
 
-export type JavaDependency = JavaArtifact & JavaArtifactVersion;
+export type JavaDependency = JavaArtifact &
+  JavaArtifactVersion & {
+    exclusions?: JavaArtifact[];
+  };
 
 export type JavaDefinition = {
   versions?: JavaDependencyVersion[];
   dependencies?: JavaDependency[];
+  mavenDefinition?: MavenDefinition;
 };
 
 export type JavaNeedleOptions = GradleNeedleOptions;
 
-export type JavaApplication = BaseApplication &
+export type JavaApplication = JavaBootstrapStorageProperties &
   GradleApplication & {
     javaVersion: string;
 
-    packageName: string;
     packageFolder: string;
     entityPackages: string[];
 
@@ -67,6 +76,8 @@ export type JavaApplication = BaseApplication &
     addOpenapiGeneratorPlugin: boolean;
   };
 
+export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };
+
 export type JavaSourceType = {
   /**
    * Add a JavaDefinition to the application.
@@ -74,6 +85,10 @@ export type JavaSourceType = {
    * A dependency with versionRef requires a valid referenced version at `versions` otherwise it will be ignored.
    */
   addJavaDefinition?(definition: JavaDefinition, options?: JavaNeedleOptions): void;
+  addJavaDefinitions?(
+    optionsOrDefinition: JavaNeedleOptions | ConditionalJavaDefinition,
+    ...definitions: ConditionalJavaDefinition[]
+  ): void;
   addJavaDependencies?(dependency: JavaDependency[], options?: JavaNeedleOptions): void;
   hasJavaProperty?(propertyName: string): boolean;
   hasJavaManagedProperty?(propertyName: string): boolean;

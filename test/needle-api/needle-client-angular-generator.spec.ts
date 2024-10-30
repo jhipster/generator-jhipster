@@ -1,5 +1,5 @@
-import { before, it, describe } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../testing/index.js';
+import { before, describe, it } from 'esmocha';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 
 import AngularGenerator from '../../generators/angular/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.js';
@@ -16,7 +16,7 @@ const mockAngularBlueprintSubGen = class extends AngularGenerator {
       addToMenuStep() {
         this.addElementToAdminMenu('routerName2', 'iconName2', true);
       },
-      addToModuleStep({ application, source }) {
+      addToModuleStep({ source, application }) {
         source.addEntitiesToClient({
           application,
           entities: [
@@ -47,7 +47,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
         skipServer: true,
       })
       .withOptions({
-        blueprint: 'myblueprint2',
+        blueprint: ['myblueprint2'],
       })
       .withGenerators([[mockAngularBlueprintSubGen, { namespace: 'jhipster-myblueprint2:angular' }]]);
   });
@@ -95,11 +95,11 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
     );
   });
   it('should bail on any file change adding same needles again', async () => {
-    await runResult
-      .create('jhipster:angular')
+    await helpers
+      .runJHipsterInApplication('jhipster:angular')
       .withGenerators([[mockAngularBlueprintSubGen, { namespace: 'jhipster-myblueprint2:angular' }]])
       .withOptions({
-        blueprint: 'myblueprint2',
+        blueprint: ['myblueprint2'],
         force: false,
       });
   });

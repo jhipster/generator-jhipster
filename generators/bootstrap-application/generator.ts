@@ -19,12 +19,12 @@
 import assert from 'assert';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { validations } from '../../jdl/jhipster/index.js';
+import { validations } from '../../lib/jhipster/index.js';
 import {
-  stringifyApplicationData,
   derivedPrimaryKeyProperties,
   preparePostEntitiesCommonDerivedProperties,
   preparePostEntityCommonDerivedProperties,
+  stringifyApplicationData,
 } from '../base-application/support/index.js';
 
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.js';
@@ -69,12 +69,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           gatewayServicesApiAvailable: undefined,
         });
 
-        applicationDefaults({
-          useNpmWrapper: application => application.clientFrameworkAny && application.backendTypeJavaAny,
-          documentationArchiveUrl: ({ jhipsterVersion }) =>
-            `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`,
-        });
-
         let prettierExtensions = 'md,json,yml,html';
         if (application.clientFrameworkAny) {
           prettierExtensions = `${prettierExtensions},cjs,mjs,js,ts,tsx,css,scss`;
@@ -85,7 +79,14 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
         if (!application.skipServer) {
           prettierExtensions = `${prettierExtensions},java`;
         }
-        application.prettierExtensions = prettierExtensions;
+
+        applicationDefaults({
+          // TODO remove prettierExtensions, moved to prettier generator
+          prettierExtensions,
+          useNpmWrapper: application => application.clientFrameworkAny && application.backendTypeJavaAny,
+          documentationArchiveUrl: ({ jhipsterVersion }) =>
+            `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`,
+        });
       },
     });
   }
@@ -101,7 +102,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           entityConfig.name = entityName;
         }
 
-        entityConfig.fields.forEach((field: any) => {
+        entityConfig.fields!.forEach((field: any) => {
           const { fieldName, fieldType, fieldValidateRules } = field;
 
           assert(fieldName, `fieldName is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);

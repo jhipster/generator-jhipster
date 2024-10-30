@@ -22,7 +22,6 @@
 -%>
 <&_ if (fragment.importSection) { -&>
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 <&_ } -&>
@@ -55,7 +54,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 <%_ for (const relationship of relationships) { _%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
-    @Transient
+    @org.springframework.data.annotation.Transient
 <&_ } -&>
 <%_ } -%>
 

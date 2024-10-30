@@ -1,7 +1,7 @@
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_WORKSPACES } from '../generator-list.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   arguments: {
     jdlFiles: {
       type: Array,
@@ -44,6 +44,7 @@ const command: JHipsterCommandDefinition = {
       description: 'Pass JDL content inline. Argument can be skipped when passing this',
       type: String,
       scope: 'generator',
+      env: 'JHI_JDL',
     },
     skipUserManagement: {
       description: 'Skip the user management module during app generation',
@@ -52,6 +53,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [GENERATOR_WORKSPACES],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

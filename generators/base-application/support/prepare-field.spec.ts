@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import { it, describe, beforeEach } from 'esmocha';
+import { beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { formatDateForChangelog } from '../../base/support/index.js';
 import BaseGenerator from '../../base/index.js';
-import { getConfigWithDefaults } from '../../../jdl/jhipster/index.js';
+import { getConfigWithDefaults } from '../../../lib/jhipster/index.js';
 import prepareFieldForTemplates, { getEnumValuesWithCustomValues } from './prepare-field.js';
 import prepareEntityForTemplates, { loadRequiredConfigIntoEntity } from './prepare-entity.js';
 
@@ -39,7 +39,6 @@ describe('generator - base-application - support - prepareField', () => {
 
   describe('prepareFieldForTemplates', () => {
     describe('when called', () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let field: any = { fieldName: 'name', fieldType: 'String' };
       beforeEach(() => {
         field = prepareFieldForTemplates(defaultEntity, field, defaultGenerator);
@@ -58,7 +57,6 @@ describe('generator - base-application - support - prepareField', () => {
       });
     });
     describe('with dto == mapstruct and @MapstructExpression', () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let field: any = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
       beforeEach(() => {
         field = prepareFieldForTemplates({ ...defaultEntity, dto: 'mapstruct' }, field, defaultGenerator);
@@ -73,6 +71,7 @@ describe('generator - base-application - support - prepareField', () => {
   describe('getEnumValuesWithCustomValues', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
+        // @ts-expect-error testing invalid arguments
         expect(() => getEnumValuesWithCustomValues()).to.throw(/^Enumeration values must be passed to get the formatted values\.$/);
       });
     });

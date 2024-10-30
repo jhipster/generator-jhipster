@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { normalizeLineEndings, stripMargin } from './contents.js';
 
 describe('generator - base - support - contents', () => {

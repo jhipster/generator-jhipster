@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import {
   GENERATOR_BOOTSTRAP,
   GENERATOR_BOOTSTRAP_APPLICATION_BASE,
@@ -28,11 +28,12 @@ import {
   GENERATOR_SERVER,
 } from '../generator-list.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {
     defaults: {
       description: 'Execute jhipster with default config',
       type: Boolean,
+      scope: 'none',
     },
     skipClient: {
       description: 'Skip the client-side application generation',
@@ -62,15 +63,18 @@ const command: JHipsterCommandDefinition = {
     blueprint: {
       description: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
       type: Array,
+      scope: 'none',
     },
     blueprints: {
       description:
         'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
       type: String,
+      scope: 'none',
     },
     ignoreErrors: {
       description: "Don't fail on prettier errors.",
       type: Boolean,
+      scope: 'none',
     },
     pkType: {
       description: 'Default primary key type (beta)',
@@ -85,6 +89,7 @@ const command: JHipsterCommandDefinition = {
     testFrameworks: {
       description: 'Test frameworks to be generated',
       type: Array,
+      scope: 'none',
     },
   },
   import: [
@@ -97,6 +102,6 @@ const command: JHipsterCommandDefinition = {
     GENERATOR_CYPRESS,
     GENERATOR_LANGUAGES,
   ],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

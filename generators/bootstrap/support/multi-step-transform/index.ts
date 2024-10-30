@@ -19,12 +19,11 @@
 import { type DuplexWithDebug, transform } from 'p-transform';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import TemplateFileFs from './template-file-fs.js';
-import TemplateFile from './template-file.js';
+import type TemplateFile from './template-file.js';
 
-// eslint-disable-next-line import/prefer-default-export
 export const createMultiStepTransform = () => {
   const templateFileFs = new TemplateFileFs({});
-  const templateFiles: Array<TemplateFile> = [];
+  const templateFiles: TemplateFile[] = [];
 
   const duplex: DuplexWithDebug & { templateFileFs: TemplateFileFs } = transform(
     (file: MemFsEditorFile) => {

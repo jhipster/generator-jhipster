@@ -16,14 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import assert from 'assert';
 import { snakeCase } from 'lodash-es';
-import { before, it, describe, expect } from 'esmocha';
-import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
-import { defaultHelpers as helpers, result } from '../../testing/index.js';
-import { testFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { before, describe, expect, it } from 'esmocha';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
+import { defaultHelpers as helpers, result, runResult } from '../../lib/testing/index.js';
+import { testFrameworkTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_CLIENT } from '../generator-list.js';
 import Generator from './index.js';
 
@@ -33,7 +32,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.js');
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -47,11 +45,10 @@ describe(`generator - ${generator}`, () => {
     const mockedComposedGenerators = ['jhipster:common', 'jhipster:languages', 'jhipster:cypress'];
 
     describe('with translation disabled', () => {
-      let runResult;
       const options = { enableTranslation: false };
       before(async () => {
-        runResult = await helpers
-          .run(generatorFile)
+        await helpers
+          .runJHipster(generator)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
@@ -59,19 +56,18 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with jhipster:common', () => {
-        assert(runResult.mockedGenerators['jhipster:common'].calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:common');
       });
       it('should compose with jhipster:languages', () => {
-        assert.equal(runResult.mockedGenerators['jhipster:languages'].callCount, 1);
+        runResult.assertGeneratorComposedOnce('jhipster:languages');
       });
     });
 
     describe('with translation enabled', () => {
-      let runResult;
       const options = { enableTranslation: true };
       before(async () => {
-        runResult = await helpers
-          .run(generatorFile)
+        await helpers
+          .runJHipster(generator)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
@@ -79,19 +75,18 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with jhipster:common', () => {
-        assert(runResult.mockedGenerators['jhipster:common'].calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:common');
       });
       it('should compose with jhipster:languages', () => {
-        assert.equal(runResult.mockedGenerators['jhipster:languages'].callCount, 1);
+        runResult.assertGeneratorComposedOnce('jhipster:languages');
       });
     });
 
     describe('without cypress', () => {
-      let runResult;
       const options = { testFrameworks: [] };
       before(async () => {
-        runResult = await helpers
-          .run(generatorFile)
+        await helpers
+          .runJHipster(generator)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
@@ -99,22 +94,21 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with jhipster:common', () => {
-        assert(runResult.mockedGenerators['jhipster:common'].calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:common');
       });
       it('should compose with jhipster:languages', () => {
-        assert(runResult.mockedGenerators['jhipster:languages'].calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:languages');
       });
       it('should not compose with jhipster:cypress', () => {
-        assert.equal(runResult.mockedGenerators['jhipster:cypress'].callCount, 0);
+        runResult.assertGeneratorNotComposed('jhipster:cypress');
       });
     });
 
     describe('with cypress', () => {
-      let runResult;
       const options = { testFrameworks: [CYPRESS] };
       before(async () => {
-        runResult = await helpers
-          .run(generatorFile)
+        await helpers
+          .runJHipster(generator)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
@@ -122,13 +116,13 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with jhipster:common', () => {
-        assert(runResult.mockedGenerators['jhipster:common'].calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:common');
       });
       it('should compose with jhipster:languages', () => {
-        assert(runResult.mockedGenerators['jhipster:languages'].calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:languages');
       });
       it('should compose with jhipster:cypress', () => {
-        assert(runResult.mockedGenerators['jhipster:cypress'].calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:cypress');
       });
     });
   });
@@ -142,33 +136,32 @@ describe(`generator - ${generator}`, () => {
       'jhipster:react',
       'jhipster:vue',
     ];
-    const options = { applicationType: 'microservice' };
     before(async () => {
       await helpers
-        .run(generatorFile)
+        .runJHipster(generator)
         .withControl({ getWebappTranslation: () => 'translations' })
-        .withJHipsterConfig(options)
+        .withJHipsterConfig({ applicationType: 'microservice' })
         .withSkipWritingPriorities()
         .withMockedGenerators(mockedComposedGenerators);
     });
 
     it('should compose with jhipster:common', () => {
-      assert(result.mockedGenerators['jhipster:common'].calledOnce);
+      result.assertGeneratorComposedOnce('jhipster:common');
     });
     it('should compose with jhipster:languages', () => {
-      assert(result.mockedGenerators['jhipster:languages'].notCalled);
+      result.assertGeneratorNotComposed('jhipster:languages');
     });
     it('should compose with jhipster:cypress', () => {
-      assert(result.mockedGenerators['jhipster:cypress'].notCalled);
+      result.assertGeneratorNotComposed('jhipster:cypress');
     });
     it('should compose with jhipster:angular', () => {
-      assert(result.mockedGenerators['jhipster:angular'].notCalled);
+      result.assertGeneratorNotComposed('jhipster:angular');
     });
     it('should compose with jhipster:react', () => {
-      assert(result.mockedGenerators['jhipster:react'].notCalled);
+      result.assertGeneratorNotComposed('jhipster:react');
     });
     it('should compose with jhipster:vue', () => {
-      assert(result.mockedGenerators['jhipster:vue'].notCalled);
+      result.assertGeneratorNotComposed('jhipster:vue');
     });
   });
 });

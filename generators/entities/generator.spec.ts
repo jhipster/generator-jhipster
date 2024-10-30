@@ -18,18 +18,17 @@
  */
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
+import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { skipPrettierHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import Generator from './generator.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const generator = basename(__dirname);
-const generatorPath = `${__dirname}/index.ts`;
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -75,7 +74,7 @@ describe(`generator - ${generator}`, () => {
     describe('some entities', () => {
       before(async () => {
         await helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withJHipsterConfig({}, entities)
           .withArguments(['Foo', 'Bar'])
           .withOptions({
@@ -110,7 +109,7 @@ describe(`generator - ${generator}`, () => {
     describe('all entities', () => {
       before(async () => {
         await helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withJHipsterConfig({}, entities)
           .withOptions({
             regenerate: true,

@@ -17,20 +17,25 @@
  * limitations under the License.
  */
 
+import assert from 'assert';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_LIQUIBASE } from '../generator-list.js';
-import { isReservedTableName } from '../../jdl/jhipster/reserved-keywords.js';
-import { databaseTypes } from '../../jdl/jhipster/index.js';
-import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.js';
+import { isReservedTableName } from '../../lib/jhipster/reserved-keywords.js';
+import { databaseTypes } from '../../lib/jhipster/index.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
 import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.js';
-import { getDatabaseDriverForDatabase, getDatabaseTypeMavenDefinition, getH2MavenDefinition } from './internal/dependencies.js';
+import {
+  getDatabaseDriverForDatabase,
+  getDatabaseTypeMavenDefinition,
+  getH2MavenDefinition,
+  javaSqlDatabaseArtifacts,
+} from './internal/dependencies.js';
 
 const { SQL } = databaseTypes;
 
-export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
+export default class SqlGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -60,7 +65,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
         anyApp.devDatabaseExtraOptions = getDBCExtraOption(anyApp.devDatabaseType);
         anyApp.prodDatabaseExtraOptions = getDBCExtraOption(anyApp.prodDatabaseType);
 
-        anyApp.prodDatabaseDriver = getDatabaseDriverForDatabase(application.prodDatabaseType);
+        anyApp.prodDatabaseDriver = getDatabaseDriverForDatabase(application.prodDatabaseType!);
       },
     });
   }
@@ -139,57 +144,103 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
       },
       addDependencies({ application, source }) {
         const { reactive, javaDependencies, packageFolder } = application;
+        assert.ok(javaDependencies, 'javaDependencies is required');
+        assert.ok(packageFolder, 'packageFolder is required');
 
-        if (reactive) {
-          source.addJavaDependencies?.([
-            { groupId: 'commons-beanutils', artifactId: 'commons-beanutils', version: javaDependencies['commons-beanutils'] },
-            { groupId: 'jakarta.persistence', artifactId: 'jakarta.persistence-api' },
-            { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-r2dbc' },
-          ]);
-        } else {
-          source.addJavaDependencies?.([
-            { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
-            { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
-            { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
-            { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa' },
-            { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
-            { scope: 'annotationProcessor', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' },
-          ]);
-        }
+        const { prodDatabaseType, devDatabaseTypeH2Any } = application as any;
+        const dbDefinitions = getDatabaseTypeMavenDefinition(prodDatabaseType, {
+          inProfile: devDatabaseTypeH2Any ? 'prod' : undefined,
+          javaDependencies,
+        });
+        const h2Definitions = devDatabaseTypeH2Any ? getH2MavenDefinition({ prodDatabaseType, packageFolder }) : undefined;
 
-        source.addJavaDependencies?.([
-          { groupId: 'com.fasterxml.jackson.module', artifactId: 'jackson-module-jaxb-annotations' },
-          { groupId: 'com.zaxxer', artifactId: 'HikariCP' },
-          { scope: 'annotationProcessor', groupId: 'org.glassfish.jaxb', artifactId: 'jaxb-runtime' },
-        ]);
+        source.addJavaDefinitions?.(
+          {
+            condition: reactive,
+            dependencies: [
+              {
+                groupId: 'commons-beanutils',
+                artifactId: 'commons-beanutils',
+                version: javaDependencies['commons-beanutils'],
+                exclusions: [{ groupId: 'commons-logging', artifactId: 'commons-logging' }],
+              },
+              { groupId: 'jakarta.persistence', artifactId: 'jakarta.persistence-api' },
+              { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-r2dbc' },
+            ],
+            mavenDefinition: dbDefinitions.r2dbc,
+          },
+          {
+            condition: !reactive,
+            dependencies: [
+              { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
+              { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
+              { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
+              { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa' },
+              { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
+              { scope: 'annotationProcessor', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' },
+            ],
+            mavenDefinition: { dependencies: [{ inProfile: 'IDE', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' }] },
+          },
+          {
+            dependencies: [
+              { groupId: 'com.fasterxml.jackson.module', artifactId: 'jackson-module-jaxb-annotations' },
+              { groupId: 'com.zaxxer', artifactId: 'HikariCP' },
+              { scope: 'annotationProcessor', groupId: 'org.glassfish.jaxb', artifactId: 'jaxb-runtime' },
+              { scope: 'test', groupId: 'org.testcontainers', artifactId: 'jdbc' },
+              { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
+              { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
+            ],
+            mavenDefinition: dbDefinitions.jdbc,
+          },
+          {
+            condition: devDatabaseTypeH2Any,
+            mavenDefinition: h2Definitions?.jdbc,
+          },
+          {
+            condition: devDatabaseTypeH2Any && reactive,
+            mavenDefinition: h2Definitions?.r2dbc,
+          },
+        );
 
-        source.addJavaDependencies?.([
-          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'jdbc' },
-          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
-          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
-        ]);
-
-        if (application.buildToolMaven) {
-          const { prodDatabaseType, devDatabaseTypeH2Any } = application as any;
-
-          const inProfile = devDatabaseTypeH2Any ? 'prod' : undefined;
-          if (!reactive) {
-            source.addMavenDefinition?.({
-              dependencies: [{ inProfile: 'IDE', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' }],
-            });
-          }
+        if (application.buildToolGradle) {
+          const artifacts = javaSqlDatabaseArtifacts[prodDatabaseType];
+          source.addJavaDefinition!(
+            { dependencies: [artifacts.jdbc, artifacts.testContainer, ...(reactive && artifacts.r2dbc ? [artifacts.r2dbc] : [])] },
+            { gradleFile: devDatabaseTypeH2Any ? 'gradle/profile_prod.gradle' : 'build.gradle' },
+          );
           if (devDatabaseTypeH2Any) {
-            const h2Definitions = getH2MavenDefinition({ prodDatabaseType, packageFolder });
-            source.addMavenDefinition?.(h2Definitions.jdbc);
-            if (reactive) {
-              source.addMavenDefinition?.(h2Definitions.r2dbc);
-            }
+            source.addJavaDefinition!(
+              { dependencies: [javaSqlDatabaseArtifacts.h2.jdbc, ...(reactive ? [javaSqlDatabaseArtifacts.h2.r2dbc] : [])] },
+              { gradleFile: 'gradle/profile_dev.gradle' },
+            );
           }
-          const dbDefinitions = getDatabaseTypeMavenDefinition(prodDatabaseType, { inProfile, javaDependencies });
-          source.addMavenDefinition?.(dbDefinitions.jdbc);
-          if (reactive) {
-            source.addMavenDefinition?.(dbDefinitions.r2dbc);
-          }
+        }
+      },
+      nativeHints({ application, source }) {
+        if (application.reactive || !application.graalvmSupport) return;
+
+        // Latest hibernate-core version supported by Reachability Repository is 6.5.0.Final
+        // Hints may be dropped if newer version is supported
+        // https://github.com/oracle/graalvm-reachability-metadata/blob/master/metadata/org.hibernate.orm/hibernate-core/index.json
+        source.addNativeHint!({
+          publicConstructors: ['org.hibernate.binder.internal.BatchSizeBinder.class'],
+        });
+      },
+      async nativeGradleBuildTool({ application, source }) {
+        if (!application.buildToolGradle || !application.graalvmSupport) return;
+
+        const { reactive, javaManagedProperties, buildToolMaven } = application;
+        if (buildToolMaven) {
+          source.addMavenProperty!({ property: 'spring.h2.console.enabled', value: 'true' });
+        }
+        if (!reactive) {
+          source.addGradleDependencyCatalogVersion!({ name: 'hibernate', version: javaManagedProperties!['hibernate.version']! });
+          source.addGradleDependencyCatalogPlugin!({
+            addToBuild: true,
+            pluginName: 'hibernate',
+            id: 'org.hibernate.orm',
+            'version.ref': 'hibernate',
+          });
         }
       },
     });
@@ -197,6 +248,29 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
+  get postWritingEntities() {
+    return this.asPostWritingEntitiesTaskGroup({
+      async jsonFilter({ application, entities, source }) {
+        if (application.reactive || !application.graalvmSupport) return;
+        for (const entity of entities.filter(({ builtIn, builtInUser, embedded }) => builtInUser || (!builtIn && !embedded))) {
+          source.editJavaFile!(`${application.srcMainJava}/${entity.entityAbsoluteFolder}/domain/${entity.entityClass}.java`, {
+            annotations: [
+              {
+                package: 'com.fasterxml.jackson.annotation',
+                annotation: 'JsonFilter',
+                parameters: () => '"lazyPropertyFilter"',
+              },
+            ],
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
   /**

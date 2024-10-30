@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { parseCreationTimestamp } from '../base/support/timestamp.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {
     baseName: {
       description: 'Application base name',
@@ -29,6 +29,7 @@ const command: JHipsterCommandDefinition = {
     skipJhipsterDependencies: {
       description: "Don't write jhipster dependencies to package.json.",
       type: Boolean,
+      env: 'JHI_SKIP_JHIPSTER_DEPENDENCIES',
       scope: 'storage',
     },
     creationTimestamp: {
@@ -46,6 +47,6 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
   },
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

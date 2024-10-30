@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { WriteFileSection } from '../../../base/api.js';
-import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR, GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
+import type { WriteFileSection } from '../../../base/api.js';
+import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.js';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../../../server/support/index.js';
 
-export const kafkaFiles: WriteFileSection<any, any> = {
+export const kafkaFiles: WriteFileSection = {
   config: [
     {
       condition: data => data.buildToolGradle,

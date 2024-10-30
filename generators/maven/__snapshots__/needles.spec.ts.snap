@@ -30,23 +30,6 @@ exports[`generator - maven - needles prod profile should match generated pom 1`]
     <profiles>
         <profile>
             <id>prod</id>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>dependencyManagementGroupId</groupId>
-                        <artifactId>dependencyManagementArtifactId</artifactId>
-                        <version>version</version>
-                        <type>type</type>
-                        <scope>scope</scope>
-                        <exclusions>
-                            <exclusion>
-                                <groupId>exclusionGroupId</groupId>
-                                <artifactId>exclusionArtifactId</artifactId>
-                            </exclusion>
-                        </exclusions>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
             <distributionManagement>
                 <snapshotRepository>
                     <id>snapshotsId</id>
@@ -60,6 +43,23 @@ exports[`generator - maven - needles prod profile should match generated pom 1`]
             <properties>
                 <propertyName.dotted>propertyValue</propertyName.dotted>
             </properties>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>dependencyManagementGroupId</groupId>
+                        <artifactId>dependencyManagementArtifactId</artifactId>
+                        <version>version</version>
+                        <type>jar</type>
+                        <scope>test</scope>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>exclusionGroupId</groupId>
+                                <artifactId>exclusionArtifactId</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
             <dependencies>
                 <dependency>
                     <groupId>dependencyGroupId</groupId>
@@ -90,17 +90,6 @@ exports[`generator - maven - needles prod profile should match generated pom 1`]
                 <pluginManagement>
                     <plugins>
                         <plugin>
-                            <groupId>mavenPluginManagementGroupId</groupId>
-                            <artifactId>mavenPluginManagementArtifactId</artifactId>
-                            <version>version</version>
-                            <exclusions>
-                                <exclusion>
-                                    <groupId>exclusionGroupId</groupId>
-                                    <artifactId>exclusionArtifactId</artifactId>
-                                </exclusion>
-                            </exclusions>
-                        </plugin>
-                        <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-compiler-plugin</artifactId>
                             <configuration>
@@ -112,6 +101,17 @@ exports[`generator - maven - needles prod profile should match generated pom 1`]
                                     </path>
                                 </annotationProcessorPaths>
                             </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>mavenPluginManagementGroupId</groupId>
+                            <artifactId>mavenPluginManagementArtifactId</artifactId>
+                            <version>version</version>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>exclusionGroupId</groupId>
+                                    <artifactId>exclusionArtifactId</artifactId>
+                                </exclusion>
+                            </exclusions>
                         </plugin>
                     </plugins>
                 </pluginManagement>

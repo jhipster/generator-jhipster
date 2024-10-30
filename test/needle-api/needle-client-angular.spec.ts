@@ -1,12 +1,9 @@
-import { before, it, describe } from 'esmocha';
-import { basicHelpers as helpers, result as runResult, getGenerator } from '../../testing/index.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { before, describe, it } from 'esmocha';
+import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.js';
 import BaseApplicationGenerator from '../../generators/base-application/index.js';
 import AngularGenerator from '../../generators/angular/index.js';
-
-const { ANGULAR } = clientFrameworkTypes;
 
 const mockBlueprintSubGen = class extends AngularGenerator {
   constructor(args, opts, features) {
@@ -15,7 +12,7 @@ const mockBlueprintSubGen = class extends AngularGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return {
+    return this.asPostWritingTaskGroup({
       addCssStylesProperty() {
         this.addMainSCSSStyle('@import style_without_comment;');
         this.addMainSCSSStyle('@import style;', 'my comment');
@@ -23,28 +20,27 @@ const mockBlueprintSubGen = class extends AngularGenerator {
         this.addVendorSCSSStyle('@import style_without_comment;');
       },
       addToMenuStep() {
-        this.addElementToMenu('routerName1', 'iconName1', true, ANGULAR);
+        this.addElementToMenu('routerName1', 'iconName1', true);
       },
       addToModuleStep() {
-        this.addAngularModule('appName', 'angularName', 'folderName', 'fileName', true, ANGULAR);
+        this.addAngularModule('appName', 'angularName', 'folderName', 'fileName', true);
         this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule', 'entityAudit.home.title');
       },
-    };
+    });
   }
 };
 
 describe('needle API Angular: JHipster angular generator with blueprint', () => {
   before(async () => {
     await helpers
-      .create(getGenerator('angular'))
+      .runJHipster('angular')
       .withJHipsterConfig({
         skipServer: true,
       })
       .withOptions({
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
       })
-      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:angular' }]])
-      .run();
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:angular' }]]);
   });
 
   it('vendor.scss contains the specific change (without comment) added by needle api', () => {

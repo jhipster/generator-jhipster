@@ -1,0 +1,1224 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - server composing databaseType option no with jwt should match generated files 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/SecurityInMemoryConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/filter/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/vm/LoginVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/CRLFLogConverterTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/WebConfigurerTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/AuthenticationIntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/JwtAuthenticationTestUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AuthenticateControllerIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - server composing databaseType option no with oauth2 should match generated files 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/OAuth2Configuration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/oauth2/AudienceValidator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/oauth2/CustomClaimConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/oauth2/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/filter/OAuth2RefreshTokensWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/filter/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthInfoResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/LogoutResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/CRLFLogConverterTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestSecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/WebConfigurerTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/oauth2/AudienceValidatorTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/oauth2/CustomClaimConverterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/test/util/OAuth2TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/LogoutResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - server composing databaseType option no with session should match generated files 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/filter/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/CRLFLogConverterTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/WebConfigurerTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - server with entities should match files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": {
+    "stateCleared": "modified",
+  },
+  ".gitignore": {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Bar.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Foo.json": {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.cjs": {
+    "stateCleared": "modified",
+  },
+  ".mvn/jvm.config": {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.properties": {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "README.md": {
+    "stateCleared": "modified",
+  },
+  "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "mvnw": {
+    "stateCleared": "modified",
+  },
+  "mvnw.cmd": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/postgresql.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/DatabaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/LiquibaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/AbstractAuditingEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/Authority.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/Bar.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/Foo.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/User.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/BarRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/FooRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/DomainUserDetailsService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/SpringSecurityAuditorAware.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/UserNotActivatedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/EmailAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/InvalidPasswordException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/MailService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/UserService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/UsernameAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/dto/AdminUserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/dto/BarDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/dto/PasswordChangeDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/dto/UserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/dto/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/mapper/BarMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/mapper/UserMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/mapper/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthorityResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/BarResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/FooResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/UserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/EmailAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/InvalidPasswordException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/LoginAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/errors/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/vm/KeyAndPasswordVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/vm/LoginVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/vm/ManagedUserVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/vm/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20160926101210_added_entity_Foo.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20160926101211_added_entity_Bar.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/data/authority.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/data/user.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/data/user_authority.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/fake-data/bar.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/fake-data/foo.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/master.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages_en.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/activationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/creationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/passwordResetEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/CRLFLogConverterTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/SqlTestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/WebConfigurerTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/timezone/HibernateTimeZoneIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityAsserts.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/BarAsserts.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/BarTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooAsserts.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/repository/timezone/DateTimeWrapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/repository/timezone/DateTimeWrapperRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/DomainUserDetailsServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/AuthenticationIntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/JwtAuthenticationTestUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/service/UserServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/service/dto/BarDTOTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/service/mapper/BarMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/service/mapper/UserMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AuthenticateControllerIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AuthorityResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/BarResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/FooResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/UserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testdev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-testprod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_en.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/activationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/testEmail.html": {
+    "stateCleared": "modified",
+  },
+}
+`;

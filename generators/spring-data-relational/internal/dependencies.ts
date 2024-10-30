@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-import { MavenDefinition, MavenPlugin } from '../../maven/types.js';
+import type { JavaDependency } from '../../java/types.js';
+import type { MavenDefinition, MavenPlugin } from '../../maven/types.js';
 
 type DatabaseTypeDependencies = {
   jdbc: MavenDefinition;
@@ -31,31 +32,42 @@ const testcontainerFileForDB = {
   postgresql: 'PostgreSqlTestContainer.java',
 };
 
-type JavaDependency = { groupId: string; artifactId: string; version?: string };
-export type DatabaseArtifact = { jdbc: JavaDependency; r2dbc: JavaDependency };
+export type DatabaseArtifact = { jdbc: JavaDependency; r2dbc?: JavaDependency; testContainer?: JavaDependency };
 
-const databaseArtifactForDB: Record<string, DatabaseArtifact> = {
+export const javaSqlDatabaseArtifacts = {
   mariadb: {
     jdbc: { groupId: 'org.mariadb.jdbc', artifactId: 'mariadb-java-client' },
     // maria-r2dbc driver is failing.
     // r2dbc: { groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb' },
     r2dbc: { groupId: 'io.asyncer', artifactId: 'r2dbc-mysql' },
+    testContainer: { groupId: 'org.testcontainers', artifactId: 'mariadb', scope: 'test' },
   },
   mssql: {
     jdbc: { groupId: 'com.microsoft.sqlserver', artifactId: 'mssql-jdbc' },
     r2dbc: { groupId: 'io.r2dbc', artifactId: 'r2dbc-mssql' },
+    testContainer: { groupId: 'org.testcontainers', artifactId: 'mssqlserver', scope: 'test' },
   },
   mysql: {
     jdbc: { groupId: 'com.mysql', artifactId: 'mysql-connector-j' },
     r2dbc: { groupId: 'io.asyncer', artifactId: 'r2dbc-mysql' },
+    testContainer: { groupId: 'org.testcontainers', artifactId: 'mysql', scope: 'test' },
   },
   postgresql: {
     jdbc: { groupId: 'org.postgresql', artifactId: 'postgresql' },
     r2dbc: { groupId: 'org.postgresql', artifactId: 'r2dbc-postgresql' },
+    testContainer: { groupId: 'org.testcontainers', artifactId: 'postgresql', scope: 'test' },
   },
-};
+  oracle: {
+    jdbc: { groupId: 'com.oracle.database.jdbc', artifactId: 'ojdbc8' },
+    testContainer: { groupId: 'org.testcontainers', artifactId: 'oracle-xe', scope: 'test' },
+  },
+  h2: {
+    jdbc: { groupId: 'com.h2database', artifactId: 'h2' },
+    r2dbc: { groupId: 'io.r2dbc', artifactId: 'r2dbc-h2' },
+  },
+} as const satisfies Record<string, DatabaseArtifact>;
 
-export const getDatabaseDriverForDatabase = (databaseType: string) => databaseArtifactForDB[databaseType];
+export const getDatabaseDriverForDatabase = (databaseType: string) => javaSqlDatabaseArtifacts[databaseType];
 
 export const getH2MavenDefinition = ({
   prodDatabaseType,
@@ -84,16 +96,15 @@ export const getH2MavenDefinition = ({
 
   return {
     jdbc: {
-      dependencies: [{ inProfile: 'dev', groupId: 'com.h2database', artifactId: 'h2' }],
+      dependencies: [{ inProfile: 'dev', ...javaSqlDatabaseArtifacts.h2.jdbc }],
       plugins: excludeContainerPlugin,
     },
     r2dbc: {
-      dependencies: [{ inProfile: 'dev', groupId: 'io.r2dbc', artifactId: 'r2dbc-h2' }],
+      dependencies: [{ inProfile: 'dev', ...javaSqlDatabaseArtifacts.h2.r2dbc }],
     },
   };
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const getDatabaseTypeMavenDefinition: (
   databaseType: string,
   options: { inProfile?: string; javaDependencies: Record<string, string> },
@@ -102,41 +113,41 @@ export const getDatabaseTypeMavenDefinition: (
     mariadb: {
       jdbc: {
         dependencies: [
-          { inProfile, ...databaseArtifactForDB.mariadb.jdbc },
-          { groupId: 'org.testcontainers', artifactId: 'mariadb', scope: 'test' },
+          { inProfile, ...javaSqlDatabaseArtifacts.mariadb.jdbc },
+          { inProfile, ...javaSqlDatabaseArtifacts.mariadb.testContainer },
         ],
       },
       r2dbc: {
-        dependencies: [{ inProfile, ...databaseArtifactForDB.mariadb.r2dbc }],
+        dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.mariadb.r2dbc }],
       },
     },
     mssql: {
       jdbc: {
         dependencies: [
-          { inProfile, ...databaseArtifactForDB.mssql.jdbc },
-          { groupId: 'org.testcontainers', artifactId: 'mssqlserver', scope: 'test' },
+          { inProfile, ...javaSqlDatabaseArtifacts.mssql.jdbc },
+          { inProfile, ...javaSqlDatabaseArtifacts.mssql.testContainer },
         ],
       },
       r2dbc: {
-        dependencies: [{ inProfile, ...databaseArtifactForDB.mssql.r2dbc }],
+        dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.mssql.r2dbc }],
       },
     },
     mysql: {
       jdbc: {
         dependencies: [
-          { inProfile, ...databaseArtifactForDB.mysql.jdbc },
-          { groupId: 'org.testcontainers', artifactId: 'mysql', scope: 'test' },
+          { inProfile, ...javaSqlDatabaseArtifacts.mysql.jdbc },
+          { inProfile, ...javaSqlDatabaseArtifacts.mysql.testContainer },
         ],
       },
       r2dbc: {
-        dependencies: [{ inProfile, ...databaseArtifactForDB.mysql.r2dbc }],
+        dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.mysql.r2dbc }],
       },
     },
     oracle: {
       jdbc: {
         dependencies: [
-          { inProfile, groupId: 'com.oracle.database.jdbc', artifactId: 'ojdbc8' },
-          { groupId: 'org.testcontainers', artifactId: 'oracle-xe', scope: 'test' },
+          { inProfile, ...javaSqlDatabaseArtifacts.oracle.jdbc },
+          { inProfile, ...javaSqlDatabaseArtifacts.oracle.testContainer },
         ],
       },
       r2dbc: {},
@@ -144,12 +155,12 @@ export const getDatabaseTypeMavenDefinition: (
     postgresql: {
       jdbc: {
         dependencies: [
-          { inProfile, ...databaseArtifactForDB.postgresql.jdbc },
-          { groupId: 'org.testcontainers', artifactId: 'postgresql', scope: 'test' },
+          { inProfile, ...javaSqlDatabaseArtifacts.postgresql.jdbc },
+          { inProfile, ...javaSqlDatabaseArtifacts.postgresql.testContainer },
         ],
       },
       r2dbc: {
-        dependencies: [{ inProfile, ...databaseArtifactForDB.postgresql.r2dbc }],
+        dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.postgresql.r2dbc }],
       },
     },
   };

@@ -17,33 +17,33 @@
  * limitations under the License.
  */
 import { inspect } from 'node:util';
-import { it, describe, expect } from 'esmocha';
-import { replaceTranslationTags, replaceTranslations, removeDeclarations } from './translate-vue.js';
+import { describe, expect, it } from 'esmocha';
+import { removeDeclarations, replaceTranslationTags, replaceTranslations } from './translate-vue.js';
 
 const FULL_BODY = `
 <span v-html="t$('activate.messages.success')"><strong>Your user account has been activated.</strong> Please </span>
 <b-link :to="'/account/reset/request'" class="alert-link" v-text="t$('login.password.forgot')"
  data-cy="forgetYourPasswordSelector" >Did you forget your password?</b-link>
-<b-form-group v-bind:label="t$('login.form.password')" label-for="password">
+<b-form-group :label="t$('login.form.password')" label-for="password">
   <b-form-input
     id="password"
     type="password"
     name="password"
-    v-bind:placeholder="t$('login.form[\\'password.placeholder\\']')"
+    :placeholder="t$('login.form[\\'password.placeholder\\']')"
     v-model="password"
     data-cy="password"
   >
   </b-form-input>
 </b-form-group>
 
-<b-modal ref="removeUser" id="removeUser" v-bind:title="t$('entity.delete.title')" @ok="deleteUser()">
+<b-modal ref="removeUser" id="removeUser" :title="t$('entity.delete.title')" @ok="deleteUser()">
   <div class="modal-body">
     <p id="jhi-delete-user-heading" v-text="t$('userManagement.delete.question', { 'login': removeId})">Are you sure you want to delete this user?</p>
   </div>
   <template #modal-footer>
     <div>
-      <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" v-on:click="closeDialog()">Cancel</button>
-      <button type="button" class="btn btn-primary" id="confirm-delete-user" v-text="t$('entity.action.delete')" v-on:click="deleteUser()">Delete</button>
+      <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" @click="closeDialog()">Cancel</button>
+      <button type="button" class="btn btn-primary" id="confirm-delete-user" v-text="t$('entity.action.delete')" @click="deleteUser()">Delete</button>
     </div>
   </template>
 </b-modal>
@@ -162,8 +162,8 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
   </div>
   <template #modal-footer>
     <div>
-      <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">getWebappTranslation('entity.action.cancel')</button>
-      <button type="button" class="btn btn-primary" id="confirm-delete-user" v-on:click="deleteUser()">getWebappTranslation('entity.action.delete')</button>
+      <button type="button" class="btn btn-secondary" @click="closeDialog()">getWebappTranslation('entity.action.cancel')</button>
+      <button type="button" class="btn btn-primary" id="confirm-delete-user" @click="deleteUser()">getWebappTranslation('entity.action.delete')</button>
     </div>
   </template>
 </b-modal>
@@ -183,26 +183,26 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
 <span v-html="t$('activate.messages.success')"></span>
 <b-link :to="'/account/reset/request'" class="alert-link" v-text="t$('login.password.forgot')"
  data-cy="forgetYourPasswordSelector" ></b-link>
-<b-form-group v-bind:label="t$('login.form.password')" label-for="password">
+<b-form-group :label="t$('login.form.password')" label-for="password">
   <b-form-input
     id="password"
     type="password"
     name="password"
-    v-bind:placeholder="t$('login.form[\\'password.placeholder\\']')"
+    :placeholder="t$('login.form[\\'password.placeholder\\']')"
     v-model="password"
     data-cy="password"
   >
   </b-form-input>
 </b-form-group>
 
-<b-modal ref="removeUser" id="removeUser" v-bind:title="t$('entity.delete.title')" @ok="deleteUser()">
+<b-modal ref="removeUser" id="removeUser" :title="t$('entity.delete.title')" @ok="deleteUser()">
   <div class="modal-body">
     <p id="jhi-delete-user-heading" v-text="t$('userManagement.delete.question', { 'login': removeId})"></p>
   </div>
   <template #modal-footer>
     <div>
-      <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" v-on:click="closeDialog()"></button>
-      <button type="button" class="btn btn-primary" id="confirm-delete-user" v-text="t$('entity.action.delete')" v-on:click="deleteUser()"></button>
+      <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" @click="closeDialog()"></button>
+      <button type="button" class="btn btn-primary" id="confirm-delete-user" v-text="t$('entity.action.delete')" @click="deleteUser()"></button>
     </div>
   </template>
 </b-modal>

@@ -19,6 +19,8 @@
 
 name: Incremental Changelog
 on: [workflow_call]
+env:
+  FORCE_COLOR: 2
 jobs:
   check-generator-database-changelog-liquibase:
     name: ${{ matrix.app-type }}

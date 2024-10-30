@@ -1,0 +1,302 @@
+#
+# Copyright 2013-2024 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+name: 'SonarQube PR Analysis'
+description: 'A GitHub Action to perform SonarQube analysis on a PR with caching and metrics retrieval.'
+
+inputs:
+  sonar-project-key:
+    description: 'SonarQube project key'
+    required: true
+  application-dir:
+    description: 'Application directory'
+    required: true
+  docker-compose-file:
+    description: 'Path to the Docker Compose file'
+    required: true
+  comment-token:
+    description: 'GitHub token for commenting on the PR'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    # Make sure the sonar project folder exists.
+    - run: mkdir -p ./${{ inputs.sonar-project-key }}
+      shell: bash
+
+    # Cache the main branch project for future PR analysis
+    - name: 'Cache project on main branch'
+      if: github.ref == 'refs/heads/main'
+      shell: bash
+      run: |
+        cp -r ${{ inputs.application-dir }}/. .
+        rm -rf node_modules \
+            package-lock.json \
+            target/node \
+            target/*.original \
+            target/*.jar
+      working-directory: ${{ inputs.sonar-project-key }}
+
+    - name: 'Store cache (main branch)'
+      if: github.ref == 'refs/heads/main'
+      uses: actions/cache/save@v4
+      with:
+        path: ./${{ inputs.sonar-project-key }}
+        key: application-${{ inputs.sonar-project-key }}-${{ github.sha }}
+
+    # Restore the cache for PR analysis
+    - name: 'Restore project cache for PR analysis'
+      if: github.event_name == 'pull_request'
+      id: restore_cache
+      uses: actions/cache/restore@v4
+      with:
+        path: ./${{ inputs.sonar-project-key }}
+        key: application-${{ inputs.sonar-project-key }}-${{ github.event.pull_request.base.sha }}
+        restore-keys: |
+          application-${{ inputs.sonar-project-key }}-
+
+    # Start SonarQube server using Docker Compose
+    - name: 'Start SonarQube server'
+      if: github.event_name == 'pull_request'
+      shell: bash
+      run: |
+        echo "::group::Starting sonarqube"
+        docker compose -f ${{ inputs.docker-compose-file }} up --build -d --wait
+        echo "::endgroup::"
+
+    # Create SonarQube project
+    - name: 'Create SonarQube project'
+      if: github.event_name == 'pull_request'
+      shell: bash
+      run: |
+        curl -s -u admin:admin -X POST "http://localhost:9000/api/projects/create?name=${{ inputs.sonar-project-key }}&project=${{ inputs.sonar-project-key }}" || true
+
+    # Run SonarQube analysis on the main branch or add an empty scan
+    - name: 'Run SonarQube analysis on main branch'
+      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-matched-key
+      shell: bash
+      run: >-
+        echo "::group::Scanning main branch application" &&
+        ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
+        -Dsonar.host.url=http://localhost:9000
+        -Dsonar.projectKey=${{ inputs.sonar-project-key }}
+        -Dsonar.login=admin
+        -Dsonar.password=admin
+        -Dsonar.branch.name=main &&
+        echo "::endgroup::"
+      working-directory: ${{ inputs.sonar-project-key }}
+
+    - name: Add an empty scan to sonar main branch
+      if: github.event_name == 'pull_request' && !steps.restore_cache.outputs.cache-matched-key
+      shell: bash
+      run: >-
+        echo "::group::Scanning empty commit" &&
+        git init &&
+        git commit -m "Initial commit" --allow-empty &&
+        docker run --net=host -v ".:/usr/src" --rm sonarsource/sonar-scanner-cli
+        -Dsonar.host.url=http://localhost:9000
+        -Dsonar.projectKey=${{ inputs.sonar-project-key }}
+        -Dsonar.login=admin
+        -Dsonar.password=admin
+        -Dsonar.branch.name=main &&
+        echo "::endgroup::"
+      working-directory: ${{ inputs.sonar-project-key }}
+
+    # Prepare the repository for the PR changes
+    - name: 'Clean repository for PR changes'
+      if: github.event_name == 'pull_request'
+      shell: bash
+      run: find . -mindepth 1 -not -path "./.git*" -delete
+      working-directory: ${{ inputs.sonar-project-key }}
+
+    - name: 'Apply PR changes to the repository'
+      if: github.event_name == 'pull_request'
+      shell: bash
+      run: |
+        echo "::group::Creating changes commit"
+        rm -rf "${{ inputs.application-dir }}/.git"
+        cp -r ${{ inputs.application-dir }}/. .
+
+        git checkout -b dev
+        git add -A
+        git commit -m "Apply changes from PR branch"
+        echo "::endgroup::"
+      working-directory: ${{ inputs.sonar-project-key }}
+
+    # Run SonarQube analysis on the PR changes
+    - name: 'Run SonarQube analysis on PR changes'
+      if: github.event_name == 'pull_request'
+      shell: bash
+      run: >-
+        echo "::group::Scanning PR application changes" &&
+        ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
+        -Dsonar.host.url=http://localhost:9000
+        -Dsonar.projectKey=${{ inputs.sonar-project-key }}
+        -Dsonar.login=admin
+        -Dsonar.password=admin
+        -Dsonar.pullrequest.key=${{github.event.pull_request.number}}
+        -Dsonar.pullrequest.branch=dev
+        -Dsonar.pullrequest.base=main
+        -Dsonar.scm.revision=$(git rev-parse HEAD) &&
+        echo "::endgroup::"
+      working-directory: ${{ inputs.sonar-project-key }}
+
+    # Wait for SonarQube tasks to complete
+    - name: 'Wait for SonarQube tasks to complete'
+      if: github.event_name == 'pull_request'
+      shell: bash
+      run: |
+        timeout 300s bash -c 'while :; do
+          response=$(curl -s -u admin:admin "http://localhost:9000/api/ce/component?component=${{ inputs.sonar-project-key }}")
+          queue_status=$(echo "$response" | jq -r ".queue[]?.status")
+          current_status=$(echo "$response" | jq -r ".current.status")
+
+          if [[ "$queue_status" == "" && "$current_status" != "IN_PROGRESS" ]]; then
+            echo "All tasks completed or no tasks pending."
+            break
+          fi
+
+          if [[ "$queue_status" == "PENDING" || "$queue_status" == "IN_PROGRESS" || "$current_status" == "IN_PROGRESS" ]]; then
+            echo "Tasks are still in progress or pending. Waiting..."
+            sleep 10
+          else
+            echo "All tasks completed."
+            break
+          fi
+        done' || (echo "SonarQube tasks failed to complete in time" && exit 1)
+
+    # Retrieve SonarQube metrics for the PR
+    - name: 'Retrieve SonarQube metrics'
+      if: github.event_name == 'pull_request'
+      id: sonar_metrics
+      shell: bash
+      run: |
+        SONAR_RESPONSE=$(curl -s -u admin:admin \
+          "http://localhost:9000/api/measures/component?component=${{ inputs.sonar-project-key }}&pullRequest=${{ github.event.pull_request.number }}&metricKeys=new_bugs,new_vulnerabilities,new_code_smells,new_coverage,new_duplicated_lines_density,new_violations")
+        echo ":::group::PR SonarQube Analysis"
+        echo "$SONAR_RESPONSE"
+        echo "::endgroup::"
+
+        SONAR_RESPONSE_MAIN=$(curl -s -u admin:admin \
+          "http://localhost:9000/api/measures/component?component=${{ inputs.sonar-project-key }}&metricKeys=violations")
+        echo ":::group::SonarQube Analysis"
+        echo "$SONAR_RESPONSE_MAIN"
+        echo "::endgroup::"
+
+        export_measure() {
+          METRIC_NAME=$1
+          ENV_VAR_NAME=$2
+          METRIC_VALUE=$(echo "$SONAR_RESPONSE" | jq -r ".component.measures[] | select(.metric == \"$METRIC_NAME\") | .period.value")
+          if [ -z "$METRIC_VALUE" ] || [ "$METRIC_VALUE" == "null" ]; then
+            METRIC_VALUE="N/A"
+          fi
+          echo "$ENV_VAR_NAME=$METRIC_VALUE" >> $GITHUB_ENV
+          export $ENV_VAR_NAME=$METRIC_VALUE
+        }
+
+        print_main_metric() {
+          METRIC_NAME=$1
+          METRIC_VALUE=$(echo "$SONAR_RESPONSE_MAIN" | jq -r ".component.measures[] | select(.metric == \"$METRIC_NAME\") | .value")
+          if [ -z "$METRIC_VALUE" ] || [ "$METRIC_VALUE" == "null" ]; then
+            METRIC_VALUE="N/A"
+          fi
+          echo "${METRIC_VALUE}"
+        }
+
+        export_measure "new_vulnerabilities" "NEW_VUL"
+        export_measure "new_code_smells" "NEW_CSM"
+        export_measure "new_bugs" "NEW_BUG"
+        export_measure "new_violations" "NEW_VIOLATIONS"
+        export_measure "violations" "VIOLATIONS"
+        export_measure "new_coverage" "NEW_COV"
+        export_measure "new_duplicated_lines_density" "NEW_DUP"
+
+        {
+          echo "## :bar_chart: SonarQube Analysis for ${{ inputs.sonar-project-key }}"
+          echo ""
+          echo "| Metric                      | Value       |"
+          echo "|-----------------------------|-------------|"
+          echo "| **Total Violations**        | $(print_main_metric "violations") |"
+          echo "| **New Vulnerabilities**     | ${NEW_VUL} |"
+          echo "| **New Bugs**                | ${NEW_BUG} |"
+          echo "| **New Code smells**         | ${NEW_CSM} |"
+          echo "| **Coverage on New Code**    | ${NEW_COV}% |"
+          echo "| **Duplication on New Code** | ${NEW_DUP}% |"
+
+          if [[ "${NEW_VIOLATIONS}" != "N/A" && "${NEW_VIOLATIONS}" != "0" ]]; then
+            echo ""
+            echo "<details><summary>Unresolved New Issues (click to expand)</summary>"
+            echo ""
+            ISSUES=$(curl -s -u admin:admin \
+              "http://localhost:9000/api/issues/search?componentKeys=${{ inputs.sonar-project-key }}&resolved=false&pullRequest=${{ github.event.pull_request.number }}" | \
+              jq -r '.issues[] | "File: \(.component) Line: \(.line)\n  [\(.rule)] \(.message)\n"')
+            echo "$ISSUES"
+            echo "</details>"
+          fi
+        } > sonar_result.md
+
+        {
+          echo 'COMMENT_BODY<<EOF'
+          cat sonar_result.md
+          echo 'EOF'
+        } >> "$GITHUB_ENV"
+
+        cat sonar_result.md
+
+    # Find previous SonarQube analysis comment
+    - name: 'Find existing PR comment with SonarQube results'
+      if: github.event_name == 'pull_request' && inputs.comment-token && steps.sonar_metrics.outcome == 'success'
+      id: find_comment
+      uses: peter-evans/find-comment@v3
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body-includes: '## :bar_chart: SonarQube Analysis for ${{ inputs.sonar-project-key }}'
+        token: ${{ inputs.comment-token }}
+
+    # Create or update PR comment with SonarQube results
+    - name: 'Post SonarQube results as PR comment'
+      if: github.event_name == 'pull_request' && inputs.comment-token && steps.sonar_metrics.outcome == 'success'
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: ${{ env.COMMENT_BODY }}
+        comment-id: ${{ steps.find_comment.outputs.comment-id }}
+        edit-mode: replace
+        token: ${{ inputs.comment-token }}
+
+    # Fail the action if there are unresolved issues
+    - name: 'Fail PR if unresolved issues are found'
+      if: >-
+        github.event_name == 'pull_request' &&
+        steps.sonar_metrics.outcome == 'success' &&
+        env.NEW_VIOLATIONS != 'N/A' && env.NEW_VIOLATIONS != 0 &&
+        !contains(github.event.pull_request.labels.*.name, 'pr: disable-sonar')
+      shell: bash
+      run: |
+        echo "SonarQube PR Analysis failed due to unresolved issues."
+        exit 1
+
+    # Stop the SonarQube server
+    - name: 'Stop SonarQube server'
+      if: github.event_name == 'pull_request'
+      shell: bash
+      run: |
+        echo "::group::Stopping SonarQube"
+        docker compose -f ${{ inputs.docker-compose-file }} down
+        echo "::endgroup::"

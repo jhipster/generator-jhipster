@@ -1,32 +1,24 @@
 import eslint from 'eslint';
+import ts from 'typescript-eslint';
 
-import { baseRules } from '../../../lib/eslint/base.js';
+import jhipster from '../../../lib/eslint/index.js';
 
 let eslintInstance;
 
-/* Flat config based eslint
-Blocked by https://github.com/import-js/eslint-plugin-import/issues/2556
-import eslint from 'eslint/use-at-your-own-risk';
-const { languageOptions, plugins: tseslintPlugins } = tseslint.configs.base;
-new eslint.FlatESLint({ fix: true, overrideConfigFile: true, cwd, plugins, baseConfig: { languageOptions, rules } });
-*/
-
-export default async ({ resolvePluginsRelativeTo, filePath, fileContents }) => {
-  if (!eslintInstance) {
+export default async ({ cwd, filePath, fileContents, extensions, config, additionalConfig = [], recreateEslint }) => {
+  if (recreateEslint || !eslintInstance) {
     eslintInstance = new eslint.ESLint({
       fix: true,
-      // Disable destination configs. We should apply plugins and rules which jhipster depends on.
-      useEslintrc: false,
-      resolvePluginsRelativeTo,
-      overrideConfig: {
-        plugins: ['unused-imports', 'import'],
-        extends: ['plugin:@typescript-eslint/base'],
-        parserOptions: {
-          sourceType: 'module',
-          ecmaVersion: 'latest',
-        },
-        rules: baseRules,
-      },
+      overrideConfigFile: true,
+      allowInlineConfig: false,
+      cache: false,
+      cwd,
+      baseConfig: ts.config(
+        { files: [`**/*.{${extensions}}`] },
+        ts.configs.base,
+        ...additionalConfig,
+        config ? JSON.parse(config) : jhipster.base,
+      ),
     });
   }
 

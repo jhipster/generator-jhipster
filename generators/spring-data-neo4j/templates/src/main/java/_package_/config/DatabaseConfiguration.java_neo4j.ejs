@@ -27,6 +27,7 @@ import org.springframework.data.elasticsearch.repository.config.Enable<% if (rea
 <%_ } _%>
 
 import org.springframework.data.neo4j.repository.config.Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories;
+import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <%_ if (reactive) { _%>
 
 import org.neo4j.driver.Driver;

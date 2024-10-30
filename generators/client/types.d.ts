@@ -1,20 +1,20 @@
 import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/needles.js';
 import type { AngularApplication } from '../angular/types.js';
-import type { OptionWithDerivedProperties } from '../base-application/application-options.js';
+import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/index.js';
 import type { CypressApplication } from '../cypress/types.js';
 import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
+import type { PostWritingEntitiesTaskParam } from '../../lib/types/application/tasks.js';
+import type Command from './command.ts';
 
-type ClientFrameworkType = ['no', 'angular', 'react', 'vue', 'svelte'];
+type ApplicationClientProperties = ExportApplicationPropertiesFromCommand<typeof Command>;
 
-type ClientFrameworkApplication = OptionWithDerivedProperties<'clientFramework', ClientFrameworkType>;
-
-export type ClientApplication = ClientFrameworkApplication &
+export type ClientApplication = ApplicationClientProperties &
   JavaScriptApplication &
   AngularApplication &
   CypressApplication & {
-    withAdminUi: boolean;
     webappLoginRegExp: string;
     webappEnumerationsDir?: string;
+    clientFrameworkBuiltIn?: boolean;
   };
 
 export type ClientResources = {
@@ -27,7 +27,9 @@ export type ClientResources = {
    */
   comment?: string;
 };
+
 export type ClientSourceType = JavaScriptSourceType & {
+  addEntitiesToClient: (arg1: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) => void;
   /**
    * Add external resources to root file(index.html).
    */

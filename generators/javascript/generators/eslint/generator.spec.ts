@@ -18,10 +18,10 @@
  */
 import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '../../../../testing/index.js';
+import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -52,7 +52,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should compose with generators', () => {
-      expect(result.composedMockedGenerators).toMatchInlineSnapshot(`
+      expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:javascript:bootstrap",
 ]

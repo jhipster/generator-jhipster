@@ -17,16 +17,15 @@
  * limitations under the License.
  */
 
-import CoreGenerator from '../base-core/index.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
 import { CLIENT_WEBPACK_DIR } from '../generator-constants.js';
-import { GeneratorDefinition } from '../base-application/generator.js';
 
 /**
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-// eslint-disable-next-line import/prefer-default-export
-export default function cleanupOldFilesTask(this: CoreGenerator, { application }: GeneratorDefinition['writingTaskParam']) {
+
+export default asWritingTask(function cleanupOldFilesTask(this, { application }) {
   if (this.isJhipsterVersionLessThan('3.2.0')) {
     // removeFile and removeFolder methods should be called here for files and folders to cleanup
     this.removeFile(`${application.clientSrcDir}app/components/form/uib-pager.config.js`);
@@ -292,4 +291,4 @@ export default function cleanupOldFilesTask(this: CoreGenerator, { application }
     this.removeFile(`${application.clientSrcDir}app/entities/user/user.service.ts`);
     this.removeFile(`${application.clientSrcDir}app/entities/user/user.service.spec.ts`);
   }
-}
+});

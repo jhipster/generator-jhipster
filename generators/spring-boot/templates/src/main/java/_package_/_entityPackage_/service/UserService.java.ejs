@@ -199,7 +199,8 @@ public class UserService {
     <%_ } _%>
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= user.persistClass %>> completePasswordReset(String newPassword, String key) {
         LOG.debug("Reset user password for reset key {}", key);
-        return userRepository.findOneByResetKey(key)
+        return userRepository
+            .findOneByResetKey(key)
             .filter(user -> user.getResetDate().isAfter(Instant.now().minus(1, ChronoUnit.DAYS)))
     <%_ if (reactive) { _%>
             .publishOn(Schedulers.boundedElastic())
@@ -387,7 +388,7 @@ public class UserService {
     <%_ if (!reactive) { _%>
     private boolean removeNonActivatedUser(<%= user.persistClass %> existingUser) {
         if (existingUser.isActivated()) {
-             return false;
+            return false;
         }
         userRepository.delete(existingUser);
       <%_ if (databaseTypeSql) { _%>
@@ -457,7 +458,9 @@ public class UserService {
         user.setActivated(true);
       <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
         if (userDTO.getAuthorities() != null) {
-            Set<Authority> authorities = userDTO.getAuthorities().stream()
+            Set<Authority> authorities = userDTO
+                .getAuthorities()
+                .stream()
                 .map(authorityRepository::findById)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -575,7 +578,8 @@ public class UserService {
     @Transactional
       <%_ } _%>
     public Mono<Void> deleteUser(String login) {
-        return userRepository.findOneByLogin(login)
+        return userRepository
+            .findOneByLogin(login)
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
       <%_ if (searchEngineElasticsearch) { _%>
             .flatMap(user -> userSearchRepository.delete(user).thenReturn(user))
@@ -917,14 +921,11 @@ public class UserService {
                     }
                     if (idpModifiedDate.isAfter(dbModifiedDate)) {
                         LOG.debug("Updating user '{}' in local database", user.getLogin());
-                        return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
-                            user.getLangKey(), user.getImageUrl());
+                        return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(), user.getLangKey(), user.getImageUrl());
                     }
-                    // no last updated info, blindly update
                 } else {
                     LOG.debug("Updating user '{}' in local database", user.getLogin());
-                    return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
-                        user.getLangKey(), user.getImageUrl());
+                    return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(), user.getLangKey(), user.getImageUrl());
                 }
                 return Mono.empty();
             })

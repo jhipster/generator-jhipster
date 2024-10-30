@@ -226,7 +226,7 @@ class UserResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static <%= user.persistClass %> createEntity(<% if (databaseTypeSql) { %>EntityManager em<% } %>) {
+    public static <%= user.persistClass %> createEntity() {
         <%= user.persistClass %> persistUser = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra || (authenticationTypeOauth2 && !databaseTypeCouchbase)) { _%>
         persistUser.setId(UUID.randomUUID().toString());
@@ -260,8 +260,8 @@ class UserResourceIT {
     /**
      * Setups the database with one user.
      */
-    public static <%= user.persistClass %> initTestUser(<% if (databaseTypeSql) { %>EntityManager em<% } _%>) {
-        <%= user.persistClass %> persistUser = createEntity(<% if (databaseTypeSql ) { %>em<% } _%>);
+    public static <%= user.persistClass %> initTestUser() {
+        <%= user.persistClass %> persistUser = createEntity();
 <%_ if (databaseTypeSql) { _%>
         persistUser.setLogin(DEFAULT_LOGIN);
         persistUser.setEmail(DEFAULT_EMAIL);
@@ -271,7 +271,7 @@ class UserResourceIT {
 
     @BeforeEach
     public void initTest() {
-        user = initTestUser(<% if (databaseTypeSql) { %>em<% } _%>);
+        user = initTestUser();
     }
 
     @AfterEach
@@ -460,7 +460,7 @@ class UserResourceIT {
         userDTO.setLogin("anotherlogin");
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
-        userDTO.setEmail(DEFAULT_EMAIL);// this email should already be used
+        userDTO.setEmail(DEFAULT_EMAIL); // this email should already be used
         userDTO.setActivated(true);
   <%_ if (!databaseTypeCassandra) { _%>
         userDTO.setImageUrl(DEFAULT_IMAGEURL);
@@ -759,7 +759,7 @@ class UserResourceIT {
         userDTO.setLogin(updatedUser.getLogin());
         userDTO.setFirstName(updatedUser.getFirstName());
         userDTO.setLastName(updatedUser.getLastName());
-        userDTO.setEmail("jhipster@localhost");// this email should already be used by anotherUser
+        userDTO.setEmail("jhipster@localhost"); // this email should already be used by anotherUser
         userDTO.setActivated(updatedUser.isActivated());
   <%_ if (!databaseTypeCassandra) { _%>
         userDTO.setImageUrl(updatedUser.getImageUrl());
@@ -826,7 +826,7 @@ class UserResourceIT {
 
         <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
         userDTO.setId(updatedUser.getId());
-        userDTO.setLogin("jhipster");// this login should already be used by anotherUser
+        userDTO.setLogin("jhipster"); // this login should already be used by anotherUser
         userDTO.setFirstName(updatedUser.getFirstName());
         userDTO.setLastName(updatedUser.getLastName());
         userDTO.setEmail(updatedUser.getEmail());

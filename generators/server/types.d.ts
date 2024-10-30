@@ -1,13 +1,13 @@
-import { JavaApplication, JavaSourceType } from '../java/types.js';
-import { GradleSourceType } from '../gradle/types.js';
-import { MavenSourceType } from '../maven/types.js';
-import { LiquibaseSourceType } from '../liquibase/types.js';
-import { SpringCacheSourceType } from '../spring-cache/types.js';
-import type { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from '../base-application/application-options.js';
-import { GatewayApplication } from '../spring-cloud/generators/gateway/types.ts';
-import { JavaAnnotation } from '../java/support/add-java-annotation.ts';
-import { ApplicationPropertiesNeedles } from './support/needles.ts';
-import { MessageBrokerApplicationType } from './options/message-broker.js';
+import type { PackageJson } from 'type-fest';
+import type { JavaApplication, JavaSourceType } from '../java/types.js';
+import type { GradleSourceType } from '../gradle/types.js';
+import type { MavenSourceType } from '../maven/types.js';
+import type { LiquibaseSourceType } from '../liquibase/types.js';
+import type { SpringCacheSourceType } from '../spring-cache/types.js';
+import type { OptionWithDerivedProperties } from '../base-application/application-options.js';
+import type { GatewayApplication } from '../spring-cloud/generators/gateway/types.js';
+import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
+import type { ApplicationPropertiesNeedles } from './support/needles.ts';
 
 export type SpringEntity = {
   /* Generate entity's Entity */
@@ -34,6 +34,12 @@ export type SpringBootSourceType = JavaSourceType &
     addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
     addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
     addApplicationPropertiesProperty?({ propertyName, propertyType }: { propertyName: string; propertyType: string }): void;
+    addNativeHint?(hints: {
+      advanced?: string[];
+      declaredConstructors?: string[];
+      resources?: string[];
+      publicConstructors?: string[];
+    }): void;
   };
 
 type CacheProviderApplication = OptionWithDerivedProperties<
@@ -54,6 +60,8 @@ export type LiquibaseApplication = {
   liquibaseDefaultSchemaName: string;
 };
 
+/*
+Deterministic option causes types to be too complex
 type DatabaseTypeSqlApplication = (
   | ReactiveApplication
   | (ImperativeApplication & {
@@ -64,13 +72,27 @@ type DatabaseTypeSqlApplication = (
   prodDatabaseType: string;
   devDatabaseTypeMysql: boolean;
 } & LiquibaseApplication;
-
+ */
+type DatabaseTypeSqlApplication = {
+  enableHibernateCache: boolean;
+} & {
+  devDatabaseType: string;
+  prodDatabaseType: string;
+  devDatabaseTypeMysql: boolean;
+} & LiquibaseApplication;
+/*
+Deterministic option causes types to be too complex
 type DatabaseTypeApplication = DeterministicOptionWithDerivedProperties<
   'databaseType',
   ['sql', 'no', 'cassandra', 'couchbase', 'mongodb', 'neo4j'],
   [DatabaseTypeSqlApplication]
 >;
+*/
+type DatabaseTypeApplication = DatabaseTypeSqlApplication &
+  OptionWithDerivedProperties<'databaseType', ['sql', 'no', 'cassandra', 'couchbase', 'mongodb', 'neo4j']>;
 
+/*
+Deterministic option causes types to be too complex
 type BuildToolApplication = DeterministicOptionWithDerivedProperties<
   'buildTool',
   ['maven', 'gradle'],
@@ -81,20 +103,28 @@ type BuildToolApplication = DeterministicOptionWithDerivedProperties<
     },
   ]
 >;
+*/
+type BuildToolApplication = OptionWithDerivedProperties<'buildTool', ['maven', 'gradle']> & {
+  enableGradleEnterprise: boolean;
+};
 
 type SearchEngine = {
   searchEngine: string;
 };
 
+/*
+Deterministic option causes types to be too complex
 type ApplicationNature = (ImperativeApplication & CacheProviderApplication) | ReactiveApplication;
+*/
+type ApplicationNature = { reactive: boolean } & CacheProviderApplication;
 
 export type SpringBootApplication = JavaApplication &
   ApplicationNature &
   BuildToolApplication &
   SearchEngine &
   DatabaseTypeApplication &
-  GatewayApplication &
-  MessageBrokerApplicationType & {
+  GatewayApplication & {
+    jhipsterPackageJson: PackageJson;
     jhipsterDependenciesVersion: string;
     springBootDependencies: Record<string, string>;
     dockerContainers: Record<string, string>;
@@ -107,6 +137,13 @@ export type SpringBootApplication = JavaApplication &
     skipCheckLengthOfIdentifier: boolean;
 
     imperativeOrReactive: string;
+    optionalOrMono: string;
+    optionalOrMonoOfNullable: string;
+    listOrFlux: string;
+    optionalOrMonoClassPath: string;
+    wrapMono: (className: string) => string;
+    listOrFluxClassPath: string;
+
     generateAuthenticationApi?: boolean;
     generateInMemoryUserCredentials?: boolean;
 

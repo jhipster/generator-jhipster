@@ -1,0 +1,44 @@
+graalvmNative {
+  toolchainDetection = true
+  binaries {
+    main {
+      imageName = 'native-executable'
+      //this is only needed when you toolchain can't be detected
+      //javaLauncher = javaToolchains.launcherFor {
+      //  languageVersion = JavaLanguageVersion.of(19)
+      //  vendor = JvmVendorSpec.matching("GraalVM Community")
+      //}
+      buildArgs.add("-Duser.language=<%- nativeLanguageDefinition.languageTag %>")
+      buildArgs.add("-H:IncludeLocales=<%- languagesDefinition.map(def => def.languageTag).join(',') %>")
+    }
+  }
+  binaries.all {
+    verbose = true
+    jvmArgs.add('-Xms4g')
+    jvmArgs.add('-Xmx10g')
+  }
+}
+
+processTestAot {
+  jvmArgs += ["-XX:+AllowRedefinitionToAddDeleteMethods"]
+}
+<%_ if (!reactive && databaseTypeSql) { _%>
+  <%_ if (devDatabaseTypeH2Any) { _%>
+
+processResources {
+  filesMatching("**/application-dev.yml") {
+    filter {
+      it.replace("@spring.h2.console.enabled@", String.valueOf(!project.hasProperty("native")))
+    }
+  }
+}
+  <%_ } _%>
+
+if (project.hasProperty("native")) {
+  hibernate {
+    enhancement {
+      enableLazyInitialization = true
+    }
+  }
+}
+<%_ } _%>

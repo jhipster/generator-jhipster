@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {
     skipFakeData: {
       description: 'Skip generation of fake data for development',
@@ -26,6 +26,19 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
   },
-};
+  configs: {
+    incrementalChangelog: {
+      cli: {
+        description: 'Creates incremental database changelogs',
+        type: Boolean,
+      },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
+      scope: 'storage',
+    },
+  },
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

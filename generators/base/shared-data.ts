@@ -21,7 +21,8 @@ import { rm } from 'fs/promises';
 import { isAbsolute, join, relative } from 'path';
 import { lt as semverLessThan } from 'semver';
 import { defaults } from 'lodash-es';
-import { MemFsEditor, create } from 'mem-fs-editor';
+import type { MemFsEditor } from 'mem-fs-editor';
+import { create } from 'mem-fs-editor';
 import { type BaseApplication } from '../base-application/types.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { type Control } from './types.js';
@@ -65,7 +66,7 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
       customizeTemplatePaths: [],
     });
 
-    let customizeRemoveFiles: Array<(file: string) => string | undefined> = [];
+    let customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
     const removeFiles = async (assertions: { removedInVersion?: string } | string, ...files: string[]) => {
       if (typeof assertions === 'string') {
         files = [assertions, ...files];
@@ -103,7 +104,8 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
       jhipsterOldVersion,
       removeFiles,
       customizeRemoveFiles: [],
-      cleanupFiles: async (cleanup: Record<string, Array<string | [boolean, ...string[]]>>) => {
+      cleanupFiles: async (cleanup: Record<string, (string | [boolean, ...string[]])[]>) => {
+        if (!jhipsterOldVersion) return;
         await Promise.all(
           Object.entries(cleanup).map(async ([version, files]) => {
             const stringFiles: string[] = [];

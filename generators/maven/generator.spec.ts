@@ -16,18 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import { GENERATOR_MAVEN } from '../generator-list.js';
 import MavenGenerator from './generator.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.js');
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', () => {
@@ -36,7 +35,7 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with valid configuration', () => {
     before(async () => {
-      await helpers.run(generatorFile).withJHipsterConfig({
+      await helpers.runJHipster(generator).withJHipsterConfig({
         baseName: 'existing',
         packageName: 'tech.jhipster',
       });
@@ -47,7 +46,7 @@ describe(`generator - ${generator}`, () => {
   });
   describe('with empty configuration', () => {
     before(async () => {
-      await helpers.run(generatorFile).withJHipsterConfig();
+      await helpers.runJHipster(generator).withJHipsterConfig();
     });
     it('should generate only maven files', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();

@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getDefaultJDLApplicationConfig() should return the default JDL application config 1`] = `
+{
+  "optionsTypes": {
+    "databaseMigration": {
+      "type": "string",
+    },
+    "feignClient": {
+      "type": "boolean",
+    },
+    "incrementalChangelog": {
+      "type": "boolean",
+    },
+    "messageBroker": {
+      "type": "string",
+    },
+    "routes": {
+      "type": "quotedList",
+    },
+    "syncUserWithIdp": {
+      "type": "boolean",
+    },
+  },
+  "optionsValues": {
+    "databaseMigration": {
+      "liquibase": "liquibase",
+    },
+    "messageBroker": {
+      "kafka": "kafka",
+      "no": "no",
+      "pulsar": "pulsar",
+    },
+  },
+  "quotedOptionNames": [],
+  "tokenConfigs": [
+    {
+      "name": "DATABASE MIGRATION",
+      "pattern": "databaseMigration",
+    },
+    {
+      "name": "FEIGN CLIENT",
+      "pattern": "feignClient",
+    },
+    {
+      "name": "INCREMENTAL CHANGELOG",
+      "pattern": "incrementalChangelog",
+    },
+    {
+      "name": "MESSAGE BROKER",
+      "pattern": "messageBroker",
+    },
+    {
+      "name": "ROUTES",
+      "pattern": "routes",
+    },
+    {
+      "name": "SYNC USER WITH IDP",
+      "pattern": "syncUserWithIdp",
+    },
+  ],
+  "validatorConfig": {
+    "DATABASE MIGRATION": {
+      "msg": "databaseMigration property",
+      "pattern": /\\^\\[A-Za-z\\]\\[A-Za-z0-9\\]\\*\\$/,
+      "type": "NAME",
+    },
+    "FEIGN CLIENT": {
+      "msg": "feignClient property",
+      "pattern": undefined,
+      "type": "BOOLEAN",
+    },
+    "INCREMENTAL CHANGELOG": {
+      "msg": "incrementalChangelog property",
+      "pattern": undefined,
+      "type": "BOOLEAN",
+    },
+    "MESSAGE BROKER": {
+      "msg": "messageBroker property",
+      "pattern": /\\^\\[A-Za-z\\]\\[A-Za-z0-9\\]\\*\\$/,
+      "type": "NAME",
+    },
+    "ROUTES": {
+      "msg": "routes property",
+      "pattern": /\\^"\\[A-Za-z\\]\\[A-Za-z0-9_\\]\\*\\(\\?::\\[A-Za-z\\]\\[A-Za-z0-9_\\]\\+\\(\\?::\\[0-9\\]\\+\\)\\?\\)\\?"\\$/,
+      "type": "quotedList",
+    },
+    "SYNC USER WITH IDP": {
+      "msg": "syncUserWithIdp property",
+      "pattern": undefined,
+      "type": "BOOLEAN",
+    },
+  },
+}
+`;

@@ -16,18 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return */
-import assert from 'assert/strict';
+
+import assert from 'node:assert/strict';
+import { passthrough } from '@yeoman/transform';
+import { isFileStateModified } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 
-import { type GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.js';
 import files from './files.js';
 import { MAVEN } from './constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
-import { createPomStorage, type PomStorage } from './support/index.js';
+import { type PomStorage, createPomStorage, sortPomFile } from './support/index.js';
 
-export default class MavenGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
+export default class MavenGenerator extends BaseApplicationGenerator {
   pomStorage!: PomStorage;
   sortMavenPom!: boolean;
 
@@ -44,7 +45,7 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
   get initializing() {
     return this.asInitializingTaskGroup({
       pomStorage() {
-        this.pomStorage = createPomStorage(this, { sortFile: this.sortMavenPom });
+        this.pomStorage = createPomStorage(this, { sortFile: false });
       },
     });
   }
@@ -125,6 +126,29 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      queueTranslateTransform() {
+        if (this.sortMavenPom) {
+          this.queueTransformStream(
+            {
+              name: 'sorting pom.xml file',
+              filter: file => isFileStateModified(file) && file.path === this.destinationPath('pom.xml'),
+              refresh: false,
+            },
+            passthrough(file => {
+              file.contents = Buffer.from(sortPomFile(file.contents.toString()));
+            }),
+          );
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get writing() {

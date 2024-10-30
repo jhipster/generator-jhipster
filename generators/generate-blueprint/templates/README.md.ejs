@@ -46,13 +46,23 @@ npm install -g generator-jhipster-<%= baseName %>
 
 To use this blueprint, run the below command
 
-```bash
 <%_ if (cli) { _%>
+```bash
 <%= cliName %>
-<%_ } else { _%>
-jhipster --blueprints <%= baseName %>
-<%_ } _%>
+  <%_ if (caret) { _%>
 ```
+
+or
+
+```bash
+jhipster --blueprints <%= baseName %>
+```
+  <%_ } _%>
+<%_ } else { _%>
+```bash
+jhipster --blueprints <%= baseName %>
+```
+<%_ } _%>
 
 You can look for updated <%= baseName %> blueprint specific options by running
 

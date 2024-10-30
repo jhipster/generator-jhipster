@@ -42,7 +42,7 @@ export default defineComponent({
     },
     invalidate(session) {
       return axios
-        .delete('api/account/sessions/' + session)
+        .delete(`api/account/sessions/${session}`)
         .then(() => {
           this.error = null;
           this.success = 'OK';

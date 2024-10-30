@@ -1,9 +1,10 @@
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import NeedleApiBase from '../../generators/needle-base.js';
 
 describe('needle-api - base', () => {
   let needleApiBase;
   before(() => {
+    // @ts-expect-error testing purposes
     needleApiBase = new NeedleApiBase();
   });
   describe('generate a file model without path', () => {

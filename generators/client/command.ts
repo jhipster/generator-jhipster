@@ -18,9 +18,13 @@
  */
 import chalk from 'chalk';
 import { intersection } from 'lodash-es';
-import { testFrameworkTypes } from '../../jdl/jhipster/index.js';
-import { JHipsterCommandDefinition } from '../base/api.js';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, clientFrameworkTypes } from '../../jdl/index.js';
+import {
+  APPLICATION_TYPE_GATEWAY,
+  APPLICATION_TYPE_MICROSERVICE,
+  clientFrameworkTypes,
+  testFrameworkTypes,
+} from '../../lib/jhipster/index.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_COMMON } from '../generator-list.js';
 
 const { CYPRESS } = testFrameworkTypes;
@@ -36,7 +40,7 @@ const promptValueToMicrofrontends = answer =>
         .map(baseName => ({ baseName }))
     : [];
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {},
   configs: {
     clientFramework: {
@@ -57,6 +61,29 @@ const command: JHipsterCommandDefinition = {
         { value: VUE, name: 'Vue' },
         { value: CLIENT_FRAMEWORK_NO, name: 'No client' },
       ],
+      scope: 'storage',
+    },
+    clientTheme: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      scope: 'storage',
+    },
+    clientThemeVariant: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      scope: 'storage',
+    },
+    clientBundler: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      choices: ['webpack', 'vite'],
+      scope: 'storage',
     },
     microfrontend: {
       description: 'Enable microfrontend support',
@@ -71,11 +98,12 @@ const command: JHipsterCommandDefinition = {
         message: `Do you want to enable ${chalk.yellow('*microfrontends*')}?`,
         default: false,
       }),
+      scope: 'storage',
     },
     microfrontends: {
       description: 'Microfrontends to load',
       cli: {
-        type: String,
+        type: (val: string) => promptValueToMicrofrontends(val),
       },
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         when: answers => {
@@ -95,9 +123,14 @@ const command: JHipsterCommandDefinition = {
         filter: promptValueToMicrofrontends,
         transformer: microfrontendsToPromptValue,
       }),
+      scope: 'storage',
     },
     clientTestFrameworks: {
       description: 'Client test frameworks',
+      cli: {
+        type: Array,
+        hide: true,
+      },
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         when: answers => [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? config.clientFramework),
         type: 'checkbox',
@@ -105,6 +138,7 @@ const command: JHipsterCommandDefinition = {
         default: () => intersection([CYPRESS], config.testFrameworks),
       }),
       choices: [{ name: 'Cypress', value: CYPRESS }],
+      scope: 'storage',
     },
     withAdminUi: {
       description: 'Generate administrative user interface',
@@ -116,15 +150,17 @@ const command: JHipsterCommandDefinition = {
         when: answers => [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? config.clientFramework),
         message: 'Do you want to generate the admin UI?',
       }),
+      scope: 'storage',
     },
     clientRootDir: {
       description: 'Client root',
       cli: {
         type: String,
       },
+      scope: 'storage',
     },
   },
   import: [GENERATOR_COMMON],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

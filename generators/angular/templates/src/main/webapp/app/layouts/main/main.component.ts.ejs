@@ -40,25 +40,25 @@ import PageRibbonComponent from '../profiles/page-ribbon.component';
 })
 export default class MainComponent implements OnInit {
 <%_ if (enableTranslation) { _%>
-  private renderer: Renderer2;
+  private readonly renderer: Renderer2;
 <%_ } _%>
 
-  private router = inject(Router);
-  private appPageTitleStrategy = inject(AppPageTitleStrategy);
-  private accountService = inject(AccountService);
+  private readonly router = inject(Router);
+  private readonly appPageTitleStrategy = inject(AppPageTitleStrategy);
+  private readonly accountService = inject(AccountService);
 <%_ if (enableI18nRTL) { _%>
-  private findLanguageFromKeyPipe = inject(FindLanguageFromKeyPipe);
+  private readonly findLanguageFromKeyPipe = inject(FindLanguageFromKeyPipe);
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
-  private translateService = inject(TranslateService);
-  private rootRenderer = inject(RendererFactory2);
+  private readonly translateService = inject(TranslateService);
+  private readonly rootRenderer = inject(RendererFactory2);
 <%_ } _%>
+<%_ if (enableTranslation) { _%>
 
   constructor() {
-<%_ if (enableTranslation) { _%>
     this.renderer = this.rootRenderer.createRenderer(document.querySelector('html'), null);
-<%_ } _%>
   }
+<%_ } _%>
 
   ngOnInit(): void {
     // try to log in automatically

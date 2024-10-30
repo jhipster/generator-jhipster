@@ -93,16 +93,14 @@ export function initFortAwesome(vue) {
 }
 <%_ if (enableTranslation) { _%>
 export function initI18N(opts: any = {}) {
-  return createI18n(
-    {
-      missingWarn: false,
-      fallbackWarn: false,
-      legacy: false,
-      datetimeFormats,
-      silentTranslationWarn: true,
-      ...opts,
-    }
-  );
+  return createI18n({
+    missingWarn: false,
+    fallbackWarn: false,
+    legacy: false,
+    datetimeFormats,
+    silentTranslationWarn: true,
+    ...opts,
+  });
 }
 
 <%_ } _%>

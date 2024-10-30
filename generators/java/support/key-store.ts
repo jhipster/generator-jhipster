@@ -1,12 +1,12 @@
-import { mkdir, lstat } from 'fs/promises';
+import { lstat, mkdir } from 'fs/promises';
 import { dirname } from 'path';
 import { execa } from 'execa';
-import { ValidationResult } from '../../base/api.js';
+import type { ValidationResult } from '../../base/api.js';
 
 /**
  * Generate a KeyStore.
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export async function generateKeyStore(keyStoreFile: string, { packageName }: { packageName: string }): Promise<ValidationResult> {
   try {
     const stat = await lstat(keyStoreFile);

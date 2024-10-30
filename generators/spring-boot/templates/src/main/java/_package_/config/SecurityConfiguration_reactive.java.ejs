@@ -1,0 +1,509 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.config;
+
+import <%= packageName %>.security.AuthoritiesConstants;
+<%_ if (authenticationTypeOauth2) { _%>
+import static org.springframework.security.oauth2.core.oidc.StandardClaimNames.PREFERRED_USERNAME;
+
+import <%= packageName %>.security.SecurityUtils;
+import <%= packageName %>.security.oauth2.AudienceValidator;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
+import org.springframework.beans.factory.annotation.Value;
+import reactor.core.publisher.Flux;
+<%_ } _%>
+<%_ if (authenticationUsesCsrf) { _%>
+import tech.jhipster.web.filter.reactive.CookieCsrfFilter;
+<%_ } _%>
+import tech.jhipster.config.JHipsterProperties;
+<%_ if (generateInMemoryUserCredentials) { _%>
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+<%_ } _%>
+<%_ if (!skipClient) { _%>
+import <%= packageName %>.web.filter.SpaWebFilter;
+<%_ } _%>
+<%_ if (applicationTypeGateway) { _%>
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+<%_ } _%>
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+<%_ if (authenticationTypeOauth2) { _%>
+import org.springframework.core.convert.converter.Converter;
+  <%_ if (!applicationTypeMicroservice) { _%>
+import org.springframework.core.ParameterizedTypeReference;
+  <%_ } _%>
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+import org.springframework.security.config.Customizer;
+<%_ } _%>
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+<%_ if (authenticationTypeSession) { _%>
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcReactiveOAuth2UserService;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+  <%_ if (!applicationTypeMicroservice) { _%>
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+  <%_ } _%>
+import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserService;
+  <%_ if (!applicationTypeMicroservice) { _%>
+import org.springframework.security.oauth2.client.web.server.DefaultServerOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizationRequestResolver;
+  <%_ } _%>
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+  <%_ if (!applicationTypeMicroservice) { _%>
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+  <%_ } _%>
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
+import org.springframework.security.oauth2.jwt.*;
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
+  <%_ if (generateInMemoryUserCredentials) { _%>
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
+  <%_ } _%>
+<%_ } _%>
+<%_ if (generateUserManagement) { _%>
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+<%_ } _%>
+import org.springframework.security.web.server.SecurityWebFilterChain;
+<%_ if (authenticationTypeSession) { _%>
+import org.springframework.security.web.server.WebFilterExchange;
+import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
+import org.springframework.security.web.server.authentication.logout.HttpStatusReturningServerLogoutSuccessHandler;
+<%_ } _%>
+<%_ if (authenticationUsesCsrf) { _%>
+import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
+import org.springframework.security.web.server.csrf.ServerCsrfTokenRequestAttributeHandler;
+<%_ } _%>
+import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter.Mode;
+import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
+<%_ if (applicationTypeMicroservice) { _%>
+import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
+<%_ } _%>
+import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
+<%_ if (applicationTypeGateway) { _%>
+import org.springframework.security.web.server.WebFilterChainProxy;
+import org.springframework.security.web.server.firewall.ServerWebExchangeFirewall;
+<%_ } _%>
+<%_ if (authenticationUsesCsrf) { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
+  <%_ } _%>
+
+import java.util.HashSet;
+import java.util.Set;
+  <%_ if (!applicationTypeMicroservice) { _%>
+import java.util.function.Consumer;
+  <%_ } _%>
+<%_ } _%>
+
+<%_ if (authenticationTypeOauth2 || !applicationTypeMicroservice || authenticationTypeJwt) { _%>
+import static org.springframework.security.config.Customizer.withDefaults;
+<%_ } _%>
+import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
+
+@Configuration
+@EnableReactiveMethodSecurity
+public class SecurityConfiguration {
+
+    private final JHipsterProperties jHipsterProperties;
+
+<%_ if (authenticationTypeOauth2) { _%>
+    @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
+    private String issuerUri;
+  <%_ if (!applicationTypeMicroservice) { _%>
+
+    private final ReactiveClientRegistrationRepository clientRegistrationRepository;
+
+    // See https://github.com/jhipster/generator-jhipster/issues/18868
+    // We don't use a distributed cache or the user selected cache implementation here on purpose
+    private final Cache<String, Mono<Jwt>> users = Caffeine.newBuilder()
+        .maximumSize(10_000)
+        .expireAfterWrite(Duration.ofHours(1))
+        .recordStats()
+        .build();
+
+  <%_ } _%>
+<%_ } _%>
+
+    public SecurityConfiguration(
+<%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
+        ReactiveClientRegistrationRepository clientRegistrationRepository,
+<%_ } _%>
+        JHipsterProperties jHipsterProperties
+    ) {
+<%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
+        this.clientRegistrationRepository = clientRegistrationRepository;
+<%_ } _%>
+        this.jHipsterProperties = jHipsterProperties;
+    }
+
+<%_ if (generateUserManagement) { _%>
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public ReactiveAuthenticationManager reactiveAuthenticationManager(ReactiveUserDetailsService userDetailsService) {
+        UserDetailsRepositoryReactiveAuthenticationManager authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(
+            userDetailsService
+        );
+        authenticationManager.setPasswordEncoder(passwordEncoder());
+        return authenticationManager;
+    }
+
+<%_ } else if (generateInMemoryUserCredentials) { _%>
+    @Bean
+    public MapReactiveUserDetailsService userDetailsService(SecurityProperties properties) {
+        SecurityProperties.User user = properties.getUser();
+        UserDetails userDetails = User.withUsername(user.getName())
+            .password("{noop}" + user.getPassword())
+            .roles(StringUtils.toStringArray(user.getRoles()))
+            .build();
+        return new MapReactiveUserDetailsService(userDetails);
+    }
+
+    @Bean
+    public ReactiveAuthenticationManager reactiveAuthenticationManager(ReactiveUserDetailsService userDetailsService) {
+        return new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
+    }
+
+<%_ } _%>
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        http
+            .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
+                pathMatchers(
+  <%_ if (clientBundlerVite) { _%>
+                    "/assets/**",
+  <%_ } else { _%>
+                    "/app/**",
+                    "/i18n/**",
+                    "/content/**",
+  <%_ } _%>
+                    "/swagger-ui/**"
+                )
+            )))
+<%_ if (!applicationTypeMicroservice) { _%>
+            .cors(withDefaults())
+<%_ } _%>
+            .csrf(csrf -> csrf
+<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+                .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
+                // See https://stackoverflow.com/q/74447118/65681
+                .csrfTokenRequestHandler(new ServerCsrfTokenRequestAttributeHandler()))
+            // See https://github.com/spring-projects/spring-security/issues/5766
+            .addFilterAt(new CookieCsrfFilter(), SecurityWebFiltersOrder.REACTOR_CONTEXT)
+<%_ } else { _%>
+                .disable())
+<%_ } _%>
+<%_ if (!skipClient) { _%>
+            .addFilterAfter(new SpaWebFilter(), SecurityWebFiltersOrder.HTTPS_REDIRECT)
+<%_ } _%>
+<%_ if (authenticationTypeSession) { _%>
+            .formLogin(formLogin -> formLogin
+                .loginPage("/")
+                .requiresAuthenticationMatcher(pathMatchers(HttpMethod.POST, "/api/authentication"))
+                .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.OK))
+                .authenticationSuccessHandler(this::onAuthenticationSuccess)
+                .authenticationFailureHandler(this::onAuthenticationError))
+            .logout(logout -> logout
+                .logoutUrl("/api/logout")
+                .logoutSuccessHandler(new HttpStatusReturningServerLogoutSuccessHandler()))
+<%_ } _%>
+            .headers(headers -> headers
+                .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
+                .frameOptions(frameOptions -> frameOptions.mode(Mode.DENY))
+                .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+                .permissionsPolicy(permissions ->
+                    permissions.policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")))
+<%_ if (applicationTypeMicroservice) { _%>
+                .requestCache(cache -> cache.requestCache(NoOpServerRequestCache.getInstance()))
+<%_ } _%>
+            .authorizeExchange(authz ->
+                // prettier-ignore
+                authz
+<%_ if (!skipClient) { _%>
+                    .pathMatchers("/").permitAll()
+                    .pathMatchers("/*.*").permitAll()
+<%_ } _%>
+                    .pathMatchers("/api/authenticate").permitAll()
+<%_ if (generateUserManagement) { _%>
+                    .pathMatchers("/api/register").permitAll()
+                    .pathMatchers("/api/activate").permitAll()
+                    .pathMatchers("/api/account/reset-password/init").permitAll()
+                    .pathMatchers("/api/account/reset-password/finish").permitAll()
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+                    .pathMatchers("/api/auth-info").permitAll()
+<%_ } _%>
+                    .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .pathMatchers("/api/**").authenticated()
+<%_ if (applicationTypeGateway) { _%>
+  <%_ if (microfrontend) { _%>
+                    // microfrontend resources are loaded by webpack without authentication, they need to be public
+    <%_ if (clientBundlerVite) { _%>
+                    .pathMatchers("/services/*/assets/**").permitAll()
+                    .pathMatchers("/services/*/*.js").permitAll()
+    <%_ } else { _%>
+                    .pathMatchers("/services/*/*.js").permitAll()
+                    .pathMatchers("/services/*/*.txt").permitAll()
+                    .pathMatchers("/services/*/*.json").permitAll()
+                    .pathMatchers("/services/*/*.js.map").permitAll()
+    <%_ } _%>
+  <%_ } _%>
+                    .pathMatchers("/services/*/management/health/readiness").permitAll()
+                    .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
+<%_ } _%>
+<%_ if (!applicationTypeMicroservice) { _%>
+                    .pathMatchers("/services/**").authenticated()
+<%_ } _%>
+                    .pathMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .pathMatchers("/management/health").permitAll()
+                    .pathMatchers("/management/health/**").permitAll()
+                    .pathMatchers("/management/info").permitAll()
+                    .pathMatchers("/management/prometheus").permitAll()
+                    .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
+<%_ if (authenticationTypeOauth2) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
+            .oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))
+  <%_ } _%>
+            .oauth2Client(withDefaults())
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt
+                    .jwtAuthenticationConverter(jwtAuthenticationConverter())));
+<%_ } else if (authenticationTypeJwt) { _%>
+            .httpBasic(basic -> basic.disable())
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
+<%_ } else { _%>;<%_ } _%>
+        return http.build();
+    }
+
+<%_ if (authenticationTypeOauth2) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
+    private ServerOAuth2AuthorizationRequestResolver authorizationRequestResolver(
+        ReactiveClientRegistrationRepository clientRegistrationRepository
+    ) {
+        DefaultServerOAuth2AuthorizationRequestResolver authorizationRequestResolver = new DefaultServerOAuth2AuthorizationRequestResolver(
+            clientRegistrationRepository
+        );
+        if (this.issuerUri.contains("auth0.com")) {
+            authorizationRequestResolver.setAuthorizationRequestCustomizer(authorizationRequestCustomizer());
+        }
+        return authorizationRequestResolver;
+    }
+
+    private Consumer<OAuth2AuthorizationRequest.Builder> authorizationRequestCustomizer() {
+        return customizer ->
+            customizer.authorizationRequestUri(uriBuilder ->
+                uriBuilder.queryParam("audience", jHipsterProperties.getSecurity().getOauth2().getAudience()).build()
+            );
+    }
+  <%_ } _%>
+
+    Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter() {
+        ReactiveJwtAuthenticationConverter jwtAuthenticationConverter = new ReactiveJwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
+            new Converter<Jwt, Flux<GrantedAuthority>>() {
+                @Override
+                public Flux<GrantedAuthority> convert(Jwt jwt) {
+                    return Flux.fromIterable(SecurityUtils.extractAuthorityFromClaims(jwt.getClaims()));
+                }
+            }
+        );
+        jwtAuthenticationConverter.setPrincipalClaimName(PREFERRED_USERNAME);
+        return jwtAuthenticationConverter;
+    }
+
+    /**
+     * Map authorities from "groups" or "roles" claim in ID Token.
+     *
+     * @return a {@link ReactiveOAuth2UserService} that has the groups from the IdP.
+     */
+    @Bean
+    public ReactiveOAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
+        final OidcReactiveOAuth2UserService delegate = new OidcReactiveOAuth2UserService();
+
+        return userRequest -> {
+            // Delegate to the default implementation for loading a user
+            return delegate
+                .loadUser(userRequest)
+                .map(user -> {
+                    Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
+
+                    user
+                        .getAuthorities()
+                        .forEach(authority -> {
+                            if (authority instanceof OidcUserAuthority) {
+                                OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
+                                mappedAuthorities.addAll(
+                                    SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims())
+                                );
+                            }
+                        });
+
+                    return new DefaultOidcUser(mappedAuthorities, user.getIdToken(), user.getUserInfo(), PREFERRED_USERNAME);
+                });
+        };
+    }
+
+    @Bean
+    ReactiveJwtDecoder jwtDecoder(<%_ if (!applicationTypeMicroservice) { _%>ReactiveClientRegistrationRepository registrations<%_ } _%>) {
+    <%_ if (applicationTypeMicroservice) { _%>
+        NimbusReactiveJwtDecoder jwtDecoder = (NimbusReactiveJwtDecoder) ReactiveJwtDecoders.fromOidcIssuerLocation(issuerUri);
+
+        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
+        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
+        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+
+        jwtDecoder.setJwtValidator(withAudience);
+
+        return jwtDecoder;
+    }
+    <%_ } else { _%>
+
+        Mono<ClientRegistration> clientRegistration = registrations.findByRegistrationId("oidc");
+
+        return clientRegistration.map(oidc -> createJwtDecoder(
+            oidc.getProviderDetails().getIssuerUri(),
+            oidc.getProviderDetails().getJwkSetUri(),
+            oidc.getProviderDetails().getUserInfoEndpoint().getUri()
+        )).block();
+    }
+
+    private ReactiveJwtDecoder createJwtDecoder(String issuerUri, String jwkSetUri, String userInfoUri) {
+        NimbusReactiveJwtDecoder jwtDecoder = new NimbusReactiveJwtDecoder(jwkSetUri);
+        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
+        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
+        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+
+        jwtDecoder.setJwtValidator(withAudience);
+
+        return new ReactiveJwtDecoder() {
+            @Override
+            public Mono<Jwt> decode(String token) throws JwtException {
+                return jwtDecoder.decode(token).flatMap(jwt -> enrich(token, jwt));
+            }
+
+            private Mono<Jwt> enrich(String token, Jwt jwt) {
+                // Only look up user information if identity claims are missing
+                if (jwt.hasClaim("given_name") && jwt.hasClaim("family_name")) {
+                    return Mono.just(jwt);
+                }
+                // Get user info from `users` cache if present
+                return Optional.ofNullable(users.getIfPresent(jwt.getSubject())).orElseGet(() -> // Retrieve user info from OAuth provider if not already loaded
+                    WebClient.create()
+                        .get()
+                        .uri(userInfoUri)
+                        .headers(headers -> headers.setBearerAuth(token))
+                        .retrieve()
+                        .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                        .map(userInfo ->
+                            Jwt.withTokenValue(jwt.getTokenValue())
+                                .subject(jwt.getSubject())
+                                .audience(jwt.getAudience())
+                                .headers(headers -> headers.putAll(jwt.getHeaders()))
+                                .claims(claims -> {
+                                    String username = userInfo.get("preferred_username").toString();
+                                    // special handling for Auth0
+                                    if (userInfo.get("sub").toString().contains("|") && username.contains("@")) {
+                                        userInfo.put("email", username);
+                                    }
+                                    // Allow full name in a name claim - happens with Auth0
+                                    if (userInfo.get("name") != null) {
+                                        String[] name = userInfo.get("name").toString().split("\\s+");
+                                        if (name.length > 0) {
+                                            userInfo.put("given_name", name[0]);
+                                            userInfo.put("family_name", String.join(" ", Arrays.copyOfRange(name, 1, name.length)));
+                                        }
+                                    }
+                                    claims.putAll(userInfo);
+                                })
+                                .claims(claims -> claims.putAll(jwt.getClaims()))
+                                .build()
+                        )
+                        // Put user info into the `users` cache
+                        .doOnNext(newJwt -> users.put(jwt.getSubject(), Mono.just(newJwt)))
+                );
+            }
+        };
+    }
+    <%_ } _%>
+<%_ } _%>
+<%_ if (authenticationTypeSession) { _%>
+    private Mono<Void> onAuthenticationError(WebFilterExchange exchange, AuthenticationException e) {
+        exchange.getExchange().getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        return Mono.empty();
+    }
+
+    private Mono<Void> onAuthenticationSuccess(WebFilterExchange exchange, Authentication authentication) {
+        exchange.getExchange().getResponse().setStatusCode(HttpStatus.OK);
+        return Mono.empty();
+    }
+<%_ } _%>
+<%_ if (applicationTypeGateway) { _%>
+
+    // Fix for Spring Boot 3.3.5: https://github.com/spring-cloud/spring-cloud-gateway/issues/3568
+    @Bean
+    BeanPostProcessor beanPostProcessor() {
+        return new BeanPostProcessor() {
+            @Override
+            public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+                if (bean instanceof WebFilterChainProxy springSecurity) {
+                    springSecurity.setFirewall(ServerWebExchangeFirewall.INSECURE_NOOP);
+                }
+                return bean;
+            }
+        };
+    }
+<%_ } _%>
+}

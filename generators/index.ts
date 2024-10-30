@@ -23,7 +23,9 @@ export {
   CLIENT_TEST_SRC_DIR as TEMPLATES_JAVASCRIPT_TEST_DIR,
 } from './generator-constants.js';
 
-export type { JHipsterCommandDefinition } from './base/api.js';
+export * from './type-utils.js';
+
+export type { JHipsterCommandDefinition } from '../lib/command/index.js';
 
 export { default as GeneratorBase } from './base/index.js';
 export { default as GeneratorBaseCore } from './base-core/index.js';

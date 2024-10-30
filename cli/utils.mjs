@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable no-console */
+
 import chalk from 'chalk';
 
-import { createJHipsterLogger, CLI_LOGGER } from '../generators/base/support/index.js';
+import { CLI_LOGGER, createJHipsterLogger } from '../lib/utils/logger.js';
 
 export const CLI_NAME = 'jhipster';
 export const GENERATOR_NAME = 'generator-jhipster';
@@ -44,31 +44,21 @@ export const getCommand = (cmd, args = []) => {
   return `${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
 };
 
-export const doneFactory = (successMsg, sponsorMsg) => {
+export const doneFactory = (options = {}) => {
+  const { successMsg = SUCCESS_MESSAGE, sponsorMsg = SPONSOR_MESSAGE, logger: log = logger } = options;
   return errorOrMsg => {
     if (errorOrMsg instanceof Error) {
-      logger.error(`ERROR! ${errorOrMsg.message}`);
-      logger.log(errorOrMsg);
+      log.error(`ERROR! ${errorOrMsg.message}`);
+      log.log(errorOrMsg);
     } else if (errorOrMsg) {
-      logger.error(`ERROR! ${errorOrMsg}`);
+      log.error(`ERROR! ${errorOrMsg}`);
     } else if (successMsg) {
-      logger.log('');
-      logger.log(chalk.green.bold(successMsg));
-      logger.log('');
-      logger.log(chalk.cyan.bold(sponsorMsg));
+      log.log('');
+      log.log(chalk.green.bold(successMsg));
+      log.log('');
+      log.log(chalk.cyan.bold(sponsorMsg));
     }
   };
 };
 
-export const printSuccess = () => {
-  if (process.exitCode === undefined || process.exitCode === 0) {
-    logger.log('');
-    logger.log(chalk.green.bold(SUCCESS_MESSAGE));
-    logger.log('');
-    logger.log(chalk.cyan.bold(SPONSOR_MESSAGE));
-  } else {
-    logger.error(`JHipster finished with code ${process.exitCode}`);
-  }
-};
-
-export const done = doneFactory(SUCCESS_MESSAGE, SPONSOR_MESSAGE);
+export const done = doneFactory();

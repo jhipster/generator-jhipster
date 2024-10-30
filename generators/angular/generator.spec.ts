@@ -1,11 +1,11 @@
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers, runResult } from '../../testing/index.js';
-import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import { GENERATOR_ANGULAR } from '../generator-list.js';
 import Generator from './index.js';
@@ -14,7 +14,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.ts');
 
 const { ANGULAR: clientFramework } = clientFrameworkTypes;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
@@ -88,7 +87,7 @@ describe(`generator - ${clientFramework}`, () => {
     describe(name, () => {
       before(async () => {
         await helpers
-          .run(generatorFile)
+          .runJHipster(generator)
           .withJHipsterConfig(sampleConfig, entities)
           .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
           .withControl({ getWebappTranslation: () => 'translations' })

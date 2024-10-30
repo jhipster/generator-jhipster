@@ -27,20 +27,21 @@
 
   <h3>__jhiTranslateTag__('metrics.jvm.title')</h3>
 
-@if (metrics() && !updatingMetrics()) {
+@let metricsRef = metrics();
+@if (metricsRef && !updatingMetrics()) {
   <div class="row">
-    <<%= jhiPrefixDashed %>-jvm-memory class="col-md-4" [updating]="updatingMetrics()" [jvmMemoryMetrics]="metrics()?.jvm"></<%= jhiPrefixDashed %>-jvm-memory>
+    <<%= jhiPrefixDashed %>-jvm-memory class="col-md-4" [updating]="updatingMetrics()" [jvmMemoryMetrics]="metricsRef.jvm"></<%= jhiPrefixDashed %>-jvm-memory>
 
     <<%= jhiPrefixDashed %>-jvm-threads class="col-md-4" [threads]="threads()"></<%= jhiPrefixDashed %>-jvm-threads>
 
-    <<%= jhiPrefixDashed %>-metrics-system class="col-md-4" [updating]="updatingMetrics()" [systemMetrics]="metrics()?.processMetrics"></<%= jhiPrefixDashed %>-metrics-system>
+    <<%= jhiPrefixDashed %>-metrics-system class="col-md-4" [updating]="updatingMetrics()" [systemMetrics]="metricsRef.processMetrics"></<%= jhiPrefixDashed %>-metrics-system>
   </div>
 }
 
-@if (metrics() && metricsKeyExists('garbageCollector')) {
+@if (metricsRef?.garbageCollector; as metricsRefGarbageCollector) {
   <<%= jhiPrefixDashed %>-metrics-garbagecollector
     [updating]="updatingMetrics()"
-    [garbageCollectorMetrics]="metrics()?.garbageCollector"
+    [garbageCollectorMetrics]="metricsRefGarbageCollector"
   ></<%= jhiPrefixDashed %>-metrics-garbagecollector>
 }
 
@@ -48,31 +49,31 @@
   <div class="well well-lg">__jhiTranslateTag__('metrics.updating')</div>
 }
 
-@if (metrics() && metricsKeyExists('http.server.requests')) {
+@if (metricsRef?.['http.server.requests']; as metricsRefHttpServerRequests) {
   <<%= jhiPrefixDashed %>-metrics-request
     [updating]="updatingMetrics()"
-    [requestMetrics]="metrics()?.['http.server.requests']"
+    [requestMetrics]="metricsRefHttpServerRequests"
   ></<%= jhiPrefixDashed %>-metrics-request>
 }
 
-@if (metrics() && metricsKeyExists('services')) {
+@if (metricsRef?.services; as metricsRefServices) {
   <<%= jhiPrefixDashed %>-metrics-endpoints-requests
     [updating]="updatingMetrics()"
-    [endpointsRequestsMetrics]="metrics()?.services"
+    [endpointsRequestsMetrics]="metricsRefServices"
   ></<%= jhiPrefixDashed %>-metrics-endpoints-requests>
 }
 
-@if (metrics() && metricsKeyExists('cache')) {
+@if (metricsRef?.cache; as metricsRefCache) {
   <<%= jhiPrefixDashed %>-metrics-cache
     [updating]="updatingMetrics()"
-    [cacheMetrics]="metrics()?.cache"
+    [cacheMetrics]="metricsRefCache"
   ></<%= jhiPrefixDashed %>-metrics-cache>
 }
 
-@if (metrics() && metricsKeyExistsAndObjectNotEmpty('databases')) {
+@if (metricsRef && metricsKeyExistsAndObjectNotEmpty('databases')) {
   <<%= jhiPrefixDashed %>-metrics-datasource
     [updating]="updatingMetrics()"
-    [datasourceMetrics]="metrics()?.databases"
+    [datasourceMetrics]="metricsRef.databases"
   ></<%= jhiPrefixDashed %>-metrics-datasource>
 }
 </div>

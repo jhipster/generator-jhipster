@@ -18,24 +18,24 @@
  */
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import {
-  buildServerMatrix,
-  extendMatrix,
-  entitiesSimple as entities,
   buildSamplesFromMatrix,
+  buildServerMatrix,
+  entitiesSimple as entities,
+  extendMatrix,
   defaultHelpers as helpers,
   runResult,
-} from '../../testing/index.js';
+} from '../../lib/testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 
-import { databaseTypes } from '../../jdl/jhipster/index.js';
+import { databaseTypes } from '../../lib/jhipster/index.js';
 import {
   filterBasicServerGenerators,
-  shouldComposeWithSpringCloudStream,
   shouldComposeWithLiquibase,
+  shouldComposeWithSpringCloudStream,
 } from '../server/__test-support/index.js';
 import Generator from './generator.js';
 
@@ -85,6 +85,7 @@ describe(`generator - ${databaseType}`, () => {
         await helpers
           .runJHipster('server')
           .withJHipsterConfig(sampleConfig, entities)
+          .withMockedSource({ except: ['addTestSpringFactory'] })
           .withMockedJHipsterGenerators({
             except: ['jhipster:spring-data-couchbase'],
             filter: filterBasicServerGenerators,

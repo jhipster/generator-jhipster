@@ -20,9 +20,9 @@ import chalk from 'chalk';
 
 import BaseGenerator from '../base/index.js';
 
-import { applicationOptions } from '../../jdl/jhipster/index.js';
-import JSONToJDLConverter from '../../jdl/converters/json-to-jdl-converter.js';
-import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures } from '../base/api.js';
+import { applicationOptions } from '../../lib/jhipster/index.js';
+import { convertToJDL } from '../../lib/jdl/converters/json-to-jdl-converter.js';
+import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
 
 const { OptionNames } = applicationOptions;
 
@@ -50,12 +50,11 @@ export default class extends BaseGenerator {
     return this.asDefaultTaskGroup({
       convertToJDL() {
         try {
-          const jdlObject = JSONToJDLConverter.convertToJDL(this.destinationPath(), false);
+          const jdlObject = convertToJDL(this.destinationPath(), false, this.options.jdlDefinition);
           if (jdlObject) {
             this.jdlContent = jdlObject.toString();
           }
         } catch (error: unknown) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           throw new Error(`An error occurred while exporting to JDL: ${(error as any).message}\n${error}`, { cause: error });
         }
       },

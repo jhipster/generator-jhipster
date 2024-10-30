@@ -1,4 +1,4 @@
-import prettier from 'prettier';
+import { format, resolveConfig } from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginProperties from 'prettier-plugin-properties';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
@@ -14,7 +14,7 @@ export default async ({
   prettierProperties,
 }) => {
   try {
-    const resolvedDestinationFileOptions = await prettier.resolveConfig(relativeFilePath);
+    const resolvedDestinationFileOptions = await resolveConfig(relativeFilePath);
     const fileOptions = {
       // Config from disk
       ...resolvedDestinationFileOptions,
@@ -32,7 +32,7 @@ export default async ({
     if (prettierProperties) {
       fileOptions.plugins.push(prettierPluginProperties);
     }
-    return { result: await prettier.format(fileContents, fileOptions) };
+    return { result: await format(fileContents, fileOptions) };
   } catch (error) {
     let errorMessage;
     if (fileContents) {

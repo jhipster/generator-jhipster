@@ -156,8 +156,7 @@ export const UserManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {
-          users.map((user, i) => (
+          {users.map((user, i) => (
             <tr id={user.login} key={`user-${i}`}>
               <td>
                 <Button tag={Link} to={user.login} color="link" size="sm">
@@ -168,11 +167,11 @@ export const UserManagement = () => {
               <td>{user.email}</td>
               <td>
                 {user.activated ? (
-                  <Button color="success" onClick={toggleActive(user) }>
+                  <Button color="success" onClick={toggleActive(user)}>
                     <Translate contentKey="userManagement.activated">Activated</Translate>
                   </Button>
                 ) : (
-                  <Button color="danger" onClick={toggleActive(user) }>
+                  <Button color="danger" onClick={toggleActive(user)}>
                     <Translate contentKey="userManagement.deactivated">Deactivated</Translate>
                   </Button>
                 )}
@@ -181,14 +180,13 @@ export const UserManagement = () => {
               <td>{user.langKey}</td>
 <%_ } _%>
               <td>
-                {
-                  user.authorities ? (
-                  user.authorities.map((authority, j) => (
-                    <div key={`user-auth-${i}-${j}`}>
-                      <Badge color="info">{authority}</Badge>
-                    </div>
-                  ))) : null
-                }
+                {user.authorities
+                  ? user.authorities.map((authority, j) => (
+                      <div key={`user-auth-${i}-${j}`}>
+                        <Badge color="info">{authority}</Badge>
+                      </div>
+                    ))
+                  : null}
               </td>
 <%_ if (!databaseTypeCassandra) { _%>
               <td>
@@ -204,13 +202,22 @@ export const UserManagement = () => {
               <td className="text-end">
                 <div className="btn-group flex-btn-group-container">
                   <Button tag={Link} to={user.login} color="info" size="sm">
-                    <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.view">View</Translate></span>
+                    <FontAwesomeIcon icon="eye" />{' '}
+                    <span className="d-none d-md-inline">
+                      <Translate contentKey="entity.action.view">View</Translate>
+                    </span>
                   </Button>
                   <Button tag={Link} to={`${user.login}/edit`} color="primary" size="sm">
-                    <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
+                    <FontAwesomeIcon icon="pencil-alt" />{' '}
+                    <span className="d-none d-md-inline">
+                      <Translate contentKey="entity.action.edit">Edit</Translate>
+                    </span>
                   </Button>
                   <Button tag={Link} to={`${user.login}/delete`} color="danger" size="sm" disabled={account.login === user.login}>
-                    <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
+                    <FontAwesomeIcon icon="trash" />{' '}
+                    <span className="d-none d-md-inline">
+                      <Translate contentKey="entity.action.delete">Delete</Translate>
+                    </span>
                   </Button>
                 </div>
               </td>

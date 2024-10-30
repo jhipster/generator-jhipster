@@ -18,13 +18,11 @@
  */
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
-import { SinonSpy } from 'sinon';
 
-import { RunResult } from 'yeoman-test';
 import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import * as GENERATORS from '../generator-list.js';
 import { GENERATOR_JDL } from '../generator-list.js';
 import Generator from './index.js';
@@ -78,10 +76,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('with valid parameters', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
           inline: 'entity Foo {}',
           db: 'postgresql',
           baseName: 'jhipster',
@@ -89,14 +85,13 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should not compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_APP);
       });
 
       it('should compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(1);
-        expect(mock.lastCall.args).toStrictEqual([['Foo'], expect.any(Object)]);
+        runResult.assertGeneratorComposedOnce(MOCKED_ENTITIES);
+        const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
+        expect(calls[calls.length - 1].arguments).toStrictEqual([['Foo'], expect.any(Object)]);
       });
 
       it('should write expected files', () => {
@@ -107,23 +102,20 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('with valid config', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withJHipsterConfig().withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withJHipsterConfig().withMockedGenerators(mockedGenerators).withOptions({
           inline: 'entity Foo {}',
         });
       });
 
       it('should not compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_APP);
       });
 
       it('should compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(1);
-        expect(mock.lastCall.args).toStrictEqual([['Foo'], expect.any(Object)]);
+        runResult.assertGeneratorComposedOnce(MOCKED_ENTITIES);
+        const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
+        expect(calls[calls.length - 1].arguments).toStrictEqual([['Foo'], expect.any(Object)]);
       });
 
       it('should write expected files', () => {
@@ -136,22 +128,21 @@ describe(`generator - ${generator}`, () => {
 
   describe('for application jdl', () => {
     describe('with valid jdl', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
           inline: 'application { }',
         });
       });
 
       it('should not compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_ENTITIES);
       });
       it('should compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(1);
-        expect(mock.lastCall.args).toStrictEqual([[], expect.not.objectContaining({ applicationWithEntities: expect.any(Object) })]);
+        runResult.assertGeneratorComposedOnce(MOCKED_APP);
+        expect(runResult.getGeneratorMock(MOCKED_APP).calls[0].arguments).toStrictEqual([
+          [],
+          expect.not.objectContaining({ applicationWithEntities: expect.any(Object) }),
+        ]);
       });
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -159,10 +150,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('with blueprint jdl with blueprint config', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withOptions({
           jsonOnly: true,
           inline: 'application { config { blueprints [foo, bar] } config(foo) { config fooValue } config(bar) { config barValue } }',
         });
@@ -200,22 +189,22 @@ describe(`generator - ${generator}`, () => {
 
   describe('for one application and entity jdl', () => {
     describe('with valid jdl', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
           inline: 'application { entities Foo } entity Foo {}',
         });
       });
 
       it('should not compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_ENTITIES);
       });
       it('should compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(1);
-        expect(mock.lastCall.args).toStrictEqual([[], expect.not.objectContaining({ applicationWithEntities: expect.any(Object) })]);
+        runResult.assertGeneratorComposedOnce(MOCKED_APP);
+        const calls = runResult.getGeneratorMock(MOCKED_APP).calls;
+        expect(calls[calls.length - 1].arguments).toStrictEqual([
+          [],
+          expect.not.objectContaining({ applicationWithEntities: expect.any(Object) }),
+        ]);
       });
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -223,10 +212,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('with --ignore-application option', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
           ignoreApplication: true,
           inline: 'application { entities Foo } entity Foo {}',
         });
@@ -240,26 +227,22 @@ describe(`generator - ${generator}`, () => {
 
   describe('for two applications and entity jdl', () => {
     describe('with valid jdl', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
           inline: 'application { entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
         });
       });
 
       it('should not compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_ENTITIES);
       });
       it('should not compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_APP);
       });
       it('should compose with workspaces', () => {
-        const mock = runResult.mockedGenerators[MOCKED_WORKSPACES] as SinonSpy;
-        expect(mock.callCount).toBe(1);
-        expect(mock.lastCall.args).toStrictEqual([
+        runResult.assertGeneratorComposedOnce(MOCKED_WORKSPACES);
+        const calls = runResult.getGeneratorMock(MOCKED_WORKSPACES).calls;
+        expect(calls[calls.length - 1].arguments).toStrictEqual([
           [],
           expect.objectContaining({ workspacesFolders: ['jhipster', 'jhipster2'], generateApplications: expect.any(Function) }),
         ]);
@@ -270,27 +253,23 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('with --ignore-application option', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
           ignoreApplication: true,
           inline: 'application { entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
         });
       });
 
       it('should compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(2);
-        expect(mock.lastCall.args).toStrictEqual([['Bar'], expect.any(Object)]);
+        expect(runResult.getGeneratorComposeCount(MOCKED_ENTITIES)).toBe(2);
+        const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
+        expect(calls[calls.length - 1].arguments).toStrictEqual([['Bar'], expect.any(Object)]);
       });
       it('should not compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_APP);
       });
       it('should not compose with workspaces', () => {
-        const mock = runResult.mockedGenerators[MOCKED_WORKSPACES] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_WORKSPACES);
       });
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -301,10 +280,8 @@ describe(`generator - ${generator}`, () => {
   describe('--json-only option', () => {
     describe('for entities only jdl', () => {
       describe('with valid parameters', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withOptions({
             jsonOnly: true,
             inline: 'entity Foo {}',
             db: 'postgresql',
@@ -320,10 +297,8 @@ describe(`generator - ${generator}`, () => {
       });
 
       describe('with valid config', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withJHipsterConfig().withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withJHipsterConfig().withOptions({
             jsonOnly: true,
             inline: 'entity Foo {}',
           });
@@ -339,10 +314,8 @@ describe(`generator - ${generator}`, () => {
 
     describe('for application jdl', () => {
       describe('with valid jdl', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withOptions({
             jsonOnly: true,
             inline: 'application { }',
           });
@@ -358,10 +331,8 @@ describe(`generator - ${generator}`, () => {
 
     describe('for one application and entity jdl', () => {
       describe('with valid jdl', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withOptions({
             jsonOnly: true,
             inline: 'application { entities Foo } entity Foo {}',
           });
@@ -376,10 +347,8 @@ describe(`generator - ${generator}`, () => {
       });
 
       describe('with --ignore-application option', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withOptions({
             jsonOnly: true,
             ignoreApplication: true,
             inline: 'application { entities Foo } entity Foo {}',
@@ -396,10 +365,8 @@ describe(`generator - ${generator}`, () => {
 
     describe('for two applications and entity jdl', () => {
       describe('with valid jdl', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withOptions({
             jsonOnly: true,
             inline: 'application { entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
           });
@@ -411,10 +378,8 @@ describe(`generator - ${generator}`, () => {
       });
 
       describe('with --ignore-application option', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withOptions({
             jsonOnly: true,
             ignoreApplication: true,
             inline: 'application { entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
@@ -443,17 +408,14 @@ entity Bar
       });
 
       it('should not compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_ENTITIES);
       });
       it('should not compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_APP);
       });
       it('should compose with workspaces', () => {
-        const mock = runResult.mockedGenerators[MOCKED_WORKSPACES] as SinonSpy;
-        expect(mock.callCount).toBe(1);
-        expect(mock.lastCall.args).toStrictEqual([
+        runResult.assertGeneratorComposedOnce(MOCKED_WORKSPACES);
+        expect(runResult.getGeneratorMock(MOCKED_WORKSPACES).calls[0].arguments).toStrictEqual([
           [],
           expect.objectContaining({ workspacesFolders: ['gatewayApp', 'jhipster'], generateApplications: expect.any(Function) }),
         ]);
@@ -501,8 +463,7 @@ application { config { baseName gatewayApp applicationType gateway } }
       });
 
       it('should generate expected config', () => {
-        const mock = runResult.mockedGenerators['foo:bar'] as SinonSpy;
-        expect(mock.callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce('foo:bar');
       });
     });
   });

@@ -73,8 +73,8 @@ export default class UserManagementUpdateComponent implements OnInit {
     authorities: new FormControl(userTemplate.authorities, { nonNullable: true }),
   });
 
-  private userService = inject(UserManagementService);
-  private route = inject(ActivatedRoute);
+  private readonly userService = inject(UserManagementService);
+  private readonly route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.route.data.subscribe(({ user }) => {

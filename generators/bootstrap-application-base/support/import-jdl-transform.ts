@@ -5,15 +5,24 @@ import type { MemFsEditorFile } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';
 import { upperFirst } from 'lodash-es';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
-import { createImporterFromContent } from '../../../jdl/jdl-importer.js';
-import { mergeYoRcContent } from '../../../jdl/index.js';
+import { createImporterFromContent } from '../../../lib/jdl/jdl-importer.js';
+import { mergeYoRcContent } from '../../../lib/utils/yo-rc.js';
+import type { JDLApplicationConfig } from '../../../lib/jdl/core/types/parsing.js';
 
-export const importJDLTransform = ({ destinationPath, jdlStorePath }: { destinationPath: string; jdlStorePath: string }) =>
+export const importJDLTransform = ({
+  destinationPath,
+  jdlStorePath,
+  jdlDefinition,
+}: {
+  destinationPath: string;
+  jdlStorePath: string;
+  jdlDefinition: JDLApplicationConfig;
+}) =>
   Duplex.from(async function* (files: AsyncGenerator<MemFsEditorFile>) {
     const yoRcFilePath = join(destinationPath, '.yo-rc.json');
     const entitiesFolder = join(destinationPath, '.jhipster');
     const entitiesMatcher = new Minimatch(`${entitiesFolder}/*.json`);
-    const entityFields: Array<MemFsEditorFile> = [];
+    const entityFields: MemFsEditorFile[] = [];
 
     let jdlStoreFileInMemory: MemFsEditorFile | undefined;
     let yoRcFileInMemory: MemFsEditorFile | undefined;
@@ -44,7 +53,7 @@ export const importJDLTransform = ({ destinationPath, jdlStorePath }: { destinat
     if (entityFields.length > 0) {
       throw new Error('Entities configuration files are not supported by jdlStore');
     }
-    const importer = createImporterFromContent(jdlStoreContents.toString());
+    const importer = createImporterFromContent(jdlStoreContents.toString(), undefined, jdlDefinition);
     const importState = importer.import();
     const applicationWithEntities = Object.values(importState.exportedApplicationsWithEntities);
     if (applicationWithEntities.length !== 1) {

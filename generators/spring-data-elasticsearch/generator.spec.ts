@@ -18,19 +18,19 @@
  */
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import {
-  buildServerMatrix,
-  extendMatrix,
-  entitiesServerSamples as entities,
   buildSamplesFromMatrix,
+  buildServerMatrix,
+  entitiesServerSamples as entities,
+  extendMatrix,
   defaultHelpers as helpers,
   runResult,
-} from '../../testing/index.js';
+} from '../../lib/testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { databaseTypes, searchEngineTypes, authenticationTypes, applicationTypes } from '../../jdl/jhipster/index.js';
+import { applicationTypes, authenticationTypes, databaseTypes, searchEngineTypes } from '../../lib/jhipster/index.js';
 import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.js';
 import Generator from './generator.js';
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.js';
@@ -87,6 +87,7 @@ describe('generator - elasticsearch', () => {
         await helpers
           .runJHipster('server')
           .withJHipsterConfig(sampleConfig, entities)
+          .withMockedSource({ except: ['addTestSpringFactory'] })
           .withMockedJHipsterGenerators({
             except: ['jhipster:spring-data-elasticsearch'],
             filter: filterBasicServerGenerators,
@@ -94,10 +95,10 @@ describe('generator - elasticsearch', () => {
       });
 
       it('should compose with jhipster:common', () => {
-        expect(runResult.mockedGenerators['jhipster:common'].callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce('jhipster:common');
       });
       it(`should ${enableTranslation ? '' : 'not '}compose with jhipster:languages`, () => {
-        expect(runResult.mockedGenerators['jhipster:languages'].callCount).toBe(enableTranslation ? 1 : 0);
+        expect(runResult.getGeneratorComposeCount('jhipster:languages')).toBe(enableTranslation ? 1 : 0);
       });
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
@@ -105,9 +106,8 @@ describe('generator - elasticsearch', () => {
 
       describe('searchEngine', () => {
         const elasticsearch = sampleConfig.searchEngine === ELASTICSEARCH;
-        matchElasticSearch(() => runResult, elasticsearch);
+        matchElasticSearch(elasticsearch);
         matchElasticSearchUser(
-          () => runResult,
           elasticsearch &&
             (sampleConfig.authenticationType === OAUTH2 ||
               (sampleConfig.applicationType !== MICROSERVICE && !sampleConfig.skipUserManagement)),

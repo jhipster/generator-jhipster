@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../../base/api.js';
+import type { JHipsterCommandDefinition } from '../../../../lib/command/index.js';
 import gitCommand from '../../../git/command.js';
 
 const { monorepository } = gitCommand.configs!;
 
-const command: JHipsterCommandDefinition = {
+const command = {
   configs: {
     fromInit: {
       description: 'Generate prettier config using init defaults',
@@ -60,6 +60,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

@@ -5,9 +5,11 @@ exports[`generator - entity --single-entity when regenerating with default confi
   "addEntitiesToClient": [
     {
       "application": "Application[jhipster]",
+      "control": "TaskParameter[control]",
       "entities": [
         "Entity[Foo]",
       ],
+      "source": "TaskParameter[source]",
     },
   ],
   "addEntityToCache": [

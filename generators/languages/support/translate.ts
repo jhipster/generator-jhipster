@@ -24,10 +24,6 @@ export const escapeHtmlTranslationValue = (translation: string) =>
 
 export const escapeTsTranslationValue = (translation: string) => translation.replace(/'/g, "\\'").replace(/\\/g, '\\\\');
 
-function getTranslationValue(getWebappTranslation, key, data) {
-  return getWebappTranslation(key, data) || undefined;
-}
-
 export type TranslationReplaceOptions = {
   keyPattern?: string;
   interpolatePattern?: string;
@@ -54,7 +50,7 @@ export const replaceTranslationKeysWithText = (
 
     let key = match.groups?.key;
     if (!key && keyPattern) {
-      const keyMatch = target.match(new RegExp(keyPattern));
+      const keyMatch = new RegExp(keyPattern).exec(target);
       key = keyMatch?.groups?.key;
     }
     if (!key) {
@@ -63,7 +59,7 @@ export const replaceTranslationKeysWithText = (
 
     let interpolate = match.groups?.interpolate;
     if (!interpolate && interpolatePattern) {
-      const interpolateMatch = target.match(new RegExp(interpolatePattern));
+      const interpolateMatch = new RegExp(interpolatePattern).exec(target);
       interpolate = interpolateMatch?.groups?.interpolate;
     }
 
@@ -77,7 +73,7 @@ export const replaceTranslationKeysWithText = (
       }
     }
 
-    const translation = getTranslationValue(getWebappTranslation, key, data);
+    const translation = getWebappTranslation(key, data);
 
     let replacement = translation;
     if (!replacement) {
@@ -90,7 +86,7 @@ export const replaceTranslationKeysWithText = (
     } else if (stringify) {
       replacement = JSON.stringify(replacement);
     }
-    body = `${body.slice(0, match.index!)}${replacement}${body.slice(match.index! + target.length)}`;
+    body = `${body.slice(0, match.index)}${replacement}${body.slice(match.index + target.length)}`;
   }
   return body;
 };
@@ -144,7 +140,7 @@ export const replaceTranslateContents = (body: string, filePath: string, regexp:
       }
     }
 
-    body = `${body.slice(0, match.index!)}${converter({ filePath, key, interpolate, parsedInterpolate, type, prefix, suffix })}${body.slice(match.index! + target.length)}`;
+    body = `${body.slice(0, match.index)}${converter({ filePath, key, interpolate, parsedInterpolate, type, prefix, suffix })}${body.slice(match.index + target.length)}`;
   }
   return body;
 };

@@ -20,7 +20,7 @@ import { passthrough } from 'p-transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import { Minimatch } from 'minimatch';
 import { Piscina } from 'piscina';
-import type prettier from 'prettier';
+import type { Options as PrettierOptions } from 'prettier';
 import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
 import type CoreGenerator from '../../base-core/index.js';
 
@@ -28,25 +28,45 @@ const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
 export const isPrettierConfigFilePath = (filePath: string) => minimatch.match(filePath);
 export const isPrettierConfigFile = (file: MemFsEditorFile) => isPrettierConfigFilePath(file.path);
 
+type PrettierWorkerOptions = {
+  prettierPackageJson?: boolean;
+  prettierJava?: boolean;
+  prettierProperties?: boolean;
+  prettierOptions?: PrettierOptions;
+};
+
+export class PrettierPool extends Piscina {
+  constructor(options = {}) {
+    super({
+      maxThreads: 1,
+      filename: new URL('./prettier-worker.js', import.meta.url).href,
+      ...options,
+    });
+  }
+
+  apply(
+    data: PrettierWorkerOptions & { relativeFilePath: string; filePath: string; fileContents: string },
+  ): Promise<{ result?: string; errorMessage?: string }> {
+    return this.run(data);
+  }
+}
+
 export const createPrettierTransform = async function (
   this: CoreGenerator,
-  options: {
-    ignoreErrors?: boolean;
-    extensions?: string;
-    prettierPackageJson?: boolean;
-    prettierJava?: boolean;
-    prettierProperties?: boolean;
-    prettierOptions?: prettier.Options;
-  } = {},
+  options: PrettierWorkerOptions & { ignoreErrors?: boolean; extensions?: string; skipForks?: boolean } = {},
 ) {
-  const pool = new Piscina({
-    maxThreads: 1,
-    filename: new URL('./prettier-worker.js', import.meta.url).href,
-  });
-
-  const { ignoreErrors = false, extensions = '*', prettierPackageJson, prettierJava, prettierProperties, prettierOptions } = options;
+  const { ignoreErrors = false, extensions = '*', skipForks, ...workerOptions } = options;
   const globExpression = extensions.includes(',') ? `**/*.{${extensions}}` : `**/*.${extensions}`;
   const minimatch = new Minimatch(globExpression, { dot: true });
+
+  let applyPrettier;
+  const pool = skipForks ? undefined : new PrettierPool();
+  if (skipForks) {
+    const { default: applyPrettierWorker } = await import('./prettier-worker.js');
+    applyPrettier = applyPrettierWorker;
+  } else {
+    applyPrettier = data => pool!.apply(data);
+  }
 
   return passthrough(
     async (file: VinylMemFsEditorFile) => {
@@ -56,15 +76,11 @@ export const createPrettierTransform = async function (
       if (!file.contents) {
         throw new Error(`File content doesn't exist for ${file.relative}`);
       }
-      const { result, errorMessage } = await pool.run({
+      const { result, errorMessage } = await applyPrettier({
         relativeFilePath: file.relative,
         filePath: file.path,
         fileContents: file.contents.toString('utf8'),
-        prettierOptions,
-        prettierPackageJson,
-        prettierJava,
-        prettierProperties,
-        ignoreErrors,
+        ...workerOptions,
       });
       if (result) {
         file.contents = Buffer.from(result);
@@ -76,8 +92,8 @@ export const createPrettierTransform = async function (
         this?.log?.warn?.(errorMessage);
       }
     },
-    () => {
-      pool.destroy();
+    async () => {
+      await pool?.destroy();
     },
   );
 };

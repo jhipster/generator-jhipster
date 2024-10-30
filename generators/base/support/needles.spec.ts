@@ -16,8 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { it, describe, expect, esmocha, beforeEach } from 'esmocha';
-import { checkContentIn, insertContentBeforeNeedle, createNeedleCallback, createBaseNeedle } from './needles.js';
+import test from 'node:test';
+import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import { createJHipsterLogger } from '../../../lib/utils/logger.js';
+import { checkContentIn, createBaseNeedle, createNeedleCallback, insertContentBeforeNeedle } from './needles.js';
 
 describe('needles - support', () => {
   describe('checkContentIn', () => {
@@ -218,37 +220,38 @@ ${needlePrefix} jhipster-needle-a-needle"
     });
 
     it('returned function should throw on missing content', () => {
-      expect(() => createNeedleCallback({ contentToAdd, needle }).call({ log() {} })).toThrow(/content is required/);
+      const needleCallback = createNeedleCallback({ contentToAdd, needle });
+      // @ts-expect-error invalid params
+      expect(() => needleCallback.call({ log() {} })).toThrow(/content is required/);
     });
 
     it('returned function should throw on missing needle', () => {
-      expect(() => createNeedleCallback({ contentToAdd, needle }).call({ log() {} }, 'no needle')).toThrow(
-        /Missing required jhipster-needle/,
-      );
+      const log = test.mock.fn(createJHipsterLogger());
+      const needleCallback = createNeedleCallback({ contentToAdd, needle });
+      // @ts-expect-error invalid params
+      expect(() => needleCallback.call({ log } as any, 'no needle')).toThrow(/Missing required jhipster-needle/);
     });
 
     it('returned function should not throw on optional missing needle', () => {
       const content = 'no needle';
-      const log = () => {};
-      log.warn = () => {};
-      expect(createNeedleCallback({ contentToAdd, needle, optional: true }).call({ log }, content, 'file')).toBe(content);
+      const log = test.mock.fn(createJHipsterLogger());
+      const needleCallback = createNeedleCallback({ contentToAdd, needle, optional: true });
+      expect(needleCallback.call({ log } as any, content, 'file')).toBe(content);
     });
 
     it('returned function should add contentToAdd', () => {
-      expect(createNeedleCallback({ contentToAdd, needle }).call({ log() {} }, `\\\\ jhipster-needle-${needle}`, 'file'))
-        .toMatchInlineSnapshot(`
+      const log = test.mock.fn(createJHipsterLogger());
+      const needleCallback = createNeedleCallback({ contentToAdd, needle });
+      expect(needleCallback.call({ log } as any, `\\\\ jhipster-needle-${needle}`, 'file')).toMatchInlineSnapshot(`
 "content to add
 \\\\ jhipster-needle-a-needle"
 `);
     });
 
     it('returned function should add contentToAdd array', () => {
-      expect(
-        createNeedleCallback({ contentToAdd: [contentToAdd, `${contentToAdd}2`], needle }).call(
-          { log() {} },
-          `\\\\ jhipster-needle-${needle}`,
-        ),
-      ).toMatchInlineSnapshot(`
+      const log = test.mock.fn(createJHipsterLogger());
+      const needleCallback = createNeedleCallback({ contentToAdd: [contentToAdd, `${contentToAdd}2`], needle });
+      expect(needleCallback.call({ log } as any, `\\\\ jhipster-needle-${needle}`, 'any-file')).toMatchInlineSnapshot(`
 "content to add
 content to add2
 \\\\ jhipster-needle-a-needle"
@@ -276,7 +279,6 @@ content to add2
     });
 
     it('should throw with options and empty needles', () => {
-      // @ts-expect-error
       expect(() => createBaseNeedle({ optional: true }, {})).toThrow(/At least 1 needle is required/);
     });
 
@@ -286,12 +288,13 @@ content to add2
 
     it('should throw with filePath without generator', () => {
       const filePath = 'file.foo';
+      // @ts-expect-error invalid params
       expect(() => createBaseNeedle({ filePath }, needles)).toThrow(/when passing filePath, the generator is required/);
     });
 
     it('should execute editFile if generator and filePath is passed', () => {
       const filePath = 'file.foo';
-      createBaseNeedle.call(generator, { filePath }, needles);
+      createBaseNeedle.call(generator as any, { filePath }, needles);
       expect(generator.editFile).toBeCalledTimes(1);
       expect(generator.editFile.mock.lastCall[0]).toBe(filePath);
       expect(typeof generator.editFile.mock.lastCall[1]).toBe('function');

@@ -14,10 +14,10 @@ exports[`generator - cypress jwt-cypressAudit(false)-angular-withAdminUi(false)-
   "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/.eslintrc.json": {
+  "clientRoot/src/test/javascript/cypress/e2e/account/login-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/login-page.cy.ts": {
+  "clientRoot/src/test/javascript/cypress/e2e/account/logout.cy.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/test/javascript/cypress/e2e/account/password-page.cy.ts": {
@@ -88,10 +88,10 @@ exports[`generator - cypress jwt-cypressAudit(true)-vue-withAdminUi(true)-cypres
   "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/.eslintrc.json": {
+  "clientRoot/src/test/javascript/cypress/e2e/account/login-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/login-page.cy.ts": {
+  "clientRoot/src/test/javascript/cypress/e2e/account/logout.cy.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/test/javascript/cypress/e2e/account/password-page.cy.ts": {
@@ -162,7 +162,7 @@ exports[`generator - cypress oauth2-cypressAudit(false)-angular-withAdminUi(fals
   "package.json": {
     "stateCleared": "modified",
   },
-  "src/test/javascript/cypress/.eslintrc.json": {
+  "src/test/javascript/cypress/e2e/account/logout.cy.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/e2e/administration/administration.cy.ts": {
@@ -218,7 +218,7 @@ exports[`generator - cypress oauth2-cypressAudit(true)-vue-withAdminUi(true)-cyp
   "package.json": {
     "stateCleared": "modified",
   },
-  "src/test/javascript/cypress/.eslintrc.json": {
+  "src/test/javascript/cypress/e2e/account/logout.cy.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/e2e/administration/administration.cy.ts": {
@@ -348,10 +348,10 @@ exports[`generator - cypress session-cypressAudit(false)-angular-withAdminUi(fal
   "package.json": {
     "stateCleared": "modified",
   },
-  "src/test/javascript/cypress/.eslintrc.json": {
+  "src/test/javascript/cypress/e2e/account/login-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "src/test/javascript/cypress/e2e/account/login-page.cy.ts": {
+  "src/test/javascript/cypress/e2e/account/logout.cy.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/e2e/account/password-page.cy.ts": {
@@ -422,10 +422,10 @@ exports[`generator - cypress session-cypressAudit(true)-vue-withAdminUi(true)-cy
   "package.json": {
     "stateCleared": "modified",
   },
-  "src/test/javascript/cypress/.eslintrc.json": {
+  "src/test/javascript/cypress/e2e/account/login-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "src/test/javascript/cypress/e2e/account/login-page.cy.ts": {
+  "src/test/javascript/cypress/e2e/account/logout.cy.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/e2e/account/password-page.cy.ts": {

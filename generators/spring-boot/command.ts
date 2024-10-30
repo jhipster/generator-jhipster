@@ -17,15 +17,17 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
 import { createBase64Secret, createSecret } from '../base/support/secret.js';
-import { authenticationTypes, applicationTypes } from '../../jdl/index.js';
+import { applicationTypes, authenticationTypes } from '../../lib/jhipster/index.js';
 
 const { OAUTH2, SESSION, JWT } = authenticationTypes;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 
-const command: JHipsterCommandDefinition = {
+const ALPHANUMERIC_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
+
+const command = {
   options: {
     fakeKeytool: {
       description: 'Add a fake certificate store file for test purposes',
@@ -46,6 +48,7 @@ const command: JHipsterCommandDefinition = {
         type: 'confirm',
         message: 'Do you want to make it reactive with Spring WebFlux?',
       }),
+      scope: 'storage',
     },
     serverPort: {
       prompt: gen => ({
@@ -61,6 +64,7 @@ const command: JHipsterCommandDefinition = {
           gen.jhipsterConfig.serverPort = 8080 + gen.jhipsterConfig.applicationIndex;
         }
       },
+      scope: 'storage',
     },
     serviceDiscoveryType: {
       cli: {
@@ -78,6 +82,15 @@ const command: JHipsterCommandDefinition = {
         { value: 'eureka', name: 'JHipster Registry (legacy, uses Eureka, provides Spring Cloud Config support)' },
         { value: 'no', name: 'No service discovery' },
       ],
+      scope: 'storage',
+    },
+    jwtSecretKey: {
+      cli: {
+        type: String,
+        env: 'JHI_JWT_SECRET_KEY',
+        hide: true,
+      },
+      scope: 'storage',
     },
     authenticationType: {
       cli: {
@@ -112,6 +125,7 @@ const command: JHipsterCommandDefinition = {
           gen.jhipsterConfig.jwtSecretKey = createBase64Secret(64, gen.options.reproducibleTests);
         }
       },
+      scope: 'storage',
     },
     feignClient: {
       description: 'Generate a feign client',
@@ -125,7 +139,12 @@ const command: JHipsterCommandDefinition = {
           [MICROSERVICE].includes(gen.jhipsterConfigWithDefaults.applicationType) &&
           (reactive ?? gen.jhipsterConfigWithDefaults.reactive) === false,
       }),
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
       default: false,
+      scope: 'storage',
     },
     syncUserWithIdp: {
       description: 'Allow relationships with User for oauth2 applications',
@@ -137,6 +156,10 @@ const command: JHipsterCommandDefinition = {
         message: 'Do you want to allow relationships with User entity?',
         when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === 'oauth2',
       }),
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
       configure: gen => {
         if (gen.jhipsterConfig.syncUserWithIdp === undefined && gen.jhipsterConfigWithDefaults.authenticationType === 'oauth2') {
           if (gen.isJhipsterVersionLessThan('8.1.1')) {
@@ -146,6 +169,7 @@ const command: JHipsterCommandDefinition = {
           throw new Error('syncUserWithIdp is only supported with authenticationType oauth2');
         }
       },
+      scope: 'storage',
     },
     defaultPackaging: {
       description: 'Default packaging for the application',
@@ -162,8 +186,53 @@ const command: JHipsterCommandDefinition = {
         }
       },
     },
+    databaseType: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
+      scope: 'storage',
+    },
+    messageBroker: {
+      description: 'message broker',
+      cli: {
+        type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      choices: ['kafka', 'pulsar', 'no'],
+      scope: 'storage',
+    },
+    databaseMigration: {
+      description: 'Database migration',
+      cli: {
+        type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      choices: ['liquibase'],
+      scope: 'storage',
+    },
+    graalvmSupport: {
+      description: 'Experimental GraalVM Native support',
+      cli: {
+        type: Boolean,
+      },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
+      scope: 'storage',
+    },
   },
-  import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
-};
+  import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL, 'jhipster:spring-cloud:gateway'],
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

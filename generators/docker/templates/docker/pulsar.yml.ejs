@@ -29,3 +29,7 @@ services:
     environment:
       PULSAR_MEM: " -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"   
     command: bin/pulsar standalone
+<%_ if (backendTypeSpringBoot) { _%>
+    labels:
+      org.springframework.boot.ignore: true
+<%_ } _%>

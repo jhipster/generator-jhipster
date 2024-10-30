@@ -58,14 +58,15 @@ import {
   searchEngineTypes,
   testFrameworkTypes,
   websocketTypes,
-} from '../../jdl/index.js';
+} from '../../lib/jhipster/index.js';
 import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.js';
+import type { FieldType } from '../../lib/application/field-types.js';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
 import cleanupTask from './cleanup.js';
 import { serverFiles } from './files.js';
 import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
 
-const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
+const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
@@ -103,13 +104,6 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      checks() {
-        const config = this.jhipsterConfigWithDefaults;
-        if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider)) {
-          this.log.verboseInfo(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
-          this.jhipsterConfig.enableHibernateCache = false;
-        }
-      },
       feignMigration() {
         const { reactive, applicationType, feignClient } = this.jhipsterConfigWithDefaults;
         if (feignClient) {
@@ -142,12 +136,11 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         const {
           applicationType,
           databaseType,
+          graalvmSupport,
           messageBroker,
           searchEngine,
           websocket,
           cacheProvider,
-          skipClient,
-          clientFramework,
           testFrameworks,
           feignClient,
           enableSwaggerCodegen,
@@ -157,8 +150,8 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         await this.composeWithJHipster('jhipster:java:jib');
         await this.composeWithJHipster('jhipster:java:code-quality');
 
-        if (!skipClient && clientFramework !== 'no') {
-          await this.composeWithJHipster('jhipster:java:node');
+        if (graalvmSupport) {
+          await this.composeWithJHipster('jhipster:java:graalvm');
         }
 
         if (enableSwaggerCodegen) {
@@ -199,7 +192,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         if (websocket === SPRING_WEBSOCKET) {
           await this.composeWithJHipster(GENERATOR_SPRING_WEBSOCKET);
         }
-        if ([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(cacheProvider)) {
+        if ([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(cacheProvider!)) {
           await this.composeWithJHipster(GENERATOR_SPRING_CACHE);
         }
       },
@@ -212,6 +205,13 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get composingComponent() {
     return this.asComposingComponentTaskGroup({
+      async composing() {
+        const { clientFramework, skipClient } = this.jhipsterConfigWithDefaults;
+        if (!skipClient && clientFramework !== 'no') {
+          // When using prompts, clientFramework will only be known after composing priority.
+          await this.composeWithJHipster('jhipster:java:node');
+        }
+      },
       async composeLanguages() {
         if (this.jhipsterConfigWithDefaults.enableTranslation) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
@@ -345,7 +345,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       prepareEntity({ field }) {
-        field.fieldJavaBuildSpecification = getSpecificationBuildForType(field.fieldType);
+        field.fieldJavaBuildSpecification = getSpecificationBuildForType(field.fieldType as FieldType);
 
         field.filterableField = ![TYPE_BYTES, TYPE_BYTE_BUFFER].includes(field.fieldType) && !field.transient;
         if (field.filterableField) {
@@ -397,10 +397,11 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
         }
       },
       prepareEntity({ relationship }) {
-        if (relationship.otherEntity.embedded) return;
+        const { primaryKey } = relationship.otherEntity;
+        if (!primaryKey) return;
 
         const { relationshipName, relationshipNameCapitalized } = relationship;
-        const otherEntityPkField = relationship.otherEntity.primaryKey.fields[0];
+        const otherEntityPkField = primaryKey.fields[0];
         mutateData(relationship, {
           propertyJavaFilterName: `${relationshipName}Id`,
           propertyJavaFilterJavaBeanName: `${relationshipNameCapitalized}Id`,
@@ -453,7 +454,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
       async writeFiles({ application }) {
         return this.writeFiles({
           sections: serverFiles,
-          rootTemplatesPath: ['', '../../server/templates/', '../../java/generators/domain/templates/'],
+          rootTemplatesPath: ['', '../../java/generators/domain/templates/'],
           context: application,
         });
       },
@@ -489,29 +490,32 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
           application;
         const { serviceDiscoveryAny } = application as any;
 
-        if (application.buildToolMaven) {
-          source.addMavenProperty?.({
-            property: 'spring-boot.version',
-            // eslint-disable-next-line no-template-curly-in-string
-            value: '${project.parent.version}',
-          });
-        }
-
-        source.addJavaDependencies?.([
-          { groupId: 'tech.jhipster', artifactId: 'jhipster-framework', version: jhipsterDependenciesVersion! },
-        ]);
-
-        if (applicationTypeGateway || applicationTypeMicroservice || serviceDiscoveryAny || messageBrokerAny) {
-          source.addJavaDependencies?.([
-            {
-              groupId: 'org.springframework.cloud',
-              artifactId: 'spring-cloud-dependencies',
-              type: 'pom',
-              scope: 'import',
-              version: javaDependencies!['spring-cloud-dependencies'],
+        source.addJavaDefinitions?.(
+          {
+            dependencies: [{ groupId: 'tech.jhipster', artifactId: 'jhipster-framework', version: jhipsterDependenciesVersion! }],
+            mavenDefinition: {
+              properties: [
+                {
+                  property: 'spring-boot.version',
+                  // eslint-disable-next-line no-template-curly-in-string
+                  value: '${project.parent.version}',
+                },
+              ],
             },
-          ]);
-        }
+          },
+          {
+            condition: applicationTypeGateway || applicationTypeMicroservice || serviceDiscoveryAny || messageBrokerAny,
+            dependencies: [
+              {
+                groupId: 'org.springframework.cloud',
+                artifactId: 'spring-cloud-dependencies',
+                type: 'pom',
+                scope: 'import',
+                version: javaDependencies!['spring-cloud-dependencies'],
+              },
+            ],
+          },
+        );
       },
       addSpringdoc({ application, source }) {
         const springdocDependency = `springdoc-openapi-starter-${application.reactive ? 'webflux' : 'webmvc'}-api`;
@@ -566,6 +570,28 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
               addToBuild: true,
             },
           ]);
+        }
+      },
+      addSpringBootCompose({ application, source }) {
+        source.addLogbackMainLog!({ name: 'org.springframework.boot.docker', level: 'WARN' });
+
+        const dockerComposeArtifact = { groupId: 'org.springframework.boot', artifactId: 'spring-boot-docker-compose' };
+        if (application.buildToolGradle) {
+          source.addGradleDependency!({ ...dockerComposeArtifact, scope: 'developmentOnly' });
+        } else if (application.buildToolMaven) {
+          // Add dependency to profile due to jib issue https://github.com/GoogleContainerTools/jib-extensions/issues/158
+          source.addMavenDefinition!({
+            profiles: [
+              {
+                id: 'docker-compose',
+                content: `
+                <activation>
+                  <activeByDefault>true</activeByDefault>
+                </activation>`,
+              },
+            ],
+          });
+          source.addMavenDependency!({ inProfile: 'docker-compose', ...dockerComposeArtifact, optional: true });
         }
       },
     });

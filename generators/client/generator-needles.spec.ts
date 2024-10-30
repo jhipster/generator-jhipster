@@ -1,12 +1,11 @@
-import { before, it, describe } from 'esmocha';
-import { basicHelpers as helpers, result as runResult, getGenerator } from '../../testing/index.js';
+import { before, describe, it } from 'esmocha';
+import { dryRunHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import { CLIENT_WEBPACK_DIR } from '../generator-constants.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import ClientGenerator from './index.js';
 
 const { ANGULAR, REACT } = clientFrameworkTypes;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ClientGenerator {
   constructor(args, opts, features) {
     super(args, opts, { ...features, sbsBlueprint: true });
@@ -15,7 +14,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
   get [ClientGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       webpackPhase({ source }) {
-        source!.addWebpackConfig!({ config: '{devServer:{}}' });
+        source.addWebpackConfig!({ config: '{devServer:{}}' });
       },
     });
   }
@@ -24,9 +23,9 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
 describe('needle API Webpack: JHipster client generator with blueprint', () => {
   function generateAppWithClientFramework(clientFramework) {
     return helpers
-      .create(getGenerator('client'))
+      .runJHipster('client')
       .withOptions({
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
       })
       .withJHipsterConfig({
         buildTool: 'maven',
@@ -39,8 +38,7 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
       })
-      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:client' }]])
-      .run();
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:client' }]]);
   }
 
   describe('Angular clientFramework', () => {

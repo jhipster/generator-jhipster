@@ -18,16 +18,16 @@
  */
 import { createNeedleCallback } from '../../base/support/index.js';
 import type {
-  GradleScript,
+  GradleComment,
   GradleDependency,
+  GradleLibraryDependency,
+  GradleNeedleOptions,
   GradlePlugin,
   GradleProperty,
   GradleRepository,
-  GradleTomlVersion,
-  GradleLibrary,
+  GradleScript,
   GradleTomlPlugin,
-  GradleComment,
-  GradleNeedleOptions,
+  GradleTomlVersion,
 } from '../types.js';
 
 const tomlItemToString = (item: Record<string, string | undefined>) =>
@@ -43,6 +43,30 @@ const scopeSortOrder = {
   implementation: 2,
   compileOnly: 3,
   runtimeOnly: 4,
+  testImplementation: 5,
+  testRuntimeOnly: 6,
+};
+
+const wrapScope = (scope: string, dependency: string, closure?: string[]) => {
+  if (closure?.length || scope === 'implementation platform') {
+    return `${scope}(${dependency})${closure?.length ? ` {\n${closure.join('\n')}\n}` : ''}`;
+  }
+  return `${scope} ${dependency}`;
+};
+
+const serializeDependency = (dependency: GradleDependency) => {
+  if ('libraryName' in dependency) {
+    return wrapScope(dependency.scope, `libs.${gradleNameToReference(dependency.libraryName)}`, dependency.closure);
+  }
+
+  const { groupId, artifactId, version, classifier, scope, closure } = dependency;
+  return wrapScope(
+    scope,
+    classifier && !version
+      ? `group: "${groupId}", name: "${artifactId}", classifier: "${classifier}"`
+      : `"${groupId}:${artifactId}${version ? `:${version}` : ''}${classifier ? `:${classifier}` : ''}"`,
+    closure,
+  );
 };
 
 export const gradleNeedleOptionsWithDefaults = (options: GradleNeedleOptions): Required<GradleNeedleOptions> => {
@@ -52,21 +76,32 @@ export const gradleNeedleOptionsWithDefaults = (options: GradleNeedleOptions): R
 
 export const sortDependencies = (a: GradleDependency, b: GradleDependency): number => {
   let ret = (scopeSortOrder[a.scope] ?? 100) - (scopeSortOrder[b.scope] ?? 100);
-  if (ret === 0) {
-    ret = a.groupId.localeCompare(b.groupId);
-    if (ret !== 0) {
-      // Keep Spring dependencies on top
-      const aIsSpring = a.groupId.startsWith('org.springframework.');
-      const bIsSpring = b.groupId.startsWith('org.springframework.');
-      if (aIsSpring !== bIsSpring && (aIsSpring || bIsSpring)) {
-        return aIsSpring ? -1 : 1;
-      }
+  // Keep implementation platform scope dependencies in the order they were added
+  if (ret !== 0 || a.scope === 'implementation platform') {
+    return ret;
+  }
+  ret = a.scope.localeCompare(b.scope);
+  if (ret !== 0) {
+    return ret;
+  }
+  if ('libraryName' in a || 'libraryName' in b) {
+    // Keep catalog dependencies on top
+    if ('libraryName' in a && 'libraryName' in b) {
+      return a.libraryName.localeCompare(b.libraryName);
     }
+    return 'libraryName' in a ? -1 : 1;
   }
-  if (ret === 0) {
-    ret = a.artifactId.localeCompare(b.artifactId);
+  ret = a.groupId.localeCompare(b.groupId);
+  if (ret !== 0) {
+    // Keep Spring dependencies on top
+    const aIsSpring = a.groupId.startsWith('org.springframework.');
+    const bIsSpring = b.groupId.startsWith('org.springframework.');
+    if (aIsSpring !== bIsSpring && (aIsSpring || bIsSpring)) {
+      return aIsSpring ? -1 : 1;
+    }
+    return ret;
   }
-  return ret;
+  return ret === 0 ? a.artifactId.localeCompare(b.artifactId) : ret;
 };
 
 export const applyFromGradleCallback = ({ script }: GradleScript) =>
@@ -78,18 +113,14 @@ export const applyFromGradleCallback = ({ script }: GradleScript) =>
 export const addGradleDependenciesCallback = (dependencies: GradleDependency[]) =>
   createNeedleCallback({
     needle: 'gradle-dependency',
-    contentToAdd: dependencies.map(({ groupId, artifactId, version, scope, classifier }) =>
-      classifier && !version
-        ? `${scope} group: "${groupId}", name: "${artifactId}", classifier: "${classifier}"`
-        : `${scope} "${groupId}:${artifactId}${version ? `:${version}` : ''}${classifier ? `:${classifier}` : ''}"`,
-    ),
+    contentToAdd: dependencies.map(serializeDependency),
   });
 
 /** @deprecated use addGradleDependenciesCallback */
-export const addGradleBuildSrcDependencyCallback = ({ groupId, artifactId, version, scope }: GradleDependency) =>
+export const addGradleBuildSrcDependencyCallback = (dependency: GradleDependency) =>
   createNeedleCallback({
     needle: 'gradle-build-src-dependency',
-    contentToAdd: `${scope} "${groupId}:${artifactId}${version ? `:${version}` : ''}"`,
+    contentToAdd: serializeDependency(dependency),
   });
 
 export const addGradleDependenciesCatalogVersionCallback = (versions: GradleTomlVersion[]) =>
@@ -98,24 +129,12 @@ export const addGradleDependenciesCatalogVersionCallback = (versions: GradleToml
     contentToAdd: versions.map(({ name, version }) => `${name} = "${version}"`),
   });
 
-export const addGradleDependencyCatalogLibrariesCallback = (libraries: GradleLibrary[]) =>
+export const addGradleDependencyCatalogLibrariesCallback = (libraries: (GradleLibraryDependency & { closure?: string[] })[]) =>
   createNeedleCallback({
     needle: 'gradle-dependency-catalog-libraries',
-    contentToAdd: libraries.map(({ libraryName, scope: _scope, ...others }) =>
+    contentToAdd: libraries.map(({ libraryName, scope: _scope, closure: _closure, ...others }) =>
       'library' in others ? `${libraryName} = "${others.library}"` : `${libraryName} = ${tomlItemToString(others)}`,
     ),
-  });
-
-export const addGradleDependencyFromCatalogCallback = (libraries: GradleLibrary[]) =>
-  createNeedleCallback({
-    needle: 'gradle-dependency',
-    contentToAdd: libraries
-      .filter(({ scope }) => scope)
-      .map(({ libraryName, scope }) =>
-        scope === 'implementation platform'
-          ? `${scope}(libs.${gradleNameToReference(libraryName)})`
-          : `${scope} libs.${gradleNameToReference(libraryName)}`,
-      ),
   });
 
 export const addGradleDependencyCatalogPluginsCallback = (plugins: GradleTomlPlugin[]) =>

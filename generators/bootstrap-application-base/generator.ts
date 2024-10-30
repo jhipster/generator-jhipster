@@ -28,16 +28,21 @@ import {
   addFakerToEntity,
   loadEntitiesAnnotations,
   loadEntitiesOtherSide,
-  stringifyApplicationData,
   prepareEntity as prepareEntityForTemplates,
   prepareField as prepareFieldForTemplates,
   prepareRelationship,
+  stringifyApplicationData,
 } from '../base-application/support/index.js';
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
 import { loadLanguagesConfig } from '../languages/support/index.js';
 import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.js';
+import { lookupCommandsConfigs } from '../../lib/command/lookup-commands-configs.js';
+import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../lib/command/load.js';
+import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
+import { removeFieldsWithNullishValues } from '../base/support/index.js';
+import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../lib/application/field-types.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
 
@@ -78,9 +83,13 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
           const destinationPath = this.destinationPath();
           const jdlStorePath = this.destinationPath(this.jhipsterConfig.jdlStore);
+          const { jdlDefinition } = this.options;
 
-          this.features.commitTransformFactory = () => exportJDLTransform({ destinationPath, jdlStorePath });
-          await this.pipeline({ refresh: true, pendingFiles: false }, importJDLTransform({ destinationPath, jdlStorePath }));
+          this.features.commitTransformFactory = () => exportJDLTransform({ destinationPath, jdlStorePath, jdlDefinition: jdlDefinition! });
+          await this.pipeline(
+            { refresh: true, pendingFiles: false },
+            importJDLTransform({ destinationPath, jdlStorePath, jdlDefinition: jdlDefinition! }),
+          );
         }
       },
     });
@@ -117,6 +126,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         applicationDefaults({
           backendType: this.jhipsterConfig.backendType ?? 'Java',
           syncUserWithIdp: this.jhipsterConfig.syncUserWithIdp,
+          packageJsonScripts: {},
         });
       },
       loadNodeDependencies({ application }) {
@@ -140,6 +150,17 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      /**
+       * Avoid having undefined keys in the application object when redering ejs templates
+       */
+      async loadApplicationKeys({ application }) {
+        const { applyDefaults = getConfigWithDefaults, commandsConfigs = await lookupCommandsConfigs() } = this.options;
+        loadCommandConfigsIntoApplication({
+          source: applyDefaults(removeFieldsWithNullishValues(this.config.getAll())),
+          application,
+          commandsConfigs,
+        });
+      },
       prepareApplication({ application, applicationDefaults }) {
         loadDerivedAppConfig({ application });
 
@@ -165,6 +186,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
           backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
           backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
+          clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework),
         });
       },
       userRelationship({ applicationDefaults }) {
@@ -207,6 +229,11 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
       configureEntity({ entityStorage, entityConfig }) {
         entityStorage.defaults({ fields: [], relationships: [], annotations: {} });
 
+        for (const field of entityConfig.fields!.filter(field => field.fieldType === 'byte[]')) {
+          convertFieldBlobType(field);
+          entityStorage.save();
+        }
+
         if (entityConfig.changelogDate) {
           entityConfig.annotations.changelogDate = entityConfig.changelogDate;
           delete entityConfig.changelogDate;
@@ -219,7 +246,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
       configureRelationships({ entityName, entityStorage, entityConfig }) {
         // Validate entity json relationship content
-        entityConfig.relationships.forEach((relationship: any) => {
+        entityConfig.relationships!.forEach(relationship => {
           const { otherEntityName, relationshipType } = relationship;
 
           assert(
@@ -233,7 +260,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
           if (!relationship.relationshipSide) {
             // Try to create relationshipSide based on best bet.
+            // @ts-ignore deprecated property
             if (relationship.ownerSide !== undefined) {
+              // @ts-ignore deprecated property
               relationship.relationshipSide = relationship.ownerSide ? 'left' : 'right';
             } else {
               // Missing ownerSide (one-to-many/many-to-one relationships) depends on the otherSide existence.
@@ -275,7 +304,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
 
           const customUserData: any = customUser?.entityStorage.getAll() ?? {};
-          Object.assign(bootstrap!, createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application));
+          Object.assign(bootstrap, createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application));
           application.user = bootstrap;
         }
       },
@@ -290,7 +319,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
           const customUserManagementData: any = customUserManagement?.entityStorage.getAll() ?? {};
           Object.assign(
-            bootstrap!,
+            bootstrap,
             createUserManagementEntity.call(this, { ...customUserManagementData, ...customUserManagementData.annotations }, application),
           );
           application.userManagement = bootstrap;
@@ -307,10 +336,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
 
           const customEntityData: any = customEntity?.entityStorage.getAll() ?? {};
-          Object.assign(
-            bootstrap!,
-            createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application),
-          );
+          Object.assign(bootstrap, createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application));
           application.authority = bootstrap;
         }
       },
@@ -329,6 +355,19 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         this.validateResult(loadEntitiesOtherSide(entities, { application }));
 
         for (const entity of entities) {
+          for (const field of entity.fields) {
+            if (isFieldBinaryType(field)) {
+              if (isFieldBlobType(field)) {
+                field.fieldTypeBlobContent ??= getBlobContentType(field.fieldType);
+              }
+              if (application.databaseTypeCassandra || entity.databaseType === 'cassandra') {
+                // @ts-expect-error set another type
+                field.fieldType = 'ByteBuffer';
+              } else if (isFieldBlobType(field)) {
+                field.fieldType = 'byte[]' as any;
+              }
+            }
+          }
           for (const relationship of entity.relationships) {
             if (relationship.ownerSide === undefined) {
               // ownerSide backward compatibility
@@ -385,6 +424,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
+      hasRequiredRelationship({ entity }) {
+        entity.anyRelationshipIsRequired = entity.relationships.some(rel => rel.relationshipRequired || rel.id);
+      },
       checkForCircularRelationships({ entity }) {
         const detectCyclicRequiredRelationship = (entity, relatedEntities) => {
           if (relatedEntities.has(entity)) return true;
@@ -404,6 +446,23 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get default() {
     return this.asDefaultTaskGroup({
+      /**
+       * Avoid having undefined keys in the application object when redering ejs templates
+       */
+      async loadApplicationKeys({ application }) {
+        if (this.options.commandsConfigs) {
+          // Load keys passed from cli
+          loadCommandConfigsKeysIntoTemplatesContext({
+            templatesContext: application,
+            commandsConfigs: this.options.commandsConfigs,
+          });
+        }
+        // Load keys from main generators
+        loadCommandConfigsKeysIntoTemplatesContext({
+          templatesContext: application,
+          commandsConfigs: await lookupCommandsConfigs(),
+        });
+      },
       task({ application }) {
         const packageJsonFiles = [this.destinationPath('package.json')];
         if (application.clientRootDir) {

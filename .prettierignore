@@ -10,3 +10,4 @@ jdl/**/.jhipster/**
 test/fixtures/**
 dist
 coverage
+BadEntity.json

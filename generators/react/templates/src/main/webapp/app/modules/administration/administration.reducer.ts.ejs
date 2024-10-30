@@ -32,7 +32,7 @@ const initialState = {
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
   logs: {
-    loggers: [] as any[]
+    loggers: [] as any[],
   },
   health: {} as any,
   metrics: {} as any,
@@ -85,7 +85,7 @@ export const setLoggers = createAsyncThunk(
   async ({ name, configuredLevel }: any) => axios.post(`management/loggers/${name}`, { configuredLevel }),
   {
     serializeError: serializeAxiosError,
-  }
+  },
 );
 
 export const changeLogLevel: (name, configuredLevel) => AppThunk = (name, configuredLevel) => async dispatch => {
@@ -93,9 +93,13 @@ export const changeLogLevel: (name, configuredLevel) => AppThunk = (name, config
   dispatch(getLoggers());
 };
 
-export const getConfigurations = createAsyncThunk('administration/fetch_configurations', async () => axios.get<any>('management/configprops'), {
-  serializeError: serializeAxiosError,
-});
+export const getConfigurations = createAsyncThunk(
+  'administration/fetch_configurations',
+  async () => axios.get<any>('management/configprops'),
+  {
+    serializeError: serializeAxiosError,
+  },
+);
 
 export const getEnv = createAsyncThunk('administration/fetch_env', async () => axios.get<any>('management/env'), {
   serializeError: serializeAxiosError,
@@ -197,7 +201,7 @@ export const AdministrationSlice = createSlice({
         (state, action) => {
           state.errorMessage = action.error.message;
           state.loading = false;
-        }
+        },
       );
 <%_ } _%>
   },

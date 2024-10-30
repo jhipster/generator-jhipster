@@ -1,0 +1,73 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+pluginManagement {
+    repositories {
+<%_ if (addSpringMilestoneRepository) { _%>
+        mavenCentral()
+        maven { url 'https://repo.spring.io/milestone' }
+        gradlePluginPortal()
+<%_ } _%>
+        // jhipster-needle-gradle-plugin-management-repositories - JHipster will add additional entries here
+    }
+<%_ if (databaseMigrationLiquibase) { _%>
+    buildscript {
+        repositories {
+            mavenCentral()
+        }
+        dependencies {
+            classpath group: 'org.liquibase', name: 'liquibase-core', version: "${liquibaseCoreVersion}"
+        }
+    }
+<%_ } _%>
+    plugins {
+        id 'com.gorylenko.gradle-git-properties' version "${gitPropertiesPluginVersion}"
+<%_ if (enableGradleEnterprise) { _%>
+        id "com.gradle.enterprise" version "${gradleEnterprisePluginVersion}"
+        id "com.gradle.common-custom-user-data-gradle-plugin" version "${gradleCommonCustomUserDataPluginVersion}"
+<%_ } _%>
+        // jhipster-needle-gradle-plugin-management-plugins - JHipster will add additional entries here
+    }
+}
+
+<%_ if (enableGradleEnterprise) { _%>
+plugins {
+    id 'com.gradle.enterprise'
+    id 'com.gradle.common-custom-user-data-gradle-plugin'
+}
+
+gradleEnterprise {
+    server = "<%= gradleEnterpriseHost %>"
+    buildScan {
+        captureTaskInputFiles = true
+        uploadInBackground = System.getenv("CI") == null // adjust to your CI provider
+        publishAlways()
+    }
+}
+
+buildCache {
+    local { enabled = true }
+    remote(HttpBuildCache) {
+        push = true
+        enabled = false // Disabled as this might not always desired
+        url = '<%= gradleEnterpriseHost %>/cache/' // note the trailing slash!
+    }
+}
+<%_ } _%>
+rootProject.name = "<%= dasherizedBaseName %>"

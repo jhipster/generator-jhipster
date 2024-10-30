@@ -19,18 +19,13 @@
 import { Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import { <%= entityAngularName %>Component } from './list/<%= entityFileName %>.component';
-import { <%= entityAngularName %>DetailComponent } from './detail/<%= entityFileName %>-detail.component';
-<%_ if (!readOnly) { _%>
-import { <%= entityAngularName %>UpdateComponent } from './update/<%= entityFileName %>-update.component';
-<%_ } _%>
 import <%= entityAngularName %>Resolve from './route/<%= entityFileName %>-routing-resolve.service';
 import { ASC } from 'app/config/navigation.constants';
 
 const <%= entityInstance %>Route: Routes = [
   {
     path: '',
-    component: <%= entityAngularName %>Component,
+    loadComponent: () => import('./list/<%= entityFileName %>.component').then(m => m.<%= entityAngularName %>Component),
     data: {
 <%_ if (primaryKey.typeLong && primaryKey.autoGenerate) { _%>
       defaultSort: '<%- primaryKey.name %>,' + ASC,
@@ -39,11 +34,11 @@ const <%= entityInstance %>Route: Routes = [
       authorities: [<%- entityAngularReadAuthorities %>],
 <%_ } _%>
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: ':<%= primaryKey.name %>/view',
-    component: <%= entityAngularName %>DetailComponent,
+    loadComponent: () => import('./detail/<%= entityFileName %>-detail.component').then(m => m.<%= entityAngularName %>DetailComponent),
     resolve: {
       <%= entityInstance %>: <%= entityAngularName %>Resolve
     },
@@ -57,7 +52,7 @@ const <%= entityInstance %>Route: Routes = [
 <%_ if (!readOnly) { _%>
   {
     path: 'new',
-    component: <%= entityAngularName %>UpdateComponent,
+    loadComponent: () => import('./update/<%= entityFileName %>-update.component').then(m => m.<%= entityAngularName %>UpdateComponent),
     resolve: {
       <%= entityInstance %>: <%= entityAngularName %>Resolve
     },
@@ -72,7 +67,7 @@ const <%= entityInstance %>Route: Routes = [
 <%_ if (!readOnly && updatableEntity) { _%>
   {
     path: ':<%= primaryKey.name %>/edit',
-    component: <%= entityAngularName %>UpdateComponent,
+    loadComponent: () => import('./update/<%= entityFileName %>-update.component').then(m => m.<%= entityAngularName %>UpdateComponent),
     resolve: {
       <%= entityInstance %>: <%= entityAngularName %>Resolve
     },

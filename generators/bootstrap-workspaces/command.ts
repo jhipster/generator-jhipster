@@ -1,14 +1,16 @@
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
-const command: JHipsterCommandDefinition = {
-  options: {
+const command = {
+  configs: {
     customWorkspacesConfig: {
-      type: Boolean,
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
       description: 'Use custom configuration',
       scope: 'generator',
-      hide: true,
     },
   },
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

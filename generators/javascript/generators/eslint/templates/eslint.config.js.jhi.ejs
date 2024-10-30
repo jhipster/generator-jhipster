@@ -21,6 +21,7 @@
  fragments.registerSections({
    importsSection: 0,
    configSection: 0,
+   endConfigSection: 0,
  });
 _&>
 <%_ if (typescriptEslint) { _%>
@@ -32,7 +33,7 @@ import prettier from 'eslint-plugin-prettier/recommended';
 <%_ if (typescriptEslint) { _%>
 import tseslint from 'typescript-eslint';
 <%_ } _%>
-<&- fragments.importsSection() &>
+<&- fragments.importsSection() -&>
 // jhipster-needle-eslint-add-import - JHipster will add additional import here
 
 <%_ if (typescriptEslint) { _%>
@@ -47,9 +48,10 @@ export default [
       },
     },
   },
-<&- fragments.configSection() &>
+<&- fragments.configSection() -&>
   // jhipster-needle-eslint-add-config - JHipster will add additional config here
   prettier,
+<&- fragments.endConfigSection() -&>
 <%_ if (typescriptEslint) { _%>
 );
 <%_ } else { _%>

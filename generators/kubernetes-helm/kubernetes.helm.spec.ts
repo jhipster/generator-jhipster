@@ -1,5 +1,5 @@
-import { before, it, describe, expect } from 'esmocha';
-import { basicHelpers as helpers, getGenerator } from '../../testing/index.js';
+import { before, describe, expect, it } from 'esmocha';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { GENERATOR_KUBERNETES_HELM } from '../generator-list.js';
 
 const expectedFiles = {
@@ -72,17 +72,16 @@ const expectedFiles = {
 
 describe('generator - Kubernetes Helm', () => {
   describe('only gateway', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -97,8 +96,7 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -117,17 +115,16 @@ describe('generator - Kubernetes Helm', () => {
   });
 
   describe('gateway and mysql microservice', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway', '02-mysql'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -141,8 +138,7 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -164,17 +160,16 @@ describe('generator - Kubernetes Helm', () => {
   });
 
   describe('mysql microservice with custom namespace', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['02-mysql'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -188,8 +183,7 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: true,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -211,17 +205,16 @@ describe('generator - Kubernetes Helm', () => {
   });
 
   describe('gateway and ingress', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -237,8 +230,7 @@ describe('generator - Kubernetes Helm', () => {
           ingressType: 'gke',
           ingressDomain: 'example.com',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -263,17 +255,16 @@ describe('generator - Kubernetes Helm', () => {
   });
 
   describe('MySQL and PostgreSQL microservices without gateway', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['02-mysql', '03-psql'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -287,8 +278,7 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -315,17 +305,16 @@ describe('generator - Kubernetes Helm', () => {
   });
 
   describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -340,8 +329,7 @@ describe('generator - Kubernetes Helm', () => {
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
           istio: false,
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -376,17 +364,16 @@ describe('generator - Kubernetes Helm', () => {
   });
 
   describe('monolith application', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['08-monolith'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -400,8 +387,7 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -419,17 +405,16 @@ describe('generator - Kubernetes Helm', () => {
   });
 
   describe('Kafka application', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['09-kafka'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -443,8 +428,7 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -461,17 +445,16 @@ describe('generator - Kubernetes Helm', () => {
   });
 
   describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['02-mysql'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -484,8 +467,7 @@ describe('generator - Kubernetes Helm', () => {
           kubernetesNamespace: 'mynamespace',
           monitoring: 'prometheus',
           kubernetesServiceType: 'LoadBalancer',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -511,17 +493,16 @@ describe('generator - Kubernetes Helm', () => {
   });
 
   describe('gateway with istio', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -535,8 +516,7 @@ describe('generator - Kubernetes Helm', () => {
           ingressDomain: 'example.com',
           clusteredDbApps: [],
           istio: true,
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();

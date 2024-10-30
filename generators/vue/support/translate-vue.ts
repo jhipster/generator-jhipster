@@ -18,12 +18,12 @@
  */
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
-import CoreGenerator from '../../base-core/index.js';
+import type CoreGenerator from '../../base-core/index.js';
 
 type GetWebappTranslation = (s: string, data?: Record<string, any>) => string;
 
 function replaceTranslationAttributes({ content, getWebappTranslation }: { content: string; getWebappTranslation: GetWebappTranslation }) {
-  return content.replaceAll(/v-bind:(?<tag>(?:placeholder|title|label))="(?<translate>t\$\([^"]+\))"/g, (_complete, ...args) => {
+  return content.replaceAll(/:(?<tag>(?:placeholder|title|label))="(?<translate>t\$\([^"]+\))"/g, (_complete, ...args) => {
     const groups: Record<string, string> = args.pop();
     if (groups.translate.includes('+')) {
       return '';

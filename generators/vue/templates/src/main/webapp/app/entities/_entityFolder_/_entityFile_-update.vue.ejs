@@ -1,7 +1,7 @@
 <template>
     <div class="row justify-content-center">
         <div class="col-8">
-            <form name="editForm" novalidate v-on:submit.prevent="save()" >
+            <form name="editForm" novalidate @submit.prevent="save()" >
                 <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%= entityClass %>CreateUpdateHeading" v-text="t$('<%= i18nKeyPrefix %>.home.createOrEditLabel')">Create or edit a <%= entityAngularName %></h2>
                 <div>
                     <div class="form-group" v-if="<%= entityInstance %>.<%= primaryKey.name %>">
@@ -35,33 +35,33 @@ _%>
   <%_ if (field.fieldIsEnum) { _%>
                         <select class="form-control" name="<%= fieldName %>" :class="{'valid': !v$.<%= fieldName %>.$invalid, 'invalid': v$.<%= fieldName %>.$invalid }" v-model="v$.<%= fieldName %>.$model" id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>>
     <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
-                            <option v-for="<%= this._.lowerFirst(fieldType) %> in <%= this._.lowerFirst(fieldType)%>Values" :key="<%= this._.lowerFirst(fieldType) %>" v-bind:value="<%= this._.lowerFirst(fieldType) %>" v-bind:label="t$('<%= enumPrefix %>.'+<%= this._.lowerFirst(fieldType) %>)">{{ <%= this._.lowerFirst(fieldType) %> }}</option>
+                            <option v-for="<%= this._.lowerFirst(fieldType) %> in <%= this._.lowerFirst(fieldType)%>Values" :key="<%= this._.lowerFirst(fieldType) %>" :value="<%= this._.lowerFirst(fieldType) %>" :label="t$('<%= enumPrefix %>.'+<%= this._.lowerFirst(fieldType) %>)">{{ <%= this._.lowerFirst(fieldType) %> }}</option>
 
                         </select>
   <%_ } else { _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
                         <div>
       <%_ if (field.blobContentTypeImage) { _%>
-                            <img v-bind:src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 100px;" v-if="<%= entityInstance %>.<%= fieldName %>" alt="<%=entityInstance %>"/>
+                            <img :src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 100px;" v-if="<%= entityInstance %>.<%= fieldName %>" alt="<%=entityInstance %>"/>
       <%_ } _%>
                             <div v-if="<%= entityInstance %>.<%= fieldName %>" class="form-text text-danger clearfix">
       <%_ if (field.blobContentTypeAny) { _%>
-                                <a class="pull-left" v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="t$('entity.action.open')">open</a><br>
+                                <a class="pull-left" @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="t$('entity.action.open')">open</a><br>
                                 <span class="pull-left">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
       <%_ } else { _%>
                                 <span class="pull-left">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
       <%_ } _%>
       <%_ if (field.blobContentTypeImage) { _%>
-                                <button type="button" v-on:click="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'file_<%= fieldName %>')" class="btn btn-secondary btn-xs pull-right">
+                                <button type="button" @click="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'file_<%= fieldName %>')" class="btn btn-secondary btn-xs pull-right">
       <%_ } else { _%>
-                                <button type="button" v-on:click="<%= entityInstance %>.<%= fieldName %>=null;<%= entityInstance %>.<%= fieldName %>ContentType=null;"
+                                <button type="button" @click="<%= entityInstance %>.<%= fieldName %>=null;<%= entityInstance %>.<%= fieldName %>ContentType=null;"
                                         class="btn btn-secondary btn-xs pull-right">
       <%_ } _%>
                                     <font-awesome-icon icon="times"></font-awesome-icon>
                                 </button>
                             </div>
                             <label for="file_<%= fieldName %>" <% if (fieldTypeBlobContent === 'image') { %>v-text="t$('entity.action.addimage')"<% } else { %>v-text="t$('entity.action.addblob')"<% } %> class="btn btn-primary pull-right"></label>
-                            <input type="file" ref="file_<%= fieldName %>" id="file_<%= fieldName %>" style="display: none;" data-cy="<%= fieldName %>" v-on:change="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*"<% } else { %>false)"<% } %>/>
+                            <input type="file" ref="file_<%= fieldName %>" id="file_<%= fieldName %>" style="display: none;" data-cy="<%= fieldName %>" @change="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*"<% } else { %>false)"<% } %>/>
                         </div>
     <%_ } _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
@@ -135,18 +135,18 @@ _%>
                         <label class="form-control-label" v-text="t$('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                         <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
     <%_ if (!relationshipRequired) { _%>
-                            <option v-bind:value="null"></option>
+                            <option :value="null"></option>
     <%_ } else { _%>
-                            <option v-if="!<%= entityInstance %>.<%= relationshipName %>" v-bind:value="null" selected></option>
+                            <option v-if="!<%= entityInstance %>.<%= relationshipName %>" :value="null" selected></option>
     <%_ } _%>
-                            <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === <%= entityInstance %>.<%=relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %> ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                            <option :value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === <%= entityInstance %>.<%=relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %> ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                         </select>
                     </div>
   <%_ } else if (relationship.persistableRelationship) { _%>
                     <div class="form-group">
                         <label v-text="t$('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                         <select class="form-control" id="<%= entityFileName %>-<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipName %>" v-if="<%=entityInstance %>.<%=relationshipFieldNamePlural %> !== undefined" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
-                            <option v-bind:value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option, '<%= relationship.otherEntity.primaryKey.name %>')" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                            <option :value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option, '<%= relationship.otherEntity.primaryKey.name %>')" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                         </select>
                     </div>
   <%_ } _%>
@@ -162,7 +162,7 @@ _%>
 <%_ } _%>
                 </div>
                 <div>
-                    <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
+                    <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" @click="previousState()">
                         <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.cancel')">Cancel</span>
                     </button>
                     <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" :disabled="v$.$invalid || isSaving" class="btn btn-primary">

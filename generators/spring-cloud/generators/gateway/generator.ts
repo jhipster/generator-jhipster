@@ -70,8 +70,8 @@ export default class GatewayGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      cleanup({ control, application }) {
-        control.cleanupFiles({
+      async cleanup({ control, application }) {
+        await control.cleanupFiles({
           '8.6.1': [
             [
               application.reactive && (application as any).serviceDiscoveryAny,

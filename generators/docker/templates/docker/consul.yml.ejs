@@ -28,6 +28,10 @@ services:
       - 127.0.0.1:8500:8500
       - 127.0.0.1:8600:8600
     command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+<%_ if (backendTypeSpringBoot) { _%>
+    labels:
+      org.springframework.boot.ignore: true
+<%_ } _%>
 
   consul-config-loader:
     image: <%- dockerContainers.consulConfigLoader %>
@@ -41,3 +45,7 @@ services:
       # as configured in central-server-config/git2consul.json
       # Also set SPRING_CLOUD_CONSUL_CONFIG_FORMAT=files on your apps
       # - CONFIG_MODE=git
+<%_ if (backendTypeSpringBoot) { _%>
+    labels:
+      org.springframework.boot.ignore: true
+<%_ } _%>

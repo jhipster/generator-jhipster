@@ -6,7 +6,7 @@
 
 Greetings, Java Hipster!
 
-Full documentation and information is available on our website at [https://www.jhipster.tech/][jhipster-url]
+Full documentation and information is available on our website at [https://www.jhipster.tech][jhipster-url].
 
 Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre-populated [here][issue-template]. For feature requests and queries you can use [this template][feature-template]. If you have found a potential security issue, please read our security policy and contact us privately first: https://github.com/jhipster/generator-jhipster/security/policy
 
@@ -18,9 +18,9 @@ We are honored by any contributions you may have small or large. Please refer to
 
 The following Java and Node combinations are tested and verified by GitHub Actions:
 
-| Java     | Node  | Status |
-| -------- | ----- | ------ |
-| 17/21/22 | 18/20 | ✅     |
+| Java     | Node     | Status |
+| -------- | -------- | ------ |
+| 17/21/23 | 18/20/22 | ✅     |
 
 ## Sponsors
 

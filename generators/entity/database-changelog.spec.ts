@@ -1,5 +1,5 @@
-import { before, it, describe } from 'esmocha';
-import { defaultHelpers as helpers, runResult, getGenerator } from '../../testing/index.js';
+import { before, describe, it } from 'esmocha';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import BaseApplicationGenerator from '../base-application/generator.js';
 
@@ -20,7 +20,7 @@ describe('generator - entity database changelogs', () => {
     describe('with cassandra database', () => {
       before(async () => {
         await helpers
-          .run(getGenerator('entity'))
+          .runJHipster('entity')
           .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
           .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo])
           .withArguments(['Foo'])
@@ -34,11 +34,9 @@ describe('generator - entity database changelogs', () => {
     describe('with gateway application type', () => {
       before(async () => {
         await helpers
-          .run(getGenerator('entity'))
+          .runJHipster('entity')
           .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
-          .withJHipsterConfig({ applicationType: 'gateway' }, [
-            { ...entityFoo, microservicePath: 'microservice1', microserviceName: 'microservice1' },
-          ])
+          .withJHipsterConfig({ applicationType: 'gateway' }, [{ ...entityFoo, microserviceName: 'microservice1' }])
           .withArguments(['Foo'])
           .withOptions({ regenerate: true, force: true, ignoreNeedlesError: true });
       });

@@ -17,5 +17,12 @@ export const DurationFormat = ({ value, blankOnInvalid, locale }: IDurationForma
     locale = TranslatorContext.context.locale;
   }
 
-  return <span title={value}>{dayjs.duration(value).locale(locale || '<% if (enableTranslation) { %><%= nativeLanguage %><% } else { %>en<% } %>').humanize()}</span>;
+  return (
+    <span title={value}>
+      {dayjs
+        .duration(value)
+        .locale(locale || '<% if (enableTranslation) { %><%= nativeLanguage %><% } else { %>en<% } %>')
+        .humanize()}
+    </span>
+  );
 };

@@ -22,11 +22,13 @@
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import JSONToJDLEntityConverter from '../../jdl/converters/json-to-jdl-entity-converter.js';
-import JSONToJDLOptionConverter from '../../jdl/converters/json-to-jdl-option-converter.js';
+import JSONToJDLEntityConverter from '../../lib/jdl/converters/json-to-jdl-entity-converter.js';
+import JSONToJDLOptionConverter from '../../lib/jdl/converters/json-to-jdl-option-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
 import { YO_RC_FILE } from '../generator-constants.js';
-import { JSONEntity } from '../../jdl/converters/types.js';
+import { applicationsLookup } from '../workspaces/support/applications-lookup.js';
+import type { Entity } from '../../lib/types/base/entity.js';
+import { convertFieldBlobType } from '../../lib/application/field-types.js';
 import { replaceSensitiveConfig } from './support/utils.js';
 
 const isInfoCommand = commandName => commandName === 'info' || undefined;
@@ -53,7 +55,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
         console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
       },
 
-      displayConfiguration() {
+      async displayConfiguration() {
         // Omit sensitive information.
         const yoRc = this.readDestinationJSON(YO_RC_FILE);
         if (yoRc) {
@@ -64,7 +66,11 @@ export default class InfoGenerator extends BaseApplicationGenerator {
           console.log('\n##### **JHipster configuration not found**\n');
         }
 
-        const packages = this.jhipsterConfig.appsFolders ?? this.jhipsterConfig.packages ?? [];
+        let packages = this.jhipsterConfig.appsFolders ?? this.jhipsterConfig.packages ?? [];
+        if (!yoRc && packages.length === 0) {
+          packages = await applicationsLookup(this.destinationRoot());
+        }
+
         if (packages.length > 0) {
           for (const pkg of packages) {
             const yoRc = this.readDestinationJSON(this.destinationPath(pkg, YO_RC_FILE));
@@ -125,7 +131,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
   ) {
     try {
       printInfo(await this.spawn(command, args, { stdio: 'pipe' }));
-    } catch (_error) {
+    } catch {
       console.log(chalk.red(`'${command}' command could not be found`));
     }
   }
@@ -135,10 +141,17 @@ export default class InfoGenerator extends BaseApplicationGenerator {
    */
   generateJDLFromEntities() {
     let jdlObject;
-    const entities = new Map<string, JSONEntity>();
+    const entities = new Map<string, Entity>();
     try {
-      this.getExistingEntities().forEach(entity => {
-        entities.set(entity.name, entity.definition);
+      this.getExistingEntities().forEach(({ name, definition: entity }) => {
+        if (entity.fields) {
+          for (const field of entity.fields) {
+            if (field.fieldType === 'byte[]') {
+              convertFieldBlobType(field);
+            }
+          }
+        }
+        entities.set(name, entity);
       });
       jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL(entities);
       JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);

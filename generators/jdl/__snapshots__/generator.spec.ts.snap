@@ -164,7 +164,7 @@ Options:
   --ignore-application                     Ignores application generation
   --ignore-deployments                     Ignores deployments generation
   --skip-sample-repository                 Disable fetching sample files when the file is not a URL
-  --inline <value>                         Pass JDL content inline. Argument can be skipped when passing this
+  --inline <value>                         Pass JDL content inline. Argument can be skipped when passing this (env: JHI_JDL)
   --skip-user-management                   Skip the user management module during app generation
   --skip-cache                             Do not remember prompt answers (default: false)
   --skip-install                           Do not automatically install dependencies (default: false)
@@ -173,6 +173,8 @@ Options:
   --workspaces-folders <value...>          Folders to use as monorepository workspace
   --workspaces                             Generate workspaces for multiples applications
   --skip-git                               Skip git repository initialization
+  --force-git                              Force commit to git repository
+  --commit-msg <value>                     Commit changes (implies forceGit)
   --monorepository                         Use monorepository
   --defaults                               Execute jhipster with default config
   --skip-client                            Skip the client-side application generation
@@ -187,18 +189,16 @@ Options:
   --client-package-manager <value>         Force an unsupported client package manager
   --test-frameworks <value...>             Test frameworks to be generated
   --base-name <value>                      Application base name
-  --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json.
+  --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json. (env: JHI_SKIP_JHIPSTER_DEPENDENCIES)
   --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
   --jdl-store <value>                      JDL store
+  --prettier-tab-width <value>             Default tab width for prettier (default: 2)
   --skip-commit-hook                       Skip adding husky commit hooks
-  --prettier-tab-width <value>             Default tab width for prettier
   --db <value>                             Provide DB name for the application when skipping server side generation
-  --incremental-changelog                  Creates incremental database changelogs
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --cache-provider <value>                 Cache provider
   --enable-swagger-codegen                 API first development using OpenAPI-generator
   --enable-hibernate-cache                 Enable hibernate cache
-  --message-broker <value>                 message broker
   --search-engine <value>                  Provide search engine for the application when skipping server side generation
   --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
   --skip-db-changelog                      Skip the generation of database migrations
@@ -210,13 +210,17 @@ Options:
   --reactive                               Generate a reactive backend
   --service-discovery-type <value>         Service discovery type (choices: "consul", "eureka", "no")
   --auth <value>                           Provide authentication type for the application when skipping server side generation (choices: "jwt", "oauth2", "session")
-  --feign-client                           Generate a feign client
+  --feign-client                           Generate a feign client (default: false)
   --sync-user-with-idp                     Allow relationships with User for oauth2 applications
+  --message-broker <value>                 message broker (choices: "kafka", "pulsar", "no")
+  --database-migration <value>             Database migration (choices: "liquibase")
+  --graalvm-support                        Experimental GraalVM Native support
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --package-name <value>                   The package name for the generated application
-  --build <value>                          Provide build tool for the application when skipping server side generation (choices: "maven", "gradle")
-  --enable-gradle-enterprise               Enable Gradle Enterprise integration
+  --build <value>                          Provide build tool for the application when skipping server side generation (default: maven) (choices: "maven", "gradle")
+  --enable-gradle-enterprise               Enable Gradle Enterprise integration (default: false)
   --gradle-enterprise-host <value>         Gradle Enterprise Host
+  --incremental-changelog                  Creates incremental database changelogs
   --dev-database-type <value>              Development database
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support

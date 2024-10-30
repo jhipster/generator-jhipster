@@ -1,10 +1,9 @@
-import { before, it, describe } from 'esmocha';
-import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { before, describe, it } from 'esmocha';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
 import { GENERATOR_SPRING_CACHE } from '../generator-list.js';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
@@ -34,7 +33,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
       await helpers
         .runJHipster(GENERATOR_SPRING_CACHE)
         .withOptions({
-          blueprint: 'myblueprint',
+          blueprint: ['myblueprint'],
         })
         .withJHipsterConfig({
           cacheProvider: 'ehcache',
@@ -69,7 +68,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
       await helpers
         .runJHipster(GENERATOR_SPRING_CACHE)
         .withOptions({
-          blueprint: 'myblueprint',
+          blueprint: ['myblueprint'],
         })
         .withJHipsterConfig({
           cacheProvider: 'caffeine',
@@ -104,7 +103,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
       await helpers
         .runJHipster(GENERATOR_SPRING_CACHE)
         .withOptions({
-          blueprint: 'myblueprint',
+          blueprint: ['myblueprint'],
         })
         .withJHipsterConfig({
           cacheProvider: 'redis',

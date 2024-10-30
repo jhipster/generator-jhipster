@@ -1,0 +1,11 @@
+deployment {
+  deploymentType docker-compose,
+  appsFolders [tata, titi],
+  dockerRepositoryName "test"
+}
+deployment {
+  deploymentType kubernetes,
+  appsFolders [tata, titi],
+  dockerRepositoryName "test"
+  kubernetesStorageClassName "KubernetesStorageClassName"
+}

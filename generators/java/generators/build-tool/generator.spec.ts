@@ -18,10 +18,10 @@
  */
 import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '../../../../testing/index.js';
+import { defaultHelpers as helpers, result, runResult } from '../../../../lib/testing/index.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -45,9 +45,8 @@ describe(`generator - ${generator}`, () => {
 
   describe('buildTool option', () => {
     describe('maven', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .runJHipster(generator)
           .withJHipsterConfig({
             buildTool: 'maven',
@@ -57,16 +56,15 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with maven generator', () => {
-        expect(runResult.mockedGenerators['jhipster:maven'].calledOnce).toBe(true);
+        runResult.assertGeneratorComposedOnce('jhipster:maven');
       });
       it('should not compose with others buildTool generators', () => {
-        expect(runResult.mockedGenerators['jhipster:gradle'].notCalled).toBe(true);
+        runResult.assertGeneratorNotComposed('jhipster:gradle');
       });
     });
     describe('gradle', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .runJHipster(generator)
           .withJHipsterConfig({
             buildTool: 'gradle',
@@ -76,10 +74,10 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with gradle generator', () => {
-        expect(runResult.mockedGenerators['jhipster:gradle'].called).toBe(true);
+        runResult.assertGeneratorComposedOnce('jhipster:gradle');
       });
       it('should not compose with others buildTool generators', () => {
-        expect(runResult.mockedGenerators['jhipster:maven'].notCalled).toBe(true);
+        runResult.assertGeneratorNotComposed('jhipster:maven');
       });
     });
   });

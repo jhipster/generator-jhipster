@@ -1,14 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import assert from 'assert';
-
-import { messageBrokerTypes, databaseTypes } from '../../../jdl/jhipster/index.js';
+import { databaseTypes, messageBrokerTypes } from '../../../lib/jhipster/index.js';
 import {
-  GENERATOR_SPRING_CLOUD_STREAM,
+  GENERATOR_BOOTSTRAP,
   GENERATOR_JAVA,
   GENERATOR_PROJECT_NAME,
   GENERATOR_SERVER,
   GENERATOR_SPRING_BOOT,
-  GENERATOR_BOOTSTRAP,
+  GENERATOR_SPRING_CLOUD_STREAM,
 } from '../../generator-list.js';
 
 const { KAFKA, PULSAR } = messageBrokerTypes;
@@ -18,11 +15,11 @@ export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {
   const liquibaseEnabled = typeof testSample === 'boolean' ? testSample : testSample?.databaseType === SQL;
   if (liquibaseEnabled) {
     it('should compose with liquibase generator', () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:liquibase'].calledOnce);
+      runResultSupplier().assertGeneratorComposedOnce('jhipster:liquibase');
     });
   } else {
     it('should not compose with liquibase generator', () => {
-      assert(runResultSupplier().mockedGenerators['jhipster:liquibase'].notCalled);
+      runResultSupplier().assertGeneratorNotComposed('jhipster:liquibase');
     });
   }
 };
@@ -32,11 +29,11 @@ export const shouldComposeWithSpringCloudStream = (sampleConfig, runResultSuppli
   const kafkaEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === KAFKA;
   if (pulsarEnabled || kafkaEnabled) {
     it(`should compose with ${GENERATOR_SPRING_CLOUD_STREAM} generator`, () => {
-      assert(runResultSupplier().mockedGenerators[`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`].calledOnce);
+      runResultSupplier().assertGeneratorComposedOnce(`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`);
     });
   } else {
     it(`should not compose with ${GENERATOR_SPRING_CLOUD_STREAM} generator`, () => {
-      assert(runResultSupplier().mockedGenerators[`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`].notCalled);
+      runResultSupplier().assertGeneratorNotComposed(`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`);
     });
   }
 };
@@ -45,11 +42,11 @@ const shouldComposeWithDatabasetype = (databaseType: string, shouldCompose: bool
   const generator = databaseType;
   if (shouldCompose) {
     it(`should compose with ${generator} generator`, () => {
-      assert(runResultSupplier().mockedGenerators[`jhipster:spring-data-${generator}`].calledOnce);
+      runResultSupplier().assertGeneratorComposedOnce(`jhipster:spring-data-${generator}`);
     });
   } else {
     it(`should not compose with ${generator} generator`, () => {
-      assert(runResultSupplier().mockedGenerators[`jhipster:spring-data-${generator}`].notCalled);
+      runResultSupplier().assertGeneratorNotComposed(`jhipster:spring-data-${generator}`);
     });
   }
 };

@@ -21,4 +21,4 @@
  * Register generator-base at yeoman-environment
  */
 export { default } from './generator.js';
-export type { BaseEntity, Entity, Field, Relationship } from './types/index.js';
+export type { Entity, Field, Relationship } from '../../lib/types/application/index.js';

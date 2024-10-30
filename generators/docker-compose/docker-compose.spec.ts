@@ -1,8 +1,8 @@
-import { before, it, describe, expect } from 'esmocha';
-import monitoringTypes from '../../jdl/jhipster/monitoring-types.js';
-import applicationTypes from '../../jdl/jhipster/application-types.js';
+import { before, describe, expect, it } from 'esmocha';
+import monitoringTypes from '../../lib/jhipster/monitoring-types.js';
+import applicationTypes from '../../lib/jhipster/application-types.js';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.js';
-import { defaultHelpers as helpers, getGenerator, runResult } from '../../testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 
 const { PROMETHEUS } = monitoringTypes;
 const { MICROSERVICE, MONOLITH } = applicationTypes;
@@ -17,24 +17,20 @@ const expectedFiles = {
 
 describe('generator - Docker Compose', () => {
   describe('only gateway', () => {
-    let runResult;
     const chosenApps = ['01-gateway'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-          monitoring: NO_MONITORING,
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+        monitoring: NO_MONITORING,
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -53,24 +49,20 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('only one microservice', () => {
-    let runResult;
     const chosenApps = ['02-mysql'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-          monitoring: NO_MONITORING,
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+        monitoring: NO_MONITORING,
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -89,24 +81,20 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('one microservice and a directory path without a trailing slash', () => {
-    let runResult;
     const chosenApps = ['02-mysql'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: '.',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-          monitoring: NO_MONITORING,
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: '.',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+        monitoring: NO_MONITORING,
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -127,16 +115,13 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-          monitoring: NO_MONITORING,
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+        monitoring: NO_MONITORING,
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -155,23 +140,19 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('gateway and one microservice', () => {
-    let runResult;
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -193,23 +174,19 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('gateway and one microservice, with curator', () => {
-    let runResult;
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -231,24 +208,20 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('gateway and one microservice, with prometheus', () => {
-    let runResult;
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-          monitoring: PROMETHEUS,
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+        monitoring: PROMETHEUS,
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -270,23 +243,19 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('gateway and multi microservices', () => {
-    let runResult;
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -305,23 +274,19 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('gateway and multi microservices, with 1 mongodb cluster', () => {
-    let runResult;
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: ['04-mongo'],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: ['04-mongo'],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -340,23 +305,19 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('gateway and 1 microservice, with Cassandra', () => {
-    let runResult;
     const chosenApps = ['01-gateway', '05-cassandra'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -375,23 +336,19 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('monolith', () => {
-    let runResult;
     const chosenApps = ['08-monolith'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MONOLITH,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MONOLITH,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -407,23 +364,19 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('gateway and multi microservices using oauth2', () => {
-    let runResult;
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ authenticationType: 'oauth2' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot({
@@ -447,23 +400,19 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('gateway and multi microservices, with couchbase', () => {
-    let runResult;
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -482,23 +431,19 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('gateway and 1 microservice, with 1 couchbase cluster', () => {
-    let runResult;
     const chosenApps = ['01-gateway', '10-couchbase'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: ['10-couchbase'],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: ['10-couchbase'],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -517,24 +462,20 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('oracle monolith', () => {
-    let runResult;
     const chosenApps = ['12-oracle'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MONOLITH,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-          monitoring: NO_MONITORING,
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MONOLITH,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+        monitoring: NO_MONITORING,
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();

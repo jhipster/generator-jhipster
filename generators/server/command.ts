@@ -17,20 +17,16 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../jdl/index.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/jhipster/index.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {
     db: {
       description: 'Provide DB name for the application when skipping server side generation',
       type: String,
-    },
-    incrementalChangelog: {
-      description: 'Creates incremental database changelogs',
-      type: Boolean,
-      scope: 'storage',
+      scope: 'none',
     },
     skipUserManagement: {
       description: 'Skip the user management module during app generation',
@@ -40,6 +36,7 @@ const command: JHipsterCommandDefinition = {
     recreateInitialChangelog: {
       description: 'Recreate the initial database changelog based on the current config',
       type: Boolean,
+      scope: 'none',
     },
     cacheProvider: {
       description: 'Cache provider',
@@ -56,11 +53,6 @@ const command: JHipsterCommandDefinition = {
       type: Boolean,
       scope: 'storage',
     },
-    messageBroker: {
-      description: 'message broker',
-      type: String,
-      scope: 'storage',
-    },
     searchEngine: {
       description: 'Provide search engine for the application when skipping server side generation',
       type: String,
@@ -74,6 +66,7 @@ const command: JHipsterCommandDefinition = {
     skipDbChangelog: {
       description: 'Skip the generation of database migrations',
       type: Boolean,
+      scope: 'none',
     },
     skipFakeData: {
       description: 'Skip generation of fake data for development',
@@ -122,9 +115,10 @@ const command: JHipsterCommandDefinition = {
           name: 'Microservice application',
         },
       ],
+      scope: 'storage',
     },
   },
   import: [GENERATOR_COMMON, GENERATOR_SPRING_BOOT],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

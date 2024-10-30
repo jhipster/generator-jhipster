@@ -52,3 +52,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 20
+<%_ if (backendTypeSpringBoot) { _%>
+    labels:
+      org.springframework.boot.ignore: true
+<%_ } _%>

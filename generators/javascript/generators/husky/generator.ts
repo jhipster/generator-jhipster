@@ -29,7 +29,7 @@ export default class HuskyGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:javascript:bootstrap');
+      await this.dependsOnJHipster('jhipster:javascript:prettier');
     }
   }
 

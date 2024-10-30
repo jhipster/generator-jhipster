@@ -1,13 +1,12 @@
 import { extname } from 'path';
 import { passthrough } from 'p-transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
-import { VinylMemFsEditorFile } from 'mem-fs-editor';
+import type { VinylMemFsEditorFile } from 'mem-fs-editor';
 import { Piscina } from 'piscina';
 
 import type CoreGenerator from '../../base-core/index.js';
 import { addLineNumbers } from '../internal/transform-utils.js';
 
-// eslint-disable-next-line import/prefer-default-export
 export const createRemoveUnusedImportsTransform = function (
   this: CoreGenerator,
   options: {
@@ -45,8 +44,8 @@ export const createRemoveUnusedImportsTransform = function (
         }
       }
     },
-    () => {
-      pool.destroy();
+    async () => {
+      await pool.destroy();
     },
   );
 };

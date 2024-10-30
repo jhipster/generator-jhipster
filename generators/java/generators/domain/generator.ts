@@ -152,6 +152,7 @@ export default class DomainGenerator extends BaseApplicationGenerator {
         for (const entity of entities.filter(entity => !entity.skipServer)) {
           for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
             const enumInfo = {
+              ...application,
               ...getEnumInfo(field, (entity as any).clientRootFolder),
               frontendAppName: (entity as any).frontendAppName,
               packageName: application.packageName,

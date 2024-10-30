@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/types.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {
     useVersionPlaceholders: {
       description: 'replace mutable versions with placeholders',
@@ -41,6 +41,7 @@ const command: JHipsterCommandDefinition = {
     disableBlueprints: {
       description: 'Disable blueprints support',
       type: Boolean,
+      scope: 'generator',
     },
     debugEnabled: {
       name: 'debug',
@@ -57,6 +58,7 @@ const command: JHipsterCommandDefinition = {
     skipPrompts: {
       description: 'Skip prompts',
       type: Boolean,
+      scope: 'generator',
     },
     ignoreNeedlesError: {
       description: 'Ignore needles failures',
@@ -65,6 +67,6 @@ const command: JHipsterCommandDefinition = {
       scope: 'generator',
     },
   },
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

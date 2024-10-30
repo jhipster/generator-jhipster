@@ -3,7 +3,7 @@
         <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
             <span v-text="t$('<%= i18nKeyPrefix %>.home.title')" id="<%= entityFileName %>-heading"><%= entityClassPluralHumanized %></span>
             <div class="d-flex justify-content-end">
-                <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
+                <button class="btn btn-info mr-2" @click="handleSyncList" :disabled="isFetching">
                     <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span v-text="t$('<%= i18nKeyPrefix %>.home.refreshListLabel')">Refresh List</span>
                 </button>
 <%_ if (!readOnly) { _%>
@@ -21,15 +21,15 @@
 <%_ if (searchEngineAny) { _%>
         <div class="row">
             <div class="col-sm-12">
-                <form name="searchForm" class="form-inline" v-on:submit.prevent="search(currentSearch)">
+                <form name="searchForm" class="form-inline" @submit.prevent="search(currentSearch)">
                     <div class="input-group w-100 mt-3">
                         <input type="text" class="form-control" name="currentSearch" id="currentSearch"
-                            v-bind:placeholder="t$('<%= i18nKeyPrefix %>.home.search')"
+                            :placeholder="t$('<%= i18nKeyPrefix %>.home.search')"
                             v-model="currentSearch" />
-                        <button type="button" id="launch-search" class="btn btn-primary" v-on:click="search(currentSearch)">
+                        <button type="button" id="launch-search" class="btn btn-primary" @click="search(currentSearch)">
                             <font-awesome-icon icon="search"></font-awesome-icon>
                         </button>
-                        <button type="button" id="clear-search" class="btn btn-secondary" v-on:click="clear()"
+                        <button type="button" id="clear-search" class="btn btn-secondary" @click="clear()"
                             v-if="currentSearch">
                             <font-awesome-icon icon="trash"></font-awesome-icon>
                         </button>
@@ -46,14 +46,14 @@
             <table class="table table-striped" aria-describedby="<%= entityInstancePlural %>">
                 <thead>
                 <tr>
-                    <th scope="row"<% if (!paginationNo) { %> v-on:click="changeOrder('<%= primaryKey.name %>')"<% } %>><span v-text="t$('global.field.id')"><%= primaryKey.nameCapitalized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
+                    <th scope="row"<% if (!paginationNo) { %> @click="changeOrder('<%= primaryKey.name %>')"<% } %>><span v-text="t$('global.field.id')"><%= primaryKey.nameCapitalized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
 <%_ for (field of fields.filter(field => !field.id)) { _%>
-                    <th scope="row"<% if (!paginationNo) { %> v-on:click="changeOrder('<%= field.fieldName%>')"<% } %>><span v-text="t$('<%=`${i18nKeyPrefix}.${field.fieldName}` %>')"><%= field.fieldNameHumanized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%= field.fieldName%>'"></jhi-sort-indicator><% } %></th>
+                    <th scope="row"<% if (!paginationNo) { %> @click="changeOrder('<%= field.fieldName%>')"<% } %>><span v-text="t$('<%=`${i18nKeyPrefix}.${field.fieldName}` %>')"><%= field.fieldNameHumanized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%= field.fieldName%>'"></jhi-sort-indicator><% } %></th>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
   <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) {
     const fieldName = "." + relationship.otherEntityField; _%>
-                    <th scope="row"<% if (!paginationNo) { %> v-on:click="changeOrder('<%=relationship.relationshipName + (fieldName)%>')"<% } %>><span v-text="t$('<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>')"><%= relationship.relationshipNameHumanized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%=relationship.relationshipName + (fieldName)%>'"></jhi-sort-indicator><% } %></th>
+                    <th scope="row"<% if (!paginationNo) { %> @click="changeOrder('<%=relationship.relationshipName + (fieldName)%>')"<% } %>><span v-text="t$('<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>')"><%= relationship.relationshipNameHumanized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%=relationship.relationshipName + (fieldName)%>'"></jhi-sort-indicator><% } %></th>
   <%_ } _%>
 <%_ } _%>
                     <th scope="row"></th>
@@ -70,14 +70,14 @@
     const fieldType = field.fieldType; _%>
   <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <td>
-                        <a v-if="<%= entityInstance %>.<%= fieldName %>" v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
-                            <img v-bind:src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 30px;" alt="<%=entityInstance %>"/>
+                        <a v-if="<%= entityInstance %>.<%= fieldName %>" @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
+                            <img :src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 30px;" alt="<%=entityInstance %>"/>
                         </a>
                         <span v-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     </td>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                     <td>
-                        <a v-if="<%= entityInstance %>.<%= fieldName %>" v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="t$('entity.action.open')">open</a>
+                        <a v-if="<%= entityInstance %>.<%= fieldName %>" @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="t$('entity.action.open')">open</a>
                         <span v-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     </td>
   <%_ } else if (field.fieldIsEnum) { _%>
@@ -147,7 +147,7 @@
                                 </button>
   <%_ } _%>
                             </router-link>
-                            <b-button v-on:click="prepareRemove(<%= entityInstance %>)"
+                            <b-button @click="prepareRemove(<%= entityInstance %>)"
                                    variant="danger"
                                    class="btn btn-sm"
                                    data-cy="entityDeleteButton"
@@ -177,8 +177,8 @@
             </div>
             <template #modal-footer>
                 <div>
-                    <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" v-on:click="closeDialog()">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>" data-cy="entityConfirmDeleteButton" v-text="t$('entity.action.delete')" v-on:click="remove<%= entityAngularName %>()">Delete</button>
+                    <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" @click="closeDialog()">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>" data-cy="entityConfirmDeleteButton" v-text="t$('entity.action.delete')" @click="remove<%= entityAngularName %>()">Delete</button>
                 </div>
             </template>
         </b-modal>

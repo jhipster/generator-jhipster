@@ -2,6 +2,7 @@ const Module = require('module');
 const process = require('process');
 
 if (!Module.register) {
+  // eslint-disable-next-line no-console
   console.log('JHipster test requires node >=18.19.0 || >= 20.6.0\n');
   process.exit(1);
 }
@@ -17,4 +18,5 @@ module.exports = {
   // `loader` options is passed to forks, but `require` is not.
   // Use node-option instead (it overrides loader option)
   parallel: true,
+  require: ['yeoman-test/mocha-cleanup'],
 };

@@ -72,5 +72,11 @@ exports[`generator - spring-cloud:gateway with serviceDiscovery option should ma
   "src/main/java/com/mycompany/myapp/security/jwt/JWTRelayGatewayFilterFactory.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/web/rest/GatewayResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/vm/RouteVM.java": {
+    "stateCleared": "modified",
+  },
 }
 `;

@@ -25,7 +25,9 @@ services:
     #   - ~/volumes/jhipster/<%= baseName %>/postgresql/:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=<%= baseName %>
-      - POSTGRES_PASSWORD=
+<%_ if (prodDatabasePassword) { _%>
+      - POSTGRES_PASSWORD=<%- prodDatabasePassword %>
+<%_ } _%>
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER}']

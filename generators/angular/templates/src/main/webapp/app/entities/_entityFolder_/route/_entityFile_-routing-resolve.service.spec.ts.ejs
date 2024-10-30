@@ -91,7 +91,7 @@ describe('<%= entityAngularName %> routing resolve service', () => {
       });
 
       // THEN
-      expect(service.find).not.toBeCalled();
+      expect(service.find).not.toHaveBeenCalled();
       expect(result<%= entityAngularName %>).toEqual(null);
     });
 

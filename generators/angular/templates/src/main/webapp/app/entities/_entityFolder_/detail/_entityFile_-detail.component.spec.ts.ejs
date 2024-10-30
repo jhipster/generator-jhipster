@@ -46,7 +46,7 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
           [
             {
               path: '**',
-              component: <%= entityAngularName %>DetailComponent,
+              loadComponent: () => import('./<%= entityFileName %>-detail.component').then(m => m.<%= entityAngularName %>DetailComponent),
               resolve: { <%= entityInstance %>: () => of(<%- testEntity %>) },
             },
           ],

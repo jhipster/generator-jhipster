@@ -7,25 +7,25 @@
         </b-alert>
       </div>
       <div class="col-md-8">
-        <b-form v-on:submit.prevent="doLogin()">
-          <b-form-group v-bind:label="t$('global.form[\'username.label\']')" label-for="username">
+        <b-form @submit.prevent="doLogin()">
+          <b-form-group :label="t$('global.form[\'username.label\']')" label-for="username">
             <b-form-input
               id="username"
               type="text"
               name="username"
               autofocus
-              v-bind:placeholder="t$('global.form[\'username.placeholder\']')"
+              :placeholder="t$('global.form[\'username.placeholder\']')"
               v-model="login"
               data-cy="username"
             >
             </b-form-input>
           </b-form-group>
-          <b-form-group v-bind:label="t$('login.form.password')" label-for="password">
+          <b-form-group :label="t$('login.form.password')" label-for="password">
             <b-form-input
               id="password"
               type="password"
               name="password"
-              v-bind:placeholder="t$('login.form[\'password.placeholder\']')"
+              :placeholder="t$('login.form[\'password.placeholder\']')"
               v-model="password"
               data-cy="password"
             >
@@ -42,8 +42,12 @@
         <%_ if (generateUserManagement) { _%>
         <div>
           <b-alert show variant="warning">
-            <b-link :to="'/account/reset/request'" class="alert-link" v-text="t$('login.password.forgot')"
-            data-cy="forgetYourPasswordSelector" >Did you forget your password?</b-link
+            <b-link
+              :to="'/account/reset/request'"
+              class="alert-link"
+              v-text="t$('login.password.forgot')"
+              data-cy="forgetYourPasswordSelector"
+              >Did you forget your password?</b-link
             >
           </b-alert>
         </div>

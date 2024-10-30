@@ -43,5 +43,10 @@ services:
       test: 'bash /opt/keycloak/health-check.sh'
       interval: 5s
       timeout: 5s
-      retries: 40
+      # Increased retries due to slow Keycloak startup in GitHub Actions using MacOS
+      retries: 50
       start_period: 10s
+<%_ if (backendTypeSpringBoot) { _%>
+    labels:
+      org.springframework.boot.ignore: true
+<%_ } _%>

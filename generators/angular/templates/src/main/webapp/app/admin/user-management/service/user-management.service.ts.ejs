@@ -30,10 +30,10 @@ import { Authority } from 'app/config/authority.constants';
 
 @Injectable({ providedIn: 'root' })
 export class UserManagementService {
-  private http = inject(HttpClient);
-  private applicationConfigService = inject(ApplicationConfigService);
+  private readonly http = inject(HttpClient);
+  private readonly applicationConfigService = inject(ApplicationConfigService);
 
-  private resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
+  private readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
 
 <%_ if (generateUserManagement) { _%>
   create(user: IUser): Observable<IUser> {
@@ -62,7 +62,7 @@ export class UserManagementService {
   authorities(): Observable<string[]> {
   <%_ if (generateBuiltInAuthorityEntity) { _%>
     return this.http
-      .get<Array<{ name: string }>>(this.applicationConfigService.getEndpointFor('api/authorities'))
+      .get<{ name: string }[]>(this.applicationConfigService.getEndpointFor('api/authorities'))
       .pipe(map(authorities => authorities.map(a => a.name)));
   <%_ } else { _%>
     return of([Authority.ADMIN, Authority.USER]);

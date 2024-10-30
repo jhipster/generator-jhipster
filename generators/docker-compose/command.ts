@@ -1,4 +1,4 @@
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const command: JHipsterCommandDefinition = {
   arguments: {
@@ -7,7 +7,15 @@ const command: JHipsterCommandDefinition = {
       description: 'Application folders',
     },
   },
-  options: {},
+  configs: {
+    jwtSecretKey: {
+      cli: {
+        type: String,
+        env: 'JHI_JWT_SECRET_KEY',
+      },
+      scope: 'generator',
+    },
+  },
 };
 
 export default command;

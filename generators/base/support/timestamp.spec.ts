@@ -16,20 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { parseChangelog } from './timestamp.js';
 
 describe('generator - base - support - timestamp', () => {
   describe('::parseChangelog', () => {
     describe('when not passing parameters', () => {
       it('throws', () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         expect(() => parseChangelog(undefined as any)).toThrow(/^changelogDate is required\.$/);
       });
     });
     describe('when passing a number', () => {
       it('throws', () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // @ts-expect-error invalid argument
         expect(() => parseChangelog(123)).toThrow(/^changelogDate 123 must be a string\.$/);
       });
     });

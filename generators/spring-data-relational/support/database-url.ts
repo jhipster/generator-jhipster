@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { databaseTypes } from '../../../jdl/jhipster/index.js';
+import { databaseTypes } from '../../../lib/jhipster/index.js';
 import databaseData, { type getData } from './database-data.js';
 
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_DISK, H2_MEMORY } = databaseTypes;

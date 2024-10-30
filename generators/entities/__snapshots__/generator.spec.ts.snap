@@ -355,11 +355,13 @@ exports[`generator - entities regenerating all entities should match source call
   "addEntitiesToClient": [
     {
       "application": "Application[jhipster]",
+      "control": "TaskParameter[control]",
       "entities": [
         "Entity[Foo]",
         "Entity[Bar]",
         "Entity[Skip]",
       ],
+      "source": "TaskParameter[source]",
     },
   ],
   "addEntityToCache": [
@@ -672,10 +674,12 @@ exports[`generator - entities regenerating some entities should match source cal
   "addEntitiesToClient": [
     {
       "application": "Application[jhipster]",
+      "control": "TaskParameter[control]",
       "entities": [
         "Entity[Foo]",
         "Entity[Bar]",
       ],
+      "source": "TaskParameter[source]",
     },
   ],
   "addEntityToCache": [

@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import BaseGenerator from './base/index.js';
-import { createNeedleCallback, NeedleInsertion } from './base/support/needles.js';
+import type BaseGenerator from './base/index.js';
+import type { NeedleInsertion } from './base/support/needles.js';
+import { createNeedleCallback } from './base/support/needles.js';
 
 export type NeedleFileModel = {
   /**

@@ -16,10 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CommonClientServerApplication } from '../../base-application/types.js';
-import BaseGenerator from '../../base/index.js';
+import type { CommonClientServerApplication } from '../../base-application/types.js';
+import type BaseGenerator from '../../base/index.js';
 
-export type UpdateClientLanguagesTaskParam = { application: CommonClientServerApplication & { enableTranslation: true }; control?: any };
+export type UpdateClientLanguagesTaskParam = {
+  application: CommonClientServerApplication<any> & { enableTranslation: true };
+  control?: any;
+};
 
 /**
  * Update DayJS Locales.
@@ -28,7 +31,7 @@ export type UpdateClientLanguagesTaskParam = { application: CommonClientServerAp
  * @param configurationFile
  * @param commonjs
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export function updateLanguagesInDayjsConfigurationTask(
   this: BaseGenerator,
   { application, control = {} }: UpdateClientLanguagesTaskParam,

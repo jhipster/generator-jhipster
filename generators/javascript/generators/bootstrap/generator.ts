@@ -21,10 +21,6 @@ import BaseApplicationGenerator from '../../../base-application/index.js';
 import { GENERATOR_PROJECT_NAME } from '../../../generator-list.js';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator {
-  constructor(args, options, features) {
-    super(args, options, { queueCommandTasks: true, ...features });
-  }
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -42,6 +38,12 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
           application.nodeDependencies,
           this.fetchFromInstalledJHipster('javascript', 'resources', 'package.json'),
         );
+      },
+      jsExtensions({ applicationDefaults, application }) {
+        applicationDefaults({
+          cjsExtension: application.packageJsonTypeCommonjs ? '.js' : '.cjs',
+          mjsExtension: application.packageJsonTypeCommonjs ? '.js' : '.mjs',
+        });
       },
     });
   }
@@ -68,15 +70,22 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addPrettierDependencies({ application }) {
-        const { packageJsonNodeEngine, packageJsonType } = application;
-        if (packageJsonType) {
+        const { packageJsonNodeEngine, packageJsonType, dasherizedBaseName, projectDescription, packageJsonScripts } = application;
+        this.packageJson.merge({ scripts: packageJsonScripts! });
+        this.packageJson.defaults({
+          name: dasherizedBaseName,
+          version: '0.0.0',
+          description: projectDescription,
+          license: 'UNLICENSED',
+        });
+        if (packageJsonType === 'module') {
           this.packageJson.merge({ type: packageJsonType });
         }
         if (packageJsonNodeEngine) {
-          this.packageJson.merge({
-            engines: {
-              node: typeof packageJsonNodeEngine === 'string' ? packageJsonNodeEngine : packageJson.engines.node,
-            },
+          const packageJsonEngines: any = this.packageJson.get('engines') ?? {};
+          this.packageJson.set('engines', {
+            ...packageJsonEngines,
+            node: typeof packageJsonNodeEngine === 'string' ? packageJsonNodeEngine : packageJson.engines.node,
           });
         }
       },

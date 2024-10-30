@@ -17,12 +17,11 @@
  * limitations under the License.
  */
 
-import { set, get } from 'lodash-es';
-import sortKeys from 'sort-keys';
+import { get, set } from 'lodash-es';
 
-import CoreGenerator from '../../base-core/index.js';
+import type CoreGenerator from '../../base-core/index.js';
 import XmlStorage from '../internal/xml-store.js';
-import {
+import type {
   MavenAnnotationProcessor,
   MavenArtifact,
   MavenDependency,
@@ -32,79 +31,7 @@ import {
   MavenProperty,
   MavenRepository,
 } from '../types.js';
-
-const rootOrder = [
-  'modelVersion',
-  'groupId',
-  'artifactId',
-  'version',
-  'packaging',
-  'name',
-  'description',
-  'parent',
-  'repositories',
-  'pluginRepositories',
-  'distributionManagement',
-  'properties',
-  'dependencyManagement',
-  'dependencies',
-  'build',
-  'profiles',
-];
-
-const propertiesOrder = [
-  'maven.version',
-  'java.version',
-  'node.version',
-  'npm.version',
-  'project.build.sourceEncoding',
-  'project.reporting.outputEncoding',
-  'maven.build.timestamp.format',
-  'maven.compiler.source',
-  'maven.compiler.target',
-  'start-class',
-  'argLine',
-  'm2e.apt.activation',
-  'run.addResources',
-  'jhipster-dependencies.version',
-  'spring-boot.version',
-];
-
-const formatFirstXmlLevel = content =>
-  content.replace(
-    /(\n {4}<(?:groupId|distributionManagement|repositories|pluginRepositories|properties|dependencyManagement|dependencies|build|profiles)>)/g,
-    '\n$1',
-  );
-
-const sortSection = section => {
-  return Object.fromEntries(
-    Object.entries(section).sort(([key1, value1], [key2, value2]) => {
-      if (typeof value1 === typeof value2) key1.localeCompare(key2);
-      if (typeof value1 === 'string') return -1;
-      if (typeof value2 === 'string') return 1;
-      return 0;
-    }),
-  );
-};
-
-const isComment = name => name.startsWith('#');
-
-const toMaxInt = nr => (nr === -1 ? Number.MAX_SAFE_INTEGER : nr);
-
-const sortWithTemplate = (template: string[], a: string, b: string) => {
-  if (isComment(a)) return -1;
-  if (isComment(b)) return 1;
-  const indexOfA = toMaxInt(template.findIndex(item => item === a));
-  const indexOfB = toMaxInt(template.findIndex(item => item === b));
-  if (indexOfA === indexOfB) {
-    return a.localeCompare(b);
-  }
-  return indexOfA - indexOfB;
-};
-
-const comparator = (order: string[]) => (a: string, b: string) => sortWithTemplate(order, a, b);
-
-const sortProperties = properties => sortKeys(properties, { compare: comparator(propertiesOrder) });
+import { formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.js';
 
 const artifactEquals = (a: MavenArtifact, b: MavenArtifact) => {
   return a.groupId === b.groupId && a.artifactId === b.artifactId;
@@ -153,25 +80,6 @@ const ensureProfile = (project, profileId: string) => {
   const profileArray = ensureChildIsArray(project, 'profiles.profile');
   return appendOrGet(profileArray, { id: profileId }, idEquals);
 };
-
-const groupIdOrder = ['tech.jhipster', 'org.springframework.boot', 'org.springframework.security', 'org.springdoc'];
-
-const sortArtifacts = (artifacts: MavenArtifact[]) =>
-  artifacts.sort((a: MavenArtifact, b: MavenArtifact) => {
-    if (a.groupId !== b.groupId) {
-      if (a.groupId === undefined) {
-        return -1;
-      }
-      if (b.groupId === undefined) {
-        return 1;
-      }
-      const groupIdCompared = sortWithTemplate(groupIdOrder, a.groupId, b.groupId);
-      if (groupIdCompared) return groupIdCompared;
-    }
-    return a.artifactId.localeCompare(b.artifactId);
-  });
-
-const sortProfiles = (profiles: MavenProfile[]) => profiles.sort((a, b) => a.id?.localeCompare(b.id) ?? 1);
 
 const ensureChildPath = (node: any, childPath) => {
   let child = get(node, childPath);
@@ -334,30 +242,7 @@ export default class PomStorage extends XmlStorage {
 
   protected sort() {
     if (this.store.project) {
-      const project = sortKeys(this.store.project, { compare: comparator(rootOrder) });
-      this.store.project = project;
-      if (project.properties) {
-        project.properties = sortProperties(project.properties);
-      }
-      if (Array.isArray(project.dependencies?.dependency)) {
-        project.dependencies.dependency = sortArtifacts(project.dependencies.dependency);
-      }
-      if (Array.isArray(project.dependencyManagement?.dependencies?.dependency)) {
-        project.dependencyManagement.dependencies.dependency = sortArtifacts(project.dependencyManagement.dependencies.dependency);
-      }
-      if (project.build) {
-        project.build = sortSection(project.build);
-
-        if (Array.isArray(project.build.plugins?.plugin)) {
-          project.build.plugins.plugin = sortArtifacts(project.build.plugins.plugin);
-        }
-        if (Array.isArray(project.build.pluginManagement?.plugins?.plugin)) {
-          project.build.pluginManagement.plugins.plugin = sortArtifacts(project.build.pluginManagement.plugins.plugin);
-        }
-      }
-      if (Array.isArray(project.profiles?.profile)) {
-        project.profiles.profile = sortProfiles(project.profiles.profile);
-      }
+      this.store.project = sortPomProject(this.store.project);
     }
   }
 }
@@ -373,7 +258,7 @@ export const createPomStorage = (generator: CoreGenerator, { sortFile }: { sortF
   const loadFile = () => generator.readDestination('pom.xml', { defaults: emptyPomFile })?.toString() ?? '';
   const pomStorage = new PomStorage({
     loadFile,
-    saveFile: content => generator.writeDestination('pom.xml', formatFirstXmlLevel(content)),
+    saveFile: content => generator.writeDestination('pom.xml', formatPomFirstLevel(content)),
     sortFile,
   });
   generator.fs.store.on('change', filename => {

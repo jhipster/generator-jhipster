@@ -1,24 +1,24 @@
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import {
-  buildServerMatrix,
-  extendMatrix,
-  extendFilteredMatrix,
   buildSamplesFromMatrix,
+  buildServerMatrix,
+  extendFilteredMatrix,
+  extendMatrix,
   defaultHelpers as helpers,
   runResult,
-} from '../../testing/index.js';
+} from '../../lib/testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import Generator from '../server/index.js';
 
-import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.js';
+import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.js';
 import {
   filterBasicServerGenerators,
-  shouldComposeWithSpringCloudStream,
   shouldComposeWithLiquibase,
+  shouldComposeWithSpringCloudStream,
 } from '../server/__test-support/index.js';
 import { GENERATOR_SERVER } from '../generator-list.js';
 
@@ -93,6 +93,7 @@ describe(`generator - ${databaseType}`, () => {
         await helpers
           .runJHipster('server')
           .withJHipsterConfig(sampleConfig)
+          .withMockedSource({ except: ['addTestSpringFactory'] })
           .withMockedJHipsterGenerators({
             except: ['jhipster:spring-data-relational'],
             filter: filterBasicServerGenerators,
@@ -100,13 +101,13 @@ describe(`generator - ${databaseType}`, () => {
       });
 
       it('should compose with jhipster:common', () => {
-        expect(runResult.mockedGenerators['jhipster:common'].callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce('jhipster:common');
       });
       it(`should ${enableTranslation ? '' : 'not '}compose with jhipster:languages`, () => {
-        expect(runResult.mockedGenerators['jhipster:languages'].callCount).toBe(enableTranslation ? 1 : 0);
+        expect(runResult.getGeneratorComposeCount('jhipster:languages')).toBe(enableTranslation ? 1 : 0);
       });
       it('should compose with jhipster:liquibase', () => {
-        expect(runResult.mockedGenerators['jhipster:liquibase'].callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce('jhipster:liquibase');
       });
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();

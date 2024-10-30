@@ -1,0 +1,275 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+plugins {
+    id "java"
+    id "maven-publish"
+    id "idea"
+    id "eclipse"
+    id "com.gorylenko.gradle-git-properties"
+    // jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
+}
+
+group = "<%= packageName %>"
+version = "0.0.1-SNAPSHOT"
+
+description = ""
+
+sourceCompatibility=<%= JAVA_VERSION %>
+targetCompatibility=<%= JAVA_VERSION %>
+assert System.properties["java.specification.version"] == <%- JAVA_COMPATIBLE_VERSIONS.map(ver => `"${ver}"`).join(' || '); %>
+
+ext {
+    springProfiles = ""
+    if (project.hasProperty("tls")) {
+        springProfiles += ",tls"
+    }
+    if (project.hasProperty("e2e")) {
+        springProfiles += ",e2e"
+    }
+}
+
+repositories {
+    // Local maven repository is required for libraries built locally with maven like development jhipster-bom.
+    <%= !jhipsterDependenciesVersion.includes('-SNAPSHOT') && !jhipsterDependenciesVersion.includes('-CICD') ? '// ' : '' %>mavenLocal()
+    mavenCentral()
+    <%_ if (addSpringMilestoneRepository) { _%>
+    maven { url 'https://repo.spring.io/milestone' }
+    <%_ } _%>
+    <%_ if (jhipsterDependenciesVersion.endsWith('-SNAPSHOT')) { _%>
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
+    <%_ } _%>
+    <%_ if (serviceDiscoveryEureka) { _%>
+    maven { url 'https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates' }
+    <%_ } _%>
+    // jhipster-needle-gradle-repositories - JHipster will add additional repositories
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+// jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
+
+if (project.hasProperty("prod")) {
+    apply from: "gradle/profile_prod.gradle"
+} else {
+    apply from: "gradle/profile_dev.gradle"
+}
+
+if (project.hasProperty("war")) {
+    apply from: "gradle/war.gradle"
+}
+
+<%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
+if (project.hasProperty("zipkin")) {
+    apply from: "gradle/zipkin.gradle"
+}
+<%_ } _%>
+
+idea {
+    module {
+        excludeDirs += files("node_modules")
+    }
+}
+
+eclipse {
+    sourceSets {
+        main {
+            java {
+                srcDirs += ["build/generated/sources/annotationProcessor/java/main"]
+            }
+        }
+    }
+}
+
+defaultTasks "bootRun"
+
+springBoot {
+    mainClass = "<%= packageName %>.<%= mainClass %>"
+}
+
+test {
+    useJUnitPlatform()
+    exclude "**/*IT*", "**/*IntTest*"
+    testLogging {
+        events 'FAILED', 'SKIPPED'
+    }
+    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx512m'
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
+    reports.html.required = false
+    testLogging.exceptionFormat "full"
+<%_ if (reactive) { _%>
+
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
+        jvmArgs += [
+            "-XX:+AllowRedefinitionToAddDeleteMethods"
+        ]
+    }
+<%_ } _%>
+}
+
+check.dependsOn integrationTest
+task testReport(type: TestReport) {
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(test)
+}
+
+task integrationTestReport(type: TestReport) {
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(integrationTest)
+}
+
+gitProperties {
+    failOnNoGitDirectory = false
+    keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
+}
+
+tasks.withType(com.gorylenko.GenerateGitPropertiesTask).configureEach {
+  outputs.doNotCacheIf("Task is always executed") { true }
+}
+
+configurations {
+    providedRuntime
+    implementation.exclude module: "spring-boot-starter-tomcat"
+}
+
+dependencies {
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+<%_ if (authenticationTypeOauth2) { _%>
+    implementation "com.github.ben-manes.caffeine:caffeine"
+<%_ } _%>
+    testImplementation("com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
+    testRuntimeOnly("com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
+    implementation "io.micrometer:micrometer-registry-prometheus-simpleclient"
+<%_ if (reactive) { _%>
+    runtimeOnly "io.netty:netty-tcnative-boringssl-static"
+<%_ } _%>
+<%_ if (reactive) { _%>
+    testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhoundJunitPlatformVersion}"
+<%_ } _%>
+    implementation "jakarta.annotation:jakarta.annotation-api"
+    implementation "org.apache.commons:commons-lang3"
+<%_ if (reactive) { _%>
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+<%_ } _%>
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    implementation "org.springframework.boot:spring-boot-loader-tools"
+<%_ /* This is useful for major Spring Boot migration */
+if (addSpringMilestoneRepository) { _%>
+    runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
+<%_ } _%>
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-aop"
+    implementation "org.springframework.boot:spring-boot-starter-logging"
+    implementation "org.springframework.boot:spring-boot-starter-mail"
+<%_ if (authenticationTypeOauth2) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
+<%_ } _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-security"
+<%_ } _%>
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+<%_ if (!reactive) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-undertow"
+    modules {
+        module("org.springframework.boot:spring-boot-starter-tomcat") {
+            replacedBy("org.springframework.boot:spring-boot-starter-undertow", "Use Undertow instead of Tomcat")
+        }
+    }
+<%_ } _%>
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>"
+    testImplementation "org.springframework.boot:spring-boot-test"
+<%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter"
+<%_ } _%>
+<%_ if (serviceDiscoveryAny) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-bootstrap"
+<%_ } _%>
+<%_ if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j"
+<%_ } _%>
+<%_ if ((applicationTypeMicroservice || applicationTypeGateway) && !reactive) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j"
+<%_ } _%>
+<%_ if (serviceDiscoveryAny && serviceDiscoveryEureka) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-config"
+<%_ } _%>
+<%_ if (applicationTypeGateway && !reactive) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-loadbalancer"
+<%_ } _%>
+<%_ if (serviceDiscoveryAny && serviceDiscoveryConsul) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-consul-config"
+<%_ } _%>
+<%_ if (serviceDiscoveryAny && serviceDiscoveryConsul) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-consul-discovery"
+<%_ } _%>
+<%_ if (serviceDiscoveryAny && serviceDiscoveryEureka) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
+<%_ } _%>
+<%_ if (reactive) { _%>
+    implementation "org.springframework.data:spring-data-commons"
+<%_ } _%>
+<%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
+    implementation "org.springframework.retry:spring-retry"
+<%_ } _%>
+    testImplementation "org.springframework.security:spring-security-test"
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+<%_ if (reactive) { _%>
+    OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
+    Architecture arch = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentArchitecture();
+    if (os.isMacOsX() && !arch.isAmd64()) {
+        implementation("io.netty:netty-resolver-dns-native-macos") {
+            artifact {
+                classifier = "osx-aarch_64"
+            }
+        }
+    }
+<%_ } _%>
+}
+
+task cleanResources(type: Delete) {
+    delete "build/resources"
+}
+
+<%_ if (embeddableLaunchScript) { _%>
+
+bootJar {
+    launchScript()
+}
+<%_ } _%>
+
+compileJava.dependsOn processResources
+processResources.dependsOn bootBuildInfo

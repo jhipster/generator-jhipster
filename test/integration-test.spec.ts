@@ -20,10 +20,10 @@ import assert from 'assert';
 import fs, { existsSync, writeFileSync } from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import sortKeys from 'sort-keys';
 
-import { applicationTypes, authenticationTypes } from '../jdl/jhipster/index.js';
+import { applicationTypes, authenticationTypes } from '../lib/jhipster/index.js';
 import { formatDateForChangelog } from '../generators/base/support/index.js';
 
 const writeJsonSync = (file, content) => writeFileSync(file, JSON.stringify(content, null, 2));
@@ -157,7 +157,7 @@ describe('integration-test', () => {
   });
 
   describe('::entities samples reproducibility', () => {
-    const changelogDates = [];
+    const changelogDates: string[] = [];
     for (const [name, entitySample] of itEntitiesSamplesEntries) {
       let entityJson = readJsonSync(entitySample);
       before(() => {

@@ -22,21 +22,21 @@ import { escape, min } from 'lodash-es';
 import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
 import { getFKConstraintName, getUXConstraintName, prepareEntity as prepareEntityForServer } from '../server/support/index.js';
 import {
-  prepareEntityPrimaryKeyForTemplates,
-  prepareRelationship,
-  prepareField,
-  prepareEntity,
   loadRequiredConfigIntoEntity,
+  prepareEntity,
+  prepareEntityPrimaryKeyForTemplates,
+  prepareField,
+  prepareRelationship,
 } from '../base-application/support/index.js';
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
-import { fieldTypes } from '../../jdl/jhipster/index.js';
+import { fieldTypes } from '../../lib/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
 import { liquibaseFiles } from './files.js';
 import {
-  prepareField as prepareFieldForLiquibase,
-  postPrepareEntity,
-  prepareRelationshipForLiquibase,
   liquibaseComment,
+  postPrepareEntity,
+  prepareField as prepareFieldForLiquibase,
+  prepareRelationshipForLiquibase,
 } from './support/index.js';
 import mavenPlugin from './support/maven-plugin.js';
 import {
@@ -44,7 +44,7 @@ import {
   addLiquibaseConstraintsChangelogCallback,
   addLiquibaseIncrementalChangelogCallback,
 } from './internal/needles.js';
-import { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } from './changelog-files.js';
+import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.js';
 
 const {
   CommonDBTypes: { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER },
@@ -148,9 +148,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
-      postPrepareEntity({ application, entity }) {
-        postPrepareEntity({ application, entity });
-      },
+      postPrepareEntity,
     });
   }
 
@@ -192,7 +190,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
               prepareRelationship(entity, relationship, this, true);
               prepareRelationshipForLiquibase(entity, relationship);
             }
-            postPrepareEntity({ application, entity });
+            postPrepareEntity.call(this, { application, entity } as any);
           }
         }
 
@@ -200,7 +198,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
           this.options.entities ?? entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
         // Write only specified entities changelogs.
         const changes = entityChanges.filter(
-          databaseChangelog => entitiesToWrite!.length === 0 || entitiesToWrite!.includes(databaseChangelog.entityName),
+          databaseChangelog => entitiesToWrite.length === 0 || entitiesToWrite.includes(databaseChangelog.entityName),
         );
 
         for (const databaseChangelog of changes) {
@@ -491,6 +489,9 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
         source.addGradleProperty?.({ property: 'liquibaseTaskPrefix', value: 'liquibase' });
         source.addGradleProperty?.({ property: 'liquibasePluginVersion', value: gradleLiquibaseVersion });
+        if (application.javaManagedProperties?.['liquibase.version']) {
+          source.addGradleProperty?.({ property: 'liquibaseCoreVersion', value: application.javaManagedProperties['liquibase.version'] });
+        }
 
         source.applyFromGradle?.({ script: 'gradle/liquibase.gradle' });
         source.addGradlePlugin?.({ id: 'org.liquibase.gradle' });
@@ -509,6 +510,20 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
             { gradleFile: 'gradle/liquibase.gradle' },
           );
         }
+      },
+      nativeHints({ source, application }) {
+        if (!application.graalvmSupport) return;
+        // Latest liquibase version supported by Reachability Repository is 4.23.0
+        // Hints may be dropped if newer version is supported
+        // https://github.com/oracle/graalvm-reachability-metadata/blob/master/metadata/org.liquibase/liquibase-core/index.json
+        source.addNativeHint!({
+          resources: ['config/liquibase/*'],
+          declaredConstructors: [
+            'liquibase.database.LiquibaseTableNamesFactory.class',
+            'liquibase.report.ShowSummaryGeneratorFactory.class',
+          ],
+          publicConstructors: ['liquibase.ui.LoggerUIService.class'],
+        });
       },
     });
   }
@@ -697,7 +712,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
       return undefined;
     }
 
-    // eslint-disable-next-line no-nested-ternary
     const entityChanges = databaseChangelog.changelogData;
     entityChanges.skipFakeData = application.skipFakeData || entity.skipFakeData;
 

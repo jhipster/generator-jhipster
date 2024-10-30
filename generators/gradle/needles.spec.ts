@@ -1,5 +1,5 @@
-import { before, it, describe } from 'esmocha';
-import { dryRunHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { before, describe, it } from 'esmocha';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_SERVER } from '../generator-list.js';
 
@@ -45,9 +45,11 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
     await helpers
       .runJHipster(GENERATOR_SERVER)
       .withJHipsterConfig({
-        blueprint: 'myblueprint',
         clientFramework: 'no',
         buildTool: 'gradle',
+      })
+      .withOptions({
+        blueprint: ['myblueprint'],
       })
       .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:server' }]]);
   });

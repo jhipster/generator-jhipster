@@ -25,8 +25,11 @@ import BaseGenerator from '../base/index.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import { normalizePathEnd } from '../base/support/path.js';
+import type { TaskTypes } from '../../lib/types/base/tasks.js';
+import type { Entity } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 import command from './command.js';
-import { PRIORITY_NAMES, CUSTOM_PRIORITIES } from './priorities.js';
 
 const {
   PROMPTING_WORKSPACES,
@@ -41,10 +44,22 @@ const {
   END,
 } = PRIORITY_NAMES;
 
+type WorkspacesTypes<E extends Entity = Entity, A extends ApplicationType<E> = ApplicationType<E>> = TaskTypes & {
+  LoadingTaskParam: TaskTypes['LoadingTaskParam'] & { applications: A[] };
+  PreparingTaskParam: TaskTypes['PreparingTaskParam'] & { applications: A[] };
+  PostPreparingTaskParam: TaskTypes['PostPreparingTaskParam'] & { applications: A[] };
+  DefaultTaskParam: TaskTypes['DefaultTaskParam'] & { applications: A[] };
+  WritingTaskParam: TaskTypes['WritingTaskParam'] & { applications: A[] };
+  PostWritingTaskParam: TaskTypes['PostWritingTaskParam'] & { applications: A[] };
+  InstallTaskParam: TaskTypes['InstallTaskParam'] & { applications: A[] };
+  PostInstallTaskParam: TaskTypes['PostInstallTaskParam'] & { applications: A[] };
+  EndTaskParam: TaskTypes['EndTaskParam'] & { applications: A[] };
+};
+
 /**
  * This is the base class for a generator that generates entities.
  */
-export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
+export default abstract class BaseWorkspacesGenerator extends BaseGenerator<WorkspacesTypes> {
   static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 
   static CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);
@@ -66,7 +81,8 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator {
     }
   }
 
-  protected loadWorkspacesConfig({ context = this } = {}) {
+  protected loadWorkspacesConfig(opts?) {
+    const { context = this } = opts ?? {};
     context.appsFolders = this.jhipsterConfig.appsFolders;
     context.directoryPath = this.jhipsterConfig.directoryPath ?? './';
   }

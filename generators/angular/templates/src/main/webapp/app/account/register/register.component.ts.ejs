@@ -68,8 +68,8 @@ export default class RegisterComponent implements AfterViewInit {
     }),
   });
 
-  <%_ if (enableTranslation) { _%>private translateService = inject(TranslateService);<%_ } _%>
-  private registerService = inject(RegisterService);
+  <%_ if (enableTranslation) { _%>private readonly translateService = inject(TranslateService);<%_ } _%>
+  private readonly registerService = inject(RegisterService);
 
   ngAfterViewInit(): void {
     this.login().nativeElement.focus();

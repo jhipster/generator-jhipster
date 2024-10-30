@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { buildToolTypes } from '../../../../jdl/index.js';
-import type { JHipsterCommandDefinition } from '../../../base/api.js';
+import type { JHipsterCommandDefinition } from '../../../../lib/command/types.js';
+import { buildToolTypes } from '../../../../lib/jhipster/index.js';
 import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.js';
 
 const { GRADLE, MAVEN } = buildToolTypes;
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {},
   configs: {
     buildTool: {
@@ -44,6 +44,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [GENERATOR_GRADLE, GENERATOR_MAVEN],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

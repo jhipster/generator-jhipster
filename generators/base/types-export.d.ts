@@ -1,4 +1,4 @@
-import Generator from './index.js';
+import type Generator from './index.js';
 
 // Remove generics support
 export type BaseGenerator = Generator;

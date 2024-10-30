@@ -1,15 +1,15 @@
 import { mutateData, normalizePathEnd, pickFields } from '../../base/support/index.js';
 
 import {
-  databaseTypes,
-  monitoringTypes,
   authenticationTypes,
   buildToolTypes,
   cacheTypes,
-  websocketTypes,
-  serviceDiscoveryTypes,
+  databaseTypes,
+  monitoringTypes,
   searchEngineTypes,
-} from '../../../jdl/jhipster/index.js';
+  serviceDiscoveryTypes,
+  websocketTypes,
+} from '../../../lib/jhipster/index.js';
 import { prepareSqlApplicationProperties } from '../../spring-data-relational/support/index.js';
 import {
   CLIENT_DIST_DIR,
@@ -20,8 +20,7 @@ import {
   SERVER_TEST_RES_DIR,
   SERVER_TEST_SRC_DIR,
 } from '../../generator-constants.js';
-import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../../server/options/index.js';
-import { PlatformApplication } from '../../base-application/types.js';
+import type { PlatformApplication } from '../../base-application/types.js';
 
 const { NO: NO_DATABASE, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA } = databaseTypes;
 const { PROMETHEUS, ELK } = monitoringTypes;
@@ -124,13 +123,6 @@ export const loadDerivedServerConfig = ({ application }: { application: any }) =
   application.searchEngineAny = !application.searchEngineNo;
   application.searchEngineCouchbase = application.searchEngine === COUCHBASE;
   application.searchEngineElasticsearch = application.searchEngine === ELASTICSEARCH;
-
-  if (!application.messageBroker) {
-    application.messageBroker = MESSAGE_BROKER_NO;
-  }
-  application.messageBrokerKafka = application.messageBroker === MESSAGE_BROKER_KAFKA;
-  application.messageBrokerPulsar = application.messageBroker === MESSAGE_BROKER_PULSAR;
-  application.messageBrokerAny = application.messageBroker && application.messageBroker !== MESSAGE_BROKER_NO;
 
   application.buildToolGradle = application.buildTool === GRADLE;
   application.buildToolMaven = application.buildTool === MAVEN;

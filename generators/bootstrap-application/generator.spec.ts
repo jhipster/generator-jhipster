@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
-import { fieldTypes } from '../../jdl/jhipster/index.js';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+import { fieldTypes } from '../../lib/jhipster/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import Generator from './index.js';
 
@@ -33,7 +33,6 @@ const {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const generatorPath = join(__dirname, 'index.ts');
 const generator = basename(__dirname);
 
 const expectedField = () => ({
@@ -87,7 +86,7 @@ describe(`generator - ${generator}`, () => {
   describe('with', () => {
     describe('default config', () => {
       before(async () => {
-        await helpers.run(generatorPath).withJHipsterConfig({}, [
+        await helpers.runJHipster(generator).withJHipsterConfig({}, [
           {
             name: 'EntityA',
             changelogDate: '20220129025419',
@@ -189,6 +188,7 @@ describe(`generator - ${generator}`, () => {
   "anyFieldIsUUID": true,
   "anyFieldIsZonedDateTime": false,
   "anyPropertyHasValidation": true,
+  "anyRelationshipIsRequired": false,
   "applicationType": "monolith",
   "auditableEntity": true,
   "authenticationType": "jwt",
@@ -323,6 +323,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
       "generateFakeData": Any<Function>,
+      "generateFakeDataFromPattern": [Function],
       "id": true,
       "javaFieldType": "UUID",
       "javaValueGenerator": "UUID.randomUUID()",
@@ -417,6 +418,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationUnique": true,
       "fieldWithContentType": false,
       "generateFakeData": Any<Function>,
+      "generateFakeDataFromPattern": [Function],
       "javaFieldType": "String",
       "javaValueGenerator": "UUID.randomUUID().toString()",
       "javaValueSample1": ""login1"",
@@ -503,6 +505,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
       "generateFakeData": Any<Function>,
+      "generateFakeDataFromPattern": [Function],
       "javaFieldType": "String",
       "javaValueGenerator": "UUID.randomUUID().toString()",
       "javaValueSample1": ""firstName1"",
@@ -588,6 +591,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
       "generateFakeData": Any<Function>,
+      "generateFakeDataFromPattern": [Function],
       "javaFieldType": "String",
       "javaValueGenerator": "UUID.randomUUID().toString()",
       "javaValueSample1": ""lastName1"",
@@ -677,6 +681,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationUnique": true,
       "fieldWithContentType": false,
       "generateFakeData": Any<Function>,
+      "generateFakeDataFromPattern": [Function],
       "javaFieldType": "String",
       "javaValueGenerator": "UUID.randomUUID().toString()",
       "javaValueSample1": ""email1"",
@@ -763,6 +768,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
       "generateFakeData": Any<Function>,
+      "generateFakeDataFromPattern": [Function],
       "javaFieldType": "String",
       "javaValueGenerator": "UUID.randomUUID().toString()",
       "javaValueSample1": ""imageUrl1"",
@@ -845,6 +851,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
       "generateFakeData": Any<Function>,
+      "generateFakeDataFromPattern": [Function],
       "javaFieldType": "Boolean",
       "liquibaseDefaultValueAttributeName": undefined,
       "liquibaseDefaultValueAttributeValue": undefined,
@@ -926,6 +933,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
       "generateFakeData": Any<Function>,
+      "generateFakeDataFromPattern": [Function],
       "javaFieldType": "String",
       "javaValueGenerator": "UUID.randomUUID().toString()",
       "javaValueSample1": ""langKey1"",
@@ -1089,6 +1097,7 @@ describe(`generator - ${generator}`, () => {
   "anyFieldIsUUID": true,
   "anyFieldIsZonedDateTime": false,
   "anyPropertyHasValidation": false,
+  "anyRelationshipIsRequired": false,
   "applicationType": "monolith",
   "authenticationType": "jwt",
   "baseName": "jhipster",
@@ -1212,6 +1221,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
       "generateFakeData": Any<Function>,
+      "generateFakeDataFromPattern": [Function],
       "id": true,
       "javaFieldType": "UUID",
       "javaValueGenerator": "UUID.randomUUID()",
@@ -1355,9 +1365,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('skipUserManagement', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig(
+        await helpers.runJHipster(generator).withJHipsterConfig(
           {
             skipUserManagement: true,
           },
@@ -1432,6 +1441,7 @@ describe(`generator - ${generator}`, () => {
   "anyFieldIsUUID": true,
   "anyFieldIsZonedDateTime": false,
   "anyPropertyHasValidation": false,
+  "anyRelationshipIsRequired": false,
   "applicationType": "monolith",
   "authenticationType": "jwt",
   "baseName": "jhipster",
@@ -1555,6 +1565,7 @@ describe(`generator - ${generator}`, () => {
       "fieldValidationUnique": false,
       "fieldWithContentType": false,
       "generateFakeData": Any<Function>,
+      "generateFakeDataFromPattern": [Function],
       "id": true,
       "javaFieldType": "UUID",
       "javaValueGenerator": "UUID.randomUUID()",

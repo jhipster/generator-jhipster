@@ -1,13 +1,12 @@
-import { before, it, describe } from 'esmocha';
-import { basicHelpers as helpers, result as runResult, getGenerator } from '../../testing/index.js';
+import { before, describe, it } from 'esmocha';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import ReactGenerator from '../../generators/react/index.js';
 import BaseApplicationGenerator from '../../generators/base-application/index.js';
 
 const { REACT } = clientFrameworkTypes;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockReactBlueprintSubGen: any = class extends ReactGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
@@ -20,9 +19,9 @@ const mockReactBlueprintSubGen: any = class extends ReactGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    const customPhaseSteps = {
+    return this.asPostWritingTaskGroup({
       addEntityToMenuStep() {
-        this.addEntityToMenu('routerName', false, false);
+        this.addEntityToMenu('routerName', false);
       },
       addEntityToModuleStep({ application }) {
         const { applicationTypeMicroservice, clientSrcDir } = application;
@@ -31,22 +30,19 @@ const mockReactBlueprintSubGen: any = class extends ReactGenerator {
           clientSrcDir,
         });
       },
-    };
-    return { ...customPhaseSteps };
+    });
   }
 };
 
 describe('needle API React: JHipster client generator with blueprint', () => {
-  let result;
-
   before(async () => {
-    result = await helpers
-      .run(getGenerator('react'))
+    await helpers
+      .runJHipster('react')
       .withOptions({
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
         ignoreNeedlesError: true,
       })
       .withGenerators([[mockReactBlueprintSubGen, { namespace: 'jhipster-myblueprint:react' }]])
@@ -71,7 +67,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
   });
 
   it('Assert entity is added to menu', () => {
-    result.assertFileContent(
+    runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/entities/menu.tsx`,
       '<MenuItem icon="asterisk" to="/routerName">\n        Router Name\n      </MenuItem>',
     );

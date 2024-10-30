@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, after, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers } from '../../testing/index.js';
-import { messageBrokerTypes } from '../../jdl/jhipster/index.js';
+import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { messageBrokerTypes } from '../../lib/jhipster/index.js';
 import Generator from './index.js';
 
 const { PULSAR } = messageBrokerTypes;
@@ -32,7 +32,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.ts');
 
 const commonConfig = { messageBroker: PULSAR };
 
@@ -47,13 +46,9 @@ describe(`generator - ${generator}`, () => {
 
   Object.entries(testSamples).forEach(([name, config]) => {
     describe(name, () => {
-      let runResult;
-
       before(async () => {
-        runResult = await helpers.run(generatorFile).withJHipsterConfig(config);
+        await helpers.runJHipster(generator).withJHipsterConfig(config);
       });
-
-      after(() => runResult.cleanup());
 
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();

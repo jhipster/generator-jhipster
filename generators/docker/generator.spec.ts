@@ -16,23 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import {
   buildSamplesFromMatrix,
+  buildServerMatrix,
   extendFilteredMatrix,
   extendMatrix,
   defaultHelpers as helpers,
   runResult,
-  buildServerMatrix,
-} from '../../testing/index.js';
+} from '../../lib/testing/index.js';
 import { matchElasticSearchDocker } from '../spring-data-elasticsearch/__test-support/elastic-search-matcher.js';
 
-import { databaseTypes, searchEngineTypes, serviceDiscoveryTypes, cacheTypes } from '../../jdl/jhipster/index.js';
-import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/message-broker.js';
+import { cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.js';
 import Generator from './index.js';
@@ -46,7 +45,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.ts');
 
 const NO_SQL = [CASSANDRA, COUCHBASE, MONGODB, NEO4J];
 
@@ -56,7 +54,6 @@ matrix = extendMatrix(matrix, {
   prodDatabaseType: [POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE, ...NO_SQL],
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 Object.entries(matrix).forEach(([_name, config]) => {
   if (NO_SQL.includes(config.prodDatabaseType)) {
     config.databaseType = config.prodDatabaseType;
@@ -68,7 +65,7 @@ matrix = extendMatrix(matrix, {
   searchEngine: [NO_SEARCH_ENGINE, ELASTICSEARCH],
   serviceDiscoveryType: [NO_SERVICE_DISCOVERY, EUREKA, CONSUL],
   enableSwaggerCodegen: [false, true],
-  messageBroker: [MESSAGE_BROKER_NO, MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_PULSAR],
+  messageBroker: ['no', 'kafka', 'pulsar'],
 });
 
 matrix = extendFilteredMatrix(matrix, ({ reactive }) => !reactive, {
@@ -88,7 +85,7 @@ describe(`generator - ${generator}`, () => {
 
     describe(name, () => {
       before(async () => {
-        await helpers.run(generatorFile).withJHipsterConfig(sampleConfig);
+        await helpers.runJHipster(generator).withJHipsterConfig(sampleConfig);
       });
 
       it('should match generated files snapshot', () => {
@@ -99,18 +96,18 @@ describe(`generator - ${generator}`, () => {
       });
       describe('searchEngine', () => {
         const elasticsearch = searchEngine === ELASTICSEARCH;
-        matchElasticSearchDocker(() => runResult, elasticsearch);
+        matchElasticSearchDocker(elasticsearch);
       });
       describe('serviceDiscoveryType', () => {
-        matchEureka(() => runResult, serviceDiscoveryType === EUREKA);
-        matchConsul(() => runResult, serviceDiscoveryType === CONSUL);
+        matchEureka(serviceDiscoveryType === EUREKA);
+        matchConsul(serviceDiscoveryType === CONSUL);
       });
     });
 
     describe(`custom path for ${name}`, () => {
       before(async () => {
         await helpers
-          .run(generatorFile)
+          .runJHipster(generator)
           .withSharedApplication({
             dockerServicesDir: 'foo/',
           })

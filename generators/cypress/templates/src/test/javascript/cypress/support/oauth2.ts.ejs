@@ -16,8 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-// eslint-disable-next-line spaced-comment
-/// <reference types="cypress" />
+/* eslint-disable @typescript-eslint/no-namespace */
 
 Cypress.Commands.add('getOauth2Data', () => {
   cy.request({
@@ -157,6 +156,7 @@ Cypress.Commands.add('oauthLogout', () => {
 
 declare global {
   namespace Cypress {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Chainable<Subject> {
       getOauth2Data(): Cypress.Chainable;
       oauthLogin(oauth2Data, username: string, password: string): Cypress.Chainable;

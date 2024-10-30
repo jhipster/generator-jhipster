@@ -90,18 +90,20 @@ describe('LoginForm Component', () => {
     loginForm.password = 'pwd';
     loginForm.rememberMe = true;
     const jwtSecret = 'jwt-secret';
-    axiosStub.post.resolves({ headers: { authorization: 'Bearer ' + jwtSecret } });
+    axiosStub.post.resolves({ headers: { authorization: `Bearer ${jwtSecret}` } });
 
     // WHEN
     loginForm.doLogin();
     await loginForm.$nextTick();
 
     // THEN
-    expect(axiosStub.post.calledWith('api/authenticate', {
-      username: 'login',
-      password: 'pwd',
-      rememberMe: true
-    })).toBeTruthy();
+    expect(
+      axiosStub.post.calledWith('api/authenticate', {
+        username: 'login',
+        password: 'pwd',
+        rememberMe: true,
+      }),
+    ).toBeTruthy();
 
     expect(loginForm.authenticationError).toBeFalsy();
     expect(localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken')).toEqual(jwtSecret);
@@ -113,18 +115,20 @@ describe('LoginForm Component', () => {
     loginForm.password = 'pwd';
     loginForm.rememberMe = false;
     const jwtSecret = 'jwt-secret';
-    axiosStub.post.resolves({ headers: { authorization: 'Bearer ' + jwtSecret } });
+    axiosStub.post.resolves({ headers: { authorization: `Bearer ${jwtSecret}` } });
 
     // WHEN
     loginForm.doLogin();
     await loginForm.$nextTick();
 
     // THEN
-    expect(axiosStub.post.calledWith('api/authenticate', {
-      username: 'login',
-      password: 'pwd',
-      rememberMe: false
-    })).toBeTruthy();
+    expect(
+      axiosStub.post.calledWith('api/authenticate', {
+        username: 'login',
+        password: 'pwd',
+        rememberMe: false,
+      }),
+    ).toBeTruthy();
 
     expect(loginForm.authenticationError).toBeFalsy();
     expect(sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken')).toEqual(jwtSecret);
@@ -163,9 +167,11 @@ describe('LoginForm Component', () => {
     await loginForm.$nextTick();
 
     // THEN
-    expect(axiosStub.post.calledWith('api/authentication',
-      'username=login&password=pwd&remember-me=true&submit=Login',
-      { "headers": { "Content-Type": "application/x-www-form-urlencoded" } })).toBeTruthy();
+    expect(
+      axiosStub.post.calledWith('api/authentication', 'username=login&password=pwd&remember-me=true&submit=Login', {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      }),
+    ).toBeTruthy();
 
     expect(loginForm.authenticationError).toBeFalsy();
   });

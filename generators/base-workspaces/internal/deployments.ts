@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import { defaults } from 'lodash-es';
-import { applicationOptions, deploymentOptions } from '../../../jdl/index.js';
-import { loadDerivedPlatformConfig, loadPlatformConfig, loadDerivedServerAndPlatformProperties } from '../../server/support/index.js';
+import { applicationOptions, deploymentOptions } from '../../../lib/jhipster/index.js';
+import { loadDerivedPlatformConfig, loadDerivedServerAndPlatformProperties, loadPlatformConfig } from '../../server/support/index.js';
 import type { GeneratorBaseCore } from '../../index.js';
 
 const { OptionNames } = applicationOptions;

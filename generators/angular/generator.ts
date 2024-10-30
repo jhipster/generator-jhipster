@@ -20,32 +20,33 @@ import { camelCase } from 'lodash-es';
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
-import BaseApplicationGenerator, { type Entity } from '../base-application/index.js';
+import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.js';
 import { defaultLanguage } from '../languages/support/index.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import {
+  generateTypescriptTestEntity as generateTestEntity,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   getTypescriptKeyType as getTSKeyType,
   generateTestEntityId as getTestEntityId,
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
-  generateTypescriptTestEntity as generateTestEntity,
 } from '../client/support/index.js';
-import type { CommonClientServerApplication } from '../base-application/types.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
-import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-angular.js';
+import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
+import type { PostWritingEntitiesTaskParam } from '../../lib/types/application/tasks.js';
+import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.js';
 import { writeFiles } from './files-angular.js';
 import cleanupOldFilesTask from './cleanup.js';
+import type { addItemToMenu } from './support/index.js';
 import {
-  buildAngularFormPath as angularFormPath,
   addEntitiesRoute,
-  addToEntitiesMenu,
-  translateAngularFilesTransform,
-  isTranslatedAngularFile,
-  addRoute,
-  addItemToMenu,
-  addItemToAdminMenu,
   addIconImport,
+  addItemToAdminMenu,
+  addRoute,
+  addToEntitiesMenu,
+  buildAngularFormPath as angularFormPath,
+  isTranslatedAngularFile,
+  translateAngularFilesTransform,
 } from './support/index.js';
 
 const { ANGULAR } = clientFrameworkTypes;
@@ -72,6 +73,12 @@ export default class AngularGenerator extends BaseApplicationGenerator {
           this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json'),
         );
       },
+      applicationDefauts({ applicationDefaults }) {
+        applicationDefaults({
+          __override__: true,
+          typescriptEslint: true,
+        });
+      },
     });
   }
 
@@ -81,15 +88,20 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareForTemplates({ application }) {
-        application.webappEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
-        application.angularLocaleId = application.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!;
+      applicationDefauts({ application, applicationDefaults }) {
+        applicationDefaults({
+          __override__: true,
+          eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
+          webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
+          angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale,
+        });
+
+        application.addPrettierExtensions?.(['html', 'css', 'scss']);
       },
       addNeedles({ source, application }) {
         source.addEntitiesToClient = param => {
-          const { application, entities } = param;
-          this.addEntitiesToModule({ application, entities });
-          this.addEntitiesToMenu({ application, entities });
+          this.addEntitiesToModule(param);
+          this.addEntitiesToMenu(param);
         };
 
         source.addAdminRoute = (args: Omit<Parameters<typeof addRoute>[0], 'needle'>) =>
@@ -129,7 +141,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
             { ignoreNonExisting },
             createNeedleCallback({
               needle: 'jhipster-needle-add-webpack-config',
-              contentToAdd: `,${args.config}`,
+              contentToAdd: `${args.config},`,
             }),
           );
         };
@@ -222,7 +234,13 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
+      async cleanup({ control }) {
+        await control.cleanupFiles({
+          '8.6.1': ['.eslintrc.json', '.eslintignore'],
+        });
+      },
       cleanupOldFilesTask,
+      writeEslintClientRootConfigFile,
       writeFiles,
     });
   }
@@ -318,7 +336,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * }
    *
    */
-  addVendorSCSSStyle(style, comment) {
+  addVendorSCSSStyle(style, comment?) {
     this.needleApi.clientAngular.addVendorSCSSStyle(style, comment);
   }
 
@@ -374,7 +392,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, jhiPrefix);
   }
 
-  addEntitiesToMenu({ application, entities }: { application: CommonClientServerApplication; entities: Entity[] }) {
+  addEntitiesToMenu({ application, entities }: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) {
     const filePath = `${application.clientSrcDir}app/layouts/navbar/navbar.component.html`;
     const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
     const editCallback = addToEntitiesMenu({ application, entities });
@@ -382,10 +400,10 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     this.editFile(filePath, { ignoreNonExisting }, editCallback);
   }
 
-  addEntitiesToModule({ application, entities }: { application: CommonClientServerApplication; entities: Entity[] }) {
-    const filePath = `${application.clientSrcDir}app/entities/entity.routes.ts`;
+  addEntitiesToModule(param: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) {
+    const filePath = `${param.application.clientSrcDir}app/entities/entity.routes.ts`;
     const ignoreNonExisting = chalk.yellow(`Route(s) not added to ${filePath}.`);
-    const addRouteCallback = addEntitiesRoute({ application, entities });
+    const addRouteCallback = addEntitiesRoute(param);
     this.editFile(filePath, { ignoreNonExisting }, addRouteCallback);
   }
 
@@ -409,7 +427,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * }
    *
    */
-  addMainSCSSStyle(style, comment) {
+  addMainSCSSStyle(style, comment?) {
     this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
   }
 
@@ -486,7 +504,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * @param {string} clientFramework - The name of the client framework
    * @param {string} translationKeyMenu - i18n key for entry in the menu
    */
-  addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = camelCase(routerName)) {
+  addElementToMenu(routerName, iconName, enableTranslation, _clientFramework?, translationKeyMenu = camelCase(routerName)) {
     this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
   }
 }

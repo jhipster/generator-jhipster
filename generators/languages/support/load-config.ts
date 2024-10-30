@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { type I18nApplication } from '../types.js';
-import { findLanguageForTag, supportedLanguages as baseSupportedLanguages, type Language } from './languages.js';
+import { type Language, supportedLanguages as baseSupportedLanguages, findLanguageForTag } from './languages.js';
 
 /**
  * Load translation config into application

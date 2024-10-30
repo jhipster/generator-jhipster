@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../../base/api.js';
+import type { JHipsterCommandDefinition, PromptSpec } from '../../../../lib/command/index.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {
     withGeneratedFlag: {
       description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
@@ -38,7 +38,7 @@ const command: JHipsterCommandDefinition = {
       cli: {
         type: String,
       },
-      prompt: gen => ({
+      prompt: (gen): PromptSpec => ({
         type: 'input',
         message: 'What is your default Java package name?',
         default: gen.jhipsterConfigWithDefaults.packageName,
@@ -50,8 +50,15 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
       description: 'The package name for the generated application',
     },
+    packageFolder: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      scope: 'storage',
+    },
   },
   import: [],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

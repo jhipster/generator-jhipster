@@ -1,7 +1,5 @@
 'use strict';
 
-const path = require('path');
-
 <%_ if (buildToolUnknown) { _%>
 const packageJson = require('./../package.json');
 <%_ } _%>
@@ -12,7 +10,7 @@ module.exports = {
   version: packageJson.version,
 <%_ } else { _%>
   // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
-  version: process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'DEV',
+  version: process.env.APP_VERSION || 'DEV',
 <%_ } _%>
 
   dev: {

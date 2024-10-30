@@ -16,10 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, it, describe, expect } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../../testing/index.js';
+import { before, describe, expect, it } from 'esmocha';
+import { defaultHelpers as helpers, runResult } from '../../../lib/testing/index.js';
 import { GENERATOR_SPRING_BOOT } from '../../generator-list.js';
-import type { SpringBootApplication } from '../types.js';
 import { insertContentIntoApplicationProperties } from './needles.js';
 
 describe('generator - server - support - needles', () => {
@@ -36,10 +35,11 @@ describe('generator - server - support - needles', () => {
 
     describe('insertContentIntoApplicationProperties needle', () => {
       it('with a non existing needle', () => {
-        const application: SpringBootApplication = runResult.generator.sharedData.getApplication();
-        expect(() => insertContentIntoApplicationProperties.call(runResult.generator, application, { foo: 'foo' })).toThrow(
-          /Missing required jhipster-needle application-properties-foo not found at/,
-        );
+        const application = runResult.generator.sharedData.getApplication();
+        expect(() => {
+          // @ts-expect-error invalid needle
+          insertContentIntoApplicationProperties.call(runResult.generator, application, { foo: 'foo' });
+        }).toThrow(/Missing required jhipster-needle application-properties-foo not found at/);
       });
 
       it('without a needle', () => {

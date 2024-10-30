@@ -16,30 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { camelCase, kebabCase, startCase, upperFirst, sortedUniq, intersection, lowerFirst, uniq } from 'lodash-es';
+import { camelCase, intersection, kebabCase, lowerFirst, sortedUniq, startCase, uniq, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
 import type BaseGenerator from '../../base-core/index.js';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.js';
 import {
   createFaker,
+  getMicroserviceAppName,
+  mutateData,
   parseChangelog,
   stringHashCode,
   upperFirstCamelCase,
-  getMicroserviceAppName,
-  mutateData,
 } from '../../base/support/index.js';
-import { getTypescriptKeyType, getEntityParentPathAddition } from '../../client/support/index.js';
-import {
-  applicationTypes,
-  binaryOptions,
-  databaseTypes,
-  entityOptions,
-  fieldTypes,
-  searchEngineTypes,
-} from '../../../jdl/jhipster/index.js';
+import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/support/index.js';
+import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
+import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
-import { Entity } from '../types/index.js';
+import type { Entity } from '../../../lib/types/application/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import { fieldIsEnum } from './field-utils.js';
 import { fieldToReference } from './prepare-field.js';
@@ -149,7 +143,11 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   mutateData(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
   if (entityWithConfig.changelogDate) {
-    entityWithConfig.changelogDateForRecent = parseChangelog(String(entityWithConfig.changelogDate));
+    try {
+      entityWithConfig.changelogDateForRecent = parseChangelog(String(entityWithConfig.changelogDate));
+    } catch (error: unknown) {
+      throw new Error(`Error parsing changelog date for entity ${entityName}: ${(error as Error).message}`, { cause: error });
+    }
   }
 
   entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;
@@ -281,9 +279,9 @@ export default function prepareEntity(entityWithConfig, generator, application) 
 
 export function derivedPrimaryKeyProperties(primaryKey) {
   mutateData(primaryKey, {
-    hasUUID: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === UUID),
-    hasLong: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === LONG),
-    hasInteger: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === INTEGER),
+    hasUUID: primaryKey.fields?.some(field => field.fieldType === UUID),
+    hasLong: primaryKey.fields?.some(field => field.fieldType === LONG),
+    hasInteger: primaryKey.fields?.some(field => field.fieldType === INTEGER),
     typeUUID: primaryKey.type === UUID,
     typeString: primaryKey.type === STRING,
     typeLong: primaryKey.type === LONG,
@@ -610,7 +608,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
     entity.relationships.some(relationship => !relationship.id && relationship.persistableRelationship);
 
   entity.allReferences
-    .filter(reference => reference.relationship && reference.relationship.relatedField)
+    .filter(reference => reference.relationship?.relatedField)
     .forEach(reference => {
       reference.relatedReference = reference.relationship.relatedField.reference;
     });

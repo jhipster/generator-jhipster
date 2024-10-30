@@ -1,0 +1,5 @@
+[versions]
+nativeBuildTools = '0.10.3'
+
+[libraries]
+nativeGradlePlugin = { module = 'org.graalvm.buildtools:native-gradle-plugin', version.ref = 'nativeBuildTools' }

@@ -27,7 +27,11 @@ services:
     #   - ~/volumes/jhipster/<%= baseName %>/mariadb/:/var/lib/mariadb/
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_DATABASE=<%= baseName.toLowerCase() %>
+<%_ if (prodDatabasePassword) { _%>
+      - MARIADB_PASSWORD=<%- prodDatabasePassword %>
+<%_ } _%>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
@@ -38,3 +42,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+<%_ if (backendTypeSpringBoot && reactive) { _%>
+    labels:
+      org.springframework.boot.ignore: true
+<%_ } _%>

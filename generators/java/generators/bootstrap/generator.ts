@@ -20,14 +20,14 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../../../base-application/index.js';
 import { JAVA_COMPATIBLE_VERSIONS } from '../../../generator-constants.js';
 import {
-  packageInfoTransform,
-  generatedAnnotationTransform,
-  checkJava,
-  isReservedJavaKeyword,
-  matchMainJavaFiles,
-  javaMainPackageTemplatesBlock,
-  addJavaImport,
   addJavaAnnotation,
+  addJavaImport,
+  checkJava,
+  generatedAnnotationTransform,
+  isReservedJavaKeyword,
+  javaMainPackageTemplatesBlock,
+  matchMainJavaFiles,
+  packageInfoTransform,
 } from '../../support/index.js';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator {
@@ -61,7 +61,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
     return this.asConfiguringTaskGroup({
       checkConfig() {
         const { packageName } = this.jhipsterConfigWithDefaults;
-        const reservedKeywork = packageName.split('.').find(isReservedJavaKeyword);
+        const reservedKeywork = packageName!.split('.').find(isReservedJavaKeyword);
         if (reservedKeywork) {
           throw new Error(`The package name "${packageName}" contains a reserved Java keyword "${reservedKeywork}".`);
         }
@@ -75,6 +75,9 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      applicationDefaults({ application }) {
+        application.addPrettierExtensions?.(['java']);
+      },
       prepareJavaApplication({ application, source }) {
         source.hasJavaProperty = (property: string) => application.javaProperties![property] !== undefined;
         source.hasJavaManagedProperty = (property: string) => application.javaManagedProperties![property] !== undefined;
@@ -88,6 +91,19 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
             ...annotations.map(annotation => addJavaAnnotation(annotation)),
             ...editFileCallback,
           );
+      },
+      imperativeOrReactive({ applicationDefaults }) {
+        applicationDefaults({
+          optionalOrMono: ({ reactive }) => (reactive ? 'Mono' : 'Optional'),
+          optionalOrMonoOfNullable: ({ reactive }) => (reactive ? 'Mono.justOrEmpty' : 'Optional.ofNullable'),
+          optionalOrMonoClassPath: ({ reactive }) => (reactive ? 'reactor.core.publisher.Mono' : 'java.util.Optional'),
+          wrapMono:
+            ({ reactive }) =>
+            className =>
+              reactive ? `Mono<${className}>` : className,
+          listOrFlux: ({ reactive }) => (reactive ? 'Flux' : 'List'),
+          listOrFluxClassPath: ({ reactive }) => (reactive ? 'reactor.core.publisher.Flux' : 'java.util.List'),
+        });
       },
     });
   }
@@ -122,8 +138,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
 
         const { srcMainJava } = application;
         if (this.packageInfoFile && srcMainJava) {
-          const mainPackageMatch = matchMainJavaFiles(srcMainJava!);
-          const root = this.destinationPath(srcMainJava!);
+          const mainPackageMatch = matchMainJavaFiles(srcMainJava);
+          const root = this.destinationPath(srcMainJava);
           this.queueTransformStream(
             {
               name: 'adding package-info.java files',
@@ -169,6 +185,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
             javaMainPackageTemplatesBlock({
               templates: ['GeneratedByJHipster.java'],
             }),
+            { templates: ['.editorconfig.jhi.java'] },
           ],
           context: application,
         });

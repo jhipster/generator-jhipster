@@ -52,7 +52,7 @@ describe('Administration reducer tests', () => {
     expect(state).toMatchObject({
       loading: false,
       errorMessage: null,
-      totalItems: 0
+      totalItems: 0,
     });
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
     expect(isEmpty(state.gateway.routes));
@@ -98,9 +98,9 @@ describe('Administration reducer tests', () => {
         state => {
           expect(state).toMatchObject({
             errorMessage: null,
-            loading: true
+            loading: true,
           });
-        }
+        },
       );
     });
   });
@@ -130,7 +130,7 @@ describe('Administration reducer tests', () => {
         },
         {
           message: 'error',
-        }
+        },
       );
     });
   });
@@ -149,19 +149,20 @@ describe('Administration reducer tests', () => {
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
     it('should update state according to a successful fetch logs request', () => {
-      const payload = { data: {
+      const payload = {
+        data: {
           loggers: {
             main: {
-              effectiveLevel: 'WARN'
-            }
-          }
-        }
+              effectiveLevel: 'WARN',
+            },
+          },
+        },
       };
       const toTest = administration(undefined, { type: getLoggers.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
-        logs: payload.data
+        logs: payload.data,
       });
     });
 
@@ -216,8 +217,8 @@ describe('Administration reducer tests', () => {
         loading: false,
         configuration: {
           configProps: {},
-          env: payload.data
-        }
+          env: payload.data,
+        },
       });
     });
 <%_ } _%>

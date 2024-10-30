@@ -1,5 +1,5 @@
 import type Environment from 'yeoman-environment';
-import EnvironmentBuilder from './environment-builder.mjs';
+import type EnvironmentBuilder from './environment-builder.mjs';
 
 /**
  * @param args - positional arguments, a varidic argument is an array at last position.

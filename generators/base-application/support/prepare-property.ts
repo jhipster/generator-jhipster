@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 import { snakeCase, upperFirst } from 'lodash-es';
-import { mutateData } from '../../base/support/config.js';
+import { mutateData } from '../../../lib/utils/object.js';
+import type { Field } from '../../../lib/types/application/field.js';
+import type { Relationship } from '../../../lib/types/application/relationship.js';
 
-export const prepareProperty = (property: any) => {
+export const prepareProperty = (property: Field | Relationship) => {
   mutateData(property, {
     __override__: false,
     propertyNameCapitalized: ({ propertyName }) => upperFirst(propertyName),

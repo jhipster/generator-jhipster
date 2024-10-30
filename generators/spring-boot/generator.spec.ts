@@ -1,9 +1,9 @@
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
-import { defaultHelpers as helpers, runResult } from '../../testing/index.js';
-import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
 import Generator from '../server/index.js';
 
 import { filterBasicServerGenerators } from '../server/__test-support/index.js';
@@ -26,6 +26,7 @@ describe(`generator - ${generator}`, () => {
       await helpers
         .runJHipster(generator)
         .withJHipsterConfig({ authenticationType: 'jwt' })
+        .withMockedSource({ except: ['addTestSpringFactory'] })
         .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
     });
 
@@ -39,6 +40,7 @@ describe(`generator - ${generator}`, () => {
       await helpers
         .runJHipster(generator)
         .withJHipsterConfig({ authenticationType: 'oauth2' })
+        .withMockedSource({ except: ['addTestSpringFactory'] })
         .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
     });
 

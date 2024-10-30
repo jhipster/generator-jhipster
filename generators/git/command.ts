@@ -16,17 +16,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
-const command: JHipsterCommandDefinition = {
-  options: {
+const command = {
+  configs: {
     skipGit: {
       description: 'Skip git repository initialization',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
-  },
-  configs: {
+    forceGit: {
+      description: 'Force commit to git repository',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'generator',
+    },
+    commitMsg: {
+      description: 'Commit changes (implies forceGit)',
+      cli: {
+        type: String,
+        implies: {
+          forceGit: true,
+        },
+      },
+      scope: 'generator',
+    },
     monorepository: {
       description: 'Use monorepository',
       cli: {
@@ -35,6 +52,6 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
   },
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

@@ -1,14 +1,14 @@
-import { before, it, describe } from 'esmocha';
-import { defaultHelpers as helpers } from '../../testing/index.js';
+import { before, describe, it } from 'esmocha';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import {
   applicationTypes,
-  databaseTypes,
-  cacheTypes,
   authenticationTypes,
-  testFrameworkTypes,
-  clientFrameworkTypes,
   buildToolTypes,
-} from '../../jdl/jhipster/index.js';
+  cacheTypes,
+  clientFrameworkTypes,
+  databaseTypes,
+  testFrameworkTypes,
+} from '../../lib/jhipster/index.js';
 import { GENERATOR_APP } from '../generator-list.js';
 
 const { MONOLITH } = applicationTypes;
@@ -24,9 +24,8 @@ const mockedComposedGenerators = ['jhipster:common', 'jhipster:server', 'jhipste
 describe('generator - client - prompts', () => {
   describe('clientTestFrameworks prompt', () => {
     describe('with cypress value', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .runJHipster(GENERATOR_APP)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withAnswers({

@@ -24,7 +24,7 @@
  * @see org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
  * @returns hibernate SnakeCase in JHipster preferred style
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export function hibernateSnakeCase(value: string): string {
   let res = '';
   if (value) {

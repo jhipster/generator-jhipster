@@ -40,6 +40,9 @@ export default class FrontendPluginGenerator extends BaseApplicationGenerator {
           clientFrameworkAngular,
           clientFrameworkReact,
           clientFrameworkVue,
+          clientFrameworkBuiltIn,
+          clientBundlerVite,
+          clientBundlerWebpack,
           microfrontend,
           srcMainWebapp,
         } = application;
@@ -52,15 +55,20 @@ export default class FrontendPluginGenerator extends BaseApplicationGenerator {
           'tsconfig.json',
         ];
         if (clientFrameworkAngular) {
-          checksumIncludedFiles.push('tsconfig.app.json', 'webpack/*.*');
+          checksumIncludedFiles.push('tsconfig.app.json');
         } else if (clientFrameworkReact) {
-          checksumIncludedFiles.push('.postcss.config.js', 'webpack/*.*');
+          checksumIncludedFiles.push('.postcss.config.js');
         } else if (clientFrameworkVue) {
           checksumIncludedFiles.push('.postcssrc.js', 'tsconfig.app.json');
           if (microfrontend) {
+            checksumIncludedFiles.push('module-federation.config.cjs');
+          }
+        }
+        if (clientFrameworkBuiltIn) {
+          if (clientBundlerWebpack) {
             checksumIncludedFiles.push('webpack/*.*');
-          } else {
-            checksumIncludedFiles.push('vite.config.ts');
+          } else if (clientBundlerVite) {
+            checksumIncludedFiles.push('vite.config.mts');
           }
         }
         source.addMavenDefinition!({

@@ -21,21 +21,21 @@ import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import BaseGenerator from '../base/index.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { GenericTaskGroup, GenericSourceTypeDefinition } from '../base/tasks.js';
-import { SpringBootSourceType } from '../server/types.js';
-import { ClientSourceType } from '../client/types.js';
-import { I18nApplication } from '../languages/types.js';
-import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
-import { mutateData } from '../base/support/config.js';
+import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
+import { mutateData } from '../../lib/utils/object.js';
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
   GENERATOR_BOOTSTRAP_APPLICATION_BASE,
   GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
   GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
 } from '../generator-list.js';
+import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/tasks.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { Entity } from '../../lib/types/application/entity.js';
+import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type SharedData from '../base/shared-data.js';
 import { getEntitiesFromDir } from './support/index.js';
-import type { BaseApplication, CommonClientServerApplication } from './types.js';
-import type { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from './tasks.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 
 const {
@@ -71,24 +71,14 @@ const {
 
 const asPriority = BaseGenerator.asPriority;
 
-export type BaseApplicationSource = Record<string, (...args: any[]) => any> & SpringBootSourceType & ClientSourceType & I18nApplication;
-
-export type JHipsterApplication = BaseApplication & Partial<CommonClientServerApplication>;
-
-export type GeneratorDefinition = BaseApplicationGeneratorDefinition<
-  GenericApplicationDefinition<JHipsterApplication> & GenericSourceTypeDefinition<BaseApplicationSource>
->;
-
 /**
  * This is the base class for a generator that generates entities.
  */
 export default class BaseApplicationGenerator<
-  Definition extends BaseApplicationGeneratorDefinition<{
-    applicationType: any;
-    entityType: any;
-    sourceType: any;
-  }> = GeneratorDefinition,
-> extends BaseGenerator<Definition> {
+  E extends Entity = Entity,
+  A extends ApplicationType<E> = ApplicationType<E>,
+  TaskTypes extends DefaultTaskTypes<any, any> = DefaultTaskTypes<E, A>,
+> extends BaseGenerator<TaskTypes> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
   static LOADING_ENTITIES = asPriority(LOADING_ENTITIES);
@@ -104,6 +94,9 @@ export default class BaseApplicationGenerator<
   static WRITING_ENTITIES = asPriority(WRITING_ENTITIES);
 
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
+
+  declare jhipsterConfig: ApplicationConfiguration & Record<string, any>;
+  declare sharedData: SharedData<A>;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, features);
@@ -194,16 +187,16 @@ export default class BaseApplicationGenerator<
   /**
    * get sorted list of entities according to changelog date (i.e. the order in which they were added)
    */
-  getExistingEntities(): { name: string; definition: Record<string, any> }[] {
+  getExistingEntities(): { name: string; definition: E }[] {
     function isBefore(e1, e2) {
       return (e1.definition.annotations?.changelogDate ?? 0) - (e2.definition.annotations?.changelogDate ?? 0);
     }
 
     const configDir = this.getEntitiesConfigPath();
 
-    const entities: { name: string; definition: Record<string, any> }[] = [];
+    const entities: { name: string; definition: E }[] = [];
     for (const entityName of [...new Set(((this.jhipsterConfig.entities as string[]) || []).concat(getEntitiesFromDir(configDir)))]) {
-      const definition = this.getEntityConfig(entityName)?.getAll();
+      const definition: E = this.getEntityConfig(entityName)?.getAll() as unknown as E;
       if (definition) {
         entities.push({ name: entityName, definition });
       }
@@ -218,118 +211,118 @@ export default class BaseApplicationGenerator<
    *
    * Configuring each entity should configure entities.
    */
-  get configuringEachEntity(): GenericTaskGroup<this, Definition['configuringEachEntityTaskParam']> {
-    return this.asConfiguringEachEntityTaskGroup({});
+  get configuringEachEntity() {
+    return {};
   }
 
-  get preparingEachEntity(): GenericTaskGroup<this, Definition['preparingEachEntityTaskParam']> {
-    return this.asPreparingEachEntityTaskGroup({});
-  }
-
-  /**
-   * Priority API stub for blueprints.
-   */
-  get preparingEachEntityField(): GenericTaskGroup<this, Definition['preparingEachEntityFieldTaskParam']> {
-    return this.asPreparingEachEntityFieldTaskGroup({});
+  get preparingEachEntity() {
+    return {};
   }
 
   /**
    * Priority API stub for blueprints.
    */
-  get preparingEachEntityRelationship(): GenericTaskGroup<this, Definition['preparingEachEntityRelationshipTaskParam']> {
-    return this.asPreparingEachEntityRelationshipTaskGroup({});
+  get preparingEachEntityField() {
+    return {};
   }
 
   /**
    * Priority API stub for blueprints.
    */
-  get postPreparingEachEntity(): GenericTaskGroup<this, Definition['postPreparingEachEntityTaskParam']> {
-    return this.asPostPreparingEachEntityTaskGroup({});
+  get preparingEachEntityRelationship() {
+    return {};
   }
 
   /**
    * Priority API stub for blueprints.
    */
-  get writingEntities(): GenericTaskGroup<this, Definition['writingEntitiesTaskParam']> {
-    return this.asWritingEntitiesTaskGroup({});
+  get postPreparingEachEntity() {
+    return {};
   }
 
   /**
    * Priority API stub for blueprints.
    */
-  get postWritingEntities(): GenericTaskGroup<this, Definition['postWritingEntitiesTaskParam']> {
-    return this.asPostWritingEntitiesTaskGroup({});
+  get writingEntities() {
+    return {};
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   */
+  get postWritingEntities() {
+    return {};
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asConfiguringEachEntityTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['configuringEachEntityTaskParam']>,
-  ): GenericTaskGroup<this, Definition['configuringEachEntityTaskParam']> {
+  asConfiguringEachEntityTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['ConfiguringEachEntityTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['ConfiguringEachEntityTaskParam'], K> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asLoadingEntitiesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['loadingEntitiesTaskParam']>,
-  ): GenericTaskGroup<this, Definition['loadingEntitiesTaskParam']> {
+  asLoadingEntitiesTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['LoadingEntitiesTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['LoadingEntitiesTaskParam'], K> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingEachEntityTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['preparingEachEntityTaskParam']>,
-  ): GenericTaskGroup<this, Definition['preparingEachEntityTaskParam']> {
+  asPreparingEachEntityTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PreparingEachEntityTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['PreparingEachEntityTaskParam'], K> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingEachEntityFieldTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['preparingEachEntityFieldTaskParam']>,
-  ): GenericTaskGroup<this, Definition['preparingEachEntityFieldTaskParam']> {
+  asPreparingEachEntityFieldTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PreparingEachEntityFieldTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['PreparingEachEntityFieldTaskParam'], K> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingEachEntityRelationshipTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['preparingEachEntityRelationshipTaskParam']>,
-  ): GenericTaskGroup<this, Definition['preparingEachEntityRelationshipTaskParam']> {
+  asPreparingEachEntityRelationshipTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PreparingEachEntityRelationshipTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['PreparingEachEntityRelationshipTaskParam'], K> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostPreparingEachEntityTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['postPreparingEachEntityTaskParam']>,
-  ): GenericTaskGroup<this, Definition['postPreparingEachEntityTaskParam']> {
+  asPostPreparingEachEntityTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PostPreparingEachEntityTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['PostPreparingEachEntityTaskParam'], K> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asWritingEntitiesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['writingEntitiesTaskParam']>,
-  ): GenericTaskGroup<this, Definition['writingEntitiesTaskParam']> {
+  asWritingEntitiesTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['WritingEntitiesTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['WritingEntitiesTaskParam'], K> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostWritingEntitiesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['postWritingEntitiesTaskParam']>,
-  ): GenericTaskGroup<this, Definition['postWritingEntitiesTaskParam']> {
+  asPostWritingEntitiesTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PostWritingEntitiesTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['PostWritingEntitiesTaskParam'], K> {
     return taskGroup;
   }
 
@@ -459,7 +452,6 @@ export default class BaseApplicationGenerator<
     }
     const entitiesToLoad = [...new Set([...builtInEntities, ...this.getExistingEntityNames()])];
     return entitiesToLoad.map(entityName => {
-      // eslint-disable-next-line @typescript-eslint/no-this-alias
       const generator = this;
       if (!this.sharedData.hasEntity(entityName)) {
         this.sharedData.setEntity(entityName, { name: entityName });

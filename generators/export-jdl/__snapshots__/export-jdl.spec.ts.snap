@@ -26,7 +26,6 @@ exports[`generator - export-jdl exports entities to a JDL file with file argumen
     serverPort 8080
     skipClient true
     skipServer true
-    testFrameworks []
     websocket no
   }
 
@@ -145,7 +144,6 @@ exports[`generator - export-jdl exports entities to a JDL file without argument 
     serverPort 8080
     skipClient true
     skipServer true
-    testFrameworks []
     websocket no
   }
 

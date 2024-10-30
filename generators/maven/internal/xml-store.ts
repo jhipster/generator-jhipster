@@ -18,21 +18,23 @@
  */
 
 import assert from 'assert';
-import { XMLParser, XMLBuilder, XmlBuilderOptions, X2jOptions } from 'fast-xml-parser';
+import type { X2jOptions, XmlBuilderOptions } from 'fast-xml-parser';
+import { XMLBuilder, XMLParser } from 'fast-xml-parser';
 import { merge } from 'lodash-es';
 
 const defaultXmlCommonOptions: Partial<X2jOptions & XmlBuilderOptions> = {
   ignoreAttributes: false,
   attributeNamePrefix: '@@',
   commentPropName: '#comment',
-  parseAttributeValue: false,
 };
 
-const defaultXmlParserOptions: Partial<X2jOptions> = {
+export const defaultXmlParserOptions: Partial<X2jOptions> = {
+  parseAttributeValue: false,
+  parseTagValue: false,
   ...defaultXmlCommonOptions,
 };
 
-const defaultXmlBuildOptions: Partial<XmlBuilderOptions> = {
+export const defaultXmlBuildOptions: Partial<XmlBuilderOptions> = {
   ...defaultXmlCommonOptions,
   suppressBooleanAttributes: false,
   suppressEmptyNode: true,

@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -39,7 +38,7 @@ class RandexpWithFaker extends Randexp {
   }
 }
 
-class FakerWithRandexp extends Faker {
+export class FakerWithRandexp extends Faker {
   createRandexp(regexp: string | RegExp, flags?: string) {
     return new RandexpWithFaker(regexp, flags, this);
   }
@@ -50,7 +49,7 @@ class FakerWithRandexp extends Faker {
  * @param nativeLanguage - native language
  * @returns Faker instance
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export async function createFaker(nativeLanguage = 'en') {
   nativeLanguage = languageToJavaLanguage(nativeLanguage);
   let locale;
@@ -58,11 +57,10 @@ export async function createFaker(nativeLanguage = 'en') {
   // We need a Faker instance for each entity, to build additional fake instances, use the locale from the exported localized faker instance.
   // See https://github.com/faker-js/faker/pull/642
   try {
-    // eslint-disable-next-line import/no-dynamic-require, quotes
     locale = (await import(`@faker-js/faker`))[nativeLanguage];
-  } catch (error) {
+  } catch {
     // Faker not implemented for the native language, fallback to en.
-    // eslint-disable-next-line import/no-unresolved, import/no-dynamic-require
+
     locale = (await import('@faker-js/faker')).en;
   }
 

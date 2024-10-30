@@ -49,8 +49,7 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
     public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
         return new ContextCustomizer() {
             @Override
-            public void customizeContext(ConfigurableApplicationContext context,
-                    MergedContextConfiguration mergedConfig) {
+            public void customizeContext(ConfigurableApplicationContext context, MergedContextConfiguration mergedConfig) {
                 ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
                 TestPropertyValues testValues = TestPropertyValues.empty();
                 EmbeddedSQL sqlAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedSQL.class);

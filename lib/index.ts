@@ -6,14 +6,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export const isDistFolder = () => {
-  return basename(join(__dirname, '..')) === 'dist';
+  return basename(dirname(__dirname)) === 'dist';
 };
 
 export const getPackageRoot = (relativePath?: string) => {
-  const sourceRoot = join(__dirname, '..');
-  const packageDirectory = isDistFolder() ? join(sourceRoot, '..') : sourceRoot;
+  const sourceRoot = dirname(__dirname);
+  const packageDirectory = isDistFolder() ? dirname(sourceRoot) : sourceRoot;
   return relativePath ? join(packageDirectory, relativePath) : packageDirectory;
 };
 
-// eslint-disable-next-line import/prefer-default-export
+export const getSourceRoot = (relativePath?: string) => {
+  const sourceRoot = dirname(__dirname);
+  return relativePath ? join(sourceRoot, relativePath) : sourceRoot;
+};
+
 export const packageJson = JSON.parse(readFileSync(getPackageRoot('package.json')).toString());

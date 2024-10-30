@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 import { existsSync, opendirSync } from 'fs';
-import { extname, basename } from 'path';
+import { basename, extname } from 'path';
 
-// eslint-disable-next-line import/prefer-default-export
 export function getEntitiesFromDir(configDir: string): string[] {
   if (!existsSync(configDir)) {
     return [];

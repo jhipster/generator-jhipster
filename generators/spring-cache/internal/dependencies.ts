@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { JavaDependency, JavaDependencyVersion } from '../../java/types.js';
+import type { JavaDependency, JavaDependencyVersion } from '../../java/types.js';
 
 const javaxCacheApi = {
   groupId: 'javax.cache',
@@ -35,7 +35,6 @@ type CacheProviderDependencies = {
   hibernateCache?: CacheProviderDefinition;
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const getCacheProviderMavenDefinition: (
   cacheProvider: string,
   javaDependencies: Record<string, string>,

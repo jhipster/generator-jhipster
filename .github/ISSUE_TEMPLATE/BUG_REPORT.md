@@ -41,27 +41,20 @@ Which version of JHipster are you using, is it a regression?
 
 ##### **JHipster configuration**
 
-<!--
-To provide all information we need, you should run `jhipster info` in the project root folder, and
+To provide all information we need, you should run `jhipster info` in the project root folder (or workspaces root for microservices), and
 copy/paste the result here.
-The `.yo-rc.json` file generated in the root folder is mandatory for bug reports. This will help us to replicate the scenario.
-You should remove any sensitive information like the rememberMe key or the jwtSecretKey key.
----
-If you have a JDL please wrap it in below structure
+`jhipster info` removes sentitive information like rememberKey, jwtSecretKey. Double check if there is any other sensitive info.
+
+As alternative you can add a JDL wrapped in below structure
+
   <details>
   <summary>JDL definitions</summary>
   <pre>
      JDL content here
   </pre>
   </details>
--->
 
-##### **Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**
-
-<!--
-If the error is during an entity creation or associated with a specific entity.
-If you are using JDL, please share that configuration as well.
--->
+The information is mandatory for bug reports. This will allow us to use automated tests and genarate the broken sample using `jhipster from-issue` command.
 
 ##### **Browsers and Operating System**
 

@@ -19,11 +19,8 @@
 import type { WriteFileSection } from '../base/api.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
 import { moveToJavaPackageSrcDir } from '../server/support/index.js';
-import { CommonClientServerApplication } from '../base-application/types.js';
-import type LiquibaseGenerator from './generator.js';
 
-// eslint-disable-next-line import/prefer-default-export
-export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, CommonClientServerApplication> = {
+export const liquibaseFiles: WriteFileSection = {
   liquibase: [
     {
       condition: ctx => ctx.backendTypeSpringBoot,
@@ -62,6 +59,14 @@ export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, CommonClientSe
       condition: generator => Boolean(generator.generateBuiltInAuthorityEntity),
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/data/authority.csv'],
+    },
+  ],
+  graalvm: [
+    {
+      condition: ctx => ctx.graalvmSupport,
+      transform: false,
+      path: SERVER_MAIN_RES_DIR,
+      templates: ['META-INF/native-image/liquibase/reflect-config.json'],
     },
   ],
 };

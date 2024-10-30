@@ -137,8 +137,8 @@ public class <%= persistClass %> <&- fragments.extendsSection() -&>implements Se
 for (relationship of relationships) {
   if (typeof relationship.fieldApiDescription) { _%>
 <%- relationship.relationshipJavadoc %>
-    <%_ if (!dtoMapstruct && relationship.relationshipyApiDescription) { _%>
-    @Schema(description = "<%- relationship.relationshipyApiDescription %>")
+    <%_ if (!dtoMapstruct && relationship.relationshipApiDescription) { _%>
+    @Schema(description = "<%- relationship.relationshipApiDescription %>")
     <%_ } _%>
   <%_ } _%>
 <&- fragments.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection() -&>

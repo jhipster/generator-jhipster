@@ -26,8 +26,9 @@
  });
 _&>
 
-const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const { ModuleFederationPlugin } = require('@module-federation/enhanced/webpack');
 <&- fragments.importsSection() &>
+<%_ if (!clientFrameworkVue) { _%>
 const packageJson = require('../package.json');
 // Microfrontend api, should match across gateway and microservices.
 const apiVersion = '0.0.1';
@@ -41,6 +42,7 @@ const shareDependencies = ({ skipList = [] } = {}) =>
       .filter(([dependency]) => !skipList.includes(dependency))
       .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
   );
+<%_ } _%>
 
 module.exports = () => {
   return {
@@ -51,18 +53,27 @@ module.exports = () => {
     },
 <&- fragments.configSection() &>
     plugins: [
-      new ModuleFederationPlugin({
-<%_ if (applicationTypeMicroservice) { _%>
+      new ModuleFederationPlugin(
+<%_ if (clientFrameworkVue) { _%>
+        require('../module-federation.config.cjs'),
+<%_ } else { -%>
+        {
+  <%_ if (applicationTypeMicroservice) { _%>
         name: '<%= lowercaseBaseName %>',
         filename: 'remoteEntry.js',
-<%_ } _%>
+  <%_ } _%>
         shareScope: 'default',
+        dts: false,
+        manifest: false,
 <&- fragments.moduleFederationSection() &>
-      }),
+      }
+<%_ } -%>
+      ),
 <&- fragments.pluginsSection() &>
     ],
     output: {
       publicPath: 'auto',
+      scriptType: 'text/javascript',
     },
   };
 };

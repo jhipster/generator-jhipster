@@ -46,32 +46,30 @@ export default class CucumberGenerator extends BaseApplicationGenerator {
     return this.asPostWritingTaskGroup({
       addDependencies({ application, source }) {
         const { javaDependencies, gradleBuildSrc } = application;
-        source.addJavaDependencies?.(
-          [
-            {
-              groupId: 'io.cucumber',
-              artifactId: 'cucumber-bom',
-              version: javaDependencies!['cucumber-bom'],
-              type: 'pom',
-              scope: 'import',
-            },
-            { groupId: 'io.cucumber', artifactId: 'cucumber-junit-platform-engine', scope: 'test' },
-            { groupId: 'io.cucumber', artifactId: 'cucumber-java', scope: 'test' },
-            { groupId: 'io.cucumber', artifactId: 'cucumber-spring', scope: 'test' },
-            { groupId: 'org.junit.platform', artifactId: 'junit-platform-console', scope: 'test' },
-            { groupId: 'org.testng', artifactId: 'testng', scope: 'test', version: javaDependencies!.testng },
-          ],
+        source.addJavaDefinitions?.(
           { gradleFile: `${gradleBuildSrc}src/main/groovy/jhipster.cucumber-conventions.gradle` },
-        );
-
-        if (application.buildToolMaven) {
-          source.addMavenDefinition?.({
-            plugins: [{ groupId: 'org.apache.maven.plugins', artifactId: 'maven-antrun-plugin' }],
-            pluginManagement: [
+          {
+            dependencies: [
               {
-                groupId: 'org.apache.maven.plugins',
-                artifactId: 'maven-antrun-plugin',
-                additionalContent: `
+                groupId: 'io.cucumber',
+                artifactId: 'cucumber-bom',
+                version: javaDependencies!['cucumber-bom'],
+                type: 'pom',
+                scope: 'import',
+              },
+              { groupId: 'io.cucumber', artifactId: 'cucumber-junit-platform-engine', scope: 'test' },
+              { groupId: 'io.cucumber', artifactId: 'cucumber-java', scope: 'test' },
+              { groupId: 'io.cucumber', artifactId: 'cucumber-spring', scope: 'test' },
+              { groupId: 'org.junit.platform', artifactId: 'junit-platform-console', scope: 'test' },
+              { groupId: 'org.testng', artifactId: 'testng', scope: 'test', version: javaDependencies!.testng },
+            ],
+            mavenDefinition: {
+              plugins: [{ groupId: 'org.apache.maven.plugins', artifactId: 'maven-antrun-plugin' }],
+              pluginManagement: [
+                {
+                  groupId: 'org.apache.maven.plugins',
+                  artifactId: 'maven-antrun-plugin',
+                  additionalContent: `
 <executions>
   <execution>
   <!--Work around. Surefire does not use JUnit's Test Engine discovery functionality -->
@@ -105,10 +103,11 @@ export default class CucumberGenerator extends BaseApplicationGenerator {
   </execution>
 </executions>
 `,
-              },
-            ],
-          });
-        }
+                },
+              ],
+            },
+          },
+        );
 
         if (application.buildToolGradle) {
           source.addGradlePlugin?.({ id: 'jhipster.cucumber-conventions' });

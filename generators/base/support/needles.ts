@@ -18,8 +18,8 @@
  */
 import assert from 'assert';
 import { escapeRegExp, kebabCase } from 'lodash-es';
-import CoreGenerator from '../../base-core/index.js';
-import { CascatedEditFileCallback, EditFileCallback } from '../api.js';
+import type CoreGenerator from '../../base-core/index.js';
+import type { CascatedEditFileCallback, EditFileCallback, NeedleCallback } from '../api.js';
 import { joinCallbacks } from './write-files.js';
 
 export type NeedleInsertion = {
@@ -210,7 +210,7 @@ export const createNeedleCallback = <Generator extends CoreGenerator = CoreGener
       return newContent;
     }
     const message = `Missing ${optional ? 'optional' : 'required'} jhipster-needle ${needle} not found at '${filePath}'`;
-    if (optional) {
+    if (optional && this) {
       this.log.warn(message);
       return content;
     }
@@ -223,23 +223,33 @@ export const createNeedleCallback = <Generator extends CoreGenerator = CoreGener
  *
  * @param this - generator if provided, editFile will be executed
  */
+export function createBaseNeedle(
+  options: Omit<NeedleFileInsertion, 'filePath' | 'needle' | 'contentToAdd'>,
+  needles: Record<string, string>,
+): NeedleCallback;
+export function createBaseNeedle(needles: Record<string, string>): NeedleCallback;
+export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator>(
+  this: Generator,
+  options: Omit<NeedleFileInsertion, 'filePath' | 'needle' | 'contentToAdd'> & { filePath: string },
+  needles: Record<string, string>,
+): CascatedEditFileCallback<Generator>;
 export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator>(
   this: Generator | void,
-  options: NeedleFileInsertion | Record<string, string>,
+  options: Omit<NeedleFileInsertion, 'filePath' | 'needle' | 'contentToAdd'> | Record<string, string>,
   needles?: Record<string, string>,
 ): EditFileCallback<Generator> | CascatedEditFileCallback<Generator> {
   const actualNeedles = needles === undefined ? (options as Record<string, string>) : needles;
   const actualOptions: Partial<NeedleFileInsertion> | undefined = needles === undefined ? {} : (options as NeedleFileInsertion);
 
   assert(actualNeedles, 'needles is required');
-  const { filePath, optional = false, ignoreWhitespaces = true } = actualOptions;
-  let { needlesPrefix } = actualOptions;
-  needlesPrefix = needlesPrefix ? `${needlesPrefix}-` : '';
+  const { needlesPrefix, filePath, ...needleOptions } = actualOptions;
+  needleOptions.optional = needleOptions.optional ?? false;
+  needleOptions.ignoreWhitespaces = needleOptions.ignoreWhitespaces ?? true;
 
   const callbacks = Object.entries(actualNeedles)
     .filter(([_key, contentToAdd]) => contentToAdd)
     .map(([key, contentToAdd]) =>
-      createNeedleCallback({ needle: `${needlesPrefix}${kebabCase(key)}`, contentToAdd, optional, ignoreWhitespaces }),
+      createNeedleCallback({ ...needleOptions, needle: `${needlesPrefix ? `${needlesPrefix}-` : ''}${kebabCase(key)}`, contentToAdd }),
     );
 
   assert(callbacks.length > 0, 'At least 1 needle is required');

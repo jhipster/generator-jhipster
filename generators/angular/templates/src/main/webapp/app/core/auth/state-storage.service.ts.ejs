@@ -20,10 +20,10 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class StateStorageService {
-  private previousUrlKey = 'previousUrl';
-  private authenticationKey = '<%= jhiPrefixDashed %>-authenticationToken';
+  private readonly previousUrlKey = 'previousUrl';
+  private readonly authenticationKey = '<%= jhiPrefixDashed %>-authenticationToken';
 <%_ if (enableTranslation) { _%>
-  private localeKey = 'locale';
+  private readonly localeKey = 'locale';
 <%_ } _%>
 
   storeUrl(url: string): void {

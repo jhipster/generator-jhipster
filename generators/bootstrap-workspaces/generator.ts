@@ -18,8 +18,6 @@
  */
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
-import command from './command.js';
-
 export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   sharedWorkspaces!: any;
   customWorkspacesConfig?: boolean;
@@ -27,7 +25,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   async beforeQueue() {
     this.sharedWorkspaces = this.getSharedApplication().sharedWorkspaces;
     this.sharedWorkspaces.existingWorkspaces = this.sharedWorkspaces.existingWorkspaces ?? Boolean(this.jhipsterConfig.appsFolders);
-    this.parseJHipsterOptions(command.options);
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

@@ -22,22 +22,21 @@ import chalk from 'chalk';
 import semver from 'semver';
 
 import type { ComposeOptions } from 'yeoman-generator';
+import { union } from 'lodash-es';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
+import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import { packageNameToNamespace } from './support/index.js';
-import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from './internal/index.js';
+import { loadBlueprintsFromConfiguration, mergeBlueprints, normalizeBlueprintName, parseBluePrints } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
-import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';
 import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.js';
 
 /**
  * Base class that contains blueprints support.
  */
-export default class JHipsterBaseBlueprintGenerator<
-  Definition extends BaseGeneratorDefinition = BaseGeneratorDefinition,
-> extends CoreGenerator {
+export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTypes = BaseTaskTypes> extends CoreGenerator {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
   delegateToBlueprint?: boolean;
@@ -101,11 +100,18 @@ export default class JHipsterBaseBlueprintGenerator<
   }
 
   /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asAnyTaskGroup<const K extends string>(taskGroup: GenericTaskGroup<this, any, K>): GenericTaskGroup<any, any, K> {
+    return taskGroup;
+  }
+
+  /**
    * Priority API stub for blueprints.
    *
    * Initializing priority is used to show logo and tasks related to preparing for prompts, like loading constants.
    */
-  get initializing(): GenericTaskGroup<this, Definition['initializingTaskParam']> {
+  get initializing() {
     return this.asInitializingTaskGroup(this._initializing());
   }
 
@@ -120,9 +126,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asInitializingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['initializingTaskParam']>,
-  ): GenericTaskGroup<this, Definition['initializingTaskParam']> {
+  asInitializingTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['InitializingTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['InitializingTaskParam'], K> {
     return taskGroup;
   }
 
@@ -131,8 +137,8 @@ export default class JHipsterBaseBlueprintGenerator<
    *
    * Prompting priority is used to prompt users for configuration values.
    */
-  get prompting(): GenericTaskGroup<this, Definition['promptingTaskParam']> {
-    return this.asPromptingTaskGroup(this._prompting());
+  get prompting() {
+    return this._prompting();
   }
 
   /**
@@ -146,9 +152,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPromptingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['promptingTaskParam']>,
-  ): GenericTaskGroup<this, Definition['promptingTaskParam']> {
+  asPromptingTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PromptingTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['PromptingTaskParam'], K> {
     return taskGroup;
   }
 
@@ -157,8 +163,8 @@ export default class JHipsterBaseBlueprintGenerator<
    *
    * Configuring priority is used to customize and validate the configuration.
    */
-  get configuring(): GenericTaskGroup<this, Definition['configuringTaskParam']> {
-    return this.asConfiguringTaskGroup(this._configuring());
+  get configuring() {
+    return this._configuring();
   }
 
   /**
@@ -172,9 +178,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asConfiguringTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['configuringTaskParam']>,
-  ): GenericTaskGroup<this, Definition['configuringTaskParam']> {
+  asConfiguringTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['ConfiguringTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['ConfiguringTaskParam'], K> {
     return taskGroup;
   }
 
@@ -183,8 +189,8 @@ export default class JHipsterBaseBlueprintGenerator<
    *
    * Composing should be used to compose with others generators.
    */
-  get composing(): GenericTaskGroup<this, Definition['composingTaskParam']> {
-    return this.asComposingTaskGroup(this._composing());
+  get composing() {
+    return this._composing();
   }
 
   /**
@@ -198,9 +204,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asComposingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['composingTaskParam']>,
-  ): GenericTaskGroup<this, Definition['composingTaskParam']> {
+  asComposingTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['ComposingTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['ComposingTaskParam'], K> {
     return taskGroup;
   }
 
@@ -209,16 +215,16 @@ export default class JHipsterBaseBlueprintGenerator<
    *
    * ComposingComponent priority should be used to handle component configuration order.
    */
-  get composingComponent(): GenericTaskGroup<this, Definition['composingTaskParam']> {
+  get composingComponent(): any {
     return {};
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asComposingComponentTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['composingTaskParam']>,
-  ): GenericTaskGroup<this, Definition['composingTaskParam']> {
+  asComposingComponentTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['ComposingTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['ComposingTaskParam'], K> {
     return taskGroup;
   }
 
@@ -228,7 +234,7 @@ export default class JHipsterBaseBlueprintGenerator<
    * Loading should be used to load application configuration from jhipster configuration.
    * Before this priority the configuration should be considered dirty, while each generator configures itself at configuring priority, another generator composed at composing priority can still change it.
    */
-  get loading(): GenericTaskGroup<this, Definition['loadingTaskParam']> {
+  get loading(): any {
     return this.asLoadingTaskGroup(this._loading());
   }
 
@@ -243,9 +249,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asLoadingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['loadingTaskParam']>,
-  ): GenericTaskGroup<this, Definition['loadingTaskParam']> {
+  asLoadingTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['LoadingTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['LoadingTaskParam'], K> {
     return taskGroup;
   }
 
@@ -254,8 +260,8 @@ export default class JHipsterBaseBlueprintGenerator<
    *
    * Preparing should be used to generate derived properties.
    */
-  get preparing(): GenericTaskGroup<this, Definition['preparingTaskParam']> {
-    return this.asPreparingTaskGroup(this._preparing());
+  get preparing() {
+    return this._preparing();
   }
 
   /**
@@ -269,9 +275,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['preparingTaskParam']>,
-  ): GenericTaskGroup<this, Definition['preparingTaskParam']> {
+  asPreparingTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PreparingTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['PreparingTaskParam'], K> {
     return taskGroup;
   }
 
@@ -280,16 +286,16 @@ export default class JHipsterBaseBlueprintGenerator<
    *
    * Preparing should be used to generate derived properties.
    */
-  get postPreparing(): GenericTaskGroup<this, Definition['preparingTaskParam']> {
-    return this.asPreparingTaskGroup({});
+  get postPreparing() {
+    return {};
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostPreparingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['postPreparingTaskParam']>,
-  ): GenericTaskGroup<this, Definition['postPreparingTaskParam']> {
+  asPostPreparingTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PostPreparingTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['PostPreparingTaskParam'], K> {
     return taskGroup;
   }
 
@@ -298,8 +304,8 @@ export default class JHipsterBaseBlueprintGenerator<
    *
    * Default priority should used as misc customizations.
    */
-  get default(): GenericTaskGroup<this, Definition['defaultTaskParam']> {
-    return this.asDefaultTaskGroup(this._default());
+  get default() {
+    return this._default();
   }
 
   /**
@@ -313,9 +319,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asDefaultTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['defaultTaskParam']>,
-  ): GenericTaskGroup<this, Definition['defaultTaskParam']> {
+  asDefaultTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['DefaultTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['DefaultTaskParam'], K> {
     return taskGroup;
   }
 
@@ -324,8 +330,8 @@ export default class JHipsterBaseBlueprintGenerator<
    *
    * Writing priority should used to write files.
    */
-  get writing(): GenericTaskGroup<this, Definition['writingTaskParam']> {
-    return this.asWritingTaskGroup(this._writing());
+  get writing() {
+    return this._writing();
   }
 
   /**
@@ -339,9 +345,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asWritingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['writingTaskParam']>,
-  ): GenericTaskGroup<this, Definition['writingTaskParam']> {
+  asWritingTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['WritingTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['WritingTaskParam'], K> {
     return taskGroup;
   }
 
@@ -350,8 +356,8 @@ export default class JHipsterBaseBlueprintGenerator<
    *
    * PostWriting priority should used to customize files.
    */
-  get postWriting(): GenericTaskGroup<this, Definition['postWritingTaskParam']> {
-    return this.asPostWritingTaskGroup(this._postWriting());
+  get postWriting() {
+    return this._postWriting();
   }
 
   /**
@@ -365,9 +371,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostWritingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['postWritingTaskParam']>,
-  ): GenericTaskGroup<this, Definition['postWritingTaskParam']> {
+  asPostWritingTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PostWritingTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['PostWritingTaskParam'], K> {
     return taskGroup;
   }
 
@@ -376,8 +382,8 @@ export default class JHipsterBaseBlueprintGenerator<
    *
    * Install priority should used to prepare the project.
    */
-  get install(): GenericTaskGroup<this, Definition['installTaskParam']> {
-    return this.asInstallTaskGroup(this._install());
+  get install() {
+    return this._install();
   }
 
   /**
@@ -391,9 +397,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asInstallTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['installTaskParam']>,
-  ): GenericTaskGroup<this, Definition['installTaskParam']> {
+  asInstallTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['InstallTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['InstallTaskParam'], K> {
     return taskGroup;
   }
 
@@ -402,8 +408,8 @@ export default class JHipsterBaseBlueprintGenerator<
    *
    * PostWriting priority should used to customize files.
    */
-  get postInstall(): GenericTaskGroup<this, Definition['postInstallTaskParam']> {
-    return this.asPostInstallTaskGroup(this._postInstall());
+  get postInstall() {
+    return this._postInstall();
   }
 
   /**
@@ -417,9 +423,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostInstallTaskGroup(
-    taskGroup: GenericTaskGroup<this, Definition['postInstallTaskParam']>,
-  ): GenericTaskGroup<this, Definition['postInstallTaskParam']> {
+  asPostInstallTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PostInstallTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['PostInstallTaskParam'], K> {
     return taskGroup;
   }
 
@@ -428,8 +434,8 @@ export default class JHipsterBaseBlueprintGenerator<
    *
    * End priority should used to say good bye and print instructions.
    */
-  get end(): GenericTaskGroup<this, Definition['endTaskParam']> {
-    return this.asEndTaskGroup(this._end());
+  get end() {
+    return this._end();
   }
 
   /**
@@ -443,7 +449,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asEndTaskGroup(taskGroup: GenericTaskGroup<this, Definition['endTaskParam']>): GenericTaskGroup<this, Definition['endTaskParam']> {
+  asEndTaskGroup<const K extends string>(
+    taskGroup: GenericTaskGroup<this, TaskTypes['EndTaskParam'], K>,
+  ): GenericTaskGroup<any, TaskTypes['EndTaskParam'], K> {
     return taskGroup;
   }
 
@@ -454,7 +462,7 @@ export default class JHipsterBaseBlueprintGenerator<
   protected async composeWithBlueprints(subGen?: string, options?: ComposeOptions) {
     if (subGen === undefined) {
       const { namespace } = this.options;
-      if (!namespace || !namespace.startsWith('jhipster:')) {
+      if (!namespace?.startsWith('jhipster:')) {
         throw new Error(`Generator is not blueprintable ${namespace}`);
       }
       subGen = namespace.substring('jhipster:'.length);
@@ -539,12 +547,13 @@ export default class JHipsterBaseBlueprintGenerator<
   private async _configureBlueprints() {
     let argvBlueprints = this.options.blueprints || '';
     // check for old single blueprint declaration
-    const blueprint = this.options.blueprint;
+    let { blueprint } = this.options;
     if (blueprint) {
-      this.log.warn('--blueprint option is deprecated. Please use --blueprints instead');
-      if (!argvBlueprints.split(',').includes(blueprint)) {
-        argvBlueprints = `${blueprint},${argvBlueprints}`;
+      if (typeof blueprint === 'string') {
+        blueprint = [blueprint];
       }
+      this.log.warn('--blueprint option is deprecated. Please use --blueprints instead');
+      argvBlueprints = union(blueprint, argvBlueprints.split(',')).join(',');
     }
     const blueprints = mergeBlueprints(parseBluePrints(argvBlueprints), loadBlueprintsFromConfiguration(this.config));
 
@@ -653,7 +662,7 @@ export default class JHipsterBaseBlueprintGenerator<
    */
   private _findBlueprintVersion(blueprintPkgName) {
     const blueprintPackageJson = this._findBlueprintPackageJson(blueprintPkgName);
-    if (!blueprintPackageJson || !blueprintPackageJson.version) {
+    if (!blueprintPackageJson?.version) {
       this.log.warn(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
       return undefined;
     }

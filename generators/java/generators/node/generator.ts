@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import chalk from 'chalk';
+import type { ExecaError } from 'execa';
 import BaseApplicationGenerator from '../../../base-application/index.js';
 
 export default class NodeGenerator extends BaseApplicationGenerator {
@@ -47,6 +49,20 @@ export default class NodeGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      useNpmWrapper({ application }) {
+        if (application.useNpmWrapper) {
+          this.useNpmWrapperInstallTask();
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
@@ -66,5 +82,26 @@ export default class NodeGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  useNpmWrapperInstallTask() {
+    this.setFeatures({
+      customInstallTask: async (preferredPm, defaultInstallTask) => {
+        const buildTool = this.jhipsterConfigWithDefaults.buildTool;
+        if ((preferredPm && preferredPm !== 'npm') || this.jhipsterConfig.skipClient || (buildTool !== 'gradle' && buildTool !== 'maven')) {
+          await defaultInstallTask();
+          return;
+        }
+
+        const npmCommand = process.platform === 'win32' ? 'npmw' : './npmw';
+        try {
+          await this.spawn(npmCommand, ['install'], { preferLocal: true });
+        } catch (error: unknown) {
+          this.log.error(
+            chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${(error as ExecaError).shortMessage})`),
+          );
+        }
+      },
+    });
   }
 }

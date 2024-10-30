@@ -33,8 +33,8 @@ function lazyTranslatePartialLoader(http: HttpClient): TranslateLoader {
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
-        useFactory: (lazyTranslatePartialLoader),
-        deps: [HttpClient]
+        useFactory: lazyTranslatePartialLoader,
+        deps: [HttpClient],
       },
       isolate: false,
       extend: true,
@@ -42,12 +42,12 @@ function lazyTranslatePartialLoader(http: HttpClient): TranslateLoader {
   ],
 })
 export class LazyTranslationModule {
-  private translateService = inject(TranslateService);
-  private translateLoader = inject(TranslateLoader);
-  private stateStorageService = inject(StateStorageService);
+  private readonly translateService = inject(TranslateService);
+  private readonly translateLoader = inject(TranslateLoader);
+  private readonly stateStorageService = inject(StateStorageService);
 
   constructor() {
-    const currentLang = this.translateService.store.currentLang;
+    const { currentLang } = this.translateService.store;
     this.translateLoader.getTranslation(currentLang).subscribe(translation => {
       this.translateService.setTranslation(currentLang, translation);
     });

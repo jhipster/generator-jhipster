@@ -43,14 +43,14 @@ export class TrackerService {
   private rxStomp?: RxStomp;
   private routerSubscription: Subscription | null = null;
 
-  private router = inject(Router);
-  private accountService = inject(AccountService);
+  private readonly router = inject(Router);
+  private readonly accountService = inject(AccountService);
 <%_ if (authenticationTypeSession) { _%>
-  private csrfService = inject(CSRFService);
+  private readonly csrfService = inject(CSRFService);
 <%_ } else if (authenticationTypeJwt) { _%>
-  private authServerProvider = inject(AuthServerProvider);
+  private readonly authServerProvider = inject(AuthServerProvider);
 <%_ } _%>
-  private location = inject(Location);
+  private readonly location = inject(Location);
 
   setup(): void {
     this.rxStomp = new RxStomp();

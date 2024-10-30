@@ -17,12 +17,11 @@
  * limitations under the License.
  */
 import { moveToJavaPackageTestDir } from '../server/support/index.js';
-import { SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, GRADLE_BUILD_SRC_MAIN_DIR } from '../generator-constants.js';
-import { WriteFileSection } from '../base/api.js';
-import { CommonClientServerApplication } from '../base-application/types.js';
-import Generator from './generator.js';
+import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
+import type { WriteFileSection } from '../base/api.js';
+import type Generator from './generator.js';
 
-const cucumberFiles: WriteFileSection<Generator, CommonClientServerApplication> = {
+const cucumberFiles: WriteFileSection = {
   cucumberFiles: [
     {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,

@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { buildToolTypes } from '../../../../jdl/index.js';
+import { buildToolTypes } from '../../../../lib/jhipster/index.js';
 import BaseApplicationGenerator from '../../../base-application/index.js';
 import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.js';
 import type { MavenDependency } from '../../../maven/types.js';
 import { javaScopeToGradleScope } from '../../support/index.js';
-import type { JavaDependency } from '../../types.js';
+import type { ConditionalJavaDefinition, JavaDependency, JavaNeedleOptions } from '../../types.js';
 
 const { GRADLE, MAVEN } = buildToolTypes;
 
@@ -61,30 +61,55 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
       prepareJavaApplication({ application, source }) {
         source.addJavaDependencies = (dependencies, options) => {
           if (application.buildToolMaven) {
-            const annotationProcessors = dependencies.filter(dep => dep.scope === 'annotationProcessor');
-            const importDependencies = dependencies.filter(dep => dep.scope === 'import');
-            const commonDependencies = dependencies.filter(dep => !['annotationProcessor', 'import'].includes(dep.scope!));
-            const convertVersionToRef = ({ version, versionRef, ...artifact }: JavaDependency): MavenDependency =>
-              version || versionRef ? { ...artifact, version: `\${${versionRef ?? artifact.artifactId}.version}` } : artifact;
-            const removeScope = ({ scope: _scope, ...artifact }: MavenDependency) => artifact;
+            const convertVersionToMavenDependency = ({ versionRef, version, exclusions, ...artifact }: JavaDependency): MavenDependency => {
+              // If a version is provided, convert to version ref using artifactId
+              versionRef ??= version ? artifact.artifactId : undefined;
+              version = versionRef ? `\${${versionRef}.version}` : undefined;
+              const additionalContent = exclusions?.length
+                ? `<exclusions>${exclusions.map(
+                    e => `
+                <exclusion>
+                    <groupId>${e.groupId}</groupId>
+                    <artifactId>${e.artifactId}</artifactId>
+                </exclusion>`,
+                  )}
+                </exclusions>`
+                : '';
+              return additionalContent ? { ...artifact, version, additionalContent } : { ...artifact, version };
+            };
+            const removeScope = ({ scope: _scope, ...artifact }: JavaDependency) => artifact;
+
+            const properties = dependencies
+              .filter(dep => dep.version)
+              .map(({ artifactId, version }) => ({ property: `${artifactId}.version`, value: version }));
+            const annotationProcessors = dependencies
+              .filter(dep => dep.scope === 'annotationProcessor')
+              .map(removeScope)
+              .map(convertVersionToMavenDependency);
+            const dependencyManagement = dependencies.filter(dep => dep.scope === 'import').map(convertVersionToMavenDependency);
+            const commonDependencies = dependencies
+              .filter(dep => !['annotationProcessor', 'import'].includes(dep.scope!))
+              .map(convertVersionToMavenDependency);
 
             source.addMavenDefinition?.({
-              properties: dependencies
-                .filter(dep => dep.version)
-                .map(({ artifactId, version }) => ({ property: `${artifactId}.version`, value: version })),
+              properties,
               dependencies: [
-                ...commonDependencies.map(convertVersionToRef),
+                ...commonDependencies,
                 // Add a provided scope for annotation processors so that version is not required in annotationProcessor dependencies
-                ...annotationProcessors.filter(dep => !dep.version).map(artifact => ({ ...artifact, scope: 'provided' })),
+                ...annotationProcessors.filter(dep => !dep.version).map(artifact => ({ ...artifact, scope: 'provided' as const })),
               ],
-              dependencyManagement: importDependencies.map(convertVersionToRef),
-              annotationProcessors: annotationProcessors.map(convertVersionToRef).map(removeScope),
+              dependencyManagement,
+              annotationProcessors,
             });
           }
 
           if (application.buildToolGradle) {
+            const gradleDependencies = dependencies.map(({ exclusions, ...dep }) => ({
+              ...dep,
+              closure: exclusions?.map(({ groupId, artifactId }) => `    exclude group: '${groupId}', module: '${artifactId}'`),
+            }));
             source.addGradleDependencies?.(
-              dependencies
+              gradleDependencies
                 .filter(dep => !dep.version && !dep.versionRef)
                 .map(({ scope, type, ...artifact }) => ({
                   ...artifact,
@@ -93,13 +118,14 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
               options,
             );
             source.addGradleDependencyCatalogLibraries?.(
-              dependencies
+              gradleDependencies
                 .filter(dep => dep.version || dep.versionRef)
-                .map(({ scope, type, groupId, artifactId, version, versionRef }) => {
+                .map(({ scope, type, groupId, artifactId, version, versionRef, closure }) => {
                   const library = {
                     libraryName: artifactId,
                     module: `${groupId}:${artifactId}`,
                     scope: javaScopeToGradleScope({ scope, type }),
+                    closure,
                   };
                   return version ? { ...library, version } : { ...library, 'version.ref': versionRef! };
                 }),
@@ -109,7 +135,7 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
         };
 
         source.addJavaDefinition = (definition, options) => {
-          const { dependencies, versions } = definition;
+          const { dependencies, versions, mavenDefinition } = definition;
           if (dependencies) {
             source.addJavaDependencies!(
               dependencies.filter(dep => {
@@ -128,7 +154,27 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
               });
             }
             if (application.buildToolGradle) {
-              source.addGradleDependencyCatalogVersions?.(versions, options);
+              source.addGradleDependencyCatalogVersions!(versions, options);
+            }
+          }
+          if (application.buildToolMaven && mavenDefinition) {
+            source.addMavenDefinition!(mavenDefinition);
+          }
+        };
+
+        source.addJavaDefinitions = (
+          optionsOrDefinition: JavaNeedleOptions | ConditionalJavaDefinition,
+          ...definitions: ConditionalJavaDefinition[]
+        ) => {
+          let options: JavaNeedleOptions | undefined = undefined;
+          if ('gradleFile' in optionsOrDefinition || 'gradleVersionCatalogFile' in optionsOrDefinition) {
+            options = optionsOrDefinition;
+          } else {
+            definitions.unshift(optionsOrDefinition as ConditionalJavaDefinition);
+          }
+          for (const definition of definitions) {
+            if (definition.condition ?? true) {
+              source.addJavaDefinition!(definition, options);
             }
           }
         };

@@ -22,11 +22,6 @@ import { Routes } from '@angular/router';
 import { errorRoute } from './layouts/error/error.route';
 import { Authority } from 'app/config/authority.constants';
 
-import HomeComponent from './home/home.component';
-import NavbarComponent from './layouts/navbar/navbar.component';
-<%_ if (!authenticationTypeOauth2) { _%>
-import LoginComponent from './login/login.component';
-<%_ } _%>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 import { loadEntityRoutes } from './core/microfrontend';
 <%_ } _%>
@@ -36,12 +31,12 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
+    loadComponent: () => import('./home/home.component'),
     title: 'home.title',
   },
   {
     path: '',
-    component: NavbarComponent,
+    loadComponent: () => import('./layouts/navbar/navbar.component'),
     outlet: 'navbar',
   },
 <%_ if (!applicationTypeMicroservice) { _%>
@@ -63,7 +58,7 @@ const routes: Routes = [
 <%_ if (!authenticationTypeOauth2) { _%>
   {
     path: 'login',
-    component: LoginComponent,
+    loadComponent: () => import('./login/login.component'),
     title: 'login.title',
   },
 <%_ } _%>

@@ -33,7 +33,8 @@ on:
       - '*'
 permissions:
   contents: read
-
+env:
+  FORCE_COLOR: 2
 jobs:
   generate-blueprint:
     permissions:
@@ -43,16 +44,21 @@ jobs:
     permissions:
       contents: none
     uses: ./.github/workflows/generator-database-changelog-liquibase.yml
+  graalvm:
+    permissions:
+      contents: none
+    uses: ./.github/workflows/generator-graalvm.yml
   check-generators:
     permissions:
       contents: none
     runs-on: ubuntu-latest
-    needs: [generate-blueprint, database-changelog-liquibase]
+    needs: [generate-blueprint, database-changelog-liquibase, graalvm]
     if: always()
     steps:
       - run: |
           echo '${{ toJSON(needs) }}'
           if ([ 'skipped' == '${{ needs.generate-blueprint.result }}' ] || [ 'success' == '${{ needs.generate-blueprint.result }}' ]) && \
+              ([ 'skipped' == '${{ needs.graalvm.result }}' ] || [ 'success' == '${{ needs.graalvm.result }}' ]) && \
               ([ 'skipped' == '${{ needs.database-changelog-liquibase.result }}' ] || [ 'success' == '${{ needs.database-changelog-liquibase.result }}' ]); then
             exit 0
           fi

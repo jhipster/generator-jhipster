@@ -1,5 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`generator - javascript:prettier fromInit(false) should compose with generators 1`] = `
+[
+  "jhipster:javascript:bootstrap",
+  "jhipster:project-name",
+]
+`;
+
 exports[`generator - javascript:prettier fromInit(false) should match files snapshot 1`] = `
 {
   ".prettierignore": {
@@ -35,6 +42,12 @@ plugins:
     "stateCleared": "modified",
   },
 }
+`;
+
+exports[`generator - javascript:prettier fromInit(true) should compose with generators 1`] = `
+[
+  "jhipster:javascript:bootstrap",
+]
 `;
 
 exports[`generator - javascript:prettier fromInit(true) should match files snapshot 1`] = `
@@ -78,6 +91,13 @@ plugins:
 }
 `;
 
+exports[`generator - javascript:prettier monorepository(true)-monorepositoryRoot(false) should compose with generators 1`] = `
+[
+  "jhipster:javascript:bootstrap",
+  "jhipster:project-name",
+]
+`;
+
 exports[`generator - javascript:prettier monorepository(true)-monorepositoryRoot(false) should match files snapshot 1`] = `
 {
   ".prettierignore": {
@@ -113,6 +133,13 @@ plugins:
     "stateCleared": "modified",
   },
 }
+`;
+
+exports[`generator - javascript:prettier monorepository(true)-monorepositoryRoot(true) should compose with generators 1`] = `
+[
+  "jhipster:javascript:bootstrap",
+  "jhipster:project-name",
+]
 `;
 
 exports[`generator - javascript:prettier monorepository(true)-monorepositoryRoot(true) should match files snapshot 1`] = `

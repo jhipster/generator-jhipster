@@ -23,9 +23,6 @@ exports[`generator - java:jib with defaults options should match files snapshot 
   "package.json": {
     "stateCleared": "modified",
   },
-  "pom.xml": {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
@@ -82,7 +79,22 @@ exports[`generator - java:jib with defaults options should match source snapshot
             </permission>
         </permissions>
     </extraDirectories>
-</configuration>",
+    <pluginExtensions>
+        <pluginExtension>
+            <implementation>com.google.cloud.tools.jib.maven.extension.springboot.JibSpringBootExtension</implementation>
+        </pluginExtension>
+    </pluginExtensions>
+
+</configuration>
+<dependencies>
+    <dependency>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-spring-boot-extension-maven</artifactId>
+        <version>'JIB-SPRING-BOOT-EXTENSION-MAVEN-VERSION'</version>
+    </dependency>
+</dependencies>
+
+",
           "artifactId": "jib-maven-plugin",
           "groupId": "com.google.cloud.tools",
           "version": "\${jib-maven-plugin.version}",

@@ -25,7 +25,7 @@ import TemplateFile from './template-file.js';
 
 export default class TemplateFileFs {
   fragmentFiles: Record<string, TemplateFile>;
-  rootFiles: Array<MemFsEditorFile> = [];
+  rootFiles: MemFsEditorFile[] = [];
   extension: string;
   delimiter: string;
 
@@ -55,7 +55,7 @@ export default class TemplateFileFs {
     if (templateFile.rootTemplate) {
       templateFile.file = file;
     } else {
-      this.get(templateFile.parentPath).addFragment(templateFile);
+      this.get(templateFile.parentPath!).addFragment(templateFile);
     }
     return templateFile;
   }

@@ -36,13 +36,13 @@ describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipst
         .withOptions({
           ignoreNeedlesError: true,
 <%_ if (!customGenerator) { _%>
-          blueprint: '<%= application.baseName %>',
+          blueprint: ['<%= application.baseName %>'],
 <%_ } _%>
 <%_ if (subGenerator === 'jdl') { _%>
           inline: 'application { }',
 <%_ } _%>
         })
-        .withJHipsterLookup()
+        .withJHipsterGenerators()
         .withParentBlueprintLookup();
     });
 

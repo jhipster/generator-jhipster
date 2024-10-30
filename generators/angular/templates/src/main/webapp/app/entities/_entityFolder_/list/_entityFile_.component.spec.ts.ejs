@@ -138,7 +138,7 @@ describe('<%= entityAngularName %> Management Component', () => {
         it('Should forward to <%= entityInstance %>Service', () => {
             const entity = <%- this.generateTestEntityPrimaryKey(primaryKey, 0) %>;
             jest.spyOn(service, 'get<%= entityAngularName %>Identifier');
-            const <%= primaryKey.name %> = comp.track<%= primaryKey.nameCapitalized %>(0, entity);
+            const <%= primaryKey.name %> = comp.track<%= primaryKey.nameCapitalized %>(entity);
             expect(service.get<%= entityAngularName %>Identifier).toHaveBeenCalledWith(entity);
             expect(<%= primaryKey.name %>).toBe(entity.<%= primaryKey.name %>);
         });

@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "8.6.0",
+  "version": "8.7.3",
   "description": "Spring Boot + Angular/React/Vue in one handy generator",
   "keywords": [
     "yeoman-generator",
@@ -37,49 +37,53 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/types/generators/index.d.ts",
+      "types": "./dist/generators/index.d.ts",
       "default": "./dist/generators/index.js"
     },
     "./cli": {
-      "types": "./dist/types/cli/index.d.mts",
+      "types": "./dist/cli/index.d.mts",
       "default": "./dist/cli/index.mjs"
     },
     "./package.json": "./package.json",
     "./eslint/recommended": {
-      "types": "./dist/types/lib/eslint/recommended.d.ts",
+      "types": "./dist/lib/eslint/recommended.d.ts",
       "default": "./dist/lib/eslint/recommended.js"
     },
+    "./eslint": {
+      "types": "./dist/lib/eslint/index.d.ts",
+      "default": "./dist/lib/eslint/index.js"
+    },
     "./generators": {
-      "types": "./dist/types/generators/generator-list.d.ts",
+      "types": "./dist/generators/generator-list.d.ts",
       "default": "./dist/generators/generator-list.js"
     },
     "./generators/*": {
-      "types": "./dist/types/generators/*/types-export.d.ts",
+      "types": "./dist/generators/*/types-export.d.ts",
       "default": "./dist/generators/*/index.js"
     },
     "./generators/*/support": {
-      "types": "./dist/types/generators/*/support/index.d.ts",
+      "types": "./dist/generators/*/support/index.d.ts",
       "default": "./dist/generators/*/support/index.js"
     },
     "./generators/*/generators/*": {
-      "types": "./dist/types/generators/*/generators/*/types-export.d.ts",
+      "types": "./dist/generators/*/generators/*/types-export.d.ts",
       "default": "./dist/generators/*/generators/*/index.js"
     },
     "./generators/*/generators/*/support": {
-      "types": "./dist/types/generators/*/generators/*/support/index.d.ts",
+      "types": "./dist/generators/*/generators/*/support/index.d.ts",
       "default": "./dist/generators/*/generators/*/support/index.js"
     },
     "./jdl": {
-      "types": "./dist/types/jdl/index.d.ts",
-      "default": "./dist/jdl/index.js"
+      "types": "./dist/lib/jdl/index.d.ts",
+      "default": "./dist/lib/jdl/index.js"
     },
     "./testing": {
-      "types": "./dist/types/testing/index.d.ts",
-      "default": "./dist/testing/index.js"
+      "types": "./dist/lib/testing/index.d.ts",
+      "default": "./dist/lib/testing/index.js"
     }
   },
   "main": "./dist/generators/index.js",
-  "types": "./dist/types/generators/index.d.ts",
+  "types": "./dist/generators/index.d.ts",
   "bin": {
     "jhipster": "dist/cli/jhipster.cjs"
   },
@@ -91,115 +95,111 @@
   ],
   "scripts": {
     "prebuild": "npm run clean",
-    "build": "npm run compile && npm run copy-files && npm run compile-types && npm run copy-types",
+    "build": "npm run compile && npm run copy-files && npm run copy-types",
     "postbuild": "node bin/fix-bin.cjs",
     "check-types": "tsc -p tsconfig.spec.json",
     "clean": "rimraf dist",
     "compile": "tsc",
-    "compile-types": "tsc -p tsconfig.types.json",
     "completion": "tabtab install --name jhipster --auto",
-    "copy-files": "cpy \"jdl/*.json\" \"dist/jdl\" && cpy \"generators/**\" \"!**/*.(js|cjs|mjs|ts|cts|mts|snap)\" \"!**/__*/*\" dist/generators",
-    "copy-types": "cpy \"generators/**/*.d.(|c|m)ts\" dist/types/generators && cpy \"jdl/**/*.d.(|c|m)ts\" dist/types/jdl",
+    "copy-files": "cpy \"lib/jdl/*.json\" \"dist/lib/jdl\" && cpy \"generators/**\" \"!**/*.(js|cjs|mjs|ts|cts|mts|snap)\" \"!**/__*/*\" dist/generators",
+    "copy-types": "cpy \"generators/**/*.d.(|c|m)ts\" dist/generators && cpy \"lib/**/*.d.(|c|m)ts\" dist/lib",
     "ejslint": "ejslint generators/**/*.ejs",
-    "eslint": "eslint . --ext .js,.cjs,.mjs,.ts,.cts,.mts --max-warnings 5",
-    "jdl:test": "esmocha jdl --no-insight --forbid-only -p",
+    "eslint": "eslint . --max-warnings 5",
+    "jdl:test": "esmocha lib/jdl --no-insight --forbid-only -p",
     "jdl:test-watch": "npm run jdl:test -- --watch",
     "jsdoc": "jsdoc --configure jsdoc-conf.json",
     "lint": "npm run eslint && npm run ejslint",
-    "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
-    "mocha-test": "esmocha jdl --no-insight --forbid-only --parallel --max-old-space-size=4096",
+    "lint-fix": "npm run eslint -- --fix && npm run prettier:format",
+    "mocha-test": "esmocha lib/jdl --no-insight --forbid-only --parallel --max-old-space-size=4096",
     "prepare": "npm run build",
     "prettier:check": "prettier --check \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java}\"",
     "prettier:format": "prettier --write \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java}\"",
     "pretest": "npm run lint && npm run check-types",
-    "test": "npm run mocha-test test generators cli",
+    "test": "npm run mocha-test test generators cli .blueprint",
     "update-snapshot": "esmocha --no-insight --no-parallel --update-snapshot --",
-    "update-snapshots": "esmocha jdl generators cli --update-snapshot --no-insight --forbid-only"
+    "update-snapshots": "esmocha lib/jdl generators cli --update-snapshot --no-insight --forbid-only"
   },
   "dependencies": {
-    "@eslint/js": "9.7.0",
-    "@faker-js/faker": "8.4.1",
+    "@eslint/js": "9.13.0",
+    "@faker-js/faker": "9.1.0",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
-    "@types/lodash": "4.17.6",
-    "@typescript-eslint/eslint-plugin": "7.16.1",
-    "@typescript-eslint/parser": "7.16.1",
-    "@yeoman/adapter": "1.4.0",
-    "@yeoman/conflicter": "2.0.0",
-    "@yeoman/namespace": "1.0.0",
-    "@yeoman/transform": "1.2.0",
-    "@yeoman/types": "1.2.0",
-    "axios": "1.7.2",
+    "@types/lodash-es": "4.17.12",
+    "@yeoman/adapter": "2.0.0",
+    "@yeoman/conflicter": "2.3.1",
+    "@yeoman/namespace": "1.0.1",
+    "@yeoman/transform": "2.1.0",
+    "@yeoman/types": "1.5.0",
+    "axios": "1.7.7",
     "chalk": "5.3.0",
     "chevrotain": "11.0.3",
     "commander": "12.1.0",
-    "conf": "13.0.1",
-    "debug": "4.3.5",
+    "debug": "4.3.7",
     "didyoumean": "1.2.2",
     "dockerfile-ast": "0.6.1",
     "dot-properties": "1.0.1",
     "ejs": "3.1.10",
-    "eslint": "8.57.0",
-    "eslint-plugin-import": "2.29.1",
-    "eslint-plugin-unused-imports": "3.2.0",
-    "execa": "9.3.0",
-    "fast-xml-parser": "4.4.0",
+    "eslint": "9.13.0",
+    "eslint-plugin-import-x": "4.3.1",
+    "eslint-plugin-unused-imports": "4.1.4",
+    "execa": "9.5.1",
+    "fast-xml-parser": "4.5.0",
     "glob": "10.4.2",
-    "isbinaryfile": "5.0.2",
+    "globals": "15.11.0",
+    "isbinaryfile": "5.0.4",
     "java-lint": "0.3.0",
-    "js-yaml": "4.1.0",
     "latest-version": "9.0.0",
     "lodash-es": "4.17.21",
-    "mem-fs": "4.1.0",
-    "mem-fs-editor": "11.0.1",
+    "mem-fs": "4.1.1",
+    "mem-fs-editor": "11.1.3",
     "minimatch": "9.0.5",
     "normalize-path": "3.0.0",
     "os-locale": "6.0.2",
-    "p-transform": "4.1.5",
+    "p-transform": "5.0.1",
     "parse-gitignore": "2.0.0",
-    "piscina": "4.6.1",
+    "piscina": "4.7.0",
     "pluralize": "8.0.0",
     "prettier": "3.3.3",
-    "prettier-plugin-java": "2.6.4",
-    "prettier-plugin-packagejson": "2.5.1",
+    "prettier-plugin-java": "2.6.5",
+    "prettier-plugin-packagejson": "2.5.3",
     "prettier-plugin-properties": "0.3.0",
     "randexp": "0.5.3",
     "semver": "7.6.3",
-    "simple-git": "3.25.0",
-    "sort-keys": "5.0.0",
-    "type-fest": "4.22.0",
-    "typescript": "5.4.5",
-    "winston": "3.13.1",
-    "yaml": "2.4.5",
-    "yeoman-environment": "4.4.1",
-    "yeoman-generator": "7.3.2"
+    "simple-git": "3.27.0",
+    "sort-keys": "5.1.0",
+    "type-fest": "4.26.1",
+    "typescript": "5.5.4",
+    "typescript-eslint": "8.12.2",
+    "yaml": "2.6.0",
+    "yeoman-environment": "4.4.3",
+    "yeoman-generator": "7.3.3"
   },
   "devDependencies": {
-    "@actions/core": "1.10.1",
-    "@node-loaders/esbuildx": "1.4.0",
-    "@types/chai": "4.3.11",
+    "@actions/core": "1.11.1",
+    "@eslint/core": "0.8.0",
+    "@node-loaders/esbuild": "2.0.0",
+    "@types/chai": "4.3.16",
+    "@types/estree": "1.0.6",
     "@types/node": "20.11.25",
     "@types/sinon-chai": "3.2.12",
-    "chai": "4.4.1",
+    "chai": "4.5.0",
     "cpy-cli": "5.0.0",
     "ejs-lint": "2.0.0",
     "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-chai-friendly": "1.0.0",
-    "eslint-plugin-mocha": "10.4.3",
+    "eslint-import-resolver-typescript": "3.6.3",
+    "eslint-plugin-chai-friendly": "1.0.1",
     "eslint-plugin-prettier": "5.2.1",
-    "esmocha": "1.2.0",
-    "jest-extended": "4.0.2",
-    "jsdoc": "4.0.3",
+    "esmocha": "2.3.0",
+    "jsdoc": "4.0.4",
     "open-cli": "8.0.0",
     "prettier2": "npm:prettier@2.8.8",
-    "quibble": "0.9.2",
     "rimraf": "5.0.7",
-    "sinon": "18.0.0",
+    "sinon": "19.0.2",
     "sinon-chai": "3.7.0",
-    "yeoman-test": "8.3.0"
+    "yeoman-test": "10.0.1"
   },
   "peerDependencies": {
-    "yeoman-test": "8.3.0"
+    "yeoman-test": "10.0.1"
   },
   "peerDependenciesMeta": {
     "yeoman-test": {
@@ -214,5 +214,10 @@
     "type": "opencollective",
     "url": "https://opencollective.com/generator-jhipster",
     "logo": "https://opencollective.com/opencollective/logo.txt"
+  },
+  "overrides": {
+    "ejs-lint": {
+      "ejs": "$ejs"
+    }
   }
 }

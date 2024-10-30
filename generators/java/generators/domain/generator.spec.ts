@@ -1,9 +1,9 @@
 import { basename, dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '../../../../testing/index.js';
+import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -61,9 +61,10 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should have options defaults set', () => {
-      expect(result.generator.generateEntities).toBe(true);
-      expect(result.generator.generateEnums).toBe(true);
-      expect(result.generator.useJakartaValidation).toBe(true);
+      const generator: any = result.generator;
+      expect(generator.generateEntities).toBe(true);
+      expect(generator.generateEnums).toBe(true);
+      expect(generator.useJakartaValidation).toBe(true);
     });
   });
 
@@ -118,7 +119,7 @@ describe(`generator - ${generator}`, () => {
       await helpers
         .runJHipster(generator)
         .withJHipsterConfig({})
-        .onGenerator(generator => {
+        .onGenerator((generator: any) => {
           generator.generateEntities = false;
           generator.generateEnums = false;
           generator.useJakartaValidation = false;
@@ -126,9 +127,10 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should not override custom values', () => {
-      expect(result.generator.generateEntities).toBe(false);
-      expect(result.generator.generateEnums).toBe(false);
-      expect(result.generator.useJakartaValidation).toBe(false);
+      const generator: any = result.generator;
+      expect(generator.generateEntities).toBe(false);
+      expect(generator.generateEnums).toBe(false);
+      expect(generator.useJakartaValidation).toBe(false);
     });
   });
 });

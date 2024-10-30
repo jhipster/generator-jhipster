@@ -14,7 +14,6 @@
     "devDatabaseType": "mysql",
     "dtoSuffix": "DTO",
     "embeddableLaunchScript": false,
-    "enableHibernateCache": true,
     "enableSwaggerCodegen": false,
     "enableTranslation": false,
     "entitySuffix": "",

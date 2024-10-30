@@ -1,23 +1,25 @@
 #!/usr/bin/env node
 import { createHash } from 'node:crypto';
-import { writeFileSync, readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
-  packageRoot,
+  BUILD_JHIPSTER_BOM,
   JAVA_VERSION,
-  NODE_VERSION,
-  NPM_VERSION,
   JHIPSTER_BOM_BRANCH,
   JHIPSTER_BOM_CICD_VERSION,
-  BUILD_JHIPSTER_BOM,
+  NODE_VERSION,
+  NPM_VERSION,
+  packageRoot,
 } from '../integration-test-constants.js';
+import { JAVA_COMPATIBLE_VERSIONS } from '../../generators/generator-constants.js';
 
 const MATRIX_FILE = 'matrix.json';
 
 let existing = {};
 try {
   existing = JSON.parse(readFileSync(MATRIX_FILE));
-} catch (_) {
+} catch {
+  // eslint-disable-next-line no-console
   console.log(`File ${MATRIX_FILE} not found`);
   existing = { include: [] };
 }
@@ -40,7 +42,7 @@ writeFileSync(
               return JSON.parse(readFileSync(file).toString())
                 .include.filter(sample => !sample.disabled)
                 .map(({ generatorOptions, name, ...sample }) => {
-                  const javaVersion = randomReproducibleValue(`java-${name}`, [JAVA_VERSION, '17', '21', '22']);
+                  const javaVersion = randomReproducibleValue(`java-${name}`, [JAVA_VERSION, ...JAVA_COMPATIBLE_VERSIONS]);
                   const nodeVersion = randomReproducibleValue(`node-${name}`, [NODE_VERSION, '18', '20']);
                   return {
                     name,
@@ -64,9 +66,12 @@ writeFileSync(
                     ...sample,
                     'skip-backend-tests': sample['skip-backend-tests'] ? 'true' : 'false',
                     'skip-frontend-tests': sample['skip-frontend-tests'] ? 'true' : 'false',
+                    'jwt-secret-key':
+                      'ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=',
                   };
                 });
             } catch (error) {
+              // eslint-disable-next-line no-console
               console.log(`File ${file} not found`, error);
               return [];
             }

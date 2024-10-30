@@ -8,9 +8,8 @@ import { execaCommandSync } from 'execa';
 import type { GeneratorMeta } from '@yeoman/types';
 import type FullEnvironment from 'yeoman-environment';
 import { coerce } from 'semver';
-import quibble from 'quibble';
 
-import { defaultHelpers as helpers, createBlueprintFiles } from '../testing/index.js';
+import { defaultHelpers as helpers, createBlueprintFiles } from '../lib/testing/index.js';
 import { getCommand as actualGetCommonand } from './utils.mjs';
 import { createProgram } from './program.mjs';
 
@@ -90,23 +89,22 @@ const cliSharedBlueprintFiles = {
 describe('cli', () => {
   const __filename = fileURLToPath(import.meta.url);
   const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.cjs');
-  const logger = { verboseInfo: esmocha.fn(), fatal: esmocha.fn(), debug: esmocha.fn() };
+  const logger = { verboseInfo: esmocha.fn(), warn: esmocha.fn(), fatal: esmocha.fn(), debug: esmocha.fn() };
   const getCommand = esmocha.fn();
   let mockCli;
   let argv;
 
   before(async () => {
-    await quibble.esm('./utils.mjs', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} });
+    await esmocha.mock('./utils.mjs', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} } as any);
     const { buildJHipster } = await import('./program.mjs');
 
     mockCli = async (argv: string[], opts = {}) => {
-      // @ts-expect-error
       const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
       return program.parseAsync(argv);
     };
   });
   after(() => {
-    quibble.reset();
+    esmocha.reset();
   });
 
   beforeEach(async () => {

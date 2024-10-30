@@ -1,6 +1,6 @@
 import { Readable } from 'stream';
 import { pipeline } from 'stream/promises';
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { transform } from 'p-transform';
 import { setModifiedFileState } from 'mem-fs-editor/state';
 
@@ -13,6 +13,7 @@ describe('generator - bootstrap - eslint', () => {
         path: 'foo.ts',
         contents: Buffer.from(`
 import { Foo } from 'bar';
+// eslint-disable-next-line no-console
 export const foo = 'bar';
 `),
       };
@@ -23,6 +24,7 @@ export const foo = 'bar';
         transform(() => undefined),
       );
       expect(file.contents.toString()).toBe(`
+// eslint-disable-next-line no-console
 export const foo = 'bar';
 `);
     });

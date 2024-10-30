@@ -30,12 +30,12 @@ import {
 } from '../generator-constants.js';
 import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } from '../base-application/support/index.js';
 import {
-  loadRequiredConfigDerivedProperties,
-  prepareEntity as prepareEntityServerForTemplates,
   addEntitiesOtherRelationships,
   hibernateSnakeCase,
-  loadServerConfig,
   loadDerivedServerConfig,
+  loadRequiredConfigDerivedProperties,
+  loadServerConfig,
+  prepareEntity as prepareEntityServerForTemplates,
   prepareRelationship,
 } from '../server/support/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/index.js';
@@ -214,7 +214,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
           return;
         }
         // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
-        const derivedFields = entity.primaryKey.derivedFields;
+        const derivedFields = primaryKey.derivedFields;
         entity.fields.unshift(...derivedFields);
       },
     });

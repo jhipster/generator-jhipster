@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { WriteFileSection } from '../../../base/api.js';
+import type { WriteFileSection } from '../../../base/api.js';
 import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from '../../support/index.js';
 
 export const entityServerFiles: WriteFileSection = {
@@ -51,7 +51,7 @@ export const entityServerFiles: WriteFileSection = {
 export const enumFiles: WriteFileSection = {
   enumFiles: [
     javaMainPackageTemplatesBlock({
-      renameTo: (data, filepath) => filepath.replace('_enumName_', data.enumName),
+      renameTo: (data, filepath) => filepath.replace('_enumName_', (data as any).enumName),
       templates: ['_entityPackage_/domain/enumeration/_enumName_.java'],
     }),
   ],

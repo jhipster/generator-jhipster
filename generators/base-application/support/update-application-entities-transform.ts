@@ -47,10 +47,10 @@ export const updateApplicationEntitiesTransform = ({
             yoRcFile.contents = Buffer.from(JSON.stringify(contents, null, 2));
             yoRcFileInMemory = yoRcFile;
           } else if (throwOnMissingConfig) {
-            throw new Error(`File ${yoRcFile!.path} is not a valid JHipster configuration file`);
+            throw new Error(`File ${yoRcFile.path} is not a valid JHipster configuration file`);
           }
         } else if (throwOnMissingConfig) {
-          throw new Error(`File ${yoRcFile!.path} has no contents`);
+          throw new Error(`File ${yoRcFile.path} has no contents`);
         }
       }
       if (yoRcFileInMemory) {

@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import CoreGenerator from '../../base-core/index.js';
+import assert from 'assert';
+import type CoreGenerator from '../../base-core/index.js';
 import { createBaseNeedle } from '../../base/support/needles.js';
-import { SpringBootApplication } from '../types.js';
 
 export type ApplicationPropertiesNeedles = {
   property?: string;
@@ -56,22 +56,24 @@ export type ApplicationPropertiesNeedles = {
  *   });
  * );
  */
+export function insertContentIntoApplicationProperties(needles: ApplicationPropertiesNeedles);
 export function insertContentIntoApplicationProperties(
   this: CoreGenerator,
-  application: SpringBootApplication,
+  application: { javaPackageSrcDir: string },
   needles: ApplicationPropertiesNeedles,
 );
-export function insertContentIntoApplicationProperties(this: void, needles: ApplicationPropertiesNeedles);
 export function insertContentIntoApplicationProperties(
   this: CoreGenerator | void,
-  application: SpringBootApplication | ApplicationPropertiesNeedles,
+  application: { javaPackageSrcDir: string } | ApplicationPropertiesNeedles,
   needles?: ApplicationPropertiesNeedles,
 ) {
-  if (this) {
+  if (needles) {
+    assert.ok(this, 'Generator context is required');
+
     return createBaseNeedle.call(
       this,
       {
-        filePath: `${(application as SpringBootApplication).javaPackageSrcDir}config/ApplicationProperties.java`,
+        filePath: `${(application as { javaPackageSrcDir: string }).javaPackageSrcDir}config/ApplicationProperties.java`,
         needlesPrefix: 'application-properties',
       },
       needles,

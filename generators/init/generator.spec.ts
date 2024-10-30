@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { basicTests, getCommandHelpOutput, testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '../../testing/index.js';
+import { defaultHelpers as helpers, result } from '../../lib/testing/index.js';
 import { GENERATOR_INIT } from '../generator-list.js';
 import { defaultConfig, requiredConfig } from './config.js';
 
@@ -28,19 +28,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorPath = join(__dirname, 'index.js');
-
-const contextBuilder = () => helpers.create(generatorPath);
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', () => {
     expect(GENERATOR_INIT).toBe(generator);
   });
   basicTests({
+    generatorNamespace: generator,
     requiredConfig,
     defaultConfig,
     customPrompts: {},
-    contextBuilder,
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('help', () => {
@@ -54,7 +51,7 @@ describe(`generator - ${generator}`, () => {
         await helpers
           .runJHipster('init')
           .withMockedJHipsterGenerators(['bootstrap'])
-          .withSharedApplication({ projectDescription: 'projectDescription' })
+          .withSharedApplication({ projectDescription: 'projectDescription', prettierTabWidth: 'prettierTabWidth' })
           .withJHipsterConfig();
       });
       it('should write files and match snapshot', () => {
@@ -62,7 +59,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with generators', () => {
-        expect(result.composedMockedGenerators).toMatchInlineSnapshot(`
+        expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:git",
   "jhipster:javascript:bootstrap",

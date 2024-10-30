@@ -9,18 +9,17 @@ exports[`generator - javascript:bootstrap customVersion-commonjs should match fi
   },
   "package.json": {
     "contents": "{
-  "name": "dasherizedBaseName",
-  "version": "0.0.0",
-  "description": "projectDescription",
   "private": true,
-  "license": "UNLICENSED",
   "dependencies": {},
   "devDependencies": {},
   "engines": {
     "node": "customVersion"
   },
   "scripts": {},
-  "type": "commonjs"
+  "name": "dasherizedBaseName",
+  "version": "0.0.0",
+  "description": "projectDescription",
+  "license": "UNLICENSED"
 }
 ",
     "stateCleared": "modified",
@@ -37,15 +36,15 @@ exports[`generator - javascript:bootstrap packageJsonNodeEngine(false)-module sh
   },
   "package.json": {
     "contents": "{
-  "name": "dasherizedBaseName",
-  "version": "0.0.0",
-  "description": "projectDescription",
   "private": true,
-  "license": "UNLICENSED",
   "dependencies": {},
   "devDependencies": {},
   "engines": {},
   "scripts": {},
+  "name": "dasherizedBaseName",
+  "version": "0.0.0",
+  "description": "projectDescription",
+  "license": "UNLICENSED",
   "type": "module"
 }
 ",
@@ -63,18 +62,17 @@ exports[`generator - javascript:bootstrap packageJsonNodeEngine(true) should mat
   },
   "package.json": {
     "contents": "{
-  "name": "dasherizedBaseName",
-  "version": "0.0.0",
-  "description": "projectDescription",
   "private": true,
-  "license": "UNLICENSED",
   "dependencies": {},
   "devDependencies": {},
   "engines": {
     "node": "^18.19.0 || >= 20.6.1"
   },
   "scripts": {},
-  "type": "commonjs"
+  "name": "dasherizedBaseName",
+  "version": "0.0.0",
+  "description": "projectDescription",
+  "license": "UNLICENSED"
 }
 ",
     "stateCleared": "modified",

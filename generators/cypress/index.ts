@@ -18,5 +18,4 @@
  */
 export { default } from './generator.js';
 export { default as command } from './command.js';
-export * from './generator.js';
 export { cypressFiles, cypressEntityFiles } from './files.js';

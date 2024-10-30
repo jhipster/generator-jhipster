@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   arguments: {
     languages: {
       description: 'Languages to generate',
@@ -26,30 +26,46 @@ const command: JHipsterCommandDefinition = {
       required: false,
     },
   },
-  options: {
+  configs: {
+    languages: {
+      cli: {
+        type: Array,
+        hide: true,
+      },
+      scope: 'storage',
+    },
     enableTranslation: {
-      description: 'Enable translation',
-      type: Boolean,
-      required: false,
+      cli: {
+        description: 'Enable translation',
+        type: Boolean,
+      },
       scope: 'storage',
     },
     language: {
-      alias: 'l',
-      description: 'Language to be added to application (existing languages are not removed)',
-      type: Array,
+      cli: {
+        alias: 'l',
+        description: 'Language to be added to application (existing languages are not removed)',
+        type: Array,
+      },
+      scope: 'none',
     },
     nativeLanguage: {
-      alias: 'n',
-      description: 'Set application native language',
-      type: String,
-      required: false,
+      cli: {
+        alias: 'n',
+        description: 'Set application native language',
+        type: String,
+        required: false,
+      },
+      scope: 'storage',
     },
     regenerateLanguages: {
-      description: 'Regenerate languages',
-      type: Boolean,
+      cli: {
+        description: 'Regenerate languages',
+        type: Boolean,
+      },
       scope: 'generator',
     },
   },
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

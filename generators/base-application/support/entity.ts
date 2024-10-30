@@ -18,8 +18,7 @@
  */
 
 import { upperFirst } from 'lodash-es';
-import { JSONEntity } from '../../../jdl/converters/types.js';
+import type { Entity } from '../../../lib/types/application/entity.js';
 
-// eslint-disable-next-line import/prefer-default-export
-export const findEntityInEntities = (entityName: string, entities: JSONEntity[]) =>
+export const findEntityInEntities = (entityName: string, entities: Entity[]): Entity | undefined =>
   entities.find(entity => upperFirst(entity.name) === upperFirst(entityName));

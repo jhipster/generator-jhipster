@@ -36,8 +36,8 @@ export default class SessionsComponent implements OnInit {
   success = false;
   sessions: Session[] = [];
 
-  private sessionsService = inject(SessionsService);
-  private accountService = inject(AccountService);
+  private readonly sessionsService = inject(SessionsService);
+  private readonly accountService = inject(AccountService);
 
   ngOnInit(): void {
     this.sessionsService.findAll().subscribe(sessions => (this.sessions = sessions));
@@ -49,12 +49,12 @@ export default class SessionsComponent implements OnInit {
     this.error = false;
     this.success = false;
 
-    this.sessionsService.delete(encodeURIComponent(series)).subscribe(
-      () => {
+    this.sessionsService.delete(encodeURIComponent(series)).subscribe({
+      next: () => {
         this.success = true;
         this.sessionsService.findAll().subscribe(sessions => (this.sessions = sessions));
       },
-      () => (this.error = true),
-    );
+      error: () => (this.error = true),
+    });
   }
 }

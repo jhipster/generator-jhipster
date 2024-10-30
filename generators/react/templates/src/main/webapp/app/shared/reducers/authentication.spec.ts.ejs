@@ -70,10 +70,10 @@ describe('Authentication reducer tests', () => {
   describe('Requests', () => {
     it('should detect a request', () => {
       expect(authentication(undefined, { type: authenticate.pending.type })).toMatchObject({
-        loading: true
+        loading: true,
       });
       expect(authentication(undefined, { type: getAccount.pending.type })).toMatchObject({
-        loading: true
+        loading: true,
       });
     });
   });
@@ -87,7 +87,7 @@ describe('Authentication reducer tests', () => {
         loading: false,
         loginError: false,
         loginSuccess: true,
-        showModalLogin: false
+        showModalLogin: false,
       });
     });
 <%_ } _%>
@@ -122,7 +122,7 @@ describe('Authentication reducer tests', () => {
       expect(toTest).toMatchObject({
         errorMessage: error.message,
         showModalLogin: true,
-        loginError: true
+        loginError: true,
       });
       expect(isAccountEmpty(toTest));
     });
@@ -165,7 +165,7 @@ describe('Authentication reducer tests', () => {
         showModalLogin: true,
 <%_ } _%>
         errorMessage: null,
-        redirectMessage: null
+        redirectMessage: null,
       });
       expect(isAccountEmpty(toTest));
     });
@@ -182,7 +182,7 @@ describe('Authentication reducer tests', () => {
         showModalLogin: true,
 <%_ } _%>
         errorMessage: null,
-        redirectMessage: message
+        redirectMessage: message,
       });
       expect(isAccountEmpty(toTest));
     });
@@ -257,15 +257,12 @@ describe('Authentication reducer tests', () => {
 <%_ if (authenticationTypeJwt) { _%>
   describe('clearAuthToken', () => {
     let store;
-    const reducer = createReducer(
-      { authentication: { account: { langKey: 'en' } } },
-      (builder) => {
-        builder.addDefaultCase(() => {})
-      }
-    );
+    const reducer = createReducer({ authentication: { account: { langKey: 'en' } } }, builder => {
+      builder.addDefaultCase(() => {});
+    });
     beforeEach(() => {
       store = configureStore({
-        reducer
+        reducer,
       });
     });
     it('clears the session token on clearAuthToken', async () => {

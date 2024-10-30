@@ -17,27 +17,23 @@
  limitations under the License.
 -%>
 import { fileURLToPath, URL } from 'node:url';
-import { existsSync } from 'node:fs';
 import { normalizePath } from 'vite'
 
 import {
-<%_ if (microfrontend) { _%>
+<%_ if (microfrontend && clientBundlerVite) { _%>
   mergeConfig,
 <%_ } _%>
   defineConfig,
 } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-<%_ if (microfrontend) { _%>
+<%_ if (microfrontend && clientBundlerVite) { _%>
 import federation from "@originjs/vite-plugin-federation";
 
+  <%_ if (applicationTypeGateway) { _%>
 const sharedAppVersion = '0.0.0';
+  <%_ } _%>
 <%_ } _%>
-
-const getFileFromRepo = (file: string) =>
-  existsSync(fileURLToPath(new URL(`../node_modules/${file}`, import.meta.url)))
-    ? fileURLToPath(new URL(`../node_modules/${file}`, import.meta.url))
-    : fileURLToPath(new URL(`./node_modules/${file}`, import.meta.url));
 
 const { getAbsoluteFSPath } = await import('swagger-ui-dist');
 const swaggerUiPath = getAbsoluteFSPath();
@@ -52,7 +48,7 @@ let config = defineConfig({
           src: [
             `${normalizePath(swaggerUiPath)}/*.{js,css,html,png}`,
             `!${normalizePath(swaggerUiPath)}/**/index.html`,
-            normalizePath(getFileFromRepo('axios/dist/axios.min.js')),
+            normalizePath(fileURLToPath(new URL('./dist/axios.min.js', import.meta.resolve('axios/package.json')))),
             normalizePath(fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/index.html', import.meta.url))),
           ],
           dest: 'swagger-ui',
@@ -115,34 +111,34 @@ let config = defineConfig({
           ws: res === '/websocket',
 <%_ } _%>
         },
-      ])
+      ]),
     ),
   },
 });
 
-<%_ if (microfrontend) { _%>
+<%_ if (microfrontend && clientBundlerVite) { _%>
 config = mergeConfig(config, {
   build: {
     modulePreload: false,
     minify: false,
-    target: ["chrome89", "edge89", "firefox89", "safari15"],
+    target: ['chrome89', 'edge89', 'firefox89', 'safari15'],
   },
   plugins: [
     federation({
       name: '<%= lowercaseBaseName %>',
-<%_ if (applicationTypeGateway) { _%>
+  <%_ if (applicationTypeGateway) { _%>
       remotes: {
-  <%_ for (const remote of microfrontends) { _%>
+    <%_ for (const remote of microfrontends) { _%>
         '@<%= remote.lowercaseBaseName %>': `/<%= remote.endpointPrefix %>/assets/remoteEntry.js`,
   <%_ } _%>
       },
-<%_ } _%>
-<%_ if (applicationTypeMicroservice) { _%>
+  <%_ } _%>
+  <%_ if (applicationTypeMicroservice) { _%>
       exposes: {
         './entities-router': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities',
         './entities-menu': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
       },
-<%_ } _%>
+  <%_ } _%>
       shared: {
         '@vuelidate/core': {},
         '@vuelidate/validators': {},
@@ -156,21 +152,21 @@ config = mergeConfig(config, {
         pinia: {},
         '@/shared/security/authority': {
           packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/security/authority',
-<%_ if (applicationTypeGateway) { _%>
+  <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
-<%_ } _%>
+  <%_ } _%>
         },
         '@/shared/alert/alert.service': {
           packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/alert/alert.service',
-<%_ if (applicationTypeGateway) { _%>
+  <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
-<%_ } _%>
+  <%_ } _%>
         },
         '@/locale/translation.service': {
           packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/locale/translation.service',
-<%_ if (applicationTypeGateway) { _%>
+  <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
-<%_ } _%>
+  <%_ } _%>
         },
       },
     }),

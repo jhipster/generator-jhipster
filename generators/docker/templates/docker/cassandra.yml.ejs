@@ -37,6 +37,10 @@ services:
       interval: 5s
       timeout: 25s
       retries: 20
+<%_ if (backendTypeSpringBoot) { _%>
+    labels:
+      org.springframework.boot.ignore: true
+<%_ } _%>
   cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
@@ -48,3 +52,7 @@ services:
       dockerfile: cassandra/Cassandra-Migration.Dockerfile
     volumes:
       - ../resources/config/cql:/cql:ro
+<%_ if (backendTypeSpringBoot) { _%>
+    labels:
+      org.springframework.boot.ignore: true
+<%_ } _%>

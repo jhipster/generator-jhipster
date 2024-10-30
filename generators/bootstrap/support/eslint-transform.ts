@@ -21,23 +21,34 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import { Minimatch } from 'minimatch';
 import { Piscina } from 'piscina';
 
-import BaseGenerator from '../../base-core/index.js';
-import { getPackageRoot } from '../../../lib/index.js';
-import { JS_PRETTIER_EXTENSIONS } from '../../generator-constants.js';
+import type BaseGenerator from '../../base-core/index.js';
 import { addLineNumbers } from '../internal/transform-utils.js';
 
-// eslint-disable-next-line import/prefer-default-export
+type PoolOptions = Exclude<ConstructorParameters<typeof Piscina>[0], undefined>;
+type ESLintWorkerOptions = { cwd?: string; extensions: string; recreateEslint?: boolean };
+
+export class ESLintPool extends Piscina {
+  constructor(options?: PoolOptions) {
+    super({
+      maxThreads: 1,
+      filename: new URL('./eslint-worker.js', import.meta.url).href,
+      ...options,
+    });
+  }
+
+  apply(data: ESLintWorkerOptions & { filePath: string; fileContents: string }): Promise<{ result: string; error: string }> {
+    return this.run(data);
+  }
+}
+
 export const createESLintTransform = function (
   this: BaseGenerator | void,
-  transformOptions: { ignoreErrors?: boolean; extensions?: string } = {},
+  transformOptions: { ignoreErrors?: boolean; poolOptions?: PoolOptions } & Partial<ESLintWorkerOptions> = {},
 ) {
-  const { extensions = JS_PRETTIER_EXTENSIONS, ignoreErrors } = transformOptions;
+  const { extensions = 'js,cjs,mjs,ts,cts,mts,jsx,tsx', ignoreErrors, cwd, poolOptions, recreateEslint } = transformOptions;
   const minimatch = new Minimatch(`**/*.{${extensions}}`, { dot: true });
 
-  const pool = new Piscina({
-    maxThreads: 1,
-    filename: new URL('./eslint-worker.js', import.meta.url).href,
-  });
+  const pool = new ESLintPool(poolOptions);
 
   return passthrough(
     async file => {
@@ -45,10 +56,12 @@ export const createESLintTransform = function (
         return;
       }
       const fileContents = file.contents.toString();
-      const { result, error } = await pool.run({
-        resolvePluginsRelativeTo: getPackageRoot(),
+      const { result, error } = await pool.apply({
+        cwd,
         filePath: file.path,
         fileContents,
+        extensions,
+        recreateEslint,
       });
       if (result) {
         file.contents = Buffer.from(result);
@@ -62,8 +75,8 @@ export const createESLintTransform = function (
         this?.log?.warn?.(errorMessage);
       }
     },
-    () => {
-      pool.destroy();
+    async () => {
+      await pool.destroy();
     },
   );
 };

@@ -1,10 +1,15 @@
-import { RequireOneOrNone } from 'type-fest';
+import type { RequireOneOrNone } from 'type-fest';
 
 export type GradleComment = { comment?: string };
 
 export type GradleScript = { script: string };
 
-export type GradleDependency = { groupId: string; artifactId: string; version?: string; scope: string; classifier?: string };
+export type GradleLibraryDependency = { libraryName: string; scope?: string };
+
+export type GradleDependency = (
+  | { groupId: string; artifactId: string; version?: string; scope: string; classifier?: string }
+  | Required<GradleLibraryDependency>
+) & { closure?: string[] };
 
 export type GradlePlugin = { id: string; version?: string };
 
@@ -18,10 +23,7 @@ export type GradleTomlAnyItemVersion = RequireOneOrNone<{ version: string; 'vers
 
 export type GradleTomlLibraryId = { module: string } | { group: string; name: string };
 
-export type GradleLibrary = { libraryName: string; scope?: string } & (
-  | { library: string }
-  | (GradleTomlLibraryId & GradleTomlAnyItemVersion)
-);
+export type GradleLibrary = GradleLibraryDependency & ({ library: string } | (GradleTomlLibraryId & GradleTomlAnyItemVersion));
 
 export type GradleTomlPlugin = { pluginName: string; addToBuild?: boolean } & (
   | { plugin: string }
@@ -34,6 +36,7 @@ export type GradleCatalogNeedleOptions = { gradleVersionCatalogFile?: string };
 export type GradleNeedleOptions = GradleFileNeedleOptions & GradleCatalogNeedleOptions;
 
 export type GradleSourceType = {
+  _gradleDependencies?: GradleDependency[];
   applyFromGradle?(script: GradleScript): void;
   addGradleDependency?(dependency: GradleDependency, options?: GradleFileNeedleOptions): void;
   addGradleDependencies?(dependency: GradleDependency[], options?: GradleFileNeedleOptions): void;

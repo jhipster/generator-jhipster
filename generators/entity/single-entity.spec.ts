@@ -1,6 +1,6 @@
-import { before, it, describe, after, expect } from 'esmocha';
-import { skipPrettierHelpers as helpers, result as runResult } from '../../testing/index.js';
-import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
+import { before, describe, expect, it } from 'esmocha';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
 import BaseApplicationGenerator from '../base-application/generator.js';
 import { GENERATOR_ENTITY } from '../generator-list.js';
 
@@ -52,17 +52,14 @@ describe('generator - entity --single-entity', () => {
     });
 
     describe('with cassandra database', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .runJHipster(GENERATOR_ENTITY)
           .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
           .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo, entityBar])
           .withArguments(['Foo'])
           .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true });
       });
-
-      after(() => runResult.cleanup());
 
       it('should create files for entity Foo', () => {
         runResult.assertFile([

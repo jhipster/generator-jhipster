@@ -63,13 +63,13 @@ export default class UserManagementComponent implements OnInit {
   sortState = sortStateSignal({});
 <%_ } _%>
 
-  private userService = inject(UserManagementService);
+  private readonly userService = inject(UserManagementService);
 <%_ if (!databaseTypeCassandra) { _%>
-  private activatedRoute = inject(ActivatedRoute);
-  private router = inject(Router);
-  private sortService = inject(SortService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly sortService = inject(SortService);
 <%_ } _%>
-  private modalService = inject(NgbModal);
+  private readonly modalService = inject(NgbModal);
 
   ngOnInit(): void {
 <%_ if (databaseTypeCassandra) { _%>
@@ -83,7 +83,7 @@ export default class UserManagementComponent implements OnInit {
     this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.loadAll());
   }
 
-  trackIdentity(_index: number, item: User): <%= this.getTypescriptKeyType(user.primaryKey.type) %> {
+  trackIdentity(item: User): <%= this.getTypescriptKeyType(user.primaryKey.type) %> {
     return item.id!;
   }
 
@@ -130,7 +130,7 @@ export default class UserManagementComponent implements OnInit {
     combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
       const page = params.get('page');
       this.page = +(page ?? 1);
-      this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data['defaultSort']));
+      this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data.defaultSort));
       this.loadAll();
     });
   }
@@ -138,7 +138,7 @@ export default class UserManagementComponent implements OnInit {
 
   private onSuccess(users: User[] | null<% if (!databaseTypeCassandra) { %>, headers: HttpHeaders<% } %>): void {
 <%_ if (!databaseTypeCassandra) { _%>
-    this.totalItems.set(Number(headers.get('X-Total-Count')));    
+    this.totalItems.set(Number(headers.get('X-Total-Count')));
 <%_ } _%>
     this.users.set(users);
   }

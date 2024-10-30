@@ -23,7 +23,7 @@ import needleClientBase from '../../client/needle-api/needle-client.js';
 import { stripMargin } from '../../base/support/index.js';
 
 export default class extends needleClientBase {
-  addAppSCSSStyle(style: string, comment: string) {
+  addAppSCSSStyle(style: string, comment?: string) {
     const filePath = `${this.clientSrcDir}app/app.scss`;
     this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
   }

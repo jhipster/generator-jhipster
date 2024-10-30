@@ -1,6 +1,6 @@
-import { Readable } from 'stream';
-import { it, describe, expect } from 'esmocha';
-import { pipeline } from 'p-transform';
+import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
+import { describe, expect, it } from 'esmocha';
 import generatedAnnotationTransform from './generated-annotation-transform.js';
 
 describe('generators - java - generated-annotation-transform', () => {

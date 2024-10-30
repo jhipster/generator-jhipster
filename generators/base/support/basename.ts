@@ -5,7 +5,7 @@ import { camelCase } from 'lodash-es';
  */
 export const getFrontendAppName = ({ baseName }: { baseName: string }) => {
   const name = camelCase(baseName) + (baseName.endsWith('App') ? '' : 'App');
-  return name.match(/^\d/) ? 'App' : name;
+  return /^\d/.exec(name) ? 'App' : name;
 };
 
 export const getMicroserviceAppName = ({ microserviceName }: { microserviceName: string }) => {

@@ -1,0 +1,222 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.web.rest;
+
+import <%= packageName %>.security.SecurityUtils;
+<%_ if (generateBuiltInAuthorityEntity) { _%>
+import <%= packageName %>.domain.Authority;
+
+<%_ } _%>
+
+import java.security.Principal;
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+<%_ } _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+<%_ } else { _%>
+  <%_ if (reactive) { _%>
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.userdetails.UserDetails;
+  <%_ } else { _%>
+import <%= packageName %>.security.SecurityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
+  <%_ } _%>
+<%_ } _%>
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/api")
+public class AccountResource {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AccountResource.class);
+
+    private static class AccountResourceException extends RuntimeException {
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+        private static final long serialVersionUID = 1L;
+
+        private AccountResourceException(String message) {
+            super(message);
+        }
+<%_ } _%>
+    }
+
+    /**
+     * {@code GET  /account} : get the current user.
+     *
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+     * @param principal the current user; resolves to {@code null} if not authenticated.
+<%_ } _%>
+     * @return the current user.
+     * @throws AccountResourceException {@code 500 (Internal Server Error)} if the user couldn't be returned.
+     */
+    @GetMapping("/account")
+<%_ if (reactive) { _%>
+  <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+    public Mono<UserVM> getAccount(Principal principal) {
+        if (principal instanceof AbstractAuthenticationToken) {
+            return Mono.just(getUserFromAuthentication((AbstractAuthenticationToken) principal));
+        } else {
+            throw new AccountResourceException("User could not be found");
+        }
+    }
+  <%_ } else { _%>
+    public Mono<UserVM> getAccount() {
+        return ReactiveSecurityContextHolder.getContext()
+            .map(SecurityContext::getAuthentication)
+            .map(authentication -> {
+                String login;
+                if (authentication.getPrincipal() instanceof UserDetails) {
+                    login = ((UserDetails) authentication.getPrincipal()).getUsername();
+                } else if (authentication.getPrincipal() instanceof String) {
+                    login = (String) authentication.getPrincipal();
+                } else {
+                    throw new AccountResourceException();
+                }
+                Set<String> authorities = authentication
+                    .getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toSet());
+                return new UserVM(login, authorities);
+            })
+            .switchIfEmpty(Mono.error(new AccountResourceException()));
+    }
+  <%_ } _%>
+<%_ } else { _%>
+  <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+    public UserVM getAccount(Principal principal) {
+        if (principal instanceof AbstractAuthenticationToken) {
+            return getUserFromAuthentication((AbstractAuthenticationToken) principal);
+        } else {
+            throw new AccountResourceException("User could not be found");
+        }
+    }
+  <%_ } else { _%>
+    public UserVM getAccount() {
+        String login = SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(AccountResourceException::new);
+        Set<String> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toSet());
+        return new UserVM(login, authorities);
+    }
+  <%_ } _%>
+<%_ } _%>
+<%_ if (!authenticationTypeJwt) { _%>
+
+    /**
+     * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
+     *
+     * @param principal the authentication principal.
+     * @return the login if the user is authenticated.
+     */
+    @GetMapping(value = "/authenticate", produces = MediaType.TEXT_PLAIN_VALUE)
+    public String isAuthenticated(Principal principal) {
+        LOG.debug("REST request to check if the current user is authenticated");
+        return principal == null ? null : principal.getName();
+    }
+<%_ } _%>
+
+    private static class UserVM {
+        private String login;
+<%_ if (generateBuiltInAuthorityEntity) { _%>
+        private Set<Authority> authorities;
+<%_ } else { _%>
+        private Set<String> authorities;
+<%_ } _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+        private Map<String, Object> details;
+<%_ } _%>
+
+        UserVM(String login, Set<String> authorities<% if (authenticationTypeOauth2 || authenticationTypeJwt) { %>, Map<String, Object> details<% } %>) {
+            this.login = login;
+            this.authorities = authorities;
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+            this.details = details;
+<%_ } _%>
+        }
+
+        public boolean isActivated() {
+            return true;
+        }
+
+        public Set<String> getAuthorities() {
+            return authorities;
+        }
+
+        public String getLogin() {
+            return login;
+        }
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+
+        @JsonAnyGetter
+        public Map<String, Object> getDetails() {
+            return details;
+        }
+<%_ } _%>
+    }
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+
+    private static UserVM getUserFromAuthentication(AbstractAuthenticationToken authToken) {
+        Map<String, Object> attributes;
+        if (authToken instanceof JwtAuthenticationToken) {
+            attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();
+  <%_ if (authenticationTypeOauth2) { _%>
+        } else if (authToken instanceof OAuth2AuthenticationToken) {
+            attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
+  <%_ } _%>
+        } else {
+            throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
+        }
+
+        return new UserVM(
+            authToken.getName(),
+            authToken.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+  <%_ if (generateBuiltInAuthorityEntity) { _%>
+                .map(authority -> {
+                    Authority auth = new Authority();
+                    auth.setName(authority);
+                    return auth;
+                })
+  <%_ } _%>
+                .collect(Collectors.toSet()),
+            SecurityUtils.extractDetailsFromTokenAttributes(attributes)
+        );
+    }
+<%_ } _%>
+}

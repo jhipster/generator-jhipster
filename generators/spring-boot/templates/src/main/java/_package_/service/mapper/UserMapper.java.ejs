@@ -1,0 +1,207 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.service.mapper;
+
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+import <%= packageName %>.domain.Authority;
+<%_ } _%>
+import <%= user.entityAbsoluteClass %>;
+import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
+import <%= packageName %>.service.dto.<%= user.dtoClass %>;
+
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+/**
+ * Mapper for the entity {@link <%= user.persistClass %>} and its DTO called {@link <%= user.dtoClass %>}.
+ *
+ * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
+ * support is still in beta, and requires a manual step with an IDE.
+ */
+@Service
+public class UserMapper {
+
+    public List<<%= user.dtoClass %>> usersToUserDTOs(List<<%= user.persistClass %>> users) {
+        return users.stream()
+            .filter(Objects::nonNull)
+            .map(this::userToUserDTO)
+            .toList();
+    }
+
+    public <%= user.dtoClass %> userToUserDTO(<%= user.persistClass %> user) {
+        return new <%= user.dtoClass %>(user);
+    }
+
+    public List<<%= user.adminUserDto %>> usersToAdminUserDTOs(List<<%= user.persistClass %>> users) {
+        return users.stream()
+            .filter(Objects::nonNull)
+            .map(this::userToAdminUserDTO)
+            .toList();
+    }
+
+    public <%= user.adminUserDto %> userToAdminUserDTO(<%= user.persistClass %> user) {
+        return new <%= user.adminUserDto %>(user);
+    }
+
+    public List<<%= user.persistClass %>> userDTOsToUsers(List<<%= user.adminUserDto %>> userDTOs) {
+        return userDTOs.stream()
+            .filter(Objects::nonNull)
+            .map(this::userDTOToUser)
+            .toList();
+    }
+
+    public <%= user.persistClass %> userDTOToUser(<%= user.adminUserDto %> userDTO) {
+        if (userDTO == null) {
+            return null;
+        } else {
+            <%= user.persistClass %> user = new <%= user.persistClass %>();
+            user.setId(userDTO.getId());
+            user.setLogin(userDTO.getLogin());
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            user.setEmail(userDTO.getEmail());
+<%_ if (!databaseTypeCassandra) { _%>
+            user.setImageUrl(userDTO.getImageUrl());
+<%_ } _%>
+<%_ if (generateSpringAuditor) { _%>
+            user.setCreatedBy(userDTO.getCreatedBy());
+            user.setCreatedDate(userDTO.getCreatedDate());
+            user.setLastModifiedBy(userDTO.getLastModifiedBy());
+            user.setLastModifiedDate(userDTO.getLastModifiedDate());
+<%_ } _%>
+            user.setActivated(userDTO.isActivated());
+            user.setLangKey(userDTO.getLangKey());
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+            Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
+            user.setAuthorities(authorities);
+<%_ } else { _%>
+            Set<String> authorities = this.cleanNullStringAuthorities(userDTO.getAuthorities());
+            user.setAuthorities(authorities);
+<%_ } _%>
+            return user;
+        }
+    }
+
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+
+    private Set<Authority> authoritiesFromStrings(Set<String> authoritiesAsString) {
+        Set<Authority> authorities = new HashSet<>();
+
+        if (authoritiesAsString != null) {
+            authorities = authoritiesAsString
+                .stream()
+                .map(string -> {
+                    Authority auth = new Authority();
+                    auth.setName(string);
+                    return auth;
+                })
+                .collect(Collectors.toSet());
+        }
+
+        return authorities;
+    }
+<%_ } else { _%>
+
+    private Set<String> cleanNullStringAuthorities(Set<String> authoritiesAsString) {
+        Set<String> authorities = new HashSet<>();
+
+        if (authoritiesAsString != null) {
+            authorities = authoritiesAsString.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        }
+
+        return authorities;
+    }
+<%_ } _%>
+
+    public <%= user.persistClass %> userFromId(<%= user.primaryKey.type %> id) {
+        if (id == null) {
+            return null;
+        }
+        <%= user.persistClass %> user = new <%= user.persistClass %>();
+        user.setId(id);
+        return user;
+    }
+
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    public <%= user.dtoClass %> toDtoId(<%= user.persistClass %> user) {
+        if (user == null) {
+            return null;
+        }
+        <%= user.dtoClass %> userDto = new <%= user.dtoClass %>();
+        userDto.setId(user.getId());
+        return userDto;
+    }
+
+    @Named("idSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    public Set<<%= user.dtoClass %>> toDtoIdSet(Set<<%= user.persistClass %>> users) {
+        if ( users == null ) {
+            return Collections.emptySet();
+        }
+
+        Set<<%= user.dtoClass %>> userSet = new HashSet<>();
+        for ( <%= user.persistClass %> userEntity : users ) {
+            userSet.add( this.toDtoId( userEntity ) );
+        }
+
+        return userSet;
+    }
+
+    @Named("login")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "login", source = "login")
+    public <%= user.dtoClass %> toDtoLogin(<%= user.persistClass %> user) {
+        if (user == null) {
+            return null;
+        }
+        <%= user.dtoClass %> userDto = new <%= user.dtoClass %>();
+        userDto.setId(user.getId());
+        userDto.setLogin(user.getLogin());
+        return userDto;
+    }
+
+    @Named("loginSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "login", source = "login")
+    public Set<<%= user.dtoClass %>> toDtoLoginSet(Set<<%= user.persistClass %>> users) {
+        if ( users == null ) {
+            return Collections.emptySet();
+        }
+
+        Set<<%= user.dtoClass %>> userSet = new HashSet<>();
+        for ( <%= user.persistClass %> userEntity : users ) {
+            userSet.add( this.toDtoLogin( userEntity ) );
+        }
+
+        return userSet;
+    }
+}

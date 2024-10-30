@@ -100,6 +100,9 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
           ]);
         }
       },
+      addLog({ source }) {
+        source.addLogbackMainLog!({ name: 'org.apache.kafka', level: 'WARN' });
+      },
     });
   }
 

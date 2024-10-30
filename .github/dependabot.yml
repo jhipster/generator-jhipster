@@ -36,9 +36,10 @@ updates:
       - dependency-name: '@types/node'
         versions: ['>=19']
     groups:
-      typescript-eslint:
+      eslint:
         patterns:
-          - '@typescript-eslint/*'
+          - '@eslint/*'
+          - 'eslint'
 
   - package-ecosystem: 'npm'
     directory: '/generators/generate-blueprint/resources/'
@@ -83,16 +84,14 @@ updates:
           - 'ngx-infinite-scroll'
           - 'typescript'
           - 'zone.js'
-      angular-eslint:
-        patterns:
-          - '@angular-eslint/*'
       fortawesome:
         patterns:
           - '@fortawesome/fontawesome-svg-core'
           - '@fortawesome/free-solid-svg-icons'
-      typescript-eslint:
+      eslint:
         patterns:
-          - '@typescript-eslint/*'
+          - '@eslint/*'
+          - 'eslint'
 
   - package-ecosystem: 'npm'
     directory: '/generators/common/resources/'
@@ -147,7 +146,8 @@ updates:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=19']
-      - dependency-name: '@module-federation/utilities'
+      # https://github.com/jhipster/generator-jhipster/issues/27464#issuecomment-2400505558, https://github.com/twbs/bootstrap/issues/40849
+      - dependency-name: 'sass'
         versions: ['*']
     groups:
       eslint:
@@ -181,19 +181,17 @@ updates:
       # https://github.com/bootstrap-vue/bootstrap-vue/issues/5507
       - dependency-name: 'bootstrap'
         versions: ['>=5']
+      # Bootstrap v4 issue https://github.com/jhipster/generator-jhipster/issues/23770, https://github.com/twbs/bootstrap/issues/39028, https://github.com/jhipster/generator-jhipster/issues/27464#issuecomment-2400505558, https://github.com/twbs/bootstrap/issues/40849
+      - dependency-name: 'sass'
+        versions: ['*']
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=19']
-      - dependency-name: '@module-federation/utilities'
-        versions: ['*']
     groups:
-      typescript-eslint:
+      eslint:
         patterns:
-          - '@typescript-eslint/*'
-      vue-eslint:
-        patterns:
-          - '@vue/eslint-config-typescript'
-          - 'eslint-plugin-vue'
+          - '@eslint/*'
+          - 'eslint'
       fortawesome:
         patterns:
           - '@fortawesome/fontawesome-svg-core'
@@ -209,10 +207,17 @@ updates:
       - 'theme: dependencies'
       - 'theme: docker :whale:'
       - 'skip-changelog'
-    ignore:
-      # https://github.com/jhipster/generator-jhipster/issues/25548
-      - dependency-name: 'mongo'
-        versions: ['>=7.0.6']
+
+  - package-ecosystem: 'docker'
+    directory: '/test-integration/sonar-pr/'
+    schedule:
+      interval: 'daily'
+      time: '00:30'
+    open-pull-requests-limit: 5
+    labels:
+      - 'theme: dependencies'
+      - 'theme: docker :whale:'
+      - 'skip-changelog'
 
   - package-ecosystem: 'maven'
     directory: '/generators/server/resources/'
@@ -257,4 +262,14 @@ updates:
     labels:
       - 'theme: github_actions'
       - 'theme: CI builds'
+      - 'skip-changelog'
+
+  - package-ecosystem: 'gradle'
+    directory: '/generators/spring-boot/generators/graalvm/resources/'
+    schedule:
+      interval: 'daily'
+      time: '08:30'
+    open-pull-requests-limit: 5
+    labels:
+      - 'theme: dependencies'
       - 'skip-changelog'

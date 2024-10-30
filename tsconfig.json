@@ -1,5 +1,5 @@
 {
-  "include": ["cli/**/*", "generators/**/*", "jdl/**/*", "lib/**/*", "testing/**/*"],
+  "include": ["./cli", "./generators", "./lib"],
   "exclude": ["**/*.spec.*", "**/__*/**", "**/node_modules", "**/.*/"],
   "compilerOptions": {
     /* Language and Environment */
@@ -17,17 +17,19 @@
 
     /* Emit */
     "outDir": "./dist" /* Specify an output folder for all emitted files. */,
+    "declaration": true,
 
     /* Interop Constraints */
     "allowSyntheticDefaultImports": true /* Allow 'import x from y' when a module doesn't have a default export. */,
     "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+    "isolatedModules": true /* Ensure that each file can be safely transpiled independently. */,
 
     /* Type Checking */
     "strict": true /* Enable all strict type-checking options. */,
     "noImplicitAny": false,
 
     /* Completeness */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+    "skipLibCheck": false /* Skip type checking all .d.ts files. */
   }
 }

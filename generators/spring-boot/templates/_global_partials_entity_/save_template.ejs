@@ -33,5 +33,5 @@
 <%_ if (dtoMapstruct) { _%>
         <%- returnDirectly ? 'return' : `${dtoInstance} =` %> <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 <%_ } else if (returnDirectly && searchEngineElasticsearch) { _%>
-        return <%- entityInstance %>;
+        return <%- persistInstance %>;
 <%_ } _%>

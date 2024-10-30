@@ -29,6 +29,8 @@ on:
         type: number
 permissions:
   contents: read
+env:
+  FORCE_COLOR: 2
 jobs:
   comment:
     runs-on: ubuntu-latest

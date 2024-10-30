@@ -17,17 +17,14 @@
  * limitations under the License.
  */
 
-import type BaseGenerator from '../../base/index.js';
-import { type SpringBootApplication } from '../types.js';
-
-type UpdateServerLanguagesTaskParam = { application: SpringBootApplication & { enableTranslation: true }; control: any };
+import { asPostWritingTask } from '../../base-application/support/task-type-inference.js';
 
 /**
  * Update Languages In MailServiceIT
  *
  * @param application
  */
-export function updateLanguagesInMailServiceITTask(this: BaseGenerator, { application, control }: UpdateServerLanguagesTaskParam) {
+export const updateLanguagesInMailServiceITTask = asPostWritingTask(function updateLanguagesInMailServiceITTask({ application, control }) {
   const { javaPackageTestDir, languagesDefinition } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
   let newContent = 'private static final String[] languages = {\n';
@@ -39,8 +36,8 @@ export function updateLanguagesInMailServiceITTask(this: BaseGenerator, { applic
   this.editFile(`${javaPackageTestDir}/service/MailServiceIT.java`, { ignoreNonExisting }, content =>
     content.replace(/private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g, newContent),
   );
-}
+});
 
-export default function updateLanguagesTask(this: BaseGenerator, taskParam: UpdateServerLanguagesTaskParam) {
+export default asPostWritingTask(function updateLanguagesTask(this, taskParam) {
   updateLanguagesInMailServiceITTask.call(this, taskParam);
-}
+});

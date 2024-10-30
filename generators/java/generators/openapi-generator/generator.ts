@@ -34,8 +34,8 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
 
   get writing() {
     return this.asWritingTaskGroup({
-      cleanup({ application, control }) {
-        control.cleanupFiles({
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
           '8.6.1': [[application.buildToolGradle!, 'gradle/swagger.gradle']],
         });
       },
@@ -62,18 +62,20 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addDependencies({ source, application }) {
-        const { addOpenapiGeneratorPlugin, buildToolGradle, buildToolMaven, javaDependencies } = application;
-        source.addJavaDependencies!([
+        const { addOpenapiGeneratorPlugin, buildToolGradle, javaDependencies } = application;
+        source.addJavaDefinitions!(
           {
-            groupId: 'org.openapitools',
-            artifactId: 'jackson-databind-nullable',
-            version: javaDependencies!['jackson-databind-nullable'],
+            dependencies: [
+              {
+                groupId: 'org.openapitools',
+                artifactId: 'jackson-databind-nullable',
+                version: javaDependencies!['jackson-databind-nullable'],
+              },
+            ],
           },
-        ]);
-
-        if (addOpenapiGeneratorPlugin) {
-          if (buildToolMaven) {
-            source.addMavenDefinition!({
+          {
+            condition: addOpenapiGeneratorPlugin,
+            mavenDefinition: {
               properties: [
                 { property: 'openapi-generator-maven-plugin.version', value: javaDependencies!['openapi-generator-maven-plugin'] },
               ],
@@ -82,6 +84,7 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
                 {
                   groupId: 'org.openapitools',
                   artifactId: 'openapi-generator-maven-plugin',
+                  // eslint-disable-next-line no-template-curly-in-string
                   version: '${openapi-generator-maven-plugin.version}',
                   additionalContent: `                <executions>
                     <execution>
@@ -112,8 +115,11 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
 `,
                 },
               ],
-            });
-          }
+            },
+          },
+        );
+
+        if (addOpenapiGeneratorPlugin) {
           if (buildToolGradle) {
             source.addGradleBuildSrcDependencyCatalogLibraries?.([
               {

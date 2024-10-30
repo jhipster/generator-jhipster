@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-expressions */
-import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
-import { basicHelpers as helpers } from '../../testing/index.js';
+import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
+import { defaultHelpers as helpers } from '../../lib/testing/index.js';
 
-import { createJHipsterLogger } from '../base/support/logger.js';
+import { createJHipsterLogger } from '../base/support/index.js';
 import Base from './index.js';
 
 const BaseGenerator: any = Base.prototype;
@@ -19,7 +18,7 @@ describe('generator - base-core', () => {
     let Dummy;
     beforeEach(async () => {
       await helpers.prepareTemporaryDir();
-      Dummy = helpers.createDummyGenerator(Base);
+      Dummy = helpers.createDummyGenerator(Base as any);
     });
 
     it('no argument', async () => {
@@ -78,7 +77,8 @@ describe('generator - base-core', () => {
         },
       });
       jestExpect(base.first).toBe('bar');
-      jestExpect(base.jdlFiles).toMatchObject(['foo']);
+      jestExpect(base.jdlFiles).toHaveLength(1);
+      jestExpect(base.jdlFiles[0]).toMatch('foo');
     });
     it('vararg arguments using positionalArguments', async () => {
       const base = new Dummy({ positionalArguments: ['bar', ['foo']], sharedData: {}, env: await helpers.createTestEnv() });
@@ -91,7 +91,8 @@ describe('generator - base-core', () => {
         },
       });
       jestExpect(base.first).toBe('bar');
-      jestExpect(base.jdlFiles).toMatchObject(['foo']);
+      jestExpect(base.jdlFiles).toHaveLength(1);
+      jestExpect(base.jdlFiles[0]).toBe('foo');
     });
   });
 });
