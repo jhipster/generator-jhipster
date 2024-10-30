@@ -18,7 +18,6 @@
  */
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
-import type { Entity } from '../../lib/types/application/entity.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.js';
 import { defaultLanguage } from '../languages/support/index.js';
@@ -40,17 +39,15 @@ import {
   isTranslatedAngularFile,
   translateAngularFilesTransform,
 } from './support/index.js';
-import type { AngularApplication } from './types.js';
+import type { AngularApplication, AngularEntity } from './types.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
 export default class AngularGenerator extends BaseApplicationGenerator<
-  Entity,
+  AngularEntity,
   AngularApplication,
-  DefaultTaskTypes<Entity, AngularApplication>
+  DefaultTaskTypes<AngularEntity, AngularApplication>
 > {
-  localEntities?: any[];
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -85,6 +82,12 @@ export default class AngularGenerator extends BaseApplicationGenerator<
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      prepareApplication({ application }) {
+        // @ts-ignore
+        application.getTypescriptKeyType = primaryKey => {
+          return getTSKeyType(primaryKey);
+        };
+      },
       applicationDefauts({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
@@ -92,7 +95,6 @@ export default class AngularGenerator extends BaseApplicationGenerator<
           webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
           angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!,
         });
-
         application.addPrettierExtensions?.(['html', 'css', 'scss']);
       },
       addNeedles({ source, application }) {
@@ -107,7 +109,6 @@ export default class AngularGenerator extends BaseApplicationGenerator<
           const editCallback = addToEntitiesMenu(param);
           this.editFile(filePath, { ignoreNonExisting }, editCallback);
         };
-
         source.addAdminRoute = (args: Omit<Parameters<typeof addRoute>[0], 'needle'>) =>
           this.editFile(
             `${application.srcMainWebapp}app/admin/admin.routes.ts`,
@@ -178,6 +179,26 @@ export default class AngularGenerator extends BaseApplicationGenerator<
             ...(entity.entityReadAuthority?.split(',') ?? []),
           ]),
         });
+
+        entity.generateEntityClientEnumImports = fields => {
+          return getClientEnumImportsFormat(fields, ANGULAR);
+        };
+
+        entity.generateTestEntityPrimaryKey = (primaryKey, index) => {
+          return getTestEntityPrimaryKey(primaryKey, index);
+        };
+
+        entity.generateTypescriptTestEntity = (references, additionalFields) => {
+          return generateTestEntity(references, additionalFields);
+        };
+
+        entity.buildAngularFormPath = (reference, prefix = []) => {
+          return angularFormPath(reference, prefix);
+        };
+
+        entity.generateTestEntityId = (primaryKey, index = 0, wrapped = true) => {
+          return getTestEntityId(primaryKey, index, wrapped);
+        };
       },
     });
   }
@@ -223,9 +244,9 @@ export default class AngularGenerator extends BaseApplicationGenerator<
 
   get default() {
     return this.asDefaultTaskGroup({
-      loadEntities() {
+      loadEntities({ application }) {
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);
-        this.localEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient);
+        application.frontendEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient);
       },
       queueTranslateTransform({ control, application }) {
         const { enableTranslation, jhiPrefix } = application;
@@ -326,27 +347,5 @@ export default class AngularGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
-  }
-  /**
-   * Returns the typescript import section of enums referenced by all fields of the entity.
-   * @param fields returns the import of enums that are referenced by the fields
-   * @returns {typeImports:Map} the fields that potentially contains some enum types
-   */
-  generateEntityClientEnumImports(fields) {
-    return getClientEnumImportsFormat(fields, ANGULAR);
-  }
-
-  /**
-   * @private
-   * Add a new menu element, at the root of the menu.
-   *
-   * @param {string} routerName - The name of the router that is added to the menu.
-   * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} translationKeyMenu - i18n key for entry in the menu
-   */
-  addElementToMenu(routerName, iconName, enableTranslation, _clientFramework?, translationKeyMenu = camelCase(routerName)) {
-    this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
   }
 }

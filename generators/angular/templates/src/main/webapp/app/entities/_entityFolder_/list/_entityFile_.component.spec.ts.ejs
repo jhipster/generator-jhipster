@@ -136,7 +136,11 @@ describe('<%= entityAngularName %> Management Component', () => {
 
     describe('track<%= primaryKey.nameCapitalized %>', () => {
         it('Should forward to <%= entityInstance %>Service', () => {
+<<<<<<< HEAD
             const entity = <%- tsPrimaryKeySamples[0] %>;
+=======
+            const entity = <%- generateTestEntityPrimaryKey(primaryKey, 0) %>;
+>>>>>>> 6a2ff33b25 (generator-specific entity)
             jest.spyOn(service, 'get<%= entityAngularName %>Identifier');
             const <%= primaryKey.name %> = comp.track<%= primaryKey.nameCapitalized %>(entity);
             expect(service.get<%= entityAngularName %>Identifier).toHaveBeenCalledWith(entity);

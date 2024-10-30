@@ -27,11 +27,6 @@ import type { FakerWithRandexp } from '../../../generators/base/support/faker.ts
 import type { Field } from './field.js';
 import type { Relationship } from './relationship.js';
 
-type AngularEntity = {
-  entityAngularAuthorities?: string;
-  entityAngularReadAuthorities?: string;
-};
-
 export type PrimaryKey<F extends BaseField = Field> = {
   name: string;
   fields: F[];

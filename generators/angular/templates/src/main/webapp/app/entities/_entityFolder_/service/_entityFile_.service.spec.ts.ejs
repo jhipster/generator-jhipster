@@ -18,7 +18,7 @@
 -%>
 <%_
 const tsKeyId = primaryKey.tsSampleValues[0];
-const enumImports = this.generateEntityClientEnumImports(fields);
+const enumImports = generateEntityClientEnumImports(fields);
 _%>
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
@@ -219,7 +219,11 @@ describe('<%= entityAngularName %> Service', () => {
             });
 
             it('Should return false if one entity is null', () => {
+<<<<<<< HEAD
                 const entity1 = <%- tsPrimaryKeySamples[0] %>;
+=======
+                const entity1 = <%- generateTestEntityPrimaryKey(primaryKey, 0) %>;
+>>>>>>> 6a2ff33b25 (generator-specific entity)
                 const entity2 = null;
 
                 const compareResult1 = service.compare<%= entityAngularName %>(entity1, entity2);
@@ -230,8 +234,13 @@ describe('<%= entityAngularName %> Service', () => {
             });
 
             it('Should return false if primaryKey differs', () => {
+<<<<<<< HEAD
                 const entity1 = <%- tsPrimaryKeySamples[0] %>;
                 const entity2 = <%- tsPrimaryKeySamples[1] %>;
+=======
+                const entity1 = <%- generateTestEntityPrimaryKey(primaryKey, 0) %>;
+                const entity2 = <%- generateTestEntityPrimaryKey(primaryKey, 1) %>;
+>>>>>>> 6a2ff33b25 (generator-specific entity)
 
                 const compareResult1 = service.compare<%= entityAngularName %>(entity1, entity2);
                 const compareResult2 = service.compare<%= entityAngularName %>(entity2, entity1);
@@ -241,8 +250,13 @@ describe('<%= entityAngularName %> Service', () => {
             });
 
             it('Should return false if primaryKey matches', () => {
+<<<<<<< HEAD
                 const entity1 = <%- tsPrimaryKeySamples[0] %>;
                 const entity2 = <%- tsPrimaryKeySamples[0] %>;
+=======
+                const entity1 = <%- generateTestEntityPrimaryKey(primaryKey, 0) %>;
+                const entity2 = <%- generateTestEntityPrimaryKey(primaryKey, 0) %>;
+>>>>>>> 6a2ff33b25 (generator-specific entity)
 
                 const compareResult1 = service.compare<%= entityAngularName %>(entity1, entity2);
                 const compareResult2 = service.compare<%= entityAngularName %>(entity2, entity1);
