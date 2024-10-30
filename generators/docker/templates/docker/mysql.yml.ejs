@@ -35,7 +35,7 @@ services:
       - 127.0.0.1:3306:3306
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
-      test: ["CMD", "mysql", "-e", "SHOW DATABASES;"]
+      test: ['CMD-SHELL', 'mysql -e "SHOW DATABASES;" && sleep 5']
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
