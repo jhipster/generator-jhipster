@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "18.2.9",
+    "@angular/common": "18.2.10",
     "@fortawesome/angular-fontawesome": "0.15.0",
     "@fortawesome/fontawesome-svg-core": "6.6.0",
     "@fortawesome/free-solid-svg-icons": "6.6.0",
@@ -23,7 +23,7 @@
     "@angular-architects/module-federation-runtime": "18.0.6",
     "@angular-builders/custom-webpack": "18.0.0",
     "@angular-builders/jest": "18.0.0",
-    "@angular/cli": "18.2.10",
+    "@angular/cli": "18.2.11",
     "@types/jest": "29.5.14",
     "@types/node": "20.11.25",
     "@types/sockjs-client": "1.5.4",
