@@ -3,9 +3,11 @@ import { extname, join } from 'node:path';
 import type { GitHubMatrixGroup } from './github-matrix.js';
 import { getUnknownGitHubMatrixGroupProperties } from './github-matrix.js';
 
-export const getGithubSamplesGroups = async (samplesGroupFolder: string): Promise<string[]> => {
+export const getGithubSamplesGroups = async (samplesGroupFolder: string, keepExtensions = false): Promise<string[]> => {
   const samplesFolderContent = await readdir(samplesGroupFolder);
-  return samplesFolderContent.filter(sample => ['.json', '.js', '.ts', ''].includes(extname(sample)));
+  return samplesFolderContent
+    .filter(sample => ['.json', '.js', '.ts', ''].includes(extname(sample)))
+    .map(sample => (keepExtensions ? sample : sample.split('.')[0]));
 };
 
 export const getGithubSamplesGroup = async (
@@ -14,7 +16,7 @@ export const getGithubSamplesGroup = async (
 ): Promise<{ samples: GitHubMatrixGroup; warnings: string[] }> => {
   const warnings: string[] = [];
   let samples: GitHubMatrixGroup = {};
-  const samplesFolderContent = await getGithubSamplesGroups(samplesGroupFolder);
+  const samplesFolderContent = await getGithubSamplesGroups(samplesGroupFolder, true);
   if (samplesFolderContent.includes(`${group}.js`) || samplesFolderContent.includes(`${group}.ts`)) {
     const jsGroup: { default: GitHubMatrixGroup } = await import(join(samplesGroupFolder, `${group}.js`));
     samples = Object.fromEntries(Object.entries(jsGroup.default).map(([sample, value]) => [sample, { ...value, 'samples-group': group }]));

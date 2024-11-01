@@ -18,6 +18,7 @@
  */
 import { readdir } from 'node:fs/promises';
 import { GENERATOR_APP } from 'generator-jhipster/generators';
+import { getGithubSamplesGroups } from 'generator-jhipster/testing';
 
 /**
  * @type {import('generator-jhipster').JHipsterCommandDefinition}
@@ -29,12 +30,20 @@ const command = {
     },
   },
   configs: {
+    samplesFolder: {
+      description: 'Path to the samples folder',
+      cli: {
+        type: String,
+      },
+      default: 'samples',
+      scope: 'generator',
+    },
     sampleName: {
       prompt: gen => ({
         when: !gen.all,
         type: 'list',
         message: 'which sample do you want to generate?',
-        choices: async () => readdir(gen.templatePath('samples')),
+        choices: async () => getGithubSamplesGroups(gen.templatePath(gen.samplesFolder)),
       }),
       scope: 'generator',
     },
