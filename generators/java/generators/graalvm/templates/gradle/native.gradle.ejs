@@ -9,7 +9,7 @@ graalvmNative {
       //  vendor = JvmVendorSpec.matching("GraalVM Community")
       //}
       buildArgs.add("-Duser.language=<%- nativeLanguageDefinition.languageTag %>")
-      buildArgs.add("-H:IncludeLocales=<%- languagesDefinition.map(def => def.languageTag).join(',') %>")
+      buildArgs.add("-H:IncludeLocales=<%- languagesDefinition?.map(def => def.languageTag)?.join(',') ?? nativeLanguageDefinition.languageTag %>")
     }
   }
   binaries.all {
