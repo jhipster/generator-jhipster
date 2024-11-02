@@ -18,6 +18,7 @@
  */
 import { inspect } from 'node:util';
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import type { GetWebappTranslationCallback } from '../../../lib/types/base/translation.js';
 import { createTranslationReplacer } from './translate-angular.js';
 
 describe('generator - angular - transform', () => {
@@ -28,11 +29,11 @@ describe('generator - angular - transform', () => {
     beforeEach(() => {
       let value = 0;
       const testImpl = (key, data) => (key === 'blank' ? '' : `translated-value-${key}-${data ? `${inspect(data)}-` : ''}${value++}`);
-      replaceAngularTranslations = createTranslationReplacer(esmocha.fn().mockImplementation(testImpl), {
+      replaceAngularTranslations = createTranslationReplacer(esmocha.fn<GetWebappTranslationCallback>().mockImplementation(testImpl), {
         jhiPrefix: 'jhi',
         enableTranslation: false,
       });
-      enabledAngularTranslations = createTranslationReplacer(esmocha.fn().mockImplementation(testImpl), {
+      enabledAngularTranslations = createTranslationReplacer(esmocha.fn<GetWebappTranslationCallback>().mockImplementation(testImpl), {
         jhiPrefix: 'jhi',
         enableTranslation: true,
       });

@@ -19,10 +19,15 @@
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 import type CoreGenerator from '../../base-core/index.js';
+import type { GetWebappTranslationCallback } from '../../../lib/types/base/translation.js';
 
-type GetWebappTranslation = (s: string, data?: Record<string, any>) => string;
-
-function replaceTranslationAttributes({ content, getWebappTranslation }: { content: string; getWebappTranslation: GetWebappTranslation }) {
+function replaceTranslationAttributes({
+  content,
+  getWebappTranslation,
+}: {
+  content: string;
+  getWebappTranslation: GetWebappTranslationCallback;
+}) {
   return content.replaceAll(/:(?<tag>(?:placeholder|title|label))="(?<translate>t\$\([^"]+\))"/g, (_complete, ...args) => {
     const groups: Record<string, string> = args.pop();
     if (groups.translate.includes('+')) {
@@ -49,7 +54,7 @@ export function replaceTranslationTags(
   }: {
     body: string;
     enableTranslation: boolean;
-    getWebappTranslation: GetWebappTranslation;
+    getWebappTranslation: GetWebappTranslationCallback;
   },
 ) {
   body = body.replaceAll(
@@ -93,7 +98,7 @@ export function replaceTranslations({
 }: {
   content: string;
   type: 'vue' | 'ts';
-  getWebappTranslation: GetWebappTranslation;
+  getWebappTranslation: GetWebappTranslationCallback;
 }) {
   const regex =
     type === 'ts'
@@ -155,7 +160,7 @@ function translateVueFilesTransform(
     getWebappTranslation,
   }: {
     enableTranslation: boolean;
-    getWebappTranslation: GetWebappTranslation;
+    getWebappTranslation: GetWebappTranslationCallback;
   },
 ) {
   return passthrough(file => {

@@ -1,5 +1,6 @@
 import type { Entity } from '../base-application/index.js';
 import type { ExportControlPropertiesFromCommand } from '../../lib/command/index.js';
+import type { GetWebappTranslationCallback } from '../../lib/types/base/translation.js';
 import type command from './command.ts';
 
 type BaseApplicationControlProperties = ExportControlPropertiesFromCommand<typeof command>;
@@ -24,5 +25,5 @@ export type Control = BaseApplicationControlProperties & {
    * cleanupFiles({ '6.0.0': ['file1', 'file2', [application.shouldRemove, 'file3']] })
    */
   cleanupFiles: (cleanup: Record<string, (string | [boolean, ...string[]])[]>) => Promise<void>;
-  getWebappTranslation?: (s: string, data?: Record<string, any>) => string;
+  getWebappTranslation?: GetWebappTranslationCallback;
 };
