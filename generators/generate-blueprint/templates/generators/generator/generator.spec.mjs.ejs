@@ -31,19 +31,18 @@ describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipst
   describe('run', () => {
     beforeAll(async function() {
       await helpers
+<%_ if (subGenerator === 'jdl') { _%>
+        .runJDL('application { }')
+<%_ } else { _%>
         .run(<%= customGenerator ? 'SUB_GENERATOR_NAMESPACE' : 'BLUEPRINT_NAMESPACE' %>)
+<%_ } _%>
         .withJHipsterConfig()
         .withOptions({
           ignoreNeedlesError: true,
-<%_ if (!customGenerator) { _%>
-          blueprint: ['<%= application.baseName %>'],
-<%_ } _%>
-<%_ if (subGenerator === 'jdl') { _%>
-          inline: 'application { }',
-<%_ } _%>
         })
         .withJHipsterGenerators()
-        .withParentBlueprintLookup();
+        .withConfiguredBlueprint()
+        .withBlueprintConfig();
     });
 
     it('should succeed', () => {

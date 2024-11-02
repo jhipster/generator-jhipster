@@ -1,4 +1,5 @@
-import { basename, dirname, isAbsolute, join } from 'path';
+import assert from 'node:assert';
+import { basename, dirname, isAbsolute, join } from 'node:path';
 import { mock } from 'node:test';
 import { merge, set, snakeCase } from 'lodash-es';
 import type { RunContextSettings, RunResult } from 'yeoman-test';
@@ -65,6 +66,14 @@ type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = Om
   createJHipster: (ns: string, options?: WithJHipsterGenerators) => JHipsterRunContext;
 };
 
+type HelpersDefaults = {
+  /** Blueprint namespace */
+  blueprint?: string;
+  /** Path where blueprint's generators folder is located */
+  blueprintPackagePath?: string;
+  entrypointGenerator?: string;
+};
+
 const runResult = result as JHipsterRunResult;
 
 export { runResult, runResult as result };
@@ -90,6 +99,11 @@ const defaultSharedApplication = Object.fromEntries(['CLIENT_WEBPACK_DIR'].map(k
 
 let defaultMockFactory: (original?: any) => any;
 let defaultAccumulateMockArgs: (mocks: Record<string, any>) => Record<string, any>;
+let helpersDefaults: HelpersDefaults = {};
+
+export const resetDefaults = () => {
+  helpersDefaults = {};
+};
 
 const createEnvBuilderEnvironment = (...args) => EnvironmentBuilder.createEnv(...args);
 
@@ -99,9 +113,11 @@ export const defineDefaults = async (
     mockFactory?: any;
     /** @deprecated mock from `node:test` is used internally */
     accumulateMockArgs?: (mock: Record<string, any>) => Record<string, any>;
-  } = {},
+  } & HelpersDefaults = {},
 ) => {
-  const { mockFactory, accumulateMockArgs } = defaults;
+  const { mockFactory, accumulateMockArgs, ...rest } = defaults;
+  Object.assign(helpersDefaults, rest);
+
   if (mockFactory) {
     defaultMockFactory = mockFactory;
   } else if (!defaultMockFactory) {
@@ -251,6 +267,36 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   /** @deprecated use withJHipsterGenerators */
   withJHipsterLookup(): this {
     return this.withJHipsterGenerators();
+  }
+
+  withBlueprintConfig(config: Record<string, any>): this {
+    const { blueprint } = helpersDefaults;
+    assert(blueprint, 'Blueprint must be configured');
+    return this.withYoRcConfig(blueprint, config);
+  }
+
+  /**
+   * Use configured default blueprint.
+   */
+  withConfiguredBlueprint(): this {
+    const { blueprint, blueprintPackagePath, entrypointGenerator } = helpersDefaults;
+    assert(blueprintPackagePath, 'Blueprint generators package path must be configured');
+    assert(blueprint, 'Blueprint must be configured');
+
+    if (entrypointGenerator) {
+      this.withOptions({ entrypointGenerator });
+    }
+
+    return this.withLookups([
+      {
+        packagePaths: [blueprintPackagePath],
+        // @ts-expect-error lookups is not exported
+        lookups: [`generators`, `generators/*/generators`],
+        customizeNamespace: ns => ns?.replaceAll(':generators:', ':'),
+      },
+    ]).withOptions({
+      blueprint: [blueprint],
+    });
   }
 
   /**
