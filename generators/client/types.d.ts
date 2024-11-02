@@ -3,11 +3,12 @@ import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/i
 import type { CypressApplication } from '../cypress/types.js';
 import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
 import type { PostWritingEntitiesTaskParam } from '../../lib/types/application/tasks.js';
+import type { PartialAngularApplication } from '../angular/types-deprecated.js';
 import type Command from './command.ts';
 
 type ApplicationClientProperties = ExportApplicationPropertiesFromCommand<typeof Command>;
 
-export type ClientApplication = ApplicationClientProperties &
+export type FrontendApplication = ApplicationClientProperties &
   JavaScriptApplication &
   CypressApplication & {
     webappLoginRegExp: string;
@@ -15,6 +16,11 @@ export type ClientApplication = ApplicationClientProperties &
     webappEnumerationsDir?: string;
     clientFrameworkBuiltIn?: boolean;
   };
+
+/**
+ * Deprecated in favor of frontend application.
+ */
+export type ClientApplication = JavaScriptApplication & PartialAngularApplication;
 
 export type ClientResources = {
   /**
