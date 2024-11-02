@@ -30,6 +30,7 @@ export const files = asWriteFilesSection<any>({
         'README.md',
         'tsconfig.json',
         'vitest.config.ts',
+        'vitest.test-setup.ts',
         '.blueprint/cli/commands.mjs',
         '.blueprint/generate-sample/command.mjs',
         '.blueprint/generate-sample/generator.mjs',

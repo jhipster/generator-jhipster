@@ -104,6 +104,7 @@ exports[`public api generator-jhipster/generators should match snapshot 2`] = `
   "matchWrittenFiles",
   "parseIssue",
   "prepareSample",
+  "resetDefaults",
   "result",
   "runResult",
   "setGithubTaskOutput",
