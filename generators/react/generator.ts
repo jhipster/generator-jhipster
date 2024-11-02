@@ -142,7 +142,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
               filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedReactFile(file),
               refresh: false,
             },
-            translateReactFilesTransform(control.getWebappTranslation),
+            translateReactFilesTransform(control.getWebappTranslation!),
           );
         }
       },

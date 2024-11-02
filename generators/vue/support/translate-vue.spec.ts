@@ -18,6 +18,7 @@
  */
 import { inspect } from 'node:util';
 import { describe, expect, it } from 'esmocha';
+import type { GetWebappTranslationCallback } from '../../../lib/types/base/translation.js';
 import { removeDeclarations, replaceTranslationTags, replaceTranslations } from './translate-vue.js';
 
 const FULL_BODY = `
@@ -52,7 +53,7 @@ const FULL_BODY = `
        <label class="form-control-label" v-text="t$('jhipsterVueApp.mapsIdGrandchildEntityWithoutDTO.date')" for="maps-id-grandchild-entity-without-dto-date">Date</label>
 
 `;
-const getWebappTranslation = (s, data) => `getWebappTranslation('${s}'${data ? `, ${inspect(data)}` : ''})`;
+const getWebappTranslation: GetWebappTranslationCallback = (s, data) => `getWebappTranslation('${s}'${data ? `, ${inspect(data)}` : ''})`;
 
 describe('generator - vue - transform', () => {
   describe('removeDeclarations', () => {

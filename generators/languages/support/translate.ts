@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { GetWebappTranslationCallback } from '../../../lib/types/base/translation.js';
 
 const TRANSLATE_FUNCTION_ARGS = /\(\s*'(?<key>[^']+)'(?:,\s*(?<interpolate>\{(?:(?!\}\))[\s\S])*\}))?\)/gs.source;
 
@@ -36,7 +37,7 @@ export type TranslationReplaceOptions = {
 };
 
 export const replaceTranslationKeysWithText = (
-  getWebappTranslation,
+  getWebappTranslation: GetWebappTranslationCallback,
   body: string,
   regexp: string,
   { keyPattern, interpolatePattern, wrapTranslation, escapeHtml, stringify }: TranslationReplaceOptions = {},
@@ -91,10 +92,11 @@ export const replaceTranslationKeysWithText = (
   return body;
 };
 
-export const createJhiTransformTranslateReplacer = (getWebappTranslation, translateOptions?: TranslationReplaceOptions) => (body: string) =>
-  replaceTranslationKeysWithText(getWebappTranslation, body, `__jhiTransformTranslate__${TRANSLATE_FUNCTION_ARGS}`, translateOptions);
+export const createJhiTransformTranslateReplacer =
+  (getWebappTranslation: GetWebappTranslationCallback, translateOptions?: TranslationReplaceOptions) => (body: string) =>
+    replaceTranslationKeysWithText(getWebappTranslation, body, `__jhiTransformTranslate__${TRANSLATE_FUNCTION_ARGS}`, translateOptions);
 
-export const createJhiTransformTranslateStringifyReplacer = getWebappTranslation => (body: string) =>
+export const createJhiTransformTranslateStringifyReplacer = (getWebappTranslation: GetWebappTranslationCallback) => (body: string) =>
   replaceTranslationKeysWithText(getWebappTranslation, body, `__jhiTransformTranslateStringify__${TRANSLATE_FUNCTION_ARGS}`, {
     stringify: true,
   });

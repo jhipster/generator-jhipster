@@ -28,6 +28,7 @@ import {
   escapeHtmlTranslationValue,
   escapeTsTranslationValue,
 } from '../../languages/support/index.js';
+import type { GetWebappTranslationCallback } from '../../../lib/types/base/translation.js';
 
 const PLACEHOLDER_REGEX = /(?:placeholder|title)=['|"](\{\{\s?['|"]([a-zA-Z0-9.\-_]+)['|"]\s?\|\s?translate\s?\}\})['|"]/.source;
 
@@ -50,7 +51,7 @@ export type ReplacerOptions = { jhiPrefix: string; enableTranslation: boolean };
  * @returns {string}
  */
 function replaceTranslationKeysWithText(
-  getWebappTranslation,
+  getWebappTranslation: GetWebappTranslationCallback,
   content,
   regexSource,
   {
@@ -81,7 +82,7 @@ function replaceTranslationKeysWithText(
  * @param {string} jsKey
  * @returns string with jsKey value replaced
  */
-function replaceJSTranslation(getWebappTranslation, content, jsKey) {
+function replaceJSTranslation(getWebappTranslation: GetWebappTranslationCallback, content, jsKey) {
   return replaceTranslationKeysWithText(
     getWebappTranslation,
     content,
@@ -98,23 +99,18 @@ function replaceJSTranslation(getWebappTranslation, content, jsKey) {
  * @param {string} content html content
  * @returns string with pageTitle replaced
  */
-function replacePageTitles(getWebappTranslation, content) {
+function replacePageTitles(getWebappTranslation: GetWebappTranslationCallback, content) {
   return replaceJSTranslation(getWebappTranslation, content, 'title');
 }
 
-/**
- * @type {function(import('../generator-base.js'), string): string}
- */
-function replacePlaceholders(getWebappTranslation, content) {
+function replacePlaceholders(getWebappTranslation: GetWebappTranslationCallback, content) {
   return replaceTranslationKeysWithText(getWebappTranslation, content, PLACEHOLDER_REGEX, { keyIndex: 2 });
 }
 
 /**
  * Replace error code translation key with translated message
- *
- * @type {function(import('../generator-base.js'), string): string}
  */
-function replaceErrorMessage(getWebappTranslation, content) {
+function replaceErrorMessage(getWebappTranslation: GetWebappTranslationCallback, content) {
   return replaceJSTranslation(getWebappTranslation, content, 'errorMessage');
 }
 
@@ -123,7 +119,7 @@ function replaceErrorMessage(getWebappTranslation, content) {
  * Or the translation value if translation is disabled.
  */
 const tagTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: GetWebappTranslationCallback,
   { enableTranslation, jhiPrefix }: ReplacerOptions,
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -149,7 +145,7 @@ const tagTranslation = (
  * Or the translation value if translation is disabled.
  */
 const validationTagTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: GetWebappTranslationCallback,
   { enableTranslation, jhiPrefix }: ReplacerOptions,
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -175,7 +171,7 @@ const validationTagTranslation = (
  * Or the translation value if translation is disabled.
  */
 const tagPipeTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: GetWebappTranslationCallback,
   { enableTranslation, jhiPrefix }: ReplacerOptions,
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -201,7 +197,7 @@ const tagPipeTranslation = (
  * Or the translation value if translation is disabled.
  */
 const tagEnumTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: GetWebappTranslationCallback,
   { enableTranslation, jhiPrefix }: ReplacerOptions,
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -222,7 +218,7 @@ const tagEnumTranslation = (
  * Or the translation value if translation is disabled.
  */
 const pipeTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: GetWebappTranslationCallback,
   { enableTranslation }: ReplacerOptions,
   { key, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -237,7 +233,7 @@ const pipeTranslation = (
  * Get translation value.
  */
 const valueTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: GetWebappTranslationCallback,
   _replacerOptions: ReplacerOptions,
   { filePath, key, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -256,7 +252,7 @@ const valueTranslation = (
  * Or the translation value if translation is disabled.
  */
 const pipeEnumTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: GetWebappTranslationCallback,
   { enableTranslation }: ReplacerOptions,
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -274,7 +270,7 @@ const pipeEnumTranslation = (
 
 const replaceImplementations: Record<
   string,
-  (getWebappTranslation: any, replacerOpts: ReplacerOptions, translateOpts: JHITranslateConverterOptions) => string
+  (getWebappTranslation: GetWebappTranslationCallback, replacerOpts: ReplacerOptions, translateOpts: JHITranslateConverterOptions) => string
 > = {
   Tag: tagTranslation,
   TagPipe: tagPipeTranslation,
@@ -291,7 +287,7 @@ const replaceImplementations: Record<
  * @type {import('../generator-base.js').EditFileCallback}
  * @this {import('../generator-base.js')}
  */
-export const createTranslationReplacer = (getWebappTranslation, opts: ReplacerOptions | boolean) => {
+export const createTranslationReplacer = (getWebappTranslation: GetWebappTranslationCallback, opts: ReplacerOptions | boolean) => {
   const htmlJhiTranslateReplacer = createJhiTransformTranslateReplacer(getWebappTranslation, { escapeHtml: true });
   const htmlJhiTranslateStringifyReplacer = createJhiTransformTranslateStringifyReplacer(getWebappTranslation);
   let translationReplacer: ((content: string, filePath: string) => string) | undefined;

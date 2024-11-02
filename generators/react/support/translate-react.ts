@@ -18,6 +18,7 @@
  */
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
+import type { GetWebappTranslationCallback } from '../../../lib/types/base/translation.js';
 
 const TRANSLATE_IMPORT_1 = /import { ?[T|t]ranslate(?:, ?[T|t]ranslate)? ?} from 'react-jhipster';?/.source; // Translate imports
 const TRANSLATE_IMPORT_2 = / *[T|t]ranslate,|, ?[T|t]ranslate/.source; // Translate import
@@ -33,7 +34,7 @@ const TRANSLATE_TAG = `<Translate\\s*(?:(?:${COMPONENT_ATTRIBUTE}|${INTERPOLATE_
 type Options = { keyPattern?: string; interpolatePattern?: string; wrapTranslation?: string | string[]; escapeHtml?: boolean };
 
 const replaceTranslationKeysWithText = (
-  getWebappTranslation,
+  getWebappTranslation: GetWebappTranslationCallback,
   body: string,
   regexp: string,
   { keyPattern, interpolatePattern, wrapTranslation, escapeHtml }: Options = {},
@@ -106,7 +107,7 @@ const replaceTranslationKeysWithText = (
  *
  * @return {import('../../base/api.js').EditFileCallback}
  */
-export const createTranslationReplacer = getWebappTranslation =>
+export const createTranslationReplacer = (getWebappTranslation: GetWebappTranslationCallback) =>
   function replaceReactTranslations(body: string, filePath: string) {
     if (filePath.endsWith('.tsx')) {
       body = body.replace(new RegExp(TRANSLATE_IMPORT, 'g'), '');
@@ -124,7 +125,7 @@ export const createTranslationReplacer = getWebappTranslation =>
 const minimatch = new Minimatch('**/*.tsx');
 export const isTranslatedReactFile = file => minimatch.match(file.path);
 
-const translateReactFilesTransform = getWebappTranslation => {
+const translateReactFilesTransform = (getWebappTranslation: GetWebappTranslationCallback) => {
   const translate = createTranslationReplacer(getWebappTranslation);
   return passthrough(file => {
     file.contents = Buffer.from(translate(file.contents.toString(), file.path));
