@@ -151,7 +151,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
       async cleanup({ control, application }) {
         await control.cleanupFiles({
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
-          '8.7.2': [
+          '8.7.4': [
             [
               application.microfrontend!,
               `${application.srcMainWebapp}microfrontends/entities-menu-test.vue`,
