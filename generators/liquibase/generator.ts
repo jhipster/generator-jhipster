@@ -504,7 +504,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
           source.addGradleProperty?.({ property: 'liquibaseCoreVersion', value: application.javaManagedProperties['liquibase.version'] });
         }
 
-        source.applyFromGradle?.({ script: 'gradle/liquibase.gradle' });
+        source.addGradlePlugin?.({ id: 'jhipster.liquibase-conventions' });
         source.addGradlePlugin?.({ id: 'org.liquibase.gradle' });
         // eslint-disable-next-line no-template-curly-in-string
         source.addGradlePluginManagement?.({ id: 'org.liquibase.gradle', version: '${liquibasePluginVersion}' });
@@ -518,7 +518,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
               // eslint-disable-next-line no-template-curly-in-string
               version: liquibaseVersion ? '${liquibaseVersion}' : "${dependencyManagement.importedProperties['liquibase.version']}",
             },
-            { gradleFile: 'gradle/liquibase.gradle' },
+            { gradleFile: 'buildSrc/src/main/groovy/jhipster.liquibase-conventions.gradle' },
           );
         }
       },
