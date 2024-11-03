@@ -22,7 +22,12 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.js';
 import { defaultLanguage } from '../languages/support/index.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
-import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.js';
+import {
+  generateTypescriptTestEntity as generateTestEntity,
+  generateEntityClientEnumImports as getClientEnumImportsFormat,
+  generateTestEntityId as getTestEntityId,
+  generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
+} from '../client/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
 import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/tasks.js';
@@ -82,12 +87,6 @@ export default class AngularGenerator extends BaseApplicationGenerator<
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareApplication({ application }) {
-        // @ts-ignore
-        application.getTypescriptKeyType = primaryKey => {
-          return getTSKeyType(primaryKey);
-        };
-      },
       applicationDefauts({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
