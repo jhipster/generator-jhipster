@@ -23,6 +23,12 @@ import { MemoryRouter } from 'react-router-dom';
 
 import initStore from 'app/config/store';
 import Header from './header';
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+
+jest.mock('@module-federation/utilities', () => ({
+  importRemote: jest.fn(() => Promise.reject(new Error('Test only'))),
+}));
+<%_ } _%>
 
 describe('Header', () => {
   let mountedWrapper;
