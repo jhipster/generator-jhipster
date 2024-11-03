@@ -9,6 +9,13 @@ import { useStore } from '@/store';
 import { createRouter } from '@/router';
 import <% if (authenticationTypeOauth2) { %>type <% } %>LoginService from '@/account/login.service';
 
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+
+vitest.mock('@module-federation/enhanced/runtime', () => ({
+  loadRemote: vitest.fn(() => Promise.reject(new Error('Test only'))),
+}));
+<%_ } _%>
+
 type JhiNavbarComponentType = InstanceType<typeof JhiNavbar>;
 
 const pinia = createTestingPinia({ stubActions: false });
