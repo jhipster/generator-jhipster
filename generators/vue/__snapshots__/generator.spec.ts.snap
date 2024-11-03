@@ -449,9 +449,33 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/vitest.config.mts": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
+}
+`;
+
+exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(true) should match source calls snapshot 1`] = `
+{
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load vue main",
+      "resource": "<script type="module" src="./app/main.ts"></script>",
+    },
+  ],
+  "mergeClientPackageJson": [
+    {
+      "scripts": {
+        "vite-build": "vite build",
+        "vite-serve": "vite",
+        "webapp:build:dev": "npm run vite-build",
+        "webapp:build:prod": "npm run vite-build",
+        "webapp:dev": "npm run vite-serve",
+        "webapp:serve": "npm run vite-serve",
+      },
+    },
+  ],
 }
 `;
 
@@ -976,9 +1000,33 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/vitest.config.mts": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
+}
+`;
+
+exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-clientRoot/-websocket(true) should match source calls snapshot 1`] = `
+{
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load vue main",
+      "resource": "<script type="module" src="./app/main.ts"></script>",
+    },
+  ],
+  "mergeClientPackageJson": [
+    {
+      "scripts": {
+        "vite-build": "vite build",
+        "vite-serve": "vite",
+        "webapp:build:dev": "npm run vite-build",
+        "webapp:build:prod": "npm run vite-build",
+        "webapp:dev": "npm run vite-serve",
+        "webapp:serve": "npm run vite-serve",
+      },
+    },
+  ],
 }
 `;
 
@@ -1458,9 +1506,50 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
+}
+`;
+
+exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false) should match source calls snapshot 1`] = `
+{
+  "addWebpackConfig": [
+    {
+      "config": "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })",
+    },
+  ],
+  "mergeClientPackageJson": [
+    {
+      "scripts": {
+        "webapp:build:dev": "npm run webpack -- --mode development --env stats=minimal",
+        "webapp:build:prod": "npm run webpack -- --mode production --env stats=minimal",
+        "webapp:dev": "npm run webpack-dev-server -- --mode development --env stats=normal",
+        "webpack": "webpack --config webpack/webpack.common.js",
+        "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
+      },
+    },
+    {
+      "devDependencies": {
+        "@module-federation/enhanced": null,
+        "browser-sync-webpack-plugin": null,
+        "copy-webpack-plugin": null,
+        "css-loader": null,
+        "css-minimizer-webpack-plugin": null,
+        "html-webpack-plugin": null,
+        "mini-css-extract-plugin": null,
+        "postcss-loader": null,
+        "sass-loader": null,
+        "terser-webpack-plugin": null,
+        "ts-loader": null,
+        "vue-loader": null,
+        "vue-style-loader": null,
+        "webpack": null,
+        "webpack-bundle-analyzer": null,
+        "webpack-cli": null,
+        "webpack-dev-server": null,
+        "webpack-merge": null,
+        "workbox-webpack-plugin": null,
+      },
+    },
+  ],
 }
 `;
 
@@ -1940,6 +2029,52 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
+}
+`;
+
+exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false) should match source calls snapshot 1`] = `
+{
+  "addWebpackConfig": [
+    {
+      "config": "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })",
+    },
+  ],
+  "mergeClientPackageJson": [
+    {
+      "scripts": {
+        "webapp:build:dev": "npm run webpack -- --mode development --env stats=minimal",
+        "webapp:build:prod": "npm run webpack -- --mode production --env stats=minimal",
+        "webapp:dev": "npm run webpack-dev-server -- --mode development --env stats=normal",
+        "webpack": "webpack --config webpack/webpack.common.js",
+        "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
+      },
+    },
+    {
+      "devDependencies": {
+        "@module-federation/enhanced": null,
+        "browser-sync-webpack-plugin": null,
+        "copy-webpack-plugin": null,
+        "css-loader": null,
+        "css-minimizer-webpack-plugin": null,
+        "folder-hash": null,
+        "html-webpack-plugin": null,
+        "merge-jsons-webpack-plugin": null,
+        "mini-css-extract-plugin": null,
+        "postcss-loader": null,
+        "sass-loader": null,
+        "terser-webpack-plugin": null,
+        "ts-loader": null,
+        "vue-loader": null,
+        "vue-style-loader": null,
+        "webpack": null,
+        "webpack-bundle-analyzer": null,
+        "webpack-cli": null,
+        "webpack-dev-server": null,
+        "webpack-merge": null,
+        "workbox-webpack-plugin": null,
+      },
+    },
+  ],
 }
 `;
 
@@ -2554,6 +2689,33 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
 }
 `;
 
+exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(true) should match source calls snapshot 1`] = `
+{
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load vue main",
+      "resource": "<script type="module" src="./app/main.ts"></script>",
+    },
+  ],
+  "mergeClientPackageJson": [
+    {
+      "scripts": {
+        "vite-build": "vite build",
+        "vite-serve": "vite",
+        "webapp:build:dev": "npm run vite-build",
+        "webapp:build:prod": "npm run vite-build",
+        "webapp:dev": "npm run vite-serve",
+        "webapp:serve": "npm run vite-serve",
+      },
+    },
+  ],
+}
+`;
+
 exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false) should match generated files snapshot 1`] = `
 {
   ".jhipster/EntityWithCustomId.json": {
@@ -2982,6 +3144,33 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "vitest.config.mts": {
     "stateCleared": "modified",
   },
+}
+`;
+
+exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false) should match source calls snapshot 1`] = `
+{
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load vue main",
+      "resource": "<script type="module" src="./app/main.ts"></script>",
+    },
+  ],
+  "mergeClientPackageJson": [
+    {
+      "scripts": {
+        "vite-build": "vite build",
+        "vite-serve": "vite",
+        "webapp:build:dev": "npm run vite-build",
+        "webapp:build:prod": "npm run vite-build",
+        "webapp:dev": "npm run vite-serve",
+        "webapp:serve": "npm run vite-serve",
+      },
+    },
+  ],
 }
 `;
 
@@ -3422,6 +3611,33 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "vitest.config.mts": {
     "stateCleared": "modified",
   },
+}
+`;
+
+exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(true) should match source calls snapshot 1`] = `
+{
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load vue main",
+      "resource": "<script type="module" src="./app/main.ts"></script>",
+    },
+  ],
+  "mergeClientPackageJson": [
+    {
+      "scripts": {
+        "vite-build": "vite build",
+        "vite-serve": "vite",
+        "webapp:build:dev": "npm run vite-build",
+        "webapp:build:prod": "npm run vite-build",
+        "webapp:dev": "npm run vite-serve",
+        "webapp:serve": "npm run vite-serve",
+      },
+    },
+  ],
 }
 `;
 
