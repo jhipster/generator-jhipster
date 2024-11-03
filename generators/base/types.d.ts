@@ -5,6 +5,8 @@ import type command from './command.ts';
 
 type BaseApplicationControlProperties = ExportControlPropertiesFromCommand<typeof command>;
 
+export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
+
 export type Control = BaseApplicationControlProperties & {
   existingProject: boolean;
   ignoreNeedlesError: boolean;
@@ -23,7 +25,9 @@ export type Control = BaseApplicationControlProperties & {
    * Cleanup files conditionally based on version and condition.
    * @example
    * cleanupFiles({ '6.0.0': ['file1', 'file2', [application.shouldRemove, 'file3']] })
+   * @example
+   * cleanupFiles('4.0.0', { '6.0.0': ['file1', 'file2', [application.shouldRemove, 'file3']] })
    */
-  cleanupFiles: (cleanup: Record<string, (string | [boolean, ...string[]])[]>) => Promise<void>;
+  cleanupFiles: (cleanup: CleanupArgumentType) => Promise<void> | ((oldVersion: string, cleanup: CleanupArgumentType) => Promise<void>);
   getWebappTranslation?: GetWebappTranslationCallback;
 };

@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import assert from 'node:assert';
 import { existsSync, readFileSync, statSync } from 'fs';
 import { rm } from 'fs/promises';
 import { isAbsolute, join, relative } from 'path';
@@ -25,7 +26,7 @@ import type { MemFsEditor } from 'mem-fs-editor';
 import { create } from 'mem-fs-editor';
 import { type BaseApplication } from '../base-application/types.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import { type Control } from './types.js';
+import type { CleanupArgumentType, Control } from './types.js';
 
 export default class SharedData<ApplicationType extends BaseApplication = BaseApplication> {
   _storage: any;
@@ -67,7 +68,7 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
     });
 
     let customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
-    const removeFiles = async (assertions: { removedInVersion?: string } | string, ...files: string[]) => {
+    const removeFiles = async (assertions: { oldVersion?: string; removedInVersion?: string } | string, ...files: string[]) => {
       if (typeof assertions === 'string') {
         files = [assertions, ...files];
         assertions = {};
@@ -77,8 +78,8 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
         files = files.map(customize).filter(file => file) as string[];
       }
 
-      const { removedInVersion } = assertions;
-      if (removedInVersion && jhipsterOldVersion && !semverLessThan(jhipsterOldVersion, removedInVersion)) {
+      const { removedInVersion, oldVersion = jhipsterOldVersion } = assertions;
+      if (removedInVersion && oldVersion && !semverLessThan(oldVersion, removedInVersion)) {
         return;
       }
 
@@ -104,8 +105,16 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
       jhipsterOldVersion,
       removeFiles,
       customizeRemoveFiles: [],
-      cleanupFiles: async (cleanup: Record<string, (string | [boolean, ...string[]])[]>) => {
+      cleanupFiles: async (oldVersionOrCleanup: string | CleanupArgumentType, cleanup?: CleanupArgumentType) => {
         if (!jhipsterOldVersion) return;
+        let oldVersion: string;
+        if (typeof oldVersionOrCleanup === 'string') {
+          oldVersion = oldVersionOrCleanup;
+          assert(cleanup, 'cleanupFiles requires cleanup object');
+        } else {
+          cleanup = oldVersionOrCleanup;
+          oldVersion = jhipsterOldVersion;
+        }
         await Promise.all(
           Object.entries(cleanup).map(async ([version, files]) => {
             const stringFiles: string[] = [];
@@ -119,7 +128,7 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
                 stringFiles.push(file);
               }
             }
-            await removeFiles({ removedInVersion: version }, ...stringFiles);
+            await removeFiles({ oldVersion, removedInVersion: version }, ...stringFiles);
           }),
         );
       },
