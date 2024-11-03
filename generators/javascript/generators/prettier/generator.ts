@@ -128,7 +128,7 @@ export default class PrettierGenerator extends BaseApplicationGenerator {
           this.packageJson.merge({
             scripts: {
               'prettier:check': `prettier --check "{${folders.join(',')}}*.{${prettierExtensions}}"`,
-              'prettier:format': `prettier --write "{${folders.join(',')}*.{${prettierExtensions}}"`,
+              'prettier:format': `prettier --write "{${folders.join(',')}}*.{${prettierExtensions}}"`,
             },
           });
         }
