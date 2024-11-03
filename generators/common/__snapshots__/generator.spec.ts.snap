@@ -116,7 +116,7 @@ This application was generated using JHipster JHIPSTER_VERSION, you can find doc
   "engines": {},
   "scripts": {
     "prettier:check": "prettier --check \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
-    "prettier:format": "prettier --write \\"{,src/**/,webpack/,.blueprint/**/*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
+    "prettier:format": "prettier --write \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
     "prepare": "husky"
   },
   "config": {
