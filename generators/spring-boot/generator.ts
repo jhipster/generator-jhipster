@@ -248,6 +248,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
           application.springBootDependencies = this.prepareDependencies(getPomVersionProperties(pom), 'java');
           application.javaDependencies!['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
           Object.assign(application.javaManagedProperties!, pom.project.properties);
+          application.javaDependencies!.liquibase = application.javaManagedProperties!['liquibase.version']!;
         }
       },
       prepareForTemplates({ application }) {
