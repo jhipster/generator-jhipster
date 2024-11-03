@@ -333,6 +333,9 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
         }
 
         const { javaDependencies } = application;
+        const shouldAddProperty = (property: string, value: string) => {
+          return value && !source.hasJavaProperty?.(property) && application.javaManagedProperties![property] !== value;
+        };
         const checkProperty = (property: string) => {
           if (!source.hasJavaManagedProperty?.(property) && !source.hasJavaProperty?.(property)) {
             const message = `${property} is required by maven-liquibase-plugin, make sure to add it to your pom.xml`;
@@ -357,7 +360,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
           liquibasePluginHibernateDialect = '${liquibase-plugin.hibernate-dialect}';
           // eslint-disable-next-line no-template-curly-in-string
           liquibasePluginJdbcDriver = '${liquibase-plugin.driver}';
-          if (h2Version) {
+          if (shouldAddProperty('h2.version', h2Version)) {
             mavenProperties.push({ property: 'h2.version', value: h2Version });
           } else {
             checkProperty('h2.version');
@@ -375,13 +378,13 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
           liquibasePluginJdbcDriver = applicationAny.prodJdbcDriver;
         }
 
-        if (validationVersion) {
+        if (shouldAddProperty('jakarta-validation.version', validationVersion)) {
           mavenProperties.push({ property: 'jakarta-validation.version', value: validationVersion });
         } else {
           checkProperty('jakarta-validation.version');
         }
 
-        if (liquibaseVersion) {
+        if (shouldAddProperty('liquibase.version', liquibaseVersion)) {
           mavenProperties.push({ property: 'liquibase.version', value: liquibaseVersion });
         } else {
           checkProperty('liquibase.version');
