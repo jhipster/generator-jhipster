@@ -84,7 +84,14 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       mergePackageJson({ application, source }) {
-        const { packageJsonNodeEngine, packageJsonType, dasherizedBaseName, projectDescription, packageJsonScripts } = application;
+        const {
+          packageJsonNodeEngine,
+          packageJsonType,
+          dasherizedBaseName,
+          projectDescription,
+          packageJsonScripts,
+          clientPackageJsonScripts,
+        } = application;
 
         this.packageJson.merge({ scripts: packageJsonScripts! });
 
@@ -107,9 +114,9 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
           });
         }
 
-        source.mergeClientPackageJson!({
-          scripts: application.clientPackageJsonScripts,
-        });
+        if (Object.keys(clientPackageJsonScripts).length > 0) {
+          source.mergeClientPackageJson!({ scripts: clientPackageJsonScripts });
+        }
       },
     });
   }
