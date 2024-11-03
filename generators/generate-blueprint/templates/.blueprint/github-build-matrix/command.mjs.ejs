@@ -16,14 +16,28 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-{
-  "extends": "./tsconfig",
-  "include": ["<%= this.relativeDir(clientRootDir, clientSrcDir) %>app", "<%= this.relativeDir(clientRootDir, clientSrcDir) %>microfrontends"],
-  "exclude": [],
-  "compilerOptions": {
-    "paths": {
-      "app/*": ["<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/*"]
-   },
-    "types": ["jest", "webpack-env"]
-  }
-}
+/**
+ * @type {import('generator-jhipster').JHipsterCommandDefinition}
+ */
+const command = {
+  configs: {
+    samplesFolder: {
+      description: 'Samples folder',
+      cli: {
+        type: String,
+      },
+      scope: 'generator',
+    },
+    samplesGroup: {
+      description: 'Samples Group',
+      argument: {
+        type: String,
+      },
+      default: 'samples',
+      scope: 'generator',
+    },
+  },
+  options: {},
+};
+
+export default command;

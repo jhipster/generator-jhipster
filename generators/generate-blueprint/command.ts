@@ -40,6 +40,13 @@ const command = {
       },
       scope: 'storage',
     },
+    cliName: {
+      cli: {
+        description: 'CLI name',
+        type: String,
+      },
+      scope: 'storage',
+    },
     recreatePackageLock: {
       description: 'Recreate package lock',
       cli: {

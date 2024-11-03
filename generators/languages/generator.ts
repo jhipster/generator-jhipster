@@ -46,7 +46,7 @@ const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 export default class LanguagesGenerator extends BaseApplicationGenerator {
   askForMoreLanguages!: boolean;
   askForNativeLanguage!: boolean;
-  translationData;
+  translationData: TranslationData;
   supportedLanguages;
   languages;
   /**

@@ -142,7 +142,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
               filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedReactFile(file),
               refresh: false,
             },
-            translateReactFilesTransform(control.getWebappTranslation),
+            translateReactFilesTransform(control.getWebappTranslation!),
           );
         }
       },
@@ -155,9 +155,16 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      async cleanup({ control }) {
+      async cleanup({ control, application }) {
         await control.cleanupFiles({
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
+          '8.7.4': [
+            [
+              Boolean(application.microfrontend && application.applicationTypeGateway),
+              `${application.srcMainWebapp}microfrontends/entities-menu.tsx`,
+              `${application.srcMainWebapp}microfrontends/entities-routes.tsx`,
+            ],
+          ],
         });
       },
       cleanupOldFilesTask,
@@ -189,22 +196,22 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addMicrofrontendDependencies({ application }) {
+      addMicrofrontendDependencies({ application, source }) {
         if (!application.microfrontend) return;
         const { applicationTypeGateway } = application;
         if (applicationTypeGateway) {
-          this.packageJson.merge({
+          source.mergeClientPackageJson!({
             devDependencies: { '@module-federation/utilities': null },
           });
         }
-        this.packageJson.merge({
+        source.mergeClientPackageJson!({
           devDependencies: { '@module-federation/enhanced': null },
         });
       },
-      addWebsocketDependencies({ application }) {
+      addWebsocketDependencies({ application, source }) {
         const { communicationSpringWebsocket, nodeDependencies } = application;
         if (communicationSpringWebsocket) {
-          this.packageJson.merge({
+          source.mergeClientPackageJson!({
             dependencies: {
               rxjs: nodeDependencies.rxjs,
               'sockjs-client': nodeDependencies['sockjs-client'],

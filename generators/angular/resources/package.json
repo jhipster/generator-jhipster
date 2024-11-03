@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "18.2.9",
+    "@angular/common": "18.2.10",
     "@fortawesome/angular-fontawesome": "0.15.0",
     "@fortawesome/fontawesome-svg-core": "6.6.0",
     "@fortawesome/free-solid-svg-icons": "6.6.0",
@@ -15,7 +15,7 @@
     "ngx-infinite-scroll": "18.0.0",
     "rxjs": "7.8.1",
     "sockjs-client": "1.6.1",
-    "tslib": "2.8.0",
+    "tslib": "2.8.1",
     "zone.js": "0.14.10"
   },
   "devDependencies": {
@@ -23,7 +23,7 @@
     "@angular-architects/module-federation-runtime": "18.0.6",
     "@angular-builders/custom-webpack": "18.0.0",
     "@angular-builders/jest": "18.0.0",
-    "@angular/cli": "18.2.10",
+    "@angular/cli": "18.2.11",
     "@types/jest": "29.5.14",
     "@types/node": "20.11.25",
     "@types/sockjs-client": "1.5.4",
@@ -48,8 +48,8 @@
     "rimraf": "5.0.8",
     "ts-jest": "29.2.5",
     "typescript": "5.5.4",
-    "typescript-eslint": "8.11.0",
-    "webpack": "5.95.0",
+    "typescript-eslint": "8.12.2",
+    "webpack": "5.96.0",
     "webpack-bundle-analyzer": "4.10.2",
     "webpack-merge": "6.0.1",
     "webpack-notifier": "1.15.0"

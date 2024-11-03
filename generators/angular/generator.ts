@@ -262,14 +262,14 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addWebsocketDependencies({ application }) {
+      addWebsocketDependencies({ application, source }) {
         const { authenticationTypeSession, communicationSpringWebsocket, nodeDependencies } = application;
         const dependencies = {};
         if (communicationSpringWebsocket) {
           if (authenticationTypeSession) {
             dependencies['ngx-cookie-service'] = nodeDependencies['ngx-cookie-service'];
           }
-          this.packageJson.merge({
+          source.mergeClientPackageJson!({
             dependencies: {
               'sockjs-client': nodeDependencies['sockjs-client'],
               '@stomp/rx-stomp': nodeDependencies['@stomp/rx-stomp'],

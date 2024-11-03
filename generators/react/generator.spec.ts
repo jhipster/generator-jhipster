@@ -62,11 +62,15 @@ describe(`generator - ${clientFramework}`, () => {
           .withJHipsterConfig(sampleConfig, entities)
           .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
           .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
+          .withMockedSource()
           .withMockedGenerators(['jhipster:common']);
       });
 
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+      it('should match source calls snapshot', () => {
+        expect(runResult.sourceCallsArg).toMatchSnapshot();
       });
       it('contains correct clientFramework', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"clientFramework": "${clientFramework}"`));

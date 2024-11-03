@@ -226,13 +226,15 @@ export default class SqlGenerator extends BaseApplicationGenerator {
           publicConstructors: ['org.hibernate.binder.internal.BatchSizeBinder.class'],
         });
       },
+      async nativeMavenBuildTool({ application, source }) {
+        if (!application.buildToolMaven || !application.graalvmSupport) return;
+
+        source.addMavenProperty!({ property: 'spring.h2.console.enabled', value: 'true' });
+      },
       async nativeGradleBuildTool({ application, source }) {
         if (!application.buildToolGradle || !application.graalvmSupport) return;
 
-        const { reactive, javaManagedProperties, buildToolMaven } = application;
-        if (buildToolMaven) {
-          source.addMavenProperty!({ property: 'spring.h2.console.enabled', value: 'true' });
-        }
+        const { reactive, javaManagedProperties } = application;
         if (!reactive) {
           source.addGradleDependencyCatalogVersion!({ name: 'hibernate', version: javaManagedProperties!['hibernate.version']! });
           source.addGradleDependencyCatalogPlugin!({

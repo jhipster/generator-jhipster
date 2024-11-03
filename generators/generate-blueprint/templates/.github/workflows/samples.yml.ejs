@@ -26,7 +26,7 @@ jobs:
           npm install
           ./cli/cli.cjs github-build-matrix
   samples:
-    name: ${{ matrix.job-name || matrix.sample-name }}
+    name: ${{ matrix.job-name || matrix.sample }}
     runs-on: ubuntu-latest
     needs: build-matrix
     defaults:
@@ -50,7 +50,7 @@ jobs:
           binary-dir: ${{ github.workspace }}/generator-jhipster-<%= baseName %>/cli/
       - run: npm install
         working-directory: ${{ github.workspace }}/generator-jhipster-<%= baseName %>
-      - run: cli.cjs generate-sample ${{ matrix.sample-name }} --skip-jhipster-dependencies ${{ matrix.extra-args }}
+      - run: cli.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
       - uses: jhipster/actions/compare-sample@v0
         id: compare
         if: >-
@@ -58,13 +58,13 @@ jobs:
           !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         with:
           generator-path: generator-jhipster-<%= baseName %>
-          cmd: cli.cjs generate-sample ${{ matrix.sample-name }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
+          cmd: cli.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
       - run: npm run ci:backend:test
         if: steps.compare.outputs.equals != 'true'
         id: backend
-      - run: npm run ci:frontend:test --if-present
-        if: steps.compare.outputs.equals != 'true'
       - run: npm run ci:e2e:package
+        if: steps.compare.outputs.equals != 'true'
+      - run: npm run ci:frontend:test --if-present
         if: steps.compare.outputs.equals != 'true'
       - run: npm run ci:e2e:prepare
         if: steps.compare.outputs.equals != 'true'
@@ -75,7 +75,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always() && steps.backend.outcome == 'failure'
         with:
-          name: log-${{ matrix.sample-name }}
+          name: log-${{ matrix.job-name || matrix.sample }}
           path: |
             ${{ github.workspace }}/app/build/test-results/**/*.xml
             ${{ github.workspace }}/app/target/surefire-reports
@@ -83,7 +83,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always() && steps.e2e.outcome == 'failure'
         with:
-          name: screenshots-${{ matrix.sample-name }}
+          name: screenshots-${{ matrix.job-name || matrix.sample }}
           path: ${{ github.workspace }}/app/**/cypress/screenshots
       - name: Dump docker logs
         if: always()

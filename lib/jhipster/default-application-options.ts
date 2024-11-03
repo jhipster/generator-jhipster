@@ -35,7 +35,7 @@ const { JWT, OAUTH2 } = authenticationTypes;
 const { ANGULAR, NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
 const { EHCACHE, HAZELCAST } = cacheTypes;
 
-const NO_CACHE_PROVIDER = cacheTypes.NO;
+const { NO: NO_CACHE_PROVIDER, MEMCACHED } = cacheTypes;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 const { MAVEN } = buildToolTypes;
@@ -156,7 +156,8 @@ export function getConfigForCacheProvider(options: ApplicationDefaults = {}): Ap
   if (options[REACTIVE] || options[CACHE_PROVIDER] === undefined) {
     options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   }
-  options[ENABLE_HIBERNATE_CACHE] ??= options[DATABASE_TYPE] === SQL && !options[REACTIVE] && options[CACHE_PROVIDER] !== NO_CACHE_PROVIDER;
+  options[ENABLE_HIBERNATE_CACHE] ??=
+    options[DATABASE_TYPE] === SQL && !options[REACTIVE] && ![NO_CACHE_PROVIDER, MEMCACHED].includes(options[CACHE_PROVIDER]);
   return options;
 }
 

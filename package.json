@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "8.7.2",
+  "version": "8.7.3",
   "description": "Spring Boot + Angular/React/Vue in one handy generator",
   "keywords": [
     "yeoman-generator",
@@ -120,7 +120,7 @@
     "update-snapshots": "esmocha lib/jdl generators cli --update-snapshot --no-insight --forbid-only"
   },
   "dependencies": {
-    "@eslint/js": "9.13.0",
+    "@eslint/js": "9.14.0",
     "@faker-js/faker": "9.1.0",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
@@ -139,10 +139,10 @@
     "dockerfile-ast": "0.6.1",
     "dot-properties": "1.0.1",
     "ejs": "3.1.10",
-    "eslint": "9.13.0",
-    "eslint-plugin-import-x": "4.3.1",
+    "eslint": "9.14.0",
+    "eslint-plugin-import-x": "4.4.0",
     "eslint-plugin-unused-imports": "4.1.4",
-    "execa": "9.5.0",
+    "execa": "9.5.1",
     "fast-xml-parser": "4.5.0",
     "glob": "10.4.2",
     "globals": "15.11.0",
@@ -169,7 +169,7 @@
     "sort-keys": "5.1.0",
     "type-fest": "4.26.1",
     "typescript": "5.5.4",
-    "typescript-eslint": "8.12.1",
+    "typescript-eslint": "8.12.2",
     "yaml": "2.6.0",
     "yeoman-environment": "4.4.3",
     "yeoman-generator": "7.3.3"

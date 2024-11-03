@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import type { GetWebappTranslationCallback } from '../../../lib/types/base/translation.js';
 import { createTranslationReplacer } from './translate-react.js';
 
 describe('generator - react - transform', () => {
@@ -25,11 +26,9 @@ describe('generator - react - transform', () => {
     beforeEach(() => {
       let value = 0;
       replaceReactTranslations = createTranslationReplacer(
-        esmocha.fn().mockImplementation((key, interpolation = '') => {
-          if (interpolation) {
-            interpolation = `-${JSON.stringify(interpolation)}`;
-          }
-          return `${key}${interpolation}-translated-value-${value++}`;
+        esmocha.fn<GetWebappTranslationCallback>().mockImplementation((key, interpolation) => {
+          const stringifiedInterpolation = interpolation ? `-${JSON.stringify(interpolation)}` : '';
+          return `${key}${stringifiedInterpolation}-translated-value-${value++}`;
         }),
       );
     });

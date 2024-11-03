@@ -422,6 +422,8 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
 }
 `;
 
+exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(true) should match source calls snapshot 1`] = `{}`;
+
 exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-clientRoot/-websocket(true) should match generated files snapshot 1`] = `
 {
   ".jhipster/EntityWithCustomId.json": {
@@ -877,6 +879,8 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
 }
 `;
 
+exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-clientRoot/-websocket(true) should match source calls snapshot 1`] = `{}`;
+
 exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false) should match generated files snapshot 1`] = `
 {
   ".jhipster/EntityWithCustomId.json": {
@@ -1302,6 +1306,23 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "package.json": {
     "stateCleared": "modified",
   },
+}
+`;
+
+exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false) should match source calls snapshot 1`] = `
+{
+  "addWebpackConfig": [
+    {
+      "config": "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })",
+    },
+  ],
+  "mergeClientPackageJson": [
+    {
+      "devDependencies": {
+        "@module-federation/enhanced": null,
+      },
+    },
+  ],
 }
 `;
 
@@ -1745,6 +1766,23 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
+}
+`;
+
+exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false) should match source calls snapshot 1`] = `
+{
+  "addWebpackConfig": [
+    {
+      "config": "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })",
+    },
+  ],
+  "mergeClientPackageJson": [
+    {
+      "devDependencies": {
+        "@module-federation/enhanced": null,
+      },
+    },
+  ],
 }
 `;
 
@@ -2260,6 +2298,8 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
 }
 `;
 
+exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(true) should match source calls snapshot 1`] = `{}`;
+
 exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false) should match generated files snapshot 1`] = `
 {
   ".jhipster/EntityWithCustomId.json": {
@@ -2682,6 +2722,8 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
 }
 `;
 
+exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false) should match source calls snapshot 1`] = `{}`;
+
 exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(true) should match generated files snapshot 1`] = `
 {
   ".jhipster/EntityWithCustomId.json": {
@@ -3097,6 +3139,8 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   },
 }
 `;
+
+exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(true) should match source calls snapshot 1`] = `{}`;
 
 exports[`generator - react samples matrix should match snapshot 1`] = `
 {
