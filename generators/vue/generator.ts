@@ -177,10 +177,10 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addPackageJsonScripts({ application }) {
-        const { clientBundlerVite, clientBundlerWebpack, clientPackageManager, prettierExtensions } = application;
+      addPackageJsonScripts({ application, source }) {
+        const { clientBundlerVite, clientBundlerWebpack, clientPackageManager } = application;
         if (clientBundlerVite) {
-          this.packageJson.merge({
+          source.mergeClientPackageJson!({
             scripts: {
               'webapp:build:dev': `${clientPackageManager} run vite-build`,
               'webapp:build:prod': `${clientPackageManager} run vite-build`,
@@ -191,10 +191,8 @@ export default class VueGenerator extends BaseApplicationGenerator {
             },
           });
         } else if (clientBundlerWebpack) {
-          this.packageJson.merge({
+          source.mergeClientPackageJson!({
             scripts: {
-              'prettier:check': `prettier --check "{,src/**/,webpack/,.blueprint/**/}*.{${prettierExtensions}}"`,
-              'prettier:format': `prettier --write "{,src/**/,webpack/,.blueprint/**/}*.{${prettierExtensions}}"`,
               'webapp:build:dev': `${clientPackageManager} run webpack -- --mode development --env stats=minimal`,
               'webapp:build:prod': `${clientPackageManager} run webpack -- --mode production --env stats=minimal`,
               'webapp:dev': `${clientPackageManager} run webpack-dev-server -- --mode development --env stats=normal`,
@@ -204,24 +202,24 @@ export default class VueGenerator extends BaseApplicationGenerator {
           });
         }
       },
-      addMicrofrontendDependencies({ application }) {
+      addMicrofrontendDependencies({ application, source }) {
         const { applicationTypeGateway, clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
-          this.packageJson.merge({
+          source.mergeClientPackageJson!({
             devDependencies: {
               '@originjs/vite-plugin-federation': '1.3.6',
             },
           });
         } else if (clientBundlerWebpack) {
           if (applicationTypeGateway) {
-            this.packageJson.merge({
+            source.mergeClientPackageJson!({
               devDependencies: {
                 '@module-federation/utilities': null,
               },
             });
           }
-          this.packageJson.merge({
+          source.mergeClientPackageJson!({
             devDependencies: {
               '@module-federation/enhanced': null,
               'browser-sync-webpack-plugin': null,

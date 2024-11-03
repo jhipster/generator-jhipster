@@ -132,8 +132,6 @@
     "default_environment": "prod"
   },
   "scripts": {
-    "prettier:check": "prettier --check \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
-    "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
     "lint": "eslint .",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",

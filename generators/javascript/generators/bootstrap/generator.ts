@@ -52,6 +52,20 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      addSource({ application, source }) {
+        source.mergeClientPackageJson = args => {
+          this.mergeDestinationJson(`${application.clientRootDir}package.json`, args);
+        };
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
@@ -69,18 +83,22 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addPrettierDependencies({ application }) {
+      mergePackageJson({ application, source }) {
         const { packageJsonNodeEngine, packageJsonType, dasherizedBaseName, projectDescription, packageJsonScripts } = application;
+
         this.packageJson.merge({ scripts: packageJsonScripts! });
+
         this.packageJson.defaults({
           name: dasherizedBaseName,
           version: '0.0.0',
           description: projectDescription,
           license: 'UNLICENSED',
         });
+
         if (packageJsonType === 'module') {
           this.packageJson.merge({ type: packageJsonType });
         }
+
         if (packageJsonNodeEngine) {
           const packageJsonEngines: any = this.packageJson.get('engines') ?? {};
           this.packageJson.set('engines', {
@@ -88,6 +106,10 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
             node: typeof packageJsonNodeEngine === 'string' ? packageJsonNodeEngine : packageJson.engines.node,
           });
         }
+
+        source.mergeClientPackageJson!({
+          scripts: application.clientPackageJsonScripts,
+        });
       },
     });
   }

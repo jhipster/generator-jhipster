@@ -102,8 +102,6 @@
     "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prettier:check": "prettier --check \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
-    "prettier:format": "prettier --write \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
     "serve": "<%= clientPackageManager %> run start --",
     "start": "<%= clientPackageManager %> run webapp:dev --",
     "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
