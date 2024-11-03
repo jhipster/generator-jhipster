@@ -114,7 +114,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
           });
         }
 
-        if (Object.keys(clientPackageJsonScripts).length > 0) {
+        if (clientPackageJsonScripts && Object.keys(clientPackageJsonScripts).length > 0) {
           source.mergeClientPackageJson!({ scripts: clientPackageJsonScripts });
         }
       },
