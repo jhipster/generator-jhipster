@@ -16,11 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import path from 'path';
+import assert from 'node:assert';
+import path from 'node:path';
 
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.js';
 import type { PrimaryKey } from '../../../lib/types/application/entity.js';
 import type { FieldType } from '../../../lib/application/field-types.js';
+import type { Field } from '../../../lib/types/application/field.js';
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;
@@ -95,40 +97,71 @@ export const generateEntityClientEnumImports = (fields, clientFramework) => {
 /**
  * @private
  * Generate a primary key, according to the type
- *
- * @param {any} primaryKey - primary key definition
- * @param {number} index - the index of the primary key, currently it's possible to generate 2 values, index = 0 - first key (default), otherwise second key
- * @param {boolean} [wrapped=true] - wrapped values for required types.
  */
 
-export const generateTestEntityId = (primaryKey: FieldType | PrimaryKey, index: string | number = 0, wrapped = true) => {
-  primaryKey = getEntryIfTypeOrTypeAttribute(primaryKey);
-  let value;
-  if (primaryKey === TYPE_STRING) {
+export const generateTestEntityId = (primaryKey: FieldType | PrimaryKey, index: 0 | 1 | 'random' = 0, wrapped = true): string | number => {
+  if (index === 'random' && typeof primaryKey === 'object') {
+    return primaryKey.fields[0]!.generateFakeData!('ts');
+  }
+
+  assert(index === 0 || index === 1, 'index must be 0 or 1');
+
+  const primaryKeyType = getEntryIfTypeOrTypeAttribute(primaryKey);
+  let value: string | number;
+  if (primaryKeyType === TYPE_STRING) {
     value = index === 0 ? 'ABC' : 'CBA';
-  } else if (primaryKey === TYPE_UUID) {
+  } else if (primaryKeyType === TYPE_UUID) {
     value = index === 0 ? '9fec3727-3421-4967-b213-ba36557ca194' : '1361f429-3817-4123-8ee3-fdf8943310b2';
   } else {
     value = index === 0 ? 123 : 456;
   }
-  if (wrapped && [TYPE_UUID, TYPE_STRING].includes(primaryKey as any)) {
+  if (wrapped && [TYPE_UUID, TYPE_STRING].includes(primaryKeyType)) {
     return `'${value}'`;
   }
   return value;
 };
 
 /**
+ * Generate a test entity, according to the type
+ */
+export const generateTsTestEntityForFields = (fields: Field[]): Record<string, string | number | boolean> => {
+  const entries = fields
+    .map(field => {
+      const { fieldWithContentType, contentTypeFieldName, fieldTypeTimed, fieldTypeLocalDate } = field;
+      const fakeData = field.generateFakeData!('ts');
+      if (fieldWithContentType) {
+        return [
+          [field.propertyName, fakeData],
+          [contentTypeFieldName, "'unknown'"],
+        ];
+      }
+      if (fieldTypeTimed || fieldTypeLocalDate) {
+        return [[field.propertyName, `dayjs(${fakeData})`]];
+      }
+      return [[field.propertyName, fakeData]];
+    })
+    .flat();
+  return Object.fromEntries(entries);
+};
+
+export const stringifyTsEntity = (data: Record<string, any>, options: { sep?: string } = {}): string => {
+  const entries = Object.entries(data);
+  const { sep = entries.length > 1 ? '\n  ' : '' } = options;
+  return `{${sep}${entries.map(([key, value]) => `${key}: ${value}`).join(`,${sep}`)}${sep.trim()}}`;
+};
+
+/**
  * @private
+ * @deprecated
  * Generate a test entity, according to the type
  *
  * @param references
  * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
  */
-export const generateTestEntity = (references, index = 'random') => {
-  const random = index === 'random';
+export const generateTestEntity = (references, index: 0 | 1 | 'random' = 'random') => {
   const entries = references
     .map(reference => {
-      if (random && reference.field) {
+      if (index === 'random') {
         const field = reference.field;
         const { fieldWithContentType, contentTypeFieldName } = field;
         const fakeData = field.generateFakeData('json-serializable');
@@ -147,6 +180,7 @@ export const generateTestEntity = (references, index = 'random') => {
 };
 
 /**
+ * @deprecated
  * Generate a test entity, according to the references
  *
  * @param references
@@ -182,13 +216,12 @@ export const generateTypescriptTestEntity = (references, additionalFields = {}) 
   ${[...entries, ...Object.entries(additionalFields)].map(([key, value]) => `${key}: ${value}`).join(',\n  ')}
 }`;
 };
+
 /**
+ * @deprecated
  * Generate a test entity for the PK references (when the PK is a composite key)
- *
- * @param {any} primaryKey - primary key definition.
- * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
  */
-export const generateTestEntityPrimaryKey = (primaryKey, index) => {
+export const generateTestEntityPrimaryKey = (primaryKey, index: 0 | 1 | 'random') => {
   return JSON.stringify(
     generateTestEntity(
       primaryKey.fields.map(f => f.reference),
@@ -202,7 +235,7 @@ export const generateTestEntityPrimaryKey = (primaryKey, index) => {
  * Get a parent folder path addition for entity
  * @param {string} clientRootFolder
  */
-export const getEntityParentPathAddition = clientRootFolder => {
+export const getEntityParentPathAddition = (clientRootFolder: string) => {
   if (!clientRootFolder) {
     return '';
   }

@@ -41,7 +41,11 @@ export type PrimaryKey<F extends BaseField = Field> = {
   derived: boolean;
   javaValueGenerator?: string;
   javaBuildSpecification?: string;
+
+  tsSampleValues?: (string | number)[];
 };
+
+type ClientSample = Record<string, string | number | boolean | null>;
 
 export interface Entity<F extends BaseField = Field, R extends BaseRelationship = never>
   extends Omit<Required<BaseEntity<F>>, 'relationships'>,
@@ -146,8 +150,16 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   anyRelationshipIsRequired: boolean;
 
   dtoMapstruct: boolean;
+  dtoAny: boolean;
 
   propertyJavaFilteredType?: string;
 
+  resetFakerSeed(suffix?: string): void;
   faker: FakerWithRandexp;
+
+  tsSampleWithPartialData?: string;
+  tsSampleWithRequiredData?: string;
+  tsSampleWithFullData?: string;
+  tsSampleWithNewData?: string;
+  tsPrimaryKeySamples?: string[];
 }

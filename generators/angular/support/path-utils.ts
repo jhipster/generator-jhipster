@@ -19,6 +19,7 @@
 
 /**
  * @private
+ * @deprecated
  * Create a angular form path getter method of reference.
  *
  * @param {object} reference

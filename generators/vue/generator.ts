@@ -28,8 +28,6 @@ import {
   generateEntityClientImports as formatEntityClientImports,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
-  getTypescriptKeyType as getTSKeyType,
-  generateTestEntityId as getTestEntityId,
 } from '../client/support/index.js';
 import { createNeedleCallback } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
@@ -355,10 +353,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return defaultVariablesValues;
   }
 
-  getTypescriptKeyType(primaryKey) {
-    return getTSKeyType(primaryKey);
-  }
-
   generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
     return getHydratedEntityClientFields(primaryKey, fields, relationships, dto, customDateType, embedded, VUE);
   }
@@ -369,9 +363,5 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   generateEntityClientEnumImports(fields) {
     return getClientEnumImportsFormat(fields, VUE);
-  }
-
-  generateTestEntityId(primaryKey, index = 0, wrapped = true) {
-    return getTestEntityId(primaryKey, index, wrapped);
   }
 }
