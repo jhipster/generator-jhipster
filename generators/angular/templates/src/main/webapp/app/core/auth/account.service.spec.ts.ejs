@@ -23,7 +23,7 @@ import { provideHttpClientTesting, HttpTestingController } from '@angular/common
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { InterpolatableTranslationObject, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 <%_ } _%>
 
@@ -88,7 +88,7 @@ describe('Account Service', () => {
 <%_ if (enableTranslation) { _%>
 
     mockTranslateService = TestBed.inject(TranslateService);
-    jest.spyOn(mockTranslateService, 'use').mockImplementation(() => of(''));
+    jest.spyOn(mockTranslateService, 'use').mockImplementation(() => of({} as InterpolatableTranslationObject));
 <%_ } _%>
   });
 

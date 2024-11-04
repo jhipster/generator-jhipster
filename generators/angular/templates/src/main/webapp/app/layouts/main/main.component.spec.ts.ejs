@@ -25,7 +25,7 @@ import { DOCUMENT } from '@angular/common';
 import { Component, NgZone } from '@angular/core';
 import { of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { InterpolatableTranslationObject, TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
 <%_ } _%>
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -100,7 +100,7 @@ describe('MainComponent', () => {
     const parentRoutePageTitle = 'parentTitle';
     const childRoutePageTitle = 'childTitle';
 <%_ if (enableTranslation) { _%>
-    const langChangeEvent: LangChangeEvent = { lang: '<%= nativeLanguage %>', translations: null };
+    const langChangeEvent: LangChangeEvent = { lang: '<%= nativeLanguage %>', translations: {} as InterpolatableTranslationObject };
 <%_ } _%>
 
     beforeEach(() => {
@@ -271,7 +271,7 @@ describe('MainComponent', () => {
   <%_ if (enableI18nRTL) { _%>
       findLanguageFromKeyPipe.isRTL = jest.fn(() => false);
   <%_ } _%>
-      translateService.onLangChange.emit({ lang: 'lang1', translations: null });
+      translateService.onLangChange.emit({ lang: 'lang1', translations: {} as InterpolatableTranslationObject });
 
       // THEN
       expect(document.querySelector('html')?.getAttribute('lang')).toEqual('lang1');
@@ -283,7 +283,7 @@ describe('MainComponent', () => {
   <%_ if (enableI18nRTL) { _%>
       findLanguageFromKeyPipe.isRTL = jest.fn(() => true);
   <%_ } _%>
-      translateService.onLangChange.emit({ lang: 'lang2', translations: null });
+      translateService.onLangChange.emit({ lang: 'lang2', translations: {} as InterpolatableTranslationObject });
 
       // THEN
       expect(document.querySelector('html')?.getAttribute('lang')).toEqual('lang2');
