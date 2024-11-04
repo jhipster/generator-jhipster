@@ -113,6 +113,7 @@ function _derivedProperties(entityWithConfig) {
     paginationInfiniteScroll: pagination === INFINITE_SCROLL,
     paginationNo: pagination === NO_PAGINATION,
     dtoMapstruct: dto === MAPSTRUCT,
+    dtoAny: dto && dto !== NO_DTO,
     serviceImpl: service === SERVICE_IMPL,
     serviceNo: service === NO_SERVICE,
   });

@@ -18,13 +18,17 @@
  */
 
 import { asPostWritingTask } from '../../base-application/support/task-type-inference.js';
+import type { Language } from '../../languages/support/languages.js';
 
 /**
  * Update Languages In MailServiceIT
  *
  * @param application
  */
-export const updateLanguagesInMailServiceITTask = asPostWritingTask(function updateLanguagesInMailServiceITTask({ application, control }) {
+export const updateLanguagesInMailServiceITTask = asPostWritingTask<
+  any,
+  { javaPackageTestDir?: string; languagesDefinition?: readonly Language[] }
+>(function updateLanguagesInMailServiceITTask({ application, control }) {
   const { javaPackageTestDir, languagesDefinition } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
   let newContent = 'private static final String[] languages = {\n';
@@ -38,6 +42,8 @@ export const updateLanguagesInMailServiceITTask = asPostWritingTask(function upd
   );
 });
 
-export default asPostWritingTask(function updateLanguagesTask(this, taskParam) {
-  updateLanguagesInMailServiceITTask.call(this, taskParam);
-});
+export default asPostWritingTask<any, { javaPackageTestDir?: string; languagesDefinition?: readonly Language[] }>(
+  function updateLanguagesTask(this, taskParam) {
+    updateLanguagesInMailServiceITTask.call(this, taskParam);
+  },
+);
