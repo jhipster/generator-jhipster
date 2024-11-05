@@ -308,7 +308,7 @@ describe(`generator - ${generator}`, () => {
       "fieldTypeUUID": true,
       "fieldTypeZonedDateTime": false,
       "fieldValidate": false,
-      "fieldValidateRulesMaxlength": NaN,
+      "fieldValidateRulesMaxlength": undefined,
       "fieldValidateRulesPatternAngular": undefined,
       "fieldValidateRulesPatternJava": undefined,
       "fieldValidateRulesPatternReact": undefined,

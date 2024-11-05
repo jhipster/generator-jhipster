@@ -113,7 +113,7 @@ function generateFakeDataForField(
   let originalData;
   let data;
   for (const prop of ['fieldValidateRulesMax', 'fieldValidateRulesMin', 'fieldValidateRulesMaxlength', 'fieldValidateRulesMinlength']) {
-    if (prop in field) {
+    if (prop in field && field[prop] !== undefined) {
       try {
         field[prop] = parseInt(field[prop], 10);
       } catch {
