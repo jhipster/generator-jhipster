@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.14.0",
-    "@module-federation/enhanced": "0.6.15",
+    "@module-federation/enhanced": "0.6.16",
     "@module-federation/utilities": "3.1.21",
     "@testing-library/react": "16.0.1",
     "@types/jest": "29.5.14",
