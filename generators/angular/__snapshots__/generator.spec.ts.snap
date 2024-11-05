@@ -32,628 +32,628 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/404.html": {
+  "clientRoot/src/404.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/WEB-INF/web.xml": {
+  "clientRoot/src/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/admin.routes.ts": {
+  "clientRoot/src/app/admin/admin.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/docs/docs.component.html": {
+  "clientRoot/src/app/admin/docs/docs.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/docs/docs.component.scss": {
+  "clientRoot/src/app/admin/docs/docs.component.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/docs/docs.component.ts": {
+  "clientRoot/src/app/admin/docs/docs.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/gateway/gateway-route.model.ts": {
+  "clientRoot/src/app/admin/gateway/gateway-route.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/gateway/gateway-routes.service.ts": {
+  "clientRoot/src/app/admin/gateway/gateway-routes.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/gateway/gateway.component.html": {
+  "clientRoot/src/app/admin/gateway/gateway.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/gateway/gateway.component.ts": {
+  "clientRoot/src/app/admin/gateway/gateway.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app-page-title-strategy.ts": {
+  "clientRoot/src/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.component.ts": {
+  "clientRoot/src/app/app.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.config.ts": {
+  "clientRoot/src/app/app.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.constants.ts": {
+  "clientRoot/src/app/app.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.routes.ts": {
+  "clientRoot/src/app/app.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/authority.constants.ts": {
+  "clientRoot/src/app/config/authority.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/datepicker-adapter.ts": {
+  "clientRoot/src/app/config/datepicker-adapter.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/dayjs.ts": {
+  "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/error.constants.ts": {
+  "clientRoot/src/app/config/error.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/font-awesome-icons.ts": {
+  "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/input.constants.ts": {
+  "clientRoot/src/app/config/input.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/navigation.constants.ts": {
+  "clientRoot/src/app/config/navigation.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/pagination.constants.ts": {
+  "clientRoot/src/app/config/pagination.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/uib-pagination.config.ts": {
+  "clientRoot/src/app/config/uib-pagination.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/account.model.ts": {
+  "clientRoot/src/app/core/auth/account.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/account.service.spec.ts": {
+  "clientRoot/src/app/core/auth/account.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/account.service.ts": {
+  "clientRoot/src/app/core/auth/account.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/auth-jwt.service.spec.ts": {
+  "clientRoot/src/app/core/auth/auth-jwt.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/auth-jwt.service.ts": {
+  "clientRoot/src/app/core/auth/auth-jwt.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/state-storage.service.ts": {
+  "clientRoot/src/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/user-route-access.service.ts": {
+  "clientRoot/src/app/core/auth/user-route-access.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/config/application-config.service.spec.ts": {
+  "clientRoot/src/app/core/config/application-config.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/config/application-config.service.ts": {
+  "clientRoot/src/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
+  "clientRoot/src/app/core/interceptor/auth-expired.interceptor.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/auth.interceptor.ts": {
+  "clientRoot/src/app/core/interceptor/auth.interceptor.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/error-handler.interceptor.ts": {
+  "clientRoot/src/app/core/interceptor/error-handler.interceptor.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/index.ts": {
+  "clientRoot/src/app/core/interceptor/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/notification.interceptor.ts": {
+  "clientRoot/src/app/core/interceptor/notification.interceptor.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/request/request-util.ts": {
+  "clientRoot/src/app/core/request/request-util.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/request/request.model.ts": {
+  "clientRoot/src/app/core/request/request.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/alert.service.spec.ts": {
+  "clientRoot/src/app/core/util/alert.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/alert.service.ts": {
+  "clientRoot/src/app/core/util/alert.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/data-util.service.spec.ts": {
+  "clientRoot/src/app/core/util/data-util.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/data-util.service.ts": {
+  "clientRoot/src/app/core/util/data-util.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/event-manager.service.spec.ts": {
+  "clientRoot/src/app/core/util/event-manager.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/event-manager.service.ts": {
+  "clientRoot/src/app/core/util/event-manager.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/operators.spec.ts": {
+  "clientRoot/src/app/core/util/operators.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/operators.ts": {
+  "clientRoot/src/app/core/util/operators.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/parse-links.service.spec.ts": {
+  "clientRoot/src/app/core/util/parse-links.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/parse-links.service.ts": {
+  "clientRoot/src/app/core/util/parse-links.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-navbar-items.ts": {
+  "clientRoot/src/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.html": {
+  "clientRoot/src/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.html": {
+  "clientRoot/src/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.model.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.routes.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.test-samples.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.html": {
+  "clientRoot/src/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/route/entity-with-custom-id-routing-resolve.service.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/route/entity-with-custom-id-routing-resolve.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/route/entity-with-custom-id-routing-resolve.service.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/route/entity-with-custom-id-routing-resolve.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/service/entity-with-custom-id.service.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/service/entity-with-custom-id.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/service/entity-with-custom-id.service.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/service/entity-with-custom-id.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-form.service.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-form.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-form.service.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-form.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.html": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity.routes.ts": {
+  "clientRoot/src/app/entities/entity.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.html": {
+  "clientRoot/src/app/entities/microservice/delete/microservice-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.spec.ts": {
+  "clientRoot/src/app/entities/microservice/delete/microservice-delete-dialog.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.ts": {
+  "clientRoot/src/app/entities/microservice/delete/microservice-delete-dialog.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/detail/microservice-detail.component.html": {
+  "clientRoot/src/app/entities/microservice/detail/microservice-detail.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/detail/microservice-detail.component.spec.ts": {
+  "clientRoot/src/app/entities/microservice/detail/microservice-detail.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/detail/microservice-detail.component.ts": {
+  "clientRoot/src/app/entities/microservice/detail/microservice-detail.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/list/microservice.component.html": {
+  "clientRoot/src/app/entities/microservice/list/microservice.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/list/microservice.component.spec.ts": {
+  "clientRoot/src/app/entities/microservice/list/microservice.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/list/microservice.component.ts": {
+  "clientRoot/src/app/entities/microservice/list/microservice.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/microservice.model.ts": {
+  "clientRoot/src/app/entities/microservice/microservice.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/microservice.routes.ts": {
+  "clientRoot/src/app/entities/microservice/microservice.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/microservice.test-samples.ts": {
+  "clientRoot/src/app/entities/microservice/microservice.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/route/microservice-routing-resolve.service.spec.ts": {
+  "clientRoot/src/app/entities/microservice/route/microservice-routing-resolve.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/route/microservice-routing-resolve.service.ts": {
+  "clientRoot/src/app/entities/microservice/route/microservice-routing-resolve.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/service/microservice.service.spec.ts": {
+  "clientRoot/src/app/entities/microservice/service/microservice.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/service/microservice.service.ts": {
+  "clientRoot/src/app/entities/microservice/service/microservice.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-form.service.spec.ts": {
+  "clientRoot/src/app/entities/microservice/update/microservice-form.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-form.service.ts": {
+  "clientRoot/src/app/entities/microservice/update/microservice-form.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-update.component.html": {
+  "clientRoot/src/app/entities/microservice/update/microservice-update.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-update.component.spec.ts": {
+  "clientRoot/src/app/entities/microservice/update/microservice-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-update.component.ts": {
+  "clientRoot/src/app/entities/microservice/update/microservice-update.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/delete/simple-delete-dialog.component.html": {
+  "clientRoot/src/app/entities/simple/delete/simple-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/delete/simple-delete-dialog.component.spec.ts": {
+  "clientRoot/src/app/entities/simple/delete/simple-delete-dialog.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/delete/simple-delete-dialog.component.ts": {
+  "clientRoot/src/app/entities/simple/delete/simple-delete-dialog.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/detail/simple-detail.component.html": {
+  "clientRoot/src/app/entities/simple/detail/simple-detail.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/detail/simple-detail.component.spec.ts": {
+  "clientRoot/src/app/entities/simple/detail/simple-detail.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/detail/simple-detail.component.ts": {
+  "clientRoot/src/app/entities/simple/detail/simple-detail.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/list/simple.component.html": {
+  "clientRoot/src/app/entities/simple/list/simple.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/list/simple.component.spec.ts": {
+  "clientRoot/src/app/entities/simple/list/simple.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/list/simple.component.ts": {
+  "clientRoot/src/app/entities/simple/list/simple.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/route/simple-routing-resolve.service.spec.ts": {
+  "clientRoot/src/app/entities/simple/route/simple-routing-resolve.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/route/simple-routing-resolve.service.ts": {
+  "clientRoot/src/app/entities/simple/route/simple-routing-resolve.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/service/simple.service.spec.ts": {
+  "clientRoot/src/app/entities/simple/service/simple.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/service/simple.service.ts": {
+  "clientRoot/src/app/entities/simple/service/simple.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/simple.model.ts": {
+  "clientRoot/src/app/entities/simple/simple.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/simple.routes.ts": {
+  "clientRoot/src/app/entities/simple/simple.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/simple.test-samples.ts": {
+  "clientRoot/src/app/entities/simple/simple.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-form.service.spec.ts": {
+  "clientRoot/src/app/entities/simple/update/simple-form.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-form.service.ts": {
+  "clientRoot/src/app/entities/simple/update/simple-form.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-update.component.html": {
+  "clientRoot/src/app/entities/simple/update/simple-update.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-update.component.spec.ts": {
+  "clientRoot/src/app/entities/simple/update/simple-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-update.component.ts": {
+  "clientRoot/src/app/entities/simple/update/simple-update.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/home/home.component.html": {
+  "clientRoot/src/app/home/home.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/home/home.component.scss": {
+  "clientRoot/src/app/home/home.component.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/home/home.component.spec.ts": {
+  "clientRoot/src/app/home/home.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/home/home.component.ts": {
+  "clientRoot/src/app/home/home.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/error/error.component.html": {
+  "clientRoot/src/app/layouts/error/error.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/error/error.component.ts": {
+  "clientRoot/src/app/layouts/error/error.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/error/error.route.ts": {
+  "clientRoot/src/app/layouts/error/error.route.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/footer/footer.component.html": {
+  "clientRoot/src/app/layouts/footer/footer.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/footer/footer.component.ts": {
+  "clientRoot/src/app/layouts/footer/footer.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/main/main.component.html": {
+  "clientRoot/src/app/layouts/main/main.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/main/main.component.spec.ts": {
+  "clientRoot/src/app/layouts/main/main.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/main/main.component.ts": {
+  "clientRoot/src/app/layouts/main/main.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar-item.model.d.ts": {
+  "clientRoot/src/app/layouts/navbar/navbar-item.model.d.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar.component.html": {
+  "clientRoot/src/app/layouts/navbar/navbar.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar.component.scss": {
+  "clientRoot/src/app/layouts/navbar/navbar.component.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar.component.spec.ts": {
+  "clientRoot/src/app/layouts/navbar/navbar.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar.component.ts": {
+  "clientRoot/src/app/layouts/navbar/navbar.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/page-ribbon.component.scss": {
+  "clientRoot/src/app/layouts/profiles/page-ribbon.component.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/page-ribbon.component.spec.ts": {
+  "clientRoot/src/app/layouts/profiles/page-ribbon.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/page-ribbon.component.ts": {
+  "clientRoot/src/app/layouts/profiles/page-ribbon.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/profile-info.model.ts": {
+  "clientRoot/src/app/layouts/profiles/profile-info.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/profile.service.ts": {
+  "clientRoot/src/app/layouts/profiles/profile.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/login/login.component.html": {
+  "clientRoot/src/app/login/login.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/login/login.component.spec.ts": {
+  "clientRoot/src/app/login/login.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/login/login.component.ts": {
+  "clientRoot/src/app/login/login.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/login/login.model.ts": {
+  "clientRoot/src/app/login/login.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/login/login.service.ts": {
+  "clientRoot/src/app/login/login.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert-error.component.html": {
+  "clientRoot/src/app/shared/alert/alert-error.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert-error.component.spec.ts": {
+  "clientRoot/src/app/shared/alert/alert-error.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert-error.component.ts": {
+  "clientRoot/src/app/shared/alert/alert-error.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert-error.model.ts": {
+  "clientRoot/src/app/shared/alert/alert-error.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert.component.html": {
+  "clientRoot/src/app/shared/alert/alert.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert.component.spec.ts": {
+  "clientRoot/src/app/shared/alert/alert.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert.component.ts": {
+  "clientRoot/src/app/shared/alert/alert.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/auth/has-any-authority.directive.spec.ts": {
+  "clientRoot/src/app/shared/auth/has-any-authority.directive.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/auth/has-any-authority.directive.ts": {
+  "clientRoot/src/app/shared/auth/has-any-authority.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/duration.pipe.ts": {
+  "clientRoot/src/app/shared/date/duration.pipe.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/format-medium-date.pipe.spec.ts": {
+  "clientRoot/src/app/shared/date/format-medium-date.pipe.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/format-medium-date.pipe.ts": {
+  "clientRoot/src/app/shared/date/format-medium-date.pipe.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/format-medium-datetime.pipe.spec.ts": {
+  "clientRoot/src/app/shared/date/format-medium-datetime.pipe.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": {
+  "clientRoot/src/app/shared/date/format-medium-datetime.pipe.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/index.ts": {
+  "clientRoot/src/app/shared/date/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/filter.component.html": {
+  "clientRoot/src/app/shared/filter/filter.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/filter.component.ts": {
+  "clientRoot/src/app/shared/filter/filter.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/filter.model.spec.ts": {
+  "clientRoot/src/app/shared/filter/filter.model.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/filter.model.ts": {
+  "clientRoot/src/app/shared/filter/filter.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/index.ts": {
+  "clientRoot/src/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/pagination/index.ts": {
+  "clientRoot/src/app/shared/pagination/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/pagination/item-count.component.spec.ts": {
+  "clientRoot/src/app/shared/pagination/item-count.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/pagination/item-count.component.ts": {
+  "clientRoot/src/app/shared/pagination/item-count.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/shared.module.ts": {
+  "clientRoot/src/app/shared/shared.module.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/index.ts": {
+  "clientRoot/src/app/shared/sort/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort-by.directive.spec.ts": {
+  "clientRoot/src/app/shared/sort/sort-by.directive.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort-by.directive.ts": {
+  "clientRoot/src/app/shared/sort/sort-by.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort-state.ts": {
+  "clientRoot/src/app/shared/sort/sort-state.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort.directive.spec.ts": {
+  "clientRoot/src/app/shared/sort/sort.directive.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort.directive.ts": {
+  "clientRoot/src/app/shared/sort/sort.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort.service.spec.ts": {
+  "clientRoot/src/app/shared/sort/sort.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort.service.ts": {
+  "clientRoot/src/app/shared/sort/sort.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/bootstrap.ts": {
+  "clientRoot/src/bootstrap.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/css/loading.css": {
+  "clientRoot/src/content/css/loading.css": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0.svg": {
+  "clientRoot/src/content/images/jhipster_family_member_0.svg": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-192.png": {
+  "clientRoot/src/content/images/jhipster_family_member_0_head-192.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-256.png": {
+  "clientRoot/src/content/images/jhipster_family_member_0_head-256.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-384.png": {
+  "clientRoot/src/content/images/jhipster_family_member_0_head-384.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-512.png": {
+  "clientRoot/src/content/images/jhipster_family_member_0_head-512.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1.svg": {
+  "clientRoot/src/content/images/jhipster_family_member_1.svg": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-192.png": {
+  "clientRoot/src/content/images/jhipster_family_member_1_head-192.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-256.png": {
+  "clientRoot/src/content/images/jhipster_family_member_1_head-256.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-384.png": {
+  "clientRoot/src/content/images/jhipster_family_member_1_head-384.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-512.png": {
+  "clientRoot/src/content/images/jhipster_family_member_1_head-512.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2.svg": {
+  "clientRoot/src/content/images/jhipster_family_member_2.svg": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-192.png": {
+  "clientRoot/src/content/images/jhipster_family_member_2_head-192.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-256.png": {
+  "clientRoot/src/content/images/jhipster_family_member_2_head-256.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-384.png": {
+  "clientRoot/src/content/images/jhipster_family_member_2_head-384.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-512.png": {
+  "clientRoot/src/content/images/jhipster_family_member_2_head-512.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3.svg": {
+  "clientRoot/src/content/images/jhipster_family_member_3.svg": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-192.png": {
+  "clientRoot/src/content/images/jhipster_family_member_3_head-192.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-256.png": {
+  "clientRoot/src/content/images/jhipster_family_member_3_head-256.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-384.png": {
+  "clientRoot/src/content/images/jhipster_family_member_3_head-384.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-512.png": {
+  "clientRoot/src/content/images/jhipster_family_member_3_head-512.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/logo-jhipster.png": {
+  "clientRoot/src/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/scss/_bootstrap-variables.scss": {
+  "clientRoot/src/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/scss/global.scss": {
+  "clientRoot/src/content/scss/global.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/scss/vendor.scss": {
+  "clientRoot/src/content/scss/vendor.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/declarations.d.ts": {
+  "clientRoot/src/declarations.d.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/favicon.ico": {
+  "clientRoot/src/favicon.ico": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/index.html": {
+  "clientRoot/src/index.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/main.ts": {
+  "clientRoot/src/main.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/manifest.webapp": {
+  "clientRoot/src/manifest.webapp": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/robots.txt": {
+  "clientRoot/src/robots.txt": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/swagger-ui/dist/images/throbber.gif": {
+  "clientRoot/src/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/swagger-ui/index.html": {
+  "clientRoot/src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
   "clientRoot/tsconfig.app.json": {
@@ -675,6 +675,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/webpack/webpack.custom.js": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
     "stateCleared": "modified",
   },
 }
@@ -729,850 +732,850 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/404.html": {
+  "clientRoot/src/404.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/WEB-INF/web.xml": {
+  "clientRoot/src/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/admin.routes.ts": {
+  "clientRoot/src/app/admin/admin.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/configuration/configuration.component.html": {
+  "clientRoot/src/app/admin/configuration/configuration.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/configuration/configuration.component.spec.ts": {
+  "clientRoot/src/app/admin/configuration/configuration.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/configuration/configuration.component.ts": {
+  "clientRoot/src/app/admin/configuration/configuration.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/configuration/configuration.model.ts": {
+  "clientRoot/src/app/admin/configuration/configuration.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/configuration/configuration.service.spec.ts": {
+  "clientRoot/src/app/admin/configuration/configuration.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/configuration/configuration.service.ts": {
+  "clientRoot/src/app/admin/configuration/configuration.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/docs/docs.component.html": {
+  "clientRoot/src/app/admin/docs/docs.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/docs/docs.component.scss": {
+  "clientRoot/src/app/admin/docs/docs.component.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/docs/docs.component.ts": {
+  "clientRoot/src/app/admin/docs/docs.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/gateway/gateway-route.model.ts": {
+  "clientRoot/src/app/admin/gateway/gateway-route.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/gateway/gateway-routes.service.ts": {
+  "clientRoot/src/app/admin/gateway/gateway-routes.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/gateway/gateway.component.html": {
+  "clientRoot/src/app/admin/gateway/gateway.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/gateway/gateway.component.ts": {
+  "clientRoot/src/app/admin/gateway/gateway.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/health/health.component.html": {
+  "clientRoot/src/app/admin/health/health.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/health/health.component.spec.ts": {
+  "clientRoot/src/app/admin/health/health.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/health/health.component.ts": {
+  "clientRoot/src/app/admin/health/health.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/health/health.model.ts": {
+  "clientRoot/src/app/admin/health/health.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/health/health.service.spec.ts": {
+  "clientRoot/src/app/admin/health/health.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/health/health.service.ts": {
+  "clientRoot/src/app/admin/health/health.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/health/modal/health-modal.component.html": {
+  "clientRoot/src/app/admin/health/modal/health-modal.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/health/modal/health-modal.component.spec.ts": {
+  "clientRoot/src/app/admin/health/modal/health-modal.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/health/modal/health-modal.component.ts": {
+  "clientRoot/src/app/admin/health/modal/health-modal.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/logs/log.model.ts": {
+  "clientRoot/src/app/admin/logs/log.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/logs/logs.component.html": {
+  "clientRoot/src/app/admin/logs/logs.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/logs/logs.component.spec.ts": {
+  "clientRoot/src/app/admin/logs/logs.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/logs/logs.component.ts": {
+  "clientRoot/src/app/admin/logs/logs.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/logs/logs.service.spec.ts": {
+  "clientRoot/src/app/admin/logs/logs.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/logs/logs.service.ts": {
+  "clientRoot/src/app/admin/logs/logs.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/jvm-memory/jvm-memory.component.html": {
+  "clientRoot/src/app/admin/metrics/blocks/jvm-memory/jvm-memory.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/jvm-memory/jvm-memory.component.ts": {
+  "clientRoot/src/app/admin/metrics/blocks/jvm-memory/jvm-memory.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/jvm-threads/jvm-threads.component.html": {
+  "clientRoot/src/app/admin/metrics/blocks/jvm-threads/jvm-threads.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/jvm-threads/jvm-threads.component.ts": {
+  "clientRoot/src/app/admin/metrics/blocks/jvm-threads/jvm-threads.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-cache/metrics-cache.component.html": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-cache/metrics-cache.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-cache/metrics-cache.component.ts": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-cache/metrics-cache.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.html": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.ts": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.html": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.ts": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.html": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.ts": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.html": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.spec.ts": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.ts": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-request/metrics-request.component.html": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-request/metrics-request.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-request/metrics-request.component.ts": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-request/metrics-request.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.component.html": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-system/metrics-system.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.component.ts": {
+  "clientRoot/src/app/admin/metrics/blocks/metrics-system/metrics-system.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/metrics.component.html": {
+  "clientRoot/src/app/admin/metrics/metrics.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/metrics.component.spec.ts": {
+  "clientRoot/src/app/admin/metrics/metrics.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/metrics.component.ts": {
+  "clientRoot/src/app/admin/metrics/metrics.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/metrics.model.ts": {
+  "clientRoot/src/app/admin/metrics/metrics.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/metrics.service.spec.ts": {
+  "clientRoot/src/app/admin/metrics/metrics.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/metrics/metrics.service.ts": {
+  "clientRoot/src/app/admin/metrics/metrics.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app-page-title-strategy.ts": {
+  "clientRoot/src/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.component.ts": {
+  "clientRoot/src/app/app.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.config.ts": {
+  "clientRoot/src/app/app.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.constants.ts": {
+  "clientRoot/src/app/app.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.routes.ts": {
+  "clientRoot/src/app/app.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/authority.constants.ts": {
+  "clientRoot/src/app/config/authority.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/datepicker-adapter.ts": {
+  "clientRoot/src/app/config/datepicker-adapter.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/dayjs.ts": {
+  "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/error.constants.ts": {
+  "clientRoot/src/app/config/error.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/font-awesome-icons.ts": {
+  "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/input.constants.ts": {
+  "clientRoot/src/app/config/input.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/language.constants.ts": {
+  "clientRoot/src/app/config/language.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/navigation.constants.ts": {
+  "clientRoot/src/app/config/navigation.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/pagination.constants.ts": {
+  "clientRoot/src/app/config/pagination.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/translation.config.ts": {
+  "clientRoot/src/app/config/translation.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/uib-pagination.config.ts": {
+  "clientRoot/src/app/config/uib-pagination.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/account.model.ts": {
+  "clientRoot/src/app/core/auth/account.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/account.service.spec.ts": {
+  "clientRoot/src/app/core/auth/account.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/account.service.ts": {
+  "clientRoot/src/app/core/auth/account.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/auth-session.service.ts": {
+  "clientRoot/src/app/core/auth/auth-session.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/state-storage.service.ts": {
+  "clientRoot/src/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/user-route-access.service.ts": {
+  "clientRoot/src/app/core/auth/user-route-access.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/config/application-config.service.spec.ts": {
+  "clientRoot/src/app/core/config/application-config.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/config/application-config.service.ts": {
+  "clientRoot/src/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
+  "clientRoot/src/app/core/interceptor/auth-expired.interceptor.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/error-handler.interceptor.ts": {
+  "clientRoot/src/app/core/interceptor/error-handler.interceptor.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/index.ts": {
+  "clientRoot/src/app/core/interceptor/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/notification.interceptor.ts": {
+  "clientRoot/src/app/core/interceptor/notification.interceptor.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/request/request-util.ts": {
+  "clientRoot/src/app/core/request/request-util.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/request/request.model.ts": {
+  "clientRoot/src/app/core/request/request.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/alert.service.spec.ts": {
+  "clientRoot/src/app/core/util/alert.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/alert.service.ts": {
+  "clientRoot/src/app/core/util/alert.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/data-util.service.spec.ts": {
+  "clientRoot/src/app/core/util/data-util.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/data-util.service.ts": {
+  "clientRoot/src/app/core/util/data-util.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/event-manager.service.spec.ts": {
+  "clientRoot/src/app/core/util/event-manager.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/event-manager.service.ts": {
+  "clientRoot/src/app/core/util/event-manager.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/operators.spec.ts": {
+  "clientRoot/src/app/core/util/operators.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/operators.ts": {
+  "clientRoot/src/app/core/util/operators.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/parse-links.service.spec.ts": {
+  "clientRoot/src/app/core/util/parse-links.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/parse-links.service.ts": {
+  "clientRoot/src/app/core/util/parse-links.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/authority.model.ts": {
+  "clientRoot/src/app/entities/admin/authority/authority.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/authority.routes.ts": {
+  "clientRoot/src/app/entities/admin/authority/authority.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/authority.test-samples.ts": {
+  "clientRoot/src/app/entities/admin/authority/authority.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/delete/authority-delete-dialog.component.html": {
+  "clientRoot/src/app/entities/admin/authority/delete/authority-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/delete/authority-delete-dialog.component.spec.ts": {
+  "clientRoot/src/app/entities/admin/authority/delete/authority-delete-dialog.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/delete/authority-delete-dialog.component.ts": {
+  "clientRoot/src/app/entities/admin/authority/delete/authority-delete-dialog.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/detail/authority-detail.component.html": {
+  "clientRoot/src/app/entities/admin/authority/detail/authority-detail.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/detail/authority-detail.component.spec.ts": {
+  "clientRoot/src/app/entities/admin/authority/detail/authority-detail.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/detail/authority-detail.component.ts": {
+  "clientRoot/src/app/entities/admin/authority/detail/authority-detail.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/list/authority.component.html": {
+  "clientRoot/src/app/entities/admin/authority/list/authority.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/list/authority.component.spec.ts": {
+  "clientRoot/src/app/entities/admin/authority/list/authority.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/list/authority.component.ts": {
+  "clientRoot/src/app/entities/admin/authority/list/authority.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/route/authority-routing-resolve.service.spec.ts": {
+  "clientRoot/src/app/entities/admin/authority/route/authority-routing-resolve.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/route/authority-routing-resolve.service.ts": {
+  "clientRoot/src/app/entities/admin/authority/route/authority-routing-resolve.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/service/authority.service.spec.ts": {
+  "clientRoot/src/app/entities/admin/authority/service/authority.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/service/authority.service.ts": {
+  "clientRoot/src/app/entities/admin/authority/service/authority.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/update/authority-form.service.spec.ts": {
+  "clientRoot/src/app/entities/admin/authority/update/authority-form.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/update/authority-form.service.ts": {
+  "clientRoot/src/app/entities/admin/authority/update/authority-form.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/update/authority-update.component.html": {
+  "clientRoot/src/app/entities/admin/authority/update/authority-update.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/update/authority-update.component.spec.ts": {
+  "clientRoot/src/app/entities/admin/authority/update/authority-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/admin/authority/update/authority-update.component.ts": {
+  "clientRoot/src/app/entities/admin/authority/update/authority-update.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-navbar-items.ts": {
+  "clientRoot/src/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.html": {
+  "clientRoot/src/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.html": {
+  "clientRoot/src/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.model.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.routes.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.test-samples.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.html": {
+  "clientRoot/src/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/route/entity-with-custom-id-routing-resolve.service.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/route/entity-with-custom-id-routing-resolve.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/route/entity-with-custom-id-routing-resolve.service.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/route/entity-with-custom-id-routing-resolve.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/service/entity-with-custom-id.service.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/service/entity-with-custom-id.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/service/entity-with-custom-id.service.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/service/entity-with-custom-id.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-form.service.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-form.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-form.service.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-form.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.html": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity.routes.ts": {
+  "clientRoot/src/app/entities/entity.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.html": {
+  "clientRoot/src/app/entities/microservice/delete/microservice-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.spec.ts": {
+  "clientRoot/src/app/entities/microservice/delete/microservice-delete-dialog.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.ts": {
+  "clientRoot/src/app/entities/microservice/delete/microservice-delete-dialog.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/detail/microservice-detail.component.html": {
+  "clientRoot/src/app/entities/microservice/detail/microservice-detail.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/detail/microservice-detail.component.spec.ts": {
+  "clientRoot/src/app/entities/microservice/detail/microservice-detail.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/detail/microservice-detail.component.ts": {
+  "clientRoot/src/app/entities/microservice/detail/microservice-detail.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/list/microservice.component.html": {
+  "clientRoot/src/app/entities/microservice/list/microservice.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/list/microservice.component.spec.ts": {
+  "clientRoot/src/app/entities/microservice/list/microservice.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/list/microservice.component.ts": {
+  "clientRoot/src/app/entities/microservice/list/microservice.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/microservice.model.ts": {
+  "clientRoot/src/app/entities/microservice/microservice.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/microservice.routes.ts": {
+  "clientRoot/src/app/entities/microservice/microservice.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/microservice.test-samples.ts": {
+  "clientRoot/src/app/entities/microservice/microservice.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/route/microservice-routing-resolve.service.spec.ts": {
+  "clientRoot/src/app/entities/microservice/route/microservice-routing-resolve.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/route/microservice-routing-resolve.service.ts": {
+  "clientRoot/src/app/entities/microservice/route/microservice-routing-resolve.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/service/microservice.service.spec.ts": {
+  "clientRoot/src/app/entities/microservice/service/microservice.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/service/microservice.service.ts": {
+  "clientRoot/src/app/entities/microservice/service/microservice.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-form.service.spec.ts": {
+  "clientRoot/src/app/entities/microservice/update/microservice-form.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-form.service.ts": {
+  "clientRoot/src/app/entities/microservice/update/microservice-form.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-update.component.html": {
+  "clientRoot/src/app/entities/microservice/update/microservice-update.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-update.component.spec.ts": {
+  "clientRoot/src/app/entities/microservice/update/microservice-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-update.component.ts": {
+  "clientRoot/src/app/entities/microservice/update/microservice-update.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/delete/simple-delete-dialog.component.html": {
+  "clientRoot/src/app/entities/simple/delete/simple-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/delete/simple-delete-dialog.component.spec.ts": {
+  "clientRoot/src/app/entities/simple/delete/simple-delete-dialog.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/delete/simple-delete-dialog.component.ts": {
+  "clientRoot/src/app/entities/simple/delete/simple-delete-dialog.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/detail/simple-detail.component.html": {
+  "clientRoot/src/app/entities/simple/detail/simple-detail.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/detail/simple-detail.component.spec.ts": {
+  "clientRoot/src/app/entities/simple/detail/simple-detail.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/detail/simple-detail.component.ts": {
+  "clientRoot/src/app/entities/simple/detail/simple-detail.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/list/simple.component.html": {
+  "clientRoot/src/app/entities/simple/list/simple.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/list/simple.component.spec.ts": {
+  "clientRoot/src/app/entities/simple/list/simple.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/list/simple.component.ts": {
+  "clientRoot/src/app/entities/simple/list/simple.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/route/simple-routing-resolve.service.spec.ts": {
+  "clientRoot/src/app/entities/simple/route/simple-routing-resolve.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/route/simple-routing-resolve.service.ts": {
+  "clientRoot/src/app/entities/simple/route/simple-routing-resolve.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/service/simple.service.spec.ts": {
+  "clientRoot/src/app/entities/simple/service/simple.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/service/simple.service.ts": {
+  "clientRoot/src/app/entities/simple/service/simple.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/simple.model.ts": {
+  "clientRoot/src/app/entities/simple/simple.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/simple.routes.ts": {
+  "clientRoot/src/app/entities/simple/simple.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/simple.test-samples.ts": {
+  "clientRoot/src/app/entities/simple/simple.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-form.service.spec.ts": {
+  "clientRoot/src/app/entities/simple/update/simple-form.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-form.service.ts": {
+  "clientRoot/src/app/entities/simple/update/simple-form.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-update.component.html": {
+  "clientRoot/src/app/entities/simple/update/simple-update.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-update.component.spec.ts": {
+  "clientRoot/src/app/entities/simple/update/simple-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-update.component.ts": {
+  "clientRoot/src/app/entities/simple/update/simple-update.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/user/service/user.service.spec.ts": {
+  "clientRoot/src/app/entities/user/service/user.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/user/service/user.service.ts": {
+  "clientRoot/src/app/entities/user/service/user.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/user/user.model.ts": {
+  "clientRoot/src/app/entities/user/user.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/user/user.test-samples.ts": {
+  "clientRoot/src/app/entities/user/user.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/home/home.component.html": {
+  "clientRoot/src/app/home/home.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/home/home.component.scss": {
+  "clientRoot/src/app/home/home.component.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/home/home.component.spec.ts": {
+  "clientRoot/src/app/home/home.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/home/home.component.ts": {
+  "clientRoot/src/app/home/home.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/error/error.component.html": {
+  "clientRoot/src/app/layouts/error/error.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/error/error.component.ts": {
+  "clientRoot/src/app/layouts/error/error.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/error/error.route.ts": {
+  "clientRoot/src/app/layouts/error/error.route.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/footer/footer.component.html": {
+  "clientRoot/src/app/layouts/footer/footer.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/footer/footer.component.ts": {
+  "clientRoot/src/app/layouts/footer/footer.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/main/main.component.html": {
+  "clientRoot/src/app/layouts/main/main.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/main/main.component.spec.ts": {
+  "clientRoot/src/app/layouts/main/main.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/main/main.component.ts": {
+  "clientRoot/src/app/layouts/main/main.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/active-menu.directive.ts": {
+  "clientRoot/src/app/layouts/navbar/active-menu.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar-item.model.d.ts": {
+  "clientRoot/src/app/layouts/navbar/navbar-item.model.d.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar.component.html": {
+  "clientRoot/src/app/layouts/navbar/navbar.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar.component.scss": {
+  "clientRoot/src/app/layouts/navbar/navbar.component.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar.component.spec.ts": {
+  "clientRoot/src/app/layouts/navbar/navbar.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar.component.ts": {
+  "clientRoot/src/app/layouts/navbar/navbar.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/page-ribbon.component.scss": {
+  "clientRoot/src/app/layouts/profiles/page-ribbon.component.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/page-ribbon.component.spec.ts": {
+  "clientRoot/src/app/layouts/profiles/page-ribbon.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/page-ribbon.component.ts": {
+  "clientRoot/src/app/layouts/profiles/page-ribbon.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/profile-info.model.ts": {
+  "clientRoot/src/app/layouts/profiles/profile-info.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/profile.service.ts": {
+  "clientRoot/src/app/layouts/profiles/profile.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/login/login.service.ts": {
+  "clientRoot/src/app/login/login.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/login/logout.model.ts": {
+  "clientRoot/src/app/login/logout.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert-error.component.html": {
+  "clientRoot/src/app/shared/alert/alert-error.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert-error.component.spec.ts": {
+  "clientRoot/src/app/shared/alert/alert-error.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert-error.component.ts": {
+  "clientRoot/src/app/shared/alert/alert-error.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert-error.model.ts": {
+  "clientRoot/src/app/shared/alert/alert-error.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert.component.html": {
+  "clientRoot/src/app/shared/alert/alert.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert.component.spec.ts": {
+  "clientRoot/src/app/shared/alert/alert.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert.component.ts": {
+  "clientRoot/src/app/shared/alert/alert.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/auth/has-any-authority.directive.spec.ts": {
+  "clientRoot/src/app/shared/auth/has-any-authority.directive.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/auth/has-any-authority.directive.ts": {
+  "clientRoot/src/app/shared/auth/has-any-authority.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/duration.pipe.ts": {
+  "clientRoot/src/app/shared/date/duration.pipe.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/format-medium-date.pipe.spec.ts": {
+  "clientRoot/src/app/shared/date/format-medium-date.pipe.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/format-medium-date.pipe.ts": {
+  "clientRoot/src/app/shared/date/format-medium-date.pipe.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/format-medium-datetime.pipe.spec.ts": {
+  "clientRoot/src/app/shared/date/format-medium-datetime.pipe.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": {
+  "clientRoot/src/app/shared/date/format-medium-datetime.pipe.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/index.ts": {
+  "clientRoot/src/app/shared/date/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/filter.component.html": {
+  "clientRoot/src/app/shared/filter/filter.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/filter.component.ts": {
+  "clientRoot/src/app/shared/filter/filter.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/filter.model.spec.ts": {
+  "clientRoot/src/app/shared/filter/filter.model.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/filter.model.ts": {
+  "clientRoot/src/app/shared/filter/filter.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/index.ts": {
+  "clientRoot/src/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": {
+  "clientRoot/src/app/shared/language/find-language-from-key.pipe.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/language/index.ts": {
+  "clientRoot/src/app/shared/language/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/language/translate.directive.spec.ts": {
+  "clientRoot/src/app/shared/language/translate.directive.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/language/translate.directive.ts": {
+  "clientRoot/src/app/shared/language/translate.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/language/translation.module.ts": {
+  "clientRoot/src/app/shared/language/translation.module.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/pagination/index.ts": {
+  "clientRoot/src/app/shared/pagination/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/pagination/item-count.component.spec.ts": {
+  "clientRoot/src/app/shared/pagination/item-count.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/pagination/item-count.component.ts": {
+  "clientRoot/src/app/shared/pagination/item-count.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/shared.module.ts": {
+  "clientRoot/src/app/shared/shared.module.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/index.ts": {
+  "clientRoot/src/app/shared/sort/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort-by.directive.spec.ts": {
+  "clientRoot/src/app/shared/sort/sort-by.directive.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort-by.directive.ts": {
+  "clientRoot/src/app/shared/sort/sort-by.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort-state.ts": {
+  "clientRoot/src/app/shared/sort/sort-state.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort.directive.spec.ts": {
+  "clientRoot/src/app/shared/sort/sort.directive.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort.directive.ts": {
+  "clientRoot/src/app/shared/sort/sort.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort.service.spec.ts": {
+  "clientRoot/src/app/shared/sort/sort.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort.service.ts": {
+  "clientRoot/src/app/shared/sort/sort.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/bootstrap.ts": {
+  "clientRoot/src/bootstrap.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/css/loading.css": {
+  "clientRoot/src/content/css/loading.css": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0.svg": {
+  "clientRoot/src/content/images/jhipster_family_member_0.svg": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-192.png": {
+  "clientRoot/src/content/images/jhipster_family_member_0_head-192.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-256.png": {
+  "clientRoot/src/content/images/jhipster_family_member_0_head-256.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-384.png": {
+  "clientRoot/src/content/images/jhipster_family_member_0_head-384.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-512.png": {
+  "clientRoot/src/content/images/jhipster_family_member_0_head-512.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1.svg": {
+  "clientRoot/src/content/images/jhipster_family_member_1.svg": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-192.png": {
+  "clientRoot/src/content/images/jhipster_family_member_1_head-192.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-256.png": {
+  "clientRoot/src/content/images/jhipster_family_member_1_head-256.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-384.png": {
+  "clientRoot/src/content/images/jhipster_family_member_1_head-384.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-512.png": {
+  "clientRoot/src/content/images/jhipster_family_member_1_head-512.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2.svg": {
+  "clientRoot/src/content/images/jhipster_family_member_2.svg": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-192.png": {
+  "clientRoot/src/content/images/jhipster_family_member_2_head-192.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-256.png": {
+  "clientRoot/src/content/images/jhipster_family_member_2_head-256.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-384.png": {
+  "clientRoot/src/content/images/jhipster_family_member_2_head-384.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-512.png": {
+  "clientRoot/src/content/images/jhipster_family_member_2_head-512.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3.svg": {
+  "clientRoot/src/content/images/jhipster_family_member_3.svg": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-192.png": {
+  "clientRoot/src/content/images/jhipster_family_member_3_head-192.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-256.png": {
+  "clientRoot/src/content/images/jhipster_family_member_3_head-256.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-384.png": {
+  "clientRoot/src/content/images/jhipster_family_member_3_head-384.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-512.png": {
+  "clientRoot/src/content/images/jhipster_family_member_3_head-512.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/logo-jhipster.png": {
+  "clientRoot/src/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/scss/_bootstrap-variables.scss": {
+  "clientRoot/src/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/scss/global.scss": {
+  "clientRoot/src/content/scss/global.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/scss/vendor.scss": {
+  "clientRoot/src/content/scss/vendor.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/declarations.d.ts": {
+  "clientRoot/src/declarations.d.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/favicon.ico": {
+  "clientRoot/src/favicon.ico": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/index.html": {
+  "clientRoot/src/index.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/main.ts": {
+  "clientRoot/src/main.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/manifest.webapp": {
+  "clientRoot/src/manifest.webapp": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/robots.txt": {
+  "clientRoot/src/robots.txt": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/swagger-ui/dist/images/throbber.gif": {
+  "clientRoot/src/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/swagger-ui/index.html": {
+  "clientRoot/src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
   "clientRoot/tsconfig.app.json": {
@@ -1594,6 +1597,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/webpack/webpack.custom.js": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
     "stateCleared": "modified",
   },
 }
@@ -1649,604 +1655,604 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/404.html": {
+  "clientRoot/src/404.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/WEB-INF/web.xml": {
+  "clientRoot/src/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app-page-title-strategy.ts": {
+  "clientRoot/src/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.component.ts": {
+  "clientRoot/src/app/app.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.config.ts": {
+  "clientRoot/src/app/app.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.constants.ts": {
+  "clientRoot/src/app/app.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.routes.ts": {
+  "clientRoot/src/app/app.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/authority.constants.ts": {
+  "clientRoot/src/app/config/authority.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/datepicker-adapter.ts": {
+  "clientRoot/src/app/config/datepicker-adapter.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/dayjs.ts": {
+  "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/error.constants.ts": {
+  "clientRoot/src/app/config/error.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/font-awesome-icons.ts": {
+  "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/input.constants.ts": {
+  "clientRoot/src/app/config/input.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/navigation.constants.ts": {
+  "clientRoot/src/app/config/navigation.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/pagination.constants.ts": {
+  "clientRoot/src/app/config/pagination.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/config/uib-pagination.config.ts": {
+  "clientRoot/src/app/config/uib-pagination.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/account.model.ts": {
+  "clientRoot/src/app/core/auth/account.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/account.service.spec.ts": {
+  "clientRoot/src/app/core/auth/account.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/account.service.ts": {
+  "clientRoot/src/app/core/auth/account.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/auth-jwt.service.spec.ts": {
+  "clientRoot/src/app/core/auth/auth-jwt.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/auth-jwt.service.ts": {
+  "clientRoot/src/app/core/auth/auth-jwt.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/state-storage.service.ts": {
+  "clientRoot/src/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/auth/user-route-access.service.ts": {
+  "clientRoot/src/app/core/auth/user-route-access.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/config/application-config.service.spec.ts": {
+  "clientRoot/src/app/core/config/application-config.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/config/application-config.service.ts": {
+  "clientRoot/src/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
+  "clientRoot/src/app/core/interceptor/auth-expired.interceptor.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/auth.interceptor.ts": {
+  "clientRoot/src/app/core/interceptor/auth.interceptor.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/error-handler.interceptor.ts": {
+  "clientRoot/src/app/core/interceptor/error-handler.interceptor.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/index.ts": {
+  "clientRoot/src/app/core/interceptor/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/interceptor/notification.interceptor.ts": {
+  "clientRoot/src/app/core/interceptor/notification.interceptor.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/request/request-util.ts": {
+  "clientRoot/src/app/core/request/request-util.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/request/request.model.ts": {
+  "clientRoot/src/app/core/request/request.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/alert.service.spec.ts": {
+  "clientRoot/src/app/core/util/alert.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/alert.service.ts": {
+  "clientRoot/src/app/core/util/alert.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/data-util.service.spec.ts": {
+  "clientRoot/src/app/core/util/data-util.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/data-util.service.ts": {
+  "clientRoot/src/app/core/util/data-util.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/event-manager.service.spec.ts": {
+  "clientRoot/src/app/core/util/event-manager.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/event-manager.service.ts": {
+  "clientRoot/src/app/core/util/event-manager.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/operators.spec.ts": {
+  "clientRoot/src/app/core/util/operators.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/operators.ts": {
+  "clientRoot/src/app/core/util/operators.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/parse-links.service.spec.ts": {
+  "clientRoot/src/app/core/util/parse-links.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/core/util/parse-links.service.ts": {
+  "clientRoot/src/app/core/util/parse-links.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-navbar-items.ts": {
+  "clientRoot/src/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.html": {
+  "clientRoot/src/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.html": {
+  "clientRoot/src/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.model.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.routes.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.test-samples.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.html": {
+  "clientRoot/src/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/list/entity-with-custom-id.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/route/entity-with-custom-id-routing-resolve.service.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/route/entity-with-custom-id-routing-resolve.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/route/entity-with-custom-id-routing-resolve.service.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/route/entity-with-custom-id-routing-resolve.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/service/entity-with-custom-id.service.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/service/entity-with-custom-id.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/service/entity-with-custom-id.service.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/service/entity-with-custom-id.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-form.service.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-form.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-form.service.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-form.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.html": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.spec.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.ts": {
+  "clientRoot/src/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity.routes.ts": {
+  "clientRoot/src/app/entities/entity.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.html": {
+  "clientRoot/src/app/entities/microservice/delete/microservice-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.spec.ts": {
+  "clientRoot/src/app/entities/microservice/delete/microservice-delete-dialog.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.ts": {
+  "clientRoot/src/app/entities/microservice/delete/microservice-delete-dialog.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/detail/microservice-detail.component.html": {
+  "clientRoot/src/app/entities/microservice/detail/microservice-detail.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/detail/microservice-detail.component.spec.ts": {
+  "clientRoot/src/app/entities/microservice/detail/microservice-detail.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/detail/microservice-detail.component.ts": {
+  "clientRoot/src/app/entities/microservice/detail/microservice-detail.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/list/microservice.component.html": {
+  "clientRoot/src/app/entities/microservice/list/microservice.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/list/microservice.component.spec.ts": {
+  "clientRoot/src/app/entities/microservice/list/microservice.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/list/microservice.component.ts": {
+  "clientRoot/src/app/entities/microservice/list/microservice.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/microservice.model.ts": {
+  "clientRoot/src/app/entities/microservice/microservice.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/microservice.routes.ts": {
+  "clientRoot/src/app/entities/microservice/microservice.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/microservice.test-samples.ts": {
+  "clientRoot/src/app/entities/microservice/microservice.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/route/microservice-routing-resolve.service.spec.ts": {
+  "clientRoot/src/app/entities/microservice/route/microservice-routing-resolve.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/route/microservice-routing-resolve.service.ts": {
+  "clientRoot/src/app/entities/microservice/route/microservice-routing-resolve.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/service/microservice.service.spec.ts": {
+  "clientRoot/src/app/entities/microservice/service/microservice.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/service/microservice.service.ts": {
+  "clientRoot/src/app/entities/microservice/service/microservice.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-form.service.spec.ts": {
+  "clientRoot/src/app/entities/microservice/update/microservice-form.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-form.service.ts": {
+  "clientRoot/src/app/entities/microservice/update/microservice-form.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-update.component.html": {
+  "clientRoot/src/app/entities/microservice/update/microservice-update.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-update.component.spec.ts": {
+  "clientRoot/src/app/entities/microservice/update/microservice-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/microservice/update/microservice-update.component.ts": {
+  "clientRoot/src/app/entities/microservice/update/microservice-update.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/delete/simple-delete-dialog.component.html": {
+  "clientRoot/src/app/entities/simple/delete/simple-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/delete/simple-delete-dialog.component.spec.ts": {
+  "clientRoot/src/app/entities/simple/delete/simple-delete-dialog.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/delete/simple-delete-dialog.component.ts": {
+  "clientRoot/src/app/entities/simple/delete/simple-delete-dialog.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/detail/simple-detail.component.html": {
+  "clientRoot/src/app/entities/simple/detail/simple-detail.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/detail/simple-detail.component.spec.ts": {
+  "clientRoot/src/app/entities/simple/detail/simple-detail.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/detail/simple-detail.component.ts": {
+  "clientRoot/src/app/entities/simple/detail/simple-detail.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/list/simple.component.html": {
+  "clientRoot/src/app/entities/simple/list/simple.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/list/simple.component.spec.ts": {
+  "clientRoot/src/app/entities/simple/list/simple.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/list/simple.component.ts": {
+  "clientRoot/src/app/entities/simple/list/simple.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/route/simple-routing-resolve.service.spec.ts": {
+  "clientRoot/src/app/entities/simple/route/simple-routing-resolve.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/route/simple-routing-resolve.service.ts": {
+  "clientRoot/src/app/entities/simple/route/simple-routing-resolve.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/service/simple.service.spec.ts": {
+  "clientRoot/src/app/entities/simple/service/simple.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/service/simple.service.ts": {
+  "clientRoot/src/app/entities/simple/service/simple.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/simple.model.ts": {
+  "clientRoot/src/app/entities/simple/simple.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/simple.routes.ts": {
+  "clientRoot/src/app/entities/simple/simple.routes.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/simple.test-samples.ts": {
+  "clientRoot/src/app/entities/simple/simple.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-form.service.spec.ts": {
+  "clientRoot/src/app/entities/simple/update/simple-form.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-form.service.ts": {
+  "clientRoot/src/app/entities/simple/update/simple-form.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-update.component.html": {
+  "clientRoot/src/app/entities/simple/update/simple-update.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-update.component.spec.ts": {
+  "clientRoot/src/app/entities/simple/update/simple-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/simple/update/simple-update.component.ts": {
+  "clientRoot/src/app/entities/simple/update/simple-update.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/home/home.component.html": {
+  "clientRoot/src/app/home/home.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/home/home.component.scss": {
+  "clientRoot/src/app/home/home.component.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/home/home.component.spec.ts": {
+  "clientRoot/src/app/home/home.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/home/home.component.ts": {
+  "clientRoot/src/app/home/home.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/error/error.component.html": {
+  "clientRoot/src/app/layouts/error/error.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/error/error.component.ts": {
+  "clientRoot/src/app/layouts/error/error.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/error/error.route.ts": {
+  "clientRoot/src/app/layouts/error/error.route.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/footer/footer.component.html": {
+  "clientRoot/src/app/layouts/footer/footer.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/footer/footer.component.ts": {
+  "clientRoot/src/app/layouts/footer/footer.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/main/main.component.html": {
+  "clientRoot/src/app/layouts/main/main.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/main/main.component.spec.ts": {
+  "clientRoot/src/app/layouts/main/main.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/main/main.component.ts": {
+  "clientRoot/src/app/layouts/main/main.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar-item.model.d.ts": {
+  "clientRoot/src/app/layouts/navbar/navbar-item.model.d.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar.component.html": {
+  "clientRoot/src/app/layouts/navbar/navbar.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar.component.scss": {
+  "clientRoot/src/app/layouts/navbar/navbar.component.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar.component.spec.ts": {
+  "clientRoot/src/app/layouts/navbar/navbar.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/navbar/navbar.component.ts": {
+  "clientRoot/src/app/layouts/navbar/navbar.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/page-ribbon.component.scss": {
+  "clientRoot/src/app/layouts/profiles/page-ribbon.component.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/page-ribbon.component.spec.ts": {
+  "clientRoot/src/app/layouts/profiles/page-ribbon.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/page-ribbon.component.ts": {
+  "clientRoot/src/app/layouts/profiles/page-ribbon.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/profile-info.model.ts": {
+  "clientRoot/src/app/layouts/profiles/profile-info.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/layouts/profiles/profile.service.ts": {
+  "clientRoot/src/app/layouts/profiles/profile.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/login/login.component.html": {
+  "clientRoot/src/app/login/login.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/login/login.component.spec.ts": {
+  "clientRoot/src/app/login/login.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/login/login.component.ts": {
+  "clientRoot/src/app/login/login.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/login/login.model.ts": {
+  "clientRoot/src/app/login/login.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/login/login.service.ts": {
+  "clientRoot/src/app/login/login.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert-error.component.html": {
+  "clientRoot/src/app/shared/alert/alert-error.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert-error.component.spec.ts": {
+  "clientRoot/src/app/shared/alert/alert-error.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert-error.component.ts": {
+  "clientRoot/src/app/shared/alert/alert-error.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert-error.model.ts": {
+  "clientRoot/src/app/shared/alert/alert-error.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert.component.html": {
+  "clientRoot/src/app/shared/alert/alert.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert.component.spec.ts": {
+  "clientRoot/src/app/shared/alert/alert.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/alert/alert.component.ts": {
+  "clientRoot/src/app/shared/alert/alert.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/auth/has-any-authority.directive.spec.ts": {
+  "clientRoot/src/app/shared/auth/has-any-authority.directive.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/auth/has-any-authority.directive.ts": {
+  "clientRoot/src/app/shared/auth/has-any-authority.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/duration.pipe.ts": {
+  "clientRoot/src/app/shared/date/duration.pipe.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/format-medium-date.pipe.spec.ts": {
+  "clientRoot/src/app/shared/date/format-medium-date.pipe.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/format-medium-date.pipe.ts": {
+  "clientRoot/src/app/shared/date/format-medium-date.pipe.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/format-medium-datetime.pipe.spec.ts": {
+  "clientRoot/src/app/shared/date/format-medium-datetime.pipe.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": {
+  "clientRoot/src/app/shared/date/format-medium-datetime.pipe.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/date/index.ts": {
+  "clientRoot/src/app/shared/date/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/filter.component.html": {
+  "clientRoot/src/app/shared/filter/filter.component.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/filter.component.ts": {
+  "clientRoot/src/app/shared/filter/filter.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/filter.model.spec.ts": {
+  "clientRoot/src/app/shared/filter/filter.model.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/filter.model.ts": {
+  "clientRoot/src/app/shared/filter/filter.model.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/filter/index.ts": {
+  "clientRoot/src/app/shared/filter/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/pagination/index.ts": {
+  "clientRoot/src/app/shared/pagination/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/pagination/item-count.component.spec.ts": {
+  "clientRoot/src/app/shared/pagination/item-count.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/pagination/item-count.component.ts": {
+  "clientRoot/src/app/shared/pagination/item-count.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/shared.module.ts": {
+  "clientRoot/src/app/shared/shared.module.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/index.ts": {
+  "clientRoot/src/app/shared/sort/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort-by.directive.spec.ts": {
+  "clientRoot/src/app/shared/sort/sort-by.directive.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort-by.directive.ts": {
+  "clientRoot/src/app/shared/sort/sort-by.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort-state.ts": {
+  "clientRoot/src/app/shared/sort/sort-state.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort.directive.spec.ts": {
+  "clientRoot/src/app/shared/sort/sort.directive.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort.directive.ts": {
+  "clientRoot/src/app/shared/sort/sort.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort.service.spec.ts": {
+  "clientRoot/src/app/shared/sort/sort.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/shared/sort/sort.service.ts": {
+  "clientRoot/src/app/shared/sort/sort.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/bootstrap.ts": {
+  "clientRoot/src/bootstrap.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/css/loading.css": {
+  "clientRoot/src/content/css/loading.css": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0.svg": {
+  "clientRoot/src/content/images/jhipster_family_member_0.svg": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-192.png": {
+  "clientRoot/src/content/images/jhipster_family_member_0_head-192.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-256.png": {
+  "clientRoot/src/content/images/jhipster_family_member_0_head-256.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-384.png": {
+  "clientRoot/src/content/images/jhipster_family_member_0_head-384.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-512.png": {
+  "clientRoot/src/content/images/jhipster_family_member_0_head-512.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1.svg": {
+  "clientRoot/src/content/images/jhipster_family_member_1.svg": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-192.png": {
+  "clientRoot/src/content/images/jhipster_family_member_1_head-192.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-256.png": {
+  "clientRoot/src/content/images/jhipster_family_member_1_head-256.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-384.png": {
+  "clientRoot/src/content/images/jhipster_family_member_1_head-384.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-512.png": {
+  "clientRoot/src/content/images/jhipster_family_member_1_head-512.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2.svg": {
+  "clientRoot/src/content/images/jhipster_family_member_2.svg": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-192.png": {
+  "clientRoot/src/content/images/jhipster_family_member_2_head-192.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-256.png": {
+  "clientRoot/src/content/images/jhipster_family_member_2_head-256.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-384.png": {
+  "clientRoot/src/content/images/jhipster_family_member_2_head-384.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-512.png": {
+  "clientRoot/src/content/images/jhipster_family_member_2_head-512.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3.svg": {
+  "clientRoot/src/content/images/jhipster_family_member_3.svg": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-192.png": {
+  "clientRoot/src/content/images/jhipster_family_member_3_head-192.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-256.png": {
+  "clientRoot/src/content/images/jhipster_family_member_3_head-256.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-384.png": {
+  "clientRoot/src/content/images/jhipster_family_member_3_head-384.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-512.png": {
+  "clientRoot/src/content/images/jhipster_family_member_3_head-512.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/images/logo-jhipster.png": {
+  "clientRoot/src/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/scss/_bootstrap-variables.scss": {
+  "clientRoot/src/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/scss/global.scss": {
+  "clientRoot/src/content/scss/global.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/content/scss/vendor.scss": {
+  "clientRoot/src/content/scss/vendor.scss": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/declarations.d.ts": {
+  "clientRoot/src/declarations.d.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/favicon.ico": {
+  "clientRoot/src/favicon.ico": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/index.html": {
+  "clientRoot/src/index.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/main.ts": {
+  "clientRoot/src/main.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/manifest.webapp": {
+  "clientRoot/src/manifest.webapp": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/robots.txt": {
+  "clientRoot/src/robots.txt": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/swagger-ui/dist/images/throbber.gif": {
+  "clientRoot/src/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/swagger-ui/index.html": {
+  "clientRoot/src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
   "clientRoot/tsconfig.app.json": {
@@ -2271,6 +2277,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/webpack/webpack.microfrontend.js": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
     "stateCleared": "modified",
   },
 }

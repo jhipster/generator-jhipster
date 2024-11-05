@@ -14,58 +14,58 @@ exports[`generator - cypress jwt-cypressAudit(false)-angular-withAdminUi(false)-
   "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/login-page.cy.ts": {
+  "clientRoot/test/cypress/e2e/account/login-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/logout.cy.ts": {
+  "clientRoot/test/cypress/e2e/account/logout.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/password-page.cy.ts": {
+  "clientRoot/test/cypress/e2e/account/password-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/register-page.cy.ts": {
+  "clientRoot/test/cypress/e2e/account/register-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/reset-password-page.cy.ts": {
+  "clientRoot/test/cypress/e2e/account/reset-password-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/settings-page.cy.ts": {
+  "clientRoot/test/cypress/e2e/account/settings-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/administration/administration.cy.ts": {
+  "clientRoot/test/cypress/e2e/administration/administration.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/entity/authority.cy.ts": {
+  "clientRoot/test/cypress/e2e/entity/authority.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/entity/entity-a.cy.ts": {
+  "clientRoot/test/cypress/e2e/entity/entity-a.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/fixtures/integration-test.png": {
+  "clientRoot/test/cypress/fixtures/integration-test.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/plugins/index.ts": {
+  "clientRoot/test/cypress/plugins/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/support/account.ts": {
+  "clientRoot/test/cypress/support/account.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/support/commands.ts": {
+  "clientRoot/test/cypress/support/commands.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/support/entity.ts": {
+  "clientRoot/test/cypress/support/entity.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/support/index.ts": {
+  "clientRoot/test/cypress/support/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/support/management.ts": {
+  "clientRoot/test/cypress/support/management.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/support/navbar.ts": {
+  "clientRoot/test/cypress/support/navbar.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/tsconfig.json": {
+  "clientRoot/test/cypress/tsconfig.json": {
     "stateCleared": "modified",
   },
 }
@@ -88,61 +88,61 @@ exports[`generator - cypress jwt-cypressAudit(true)-vue-withAdminUi(true)-cypres
   "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/login-page.cy.ts": {
+  "clientRoot/test/cypress/e2e/account/login-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/logout.cy.ts": {
+  "clientRoot/test/cypress/e2e/account/logout.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/password-page.cy.ts": {
+  "clientRoot/test/cypress/e2e/account/password-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/register-page.cy.ts": {
+  "clientRoot/test/cypress/e2e/account/register-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/reset-password-page.cy.ts": {
+  "clientRoot/test/cypress/e2e/account/reset-password-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/account/settings-page.cy.ts": {
+  "clientRoot/test/cypress/e2e/account/settings-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/administration/administration.cy.ts": {
+  "clientRoot/test/cypress/e2e/administration/administration.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/entity/entity-a.cy.ts": {
+  "clientRoot/test/cypress/e2e/entity/entity-a.cy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/e2e/lighthouse.audits.ts": {
+  "clientRoot/test/cypress/e2e/lighthouse.audits.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/fixtures/integration-test.png": {
+  "clientRoot/test/cypress/fixtures/integration-test.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/plugins/global.d.ts": {
+  "clientRoot/test/cypress/plugins/global.d.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/plugins/index.ts": {
+  "clientRoot/test/cypress/plugins/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/support/account.ts": {
+  "clientRoot/test/cypress/support/account.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/support/commands.ts": {
+  "clientRoot/test/cypress/support/commands.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/support/entity.ts": {
+  "clientRoot/test/cypress/support/entity.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/support/index.ts": {
+  "clientRoot/test/cypress/support/index.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/support/management.ts": {
+  "clientRoot/test/cypress/support/management.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/support/navbar.ts": {
+  "clientRoot/test/cypress/support/navbar.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/test/javascript/cypress/tsconfig.json": {
+  "clientRoot/test/cypress/tsconfig.json": {
     "stateCleared": "modified",
   },
 }

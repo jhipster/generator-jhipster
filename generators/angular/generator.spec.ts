@@ -113,7 +113,7 @@ describe(`generator - ${clientFramework}`, () => {
 
       describe('withAdminUi', () => {
         const { applicationType, withAdminUi, clientRootDir = '' } = sampleConfig;
-        const clientSrcDir = `${clientRootDir}${CLIENT_MAIN_SRC_DIR}`;
+        const clientSrcDir = `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`;
         const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
 

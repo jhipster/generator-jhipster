@@ -240,6 +240,18 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
           scriptsStorage.set('ci:frontend:build', 'npm run webapp:build:$npm_package_config_default_environment');
           scriptsStorage.set('ci:frontend:test', 'npm run ci:frontend:build && npm test');
         }
+
+        if (application.clientRootDir) {
+          // Add scripts to map to client package.json
+          this.packageJson.merge({
+            workspaces: [application.clientRootDir],
+            scripts: {
+              'webapp:build': `npm run -w ${application.clientRootDir} webapp:build`,
+              'ci:frontend:test': `npm run -w ${application.clientRootDir} ci:frontend:test`,
+              'e2e:headless': `npm run -w ${application.clientRootDir} e2e:headless`,
+            },
+          });
+        }
       },
 
       microfrontend({ application, source }) {

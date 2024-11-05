@@ -95,12 +95,13 @@ describe(`generator - ${generator}`, () => {
 
         if (applicationType !== 'microservice') {
           const adminUiRoutingTitle = generateAdminUi ? 'should generate admin routing' : 'should not generate admin routing';
+          const cypressAdminRoot = clientRootDir ? `${clientRootDir}test/` : 'src/test/javascript/';
           it(adminUiRoutingTitle, () => {
             const assertion = (...args) =>
               generateAdminUi ? (runResult.assertFileContent as any)(...args) : (runResult.assertNoFileContent as any)(...args);
 
             assertion(
-              `${clientRootDir}src/test/javascript/cypress/e2e/administration/administration.cy.ts`,
+              `${cypressAdminRoot}cypress/e2e/administration/administration.cy.ts`,
               '  metricsPageHeadingSelector,\n' +
                 '  healthPageHeadingSelector,\n' +
                 '  logsPageHeadingSelector,\n' +
@@ -108,7 +109,7 @@ describe(`generator - ${generator}`, () => {
             );
 
             assertion(
-              `${clientRootDir}src/test/javascript/cypress/e2e/administration/administration.cy.ts`,
+              `${cypressAdminRoot}cypress/e2e/administration/administration.cy.ts`,
               "  describe('/metrics', () => {\n" +
                 "    it('should load the page', () => {\n" +
                 "      cy.clickOnAdminMenuItem('metrics');\n" +
@@ -139,7 +140,7 @@ describe(`generator - ${generator}`, () => {
             );
 
             assertion(
-              `${clientRootDir}src/test/javascript/cypress/support/commands.ts`,
+              `${cypressAdminRoot}cypress/support/commands.ts`,
               'export const metricsPageHeadingSelector = \'[data-cy="metricsPageHeading"]\';\n' +
                 'export const healthPageHeadingSelector = \'[data-cy="healthPageHeading"]\';\n' +
                 'export const logsPageHeadingSelector = \'[data-cy="logsPageHeading"]\';\n' +
