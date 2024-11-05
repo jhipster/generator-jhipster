@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -19,6 +18,7 @@
  */
 
 import { isFileStateModified } from 'mem-fs-editor/state';
+import { CheckRepoActions } from 'simple-git';
 import BaseApplicationGenerator from '../base-application/index.js';
 
 import {
@@ -55,12 +55,12 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get configuring() {
-    return {
+    return this.asConfiguringTaskGroup({
       async configureMonorepository() {
         if (this.jhipsterConfig.monorepository) return;
 
         const git = this.createGit();
-        if ((await git.checkIsRepo()) && !(await git.checkIsRepo('root'))) {
+        if ((await git.checkIsRepo()) && !(await git.checkIsRepo(CheckRepoActions.IS_REPO_ROOT))) {
           this.jhipsterConfig.monorepository = true;
         }
       },
@@ -69,7 +69,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
           this.jhipsterConfig.skipCommitHook = true;
         }
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
@@ -94,17 +94,17 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
       migrateEntity({ entityConfig, entityStorage }) {
-        for (const field of entityConfig.fields) {
+        for (const field of entityConfig.fields!) {
           if (field.javadoc) {
-            field.documentation = field.javadoc;
+            field.documentation ??= field.javadoc;
             delete field.javadoc;
           }
           if (field.fieldTypeJavadoc) {
-            field.fieldTypeDocumentation = field.fieldTypeJavadoc;
+            field.fieldTypeDocumentation ??= field.fieldTypeJavadoc;
             delete field.fieldTypeJavadoc;
           }
         }
-        for (const relationship of entityConfig.relationships) {
+        for (const relationship of entityConfig.relationships!) {
           if (relationship.javadoc) {
             relationship.documentation = relationship.javadoc;
             delete relationship.javadoc;
@@ -154,17 +154,18 @@ export default class CommonGenerator extends BaseApplicationGenerator {
           throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals!');
         }
       },
-      setupConstants({ application }) {
+      setupConstants({ applicationDefaults }) {
         // Make constants available in templates
-        application.MAIN_DIR = MAIN_DIR;
-        application.TEST_DIR = TEST_DIR;
-        application.SERVER_MAIN_RES_DIR = SERVER_MAIN_RES_DIR;
-        application.ANGULAR = ANGULAR;
-        application.REACT = REACT;
-
-        // Make documentation URL available in templates
-        application.DOCUMENTATION_URL = JHIPSTER_DOCUMENTATION_URL;
-        application.DOCUMENTATION_ARCHIVE_PATH = JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
+        applicationDefaults({
+          MAIN_DIR,
+          TEST_DIR,
+          SERVER_MAIN_RES_DIR,
+          ANGULAR,
+          REACT,
+          // Make documentation URL available in templates
+          JHIPSTER_DOCUMENTATION_URL,
+          JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
+        } as any);
       },
     });
   }
@@ -199,7 +200,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
       async cleanup({ application, control }) {
         await control.cleanupFiles({
           '7.1.1': [[!application.skipCommitHook, '.huskyrc']],
-          '7.6.1': [[application.skipClient, 'npmw', 'npmw.cmd']],
+          '7.6.1': [[application.skipClient!, 'npmw', 'npmw.cmd']],
           '8.0.0-rc.2': [[!application.skipCommitHook, '.lintstagedrc.js']],
         });
       },
@@ -225,7 +226,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
         this.packageJson.merge({
           devDependencies: {
             'generator-jhipster': application.jhipsterVersion,
-            ...Object.fromEntries(application.blueprints.map(blueprint => [blueprint.name, blueprint.version])),
+            ...Object.fromEntries((application as any).blueprints.map(blueprint => [blueprint.name, blueprint.version])),
           },
         });
       },

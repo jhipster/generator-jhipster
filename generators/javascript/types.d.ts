@@ -22,7 +22,8 @@ export type JavaScriptSourceType = {
 };
 
 export type JavaScriptApplication = JavascriptBootstrapProperties &
-  ExportApplicationPropertiesFromCommand<typeof import('./generators/eslint/command.js').default> & {
+  ExportApplicationPropertiesFromCommand<typeof import('./generators/eslint/command.js').default> &
+  ExportApplicationPropertiesFromCommand<typeof import('./generators/prettier/command.js').default> & {
     packageJsonNodeEngine?: boolean | string;
     eslintConfigFile?: string;
     cjsExtension?: string;

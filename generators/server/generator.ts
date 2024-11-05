@@ -216,7 +216,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           }
 
           this.log.warn(errorMessage);
-          entityConfig.pagination = NO_PAGINATION;
+          entityConfig.pagination = 'no';
         }
       },
       configureEntityTable({ application, entityName, entityConfig }) {

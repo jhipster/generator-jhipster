@@ -46,7 +46,7 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
           }
 
           this.log.warn(errorMessage);
-          entityConfig.pagination = NO_PAGINATION;
+          entityConfig.pagination = 'no';
         }
       },
     });

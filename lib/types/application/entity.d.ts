@@ -19,7 +19,7 @@
 
 import type { IsNever } from 'type-fest';
 import type { Entity as BaseEntity } from '../base/entity.js';
-import type { SpringEntity } from '../../../generators/server/types.js';
+import type { ServerEntity } from '../../../generators/server/types.js';
 import type { Field as BaseField } from '../base/field.js';
 import type { Relationship as BaseRelationship } from '../base/relationship.js';
 import type { FieldType } from '../../application/field-types.ts';
@@ -50,9 +50,11 @@ type ClientSample = Record<string, string | number | boolean | null>;
 
 export interface Entity<F extends BaseField = Field, R extends BaseRelationship = never>
   extends Omit<Required<BaseEntity<F>>, 'relationships'>,
-    SpringEntity,
+    ServerEntity,
     AngularEntity {
   changelogDateForRecent: any;
+  /** @experimental */
+  auditableEntity?: boolean;
   relationships: (IsNever<R> extends true ? Relationship<Omit<Entity, 'relationships'>> : R)[];
   otherRelationships: (IsNever<R> extends true ? Relationship<Omit<Entity, 'relationships'>> : R)[];
 
@@ -66,7 +68,6 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   entityAuthority?: string;
   entityReadAuthority?: string;
   hasCyclicRequiredRelationship?: boolean;
-  jpaMetamodelFiltering?: boolean;
 
   entityNameCapitalized: string;
   entityClass: string;
@@ -163,4 +164,9 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   tsSampleWithFullData?: string;
   tsSampleWithNewData?: string;
   tsPrimaryKeySamples?: string[];
+}
+
+export interface UserEntity extends Entity {
+  hasImageField?: boolean;
+  adminUserDto?: string;
 }

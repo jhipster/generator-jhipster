@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -20,12 +19,11 @@
 import { defaults } from 'lodash-es';
 import { Validations, authenticationTypes, databaseTypes, fieldTypes } from '../../lib/jhipster/index.js';
 import { loadRequiredConfigIntoEntity } from '../base-application/support/index.js';
-import { PaginationTypes } from '../../lib/jhipster/entity-options.js';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
 import { getDatabaseTypeData } from '../server/support/database.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import { formatDateForChangelog } from '../base/support/timestamp.js';
-import type { Entity as ApplicationEntity } from '../../lib/types/application/entity.js';
+import type { Entity as ApplicationEntity, UserEntity } from '../../lib/types/application/entity.js';
 
 const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -74,8 +72,8 @@ export const auditableEntityFields = () => [
 
 const authorityEntityName = 'Authority';
 
-export function createUserEntity(this: BaseApplicationGenerator, customUserData = {}, application): Partial<ApplicationEntity> {
-  const userEntityDefinition = this.getEntityConfig('User')?.getAll() as Partial<ApplicationEntity>;
+export function createUserEntity(this: BaseApplicationGenerator, customUserData = {}, application): Partial<UserEntity> {
+  const userEntityDefinition = this.getEntityConfig('User')?.getAll() as Partial<UserEntity>;
   if (userEntityDefinition) {
     if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
       this.log.warn('Relationships on the User entity side will be disregarded');
@@ -89,14 +87,16 @@ export function createUserEntity(this: BaseApplicationGenerator, customUserData 
   const cassandraOrNoDatabase = application.databaseTypeNo || application.databaseTypeCassandra;
   const hasImageField = !cassandraOrNoDatabase;
   // Create entity definition for built-in entity to make easier to deal with relationships.
-  const user: Partial<ApplicationEntity> = {
+  const user: Partial<UserEntity> = {
     name: 'User',
     builtIn: true,
     changelogDate: formatDateForChangelog(creationTimestamp),
     entityTableName: `${application.jhiTablePrefix}_user`,
     relationships: [],
     fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
-    dto: true,
+    dto: 'any',
+    dtoMapstruct: true,
+    dtoAny: true,
     adminUserDto: `AdminUser${application.dtoSuffix ?? ''}`,
     builtInUser: true,
     skipClient: application.clientFrameworkReact || application.clientFrameworkVue,
@@ -106,7 +106,7 @@ export function createUserEntity(this: BaseApplicationGenerator, customUserData 
     entityRestLayer: false,
     entitySearchLayer: false,
     hasImageField: !cassandraOrNoDatabase,
-    pagination: cassandraOrNoDatabase ? PaginationTypes.NO : PaginationTypes.PAGINATION,
+    pagination: cassandraOrNoDatabase ? 'no' : 'pagination',
     auditableEntity: !cassandraOrNoDatabase,
     i18nKeyPrefix: 'userManagement',
     ...customUserData,

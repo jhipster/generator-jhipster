@@ -8,8 +8,12 @@ type MicroserviceEntity = {
 export type Entity<F extends Field = Field, R extends Relationship = Relationship> = MicroserviceEntity & {
   name: string;
   changelogDate?: string;
-  dto?: string;
+  dto?: 'no' | 'mapstruct' | 'any';
+  entitySuffix?: string;
+  service?: 'no' | 'serviceClass' | 'serviceImpl';
   documentation?: string;
+  searchEngine?: string;
+  entityPackage?: string;
 
   fields?: F[];
   relationships?: R[];
@@ -19,7 +23,10 @@ export type Entity<F extends Field = Field, R extends Relationship = Relationshi
   embedded?: boolean;
   skipClient?: boolean;
   skipServer?: boolean;
+  skipFakeData?: boolean;
 
   microserviceName?: string;
   clientRootFolder?: string;
+  pagination?: 'no' | 'infinite-scroll' | 'pagination';
+  jpaMetamodelFiltering?: boolean;
 };

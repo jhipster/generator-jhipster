@@ -1,4 +1,5 @@
 import { fieldTypes } from '../../jhipster/index.js';
+import type { Entity } from '../../types/base/entity.js';
 
 const {
   CommonDBTypes: { UUID },
@@ -9,7 +10,7 @@ export const entitySimple = {
   changelogDate: '20220129000100',
   jpaMetamodelFiltering: true,
   fields: [{ fieldName: 'simpleName', fieldType: 'String' }],
-};
+} satisfies Entity;
 
 export const entityAnotherSimple = {
   name: 'AnotherSimple',
@@ -19,9 +20,9 @@ export const entityAnotherSimple = {
   service: 'serviceImpl',
   pagination: 'pagination',
   clientRootFolder: 'test-root',
-};
+} satisfies Entity;
 
-export const entitiesSimple = [entitySimple, entityAnotherSimple];
+export const entitiesSimple = [entitySimple, entityAnotherSimple] satisfies Entity[];
 
 export const entitiesWithRelationships = [
   entitySimple,
@@ -32,7 +33,7 @@ export const entitiesWithRelationships = [
     fields: [{ fieldName: 'twoName', fieldType: 'String' }],
     relationships: [{ relationshipName: 'relationship', otherEntityName: 'Simple', relationshipType: 'many-to-one' }],
   },
-];
+] satisfies Entity[];
 
 export const entityCustomId = {
   name: 'EntityWithCustomId',
@@ -44,7 +45,7 @@ export const entityCustomId = {
       fieldType: UUID,
     },
   ],
-};
+} satisfies Entity;
 
 export const entitiesMicroservice = {
   name: 'Microservice',
@@ -52,17 +53,17 @@ export const entitiesMicroservice = {
   changelogDate: '20220129000300',
   fields: [{ fieldName: 'simpleName', fieldType: 'String' }],
   microserviceName: 'microservice1',
-  service: 'service',
-  pagination: 'infiniscroll',
-};
+  service: 'serviceClass',
+  pagination: 'infinite-scroll',
+} satisfies Entity;
 
 export const entitySkipClient = {
   name: 'SkipClient',
   changelogDate: '20220129000400',
   skipClient: true,
   fields: [{ fieldName: 'skipClientName', fieldType: 'String' }],
-};
+} satisfies Entity;
 
-export const entitiesServerSamples = [entitySimple, entityAnotherSimple, entityCustomId, entitiesMicroservice];
+export const entitiesServerSamples = [entitySimple, entityAnotherSimple, entityCustomId, entitiesMicroservice] satisfies Entity[];
 
-export const entitiesClientSamples = [entitySimple, entityCustomId, entitiesMicroservice, entitySkipClient];
+export const entitiesClientSamples = [entitySimple, entityCustomId, entitiesMicroservice, entitySkipClient] satisfies Entity[];
