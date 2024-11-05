@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const tsKeyId = this.generateTestEntityId(primaryKey.type); _%>
+<%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 /* tslint:disable max-line-length */
 import { vitest } from 'vitest';
 import { shallowMount, type MountingOptions } from '@vue/test-utils';

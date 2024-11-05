@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
+const tsKeyId = user.primaryKey.tsSampleValues[0];
 _%>
 import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';

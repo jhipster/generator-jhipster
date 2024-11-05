@@ -175,7 +175,7 @@ _%>
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } else { _%>
-                    @if (editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.value == null) {
+                    @if (editForm.get(['<%- relationship.propertyName %>'])!.value == null) {
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } _%>
@@ -196,10 +196,10 @@ _%>
                 </div>
   <%_ } _%>
   <%_ if (relationship.relationshipValidate && relationship.persistableRelationship) { _%>
-            @if (editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.invalid && (editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.dirty || editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.touched)) {
+            @if (editForm.get(['<%- relationship.propertyName %>'])!.invalid && (editForm.get(['<%- relationship.propertyName %>'])!.dirty || editForm.get(['<%- relationship.propertyName %>'])!.touched)) {
                 <div>
     <%_ if (relationshipRequired) { _%>
-                @if (editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])?.errors?.required) {
+                @if (editForm.get(['<%- relationship.propertyName %>'])?.errors?.required) {
                     <small class="form-text text-danger">__jhiTranslateTag__('entity.validation.required')</small>
                 }
     <%_ } _%>

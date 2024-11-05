@@ -27,8 +27,6 @@ import {
   generateEntityClientImports as formatEntityClientImports,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
-  generateTestEntityId as getTestEntityId,
-  generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
 } from '../client/support/index.js';
 import { createNeedleCallback, upperFirstCamelCase } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
@@ -324,14 +322,6 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   generateEntityClientEnumImports(fields) {
     return getClientEnumImportsFormat(fields, REACT);
-  }
-
-  generateTestEntityId(primaryKey, index = 0, wrapped = true) {
-    return getTestEntityId(primaryKey, index, wrapped);
-  }
-
-  generateTestEntityPrimaryKey(primaryKey, index) {
-    return getTestEntityPrimaryKey(primaryKey, index);
   }
 
   /**

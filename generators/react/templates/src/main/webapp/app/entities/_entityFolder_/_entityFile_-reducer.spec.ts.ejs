@@ -316,7 +316,7 @@ describe('Entities reducer tests', () => {
 
 <%_ if (!readOnly) { _%>
     it('dispatches CREATE_<%= entityActionName %> actions', async () => {
-      const arg = <%- this.generateTestEntityPrimaryKey(primaryKey, 1) %>;
+      const arg = <%- tsPrimaryKeySamples[1] %>;
 
       const result = await createEntity(arg)(dispatch, getState, extra);
 
@@ -326,7 +326,7 @@ describe('Entities reducer tests', () => {
     });
 
     it('dispatches UPDATE_<%= entityActionName %> actions', async () => {
-      const arg = <%- this.generateTestEntityPrimaryKey(primaryKey, 1) %>;
+      const arg = <%- tsPrimaryKeySamples[1] %>;
 
       const result = await updateEntity(arg)(dispatch, getState, extra);
 
@@ -336,7 +336,7 @@ describe('Entities reducer tests', () => {
     });
 
     it('dispatches PARTIAL_UPDATE_<%= entityActionName %> actions', async () => {
-      const arg = { <%- primaryKey.name %>: <%- this.generateTestEntityId(primaryKey.type) %> };
+      const arg = { <%- primaryKey.name %>: <%- primaryKey.tsSampleValues[0] %> };
 
       const result = await partialUpdateEntity(arg)(dispatch, getState, extra);
 

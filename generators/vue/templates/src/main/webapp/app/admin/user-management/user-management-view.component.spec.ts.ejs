@@ -1,5 +1,5 @@
 <%_
-const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
+const tsKeyId = user.primaryKey.tsSampleValues[0];
 _%>
 import { vitest } from 'vitest';
 import { shallowMount } from '@vue/test-utils';

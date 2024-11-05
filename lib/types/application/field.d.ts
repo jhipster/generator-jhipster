@@ -33,6 +33,7 @@ export interface Field extends BaseField {
   fieldValidateRulesMax?: number;
   fieldValidateRulesMin?: number;
   fieldValidateRulesMinlength?: number;
+  fieldValidationRequired?: boolean;
   maxlength?: number;
 
   // Temporary fields for Faker
@@ -41,7 +42,7 @@ export interface Field extends BaseField {
   /** @deprecated */
   createRandexp: () => any;
 
-  generateFakeData?: () => any;
+  generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts') => any;
 
   // Java specific
   propertyJavaBeanName?: string;
@@ -65,6 +66,8 @@ export interface Field extends BaseField {
   fieldTypeBinary?: boolean;
   fieldTypeDuration?: boolean;
   fieldTypeBoolean: boolean;
+  fieldTypeTimed?: boolean;
+  fieldTypeLocalDate?: boolean;
   /** @deprecated */
   fieldTypeTemporal: boolean;
   /** @deprecated */

@@ -16,7 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { type Entity } from '../../base-application/index.js';
+import type { Field } from '../../../lib/types/application/field.js';
+import type { Relationship } from '../../../lib/types/application/relationship.js';
+import type { Entity } from '../../base-application/index.js';
+
+export const isClientField = (field: Field) => !field.skipClient;
+
+export const isClientRelationship = (rel: Relationship) =>
+  !!(rel.skipClient ?? !(rel.persistableRelationship || rel.relationshipEagerLoad || (rel.otherEntity as any)?.jpaMetamodelFiltering));
 
 /**
  * Clone entity properties for frontend templates.
@@ -24,10 +31,8 @@ import { type Entity } from '../../base-application/index.js';
  */
 export const filterEntityPropertiesForClient = (entity: Entity): Entity => ({
   ...entity,
-  fields: entity.fields.filter(field => !field.skipClient),
-  relationships: entity.relationships.filter(
-    rel => !(rel.skipClient ?? !(rel.persistableRelationship || rel.relationshipEagerLoad || rel.otherEntity?.jpaMetamodelFiltering)),
-  ),
+  fields: entity.fields.filter(field => isClientField(field)),
+  relationships: entity.relationships.filter(rel => isClientRelationship(rel)),
 });
 
 /**

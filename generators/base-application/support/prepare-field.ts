@@ -101,16 +101,19 @@ const fakeStringTemplateForFieldName = columnName => {
 };
 
 /**
- * @param {*} field
- * @param {import('@faker-js/faker').Faker} faker
- * @param {*} changelogDate
- * @param {string} type csv, cypress, json-serializable, ts
  * @returns fake value
  */
-function generateFakeDataForField(this: CoreGenerator, field: Field, faker: FakerWithRandexp, changelogDate, type = 'csv') {
+function generateFakeDataForField(
+  this: CoreGenerator,
+  field: Field,
+  faker: FakerWithRandexp,
+  changelogDate,
+  type: 'csv' | 'cypress' | 'json-serializable' | 'ts' = 'csv',
+) {
+  let originalData;
   let data;
   for (const prop of ['fieldValidateRulesMax', 'fieldValidateRulesMin', 'fieldValidateRulesMaxlength', 'fieldValidateRulesMinlength']) {
-    if (prop in field) {
+    if (prop in field && field[prop] !== undefined) {
       try {
         field[prop] = parseInt(field[prop], 10);
       } catch {
@@ -120,16 +123,17 @@ function generateFakeDataForField(this: CoreGenerator, field: Field, faker: Fake
   }
 
   if (field.fakerTemplate) {
-    data = faker.helpers.fake(field.fakerTemplate);
+    originalData = faker.helpers.fake(field.fakerTemplate);
+    data = originalData;
   } else if (field.fieldValidate && field.fieldValidateRules?.includes('pattern')) {
-    const generated = field.generateFakeDataFromPattern!();
-    if (!generated) {
-      return undefined;
+    originalData = field.generateFakeDataFromPattern!();
+    if (!originalData) {
+      return {};
     }
     if (type === 'csv' || type === 'cypress') {
-      data = generated.replace(/"/g, '');
+      data = originalData.replace(/"/g, '');
     } else {
-      data = generated;
+      data = originalData;
     }
     if (data.length === 0) {
       this.log.warn(`Generated value for pattern ${field.fieldValidateRulesPattern} is not valid.`);
@@ -161,16 +165,16 @@ function generateFakeDataForField(this: CoreGenerator, field: Field, faker: Fake
   } else if ([INSTANT, ZONED_DATE_TIME, LOCAL_DATE].includes(field.fieldType)) {
     // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
     const date = faker.date.recent({ days: 1, refDate: changelogDate });
-    const isoDate = date.toISOString();
+    originalData = date.toISOString();
     if (field.fieldType === LOCAL_DATE) {
-      data = isoDate.split('T')[0];
+      data = originalData.split('T')[0];
     } else if (type === 'json-serializable') {
       data = date;
     } else {
       // Write the date without milliseconds so Java can parse it
       // See https://stackoverflow.com/a/34053802/150868
       // YYYY-MM-DDTHH:mm:ss
-      data = isoDate.split('.')[0];
+      data = originalData.split('.')[0];
       if (type === 'cypress' || type === 'ts') {
         // YYYY-MM-DDTHH:mm
         data = data.substr(0, data.length - 3);
@@ -189,6 +193,7 @@ function generateFakeDataForField(this: CoreGenerator, field: Field, faker: Fake
   } else {
     this.log.warn(`Fake data for field ${field.fieldType} is not supported`);
   }
+  originalData ??= data;
 
   if (field.fieldType === BYTES && type === 'json-serializable') {
     data = Buffer.from(data).toString('base64');
@@ -222,7 +227,7 @@ function generateFakeDataForField(this: CoreGenerator, field: Field, faker: Fake
     }
   }
 
-  return data;
+  return { data, originalData };
 }
 
 function _derivedProperties(field) {
@@ -358,27 +363,27 @@ function prepareCommonFieldForTemplates(entityWithConfig: Entity, field: Field, 
   field.uniqueValue = [];
 
   field.generateFakeData = (type = 'csv') => {
-    let data = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
+    let generated = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
     // manage uniqueness
     if ((field.fieldValidate === true && field.fieldValidateRules!.includes(UNIQUE)) || field.id) {
       let i = 0;
-      while (field.uniqueValue!.indexOf(data) !== -1) {
+      while (field.uniqueValue!.indexOf(generated.originalData) !== -1) {
         if (i++ === 5) {
-          data = undefined;
+          generated = {};
           break;
         }
-        data = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
+        generated = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
       }
-      if (data === undefined) {
+      if (generated.data === undefined) {
         generator.log.warn(`Error generating a unique value field ${field.fieldName} and type ${field.fieldType}`);
       } else {
-        field.uniqueValue!.push(data);
+        field.uniqueValue!.push(generated.originalData);
       }
     }
-    if (data === undefined) {
+    if (generated.data === undefined) {
       generator.log.warn(`Error generating fake data for field ${entityWithConfig.name}.${field.fieldName}`);
     }
-    return data;
+    return generated.data;
   };
   field.relationshipsPath = [];
 

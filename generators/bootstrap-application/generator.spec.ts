@@ -352,7 +352,13 @@ describe(`generator - ${generator}`, () => {
       "shouldDropDefaultValue": false,
       "tsType": "string",
       "unique": false,
-      "uniqueValue": [],
+      "uniqueValue": [
+        "09076bdf-799b-4280-a46d-d5d1b0596d4e",
+        "cdbac2c8-5af0-4c05-9390-f838bceaee96",
+        "2c184532-359e-417e-8339-7736058f89c7",
+        "1344246c-16a7-46d1-bb61-2043f965c8d5",
+        "1e61df13-b2d3-459d-875e-5607a4ccdbdb",
+      ],
     },
     {
       "blobContentTypeAny": false,
@@ -443,7 +449,12 @@ describe(`generator - ${generator}`, () => {
       "tsType": "string",
       "unique": true,
       "uniqueConstraintName": "ux_jhi_user__login",
-      "uniqueValue": [],
+      "uniqueValue": [
+        "ohu@Z",
+        "M@-OK\\8Q7\\KE7Lmnl\\-9\\,gz8P\\@0wAqB",
+        "tXsOip",
+        "Uc.q",
+      ],
     },
     {
       "blobContentTypeAny": false,
@@ -1025,6 +1036,10 @@ describe(`generator - ${generator}`, () => {
     "nameCapitalized": "Id",
     "ownFields": Any<Array>,
     "relationships": [],
+    "tsSampleValues": [
+      "'9fec3727-3421-4967-b213-ba36557ca194'",
+      "'1361f429-3817-4123-8ee3-fdf8943310b2'",
+    ],
     "tsType": "string",
     "type": "UUID",
     "typeInteger": false,
@@ -1064,6 +1079,22 @@ describe(`generator - ${generator}`, () => {
   "skipUiGrouping": false,
   "springDataDescription": "Spring Data JPA",
   "tsKeyType": "string",
+  "tsPrimaryKeySamples": [
+    "{id: '1344246c-16a7-46d1-bb61-2043f965c8d5'}",
+    "{id: '1e61df13-b2d3-459d-875e-5607a4ccdbdb'}",
+  ],
+  "tsSampleWithFullData": "{
+  id: '2c184532-359e-417e-8339-7736058f89c7',
+  login: 'tXsOip'}",
+  "tsSampleWithNewData": "{
+  login: 'Uc.q',
+  id: null}",
+  "tsSampleWithPartialData": "{
+  id: '09076bdf-799b-4280-a46d-d5d1b0596d4e',
+  login: 'ohu@Z'}",
+  "tsSampleWithRequiredData": "{
+  id: 'cdbac2c8-5af0-4c05-9390-f838bceaee96',
+  login: 'M@-OK\\\\8Q7\\\\KE7Lmnl\\\\-9\\\\,gz8P\\\\@0wAqB'}",
   "uniqueEnums": {},
   "updatableEntity": true,
   "useMicroserviceJson": false,
@@ -1251,7 +1282,13 @@ describe(`generator - ${generator}`, () => {
       "shouldDropDefaultValue": false,
       "tsType": "string",
       "unique": false,
-      "uniqueValue": [],
+      "uniqueValue": [
+        "2189bcd3-31d2-4c42-9620-c948f41d0b0a",
+        "22ccb613-6f9d-4043-9a1b-63de682c25f1",
+        "19b8e903-b097-46b3-a65a-778acb6d87e9",
+        "6fe41aa2-077f-41d3-b692-28efde354481",
+        "6e13b9b6-a70d-4146-9d4c-ef8f187a1a20",
+      ],
     },
   ],
   "fieldsContainNoOwnerOneToOne": false,
@@ -1318,6 +1355,10 @@ describe(`generator - ${generator}`, () => {
     "nameCapitalized": "Id",
     "ownFields": Any<Array>,
     "relationships": [],
+    "tsSampleValues": [
+      "'9fec3727-3421-4967-b213-ba36557ca194'",
+      "'1361f429-3817-4123-8ee3-fdf8943310b2'",
+    ],
     "tsType": "string",
     "type": "UUID",
     "typeInteger": false,
@@ -1355,6 +1396,18 @@ describe(`generator - ${generator}`, () => {
   "skipUiGrouping": false,
   "springDataDescription": "Spring Data JPA",
   "tsKeyType": "string",
+  "tsPrimaryKeySamples": [
+    "{id: '6fe41aa2-077f-41d3-b692-28efde354481'}",
+    "{id: '6e13b9b6-a70d-4146-9d4c-ef8f187a1a20'}",
+  ],
+  "tsSampleWithFullData": "{
+  id: '19b8e903-b097-46b3-a65a-778acb6d87e9'}",
+  "tsSampleWithNewData": "{
+  id: null}",
+  "tsSampleWithPartialData": "{
+  id: '2189bcd3-31d2-4c42-9620-c948f41d0b0a'}",
+  "tsSampleWithRequiredData": "{
+  id: '22ccb613-6f9d-4043-9a1b-63de682c25f1'}",
   "uniqueEnums": {},
   "updatableEntity": false,
   "useMicroserviceJson": false,
@@ -1596,7 +1649,13 @@ describe(`generator - ${generator}`, () => {
       "shouldDropDefaultValue": false,
       "tsType": "string",
       "unique": false,
-      "uniqueValue": [],
+      "uniqueValue": [
+        "2189bcd3-31d2-4c42-9620-c948f41d0b0a",
+        "22ccb613-6f9d-4043-9a1b-63de682c25f1",
+        "19b8e903-b097-46b3-a65a-778acb6d87e9",
+        "6fe41aa2-077f-41d3-b692-28efde354481",
+        "6e13b9b6-a70d-4146-9d4c-ef8f187a1a20",
+      ],
     },
   ],
   "fieldsContainNoOwnerOneToOne": false,
@@ -1663,6 +1722,10 @@ describe(`generator - ${generator}`, () => {
     "nameCapitalized": "Id",
     "ownFields": Any<Array>,
     "relationships": [],
+    "tsSampleValues": [
+      "'9fec3727-3421-4967-b213-ba36557ca194'",
+      "'1361f429-3817-4123-8ee3-fdf8943310b2'",
+    ],
     "tsType": "string",
     "type": "UUID",
     "typeInteger": false,
@@ -1700,6 +1763,18 @@ describe(`generator - ${generator}`, () => {
   "skipUiGrouping": false,
   "springDataDescription": "Spring Data JPA",
   "tsKeyType": "string",
+  "tsPrimaryKeySamples": [
+    "{id: '6fe41aa2-077f-41d3-b692-28efde354481'}",
+    "{id: '6e13b9b6-a70d-4146-9d4c-ef8f187a1a20'}",
+  ],
+  "tsSampleWithFullData": "{
+  id: '19b8e903-b097-46b3-a65a-778acb6d87e9'}",
+  "tsSampleWithNewData": "{
+  id: null}",
+  "tsSampleWithPartialData": "{
+  id: '2189bcd3-31d2-4c42-9620-c948f41d0b0a'}",
+  "tsSampleWithRequiredData": "{
+  id: '22ccb613-6f9d-4043-9a1b-63de682c25f1'}",
   "uniqueEnums": {},
   "updatableEntity": false,
   "useMicroserviceJson": false,

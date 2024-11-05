@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import {
-  filterEntitiesAndPropertiesForClient,
   filterEntitiesForClient,
+  filterEntityPropertiesForClient,
   loadClientConfig,
   loadDerivedClientConfig,
   preparePostEntityClientDerivedProperties,
@@ -75,19 +75,26 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
     return this.preparing;
   }
 
-  get postPreparingEachEntity() {
-    return this.asPostPreparingEachEntityTaskGroup({
+  get default() {
+    return this.asDefaultTaskGroup({
       control({ control }) {
-        control.filterEntitiesAndPropertiesForClient = filterEntitiesAndPropertiesForClient;
-        control.filterEntitiesForClient = filterEntitiesForClient;
+        control.filterEntitiesForClient ??= filterEntitiesForClient;
+        control.filterEntityPropertiesForClient ??= filterEntityPropertiesForClient;
+        control.filterEntitiesAndPropertiesForClient ??= entities => {
+          entities = control.filterEntitiesForClient!(entities);
+          entities.forEach(control.filterEntityPropertiesForClient!);
+          return entities;
+        };
       },
-      postPreparingEntity({ entity }) {
-        preparePostEntityClientDerivedProperties(entity);
+      async postPreparingEntity({ entities }) {
+        for (const entity of entities) {
+          await preparePostEntityClientDerivedProperties(entity);
+        }
       },
     });
   }
 
-  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.postPreparingEachEntity;
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.default;
   }
 }

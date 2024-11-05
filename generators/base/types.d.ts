@@ -19,6 +19,7 @@ export type Control = BaseApplicationControlProperties & {
   reproducibleLiquibaseTimestamp?: Date;
   filterEntitiesForClient?: (entity: Entity[]) => Entity[];
   filterEntitiesAndPropertiesForClient?: (entity: Entity[]) => Entity[];
+  filterEntityPropertiesForClient?: (entity: Entity) => Entity;
   customizeRemoveFiles: ((file: string) => string | undefined)[];
   removeFiles: (options: { removedInVersion: string } | string, ...files: string[]) => Promise<void>;
   /**

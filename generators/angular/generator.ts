@@ -24,13 +24,7 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.js';
 import { defaultLanguage } from '../languages/support/index.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
-import {
-  generateTypescriptTestEntity as generateTestEntity,
-  generateEntityClientEnumImports as getClientEnumImportsFormat,
-  getTypescriptKeyType as getTSKeyType,
-  generateTestEntityId as getTestEntityId,
-  generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
-} from '../client/support/index.js';
+import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
 import type { PostWritingEntitiesTaskParam } from '../../lib/types/application/tasks.js';
@@ -44,7 +38,6 @@ import {
   addItemToAdminMenu,
   addRoute,
   addToEntitiesMenu,
-  buildAngularFormPath as angularFormPath,
   isTranslatedAngularFile,
   translateAngularFilesTransform,
 } from './support/index.js';
@@ -438,60 +431,6 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    */
   generateEntityClientEnumImports(fields) {
     return getClientEnumImportsFormat(fields, ANGULAR);
-  }
-
-  /**
-   * Get the typescript type of a non-composite primary key
-   * @param primaryKey the primary key of the entity
-   * @returns {string} the typescript type.
-   */
-  getTypescriptKeyType(primaryKey) {
-    return getTSKeyType(primaryKey);
-  }
-
-  /**
-   * generates a value for a primary key type
-   * @param primaryKey the primary key attribute (or its type) of the entity
-   * @param index an index to add salt to the value
-   * @param wrapped if the value should be within quotes
-   * @returns {string|number|string}
-   */
-  generateTestEntityId(primaryKey, index = 0, wrapped = true) {
-    return getTestEntityId(primaryKey, index, wrapped);
-  }
-
-  /**
-   * @private
-   * Generate a test entity, for the PK references (when the PK is a composite, derived key)
-   *
-   * @param {any} primaryKey - primary key definition.
-   * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
-   */
-  generateTestEntityPrimaryKey(primaryKey, index) {
-    return getTestEntityPrimaryKey(primaryKey, index);
-  }
-
-  /**
-   * @private
-   * Generate a test entity instance with faked values.
-   *
-   * @param {any} references - references to other entities.
-   * @param {any} additionalFields - additional fields to add to the entity or with default values that overrides generated values.
-   */
-  generateTypescriptTestEntity(references, additionalFields) {
-    return generateTestEntity(references, additionalFields);
-  }
-
-  /**
-   * @private
-   * Create a angular form path getter method of reference.
-   *
-   * @param {object} reference
-   * @param {string[]} prefix
-   * @return {string}
-   */
-  buildAngularFormPath(reference, prefix = []) {
-    return angularFormPath(reference, prefix);
   }
 
   /**

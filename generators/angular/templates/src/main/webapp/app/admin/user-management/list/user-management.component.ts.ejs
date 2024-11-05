@@ -83,7 +83,7 @@ export default class UserManagementComponent implements OnInit {
     this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.loadAll());
   }
 
-  trackIdentity(item: User): <%= this.getTypescriptKeyType(user.primaryKey.type) %> {
+  trackIdentity(item: User): <%= user.primaryKey.tsType %> {
     return item.id!;
   }
 
