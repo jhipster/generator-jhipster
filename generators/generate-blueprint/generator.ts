@@ -57,6 +57,7 @@ export default class extends BaseGenerator {
   recreatePackageLock!: boolean;
   skipWorkflows!: boolean;
   ignoreExistingGenerators!: boolean;
+  gitDependency!: string;
 
   async _beforeQueue() {
     if (!this.fromBlueprint) {
@@ -371,7 +372,7 @@ export default class extends BaseGenerator {
           });
         } else {
           this.packageJson.merge({
-            dependencies: exactDependency,
+            dependencies: this.gitDependency ? { 'generator-jhipster': this.gitDependency } : exactDependency,
             engines: this.jhipsterConfig.caret ? caretDependency : exactDependency,
           });
         }
