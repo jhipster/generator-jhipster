@@ -40,6 +40,6 @@ gradle-enterprise = { id = 'com.gradle.enterprise', version = '3.18.1' }
 
 common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.0.2' }
 
-gatling-gradle = { id = 'io.gatling.gradle', version = '3.12.0.3' }
+gatling-gradle = { id = 'io.gatling.gradle', version = '3.12.0.4' }
 
 gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.9.0' }
