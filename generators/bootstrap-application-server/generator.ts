@@ -31,6 +31,7 @@ import {
 import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } from '../base-application/support/index.js';
 import {
   addEntitiesOtherRelationships,
+  getPrimaryKeyValue,
   hibernateSnakeCase,
   loadDerivedServerConfig,
   loadRequiredConfigDerivedProperties,
@@ -222,5 +223,27 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
     return this.postPreparingEachEntity;
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      async postPreparingEntity({ application, entities }) {
+        if (!application.backendTypeJavaAny) return;
+        for (const entity of entities) {
+          if (entity.primaryKey) {
+            entity.resetFakerSeed(`${application.baseName}post-prepare-server`);
+            entity.primaryKey.javaSampleValues ??= [
+              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, 1),
+              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, 2),
+              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, entity.faker.number.int({ min: 10, max: 100 })),
+            ];
+          }
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.default;
   }
 }

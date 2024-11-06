@@ -56,7 +56,7 @@ class UserMapperTest {
 <%_ if (databaseTypeCouchbase) { _%>
     private static final String DEFAULT_ID = DEFAULT_LOGIN;
 <%_ } else { _%>
-    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- this.getPrimaryKeyValue(user.primaryKey.type) %>;
+    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- user.primaryKey.javaSampleValues[0] %>;
 <%_ } _%>
 
     private UserMapper userMapper;

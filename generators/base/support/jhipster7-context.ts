@@ -227,7 +227,7 @@ export const jhipster7deprecatedProperties = {
     get: () => getDBCExtraOption,
   },
   getPrimaryKeyValue: {
-    replacement: 'current generator this.getPrimaryKeyValue',
+    replacement: 'current generator primaryKey.javaSampleValues[0|1|2]',
     get: () => getPrimaryKeyValue,
   },
   getJoinTableName: {

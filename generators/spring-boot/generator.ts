@@ -41,7 +41,6 @@ import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.js';
 import {
   addSpringFactory,
   getJavaValueGeneratorForType,
-  getPrimaryKeyValue,
   getSpecificationBuildForType,
   insertContentIntoApplicationProperties,
   javaBeanCase,
@@ -622,18 +621,5 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
 
   get [BaseApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
-  }
-
-  /**
-   * @private
-   * Returns the primary key value based on the primary key type, DB and default value
-   *
-   * @param {string} primaryKey - the primary key type
-   * @param {string} databaseType - the database type
-   * @param {string} defaultValue - default value
-   * @returns {string} java primary key value
-   */
-  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1) {
-    return getPrimaryKeyValue(primaryKey, databaseType, defaultValue);
   }
 }
