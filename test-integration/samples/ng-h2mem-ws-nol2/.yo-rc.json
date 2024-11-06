@@ -8,6 +8,7 @@
     "cacheProvider": "ehcache",
     "clientFramework": "angular",
     "clientPackageManager": "npm",
+    "clientRootDir": "src/main/webapp/",
     "clientTheme": "none",
     "creationTimestamp": 1596513172471,
     "databaseType": "sql",

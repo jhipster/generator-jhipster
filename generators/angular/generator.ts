@@ -138,6 +138,16 @@ export default class AngularGenerator extends BaseApplicationGenerator {
             }),
           );
         };
+
+        if (application.clientRootDir) {
+          // Overrides only works if added in root package.json
+          this.packageJson.merge({
+            overrides: {
+              'browser-sync': application.nodeDependencies['browser-sync'],
+              webpack: application.nodeDependencies.webpack,
+            },
+          });
+        }
       },
     });
   }
