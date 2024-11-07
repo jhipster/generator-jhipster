@@ -86,6 +86,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
       await this.dependsOnJHipster(GENERATOR_SERVER);
       await this.dependsOnJHipster('jhipster:java:domain');
       await this.dependsOnJHipster('jhipster:java:build-tool');
+      await this.dependsOnJHipster('jhipster:java:server');
     }
   }
 
@@ -314,6 +315,19 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
 }
 `,
           });
+      },
+      blockhound({ application, source }) {
+        source.addAllowBlockingCallsInside = ({ classPath, method }) => {
+          if (!application.reactive) throw new Error('Blockhound is only supported by reactive applications');
+
+          this.editFile(
+            `${application.javaPackageTestDir}config/JHipsterBlockHoundIntegration.java`,
+            createNeedleCallback({
+              needle: 'blockhound-integration',
+              contentToAdd: `builder.allowBlockingCallsInside("${classPath}", "${method}");`,
+            }),
+          );
+        };
       },
     });
   }
