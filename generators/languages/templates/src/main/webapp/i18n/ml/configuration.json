@@ -1,0 +1,10 @@
+{
+  "configuration": {
+    "title": "കൺഫിഗറേഷൻ",
+    "filter": "ഫിൽട്ടർ (ആമുഖം വഴി)",
+    "table": {
+      "prefix": "ആമുഖം",
+      "properties": "ഗുണങ്ങൾ"
+    }
+  }
+}

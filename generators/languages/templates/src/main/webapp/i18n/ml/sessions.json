@@ -1,0 +1,15 @@
+{
+  "sessions": {
+    "title": "സജീവ സെഷൻ [<strong>{{username}}</strong>]",
+    "table": {
+      "ipaddress": "ഐപി വിലാസം",
+      "useragent": "ഉപയോക്തൃ ഏജന്റ്",
+      "date": "തീയതി",
+      "button": "റദ്ദാക്കുക"
+    },
+    "messages": {
+      "success": "<strong>സെഷൻ റദ്ദാക്കുക!</strong>",
+      "error": "<strong>പിശക് സംഭവിച്ചു!</strong> സെഷൻ റദ്ദാക്കുന്നത് സാധ്യമല്ല."
+    }
+  }
+}
