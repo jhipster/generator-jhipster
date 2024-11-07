@@ -142,6 +142,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json'),
         );
       },
+      loadPackageJson({ application }) {
+        application.jhipsterPackageJson = packageJson;
+      },
     });
   }
 
