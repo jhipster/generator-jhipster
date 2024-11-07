@@ -244,13 +244,19 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         if (application.clientRootDir) {
           // Add scripts to map to client package.json
           this.packageJson.merge({
-            workspaces: [application.clientRootDir],
             scripts: {
               'webapp:build': `npm run -w ${application.clientRootDir} webapp:build`,
               'ci:frontend:test': `npm run -w ${application.clientRootDir} ci:frontend:test`,
               'e2e:headless': `npm run -w ${application.clientRootDir} e2e:headless`,
             },
           });
+
+          const clientWorkspace = application.clientRootDir.slice(0, -1);
+          const packageJson = this.packageJson.createProxy();
+          const workspaces = packageJson.workspaces as string[] | undefined;
+          if (!workspaces?.includes(clientWorkspace)) {
+            packageJson.workspaces = [...(workspaces ?? []), clientWorkspace];
+          }
         }
       },
 
