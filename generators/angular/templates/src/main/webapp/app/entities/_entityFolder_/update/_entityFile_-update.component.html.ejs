@@ -175,11 +175,7 @@ _%>
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } else { _%>
-<<<<<<< HEAD
                     @if (editForm.get(['<%- relationship.propertyName %>'])!.value == null) {
-=======
-                    @if (editForm.get([<%- buildAngularFormPath(relationship.reference) %>])!.value == null) {
->>>>>>> 6a2ff33b25 (generator-specific entity)
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } _%>

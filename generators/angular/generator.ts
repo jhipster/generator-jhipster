@@ -41,6 +41,7 @@ import {
   addItemToAdminMenu,
   addRoute,
   addToEntitiesMenu,
+  buildAngularFormPath as angularFormPath,
   isTranslatedAngularFile,
   translateAngularFilesTransform,
 } from './support/index.js';
@@ -195,7 +196,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
           return angularFormPath(reference, prefix);
         };
 
-        entity.generateTestEntityId = (primaryKey, index = 0, wrapped = true) => {
+        entity.generateTestEntityId = (primaryKey, index: 0 | 1 | 'random' = 0, wrapped = true) => {
           return getTestEntityId(primaryKey, index, wrapped);
         };
       },

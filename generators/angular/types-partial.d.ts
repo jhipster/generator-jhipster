@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 /**
- * Will be deprecated and merged into AngularApplication
+ * @deprecated Will be deprecated and merged into types.d/AngularApplication
  */
 export type PartialAngularApplication = {
   angularLocaleId: string;

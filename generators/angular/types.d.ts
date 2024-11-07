@@ -27,7 +27,7 @@ export interface AngularEntity extends Entity {
    * @param wrapped if the value should be within quotes
    * @returns {string|number|string}
    */
-  generateTestEntityId: (primaryKey: any, index?: number, wrapped?: boolean) => any;
+  generateTestEntityId: (primaryKey: any, index?: 0 | 1 | 'random', wrapped?: boolean) => any;
   /**
    * @private
    * Create a angular form path getter method of reference.
