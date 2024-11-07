@@ -11,6 +11,8 @@ on:
       - '*'
 permissions:
   contents: read
+env:
+  FORCE_COLOR: 2
 jobs:
   build-matrix:
     runs-on: ubuntu-latest
@@ -27,7 +29,7 @@ jobs:
           ./cli/cli.cjs github-build-matrix
   samples:
     name: ${{ matrix.job-name || matrix.sample }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     needs: build-matrix
     defaults:
       run:
