@@ -52,29 +52,7 @@ import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
-import {
-  getJavaValueGeneratorForType as getJavaValueForType,
-  getPrimaryKeyValue as getPKValue,
-  hibernateSnakeCase,
-  javaBeanCase as javaBeanClassNameFormat,
-  buildJavaGet as javaGetCall,
-  buildJavaGetter as javaGetter,
-  buildJavaSetter as javaSetter,
-} from './support/index.js';
-
-const dbTypes = fieldTypes;
-const {
-  STRING: TYPE_STRING,
-  INTEGER: TYPE_INTEGER,
-  LONG: TYPE_LONG,
-  BIG_DECIMAL: TYPE_BIG_DECIMAL,
-  FLOAT: TYPE_FLOAT,
-  DOUBLE: TYPE_DOUBLE,
-  LOCAL_DATE: TYPE_LOCAL_DATE,
-  ZONED_DATE_TIME: TYPE_ZONED_DATE_TIME,
-  INSTANT: TYPE_INSTANT,
-  DURATION: TYPE_DURATION,
-} = dbTypes.CommonDBTypes;
+import { hibernateSnakeCase } from './support/index.js';
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
@@ -653,75 +631,5 @@ ${instructions}`,
         `relationshipSide is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`,
       );
     }
-  }
-
-  /**
-   * @private
-   * Return the method name which converts the filter to specification
-   * @param {string} fieldType
-   */
-  getSpecificationBuilder(fieldType) {
-    if (
-      [
-        TYPE_INTEGER,
-        TYPE_LONG,
-        TYPE_FLOAT,
-        TYPE_DOUBLE,
-        TYPE_BIG_DECIMAL,
-        TYPE_LOCAL_DATE,
-        TYPE_ZONED_DATE_TIME,
-        TYPE_INSTANT,
-        TYPE_DURATION,
-      ].includes(fieldType)
-    ) {
-      return 'buildRangeSpecification';
-    }
-    if (fieldType === TYPE_STRING) {
-      return 'buildStringSpecification';
-    }
-    return 'buildSpecification';
-  }
-
-  getJavaValueGeneratorForType(type) {
-    return getJavaValueForType(type);
-  }
-
-  /**
-   * @private
-   * Returns the primary key value based on the primary key type, DB and default value
-   *
-   * @param {string} primaryKey - the primary key type
-   * @param {string} databaseType - the database type
-   * @param {string} defaultValue - default value
-   * @returns {string} java primary key value
-   */
-  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1) {
-    return getPKValue(primaryKey, databaseType, defaultValue);
-  }
-
-  /**
-   * @private
-   * Convert to Java bean name case
-   *
-   * Handle the specific case when the second letter is capitalized
-   * See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
-   *
-   * @param {string} beanName name of the class to check
-   * @return {string}
-   */
-  javaBeanCase(beanName) {
-    return javaBeanClassNameFormat(beanName);
-  }
-
-  buildJavaGet(reference) {
-    return javaGetCall(reference);
-  }
-
-  buildJavaGetter(reference, type = reference.type) {
-    return javaGetter(reference, type);
-  }
-
-  buildJavaSetter(reference, valueDefinition = `${reference.type} ${reference.name}`) {
-    return javaSetter(reference, valueDefinition);
   }
 }

@@ -43,6 +43,7 @@ export type PrimaryKey<F extends BaseField = Field> = {
   javaBuildSpecification?: string;
 
   tsSampleValues?: (string | number)[];
+  javaSampleValues?: string[];
 };
 
 type ClientSample = Record<string, string | number | boolean | null>;

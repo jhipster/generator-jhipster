@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { databaseTypes, fieldTypes } from '../../../../lib/jhipster/index.js';
+import type { PrimaryKey } from '../../../../lib/types/application/entity.js';
 
 const dbTypes = fieldTypes;
 const { STRING, UUID, LONG, INTEGER } = dbTypes.CommonDBTypes;
@@ -50,15 +51,16 @@ export const getJavaValueGeneratorForType = (type) => {
  * @param {number} defaultValue - default value
  * @returns {string} java primary key value
  */
-export const getPrimaryKeyValue = (primaryKey, databaseType, defaultValue = 1) => {
+export const getPrimaryKeyValue = (primaryKey: PrimaryKey | string, databaseType: string, defaultValue = 1): string => {
   if (typeof primaryKey === 'object' && primaryKey.composite) {
-    return `new ${primaryKey.type}(${primaryKey.references
-      .map(ref => getPrimaryKeyValue(ref.type, databaseType, defaultValue))
+    return `new ${primaryKey.type}(${primaryKey.fields
+      .map(ref => getPrimaryKeyValue(ref.fieldType, databaseType, defaultValue))
       .join(', ')})`;
   }
+  const random = ![1,2].includes(defaultValue);
   const primaryKeyType = typeof primaryKey === 'string' ? primaryKey : primaryKey.type;
   if (primaryKeyType === STRING) {
-    if (databaseType === SQL && defaultValue === 0) {
+    if (databaseType === SQL && random) {
       return getJavaValueGeneratorForType(primaryKeyType);
     }
     return `"id${defaultValue}"`;
