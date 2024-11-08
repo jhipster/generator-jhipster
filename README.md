@@ -131,7 +131,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
 [npmcharts-image]: https://img.shields.io/npm/dm/generator-jhipster.svg?label=Downloads&style=flat
-[npmcharts-url]: https://npmcharts.com/compare/generator-jhipster
+[npmcharts-url]: https://npm.chart.dev/generator-jhipster?primary=sky&gray=cool&theme=dark
 [gitter-badge-image]: https://badges.gitter.im/jhipster/generator-jhipster.svg
 [gitter-badge-url]: https://gitter.im/jhipster/generator-jhipster?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
 [snyk-image]: https://snyk.io/test/npm/generator-jhipster/badge.svg
