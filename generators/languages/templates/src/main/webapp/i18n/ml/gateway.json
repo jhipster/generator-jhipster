@@ -1,15 +1,15 @@
 {
   "gateway": {
-    "title": "ഗേറ്റ്വേ",
+    "title": "Gateway",
     "routes": {
-      "title": "ചാലൂ маршру",
+      "title": "Current routes",
       "url": "URL",
-      "service": "സേവനം",
-      "servers": "ലഭ്യമായ സെർവറുകൾ",
-      "error": "അലർട്ട്: സെർവർ ലഭ്യമായില്ല!"
+      "service": "Service",
+      "servers": "Available servers",
+      "error": "Warning: no server available!"
     },
     "refresh": {
-      "button": "പുതുക്കുക"
+      "button": "Refresh"
     }
   }
 }

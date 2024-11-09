@@ -1,45 +1,73 @@
+<%#
+Copyright 2013-2024 the original author or authors from the JHipster project.
+
+This file is part of the JHipster project, see https://www.jhipster.tech/
+for more information.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-%>
 {
-    "health": {
-        "title": "ആരോഗ്യ പരിശോധന",
-        "refresh.button": "റിഫ്രെഷ്",
-        "stacktrace": "സ്റ്റാക്ക് ട്രേസ്സ്",
-        "details": {
-            "details": "വിശദാംശങ്ങൾ",
-            "properties": "ഗുണധർമങ്ങൾ",
-            "name": "പേര്",
-            "value": "മൂല്യം",
-            "error": "പിഴവ്"
-        },
-        "indicator": {
-            "binders": "മെസ്സേജ് ബ്രോക്കർ",
-            "discoveryComposite": "ഡിസ്കവറി കോമ്പോസിറ്റ്",
-            "refreshScope": "മൈക്രോസർവീസ് റിഫ്രെഷ് സ്കോപ്പ്",
-            "clientConfigServer": "മൈക്രോസർവീസ് കോൺഫിഗ് സെർവർ",
-            "hystrix": "ഹൈസ്ട്രിക്സ്",
-            "consul": "കൺസൽ",
-            "hazelcast": "ഹേസൽകാസ്റ്റ്",
-            "diskSpace": "ഡിസ്‌ക് സ്ഥലം",
-            "mail": "ഇമെയിൽ",
-            "livenessState": "ലൈവ്നസ് സ്റ്റേറ്റ്",
-            "readinessState": "റീഡിനസ് സ്റ്റേറ്റ്",
-            "ping": "ആപ്ലിക്കേഷൻ",
-            "elasticsearch": "എലാസ്റ്റിക്‌സർച്ച്",
-            "db": "ഡാറ്റാബേസ്",
-            "r2dbc": "ഡാറ്റാബേസ്",
-            "mongo": "മോംഗോഡിബി",
-            "cassandra": "കസാൻഡ്രാ",
-            "couchbase": "കൗച്ച്ബേസ്",
-            "neo4j": "നിയോ4ജെ"
-        },
-        "table": {
-            "service": "സേവാ പേര്",
-            "status": "അവസ്ഥ"
-        },
-        "status": {
-            "UNKNOWN": "അറിയപ്പെടുന്നില്ല",
-            "UP": "ഉപ്പർ",
-            "OUT_OF_SERVICE": "സേവനത്തിൽ നിന്ന് പുറത്തു",
-            "DOWN": "നിലവിളിക്കുന്നു"
-        }
-    }
+"health": {
+"title": "ആരോഗ്യ പരിശോധനകൾ",
+"refresh.button": "പുതുക്കുക",
+"stacktrace": "സ്റ്റാക്ക് ട്രേസ്",
+"details": {
+"details": "വിശദവിവരങ്ങൾ",
+"properties": "സ്വഭാവങ്ങൾ",
+"name": "പേര്",
+"value": "മൂല്യം",
+"error": "പിശക്"
+},
+"indicator": {
+<%_ if (messageBrokerAny) { _%>
+"binders": "സന്ദേശ ബ്രോക്കർ",
+<%_ } _%>
+<%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>
+"discoveryComposite": "ഡിസ്കവറി കോമ്പോസിറ്റ്",
+"refreshScope": "മൈക്രോസർവീസ് പുതുക്കൽ ദൃശ്യഭാഗം",
+"clientConfigServer": "മൈക്രോസർവീസ് കോൺഫിഗ് സെർവർ",
+"hystrix": "ഹൈസ്ട്രിക്",
+<%_ if (serviceDiscoveryConsul) { _%>
+"consul": "കോൺസൾ",
+<%_ } _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
+"hazelcast": "ഹേസൽകാസ്റ്റ്",
+<%_ } _%>
+"diskSpace": "ഡിസ്ക് സ്ഥലം",
+"mail": "ഇമെയിൽ",
+"livenessState": "ജീവിതാവസ്ഥ",
+"readinessState": "തയ്യാറാക്കലിന്റെ അവസ്ഥ",
+"ping": "ആപ്ലിക്കേഷൻ"<% if (searchEngineElasticsearch) { %>,
+"elasticsearch": "എൽസ്റ്റിക്‌സർച്ച്"<% } %><% if (databaseTypeSql && !reactive) { %>,
+"db": "ഡാറ്റാബേസ്"<% } %><% if (databaseTypeSql && reactive) { %>,
+"r2dbc": "ഡാറ്റാബേസ്"<% } %><% if (databaseTypeMongodb) { %>,
+"mongo": "മോംഗോഡിബി"<% } %><% if (databaseTypeCassandra) { %>,
+"cassandra": "കസാൻഡ്രാ"<% } %><% if (databaseTypeCouchbase) { %>,
+"couchbase": "കൗച്ച്‌ബേസ്"<% } %><% if (databaseTypeNeo4j) { %>,
+"neo4j": "നിയോ4ജെ"
+},
+"table": {
+"service": "സർവീസ് നാമം",
+"status": "പദവി"
+},
+"status": {
+"UNKNOWN": "അറിയാത്തത്",
+"UP": "ഉടയാനം",
+<%_ if (clientFrameworkAngular) { _%>
+"OUT_OF_SERVICE": "സർവീസിന്റെ പുറത്തായിരിക്കുക",
+<%_ } _%>
+"DOWN": "പതിക്കൽ"
+}
+}
 }

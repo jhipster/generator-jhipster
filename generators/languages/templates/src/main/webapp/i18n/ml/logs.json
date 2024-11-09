@@ -1,11 +1,11 @@
 {
   "logs": {
-    "title": "ലോഗുകൾ",
-    "nbloggers": "അത് തത്സമയം {{total}} ലോഗർമാർ ഉണ്ട്.",
-    "filter": "ഫിൽട്ടർ",
+    "title": "Logs",
+    "nbloggers": "There are {{ total }} loggers.",
+    "filter": "Filter",
     "table": {
-      "name": "പേര്",
-      "level": "നില"
+      "name": "Name",
+      "level": "Level"
     }
   }
 }

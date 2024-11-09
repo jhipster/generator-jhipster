@@ -1,10 +1,11 @@
 {
   "configuration": {
-    "title": "കൺഫിഗറേഷൻ",
-    "filter": "ഫിൽട്ടർ (ആമുഖം വഴി)",
+    "title": "Configurationകൾ",
+    "filter": "Filter (by prefix)",
     "table": {
-      "prefix": "ആമുഖം",
-      "properties": "ഗുണങ്ങൾ"
+      "prefix": "Prefix",
+      "properties": "Properties"
     }
   }
 }
+

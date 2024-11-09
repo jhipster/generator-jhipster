@@ -1,12 +1,13 @@
 {
   "tracker": {
-    "title": "ഉപയോക്തൃ ട്രാക്കർ",
+    "title": "Real-time user activities",
     "table": {
-      "userlogin": "ഉപയോക്തൃ ലോഗിൻ",
-      "ipaddress": "IP വിലാസം",
-      "userAgent": "ഉപയോക്തൃ ഏജന്റ്",
-      "page": "പേജ്",
-      "time": "സമയം"
+      "userlogin": "User",
+      "ipaddress": "IP Address",
+      "userAgent": "User agent",
+      "page": "Current page",
+      "time": "Time"
     }
   }
 }
+

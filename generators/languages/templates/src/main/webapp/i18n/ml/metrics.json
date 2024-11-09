@@ -1,69 +1,69 @@
 {
   "metrics": {
-    "title": "മെട്രിക്സ് അപ്ലിക്കേഷൻ",
-    "refresh.button": "പുനഃസംയോജിപ്പിക്കുക",
-    "updating": "അപ്ഡേറ്റ് ചെയ്യുന്നു...",
+    "title": "Application Metrics",
+    "refresh.button": "Refresh",
+    "updating": "Updating...",
     "jvm": {
-      "title": "JVM മെട്രിക്സ്",
+      "title": "JVM Metrics",
       "memory": {
-        "title": "മെമ്മറി",
-        "total": "മൊത്തമെമ്മറി",
-        "heap": "ഹീപ്പ് മെമ്മറി",
-        "nonheap": "നോൺ-ഹീപ്പ് മെമ്മറി"
+        "title": "Memory",
+        "total": "Total Memory",
+        "heap": "Heap Memory",
+        "nonheap": "Non-Heap Memory"
       },
       "threads": {
-        "title": "ത്രെഡുകൾ",
-        "all": "എല്ലാം",
-        "runnable": "റണ്ണബിള്",
-        "timedwaiting": "സമയം കാത്തിരിക്കുക",
-        "waiting": "കാത്തിരിക്കുക",
-        "blocked": "നിരോധിച്ചത്",
+        "title": "Threads",
+        "all": "All",
+        "runnable": "Runnable",
+        "timedwaiting": "Timed waiting",
+        "waiting": "Waiting",
+        "blocked": "Blocked",
         "dump": {
-          "title": "ത്രെഡ് ഡംപ്",
-          "id": "ഐഡി: ",
-          "blockedtime": "നിരോധിച്ച സമയം",
-          "blockedcount": "നിരോധിച്ച എണ്ണം",
-          "waitedtime": "കാത്തിരിക്കുന്ന സമയം",
-          "waitedcount": "കാത്തിരിക്കുന്ന എണ്ണം",
-          "lockname": "ലോക്ക് നാമം",
-          "stacktrace": "സ്റ്റാക്ക് ട്രേസ്സ്",
-          "show": "സ്റ്റാക്ക് ട്രേസ്സ് കാണിക്കുക",
-          "hide": "സ്റ്റാക്ക് ട്രേസ്സ് മൂടുക"
+          "title": "Threads dump",
+          "id": "Id: ",
+          "blockedtime": "Blocked Time",
+          "blockedcount": "Blocked Count",
+          "waitedtime": "Waited Time",
+          "waitedcount": "Waited Count",
+          "lockname": "Lock name",
+          "stacktrace": "Stacktrace",
+          "show": "Show Stacktrace",
+          "hide": "Hide Stacktrace"
         }
       },
       "gc": {
-        "title": "ഗാർബേജ് കളക്ഷൻ",
-        "marksweepcount": "മാർക്ക് സ്വീപ്പ് കൌണ്ട്",
-        "marksweeptime": "മാർക്ക് സ്വീപ്പ് സമയം",
-        "scavengecount": "കണ്ടയിഷൻ കൌണ്ട്",
-        "scavengetime": "കണ്ടയിഷൻ സമയം"
+        "title": "Garbage collections",
+        "marksweepcount": "Mark Sweep count",
+        "marksweeptime": "Mark Sweep time",
+        "scavengecount": "Scavenge count",
+        "scavengetime": "Scavenge time"
       },
       "http": {
-        "title": "HTTP അഭ്യർഥനകൾ (പ്രതിസെക്കൻഡ് ഇവന്റ്)",
-        "active": "സജീവ അഭ്യർഥനകൾ:",
-        "total": "മൊത്തം അഭ്യർഥനകൾ:",
+        "title": "HTTP requests (events per second)",
+        "active": "Active requests:",
+        "total": "Total requests:",
         "table": {
-          "code": "കോട്",
-          "count": "എണ്ണം",
-          "mean": "മധ്യ",
-          "average": "സരാസരി",
-          "max": "പരമാവധി"
+          "code": "Code",
+          "count": "Count",
+          "mean": "Mean",
+          "average": "Average",
+          "max": "Max"
         },
         "code": {
-          "ok": "ശരി",
-          "notfound": "കാണാനായില്ല",
-          "servererror": "സർവർ പിശക്"
+          "ok": "Ok",
+          "notfound": "Not found",
+          "servererror": "Server Error"
         }
       }
     },
     "servicesstats": {
-      "title": "സേവനാ სტატിസ്റ്റിക്സ് (മിലിസെക്കൻഡ് സമയം)",
+      "title": "Services statistics (time in millisecond)",
       "table": {
-        "name": "സേവന നാമം",
-        "count": "എണ്ണം",
-        "mean": "മധ്യ",
-        "min": "കുറഞ്ഞത്",
-        "max": "മികവുറ്റത്",
+        "name": "Service name",
+        "count": "Count",
+        "mean": "Mean",
+        "min": "Min",
+        "max": "Max",
         "p50": "p50",
         "p75": "p75",
         "p95": "p95",
@@ -71,20 +71,28 @@
       }
     },
     "cache": {
-      "title": "കാഷേ സ്റ്റാറ്റിസ്റ്റിക്സ്",
-      "cachename": "കാഷേ നാമം",
-      "hits": "ഹിറ്റുകൾ",
-      "misses": "മിസ്",
-      "evictions": "പ്രതിരോധം എണ്ണം"
+      "title": "Cache statistics",
+      "cachename": "Cache name",
+      "hits": "Cache Hits",
+      "misses": "Cache Misses",
+      "gets": "Cache Gets",
+      "puts": "Cache Puts",
+      "removals": "Cache Removals",
+      "evictions": "Cache Evictions",
+      "hitPercent": "Cache Hit %",
+      "missPercent": "Cache Miss %",
+      "averageGetTime": "Average get time (µs)",
+      "averagePutTime": "Average put time (µs)",
+      "averageRemoveTime": "Average remove time (µs)"
     },
     "datasource": {
-      "usage": "ഉപയോഗം",
-      "title": "ഡാറ്റാ സോഴ്സ് സ്റ്റാറ്റിസ്റ്റിക്സ് (മിലിസെക്കൻഡ് സമയം)",
-      "name": "പൂൾ ഉപയോഗം",
-      "count": "എണ്ണം",
-      "mean": "മധ്യ",
-      "min": "കുറഞ്ഞത്",
-      "max": "മികവുറ്റത്",
+      "usage": "Usage",
+      "title": "DataSource statistics (time in millisecond)",
+      "name": "Pool usage",
+      "count": "Count",
+      "mean": "Mean",
+      "min": "Min",
+      "max": "Max",
       "p50": "p50",
       "p75": "p75",
       "p95": "p95",
