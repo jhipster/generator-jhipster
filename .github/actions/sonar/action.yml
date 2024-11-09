@@ -257,6 +257,7 @@ runs:
           echo 'EOF'
         } >> "$GITHUB_ENV"
 
+        cat sonar_result.md >> $GITHUB_STEP_SUMMARY
         cat sonar_result.md
 
     # Find previous SonarQube analysis comment
