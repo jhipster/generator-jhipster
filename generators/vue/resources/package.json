@@ -29,7 +29,7 @@
     "@types/sinon": "17.0.3",
     "@vitejs/plugin-vue": "5.1.5",
     "@vue/test-utils": "2.4.6",
-    "@vue/tsconfig": "0.5.1",
+    "@vue/tsconfig": "0.6.0",
     "autoprefixer": "10.4.20",
     "axios-mock-adapter": "2.1.0",
     "browser-sync-webpack-plugin": "2.3.0",
