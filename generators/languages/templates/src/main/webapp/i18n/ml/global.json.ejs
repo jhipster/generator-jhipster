@@ -1,0 +1,169 @@
+<%#
+Copyright 2013-2024 the original author or authors from the JHipster project.
+
+This file is part of the JHipster project, see https://www.jhipster.tech/
+for more information.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-%>
+{
+"global": {
+"title": "<%= capitalizedBaseName %>",
+"browsehappy": "നിങ്ങൾക്ക് ബ്രൗസർ നൂതനമാക്കേണ്ടതാണ്. ദയവായി <a href=\"http://browsehappy.com/?locale=en\">അപ്ഡേറ്റ് ചെയ്യുക.</a>",
+"menu": {
+"home": "ഹോം പേജ്",
+"jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+"entities": {
+"main": "Entities",
+"jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+},
+"account": {
+"main": "അക്കൗണ്ട്",
+"settings": "ക്രമീകരണങ്ങൾ",
+"password": "പാസ്വേഡ്",
+"sessions": "സെഷനുകൾ",
+"login": "ലോഗിൻ",
+"logout": "ലോഗ് ഔട്ട്",
+"register": "രജിസ്റ്റർ ചെയ്യുക"
+},
+"admin": {
+"main": "അഡ്മിൻ",
+<%_ if (applicationTypeGateway) { _%>
+"gateway": "ഗേറ്റ്‌വേ",
+<%_ } _%>
+"userManagement": "ഉപയോക്തൃ മാനേജ്മെന്റ്",
+"tracker": "ഉപയോക്തൃ ട്രാക്കിംഗ്",
+"metrics": "മെട്രിക്സ്",
+"health": "ആരോഗ്യം",
+"configuration": "ക്രമീകരണങ്ങൾ",
+"logs": "ലോഗുകൾ",
+"apidocs": "API",
+"database": "ഡാറ്റാബേസ്",
+"jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+},
+"language": "ഭാഷ"
+},
+"form": {
+"username.label": "ഉപയോക്തൃ ഐഡി",
+"username.placeholder": "നിങ്ങളുടെ ഉപയോക്തൃ ഐഡി",
+"currentpassword.label": "നിലവിലെ പാസ്വേഡ്",
+"currentpassword.placeholder": "നിലവിലെ പാസ്വേഡ്",
+"newpassword.label": "പുതിയ പാസ്വേഡ്",
+"newpassword.placeholder": "പുതിയ പാസ്വേഡ്",
+"confirmpassword.label": "പുതിയ പാസ്വേഡ് സ്ഥിരീകരിക്കുക",
+"confirmpassword.placeholder": "പുതിയ പാസ്വേഡ് സ്ഥിരീകരിക്കുക",
+"email.label": "ഇമെയിൽ വിലാസം",
+"email.placeholder": "നിങ്ങളുടെ ഇമെയിൽ വിലാസം"
+},
+"messages": {
+"info": {
+"authenticated": {
+"prefix": "നിങ്ങൾ ",
+"link": "ലോഗിൻ",
+"suffix": " ചെയ്യാൻ ആഗ്രഹിക്കുന്നുവെങ്കിൽ, താഴെക്കാണുന്ന അക്കൗണ്ടുകൾ ഉപയോഗിച്ച് ശ്രമിക്കാം.<br/>- അഡ്മിനിസ്റ്റേറ്റർ (ഉപയോക്തൃ ഐഡി=\"admin\" പാസ്വേഡ്=\"admin\") <br/>- സാധാരണ ഉപയോക്താവ് (ഉപയോക്തൃ ഐഡി=\"user\" പാസ്വേഡ്=\"user\")"
+},
+"register": {
+"noaccount": "നിങ്ങൾക്ക് അക്കൗണ്ട് ഇല്ലേ?",
+"link": "പുതിയ അക്കൗണ്ട് രജിസ്റ്റർ ചെയ്യുക."
+}
+},
+"error": {
+"dontmatch": "പാസ്വേഡും സ്ഥിരീകരണവും പൊരുത്തപ്പെടുന്നില്ല."
+},
+"validate": {
+"newpassword": {
+"required": "നിങ്ങളുടെ പാസ്വേഡ് ആവശ്യമാണ്.",
+"minlength": "നിങ്ങളുടെ പാസ്വേഡ് കുറഞ്ഞത് 4 അക്ഷരങ്ങൾ ഉണ്ടായിരിക്കണം.",
+"maxlength": "നിങ്ങളുടെ പാസ്വേഡ് 50 അക്ഷരങ്ങളെ കടക്കരുത്.",
+"strength": "പാസ്വേഡിന്റെ ശക്തി"
+},
+"confirmpassword": {
+"required": "നിങ്ങളുടെ പാസ്വേഡ് സ്ഥിരീകരണം ആവശ്യമാണ്.",
+"minlength": "നിങ്ങളുടെ പാസ്വേഡ് സ്ഥിരീകരണം കുറഞ്ഞത് 4 അക്ഷരങ്ങൾ ഉണ്ടായിരിക്കണം.",
+"maxlength": "നിങ്ങളുടെ പാസ്വേഡ് സ്ഥിരീകരണം 50 അക്ഷരങ്ങളെ കടക്കരുത്."
+},
+"email": {
+"required": "നിങ്ങളുടെ ഇമെയിൽ വിലാസം ആവശ്യമാണ്.",
+"invalid": "നിങ്ങളുടെ ഇമെയിൽ വിലാസം സാധുവല്ല.",
+"minlength": "നിങ്ങളുടെ ഇമെയിൽ വിലാസം കുറഞ്ഞത് 5 അക്ഷരങ്ങൾ ഉണ്ടായിരിക്കണം.",
+"maxlength": "നിങ്ങളുടെ ഇമെയിൽ വിലാസം 50 അക്ഷരങ്ങളെ കടക്കരുത്."
+}
+}
+},
+"field": {
+"id": "ഐഡി"
+},
+"ribbon": {
+"dev": "ഡെവലപ്പ്മെന്റ്"
+},
+"item-count": "മൊത്തം {{total}} ൽ {{first}} മുതൽ {{second}} വരെ കാണിക്കുന്നു."
+},
+"entity": {
+"action": {
+"addblob": "ബ്ലോബ് ചേർക്കുക",
+"addimage": "ചിത്രം ചേർക്കുക",
+"back": "തിരികെ",
+"cancel": "റദ്ദാക്കുക",
+"delete": "ഇല്ലാതാക്കുക",
+"edit": "എഡിറ്റ്",
+"open": "തുറക്കുക",
+"save": "സേവ്",
+"view": "കാണുക",
+"show": "Show {{otherEntity}}"
+},
+"detail": {
+"field": "ഫീൽഡ്",
+"value": "വില"
+},
+"delete": {
+"title": "ഇല്ലാതാക്കാൻ താൽപര്യമുണ്ടോ?"
+},
+"validation": {
+"required": "പൂരിപ്പിക്കുന്നത് ആവശ്യമാണ്.",
+"minlength": "കുറഞ്ഞത് {{ min }} അക്ഷരങ്ങൾ ഉണ്ടായിരിക്കണം.",
+"maxlength": "അക്ഷരങ്ങൾ {{ max }} -നെ മറികടക്കരുത്.",
+"min": "കുറഞ്ഞത് {{ min }} ആയിരിക്കണം.",
+"max": "പരമാവധി {{ max }} ആയിരിക്കണം.",
+"minbytes": "കുറഞ്ഞത് {{ min }} ബൈറ്റുകൾ ഉണ്ടായിരിക്കണം.",
+"maxbytes": "പരമാവധി {{ max }} ബൈറ്റുകൾ.",
+"pattern": "ഈ {{ pattern }} രൂപത്തിൽ ഉണ്ടാകണം.",
+"number": "അവശ്യം സംഖ്യയായിരിക്കണം.",
+"datetimelocal": "ഈ തീയതിയും സമയവും ആയിരിക്കണം.",
+"patternLogin": "അക്ഷരങ്ങൾ, സംഖ്യകൾ, ഇമെയിൽ എന്നിവ മാത്രമേ ഉൾപ്പെടുത്താവൂ."
+},
+"filters": {
+"set": "ഇവിടെയുള്ള ഫിൽറ്ററുകൾ സജ്ജമാക്കിയിരിക്കുന്നു",
+"clear": "ഫിൽറ്റർ നീക്കം ചെയ്യുക",
+"clearAll": "എല്ലാ ഫിൽറ്ററുകളും നീക്കം ചെയ്യുക"
+}
+},
+"error": {
+"internalServerError": "സെർവറിൽ ഒരു പിശകുണ്ടായി.",
+"server.not.reachable": "സെർവറുമായി ബന്ധപ്പെടാൻ കഴിയുന്നില്ല.",
+"url.not.found": "കണ്ടെത്താനായില്ല.",
+"NotNull": "{{ fieldName }} പൂരിപ്പിക്കുന്നത് ആവശ്യമാണ്.",
+"Size": "{{ fieldName }} കുറഞ്ഞ/കൂടുതൽ അളവുകളിൽ പൊരുത്തപ്പെടുന്നില്ല.",
+"userexists": "ഉപയോക്തൃ ഐഡി ഇതിനകം രജിസ്റ്റർ ചെയ്തിരിക്കുന്നു.",
+"emailexists": "ഈ ഇമെയിൽ വിലാസം ഇതിനകം ഉപയോഗത്തിലാണ്.",
+"idexists": "പുതിയ {{ entityName }} -ൽ ഐഡി ഉണ്ടാകരുത്.",
+"idnull": "ID പിശകാണ്.",
+"idinvalid": "Invalid Id",
+"idnotfound": "ID കണ്ടെത്താനായില്ല.",
+"file": {
+"could.not.extract": "ഫയൽ പുറത്ത് എടുക്കാൻ സാധിച്ചില്ല",
+"not.image": "ഫയൽ ചിത്രമായിരിക്കുമെന്ന് പ്രതീക്ഷിച്ചുവെങ്കിലും \"{{ fileType }}\" ആയി കണ്ടെത്തി"
+}
+},
+"footer": "ഈ പേജിന്റെ അടിഭാഗമാണ്."
+}
+

@@ -1,0 +1,15 @@
+{
+  "error": {
+    "title": "പിശകുണ്ട്!",
+    "http": {
+      "400": "അഭ്യർത്ഥന പിശകുണ്ട്.",
+      "403": "നിങ്ങൾക്ക് ഈ പേജിലേക്ക് പ്രവേശനാവകാശം ഇല്ല.",
+      "404": "പേജ് കണ്ടെത്തിയില്ല",
+      "405": "The HTTP verb you used is not supported for this URL.",
+      "500": "സെർവർ പിശകുണ്ടായി."
+    },
+    "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+    "validation": "സെർവറിലെ സാക്ഷ്യപ്പെടുത്തൽ പിശകുണ്ടായി."
+  }
+}
+
