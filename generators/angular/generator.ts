@@ -179,7 +179,6 @@ export default class AngularGenerator extends BaseApplicationGenerator<
             ...(entity.entityReadAuthority?.split(',') ?? []),
           ]),
         });
-
         entity.generateEntityClientEnumImports = fields => {
           return getClientEnumImportsFormat(fields, ANGULAR);
         };
@@ -246,7 +245,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
     return this.asDefaultTaskGroup({
       loadEntities({ application }) {
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);
-        application.frontendEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient);
+        application.angularEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient);
       },
       queueTranslateTransform({ control, application }) {
         const { enableTranslation, jhiPrefix } = application;

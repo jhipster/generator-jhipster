@@ -65,7 +65,7 @@ export interface AngularEntity extends Entity {
 
 export type AngularApplication = {
   angularLocaleId: string;
-  frontendEntities: any[];
+  angularEntities: AngularEntity[];
   /**
    * Get the typescript type of a non-composite primary key
    * @param primaryKey the primary key of the entity

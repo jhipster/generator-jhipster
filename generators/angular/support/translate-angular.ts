@@ -332,10 +332,7 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
 const minimatch = new Minimatch('**/*{.html,.ts}');
 export const isTranslatedAngularFile = file => minimatch.match(file.path);
 
-export const translateAngularFilesTransform = (
-  getWebappTranslation: (s: string, val?: Record<string, any>) => string,
-  opts: ReplacerOptions | boolean,
-) => {
+export const translateAngularFilesTransform = (getWebappTranslation: GetWebappTranslationCallback, opts: ReplacerOptions | boolean) => {
   const translate = createTranslationReplacer(getWebappTranslation, opts);
   return passthrough(file => {
     file.contents = Buffer.from(translate(file.contents.toString(), file.path));

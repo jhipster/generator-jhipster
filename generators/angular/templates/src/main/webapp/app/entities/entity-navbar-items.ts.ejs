@@ -19,7 +19,7 @@
 import NavbarItem from 'app/layouts/navbar/navbar-item.model';
 
 export const EntityNavbarItems: NavbarItem[] = [
-<%_ for (const entity of frontendEntities) { _%>
+<%_ for (const entity of angularEntities) { _%>
   {
     name: '<%= entity.entityAngularName %>',
     route: '/<%= entity.entityPage %>',

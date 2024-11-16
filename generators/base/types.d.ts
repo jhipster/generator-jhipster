@@ -31,5 +31,4 @@ export type Control = BaseApplicationControlProperties & {
    */
   cleanupFiles: (cleanup: CleanupArgumentType) => Promise<void> | ((oldVersion: string, cleanup: CleanupArgumentType) => Promise<void>);
   getWebappTranslation?: GetWebappTranslationCallback;
-  // getWebappTranslation: (s: string, data?: Record<string, any>) => string;
 };
