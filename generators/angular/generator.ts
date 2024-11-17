@@ -86,7 +86,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
           __override__: true,
           eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
-          angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale,
+          angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!,
         });
 
         application.addPrettierExtensions?.(['html', 'css', 'scss']);

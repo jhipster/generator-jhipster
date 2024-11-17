@@ -121,7 +121,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           ANGULAR,
           VUE,
           REACT,
-        });
+        } as any);
 
         if (this.projectVersion) {
           application.projectVersion = this.projectVersion;

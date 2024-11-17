@@ -23,8 +23,6 @@ import { loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-applicat
 import { relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from '../liquibase/support/index.js';
 import { addEntitiesOtherRelationships } from '../server/support/index.js';
 import type { TaskTypes as ApplicationTaskTypes } from '../../lib/types/application/tasks.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
-import type { Entity } from '../../lib/types/application/entity.js';
 import type { BaseChangelog } from './types.js';
 
 const { DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES } = PRIORITY_NAMES;
@@ -44,7 +42,7 @@ const baseChangelog: () => Omit<BaseChangelog, 'changelogDate' | 'entityName' | 
   changelogData: {},
 });
 
-type TaskTypes<E, A> = ApplicationTaskTypes<E, A> & {
+type TaskTypes = ApplicationTaskTypes & {
   DefaultTaskParam: { entityChanges?: BaseChangelog[] };
   WritingEntitiesTaskParam: { entityChanges?: BaseChangelog[] };
   PostWritingEntitiesTaskParam: { entityChanges?: BaseChangelog[] };
@@ -53,10 +51,7 @@ type TaskTypes<E, A> = ApplicationTaskTypes<E, A> & {
 /**
  * This is the base class for a generator for every generator.
  */
-export default abstract class GeneratorBaseEntityChanges<
-  E extends Entity = Entity,
-  A extends ApplicationType<E> = ApplicationType<E>,
-> extends GeneratorBaseApplication<E, A, TaskTypes<E, A>> {
+export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseApplication<TaskTypes> {
   recreateInitialChangelog!: boolean;
   private entityChanges!: any[];
 

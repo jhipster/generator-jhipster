@@ -74,6 +74,7 @@ export type JavaApplication = JavaBootstrapStorageProperties &
     imperativeOrReactive: string;
 
     addOpenapiGeneratorPlugin: boolean;
+    useNpmWrapper: boolean;
   };
 
 export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };

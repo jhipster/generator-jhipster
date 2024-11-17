@@ -13,6 +13,7 @@ export type ClientApplication = ApplicationClientProperties &
   AngularApplication &
   CypressApplication & {
     webappLoginRegExp: string;
+    clientWebappDir?: string;
     webappEnumerationsDir?: string;
     clientFrameworkBuiltIn?: boolean;
   };

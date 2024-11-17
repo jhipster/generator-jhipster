@@ -190,7 +190,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
           backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
           backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
-          clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework),
+          clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
         });
       },
       userRelationship({ applicationDefaults }) {
@@ -218,7 +218,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         applicationDefaults({
           generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => generateUserManagement || syncUserWithIdp,
           generateBuiltInAuthorityEntity: ({ generateBuiltInUserEntity, databaseType }) =>
-            generateBuiltInUserEntity && databaseType !== 'cassandra',
+            Boolean(generateBuiltInUserEntity && databaseType !== 'cassandra'),
         });
       },
     });
