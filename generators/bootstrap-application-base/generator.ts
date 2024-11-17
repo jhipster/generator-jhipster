@@ -218,7 +218,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         applicationDefaults({
           generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => generateUserManagement || syncUserWithIdp,
           generateBuiltInAuthorityEntity: ({ generateBuiltInUserEntity, databaseType }) =>
-            Boolean(generateBuiltInUserEntity && databaseType !== 'cassandra'),
+            generateBuiltInUserEntity! && databaseType !== 'cassandra',
         });
       },
     });
