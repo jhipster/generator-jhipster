@@ -33,7 +33,7 @@ const command: JHipsterCommandDefinition = {
         if (parsedIssue) {
           gen.owner = parsedIssue.owner;
           gen.repository = parsedIssue.repository;
-          gen.issue = parsedIssue.issue;
+          gen.issueNumber = parsedIssue.issue;
         }
       },
       scope: 'generator',

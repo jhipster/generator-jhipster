@@ -21,6 +21,8 @@ name: Linked Issue Check
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+env:
+  FORCE_COLOR: 2
 jobs:
   linked-issue-check:
     runs-on: ubuntu-latest
@@ -84,6 +86,7 @@ jobs:
       # Launch tests
       #----------------------------------------------------------------------
       - uses: jhipster/actions/build-jhipster-bom@v0
+        if: steps.project.outputs.contains-sample != 'false'
         with:
           jhipster-bom-ref: main
       - name: 'TESTS: backend'
@@ -128,6 +131,12 @@ jobs:
       - name: Dump docker logs
         if: always() && steps.project.outputs.contains-sample != 'false'
         uses: jwalton/gh-docker-logs@v2
+      - name: summary
+        if: always()
+        run: |
+          echo "${{ steps.project.outputs.summary }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.project.outputs.footer }}" >> $GITHUB_STEP_SUMMARY
+
   check-closing-issues:
     permissions:
       contents: none

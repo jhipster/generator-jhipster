@@ -42,7 +42,7 @@ jobs:
         with:
           issue: ${{ inputs.issue || github.event.issue.number }}
           message: |
-            JHipster is [checking sample](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            ## Issue check: JHipster is [checking sample](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
   application:
     name: Check issue ${{ inputs.issue || github.event.issue.number }}
     needs: comment
@@ -126,6 +126,8 @@ jobs:
       yo-rc: ${{ steps.project.outputs.yo-rc }}
       entities-jdl: ${{ steps.project.outputs.entities-jdl }}
       application: ${{ steps.project.outputs.result }}
+      project-summary: ${{ steps.project.outputs.summary }}
+      project-footer: ${{ steps.project.outputs.footer }}
       frontend-check: ${{ steps.frontend.outcome }}
       backend-check: ${{ steps.backend.outcome }}
       e2e-check: ${{ steps.e2e.outcome }}
@@ -156,13 +158,16 @@ jobs:
         with:
           issue: ${{ inputs.issue || github.event.issue.number }}
           message: |
-            JHipster has completed the [sample check](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-            `.yo-rc.json`: ${{ needs.application.outputs.yo-rc }}
-            Entities JDL: ${{ needs.application.outputs.entities-jdl }}
-            Application: ${{ needs.application.outputs.application }}
-            Frontend check: ${{ needs.application.outputs.frontend-check }}
-            Backend check: ${{ needs.application.outputs.backend-check }}
-            E2E check: ${{ needs.application.outputs.e2e-check }}
+            ## Issue check: JHipster has completed the [sample check](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            ${{ needs.application.outputs.project-summary }}
 
-            This check uses `jhipster info` output from the issue description to generate the sample.
+            | Check | Status |
+            | --- | --- |
+            | Frontend check | ${{ needs.application.outputs.frontend-check == 'success' && ':heavy_check_mark:' || ':x:' }} |
+            | Backend check | ${{ needs.application.outputs.backend-check == 'success' && ':heavy_check_mark:' || ':x:' }} |
+            | E2E check | ${{ needs.application.outputs.e2e-check == 'success' && ':heavy_check_mark:' || ':x:' }} |
+
+            This check uses `jhipster info` or jdl output from the issue description to generate the sample.
             Bug report that does not contain this information will be marked as invalid.
+
+            ${{ needs.application.outputs.project-footer }}
