@@ -83,7 +83,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
         applicationDefaults({
           // TODO remove prettierExtensions, moved to prettier generator
           prettierExtensions,
-          useNpmWrapper: application => application.clientFrameworkAny && application.backendTypeJavaAny,
+          useNpmWrapper: application => Boolean(application.clientFrameworkAny && application.backendTypeJavaAny),
           documentationArchiveUrl: ({ jhipsterVersion }) =>
             `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`,
         });

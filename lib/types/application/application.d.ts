@@ -4,9 +4,10 @@ import type { ClientSourceType } from '../../../generators/client/types.js';
 import type { LanguagesSource } from '../../../generators/languages/types.js';
 import type { SpringBootSourceType } from '../../../generators/server/types.js';
 import type { ExportApplicationPropertiesFromCommand } from '../../command/types.js';
+import { Entity } from './entity.js';
 
-export type ApplicationType<Entity> = BaseApplication &
-  CommonClientServerApplication<Entity> &
+export type ApplicationType<E = Entity> = BaseApplication &
+  CommonClientServerApplication<E> &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/spring-boot/command.ts').default>;
 
 export type BaseApplicationSource = SpringBootSourceType & ClientSourceType & LanguagesSource;
