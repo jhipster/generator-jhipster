@@ -239,11 +239,11 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         }
 
         if (entityConfig.changelogDate) {
-          entityConfig.annotations.changelogDate = entityConfig.changelogDate;
+          entityConfig.annotations!.changelogDate = entityConfig.changelogDate;
           delete entityConfig.changelogDate;
         }
-        if (!entityConfig.annotations.changelogDate) {
-          entityConfig.annotations.changelogDate = this.dateFormatForLiquibase();
+        if (!entityConfig.annotations!.changelogDate) {
+          entityConfig.annotations!.changelogDate = this.dateFormatForLiquibase();
           entityStorage.save();
         }
       },
@@ -359,6 +359,17 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         this.validateResult(loadEntitiesOtherSide(entities, { application }));
 
         for (const entity of entities) {
+          if (!entity.builtIn) {
+            const invalidRelationship = entity.relationships.find(
+              ({ otherEntity }) => !otherEntity.builtIn && entity.microserviceName !== otherEntity.microserviceName,
+            );
+            if (invalidRelationship) {
+              throw new Error(
+                `Microservice entities cannot have relationships with entities from other microservice: '${entity.name}.${invalidRelationship.relationshipName}'`,
+              );
+            }
+          }
+
           for (const field of entity.fields) {
             if (isFieldBinaryType(field)) {
               if (isFieldBlobType(field)) {

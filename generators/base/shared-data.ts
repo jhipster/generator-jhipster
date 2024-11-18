@@ -24,11 +24,13 @@ import { lt as semverLessThan } from 'semver';
 import { defaults } from 'lodash-es';
 import type { MemFsEditor } from 'mem-fs-editor';
 import { create } from 'mem-fs-editor';
-import { type BaseApplication } from '../base-application/types.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { Entity } from '../../lib/types/application/entity.js';
+import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
 import type { CleanupArgumentType, Control } from './types.js';
 
-export default class SharedData<ApplicationType extends BaseApplication = BaseApplication> {
+export default class SharedData<EntityType extends BaseEntity = Entity, Application = ApplicationType> {
   _storage: any;
   _editor: MemFsEditor;
   _log: any;
@@ -145,20 +147,20 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
     return this._storage.control;
   }
 
-  getApplication(): ApplicationType {
+  getApplication(): Application {
     if (!this._storage.sharedApplication) throw new Error('Shared application not loaded');
     return this._storage.sharedApplication;
   }
 
-  setEntity(entityName: string, entity) {
+  setEntity(entityName: string, entity: { name: string } & Partial<EntityType>): void {
     this._storage.sharedEntities[entityName] = entity;
   }
 
-  hasEntity(entityName) {
+  hasEntity(entityName): boolean {
     return Boolean(this._storage.sharedEntities[entityName]);
   }
 
-  getEntity(entityName) {
+  getEntity(entityName): EntityType {
     const entity = this._storage.sharedEntities[entityName];
     if (!entity) {
       throw new Error(`Entity definition not loaded for ${entityName}`);
@@ -166,11 +168,11 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
     return entity;
   }
 
-  getEntities(entityNames = Object.keys(this._storage.sharedEntities)) {
+  getEntities(entityNames = Object.keys(this._storage.sharedEntities)): { entityName: string; entity: EntityType }[] {
     return entityNames.map(entityName => ({ entityName, entity: this.getEntity(entityName) }));
   }
 
-  getEntitiesMap() {
+  getEntitiesMap(): Record<string, EntityType> {
     return this._storage.sharedEntities;
   }
 }

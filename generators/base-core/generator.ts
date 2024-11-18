@@ -1390,7 +1390,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     return this.options.sharedData.applications?.[this.calculateApplicationId(applicationFolder)];
   }
 
-  private createSharedData({ help }: { help?: boolean }): SharedData<BaseApplication> {
+  private createSharedData({ help }: { help?: boolean }): SharedData {
     const applicationId = this.options.applicationId ?? this.calculateApplicationId(this.destinationPath());
     if (this.options.sharedData.applications === undefined) {
       this.options.sharedData.applications = {};
@@ -1401,7 +1401,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
     const { ignoreNeedlesError } = this.options;
 
-    return new SharedData<BaseApplication>(
+    return new SharedData(
       sharedApplications[applicationId],
       { destinationPath: this.destinationPath(), memFs: this.env.sharedFs, log: this.log, logCwd: this.env.logCwd },
       { ignoreNeedlesError },
