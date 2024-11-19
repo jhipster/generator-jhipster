@@ -13,6 +13,7 @@ export type Entity<F extends Field = Field, R extends Relationship = Relationshi
 
   fields?: F[];
   relationships?: R[];
+  annotations?: Record<string, string | boolean>;
 
   readOnly?: boolean;
   embedded?: boolean;

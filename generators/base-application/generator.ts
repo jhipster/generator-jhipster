@@ -30,7 +30,6 @@ import {
   GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
 } from '../generator-list.js';
 import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/tasks.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
@@ -94,7 +93,7 @@ export default class BaseApplicationGenerator<
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
   declare jhipsterConfig: ApplicationConfiguration & Record<string, any>;
-  declare sharedData: SharedData<ApplicationType>;
+  declare sharedData: SharedData;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, features);
