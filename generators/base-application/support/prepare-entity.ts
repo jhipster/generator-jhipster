@@ -139,6 +139,8 @@ export const entityDefaultConfig = {
 };
 
 export default function prepareEntity(entityWithConfig: Entity, generator, application: ApplicationType) {
+  const { applicationTypeMicroservice, microfrontend } = application;
+
   const entityName = upperFirst(entityWithConfig.name);
   const entitySuffix = entityWithConfig.entitySuffix ?? application.entitySuffix;
   mutateData(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
@@ -247,19 +249,13 @@ export default function prepareEntity(entityWithConfig: Entity, generator, appli
         : data.i18nKeyPrefix,
     hasRelationshipWithBuiltInUser: ({ relationships }) => relationships.some(relationship => relationship.otherEntity.builtInUser),
     saveUserSnapshot: ({ hasRelationshipWithBuiltInUser, dto }) =>
-      application.applicationTypeMicroservice &&
-      application.authenticationTypeOauth2 &&
-      hasRelationshipWithBuiltInUser &&
-      dto === NO_MAPPER,
+      applicationTypeMicroservice && application.authenticationTypeOauth2 && hasRelationshipWithBuiltInUser && dto === NO_MAPPER,
+    entityApi: ({ microserviceName }) => (microserviceName ? `services/${microserviceName.toLowerCase()}/` : ''),
+    entityPage: ({ microserviceName, entityFileName }) =>
+      microserviceName && microfrontend && applicationTypeMicroservice
+        ? `${microserviceName.toLowerCase()}/${entityFileName}`
+        : `${entityFileName}`,
   });
-
-  const { microserviceName, entityFileName, microfrontend } = entityWithConfig;
-  entityWithConfig.entityApi = microserviceName ? `services/${microserviceName.toLowerCase()}/` : '';
-  entityWithConfig.entityPage =
-    entityWithConfig.entityPage ??
-    (microfrontend && microserviceName && entityWithConfig.applicationType === MICROSERVICE
-      ? `${microserviceName.toLowerCase()}/${entityFileName}`
-      : `${entityFileName}`);
 
   entityWithConfig.generateFakeData = type => {
     const fieldsToGenerate =
