@@ -13,6 +13,7 @@ const RESULT_OUTPUT = 'result';
 const VALID_OUTPUT = 'valid';
 const SUMMARY_OUTPUT = 'summary';
 const FOOTER_OUTPUT = 'footer';
+const DIFFS_OUTPUT = 'diffs';
 
 const CONTAINS_SAMPLE = 'contains-sample';
 
@@ -35,8 +36,10 @@ const generateSummary = (data: InfoData, { applicationGenerated, issue }: { appl
 
 const generateFooter = (data: InfoData) =>
   data.files
-    .map(info => markdownDetails({ title: info.filename, content: `\n\n\`\`\`\n${info.content}\n\`\`\`\n`, contentWrapper: null }))
+    .map(info => markdownDetails({ title: info.filename, codeType: 'jdl', content: info.content }))
     .join('\n\n');
+
+const generateDiffOutput = (title: string, content: string) => markdownDetails({ title, codeType: 'diff', content });
 
 export default class extends BaseGenerator {
   projectFolder!: string;
@@ -124,6 +127,7 @@ export default class extends BaseGenerator {
             );
           } else if (jdlApplications > 0) {
             const workspaceOpts = jdlApplications > 1 ? { workspaces: true, monorepository: true } : {};
+            const diffs: string[] = [];
             for (const file of files.filter(file => file.type === 'jdl')) {
               await EnvironmentBuilder.run(
                 [`jhipster:${GENERATOR_JDL}`],
@@ -134,10 +138,14 @@ export default class extends BaseGenerator {
               const status = await git.status();
               if (!status.isClean()) {
                 await git.add('.').commit(`chore: generate application from ${file.filename}`);
-                const result = await this.spawn('git', ['diff', '--color', '@~1'], { stdio: 'pipe', all: true });
-                this.log(result.all);
+                const { all } = await this.spawn('git', ['diff', '--color', '@~1'], { stdio: 'pipe', all: true });
+                if (all) {
+                  this.log(all);
+                  diffs.push(generateDiffOutput(`diff ${file.filename}`, all));
+                }
               }
             }
+            setGithubTaskOutput(DIFFS_OUTPUT, diffs.join('\n\n'));
           }
         } catch (error) {
           setGithubTaskOutput(SUMMARY_OUTPUT, generateSummary(this.data, { applicationGenerated: false, issue: this.issue }));

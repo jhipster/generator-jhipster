@@ -1,12 +1,23 @@
+const ciMarkdownCodeSeparator = '\\`\\`\\`';
+
 export const markdownDetails = ({
   title,
   content,
-  contentWrapper = 'pre',
+  codeType,
+  contentWrapper = codeType ? null : 'pre',
 }: {
   title: string;
   content: string;
   contentWrapper?: string | null;
+  codeType?: string;
 }): string => {
-  const details = contentWrapper === null ? content : `\n  <${contentWrapper}>${content}</${contentWrapper}>`;
-  return `<details>\n  <summary>${title}</summary>${details}\n</details>`;
+  let details: string;
+  if (contentWrapper) {
+    details = `  <${contentWrapper}>${content}</${contentWrapper}>`;
+  } else if (codeType) {
+    details = `\n${ciMarkdownCodeSeparator}${codeType}\n${content}\n${ciMarkdownCodeSeparator}`;
+  } else {
+    details = content;
+  }
+  return `<details>\n  <summary>${title}</summary>\n${details}\n</details>`;
 };
