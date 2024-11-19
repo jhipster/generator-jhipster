@@ -141,7 +141,7 @@ export default class extends BaseGenerator {
               const status = await git.status();
               if (!status.isClean()) {
                 await git.add('.').commit(`chore: generate application from ${file.filename}`);
-                const { all } = await this.spawn('git', ['diff', '--color', '@~1'], { stdio: 'pipe', all: true });
+                const { all } = await this.spawn('git', ['diff', '--no-color', '@~1'], { stdio: 'pipe', all: true });
                 if (all) {
                   this.log(all);
                   diffs.push(generateDiffOutput(`diff ${file.filename}`, all));
