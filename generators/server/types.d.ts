@@ -25,6 +25,7 @@ export type SpringEntity = {
 
 export type ServerEntity = SpringEntity & {
   skipDbChangelog?: boolean;
+  entityAbsolutePackage?: string;
 };
 
 export type SpringBootSourceType = JavaSourceType &
@@ -161,4 +162,6 @@ export type SpringBootApplication = JavaApplication &
     requiresDeleteAllUsers: boolean;
     reactorBlock: string;
     reactorBlockOptional: string;
+
+    domains: string[];
   };

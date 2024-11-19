@@ -92,6 +92,13 @@ const command = {
       },
       scope: 'storage',
     },
+    rememberMeKey: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      scope: 'storage',
+    },
     authenticationType: {
       cli: {
         name: 'auth',

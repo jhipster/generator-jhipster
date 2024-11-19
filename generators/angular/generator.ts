@@ -202,7 +202,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
             return returnValue;
           },
-        });
+        } as any);
       },
     });
   }

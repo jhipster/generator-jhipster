@@ -62,7 +62,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
     return this.asPreparingTaskGroup({
       preparing({ application, applicationDefaults }) {
         if (application.authenticationType === 'oauth2' || application.databaseType === 'no') {
-          (application as any).skipUserManagement = true;
+          application.skipUserManagement = true;
         }
 
         applicationDefaults({

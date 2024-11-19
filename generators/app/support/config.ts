@@ -7,6 +7,7 @@ import detectLanguage from '../../languages/support/detect-language.js';
 import { loadConfig, loadDerivedConfig } from '../../../lib/internal/index.js';
 import serverCommand from '../../server/command.js';
 import { packageJson } from '../../../lib/index.js';
+import type { ApplicationType } from '../../../lib/types/application/application.js';
 
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MONOLITH } = applicationTypes;
@@ -77,7 +78,7 @@ export const loadAppConfig = ({
   useVersionPlaceholders,
 }: {
   config: any;
-  application: any;
+  application: ApplicationType;
   useVersionPlaceholders?: boolean;
 }) => {
   loadConfig(serverCommand.configs, { config, application });
@@ -152,7 +153,7 @@ export const loadDerivedAppConfig = ({ application }: { application: any }) => {
 
     projectDescription: ({ projectDescription, baseName }) => projectDescription ?? `Description for ${baseName}`,
     endpointPrefix: ({ applicationType, lowercaseBaseName }) => (applicationType === 'microservice' ? `services/${lowercaseBaseName}` : ''),
-  });
+  } as any);
 
   if (application.microfrontends && application.microfrontends.length > 0) {
     application.microfrontends.forEach(microfrontend => {

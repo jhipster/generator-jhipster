@@ -55,7 +55,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareGateway({ application }) {
-        application.gatewayServicesApiAvailable = (application as any).serviceDiscoveryAny || !application.reactive;
+        application.gatewayServicesApiAvailable = application.serviceDiscoveryAny || !application.reactive;
         application.gatewayRoutes = (application.routes ?? []).map(routeDef => {
           const [route, host = route, serverPort = '8080'] = routeDef.split(':');
           return { route, serverPort, host };
@@ -74,7 +74,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator {
         await control.cleanupFiles({
           '8.6.1': [
             [
-              application.reactive && (application as any).serviceDiscoveryAny,
+              application.reactive && application.serviceDiscoveryAny,
               `${application.javaPackageSrcDir}/web/filter/ModifyServersOpenApiFilter.java`,
               `${application.javaPackageTestDir}/web/filter/ModifyServersOpenApiFilterTest.java`,
             ],

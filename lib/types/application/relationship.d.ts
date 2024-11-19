@@ -1,13 +1,14 @@
 import type { Entity } from '../base/entity.js';
 import type { Relationship as BaseRelationship } from '../base/relationship.js';
 import type { DerivedPropertiesOnlyOf } from '../utils/derived-properties.js';
+import type { Property } from './property.js';
 
 type RelationshipProperties = DerivedPropertiesOnlyOf<
   'relationship',
   'LeftSide' | 'RightSide' | 'ManyToOne' | 'OneToMany' | 'OneToOne' | 'ManyToMany'
 >;
 
-export interface Relationship<E extends Entity = Entity> extends BaseRelationship, RelationshipProperties {
+export interface Relationship<E extends Entity = Entity> extends BaseRelationship, Property, RelationshipProperties {
   propertyName: string;
   relationshipNameCapitalized: string;
 
@@ -35,4 +36,7 @@ export interface Relationship<E extends Entity = Entity> extends BaseRelationshi
 
   /* TODO check motivation */
   relationshipSqlSafeName?: string;
+  relationshipJavadoc?: string;
+  relationshipApiDescription?: string;
+  columnDataType?: string;
 }

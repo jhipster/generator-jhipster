@@ -148,10 +148,10 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get loadingEntities() {
     return this.asLoadingEntitiesTaskGroup({
-      loadingEntities({ application, entitiesToLoad }) {
+      loadingEntities({ entitiesToLoad }) {
         for (const { entityName } of entitiesToLoad) {
           const entity = this.sharedData.getEntity(entityName);
-          loadRequiredConfigIntoEntity.call(this, entity, application);
+          loadRequiredConfigIntoEntity.call(this, entity, this.jhipsterConfigWithDefaults);
         }
       },
       requiredOtherSideRelationships() {
@@ -166,8 +166,8 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ entity }) {
-        prepareEntityServerForTemplates(entity);
+      prepareEntity({ entity, application }) {
+        prepareEntityServerForTemplates(entity, application);
         loadRequiredConfigDerivedProperties(entity);
       },
       preparePrimaryKey({ entity, application }) {

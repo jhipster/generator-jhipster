@@ -32,9 +32,9 @@ describe('generator - base-application - support - prepareField', () => {
   Object.setPrototypeOf(defaultGenerator, BaseGenerator.prototype);
 
   const defaultEntity = prepareEntityForTemplates(
-    loadRequiredConfigIntoEntity({ changelogDate: formatDateForChangelog(new Date()), name: 'Entity' }, defaultConfig),
+    loadRequiredConfigIntoEntity({ changelogDate: formatDateForChangelog(new Date()), name: 'Entity' } as any, defaultConfig as any),
     defaultGenerator,
-    defaultConfig,
+    defaultConfig as any,
   );
 
   describe('prepareFieldForTemplates', () => {

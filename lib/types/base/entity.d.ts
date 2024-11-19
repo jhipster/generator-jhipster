@@ -29,4 +29,6 @@ export type Entity<F extends Field = Field, R extends Relationship = Relationshi
   clientRootFolder?: string;
   pagination?: 'no' | 'infinite-scroll' | 'pagination';
   jpaMetamodelFiltering?: boolean;
+
+  angularJSSuffix?: string;
 };
