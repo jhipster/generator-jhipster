@@ -35,8 +35,11 @@ import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
 import type { Entity } from '../../../lib/types/application/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import { fieldIsEnum } from './field-utils.js';
+import type { PrimaryKey } from '../../../lib/types/application/entity.js';
+import type { ApplicationConfiguration } from '../../../lib/types/application/yo-rc.js';
+import type { ApplicationType } from '../../../lib/types/application/application.js';
 import { fieldToReference } from './prepare-field.js';
+import { fieldIsEnum } from './field-utils.js';
 
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { MapperTypes } = entityOptions;
@@ -135,7 +138,7 @@ export const entityDefaultConfig = {
   },
 };
 
-export default function prepareEntity(entityWithConfig, generator, application) {
+export default function prepareEntity(entityWithConfig: Entity, generator, application: ApplicationType) {
   const entityName = upperFirst(entityWithConfig.name);
   const entitySuffix = entityWithConfig.entitySuffix ?? application.entitySuffix;
   mutateData(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
@@ -183,9 +186,6 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   mutateData(entityWithConfig, {
     persistClass: `${entityWithConfig.entityClass}${entitySuffix ?? ''}`,
     persistInstance: `${entityWithConfig.entityInstance}${entitySuffix ?? ''}`,
-  });
-
-  mutateData(entityWithConfig, {
     restClass: dto ? entityWithConfig.dtoClass : entityWithConfig.persistClass,
     restInstance: dto ? entityWithConfig.dtoInstance : entityWithConfig.persistInstance,
   });
@@ -206,7 +206,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   mutateData(entityWithConfig, {
     __override__: false,
     entityFileName: data => kebabCase(data.entityNameCapitalized + upperFirst(data.entityAngularJSSuffix)),
-    entityAngularName: data => data.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix),
+    entityAngularName: data => data.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix!),
     entityAngularNamePlural: data => pluralize(data.entityAngularName),
     entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
   });
@@ -234,7 +234,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
 
   mutateData(entityWithConfig, {
     __override__: false,
-    i18nKeyPrefix: data => data.i18nKeyPrefix ?? `${data.frontendAppName}.${data.entityTranslationKey}`,
+    i18nKeyPrefix: data => data.i18nKeyPrefix ?? `${application.frontendAppName}.${data.entityTranslationKey}`,
     i18nAlertHeaderPrefix: data =>
       (data.i18nAlertHeaderPrefix ?? data.microserviceAppName)
         ? `${data.microserviceAppName}.${data.entityTranslationKey}`
@@ -258,11 +258,13 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   entityWithConfig.generateFakeData = type => {
     const fieldsToGenerate =
       type === 'cypress' ? entityWithConfig.fields.filter(field => !field.id || !field.autoGenerate) : entityWithConfig.fields;
-    const fieldEntries = fieldsToGenerate.map(field => {
-      const fieldData = field.generateFakeData(type);
-      if (!field.nullable && fieldData === null) return undefined;
-      return [field.fieldName, fieldData];
-    });
+    const fieldEntries: [string, any][] = fieldsToGenerate
+      .map(field => {
+        const fieldData = field.generateFakeData!(type);
+        if (!field.nullable && fieldData === null) return undefined;
+        return [field.fieldName, fieldData];
+      })
+      .filter(Boolean) as any;
     const withError = fieldEntries.find(entry => !entry);
     if (withError) {
       generator.log.warn(`Error generating a full sample for entity ${entityName}`);
@@ -275,7 +277,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   return entityWithConfig;
 }
 
-export function derivedPrimaryKeyProperties(primaryKey) {
+export function derivedPrimaryKeyProperties(primaryKey: PrimaryKey) {
   mutateData(primaryKey, {
     hasUUID: primaryKey.fields?.some(field => field.fieldType === UUID),
     hasLong: primaryKey.fields?.some(field => field.fieldType === LONG),
@@ -285,7 +287,7 @@ export function derivedPrimaryKeyProperties(primaryKey) {
     typeLong: primaryKey.type === LONG,
     typeInteger: primaryKey.type === INTEGER,
     typeNumeric: !primaryKey.composite && primaryKey.fields[0].fieldTypeNumeric,
-  });
+  } as any);
 }
 
 export function prepareEntityPrimaryKeyForTemplates(
@@ -497,12 +499,15 @@ function fieldToId(field) {
  * @param {Object} config - config object.
  * @returns {Object} the entity parameter for chaining.
  */
-export function loadRequiredConfigIntoEntity(this: BaseGenerator | void, entity, config) {
+export function loadRequiredConfigIntoEntity<E extends Partial<Entity>>(
+  this: BaseGenerator | void,
+  entity: E,
+  config: ApplicationConfiguration,
+): E {
   mutateData(entity, {
     __override__: false,
     applicationType: config.applicationType,
     baseName: config.baseName,
-    frontendAppName: config.frontendAppName,
     authenticationType: config.authenticationType,
     reactive: config.reactive,
     microfrontend: config.microfrontend,
@@ -512,7 +517,6 @@ export function loadRequiredConfigIntoEntity(this: BaseGenerator | void, entity,
     databaseType: config.databaseType,
     prodDatabaseType: config.prodDatabaseType,
 
-    skipUiGrouping: config.skipUiGrouping,
     searchEngine: config.searchEngine,
 
     jhiPrefix: config.jhiPrefix,
@@ -521,8 +525,8 @@ export function loadRequiredConfigIntoEntity(this: BaseGenerator | void, entity,
     packageName: config.packageName,
     packageFolder: config.packageFolder,
     microserviceName: ({ builtIn }) => (!builtIn && config.applicationType === MICROSERVICE ? config.baseName : undefined),
-  });
-  if (entity.searchEngine === true && (!entity.microserviceName || entity.microserviceName === config.baseName)) {
+  } as any);
+  if ((entity as any).searchEngine === true && (!entity.microserviceName || entity.microserviceName === config.baseName)) {
     // If the entity belongs to this application and searchEngine is true.
     if (config.searchEngine && config.searchEngine !== NO_SEARCH_ENGINE) {
       // Replace with the searchEngine from the application.
@@ -647,7 +651,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
           entity.eagerLoad ||
           // Fetch relationships if otherEntityField differs otherwise the id is enough
           (ownerSide && otherEntity.primaryKey.name !== otherEntityField)),
-    });
+    } as any);
   });
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
   entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);

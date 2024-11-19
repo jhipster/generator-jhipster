@@ -29,7 +29,7 @@ import { getDatabaseTypeData } from './database.js';
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { POSTGRESQL, MYSQL, MARIADB, COUCHBASE, SQL, NEO4J } = databaseTypes;
 
-export default function prepareEntity(entity) {
+export default function prepareEntity(entity: any) {
   const { entityPackage, packageName, packageFolder, persistClass } = entity;
   let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder, entityJavaPackageFolder } = entity;
   if (entityPackage) {
@@ -46,7 +46,7 @@ export default function prepareEntity(entity) {
   mutateData(entity, {
     entityJavadoc: ({ documentation }) => (documentation ? formatDocAsJavaDoc(documentation) : documentation),
     entityApiDescription: ({ documentation }) => (documentation ? formatDocAsApiDescription(documentation) : documentation),
-  });
+  } as any);
 
   if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType ?? entity.databaseType) && entity.jhiPrefix) {
     entity.entityInstanceDbSafe = `${entity.jhiPrefix}${entity.entityClass}`;

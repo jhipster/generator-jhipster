@@ -69,6 +69,8 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   entityReadAuthority?: string;
   hasCyclicRequiredRelationship?: boolean;
 
+  entityJavadoc?: string;
+
   entityNameCapitalized: string;
   entityClass: string;
   entityInstance: string;
@@ -150,6 +152,15 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
    * Any relationship is required or id
    */
   anyRelationshipIsRequired: boolean;
+  hasRelationshipWithBuiltInUser: boolean;
+
+  paginationPagination: boolean;
+  paginationInfiniteScroll: boolean;
+  paginationNo: boolean;
+
+  serviceClass: boolean;
+  serviceImpl: boolean;
+  serviceNo: boolean;
 
   dtoMapstruct: boolean;
   dtoAny: boolean;
@@ -157,6 +168,7 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   propertyJavaFilteredType?: string;
 
   resetFakerSeed(suffix?: string): void;
+  generateFakeData?: (type?: any) => any;
   faker: FakerWithRandexp;
 
   tsSampleWithPartialData?: string;
@@ -164,6 +176,15 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   tsSampleWithFullData?: string;
   tsSampleWithNewData?: string;
   tsPrimaryKeySamples?: string[];
+
+  entityAngularJSSuffix?: string;
+  saveUserSnapshot?: boolean;
+
+  /** Properties from application required for entities published through gateways */
+  useMicroserviceJson?: boolean;
+  microserviceAppName?: string;
+  applicationType?: string;
+  microfrontend?: boolean;
 }
 
 export interface UserEntity extends Entity {

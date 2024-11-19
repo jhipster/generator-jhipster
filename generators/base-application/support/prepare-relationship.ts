@@ -100,7 +100,7 @@ export default function prepareRelationship(
     // let ownerSide true when type is 'many-to-one' for convenience.
     // means that this side should control the reference.
     ownerSide: relationship.otherEntity.embedded || relationshipManyToOne || (relationshipLeftSide && !relationshipOneToMany),
-    persistableRelationship: ({ ownerSide }) => ownerSide,
+    persistableRelationship: ({ ownerSide }) => ownerSide!,
     relationshipUpdateBackReference: ({ ownerSide, relationshipRightSide, otherEntity }) =>
       !otherEntity.embedded && (entityWithConfig.databaseType === NEO4J ? relationshipRightSide : !ownerSide),
 

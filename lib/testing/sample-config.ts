@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import type { InfoFile } from '../../generators/info/support/extract-info.js';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
 import { mutateData } from '../utils/object.js';
+import type { YoRcContent } from '../types/application/yo-rc.js';
 
 const isFile = async (filename: string): Promise<boolean> => {
   try {
@@ -25,7 +26,7 @@ export const prepareSample = async (
         if (await isFile(filename)) {
           const { jwtSecretKey, rememberMeKey } = JSON.parse(await readFile(filename, 'utf-8'))[GENERATOR_JHIPSTER];
           if (jwtSecretKey || rememberMeKey) {
-            const newContent = JSON.parse(content);
+            const newContent: YoRcContent = JSON.parse(content);
             mutateData(newContent[GENERATOR_JHIPSTER], { jwtSecretKey, rememberMeKey });
             if (removeBlueprints) {
               delete newContent[GENERATOR_JHIPSTER].blueprints;

@@ -154,7 +154,7 @@ export default class DomainGenerator extends BaseApplicationGenerator {
             const enumInfo = {
               ...application,
               ...getEnumInfo(field, (entity as any).clientRootFolder),
-              frontendAppName: (entity as any).frontendAppName,
+              frontendAppName: application.frontendAppName,
               packageName: application.packageName,
               javaPackageSrcDir: application.javaPackageSrcDir,
               entityJavaPackageFolder: (entity as any).entityJavaPackageFolder,

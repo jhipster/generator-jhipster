@@ -39,6 +39,9 @@ export type BaseApplication = {
   skipServer?: boolean;
   monorepository?: boolean;
 
+  blueprints?: any[];
+  testFrameworks?: string[];
+
   /** Customize templates sourceFile and destinationFile */
   customizeTemplatePaths: ((
     this: CoreGenerator,

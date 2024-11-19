@@ -158,7 +158,7 @@ export default function prepareField(entity, field) {
     nullable: data => !data.columnRequired,
     loadColumnType: data => parseLiquibaseLoadColumnType(entity, data),
     liquibaseGenerateFakeData: true,
-  });
+  } as any);
 
   return field;
 }

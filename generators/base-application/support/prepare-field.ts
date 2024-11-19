@@ -296,7 +296,7 @@ function prepareCommonFieldForTemplates(entityWithConfig: Entity, field: Field, 
     fieldNameHumanized: ({ fieldName }) => startCase(fieldName),
     fieldTranslationKey: ({ fieldName }) => `${entityWithConfig.i18nKeyPrefix}.${fieldName}`,
     tsType: ({ fieldType }) => getTypescriptType(fieldType),
-  });
+  } as any);
 
   prepareProperty(field);
 
