@@ -166,8 +166,8 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ entity }) {
-        prepareEntityServerForTemplates(entity);
+      prepareEntity({ entity, application }) {
+        prepareEntityServerForTemplates(entity, application);
         loadRequiredConfigDerivedProperties(entity);
       },
       preparePrimaryKey({ entity, application }) {

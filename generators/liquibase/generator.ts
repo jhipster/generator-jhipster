@@ -169,7 +169,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
             const { previousEntity: entity } = databaseChangelog;
             loadRequiredConfigIntoEntity(entity, this.jhipsterConfigWithDefaults);
             prepareEntity(entity, this, application);
-            prepareEntityForServer(entity);
+            prepareEntityForServer(entity, application);
             if (!entity.embedded && !entity.primaryKey) {
               prepareEntityPrimaryKeyForTemplates.call(this, { entity, application });
             }

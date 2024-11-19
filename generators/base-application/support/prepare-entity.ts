@@ -175,20 +175,26 @@ export default function prepareEntity(entityWithConfig: Entity, generator, appli
     entityAuthority: entityWithConfig.adminEntity ? 'ROLE_ADMIN' : undefined,
   });
 
-  const dto = entityWithConfig.dto && entityWithConfig.dto !== NO_DTO;
-  if (dto) {
-    mutateData(entityWithConfig, {
-      dtoClass: `${entityWithConfig.entityClass}${application.dtoSuffix ?? ''}`,
-      dtoInstance: `${entityWithConfig.entityInstance}${application.dtoSuffix ?? ''}`,
-    });
-  }
-
   mutateData(entityWithConfig, {
     persistClass: `${entityWithConfig.entityClass}${entitySuffix ?? ''}`,
     persistInstance: `${entityWithConfig.entityInstance}${entitySuffix ?? ''}`,
-    restClass: dto ? entityWithConfig.dtoClass : entityWithConfig.persistClass,
-    restInstance: dto ? entityWithConfig.dtoInstance : entityWithConfig.persistInstance,
   });
+
+  const dto = entityWithConfig.dto && entityWithConfig.dto !== NO_DTO;
+  if (dto) {
+    const { dtoSuffix = '' } = application;
+    mutateData(entityWithConfig, {
+      dtoClass: `${entityWithConfig.entityClass}${dtoSuffix}`,
+      dtoInstance: `${entityWithConfig.entityInstance}${dtoSuffix}`,
+      restClass: ({ dtoClass }) => dtoClass!,
+      restInstance: ({ dtoInstance }) => dtoInstance!,
+    });
+  } else {
+    mutateData(entityWithConfig, {
+      restClass: ({ persistClass }) => persistClass!,
+      restInstance: ({ persistInstance }) => persistInstance!,
+    });
+  }
 
   mutateData(entityWithConfig, {
     entityNamePluralizedAndSpinalCased: kebabCase(entityWithConfig.entityNamePlural),
@@ -523,7 +529,6 @@ export function loadRequiredConfigIntoEntity<E extends Partial<Entity>>(
     entitySuffix: config.entitySuffix,
     dtoSuffix: config.dtoSuffix,
     packageName: config.packageName,
-    packageFolder: config.packageFolder,
     microserviceName: ({ builtIn }) => (!builtIn && config.applicationType === MICROSERVICE ? config.baseName : undefined),
   } as any);
   if ((entity as any).searchEngine === true && (!entity.microserviceName || entity.microserviceName === config.baseName)) {

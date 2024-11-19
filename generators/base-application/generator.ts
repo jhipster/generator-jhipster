@@ -580,7 +580,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: LOADING_ENTITIES_QUEUE,
@@ -599,7 +599,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: PREPARING_EACH_ENTITY_QUEUE,
@@ -620,7 +620,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: PREPARING_EACH_ENTITY_FIELD_QUEUE,
@@ -640,7 +640,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: PREPARING_EACH_ENTITY_RELATIONSHIP_QUEUE,
@@ -660,7 +660,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: POST_PREPARING_EACH_ENTITY_QUEUE,
@@ -680,7 +680,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: WRITING_ENTITIES_QUEUE,
@@ -697,7 +697,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: POST_WRITING_ENTITIES_QUEUE,
@@ -714,6 +714,6 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
   }
 }
