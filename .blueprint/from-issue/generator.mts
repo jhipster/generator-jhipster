@@ -34,7 +34,9 @@ const generateSummary = (data: InfoData, { applicationGenerated, issue }: { appl
 `;
 
 const generateFooter = (data: InfoData) =>
-  data.files.map(info => markdownDetails({ title: info.filename, content: info.content })).join('\n\n');
+  data.files
+    .map(info => markdownDetails({ title: info.filename, content: `\n\n\`\`\`\n${info.content}\n\`\`\`\n`, contentWrapper: null }))
+    .join('\n\n');
 
 export default class extends BaseGenerator {
   projectFolder!: string;
