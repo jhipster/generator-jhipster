@@ -19,7 +19,7 @@ export const prepareSample = async (
   { removeBlueprints }: { removeBlueprints?: boolean } = {},
 ): Promise<InfoFile[]> => {
   return Promise.all(
-    files.map(async ({ filename, content }) => {
+    files.map(async ({ filename, content, type }) => {
       filename = join(projectFolder, filename);
       if (filename.endsWith('.yo-rc.json')) {
         if (await isFile(filename)) {
@@ -34,7 +34,7 @@ export const prepareSample = async (
           }
         }
       }
-      return { filename, content };
+      return { filename, content, type };
     }),
   );
 };

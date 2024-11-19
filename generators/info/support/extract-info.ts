@@ -1,10 +1,12 @@
+import { removeFieldsWithNullishValues } from '../../base/support/index.js';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 
-export type InfoFile = { filename: string; content: string };
+export type InfoFile = { filename: string; content: string; type: 'jdl' | 'yo-rc' | 'entity-jdl' };
 
 export type InfoData = {
   yoRcContent: string | undefined;
   jdlDefinitions: string | undefined;
+  jdlApplications: number | undefined;
   jdlEntitiesDefinitions: string | undefined;
   yoRcBlank: boolean;
   yoRcValid: boolean;
@@ -17,8 +19,9 @@ export const extractDataFromInfo = (info: string): InfoData => {
   let yoRcContent: string | undefined;
   let jdlEntitiesDefinitions: string | undefined;
   let jdlDefinitions: string | undefined;
+  let jdlApplications: number | undefined;
   let workspacesFolders;
-  const files: { filename: string; content: string }[] = [];
+  const files: InfoFile[] = [];
 
   for (const match of info.matchAll(regexp)) {
     const { title, body } = match.groups ?? {};
@@ -26,23 +29,28 @@ export const extractDataFromInfo = (info: string): InfoData => {
       if (title.includes('.yo-rc.json file')) {
         if (title.includes(' for ')) {
           const folder = title.split(' for ')[1].trim();
-          files.push({ filename: `${folder}/.yo-rc.json`, content: body.trim() });
+          files.push({ filename: `${folder}/.yo-rc.json`, content: body.trim(), type: 'yo-rc' });
         } else {
           yoRcContent = body.trim();
+          files.push({ filename: '.yo-rc.json', content: yoRcContent, type: 'yo-rc' });
         }
       } else if (title.includes('JDL entity definitions')) {
         jdlEntitiesDefinitions = body.trim();
+        files.push({ filename: 'entities.jdl', content: jdlEntitiesDefinitions, type: 'entity-jdl' });
       } else if (title.includes('JDL definitions')) {
         // JDL definitions can be be a placehoder
-        if (body.includes('application')) {
-          jdlDefinitions = body.trim();
+        if ((body.match(/application\s*\{/g) || []).length > 0) {
+          const jdlCount = files.filter(file => file.type === 'jdl').length;
+          files.push({ filename: jdlCount === 0 ? 'app.jdl' : `app-${jdlCount}.jdl`, content: body.trim(), type: 'jdl' });
+          jdlApplications ??= (body.match(/application\s*\{/g) || []).length;
+          jdlDefinitions ??= body.trim();
         }
       }
     }
   }
 
   let yoRcBlank = true;
-  let yoRcValid = false;
+  let yoRcValid;
   if (yoRcContent) {
     yoRcBlank = false;
     try {
@@ -52,21 +60,25 @@ export const extractDataFromInfo = (info: string): InfoData => {
       yoRcContent = JSON.stringify(content);
       yoRcValid = true;
     } catch (error) {
+      yoRcValid = false;
       // eslint-disable-next-line no-console
       console.log('Invalid .yo-rc.json file', error);
     }
   }
 
   if (jdlDefinitions) {
-    files.push({ filename: 'app.jdl', content: jdlDefinitions });
     yoRcContent = undefined;
     jdlEntitiesDefinitions = undefined;
   }
-  if (jdlEntitiesDefinitions) {
-    files.push({ filename: 'entities.jdl', content: jdlEntitiesDefinitions });
-  }
-  if (yoRcContent) {
-    files.push({ filename: '.yo-rc.json', content: yoRcContent });
-  }
-  return { yoRcContent, jdlEntitiesDefinitions, jdlDefinitions, yoRcBlank, yoRcValid, files, workspacesFolders };
+
+  return removeFieldsWithNullishValues({
+    yoRcContent,
+    jdlEntitiesDefinitions,
+    jdlDefinitions,
+    yoRcBlank,
+    yoRcValid,
+    files,
+    workspacesFolders,
+    jdlApplications,
+  });
 };

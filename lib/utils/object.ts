@@ -25,16 +25,17 @@ const filterNullishValues = value => value !== undefined && value !== null;
  * @returns
  */
 
-export function removeFieldsWithNullishValues(object: Record<string, any>): Record<string, any> {
+export function removeFieldsWithNullishValues<const T extends Record<string, any>>(object: T): T {
   return filterValue(object, filterNullishValues);
 }
+
 /**
  * Copy and remove null and undefined values
  * @param object
  * @returns
  */
 
-function filterValue(object: Record<string, any>, filterValue: (any) => boolean = filterNullishValues): Record<string, any> {
+function filterValue<const T extends Record<string, any>>(object: T, filterValue: (any) => boolean = filterNullishValues): T {
   const clone = {};
   for (const [key, value] of Object.entries(object)) {
     if (filterValue(value)) {
@@ -49,7 +50,7 @@ function filterValue(object: Record<string, any>, filterValue: (any) => boolean 
       }
     }
   }
-  return clone;
+  return clone as T;
 }
 
 /**

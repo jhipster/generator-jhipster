@@ -1,12 +1,11 @@
 ---
-name: 💥 Report an issue using `jhipster info`
+name: 💥 Report an issue using one or more Application JDLs
 about: Report a problem with JHipster itself.
 ---
 
 <!--
 - Please follow the issue template below for bug reports.
 - If you have a support request rather than a bug, please use [Stack Overflow](http://stackoverflow.com/questions/tagged/jhipster) with the JHipster tag.
--
 - If this is a potential security issue, please read our security policy and contact us privately first: https://github.com/jhipster/generator-jhipster/security/policy
 -->
 
@@ -14,17 +13,25 @@ about: Report a problem with JHipster itself.
 
 <!-- Explain the bug, if an error is being thrown a stack trace helps -->
 
-##### **JHipster info**
+##### **JHipster JDL**
 
-<!--
-To provide all information we need, you should run `jhipster info` in the project root folder (or workspaces root for microservices), and
-copy/paste the result here.
-`jhipster info` removes sentitive information like rememberKey, jwtSecretKey. Double check if there is any other sensitive info.
+  <details>
+  <summary>JDL definitions</summary>
+  <pre>
+    Replace this line with JDL content with one or more applications (keep html structure for automated ci)
+  </pre>
+  </details>
+
+<!-- Uncomment if there is a incremental JDL
+  <details>
+  <summary>JDL definitions (incremental)</summary>
+  <pre>
+    Replace this line with incremental JDL content with one or more applications (keep html structure for automated ci)
+  </pre>
+  </details>
 -->
 
-Replace this line with your `jhipster info`.
-
-- [ ] `jhipster info` output is mandatory for bug reports. This will allow us to use automated tests and genarate the broken sample using `jhipster from-issue` command.
+- [ ] JDL is mandatory for bug reports. This will allow us to use automated tests and genarate the broken sample using `jhipster from-issue` command.
 
 ##### **Motivation for or Use Case**
 

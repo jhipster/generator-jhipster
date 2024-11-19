@@ -18,3 +18,4 @@
  */
 export * from './utils.js';
 export * from './extract-info.js';
+export * from './markdown-content.js';
