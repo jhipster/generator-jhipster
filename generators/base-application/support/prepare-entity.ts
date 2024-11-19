@@ -39,16 +39,12 @@ import { fieldIsEnum } from './field-utils.js';
 import { fieldToReference } from './prepare-field.js';
 
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
-const { PaginationTypes, ServiceTypes, MapperTypes } = entityOptions;
+const { MapperTypes } = entityOptions;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { CommonDBTypes } = fieldTypes;
 
 const { BOOLEAN, LONG, STRING, UUID, INTEGER } = CommonDBTypes;
-const { NO: NO_DTO, MAPSTRUCT } = MapperTypes;
-const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
-const { SERVICE_IMPL } = ServiceTypes;
-const NO_SERVICE = ServiceTypes.NO;
-const NO_PAGINATION = PaginationTypes.NO;
+const { NO: NO_DTO } = MapperTypes;
 const NO_MAPPER = MapperTypes.NO;
 
 const { CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = databaseTypes;
@@ -104,18 +100,19 @@ const BASE_TEMPLATE_DATA = {
   },
 };
 
-function _derivedProperties(entityWithConfig) {
+function _derivedProperties(entityWithConfig: Entity) {
   const pagination = entityWithConfig.pagination;
   const dto = entityWithConfig.dto;
   const service = entityWithConfig.service;
   mutateData(entityWithConfig, {
-    paginationPagination: pagination === PAGINATION,
-    paginationInfiniteScroll: pagination === INFINITE_SCROLL,
-    paginationNo: pagination === NO_PAGINATION,
-    dtoMapstruct: dto === MAPSTRUCT,
-    dtoAny: dto && dto !== NO_DTO,
-    serviceImpl: service === SERVICE_IMPL,
-    serviceNo: service === NO_SERVICE,
+    paginationPagination: pagination === 'pagination',
+    paginationInfiniteScroll: pagination === 'infinite-scroll',
+    paginationNo: pagination === 'no',
+    dtoMapstruct: dto === 'mapstruct' || dto === 'any',
+    dtoAny: dto && dto !== 'no',
+    serviceClass: service === 'serviceClass',
+    serviceImpl: service === 'serviceImpl',
+    serviceNo: service === 'no',
   });
 }
 

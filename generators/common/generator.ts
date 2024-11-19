@@ -163,8 +163,8 @@ export default class CommonGenerator extends BaseApplicationGenerator {
           ANGULAR,
           REACT,
           // Make documentation URL available in templates
-          JHIPSTER_DOCUMENTATION_URL,
-          JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
+          DOCUMENTATION_URL: JHIPSTER_DOCUMENTATION_URL,
+          DOCUMENTATION_ARCHIVE_PATH: JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
         } as any);
       },
     });
