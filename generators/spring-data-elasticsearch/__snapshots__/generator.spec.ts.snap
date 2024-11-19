@@ -655,6 +655,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/MicroserviceService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
     "stateCleared": "modified",
   },
@@ -1050,6 +1053,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/service/MicroserviceService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
@@ -1431,6 +1437,9 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/service/MicroserviceService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
@@ -1826,6 +1835,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/MailService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/MicroserviceService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/UserService.java": {
@@ -2331,6 +2343,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/service/MicroserviceService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
@@ -2733,6 +2748,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/MicroserviceService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
@@ -3161,6 +3179,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/service/MicroserviceService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
@@ -3595,6 +3616,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/MailService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/MicroserviceService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
@@ -4086,6 +4110,9 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/service/MicroserviceService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {

@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { FieldType } from '../../application/field-types.ts';
+import type { Property } from './property.js';
 
 type FieldEnum = {
   fieldValues: string;
@@ -29,10 +30,13 @@ type FieldBlob = {
 };
 
 export type Field = Partial<FieldEnum> &
-  Partial<FieldBlob> & {
+  Partial<FieldBlob> &
+  Property & {
     fieldName: string;
     fieldType: FieldType | string;
-    documentation?: string;
     options?: Record<string, boolean | string | number>;
     fieldValidateRules?: string[];
+
+    /** @deprecated */
+    fieldTypeJavadoc?: string;
   };

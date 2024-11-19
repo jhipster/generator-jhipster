@@ -10,6 +10,7 @@ import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
 import type { ApplicationPropertiesNeedles } from './support/needles.ts';
 
 export type SpringEntity = {
+  entitySearchLayer?: boolean;
   /* Generate entity's Entity */
   entityDomainLayer?: boolean;
   /* Generate entity's Repository */
@@ -19,6 +20,11 @@ export type SpringEntity = {
   entitySpringPreAuthorize?: string;
   entitySpringReadPreAuthorize?: string;
   skipJunitTests?: string;
+  entityR2dbcRepository?: boolean;
+};
+
+export type ServerEntity = SpringEntity & {
+  skipDbChangelog?: boolean;
 };
 
 export type SpringBootSourceType = JavaSourceType &

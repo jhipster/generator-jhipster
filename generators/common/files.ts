@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -17,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -37,11 +38,11 @@ export const commonFiles = {
 
 export function writeFiles() {
   return {
-    writeFiles({ application }) {
+    writeFiles: asWritingTask(function ({ application }) {
       return this.writeFiles({
         sections: commonFiles,
         context: application,
       });
-    },
+    }),
   };
 }
