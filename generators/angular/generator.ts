@@ -22,12 +22,7 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.js';
 import { defaultLanguage } from '../languages/support/index.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
-import {
-  generateTypescriptTestEntity as generateTestEntity,
-  generateEntityClientEnumImports as getClientEnumImportsFormat,
-  generateTestEntityId as getTestEntityId,
-  generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
-} from '../client/support/index.js';
+import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
 import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/tasks.js';
@@ -41,7 +36,6 @@ import {
   addItemToAdminMenu,
   addRoute,
   addToEntitiesMenu,
-  buildAngularFormPath as angularFormPath,
   isTranslatedAngularFile,
   translateAngularFilesTransform,
 } from './support/index.js';
@@ -49,11 +43,7 @@ import type { AngularApplication, AngularEntity } from './types.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
-export default class AngularGenerator extends BaseApplicationGenerator<
-  AngularEntity,
-  AngularApplication,
-  DefaultTaskTypes<AngularEntity, AngularApplication>
-> {
+export default class AngularGenerator extends BaseApplicationGenerator<DefaultTaskTypes<AngularEntity, AngularApplication>> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -182,22 +172,6 @@ export default class AngularGenerator extends BaseApplicationGenerator<
         entity.generateEntityClientEnumImports = fields => {
           return getClientEnumImportsFormat(fields, ANGULAR);
         };
-
-        entity.generateTestEntityPrimaryKey = (primaryKey, index) => {
-          return getTestEntityPrimaryKey(primaryKey, index);
-        };
-
-        entity.generateTypescriptTestEntity = (references, additionalFields) => {
-          return generateTestEntity(references, additionalFields);
-        };
-
-        entity.buildAngularFormPath = (reference, prefix = []) => {
-          return angularFormPath(reference, prefix);
-        };
-
-        entity.generateTestEntityId = (primaryKey, index: 0 | 1 | 'random' = 0, wrapped = true) => {
-          return getTestEntityId(primaryKey, index, wrapped);
-        };
       },
     });
   }
@@ -245,7 +219,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
     return this.asDefaultTaskGroup({
       loadEntities({ application }) {
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);
-        application.angularEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient);
+        application.angularEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient) as AngularEntity[];
       },
       queueTranslateTransform({ control, application }) {
         const { enableTranslation, jhiPrefix } = application;

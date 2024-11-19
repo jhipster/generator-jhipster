@@ -45,8 +45,7 @@ type ClientSample = Record<string, string | number | boolean | null>;
 
 export interface Entity<F extends BaseField = Field, R extends BaseRelationship = never>
   extends Omit<Required<BaseEntity<F>>, 'relationships'>,
-    ServerEntity,
-    AngularEntity {
+    ServerEntity {
   changelogDateForRecent: any;
   /** @experimental */
   auditableEntity?: boolean;
