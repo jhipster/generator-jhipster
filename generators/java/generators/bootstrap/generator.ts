@@ -142,10 +142,10 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
     return this.asDefaultTaskGroup({
       loadDomains({ application, entities }) {
         const entityPackages = [
-          ...new Set([application.packageName, ...entities.map(entity => (entity as any).entityAbsolutePackage).filter(Boolean)]),
-        ];
+          ...new Set([application.packageName, ...entities.map(entity => entity.entityAbsolutePackage).filter(Boolean)]),
+        ] as string[];
         application.entityPackages = entityPackages;
-        (application as any).domains = entityPackages;
+        application.domains = entityPackages;
       },
       generatedAnnotation({ application }) {
         if (this.jhipsterConfig.withGeneratedFlag && application.backendTypeJavaAny) {

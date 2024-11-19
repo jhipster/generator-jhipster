@@ -126,7 +126,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     return this.asLoadingTaskGroup({
       loadSharedConfig({ application }) {
         // TODO v8 rename to nodePackageManager;
-        (application as any).clientPackageManager = 'npm';
+        application.clientPackageManager = 'npm';
       },
 
       loadPackageJson({ application }) {

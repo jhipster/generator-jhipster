@@ -85,8 +85,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
       preparing({ application }) {
         application.liquibaseDefaultSchemaName = '';
         // Generate h2 properties at master.xml for blueprints that uses h2 for tests or others purposes.
-        (application as any).liquibaseAddH2Properties =
-          (application as any).liquibaseAddH2Properties ?? (application as any).devDatabaseTypeH2Any;
+        application.liquibaseAddH2Properties = application.liquibaseAddH2Properties ?? application.devDatabaseTypeH2Any;
       },
       checkDatabaseCompatibility({ application }) {
         if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {

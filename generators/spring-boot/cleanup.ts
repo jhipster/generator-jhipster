@@ -179,12 +179,12 @@ export default asWritingTask(async function cleanupTask(this, taskParam) {
     }
     if (
       application.databaseTypeSql ||
-      (application as any).cacheProviderRedis ||
+      application.cacheProviderRedis ||
       application.databaseTypeMongodb ||
       application.databaseTypeCassandra ||
-      (application as any).searchEngineElasticsearch ||
+      application.searchEngineElasticsearch ||
       application.databaseTypeCouchbase ||
-      (application as any).searchEngineCouchbase ||
+      application.searchEngineCouchbase ||
       application.databaseTypeNeo4j
     ) {
       // The condition is too complated, delete and recreate.
