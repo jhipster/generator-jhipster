@@ -40,3 +40,15 @@ export const getGithubIssue = async ({ owner, repository, issue }: { owner: stri
   });
   return response.data;
 };
+
+export const getGithubSummaryFile = (): string | undefined => {
+  const filePath = process.env.GITHUB_STEP_SUMMARY;
+  return filePath && existsSync(filePath) ? filePath : undefined;
+};
+
+export const appendToSummary = (summary: string) => {
+  const summaryFile = getGithubSummaryFile();
+  if (summaryFile) {
+    appendFileSync(summaryFile, summary, { encoding: 'utf8' });
+  }
+};

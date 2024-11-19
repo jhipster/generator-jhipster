@@ -1,4 +1,4 @@
-const ciMarkdownCodeSeparator = '\\`\\`\\`';
+const ciMarkdownCodeSeparator = '````';
 
 export const markdownDetails = ({
   title,

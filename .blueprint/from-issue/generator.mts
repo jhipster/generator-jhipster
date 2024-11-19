@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 
 import BaseGenerator from '../../generators/base/index.js';
-import { getGithubIssue, setGithubTaskOutput, prepareSample } from '../../lib/testing/index.js';
+import { getGithubIssue, setGithubTaskOutput, prepareSample, appendToSummary } from '../../lib/testing/index.js';
 import { promptSamplesFolder } from '../support.mjs';
 import { GENERATOR_APP, GENERATOR_JDL, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
 import { extractDataFromInfo, markdownDetails, type InfoData } from '../../generators/info/support/index.js';
@@ -35,9 +35,7 @@ const generateSummary = (data: InfoData, { applicationGenerated, issue }: { appl
 `;
 
 const generateFooter = (data: InfoData) =>
-  data.files
-    .map(info => markdownDetails({ title: info.filename, codeType: 'jdl', content: info.content }))
-    .join('\n\n');
+  data.files.map(info => markdownDetails({ title: info.filename, codeType: 'jdl', content: info.content })).join('\n\n');
 
 const generateDiffOutput = (title: string, content: string) => markdownDetails({ title, codeType: 'diff', content });
 
@@ -52,6 +50,10 @@ export default class extends BaseGenerator {
 
   data!: InfoData;
   logCwd = this.destinationPath();
+
+  summaryData = '';
+  summaryFooter = '';
+  summaryDiffs = '';
 
   constructor(args, options, features) {
     super(args, options, { queueCommandTasks: true, ...features });
@@ -86,7 +88,8 @@ export default class extends BaseGenerator {
         setGithubTaskOutput(ENTITIES_JDL_OUTPUT, this.data.jdlEntitiesDefinitions ? VALID : BLANK);
         setGithubTaskOutput(CONTAINS_SAMPLE, Boolean(this.data.jdlDefinitions || this.data.yoRcContent));
         setGithubTaskOutput(VALID_OUTPUT, this.data.yoRcValid);
-        setGithubTaskOutput(FOOTER_OUTPUT, generateFooter(this.data));
+        this.summaryFooter = generateFooter(this.data);
+        setGithubTaskOutput(FOOTER_OUTPUT, this.summaryFooter);
 
         for (const file of await prepareSample(
           this.destinationPath(),
@@ -145,15 +148,20 @@ export default class extends BaseGenerator {
                 }
               }
             }
-            setGithubTaskOutput(DIFFS_OUTPUT, diffs.join('\n\n'));
+            this.summaryDiffs = diffs.join('\n\n');
+            setGithubTaskOutput(DIFFS_OUTPUT, this.summaryDiffs);
           }
         } catch (error) {
-          setGithubTaskOutput(SUMMARY_OUTPUT, generateSummary(this.data, { applicationGenerated: false, issue: this.issue }));
+          this.summaryData = generateSummary(this.data, { applicationGenerated: false, issue: this.issue });
+          setGithubTaskOutput(SUMMARY_OUTPUT, this.summaryData);
+          this.appendSummary();
           throw error;
         }
 
         setGithubTaskOutput(RESULT_OUTPUT, SUCCESS);
-        setGithubTaskOutput(SUMMARY_OUTPUT, generateSummary(this.data, { applicationGenerated: true, issue: this.issue }));
+        this.summaryData = generateSummary(this.data, { applicationGenerated: true, issue: this.issue });
+        setGithubTaskOutput(SUMMARY_OUTPUT, this.summaryData);
+        this.appendSummary();
 
         if (this.codeWorkspace) {
           await this.composeWithJHipster('@jhipster/jhipster-dev:code-workspace', {
@@ -164,5 +172,9 @@ export default class extends BaseGenerator {
         }
       },
     });
+  }
+
+  appendSummary() {
+    appendToSummary(this.summaryData + this.summaryDiffs + this.summaryFooter);
   }
 }

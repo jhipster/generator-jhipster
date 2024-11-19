@@ -131,15 +131,6 @@ jobs:
       - name: Dump docker logs
         if: always() && steps.project.outputs.contains-sample != 'false'
         uses: jwalton/gh-docker-logs@v2
-      - name: summary
-        if: always()
-        run: |
-          echo "${{ steps.project.outputs.summary }}"
-          echo "${{ steps.project.outputs.diffs }}"
-          echo "${{ steps.project.outputs.footer }}"
-          echo "${{ steps.project.outputs.summary }}" >> $GITHUB_STEP_SUMMARY
-          echo "${{ steps.project.outputs.diffs }}" >> $GITHUB_STEP_SUMMARY
-          echo "${{ steps.project.outputs.footer }}" >> $GITHUB_STEP_SUMMARY
 
   check-closing-issues:
     permissions:
