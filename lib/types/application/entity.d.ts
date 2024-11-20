@@ -120,6 +120,8 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
    * Any file is of type Bytes or ByteBuffer
    */
   anyFieldIsBlobDerived: boolean;
+  entityJavaFilterableProperties: any[];
+  entityJavaCustomFilters: any[];
   /**
    * Any field is of type ZonedDateTime, Instant or LocalDate
    */

@@ -51,7 +51,6 @@ import {
   APPLICATION_TYPE_MICROSERVICE,
   applicationTypes,
   cacheTypes,
-  clientFrameworkTypes,
   databaseTypes,
   fieldTypes,
   messageBrokerTypes,
@@ -72,7 +71,6 @@ const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
 const { KAFKA, PULSAR } = messageBrokerTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
-const { NO: NO_CLIENT } = clientFrameworkTypes;
 
 const { BYTES: TYPE_BYTES, BYTE_BUFFER: TYPE_BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 const { CUCUMBER, GATLING } = testFrameworkTypes;
@@ -209,7 +207,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
     return this.asComposingComponentTaskGroup({
       async composing() {
         const { clientFramework, skipClient } = this.jhipsterConfigWithDefaults;
-        if (!skipClient && clientFramework !== NO_CLIENT) {
+        if (!skipClient && clientFramework !== 'no') {
           // When using prompts, clientFramework will only be known after composing priority.
           await this.composeWithJHipster('jhipster:java:node');
         }

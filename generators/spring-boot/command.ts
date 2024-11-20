@@ -72,7 +72,7 @@ const command = {
         type: String,
       },
       prompt: gen => ({
-        when: () => [GATEWAY, MICROSERVICE].includes(gen.jhipsterConfigWithDefaults.applicationType),
+        when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
         type: 'list',
         message: 'Which service discovery server do you want to use?',
         default: 'consul',
