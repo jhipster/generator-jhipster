@@ -27,7 +27,6 @@ import tech.jhipster.config.liquibase.SpringLiquibaseUtil;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.annotation.Value;
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
 import org.springframework.boot.autoconfigure.r2dbc.R2dbcProperties;
@@ -61,11 +60,6 @@ public class LiquibaseConfiguration {
     public LiquibaseConfiguration(Environment env) {
         this.env = env;
     }
-<%_ if (databaseTypeSql && !reactive) { _%>
-
-    @Value("${application.liquibase.async-start:true}")
-    private Boolean asyncStart;
-<%_ } _%>
 
     @Bean
     public SpringLiquibase liquibase(
@@ -78,6 +72,7 @@ public class LiquibaseConfiguration {
 <%_ } else { _%>
         @LiquibaseDataSource ObjectProvider<DataSource> liquibaseDataSource,
         ObjectProvider<DataSource> dataSource,
+        ApplicationProperties applicationProperties,
         DataSourceProperties dataSourceProperties
 <%_ } _%>
     ) {
@@ -87,7 +82,7 @@ public class LiquibaseConfiguration {
         liquibase.setDataSource(createLiquibaseDataSource(liquibaseProperties, dataSourceProperties));
 <%_ } else { _%>
         SpringLiquibase liquibase;
-        if (Boolean.TRUE.equals(asyncStart)) {
+        if (Boolean.TRUE.equals( applicationProperties.getLiquibase().getAsyncStart())) {
             liquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(this.env, executor, liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties);
         } else {
             liquibase = SpringLiquibaseUtil.createSpringLiquibase(liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties);
