@@ -82,7 +82,7 @@ public class LiquibaseConfiguration {
         liquibase.setDataSource(createLiquibaseDataSource(liquibaseProperties, dataSourceProperties));
 <%_ } else { _%>
         SpringLiquibase liquibase;
-        if (applicationProperties.getLiquibase().getAsyncStart()) {
+        if (Boolean.TRUE.equals( applicationProperties.getLiquibase().getAsyncStart())) {
             liquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(this.env, executor, liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties);
         } else {
             liquibase = SpringLiquibaseUtil.createSpringLiquibase(liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties);
