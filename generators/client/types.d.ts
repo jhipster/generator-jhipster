@@ -18,7 +18,7 @@ export type FrontendApplication = ApplicationClientProperties &
   };
 
 /**
- * Deprecated in favor of frontend application.
+ * @deprecated in favor of frontend application.
  */
 export type ClientApplication = JavaScriptApplication & PartialAngularApplication & FrontendApplication;
 

@@ -21,14 +21,7 @@ import type { Entity } from '../../lib/types/application/index.js';
 
 export interface AngularEntity extends Entity {
   /**
-   * @private
-   * Generate a test entity, for the PK references (when the PK is a composite, derived key)
-   *
-   * @param {any} primaryKey - primary key definition.
-   * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
-   */
-  generateTestEntityPrimaryKey: (primaryKey: any, index: any) => string;
-  /**
+   * @experimental to be replaced with a calculated property
    * Returns the typescript import section of enums referenced by all fields of the entity.
    * @param fields returns the import of enums that are referenced by the fields
    * @returns {typeImports:Map} the fields that potentially contains some enum types
@@ -41,10 +34,4 @@ export interface AngularEntity extends Entity {
 export type AngularApplication = {
   angularLocaleId: string;
   angularEntities: AngularEntity[];
-  /**
-   * Get the typescript type of a non-composite primary key
-   * @param primaryKey the primary key of the entity
-   * @returns {string} the typescript type.
-   */
-  getTypescriptKeyType: (primaryKey: any) => 'string' | 'number';
 } & ApplicationType<AngularEntity>;
