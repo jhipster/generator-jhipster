@@ -4,13 +4,15 @@ import { EOL } from 'node:os';
 import process from 'node:process';
 import axios from 'axios';
 
-export const parseIssue = (issue: string): undefined | { owner: string; repository: string; issue: string } => {
-  if (issue.includes('#')) {
-    const split = issue.split('/');
-    const split2 = split[1].split('#');
-    return { owner: split[0], repository: split2[0], issue: split2[1] };
+type GithubIssue = { owner: string; repository: string; issue: string };
+
+export const parseIssue = (issue: string): GithubIssue => {
+  const result = /^(((?<owner>[^/]*)\/)?(?<repository>[^#]+)#)?(?<issue>\d+)$/.exec(issue);
+  const groups = result?.groups;
+  if (groups) {
+    return { ...groups } as GithubIssue;
   }
-  return undefined;
+  throw new Error(`Invalid issue format: ${issue}`);
 };
 
 export const getGithubOutputFile = (): string | undefined => {

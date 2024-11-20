@@ -29,12 +29,14 @@ const command: JHipsterCommandDefinition = {
       },
       configure(gen: any) {
         // Gets the owner, repo and issue_number from a string such as, "jhipster/generator-jhipster#12345"
-        const parsedIssue = parseIssue(gen.issue);
-        if (parsedIssue) {
-          gen.owner = parsedIssue.owner;
-          gen.repository = parsedIssue.repository;
-          gen.issueNumber = parsedIssue.issue;
+        const { owner, repository, issue } = parseIssue(gen.issue);
+        if (owner) {
+          gen.owner = owner;
         }
+        if (repository) {
+          gen.repository = repository;
+        }
+        gen.issueNumber = issue;
       },
       scope: 'generator',
     },
