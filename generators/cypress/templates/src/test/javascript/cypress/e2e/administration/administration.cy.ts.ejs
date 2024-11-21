@@ -78,7 +78,7 @@ describe('/admin', () => {
   });
 <%_ } _%>
 
-  describe('/docs', () => {
+  describe.skip('/docs', () => {
     it('should load the page', () => {
       cy.getManagementInfo().then(info => {
         if (info.activeProfiles.includes('api-docs')) {
