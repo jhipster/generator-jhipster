@@ -29,7 +29,6 @@ class SpaWebFilterIT {
     }
 <%_ if (!skipUserManagement) { _%>
 
-    @Disabled
     @Test
     void testFilterDoesNotForwardToIndexForApi() throws Exception {
         mockMvc.perform(get("/api/<% if (!applicationTypeMicroservice) { %>authenticate<% } else { %>users<% } %>"))
@@ -38,6 +37,7 @@ class SpaWebFilterIT {
     }
 <%_ } _%>
 
+    @Disabled
     @Test
     @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void testFilterDoesNotForwardToIndexForV3ApiDocs() throws Exception {
