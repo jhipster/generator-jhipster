@@ -49,6 +49,8 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 @Configuration
 public class LiquibaseConfiguration {
@@ -89,7 +91,9 @@ public class LiquibaseConfiguration {
         }
 <%_ } _%>
         liquibase.setChangeLog("classpath:config/liquibase/master.xml");
-        liquibase.setContexts(liquibaseProperties.getContexts());
+        if (!CollectionUtils.isEmpty(properties.getContexts())) {
+            liquibase.setContexts(StringUtils.collectionToCommaDelimitedString(properties.getContexts()));
+        }
         liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());
         liquibase.setLiquibaseSchema(liquibaseProperties.getLiquibaseSchema());
         liquibase.setLiquibaseTablespace(liquibaseProperties.getLiquibaseTablespace());
