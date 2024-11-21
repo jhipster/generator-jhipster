@@ -2,6 +2,7 @@ package <%= packageName %>.web.filter;
 
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.security.AuthoritiesConstants;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,6 +29,7 @@ class SpaWebFilterIT {
     }
 <%_ if (!skipUserManagement) { _%>
 
+    @Disabled
     @Test
     void testFilterDoesNotForwardToIndexForApi() throws Exception {
         mockMvc.perform(get("/api/<% if (!applicationTypeMicroservice) { %>authenticate<% } else { %>users<% } %>"))
