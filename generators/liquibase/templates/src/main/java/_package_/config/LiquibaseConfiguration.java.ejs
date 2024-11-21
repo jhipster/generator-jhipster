@@ -91,7 +91,7 @@ public class LiquibaseConfiguration {
         }
 <%_ } _%>
         liquibase.setChangeLog("classpath:config/liquibase/master.xml");
-        if (!CollectionUtils.isEmpty(properties.getContexts())) {
+        if (!CollectionUtils.isEmpty(liquibaseProperties.getContexts())) {
             liquibase.setContexts(StringUtils.collectionToCommaDelimitedString(liquibaseProperties.getContexts()));
         }
         liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());
@@ -100,7 +100,7 @@ public class LiquibaseConfiguration {
         liquibase.setDatabaseChangeLogLockTable(liquibaseProperties.getDatabaseChangeLogLockTable());
         liquibase.setDatabaseChangeLogTable(liquibaseProperties.getDatabaseChangeLogTable());
         liquibase.setDropFirst(liquibaseProperties.isDropFirst());
-        if (!CollectionUtils.isEmpty(properties.getLabelFilter())) {
+        if (!CollectionUtils.isEmpty(liquibaseProperties.getLabelFilter())) {
             liquibase.setLabelFilter(StringUtils.collectionToCommaDelimitedString(liquibaseProperties.getLabelFilter()));
         }
         liquibase.setChangeLogParameters(liquibaseProperties.getParameters());
