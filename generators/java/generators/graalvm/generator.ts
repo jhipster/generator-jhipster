@@ -24,6 +24,7 @@ import { createNeedleCallback } from '../../../base/support/needles.js';
 import { addJavaAnnotation, addJavaImport } from '../../../java/support/add-java-annotation.js';
 import { javaMainPackageTemplatesBlock } from '../../../java/support/files.js';
 import { mavenDefinition } from './internal/maven-definition.js';
+import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.js';
 
 export default class GraalvmGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -47,6 +48,18 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
+  }
+
+  get loading() {
+    return this.asLoadingTaskGroup({
+      loading({ application }) {
+        application.graalvmReachabilityMetadata = GRAALVM_REACHABILITY_METADATA;
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
@@ -179,11 +192,20 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
       },
 
       async customizeMaven({ application, source }) {
-        const { buildToolMaven, reactive, databaseTypeSql, javaDependencies, nativeLanguageDefinition, languagesDefinition } = application;
+        const {
+          buildToolMaven,
+          reactive,
+          databaseTypeSql,
+          javaDependencies,
+          nativeLanguageDefinition,
+          languagesDefinition,
+          graalvmReachabilityMetadata,
+        } = application;
         if (!buildToolMaven) return;
 
         source.addMavenDefinition!(
           mavenDefinition({
+            graalvmReachabilityMetadata,
             reactive,
             nativeBuildToolsVersion: javaDependencies!.nativeBuildTools!,
             databaseTypeSql,

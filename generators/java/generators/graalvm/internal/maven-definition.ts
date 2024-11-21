@@ -2,12 +2,14 @@
 import type { MavenDefinition } from '../../../../maven/types.js';
 
 export const mavenDefinition = ({
+  graalvmReachabilityMetadata,
   reactive,
   nativeBuildToolsVersion,
   databaseTypeSql,
   userLanguage,
   languages,
 }: {
+  graalvmReachabilityMetadata: string;
   reactive?: boolean;
   nativeBuildToolsVersion?: string;
   databaseTypeSql?: boolean;
@@ -30,6 +32,7 @@ export const mavenDefinition = ({
             <classesDirectory>\${project.build.outputDirectory}</classesDirectory>
             <metadataRepository>
                 <enabled>true</enabled>
+                <version>${graalvmReachabilityMetadata}</version>
             </metadataRepository>
             <imageName>\${native-image-name}</imageName>
             <verbose>true</verbose>
