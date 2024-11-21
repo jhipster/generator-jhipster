@@ -32,7 +32,6 @@ class SpaWebFilterIT {
     }
 <%_ if (!skipUserManagement) { _%>
 
-    @Disabled
     @Test
     void testFilterDoesNotForwardToIndexForApi() {
         webTestClient
@@ -44,6 +43,7 @@ class SpaWebFilterIT {
     }
 <%_ } _%>
 
+    @Disabled
     @Test
     @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void testFilterDoesNotForwardToIndexForV3ApiDocs() {
