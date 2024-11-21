@@ -53,7 +53,9 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
   get loading() {
     return this.asLoadingTaskGroup({
       loading({ application }) {
-        application.graalvmReachabilityMetadata = GRAALVM_REACHABILITY_METADATA;
+        application.graalvmReachabilityMetadata = this.useVersionPlaceholders
+          ? 'GRAALVM_REACHABILITY_METADATA_VERSION'
+          : GRAALVM_REACHABILITY_METADATA;
       },
     });
   }
