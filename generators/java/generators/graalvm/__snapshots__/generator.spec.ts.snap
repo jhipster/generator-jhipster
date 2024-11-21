@@ -12,6 +12,7 @@ exports[`generator - java:graalvm with default options should call source snapsh
             <classesDirectory>\${project.build.outputDirectory}</classesDirectory>
             <metadataRepository>
                 <enabled>true</enabled>
+                <version>GRAALVM_REACHABILITY_METADATA_VERSION</version>
             </metadataRepository>
             <imageName>\${native-image-name}</imageName>
             <verbose>true</verbose>

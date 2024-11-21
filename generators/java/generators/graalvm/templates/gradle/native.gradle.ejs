@@ -17,6 +17,10 @@ graalvmNative {
     jvmArgs.add('-Xms4g')
     jvmArgs.add('-Xmx10g')
   }
+  metadataRepository {
+    enabled = true
+    version = '<%- graalvmReachabilityMetadata %>'
+  }
 }
 
 processTestAot {
