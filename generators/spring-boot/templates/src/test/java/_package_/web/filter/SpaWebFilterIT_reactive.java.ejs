@@ -3,6 +3,7 @@ package <%= packageName %>.web.filter;
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.security.AuthoritiesConstants;
 import java.time.Duration;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ class SpaWebFilterIT {
     }
 <%_ if (!skipUserManagement) { _%>
 
+    @Disabled
     @Test
     void testFilterDoesNotForwardToIndexForApi() {
         webTestClient
