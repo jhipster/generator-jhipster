@@ -2,7 +2,6 @@ package <%= packageName %>.web.filter;
 
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.security.AuthoritiesConstants;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,7 +36,6 @@ class SpaWebFilterIT {
     }
 <%_ } _%>
 
-    @Disabled
     @Test
     @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void testFilterDoesNotForwardToIndexForV3ApiDocs() throws Exception {
