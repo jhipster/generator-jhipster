@@ -63,6 +63,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ if (cacheProviderAny) { _%>
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.Cache;
+import <%= packageName %>.domain.User;
 import java.util.Objects;
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
@@ -541,7 +542,7 @@ class UserResourceIT {
   <%_ } _%>
   <%_ if (cacheProviderAny) { _%>
 
-        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin(), User.class)).isNull();
   <%_ } _%>
 
         // Get the user
@@ -578,7 +579,7 @@ class UserResourceIT {
             assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
         }
   <%_ } else if (cacheProviderAny) { _%>
-        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin(), User.class)).isNotNull();
   <%_ } _%>
     }
 
@@ -882,7 +883,7 @@ class UserResourceIT {
   <%_ } _%>
   <%_ if (cacheProviderAny) { _%>
 
-        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin(), User.class)).isNull();
   <%_ } _%>
 
         // Validate the database is empty
