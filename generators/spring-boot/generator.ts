@@ -608,7 +608,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
           source.addMavenDependency!({ inProfile: 'docker-compose', ...dockerComposeArtifact, optional: true });
         }
       },
-      addFeignReactor({ application, source }) {
+      nativeSupport({ application, source }) {
         const { graalvmSupport, reactive } = application;
         if (graalvmSupport && !reactive) {
           // Workaround https://github.com/spring-projects/spring-boot/issues/43260
