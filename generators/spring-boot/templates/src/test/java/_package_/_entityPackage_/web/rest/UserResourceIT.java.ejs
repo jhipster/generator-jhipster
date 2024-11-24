@@ -493,10 +493,6 @@ class UserResourceIT {
     @Transactional
   <%_ } _%>
     void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
-
-        <%_ if (reactive) { _%>
-        userRepository.deleteAll().block();
-        <%_ } _%>
         // Initialize the database
         userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%= saveMethod %><% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
@@ -507,8 +503,12 @@ class UserResourceIT {
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= user.adminUserDto %>.class).getResponseBody().blockFirst();
-
+            .returnResult(<%= user.adminUserDto %>.class).getResponseBody()
+        <%_ if (databaseTypeCouchbase) { _%>
+        .elementAt(3).block();
+        <%_ } else { _%>
+        .blockFirst();
+        <%_ } _%>
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(foundUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
