@@ -47,7 +47,7 @@ import static tech.jhipster.config.logging.LoggingUtils.*;
 /*
  * Configures the console and Logstash log appenders from the app properties
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 <%_ if (serviceDiscoveryAny) { _%>
 @RefreshScope
 <%_ } _%>
