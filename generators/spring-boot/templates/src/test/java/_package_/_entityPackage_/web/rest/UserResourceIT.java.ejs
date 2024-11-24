@@ -493,6 +493,10 @@ class UserResourceIT {
     @Transactional
   <%_ } _%>
     void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
+
+        <%_ if (reactive) { _%>
+        userRepository.deleteAll().block();
+        <%_ } _%>
         // Initialize the database
         userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%= saveMethod %><% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
