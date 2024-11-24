@@ -179,8 +179,6 @@ spring:
     name: <%= baseName %>
 <%_ if (serviceDiscoveryConsul || applicationTypeGateway || messageBrokerKafka) { _%>
   cloud:
-    compatibility-verifier:
-      enabled: false
   <%_ if (serviceDiscoveryConsul) { _%>
     consul:
       discovery:
