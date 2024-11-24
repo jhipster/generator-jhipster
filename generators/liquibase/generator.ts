@@ -521,6 +521,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
             'liquibase.database.LiquibaseTableNamesFactory.class',
             'liquibase.report.ShowSummaryGeneratorFactory.class',
             'liquibase.changelog.FastCheckService.class',
+            'liquibase.changelog.visitor.ValidatingVisitorGeneratorFactory.class',
           ],
           publicConstructors: ['liquibase.ui.LoggerUIService.class'],
         });
