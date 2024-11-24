@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 <%_ if (serviceDiscoveryConsul || (serviceDiscoveryAny && applicationTypeGateway || applicationTypeMicroservice)) { _%>
 import org.springframework.beans.factory.ObjectProvider;
 <%_ } _%>
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 <%_ if (serviceDiscoveryAny && (applicationTypeGateway || applicationTypeMicroservice)) { _%>
 import org.springframework.boot.info.BuildProperties;
@@ -53,8 +52,8 @@ import static tech.jhipster.config.logging.LoggingUtils.*;
 <%_ } _%>
 public class LoggingConfiguration {
 
-    public LoggingConfiguration(@Autowired @Value("${spring.application.name}") String appName,
-                                @Autowired @Value("${server.port}") String serverPort,
+    public LoggingConfiguration(@Value("${spring.application.name}") String appName,
+                                @Value("${server.port}") String serverPort,
                                 JHipsterProperties jHipsterProperties,
 <%_ if (serviceDiscoveryConsul) { _%>
                                 ObjectProvider<ConsulRegistration> consulRegistration,
