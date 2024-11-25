@@ -117,7 +117,7 @@
     "pretest": "npm run lint && npm run check-types",
     "test": "npm run mocha-test test generators cli .blueprint",
     "update-snapshot": "esmocha --no-insight --no-parallel --update-snapshot --",
-    "update-snapshots": "esmocha lib/jdl generators cli --update-snapshot --no-insight --forbid-only"
+    "update-snapshots": "esmocha lib/jdl generators cli .blueprint --update-snapshot --no-insight --forbid-only"
   },
   "dependencies": {
     "@eslint/js": "9.15.0",
