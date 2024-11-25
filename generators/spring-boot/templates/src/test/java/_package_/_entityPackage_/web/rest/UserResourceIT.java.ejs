@@ -502,7 +502,7 @@ class UserResourceIT {
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= user.adminUserDto %>.class).getResponseBody().filter(e -> e.getLogin() == DEFAULT_LOGIN).blockFirst();
+            .returnResult(<%= user.adminUserDto %>.class).getResponseBody()<% if (user.primaryKey.typeNumeric) { %>.filter(e -> DEFAULT_LOGIN.equals(e.getLogin()))<% } %>.blockFirst();
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(foundUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
@@ -512,7 +512,7 @@ class UserResourceIT {
     <%_ } _%>
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
   <%_ } else { _%>
-        restUserMockMvc.perform(get("/api/admin/users<% if (user.primaryKey.typeNumeric) { %>?sort=id,desc<% } %>")
+        restUserMockMvc.perform(get("/api/admin/users<% if (!user.primaryKey.typeNumeric) { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
