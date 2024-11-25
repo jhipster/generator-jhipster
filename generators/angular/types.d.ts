@@ -33,5 +33,6 @@ export interface AngularEntity extends Entity {
 
 export type AngularApplication = {
   angularLocaleId: string;
+  /** @experimental to be replaced with needles */
   angularEntities: AngularEntity[];
 } & ApplicationType<AngularEntity>;
