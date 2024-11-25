@@ -497,7 +497,7 @@ class UserResourceIT {
 
         // Get all the users
   <%_ if (reactive) { _%>
-        <%= user.adminUserDto %> foundUser = webTestClient.get().uri("/api/admin/users?sort=id,desc")
+        <%= user.adminUserDto %> foundUser = webTestClient.get().uri("/api/admin/users<% if (user.primaryKey.typeNumeric) { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -512,7 +512,7 @@ class UserResourceIT {
     <%_ } _%>
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
   <%_ } else { _%>
-        restUserMockMvc.perform(get("/api/admin/users<% if (databaseTypeSql) { %>?sort=id,desc<% } %>")
+        restUserMockMvc.perform(get("/api/admin/users<% if (user.primaryKey.typeNumeric) { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
