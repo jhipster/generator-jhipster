@@ -43,7 +43,7 @@
       "otherEntityRelationshipName": "requiredManyToOneOtherSide",
       "relationshipName": "requiredManyToOne",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": "required"
+      "relationshipValidateRules https://github.com/spring-projects/spring-data-jpa/issues/3690": "required"
     },
     {
       "otherEntityField": "id",
