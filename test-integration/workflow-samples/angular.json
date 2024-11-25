@@ -40,7 +40,6 @@
     },
     {
       "name": "ng-gradle-couchbase-search",
-      "disabled": "needs adjusts for sb3",
       "app-sample": "ng-gradle-couchbase-search",
       "entity": "couchbase"
     },
