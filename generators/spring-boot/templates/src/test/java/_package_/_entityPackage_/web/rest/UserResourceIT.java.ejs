@@ -512,7 +512,7 @@ class UserResourceIT {
     <%_ } _%>
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
   <%_ } else { _%>
-        restUserMockMvc.perform(get("/api/admin/users<% if (!user.primaryKey.typeNumeric) { %>?sort=id,desc<% } %>")
+        restUserMockMvc.perform(get("/api/admin/users<% if (user.primaryKey.typeNumeric) { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
