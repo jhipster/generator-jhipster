@@ -502,7 +502,7 @@ class UserResourceIT {
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= user.adminUserDto %>.class).getResponseBody().blockFirst();
+            .returnResult(<%= user.adminUserDto %>.class).getResponseBody().filter(e -> e.getLogin() == DEFAULT_LOGIN).blockFirst();
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(foundUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
