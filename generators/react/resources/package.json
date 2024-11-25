@@ -66,7 +66,7 @@
     "merge-jsons-webpack-plugin": "2.0.1",
     "mini-css-extract-plugin": "2.9.2",
     "postcss-loader": "8.1.1",
-    "postcss-rtlcss": "5.5.0",
+    "postcss-rtlcss": "5.5.1",
     "react-infinite-scroll-component": "6.1.0",
     "redux-mock-store": "1.5.5",
     "rimraf": "5.0.8",
