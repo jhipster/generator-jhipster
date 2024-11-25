@@ -264,7 +264,7 @@ task cleanResources(type: Delete) {
     delete "build/resources"
 }
 
-<%_ if (embeddableLaunchScript || databaseTypeCouchbase) { _%>
+<%_ if ( embeddableLaunchScript || databaseTypeCouchbase ) { _%>
 
 bootJar {
 <%_ if ( databaseTypeCouchbase ) { _%>
