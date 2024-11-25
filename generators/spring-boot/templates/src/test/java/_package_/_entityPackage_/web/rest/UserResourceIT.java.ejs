@@ -63,7 +63,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ if (cacheProviderAny) { _%>
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.Cache;
-import <%= packageName %>.domain.<%= user.persistClass %>;
 import java.util.Objects;
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
@@ -503,12 +502,7 @@ class UserResourceIT {
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= user.adminUserDto %>.class).getResponseBody()
-        <%_ if (databaseTypeCouchbase) { _%>
-        .elementAt(3).block();
-        <%_ } else { _%>
-        .blockFirst();
-        <%_ } _%>
+            .returnResult(<%= user.adminUserDto %>.class).getResponseBody().blockFirst();
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(foundUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
