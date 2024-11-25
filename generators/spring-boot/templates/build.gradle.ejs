@@ -264,10 +264,15 @@ task cleanResources(type: Delete) {
     delete "build/resources"
 }
 
-<%_ if (embeddableLaunchScript) { _%>
+<%_ if (embeddableLaunchScript || databaseTypeCouchbase) { _%>
 
 bootJar {
+<%_ if ( databaseTypeCouchbase ) { _%>
+    loaderImplementation = org.springframework.boot.loader.tools.LoaderImplementation.CLASSIC
+<%_ } _%>
+<%_ if ( embeddableLaunchScript ) { _%>
     launchScript()
+<%_ } _%>
 }
 <%_ } _%>
 
