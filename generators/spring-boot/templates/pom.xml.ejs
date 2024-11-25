@@ -611,7 +611,7 @@
             <properties>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev${profile.tls}<%_ if (databaseMigrationLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
-                <profile.test>testdev</profile.test>
+                <profile.test>test,testdev</profile.test>
             </properties>
             <dependencies>
                 <dependency>
@@ -626,7 +626,7 @@
             <properties>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}<%_ if (databaseMigrationLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
-                <profile.test>testprod</profile.test>
+                <profile.test>test,testprod</profile.test>
             </properties>
             <build>
                 <plugins>
