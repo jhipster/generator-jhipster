@@ -46,7 +46,13 @@ export const files = {
   sass: [
     {
       ...clientSrcTemplatesBlock(),
-      templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
+      templates: [
+        'content/scss/_bootstrap-variables.scss',
+        'content/scss/global.scss',
+        'content/scss/vendor.scss',
+        'environments/environment.ts',
+        'environments/environment.development.ts',
+      ],
     },
   ],
   angularApp: [
@@ -56,7 +62,7 @@ export const files = {
     },
     {
       ...clientApplicationTemplatesBlock(),
-      templates: ['app.config.ts', 'app.component.ts', 'app.routes.ts', 'app.constants.ts', 'app-page-title-strategy.ts'],
+      templates: ['app.config.ts', 'app.component.ts', 'app.routes.ts', 'app-page-title-strategy.ts'],
     },
   ],
   microfrontend: [

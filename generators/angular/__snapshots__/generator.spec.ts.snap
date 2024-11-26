@@ -71,9 +71,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/app.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/app.constants.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/app.routes.ts": {
     "stateCleared": "modified",
   },
@@ -635,6 +632,12 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/environments/environment.development.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/environments/environment.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/favicon.ico": {
     "stateCleared": "modified",
   },
@@ -907,9 +910,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/app.config.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/app.constants.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/app.routes.ts": {
@@ -1557,6 +1557,12 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/environments/environment.development.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/environments/environment.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/favicon.ico": {
     "stateCleared": "modified",
   },
@@ -1668,9 +1674,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/app.config.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/app.constants.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/app.routes.ts": {
@@ -2234,6 +2237,12 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/environments/environment.development.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/environments/environment.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/favicon.ico": {
     "stateCleared": "modified",
   },
@@ -2352,9 +2361,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.config.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/app.constants.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.routes.ts": {
@@ -2927,6 +2933,12 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/environments/environment.development.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/environments/environment.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/favicon.ico": {
     "stateCleared": "modified",
   },
@@ -3360,9 +3372,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.config.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/app.constants.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.routes.ts": {
@@ -4025,6 +4034,12 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/environments/environment.development.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/environments/environment.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/favicon.ico": {
     "stateCleared": "modified",
   },
@@ -4145,9 +4160,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.config.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/app.constants.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.routes.ts": {
@@ -4696,6 +4708,12 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/environments/environment.development.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/environments/environment.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/favicon.ico": {
     "stateCleared": "modified",
   },
@@ -4815,9 +4833,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.config.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/app.constants.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.routes.ts": {
@@ -5373,6 +5388,12 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/declarations.d.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/environments/environment.development.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/environments/environment.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/favicon.ico": {

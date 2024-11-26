@@ -25,7 +25,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 import SharedModule from 'app/shared/shared.module';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive'
-import { VERSION } from 'app/app.constants';
 <%_ if (enableTranslation) { _%>
 import { LANGUAGES } from 'app/config/language.constants';
 import ActiveMenuDirective from './active-menu.directive';
@@ -38,6 +37,7 @@ import { EntityNavbarItems } from 'app/entities/entity-navbar-items';
 <% if (microfrontend && applicationTypeGateway) { %>
 import { loadNavbarItems, loadTranslationModule } from 'app/core/microfrontend';
 <%_ } _%>
+import { environment } from 'environments/environment';
 import NavbarItem from './navbar-item.model';
 
 @Component({
@@ -85,6 +85,7 @@ export default class NavbarComponent implements OnInit {
   private readonly router = inject(Router);
 
   constructor() {
+    const { VERSION } = environment;
     if (VERSION) {
       this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
     }
