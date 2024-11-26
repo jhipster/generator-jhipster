@@ -237,9 +237,10 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      async cleanup({ control }) {
+      async cleanup({ application, control }) {
         await control.cleanupFiles({
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
+          '8.7.4': [`${application.clientSrcDir}app/app.constants.ts`],
         });
       },
       cleanupOldFilesTask,
