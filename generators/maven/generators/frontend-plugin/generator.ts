@@ -27,50 +27,15 @@ export default class FrontendPluginGenerator extends BaseApplicationGenerator {
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrapApplication();
       await this.dependsOnJHipster('maven');
+      await this.dependsOnJHipster('jhipster:java:node');
     }
   }
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
       customize({ application, source }) {
-        const {
-          javaDependencies,
-          nodeDependencies,
-          nodeVersion,
-          clientFrameworkAngular,
-          clientFrameworkReact,
-          clientFrameworkVue,
-          clientFrameworkBuiltIn,
-          clientBundlerVite,
-          clientBundlerWebpack,
-          microfrontend,
-          srcMainWebapp,
-        } = application;
+        const { javaDependencies, nodeDependencies, nodeVersion } = application;
 
-        const checksumIncludedFiles = [
-          `${srcMainWebapp}**/*.*`,
-          'target/classes/static/**/*.*',
-          'package-lock.json',
-          'package.json',
-          'tsconfig.json',
-        ];
-        if (clientFrameworkAngular) {
-          checksumIncludedFiles.push('tsconfig.app.json');
-        } else if (clientFrameworkReact) {
-          checksumIncludedFiles.push('.postcss.config.js');
-        } else if (clientFrameworkVue) {
-          checksumIncludedFiles.push('.postcssrc.js', 'tsconfig.app.json');
-          if (microfrontend) {
-            checksumIncludedFiles.push('module-federation.config.cjs');
-          }
-        }
-        if (clientFrameworkBuiltIn) {
-          if (clientBundlerWebpack) {
-            checksumIncludedFiles.push('webpack/*.*');
-          } else if (clientBundlerVite) {
-            checksumIncludedFiles.push('vite.config.mts');
-          }
-        }
         source.addMavenDefinition!({
           properties: [
             { property: 'node.version', value: `v${nodeVersion}` },
@@ -142,10 +107,10 @@ export default class FrontendPluginGenerator extends BaseApplicationGenerator {
                       <fileSets>
                           <fileSet>
                               <directory>\${project.basedir}</directory>
-                              <includes>${checksumIncludedFiles
-                                .map(
+                              <includes>${application.javaNodeBuildPaths
+                                ?.map(
                                   file => `
-                                  <include>${file}</include>`,
+                                  <include>${file.endsWith('/') ? `${file}**/*.*` : file}</include>`,
                                 )
                                 .join('')}
                               </includes>

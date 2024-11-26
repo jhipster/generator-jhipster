@@ -49,8 +49,58 @@ export default class NodeGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      async javaNodeBuildPaths({ application }) {
+        application.javaNodeBuildPaths ??= [];
+        const {
+          clientBundlerVite,
+          clientBundlerWebpack,
+          clientFrameworkAngular,
+          clientFrameworkReact,
+          clientFrameworkVue,
+          clientFrameworkBuiltIn,
+          microfrontend,
+          srcMainWebapp,
+          javaNodeBuildPaths,
+          clientDistDir,
+        } = application;
+
+        javaNodeBuildPaths.push(srcMainWebapp, clientDistDir!, 'package-lock.json', 'package.json', 'tsconfig.json');
+        if (clientFrameworkAngular) {
+          javaNodeBuildPaths.push('angular.json', 'tsconfig.app.json');
+        } else if (clientFrameworkReact) {
+          javaNodeBuildPaths.push('.postcss.config.js');
+        } else if (clientFrameworkVue) {
+          javaNodeBuildPaths.push('.postcssrc.js', 'tsconfig.app.json');
+          if (microfrontend) {
+            javaNodeBuildPaths.push('module-federation.config.cjs');
+          }
+        }
+        if (clientFrameworkBuiltIn) {
+          if (clientBundlerWebpack) {
+            javaNodeBuildPaths.push('webpack/');
+          } else if (clientBundlerVite) {
+            javaNodeBuildPaths.push('vite.config.mts');
+          }
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get postPreparing() {
     return this.asPostPreparingTaskGroup({
+      sortBuildFiles({ application }) {
+        const { javaNodeBuildPaths } = application;
+        if (javaNodeBuildPaths) {
+          const files = [...new Set(javaNodeBuildPaths)];
+          javaNodeBuildPaths.splice(0, javaNodeBuildPaths.length, ...files.sort());
+        }
+      },
       useNpmWrapper({ application }) {
         if (application.useNpmWrapper) {
           this.useNpmWrapperInstallTask();
