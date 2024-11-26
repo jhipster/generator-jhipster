@@ -49,6 +49,54 @@ export default class NodeGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      async javaNodeBuildFiles({ application }) {
+        application.javaNodeBuildFiles ??= [];
+        const {
+          clientFrameworkAngular,
+          clientFrameworkReact,
+          clientFrameworkVue,
+          clientFrameworkBuiltIn,
+          clientBundlerVite,
+          clientBundlerWebpack,
+          microfrontend,
+          srcMainWebapp,
+          javaNodeBuildFiles,
+        } = application;
+
+        javaNodeBuildFiles.push(
+          `${srcMainWebapp}**/*.*`,
+          'target/classes/static/**/*.*',
+          'package-lock.json',
+          'package.json',
+          'tsconfig.json',
+        );
+        if (clientFrameworkAngular) {
+          javaNodeBuildFiles.push('tsconfig.app.json');
+        } else if (clientFrameworkReact) {
+          javaNodeBuildFiles.push('.postcss.config.js');
+        } else if (clientFrameworkVue) {
+          javaNodeBuildFiles.push('.postcssrc.js', 'tsconfig.app.json');
+          if (microfrontend) {
+            javaNodeBuildFiles.push('module-federation.config.cjs');
+          }
+        }
+        if (clientFrameworkBuiltIn) {
+          if (clientBundlerWebpack) {
+            javaNodeBuildFiles.push('webpack/');
+          } else if (clientBundlerVite) {
+            javaNodeBuildFiles.push('vite.config.mts');
+          }
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get postPreparing() {
     return this.asPostPreparingTaskGroup({
       useNpmWrapper({ application }) {

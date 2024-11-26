@@ -37,15 +37,14 @@ task webapp_test(type: NpmTask) {
         .withPropertyName('build.gradle')
         .withPathSensitivity(PathSensitivity.RELATIVE)
   <%_ if (clientFrameworkAngular) { _%>
-    inputs.files("angular.json")
-        .withPropertyName('angular.json')
+    inputs.files(<%= clientBuildFiles.filter(file => !file.endsWith('/')).map(file => `'${file}'`).join(', ') %>)
+        .withPropertyName('angular-build')
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    inputs.files("tsconfig.json", "tsconfig.app.json")
-        .withPropertyName("tsconfig")
+    <%_ for (const file of clientBuildFiles.filter(file => file.endsWith('/'))) { _%>
+    inputs.dir("<%= file %>")
+        .withPropertyName("<%= file %>")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    inputs.dir("<%= CLIENT_WEBPACK_DIR %>")
-        .withPropertyName("<%= CLIENT_WEBPACK_DIR %>")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
+    <%_ } _%>
   <%_ } _%>
     inputs.dir("<%= clientSrcDir %>")
         .withPropertyName("webapp-source-dir")
