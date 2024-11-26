@@ -53,13 +53,13 @@ exports[`generator - maven:frontend-plugin with defaults options should call sou
                           <fileSet>
                               <directory>\${project.basedir}</directory>
                               <includes>
-                                  <include>src/main/webapp/**/*.*</include>
-                                  <include>target/classes/static/**/*.*</include>
                                   <include>package-lock.json</include>
                                   <include>package.json</include>
-                                  <include>tsconfig.json</include>
+                                  <include>src/main/webapp/**/*.*</include>
+                                  <include>target/classes/static/**/*.*</include>
                                   <include>tsconfig.app.json</include>
-                                  <include>webpack/*.*</include>
+                                  <include>tsconfig.json</include>
+                                  <include>webpack/**/*.*</include>
                               </includes>
                               <excludes>
                                   <exclude>**/app/**/service-worker.js</exclude>
@@ -218,6 +218,12 @@ exports[`generator - maven:frontend-plugin with defaults options should call sou
 exports[`generator - maven:frontend-plugin with defaults options should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
     "stateCleared": "modified",
   },
 }

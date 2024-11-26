@@ -37,20 +37,19 @@ task webapp_test(type: NpmTask) {
         .withPropertyName('build.gradle')
         .withPathSensitivity(PathSensitivity.RELATIVE)
   <%_ if (clientFrameworkAngular) { _%>
-    inputs.files("angular.json")
-        .withPropertyName('angular.json')
+    inputs.files(<%- javaNodeBuildPaths.filter(file => !file.endsWith('/')).map(file => `'${file}'`).join(', ') %>)
+        .withPropertyName('angular-build')
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    inputs.files("tsconfig.json", "tsconfig.app.json")
-        .withPropertyName("tsconfig")
+    <%_ for (const file of javaNodeBuildPaths.filter(file => file.endsWith('/'))) { _%>
+    inputs.dir("<%= file %>")
+        .withPropertyName("<%= file %>")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    inputs.dir("<%= CLIENT_WEBPACK_DIR %>")
-        .withPropertyName("<%= CLIENT_WEBPACK_DIR %>")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-  <%_ } _%>
+    <%_ } _%>
+  <%_ } else { _%>
     inputs.dir("<%= clientSrcDir %>")
         .withPropertyName("webapp-source-dir")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-  <%_ if (clientFrameworkReact) { _%>
+    <%_ if (clientFrameworkReact) { _%>
     inputs.files("tsconfig.json")
         .withPropertyName("tsconfig")
         .withPathSensitivity(PathSensitivity.RELATIVE)
@@ -60,8 +59,8 @@ task webapp_test(type: NpmTask) {
     inputs.files(webpackDevFiles)
         .withPropertyName("webpack-dir")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-  <%_ } _%>
-  <%_ if (clientFrameworkVue) { _%>
+    <%_ } _%>
+    <%_ if (clientFrameworkVue) { _%>
 
     inputs.files("tsconfig.json", "tsconfig.app.json")
         .withPropertyName("tsconfig")
@@ -70,24 +69,25 @@ task webapp_test(type: NpmTask) {
     inputs.files(".postcssrc")
         .withPropertyName("postcssrc")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-  <%_ } _%>
-  <%_ if (clientBundlerVite && clientFrameworkBuiltIn) { _%>
+    <%_ } _%>
+    <%_ if (clientBundlerVite && clientFrameworkBuiltIn) { _%>
 
     inputs.files("vite.config.mts")
         .withPropertyName("vite")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-  <%_ } _%>
-  <%_ if (clientFrameworkVue) { _%>
-    <%_ if (clientBundlerWebpack) { _%>
+    <%_ } _%>
+    <%_ if (clientFrameworkVue) { _%>
+      <%_ if (clientBundlerWebpack) { _%>
     def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>")
     webpackDevFiles.exclude("webpack.prod.js")
     inputs.files(webpackDevFiles)
         .withPropertyName("webpack-dir")
     <%_ } _%>
-    <%_ if (microfrontend) { _%>
+      <%_ if (microfrontend) { _%>
     inputs.files("module-federation.config.cjs")
         .withPropertyName("module-federation")
         .withPathSensitivity(PathSensitivity.RELATIVE)
+      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
 
