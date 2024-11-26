@@ -425,9 +425,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/robots.txt": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/swagger-ui/dist/images/throbber.gif": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -979,9 +976,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/robots.txt": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/swagger-ui/dist/images/throbber.gif": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -1459,9 +1453,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/src/robots.txt": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
   "clientRoot/src/swagger-ui/index.html": {
@@ -1976,9 +1967,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/robots.txt": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
   "src/main/webapp/swagger-ui/index.html": {
@@ -2653,9 +2641,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/robots.txt": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/swagger-ui/dist/images/throbber.gif": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -3109,9 +3094,6 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/robots.txt": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
   "src/main/webapp/swagger-ui/index.html": {
@@ -3576,9 +3558,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/robots.txt": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
   "src/main/webapp/swagger-ui/index.html": {
