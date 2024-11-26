@@ -52,8 +52,9 @@ export default class NodeGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       async javaNodeBuildPaths({ application }) {
-        application.javaNodeBuildPaths ??= [];
         const {
+          buildToolMaven,
+          clientBundlerExperimentalEsbuild,
           clientBundlerVite,
           clientBundlerWebpack,
           clientFrameworkAngular,
@@ -66,9 +67,16 @@ export default class NodeGenerator extends BaseApplicationGenerator {
           clientDistDir,
         } = application;
 
-        javaNodeBuildPaths.push(srcMainWebapp, clientDistDir!, 'package-lock.json', 'package.json', 'tsconfig.json');
+        javaNodeBuildPaths.push(srcMainWebapp, 'package-lock.json', 'package.json', 'tsconfig.json');
+        if (buildToolMaven) {
+          // Gradle throws an error if the directory does not exist
+          javaNodeBuildPaths.push(clientDistDir!);
+        }
         if (clientFrameworkAngular) {
           javaNodeBuildPaths.push('angular.json', 'tsconfig.app.json');
+          if (clientBundlerExperimentalEsbuild) {
+            javaNodeBuildPaths.push('build-plugins/');
+          }
         } else if (clientFrameworkReact) {
           javaNodeBuildPaths.push('.postcss.config.js');
         } else if (clientFrameworkVue) {

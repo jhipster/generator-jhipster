@@ -28,7 +28,6 @@ export const files = {
   common: [
     clientRootTemplatesBlock({
       templates: [
-        'angular.json',
         { sourceFile: 'eslint.config.js.jhi.angular', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.angular` },
         'ngsw-config.json',
         'package.json',
@@ -36,11 +35,39 @@ export const files = {
         'tsconfig.app.json',
         'tsconfig.spec.json',
         'jest.conf.js',
+      ],
+    }),
+  ],
+  webpack: [
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.clientBundlerWebpack,
+      templates: [
+        'angular.json',
         'webpack/environment.js',
         'webpack/proxy.conf.js',
         'webpack/webpack.custom.js',
         'webpack/logo-jhipster.png',
       ],
+    }),
+  ],
+  esbuild: [
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.clientBundlerExperimentalEsbuild,
+      templates: [
+        { sourceFile: 'angular.json.esbuild', destinationFile: 'angular.json' },
+        'proxy.conf.json',
+        'build-plugins/define-esbuild.mjs',
+        'build-plugins/swagger-esbuild.mjs',
+        'build-plugins/swagger-middleware.mjs',
+      ],
+    }),
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.clientBundlerExperimentalEsbuild && ctx.enableTranslation,
+      templates: ['build-plugins/i18n-esbuild.mjs'],
+    }),
+    clientSrcTemplatesBlock({
+      condition: ctx => ctx.clientBundlerExperimentalEsbuild && ctx.enableTranslation,
+      templates: ['i18n/index.ts'],
     }),
   ],
   sass: [
@@ -67,7 +94,7 @@ export const files = {
   ],
   microfrontend: [
     clientRootTemplatesBlock({
-      condition: generator => generator.microfrontend,
+      condition: generator => generator.clientBundlerWebpack && generator.microfrontend,
       templates: ['webpack/webpack.microfrontend.js'],
     }),
     {

@@ -1,0 +1,150 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "<%= dasherizedBaseName %>": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "",
+      "sourceRoot": "<%= this.relativeDir(clientRootDir, clientSrcDir).replace(/\/$/, "") %>",
+      "prefix": "<%= jhiPrefixDashed %>",
+      "architect": {
+        "build": {
+          "builder": "@angular-builders/custom-esbuild:application",
+          "options": {
+            "plugins": [
+<%_ if (enableTranslation) { _%>
+              "build-plugins/i18n-esbuild.mjs",
+<%_ } _%>
+              "build-plugins/define-esbuild.mjs",
+              "build-plugins/swagger-esbuild.mjs"
+            ],
+            "outputPath": {
+              "base": "<%= this.relativeDir(clientRootDir, clientDistDir) %>",
+              "browser": "",
+              "server": "node-server",
+              "media": "resources"
+            },
+            "index": "<%= this.relativeDir(clientRootDir, clientSrcDir) %>index.html",
+            "browser": "<%= this.relativeDir(clientRootDir, clientSrcDir) %>main.ts",
+            "polyfills": [
+<%_ if (communicationSpringWebsocket) { _%>
+              "./<%= this.relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill",
+<%_ } _%>
+              "zone.js"
+            ],
+            "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>content",
+              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>favicon.ico",
+              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>manifest.webapp",
+              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>robots.txt"
+            ],
+            "styles": [
+              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>content/scss/vendor.scss",
+              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>content/scss/global.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": <%= Boolean(microfrontend) %>,
+              "extractLicenses": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ]
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "<%= this.relativeDir(clientRootDir, clientSrcDir) %>environments/environment.ts",
+                  "with": "<%= this.relativeDir(clientRootDir, clientSrcDir) %>environments/environment.development.ts"
+                }
+              ]
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-builders/custom-esbuild:dev-server",
+          "options": {
+            "buildTarget": "<%= dasherizedBaseName %>:build:development",
+            "middlewares": [
+              "build-plugins/swagger-middleware.mjs"
+            ],
+            "open": true,
+            "proxyConfig": "proxy.conf.json",
+            "port": <%= devServerPort %>
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "<%= dasherizedBaseName %>:build:production"
+            },
+            "development": {
+              "buildTarget": "<%= dasherizedBaseName %>:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "configPath": "jest.conf.js",
+            "tsConfig": "tsconfig.spec.json"
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "cache": {
+      "enabled": true,
+      "path": "./<%= this.relativeDir(clientRootDir, temporaryDir) %>angular/",
+      "environment": "all"
+    },
+    "packageManager": "<%= clientPackageManager %>"
+  }
+}

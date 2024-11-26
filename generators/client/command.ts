@@ -82,7 +82,7 @@ const command = {
         type: String,
         hide: true,
       },
-      choices: ['webpack', 'vite'],
+      choices: ['webpack', 'vite', 'experimentalEsbuild'],
       scope: 'storage',
     },
     microfrontend: {

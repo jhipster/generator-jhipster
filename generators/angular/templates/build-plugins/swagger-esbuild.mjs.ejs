@@ -1,0 +1,36 @@
+// @ts-check
+import { copyFile, mkdir } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { globby } from 'globby';
+
+const lookup = async (pattern, sourcesDir, destDir) => {
+  const files = await globby(pattern, { cwd: sourcesDir });
+  return Object.fromEntries(files.map(file => [join(destDir, file), join(sourcesDir, file)]));
+};
+
+export const getSwaggerUiFileMap = async () => {
+  const destDir = 'swagger-ui';
+  const { getAbsoluteFSPath } = await import('swagger-ui-dist');
+  return {
+    [`${destDir}/axios.min.js`]: join(dirname(fileURLToPath(import.meta.resolve('axios/package.json'))), 'dist/axios.min.js'),
+    ...(await lookup('*.{js,css,png}', getAbsoluteFSPath(), destDir)),
+    ...(await lookup('**/*.*', join(fileURLToPath(new URL('.', import.meta.url)), '../src/main/webapp/swagger-ui'), destDir)),
+  };
+};
+
+/** @type {import('esbuild').Plugin} */
+export default {
+  name: 'copy:files',
+  async setup(build) {
+    build.onEnd(async () => {
+      const destDir = join(fileURLToPath(new URL('..', import.meta.url)), 'target/classes/static');
+      const swaggerFiles = await getSwaggerUiFileMap();
+      for (const [dest, src] of Object.entries(swaggerFiles)) {
+        const destFile = join(destDir, dest);
+        await mkdir(dirname(destFile), { recursive: true });
+        await copyFile(src, destFile);
+      }
+    });
+  },
+};

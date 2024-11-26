@@ -21,6 +21,7 @@
   "devDependencies": {
     "@angular-architects/module-federation": "18.0.6",
     "@angular-architects/module-federation-runtime": "18.0.6",
+    "@angular-builders/custom-esbuild": "18.0.0",
     "@angular-builders/custom-webpack": "18.0.0",
     "@angular-builders/jest": "18.0.0",
     "@angular/cli": "18.2.12",
@@ -33,6 +34,7 @@
     "browser-sync-webpack-plugin": "2.3.0",
     "buffer": "6.0.3",
     "copy-webpack-plugin": "12.0.2",
+    "deepmerge": "4.3.1",
     "eslint": "9.15.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.2.1",
