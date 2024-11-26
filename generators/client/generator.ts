@@ -193,6 +193,11 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get writing() {
     return this.asWritingTaskGroup({
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
+          '8.7.4': [`${application.clientSrcDir}swagger-ui/dist/images/throbber.gif`],
+        });
+      },
       webappFakeDataSeed({ application: { clientFramework } }) {
         this.resetEntitiesFakeData(clientFramework);
       },
