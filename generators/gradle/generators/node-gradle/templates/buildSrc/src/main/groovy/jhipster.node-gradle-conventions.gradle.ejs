@@ -30,9 +30,6 @@ if (project.hasProperty("nodeInstall")) {
 <%_ if (!skipClient) { _%>
 task webapp_test(type: NpmTask) {
     inputs.property('appVersion', project.version)
-    inputs.files("package-lock.json")
-        .withPropertyName('package-lock')
-        .withPathSensitivity(PathSensitivity.RELATIVE)
     inputs.files("build.gradle")
         .withPropertyName('build.gradle')
         .withPathSensitivity(PathSensitivity.RELATIVE)

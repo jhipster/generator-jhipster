@@ -96,6 +96,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         applicationDefaults({
           javaVersion: this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION,
           packageInfoJavadocs: [],
+          javaNodeBuildPaths: [],
           javaProperties: {},
           javaManagedProperties: {},
           javaDependencies: ({ javaDependencies }) => ({
