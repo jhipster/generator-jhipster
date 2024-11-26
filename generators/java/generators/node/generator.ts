@@ -68,7 +68,7 @@ export default class NodeGenerator extends BaseApplicationGenerator {
 
         javaNodeBuildPaths.push(srcMainWebapp, clientDistDir!, 'package-lock.json', 'package.json', 'tsconfig.json');
         if (clientFrameworkAngular) {
-          javaNodeBuildPaths.push('tsconfig.app.json');
+          javaNodeBuildPaths.push('angular.json', 'tsconfig.app.json');
         } else if (clientFrameworkReact) {
           javaNodeBuildPaths.push('.postcss.config.js');
         } else if (clientFrameworkVue) {

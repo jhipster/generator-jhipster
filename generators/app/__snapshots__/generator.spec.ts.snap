@@ -577,6 +577,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   },
   "javaManagedProperties": {},
   "javaNodeBuildPaths": [
+    "angular.json",
     "package-lock.json",
     "package.json",
     "src/main/webapp/",
@@ -1237,6 +1238,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   },
   "javaManagedProperties": {},
   "javaNodeBuildPaths": [
+    "angular.json",
     "package-lock.json",
     "package.json",
     "src/main/webapp/",

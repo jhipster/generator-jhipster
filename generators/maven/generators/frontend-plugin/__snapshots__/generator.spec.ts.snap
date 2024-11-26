@@ -53,6 +53,7 @@ exports[`generator - maven:frontend-plugin with defaults options should call sou
                           <fileSet>
                               <directory>\${project.basedir}</directory>
                               <includes>
+                                  <include>angular.json</include>
                                   <include>package-lock.json</include>
                                   <include>package.json</include>
                                   <include>src/main/webapp/**/*.*</include>
