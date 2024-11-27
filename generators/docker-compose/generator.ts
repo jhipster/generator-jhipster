@@ -196,6 +196,9 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
             if (appConfig.devServerPort !== undefined) {
               deployment.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
             }
+            if (appConfig.devServerPortProxy !== undefined) {
+              deployment.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPortProxy}/*", `;
+            }
             // Split ports by ":" and take last 2 elements to skip the hostname/IP if present
             const ports = yamlConfig.ports[0].split(':').slice(-2);
             ports[0] = appConfig.composePort;

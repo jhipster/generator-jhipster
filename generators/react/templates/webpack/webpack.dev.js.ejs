@@ -115,7 +115,7 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
       {
         https: options.tls,
         host: 'localhost',
-        port: 9000,
+        port: <%- devServerPortProxy %>,
         proxy: {
           target: `http${options.tls ? 's' : ''}://localhost:${options.watch ? '<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>' : '<%= devServerPort %>'}`,
           ws: true,

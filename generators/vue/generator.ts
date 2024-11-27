@@ -52,6 +52,23 @@ export default class VueGenerator extends BaseApplicationGenerator {
     }
   }
 
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      configureDevServerPort() {
+        if (this.jhipsterConfig.devServerPort === undefined) return;
+        if (this.isJhipsterVersionLessThan('8.7.4')) {
+          // Migrate old devServerPort with new one
+          const { applicationIndex = 0 } = this.jhipsterConfigWithDefaults;
+          this.jhipsterConfig.devServerPort = 9000 + applicationIndex;
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
   get loading() {
     return this.asLoadingTaskGroup({
       loadPackageJson({ application }) {

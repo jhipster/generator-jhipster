@@ -1038,14 +1038,12 @@ data:
             <%- keycloakRedirectUris %>
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
-            "http://localhost:9000/*",
             "dev.localhost.ionic:*"
           ],
           "webOrigins": [
             <%- keycloakRedirectUris.replace(/\/\*/g, "") %>
             "http://localhost:8100",
-            "http://127.0.0.1:8761",
-            "http://localhost:9000"
+            "http://127.0.0.1:8761"
           ],
           "notBefore": 0,
           "bearerOnly": false,
