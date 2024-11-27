@@ -302,7 +302,7 @@ jhipster:
   <%_ if (microfrontend) { _%>
     # Ports <%= devServerPort + 1 %>-<%= devServerPort + 9 %> are allowed for microfrontend development
   <%_ } _%>
-    allowed-origins: "http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000<%_ if (!skipClient) { _%>,http://localhost:<%= devServerPort %>,https://localhost:<%= devServerPort %><%_ if (microfrontend) { for (let port = 1; port < 10; port++) { _%>,http://localhost:<%= devServerPort + port %>,https://localhost:<%= devServerPort + port %><%_ } _%><%_ } } _%>"
+    allowed-origins: "http://localhost:8100,https://localhost:8100<%_ if (devServerPortProxy) { _%>,http://localhost:<%= devServerPortProxy %>,https://localhost:<%= devServerPortProxy %><%_ } _%><%_ if (!skipClient) { _%>,http://localhost:<%= devServerPort %>,https://localhost:<%= devServerPort %><%_ if (microfrontend) { for (let port = 1; port < 10; port++) { _%>,http://localhost:<%= devServerPort + port %>,https://localhost:<%= devServerPort + port %><%_ } _%><%_ } } _%>"
     # Enable CORS when running in GitHub Codespaces
     allowed-origin-patterns: 'https://*.githubpreview.dev'
     allowed-methods: "*"
