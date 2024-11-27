@@ -294,6 +294,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
           source.mergeClientPackageJson!({
             devDependencies: {
               '@angular-builders/custom-esbuild': null,
+              globby: null,
               ...(enableTranslation ? { 'folder-hash': null, deepmerge: null } : {}),
             },
           });
