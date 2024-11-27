@@ -5,6 +5,7 @@
     "baseName": "sampleWebfluxPsql",
     "buildTool": "maven",
     "cacheProvider": "no",
+    "clientBundler": "experimentalEsbuild",
     "clientFramework": "angular",
     "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,

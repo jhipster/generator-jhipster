@@ -350,7 +350,7 @@ exports[`generator - github-build-matrix with devserver should match matrix valu
 "{
   "include": [
     {
-      "job-name": "ng-default",
+      "job-name": "ng-default-esbuild",
       "sample": "samples/ng-default",
       "os": "ubuntu-latest",
       "node-version": "NODE-VERSION",
@@ -359,6 +359,17 @@ exports[`generator - github-build-matrix with devserver should match matrix valu
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "args": "--sample-yorc-folder --entities-sample sqllight"
+    },
+    {
+      "job-name": "ng-default-webpack",
+      "sample": "samples/ng-default",
+      "os": "ubuntu-latest",
+      "node-version": "NODE-VERSION",
+      "java-version": "JAVA-VERSION",
+      "npm-version": "NPM-VERSION",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "args": "--sample-yorc-folder --entities-sample sqllight --client-bundler webpack"
     },
     {
       "job-name": "react-default",

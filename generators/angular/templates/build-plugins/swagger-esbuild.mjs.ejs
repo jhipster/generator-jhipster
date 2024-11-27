@@ -15,7 +15,7 @@ export const getSwaggerUiFileMap = async () => {
   return {
     [`${destDir}/axios.min.js`]: join(dirname(fileURLToPath(import.meta.resolve('axios/package.json'))), 'dist/axios.min.js'),
     ...(await lookup('*.{js,css,png}', getAbsoluteFSPath(), destDir)),
-    ...(await lookup('**/*.*', join(fileURLToPath(new URL('.', import.meta.url)), '../src/main/webapp/swagger-ui'), destDir)),
+    ...(await lookup('**/*.*', join(fileURLToPath(new URL('.', import.meta.url)), '../<%- clientSrcDir %>swagger-ui'), destDir)),
   };
 };
 

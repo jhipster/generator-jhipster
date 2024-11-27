@@ -6,6 +6,7 @@
     "blueprints": [],
     "buildTool": "maven",
     "cacheProvider": "ehcache",
+    "clientBundler": "experimentalEsbuild",
     "clientFramework": "angular",
     "clientPackageManager": "npm",
     "clientTheme": "none",

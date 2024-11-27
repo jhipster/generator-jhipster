@@ -5,6 +5,7 @@
     "baseName": "reactiveGateway",
     "buildTool": "maven",
     "cacheProvider": "no",
+    "clientBundler": "experimentalEsbuild",
     "creationTimestamp": 1596513172471,
     "databaseType": "mongodb",
     "devDatabaseType": "mongodb",

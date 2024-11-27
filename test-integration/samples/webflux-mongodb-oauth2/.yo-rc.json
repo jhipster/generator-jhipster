@@ -6,6 +6,7 @@
     "blueprints": [],
     "buildTool": "gradle",
     "cacheProvider": "no",
+    "clientBundler": "experimentalEsbuild",
     "clientFramework": "angular",
     "clientPackageManager": "npm",
     "clientTheme": "none",

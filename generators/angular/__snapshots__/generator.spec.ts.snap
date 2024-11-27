@@ -699,6 +699,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
         "browser-sync-webpack-plugin": null,
@@ -1639,6 +1640,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {
+        "@ngx-translate/http-loader": null,
+      },
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
         "browser-sync-webpack-plugin": null,
@@ -2342,6 +2346,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
         "browser-sync-webpack-plugin": null,
@@ -3049,6 +3054,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {
+        "@ngx-translate/http-loader": null,
+      },
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
         "browser-sync-webpack-plugin": null,
@@ -4159,6 +4167,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {
+        "@ngx-translate/http-loader": null,
+      },
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
         "browser-sync-webpack-plugin": null,
@@ -4848,6 +4859,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
         "browser-sync-webpack-plugin": null,
@@ -5544,6 +5556,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
         "browser-sync-webpack-plugin": null,

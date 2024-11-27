@@ -146,18 +146,20 @@ export default class AngularGenerator extends BaseApplicationGenerator {
           this.editFile(iconsPath, { ignoreNonExisting }, addIconImport(args));
         };
 
-        source.addWebpackConfig = args => {
-          const webpackPath = `${application.clientRootDir}webpack/webpack.custom.js`;
-          const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
-          this.editFile(
-            webpackPath,
-            { ignoreNonExisting },
-            createNeedleCallback({
-              needle: 'jhipster-needle-add-webpack-config',
-              contentToAdd: `${args.config},`,
-            }),
-          );
-        };
+        if (application.clientBundlerWebpack) {
+          source.addWebpackConfig = args => {
+            const webpackPath = `${application.clientRootDir}webpack/webpack.custom.js`;
+            const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
+            this.editFile(
+              webpackPath,
+              { ignoreNonExisting },
+              createNeedleCallback({
+                needle: 'jhipster-needle-add-webpack-config',
+                contentToAdd: `${args.config},`,
+              }),
+            );
+          };
+        }
 
         if (application.clientRootDir) {
           // Overrides only works if added in root package.json
