@@ -42,6 +42,7 @@
             Build properties
             The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version}
         -->
+        <spring.profiles.active>dev</spring.profiles.active>
         <maven.version>3.2.5</maven.version>
         <resource.delimiter>@</resource.delimiter>
         <java.version><%= JAVA_VERSION %></java.version>
@@ -611,7 +612,7 @@
             <properties>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev${profile.tls}<%_ if (databaseMigrationLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
-                <profile.test>testdev</profile.test>
+                <profile.test>test,testdev</profile.test>
             </properties>
             <dependencies>
                 <dependency>
@@ -626,7 +627,7 @@
             <properties>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}<%_ if (databaseMigrationLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
-                <profile.test>testprod</profile.test>
+                <profile.test>test,testprod</profile.test>
             </properties>
             <build>
                 <plugins>

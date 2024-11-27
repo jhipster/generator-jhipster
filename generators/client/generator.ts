@@ -83,19 +83,10 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
 
       configureDevServerPort() {
-        if (this.jhipsterConfig.devServerPort !== undefined) return;
+        if (this.jhipsterConfig.devServerPort !== undefined || this.jhipsterConfig.applicationIndex === undefined) return;
 
-        const { clientFramework, applicationIndex } = this.jhipsterConfigWithDefaults;
-        const devServerBasePort = clientFramework === ANGULAR ? 4200 : 9060;
-        let devServerPort;
-
-        if (applicationIndex !== undefined) {
-          devServerPort = devServerBasePort + applicationIndex;
-        } else if (!devServerPort) {
-          devServerPort = devServerBasePort;
-        }
-
-        this.jhipsterConfig.devServerPort = devServerPort;
+        const { applicationIndex, devServerPort } = this.jhipsterConfigWithDefaults;
+        this.jhipsterConfig.devServerPort = devServerPort + applicationIndex;
       },
     });
   }
@@ -193,6 +184,11 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get writing() {
     return this.asWritingTaskGroup({
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
+          '8.7.4': [`${application.clientSrcDir}swagger-ui/dist/images/throbber.gif`],
+        });
+      },
       webappFakeDataSeed({ application: { clientFramework } }) {
         this.resetEntitiesFakeData(clientFramework);
       },

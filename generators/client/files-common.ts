@@ -71,7 +71,7 @@ export const files = {
   swagger: [
     {
       ...clientSrcTemplatesBlock(),
-      templates: ['swagger-ui/index.html', 'swagger-ui/dist/images/throbber.gif'],
+      templates: ['swagger-ui/index.html'],
     },
   ],
 };

@@ -94,7 +94,13 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "<%= this.relativeDir(clientRootDir, clientSrcDir) %>environments/environment.ts",
+                  "with": "<%= this.relativeDir(clientRootDir, clientSrcDir) %>environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"

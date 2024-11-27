@@ -16,27 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React from 'react';
-import { Route } from 'react-router';
-
-import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
-
-import Settings from './settings/settings';
-import Password from './password/password';
-<%_ if (authenticationTypeSession) { _%>
-import Sessions from './sessions/sessions';
-<%_ } _%>
-
-const AccountRoutes = () => (
-  <div>
-    <ErrorBoundaryRoutes>
-      <Route path="settings" element={<Settings />} />
-      <Route path="password" element={<Password />} />
-<%_ if (authenticationTypeSession) { _%>
-      <Route path="sessions" element={<Sessions />} />
-<%_ } _%>
-    </ErrorBoundaryRoutes>
-  </div>
-);
-
-export default AccountRoutes;
+export const environment = {
+  VERSION: __VERSION__,
+  DEBUG_INFO_ENABLED: false,
+};

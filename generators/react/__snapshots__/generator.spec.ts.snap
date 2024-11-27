@@ -386,9 +386,6 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/robots.txt": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/swagger-ui/dist/images/throbber.gif": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -843,9 +840,6 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/robots.txt": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/swagger-ui/dist/images/throbber.gif": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -1268,9 +1262,6 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
     "stateCleared": "modified",
   },
   "clientRoot/src/robots.txt": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
   "clientRoot/src/swagger-ui/index.html": {
@@ -1731,9 +1722,6 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     "stateCleared": "modified",
   },
   "src/main/webapp/robots.txt": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
   "src/main/webapp/swagger-ui/index.html": {
@@ -2265,9 +2253,6 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/robots.txt": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/swagger-ui/dist/images/throbber.gif": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -2689,9 +2674,6 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "src/main/webapp/robots.txt": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/swagger-ui/dist/images/throbber.gif": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
@@ -3105,9 +3087,6 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "src/main/webapp/robots.txt": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
   "src/main/webapp/swagger-ui/index.html": {

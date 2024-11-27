@@ -81,7 +81,7 @@ let config = defineConfig({
   },
   server: {
     host: true,
-    port: 9000,
+    port: <%- devServerPort %>,
     proxy: Object.fromEntries(
       [
         '/api',
