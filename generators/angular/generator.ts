@@ -132,9 +132,11 @@ export default class AngularGenerator extends BaseApplicationGenerator {
               }),
               createNeedleCallback({
                 needle: 'i18n-language-angular-loader',
-                contentToAdd: languagesDefinition.map(
-                  lang => `'${lang.languageTag}': async (): Promise<void> => import('@angular/common/locales/${lang.languageTag}'),`,
-                ),
+                contentToAdd: languagesDefinition
+                  .filter(lang => lang.angularLocale)
+                  .map(
+                    lang => `'${lang.languageTag}': async (): Promise<void> => import('@angular/common/locales/${lang.angularLocale}'),`,
+                  ),
               }),
             );
           }
