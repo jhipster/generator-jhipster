@@ -55,6 +55,7 @@ export const files = {
       condition: ctx => ctx.clientBundlerExperimentalEsbuild,
       templates: [
         { sourceFile: 'angular.json.esbuild', destinationFile: 'angular.json' },
+        'postcss.config.json',
         'proxy.conf.json',
         'build-plugins/define-esbuild.mjs',
         'build-plugins/swagger-esbuild.mjs',
