@@ -22,3 +22,11 @@
 export type PartialAngularApplication = {
   angularLocaleId: string;
 };
+
+/**
+ * @deprecated Will be deprecated and merged into types.d/AngularEntity
+ */
+export type PartialAngularEntity = {
+  entityAngularAuthorities?: string;
+  entityAngularReadAuthorities?: string;
+};

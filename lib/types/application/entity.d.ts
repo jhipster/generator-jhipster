@@ -24,6 +24,7 @@ import type { Field as BaseField } from '../base/field.js';
 import type { Relationship as BaseRelationship } from '../base/relationship.js';
 import type { FieldType } from '../../application/field-types.ts';
 import type { FakerWithRandexp } from '../../../generators/base/support/faker.ts';
+import type { PartialAngularEntity } from '../../../generators/angular/types-partial.js';
 import type { Field } from './field.js';
 import type { Relationship } from './relationship.js';
 
@@ -45,7 +46,8 @@ type ClientSample = Record<string, string | number | boolean | null>;
 
 export interface Entity<F extends BaseField = Field, R extends BaseRelationship = never>
   extends Omit<Required<BaseEntity<F>>, 'relationships'>,
-    ServerEntity {
+    ServerEntity,
+    PartialAngularEntity {
   changelogDateForRecent: any;
   /** @experimental */
   auditableEntity?: boolean;
