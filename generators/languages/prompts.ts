@@ -54,6 +54,7 @@ export async function askForLanguages(this: LanguagesGenerator, { control }) {
   const currentLanguages = this.jhipsterConfig.languages ?? [];
   const answers = await this.prompt([
     {
+      when: this.jhipsterConfigWithDefaults.enableTranslation,
       type: 'checkbox',
       name: 'languages',
       message: 'Please choose additional languages to install',
@@ -67,9 +68,11 @@ export async function askForLanguages(this: LanguagesGenerator, { control }) {
       default: () => this.jhipsterConfigWithDefaults.languages,
     },
   ]);
-  if (control.existingProject) {
-    this.languagesToApply.push(...answers.languages.filter(newLang => !currentLanguages.includes(newLang)));
-  } else {
-    this.languagesToApply.push(...answers.languages);
+  if (answers.languages) {
+    if (control.existingProject) {
+      this.languagesToApply.push(...answers.languages.filter(newLang => !currentLanguages.includes(newLang)));
+    } else {
+      this.languagesToApply.push(...answers.languages);
+    }
   }
 }
