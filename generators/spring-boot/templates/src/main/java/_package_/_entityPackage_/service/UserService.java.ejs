@@ -576,7 +576,7 @@ public class UserService {
             .map(<%= user.adminUserDto %>::new);
     }
 
-    <%_ if (databaseTypeCouchbase) { _%>
+    <%_ if (databaseTypeCouchbase && cacheProviderAny) { _%>
     @CacheEvict(cacheNames =  UserRepository.USERS_BY_LOGIN_CACHE)
     <%_ } _%>
     <%_ if (reactive) { _%>
