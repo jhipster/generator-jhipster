@@ -54,6 +54,9 @@ import org.slf4j.LoggerFactory;
 <%_ } _%>
 <%_ if (cacheProviderAny) { _%>
 import org.springframework.cache.CacheManager;
+<%_ if (databaseTypeCouchbase) { _%>
+import org.springframework.cache.annotation.CacheEvict;
+<%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
   <%_ if (!reactive) { _%>
@@ -573,6 +576,9 @@ public class UserService {
             .map(<%= user.adminUserDto %>::new);
     }
 
+    <%_ if (databaseTypeCouchbase) { _%>
+    @CacheEvict(cacheNames =  UserRepository.USERS_BY_LOGIN_CACHE)
+    <%_ } _%>
     <%_ if (reactive) { _%>
       <%_ if (databaseTypeSql) { _%>
     @Transactional
