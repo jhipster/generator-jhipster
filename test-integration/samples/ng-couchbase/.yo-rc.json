@@ -4,7 +4,7 @@
     "authenticationType": "jwt",
     "baseName": "sampleCouchbaseNoCache",
     "buildTool": "maven",
-    "cacheProvider": "no",
+    "cacheProvider": "ehcache",
     "clientFramework": "angular",
     "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,
