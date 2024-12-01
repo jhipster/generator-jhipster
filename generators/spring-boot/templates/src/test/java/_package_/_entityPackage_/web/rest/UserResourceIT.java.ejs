@@ -295,7 +295,7 @@ class UserResourceIT {
         cacheManager.getCacheNames().stream()
             .map(cacheName -> this.cacheManager.getCache(cacheName))
             .filter(Objects::nonNull)
-            .forEach(Cache::clear);
+            .forEach(Cache::invalidate);
 <%_ } _%>
     }
 <%_ if (!authenticationTypeOauth2) { _%>
