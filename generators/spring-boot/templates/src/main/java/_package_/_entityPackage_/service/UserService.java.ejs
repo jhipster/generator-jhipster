@@ -577,7 +577,7 @@ public class UserService {
     }
 
     <%_ if (databaseTypeCouchbase && cacheProviderAny) { _%>
-    @CacheEvict(cacheNames =  UserRepository.USERS_BY_LOGIN_CACHE)
+    @CacheEvict(cacheNames =  UserRepository.USERS_BY_LOGIN_CACHE, key = "#login")
     <%_ } _%>
     <%_ if (reactive) { _%>
       <%_ if (databaseTypeSql) { _%>
