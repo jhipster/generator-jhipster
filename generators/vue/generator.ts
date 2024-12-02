@@ -100,6 +100,19 @@ export default class VueGenerator extends BaseApplicationGenerator {
           webappEnumerationsDir: app => `${app.clientWebappDir}shared/model/enumerations/`,
         });
       },
+      async javaNodeBuildPaths({ application }) {
+        const { clientBundlerVite, clientBundlerWebpack, microfrontend, javaNodeBuildPaths } = application;
+
+        javaNodeBuildPaths?.push('.postcssrc.js', 'tsconfig.json', 'tsconfig.app.json');
+        if (microfrontend) {
+          javaNodeBuildPaths?.push('module-federation.config.cjs');
+        }
+        if (clientBundlerWebpack) {
+          javaNodeBuildPaths?.push('webpack/');
+        } else if (clientBundlerVite) {
+          javaNodeBuildPaths?.push('vite.config.mts');
+        }
+      },
       prepareForTemplates({ application, source }) {
         application.addPrettierExtensions?.(['html', 'vue', 'css', 'scss']);
 
