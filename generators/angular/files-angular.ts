@@ -57,9 +57,7 @@ export const files = {
         { sourceFile: 'angular.json.esbuild', destinationFile: 'angular.json' },
         'postcss.config.json',
         'proxy.conf.json',
-        'build-plugins/define-esbuild.mjs',
-        'build-plugins/swagger-esbuild.mjs',
-        'build-plugins/swagger-middleware.mjs',
+        'build-plugins/define-esbuild.mjs'
       ],
     }),
     clientRootTemplatesBlock({

@@ -4,7 +4,6 @@ export default {
   setup(build) {
     build.initialOptions.define ??= {};
     Object.assign(build.initialOptions.define, {
-      SERVER_API_URL: JSON.stringify(''),
       __VERSION__: JSON.stringify(process.env.APP_VERSION ?? 'unknown'),
     });
   },

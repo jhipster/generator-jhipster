@@ -42,8 +42,7 @@
 <%_ if (enableTranslation) { _%>
               "build-plugins/i18n-esbuild.mjs",
 <%_ } _%>
-              "build-plugins/define-esbuild.mjs",
-              "build-plugins/swagger-esbuild.mjs"
+              "build-plugins/define-esbuild.mjs"
             ],
             "outputPath": {
               "base": "<%= this.relativeDir(clientRootDir, clientDistDir) %>",
@@ -65,13 +64,27 @@
               "<%= this.relativeDir(clientRootDir, clientSrcDir) %>content",
               "<%= this.relativeDir(clientRootDir, clientSrcDir) %>favicon.ico",
               "<%= this.relativeDir(clientRootDir, clientSrcDir) %>manifest.webapp",
-              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>robots.txt"
+              "<%= this.relativeDir(clientRootDir, clientSrcDir) %>robots.txt",
+              "src/main/webapp/swagger-ui",
+              {
+                "glob": "axios.min.js",
+                "input": "node_modules/axios/dist/",
+                "output": "swagger-ui/"
+              },
+              {
+                "glob": "{*.{png,css},swagger-ui-{bundle,standalone-preset}.js}",
+                "input": "node_modules/swagger-ui-dist/",
+                "output": "swagger-ui/"
+              }
             ],
             "styles": [
               "<%= this.relativeDir(clientRootDir, clientSrcDir) %>content/scss/vendor.scss",
               "<%= this.relativeDir(clientRootDir, clientSrcDir) %>content/scss/global.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "define": {
+              "SERVER_API_URL": "''"
+            }
           },
           "configurations": {
             "production": {
@@ -112,9 +125,6 @@
           "builder": "@angular-builders/custom-esbuild:dev-server",
           "options": {
             "buildTarget": "<%= dasherizedBaseName %>:build:development",
-            "middlewares": [
-              "build-plugins/swagger-middleware.mjs"
-            ],
             "open": true,
             "proxyConfig": "proxy.conf.json",
             "port": <%= devServerPort %>
