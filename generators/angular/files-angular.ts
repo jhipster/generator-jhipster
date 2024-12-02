@@ -55,14 +55,17 @@ export const files = {
       condition: ctx => ctx.clientBundlerExperimentalEsbuild,
       templates: [
         { sourceFile: 'angular.json.esbuild', destinationFile: 'angular.json' },
-        'postcss.config.json',
         'proxy.conf.json',
-        'build-plugins/define-esbuild.mjs'
+        'build-plugins/define-esbuild.mjs',
       ],
     }),
     clientRootTemplatesBlock({
       condition: ctx => ctx.clientBundlerExperimentalEsbuild && ctx.enableTranslation,
       templates: ['build-plugins/i18n-esbuild.mjs'],
+    }),
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.clientBundlerExperimentalEsbuild && ctx.enableTranslation && ctx.enableI18nRTL,
+      templates: ['postcss.config.json'],
     }),
     clientSrcTemplatesBlock({
       condition: ctx => ctx.clientBundlerExperimentalEsbuild && ctx.enableTranslation,
