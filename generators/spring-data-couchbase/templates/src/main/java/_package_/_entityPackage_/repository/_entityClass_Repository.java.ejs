@@ -69,7 +69,7 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
             %> ", OBJECT_ADD(`<%= relationship.relationshipFieldName %>`, 'id', meta(`<%= relationship.relationshipFieldName %>`).id) AS `<%= relationship.relationshipFieldName %>`" + <%
           }
       } %>
-        " FROM #{#n1ql.bucket} b";
+        " FROM #{#n1ql.bucket}.#{#n1ql.scope}.#{#n1ql.collection} b";
 
     String JOIN = <%
         notEmbeddedRelationships.forEach(function (relationship, index) {
