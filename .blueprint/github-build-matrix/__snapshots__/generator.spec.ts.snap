@@ -37,8 +37,10 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "name": "ng-default-additional",
       "entity": "none",
       "app-sample": "ng-default",
-      "extra-args": "--client-bundler experimentalEsbuild",
       "jdl-entity": "*",
+      "generatorOptions": {
+        "clientBundler": "experimentalEsbuild"
+      },
       "workspaces": "false",
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
