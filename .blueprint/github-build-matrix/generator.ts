@@ -99,7 +99,7 @@ export default class extends BaseGenerator {
                     'skip-frontend-tests': `${!(enableFrontendTests || enableSonar)}`,
                     'gradle-cache': generatorOptions?.workspaces || jobName.includes('gradle') ? true : undefined,
                     ...sample,
-                    sample: jobName,
+                    sample: sample.name ?? jobName,
                     workspaces,
                     'build-jhipster-bom': BUILD_JHIPSTER_BOM,
                     'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,

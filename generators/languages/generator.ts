@@ -324,7 +324,11 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       write({ application, control, source }) {
         if (this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)) return;
 
-        const { enableTranslation, skipClient } = application;
+        const { enableTranslation, skipClient, languagesDefinition } = application;
+        if (languagesDefinition && languagesDefinition.length > 0) {
+          source.addLanguagesInFrontend?.({ languagesDefinition });
+        }
+
         if (enableTranslation && !skipClient) {
           if (application.clientFrameworkAngular) {
             updateLanguagesInAngularTask.call(this, { application, control });

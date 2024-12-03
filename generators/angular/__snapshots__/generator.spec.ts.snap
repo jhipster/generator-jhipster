@@ -697,6 +697,24 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
       "source": "TaskParameter[source]",
     },
   ],
+  "mergeClientPackageJson": [
+    {
+      "dependencies": {},
+      "devDependencies": {
+        "@angular-builders/custom-webpack": null,
+        "browser-sync-webpack-plugin": null,
+        "copy-webpack-plugin": null,
+        "eslint-webpack-plugin": null,
+        "webpack-bundle-analyzer": null,
+        "webpack-merge": null,
+        "webpack-notifier": null,
+      },
+      "overrides": {
+        "browser-sync": "BROWSER_SYNC_VERSION",
+        "webpack": "WEBPACK_VERSION",
+      },
+    },
+  ],
 }
 `;
 
@@ -1620,6 +1638,28 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
       "source": "TaskParameter[source]",
     },
   ],
+  "mergeClientPackageJson": [
+    {
+      "dependencies": {
+        "@ngx-translate/http-loader": null,
+      },
+      "devDependencies": {
+        "@angular-builders/custom-webpack": null,
+        "browser-sync-webpack-plugin": null,
+        "copy-webpack-plugin": null,
+        "eslint-webpack-plugin": null,
+        "folder-hash": null,
+        "merge-jsons-webpack-plugin": null,
+        "webpack-bundle-analyzer": null,
+        "webpack-merge": null,
+        "webpack-notifier": null,
+      },
+      "overrides": {
+        "browser-sync": "BROWSER_SYNC_VERSION",
+        "webpack": "WEBPACK_VERSION",
+      },
+    },
+  ],
 }
 `;
 
@@ -2302,6 +2342,24 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "addWebpackConfig": [
     {
       "config": "targetOptions.target === 'serve' ? {} : require('./webpack.microfrontend')(config, options, targetOptions)",
+    },
+  ],
+  "mergeClientPackageJson": [
+    {
+      "dependencies": {},
+      "devDependencies": {
+        "@angular-builders/custom-webpack": null,
+        "browser-sync-webpack-plugin": null,
+        "copy-webpack-plugin": null,
+        "eslint-webpack-plugin": null,
+        "webpack-bundle-analyzer": null,
+        "webpack-merge": null,
+        "webpack-notifier": null,
+      },
+      "overrides": {
+        "browser-sync": "BROWSER_SYNC_VERSION",
+        "webpack": "WEBPACK_VERSION",
+      },
     },
   ],
 }
@@ -2992,6 +3050,28 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "addWebpackConfig": [
     {
       "config": "targetOptions.target === 'serve' ? {} : require('./webpack.microfrontend')(config, options, targetOptions)",
+    },
+  ],
+  "mergeClientPackageJson": [
+    {
+      "dependencies": {
+        "@ngx-translate/http-loader": null,
+      },
+      "devDependencies": {
+        "@angular-builders/custom-webpack": null,
+        "browser-sync-webpack-plugin": null,
+        "copy-webpack-plugin": null,
+        "eslint-webpack-plugin": null,
+        "folder-hash": null,
+        "merge-jsons-webpack-plugin": null,
+        "webpack-bundle-analyzer": null,
+        "webpack-merge": null,
+        "webpack-notifier": null,
+      },
+      "overrides": {
+        "browser-sync": "BROWSER_SYNC_VERSION",
+        "webpack": "WEBPACK_VERSION",
+      },
     },
   ],
 }
@@ -4085,6 +4165,28 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       "source": "TaskParameter[source]",
     },
   ],
+  "mergeClientPackageJson": [
+    {
+      "dependencies": {
+        "@ngx-translate/http-loader": null,
+      },
+      "devDependencies": {
+        "@angular-builders/custom-webpack": null,
+        "browser-sync-webpack-plugin": null,
+        "copy-webpack-plugin": null,
+        "eslint-webpack-plugin": null,
+        "folder-hash": null,
+        "merge-jsons-webpack-plugin": null,
+        "webpack-bundle-analyzer": null,
+        "webpack-merge": null,
+        "webpack-notifier": null,
+      },
+      "overrides": {
+        "browser-sync": "BROWSER_SYNC_VERSION",
+        "webpack": "WEBPACK_VERSION",
+      },
+    },
+  ],
 }
 `;
 
@@ -4753,6 +4855,24 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
         "Entity[EntityWithCustomId]",
       ],
       "source": "TaskParameter[source]",
+    },
+  ],
+  "mergeClientPackageJson": [
+    {
+      "dependencies": {},
+      "devDependencies": {
+        "@angular-builders/custom-webpack": null,
+        "browser-sync-webpack-plugin": null,
+        "copy-webpack-plugin": null,
+        "eslint-webpack-plugin": null,
+        "webpack-bundle-analyzer": null,
+        "webpack-merge": null,
+        "webpack-notifier": null,
+      },
+      "overrides": {
+        "browser-sync": "BROWSER_SYNC_VERSION",
+        "webpack": "WEBPACK_VERSION",
+      },
     },
   ],
 }
@@ -5432,6 +5552,24 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
         "Entity[EntityWithCustomId]",
       ],
       "source": "TaskParameter[source]",
+    },
+  ],
+  "mergeClientPackageJson": [
+    {
+      "dependencies": {},
+      "devDependencies": {
+        "@angular-builders/custom-webpack": null,
+        "browser-sync-webpack-plugin": null,
+        "copy-webpack-plugin": null,
+        "eslint-webpack-plugin": null,
+        "webpack-bundle-analyzer": null,
+        "webpack-merge": null,
+        "webpack-notifier": null,
+      },
+      "overrides": {
+        "browser-sync": "BROWSER_SYNC_VERSION",
+        "webpack": "WEBPACK_VERSION",
+      },
     },
   ],
 }

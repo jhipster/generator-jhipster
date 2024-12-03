@@ -95,6 +95,11 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         application.javaNodeBuildPaths?.push('angular.json', 'tsconfig.json', 'tsconfig.app.json');
         if (application.clientBundlerWebpack) {
           application.javaNodeBuildPaths?.push('webpack/');
+        } else if (application.clientBundlerExperimentalEsbuild) {
+          application.javaNodeBuildPaths?.push('build-plugins/');
+          if (application.enableI18nRTL) {
+            application.javaNodeBuildPaths?.push('postcss.conf.json');
+          }
         }
       },
       addNeedles({ source, application }) {
@@ -126,24 +131,48 @@ export default class AngularGenerator extends BaseApplicationGenerator {
           }
         };
 
+        source.addLanguagesInFrontend = ({ languagesDefinition }) => {
+          if (application.clientBundlerExperimentalEsbuild) {
+            this.editFile(
+              `${application.clientSrcDir}i18n/index.ts`,
+              createNeedleCallback({
+                needle: 'i18n-language-loader',
+                contentToAdd: languagesDefinition.map(
+                  lang => `'${lang.languageTag}': async (): Promise<any> => import('i18n/${lang.languageTag}.json'),`,
+                ),
+              }),
+              createNeedleCallback({
+                needle: 'i18n-language-angular-loader',
+                contentToAdd: languagesDefinition
+                  .filter(lang => lang.angularLocale)
+                  .map(
+                    lang => `'${lang.languageTag}': async (): Promise<void> => import('@angular/common/locales/${lang.angularLocale}'),`,
+                  ),
+              }),
+            );
+          }
+        };
+
         source.addIconImport = args => {
           const iconsPath = `${application.srcMainWebapp}app/config/font-awesome-icons.ts`;
           const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Icon imports not updated with icon';
           this.editFile(iconsPath, { ignoreNonExisting }, addIconImport(args));
         };
 
-        source.addWebpackConfig = args => {
-          const webpackPath = `${application.clientRootDir}webpack/webpack.custom.js`;
-          const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
-          this.editFile(
-            webpackPath,
-            { ignoreNonExisting },
-            createNeedleCallback({
-              needle: 'jhipster-needle-add-webpack-config',
-              contentToAdd: `${args.config},`,
-            }),
-          );
-        };
+        if (application.clientBundlerWebpack) {
+          source.addWebpackConfig = args => {
+            const webpackPath = `${application.clientRootDir}webpack/webpack.custom.js`;
+            const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
+            this.editFile(
+              webpackPath,
+              { ignoreNonExisting },
+              createNeedleCallback({
+                needle: 'jhipster-needle-add-webpack-config',
+                contentToAdd: `${args.config},`,
+              }),
+            );
+          };
+        }
 
         if (application.clientRootDir) {
           // Overrides only works if added in root package.json
@@ -272,6 +301,40 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      clientBundler({ application, source }) {
+        const { clientBundlerExperimentalEsbuild, enableTranslation, nodeDependencies } = application;
+        if (clientBundlerExperimentalEsbuild) {
+          source.mergeClientPackageJson!({
+            devDependencies: {
+              '@angular-builders/custom-esbuild': null,
+              globby: null,
+              ...(enableTranslation ? { 'folder-hash': null, deepmerge: null } : {}),
+            },
+          });
+        } else {
+          source.mergeClientPackageJson!({
+            dependencies: enableTranslation
+              ? {
+                  '@ngx-translate/http-loader': null,
+                }
+              : {},
+            devDependencies: {
+              '@angular-builders/custom-webpack': null,
+              'browser-sync-webpack-plugin': null,
+              'copy-webpack-plugin': null,
+              'eslint-webpack-plugin': null,
+              'webpack-bundle-analyzer': null,
+              'webpack-merge': null,
+              'webpack-notifier': null,
+              ...(enableTranslation ? { 'folder-hash': null, 'merge-jsons-webpack-plugin': null } : {}),
+            },
+            overrides: {
+              'browser-sync': nodeDependencies['browser-sync'],
+              webpack: nodeDependencies.webpack,
+            },
+          });
+        }
+      },
       addWebsocketDependencies({ application, source }) {
         const { authenticationTypeSession, communicationSpringWebsocket, nodeDependencies } = application;
         const dependencies = {};
