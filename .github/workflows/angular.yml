@@ -116,6 +116,7 @@ jobs:
         id: compare
         if: >-
           github.event.pull_request &&
+          matrix.skip-compare != 'true' &&
           !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         with:
           generator-path: generator-jhipster
