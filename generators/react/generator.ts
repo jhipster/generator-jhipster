@@ -97,6 +97,14 @@ export default class ReactGenerator extends BaseApplicationGenerator {
           webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
         });
       },
+      async javaNodeBuildPaths({ application }) {
+        const { clientBundlerWebpack, javaNodeBuildPaths } = application;
+
+        javaNodeBuildPaths?.push('.postcss.config.js', 'tsconfig.json');
+        if (clientBundlerWebpack) {
+          javaNodeBuildPaths?.push('webpack/');
+        }
+      },
       prepareForTemplates({ application, source }) {
         source.addWebpackConfig = args => {
           const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;

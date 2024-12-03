@@ -1906,6 +1906,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "xmemcached-provider": "'XMEMCACHED-PROVIDER-VERSION'",
   },
   "javaManagedProperties": {},
+  "javaNodeBuildPaths": [],
   "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",
   "javaProperties": {},
