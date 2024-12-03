@@ -1797,7 +1797,7 @@ _%>
         <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+              <%_ if (!databaseTypeCouchbase) { _%>  inserted<%= persistClass %> = <%_ } _%><%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
   <%_ if (searchEngineElasticsearch) { _%>
         <%= entityInstance %>Repository.save(<%= persistInstance %>)<%= callBlock %>;
         <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;

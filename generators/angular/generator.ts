@@ -91,6 +91,12 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
         application.addPrettierExtensions?.(['html', 'css', 'scss']);
       },
+      async javaNodeBuildPaths({ application }) {
+        application.javaNodeBuildPaths?.push('angular.json', 'tsconfig.json', 'tsconfig.app.json');
+        if (application.clientBundlerWebpack) {
+          application.javaNodeBuildPaths?.push('webpack/');
+        }
+      },
       addNeedles({ source, application }) {
         source.addEntitiesToClient = param => {
           this.addEntitiesToModule(param);

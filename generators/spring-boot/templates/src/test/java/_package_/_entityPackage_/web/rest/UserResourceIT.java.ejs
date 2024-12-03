@@ -497,13 +497,12 @@ class UserResourceIT {
 
         // Get all the users
   <%_ if (reactive) { _%>
-        <%= user.adminUserDto %> foundUser = webTestClient.get().uri("/api/admin/users?sort=id,desc")
+        <%= user.adminUserDto %> foundUser = webTestClient.get().uri("/api/admin/users<% if (user.primaryKey.typeNumeric) { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= user.adminUserDto %>.class).getResponseBody().blockFirst();
-
+            .returnResult(<%= user.adminUserDto %>.class).getResponseBody()<% if (!user.primaryKey.typeNumeric) { %>.filter(e -> DEFAULT_LOGIN.equals(e.getLogin()))<% } %>.blockFirst();
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(foundUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
@@ -513,7 +512,7 @@ class UserResourceIT {
     <%_ } _%>
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
   <%_ } else { _%>
-        restUserMockMvc.perform(get("/api/admin/users<% if (databaseTypeSql) { %>?sort=id,desc<% } %>")
+        restUserMockMvc.perform(get("/api/admin/users<% if (user.primaryKey.typeNumeric) { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -541,7 +540,7 @@ class UserResourceIT {
   <%_ } _%>
   <%_ if (cacheProviderAny) { _%>
 
-        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin(), <%= user.persistClass %>.class)).isNull();
   <%_ } _%>
 
         // Get the user
@@ -578,7 +577,7 @@ class UserResourceIT {
             assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
         }
   <%_ } else if (cacheProviderAny) { _%>
-        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin(), <%= user.persistClass %>.class)).isNotNull();
   <%_ } _%>
     }
 
@@ -882,7 +881,7 @@ class UserResourceIT {
   <%_ } _%>
   <%_ if (cacheProviderAny) { _%>
 
-        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin(), <%= user.persistClass %>.class)).isNull();
   <%_ } _%>
 
         // Validate the database is empty
