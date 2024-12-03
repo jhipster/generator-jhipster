@@ -54,53 +54,16 @@ task webapp(type: NpmTask) {
     inputs.files("build.gradle")
         .withPropertyName('build.gradle')
         .withPathSensitivity(PathSensitivity.RELATIVE)
-  <%_ if (clientFrameworkAngular) { _%>
     inputs.files(<%- javaNodeBuildPaths.filter(file => !file.endsWith('/')).map(file => `'${file}'`).join(', ') %>)
-        .withPropertyName('angular-build')
+        .withPropertyName('<%= clientFramework %>-build')
         .withPathSensitivity(PathSensitivity.RELATIVE)
     <%_ for (const file of javaNodeBuildPaths.filter(file => file.endsWith('/'))) { _%>
     inputs.dir("<%= file %>")
         .withPropertyName("<%= file %>")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    <%_ } _%>
-  <%_ } else { _%>
-    inputs.dir("<%= clientSrcDir %>")
-        .withPropertyName("webapp-source-dir")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-    <%_ if (clientFrameworkReact) { _%>
-    inputs.files("tsconfig.json")
-        .withPropertyName("tsconfig")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-
-    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>")
-    webpackDevFiles.exclude("webpack.prod.js")
-    inputs.files(webpackDevFiles)
-        .withPropertyName("webpack-dir")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-    <%_ } _%>
-    <%_ if (clientFrameworkVue) { _%>
-    inputs.files("tsconfig.json", "tsconfig.app.json")
-        .withPropertyName("tsconfig")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-
-    inputs.files(".postcssrc")
-        .withPropertyName("postcssrc")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-      <%_ if (microfrontend) { _%>
-
-    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>")
-    webpackDevFiles.exclude("webpack.prod.js")
-    inputs.files(webpackDevFiles)
-        .withPropertyName("webpack-dir")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-      <%_ } else { _%>
-
-    inputs.files("vite.config.ts")
-        .withPropertyName("vite")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
       <%_ } _%>
     <%_ } _%>
-  <%_ } _%>
+
     outputs.dir("<%= clientDistDir %>")
         .withPropertyName("webapp-build-dir")
 

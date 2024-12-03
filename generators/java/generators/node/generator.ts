@@ -52,45 +52,12 @@ export default class NodeGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       async javaNodeBuildPaths({ application }) {
-        const {
-          buildToolMaven,
-          clientBundlerExperimentalEsbuild,
-          clientBundlerVite,
-          clientBundlerWebpack,
-          clientFrameworkAngular,
-          clientFrameworkReact,
-          clientFrameworkVue,
-          clientFrameworkBuiltIn,
-          microfrontend,
-          srcMainWebapp,
-          javaNodeBuildPaths,
-          clientDistDir,
-        } = application;
+        const { buildToolMaven, srcMainWebapp, javaNodeBuildPaths, clientDistDir } = application;
 
-        javaNodeBuildPaths.push(srcMainWebapp, 'package-lock.json', 'package.json', 'tsconfig.json');
+        javaNodeBuildPaths.push(srcMainWebapp, 'package-lock.json', 'package.json');
         if (buildToolMaven) {
           // Gradle throws an error if the directory does not exist
           javaNodeBuildPaths.push(clientDistDir!);
-        }
-        if (clientFrameworkAngular) {
-          javaNodeBuildPaths.push('angular.json', 'tsconfig.app.json');
-          if (clientBundlerExperimentalEsbuild) {
-            javaNodeBuildPaths.push('build-plugins/');
-          }
-        } else if (clientFrameworkReact) {
-          javaNodeBuildPaths.push('.postcss.config.js');
-        } else if (clientFrameworkVue) {
-          javaNodeBuildPaths.push('.postcssrc.js', 'tsconfig.app.json');
-          if (microfrontend) {
-            javaNodeBuildPaths.push('module-federation.config.cjs');
-          }
-        }
-        if (clientFrameworkBuiltIn) {
-          if (clientBundlerWebpack) {
-            javaNodeBuildPaths.push('webpack/');
-          } else if (clientBundlerVite) {
-            javaNodeBuildPaths.push('vite.config.mts');
-          }
         }
       },
     });
