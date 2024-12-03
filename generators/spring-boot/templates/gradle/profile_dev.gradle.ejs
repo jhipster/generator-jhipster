@@ -61,7 +61,6 @@ task webapp(type: NpmTask) {
     inputs.dir("<%= file %>")
         .withPropertyName("<%= file %>")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-      <%_ } _%>
     <%_ } _%>
 
     outputs.dir("<%= clientDistDir %>")
