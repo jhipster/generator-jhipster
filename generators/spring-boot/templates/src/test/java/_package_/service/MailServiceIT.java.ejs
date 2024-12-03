@@ -45,7 +45,7 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -66,7 +66,7 @@ class MailServiceIT {
     @Autowired
     private JHipsterProperties jHipsterProperties;
 
-    @MockBean
+    @MockitoBean
     private JavaMailSender javaMailSender;
 
     @Captor
