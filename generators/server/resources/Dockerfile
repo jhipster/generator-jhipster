@@ -46,7 +46,7 @@ LABEL ALIAS=kafka
 FROM confluentinc/cp-zookeeper:7.7.2
 LABEL ALIAS=zookeeper
 
-FROM apachepulsar/pulsar:4.0.0
+FROM apachepulsar/pulsar:4.0.1
 LABEL ALIAS=pulsar
 
 FROM sonarqube:10.7.0-community
