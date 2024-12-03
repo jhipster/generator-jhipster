@@ -96,7 +96,10 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         if (application.clientBundlerWebpack) {
           application.javaNodeBuildPaths?.push('webpack/');
         } else if (application.clientBundlerExperimentalEsbuild) {
-          application.javaNodeBuildPaths?.push('build-plugins/', 'postcss.conf.json');
+          application.javaNodeBuildPaths?.push('build-plugins/');
+          if (application.enableI18nRTL) {
+            application.javaNodeBuildPaths?.push('postcss.conf.json');
+          }
         }
       },
       addNeedles({ source, application }) {
