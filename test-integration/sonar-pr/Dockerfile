@@ -1,5 +1,5 @@
 # Use the official SonarQube 10.6.0 community image as the base
-FROM sonarqube:24.12.0.100206-community
+FROM sonarqube:10.7.0-community
 
 # Define version and plugin JAR name as environment variables
 # renovate: datasource=github-releases depName=sonarqube-community-branch-plugin packageName=mc1arke/sonarqube-community-branch-plugin
