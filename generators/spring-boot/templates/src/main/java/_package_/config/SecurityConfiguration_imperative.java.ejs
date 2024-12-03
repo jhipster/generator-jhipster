@@ -188,6 +188,9 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
   <%_ if (clientBundlerVite) { _%>
                     .requestMatchers(mvc.pattern("/assets/**")).permitAll()
+  <%_ } else if (clientBundlerExperimentalEsbuild) { _%>
+                    .requestMatchers(mvc.pattern("/content/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/resources/**")).permitAll()
   <%_ } else { _%>
                     .requestMatchers(mvc.pattern("/app/**")).permitAll()
                     .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
