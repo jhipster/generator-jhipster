@@ -52,10 +52,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (searchEngineElasticsearch) { _%>
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive && !authenticationTypeOauth2) { _%>
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.data.auditing.AuditingHandler;
 import org.springframework.data.auditing.DateTimeProvider;
 <%_ } _%>
@@ -181,7 +181,7 @@ class UserServiceIT {
      *
      * @see <%= packageName %>.repository.search.UserSearchRepositoryMockConfiguration
      */
-    @SpyBean
+    @MockitoSpyBean
     private UserSearchRepository spiedUserSearchRepository;
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive && !authenticationTypeOauth2) { _%>
@@ -189,7 +189,7 @@ class UserServiceIT {
     @Autowired
     private AuditingHandler auditingHandler;
 
-    @MockBean
+    @MockitoBean
     private DateTimeProvider dateTimeProvider;
 <%_ } _%>
     <%_ if (!databaseTypeNo) { _%>
