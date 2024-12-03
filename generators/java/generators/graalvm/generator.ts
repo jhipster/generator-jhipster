@@ -132,14 +132,6 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
               extname(file.path) === '.java',
             refresh: false,
           },
-          passthrough(file => {
-            const contents = file.contents.toString('utf8');
-            if (/@(MockBean|SpyBean)/.test(contents) || (application.reactive && /@AuthenticationIntegrationTest/.test(contents))) {
-              file.contents = Buffer.from(
-                addJavaAnnotation(contents, { package: 'org.springframework.test.context.aot', annotation: 'DisabledInAotMode' }),
-              );
-            }
-          }),
         );
       },
     });
