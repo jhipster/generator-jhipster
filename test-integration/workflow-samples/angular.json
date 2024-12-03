@@ -11,8 +11,10 @@
       "job-name": "ng-default-additional-esbuild",
       "entity": "none",
       "app-sample": "ng-default",
-      "extra-args": "--client-bundler experimentalEsbuild",
-      "jdl-entity": "*"
+      "jdl-entity": "*",
+      "generatorOptions": {
+        "clientBundler": "experimentalEsbuild"
+      }
     },
     {
       "name": "ng-mysql-es-noi18n-mapsid",
