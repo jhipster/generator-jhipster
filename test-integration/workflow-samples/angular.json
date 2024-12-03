@@ -7,7 +7,8 @@
       "sonar-analyse": "true"
     },
     {
-      "name": "ng-default-additional-esbuild",
+      "name": "ng-default-additional",
+      "job-name": "ng-default-additional-esbuild",
       "entity": "none",
       "app-sample": "ng-default",
       "extra-args": "--client-bundler experimentalEsbuild",
@@ -67,12 +68,14 @@
       }
     },
     {
-      "name": "ng-webflux-mongodb-esbuild",
+      "name": "ng-webflux-mongodb",
+      "job-name": "ng-webflux-mongodb-esbuild",
       "app-sample": "webflux-mongodb",
       "entity": "mongodb"
     },
     {
-      "name": "ng-webflux-gradle-mongodb-oauth2-esbuild",
+      "name": "ng-webflux-gradle-mongodb-oauth2",
+      "job-name": "ng-webflux-gradle-mongodb-oauth2-esbuild",
       "app-sample": "webflux-mongodb-oauth2",
       "entity": "mongodb"
     },
@@ -86,7 +89,8 @@
       "jdl-samples": "webflux-psql,custom-domain"
     },
     {
-      "name": "ng-webflux-gradle-session-h2mem-es-esbuild",
+      "name": "ng-webflux-gradle-session-h2mem-es",
+      "job-name": "ng-webflux-gradle-session-h2mem-es-esbuild",
       "app-sample": "webflux-gradle-session-h2mem-es",
       "generatorOptions": {
         "defaultEnvironment": "dev"
