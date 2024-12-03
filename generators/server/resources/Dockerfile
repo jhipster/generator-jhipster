@@ -40,11 +40,8 @@ FROM memcached:1.6.32-alpine
 
 FROM redis:7.4.1
 
-FROM confluentinc/cp-kafka:7.8.0
+FROM apache/kafka-native:3.9.0
 LABEL ALIAS=kafka
-
-FROM confluentinc/cp-zookeeper:7.8.0
-LABEL ALIAS=zookeeper
 
 FROM apachepulsar/pulsar:4.0.1
 LABEL ALIAS=pulsar

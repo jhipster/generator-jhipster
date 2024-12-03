@@ -203,14 +203,24 @@ spec:
       - name: kafka
         image: kafka-placeholder
         env:
+        - name: KAFKA_NODE_ID
+          value: 1
+        - name: KAFKA_PROCESS_ROLES
+          value: broker,controller
         - name: KAFKA_ADVERTISED_LISTENERS
           value: 'PLAINTEXT://jhipster-kafka.default.svc.cluster.local:9092'
-        - name: KAFKA_ZOOKEEPER_CONNECT
-          value: 'jhipster-zookeeper.default.svc.cluster.local:2181'
-        - name: KAFKA_BROKER_ID
-          value: '2'
+        - name: KAFKA_LISTENERS
+          value: PLAINTEXT://:9092,CONTROLLER://localhost:9093
+        - name: KAFKA_CONTROLLER_LISTENER_NAMES
+          value: CONTROLLER
+        - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+          value: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+        - name: KAFKA_CONTROLLER_QUORUM_VOTERS
+          value: 1@localhost:9093
+        - name: KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS
+          value: 0
         - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
-          value: '1'
+          value: 1
         ports:
         - containerPort: 9092
         resources:
@@ -231,53 +241,7 @@ spec:
     app: jhipster-kafka
   ports:
   - port: 9092
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: jhipster-zookeeper
-  namespace: default
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: jhipster-zookeeper
-  template:
-    metadata:
-      labels:
-        app: jhipster-zookeeper
-    spec:
-      containers:
-      - name: zookeeper
-        image: zookeeper-placeholder
-        env:
-        - name: ZOOKEEPER_CLIENT_PORT
-          value: '2181'
-        - name: ZOOKEEPER_TICK_TIME
-          value: '2000'
-        - name: ZOOKEEPER_SYNC_LIMIT
-          value: '2'
-        ports:
-        - containerPort: 2181
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "500m"
-          limits:
-            memory: "1Gi"
-            cpu: "1"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: jhipster-zookeeper
-  namespace: default
-spec:
-  selector:
-    app: jhipster-zookeeper
-  ports:
-  - port: 2181
-",
+  ",
     "stateCleared": "modified",
   },
   "samplekafka-k8s/samplekafka-deployment.yml": {
