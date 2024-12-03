@@ -28,7 +28,7 @@ export const JAVA_VERSION = '17';
 // Supported Java versions, https://www.oracle.com/java/technologies/java-se-support-roadmap.html
 export const JAVA_COMPATIBLE_VERSIONS = ['17', '21', '23'];
 // Force spring milestone repository. Spring Boot milestones are detected.
-export const ADD_SPRING_MILESTONE_REPOSITORY = true;
+export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 
 // Version of Node, NPM
 export const NODE_VERSION = readFileSync(join(fileURLToPath(import.meta.url), '../init/resources/.node-version'), 'utf-8').trim();
