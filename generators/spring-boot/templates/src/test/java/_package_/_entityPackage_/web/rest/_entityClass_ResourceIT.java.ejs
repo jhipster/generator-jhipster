@@ -986,13 +986,16 @@ _%>
   if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
     if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
-  if (field.fieldTypeInteger) { %><% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
-  if (field.fieldTypeFloat || field.fieldTypeDouble) { %>.doubleValue()<% } else
+  if (field.fieldTypeFloat) { %>.doubleValue()<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
-  if (field.fieldTypeBoolean) { %>.booleanValue()<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
-  if (!field.fieldTypeString) { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
+  if (
+    !field.fieldTypeString &&
+    !field.fieldTypeBoolean &&
+    !field.fieldTypeInteger &&
+    !field.fieldTypeDouble
+  ) { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
     }
 <% if (implementsEagerLoadApis && !databaseTypeNeo4j && !databaseTypeCouchbase) { %>
     @SuppressWarnings({"unchecked"})
@@ -1073,13 +1076,16 @@ _%>
   if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
     if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
-  if (field.fieldTypeInteger) { %><% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
-  if (field.fieldTypeFloat || field.fieldTypeDouble) { %>.doubleValue()<% } else
+  if (field.fieldTypeFloat) { %>.doubleValue()<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
-  if (field.fieldTypeBoolean) { %>.booleanValue()<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
-  if (!field.fieldTypeString) { %>.toString()<% } %>))<%_ } _%>;
+  if (
+    !field.fieldTypeString &&
+    !field.fieldTypeBoolean &&
+    !field.fieldTypeInteger &&
+    !field.fieldTypeDouble
+  ) { %>.toString()<% } %>))<%_ } _%>;
     }
 <%_ if (jpaMetamodelFiltering) {  %>
 
@@ -1313,13 +1319,16 @@ _%>
       if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
       if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
       if (field.fieldTypeBinary && !field.blobContentTypeText) { %><% if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
-      if (field.fieldTypeInteger) { %><% } else
       if (field.fieldTypeLong) { %>.intValue()<% } else
-      if (field.fieldTypeFloat || field.fieldTypeDouble) { %>.doubleValue()<% } else
+      if (field.fieldTypeFloat) { %>.doubleValue()<% } else
       if (field.fieldTypeBigDecimal) { %>)<% } else
-      if (field.fieldTypeBoolean) { %>.booleanValue()<% } else
       if (field.fieldTypeZonedDateTime) { %>)<% } else
-      if (!field.fieldTypeString) { %>.toString()<% } %>))<%_ } _%>;
+      if (
+        !field.fieldTypeString &&
+        !field.fieldTypeBoolean &&
+        !field.fieldTypeInteger &&
+        !field.fieldTypeDouble
+      ) { %>.toString()<% } %>))<%_ } _%>;
 
         // Check, that the count call also returns 1
         webTestClient.get().uri(ENTITY_API_URL + "/count?sort=<%= primaryKey.name %>,desc&" + filter)
@@ -1356,13 +1365,16 @@ _%>
     if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
     if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
       if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
-    if (field.fieldTypeInteger) { %><% } else
     if (field.fieldTypeLong) { %>.intValue()<% } else
-    if (field.fieldTypeFloat || field.fieldTypeDouble) { %>.doubleValue()<% } else
+    if (field.fieldTypeFloat) { %>.doubleValue()<% } else
     if (field.fieldTypeBigDecimal) { %>)<% } else
-    if (field.fieldTypeBoolean) { %>.booleanValue()<% } else
     if (field.fieldTypeZonedDateTime) { %>)<% } else
-    if (!field.fieldTypeString) { %>.toString()<% } %>)))<% }); %>;
+    if (
+      !field.fieldTypeString &&
+      !field.fieldTypeBoolean &&
+      !field.fieldTypeInteger &&
+      !field.fieldTypeDouble
+    ) { %>.toString()<% } %>)))<% }); %>;
 
         // Check, that the count call also returns 1
         rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%= primaryKey.name %>,desc&" + filter))
@@ -1877,13 +1889,16 @@ _%>
   if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
     if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
-  if (field.fieldTypeInteger) { %><% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
-  if (field.fieldTypeFloat || field.fieldTypeDouble) { %>.doubleValue()<% } else
+  if (field.fieldTypeFloat) { %>.doubleValue()<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
-  if (field.fieldTypeBoolean) { %>.booleanValue()<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
-  if (!field.fieldTypeString) { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
+  if (
+    !field.fieldTypeString &&
+    !field.fieldTypeBoolean &&
+    !field.fieldTypeInteger &&
+    !field.fieldTypeDouble
+  ) { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
     }
 <%_ } _%>
 
