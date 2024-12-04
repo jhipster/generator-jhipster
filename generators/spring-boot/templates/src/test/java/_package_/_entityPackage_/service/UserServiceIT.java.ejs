@@ -222,7 +222,7 @@ class UserServiceIT {
   <%_ } _%>
         user.setLogin(DEFAULT_LOGIN);
   <%_ if (!authenticationTypeOauth2) { _%>
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
+        user.setPassword(RandomStringUtils.insecure().nextAlphanumeric(60));
   <%_ } _%>
         user.setActivated(true);
         user.setEmail(DEFAULT_EMAIL);
@@ -391,7 +391,7 @@ class UserServiceIT {
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
   <%_ } _%>
         user.setActivated(false);
-        user.setActivationKey(RandomStringUtils.random(20));
+        user.setActivationKey(RandomStringUtils.insecure().next(20));
         <%= user.persistClass %> dbUser = userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
