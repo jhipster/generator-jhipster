@@ -27,8 +27,6 @@ export interface AngularEntity extends Entity {
    * @returns {typeImports:Map} the fields that potentially contains some enum types
    */
   generateEntityClientEnumImports: (fields: any) => Map<any, any>;
-  entityAngularAuthorities?: string;
-  entityAngularReadAuthorities?: string;
 }
 
 export type AngularApplication = {
