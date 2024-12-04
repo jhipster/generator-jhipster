@@ -231,12 +231,12 @@ class UserResourceIT {
 <%_ if (databaseTypeCassandra || (authenticationTypeOauth2 && !databaseTypeCouchbase)) { _%>
         persistUser.setId(UUID.randomUUID().toString());
 <%_ } _%>
-        persistUser.setLogin(DEFAULT_LOGIN<% if (databaseTypeSql) { %> + RandomStringUtils.randomAlphabetic(5)<% } %>);
+        persistUser.setLogin(DEFAULT_LOGIN<% if (databaseTypeSql) { %> + RandomStringUtils.insecure().nextAlphabetic(5)<% } %>);
 <%_ if (!authenticationTypeOauth2) { _%>
-        persistUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
+        persistUser.setPassword(RandomStringUtils.insecure().nextAlphanumeric(60));
 <%_ } _%>
         persistUser.setActivated(true);
-        persistUser.setEmail(<% if (databaseTypeSql) { %>RandomStringUtils.randomAlphabetic(5) + <% } %>DEFAULT_EMAIL);
+        persistUser.setEmail(<% if (databaseTypeSql) { %>RandomStringUtils.insecure().nextAlphabetic(5) + <% } %>DEFAULT_EMAIL);
         persistUser.setFirstName(DEFAULT_FIRSTNAME);
         persistUser.setLastName(DEFAULT_LASTNAME);
 <%_ if (!databaseTypeCassandra) { _%>
@@ -733,7 +733,7 @@ class UserResourceIT {
         anotherUser.setId(UUID.randomUUID().toString());
   <%_ } _%>
         anotherUser.setLogin("jhipster");
-        anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
+        anotherUser.setPassword(RandomStringUtils.insecure().nextAlphanumeric(60));
         anotherUser.setActivated(true);
         anotherUser.setEmail("jhipster@localhost");
         anotherUser.setFirstName("java");
@@ -803,7 +803,7 @@ class UserResourceIT {
         anotherUser.setId(UUID.randomUUID().toString());
   <%_ } _%>
         anotherUser.setLogin("jhipster");
-        anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
+        anotherUser.setPassword(RandomStringUtils.insecure().nextAlphanumeric(60));
         anotherUser.setActivated(true);
         anotherUser.setEmail("jhipster@localhost");
         anotherUser.setFirstName("java");
