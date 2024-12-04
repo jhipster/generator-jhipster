@@ -20,6 +20,7 @@ export * from './basename.js';
 export * from './configuration-helpers/options.js';
 export * from '../../../lib/utils/object.js';
 export * from './contents.js';
+export * from './derived-property.js';
 export * from './faker.js';
 export { default as getHipster } from './hipster.js';
 export * from './jhipster7-context.js';

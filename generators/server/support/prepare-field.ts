@@ -23,6 +23,7 @@ import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../.
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 import { mutateData } from '../../../lib/utils/object.js';
 import type { Field } from '../../../lib/types/application/field.js';
+import { applyDerivedProperty } from '../../base/support/index.js';
 import { getUXConstraintName } from './database.js';
 import { getJavaValueGeneratorForType } from './templates/field-values.js';
 
@@ -152,6 +153,7 @@ export default function prepareField(entityWithConfig, field: Field & any, gener
   } else {
     field.javaFieldType = field.fieldType;
   }
+  applyDerivedProperty(field, 'javaFieldType', ['String', 'Integer', 'Long', 'UUID']);
 
   if (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeString || field.fieldTypeUUID) {
     if (field.fieldTypeInteger) {
