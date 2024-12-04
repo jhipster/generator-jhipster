@@ -641,7 +641,6 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1031,7 +1030,6 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1443,7 +1441,6 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1774,7 +1771,6 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
