@@ -1,7 +1,7 @@
 {{/* vim: set filetype=mustache: */}}
 <%_ if (useKafka) { _%>
 {{/*
-Kafka and zookeeper customisation
+Kafka customisation
 */}}
 {{- define "kafka.name" -}}
 {{- default "jhipster-kafka" -}}
@@ -11,17 +11,6 @@ Kafka and zookeeper customisation
 {{- default "jhipster-kafka" -}}
 {{- end -}}
 
-{{- define "zookeeper.name" -}}
-{{- default "jhipster-zookeeper" -}}
-{{- end -}}
-
-{{- define "zookeeper.fullname" -}}
-{{- default "jhipster-zookeeper" -}}
-{{- end -}}
-
-{{- define "kafka.zookeeper.fullname" -}}
-{{- default "jhipster-zookeeper" -}}
-{{- end -}}
 <%_ } _%>
 <%_ if (monitoringPrometheus) { _%>
 {{/*

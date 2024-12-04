@@ -228,10 +228,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
           );
         }
         if (application.dockerServices.includes('kafka')) {
-          source.addDockerExtendedServiceToApplicationAndServices(
-            { serviceName: 'kafka' },
-            { serviceFile: './kafka.yml', serviceName: 'zookeeper' },
-          );
+          source.addDockerExtendedServiceToApplicationAndServices({ serviceName: 'kafka' });
         }
       },
 

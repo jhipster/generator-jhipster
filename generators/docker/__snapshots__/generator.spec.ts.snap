@@ -256,10 +256,6 @@ services:
     extends:
       file: ./kafka.yml
       service: kafka
-  zookeeper:
-    extends:
-      file: ./kafka.yml
-      service: zookeeper
 ",
     "stateCleared": "modified",
   },
@@ -365,10 +361,6 @@ services:
     extends:
       file: ./kafka.yml
       service: kafka
-  zookeeper:
-    extends:
-      file: ./kafka.yml
-      service: zookeeper
 ",
     "stateCleared": "modified",
   },
@@ -743,10 +735,6 @@ services:
     extends:
       file: ./kafka.yml
       service: kafka
-  zookeeper:
-    extends:
-      file: ./kafka.yml
-      service: zookeeper
 ",
     "stateCleared": "modified",
   },
@@ -856,10 +844,6 @@ services:
     extends:
       file: ./kafka.yml
       service: kafka
-  zookeeper:
-    extends:
-      file: ./kafka.yml
-      service: zookeeper
 ",
     "stateCleared": "modified",
   },
