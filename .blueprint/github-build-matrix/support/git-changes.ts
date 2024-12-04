@@ -3,7 +3,7 @@ import { minimatch } from 'minimatch';
 import { simpleGit } from 'simple-git';
 
 export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
-  let hasPatternChanges;
+  let hasPatternChanges: (pattern: string, ignore?: string) => boolean;
   if (options.allTrue) {
     hasPatternChanges = () => true;
   } else {
@@ -40,5 +40,6 @@ export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
     workspaces: hasPatternChanges('generators/{docker-compose,kubernetes*,workspaces}/**'),
     vue: hasPatternChanges('generators/vue/**'),
     vueWorkflow: hasClientWorkflowChanges('vue'),
+    sonarPr: hasPatternChanges('test-integration/sonar-pr/**'),
   };
 };
