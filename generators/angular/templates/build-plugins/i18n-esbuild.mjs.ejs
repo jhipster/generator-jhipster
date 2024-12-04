@@ -1,0 +1,49 @@
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { globby } from 'globby';
+import deepmerge from 'deepmerge';
+import { hashElement } from 'folder-hash';
+
+const __dirname = fileURLToPath(new URL('..', import.meta.url));
+const i18nSourceDir = join(__dirname, '<%- clientSrcDir %>i18n');
+
+export const prepareLanguage = async language => {
+  const files = await globby('*.json', { cwd: join(i18nSourceDir, language) });
+  let merged = {};
+  for (const file of files) {
+    const sourceFile = join(i18nSourceDir, language, file);
+    merged = deepmerge(merged, JSON.parse(await readFile(sourceFile, 'utf-8')));
+  }
+  return merged;
+};
+
+/** @type {import('esbuild').Plugin} */
+export default {
+  name: 'copy:i18n',
+  async setup(build) {
+    const languagesHash = await hashElement(i18nSourceDir, {
+      algo: 'md5',
+      encoding: 'hex',
+      files: { include: ['*.json'] },
+    });
+
+    build.initialOptions.define ??= {};
+    Object.assign(build.initialOptions.define, {
+      I18N_HASH: JSON.stringify(languagesHash.hash),
+    });
+
+    build.onResolve({ filter: /^i18n\// }, ({ path }) => {
+      return { namespace: 'i18n-json', path };
+    });
+
+    build.onLoad({ filter: /^i18n\//, namespace: 'i18n-json' }, async ({ path }) => {
+      const match = /^i18n\/(?<lang>.*)\.json/.exec(path);
+      const data = await prepareLanguage(match?.groups?.lang);
+      return {
+        contents: JSON.stringify(data),
+        loader: 'json',
+      };
+    });
+  },
+};

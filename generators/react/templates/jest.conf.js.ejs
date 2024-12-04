@@ -1,7 +1,7 @@
 const tsconfig = require('./tsconfig.test.json');
 
 module.exports = {
-  testEnvironment: 'jsdom',
+  testEnvironment: 'jest-fixed-jsdom',
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',

@@ -52,6 +52,23 @@ export default class VueGenerator extends BaseApplicationGenerator {
     }
   }
 
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      configureDevServerPort() {
+        if (this.jhipsterConfig.devServerPort === undefined) return;
+        if (this.isJhipsterVersionLessThan('8.7.4')) {
+          // Migrate old devServerPort with new one
+          const { applicationIndex = 0 } = this.jhipsterConfigWithDefaults;
+          this.jhipsterConfig.devServerPort = 9000 + applicationIndex;
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
   get loading() {
     return this.asLoadingTaskGroup({
       loadPackageJson({ application }) {
@@ -82,6 +99,19 @@ export default class VueGenerator extends BaseApplicationGenerator {
           clientWebappDir: app => `${app.clientSrcDir}app/`,
           webappEnumerationsDir: app => `${app.clientWebappDir}shared/model/enumerations/`,
         });
+      },
+      async javaNodeBuildPaths({ application }) {
+        const { clientBundlerVite, clientBundlerWebpack, microfrontend, javaNodeBuildPaths } = application;
+
+        javaNodeBuildPaths?.push('.postcssrc.js', 'tsconfig.json', 'tsconfig.app.json');
+        if (microfrontend) {
+          javaNodeBuildPaths?.push('module-federation.config.cjs');
+        }
+        if (clientBundlerWebpack) {
+          javaNodeBuildPaths?.push('webpack/');
+        } else if (clientBundlerVite) {
+          javaNodeBuildPaths?.push('vite.config.mts');
+        }
       },
       prepareForTemplates({ application, source }) {
         application.addPrettierExtensions?.(['html', 'vue', 'css', 'scss']);

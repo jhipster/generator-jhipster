@@ -98,6 +98,7 @@ export default class ServerGenerator extends BaseApplicationGenerator {
         });
       },
       packageJsonE2eScripts({ application }) {
+        const { devServerPort, devServerPortProxy: devServerPortE2e = devServerPort } = application;
         const scriptsStorage = this.packageJson.createStorage('scripts');
         const buildCmd = application.buildToolGradle ? 'gradlew' : 'mvnw -ntp';
 
@@ -117,7 +118,7 @@ export default class ServerGenerator extends BaseApplicationGenerator {
             'ci:e2e:run': 'concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless',
             'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue "./${buildCmd}" npm:e2e:headless`,
             'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue "./${buildCmd}" npm:e2e`,
-            'e2e:devserver': `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"`,
+            'e2e:devserver': `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}"`,
           });
         }
       },

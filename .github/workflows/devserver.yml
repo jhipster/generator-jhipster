@@ -23,6 +23,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
   cancel-in-progress: true
 env:
+  NODE_OPTIONS: --dns-result-order=ipv4first
   FORCE_COLOR: 2
 on:
   push:

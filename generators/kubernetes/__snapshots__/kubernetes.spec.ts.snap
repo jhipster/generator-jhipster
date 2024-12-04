@@ -3572,19 +3572,17 @@ data:
           "redirectUris": [
             "http://jhgate.default.example.com/*",
             "https://jhgate.default.example.com/*", "http://localhost:8080/*",
-            "https://localhost:8080/*",
+            "https://localhost:8080/*","http://localhost:4200/*", "http://localhost:9000/*", 
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
-            "http://localhost:9000/*",
             "dev.localhost.ionic:*"
           ],
           "webOrigins": [
             "http://jhgate.default.example.com",
             "https://jhgate.default.example.com", "http://localhost:8080",
-            "https://localhost:8080",
+            "https://localhost:8080","http://localhost:4200", "http://localhost:9000", 
             "http://localhost:8100",
-            "http://127.0.0.1:8761",
-            "http://localhost:9000"
+            "http://127.0.0.1:8761"
           ],
           "notBefore": 0,
           "bearerOnly": false,
@@ -7007,19 +7005,17 @@ data:
           "redirectUris": [
             "http://jhgate.default.example.com/*",
             "https://jhgate.default.example.com/*", "http://localhost:8080/*",
-            "https://localhost:8080/*",
+            "https://localhost:8080/*","http://localhost:4200/*", "http://localhost:9000/*", 
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
-            "http://localhost:9000/*",
             "dev.localhost.ionic:*"
           ],
           "webOrigins": [
             "http://jhgate.default.example.com",
             "https://jhgate.default.example.com", "http://localhost:8080",
-            "https://localhost:8080",
+            "https://localhost:8080","http://localhost:4200", "http://localhost:9000", 
             "http://localhost:8100",
-            "http://127.0.0.1:8761",
-            "http://localhost:9000"
+            "http://127.0.0.1:8761"
           ],
           "notBefore": 0,
           "bearerOnly": false,

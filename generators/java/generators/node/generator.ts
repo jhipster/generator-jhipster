@@ -49,8 +49,33 @@ export default class NodeGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      async javaNodeBuildPaths({ application }) {
+        const { buildToolMaven, srcMainWebapp, javaNodeBuildPaths, clientDistDir } = application;
+
+        javaNodeBuildPaths.push(srcMainWebapp, 'package-lock.json', 'package.json');
+        if (buildToolMaven) {
+          // Gradle throws an error if the directory does not exist
+          javaNodeBuildPaths.push(clientDistDir!);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get postPreparing() {
     return this.asPostPreparingTaskGroup({
+      sortBuildFiles({ application }) {
+        const { javaNodeBuildPaths } = application;
+        if (javaNodeBuildPaths) {
+          const files = [...new Set(javaNodeBuildPaths)];
+          javaNodeBuildPaths.splice(0, javaNodeBuildPaths.length, ...files.sort());
+        }
+      },
       useNpmWrapper({ application }) {
         if (application.useNpmWrapper) {
           this.useNpmWrapperInstallTask();

@@ -54,6 +54,7 @@ public class JwtAuthenticationTestUtils {
     }
 <%_ if (reactive) { _%>
 
+    // TODO switch to MockitoSpyBean https://github.com/spring-projects/spring-framework/issues/33941
     @MockBean
     private ReactiveUserDetailsService userDetailsService;
 <%_ } _%>

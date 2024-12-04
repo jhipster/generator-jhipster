@@ -1,0 +1,1 @@
+export const GRAALVM_REACHABILITY_METADATA = '0.3.14';

@@ -3,7 +3,7 @@ import { minimatch } from 'minimatch';
 import { simpleGit } from 'simple-git';
 
 export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
-  let hasPatternChanges;
+  let hasPatternChanges: (pattern: string, ignore?: string) => boolean;
   if (options.allTrue) {
     hasPatternChanges = () => true;
   } else {
@@ -24,7 +24,7 @@ export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
       hasPatternChanges('lib/**') ||
       hasPatternChanges('generators/*') ||
       hasPatternChanges('generators/{base*,bootstrap*,git,jdl,project-name}/**'),
-    ci: hasPatternChanges('.github/{actions,workflows}/**'),
+    ci: hasPatternChanges('.github/{actions,workflows}/**') || hasPatternChanges('test-integration/{,jdl}samples/**'),
     devBlueprint: hasPatternChanges('.blueprint/**'),
     devserverWorkflow: hasPatternChanges('.github/workflows/devserver.yml'),
     common: hasPatternChanges('generators/{app,common,docker,languages}/**'),
@@ -40,5 +40,6 @@ export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
     workspaces: hasPatternChanges('generators/{docker-compose,kubernetes*,workspaces}/**'),
     vue: hasPatternChanges('generators/vue/**'),
     vueWorkflow: hasClientWorkflowChanges('vue'),
+    sonarPr: hasPatternChanges('test-integration/sonar-pr/**'),
   };
 };

@@ -69,7 +69,7 @@ class UserMapperTest {
         user = new <%= user.persistClass %>();
         user.setLogin(DEFAULT_LOGIN);
 <%_ if (!authenticationTypeOauth2) { _%>
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
+        user.setPassword(RandomStringUtils.insecure().nextAlphanumeric(60));
 <%_ } _%>
         user.setActivated(true);
         user.setEmail("johndoe@localhost");

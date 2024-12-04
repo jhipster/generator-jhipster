@@ -612,6 +612,16 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
           source.addMavenDependency!({ inProfile: 'docker-compose', ...dockerComposeArtifact, optional: true });
         }
       },
+      nativeSupport({ application, source }) {
+        const { graalvmSupport, reactive } = application;
+        if (graalvmSupport && !reactive) {
+          // Workaround https://github.com/spring-projects/spring-boot/issues/43260
+          source.addJavaDependencies?.([
+            { groupId: 'io.reactivex.rxjava3', artifactId: 'rxjava', scope: 'runtime' },
+            { groupId: 'io.projectreactor', artifactId: 'reactor-core', scope: 'runtime' },
+          ]);
+        }
+      },
     });
   }
 
