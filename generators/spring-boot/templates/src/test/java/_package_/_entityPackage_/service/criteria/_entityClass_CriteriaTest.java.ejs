@@ -13,7 +13,7 @@ class <%- entityClass %>CriteriaTest {
     @Test
     void new<%- entityClass %>CriteriaHasAllFiltersNullTest() {
         var <%- persistInstance %>Criteria = new <%- entityClass %>Criteria();
-        assertThat(<%- persistInstance %>Criteria).is(criteriaFiltersAre(filter -> filter == null));
+        assertThat(<%- persistInstance %>Criteria).is(criteriaFiltersAre(Objects::isNull));
     }
 
     @Test
@@ -40,7 +40,7 @@ class <%- entityClass %>CriteriaTest {
         );
 
         assertThat(copy).satisfies(
-            criteria -> assertThat(criteria).is(criteriaFiltersAre(filter -> filter == null)),
+            criteria -> assertThat(criteria).is(criteriaFiltersAre(Objects::isNull)),
             criteria -> assertThat(criteria).isEqualTo(<%- persistInstance %>Criteria)
         );
     }
