@@ -181,7 +181,7 @@
     "@types/chai": "4.3.16",
     "@types/estree": "1.0.6",
     "@types/node": "20.11.25",
-    "@types/sinon-chai": "3.2.12",
+    "@types/sinon-chai": "4.0.0",
     "chai": "4.5.0",
     "cpy-cli": "5.0.0",
     "ejs-lint": "2.0.1",
@@ -195,7 +195,7 @@
     "prettier2": "npm:prettier@2.8.8",
     "rimraf": "5.0.7",
     "sinon": "19.0.2",
-    "sinon-chai": "3.7.0",
+    "sinon-chai": "4.0.0",
     "yeoman-test": "10.0.1"
   },
   "peerDependencies": {
