@@ -25,6 +25,7 @@ export const files = asWriteFilesSection<any>({
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION],
       templates: [
         '.github/workflows/generator.yml',
+        '.gitignore.jhi.blueprint',
         '.prettierignore.jhi.blueprint',
         { sourceFile: 'eslint.config.js.jhi.blueprint', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.blueprint` },
         'README.md',
