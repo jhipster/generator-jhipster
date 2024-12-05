@@ -191,6 +191,8 @@ public class SecurityConfiguration {
   <%_ } else if (clientBundlerExperimentalEsbuild) { _%>
                     .requestMatchers(mvc.pattern("/content/**")).permitAll()
                     .requestMatchers(mvc.pattern("/resources/**")).permitAll()
+  <%_ } else if (clientBundlerRsbuild) { _%>
+                    .requestMatchers(mvc.pattern("/static/**")).permitAll()
   <%_ } else { _%>
                     .requestMatchers(mvc.pattern("/app/**")).permitAll()
                     .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
@@ -220,6 +222,8 @@ public class SecurityConfiguration {
                     // microfrontend resources are loaded by webpack without authentication, they need to be public
     <%_ if (clientBundlerVite) { _%>
                     .requestMatchers(mvc.pattern("/services/*/assets/**")).permitAll()
+    <%_ } else if (clientBundlerRsbuild) { _%>
+                    .requestMatchers(mvc.pattern("/services/*/static/**")).permitAll()
     <%_ } _%>
                     .requestMatchers(mvc.pattern("/services/*/*.js")).permitAll()
                     .requestMatchers(mvc.pattern("/services/*/*.txt")).permitAll()
