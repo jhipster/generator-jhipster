@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject, Input, Directive, ElementRef, OnChanges, OnInit, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, OnChanges, OnDestroy, OnInit, inject, input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -31,8 +31,8 @@ import { translationNotFoundMessage } from 'app/config/translation.config';
   selector: '[<%= jhiPrefix %>Translate]',
 })
 export default class TranslateDirective implements OnChanges, OnInit, OnDestroy {
-  @Input() <%= jhiPrefix %>Translate!: string;
-  @Input() translateValues?: Record<string, unknown>;
+  readonly <%= jhiPrefix %>Translate = input.required<string>();
+  readonly translateValues = input<Record<string, unknown>>();
 
   private readonly directiveDestroyed = new Subject();
 
@@ -59,13 +59,13 @@ export default class TranslateDirective implements OnChanges, OnInit, OnDestroy 
 
   private getTranslation(): void {
     this.translateService
-      .get(this.<%= jhiPrefix %>Translate, this.translateValues)
+      .get(this.<%= jhiPrefix %>Translate(), this.translateValues())
       .pipe(takeUntil(this.directiveDestroyed))
       .subscribe({
         next: value => {
           this.el.nativeElement.innerHTML = value;
         },
-        error: () => `${translationNotFoundMessage}[${this.<%= jhiPrefix %>Translate}]`
+        error: () => `${translationNotFoundMessage}[${this.<%= jhiPrefix %>Translate()}]`,
       });
   }
 }
