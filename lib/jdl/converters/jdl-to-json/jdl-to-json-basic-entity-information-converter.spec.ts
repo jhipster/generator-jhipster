@@ -18,7 +18,8 @@
  */
 
 import { before, describe, it, expect as jestExpect } from 'esmocha';
-import chai, { expect } from 'chai';
+import * as chai from 'chai';
+const { expect } = chai;
 import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
