@@ -77,12 +77,12 @@ export const generateEntityClientImports = (relationships, dto?, clientFramework
  * @param {string} clientFramework the client framework, 'angular' or 'react'.
  * @returns typeImports: Map
  */
-export const generateEntityClientEnumImports = (fields, clientFramework) => {
+export const generateEntityClientEnumImports = (fields: Field[], clientFramework: string) => {
   const typeImports = new Map();
   const uniqueEnums = {};
-  fields.forEach(field => {
+  for (const field of fields) {
     const { enumFileName, fieldType } = field;
-    if (field.fieldIsEnum && (!uniqueEnums[fieldType] || (uniqueEnums[fieldType] && field.fieldValues.length !== 0))) {
+    if (field.fieldIsEnum && (!uniqueEnums[fieldType] || (uniqueEnums[fieldType] && field.fieldValues?.length !== 0))) {
       const importType = `${fieldType}`;
       const basePath = clientFramework === VUE ? '@' : 'app';
       const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
@@ -90,7 +90,7 @@ export const generateEntityClientEnumImports = (fields, clientFramework) => {
       uniqueEnums[fieldType] = field.fieldType;
       typeImports.set(importType, importPath);
     }
-  });
+  }
   return typeImports;
 };
 
