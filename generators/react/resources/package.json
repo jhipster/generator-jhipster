@@ -32,7 +32,7 @@
     "@eslint/js": "9.16.0",
     "@module-federation/enhanced": "0.8.1",
     "@module-federation/utilities": "3.1.32",
-    "@testing-library/react": "16.0.1",
+    "@testing-library/react": "16.1.0",
     "@types/jest": "29.5.14",
     "@types/lodash": "4.17.13",
     "@types/node": "20.11.25",
