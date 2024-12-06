@@ -134,7 +134,7 @@
     "chalk": "5.3.0",
     "chevrotain": "11.0.3",
     "commander": "12.1.0",
-    "debug": "4.3.7",
+    "debug": "4.4.0",
     "didyoumean": "1.2.2",
     "dockerfile-ast": "0.7.0",
     "dot-properties": "1.1.0",
