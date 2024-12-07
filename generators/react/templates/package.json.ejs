@@ -132,6 +132,10 @@
   "config": {
     "default_environment": "prod"
   },
+  "overrides": {
+    "react": "<%= nodeDependencies['react'] %>",
+    "react-dom": "<%= nodeDependencies['react-dom'] %>"
+  },
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
