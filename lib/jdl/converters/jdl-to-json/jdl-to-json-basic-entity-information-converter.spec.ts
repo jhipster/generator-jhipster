@@ -18,10 +18,10 @@
  */
 
 import { before, describe, it, expect as jestExpect } from 'esmocha';
-import chai, { expect } from 'chai';
+import { use as chaiUse, expect } from 'chai';
 import sinonChai from 'sinon-chai';
 
-chai.use(sinonChai);
+chaiUse(sinonChai);
 
 import { JDLEntity } from '../../core/models/index.js';
 import { convert } from './jdl-to-json-basic-entity-converter.js';
