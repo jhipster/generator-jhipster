@@ -454,7 +454,7 @@ exports[`generator - github-build-matrix with devserver should match matrix valu
     {
       "job-name": "react-default",
       "sample": "samples/react-default",
-      "os": "ubuntu-latest",
+      "os": "macos-latest",
       "node-version": "NODE-VERSION",
       "java-version": "JAVA-VERSION",
       "npm-version": "NPM-VERSION",

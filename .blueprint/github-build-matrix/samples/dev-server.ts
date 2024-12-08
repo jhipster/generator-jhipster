@@ -16,6 +16,7 @@ export const devServerMatrix = {
     'react-default': {
       sample: 'samples/react-default',
       args: '--sample-yorc-folder --entities-sample sqllight',
+      os: 'macos-latest',
     },
   },
   vue: {
