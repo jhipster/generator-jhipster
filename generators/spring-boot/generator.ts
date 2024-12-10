@@ -41,7 +41,6 @@ import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.js';
 import {
   addSpringFactory,
   getJavaValueGeneratorForType,
-  getPrimaryKeyValue,
   getSpecificationBuildForType,
   insertContentIntoApplicationProperties,
   javaBeanCase,
@@ -66,7 +65,7 @@ import cleanupTask from './cleanup.js';
 import { serverFiles } from './files.js';
 import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
 
-const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
+const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
@@ -87,6 +86,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
       await this.dependsOnJHipster(GENERATOR_SERVER);
       await this.dependsOnJHipster('jhipster:java:domain');
       await this.dependsOnJHipster('jhipster:java:build-tool');
+      await this.dependsOnJHipster('jhipster:java:server');
     }
   }
 
@@ -104,13 +104,6 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      checks() {
-        const config = this.jhipsterConfigWithDefaults;
-        if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider!)) {
-          this.log.verboseInfo(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
-          this.jhipsterConfig.enableHibernateCache = false;
-        }
-      },
       feignMigration() {
         const { reactive, applicationType, feignClient } = this.jhipsterConfigWithDefaults;
         if (feignClient) {
@@ -255,6 +248,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
           application.springBootDependencies = this.prepareDependencies(getPomVersionProperties(pom), 'java');
           application.javaDependencies!['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
           Object.assign(application.javaManagedProperties!, pom.project.properties);
+          application.javaDependencies!.liquibase = application.javaManagedProperties!['liquibase.version']!;
         }
       },
       prepareForTemplates({ application }) {
@@ -321,6 +315,19 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
 }
 `,
           });
+      },
+      blockhound({ application, source }) {
+        source.addAllowBlockingCallsInside = ({ classPath, method }) => {
+          if (!application.reactive) throw new Error('Blockhound is only supported by reactive applications');
+
+          this.editFile(
+            `${application.javaPackageTestDir}config/JHipsterBlockHoundIntegration.java`,
+            createNeedleCallback({
+              needle: 'blockhound-integration',
+              contentToAdd: `builder.allowBlockingCallsInside("${classPath}", "${method}");`,
+            }),
+          );
+        };
       },
     });
   }
@@ -601,6 +608,16 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
           source.addMavenDependency!({ inProfile: 'docker-compose', ...dockerComposeArtifact, optional: true });
         }
       },
+      nativeSupport({ application, source }) {
+        const { graalvmSupport, reactive } = application;
+        if (graalvmSupport && !reactive) {
+          // Workaround https://github.com/spring-projects/spring-boot/issues/43260
+          source.addJavaDependencies?.([
+            { groupId: 'io.reactivex.rxjava3', artifactId: 'rxjava', scope: 'runtime' },
+            { groupId: 'io.projectreactor', artifactId: 'reactor-core', scope: 'runtime' },
+          ]);
+        }
+      },
     });
   }
 
@@ -628,18 +645,5 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
 
   get [BaseApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
-  }
-
-  /**
-   * @private
-   * Returns the primary key value based on the primary key type, DB and default value
-   *
-   * @param {string} primaryKey - the primary key type
-   * @param {string} databaseType - the database type
-   * @param {string} defaultValue - default value
-   * @returns {string} java primary key value
-   */
-  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1) {
-    return getPrimaryKeyValue(primaryKey, databaseType, defaultValue);
   }
 }

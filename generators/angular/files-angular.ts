@@ -28,7 +28,6 @@ export const files = {
   common: [
     clientRootTemplatesBlock({
       templates: [
-        'angular.json',
         { sourceFile: 'eslint.config.js.jhi.angular', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.angular` },
         'ngsw-config.json',
         'package.json',
@@ -36,6 +35,14 @@ export const files = {
         'tsconfig.app.json',
         'tsconfig.spec.json',
         'jest.conf.js',
+      ],
+    }),
+  ],
+  webpack: [
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.clientBundlerWebpack,
+      templates: [
+        'angular.json',
         'webpack/environment.js',
         'webpack/proxy.conf.js',
         'webpack/webpack.custom.js',
@@ -43,10 +50,38 @@ export const files = {
       ],
     }),
   ],
+  esbuild: [
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.clientBundlerExperimentalEsbuild,
+      templates: [
+        { sourceFile: 'angular.json.esbuild', destinationFile: 'angular.json' },
+        'proxy.conf.json',
+        'build-plugins/define-esbuild.mjs',
+      ],
+    }),
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.clientBundlerExperimentalEsbuild && ctx.enableTranslation,
+      templates: ['build-plugins/i18n-esbuild.mjs'],
+    }),
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.clientBundlerExperimentalEsbuild && ctx.enableTranslation && ctx.enableI18nRTL,
+      templates: ['postcss.config.json'],
+    }),
+    clientSrcTemplatesBlock({
+      condition: ctx => ctx.clientBundlerExperimentalEsbuild && ctx.enableTranslation,
+      templates: ['i18n/index.ts'],
+    }),
+  ],
   sass: [
     {
       ...clientSrcTemplatesBlock(),
-      templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
+      templates: [
+        'content/scss/_bootstrap-variables.scss',
+        'content/scss/global.scss',
+        'content/scss/vendor.scss',
+        'environments/environment.ts',
+        'environments/environment.development.ts',
+      ],
     },
   ],
   angularApp: [
@@ -56,12 +91,12 @@ export const files = {
     },
     {
       ...clientApplicationTemplatesBlock(),
-      templates: ['app.config.ts', 'app.component.ts', 'app.routes.ts', 'app.constants.ts', 'app-page-title-strategy.ts'],
+      templates: ['app.config.ts', 'app.component.ts', 'app.routes.ts', 'app-page-title-strategy.ts'],
     },
   ],
   microfrontend: [
     clientRootTemplatesBlock({
-      condition: generator => generator.microfrontend,
+      condition: generator => generator.clientBundlerWebpack && generator.microfrontend,
       templates: ['webpack/webpack.microfrontend.js'],
     }),
     {

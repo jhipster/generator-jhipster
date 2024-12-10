@@ -30,7 +30,6 @@ import {
   GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
 } from '../generator-list.js';
 import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/tasks.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
@@ -75,9 +74,7 @@ const asPriority = BaseGenerator.asPriority;
  * This is the base class for a generator that generates entities.
  */
 export default class BaseApplicationGenerator<
-  E extends Entity = Entity,
-  A extends ApplicationType<E> = ApplicationType<E>,
-  TaskTypes extends DefaultTaskTypes<any, any> = DefaultTaskTypes<E, A>,
+  TaskTypes extends DefaultTaskTypes<any, any> = DefaultTaskTypes,
 > extends BaseGenerator<TaskTypes> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
@@ -96,7 +93,7 @@ export default class BaseApplicationGenerator<
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
   declare jhipsterConfig: ApplicationConfiguration & Record<string, any>;
-  declare sharedData: SharedData<A>;
+  declare sharedData: SharedData;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, features);
@@ -187,16 +184,16 @@ export default class BaseApplicationGenerator<
   /**
    * get sorted list of entities according to changelog date (i.e. the order in which they were added)
    */
-  getExistingEntities(): { name: string; definition: E }[] {
+  getExistingEntities(): { name: string; definition: Entity }[] {
     function isBefore(e1, e2) {
       return (e1.definition.annotations?.changelogDate ?? 0) - (e2.definition.annotations?.changelogDate ?? 0);
     }
 
     const configDir = this.getEntitiesConfigPath();
 
-    const entities: { name: string; definition: E }[] = [];
+    const entities: { name: string; definition: Entity }[] = [];
     for (const entityName of [...new Set(((this.jhipsterConfig.entities as string[]) || []).concat(getEntitiesFromDir(configDir)))]) {
-      const definition: E = this.getEntityConfig(entityName)?.getAll() as unknown as E;
+      const definition: Entity = this.getEntityConfig(entityName)?.getAll() as unknown as Entity;
       if (definition) {
         entities.push({ name: entityName, definition });
       }
@@ -583,7 +580,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: LOADING_ENTITIES_QUEUE,
@@ -602,7 +599,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: PREPARING_EACH_ENTITY_QUEUE,
@@ -623,7 +620,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: PREPARING_EACH_ENTITY_FIELD_QUEUE,
@@ -643,7 +640,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: PREPARING_EACH_ENTITY_RELATIONSHIP_QUEUE,
@@ -663,7 +660,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: POST_PREPARING_EACH_ENTITY_QUEUE,
@@ -683,7 +680,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: WRITING_ENTITIES_QUEUE,
@@ -700,7 +697,7 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
 
     this.queueTask({
       queueName: POST_WRITING_ENTITIES_QUEUE,
@@ -717,6 +714,6 @@ export default class BaseApplicationGenerator<
           });
         });
       },
-    } as any);
+    });
   }
 }

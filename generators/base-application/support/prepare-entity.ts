@@ -35,20 +35,19 @@ import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
 import type { Entity } from '../../../lib/types/application/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import { fieldIsEnum } from './field-utils.js';
+import type { PrimaryKey } from '../../../lib/types/application/entity.js';
+import type { ApplicationConfiguration } from '../../../lib/types/application/yo-rc.js';
+import type { ApplicationType } from '../../../lib/types/application/application.js';
 import { fieldToReference } from './prepare-field.js';
+import { fieldIsEnum } from './field-utils.js';
 
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
-const { PaginationTypes, ServiceTypes, MapperTypes } = entityOptions;
+const { MapperTypes } = entityOptions;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { CommonDBTypes } = fieldTypes;
 
 const { BOOLEAN, LONG, STRING, UUID, INTEGER } = CommonDBTypes;
-const { NO: NO_DTO, MAPSTRUCT } = MapperTypes;
-const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
-const { SERVICE_IMPL } = ServiceTypes;
-const NO_SERVICE = ServiceTypes.NO;
-const NO_PAGINATION = PaginationTypes.NO;
+const { NO: NO_DTO } = MapperTypes;
 const NO_MAPPER = MapperTypes.NO;
 
 const { CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = databaseTypes;
@@ -104,17 +103,19 @@ const BASE_TEMPLATE_DATA = {
   },
 };
 
-function _derivedProperties(entityWithConfig) {
+function _derivedProperties(entityWithConfig: Entity) {
   const pagination = entityWithConfig.pagination;
   const dto = entityWithConfig.dto;
   const service = entityWithConfig.service;
   mutateData(entityWithConfig, {
-    paginationPagination: pagination === PAGINATION,
-    paginationInfiniteScroll: pagination === INFINITE_SCROLL,
-    paginationNo: pagination === NO_PAGINATION,
-    dtoMapstruct: dto === MAPSTRUCT,
-    serviceImpl: service === SERVICE_IMPL,
-    serviceNo: service === NO_SERVICE,
+    paginationPagination: pagination === 'pagination',
+    paginationInfiniteScroll: pagination === 'infinite-scroll',
+    paginationNo: pagination === 'no',
+    dtoMapstruct: dto === 'mapstruct' || dto === 'any',
+    dtoAny: dto && dto !== 'no',
+    serviceClass: service === 'serviceClass',
+    serviceImpl: service === 'serviceImpl',
+    serviceNo: service === 'no',
   });
 }
 
@@ -137,7 +138,9 @@ export const entityDefaultConfig = {
   },
 };
 
-export default function prepareEntity(entityWithConfig, generator, application) {
+export default function prepareEntity(entityWithConfig: Entity, generator, application: ApplicationType) {
+  const { applicationTypeMicroservice, microfrontend } = application;
+
   const entityName = upperFirst(entityWithConfig.name);
   const entitySuffix = entityWithConfig.entitySuffix ?? application.entitySuffix;
   mutateData(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
@@ -174,23 +177,26 @@ export default function prepareEntity(entityWithConfig, generator, application) 
     entityAuthority: entityWithConfig.adminEntity ? 'ROLE_ADMIN' : undefined,
   });
 
-  const dto = entityWithConfig.dto && entityWithConfig.dto !== NO_DTO;
-  if (dto) {
-    mutateData(entityWithConfig, {
-      dtoClass: `${entityWithConfig.entityClass}${application.dtoSuffix ?? ''}`,
-      dtoInstance: `${entityWithConfig.entityInstance}${application.dtoSuffix ?? ''}`,
-    });
-  }
-
   mutateData(entityWithConfig, {
     persistClass: `${entityWithConfig.entityClass}${entitySuffix ?? ''}`,
     persistInstance: `${entityWithConfig.entityInstance}${entitySuffix ?? ''}`,
   });
 
-  mutateData(entityWithConfig, {
-    restClass: dto ? entityWithConfig.dtoClass : entityWithConfig.persistClass,
-    restInstance: dto ? entityWithConfig.dtoInstance : entityWithConfig.persistInstance,
-  });
+  const dto = entityWithConfig.dto && entityWithConfig.dto !== NO_DTO;
+  if (dto) {
+    const { dtoSuffix = '' } = application;
+    mutateData(entityWithConfig, {
+      dtoClass: `${entityWithConfig.entityClass}${dtoSuffix}`,
+      dtoInstance: `${entityWithConfig.entityInstance}${dtoSuffix}`,
+      restClass: ({ dtoClass }) => dtoClass!,
+      restInstance: ({ dtoInstance }) => dtoInstance!,
+    });
+  } else {
+    mutateData(entityWithConfig, {
+      restClass: ({ persistClass }) => persistClass!,
+      restInstance: ({ persistInstance }) => persistInstance!,
+    });
+  }
 
   mutateData(entityWithConfig, {
     entityNamePluralizedAndSpinalCased: kebabCase(entityWithConfig.entityNamePlural),
@@ -208,7 +214,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   mutateData(entityWithConfig, {
     __override__: false,
     entityFileName: data => kebabCase(data.entityNameCapitalized + upperFirst(data.entityAngularJSSuffix)),
-    entityAngularName: data => data.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix),
+    entityAngularName: data => data.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix!),
     entityAngularNamePlural: data => pluralize(data.entityAngularName),
     entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
   });
@@ -236,35 +242,31 @@ export default function prepareEntity(entityWithConfig, generator, application) 
 
   mutateData(entityWithConfig, {
     __override__: false,
-    i18nKeyPrefix: data => data.i18nKeyPrefix ?? `${data.frontendAppName}.${data.entityTranslationKey}`,
+    i18nKeyPrefix: data => data.i18nKeyPrefix ?? `${application.frontendAppName}.${data.entityTranslationKey}`,
     i18nAlertHeaderPrefix: data =>
       (data.i18nAlertHeaderPrefix ?? data.microserviceAppName)
         ? `${data.microserviceAppName}.${data.entityTranslationKey}`
         : data.i18nKeyPrefix,
     hasRelationshipWithBuiltInUser: ({ relationships }) => relationships.some(relationship => relationship.otherEntity.builtInUser),
     saveUserSnapshot: ({ hasRelationshipWithBuiltInUser, dto }) =>
-      application.applicationTypeMicroservice &&
-      application.authenticationTypeOauth2 &&
-      hasRelationshipWithBuiltInUser &&
-      dto === NO_MAPPER,
+      applicationTypeMicroservice && application.authenticationTypeOauth2 && hasRelationshipWithBuiltInUser && dto === NO_MAPPER,
+    entityApi: ({ microserviceName }) => (microserviceName ? `services/${microserviceName.toLowerCase()}/` : ''),
+    entityPage: ({ microserviceName, entityFileName }) =>
+      microserviceName && microfrontend && applicationTypeMicroservice
+        ? `${microserviceName.toLowerCase()}/${entityFileName}`
+        : `${entityFileName}`,
   });
-
-  const { microserviceName, entityFileName, microfrontend } = entityWithConfig;
-  entityWithConfig.entityApi = microserviceName ? `services/${microserviceName.toLowerCase()}/` : '';
-  entityWithConfig.entityPage =
-    entityWithConfig.entityPage ??
-    (microfrontend && microserviceName && entityWithConfig.applicationType === MICROSERVICE
-      ? `${microserviceName.toLowerCase()}/${entityFileName}`
-      : `${entityFileName}`);
 
   entityWithConfig.generateFakeData = type => {
     const fieldsToGenerate =
       type === 'cypress' ? entityWithConfig.fields.filter(field => !field.id || !field.autoGenerate) : entityWithConfig.fields;
-    const fieldEntries = fieldsToGenerate.map(field => {
-      const fieldData = field.generateFakeData(type);
-      if (!field.nullable && fieldData === null) return undefined;
-      return [field.fieldName, fieldData];
-    });
+    const fieldEntries: [string, any][] = fieldsToGenerate
+      .map(field => {
+        const fieldData = field.generateFakeData!(type);
+        if (!field.nullable && fieldData === null) return undefined;
+        return [field.fieldName, fieldData];
+      })
+      .filter(Boolean) as any;
     const withError = fieldEntries.find(entry => !entry);
     if (withError) {
       generator.log.warn(`Error generating a full sample for entity ${entityName}`);
@@ -277,7 +279,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   return entityWithConfig;
 }
 
-export function derivedPrimaryKeyProperties(primaryKey) {
+export function derivedPrimaryKeyProperties(primaryKey: PrimaryKey) {
   mutateData(primaryKey, {
     hasUUID: primaryKey.fields?.some(field => field.fieldType === UUID),
     hasLong: primaryKey.fields?.some(field => field.fieldType === LONG),
@@ -287,7 +289,7 @@ export function derivedPrimaryKeyProperties(primaryKey) {
     typeLong: primaryKey.type === LONG,
     typeInteger: primaryKey.type === INTEGER,
     typeNumeric: !primaryKey.composite && primaryKey.fields[0].fieldTypeNumeric,
-  });
+  } as any);
 }
 
 export function prepareEntityPrimaryKeyForTemplates(
@@ -499,12 +501,15 @@ function fieldToId(field) {
  * @param {Object} config - config object.
  * @returns {Object} the entity parameter for chaining.
  */
-export function loadRequiredConfigIntoEntity(this: BaseGenerator | void, entity, config) {
+export function loadRequiredConfigIntoEntity<E extends Partial<Entity>>(
+  this: BaseGenerator | void,
+  entity: E,
+  config: ApplicationConfiguration,
+): E {
   mutateData(entity, {
     __override__: false,
     applicationType: config.applicationType,
     baseName: config.baseName,
-    frontendAppName: config.frontendAppName,
     authenticationType: config.authenticationType,
     reactive: config.reactive,
     microfrontend: config.microfrontend,
@@ -514,17 +519,15 @@ export function loadRequiredConfigIntoEntity(this: BaseGenerator | void, entity,
     databaseType: config.databaseType,
     prodDatabaseType: config.prodDatabaseType,
 
-    skipUiGrouping: config.skipUiGrouping,
     searchEngine: config.searchEngine,
 
     jhiPrefix: config.jhiPrefix,
     entitySuffix: config.entitySuffix,
     dtoSuffix: config.dtoSuffix,
     packageName: config.packageName,
-    packageFolder: config.packageFolder,
     microserviceName: ({ builtIn }) => (!builtIn && config.applicationType === MICROSERVICE ? config.baseName : undefined),
-  });
-  if (entity.searchEngine === true && (!entity.microserviceName || entity.microserviceName === config.baseName)) {
+  } as any);
+  if ((entity as any).searchEngine === true && (!entity.microserviceName || entity.microserviceName === config.baseName)) {
     // If the entity belongs to this application and searchEngine is true.
     if (config.searchEngine && config.searchEngine !== NO_SEARCH_ENGINE) {
       // Replace with the searchEngine from the application.
@@ -649,7 +652,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
           entity.eagerLoad ||
           // Fetch relationships if otherEntityField differs otherwise the id is enough
           (ownerSide && otherEntity.primaryKey.name !== otherEntityField)),
-    });
+    } as any);
   });
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
   entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);

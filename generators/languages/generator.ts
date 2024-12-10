@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -37,16 +36,14 @@ import { clientI18nFiles } from './files.js';
 import { askForLanguages, askI18n } from './prompts.js';
 
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
+
 /**
  * This is the base class for a generator that generates entities.
- *
- * @class
- * @extends {BaseApplicationGenerator}
  */
 export default class LanguagesGenerator extends BaseApplicationGenerator {
   askForMoreLanguages!: boolean;
   askForNativeLanguage!: boolean;
-  translationData;
+  translationData!: TranslationData;
   supportedLanguages;
   languages;
   /**
@@ -54,7 +51,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
    * Can be incremental or every language.
    */
   languagesToApply;
-  composedBlueprints: string[] = [];
+  composedBlueprints: any[] = [];
   languageCommand;
   writeJavaLanguageFiles;
   regenerateLanguages;
@@ -165,7 +162,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         const { nativeLanguage, enableTranslation } = this.jhipsterConfigWithDefaults;
         const isLanguageConfigured = Boolean(this.jhipsterConfig.nativeLanguage);
         // Prompts detects current language. Save default native language for next execution.
-        this.config.defaults({ nativeLanguage });
+        this.config.defaults({ nativeLanguage: nativeLanguage! });
         if (!enableTranslation) {
           return;
         }
@@ -174,13 +171,13 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           // If languages is not configured, apply defaults.
           this.languagesToApply = this.jhipsterConfigWithDefaults.languages;
         }
-        if (this.jhipsterConfig.languages.length === 0 || this.jhipsterConfig.languages[0] !== this.jhipsterConfig.nativeLanguage) {
+        if (this.jhipsterConfig.languages!.length === 0 || this.jhipsterConfig.languages![0] !== this.jhipsterConfig.nativeLanguage) {
           // Set native language as first language.
-          this.jhipsterConfig.languages = [...new Set([nativeLanguage, ...this.jhipsterConfig.languages])];
+          this.jhipsterConfig.languages = [...new Set([nativeLanguage, ...this.jhipsterConfig.languages!])];
         }
         if (this.languagesToApply && this.languagesToApply.length > 0) {
           // Save new languages.
-          this.jhipsterConfig.languages = [...new Set([...this.jhipsterConfig.languages, ...this.languagesToApply])];
+          this.jhipsterConfig.languages = [...new Set([...this.jhipsterConfig.languages!, ...this.languagesToApply])];
         }
       },
     });
@@ -324,10 +321,15 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      write({ application, control }) {
+      write({ application, control, source }) {
         if (this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)) return;
 
-        if (application.enableTranslation && !application.skipClient) {
+        const { enableTranslation, skipClient, languagesDefinition } = application;
+        if (languagesDefinition && languagesDefinition.length > 0) {
+          source.addLanguagesInFrontend?.({ languagesDefinition });
+        }
+
+        if (enableTranslation && !skipClient) {
           if (application.clientFrameworkAngular) {
             updateLanguagesInAngularTask.call(this, { application, control });
           }
@@ -345,7 +347,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           application.backendTypeJavaAny &&
           application.backendTypeSpringBoot
         ) {
-          updateLanguagesInJava.call(this, { application, control });
+          updateLanguagesInJava.call(this, { application, control, source });
         }
       },
     });
@@ -377,13 +379,13 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
-  migrateLanguages(languagesToMigrate) {
+  migrateLanguages(languagesToMigrate: Record<string, string>) {
     const { languages, nativeLanguage } = this.jhipsterConfig;
     if (languagesToMigrate[nativeLanguage!]) {
       this.jhipsterConfig.nativeLanguage = languagesToMigrate[nativeLanguage!];
     }
-    if (languages?.some(lang => languagesToMigrate[lang])) {
-      this.jhipsterConfig.languages = languages.map(lang => languagesToMigrate[lang] ?? lang);
+    if (languages?.some(lang => languagesToMigrate[lang as string])) {
+      this.jhipsterConfig.languages = languages.map(lang => languagesToMigrate[lang as string] ?? lang);
     }
   }
 

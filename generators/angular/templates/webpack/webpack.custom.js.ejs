@@ -69,7 +69,7 @@ module.exports = async (config, options, targetOptions) => {
       new BrowserSyncPlugin(
         {
           host: 'localhost',
-          port: 9000,
+          port: <%- devServerPortProxy %>,
           https: tls,
           proxy: {
             target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '<%= devServerPort %>' : '<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>'}`,
@@ -80,7 +80,7 @@ module.exports = async (config, options, targetOptions) => {
             proxyReq: [
               function (proxyReq) {
                 // URI that will be retrieved by the ForwardedHeaderFilter on the server side
-                proxyReq.setHeader('X-Forwarded-Host', 'localhost:9000');
+                proxyReq.setHeader('X-Forwarded-Host', 'localhost:<%- devServerPortProxy %>');
                 proxyReq.setHeader('X-Forwarded-Proto', 'https');
               },
             ],
@@ -160,7 +160,6 @@ module.exports = async (config, options, targetOptions) => {
 <%_ } _%>
       // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
       __VERSION__: JSON.stringify(environment.__VERSION__),
-      __DEBUG_INFO_ENABLED__: environment.__DEBUG_INFO_ENABLED__ || config.mode === 'development',
       // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
       // If this URL is left empty (""), then it will be relative to the current context.
       // If you use an API server, in `prod` mode, you will need to enable CORS

@@ -158,13 +158,6 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
         return new CouchbaseCustomConversions(converters);
     }
 
-    @Override
-    public MappingCouchbaseConverter mappingCouchbaseConverter(CouchbaseMappingContext couchbaseMappingContext, CouchbaseCustomConversions couchbaseCustomConversions) {
-        MappingCouchbaseConverter mappingCouchbaseConverter = super.mappingCouchbaseConverter(couchbaseMappingContext, couchbaseCustomConversions);
-        ((GenericConversionService) mappingCouchbaseConverter.getConversionService()).addConverter(StringToObjectConverter.INSTANCE);
-        return mappingCouchbaseConverter;
-    }
-
     @Bean
     public Couchmove couchmove(Cluster cluster) {
         LOG.debug("Configuring Couchmove");
@@ -306,19 +299,5 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
             return source == null ? null : UUID.fromString(source);
         }
 
-    }
-
-    public enum StringToObjectConverter implements GenericConverter {
-        INSTANCE;
-
-        @Override
-        public Set<ConvertiblePair> getConvertibleTypes() {
-            return Collections.singleton(new ConvertiblePair(String.class, Object.class));
-        }
-
-        @Override
-        public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-            return null;
-        }
     }
 }

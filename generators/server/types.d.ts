@@ -1,3 +1,4 @@
+import type { PackageJson } from 'type-fest';
 import type { JavaApplication, JavaSourceType } from '../java/types.js';
 import type { GradleSourceType } from '../gradle/types.js';
 import type { MavenSourceType } from '../maven/types.js';
@@ -9,6 +10,7 @@ import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
 import type { ApplicationPropertiesNeedles } from './support/needles.ts';
 
 export type SpringEntity = {
+  entitySearchLayer?: boolean;
   /* Generate entity's Entity */
   entityDomainLayer?: boolean;
   /* Generate entity's Repository */
@@ -18,6 +20,12 @@ export type SpringEntity = {
   entitySpringPreAuthorize?: string;
   entitySpringReadPreAuthorize?: string;
   skipJunitTests?: string;
+  entityR2dbcRepository?: boolean;
+};
+
+export type ServerEntity = SpringEntity & {
+  skipDbChangelog?: boolean;
+  entityAbsolutePackage?: string;
 };
 
 export type SpringBootSourceType = JavaSourceType &
@@ -123,6 +131,7 @@ export type SpringBootApplication = JavaApplication &
   SearchEngine &
   DatabaseTypeApplication &
   GatewayApplication & {
+    jhipsterPackageJson: PackageJson;
     jhipsterDependenciesVersion: string;
     springBootDependencies: Record<string, string>;
     dockerContainers: Record<string, string>;
@@ -149,7 +158,10 @@ export type SpringBootApplication = JavaApplication &
     databaseMigrationLiquibase: boolean;
 
     communicationSpringWebsocket: boolean;
+    anyEntityHasRelationshipWithUser: boolean;
     requiresDeleteAllUsers: boolean;
     reactorBlock: string;
     reactorBlockOptional: string;
+
+    domains: string[];
   };

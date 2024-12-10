@@ -40,6 +40,21 @@ const command = {
       },
       scope: 'storage',
     },
+    gitDependency: {
+      cli: {
+        description: 'Use git dependency',
+        type: String,
+      },
+      default: 'github:jhipster/generator-jhipster#main',
+      scope: 'generator',
+    },
+    cliName: {
+      cli: {
+        description: 'CLI name',
+        type: String,
+      },
+      scope: 'storage',
+    },
     recreatePackageLock: {
       description: 'Recreate package lock',
       cli: {

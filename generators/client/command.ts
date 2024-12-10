@@ -82,7 +82,21 @@ const command = {
         type: String,
         hide: true,
       },
-      choices: ['webpack', 'vite'],
+      choices: ['webpack', 'vite', 'experimentalEsbuild'],
+      scope: 'storage',
+    },
+    devServerPort: {
+      cli: {
+        type: Number,
+        hide: true,
+      },
+      scope: 'storage',
+    },
+    devServerPortProxy: {
+      cli: {
+        type: Number,
+        hide: true,
+      },
       scope: 'storage',
     },
     microfrontend: {

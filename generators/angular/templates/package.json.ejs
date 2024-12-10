@@ -41,7 +41,6 @@
     "@ng-bootstrap/ng-bootstrap": "<%= nodeDependencies['@ng-bootstrap/ng-bootstrap'] %>",
 <%_ if (enableTranslation) { _%>
     "@ngx-translate/core": "<%= nodeDependencies['@ngx-translate/core'] %>",
-    "@ngx-translate/http-loader": "<%= nodeDependencies['@ngx-translate/http-loader'] %>",
 <%_ } _%>
     "bootstrap": "<%= nodeDependencies.bootstrap %>",
     <%_ if (!clientThemeNone) { _%>
@@ -67,27 +66,20 @@
 <%_ if (cypressTests) { _%>
     "cypress": "<%= nodeDependencies['cypress'] %>",
 <%_ } _%>
-<%_ if (enableTranslation) { _%>
-    "folder-hash": "<%= nodeDependencies['folder-hash'] %>",
-    "merge-jsons-webpack-plugin": "<%= nodeDependencies['merge-jsons-webpack-plugin'] %>",
-<%_ } _%>
     "@angular/cli": "<%= nodeDependencies['@angular/cli'] %>",
     "@angular/compiler-cli": "<%= nodeDependencies['@angular/common'] %>",
     "@angular/service-worker": "<%= nodeDependencies['@angular/common'] %>",
-    "@angular-builders/custom-webpack": "<%= nodeDependencies['@angular-builders/custom-webpack'] %>",
     "@angular-builders/jest": "<%= nodeDependencies['@angular-builders/jest'] %>",
     "@angular-devkit/build-angular": "<%= nodeDependencies['@angular/cli'] %>",
+    "@eslint/js": null,
     "@types/jest": "<%= nodeDependencies['@types/jest'] %>",
     "@types/node": "<%= nodeDependencies['@types/node'] %>",
     "angular-eslint": "<%= nodeDependencies['angular-eslint'] %>",
     "browser-sync": "<%= nodeDependencies['browser-sync'] %>",
-    "browser-sync-webpack-plugin": "<%= nodeDependencies['browser-sync-webpack-plugin'] %>",
     "buffer": "<%= nodeDependencies['buffer'] %>",
-    "copy-webpack-plugin": "<%= nodeDependencies['copy-webpack-plugin'] %>",
     "eslint": "<%= nodeDependencies['eslint'] %>",
     "eslint-config-prettier": "<%= nodeDependencies['eslint-config-prettier'] %>",
     "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
-    "eslint-webpack-plugin": "<%= nodeDependencies['eslint-webpack-plugin'] %>",
     "globals": "<%= nodeDependencies.globals %>",
     "jest": "<%= nodeDependencies['jest'] %>",
     "jest-environment-jsdom": "<%= nodeDependencies['jest'] %>",
@@ -102,14 +94,7 @@
     "swagger-ui-dist": "<%= nodeDependencies['swagger-ui-dist'] %>",
     "ts-jest": "<%= nodeDependencies['ts-jest'] %>",
     "typescript": "<%= nodeDependencies['typescript'] %>",
-    "typescript-eslint": "<%= nodeDependencies['typescript-eslint'] %>",
-    "webpack-bundle-analyzer": "<%= nodeDependencies['webpack-bundle-analyzer'] %>",
-    "webpack-merge": "<%= nodeDependencies['webpack-merge'] %>",
-    "webpack-notifier": "<%= nodeDependencies['webpack-notifier'] %>"
-  },
-  "overrides": {
-    "browser-sync": "<%= nodeDependencies['browser-sync'] %>",
-    "webpack": "<%= nodeDependencies['webpack'] %>"
+    "typescript-eslint": "<%= nodeDependencies['typescript-eslint'] %>"
   },
   "engines": {
     "node": ">=<%= nodeVersion %>"
@@ -118,8 +103,6 @@
     "default_environment": "prod"
   },
   "scripts": {
-    "prettier:check": "prettier --check \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
-    "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
     "lint": "eslint .",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",

@@ -27,8 +27,6 @@ import {
   generateEntityClientImports as formatEntityClientImports,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
-  generateTestEntityId as getTestEntityId,
-  generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
 } from '../client/support/index.js';
 import { createNeedleCallback, upperFirstCamelCase } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
@@ -99,6 +97,14 @@ export default class ReactGenerator extends BaseApplicationGenerator {
           webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
         });
       },
+      async javaNodeBuildPaths({ application }) {
+        const { clientBundlerWebpack, javaNodeBuildPaths } = application;
+
+        javaNodeBuildPaths?.push('.postcss.config.js', 'tsconfig.json');
+        if (clientBundlerWebpack) {
+          javaNodeBuildPaths?.push('webpack/');
+        }
+      },
       prepareForTemplates({ application, source }) {
         source.addWebpackConfig = args => {
           const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
@@ -142,7 +148,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
               filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedReactFile(file),
               refresh: false,
             },
-            translateReactFilesTransform(control.getWebappTranslation),
+            translateReactFilesTransform(control.getWebappTranslation!),
           );
         }
       },
@@ -155,9 +161,16 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      async cleanup({ control }) {
+      async cleanup({ control, application }) {
         await control.cleanupFiles({
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
+          '8.7.4': [
+            [
+              Boolean(application.microfrontend && application.applicationTypeGateway),
+              `${application.srcMainWebapp}microfrontends/entities-menu.tsx`,
+              `${application.srcMainWebapp}microfrontends/entities-routes.tsx`,
+            ],
+          ],
         });
       },
       cleanupOldFilesTask,
@@ -189,22 +202,22 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addMicrofrontendDependencies({ application }) {
+      addMicrofrontendDependencies({ application, source }) {
         if (!application.microfrontend) return;
         const { applicationTypeGateway } = application;
         if (applicationTypeGateway) {
-          this.packageJson.merge({
+          source.mergeClientPackageJson!({
             devDependencies: { '@module-federation/utilities': null },
           });
         }
-        this.packageJson.merge({
+        source.mergeClientPackageJson!({
           devDependencies: { '@module-federation/enhanced': null },
         });
       },
-      addWebsocketDependencies({ application }) {
+      addWebsocketDependencies({ application, source }) {
         const { communicationSpringWebsocket, nodeDependencies } = application;
         if (communicationSpringWebsocket) {
-          this.packageJson.merge({
+          source.mergeClientPackageJson!({
             dependencies: {
               rxjs: nodeDependencies.rxjs,
               'sockjs-client': nodeDependencies['sockjs-client'],
@@ -317,14 +330,6 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   generateEntityClientEnumImports(fields) {
     return getClientEnumImportsFormat(fields, REACT);
-  }
-
-  generateTestEntityId(primaryKey, index = 0, wrapped = true) {
-    return getTestEntityId(primaryKey, index, wrapped);
-  }
-
-  generateTestEntityPrimaryKey(primaryKey, index) {
-    return getTestEntityPrimaryKey(primaryKey, index);
   }
 
   /**

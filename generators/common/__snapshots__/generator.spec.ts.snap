@@ -115,6 +115,8 @@ This application was generated using JHipster JHIPSTER_VERSION, you can find doc
   },
   "engines": {},
   "scripts": {
+    "prettier:check": "prettier --check \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
+    "prettier:format": "prettier --write \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
     "prepare": "husky"
   },
   "config": {
@@ -142,16 +144,18 @@ sonar.test.inclusions = src/test/**/*.*, src/main/webapp/app/**/*.spec.ts
 sonar.coverage.jacoco.xmlReportPaths = target/site/**/jacoco*.xml
 sonar.java.codeCoveragePlugin = jacoco
 sonar.junit.reportPaths = target/surefire-reports,target/failsafe-reports
-sonar.testExecutionReportPaths = target/test-results/jest/TESTS-results-sonar.\\
-  xml
+sonar.testExecutionReportPaths = \\
+  target/test-results/jest/TESTS-results-sonar.xml
 sonar.javascript.lcov.reportPaths = target/test-results/lcov.info
 
 sonar.sourceEncoding = UTF-8
-sonar.exclusions = src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.js, \\
+sonar.exclusions = \\
+  src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.js, \\
   target/classes/static/**/*.*
 
 sonar.issue.ignore.multicriteria = \\
-  S6437,S1192,S125,S3437,S4502,S4684,S5145,UndocumentedApi
+  S6437,S1192,S125,S3437,S4502,S4684,S5145,S7027-domain,S7027-dto,UndocumentedAp\\
+  i
 
 # Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded 
 # passwords are provided for development purposes
@@ -171,6 +175,14 @@ sonar.issue.ignore.multicriteria.S4684.ruleKey = java:S4684
 # Rule https://rules.sonarsource.com/java/RSPEC-5145 log filter is applied
 sonar.issue.ignore.multicriteria.S5145.resourceKey = src/main/java/**/*
 sonar.issue.ignore.multicriteria.S5145.ruleKey = javasecurity:S5145
+# Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities
+sonar.issue.ignore.multicriteria.S7027-domain.resourceKey = \\
+  src/main/java/com/mycompany/myapp/domain/**/*
+sonar.issue.ignore.multicriteria.S7027-domain.ruleKey = javaarchitecture:S7027
+# Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for dtos
+sonar.issue.ignore.multicriteria.S7027-dto.resourceKey = \\
+  src/main/java/com/mycompany/myapp/service/dto/**/*
+sonar.issue.ignore.multicriteria.S7027-dto.ruleKey = javaarchitecture:S7027
 # Rule https://rules.sonarsource.com/java/RSPEC-1176 is ignored, as we want to 
 # follow "clean code" guidelines and classes, methods and arguments names 
 # should be self-explanatory

@@ -23,8 +23,8 @@ import {
 } from '../../support/commands';
 
 describe('logout', () => {
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? '<%- generateInMemoryUserCredentials ? 'admin' : 'user' %>';
+  const password = Cypress.env('E2E_PASSWORD') ?? '<%- generateInMemoryUserCredentials ? 'admin' : 'user' %>';
 
   it('go to home page when successfully logs out', () => {
     cy.login(username, password);

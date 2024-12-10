@@ -121,6 +121,9 @@ export function writeFiles() {
           if (appConfig.devServerPort !== undefined) {
             this.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
           }
+          if (appConfig.devServerPortProxy !== undefined) {
+            this.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPortProxy}/*", `;
+          }
 
           this.debug(chalk.red.bold(`${appConfig.baseName} has redirect URIs ${this.keycloakRedirectUris}`));
           this.debug(chalk.red.bold(`AppConfig is ${JSON.stringify(appConfig)}`));

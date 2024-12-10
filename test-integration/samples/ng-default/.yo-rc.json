@@ -15,7 +15,6 @@
     "devDatabaseType": "h2Disk",
     "dtoSuffix": "",
     "embeddableLaunchScript": false,
-    "enableHibernateCache": true,
     "enableTranslation": true,
     "entitySuffix": "Entity",
     "jhiPrefix": "myPrefix",

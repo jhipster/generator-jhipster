@@ -1,16 +1,13 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import BaseGenerator from '../../generators/base/index.js';
-import { getGithubOutputFile, setGithubTaskOutput } from '../../lib/testing/index.js';
+import type { GitHubMatrix, GitHubMatrixGroup } from '../../lib/testing/index.js';
+import { convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from '../../lib/testing/index.js';
 import { getPackageRoot } from '../../lib/index.js';
 import { BUILD_JHIPSTER_BOM, JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from '../../test-integration/integration-test-constants.js';
-import type { GitHubMatrix, GitHubMatrixRecord } from './support/github-ci-matrix.js';
-import { convertToGitHubMatrix } from './support/github-ci-matrix.js';
-import { dockerComposeMatrix } from './samples/docker-compose-integration.js';
 import { getGitChanges } from './support/git-changes.js';
 import { devServerMatrix } from './samples/dev-server.js';
 import type { eventNameChoices, workflowChoices } from './command.js';
-import { graalvmMatrix } from './samples/graalvm.js';
 
 type JHipsterGitHubMatrix = GitHubMatrix & {
   name: string;
@@ -22,6 +19,7 @@ type JHipsterGitHubMatrix = GitHubMatrix & {
   'sonar-analyse'?: 'true' | 'false';
   workspaces?: 'true' | 'false';
   'skip-frontend-tests'?: 'true' | 'false';
+  'skip-compare'?: 'true' | 'false';
   'skip-backend-tests'?: 'true' | 'false';
 };
 
@@ -44,16 +42,24 @@ export default class extends BaseGenerator {
         // Push events requires a base commit for diff. Diff cannot be checked by @~1 if PR was merged with a rebase.
         const useChanges = this.eventName === 'pull_request';
         const changes = await getGitChanges({ allTrue: !useChanges });
-        const { base, common, devBlueprint, client, e2e, java, workspaces } = changes;
+        const { base, common, devBlueprint, client, e2e, graalvm, java, workspaces } = changes;
         const hasWorkflowChanges = changes[`${this.workflow}Workflow`];
 
-        let matrix: GitHubMatrixRecord = {};
+        let matrix: GitHubMatrixGroup = {};
         let randomEnvironment = false;
         if (this.workflow === 'docker-compose-integration') {
-          matrix = dockerComposeMatrix;
+          const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
+          matrix = samples;
+          if (warnings.length) {
+            this.log.warn(warnings.join('\n'));
+          }
         } else if (this.workflow === 'graalvm') {
-          if (hasWorkflowChanges || java) {
-            matrix = graalvmMatrix;
+          if (hasWorkflowChanges || java || graalvm) {
+            const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
+            matrix = samples;
+            if (warnings.length) {
+              this.log.warn(warnings.join('\n'));
+            }
           }
         } else if (this.workflow === 'devserver') {
           if (devBlueprint || hasWorkflowChanges || client) {
@@ -67,6 +73,7 @@ export default class extends BaseGenerator {
           }
         } else if (['angular', 'react', 'vue'].includes(this.workflow)) {
           const hasClientFrameworkChanges = changes[this.workflow];
+          const hasSonarPrChanges = changes.sonarPr && this.workflow === 'angular';
           const enableAllTests = base || common || hasWorkflowChanges || devBlueprint;
           const enableBackendTests = enableAllTests || java;
           const enableFrontendTests = enableAllTests || client || hasClientFrameworkChanges;
@@ -74,34 +81,38 @@ export default class extends BaseGenerator {
           const enableAnyTest = enableE2eTests;
 
           randomEnvironment = true;
-          if (enableAnyTest) {
+          if (enableAnyTest || hasSonarPrChanges) {
             const content = await readFile(join(getPackageRoot(), `test-integration/workflow-samples/${this.workflow}.json`));
             const parsed: { include: JHipsterGitHubInputMatrix[] } = JSON.parse(content.toString());
             matrix = Object.fromEntries(
-              parsed.include.map((sample): [string, JHipsterGitHubMatrix] => {
-                const { 'job-name': jobName = sample.name, 'sonar-analyse': sonarAnalyse, generatorOptions } = sample;
-                const enableSonar = sonarAnalyse === 'true';
-                const workspaces = generatorOptions?.workspaces ? 'true' : 'false';
-                if (enableSonar && workspaces === 'true') {
-                  throw new Error('Sonar is not supported with workspaces');
-                }
-                return [
-                  jobName,
-                  {
-                    // Force tests if sonar is enabled
-                    'skip-backend-tests': `${!(enableBackendTests || enableSonar)}`,
-                    // Force tests if sonar is enabled
-                    'skip-frontend-tests': `${!(enableFrontendTests || enableSonar)}`,
-                    'gradle-cache': generatorOptions?.workspaces || jobName.includes('gradle') ? true : undefined,
-                    ...sample,
-                    sample: jobName,
-                    workspaces,
-                    'build-jhipster-bom': BUILD_JHIPSTER_BOM,
-                    'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,
-                    'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
-                  },
-                ];
-              }),
+              parsed.include
+                .map((sample): [string, JHipsterGitHubMatrix] | undefined => {
+                  const { 'job-name': jobName = sample.name, 'sonar-analyse': sonarAnalyse, generatorOptions } = sample;
+                  const enableSonar = sonarAnalyse === 'true';
+                  const workspaces = generatorOptions?.workspaces ? 'true' : 'false';
+                  if (enableSonar && workspaces === 'true') {
+                    throw new Error('Sonar is not supported with workspaces');
+                  }
+                  if (!enableAnyTest && !sonarAnalyse) return undefined;
+                  return [
+                    jobName,
+                    {
+                      'skip-compare': `${changes.sonarPr && enableSonar}`,
+                      // Force tests if sonar is enabled
+                      'skip-backend-tests': `${!(enableBackendTests || enableSonar)}`,
+                      // Force tests if sonar is enabled
+                      'skip-frontend-tests': `${!(enableFrontendTests || enableSonar)}`,
+                      'gradle-cache': generatorOptions?.workspaces || jobName.includes('gradle') ? true : undefined,
+                      ...sample,
+                      sample: sample.name ?? jobName,
+                      workspaces,
+                      'build-jhipster-bom': BUILD_JHIPSTER_BOM,
+                      'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,
+                      'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
+                    },
+                  ];
+                })
+                .filter(Boolean) as [string, JHipsterGitHubMatrix][],
             );
           }
         }

@@ -31,11 +31,16 @@ export type BaseApplication = {
 
   nodeVersion: string;
   nodePackageManager: string;
+  /* @deprecated use nodePackageManager */
+  clientPackageManager: string;
   nodeDependencies: Record<string, string>;
 
   skipClient?: boolean;
   skipServer?: boolean;
   monorepository?: boolean;
+
+  blueprints?: { name: string; version: string }[];
+  testFrameworks?: string[];
 
   /** Customize templates sourceFile and destinationFile */
   customizeTemplatePaths: ((
@@ -104,16 +109,13 @@ type UserManagement<Entity> = {
   userManagement: Entity;
   authority: Entity;
 };
+
 type JwtApplication = {
   jwtSecretKey: string;
 };
 
 type Oauth2Application = {
-  jwtSecretKey: string;
-  generateBuiltInUserEntity?: boolean;
-  user: any;
-  generateBuiltInAuthorityEntity: false;
-  generateUserManagement: false;
+  syncUserWithIdp?: boolean;
 };
 
 type SessionApplication = {
@@ -177,11 +179,8 @@ export type CommonClientServerApplication<Entity> = BaseApplication &
 
     dockerServicesDir?: string;
     dockerServices?: string[];
+    prettierFolders?: string;
     prettierExtensions?: string;
-
-    skipUserManagement?: boolean;
-    syncUserWithIdp?: boolean;
-    generateUserManagement?: boolean;
   };
 
 type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscoveryType', ['no', 'eureka', 'consul']>;

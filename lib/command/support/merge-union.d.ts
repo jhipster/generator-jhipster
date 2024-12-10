@@ -1,8 +1,19 @@
-type Compute<T> = { [K in keyof T]: T[K] } | never;
-type AllKeys<T> = T extends any ? keyof T : never;
 /**
- * Based on https://github.com/sindresorhus/type-fest/issues/610
+ * Based on https://github.com/sindresorhus/type-fest/issues/610#issuecomment-2398118998
  */
-export type MergeUnion<T, Keys extends keyof T = keyof T> = Compute<
-  { [K in Keys]: T[Keys] } & { [K in AllKeys<T>]?: T extends any ? (K extends keyof T ? T[K] : never) : never }
->;
+import type { EmptyObject, IsNever, KeysOfUnion, Simplify, UnionToIntersection } from 'type-fest';
+
+type _MergeUnionKnownKeys<BaseType, Keys extends keyof BaseType = keyof BaseType> = {
+  [K in Keys]: Keys extends K ? BaseType[Keys] : never;
+};
+
+type IsUnion<T> = [T] extends [UnionToIntersection<T>] ? false : true;
+
+export type MergeUnion<BaseType> =
+  IsNever<BaseType> extends false
+    ? Simplify<
+        _MergeUnionKnownKeys<BaseType> & {
+          [K in KeysOfUnion<BaseType>]?: BaseType extends object ? (K extends keyof BaseType ? BaseType[K] : never) : never;
+        }
+      >
+    : EmptyObject;

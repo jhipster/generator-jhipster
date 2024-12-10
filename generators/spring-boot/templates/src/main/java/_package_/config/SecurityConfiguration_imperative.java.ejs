@@ -45,9 +45,6 @@ import org.springframework.security.web.SecurityFilterChain;
 <%_ if (!skipClient || authenticationUsesCsrf) { _%>
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 <%_ } _%>
-<%_ if (authenticationUsesCsrf) { _%>
-import tech.jhipster.web.filter.CookieCsrfFilter;
-<%_ } _%>
 <%_ if (!skipClient) { _%>
 import <%= packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
@@ -175,17 +172,12 @@ public class SecurityConfiguration {
 <%_ if (!skipClient) { _%>
             .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
 <%_ } _%>
-<%_ if (!applicationTypeMicroservice) { _%>
-  <%_ if (authenticationUsesCsrf) { _%>
-            .addFilterAfter(new CookieCsrfFilter(), BasicAuthenticationFilter.class)
-  <%_ } _%>
-<%_ } _%>
 <%_ if (!skipClient) { _%>
             .headers(headers -> headers
                 .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
                 .frameOptions(FrameOptionsConfig::sameOrigin)
                 .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
-                .permissionsPolicy(permissions ->
+                .permissionsPolicyHeader(permissions ->
                     permissions.policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")))
 <%_ } _%>
             .authorizeHttpRequests(authz ->
@@ -196,6 +188,9 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
   <%_ if (clientBundlerVite) { _%>
                     .requestMatchers(mvc.pattern("/assets/**")).permitAll()
+  <%_ } else if (clientBundlerExperimentalEsbuild) { _%>
+                    .requestMatchers(mvc.pattern("/content/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/resources/**")).permitAll()
   <%_ } else { _%>
                     .requestMatchers(mvc.pattern("/app/**")).permitAll()
                     .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
@@ -376,15 +371,15 @@ public class SecurityConfiguration {
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
 
     /**
-     * Custom CSRF handler to provide BREACH protection.
+     * Custom CSRF handler to provide BREACH protection for Single-Page Applications (SPA).
      *
      * @see <a href="https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html#csrf-integration-javascript-spa">Spring Security Documentation - Integrating with CSRF Protection</a>
      * @see <a href="https://github.com/jhipster/generator-jhipster/pull/25907">JHipster - use customized SpaCsrfTokenRequestHandler to handle CSRF token</a>
      * @see <a href="https://stackoverflow.com/q/74447118/65681">CSRF protection not working with Spring Security 6</a>
      */
-    static final class SpaCsrfTokenRequestHandler extends CsrfTokenRequestAttributeHandler {
-
-        private final CsrfTokenRequestHandler delegate = new XorCsrfTokenRequestAttributeHandler();
+    static final class SpaCsrfTokenRequestHandler implements CsrfTokenRequestHandler {
+        private final CsrfTokenRequestHandler plain = new CsrfTokenRequestAttributeHandler();
+        private final CsrfTokenRequestHandler xor = new XorCsrfTokenRequestAttributeHandler();
 
         @Override
         public void handle(HttpServletRequest request, HttpServletResponse response, Supplier<CsrfToken> csrfToken) {
@@ -392,7 +387,10 @@ public class SecurityConfiguration {
              * Always use XorCsrfTokenRequestAttributeHandler to provide BREACH protection of
              * the CsrfToken when it is rendered in the response body.
              */
-            this.delegate.handle(request, response, csrfToken);
+            this.xor.handle(request, response, csrfToken);
+
+            // Render the token value to a cookie by causing the deferred token to be loaded.
+            csrfToken.get();
         }
 
         @Override
@@ -404,7 +402,7 @@ public class SecurityConfiguration {
              * raw CsrfToken.
              */
             if (StringUtils.hasText(request.getHeader(csrfToken.getHeaderName()))) {
-                return super.resolveCsrfTokenValue(request, csrfToken);
+                return this.plain.resolveCsrfTokenValue(request, csrfToken);
             }
             /*
              * In all other cases (e.g. if the request contains a request parameter), use
@@ -412,7 +410,7 @@ public class SecurityConfiguration {
              * when a server-side rendered form includes the _csrf request parameter as a
              * hidden input.
              */
-            return this.delegate.resolveCsrfTokenValue(request, csrfToken);
+            return this.xor.resolveCsrfTokenValue(request, csrfToken);
         }
     }
 <%_ } _%>

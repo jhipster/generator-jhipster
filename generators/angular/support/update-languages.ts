@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type BaseGenerator from '../../base/index.js';
+import type BaseGenerator from '../../base-core/index.js';
 import { type UpdateClientLanguagesTaskParam, updateLanguagesInDayjsConfigurationTask } from '../../client/support/index.js';
 import { generateLanguagesWebappOptions } from '../../languages/support/index.js';
 
@@ -67,6 +67,8 @@ function updateLanguagesInWebpackTask(this: BaseGenerator, { application, contro
 export default function updateLanguagesTask(this: BaseGenerator, param: UpdateClientLanguagesTaskParam) {
   updateLanguagesInPipeTask.call(this, param);
   updateLanguagesInConstantsTask.call(this, param);
-  updateLanguagesInWebpackTask.call(this, param);
+  if (param.application.clientBundlerWebpack) {
+    updateLanguagesInWebpackTask.call(this, param);
+  }
   updateLanguagesInDayjsConfigurationTask.call(this, param, { configurationFile: `${param.application.clientSrcDir}app/config/dayjs.ts` });
 }

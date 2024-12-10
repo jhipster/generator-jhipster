@@ -2,9 +2,9 @@
   "generator-jhipster": {
     "applicationType": "monolith",
     "authenticationType": "jwt",
-    "baseName": "sampleCouchbaseNoCache",
+    "baseName": "sampleCouchbaseCache",
     "buildTool": "maven",
-    "cacheProvider": "no",
+    "cacheProvider": "ehcache",
     "clientFramework": "angular",
     "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,

@@ -41,7 +41,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
   <%_ if (requiresPersistableImplementation) { _%>
@@ -395,7 +394,7 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
     @BatchSize(size = 20)
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
-    @Transient
+    @org.springframework.data.annotation.Transient
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
     private Set<Authority> authorities = new HashSet<>();
@@ -413,7 +412,7 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive && requiresPersistableImplementation) { _%>
 
-    @Transient
+    @org.springframework.data.annotation.Transient
     private boolean isPersisted;
 <%_ } _%>
 

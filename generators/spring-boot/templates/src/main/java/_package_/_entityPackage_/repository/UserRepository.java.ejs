@@ -203,7 +203,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <%_ if (!authenticationTypeOauth2) { _%>
     <%_ if (databaseTypeCouchbase || databaseTypeMongodb || databaseTypeNeo4j) { _%>
       <%_ if (cacheProviderAny) { _%>
-    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
+    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
       <%_ } _%>
     <%_ } _%>
     <% if (databaseTypeCouchbase) { %>default <% } %><%= optionalOrMono %><<%= user.persistClass %>> findOneByEmailIgnoreCase(String email)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
@@ -219,14 +219,14 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <%_ } _%>
   <%_ if (databaseTypeCouchbase) { _%>
     <%_ if (cacheProviderAny) { _%>
-    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
+    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
     <%_ } _%>
     default <%= optionalOrMono %><<%= user.persistClass %>> findOneByLogin(String login) {
         return findById(login);
     }
   <%_ } else if (databaseTypeMongodb || databaseTypeNeo4j) { _%>
     <%_ if (cacheProviderAny) { _%>
-    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
+    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
     <%_ } _%>
     <%= optionalOrMono %><<%= user.persistClass %>> findOneByLogin(String login);
   <%_ } else { _%>
@@ -241,14 +241,14 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <%_ if (databaseTypeSql) { _%>
     @EntityGraph(attributePaths = "authorities")
     <%_ if (cacheProviderAny) { _%>
-    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
+    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
     <%_ } _%>
     Optional<<%= user.persistClass %>> findOneWithAuthoritiesByLogin(String login);
 
     <%_ if (!authenticationTypeOauth2) { _%>
     @EntityGraph(attributePaths = "authorities")
       <%_ if (cacheProviderAny) { _%>
-    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
+    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
       <%_ } _%>
     Optional<<%= user.persistClass %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
@@ -609,7 +609,7 @@ public class UserRepository {
     }
 
   <%_ if (cacheProviderAny) { _%>
-    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
+    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
   <%_ } _%>
     public <%= optionalOrMono %><<%= user.persistClass %>> findOneByEmailIgnoreCase(String email) {
         BoundStatement stmt = findOneByEmailStmt.bind().setString("email", email.toLowerCase());
@@ -617,7 +617,7 @@ public class UserRepository {
     }
 
   <%_ if (cacheProviderAny) { _%>
-    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
+    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
   <%_ } _%>
     public <%= optionalOrMono %><<%= user.persistClass %>> findOneByLogin(String login) {
         BoundStatement stmt = findOneByLoginStmt.bind().setString("login", login);

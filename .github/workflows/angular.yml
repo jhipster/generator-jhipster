@@ -35,6 +35,8 @@ on:
     types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
+env:
+  FORCE_COLOR: 2
 jobs:
   build-matrix:
     runs-on: ubuntu-20.04
@@ -114,6 +116,7 @@ jobs:
         id: compare
         if: >-
           github.event.pull_request &&
+          matrix.skip-compare != 'true' &&
           !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         with:
           generator-path: generator-jhipster
@@ -207,6 +210,7 @@ jobs:
       - name: 'ANALYSIS: Local SonarQube PR Analysis'
         if: >-
           matrix.sonar-analyse == 'true' &&
+          !contains(github.event.pull_request.labels.*.name, 'pr: disable-sonar') &&
           steps.compare.outputs.equals != 'true'
         uses: ./generator-jhipster/.github/actions/sonar
         with:

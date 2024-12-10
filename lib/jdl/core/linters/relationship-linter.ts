@@ -50,9 +50,7 @@ export function checkRelationships(relationshipDeclarations: RelationshipDeclara
 }
 
 function checkForCollapsibleRelationships(relationshipDeclarations: RelationshipDeclaration[]) {
-  const sortedRelationships: {
-    [key in string]: { from: string; to: string }[];
-  } = {
+  const sortedRelationships: Record<string, { from: string; to: string }[]> = {
     [relationshipTypes.ONE_TO_ONE]: [],
     [relationshipTypes.ONE_TO_MANY]: [],
     [relationshipTypes.MANY_TO_ONE]: [],

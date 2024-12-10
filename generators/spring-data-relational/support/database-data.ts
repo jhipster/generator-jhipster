@@ -151,10 +151,6 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     jdbcDriver: 'org.postgresql.Driver',
     hibernateDialect: 'org.hibernate.dialect.PostgreSQLDialect',
     port: ':5432/',
-    // Password is required by Spring Boot v3.3.x, can be removed for v3.4.x, see https://github.com/spring-projects/spring-boot/pull/41511
-    // Use a strong password to avoid being flagged by SonarQube
-    defaultPassword: 'password',
-
     constraintNameMaxLength: 63,
     tableNameMaxLength: 63,
   },

@@ -21,6 +21,7 @@ import {
   SERVER_TEST_SRC_DIR,
 } from '../../generator-constants.js';
 import type { PlatformApplication } from '../../base-application/types.js';
+import type { ApplicationType } from '../../../lib/types/application/application.js';
 
 const { NO: NO_DATABASE, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA } = databaseTypes;
 const { PROMETHEUS, ELK } = monitoringTypes;
@@ -36,7 +37,7 @@ const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
  * all variables should be set to dest,
  * all variables should be referred from config,
  */
-export const loadServerConfig = ({ config, application }: { config: any; application: any }) => {
+export const loadServerConfig = ({ config, application }: { config: any; application: ApplicationType }) => {
   mutateData(
     application,
     {
@@ -105,9 +106,6 @@ export const loadDerivedPlatformConfig = ({ application }: { application: Platfo
   loadDerivedServerAndPlatformProperties({ application });
 };
 
-/**
- * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
- */
 export const loadDerivedServerConfig = ({ application }: { application: any }) => {
   application.prodDatabaseTypePostgresql = undefined;
   application.prodDatabaseTypeMssql = undefined;
@@ -161,7 +159,7 @@ export const loadDerivedServerConfig = ({ application }: { application: any }) =
     authenticationUsesCsrf: ({ authenticationType }) => [OAUTH2, SESSION].includes(authenticationType),
     imperativeOrReactive: ({ reactive }) => (reactive ? 'reactive' : 'imperative'),
     generateSpringAuditor: ctx => ctx.databaseTypeSql || ctx.databaseTypeMongodb || ctx.databaseTypeNeo4j || ctx.databaseTypeCouchbase,
-  });
+  } as any);
 
   if (application.databaseTypeSql) {
     prepareSqlApplicationProperties({ application });

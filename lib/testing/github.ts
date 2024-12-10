@@ -1,15 +1,18 @@
 import { randomUUID } from 'node:crypto';
 import { appendFileSync, existsSync } from 'node:fs';
 import { EOL } from 'node:os';
+import process from 'node:process';
 import axios from 'axios';
 
-export const parseIssue = (issue: string): undefined | { owner: string; repository: string; issue: string } => {
-  if (issue.includes('#')) {
-    const split = issue.split('/');
-    const split2 = split[1].split('#');
-    return { owner: split[0], repository: split2[0], issue: split2[1] };
+type GithubIssue = { owner: string; repository: string; issue: string };
+
+export const parseIssue = (issue: string): GithubIssue => {
+  const result = /^(((?<owner>[^/]*)\/)?(?<repository>[^#]+)#)?(?<issue>\d+)$/.exec(issue);
+  const groups = result?.groups;
+  if (groups) {
+    return { ...groups } as GithubIssue;
   }
-  return undefined;
+  throw new Error(`Invalid issue format: ${issue}`);
 };
 
 export const getGithubOutputFile = (): string | undefined => {
@@ -30,10 +33,24 @@ export const setGithubTaskOutput = (name: string, value: string | boolean | numb
 };
 
 export const getGithubIssue = async ({ owner, repository, issue }: { owner: string; repository: string; issue: string }) => {
+  const token = process.env.GITHUB_TOKEN;
   const response = await axios.get(`https://api.github.com/repos/${owner}/${repository}/issues/${issue}`, {
     headers: {
       'X-GitHub-Api-Version': '2022-11-28',
+      Authorization: token ? `Bearer ${token}` : undefined,
     },
   });
   return response.data;
+};
+
+export const getGithubSummaryFile = (): string | undefined => {
+  const filePath = process.env.GITHUB_STEP_SUMMARY;
+  return filePath && existsSync(filePath) ? filePath : undefined;
+};
+
+export const appendToSummary = (summary: string) => {
+  const summaryFile = getGithubSummaryFile();
+  if (summaryFile) {
+    appendFileSync(summaryFile, summary, { encoding: 'utf8' });
+  }
 };

@@ -33,9 +33,7 @@ export const rulesNames = {
 
 type RuleNames = keyof typeof rulesNames;
 
-export const rules: {
-  [key in RuleNames]: Rule;
-} = {
+export const rules: Record<RuleNames, Rule> = {
   ENT_SHORTER_DECL: new Rule({
     name: 'ShorterEntityDeclaration',
     level: INFO,

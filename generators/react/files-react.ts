@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
-import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
+import { clientApplicationTemplatesBlock, clientRootTemplatesBlock } from '../client/support/files.js';
 
 export const files = asWriteFilesSection({
   common: [
@@ -254,11 +254,6 @@ export const files = asWriteFilesSection({
       condition: generator => generator.microfrontend,
       ...clientApplicationTemplatesBlock(),
       templates: ['main.tsx', 'shared/error/error-loading.tsx'],
-    },
-    {
-      condition: generator => generator.microfrontend && generator.applicationTypeGateway,
-      ...clientSrcTemplatesBlock(),
-      templates: ['microfrontends/entities-menu.tsx', 'microfrontends/entities-routes.tsx'],
     },
   ],
   clientTestFw: [

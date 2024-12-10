@@ -16,9 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { HttpClient } from '@angular/common/http';
 import { MissingTranslationHandler, MissingTranslationHandlerParams, TranslateLoader } from '@ngx-translate/core';
+<%_ if (clientBundlerExperimentalEsbuild) { _%>
+import { loadLocale } from 'i18n';
+import { Observable, from } from 'rxjs';
+<%_ } else { _%>
+import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+<%_ } _%>
 
 export const translationNotFoundMessage = 'translation-not-found';
 
@@ -29,9 +34,19 @@ export class MissingTranslationHandlerImpl implements MissingTranslationHandler 
   }
 }
 
+<%_ if (clientBundlerExperimentalEsbuild) { _%>
+export function translatePartialLoader(): TranslateLoader {
+  return {
+    getTranslation(lang: string): Observable<any> {
+      return from(loadLocale(lang as any));
+    },
+  };
+}
+<%_ } else { _%>
 export function translatePartialLoader(http: HttpClient): TranslateLoader {
   return new TranslateHttpLoader(http, 'i18n/', `.json?_=${I18N_HASH}`);
 }
+<%_ } _%>
 
 export function missingTranslationHandler(): MissingTranslationHandler {
   return new MissingTranslationHandlerImpl();

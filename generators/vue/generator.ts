@@ -28,8 +28,6 @@ import {
   generateEntityClientImports as formatEntityClientImports,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
-  getTypescriptKeyType as getTSKeyType,
-  generateTestEntityId as getTestEntityId,
 } from '../client/support/index.js';
 import { createNeedleCallback } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
@@ -52,6 +50,23 @@ export default class VueGenerator extends BaseApplicationGenerator {
       await this.dependsOnJHipster(GENERATOR_CLIENT);
       await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     }
+  }
+
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      configureDevServerPort() {
+        if (this.jhipsterConfig.devServerPort === undefined) return;
+        if (this.isJhipsterVersionLessThan('8.7.4')) {
+          // Migrate old devServerPort with new one
+          const { applicationIndex = 0 } = this.jhipsterConfigWithDefaults;
+          this.jhipsterConfig.devServerPort = 9000 + applicationIndex;
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get loading() {
@@ -84,6 +99,19 @@ export default class VueGenerator extends BaseApplicationGenerator {
           clientWebappDir: app => `${app.clientSrcDir}app/`,
           webappEnumerationsDir: app => `${app.clientWebappDir}shared/model/enumerations/`,
         });
+      },
+      async javaNodeBuildPaths({ application }) {
+        const { clientBundlerVite, clientBundlerWebpack, microfrontend, javaNodeBuildPaths } = application;
+
+        javaNodeBuildPaths?.push('.postcssrc.js', 'tsconfig.json', 'tsconfig.app.json');
+        if (microfrontend) {
+          javaNodeBuildPaths?.push('module-federation.config.cjs');
+        }
+        if (clientBundlerWebpack) {
+          javaNodeBuildPaths?.push('webpack/');
+        } else if (clientBundlerVite) {
+          javaNodeBuildPaths?.push('vite.config.mts');
+        }
       },
       prepareForTemplates({ application, source }) {
         application.addPrettierExtensions?.(['html', 'vue', 'css', 'scss']);
@@ -148,9 +176,17 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      async cleanup({ control }) {
+      async cleanup({ control, application }) {
         await control.cleanupFiles({
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
+          '8.7.4': [
+            [
+              application.microfrontend!,
+              `${application.srcMainWebapp}microfrontends/entities-menu-test.vue`,
+              `${application.srcMainWebapp}microfrontends/entities-menu-component-test.ts`,
+              `${application.srcMainWebapp}microfrontends/entities-router-test.ts`,
+            ],
+          ],
         });
       },
       cleanupOldFilesTask,
@@ -177,10 +213,10 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addPackageJsonScripts({ application }) {
-        const { clientBundlerVite, clientBundlerWebpack, clientPackageManager, prettierExtensions } = application;
+      addPackageJsonScripts({ application, source }) {
+        const { clientBundlerVite, clientBundlerWebpack, clientPackageManager } = application;
         if (clientBundlerVite) {
-          this.packageJson.merge({
+          source.mergeClientPackageJson!({
             scripts: {
               'webapp:build:dev': `${clientPackageManager} run vite-build`,
               'webapp:build:prod': `${clientPackageManager} run vite-build`,
@@ -191,10 +227,8 @@ export default class VueGenerator extends BaseApplicationGenerator {
             },
           });
         } else if (clientBundlerWebpack) {
-          this.packageJson.merge({
+          source.mergeClientPackageJson!({
             scripts: {
-              'prettier:check': `prettier --check "{,src/**/,webpack/,.blueprint/**/}*.{${prettierExtensions}}"`,
-              'prettier:format': `prettier --write "{,src/**/,webpack/,.blueprint/**/}*.{${prettierExtensions}}"`,
               'webapp:build:dev': `${clientPackageManager} run webpack -- --mode development --env stats=minimal`,
               'webapp:build:prod': `${clientPackageManager} run webpack -- --mode production --env stats=minimal`,
               'webapp:dev': `${clientPackageManager} run webpack-dev-server -- --mode development --env stats=normal`,
@@ -204,24 +238,17 @@ export default class VueGenerator extends BaseApplicationGenerator {
           });
         }
       },
-      addMicrofrontendDependencies({ application }) {
-        const { applicationTypeGateway, clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
+      addMicrofrontendDependencies({ application, source }) {
+        const { clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
-          this.packageJson.merge({
+          source.mergeClientPackageJson!({
             devDependencies: {
               '@originjs/vite-plugin-federation': '1.3.6',
             },
           });
         } else if (clientBundlerWebpack) {
-          if (applicationTypeGateway) {
-            this.packageJson.merge({
-              devDependencies: {
-                '@module-federation/utilities': null,
-              },
-            });
-          }
-          this.packageJson.merge({
+          source.mergeClientPackageJson!({
             devDependencies: {
               '@module-federation/enhanced': null,
               'browser-sync-webpack-plugin': null,
@@ -356,10 +383,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return defaultVariablesValues;
   }
 
-  getTypescriptKeyType(primaryKey) {
-    return getTSKeyType(primaryKey);
-  }
-
   generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
     return getHydratedEntityClientFields(primaryKey, fields, relationships, dto, customDateType, embedded, VUE);
   }
@@ -370,9 +393,5 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   generateEntityClientEnumImports(fields) {
     return getClientEnumImportsFormat(fields, VUE);
-  }
-
-  generateTestEntityId(primaryKey, index = 0, wrapped = true) {
-    return getTestEntityId(primaryKey, index, wrapped);
   }
 }

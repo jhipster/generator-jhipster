@@ -1,13 +1,11 @@
 ---
-name: 💥 Report an issue
+name: 💥 Report an issue using `jhipster info`
 about: Report a problem with JHipster itself.
 ---
 
 <!--
 - Please follow the issue template below for bug reports.
 - If you have a support request rather than a bug, please use [Stack Overflow](http://stackoverflow.com/questions/tagged/jhipster) with the JHipster tag.
-- For bug reports it is mandatory to run the command `jhipster info` in your project's root folder, and paste the result here.
-- Tickets opened without any of these pieces of information will be **closed** without any explanation.
 -
 - If this is a potential security issue, please read our security policy and contact us privately first: https://github.com/jhipster/generator-jhipster/security/policy
 -->
@@ -15,6 +13,18 @@ about: Report a problem with JHipster itself.
 ##### **Overview of the issue**
 
 <!-- Explain the bug, if an error is being thrown a stack trace helps -->
+
+##### **JHipster info**
+
+<!--
+To provide all information we need, you should run `jhipster info` in the project root folder (or workspaces root for microservices), and
+copy/paste the result here.
+`jhipster info` removes sentitive information like rememberKey, jwtSecretKey. Double check if there is any other sensitive info.
+-->
+
+Replace this line with your `jhipster info`.
+
+- [ ] `jhipster info` output is mandatory for bug reports. This will allow us to use automated tests and genarate the broken sample using `jhipster from-issue` command.
 
 ##### **Motivation for or Use Case**
 
@@ -39,27 +49,11 @@ about: Report a problem with JHipster itself.
 Which version of JHipster are you using, is it a regression?
 -->
 
-##### **JHipster configuration**
-
-To provide all information we need, you should run `jhipster info` in the project root folder (or workspaces root for microservices), and
-copy/paste the result here.
-`jhipster info` removes sentitive information like rememberKey, jwtSecretKey. Double check if there is any other sensitive info.
-
-As alternative you can add a JDL wrapped in below structure
-
-  <details>
-  <summary>JDL definitions</summary>
-  <pre>
-     JDL content here
-  </pre>
-  </details>
-
-The information is mandatory for bug reports. This will allow us to use automated tests and genarate the broken sample using `jhipster from-issue` command.
-
 ##### **Browsers and Operating System**
 
 <!-- What OS are you on? is this a problem with all browsers or only IE8? -->
 
+- [ ] Tickets opened without reproduction steps or that doesn't follows the template recommendation will be **closed**.
 - [ ] Checking this box is mandatory (this is just to show you read everything)
 
 <!-- Love JHipster? Please consider supporting our collective:

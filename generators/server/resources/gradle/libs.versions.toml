@@ -1,7 +1,7 @@
 [libraries]
-spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2023.0.3' }
+spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2024.0.0' }
 
-springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '2.6.0' }
+springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '2.7.0' }
 
 feign-reactor-bom = { module = 'com.playtika.reactivefeign:feign-reactor-bom', version = '4.2.1' }
 
@@ -11,10 +11,13 @@ cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.20.1' }
 
 mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.5.0' }
 
-neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '2.13.2' }
+neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '2.15.1' }
 
 # Cassandra
 lz4-java = { module = 'org.lz4:lz4-java', version = '1.8.0' }
+
+# Couchbase
+couchmove = { module = 'com.github.differentway:couchmove', version = '3.4.1' }
 
 # jib
 jib-maven-plugin = { module = 'com.google.cloud.tools:jib-maven-plugin', version = '3.4.4' }
@@ -27,16 +30,16 @@ node-gradle = { id = 'com.github.node-gradle.node', version = '7.1.0' }
 
 gradle-liquibase = { id = 'org.liquibase.gradle', version = '3.0.1' }
 
-gradle-sonarqube = { id = 'org.sonarqube', version = '5.1.0.4882' }
+gradle-sonarqube = { id = 'org.sonarqube', version = '6.0.1.5171' }
 
 spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '6.25.0' }
 
-gradle-modernizer-plugin = { id = 'com.github.andygoossens.gradle-modernizer-plugin', version = '1.9.3' }
+gradle-modernizer-plugin = { id = 'com.github.andygoossens.gradle-modernizer-plugin', version = '1.10.0' }
 
-gradle-enterprise = { id = 'com.gradle.enterprise', version = '3.18.1' }
+gradle-enterprise = { id = 'com.gradle.enterprise', version = '3.18.2' }
 
 common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.0.2' }
 
-gatling-gradle = { id = 'io.gatling.gradle', version = '3.12.0.3' }
+gatling-gradle = { id = 'io.gatling.gradle', version = '3.13.1' }
 
-gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.9.0' }
+gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.10.0' }

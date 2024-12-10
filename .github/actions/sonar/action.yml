@@ -188,7 +188,16 @@ runs:
       shell: bash
       run: |
         SONAR_RESPONSE=$(curl -s -u admin:admin \
-        "http://localhost:9000/api/measures/component?component=${{ inputs.sonar-project-key }}&pullRequest=${{ github.event.pull_request.number }}&metricKeys=new_bugs,new_vulnerabilities,new_code_smells,new_coverage,new_duplicated_lines_density,new_violations")
+          "http://localhost:9000/api/measures/component?component=${{ inputs.sonar-project-key }}&pullRequest=${{ github.event.pull_request.number }}&metricKeys=new_bugs,new_vulnerabilities,new_code_smells,new_coverage,new_duplicated_lines_density,new_violations")
+        echo ":::group::PR SonarQube Analysis"
+        echo "$SONAR_RESPONSE"
+        echo "::endgroup::"
+
+        SONAR_RESPONSE_MAIN=$(curl -s -u admin:admin \
+          "http://localhost:9000/api/measures/component?component=${{ inputs.sonar-project-key }}&metricKeys=violations")
+        echo ":::group::SonarQube Analysis"
+        echo "$SONAR_RESPONSE_MAIN"
+        echo "::endgroup::"
 
         export_measure() {
           METRIC_NAME=$1
@@ -201,10 +210,20 @@ runs:
           export $ENV_VAR_NAME=$METRIC_VALUE
         }
 
+        print_main_metric() {
+          METRIC_NAME=$1
+          METRIC_VALUE=$(echo "$SONAR_RESPONSE_MAIN" | jq -r ".component.measures[] | select(.metric == \"$METRIC_NAME\") | .value")
+          if [ -z "$METRIC_VALUE" ] || [ "$METRIC_VALUE" == "null" ]; then
+            METRIC_VALUE="N/A"
+          fi
+          echo "${METRIC_VALUE}"
+        }
+
         export_measure "new_vulnerabilities" "NEW_VUL"
         export_measure "new_code_smells" "NEW_CSM"
         export_measure "new_bugs" "NEW_BUG"
         export_measure "new_violations" "NEW_VIOLATIONS"
+        export_measure "violations" "VIOLATIONS"
         export_measure "new_coverage" "NEW_COV"
         export_measure "new_duplicated_lines_density" "NEW_DUP"
 
@@ -213,6 +232,7 @@ runs:
           echo ""
           echo "| Metric                      | Value       |"
           echo "|-----------------------------|-------------|"
+          echo "| **Total Violations**        | $(print_main_metric "violations") |"
           echo "| **New Vulnerabilities**     | ${NEW_VUL} |"
           echo "| **New Bugs**                | ${NEW_BUG} |"
           echo "| **New Code smells**         | ${NEW_CSM} |"
@@ -221,7 +241,7 @@ runs:
 
           if [[ "${NEW_VIOLATIONS}" != "N/A" && "${NEW_VIOLATIONS}" != "0" ]]; then
             echo ""
-            echo "<details><summary>Unresolved Issues (click to expand)</summary>"
+            echo "<details><summary>Unresolved New Issues (click to expand)</summary>"
             echo ""
             ISSUES=$(curl -s -u admin:admin \
               "http://localhost:9000/api/issues/search?componentKeys=${{ inputs.sonar-project-key }}&resolved=false&pullRequest=${{ github.event.pull_request.number }}" | \
@@ -237,6 +257,7 @@ runs:
           echo 'EOF'
         } >> "$GITHUB_ENV"
 
+        cat sonar_result.md >> $GITHUB_STEP_SUMMARY
         cat sonar_result.md
 
     # Find previous SonarQube analysis comment

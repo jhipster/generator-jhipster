@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -22,7 +21,7 @@ import chalk from 'chalk';
 import * as GENERATOR_LIST from '../generator-list.js';
 import { PRIORITY_NAMES_LIST } from '../base-application/priorities.js';
 
-const prioritiesForSub = () => PRIORITY_NAMES_LIST;
+const prioritiesForSub = (_subGen: string) => PRIORITY_NAMES_LIST;
 
 export const GENERATE_SNAPSHOTS = 'generateSnapshots';
 export const LINK_JHIPSTER_DEPENDENCY = 'linkJhipsterDependency';

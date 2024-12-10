@@ -57,6 +57,7 @@ export default class extends BaseGenerator {
   recreatePackageLock!: boolean;
   skipWorkflows!: boolean;
   ignoreExistingGenerators!: boolean;
+  gitDependency!: string;
 
   async _beforeQueue() {
     if (!this.fromBlueprint) {
@@ -214,6 +215,7 @@ export default class extends BaseGenerator {
         await control.cleanupFiles({
           '8.5.1': ['.eslintrc.json'],
           '8.7.2': ['.eslintignore', 'vitest.test-setup.ts'],
+          '8.7.4': ['.blueprint/generate-sample/get-samples.mjs', '.blueprint/github-build-matrix/build-matrix.mjs'],
         });
       },
       async writing({ application }) {
@@ -278,7 +280,7 @@ export default class extends BaseGenerator {
         if (!this.isJhipsterVersionLessThan('8.7.2')) return;
         for (const generator of Object.keys(this.application[GENERATORS])) {
           const commandFile = `${this.application.blueprintsPath}${generator}/command.${application.blueprintMjsExtension}`;
-          this.editFile(commandFile, content =>
+          this.editFile(commandFile, { ignoreNonExisting: true }, content =>
             content
               .replace(
                 `/**
@@ -297,7 +299,9 @@ export default class extends BaseGenerator {
           );
 
           const generatorSpec = `${this.application.blueprintsPath}${generator}/generator.spec.${application.blueprintMjsExtension}`;
-          this.editFile(generatorSpec, content => content.replaceAll(/blueprint: '([\w-]*)'/g, "blueprint: ['$1']"));
+          this.editFile(generatorSpec, { ignoreNonExisting: true }, content =>
+            content.replaceAll(/blueprint: '([\w-]*)'/g, "blueprint: ['$1']"),
+          );
         }
       },
       packageJson() {
@@ -368,7 +372,7 @@ export default class extends BaseGenerator {
           });
         } else {
           this.packageJson.merge({
-            dependencies: exactDependency,
+            dependencies: this.gitDependency ? { 'generator-jhipster': this.gitDependency } : exactDependency,
             engines: this.jhipsterConfig.caret ? caretDependency : exactDependency,
           });
         }

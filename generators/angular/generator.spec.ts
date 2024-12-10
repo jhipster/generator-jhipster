@@ -91,11 +91,15 @@ describe(`generator - ${clientFramework}`, () => {
           .withJHipsterConfig(sampleConfig, entities)
           .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
           .withControl({ getWebappTranslation: () => 'translations' })
+          .withMockedSource()
           .withMockedGenerators(['jhipster:common', 'jhipster:languages']);
       });
 
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+      it('should match source calls snapshot', () => {
+        expect(runResult.sourceCallsArg).toMatchSnapshot();
       });
       it('contains correct clientFramework', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"clientFramework": "${clientFramework}"`));
@@ -109,7 +113,7 @@ describe(`generator - ${clientFramework}`, () => {
 
       describe('withAdminUi', () => {
         const { applicationType, withAdminUi, clientRootDir = '' } = sampleConfig;
-        const clientSrcDir = `${clientRootDir}${CLIENT_MAIN_SRC_DIR}`;
+        const clientSrcDir = `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`;
         const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
 

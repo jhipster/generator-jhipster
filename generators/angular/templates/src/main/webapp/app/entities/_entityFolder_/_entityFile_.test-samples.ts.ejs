@@ -29,14 +29,14 @@ import { <%- importedType %> } from '<%- importedPath %>';
 
 import { I<%= entityAngularName %><% if (!readOnly && primaryKey) { %>, New<%= entityAngularName %><% } %> } from './<%= entityFileName %>.model';
 
-export const sampleWithRequiredData: I<%= entityAngularName %> = <%- this.generateTypescriptTestEntity(fields.filter(field => field.id || field.fieldValidationRequired).map(field => field.reference)) %>;
+export const sampleWithRequiredData: I<%= entityAngularName %> = <%- tsSampleWithRequiredData %>;
 
-export const sampleWithPartialData: I<%= entityAngularName %> = <%- this.generateTypescriptTestEntity(fields.filter(field => field.id || field.fieldValidationRequired || (!field.transient && faker.datatype.boolean())).map(field => field.reference)) %>;
+export const sampleWithPartialData: I<%= entityAngularName %> = <%- tsSampleWithPartialData %>;
 
-export const sampleWithFullData: I<%= entityAngularName %> = <%- this.generateTypescriptTestEntity(fields.filter(field => !field.transient).map(field => field.reference)) %>;
+export const sampleWithFullData: I<%= entityAngularName %> = <%- tsSampleWithFullData %>;
 <%_ if (!readOnly && primaryKey) { _%>
 
-export const sampleWithNewData: New<%= entityAngularName %> = <%- this.generateTypescriptTestEntity(fields.filter(field => !field.id && field.fieldValidationRequired).map(field => field.reference), { [primaryKey.name]: null }) %>;
+export const sampleWithNewData: New<%= entityAngularName %> = <%- tsSampleWithNewData %>;
 
 Object.freeze(sampleWithNewData);
 <%_ } _%>

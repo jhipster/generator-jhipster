@@ -33,6 +33,25 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
     }
   }
 
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      configure() {
+        const { databaseType, reactive, cacheProvider } = this.jhipsterConfigWithDefaults;
+        if (this.jhipsterConfig.enableHibernateCache && (reactive || databaseType !== 'sql')) {
+          this.log.verboseInfo(`Disabling hibernate cache for ${reactive ? 'reactive application' : 'non-SQL databases'}`);
+          this.jhipsterConfig.enableHibernateCache = undefined;
+        }
+        if (reactive && cacheProvider !== 'no') {
+          this.log.error(`Cache provider is not supported in reactive application`);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
   get preparing() {
     return this.asPreparingTaskGroup({
       cancel() {
@@ -44,14 +63,10 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
         this.loadJavaDependenciesFromGradleCatalog(application.javaDependencies!, true);
       },
       addNeedles({ source, application }) {
-        if (
-          (application as any).cacheProviderEhcache ||
-          (application as any).cacheProviderCaffeine ||
-          (application as any).cacheProviderRedis
-        ) {
+        if (application.cacheProviderEhcache || application.cacheProviderCaffeine || application.cacheProviderRedis) {
           const cacheConfigurationFile = `${application.javaPackageSrcDir}config/CacheConfiguration.java`;
-          const needle = `${(application as any).cacheProvider}-add-entry`;
-          const useJcacheConfiguration = (application as any).cacheProviderRedis;
+          const needle = `${application.cacheProvider}-add-entry`;
+          const useJcacheConfiguration = application.cacheProviderRedis;
           const addEntryToCacheCallback = entry =>
             createNeedleCallback({
               needle,
@@ -97,7 +112,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addTestSpringFactory({ source, application }) {
-        if ((application as any).cacheProviderRedis) {
+        if (application.cacheProviderRedis) {
           source.addTestSpringFactory?.({
             key: 'org.springframework.test.context.ContextCustomizerFactory',
             value: `${application.packageName}.config.RedisTestContainersSpringContextCustomizerFactory`,

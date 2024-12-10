@@ -57,15 +57,6 @@ export const vueFiles = {
       templates: ['index.ts', 'core/error/error-loading.vue'],
     },
     {
-      condition: generator => generator.microfrontend,
-      ...clientSrcTemplatesBlock(),
-      templates: [
-        'microfrontends/entities-menu.component-test.ts',
-        'microfrontends/entities-menu-test.vue',
-        'microfrontends/entities-router-test.ts',
-      ],
-    },
-    {
       condition: generator => generator.applicationTypeMicroservice,
       ...clientApplicationTemplatesBlock(),
       templates: ['entities/entities-menu.spec.ts'],

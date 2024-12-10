@@ -8,9 +8,13 @@
     },
     {
       "name": "ng-default-additional",
+      "job-name": "ng-default-additional-esbuild",
       "entity": "none",
       "app-sample": "ng-default",
-      "jdl-entity": "*"
+      "jdl-entity": "*",
+      "generatorOptions": {
+        "clientBundler": "experimentalEsbuild"
+      }
     },
     {
       "name": "ng-mysql-es-noi18n-mapsid",
@@ -35,13 +39,11 @@
     },
     {
       "name": "ng-couchbase",
-      "disabled": "needs adjusts for sb3",
       "app-sample": "ng-couchbase",
       "entity": "couchbase"
     },
     {
       "name": "ng-gradle-couchbase-search",
-      "disabled": "needs adjusts for sb3",
       "app-sample": "ng-gradle-couchbase-search",
       "entity": "couchbase"
     },
@@ -69,11 +71,13 @@
     },
     {
       "name": "ng-webflux-mongodb",
+      "job-name": "ng-webflux-mongodb-esbuild",
       "app-sample": "webflux-mongodb",
       "entity": "mongodb"
     },
     {
       "name": "ng-webflux-gradle-mongodb-oauth2",
+      "job-name": "ng-webflux-gradle-mongodb-oauth2-esbuild",
       "app-sample": "webflux-mongodb-oauth2",
       "entity": "mongodb"
     },
@@ -88,6 +92,7 @@
     },
     {
       "name": "ng-webflux-gradle-session-h2mem-es",
+      "job-name": "ng-webflux-gradle-session-h2mem-es-esbuild",
       "app-sample": "webflux-gradle-session-h2mem-es",
       "generatorOptions": {
         "defaultEnvironment": "dev"
@@ -96,7 +101,6 @@
     },
     {
       "name": "ng-webflux-couchbase",
-      "disabled": "needs adjusts for sb3",
       "app-sample": "webflux-couchbase",
       "entity": "couchbase"
     },

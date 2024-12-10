@@ -126,12 +126,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   mscouchbase:
@@ -317,12 +315,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   mscassandra:
@@ -572,12 +568,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   msmysql:
@@ -612,12 +606,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   mspsql:
@@ -649,7 +641,6 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -956,12 +947,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   msmysql:
@@ -1001,12 +990,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   mspsql:
@@ -1043,7 +1030,6 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1104,12 +1090,10 @@ jhipster:
       - BUCKET=mscouchbase
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8091/ui/index.html
+        - CMD-SHELL
+        - curl -f "http://localhost:8091/ui/index.html" && sleep 20
       interval: 5s
-      timeout: 5s
+      timeout: 25s
       retries: 10
   
   msmariadb:
@@ -1384,12 +1368,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   msmysql:
@@ -1424,12 +1406,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   mspsql:
@@ -1461,7 +1441,6 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1719,12 +1698,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   msmysql:
@@ -1759,12 +1736,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   mspsql:
@@ -1796,7 +1771,6 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1852,12 +1826,10 @@ jhipster:
       - BUCKET=mscouchbase
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8091/ui/index.html
+        - CMD-SHELL
+        - curl -f "http://localhost:8091/ui/index.html" && sleep 20
       interval: 5s
-      timeout: 5s
+      timeout: 25s
       retries: 10
   
   msmariadb:
@@ -2045,12 +2017,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   msmysql:
@@ -2085,12 +2055,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   consul:
@@ -2237,12 +2205,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   msmysql:
@@ -2277,12 +2243,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   consul:
@@ -2454,12 +2418,10 @@ management:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   msmysql:
@@ -2494,12 +2456,10 @@ management:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   consul:
@@ -2735,12 +2695,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   msmysql:
@@ -2775,12 +2733,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   consul:
@@ -2894,12 +2850,10 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   samplemysql-elasticsearch:
     image: elasticsearch-placeholder
@@ -3026,12 +2980,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   consul:
@@ -3160,12 +3112,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   consul:
@@ -3292,12 +3242,10 @@ jhipster:
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
-        - CMD
-        - mysql
-        - -e
-        - SHOW DATABASES;
+        - CMD-SHELL
+        - mysql -e "SHOW DATABASES;" && sleep 5
       interval: 5s
-      timeout: 5s
+      timeout: 10s
       retries: 10
   
   consul:

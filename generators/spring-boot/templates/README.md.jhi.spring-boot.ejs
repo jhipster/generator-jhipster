@@ -329,46 +329,52 @@ sonar.password=admin
 
 For more information, refer to the [Code quality page][].
 
-### Using Docker to simplify development (optional)
+### Docker Compose support
 
-You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
+JHipster generates a number of Docker Compose configuration files in the [<%- dockerServicesDir %>](<%- dockerServicesDir %>) folder to launch required third party services.
 
-<%_ if (!databaseTypeNo) { _%>
-For example, to start a <%= prodDatabaseType %> database in a docker container, run:
-
-```
-docker compose -f src/main/docker/<%= prodDatabaseType ?? databaseType %>.yml up -d
-```
-
-To stop it and remove the container, run:
+For example, to start required services in Docker containers, run:
 
 ```
-docker compose -f src/main/docker/<%= prodDatabaseType ?? databaseType %>.yml down
+docker compose -f <%- dockerServicesDir %>services.yml up -d
 ```
-<%_ } _%>
+
+To stop and remove the containers, run:
+
+```
+docker compose -f <%- dockerServicesDir %>services.yml down
+```
+
+[Spring Docker Compose Integration](https://docs.spring.io/spring-boot/reference/features/dev-services.html) is enable by default. It's possible to disable it in application.yml:
+
+```yaml
+spring:
+  ...
+  docker:
+    compose:
+      enabled: false
+```
 
 You can also fully dockerize your application and all the services that it depends on.
-To achieve this, first build a docker image of your app by running:
+To achieve this, first build a Docker image of your app by running:
 
-```
+```sh
 npm run java:docker
 ```
 
-Or build a arm64 docker image when using an arm64 processor os like MacOS with M1 processor family running:
+Or build a arm64 Docker image when using an arm64 processor os like MacOS with M1 processor family running:
 
-```
+```sh
 npm run java:docker:arm64
 ```
 
 Then run:
 
-```
+```sh
 docker compose -f <%- dockerServicesDir %>app.yml up -d
 ```
 
-When running Docker Desktop on MacOS Big Sur or later, consider enabling experimental `Use the new Virtualization framework` for better processing performance ([disk access performance is worse](https://github.com/docker/roadmap/issues/7)).
-
-For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
+For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
 
 ## Continuous Integration (optional)
 

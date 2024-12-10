@@ -6,13 +6,6 @@ kafka:
   podAnnotations:
     sidecar.istio.io/inject: "false"
   <%_ } _%>
-  zookeeper:
-    enabled: true
-    replicas: 3
-  <%_ if (istio) { _%>
-    podAnnotations:
-      sidecar.istio.io/inject: "false"
-  <%_ } _%>
 <%_ } _%>
 <%_ if (monitoringPrometheus) { _%>
 prometheus:

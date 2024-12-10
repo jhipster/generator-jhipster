@@ -202,6 +202,12 @@ type DerivedPropertiesWithInferenceUnionFromParseableConfigs<U extends Parseable
     : never;
 };
 
+/**
+ * @example
+ * ```ts
+ * type ExplodedCommandChoices = ExplodeCommandChoicesNoInference<{ clientFramework: { choices: ['angular', 'no'], scope: 'storage' }, clientTestFramework: { choices: ['cypress', 'no'], scope: 'storage' } }>
+ * ```
+ */
 type ExplodeCommandChoicesNoInference<U extends ParseableConfigs> = {
   [K in keyof U]: U[K] extends infer RequiredChoices
     ? RequiredChoices extends { choices: any }
@@ -230,19 +236,32 @@ type PrepareConfigsWithType<U extends ParseableConfigs> = Simplify<{
 /** Keep Options/Config filtered by choices */
 type OnlyChoices<D, C extends boolean> = D extends { choices: JHispterChoices } ? (C extends true ? D : never) : C extends true ? never : D;
 
-/** Keep Options/Config filtered by choices */
-type OnlyCofigsWithChoice<D extends ParseableConfigs, C extends boolean> = {
+/**
+ * Keep Options/Config filtered by choices
+ *
+ * @example
+ * ```ts
+ * type ConfigsWithChoice = OnlyConfigsWithChoice<{ clientFramework: { choices: ['angular', 'no'], scope: 'storage' }, clientTestFramework: { choices: ['cypress', 'no'], scope: 'storage' } }>
+ * ```
+ */
+type OnlyConfigsWithChoice<D extends ParseableConfigs, C extends boolean> = {
   [K in keyof D as OnlyChoices<D[K], C> extends never ? never : K]: D[K];
 };
 
+/**
+ * @example
+ * ```
+ * type Prop = ExportApplicationPropertiesFromCommand<{ configs: { clientFramework: { choices: ['angular', 'no'], scope: 'storage' }, bar: { scope: 'storage' } } }>;
+ * ```
+ */
 export type ExportApplicationPropertiesFromCommand<C extends ParseableCommand> =
   MergeConfigsOptions<C, 'storage'> extends infer Merged
     ? Merged extends ParseableConfigs
       ? // Add value inference to properties with choices
-        // ? PrepareConfigsWithType<OnlyCofigsWithChoice<F, false>> & ValueOf<ExplodeCommandChoicesWithInference<OnlyCofigsWithChoice<F, true>>>
+        // ? PrepareConfigsWithType<OnlyConfigsWithChoice<F, false>> & ValueOf<ExplodeCommandChoicesWithInference<OnlyConfigsWithChoice<F, true>>>
         Simplify<
-          PrepareConfigsWithType<OnlyCofigsWithChoice<Merged, false>> &
-            MergeUnion<ValueOf<ExplodeCommandChoicesNoInference<OnlyCofigsWithChoice<Merged, true>>>>
+          PrepareConfigsWithType<OnlyConfigsWithChoice<Merged, false>> &
+            MergeUnion<ValueOf<ExplodeCommandChoicesNoInference<OnlyConfigsWithChoice<Merged, true>>>>
         >
       : never
     : never;

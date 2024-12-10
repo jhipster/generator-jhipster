@@ -19,7 +19,7 @@
 
 import type { IsNever } from 'type-fest';
 import type { Entity as BaseEntity } from '../base/entity.js';
-import type { SpringEntity } from '../../../generators/server/types.js';
+import type { ServerEntity } from '../../../generators/server/types.js';
 import type { Field as BaseField } from '../base/field.js';
 import type { Relationship as BaseRelationship } from '../base/relationship.js';
 import type { FieldType } from '../../application/field-types.ts';
@@ -41,13 +41,20 @@ export type PrimaryKey<F extends BaseField = Field> = {
   derived: boolean;
   javaValueGenerator?: string;
   javaBuildSpecification?: string;
+
+  tsSampleValues?: (string | number)[];
+  javaSampleValues?: string[];
 };
+
+type ClientSample = Record<string, string | number | boolean | null>;
 
 export interface Entity<F extends BaseField = Field, R extends BaseRelationship = never>
   extends Omit<Required<BaseEntity<F>>, 'relationships'>,
-    SpringEntity,
+    ServerEntity,
     AngularEntity {
   changelogDateForRecent: any;
+  /** @experimental */
+  auditableEntity?: boolean;
   relationships: (IsNever<R> extends true ? Relationship<Omit<Entity, 'relationships'>> : R)[];
   otherRelationships: (IsNever<R> extends true ? Relationship<Omit<Entity, 'relationships'>> : R)[];
 
@@ -61,7 +68,8 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   entityAuthority?: string;
   entityReadAuthority?: string;
   hasCyclicRequiredRelationship?: boolean;
-  jpaMetamodelFiltering?: boolean;
+
+  entityJavadoc?: string;
 
   entityNameCapitalized: string;
   entityClass: string;
@@ -144,10 +152,42 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
    * Any relationship is required or id
    */
   anyRelationshipIsRequired: boolean;
+  hasRelationshipWithBuiltInUser: boolean;
+
+  paginationPagination: boolean;
+  paginationInfiniteScroll: boolean;
+  paginationNo: boolean;
+
+  serviceClass: boolean;
+  serviceImpl: boolean;
+  serviceNo: boolean;
 
   dtoMapstruct: boolean;
+  dtoAny: boolean;
 
   propertyJavaFilteredType?: string;
 
+  resetFakerSeed(suffix?: string): void;
+  generateFakeData?: (type?: any) => any;
   faker: FakerWithRandexp;
+
+  tsSampleWithPartialData?: string;
+  tsSampleWithRequiredData?: string;
+  tsSampleWithFullData?: string;
+  tsSampleWithNewData?: string;
+  tsPrimaryKeySamples?: string[];
+
+  entityAngularJSSuffix?: string;
+  saveUserSnapshot?: boolean;
+
+  /** Properties from application required for entities published through gateways */
+  useMicroserviceJson?: boolean;
+  microserviceAppName?: string;
+  applicationType?: string;
+  microfrontend?: boolean;
+}
+
+export interface UserEntity extends Entity {
+  hasImageField?: boolean;
+  adminUserDto?: string;
 }

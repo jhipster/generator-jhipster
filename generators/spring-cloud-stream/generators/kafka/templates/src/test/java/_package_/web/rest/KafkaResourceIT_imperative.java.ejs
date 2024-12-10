@@ -71,7 +71,7 @@ class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
 
     @Test
     void producesPooledMessages() throws Exception {
-        assertThat(output.receive(1500, "kafkaProducer-out-0").getPayload()).isEqualTo("kakfa_producer".getBytes());
+        assertThat(output.receive(1500, "kafkaProducer-out-0").getPayload()).isEqualTo("kafka_producer".getBytes());
     }
 
     @Test

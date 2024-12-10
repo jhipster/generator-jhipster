@@ -263,7 +263,8 @@ describe('<%= entityClass %> e2e test', () => {
         cy.url().should('match', <%= entityInstance %>PageUrlPattern);
       });
 
-      it<% if (jpaMetamodelFiltering && (clientFrameworkAngular || clientFrameworkVue)) { %>.skip<% } %>('edit button click should load edit <%= entityClass %> page and save', () => {
+      <% if (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) { %>// Reason: jpaMetamodelFiltering with required relationship missbehavior<% } %>
+      it<% if (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) { %>.skip<% } %>('edit button click should load edit <%= entityClass %> page and save', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('<%= entityClass %>');
         cy.get(entityCreateSaveButtonSelector).click();
@@ -275,6 +276,7 @@ describe('<%= entityClass %> e2e test', () => {
 
 <%_ } _%>
 <%_ if (!readOnly) { _%>
+      <% if (skipCreateTest) { %>// Reason: cannot create a required entity with relationship with required relationships.<% } %>
       it<%= skipCreateTest %>('last delete button click should delete instance of <%= entityClass %>', () => {
   <%_ if (clientFrameworkReact) { _%>
         cy.intercept('GET', '/<%= baseApi + entityApiUrl %>/*').as('dialogDeleteRequest');
@@ -308,6 +310,7 @@ describe('<%= entityClass %> e2e test', () => {
       cy.getEntityCreateUpdateHeading('<%= entityClass %>');
     });
 
+    <% if (skipCreateTest) { %>// Reason: cannot create a required entity with relationship with required relationships.<% } %>
     it<%= skipCreateTest %>('should create an instance of <%= entityClass %>', () => {
   <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly).forEach((field) => {
     const fieldName = field.fieldName;

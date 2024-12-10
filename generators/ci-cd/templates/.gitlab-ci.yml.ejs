@@ -155,16 +155,15 @@ gradle-package:
             - build/classes
         expire_in: 1 day
 
-# Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
+# Uncomment the following section to enable pushing the Docker image to the GitLab Container Registry
 #docker-push:
 #    stage: release
 #    variables:
-#        REGISTRY_URL: registry.gitlab.com
 #        IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA
 #    dependencies:
 #        - gradle-package
 #    script:
-#        - ./gradlew jib -Pprod -PnodeInstall -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username="gitlab-ci-token"  -Djib.to.auth.password=$CI_BUILD_TOKEN
+#        - ./gradlew jib -Pprod -PnodeInstall -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=$CI_REGISTRY_USER -Djib.to.auth.password=$CI_REGISTRY_PASSWORD
 
     <%_ if (ciCdIntegrationsHeroku) { _%>
 deploy-to-production:
@@ -284,16 +283,15 @@ maven-package:
             - target/classes
         expire_in: 1 day
 
-# Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
+# Uncomment the following section to enable pushing the Docker image to the GitLab Container Registry
 #docker-push:
 #    stage: release
 #    variables:
-#        REGISTRY_URL: registry.gitlab.com
 #        IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA
 #    dependencies:
 #        - maven-package
 #    script:
-#        - ./mvnw -ntp jib:build -Pprod -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=gitlab-ci-token  -Djib.to.auth.password=$CI_BUILD_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+#        - ./mvnw -ntp jib:build -Pprod -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=$CI_REGISTRY_USER -Djib.to.auth.password=$CI_REGISTRY_PASSWORD -Dmaven.repo.local=$MAVEN_USER_HOME
 
     <%_ if (ciCdIntegrationsHeroku) { _%>
 deploy-to-production:

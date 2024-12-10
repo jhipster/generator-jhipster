@@ -35,7 +35,7 @@ const { JWT, OAUTH2 } = authenticationTypes;
 const { ANGULAR, NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
 const { EHCACHE, HAZELCAST } = cacheTypes;
 
-const NO_CACHE_PROVIDER = cacheTypes.NO;
+const { NO: NO_CACHE_PROVIDER, MEMCACHED } = cacheTypes;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 const { MAVEN } = buildToolTypes;
@@ -119,12 +119,19 @@ export function getConfigForClientApplication(options: ApplicationDefaults = {})
     options[CLIENT_THEME_VARIANT] = 'primary';
   }
   if (clientFramework === 'vue') {
-    options.clientBundler = options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'vite';
+    options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'vite';
+    options.devServerPort ??= options.clientBundler === 'webpack' ? 9060 : 9000;
   } else if (clientFramework === 'react') {
-    options.clientBundler = 'webpack';
+    options.clientBundler ??= 'webpack';
+    options.devServerPort ??= 9060;
   } else if (clientFramework === 'angular') {
-    options.clientBundler = 'webpack';
+    options.clientBundler ??= 'webpack';
+    options.devServerPort ??= 4200;
+  } else {
+    options.devServerPort ??= 9060;
   }
+  options.devServerPortProxy ??= options.clientBundler === 'webpack' ? 9000 : undefined;
+
   return options;
 }
 
@@ -156,7 +163,8 @@ export function getConfigForCacheProvider(options: ApplicationDefaults = {}): Ap
   if (options[REACTIVE] || options[CACHE_PROVIDER] === undefined) {
     options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   }
-  options[ENABLE_HIBERNATE_CACHE] ??= options[DATABASE_TYPE] === SQL && !options[REACTIVE] && options[CACHE_PROVIDER] !== NO_CACHE_PROVIDER;
+  options[ENABLE_HIBERNATE_CACHE] ??=
+    options[DATABASE_TYPE] === SQL && !options[REACTIVE] && ![NO_CACHE_PROVIDER, MEMCACHED].includes(options[CACHE_PROVIDER]);
   return options;
 }
 

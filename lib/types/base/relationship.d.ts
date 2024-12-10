@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 
-export type Relationship = {
+import type { Property } from './property.js';
+
+export type Relationship = Property & {
   relationshipName: string;
   otherEntityName: string;
   relationshipType: 'one-to-one' | 'one-to-many' | 'many-to-one' | 'many-to-many';

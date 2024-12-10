@@ -21,7 +21,6 @@ import { existsSync } from 'fs';
 
 import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 import BaseApplicationGenerator from '../base-application/index.js';
-import { packageJson } from '../../lib/index.js';
 import {
   CLIENT_WEBPACK_DIR,
   JAVA_COMPATIBLE_VERSIONS,
@@ -38,7 +37,6 @@ import {
 
 import {
   applicationTypes,
-  buildToolTypes,
   clientFrameworkTypes,
   databaseTypes,
   entityOptions,
@@ -48,38 +46,15 @@ import {
   validations,
 } from '../../lib/jhipster/index.js';
 import { stringifyApplicationData } from '../base-application/support/index.js';
-import { createNeedleCallback, mutateData } from '../base/support/index.js';
+import { mutateData } from '../base/support/index.js';
 import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
-import {
-  getJavaValueGeneratorForType as getJavaValueForType,
-  getPrimaryKeyValue as getPKValue,
-  hibernateSnakeCase,
-  javaBeanCase as javaBeanClassNameFormat,
-  buildJavaGet as javaGetCall,
-  buildJavaGetter as javaGetter,
-  buildJavaSetter as javaSetter,
-} from './support/index.js';
-
-const dbTypes = fieldTypes;
-const {
-  STRING: TYPE_STRING,
-  INTEGER: TYPE_INTEGER,
-  LONG: TYPE_LONG,
-  BIG_DECIMAL: TYPE_BIG_DECIMAL,
-  FLOAT: TYPE_FLOAT,
-  DOUBLE: TYPE_DOUBLE,
-  LOCAL_DATE: TYPE_LOCAL_DATE,
-  ZONED_DATE_TIME: TYPE_ZONED_DATE_TIME,
-  INSTANT: TYPE_INSTANT,
-  DURATION: TYPE_DURATION,
-} = dbTypes.CommonDBTypes;
+import { hibernateSnakeCase } from './support/index.js';
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
-const { GRADLE, MAVEN } = buildToolTypes;
 const { SQL, NO: NO_DATABASE } = databaseTypes;
 const { GATEWAY } = applicationTypes;
 
@@ -92,7 +67,6 @@ const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
 } = validations;
 
-const WAIT_TIMEOUT = 3 * 60000;
 const { NO: NO_PAGINATION } = PaginationTypes;
 const { NO: NO_SERVICE } = ServiceTypes;
 
@@ -130,23 +104,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadEnvironmentVariables({ application }) {
-        application.packageInfoJavadocs?.push(
-          { packageName: `${application.packageName}.aop.logging`, documentation: 'Logging aspect.' },
-          { packageName: `${application.packageName}.management`, documentation: 'Application management.' },
-          { packageName: `${application.packageName}.repository.rowmapper`, documentation: 'Webflux database column mapper.' },
-          { packageName: `${application.packageName}.security`, documentation: 'Application security utilities.' },
-          { packageName: `${application.packageName}.service.dto`, documentation: 'Data transfer objects for rest mapping.' },
-          { packageName: `${application.packageName}.service.mapper`, documentation: 'Data transfer objects mappers.' },
-          { packageName: `${application.packageName}.web.filter`, documentation: 'Request chain filters.' },
-          { packageName: `${application.packageName}.web.rest.errors`, documentation: 'Rest layer error handling.' },
-          { packageName: `${application.packageName}.web.rest.vm`, documentation: 'Rest layer visual models.' },
-        );
-
-        if (application.defaultPackaging === 'war') {
-          this.log.info(`Using ${application.defaultPackaging} as default packaging`);
-        }
-      },
       setupServerconsts({ application, applicationDefaults }) {
         // Make constants available in templates
         applicationDefaults({
@@ -164,7 +121,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           ANGULAR,
           VUE,
           REACT,
-        });
+        } as any);
 
         if (this.projectVersion) {
           application.projectVersion = this.projectVersion;
@@ -181,36 +138,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         } else {
           application.jhipsterDependenciesVersion = JHIPSTER_DEPENDENCIES_VERSION;
         }
-
-        application.jhipsterPackageJson = packageJson;
       },
     });
   }
 
   get [BaseApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      blockhound({ application, source }) {
-        source.addAllowBlockingCallsInside = ({ classPath, method }) => {
-          if (!application.reactive) throw new Error('Blockhound is only supported by reactive applications');
-
-          this.editFile(
-            `${application.javaPackageTestDir}config/JHipsterBlockHoundIntegration.java`,
-            createNeedleCallback({
-              needle: 'blockhound-integration',
-              contentToAdd: `builder.allowBlockingCallsInside("${classPath}", "${method}");`,
-            }),
-          );
-        };
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get configuringEachEntity() {
@@ -283,7 +216,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           }
 
           this.log.warn(errorMessage);
-          entityConfig.pagination = NO_PAGINATION;
+          entityConfig.pagination = 'no';
         }
       },
       configureEntityTable({ application, entityName, entityConfig }) {
@@ -448,103 +381,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
-  get postWriting() {
-    return this.asPostWritingTaskGroup({
-      packageJsonScripts({ application }) {
-        const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
-        (packageJsonConfigStorage as any).backend_port = application.gatewayServerPort || application.serverPort;
-        (packageJsonConfigStorage as any).packaging = application.defaultPackaging;
-      },
-      packageJsonBackendScripts({ application }) {
-        const scriptsStorage = this.packageJson.createStorage('scripts');
-        const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${application.packageName}=OFF`;
-        const javaTestLog =
-          '-Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF';
-
-        const buildTool = application.buildTool;
-        let e2ePackage = 'target/e2e';
-        if (buildTool === MAVEN) {
-          const excludeWebapp = application.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';
-          scriptsStorage.set({
-            'app:start': './mvnw',
-            'backend:info': './mvnw --version',
-            'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
-            'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
-            'backend:start': `./mvnw${excludeWebapp}`,
-            'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
-            'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
-            'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
-            'java:docker:arm64': 'npm run java:docker -- -Djib-maven-plugin.architecture=arm64',
-            'backend:unit:test': `./mvnw -ntp${excludeWebapp} verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
-            'backend:build-cache': './mvnw dependency:go-offline -ntp',
-            'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
-          });
-        } else if (buildTool === GRADLE) {
-          const excludeWebapp = application.skipClient ? '' : '-x webapp -x webapp_test';
-          e2ePackage = 'e2e';
-          scriptsStorage.set({
-            'app:start': './gradlew',
-            'backend:info': './gradlew -v',
-            'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
-            'backend:nohttp:test': `./gradlew checkstyleNohttp ${excludeWebapp}`,
-            'backend:start': `./gradlew ${excludeWebapp}`,
-            'java:jar': './gradlew bootJar -x test -x integrationTest',
-            'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
-            'java:docker': './gradlew bootJar -Pprod jibDockerBuild',
-            'java:docker:arm64': 'npm run java:docker -- -PjibArchitecture=arm64',
-            'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
-            'postci:e2e:package': 'cp build/libs/*.$npm_package_config_packaging e2e.$npm_package_config_packaging',
-            'backend:build-cache':
-              'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package -- -x webapp -x webapp_test',
-          });
-        }
-
-        scriptsStorage.set({
-          'java:jar:dev': 'npm run java:jar -- -Pdev,webapp',
-          'java:jar:prod': 'npm run java:jar -- -Pprod',
-          'java:war:dev': 'npm run java:war -- -Pdev,webapp',
-          'java:war:prod': 'npm run java:war -- -Pprod',
-          'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',
-          'java:docker:prod': 'npm run java:docker -- -Pprod',
-          'ci:backend:test':
-            'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment',
-          'ci:e2e:package':
-            'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
-          'preci:e2e:server:start': 'npm run services:db:await --if-present && npm run services:others:await --if-present',
-          'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=e2e,$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
-        });
-      },
-      packageJsonE2eScripts({ application }) {
-        const scriptsStorage = this.packageJson.createStorage('scripts');
-        const buildCmd = application.buildToolGradle ? 'gradlew' : 'mvnw -ntp';
-
-        let applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
-        applicationWaitTimeout = application.authenticationTypeOauth2 ? applicationWaitTimeout * 2 : applicationWaitTimeout;
-        const applicationEndpoint = application.applicationTypeMicroservice
-          ? `http-get://127.0.0.1:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
-          : 'http-get://127.0.0.1:$npm_package_config_backend_port/management/health';
-        scriptsStorage.set({
-          'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
-        });
-
-        // TODO add e2eTests property to application.
-        if (this.jhipsterConfig.testFrameworks?.includes('cypress')) {
-          scriptsStorage.set({
-            'pree2e:headless': 'npm run ci:server:await',
-            'ci:e2e:run': 'concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless',
-            'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue "./${buildCmd}" npm:e2e:headless`,
-            'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue "./${buildCmd}" npm:e2e`,
-            'e2e:devserver': `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"`,
-          });
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
-  }
-
   /**
    * Validate the entityTableName
    * @return {true|string} true for a valid value or error message.
@@ -653,75 +489,5 @@ ${instructions}`,
         `relationshipSide is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`,
       );
     }
-  }
-
-  /**
-   * @private
-   * Return the method name which converts the filter to specification
-   * @param {string} fieldType
-   */
-  getSpecificationBuilder(fieldType) {
-    if (
-      [
-        TYPE_INTEGER,
-        TYPE_LONG,
-        TYPE_FLOAT,
-        TYPE_DOUBLE,
-        TYPE_BIG_DECIMAL,
-        TYPE_LOCAL_DATE,
-        TYPE_ZONED_DATE_TIME,
-        TYPE_INSTANT,
-        TYPE_DURATION,
-      ].includes(fieldType)
-    ) {
-      return 'buildRangeSpecification';
-    }
-    if (fieldType === TYPE_STRING) {
-      return 'buildStringSpecification';
-    }
-    return 'buildSpecification';
-  }
-
-  getJavaValueGeneratorForType(type) {
-    return getJavaValueForType(type);
-  }
-
-  /**
-   * @private
-   * Returns the primary key value based on the primary key type, DB and default value
-   *
-   * @param {string} primaryKey - the primary key type
-   * @param {string} databaseType - the database type
-   * @param {string} defaultValue - default value
-   * @returns {string} java primary key value
-   */
-  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1) {
-    return getPKValue(primaryKey, databaseType, defaultValue);
-  }
-
-  /**
-   * @private
-   * Convert to Java bean name case
-   *
-   * Handle the specific case when the second letter is capitalized
-   * See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
-   *
-   * @param {string} beanName name of the class to check
-   * @return {string}
-   */
-  javaBeanCase(beanName) {
-    return javaBeanClassNameFormat(beanName);
-  }
-
-  buildJavaGet(reference) {
-    return javaGetCall(reference);
-  }
-
-  buildJavaGetter(reference, type = reference.type) {
-    return javaGetter(reference, type);
-  }
-
-  buildJavaSetter(reference, valueDefinition = `${reference.type} ${reference.name}`) {
-    return javaSetter(reference, valueDefinition);
   }
 }

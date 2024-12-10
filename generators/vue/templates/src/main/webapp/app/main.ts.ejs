@@ -26,6 +26,21 @@ import TranslationService from '@/locale/translation.service';
 <%_ if (communicationSpringWebsocket) { _%>
 import { useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+import { init } from '@module-federation/enhanced/runtime';
+
+init({
+  name: '<%= lowercaseBaseName %>',
+  remotes: [
+  <%_ for (const remote of microfrontends) { _%>
+    {
+      name: '<%= remote.lowercaseBaseName %>',
+      entry: '/<%= remote.endpointPrefix %>/remoteEntry.js',
+    },
+  <%_ } _%>
+  ],
+});
+<%_ } _%>
 
 const pinia = createPinia();
 

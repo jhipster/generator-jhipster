@@ -83,19 +83,10 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
 
       configureDevServerPort() {
-        if (this.jhipsterConfig.devServerPort !== undefined) return;
+        if (this.jhipsterConfig.devServerPort !== undefined || this.jhipsterConfig.applicationIndex === undefined) return;
 
-        const { clientFramework, applicationIndex } = this.jhipsterConfigWithDefaults;
-        const devServerBasePort = clientFramework === ANGULAR ? 4200 : 9060;
-        let devServerPort;
-
-        if (applicationIndex !== undefined) {
-          devServerPort = devServerBasePort + applicationIndex;
-        } else if (!devServerPort) {
-          devServerPort = devServerBasePort;
-        }
-
-        this.jhipsterConfig.devServerPort = devServerPort;
+        const { applicationIndex, devServerPort } = this.jhipsterConfigWithDefaults;
+        this.jhipsterConfig.devServerPort = devServerPort + applicationIndex;
       },
     });
   }
@@ -126,7 +117,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     return this.asLoadingTaskGroup({
       loadSharedConfig({ application }) {
         // TODO v8 rename to nodePackageManager;
-        (application as any).clientPackageManager = 'npm';
+        application.clientPackageManager = 'npm';
       },
 
       loadPackageJson({ application }) {
@@ -193,6 +184,11 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get writing() {
     return this.asWritingTaskGroup({
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
+          '8.7.4': [`${application.clientSrcDir}swagger-ui/dist/images/throbber.gif`],
+        });
+      },
       webappFakeDataSeed({ application: { clientFramework } }) {
         this.resetEntitiesFakeData(clientFramework);
       },
@@ -239,6 +235,24 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         } else {
           scriptsStorage.set('ci:frontend:build', 'npm run webapp:build:$npm_package_config_default_environment');
           scriptsStorage.set('ci:frontend:test', 'npm run ci:frontend:build && npm test');
+        }
+
+        if (application.clientRootDir) {
+          // Add scripts to map to client package.json
+          this.packageJson.merge({
+            scripts: {
+              'webapp:build': `npm run -w ${application.clientRootDir} webapp:build`,
+              'ci:frontend:test': `npm run -w ${application.clientRootDir} ci:frontend:test`,
+              'e2e:headless': `npm run -w ${application.clientRootDir} e2e:headless`,
+            },
+          });
+
+          const clientWorkspace = application.clientRootDir.slice(0, -1);
+          const packageJson = this.packageJson.createProxy();
+          const workspaces = packageJson.workspaces as string[] | undefined;
+          if (!workspaces?.includes(clientWorkspace)) {
+            packageJson.workspaces = [...(workspaces ?? []), clientWorkspace];
+          }
         }
       },
 

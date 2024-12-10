@@ -74,6 +74,9 @@ export type JavaApplication = JavaBootstrapStorageProperties &
     imperativeOrReactive: string;
 
     addOpenapiGeneratorPlugin: boolean;
+    useNpmWrapper: boolean;
+    graalvmReachabilityMetadata: string;
+    javaNodeBuildPaths: string[];
   };
 
 export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };

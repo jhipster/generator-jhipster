@@ -12,8 +12,10 @@ export const loadClientConfig = ({ config, application }: { config: any; applica
   application.devServerPort = config.devServerPort;
 
   application.clientRootDir = config.clientRootDir ?? '';
-  application.clientSrcDir = config.clientSrcDir ?? `${application.clientRootDir}${CLIENT_MAIN_SRC_DIR}`;
-  application.clientTestDir = config.clientTestDir ?? `${application.clientRootDir}${CLIENT_TEST_SRC_DIR}`;
+  application.clientSrcDir =
+    config.clientSrcDir ?? `${application.clientRootDir}${application.clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`;
+  application.clientTestDir =
+    config.clientTestDir ?? `${application.clientRootDir}${application.clientRootDir ? 'test/' : CLIENT_TEST_SRC_DIR}`;
 };
 
 /**

@@ -22,6 +22,8 @@ import { snakeCase, upperFirst } from 'lodash-es';
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../lib/jhipster/index.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 import { mutateData } from '../../../lib/utils/object.js';
+import type { Field } from '../../../lib/types/application/field.js';
+import { applyDerivedProperty } from '../../base/support/index.js';
 import { getUXConstraintName } from './database.js';
 import { getJavaValueGeneratorForType } from './templates/field-values.js';
 
@@ -33,7 +35,7 @@ const { MapperTypes } = entityOptions;
 const { MAPSTRUCT } = MapperTypes;
 const { INTEGER, LONG, UUID } = CommonDBTypes;
 
-export default function prepareField(entityWithConfig, field, generator) {
+export default function prepareField(entityWithConfig, field: Field & any, generator) {
   if (field.mapstructExpression) {
     assert.equal(
       entityWithConfig.dto,
@@ -52,7 +54,7 @@ export default function prepareField(entityWithConfig, field, generator) {
       fieldJavadoc: formatDocAsJavaDoc(field.documentation, 4),
       fieldApiDescription: formatDocAsApiDescription(field.documentation),
       propertyApiDescription: ({ fieldApiDescription }) => fieldApiDescription,
-    });
+    } as any);
   }
 
   if (field.id && entityWithConfig.primaryKey) {
@@ -151,6 +153,7 @@ export default function prepareField(entityWithConfig, field, generator) {
   } else {
     field.javaFieldType = field.fieldType;
   }
+  applyDerivedProperty(field, 'javaFieldType', ['String', 'Integer', 'Long', 'UUID']);
 
   if (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeString || field.fieldTypeUUID) {
     if (field.fieldTypeInteger) {

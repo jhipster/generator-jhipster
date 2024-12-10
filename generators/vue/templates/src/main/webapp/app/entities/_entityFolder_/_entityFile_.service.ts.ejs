@@ -20,7 +20,7 @@ export default class <%= entityAngularName %>Service {
   }
 <%_ } _%>
 
-  public find(<%= primaryKey.name %>: <%- this.getTypescriptKeyType(primaryKey) %>) : Promise<I<%= entityAngularName %>> {
+  public find(<%= primaryKey.name %>: <%- primaryKey.tsType %>) : Promise<I<%= entityAngularName %>> {
     return new Promise<I<%= entityAngularName %>>((resolve, reject) => {
       axios.get(`${baseApiUrl}/${<%= primaryKey.name %>}`).then(res => {
         resolve(res.data);
@@ -37,7 +37,7 @@ export default class <%= entityAngularName %>Service {
   }
 <%_ if (!readOnly) { _%>
 
-  public delete(<%= primaryKey.name %>: <%- this.getTypescriptKeyType(primaryKey) %>) : Promise<any> {
+  public delete(<%= primaryKey.name %>: <%- primaryKey.tsType %>) : Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios.delete(`${baseApiUrl}/${<%= primaryKey.name %>}`).then(res => {
         resolve(res);

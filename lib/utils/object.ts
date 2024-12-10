@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+import type { OmitIndexSignature, Simplify } from 'type-fest';
+
 const filterNullishValues = value => value !== undefined && value !== null;
 
 /**
@@ -25,16 +27,17 @@ const filterNullishValues = value => value !== undefined && value !== null;
  * @returns
  */
 
-export function removeFieldsWithNullishValues(object: Record<string, any>): Record<string, any> {
+export function removeFieldsWithNullishValues<const T extends Record<string, any>>(object: T): T {
   return filterValue(object, filterNullishValues);
 }
+
 /**
  * Copy and remove null and undefined values
  * @param object
  * @returns
  */
 
-function filterValue(object: Record<string, any>, filterValue: (any) => boolean = filterNullishValues): Record<string, any> {
+function filterValue<const T extends Record<string, any>>(object: T, filterValue: (any) => boolean = filterNullishValues): T {
   const clone = {};
   for (const [key, value] of Object.entries(object)) {
     if (filterValue(value)) {
@@ -49,7 +52,7 @@ function filterValue(object: Record<string, any>, filterValue: (any) => boolean 
       }
     }
   }
-  return clone;
+  return clone as T;
 }
 
 /**
@@ -74,22 +77,27 @@ export const pickFields = (source: Record<string | number, any>, fields: (string
  *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
  * );
  */
-export const mutateData = (
-  context: Record<string | number, any>,
-  ...mutations: (Record<string | number, any> & {
-    /** Set to false if you don't want functions to override the value */
-    __override__?: boolean;
-  })[]
+export const mutateData = <const T extends Record<string | number, any>>(
+  context: T,
+  ...mutations: Simplify<
+    OmitIndexSignature<{
+      [Key in keyof (Partial<T> & { __override__?: boolean })]?: Key extends '__override__'
+        ? boolean
+        : Key extends keyof T
+          ? T[Key] | ((ctx: T) => T[Key])
+          : never;
+    }>
+  >[]
 ) => {
   for (const mutation of mutations) {
     const override = mutation.__override__;
     for (const [key, value] of Object.entries(mutation).filter(([key]) => key !== '__override__')) {
       if (typeof value === 'function') {
         if (override !== false || context[key] === undefined) {
-          context[key] = value(context);
+          (context as any)[key] = value(context);
         }
       } else if (context[key] === undefined || override === true) {
-        context[key] = value;
+        (context as any)[key] = value;
       }
     }
   }

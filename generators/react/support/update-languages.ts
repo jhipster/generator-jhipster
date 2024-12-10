@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type BaseGenerator from '../../base/index.js';
+import type BaseGenerator from '../../base-core/index.js';
 import { type UpdateClientLanguagesTaskParam, updateLanguagesInDayjsConfigurationTask } from '../../client/support/index.js';
 import { generateLanguagesWebappOptions } from '../../languages/support/index.js';
 

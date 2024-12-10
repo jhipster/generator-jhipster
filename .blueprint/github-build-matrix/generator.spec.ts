@@ -4,6 +4,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { shouldSupportFeatures } from '../../test/support/index.js';
 import Generator from './generator.js';
+import { workflowChoices } from './command.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,7 +14,7 @@ const generator = basename(__dirname);
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
 
-  for (const workflow of ['angular', 'devserver', 'graalvm', 'react', 'docker-compose-integration', 'vue']) {
+  for (const workflow of workflowChoices) {
     describe(`with ${workflow}`, () => {
       before(async () => {
         await helpers.runJHipster(join(__dirname, 'index.ts'), { useEnvironmentBuilder: true }).withArguments(workflow);

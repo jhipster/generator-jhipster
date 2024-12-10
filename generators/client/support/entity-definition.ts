@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -20,8 +19,7 @@
 
 import { clientFrameworkTypes, fieldTypes, validations } from '../../../lib/jhipster/index.js';
 import getTypescriptKeyType from './types-utils.js';
-
-import { filterRelevantRelationships } from './template-utils.js';
+import { filterRelevantRelationships, generateTestEntityId } from './template-utils.js';
 
 const dbTypes = fieldTypes;
 const {
@@ -69,7 +67,7 @@ const generateEntityClientFields = (
   embedded = false,
   clientFramework: string = ANGULAR,
 ) => {
-  const variablesWithTypes = [];
+  const variablesWithTypes: string[] = [];
   if (!embedded && primaryKey) {
     const tsKeyType = getTypescriptKeyType(primaryKey);
     if (clientFramework === VUE) {
@@ -126,15 +124,11 @@ const generateEntityClientFields = (
 /**
  * @private
  * Generate a test entity, according to the type
- *
- * @param references
- * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
  */
-export const generateTestEntity = (references, index = 'random') => {
-  const random = index === 'random';
+export const generateTestEntity = (references, index: 0 | 1 | 'random' = 'random') => {
   const entries = references
     .map(reference => {
-      if (random && reference.field) {
+      if (index === 'random') {
         const field = reference.field;
         const fakeData = field.generateFakeData('json-serializable');
         if (reference.field.fieldWithContentType) {
@@ -145,7 +139,7 @@ export const generateTestEntity = (references, index = 'random') => {
         }
         return [[reference.name, fakeData]];
       }
-      return [[reference.name, this.generateTestEntityId(reference.type, index, false)]];
+      return [[reference.name, generateTestEntityId(reference.type, index, false)]];
     })
     .flat();
   return Object.fromEntries(entries);

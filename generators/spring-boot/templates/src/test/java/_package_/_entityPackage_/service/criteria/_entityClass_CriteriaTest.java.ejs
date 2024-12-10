@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.Objects;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ class <%- entityClass %>CriteriaTest {
     @Test
     void new<%- entityClass %>CriteriaHasAllFiltersNullTest() {
         var <%- persistInstance %>Criteria = new <%- entityClass %>Criteria();
-        assertThat(<%- persistInstance %>Criteria).is(criteriaFiltersAre(filter -> filter == null));
+        assertThat(<%- persistInstance %>Criteria).is(criteriaFiltersAre(Objects::isNull));
     }
 
     @Test
@@ -21,7 +22,7 @@ class <%- entityClass %>CriteriaTest {
 
         setAllFilters(<%- persistInstance %>Criteria);
 
-        assertThat(<%- persistInstance %>Criteria).is(criteriaFiltersAre(filter -> filter != null));
+        assertThat(<%- persistInstance %>Criteria).is(criteriaFiltersAre(Objects::nonNull));
     }
 
     @Test
@@ -39,7 +40,7 @@ class <%- entityClass %>CriteriaTest {
         );
 
         assertThat(copy).satisfies(
-            criteria -> assertThat(criteria).is(criteriaFiltersAre(filter -> filter == null)),
+            criteria -> assertThat(criteria).is(criteriaFiltersAre(Objects::isNull)),
             criteria -> assertThat(criteria).isEqualTo(<%- persistInstance %>Criteria)
         );
     }
@@ -62,7 +63,7 @@ class <%- entityClass %>CriteriaTest {
 
 
         assertThat(copy).satisfies(
-            criteria -> assertThat(criteria).is(criteriaFiltersAre(filter -> filter != null)),
+            criteria -> assertThat(criteria).is(criteriaFiltersAre(Objects::nonNull)),
             criteria -> assertThat(criteria).isEqualTo(<%- persistInstance %>Criteria)
         );
     }

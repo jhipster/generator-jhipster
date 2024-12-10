@@ -22,11 +22,6 @@
   "exclude": [],
   "compilerOptions": {
     "paths": {
-<%_ if (microfrontend && applicationTypeGateway) { _%>
-  <%_ for (const remote of microfrontends) { _%>
-      "@<%= remote.lowercaseBaseName %>/*": ["<%= this.relativeDir(clientRootDir, clientSrcDir) %>microfrontends/*"],
-  <%_ } _%>
-<%_ } _%>
       "app/*": ["<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/*"]
    },
     "types": ["jest", "webpack-env"]

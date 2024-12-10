@@ -22,7 +22,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -43,6 +43,7 @@ public class KafkaTestContainer implements InitializingBean, DisposableBean {
         if (null == kafkaContainer) {
             kafkaContainer = new KafkaContainer(DockerImageName.parse("<%- dockerContainers.kafka %>"))
                 .withLogConsumer(new Slf4jLogConsumer(LOG))
+                .withEnv("KAFKA_LISTENERS", "PLAINTEXT://:9092,BROKER://:9093,CONTROLLER://:9094")
                 .withReuse(true);
         }
         if (!kafkaContainer.isRunning()) {

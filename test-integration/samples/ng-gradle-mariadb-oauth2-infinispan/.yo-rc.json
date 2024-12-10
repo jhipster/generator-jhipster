@@ -14,7 +14,6 @@
     "devDatabaseType": "mariadb",
     "dtoSuffix": "DTO",
     "embeddableLaunchScript": false,
-    "enableHibernateCache": true,
     "enableTranslation": false,
     "entitySuffix": "",
     "jhiPrefix": "myPrefix",
