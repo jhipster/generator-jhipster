@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Duplex } from 'stream';
 import { createConflicterTransform, createYoResolveTransform, forceYoFiles } from '@yeoman/conflicter';
+import { transform } from '@yeoman/transform';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFilePending, isFileStateModified } from 'mem-fs-editor/state';
 import { createCommitTransform } from 'mem-fs-editor/transform';
@@ -249,13 +249,7 @@ export default class BootstrapGenerator extends BaseGenerator {
       },
       ...transforms,
       // Filter out pending files.
-      Duplex.from(async function* (files: AsyncGenerator<MemFsEditorFile>) {
-        for await (const file of files) {
-          if (isFilePending(file)) {
-            yield file;
-          }
-        }
-      }),
+      transform((file: MemFsEditorFile) => (isFilePending(file) ? file : undefined)),
       ...transformStreams,
     );
     this.log.ok(log ?? 'files committed to disk');
