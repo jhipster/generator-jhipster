@@ -42,9 +42,9 @@ Which version of JHipster are you using, is it a regression?
 <!-- What OS are you on? is this a problem with all browsers or only IE8? -->
 
 - [ ] Tickets opened without reproduction steps or that doesn't follows the template recommendation will be **closed**.
-- [ ] This issue is prompt related or an error that prevent jhipster from generating an application.
-- [ ] I don't have and JDL otherwise I should open an [JDL Issue](https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT_JDL.md)
-- [ ] The application is not successfully generated otherwise I should open and [Issue with jhipster info](https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md)
+- [ ] This issue is prompt-related or an error that prevents Jhipster from generating an application.
+- [ ] I don't have a JDL otherwise I should open an [JDL Issue](https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT_JDL.md)
+- [ ] The application is not successfully generated otherwise, I should open an [Issue with jhipster info](https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md)
 - [ ] Checking this box is mandatory (this is just to show you read everything)
 
 <!-- Love JHipster? Please consider supporting our collective:
