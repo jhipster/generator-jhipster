@@ -38,7 +38,7 @@ export interface I<%= entityAngularName %> {
 _%>
   <%= fieldName %><% if (!id /* && !fieldValidationRequired */) { %>?<% } %>: <%= tsType %><% if (!id /* && !fieldValidationRequired */) { %> | null<% } %>;
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-  <%= fieldName %>ContentType<% if (!id /* && !fieldValidationRequired */) { %>?<% } %>: string<% if (!id /* && !fieldValidationRequired */) { %> | null<% } %>,
+  <%= fieldName %>ContentType<% if (!fieldValidationRequired) { %>?<% } %>: string<% if (!fieldValidationRequired) { %> | null<% } %>,
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.persistableRelationship || rel.relationshipEagerLoad)) {
