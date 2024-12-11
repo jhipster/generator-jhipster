@@ -9,7 +9,7 @@ if [ -f "$basedir/mvnw" ]; then
 elif [ -f "$basedir/gradlew" ]; then
   bindir="$basedir/build/node/bin"
   repodir="$basedir/build/node/lib/node_modules"
-  installCommand="$basedir/gradlew npmSetup"
+  installCommand="$basedir/gradlew npmSetup --no-daemon"
 else
   echo "Using npm installed globally"
   exec npm "$@"
