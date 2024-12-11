@@ -6,6 +6,7 @@ export const devServerMatrix = {
       sample: 'samples/ng-default',
       args: '--sample-yorc-folder --entities-sample sqllight --client-bundler experimentalEsbuild --build gradle',
       os: 'macos-latest',
+      'java-version': 21,
     },
     'ng-default-webpack': {
       sample: 'samples/ng-default',
