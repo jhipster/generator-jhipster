@@ -49,7 +49,7 @@ import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%=
     }
   }
 _%>
-<%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
+<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
