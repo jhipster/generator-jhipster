@@ -15,14 +15,14 @@ if (project.hasProperty("nodeInstall")) {
     }
     def fixedNode = tasks.register("fixedNode", Copy) {
         from nodeSetup
-        into '<%= temporaryDir %>node'
+        into '<%= temporaryDir %>node/npmw'
         finalizedBy deleteOldNpm
     }
     tasks.named("nodeSetup").configure { finalizedBy fixedNode }
 
     def fixedNpm = tasks.register("fixedNpm", Copy) {
         from npmSetup
-        into '<%= temporaryDir %>node'
+        into '<%= temporaryDir %>node/npmw'
     }
     tasks.named("npmSetup").configure { finalizedBy fixedNpm }
 }
