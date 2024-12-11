@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-@use 'bootstrap/scss/functions' as *;
+@import 'bootstrap/scss/functions';
 <%_ if (!clientThemeNone) { _%>
-@use 'bootswatch/dist/<%= clientTheme %>/variables' as *;
+@import 'bootswatch/dist/<%= clientTheme %>/variables';
 <%_ } _%>
-@use 'bootstrap/scss/variables' as *;
+@import 'bootstrap/scss/variables';
 
 iframe {
   background: white;
