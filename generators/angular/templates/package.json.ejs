@@ -102,6 +102,12 @@
   "config": {
     "default_environment": "prod"
   },
+  "overrides": {
+    "@angular/common": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/core": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/forms": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/localize": "<%= nodeDependencies['@angular/common'] %>"
+  },
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
