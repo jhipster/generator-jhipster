@@ -29,7 +29,19 @@ import { DataUtils } from 'app/core/util/data-util.service';
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-detail',
     templateUrl: './<%= entityFileName %>-detail.component.html',
-    imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
+    imports: [
+      SharedModule,
+      RouterModule,
+<%_ if (anyFieldIsDuration) { _%>
+      DurationPipe,
+<%_ } _%>
+<%_ if (anyFieldIsTimeDerived) { _%>
+      FormatMediumDatetimePipe,
+<%_ } _%>
+<%_ if (anyFieldIsLocalDate) { _%>
+      FormatMediumDatePipe,
+<%_ } _%>
+    ],
 })
 export class <%= entityAngularName %>DetailComponent {
     <%= entityInstance %> = input<I<%= entityAngularName %> | null>(null);
