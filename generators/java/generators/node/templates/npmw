@@ -7,7 +7,7 @@ if [ -f "$basedir/mvnw" ]; then
   repodir="$basedir/target/node/node_modules"
   installCommand="$basedir/mvnw --batch-mode -ntp -Pwebapp frontend:install-node-and-npm@install-node-and-npm"
 elif [ -f "$basedir/gradlew" ]; then
-  bindir="$basedir/build/node/bin"
+  bindir="$basedir/build/node/npmw/bin"
   repodir="$basedir/build/node/lib/node_modules"
   installCommand="$basedir/gradlew npmSetup --no-daemon"
 else
