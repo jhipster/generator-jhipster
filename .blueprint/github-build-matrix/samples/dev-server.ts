@@ -4,7 +4,7 @@ export const devServerMatrix = {
   angular: {
     'ng-default-esbuild': {
       sample: 'samples/ng-default',
-      args: '--sample-yorc-folder --entities-sample sqllight --client-bundler experimentalEsbuild',
+      args: '--sample-yorc-folder --entities-sample sqllight --client-bundler experimentalEsbuild --build gradle',
       os: 'macos-latest',
     },
     'ng-default-webpack': {
