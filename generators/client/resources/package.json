@@ -3,10 +3,10 @@
     "dayjs": "1.11.13"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "3.13.8",
+    "@cypress/code-coverage": "3.13.9",
     "babel-loader": "9.2.1",
     "babel-plugin-istanbul": "7.0.0",
-    "cypress": "13.16.0",
+    "cypress": "13.16.1",
     "cypress-audit": "1.1.0",
     "eslint-plugin-cypress": "4.1.0",
     "lighthouse": "12.2.2",

@@ -18,11 +18,11 @@
  */
 
 import { after, before, describe, it, expect as jestExpect } from 'esmocha';
-import chai, { expect } from 'chai';
+import { use as chaiUse, expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-chai.use(sinonChai);
+chaiUse(sinonChai);
 
 import { relationshipTypes } from '../../core/basic-types/index.js';
 

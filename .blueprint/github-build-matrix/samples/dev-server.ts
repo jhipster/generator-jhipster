@@ -4,7 +4,8 @@ export const devServerMatrix = {
   angular: {
     'ng-default-esbuild': {
       sample: 'samples/ng-default',
-      args: '--sample-yorc-folder --entities-sample sqllight',
+      args: '--sample-yorc-folder --entities-sample sqllight --client-bundler experimentalEsbuild',
+      os: 'macos-latest',
     },
     'ng-default-webpack': {
       sample: 'samples/ng-default',
@@ -15,6 +16,7 @@ export const devServerMatrix = {
     'react-default': {
       sample: 'samples/react-default',
       args: '--sample-yorc-folder --entities-sample sqllight',
+      os: 'macos-latest',
     },
   },
   vue: {

@@ -20,7 +20,7 @@ FROM mysql:9.1.0
 
 FROM mariadb:11.6.2
 
-FROM mongo:8.0.3
+FROM mongo:8.0.4
 LABEL ALIAS=mongodb
 
 FROM couchbase/server:7.6.3
@@ -31,12 +31,12 @@ FROM cassandra:5.0
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.25.1
+FROM neo4j:5.26.0
 
 FROM hazelcast/management-center:5.6.0
 LABEL ALIAS=hazelcast
 
-FROM memcached:1.6.32-alpine
+FROM memcached:1.6.33-alpine
 
 FROM redis:7.4.1
 
@@ -61,7 +61,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:11.3.1
+FROM grafana/grafana:11.4.0
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8
