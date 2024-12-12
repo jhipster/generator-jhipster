@@ -172,7 +172,7 @@
     "typescript-eslint": "8.18.0",
     "yaml": "2.6.1",
     "yeoman-environment": "4.4.3",
-    "yeoman-generator": "7.3.3"
+    "yeoman-generator": "7.4.0"
   },
   "devDependencies": {
     "@actions/core": "1.11.1",
