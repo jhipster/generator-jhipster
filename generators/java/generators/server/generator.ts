@@ -49,11 +49,11 @@ export default class ServerGenerator extends BaseApplicationGenerator {
         if (buildTool === 'maven') {
           const excludeWebapp = application.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';
           scriptsStorage.set({
-            'app:start': './mvnw',
+            'app:start': './mvnw -ntp --batch-mode',
             'backend:info': './mvnw --version',
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
             'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
-            'backend:start': `./mvnw${excludeWebapp}`,
+            'backend:start': `./mvnw${excludeWebapp} -ntp --batch-mode`,
             'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
@@ -98,9 +98,7 @@ export default class ServerGenerator extends BaseApplicationGenerator {
         });
       },
       packageJsonE2eScripts({ application }) {
-        const { devServerPort, devServerPortProxy: devServerPortE2e = devServerPort } = application;
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const buildCmd = application.buildToolGradle ? 'gradlew' : 'mvnw -ntp';
 
         let applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
         applicationWaitTimeout = application.authenticationTypeOauth2 ? applicationWaitTimeout * 2 : applicationWaitTimeout;
@@ -110,17 +108,6 @@ export default class ServerGenerator extends BaseApplicationGenerator {
         scriptsStorage.set({
           'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
         });
-
-        // TODO add e2eTests property to application.
-        if (this.jhipsterConfig.testFrameworks?.includes('cypress')) {
-          scriptsStorage.set({
-            'pree2e:headless': 'npm run ci:server:await',
-            'ci:e2e:run': 'concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless',
-            'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue "./${buildCmd}" npm:e2e:headless`,
-            'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue "./${buildCmd}" npm:e2e`,
-            'e2e:devserver': `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}"`,
-          });
-        }
       },
     });
   }

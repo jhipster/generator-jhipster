@@ -2,14 +2,17 @@
 
 basedir=$(dirname "$0")
 
+<%_ if (buildToolMaven) { _%>
 if [ -f "$basedir/mvnw" ]; then
   bindir="$basedir/target/node"
   repodir="$basedir/target/node/node_modules"
   installCommand="$basedir/mvnw --batch-mode -ntp -Pwebapp frontend:install-node-and-npm@install-node-and-npm"
-elif [ -f "$basedir/gradlew" ]; then
+<%_ } else if (buildToolGradle) { _%>
+if [ -f "$basedir/gradlew" ]; then
   bindir="$basedir/build/node/bin"
   repodir="$basedir/build/node/lib/node_modules"
-  installCommand="$basedir/gradlew npmSetup"
+  installCommand="$basedir/gradlew npmSetup --no-daemon"
+<%_ } _%>
 else
   echo "Using npm installed globally"
   exec npm "$@"
