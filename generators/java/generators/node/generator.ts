@@ -95,7 +95,6 @@ export default class NodeGenerator extends BaseApplicationGenerator {
           blocks: [
             {
               condition: (ctx: any) => ctx.useNpmWrapper,
-              transform: false,
               templates: ['npmw', 'npmw.cmd'],
             },
           ],
