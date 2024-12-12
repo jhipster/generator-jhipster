@@ -27,6 +27,8 @@ import { cypressEntityFiles, cypressFiles } from './files.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
+const WAIT_TIMEOUT = 3 * 60000;
+
 export default class CypressGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -188,22 +190,28 @@ export default class CypressGenerator extends BaseApplicationGenerator {
       },
 
       configure({ application }) {
+        const { devServerPort, devServerPortProxy: devServerPortE2e = devServerPort } = application;
+
         const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
         clientPackageJson.merge({
           devDependencies: {
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
           },
           scripts: {
-            e2e: 'npm run e2e:cypress:headed --',
-            'e2e:headless': 'npm run e2e:cypress --',
-            'e2e:cypress:headed': 'npm run e2e:cypress -- --headed',
-            'e2e:cypress': 'cypress run --e2e --browser chrome',
-            'e2e:cypress:record': 'npm run e2e:cypress -- --record',
+            'ci:e2e:run': 'concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless',
+            'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e:headless`,
             cypress: 'cypress open --e2e',
+            e2e: 'npm run e2e:cypress:headed --',
+            'e2e:cypress': 'cypress run --e2e --browser chrome',
+            'e2e:cypress:headed': 'npm run e2e:cypress -- --headed',
+            'e2e:cypress:record': 'npm run e2e:cypress -- --record',
+            'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e`,
+            'e2e:devserver': `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}"`,
+            'pree2e:headless': 'npm run ci:server:await',
+            'e2e:headless': 'npm run e2e:cypress --',
           },
         });
       },
-
       configureAudits({ application }) {
         if (!application.cypressAudit) return;
         const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
@@ -220,7 +228,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
         });
       },
       configureCoverage({ application, source }) {
-        const { cypressCoverage, clientFrameworkAngular, dasherizedBaseName } = application;
+        const { cypressCoverage, clientFrameworkAngular, clientRootDir, dasherizedBaseName } = application;
         if (!cypressCoverage) return;
         const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
         clientPackageJson.merge({
@@ -241,7 +249,10 @@ export default class CypressGenerator extends BaseApplicationGenerator {
         });
         if (clientFrameworkAngular) {
           // Add 'ng build --configuration instrumenter' support
-          this.createStorage('angular.json').setPath(`projects.${dasherizedBaseName}.architect.build.configurations.instrumenter`, {});
+          this.createStorage(`${clientRootDir}angular.json`).setPath(
+            `projects.${dasherizedBaseName}.architect.build.configurations.instrumenter`,
+            {},
+          );
           source.addWebpackConfig?.({
             config: `targetOptions.configuration === 'instrumenter'
       ? {
