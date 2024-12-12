@@ -37,6 +37,10 @@ export const files = {
         'jest.conf.js',
       ],
     }),
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.enableTranslation && ctx.enableI18nRTL,
+      templates: ['postcss.config.json'],
+    }),
   ],
   webpack: [
     clientRootTemplatesBlock({
@@ -62,10 +66,6 @@ export const files = {
     clientRootTemplatesBlock({
       condition: ctx => ctx.clientBundlerExperimentalEsbuild && ctx.enableTranslation,
       templates: ['build-plugins/i18n-esbuild.mjs'],
-    }),
-    clientRootTemplatesBlock({
-      condition: ctx => ctx.clientBundlerExperimentalEsbuild && ctx.enableTranslation && ctx.enableI18nRTL,
-      templates: ['postcss.config.json'],
     }),
     clientSrcTemplatesBlock({
       condition: ctx => ctx.clientBundlerExperimentalEsbuild && ctx.enableTranslation,
