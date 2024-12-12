@@ -86,7 +86,7 @@
     "typescript-eslint": "8.18.0",
     "webpack": "5.97.1",
     "webpack-cli": "5.1.4",
-    "webpack-dev-server": "5.1.0",
+    "webpack-dev-server": "5.2.0",
     "webpack-merge": "6.0.1",
     "webpack-notifier": "1.15.0",
     "workbox-webpack-plugin": "7.3.0"
