@@ -49,11 +49,11 @@ export default class ServerGenerator extends BaseApplicationGenerator {
         if (buildTool === 'maven') {
           const excludeWebapp = application.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';
           scriptsStorage.set({
-            'app:start': './mvnw',
+            'app:start': './mvnw -ntp --batch-mode',
             'backend:info': './mvnw --version',
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
             'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
-            'backend:start': `./mvnw${excludeWebapp}`,
+            'backend:start': `./mvnw${excludeWebapp} -ntp --batch-mode`,
             'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
