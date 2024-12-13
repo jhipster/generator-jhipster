@@ -200,6 +200,8 @@ export function getConfigForDatabaseType(options: ApplicationDefaults = {}): App
       options[DEV_DATABASE_TYPE] = options[PROD_DATABASE_TYPE];
     }
   }
+  options.databaseMigration ??= options.databaseType === SQL ? 'liquibase' : 'no';
+
   return options;
 }
 

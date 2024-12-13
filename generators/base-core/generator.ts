@@ -59,9 +59,9 @@ import { packageJson } from '../../lib/index.js';
 import type { BaseApplication } from '../base-application/types.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import NeedleApi from '../needle-api.js';
-import command from '../base/command.js';
+import baseCommand from '../base/command.js';
 import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
-import { loadConfig } from '../../lib/internal/index.js';
+import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/index.js';
@@ -186,7 +186,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       this.sharedData = this.createSharedData({ help: this.options.help }) as any;
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
-      this.parseJHipsterOptions(command.options);
+      this.parseJHipsterOptions(baseCommand.options);
 
       // Don't write jhipsterVersion to .yo-rc.json when reproducible
       if (
@@ -418,12 +418,14 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         try {
           const command = await this.getCurrentJHipsterCommand();
           if (!command.configs) return;
+
+          const taskArgs = this.getArgsForPriority(PRIORITY_NAMES.LOADING);
+          const [{ application }] = taskArgs as any;
+          loadConfig.call(this, command.configs, { application: application ?? this });
+          loadDerivedConfig(command.configs, { application });
         } catch {
-          return;
+          // Ignore non existing command
         }
-        const taskArgs = this.getArgsForPriority(PRIORITY_NAMES.LOADING);
-        const [{ application }] = taskArgs as any;
-        await this.loadCurrentJHipsterCommandConfig(application ?? this);
       },
     });
   }

@@ -1,6 +1,6 @@
 import type { JHipsterConfigs } from '../../lib/command/index.js';
 import type CoreGenerator from '../../generators/base-core/index.js';
-import { upperFirstCamelCase } from '../utils/string.js';
+import { applyDerivedProperty } from '../utils/derived-property.js';
 
 export function loadConfig(this: CoreGenerator, configsDef: JHipsterConfigs | undefined, data: { application: any });
 export function loadConfig(configsDef: JHipsterConfigs | undefined, data: { application: any; config?: any });
@@ -39,13 +39,7 @@ export const loadDerivedConfig = (configsDef: JHipsterConfigs | undefined, { app
   if (configsDef) {
     for (const [name, def] of Object.entries(configsDef)) {
       if ((def.scope === undefined || ['storage', 'blueprint', 'context'].includes(def.scope)) && def.choices) {
-        const configVal = application[name];
-        for (const choice of def.choices) {
-          const choiceVal = typeof choice === 'string' ? choice : choice.value;
-          const prop = `${name}${upperFirstCamelCase(choiceVal)}`;
-          application[prop] = application[prop] ?? ([].concat(configVal) as any).includes(choiceVal);
-        }
-        application[`${name}Any`] = application[`${name}Any`] ?? !application[`${name}No`];
+        applyDerivedProperty(application, name, def.choices, { addAny: true });
       }
     }
   }

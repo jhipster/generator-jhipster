@@ -42,7 +42,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
       jsExtensions({ applicationDefaults, application }) {
         applicationDefaults({
           cjsExtension: application.packageJsonTypeCommonjs ? '.js' : '.cjs',
-          mjsExtension: application.packageJsonTypeCommonjs ? '.js' : '.mjs',
+          mjsExtension: application.packageJsonTypeModule ? '.js' : '.mjs',
         });
       },
     });

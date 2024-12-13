@@ -9,13 +9,15 @@ type CommandConfigScope = 'storage' | 'blueprint' | 'generator' | 'context' | 'n
 export type ConfigScope = CommandConfigScope | 'control';
 type CliSpecType = CliOptionSpec['type'];
 
-export type JHispterChoices = readonly [...(string | { value: string; name: string })[]];
+export type JHipsterNamedChoice = { value: string; name: string };
+
+export type JHipsterChoices = readonly [...(string | JHipsterNamedChoice)[]];
 
 export type JHipsterOption = SetOptional<CliOptionSpec, 'name'> & {
   readonly name?: string;
   readonly scope?: ConfigScope;
   readonly env?: string;
-  readonly choices?: JHispterChoices;
+  readonly choices?: JHipsterChoices;
   readonly commandName?: string;
 };
 
@@ -41,7 +43,7 @@ type CliSpec = Omit<SetOptional<CliOptionSpec, 'name'>, 'storage'> & {
 
 export type ConfigSpec<ConfigContext> = {
   readonly description?: string;
-  readonly choices?: JHispterChoices;
+  readonly choices?: JHipsterChoices;
   readonly cli?: CliSpec;
   readonly argument?: JHipsterArgumentConfig;
   readonly internal?: true;
@@ -114,7 +116,7 @@ type ParseableConfig = {
   readonly cli?: {
     readonly type: CliSpecType;
   };
-  readonly choices?: JHispterChoices;
+  readonly choices?: JHipsterChoices;
   readonly scope: ConfigScope;
 };
 
@@ -189,7 +191,7 @@ type NormalizeChoices<Choices extends readonly [...(string | { value: string })[
  */
 type DerivedPropertiesWithInferenceUnionFromParseableConfigs<U extends ParseableConfigs> = {
   [K in keyof U]: U[K] extends infer RequiredChoices
-    ? RequiredChoices extends { choices: JHispterChoices }
+    ? RequiredChoices extends { choices: JHipsterChoices }
       ? K extends infer StringKey
         ? StringKey extends string
           ? NormalizeChoices<RequiredChoices['choices']> extends infer NormalizedChoices
@@ -224,7 +226,7 @@ type ExplodeCommandChoicesNoInference<U extends ParseableConfigs> = {
 };
 
 type PrepareConfigsWithType<U extends ParseableConfigs> = Simplify<{
-  -readonly [K in keyof U]?: U[K] extends Record<'choices', JHispterChoices>
+  -readonly [K in keyof U]?: U[K] extends Record<'choices', JHipsterChoices>
     ? TupleToUnion<NormalizeChoices<U[K]['choices']>>
     : WrapperToPrimitive<ConstructorReturn<GetType<U[K]>>> extends infer T
       ? T extends undefined
@@ -234,7 +236,7 @@ type PrepareConfigsWithType<U extends ParseableConfigs> = Simplify<{
 }>;
 
 /** Keep Options/Config filtered by choices */
-type OnlyChoices<D, C extends boolean> = D extends { choices: JHispterChoices } ? (C extends true ? D : never) : C extends true ? never : D;
+type OnlyChoices<D, C extends boolean> = D extends { choices: JHipsterChoices } ? (C extends true ? D : never) : C extends true ? never : D;
 
 /**
  * Keep Options/Config filtered by choices
