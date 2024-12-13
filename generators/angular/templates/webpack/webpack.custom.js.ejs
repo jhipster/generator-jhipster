@@ -22,9 +22,6 @@ const path = require('path');
 <%_ if (enableTranslation) { _%>
 const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
-  <%_ if (enableI18nRTL) { _%>
-const postcssRTLCSS = require('postcss-rtlcss');
-  <%_ } _%>
 <%_ } _%>
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -137,22 +134,6 @@ module.exports = async (config, options, targetOptions) => {
     config.plugins.push(new CopyWebpackPlugin({ patterns }));
   }
 
-<%_ if (enableI18nRTL) { _%>
-  const scssRule = config.module.rules.find(x => x.test && x.test.toString().includes('scss'));
-  const uses = scssRule.rules.flatMap(r => r.use || r.oneOf.flatMap(o => o.use));
-  const postcssLoaderOptions = uses.filter(u => u.loader.includes('postcss-loader')).map(u => u.options);
-  postcssLoaderOptions.forEach(options => {
-    const generateOptions = options.postcssOptions;
-    options.postcssOptions = (loader) => {
-      const postcssOptions = generateOptions(loader);
-      postcssOptions.plugins.push(postcssRTLCSS());
-      return postcssOptions;
-    };
-    // https://github.com/angular/angular-cli/blob/4b9199d97f3bcb10710b5049b04d8a04436e2dd4/packages/angular_devkit/build_angular/src/webpack/configs/styles.ts#L201-L202
-    options.postcssOptions.config = false;
-  });
-
-<%_ } _%>
   config.plugins.push(
     new webpack.DefinePlugin({
 <%_ if (enableTranslation) { _%>
