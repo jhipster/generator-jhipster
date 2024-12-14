@@ -85,7 +85,6 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 <%_ } _%>
 
 @Component({
-    standalone: true,
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
     templateUrl: './<%= entityFileName %>.component.html',
     imports: [
@@ -96,9 +95,15 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
       SharedModule,
       SortDirective,
       SortByDirective,
+<%_ if (anyFieldIsDuration) { _%>
       DurationPipe,
+<%_ } _%>
+<%_ if (anyFieldIsTimeDerived) { _%>
       FormatMediumDatetimePipe,
+<%_ } _%>
+<%_ if (anyFieldIsLocalDate) { _%>
       FormatMediumDatePipe,
+<%_ } _%>
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
       FilterComponent,
 <%_ } _%>

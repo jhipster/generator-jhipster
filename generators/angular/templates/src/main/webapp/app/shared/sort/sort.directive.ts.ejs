@@ -26,7 +26,6 @@ export interface SortChangeDirective<T> {
 }
 
 @Directive({
-  standalone: true,
   selector: '[<%= jhiPrefix %>Sort]',
 })
 export class SortDirective implements SortChangeDirective<string> {
