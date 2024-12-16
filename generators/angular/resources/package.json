@@ -48,7 +48,7 @@
     "jest-preset-angular": "14.4.2",
     "jest-sonar": "0.2.16",
     "merge-jsons-webpack-plugin": "2.0.1",
-    "postcss-rtlcss": "5.5.1",
+    "postcss-rtlcss": "5.6.0",
     "rimraf": "5.0.8",
     "ts-jest": "29.2.5",
     "typescript": "5.6.3",
