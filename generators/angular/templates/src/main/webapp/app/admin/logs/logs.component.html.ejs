@@ -40,7 +40,7 @@
 
     <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
       <thead>
-        <tr <%= jhiPrefix %>Sort [sortState]="sortState" (sortChange)="sortState.set($event)">
+        <tr <%= jhiPrefix %>Sort [(sortState)]="sortState">
           <th <%= jhiPrefix %>SortBy="name" scope="col"><span>__jhiTranslateTag__('logs.table.name')</span> <fa-icon icon="sort"></fa-icon></th>
           <th <%= jhiPrefix %>SortBy="level" scope="col"><span>__jhiTranslateTag__('logs.table.level')</span> <fa-icon icon="sort"></fa-icon></th>
         </tr>

@@ -39,7 +39,7 @@
   <div class="table-responsive">
     <table class="table table-striped" aria-describedby="user-management-page-heading">
       <thead>
-        <tr<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>Sort [sortState]="sortState" (sortChange)="transition($event)"<% } %>>
+        <tr<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="transition($event)"<% } %>>
           <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="id"<% } %>>
             <span>__jhiTranslateTag__('global.field.id')</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
           </th>
