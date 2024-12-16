@@ -40,7 +40,7 @@ export class SortByDirective {
     effect(() => {
       if (this.iconComponent()) {
         let icon: IconDefinition = this.sortIcon;
-        const { predicate, order } = this.sort.sortState();
+        const { predicate, order } = this.sort.sortState()();
         if (predicate === this.<%= jhiPrefix %>SortBy() && order !== undefined) {
           icon = order === 'asc' ? this.sortAscIcon : this.sortDescIcon;
         }
