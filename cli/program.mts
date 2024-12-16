@@ -401,7 +401,13 @@ export const buildJHipster = async ({
   ...buildOptions
 }: BuildJHipsterOptions = {}) => {
   createEnvBuilder =
-    createEnvBuilder ?? (async options => EnvironmentBuilder.create(options).prepare({ blueprints, lookups, devBlueprintPath }));
+    createEnvBuilder ??
+    (async options =>
+      EnvironmentBuilder.create(options).prepare({ blueprints, lookups, devBlueprintPath } as {
+        blueprints?: Record<string, string>;
+        lookups?: any[];
+        devBlueprintPath?: string;
+      }));
   if (!env) {
     envBuilder = envBuilder ?? (await createEnvBuilder());
     env = env ?? envBuilder.getEnvironment();
