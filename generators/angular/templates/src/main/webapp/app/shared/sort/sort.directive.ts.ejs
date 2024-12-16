@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, input, output, OutputEmitterRef } from '@angular/core';
 import { SortOrder, SortState, SortStateSignal } from './sort-state';
 
 export interface SortChangeDirective<T> {
-  sortChange: EventEmitter<SortState>;
+  sortChange: OutputEmitterRef<SortState>;
 
   sort(field: T): void;
 }
@@ -29,12 +29,12 @@ export interface SortChangeDirective<T> {
   selector: '[<%= jhiPrefix %>Sort]',
 })
 export class SortDirective implements SortChangeDirective<string> {
-  @Input() sortState!: SortStateSignal;
+  readonly sortState = input.required<SortStateSignal>();
 
-  @Output() sortChange = new EventEmitter<SortState>();
+  readonly sortChange = output<SortState>();
 
   sort(field: string): void {
-    const { predicate, order } = this.sortState();
+    const { predicate, order } = this.sortState()();
     const toggle = (): SortOrder => (order === 'asc' ? 'desc' : 'asc');
     this.sortChange.emit({ predicate: field, order: field !== predicate ? 'asc' : toggle() });
   }
