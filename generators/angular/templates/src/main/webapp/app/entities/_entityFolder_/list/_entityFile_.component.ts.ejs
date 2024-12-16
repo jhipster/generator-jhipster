@@ -29,7 +29,7 @@
 
   const componentName = entityAngularName + 'Component';
 _%>
-import { Component, computed, NgZone, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, effect, NgZone, inject, OnInit, signal, WritableSignal } from '@angular/core';
 <%_ if (!paginationNo) { _%>
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
@@ -195,24 +195,25 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
     search(query: string): void {
-  <%_ if (notSortableFieldsAfterSearch) { _%>
-      const { predicate } = this.sortState();
-      if (query && predicate && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
-        this.loadDefaultSortState();
-      }
-  <%_ } _%>
   <%_ if (paginationPagination) { _%>
       this.page = 1;
   <%_ } _%>
       this.currentSearch = query;
+  <%_ if (notSortableFieldsAfterSearch) { _%>
+      const { predicate } = this.sortState();
+      if (query && predicate && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
+        this.navigateToWithComponentValues(this.getDefaultSortState());
+        return;
+      }
+  <%_ } _%>
       this.navigateToWithComponentValues(this.sortState());
     }
 
-    loadDefaultSortState(): void {
+    getDefaultSortState(): SortState {
   <%_ if (notSortableFieldsAfterSearchFieldNames.includes(primaryKey.name)) { _%>
-      this.sortState.set({});
+      return {};
   <%_ } else { _%>
-      this.sortState.set(this.sortService.parseSortParam(this.activatedRoute.snapshot.data[DEFAULT_SORT_DATA]));
+      return this.sortService.parseSortParam(this.activatedRoute.snapshot.data[DEFAULT_SORT_DATA]);
   <%_ } _%>
     }
 <%_ } _%>

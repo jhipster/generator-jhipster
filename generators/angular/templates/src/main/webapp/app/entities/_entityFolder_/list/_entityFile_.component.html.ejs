@@ -64,17 +64,15 @@
     <<%= jhiPrefixDashed %>-filter [filters]="filters"></<%= jhiPrefixDashed %>-filter>
 <%_ } _%>
 
-@if (<%= entityInstancePlural %>?.length === 0) {
+@if ((<%= entityInstancePlural %>?.length ?? 0) === 0) {
     <div class="alert alert-warning" id="no-result">
         <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.notFound')</span>
     </div>
-}
-
-@if (<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0) {
+} @else {
     <div class="table-responsive table-entities" id="entities">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
-                <tr <%= jhiPrefix %>Sort [sortState]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+                <tr <%= jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
                     <th scope="col" <%= jhiPrefix %>SortBy="<%= field.fieldName %>">
                         <div class="d-flex">

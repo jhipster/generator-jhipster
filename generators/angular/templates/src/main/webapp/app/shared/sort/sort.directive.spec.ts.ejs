@@ -28,7 +28,7 @@ import { SortState, sortStateSignal } from './sort-state';
   template: `
     <table>
       <thead>
-        <tr <%= jhiPrefix %>Sort [sortState]="sortState" (sortChange)="transition($event)"></tr>
+        <tr <%= jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="transition($event)"></tr>
       </thead>
     </table>
   `,
