@@ -134,7 +134,9 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
 
 <%_ if (paginationPagination) { _%>
-<%- include('pagination-template'); -%>
+  itemsPerPage = ITEMS_PER_PAGE;
+  totalItems = 0;
+  page = 1;
 <%_ } else if (paginationInfiniteScroll) { _%>
     itemsPerPage = ITEMS_PER_PAGE;
     links: WritableSignal<Record<string, undefined | Record<string, string | undefined>>> = signal({});
