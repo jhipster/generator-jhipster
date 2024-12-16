@@ -77,7 +77,7 @@ describe('Directive: SortByDirective', () => {
     fixture.detectChanges();
 
     // THEN
-    expect(sortByDirective.<%= jhiPrefix %>SortBy).toEqual('name');
+    expect(sortByDirective.<%= jhiPrefix %>SortBy()).toEqual('name');
     expect(sortByDirective.iconComponent()?.icon).toEqual(faSort.iconName);
   });
 
@@ -90,7 +90,7 @@ describe('Directive: SortByDirective', () => {
     fixture.detectChanges();
 
     // THEN
-    expect(sortByDirective.<%= jhiPrefix %>SortBy).toEqual('name');
+    expect(sortByDirective.<%= jhiPrefix %>SortBy()).toEqual('name');
     expect(sortByDirective.iconComponent()?.icon).toEqual(faSortUp.iconName);
   });
 
@@ -103,7 +103,7 @@ describe('Directive: SortByDirective', () => {
     fixture.detectChanges();
 
     // THEN
-    expect(sortByDirective.<%= jhiPrefix %>SortBy).toEqual('name');
+    expect(sortByDirective.<%= jhiPrefix %>SortBy()).toEqual('name');
     expect(sortByDirective.iconComponent()?.icon).toEqual(faSortDown.iconName);
   });
 
@@ -116,7 +116,7 @@ describe('Directive: SortByDirective', () => {
     fixture.detectChanges();
 
     // THEN
-    expect(sortByDirective.<%= jhiPrefix %>SortBy).toEqual('name');
+    expect(sortByDirective.<%= jhiPrefix %>SortBy()).toEqual('name');
     expect(sortByDirective.iconComponent()?.icon).toEqual(faSort.iconName);
   });
 
