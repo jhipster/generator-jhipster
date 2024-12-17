@@ -64,7 +64,7 @@
     <<%= jhiPrefixDashed %>-filter [filters]="filters"></<%= jhiPrefixDashed %>-filter>
 <%_ } _%>
 
-@if ((<%= entityInstancePlural %>?.length ?? 0) === 0) {
+@if (<%= entityInstancePlural %>().length === 0) {
     <div class="alert alert-warning" id="no-result">
         <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.notFound')</span>
     </div>
@@ -101,7 +101,7 @@
                 </tr>
             </thead>
             <tbody<% if (paginationInfiniteScroll) { %> infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0"<% } %>>
-            @for (<%= entityInstance %> of <%= entityInstancePlural %>; track track<%= primaryKey.nameCapitalized %>(<%= entityInstance %>)) {
+            @for (<%= entityInstance %> of <%= entityInstancePlural %>(); track track<%= primaryKey.nameCapitalized %>(<%= entityInstance %>)) {
                 <tr data-cy="entityTable">
 <%_
 const routerLink = ` [routerLink]="['/${ entityPage }', ${entityInstance}.${primaryKey.name}, 'view']"`;
@@ -218,7 +218,7 @@ _%>
     </div>
 }
 <%_ if (paginationPagination) { _%>
-@if (<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0) {
+@if (<%= entityInstancePlural %>().length > 0) {
     <div>
         <div class="d-flex justify-content-center">
             <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
