@@ -122,7 +122,7 @@ export class <%= componentName %> implements OnInit {
 
 <%_ } _%>
     subscription: Subscription | null = null;
-    <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
+    <%= entityInstancePlural %> = signal<I<%= entityAngularName %>[]>([]);
     isLoading = false;
 
     sortState = sortStateSignal({});
@@ -173,8 +173,10 @@ export class <%= componentName %> implements OnInit {
         tap(() => this.load()),
 <%_ } else { _%>
         tap(() => {
-          if (!this.<%= entityInstancePlural %> || this.<%= entityInstancePlural %>.length === 0) {
+          if (this.<%= entityInstancePlural %>().length === 0) {
             this.load();
+          } else {
+            this.<%= entityInstancePlural %>.set(this.refineData(this.<%= entityInstancePlural %>()));
           }
         }),
 <%_ } _%>
@@ -187,7 +189,7 @@ export class <%= componentName %> implements OnInit {
 
 <%_ if (paginationInfiniteScroll) { _%>
     reset(): void {
-      this.<%= entityInstancePlural %> = [];
+      this.<%= entityInstancePlural %>.set([]);
     }
 
     loadNextPage(): void {
@@ -289,9 +291,9 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
       const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
 <%_ if (paginationNo) { _%>
-      this.<%= entityInstancePlural %> = this.refineData(dataFromBody);
+      this.<%= entityInstancePlural %>.set(this.refineData(dataFromBody));
 <%_ } else { _%>
-      this.<%= entityInstancePlural %> = dataFromBody;
+      this.<%= entityInstancePlural %>.set(dataFromBody);
 <%_ } _%>
     }
 
@@ -306,7 +308,7 @@ export class <%= componentName %> implements OnInit {
 <%_ if (paginationInfiniteScroll) { _%>
       // If there is previous link, data is a infinite scroll pagination content.
       if (this.links().prev) {
-        const <%= entityInstancePlural %>New = this.<%= entityInstancePlural %> ?? [];
+        const <%= entityInstancePlural %>New = this.<%= entityInstancePlural %>();
         if (data) {
           for (const d of data) {
   <%_ if (primaryKey) { _%>
