@@ -2,8 +2,8 @@
   "dependencies": {
     "@angular/common": "19.0.4",
     "@fortawesome/angular-fontawesome": "1.0.0",
-    "@fortawesome/fontawesome-svg-core": "6.7.1",
-    "@fortawesome/free-solid-svg-icons": "6.7.1",
+    "@fortawesome/fontawesome-svg-core": "6.7.2",
+    "@fortawesome/free-solid-svg-icons": "6.7.2",
     "@ng-bootstrap/ng-bootstrap": "18.0.0-rc.0",
     "@ngx-translate/core": "16.0.3",
     "@ngx-translate/http-loader": "16.0.0",
