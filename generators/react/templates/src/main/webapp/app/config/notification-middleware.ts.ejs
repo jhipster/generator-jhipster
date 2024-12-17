@@ -25,7 +25,7 @@ import { isAxiosError } from 'axios';
 import { FieldErrorVM, isProblemWithMessage } from 'app/shared/jhipster/problem-details';
 import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
 
-type TostMessage = {
+type ToastMessage = {
   message?: string;
 <%_ if (enableTranslation) { _%>
   key?: string;
@@ -33,7 +33,7 @@ type TostMessage = {
 <%_ } _%>
 };
 
-const addErrorAlert = (message: TostMessage) => {
+const addErrorAlert = (message: ToastMessage) => {
 <%_ if (enableTranslation) { _%>
   toast.error(message.key ? translate(message.key, message.data) ?? message.message : message.message);
 <%_ } else { _%>
@@ -41,7 +41,7 @@ const addErrorAlert = (message: TostMessage) => {
 <%_ } _%>
 };
 
-const getFieldErrorsTosts = (fieldErrors: FieldErrorVM[]): TostMessage[] =>
+const getFieldErrorsToasts = (fieldErrors: FieldErrorVM[]): ToastMessage[] =>
   fieldErrors.map(fieldError => {
     if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
       fieldError.message = 'Size';
@@ -102,7 +102,7 @@ export default () => next => action => {
         const { data } = response;
         const problem = isProblemWithMessage(data) ? data : null;
         if (problem?.fieldErrors) {
-          getFieldErrorsTosts(problem.fieldErrors).forEach(message => addErrorAlert(message));
+          getFieldErrorsToasts(problem.fieldErrors).forEach(message => addErrorAlert(message));
         } else {
           const { error: toastError<% if (enableTranslation) { %>, param<% } %> } = getMessageFromHeaders((response.headers as any) ?? {});
           if (toastError) {
