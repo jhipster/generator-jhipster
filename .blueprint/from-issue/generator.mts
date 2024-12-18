@@ -93,7 +93,7 @@ export default class extends BaseGenerator {
 
         for (const file of await prepareSample(
           this.destinationPath(),
-          this.data.files.filter(file => file.type === 'yo-rc'),
+          this.data.files.filter(file => ['yo-rc', 'json'].includes(file.type)),
         )) {
           this.writeDestination(file.filename, file.content);
         }
