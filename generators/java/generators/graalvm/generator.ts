@@ -118,37 +118,6 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
-  get default() {
-    return this.asDefaultTaskGroup({
-      // workaround for https://github.com/spring-projects/spring-boot/issues/32195
-      async disabledInAotModeAnnotation({ application }) {
-        this.queueTransformStream(
-          {
-            name: 'adding @DisabledInAotMode annotations',
-            filter: file =>
-              !isFileStateDeleted(file) &&
-              isFileStateModified(file) &&
-              file.path.startsWith(this.destinationPath(application.srcTestJava!)) &&
-              extname(file.path) === '.java',
-            refresh: false,
-          },
-          passthrough(file => {
-            const contents = file.contents.toString('utf8');
-            if (/@(MockBean|SpyBean)/.test(contents) || (application.reactive && /@AuthenticationIntegrationTest/.test(contents))) {
-              file.contents = Buffer.from(
-                addJavaAnnotation(contents, { package: 'org.springframework.test.context.aot', annotation: 'DisabledInAotMode' }),
-              );
-            }
-          }),
-        );
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
-  }
-
   get writing() {
     return this.asWritingTaskGroup({
       async writingTemplateTask({ application }) {
