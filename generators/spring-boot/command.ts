@@ -224,7 +224,7 @@ const command = {
         tokenType: 'NAME',
         tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
-      choices: ['liquibase'],
+      choices: ['liquibase', 'no'],
       scope: 'storage',
     },
     graalvmSupport: {

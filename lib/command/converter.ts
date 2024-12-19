@@ -1,7 +1,7 @@
 import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
-import type { ConfigSpec, JHipsterArguments, JHipsterConfigs, JHipsterOption, JHispterChoices } from './types.js';
+import type { ConfigSpec, JHipsterArguments, JHipsterChoices, JHipsterConfigs, JHipsterOption } from './types.js';
 
-type JHipsterArgumentsWithChoices = JHipsterArguments & { choices?: JHispterChoices };
+type JHipsterArgumentsWithChoices = JHipsterArguments & { choices?: JHipsterChoices };
 
 export const extractArgumentsFromConfigs = (configs: JHipsterConfigs | undefined): JHipsterArgumentsWithChoices => {
   if (!configs) return {};

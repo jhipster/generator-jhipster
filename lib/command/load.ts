@@ -1,11 +1,5 @@
-import { upperFirst } from 'lodash-es';
-import type { CommandConfigScope, JHipsterConfigs, JHispterChoices } from './types.js';
-
-const prepareChoices = (key: string, choices: JHispterChoices) =>
-  choices
-    .map(choice => (typeof choice === 'string' ? { value: choice } : choice))
-    .filter(choice => choice.value != null)
-    .map(choice => ({ ...choice, choiceKey: `${key}${upperFirst(choice.value)}` }));
+import { applyDerivedProperty } from '../utils/derived-property.js';
+import type { CommandConfigScope, JHipsterConfigs } from './types.js';
 
 const filteredScopeEntries = (commandsConfigs: JHipsterConfigs, scopes: CommandConfigScope[]) =>
   Object.entries(commandsConfigs).filter(([_key, def]) => scopes.includes(def.scope!));
@@ -32,18 +26,12 @@ function loadConfigIntoContext<Context>(
         }
       }
       templatesContext[key] = configuredValue;
-      key = key === 'serviceDiscoveryType' ? 'serviceDiscovery' : key;
       if (def.choices) {
-        const choices = prepareChoices(key, def.choices);
-        const hasConfiguredValue = configuredValue !== undefined && configuredValue !== null;
-        for (const { choiceKey, value: choiceValue } of choices) {
-          if (hasConfiguredValue) {
-            templatesContext[choiceKey] = configuredValue === choiceValue;
-          } else {
-            templatesContext[choiceKey] = templatesContext[choiceKey] ?? undefined;
-          }
+        applyDerivedProperty(templatesContext, key, def.choices, { addAny: true });
+        if (key === 'serviceDiscoveryType') {
+          templatesContext.serviceDiscovery = templatesContext.serviceDiscoveryType;
+          applyDerivedProperty(templatesContext, 'serviceDiscovery', def.choices, { addAny: true });
         }
-        templatesContext[`${key}Any`] = hasConfiguredValue ? configuredValue !== 'no' : undefined;
       }
     });
   }
@@ -94,16 +82,10 @@ export function loadCommandConfigsKeysIntoTemplatesContext<Context>(
     filteredScopeEntries(commandsConfigs, scopes).forEach(([key, def]) => {
       templatesContext[key] = templatesContext[key] ?? undefined;
       if (def.choices) {
-        for (const { choiceKey } of prepareChoices(key, def.choices)) {
-          templatesContext[choiceKey] = templatesContext[choiceKey] ?? undefined;
-        }
-        templatesContext[`${key}Any`] = templatesContext[`${key}Any`] ?? undefined;
+        applyDerivedProperty(templatesContext, key, def.choices, { addAny: true });
         if (key === 'serviceDiscoveryType') {
-          key = 'serviceDiscovery';
-          for (const { choiceKey } of prepareChoices(key, def.choices)) {
-            templatesContext[choiceKey] = templatesContext[choiceKey] ?? undefined;
-          }
-          templatesContext[`${key}Any`] = templatesContext[`${key}Any`] ?? undefined;
+          templatesContext.serviceDiscovery = templatesContext.serviceDiscoveryType;
+          applyDerivedProperty(templatesContext, 'serviceDiscovery', def.choices, { addAny: true });
         }
       }
     });

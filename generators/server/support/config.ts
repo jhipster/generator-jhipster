@@ -143,10 +143,6 @@ export const loadDerivedServerConfig = ({ application }: { application: any }) =
   application.databaseTypeNeo4j = application.databaseType === NEO4J;
   application.databaseTypeAny = !application.databaseTypeNo;
 
-  application.databaseMigrationLiquibase = application.databaseMigration
-    ? application.databaseMigration === 'liquibase'
-    : application.databaseType === SQL;
-
   mutateData(application, {
     packageFolder: ({ packageName }) => `${packageName.replace(/\./g, '/')}/`,
     javaPackageSrcDir: ({ srcMainJava, packageFolder }) => normalizePathEnd(`${srcMainJava}${packageFolder}`),

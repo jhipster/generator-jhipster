@@ -213,7 +213,7 @@ Options:
   --feign-client                           Generate a feign client (default: false)
   --sync-user-with-idp                     Allow relationships with User for oauth2 applications
   --message-broker <value>                 message broker (choices: "kafka", "pulsar", "no")
-  --database-migration <value>             Database migration (choices: "liquibase")
+  --database-migration <value>             Database migration (choices: "liquibase", "no")
   --graalvm-support                        Experimental GraalVM Native support
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --package-name <value>                   The package name for the generated application
