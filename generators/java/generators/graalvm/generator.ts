@@ -16,12 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { extname } from 'path';
-import { isFileStateDeleted, isFileStateModified } from 'mem-fs-editor/state';
-import { passthrough } from '@yeoman/transform';
 import BaseApplicationGenerator from '../../../base-application/index.js';
 import { createNeedleCallback } from '../../../base/support/needles.js';
-import { addJavaAnnotation, addJavaImport } from '../../../java/support/add-java-annotation.js';
+import { addJavaImport } from '../../../java/support/add-java-annotation.js';
 import { javaMainPackageTemplatesBlock } from '../../../java/support/files.js';
 import { mavenDefinition } from './internal/maven-definition.js';
 import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.js';
@@ -116,37 +113,6 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
-  }
-
-  get default() {
-    return this.asDefaultTaskGroup({
-      // workaround for https://github.com/spring-projects/spring-boot/issues/32195
-      async disabledInAotModeAnnotation({ application }) {
-        this.queueTransformStream(
-          {
-            name: 'adding @DisabledInAotMode annotations',
-            filter: file =>
-              !isFileStateDeleted(file) &&
-              isFileStateModified(file) &&
-              file.path.startsWith(this.destinationPath(application.srcTestJava!)) &&
-              extname(file.path) === '.java',
-            refresh: false,
-          },
-          passthrough(file => {
-            const contents = file.contents.toString('utf8');
-            if (/@(MockBean|SpyBean)/.test(contents) || (application.reactive && /@AuthenticationIntegrationTest/.test(contents))) {
-              file.contents = Buffer.from(
-                addJavaAnnotation(contents, { package: 'org.springframework.test.context.aot', annotation: 'DisabledInAotMode' }),
-              );
-            }
-          }),
-        );
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get writing() {
