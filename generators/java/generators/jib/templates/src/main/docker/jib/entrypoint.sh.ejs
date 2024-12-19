@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "The application will start in ${JHIPSTER_SLEEP}s..." && sleep ${JHIPSTER_SLEEP}
+echo "The application will start in ${JHIPSTER_SLEEP}s..." && sleep "${JHIPSTER_SLEEP}"
 
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
@@ -38,4 +38,10 @@ file_env 'SPRING_LIQUIBASE_PASSWORD'
 <%_ } _%>
 file_env 'JHIPSTER_REGISTRY_PASSWORD'
 
-exec java ${JAVA_OPTS} -noverify -XX:+AlwaysPreTouch -Djava.security.egd=file:/dev/./urandom -cp /app/resources/:/app/classes/:/app/libs/* "<%= packageName %>.<%= mainClass %>"  "$@"
+exec java "${JAVA_OPTS}" \
+     -noverify \
+     -XX:+AlwaysPreTouch \
+     -Djava.security.egd=file:/dev/./urandom \
+     -cp /app/resources/:/app/classes/:/app/libs/* \
+     "<%= packageName %>.<%= mainClass %>" \
+     "$@"
