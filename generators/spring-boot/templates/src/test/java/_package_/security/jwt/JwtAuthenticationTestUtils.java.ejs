@@ -26,7 +26,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
 <%_ if (reactive) { _%>
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 <%_ } _%>
 
@@ -54,13 +54,14 @@ public class JwtAuthenticationTestUtils {
     }
 <%_ if (reactive) { _%>
 
-    @MockitoBean
+    // TODO switch to MockitoSpyBean https://github.com/spring-projects/spring-framework/issues/33941
+    @MockBean
     private ReactiveUserDetailsService userDetailsService;
-  <%_ if (generateBuiltInUserEntity) { _%>
+<%_ } _%>
+<%_ if (reactive && generateBuiltInUserEntity) { _%>
 
-    @MockitoBean
+    @MockBean
     private UserRepository userRepository;
-  <%_ } _%>
 <%_ } _%>
 
     public static String createValidToken(String jwtKey) {
