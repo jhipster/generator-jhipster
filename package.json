@@ -140,7 +140,7 @@
     "dot-properties": "1.1.0",
     "ejs": "3.1.10",
     "eslint": "9.17.0",
-    "eslint-plugin-import-x": "4.5.1",
+    "eslint-plugin-import-x": "4.6.1",
     "eslint-plugin-unused-imports": "4.1.4",
     "execa": "9.5.2",
     "fast-xml-parser": "4.5.1",
