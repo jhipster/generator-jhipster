@@ -1,10 +1,10 @@
 {
   "dependencies": {
-    "@angular/common": "19.0.4",
+    "@angular/common": "19.0.5",
     "@fortawesome/angular-fontawesome": "1.0.0",
     "@fortawesome/fontawesome-svg-core": "6.7.2",
     "@fortawesome/free-solid-svg-icons": "6.7.2",
-    "@ng-bootstrap/ng-bootstrap": "18.0.0-rc.0",
+    "@ng-bootstrap/ng-bootstrap": "18.0.0",
     "@ngx-translate/core": "16.0.3",
     "@ngx-translate/http-loader": "16.0.0",
     "@popperjs/core": "2.11.8",
@@ -24,7 +24,7 @@
     "@angular-builders/custom-esbuild": "19.0.0-beta.0",
     "@angular-builders/custom-webpack": "19.0.0-beta.0",
     "@angular-builders/jest": "19.0.0-beta.1",
-    "@angular/cli": "19.0.5",
+    "@angular/cli": "19.0.6",
     "@eslint/js": "9.17.0",
     "@types/jest": "29.5.14",
     "@types/node": "20.11.25",
