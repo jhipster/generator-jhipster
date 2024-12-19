@@ -1,7 +1,7 @@
 import { removeFieldsWithNullishValues } from '../../base/support/index.js';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 
-export type InfoFile = { filename: string; content: string; type: 'jdl' | 'yo-rc' | 'entity-jdl' };
+export type InfoFile = { filename: string; content: string; type: 'jdl' | 'yo-rc' | 'entity-jdl' | 'json' };
 
 export type InfoData = {
   yoRcContent: string | undefined;
@@ -34,6 +34,8 @@ export const extractDataFromInfo = (info: string): InfoData => {
           yoRcContent = body.trim();
           files.push({ filename: '.yo-rc.json', content: yoRcContent, type: 'yo-rc' });
         }
+      } else if (title.includes(' file')) {
+        files.push({ filename: title.split(' file')[0].trim(), content: body.trim(), type: 'json' });
       } else if (title.includes('JDL entity definitions')) {
         jdlEntitiesDefinitions = body.trim();
         files.push({ filename: 'entities.jdl', content: jdlEntitiesDefinitions, type: 'entity-jdl' });
