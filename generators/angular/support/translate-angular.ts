@@ -42,12 +42,9 @@ export type ReplacerOptions = { jhiPrefix: string; enableTranslation: boolean };
  * Replace translation key with translation values
  *
  * @param {import('../generator-base.js')} generator
+ * @param getWebappTranslation
  * @param {string} content
  * @param {string} regexSource regular expression to find keys
- * @param {object} [options]
- * @param {number} [options.keyIndex]
- * @param {number} [options.replacementIndex]
- * @param {any} [options.escape]
  * @returns {string}
  */
 function replaceTranslationKeysWithText(
@@ -305,7 +302,7 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
       { prefixPattern: '>\\s*', suffixPattern: '\\s*<' },
     );
   }
-  return function replaceAngularTranslations(content, filePath) {
+  return function replaceAngularTranslations(content: string, filePath: string) {
     if (filePath.endsWith('.html')) {
       if (!enableTranslation) {
         content = content.replace(new RegExp(TRANSLATE_REGEX, 'g'), '');
@@ -318,7 +315,7 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
       content = htmlJhiTranslateStringifyReplacer(content);
     }
     if (/(:?\.html|.ts)$/.test(filePath)) {
-      content = translationReplacer?.(content, filePath);
+      content = translationReplacer ? translationReplacer?.(content, filePath) : content;
     }
     if (!enableTranslation) {
       if (/(:?route|module)\.ts$/.test(filePath)) {
@@ -335,7 +332,7 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
 const minimatch = new Minimatch('**/*{.html,.ts}');
 export const isTranslatedAngularFile = file => minimatch.match(file.path);
 
-export const translateAngularFilesTransform = (getWebappTranslation, opts: ReplacerOptions | boolean) => {
+export const translateAngularFilesTransform = (getWebappTranslation: GetWebappTranslationCallback, opts: ReplacerOptions | boolean) => {
   const translate = createTranslationReplacer(getWebappTranslation, opts);
   return passthrough(file => {
     file.contents = Buffer.from(translate(file.contents.toString(), file.path));
