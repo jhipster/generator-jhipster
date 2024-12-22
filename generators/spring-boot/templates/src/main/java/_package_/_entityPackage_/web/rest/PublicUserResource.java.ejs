@@ -29,7 +29,9 @@ import java.util.stream.StreamSupport;
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
 import org.springframework.data.domain.Sort;
+  <%_ if (reactive) { _%>
 import java.util.Collections;
+  <%_ } _%>
 <%_ } _%>
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.<%= user.dtoClass %>;
