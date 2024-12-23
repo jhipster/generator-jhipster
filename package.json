@@ -131,7 +131,7 @@
     "@yeoman/transform": "2.1.0",
     "@yeoman/types": "1.5.0",
     "axios": "1.7.9",
-    "chalk": "5.4.0",
+    "chalk": "5.4.1",
     "chevrotain": "11.0.3",
     "commander": "12.1.0",
     "debug": "4.4.0",
