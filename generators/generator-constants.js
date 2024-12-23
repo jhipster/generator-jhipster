@@ -22,7 +22,7 @@ import { fileURLToPath } from 'url';
 
 export const BLUEPRINT_API_VERSION = 'jhipster-8';
 // jhipster-bom version
-export const JHIPSTER_DEPENDENCIES_VERSION = '8.7.2';
+export const JHIPSTER_DEPENDENCIES_VERSION = '8.8.0';
 // Version of Java
 export const JAVA_VERSION = '17';
 // Supported Java versions, https://www.oracle.com/java/technologies/java-se-support-roadmap.html
