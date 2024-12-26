@@ -243,7 +243,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
             scripts: {
               'webapp:build': `npm run -w ${application.clientRootDir} webapp:build`,
               'ci:frontend:test': `npm run -w ${application.clientRootDir} ci:frontend:test`,
-              'e2e:headless': `npm run -w ${application.clientRootDir} e2e:headless`,
             },
           });
 

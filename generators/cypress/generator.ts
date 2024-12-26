@@ -71,6 +71,13 @@ export default class CypressGenerator extends BaseApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
+      loadPackageJson({ application }) {
+        this.loadNodeDependenciesFromPackageJson(
+          application.nodeDependencies,
+          this.fetchFromInstalledJHipster('client', 'resources', 'package.json'),
+        );
+      },
+
       prepareForTemplates({ application }) {
         const { cypressAudit = true, cypressCoverage = false } = this.jhipsterConfig as any;
         application.cypressAudit = cypressAudit;
@@ -90,6 +97,37 @@ export default class CypressGenerator extends BaseApplicationGenerator {
         application.cypressTemporaryDir =
           (application.cypressTemporaryDir ?? application.temporaryDir) ? `${application.temporaryDir}cypress/` : '.cypress/';
         application.cypressBootstrapEntities = application.cypressBootstrapEntities ?? true;
+      },
+      npmScripts({ application }) {
+        const { devServerPort, devServerPortProxy: devServerPortE2e = devServerPort } = application;
+
+        Object.assign(application.clientPackageJsonScripts, {
+          cypress: 'cypress open --e2e',
+          e2e: 'npm run e2e:cypress:headed --',
+          'e2e:cypress': 'cypress run --e2e --browser chrome',
+          'e2e:cypress:headed': 'npm run e2e:cypress -- --headed',
+          'e2e:cypress:record': 'npm run e2e:cypress -- --record',
+          'e2e:headless': 'npm run e2e:cypress --',
+        });
+
+        // Scripts that handle server and client concurrently should be added to the root package.json
+        Object.assign(application.packageJsonScripts, {
+          'ci:e2e:run': 'concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless',
+          'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e:headless`,
+          'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e`,
+          'e2e:devserver': `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}"`,
+        });
+
+        if (application.clientRootDir) {
+          // Add scripts to map to client package.json
+          Object.assign(application.packageJsonScripts, {
+            'e2e:headless': `npm run -w ${application.clientRootDir} e2e:headless`,
+          });
+        } else if (application.backendTypeJavaAny) {
+          Object.assign(application.clientPackageJsonScripts, {
+            'pree2e:headless': 'npm run ci:server:await',
+          });
+        }
       },
     });
   }
@@ -182,33 +220,11 @@ export default class CypressGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      loadPackageJson({ application }) {
-        this.loadNodeDependenciesFromPackageJson(
-          application.nodeDependencies,
-          this.fetchFromInstalledJHipster('client', 'resources', 'package.json'),
-        );
-      },
-
-      configure({ application }) {
-        const { devServerPort, devServerPortProxy: devServerPortE2e = devServerPort } = application;
-
+      packageJson({ application }) {
         const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
         clientPackageJson.merge({
           devDependencies: {
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
-          },
-          scripts: {
-            'ci:e2e:run': 'concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless',
-            'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e:headless`,
-            cypress: 'cypress open --e2e',
-            e2e: 'npm run e2e:cypress:headed --',
-            'e2e:cypress': 'cypress run --e2e --browser chrome',
-            'e2e:cypress:headed': 'npm run e2e:cypress -- --headed',
-            'e2e:cypress:record': 'npm run e2e:cypress -- --record',
-            'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e`,
-            'e2e:devserver': `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}"`,
-            'pree2e:headless': 'npm run ci:server:await',
-            'e2e:headless': 'npm run e2e:cypress --',
           },
         });
       },
