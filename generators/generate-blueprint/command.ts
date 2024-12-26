@@ -42,10 +42,9 @@ const command = {
     },
     gitDependency: {
       cli: {
-        description: 'Use git dependency',
+        description: 'Use git dependency (eg: github:jhipster/generator-jhipster#main)',
         type: String,
       },
-      default: 'github:jhipster/generator-jhipster#main',
       scope: 'generator',
     },
     cliName: {
