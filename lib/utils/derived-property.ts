@@ -2,7 +2,8 @@ import { camelCase, upperFirst } from 'lodash-es';
 import type { JHipsterChoices } from '../command/types.js';
 import { upperFirstCamelCase } from './string.js';
 
-const flatChoices = (choices: JHipsterChoices): string[] => choices.map(choice => (typeof choice === 'string' ? choice : choice.value));
+const flatChoices = (choices: JHipsterChoices): string[] =>
+  choices.map(choice => (typeof choice === 'string' ? choice : choice.value)).filter(Boolean);
 
 export const applyDerivedProperty = <const Prop extends string>(
   data: any,
