@@ -34,6 +34,13 @@ const command = {
       },
       scope: 'storage',
     },
+    languagesDefinition: {
+      cli: {
+        type: Array,
+        hide: true,
+      },
+      scope: 'storage',
+    },
     enableTranslation: {
       cli: {
         description: 'Enable translation',
