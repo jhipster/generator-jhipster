@@ -72,6 +72,7 @@ let config = defineConfig({
     alias: {
       vue: '@vue/compat/dist/vue.esm-bundler.js',
       '@': fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/', import.meta.url)),
+      '@content': fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>content/', import.meta.url)),
     },
   },
   define: {
