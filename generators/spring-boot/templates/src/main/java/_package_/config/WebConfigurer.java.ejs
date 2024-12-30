@@ -79,7 +79,7 @@ import jakarta.servlet.*;
     <%_ if (!skipClient) { _%>
 import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import static java.net.URLDecoder.decode;
     <%_ } _%>
@@ -150,7 +150,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         if (server instanceof ConfigurableServletWebServerFactory servletWebServer) {
             File root;
             String prefixPath = resolvePathPrefix();
-            root = new File(prefixPath + "<%= clientDistDir %>");
+            root = Path.of(prefixPath + "<%= clientDistDir %>").toFile();
             if (root.exists() && root.isDirectory()) {
                 servletWebServer.setDocumentRoot(root);
             }
@@ -162,7 +162,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
      */
     private String resolvePathPrefix() {
         String fullExecutablePath = decode(this.getClass().getResource("").getPath(), StandardCharsets.UTF_8);
-        String rootPath = Paths.get(".").toUri().normalize().getPath();
+        String rootPath = Path.of(".").toUri().normalize().getPath();
         String extractedPath = fullExecutablePath.replace(rootPath, "");
         int extractionEndIndex = extractedPath.indexOf("<%= temporaryDir %>");
         if (extractionEndIndex <= 0) {
