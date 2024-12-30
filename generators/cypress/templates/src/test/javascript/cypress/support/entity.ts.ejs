@@ -37,21 +37,13 @@ export const entityConfirmDeleteButtonSelector = '[data-cy="entityConfirmDeleteB
 // End Specific Selector Attributes for Cypress
 // ***********************************************
 
-Cypress.Commands.add('getEntityHeading', (entityName: string) => {
-  return cy.get(`[data-cy="${entityName}Heading"]`);
-});
+Cypress.Commands.add('getEntityHeading', (entityName: string) => cy.get(`[data-cy="${entityName}Heading"]`));
 
-Cypress.Commands.add('getEntityCreateUpdateHeading', (entityName: string) => {
-  return cy.get(`[data-cy="${entityName}CreateUpdateHeading"]`);
-});
+Cypress.Commands.add('getEntityCreateUpdateHeading', (entityName: string) => cy.get(`[data-cy="${entityName}CreateUpdateHeading"]`));
 
-Cypress.Commands.add('getEntityDetailsHeading', (entityInstanceName: string) => {
-  return cy.get(`[data-cy="${entityInstanceName}DetailsHeading"]`);
-});
+Cypress.Commands.add('getEntityDetailsHeading', (entityInstanceName: string) => cy.get(`[data-cy="${entityInstanceName}DetailsHeading"]`));
 
-Cypress.Commands.add('getEntityDeleteDialogHeading', (entityInstanceName: string) => {
-  return cy.get(`[data-cy="${entityInstanceName}DeleteDialogHeading"]`);
-});
+Cypress.Commands.add('getEntityDeleteDialogHeading', (entityInstanceName: string) => cy.get(`[data-cy="${entityInstanceName}DeleteDialogHeading"]`));
 
 Cypress.Commands.add('setFieldImageAsBytesOfEntity', (fieldName: string, fileName: string, mimeType: string) => {
   // fileName is the image which you have already put in cypress fixture folder
