@@ -23,7 +23,9 @@ const path = require('path');
 const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } _%>
+<%_ if (microfrontend) { _%>
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+<%_ } _%>
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -32,7 +34,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const environment = require('./environment');
 const proxyConfig = require('./proxy.conf');
 
-module.exports = async (config, options, targetOptions) => {
+module.exports = async (config, _options, targetOptions) => {
 <%_ if (enableTranslation) { _%>
   const languagesHash = await hashElement(path.resolve(__dirname, '<%= this.relativeDir(clientRootDir + 'webpack/', clientSrcDir) %>i18n'), {
     algo: 'md5',
@@ -60,6 +62,7 @@ module.exports = async (config, options, targetOptions) => {
   if (config.devServer) {
     config.devServer.proxy = proxyConfig({ tls });
   }
+<%_ if (microfrontend) { _%>
 
   if (targetOptions.target === 'serve' || config.watch) {
     config.plugins.push(
@@ -102,6 +105,7 @@ module.exports = async (config, options, targetOptions) => {
       ),
     );
   }
+<%_ } _%>
 
   if (config.mode === 'production') {
     config.plugins.push(
