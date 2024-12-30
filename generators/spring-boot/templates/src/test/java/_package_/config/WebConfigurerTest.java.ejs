@@ -33,7 +33,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import jakarta.servlet.*;
 <%_ if (!skipClient) { _%>
-import java.io.File;
+import java.nio.file.Path;
 <%_ } _%>
 import java.util.*;
 
@@ -82,7 +82,7 @@ class WebConfigurerTest {
         assertThat(container.getMimeMappings().get("html")).isEqualTo("text/html");
         assertThat(container.getMimeMappings().get("json")).isEqualTo("application/json");
         if (container.getDocumentRoot() != null) {
-            assertThat(container.getDocumentRoot()).isEqualTo(new File("<%= clientDistDir %>"));
+            assertThat(container.getDocumentRoot()).isEqualTo(Path.of("<%= clientDistDir %>").toFile());
         }
     }
 
