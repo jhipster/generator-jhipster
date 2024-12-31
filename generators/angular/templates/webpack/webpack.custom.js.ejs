@@ -34,7 +34,8 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const environment = require('./environment');
 const proxyConfig = require('./proxy.conf');
 
-module.exports = async (config, _options, targetOptions) => {
+// eslint-disable-next-line no-unused-vars
+module.exports = async (config, options, targetOptions) => {
 <%_ if (enableTranslation) { _%>
   const languagesHash = await hashElement(path.resolve(__dirname, '<%= this.relativeDir(clientRootDir + 'webpack/', clientSrcDir) %>i18n'), {
     algo: 'md5',
