@@ -20,7 +20,6 @@
 const tsKeyId = primaryKey.tsSampleValues[0];
 const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
 _%>
-/* tslint:disable max-line-length */
 import axios from 'axios';
 import sinon from 'sinon'
 <%_ if (anyFieldIsDateDerived) { _%>
