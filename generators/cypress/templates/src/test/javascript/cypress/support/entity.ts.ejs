@@ -54,8 +54,7 @@ Cypress.Commands.add('setFieldImageAsBytesOfEntity', (fieldName: string, fileNam
       const file = new File([blob], fileName, { type: mimeType });
       const list = new DataTransfer();
       list.items.add(file);
-      const myFileList = list.files;
-      (el[0] as HTMLInputElement).files = myFileList;
+      (el[0] as HTMLInputElement).files = list.files;
       el[0].dispatchEvent(new Event('change', {bubbles: true}));
     });
 });
