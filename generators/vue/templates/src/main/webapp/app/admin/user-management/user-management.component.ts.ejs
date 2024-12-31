@@ -13,7 +13,7 @@ export default defineComponent({
   mounted(): void {
     this.loadAll();
   },
-  setup(prop) {
+  setup() {
     const alertService = inject('alertService', () => useAlertService(), true);
     const { formatDateShort: formatDate } = useDateFormat();
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
