@@ -71,7 +71,7 @@ a {
 .fullscreen {
   position: fixed;
   top: 100px;
-  left: 0px;
+  left: 0;
   width: 99% !important;
   height: calc(100vh - 110px) !important;
   margin: 5px;
@@ -132,8 +132,8 @@ Generic styles
 
 .shadow {
   box-shadow:
-    rgba(0, 0, 0, 0.12) 0px 1px 6px,
-    rgba(0, 0, 0, 0.12) 0px 1px 4px;
+    rgba(0, 0, 0, 0.12) 0 1px 6px,
+    rgba(0, 0, 0, 0.12) 0 1px 4px;
   border-radius: 2px;
 }
 
@@ -249,7 +249,7 @@ Generic styles
 /* end of padding helpers */
 
 .no-margin {
-  margin: 0px;
+  margin: 0;
 }
 @mixin voffset($size) {
   @if $size== '' {
