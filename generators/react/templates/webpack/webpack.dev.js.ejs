@@ -120,7 +120,7 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
           target: `http${options.tls ? 's' : ''}://localhost:${options.watch ? '<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>' : '<%= devServerPort %>'}`,
           ws: true,
           proxyOptions: {
-              changeOrigin: false  //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
+              changeOrigin: false  //pass the Host header to the backend unchanged https://github.com/Browsersync/browser-sync/issues/430
           }
       },
       socket: {
