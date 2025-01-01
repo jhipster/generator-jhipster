@@ -87,9 +87,7 @@ const applyExtendedMatrix = (matrixEntries, configMatrix) => {
  * //  'initialMatrix(false)-toBeMerged(false)': { initialMatrix: false, toBeMerged: false },
  * // }
  */
-export const extendMatrix = (matrix, configMatrix) => {
-  return Object.fromEntries(applyExtendedMatrix(Object.entries(matrix), configMatrix));
-};
+export const extendMatrix = (matrix, configMatrix) => Object.fromEntries(applyExtendedMatrix(Object.entries(matrix), configMatrix));
 
 export const extendFilteredMatrix = (matrix, filter, extendedConfig) => {
   const matrixEntries = Object.entries(matrix);

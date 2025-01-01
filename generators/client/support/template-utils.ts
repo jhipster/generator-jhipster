@@ -34,9 +34,8 @@ const { ANGULAR, VUE } = clientFrameworkTypes;
  * @param {Array|Object} relationships - array of relationships
  * @returns {Array|Object} filtered relationships
  */
-export const filterRelevantRelationships = relationships => {
-  return relationships.filter(rel => rel.persistableRelationship || rel.relationshipEagerLoad);
-};
+export const filterRelevantRelationships = relationships =>
+  relationships.filter(rel => rel.persistableRelationship || rel.relationshipEagerLoad);
 
 /**
  * @private

@@ -23,9 +23,7 @@
  * @param text the text to check, which should not begin with the closing wrapper character '<'
  * @return {boolean} true if the text is considered wrapped, false otherwise
  */
-const isSimpleText = (previousLine, text) => {
-  return !previousLine.endsWith('>') && !text.startsWith('<');
-};
+const isSimpleText = (previousLine, text) => !previousLine.endsWith('>') && !text.startsWith('<');
 
 /**
  * Format As Liquibase Remarks

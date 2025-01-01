@@ -30,6 +30,4 @@ export const angularReservedKeywords = [
   'ROUTER',
 ];
 
-export const isReservedAngularKeyword = (keyword: string) => {
-  return angularReservedKeywords.includes(keyword.toUpperCase());
-};
+export const isReservedAngularKeyword = (keyword: string) => angularReservedKeywords.includes(keyword.toUpperCase());

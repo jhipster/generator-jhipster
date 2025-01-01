@@ -50,6 +50,5 @@ export const buildServerMatrix = (matrix: Record<string, unknown> = {}) => {
   return serverMatrix;
 };
 
-export const buildServerSamples = (commonConfig?: Record<string, unknown>, matrix?: Record<string, unknown>) => {
-  return buildSamplesFromMatrix(buildServerMatrix(matrix), { commonConfig });
-};
+export const buildServerSamples = (commonConfig?: Record<string, unknown>, matrix?: Record<string, unknown>) =>
+  buildSamplesFromMatrix(buildServerMatrix(matrix), { commonConfig });

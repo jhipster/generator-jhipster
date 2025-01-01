@@ -8,6 +8,5 @@ export const getFrontendAppName = ({ baseName }: { baseName: string }) => {
   return /^\d/.exec(name) ? 'App' : name;
 };
 
-export const getMicroserviceAppName = ({ microserviceName }: { microserviceName: string }) => {
-  return camelCase(microserviceName) + (microserviceName.endsWith('App') ? '' : 'App');
-};
+export const getMicroserviceAppName = ({ microserviceName }: { microserviceName: string }) =>
+  camelCase(microserviceName) + (microserviceName.endsWith('App') ? '' : 'App');

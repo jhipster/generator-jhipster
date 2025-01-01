@@ -113,6 +113,4 @@ export const cassandraReservedKeywords = [
   'BITSTRING',
 ];
 
-export const isReservedCassandraKeyword = (keyword: string) => {
-  return cassandraReservedKeywords.includes(keyword.toUpperCase());
-};
+export const isReservedCassandraKeyword = (keyword: string) => cassandraReservedKeywords.includes(keyword.toUpperCase());
