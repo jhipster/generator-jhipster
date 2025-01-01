@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-const isReproducible = generator => {
-  return generator.options.reproducible;
-};
+const isReproducible = generator => generator.options.reproducible;
 
 export { isReproducible };
