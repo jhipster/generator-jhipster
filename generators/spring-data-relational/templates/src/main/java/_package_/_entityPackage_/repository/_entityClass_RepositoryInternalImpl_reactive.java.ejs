@@ -267,8 +267,7 @@ fields.forEach((field) => {
             }
 <%_ } _%>
 <%_ }); _%>
-<%_ reactiveEagerRelations.forEach((relationship) => {
-  const metamodelFieldName = (relationship.relationshipManyToMany || relationship.relationshipOneToMany) ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName; _%>
+<%_ reactiveEagerRelations.forEach((relationship) => { _%>
             if (criteria.get<%= relationship.relationshipNameCapitalized %>Id() != null) {
                 builder.buildFilterConditionForField(criteria.get<%= relationship.relationshipNameCapitalized %>Id(), <%= relationship.relationshipName %>Table.column("<%= relationship.otherEntity.primaryKey.ownFields[0].columnName %>"));
             }
