@@ -57,7 +57,6 @@ public interface <%= entityClass %>Repository extends ReactiveCrudRepository<<%=
 
 <%_ } _%>
 <%_ for (const relationship of relationships) {
-    let relationshipName = relationship.relationshipName;
     let ownerSide = relationship.ownerSide; _%>
   <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide)) { _%>
 
@@ -71,7 +70,6 @@ public interface <%= entityClass %>Repository extends ReactiveCrudRepository<<%=
     @Query("SELECT entity.* FROM <%= entityTableName %> entity JOIN <%= relationship.joinTable.name %> joinTable ON entity.<%= primaryKey.fields[0].columnName %> = joinTable.<%= relationship.joinColumnNames[0] %> WHERE joinTable.<%= relationship.joinColumnNames[0] %> = :id")
     Flux<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
   <%_ } else if (relationship.relationshipOneToOne && !ownerSide) {
-        let otherEntityRelationshipName = relationship.otherEntityRelationshipName;
         let otherEntityTableName = relationship.otherEntityTableName;
     _%>
 
