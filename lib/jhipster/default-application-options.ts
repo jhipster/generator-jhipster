@@ -131,7 +131,7 @@ export function getConfigForClientApplication(options: ApplicationDefaults = {})
     options.devServerPort ??= 9060;
   }
   options.devServerPortProxy ??=
-    options.clientBundler === 'webpack' && (clientFramework !== 'angular' || options.microfrontend) ? 9000 : undefined;
+    options.clientBundler === 'webpack' && (clientFramework !== 'angular' || options.microfrontend || options.applicationType === 'microservice') ? 9000 : undefined;
 
   return options;
 }
