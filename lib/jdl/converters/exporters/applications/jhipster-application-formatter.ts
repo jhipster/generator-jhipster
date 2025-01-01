@@ -37,9 +37,7 @@ export function formatApplicationsToExport(applications: Record<string, JDLAppli
   if (!applications) {
     throw new Error('Applications have to be passed to be exported.');
   }
-  return Object.values(applications).map(application => {
-    return setUpApplicationStructure(application);
-  });
+  return Object.values(applications).map(application => setUpApplicationStructure(application));
 }
 
 /**

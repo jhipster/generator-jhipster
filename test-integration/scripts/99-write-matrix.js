@@ -24,9 +24,8 @@ try {
   existing = { include: [] };
 }
 
-const randomReproducibleValue = (seed, choices) => {
-  return choices[createHash('shake256', { outputLength: 1 }).update(seed, 'utf8').digest('binary').charCodeAt(0) % choices.length];
-};
+const randomReproducibleValue = (seed, choices) =>
+  choices[createHash('shake256', { outputLength: 1 }).update(seed, 'utf8').digest('binary').charCodeAt(0) % choices.length];
 
 writeFileSync(
   MATRIX_FILE,

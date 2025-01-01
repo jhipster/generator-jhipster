@@ -62,9 +62,7 @@ type NeedleContentInsertion = NeedleInsertion & {
 /**
  * Change spaces sequences and '>' to allow any number of spaces or new line prefix
  */
-export const convertToPrettierExpressions = (str: string): string => {
-  return str.replace(/\s+/g, '([\\s\n]*)').replace(/>+/g, '(\n?[\\s]*)>');
-};
+export const convertToPrettierExpressions = (str: string): string => str.replace(/\s+/g, '([\\s\n]*)').replace(/>+/g, '(\n?[\\s]*)>');
 
 /**
  * Check if contentToCheck existing in content

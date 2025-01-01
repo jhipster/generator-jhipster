@@ -33,17 +33,11 @@ import type {
 } from '../types.js';
 import { formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.js';
 
-const artifactEquals = (a: MavenArtifact, b: MavenArtifact) => {
-  return a.groupId === b.groupId && a.artifactId === b.artifactId;
-};
+const artifactEquals = (a: MavenArtifact, b: MavenArtifact) => a.groupId === b.groupId && a.artifactId === b.artifactId;
 
-const dependencyEquals = (a: MavenDependency, b: MavenDependency) => {
-  return artifactEquals(a, b) && a.scope === b.scope && a.type === b.type;
-};
+const dependencyEquals = (a: MavenDependency, b: MavenDependency) => artifactEquals(a, b) && a.scope === b.scope && a.type === b.type;
 
-const idEquals = (a: { id: string }, b: { id: string }) => {
-  return a.id === b.id;
-};
+const idEquals = (a: { id: string }, b: { id: string }) => a.id === b.id;
 
 const ensureChildIsArray = (node, childPath) => {
   let dependencyArray = get(node, childPath);

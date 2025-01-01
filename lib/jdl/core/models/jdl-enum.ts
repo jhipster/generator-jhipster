@@ -34,9 +34,7 @@ export default class JDLEnum {
     this.comment = merged.comment;
     this.name = merged.name;
     this.values = new Map(
-      merged.values!.map((entry: ParsedJDLEnumValue) => {
-        return [entry.key, new JDLEnumValue(entry.key, entry.value, entry.comment)];
-      }),
+      merged.values!.map((entry: ParsedJDLEnumValue) => [entry.key, new JDLEnumValue(entry.key, entry.value, entry.comment)]),
     );
   }
 

@@ -77,11 +77,7 @@ export const allGeneratorsConfig = () => ({
   [ADDITIONAL_SUB_GENERATORS]: '',
   [DYNAMIC]: false,
   [JS]: true,
-  [GENERATORS]: Object.fromEntries(
-    Object.values(GENERATOR_LIST).map(subGenerator => {
-      return [subGenerator, allSubGeneratorConfig(subGenerator)];
-    }),
-  ),
+  [GENERATORS]: Object.fromEntries(Object.values(GENERATOR_LIST).map(subGenerator => [subGenerator, allSubGeneratorConfig(subGenerator)])),
 });
 
 export const prompts = () => {

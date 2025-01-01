@@ -60,9 +60,7 @@ export const databaseTypeData: Record<string, DatabaseTypeData> = {
   },
 };
 
-export const getDatabaseTypeData = (databaseType: string): DatabaseTypeData => {
-  return databaseTypeData[databaseType] ?? databaseTypeDataFallback;
-};
+export const getDatabaseTypeData = (databaseType: string): DatabaseTypeData => databaseTypeData[databaseType] ?? databaseTypeDataFallback;
 
 export const R2DBC_DB_OPTIONS = [
   {
