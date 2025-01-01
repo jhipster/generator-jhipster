@@ -27,9 +27,7 @@ export const createTranslationsFilter = ({ clientSrcDir, nativeLanguage, fallbac
       ? `**/${clientSrcDir}i18n/${nativeLanguage}/*.json`
       : `**/${clientSrcDir}i18n/{${nativeLanguage},${fallbackLanguage}}/*.json`;
   const minimatch = new Minimatch(pattern);
-  return filePath => {
-    return minimatch.match(filePath);
-  };
+  return filePath => minimatch.match(filePath);
 };
 
 export const createTranslationsFileFilter = opts => {

@@ -10,9 +10,7 @@ export const getGeneratorRelativeFolder = (generatorName: string) => {
   return join('generators', generatorName.split(':').join('/generators/'));
 };
 
-export const getGeneratorFolder = (generatorName: string) => {
-  return resolve(__dirname, '../..', getGeneratorRelativeFolder(generatorName));
-};
+export const getGeneratorFolder = (generatorName: string) => resolve(__dirname, '../..', getGeneratorRelativeFolder(generatorName));
 
 const getGenerator = (generatorName: string) => {
   const generatorFolder = getGeneratorFolder(generatorName);

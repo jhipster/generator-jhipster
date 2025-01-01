@@ -60,9 +60,7 @@ function init(passedConfiguration: JhipsterJSONJDLExporterWrapper) {
  * @param subFolder the folder (to create) in which the JHipster entity folder will be.
  */
 function updateEntities(applicationPath: string): JSONEntity[] {
-  return configuration.entities.map((entity: JSONEntity) => {
-    return updateEntityToGenerateWithExistingOne(applicationPath, entity);
-  });
+  return configuration.entities.map((entity: JSONEntity) => updateEntityToGenerateWithExistingOne(applicationPath, entity));
 }
 
 function updateEntityToGenerateWithExistingOne(applicationPath: string, entity: JSONEntity): JSONEntity {
@@ -86,7 +84,7 @@ function shouldFilterOutEntitiesBasedOnMicroservice(): string {
 }
 
 function filterOutEntitiesByMicroservice(): JSONEntity[] {
-  return configuration.entities.filter(entity => {
-    return !(entity.microserviceName && entity.microserviceName.toLowerCase() !== configuration.application.name.toLowerCase());
-  });
+  return configuration.entities.filter(
+    entity => !(entity.microserviceName && entity.microserviceName.toLowerCase() !== configuration.application.name.toLowerCase()),
+  );
 }

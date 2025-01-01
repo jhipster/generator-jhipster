@@ -1243,9 +1243,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Merge value to an existing json and write to destination
    */
   mergeDestinationJson(filepath: string, value: Record<string | number, any>) {
-    this.editFile(filepath, { create: true }, content => {
-      return JSON.stringify(merge(content ? JSON.parse(content) : {}, value), null, 2);
-    });
+    this.editFile(filepath, { create: true }, content => JSON.stringify(merge(content ? JSON.parse(content) : {}, value), null, 2));
   }
 
   /**

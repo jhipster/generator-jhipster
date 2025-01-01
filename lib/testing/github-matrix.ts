@@ -39,9 +39,8 @@ export type GitHubMatrixOutput = {
   include: GitHubMatrix[];
 };
 
-export const getUnknownGitHubMatrixProperties = (matrix: Partial<GitHubMatrix>): string[] => {
-  return Object.keys(matrix).filter(key => !knwonGitHubMatrixProperties.includes(key));
-};
+export const getUnknownGitHubMatrixProperties = (matrix: Partial<GitHubMatrix>): string[] =>
+  Object.keys(matrix).filter(key => !knwonGitHubMatrixProperties.includes(key));
 
 export const getUnknownGitHubMatrixGroupProperties = (matrixRecord: GitHubMatrixGroup): string[] => {
   let unknownProperties: string[] = [];

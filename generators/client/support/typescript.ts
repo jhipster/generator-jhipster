@@ -66,6 +66,4 @@ export const typescriptReservedKeywords = [
   'YIELD',
 ];
 
-export const isReservedTypescriptKeyword = (keyword: string) => {
-  return typescriptReservedKeywords.includes(keyword.toUpperCase());
-};
+export const isReservedTypescriptKeyword = (keyword: string) => typescriptReservedKeywords.includes(keyword.toUpperCase());

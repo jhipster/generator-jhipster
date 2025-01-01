@@ -55,13 +55,9 @@ export function languageToJavaLanguage(language) {
   return languageSnakeCase(languageUpperCaseCountry(language));
 }
 
-const languageToFakerjsLanguage = (languageTag: string): string => {
-  return languageUpperCaseCountry(languageTag);
-};
+const languageToFakerjsLanguage = (languageTag: string): string => languageUpperCaseCountry(languageTag);
 
-const languageToAngularLanguage = (languageTag: string): string => {
-  return languageUpperCaseCountry(languageTag);
-};
+const languageToAngularLanguage = (languageTag: string): string => languageUpperCaseCountry(languageTag);
 
 const languageToDayjsLanguage = (languageTag: string): string => {
   const split = splitLanguageTag(languageTag);

@@ -21,9 +21,8 @@ import sortKeys from 'sort-keys';
 import { transformContents } from '@yeoman/transform';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 
-const sortJsonFileContent = (contents: Exclude<File['contents'], null>) => {
-  return Buffer.from(`${JSON.stringify(sortKeys(JSON.parse(contents.toString('utf8')), { deep: true }), null, 2)}\n`);
-};
+const sortJsonFileContent = (contents: Exclude<File['contents'], null>) =>
+  Buffer.from(`${JSON.stringify(sortKeys(JSON.parse(contents.toString('utf8')), { deep: true }), null, 2)}\n`);
 
 export default function createSortConfigFilesTransform(pattern = '**/{.yo-rc.json,.jhipster/*.json}') {
   return transformContents<MemFsEditorFile>(contents => sortJsonFileContent(contents!), {
