@@ -42,7 +42,7 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.persistableRelationship || rel.relationshipEagerLoad)) {
-      const { propertyName, relationshipRequired, otherEntity, collection, otherEntityField } = relationship;
+      const { propertyName, otherEntity, collection, otherEntityField } = relationship;
 _%>
   <%= propertyName %>?: <% if (!otherEntity.embedded && (dtoMapstruct || otherEntity.builtInUser)) { %>Pick<<% } %>I<%= otherEntity.entityAngularName %><% if (!otherEntity.embedded && (dtoMapstruct || otherEntity.builtInUser)) { %>, '<%= otherEntity.primaryKey.name %>'<% if (otherEntity.primaryKey.name !== otherEntityField) { %> | '<%= otherEntityField %>'<% } %>><% } %><% if (collection) { %>[]<% } %> | null;
 <%_ } _%>
