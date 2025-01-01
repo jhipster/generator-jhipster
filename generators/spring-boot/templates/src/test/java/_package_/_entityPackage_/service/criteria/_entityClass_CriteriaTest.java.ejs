@@ -76,7 +76,7 @@ class <%- entityClass %>CriteriaTest {
     }
 
     private static void setAllFilters(<%- entityClass %>Criteria <%- persistInstance %>Criteria) {
-<%_ for (const { propertyJavaFilterName, propertyJavaFilterJavaBeanName } of entityJavaFilterableProperties) { _%>
+<%_ for (const { propertyJavaFilterName } of entityJavaFilterableProperties) { _%>
         <%- persistInstance %>Criteria.<%- propertyJavaFilterName %>();
 <%_ } _%>
         <%- persistInstance %>Criteria.distinct();
@@ -85,10 +85,10 @@ class <%- entityClass %>CriteriaTest {
     private static Condition<<%- entityClass %>Criteria> criteriaFiltersAre(Function<Object, Boolean> condition) {
         return new Condition<>(
             criteria ->
-<%_ for (const { propertyJavaFilterName, propertyJavaFilterJavaBeanName } of entityJavaFilterableProperties) { _%>
+<%_ for (const { propertyJavaFilterJavaBeanName } of entityJavaFilterableProperties) { _%>
                 condition.apply(criteria.get<%- propertyJavaFilterJavaBeanName %>()) &&
 <%_ } _%>
-          
+
                 condition.apply(criteria.getDistinct()),
                 "every filter matches"
         );
@@ -97,7 +97,7 @@ class <%- entityClass %>CriteriaTest {
     private static Condition<<%- entityClass %>Criteria> copyFiltersAre(<%- entityClass %>Criteria copy, BiFunction<Object, Object, Boolean> condition) {
         return new Condition<>(
             criteria ->
-<%_ for (const { propertyJavaFilterName, propertyJavaFilterJavaBeanName } of entityJavaFilterableProperties) { _%>
+<%_ for (const { propertyJavaFilterJavaBeanName } of entityJavaFilterableProperties) { _%>
                 condition.apply(criteria.get<%- propertyJavaFilterJavaBeanName %>(), copy.get<%- propertyJavaFilterJavaBeanName %>()) &&
 <%_ } _%>
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),
