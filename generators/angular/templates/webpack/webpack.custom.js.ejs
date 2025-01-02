@@ -78,7 +78,7 @@ module.exports = async (config, options, targetOptions) => {
               function (proxyReq) {
                 // URI that will be retrieved by the ForwardedHeaderFilter on the server side
                 proxyReq.setHeader('X-Forwarded-Host', 'localhost:<%- devServerPortProxy %>');
-                proxyReq.setHeader('X-Forwarded-Proto', 'https');
+                proxyReq.setHeader('X-Forwarded-Proto', `http${tls ? 's' : ''}`);
               },
             ],
           },
