@@ -544,9 +544,6 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/SpringDocConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -879,9 +876,6 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
   "src/main/java/com/mycompany/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -1209,9 +1203,6 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
