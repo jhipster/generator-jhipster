@@ -238,6 +238,6 @@ type UXConstraintName = {
 /**
  * get a unique constraint name for tables in JHipster preferred style.
  */
-export function getUXConstraintName(entityName, columnName, { prodDatabaseType, noSnakeCase }: UXConstraintName = {}) {
+export function getUXConstraintName(entityName: string, columnName: string, { prodDatabaseType, noSnakeCase }: UXConstraintName = {}) {
   return calculateDbName(entityName, columnName, { prodDatabaseType, noSnakeCase, prefix: 'ux_' });
 }

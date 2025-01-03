@@ -24,8 +24,9 @@ import { lt as semverLessThan } from 'semver';
 import { defaults } from 'lodash-es';
 import type { MemFsEditor } from 'mem-fs-editor';
 import { create } from 'mem-fs-editor';
+import type { Storage } from 'yeoman-generator';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { ApplicationType, BaseApplicationSource } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
 import type { CleanupArgumentType, Control } from './types.js';
@@ -36,7 +37,7 @@ export default class SharedData<EntityType extends BaseEntity = Entity, Applicat
   _log: any;
   _logCwd: string;
 
-  constructor(storage, { memFs, destinationPath, log, logCwd }, initialControl: Partial<Control> = {}) {
+  constructor(storage: Storage, { memFs, destinationPath, log, logCwd }, initialControl: Partial<Control> = {}) {
     if (!storage) {
       throw new Error('Storage is required for SharedData');
     }
@@ -139,7 +140,7 @@ export default class SharedData<EntityType extends BaseEntity = Entity, Applicat
     customizeRemoveFiles = this._storage.control.customizeRemoveFiles;
   }
 
-  getSource() {
+  getSource(): BaseApplicationSource {
     return this._storage.sharedSource;
   }
 
@@ -156,11 +157,11 @@ export default class SharedData<EntityType extends BaseEntity = Entity, Applicat
     this._storage.sharedEntities[entityName] = entity;
   }
 
-  hasEntity(entityName): boolean {
+  hasEntity(entityName: string): boolean {
     return Boolean(this._storage.sharedEntities[entityName]);
   }
 
-  getEntity(entityName): EntityType {
+  getEntity(entityName: string): EntityType {
     const entity = this._storage.sharedEntities[entityName];
     if (!entity) {
       throw new Error(`Entity definition not loaded for ${entityName}`);
