@@ -47,7 +47,6 @@ const { SQL } = databaseTypes;
  * @param {String} applicationSettings.databaseType - the DB type.
  * @param {Array} applicationSettings.blueprints - the blueprints used.
  * @param {Object} [logger] - the logger to use, default to the console.
- * @param {Object} [options]
  */
 export default function createValidator(jdlObject: JDLObject, applicationSettings: any = {}, logger: any = console) {
   if (!jdlObject) {

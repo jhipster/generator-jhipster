@@ -330,7 +330,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
    *
    * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
    * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} clientFramework - The name of the client framework
    * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
    * @param {string} entityTranslationValue - i18n value for entity entry in menu
    */
@@ -355,7 +354,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
    * @param {string} entityUrl - Entity router URL
    * @param {string} microserviceName - Microservice Name
    * @param {boolean} readOnly - If the entity is read-only or not
-   * @param {string} pageTitle - The translation key or the text for the page title in the browser
    */
   addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName, _entityUrl, _microserviceName, readOnly?) {
     this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
