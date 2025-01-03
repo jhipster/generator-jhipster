@@ -176,7 +176,7 @@ for (relationship of relationships) {
     private <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %>;
   <%_ } _%>
 
-<%_ }; _%>
+<%_ } _%>
 <&- fragments.classAdditionalRelationshipsSection() -&>
     // jhipster-needle-entity-add-field - JHipster will add fields here
 <%_ for (const field of fields.filter(field => !field.transient && (embedded || !field.id || !primaryKey.composite))) { _%>
