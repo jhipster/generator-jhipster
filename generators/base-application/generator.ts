@@ -29,7 +29,17 @@ import {
   GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
   GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
 } from '../generator-list.js';
-import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/tasks.js';
+import type {
+  ConfiguringEachEntityTaskParam,
+  TaskTypes as DefaultTaskTypes,
+  EntityTaskParam,
+  EntityToLoad,
+  LoadingEntitiesTaskParam,
+  PostWritingEntitiesTaskParam,
+  PreparingTaskParam,
+  TaskParamWithApplication,
+  TaskParamWithEntities,
+} from '../../lib/types/application/tasks.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
@@ -159,7 +169,7 @@ export default class BaseApplicationGenerator<
    * @param entityName Entity name
    * @returns
    */
-  getEntityConfigPath(entityName: string) {
+  getEntityConfigPath(entityName: string): string {
     return this.getEntitiesConfigPath(`${upperFirst(entityName)}.json`);
   }
 
@@ -327,7 +337,7 @@ export default class BaseApplicationGenerator<
    * Reset entities fake data seed.
    * @param {string} seed
    */
-  resetEntitiesFakeData(seed) {
+  resetEntitiesFakeData(seed: string | undefined): void {
     seed = `${this.sharedData.getApplication().baseName}-${seed}`;
     this.log.debug(`Resetting entities seed with '${seed}'`);
     this.sharedData.getEntities().forEach(({ entity }) => {
@@ -335,7 +345,7 @@ export default class BaseApplicationGenerator<
     });
   }
 
-  getArgsForPriority(priorityName): any[] {
+  getArgsForPriority(priorityName: string): TaskParamWithApplication[] {
     const args = super.getArgsForPriority(priorityName);
     let firstArg = this.getTaskFirstArgForPriority(priorityName);
     if (args.length > 0) {
@@ -347,7 +357,7 @@ export default class BaseApplicationGenerator<
   /**
    * @protected
    */
-  protected getTaskFirstArgForPriority(priorityName): any {
+  protected getTaskFirstArgForPriority(priorityName: string): TaskParamWithApplication {
     if (
       ![
         LOADING,
@@ -371,7 +381,7 @@ export default class BaseApplicationGenerator<
         END,
       ].includes(priorityName)
     ) {
-      return {};
+      return {} as any;
     }
     if (!this.jhipsterConfig.baseName) {
       throw new Error(`BaseName (${this.jhipsterConfig.baseName}) application not available for priority ${priorityName}`);
@@ -382,35 +392,35 @@ export default class BaseApplicationGenerator<
       return {
         application,
         applicationDefaults: data => mutateData(application, { __override__: false, ...data }),
-      };
+      } as PreparingTaskParam;
     }
     if (LOADING_ENTITIES === priorityName) {
       return {
         application,
         entitiesToLoad: this.getEntitiesDataToLoad(),
-      };
+      } as LoadingEntitiesTaskParam;
     }
     if ([DEFAULT].includes(priorityName)) {
       return {
         application,
         ...this.getEntitiesDataForPriorities(),
-      };
+      } as TaskParamWithEntities;
     }
     if ([WRITING_ENTITIES, POST_WRITING_ENTITIES].includes(priorityName)) {
       const applicationAndEntities = {
         application,
         ...this.getEntitiesDataToWrite(),
-      };
+      } as TaskParamWithEntities;
       if (priorityName === WRITING_ENTITIES) {
-        return applicationAndEntities;
+        return applicationAndEntities as TaskParamWithEntities;
       }
       return {
         ...applicationAndEntities,
         source: this.sharedData.getSource(),
-      };
+      } as PostWritingEntitiesTaskParam;
     }
 
-    return { application };
+    return { application } as TaskParamWithApplication;
   }
 
   /**
@@ -419,10 +429,10 @@ export default class BaseApplicationGenerator<
    * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
-  getEntitiesDataToConfigure() {
+  getEntitiesDataToConfigure(): ConfiguringEachEntityTaskParam[] {
     return this.getExistingEntityNames().map(entityName => {
       const entityStorage = this.getEntityConfig(entityName, true);
-      return { entityName, entityStorage, entityConfig: entityStorage!.createProxy() };
+      return { entityName, entityStorage, entityConfig: entityStorage!.createProxy() } as ConfiguringEachEntityTaskParam;
     });
   }
 
@@ -432,7 +442,7 @@ export default class BaseApplicationGenerator<
    * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
-  getEntitiesDataToLoad() {
+  getEntitiesDataToLoad(): EntityToLoad[] {
     const application = this.sharedData.getApplication();
     const builtInEntities: string[] = [];
     if (application.generateBuiltInUserEntity) {
@@ -463,7 +473,7 @@ export default class BaseApplicationGenerator<
           return generator.getEntityConfig(entityName, true)!.createProxy();
         },
         entityBootstrap,
-      };
+      } as EntityToLoad;
     });
   }
 
@@ -472,7 +482,7 @@ export default class BaseApplicationGenerator<
    * Get entities to prepare.
    * @returns {object[]}
    */
-  getEntitiesDataToPrepare() {
+  getEntitiesDataToPrepare(): EntityTaskParam[] {
     return this.sharedData.getEntities().map(({ entityName, ...data }) => ({
       description: entityName,
       entityName,

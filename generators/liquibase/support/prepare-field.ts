@@ -19,6 +19,8 @@
 
 import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.js';
 import { mutateData } from '../../base/support/index.js';
+import type { Field } from '../../../lib/types/application/field.js';
+import type { ApplicationType } from '../../../lib/types/application/application.js';
 
 const { MYSQL, MARIADB } = databaseTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
@@ -27,7 +29,7 @@ const { STRING, INTEGER, LONG, BIG_DECIMAL, FLOAT, DOUBLE, UUID, BOOLEAN, LOCAL_
 const { BYTES } = RelationalOnlyDBTypes;
 const { TEXT } = BlobTypes;
 
-function parseLiquibaseColumnType(entity, field) {
+function parseLiquibaseColumnType(field: Field) {
   const fieldType = field.fieldType;
   if (fieldType === STRING || field.fieldIsEnum) {
     return `varchar(${field.fieldValidateRulesMaxlength || 255})`;
@@ -94,8 +96,8 @@ function parseLiquibaseColumnType(entity, field) {
   return undefined;
 }
 
-function parseLiquibaseLoadColumnType(entity, field) {
-  const columnType = field.columnType;
+function parseLiquibaseLoadColumnType(application: ApplicationType, field: Field): string {
+  const columnType = field.columnType!;
   // eslint-disable-next-line no-template-curly-in-string
   if (['integer', 'bigint', 'double', 'decimal(21,2)', '${floatType}'].includes(columnType)) {
     return 'numeric';
@@ -124,7 +126,7 @@ function parseLiquibaseLoadColumnType(entity, field) {
     return 'clob';
   }
 
-  const { prodDatabaseType } = entity;
+  const { prodDatabaseType } = application;
   if (
     // eslint-disable-next-line no-template-curly-in-string
     columnType === '${uuidType}' &&
@@ -138,10 +140,10 @@ function parseLiquibaseLoadColumnType(entity, field) {
   return 'string';
 }
 
-export default function prepareField(entity, field) {
+export default function prepareField(application: ApplicationType, field: Field): Field {
   mutateData(field, {
     __override__: false,
-    columnType: data => parseLiquibaseColumnType(entity, data),
+    columnType: data => parseLiquibaseColumnType(data),
     liquibaseDefaultValueAttributeValue: ({ defaultValue, defaultValueComputed }) => defaultValueComputed ?? defaultValue?.toString(),
     liquibaseDefaultValueAttributeName: ({ defaultValueComputed, liquibaseDefaultValueAttributeValue }) => {
       if (liquibaseDefaultValueAttributeValue === undefined) return undefined;
@@ -154,11 +156,11 @@ export default function prepareField(entity, field) {
     shouldDropDefaultValue: data =>
       !data.liquibaseDefaultValueAttributeValue && (data.fieldType === ZONED_DATE_TIME || data.fieldType === INSTANT),
     shouldCreateContentType: data => data.fieldType === BYTES && data.fieldTypeBlobContent !== TEXT,
-    columnRequired: data => data.nullable === false || (data.fieldValidate === true && data.fieldValidateRules.includes('required')),
+    columnRequired: data => data.nullable === false || (data.fieldValidate === true && data.fieldValidateRules?.includes('required')),
     nullable: data => !data.columnRequired,
-    loadColumnType: data => parseLiquibaseLoadColumnType(entity, data),
+    loadColumnType: data => parseLiquibaseLoadColumnType(application, data),
     liquibaseGenerateFakeData: true,
-  } as any);
+  });
 
   return field;
 }

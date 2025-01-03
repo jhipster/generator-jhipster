@@ -186,8 +186,8 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
-      prepareDatabase({ entity, field }) {
-        prepareFieldForLiquibaseTemplates(entity, field);
+      prepareDatabase({ application, field }) {
+        prepareFieldForLiquibaseTemplates(application, field);
       },
     });
   }
