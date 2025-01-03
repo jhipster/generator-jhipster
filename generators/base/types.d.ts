@@ -17,6 +17,7 @@ export type Control = BaseApplicationControlProperties & {
    */
   blueprintConfigured?: boolean;
   reproducibleLiquibaseTimestamp?: Date;
+  enviromentHasDockerCompose?: boolean;
   filterEntitiesForClient?: (entity: Entity[]) => Entity[];
   filterEntitiesAndPropertiesForClient?: (entity: Entity[]) => Entity[];
   filterEntityPropertiesForClient?: (entity: Entity) => Entity;

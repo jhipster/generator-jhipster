@@ -104,7 +104,7 @@ export const SQL_DB_OPTIONS = [
     value: databaseTypes.MSSQL,
     name: 'Microsoft SQL Server',
   },
-];
+] as { value: string; name: string }[];
 
 /**
  * Get DB type from DB value
