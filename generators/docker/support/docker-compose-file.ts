@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { DockerComposeService } from '../types.js';
+
 /**
  * Creates EditFileCallback that creates a base docker compose yml file if empty.
  *
@@ -28,7 +30,7 @@ export const createDockerComposeFile = (
 name: ${name}
 `;
 
-export const createDockerExtendedServices = (...services) => ({
+export const createDockerExtendedServices = (...services: DockerComposeService[]) => ({
   services: Object.fromEntries(
     services.map(({ serviceName, serviceFile = `./${serviceName}.yml`, extendedServiceName = serviceName, additionalConfig = {} }) => [
       serviceName,

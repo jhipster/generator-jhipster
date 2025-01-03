@@ -621,18 +621,32 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
 
   get end() {
     return this.asEndTaskGroup({
-      end({ application }) {
+      end({ application, control }) {
+        const { buildToolExecutable } = application;
         this.log.ok('Spring Boot application generated successfully.');
 
-        let executable = 'mvnw';
-        if (application.buildToolGradle) {
-          executable = 'gradlew';
+        if (application.dockerServices?.length && !control.enviromentHasDockerCompose) {
+          const dockerComposeCommand = chalk.yellow.bold('docker compose');
+          this.log('');
+          this.log
+            .warn(`${dockerComposeCommand} command was not found in your environment. The generated Spring Boot application uses ${dockerComposeCommand} integration by default. You can disable it by setting
+${chalk.yellow.bold(`
+spring:
+  docker:
+    compose:
+      enabled: false
+`)}
+in your ${chalk.yellow.bold(`${application.srcMainResources}config/application.yml`)} file or removing 'spring-boot-docker-compose' dependency.
+`);
         }
+
         let logMsgComment = '';
         if (os.platform() === 'win32') {
-          logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
+          logMsgComment = ` (${chalk.yellow.bold(buildToolExecutable)} if using Windows Command Prompt)`;
         }
-        this.log.log(chalk.green(`  Run your Spring Boot application:\n  ${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+        this.log.log(
+          chalk.green(`  Run your Spring Boot application:\n  ${chalk.yellow.bold(`./${buildToolExecutable}`)}${logMsgComment}`),
+        );
       },
     });
   }

@@ -179,6 +179,9 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
           }
         };
       },
+      executable({ application }) {
+        application.buildToolExecutable = application.buildToolGradle ? 'gradlew' : 'mvnw';
+      },
     });
   }
 

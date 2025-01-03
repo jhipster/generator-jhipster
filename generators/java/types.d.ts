@@ -43,6 +43,7 @@ export type JavaNeedleOptions = GradleNeedleOptions;
 
 export type JavaApplication = JavaBootstrapStorageProperties &
   GradleApplication & {
+    buildToolExecutable: string;
     javaVersion: string;
 
     packageFolder: string;

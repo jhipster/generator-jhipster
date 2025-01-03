@@ -11,4 +11,7 @@ export type ApplicationType<E = Entity> = BaseApplication &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/gradle/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/spring-boot/command.ts').default>;
 
-export type BaseApplicationSource = SpringBootSourceType & ClientSourceType & LanguagesSource;
+export type BaseApplicationSource = SpringBootSourceType &
+  ClientSourceType &
+  LanguagesSource &
+  import('../../../generators/docker/types.d.ts').DockerSourceType;

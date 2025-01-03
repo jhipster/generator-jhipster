@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -57,29 +56,30 @@ export default class DockerGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       dockerServices({ application }) {
+        const dockerServices = application.dockerServices!;
         if (application.backendTypeSpringBoot) {
-          application.dockerServices.push('app');
+          dockerServices.push('app');
         }
         if (application.authenticationTypeOauth2) {
-          application.dockerServices.push('keycloak');
+          dockerServices.push('keycloak');
         }
         if (application.searchEngineElasticsearch) {
-          application.dockerServices.push('elasticsearch');
+          dockerServices.push('elasticsearch');
         }
         if (application.messageBrokerKafka || application.messageBrokerPulsar) {
-          application.dockerServices.push(application.messageBroker);
+          dockerServices.push(application.messageBroker!);
         }
         if (application.serviceDiscoveryConsul || application.serviceDiscoveryEureka) {
-          application.dockerServices.push(application.serviceDiscoveryType);
+          dockerServices.push(application.serviceDiscoveryType!);
         }
         if (application.serviceDiscoveryAny || application.applicationTypeGateway || application.applicationTypeMicroservice) {
-          application.dockerServices.push('zipkin');
+          dockerServices.push('zipkin');
         }
         if (application.enableSwaggerCodegen) {
-          application.dockerServices.push('swagger-editor');
+          dockerServices.push('swagger-editor');
         }
         if (application.cacheProviderMemcached || application.cacheProviderRedis || application.cacheProviderHazelcast) {
-          application.dockerServices.push(application.cacheProvider);
+          dockerServices.push(application.cacheProvider!);
         }
         if (
           application.databaseTypeCassandra ||
@@ -87,7 +87,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
           application.databaseTypeMongodb ||
           application.databaseTypeNeo4j
         ) {
-          application.dockerServices.push(application.databaseType);
+          dockerServices.push(application.databaseType!);
         }
         if (
           application.prodDatabaseTypePostgresql ||
@@ -95,7 +95,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
           application.prodDatabaseTypeMysql ||
           application.prodDatabaseTypeMssql
         ) {
-          application.dockerServices.push(application.prodDatabaseType);
+          dockerServices.push(application.prodDatabaseType);
         }
       },
       addAppServices({ application, source }) {
@@ -172,13 +172,13 @@ export default class DockerGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       async dockerServices({ application, source }) {
-        if (application.dockerServices.includes('cassandra')) {
-          const serviceName = application.databaseType;
-          source.addDockerExtendedServiceToApplicationAndServices(
+        if (application.dockerServices!.includes('cassandra')) {
+          const serviceName = application.databaseType!;
+          source.addDockerExtendedServiceToApplicationAndServices!(
             { serviceName },
             { serviceFile: './cassandra.yml', serviceName: 'cassandra-migration' },
           );
-          source.addDockerDependencyToApplication(
+          source.addDockerDependencyToApplication!(
             { serviceName, condition: SERVICE_HEALTHY },
             { serviceName: 'cassandra-migration', condition: SERVICE_COMPLETED_SUCCESSFULLY },
           );
@@ -187,24 +187,24 @@ export default class DockerGenerator extends BaseApplicationGenerator {
         for (const serviceName of intersection(['postgresql', 'mysql', 'mariadb', 'mssql'], application.dockerServices)) {
           // Blank profile services starts if no profile is passed.
           const profiles = application.prodDatabaseType === application.devDatabaseType ? undefined : ['', 'prod'];
-          source.addDockerExtendedServiceToApplication({ serviceName });
-          source.addDockerExtendedServiceToServices({ serviceName, additionalConfig: { profiles } });
-          source.addDockerDependencyToApplication({ serviceName, condition: SERVICE_HEALTHY });
+          source.addDockerExtendedServiceToApplication!({ serviceName });
+          source.addDockerExtendedServiceToServices!({ serviceName, additionalConfig: { profiles } });
+          source.addDockerDependencyToApplication!({ serviceName, condition: SERVICE_HEALTHY });
         }
 
         for (const serviceName of intersection(
           ['couchbase', 'mongodb', 'neo4j', 'elasticsearch', 'keycloak'],
           application.dockerServices,
         )) {
-          source.addDockerExtendedServiceToApplicationAndServices({ serviceName });
-          source.addDockerDependencyToApplication({ serviceName, condition: SERVICE_HEALTHY });
+          source.addDockerExtendedServiceToApplicationAndServices!({ serviceName });
+          source.addDockerDependencyToApplication!({ serviceName, condition: SERVICE_HEALTHY });
         }
 
-        for (const serviceName of application.dockerServices.filter(service => ['redis', 'memcached', 'pulsar'].includes(service))) {
-          source.addDockerExtendedServiceToApplicationAndServices({ serviceName });
+        for (const serviceName of application.dockerServices!.filter(service => ['redis', 'memcached', 'pulsar'].includes(service))) {
+          source.addDockerExtendedServiceToApplicationAndServices!({ serviceName });
         }
 
-        if (application.dockerServices.includes('eureka')) {
+        if (application.dockerServices!.includes('eureka')) {
           const depends_on = application.authenticationTypeOauth2
             ? {
                 keycloak: {
@@ -212,23 +212,23 @@ export default class DockerGenerator extends BaseApplicationGenerator {
                 },
               }
             : undefined;
-          source.addDockerExtendedServiceToApplicationAndServices({
+          source.addDockerExtendedServiceToApplicationAndServices!({
             serviceName: 'jhipster-registry',
             additionalConfig: {
               depends_on,
             },
           });
 
-          source.addDockerDependencyToApplication({ serviceName: 'jhipster-registry', condition: SERVICE_HEALTHY });
+          source.addDockerDependencyToApplication!({ serviceName: 'jhipster-registry', condition: SERVICE_HEALTHY });
         }
-        if (application.dockerServices.includes('consul')) {
-          source.addDockerExtendedServiceToApplicationAndServices(
+        if (application.dockerServices!.includes('consul')) {
+          source.addDockerExtendedServiceToApplicationAndServices!(
             { serviceName: 'consul' },
             { serviceFile: './consul.yml', serviceName: 'consul-config-loader' },
           );
         }
-        if (application.dockerServices.includes('kafka')) {
-          source.addDockerExtendedServiceToApplicationAndServices({ serviceName: 'kafka' });
+        if (application.dockerServices!.includes('kafka')) {
+          source.addDockerExtendedServiceToApplicationAndServices!({ serviceName: 'kafka' });
         }
       },
 
@@ -300,6 +300,19 @@ export default class DockerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this.postWriting);
+  }
+
+  get end() {
+    return this.asEndTaskGroup({
+      async dockerComposeUp({ control }) {
+        if (control.enviromentHasDockerCompose) {
+          this.log('');
+          this.log.warn(
+            'Docker Compose V2 is not installed on your computer. Some features may not work as expected. Read https://docs.docker.com/compose/install/',
+          );
+        }
+      },
+    });
   }
 
   /**
