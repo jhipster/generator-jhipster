@@ -750,7 +750,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
 
   /**
    * Remove File
-   * @param file
    */
   removeFile(...path: string[]) {
     const destinationFile = this.destinationPath(...path);
