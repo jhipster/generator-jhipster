@@ -32,7 +32,6 @@ export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 
 // Version of Node, NPM
 export const NODE_VERSION = readFileSync(join(fileURLToPath(import.meta.url), '../init/resources/.node-version'), 'utf-8').trim();
-export const OPENAPI_GENERATOR_CLI_VERSION = '2.13.1';
 
 // The version should be coherent with the one from spring-data-elasticsearch project
 export const ELASTICSEARCH_TAG = '8.13.4';
