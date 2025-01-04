@@ -32,10 +32,12 @@ import {
 import type {
   ConfiguringEachEntityTaskParam,
   TaskTypes as DefaultTaskTypes,
-  EntityTaskParam,
   EntityToLoad,
   LoadingEntitiesTaskParam,
   PostWritingEntitiesTaskParam,
+  PreparingEachEntityFieldTaskParam,
+  PreparingEachEntityRelationshipTaskParam,
+  PreparingEachEntityTaskParam,
   PreparingTaskParam,
   TaskParamWithApplication,
   TaskParamWithEntities,
@@ -482,7 +484,7 @@ export default class BaseApplicationGenerator<
    * Get entities to prepare.
    * @returns {object[]}
    */
-  getEntitiesDataToPrepare(): EntityTaskParam[] {
+  getEntitiesDataToPrepare(): Omit<PreparingEachEntityTaskParam, 'control' | 'application'>[] {
     return this.sharedData.getEntities().map(({ entityName, ...data }) => ({
       description: entityName,
       entityName,
@@ -495,7 +497,7 @@ export default class BaseApplicationGenerator<
    * Get entities and fields to prepare.
    * @returns {object[]}
    */
-  getEntitiesFieldsDataToPrepare() {
+  getEntitiesFieldsDataToPrepare(): Omit<PreparingEachEntityFieldTaskParam, 'control' | 'application'>[] {
     return this.getEntitiesDataToPrepare()
       .map(({ entity, entityName, ...data }) => {
         if (!entity.fields) return [];
@@ -517,7 +519,7 @@ export default class BaseApplicationGenerator<
    * Get entities and relationships to prepare.
    * @returns {object[]}
    */
-  getEntitiesRelationshipsDataToPrepare() {
+  getEntitiesRelationshipsDataToPrepare(): Omit<PreparingEachEntityRelationshipTaskParam, 'control' | 'application'>[] {
     return this.getEntitiesDataToPrepare()
       .map(({ entity, entityName, ...data }) => {
         if (!entity.relationships) return [];

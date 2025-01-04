@@ -36,7 +36,14 @@ export type Field = Partial<FieldEnum> &
     fieldType: FieldType | string;
     options?: Record<string, boolean | string | number>;
     fieldValidateRules?: string[];
-
+    fieldValidateRulesPattern?: string | RegExp;
+    fieldValidateRulesMaxlength?: number;
+    fieldValidateRulesMax?: number;
+    fieldValidateRulesMin?: number;
+    fieldValidateRulesMinlength?: number;
+    fieldValidationRequired?: boolean;
+    fieldValidateRulesMaxbytes?: number;
+    fieldValidateRulesMinbytes?: number;
     /** @deprecated */
     fieldTypeJavadoc?: string;
   };

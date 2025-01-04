@@ -452,6 +452,15 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         };
         entity.hasCyclicRequiredRelationship = detectCyclicRequiredRelationship(entity, new Set());
       },
+      processDerivedPrimaryKeyFields({ entity }) {
+        const primaryKey = entity.primaryKey;
+        if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
+          return;
+        }
+        // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
+        const derivedFields = primaryKey.derivedFields;
+        entity.fields.unshift(...derivedFields);
+      },
     });
   }
 

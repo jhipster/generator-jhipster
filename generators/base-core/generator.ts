@@ -280,7 +280,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    *
    * @param {string} version - A valid semver version string
    */
-  isJhipsterVersionLessThan(version) {
+  isJhipsterVersionLessThan(version: string): boolean {
     const jhipsterOldVersion = this.sharedData.getControl().jhipsterOldVersion;
     return this.isVersionLessThan(jhipsterOldVersion, version);
   }
@@ -289,7 +289,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Wrapper for `semver.lt` to check if the oldVersion exists and is less than the newVersion.
    * Can be used by blueprints.
    */
-  isVersionLessThan(oldVersion: string | null, newVersion: string) {
+  isVersionLessThan(oldVersion: string | null, newVersion: string): boolean {
     return oldVersion ? semverLessThan(oldVersion, newVersion) : false;
   }
 
@@ -647,7 +647,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    *                                 Set false to create a changelog date incrementing the last one.
    * @return {String} Changelog date.
    */
-  dateFormatForLiquibase(reproducible?: boolean) {
+  dateFormatForLiquibase(reproducible?: boolean): string {
     const control = this.sharedData.getControl();
     reproducible = reproducible ?? Boolean(control.reproducible);
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
@@ -693,7 +693,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
    */
-  jhipsterTemplatePath(...path: string[]) {
+  jhipsterTemplatePath(...path: string[]): string {
     let existingGenerator: string;
     try {
       existingGenerator = this._jhipsterGenerator ?? requireNamespace(this.options.namespace).generator;
@@ -751,7 +751,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * Remove File
    */
-  removeFile(...path: string[]) {
+  removeFile(...path: string[]): string {
     const destinationFile = this.destinationPath(...path);
     const relativePath = relative((this.env as any).logCwd, destinationFile);
     // Delete from memory fs to keep updated.
@@ -771,7 +771,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Remove Folder
    * @param path
    */
-  removeFolder(...path: string[]) {
+  removeFolder(...path: string[]): void {
     const destinationFolder = this.destinationPath(...path);
     const relativePath = relative((this.env as any).logCwd, destinationFolder);
     // Delete from memory fs to keep updated.
@@ -789,7 +789,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * Fetch files from the generator-jhipster instance installed
    */
-  fetchFromInstalledJHipster(...path: string[]) {
+  fetchFromInstalledJHipster(...path: string[]): string {
     if (path) {
       return joinPath(__dirname, '..', ...path);
     }
