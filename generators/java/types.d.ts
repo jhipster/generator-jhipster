@@ -4,11 +4,9 @@ import type { EditFileCallback } from '../base/api.js';
 import type { MavenDefinition } from '../maven/types.js';
 import type { ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
 import type { JavaAnnotation } from './support/add-java-annotation.ts';
-import type { default as OpenapiGeneratorCommand } from './generators/openapi-generator/command.js';
 import type { default as BootstrapCommand } from './generators/bootstrap/command.js';
 
 type JavaBootstrapStorageProperties = ExportStoragePropertiesFromCommand<typeof BootstrapCommand>;
-type JavaOpenapiGeneratorStorageProperties = ExportStoragePropertiesFromCommand<typeof OpenapiGeneratorCommand>;
 
 export type JavaDependencyVersion = {
   name: string;
