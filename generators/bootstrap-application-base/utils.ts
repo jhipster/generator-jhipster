@@ -31,45 +31,6 @@ const { CommonDBTypes } = fieldTypes;
 
 const { STRING: TYPE_STRING, BOOLEAN: TYPE_BOOLEAN, INSTANT } = CommonDBTypes;
 
-export const auditableEntityFields = () => [
-  {
-    fieldName: 'createdBy',
-    fieldType: TYPE_STRING,
-    readonly: true,
-    skipServer: true,
-    builtIn: true,
-    fieldValidateRules: [Validations.MAXLENGTH],
-    fieldValidateRulesMaxlength: 50,
-    autoGenerate: true,
-  },
-  {
-    fieldName: 'createdDate',
-    fieldType: INSTANT,
-    readonly: true,
-    skipServer: true,
-    builtIn: true,
-    autoGenerate: true,
-  },
-  {
-    fieldName: 'lastModifiedBy',
-    fieldType: TYPE_STRING,
-    readonly: true,
-    skipServer: true,
-    builtIn: true,
-    fieldValidateRules: [Validations.MAXLENGTH],
-    fieldValidateRulesMaxlength: 50,
-    autoGenerate: true,
-  },
-  {
-    fieldName: 'lastModifiedDate',
-    fieldType: INSTANT,
-    readonly: true,
-    skipServer: true,
-    builtIn: true,
-    autoGenerate: true,
-  },
-];
-
 const authorityEntityName = 'Authority';
 
 export function createUserEntity(this: BaseApplicationGenerator, customUserData = {}, application): Partial<UserEntity> {

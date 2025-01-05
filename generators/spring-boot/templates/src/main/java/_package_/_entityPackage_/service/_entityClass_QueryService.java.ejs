@@ -21,10 +21,7 @@ package <%= entityAbsolutePackage %>.service;
 <%_
 const serviceClassName = entityClass + 'QueryService';
 const instanceType = restClass;
-const instanceName = restInstance;
 const mapper = entityInstance  + 'Mapper';
-const dtoToEntity = mapper + '.'+ 'toEntity';
-const entityToDto = mapper + '.'+ 'toDto';
 const entityListToDto = mapper + '.' + 'toDto';
 const entityToDtoReference = mapper + '::'+ 'toDto';
 const repository = entityInstance  + 'Repository';
