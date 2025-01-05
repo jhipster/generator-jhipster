@@ -112,5 +112,3 @@ export const cassandraReservedKeywords = [
   'MACADDR',
   'BITSTRING',
 ];
-
-export const isReservedCassandraKeyword = (keyword: string) => cassandraReservedKeywords.includes(keyword.toUpperCase());

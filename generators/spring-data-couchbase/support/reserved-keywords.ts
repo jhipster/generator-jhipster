@@ -129,5 +129,3 @@ export const couchbaseReservedKeywords = [
   'WITH',
   'WRITE',
 ];
-
-export const isReservedCouchbaseKeyword = (keyword: string) => couchbaseReservedKeywords.includes(keyword.toUpperCase());

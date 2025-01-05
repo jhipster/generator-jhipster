@@ -116,13 +116,6 @@ export const addGradleDependenciesCallback = (dependencies: GradleDependency[]) 
     contentToAdd: dependencies.map(serializeDependency),
   });
 
-/** @deprecated use addGradleDependenciesCallback */
-export const addGradleBuildSrcDependencyCallback = (dependency: GradleDependency) =>
-  createNeedleCallback({
-    needle: 'gradle-build-src-dependency',
-    contentToAdd: serializeDependency(dependency),
-  });
-
 export const addGradleDependenciesCatalogVersionCallback = (versions: GradleTomlVersion[]) =>
   createNeedleCallback({
     needle: 'gradle-dependency-catalog-version',
@@ -151,13 +144,6 @@ export const addGradlePluginFromCatalogCallback = (plugins: GradleTomlPlugin[]) 
     contentToAdd: plugins
       .filter(({ addToBuild }) => addToBuild)
       .map(({ pluginName }) => `alias(libs.plugins.${gradleNameToReference(pluginName)})`),
-  });
-
-/** @deprecated use addGradleDependenciesCatalogVersionCallback */
-export const addGradleBuildSrcDependencyCatalogVersionCallback = ({ name, version }: GradleTomlVersion) =>
-  createNeedleCallback({
-    needle: 'gradle-build-src-dependency-catalog-version',
-    contentToAdd: `${name} = "${version}"`,
   });
 
 export const addGradlePluginCallback = ({ id, version }: GradlePlugin) =>
