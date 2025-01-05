@@ -29,7 +29,7 @@ const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
 const { CommonDBTypes } = fieldTypes;
 
-const { STRING: TYPE_STRING, BOOLEAN: TYPE_BOOLEAN, INSTANT } = CommonDBTypes;
+const { STRING: TYPE_STRING, BOOLEAN: TYPE_BOOLEAN } = CommonDBTypes;
 
 const authorityEntityName = 'Authority';
 
