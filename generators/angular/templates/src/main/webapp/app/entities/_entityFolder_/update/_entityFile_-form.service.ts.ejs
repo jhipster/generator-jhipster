@@ -66,7 +66,7 @@ type <%= entityAngularName %>FormDefaults = Pick<New<%= entityAngularName %>, '<
 
 type <%= entityAngularName %>FormGroupContent = {
 <%_ for (field of fields) {
-      const { fieldName, fieldType, fieldTypeBlobContent, fieldValidationRequired, tsType, fieldIsEnum } = field;
+      const { fieldName } = field;
 _%>
   <%= fieldName %>: FormControl<<%= entityFormName %>['<%= fieldName %>']<% if (field.id) { %> | New<%= entityAngularName %>['<%= fieldName %>']<% } %>>;
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
@@ -74,7 +74,7 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) {
-      const { propertyName, otherEntity } = relationship;
+      const { propertyName } = relationship;
 _%>
   <%= propertyName %>: FormControl<<%= entityFormName %>['<%= propertyName %>']>;
 <%_ } _%>
@@ -104,7 +104,7 @@ export class <%= entityAngularName %>FormService {
 
     return new FormGroup<<%= entityAngularName %>FormGroupContent>({
 <%_ for (const field of fields) {
-      const { fieldName, fieldType, fieldTypeBlobContent, fieldValidateRules, fieldTypeTemporal, fieldValidationRequired, fieldValidationMinLength, fieldValidationMaxLength, fieldValidationMin, fieldValidationMax, fieldValidationPattern } = field;
+      const { fieldName, fieldValidationRequired, fieldValidationMinLength, fieldValidationMaxLength, fieldValidationMin, fieldValidationMax, fieldValidationPattern } = field;
       const usesValidators = fieldValidationRequired || fieldValidationMinLength || fieldValidationMaxLength || fieldValidationMin || fieldValidationMax || fieldValidationPattern || field.id;
 _%>
       <%= fieldName %>: new FormControl(
@@ -146,7 +146,7 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) {
-      const { relationshipRequired, propertyName, relationshipName, collection, otherEntity } = relationship;
+      const { relationshipRequired, propertyName, collection } = relationship;
 _%>
       <%= propertyName %>: new FormControl(
         <%= entityInstance %>RawValue.<%= propertyName %><% if (collection) { %> ?? []<% } %>
@@ -198,7 +198,7 @@ _%>
 
     return {
   <%_ for (field of fields) {
-        const { fieldName, fieldTypeBoolean, fieldTypeTimed, fieldTypeLocalDate } = field;
+        const { fieldName, fieldTypeBoolean, fieldTypeTimed } = field;
   _%>
     <%_ if (field.fieldTsDefaultValue) { _%>
         <%= fieldName %>: <%- field.fieldTsDefaultValue %>,
@@ -213,7 +213,7 @@ _%>
     <%_ } _%>
   <%_ } _%>
   <%_ for (const relationship of relationships.filter(({ persistableRelationship }) => persistableRelationship)) {
-        const { relationshipRequired, propertyName, collection, otherEntity, relationshipName } = relationship;
+        const { propertyName, collection } = relationship;
   _%>
     <%_ if (collection) { _%>
       <%= propertyName %>: [],
@@ -248,7 +248,7 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(({ persistableRelationship }) => persistableRelationship)) {
-      const { relationshipRequired, propertyName, collection } = relationship;
+      const { propertyName, collection } = relationship;
 _%>
   <%_ if (collection) { _%>
       <%= propertyName %>: <%= entityInstance %>.<%= propertyName %> ?? [],

@@ -26,11 +26,8 @@ const optionalOrMono = (reactive) ? 'Mono' : 'Optional';
 const listOrFlux = (reactive) ? 'Flux' : 'List';
 const pageOrFlux = (reactive) ? 'Flux' : 'Page';
 const mapper = entityInstance  + 'Mapper';
-const dtoToEntity = mapper + '.'+ 'toEntity';
-const entityToDto = 'toDto';
 const entityToDtoReference = mapper + '::'+ 'toDto';
 const repository = entityInstance  + 'Repository';
-const searchRepository = entityInstance  + 'SearchRepository';
 
 _%>
 <%_ if (serviceImpl) { _%>
