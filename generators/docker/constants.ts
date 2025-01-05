@@ -17,5 +17,4 @@
  * limitations under the License.
  */
 export const SERVICE_HEALTHY = 'service_healthy';
-export const SERVICE_STARTED = 'service_started';
 export const SERVICE_COMPLETED_SUCCESSFULLY = 'service_completed_successfully';

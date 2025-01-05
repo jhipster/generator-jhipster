@@ -17,5 +17,3 @@
  * limitations under the License.
  */
 export const GRADLE = 'gradle';
-export const GRADLE_DESCRIPTION = 'Gradle';
-export const BUILD_DESTINATION_VALUE = 'build';
