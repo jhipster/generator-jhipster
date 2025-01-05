@@ -204,5 +204,3 @@ export const mssqlReservedKeywords = [
   'WITHIN GROUP',
   'WRITETEXT',
 ];
-
-export const isReservedMssqlKeyword = (keyword: string) => mssqlReservedKeywords.includes(keyword.toUpperCase());

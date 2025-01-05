@@ -500,5 +500,3 @@ export const oracleReservedKeywords = [
   'YEAR',
   'ZONE',
 ];
-
-export const isReservedOracleKeyword = (keyword: string) => oracleReservedKeywords.includes(keyword.toUpperCase());

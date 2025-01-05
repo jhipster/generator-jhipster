@@ -90,5 +90,3 @@ export const neo4jReservedKeywords = [
   'REQUIRE',
   'SCALAR',
 ];
-
-export const isReservedNeo4jKeyword = (keyword: string) => neo4jReservedKeywords.includes(keyword.toUpperCase());
