@@ -35,11 +35,6 @@ export type MavenPom = {
   };
 };
 
-export type MavenPomAndVersions = {
-  pomContent: MavenPom;
-  versions: Record<string, string>;
-};
-
 /**
  * Extract version properties from pom content
  * @param fileContent
