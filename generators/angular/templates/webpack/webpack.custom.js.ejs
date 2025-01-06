@@ -47,6 +47,7 @@ module.exports = async (config, options, targetOptions) => {
       new ESLintPlugin({
         configType: 'flat',
         extensions: ['ts', 'js', 'html'],
+        fix: true,
       }),
       new WebpackNotifierPlugin({
         title: '<%= humanizedBaseName %>',
