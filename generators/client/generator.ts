@@ -140,7 +140,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     return this.asPreparingTaskGroup({
       preparing({ applicationDefaults }) {
         applicationDefaults({
-          clientBundlerName: ctx => (ctx.clientFrameworkAngular ? 'angular-cli' : startCase(ctx.clientBundler)),
+          clientBundlerName: ctx => (ctx.clientBundlerExperimentalEsbuild ? 'esbuild' : startCase(ctx.clientBundler)),
           clientTestFramework: ctx => (ctx.clientFrameworkVue ? 'vitest' : 'jest'),
           clientTestFrameworkName: ctx => startCase(ctx.clientTestFramework),
         });
