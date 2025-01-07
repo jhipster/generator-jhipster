@@ -4,6 +4,7 @@ import type { ClientSourceType } from '../../../generators/client/types.js';
 import type { LanguagesSource } from '../../../generators/languages/types.js';
 import type { SpringBootSourceType } from '../../../generators/server/types.js';
 import type { ExportApplicationPropertiesFromCommand } from '../../command/types.js';
+import type { DockerSourceType } from '../../../generators/docker/types.ts';
 import { Entity } from './entity.js';
 
 export type ApplicationType<E = Entity> = BaseApplication &
@@ -11,7 +12,4 @@ export type ApplicationType<E = Entity> = BaseApplication &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/gradle/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/spring-boot/command.ts').default>;
 
-export type BaseApplicationSource = SpringBootSourceType &
-  ClientSourceType &
-  LanguagesSource &
-  import('../../../generators/docker/types.d.ts').DockerSourceType;
+export type BaseApplicationSource = SpringBootSourceType & ClientSourceType & LanguagesSource & DockerSourceType;

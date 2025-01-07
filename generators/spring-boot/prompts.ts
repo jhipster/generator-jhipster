@@ -45,7 +45,6 @@ const { GATLING, CUCUMBER } = testFrameworkTypes;
 export const askForServerSideOpts = asPromptingTask(async function ({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
-  const { enviromentHasDockerCompose } = control;
   const { applicationType, authenticationType, reactive } = this.jhipsterConfigWithDefaults;
 
   await this.prompt(
