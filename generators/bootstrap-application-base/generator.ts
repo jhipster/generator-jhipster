@@ -43,6 +43,7 @@ import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesC
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { removeFieldsWithNullishValues } from '../base/support/index.js';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../lib/application/field-types.js';
+import type { Entity } from '../../lib/types/application/entity.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
 
@@ -443,12 +444,12 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         entity.anyRelationshipIsRequired = entity.relationships.some(rel => rel.relationshipRequired || rel.id);
       },
       checkForCircularRelationships({ entity }) {
-        const detectCyclicRequiredRelationship = (entity, relatedEntities) => {
+        const detectCyclicRequiredRelationship = (entity: Entity, relatedEntities: Set<Entity>) => {
           if (relatedEntities.has(entity)) return true;
           relatedEntities.add(entity);
           return entity.relationships
             ?.filter(rel => rel.relationshipRequired || rel.id)
-            .some(rel => detectCyclicRequiredRelationship(rel.otherEntity, new Set([...relatedEntities])));
+            .some(rel => detectCyclicRequiredRelationship(rel.otherEntity as any, new Set([...relatedEntities])));
         };
         entity.hasCyclicRequiredRelationship = detectCyclicRequiredRelationship(entity, new Set());
       },
@@ -457,7 +458,6 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
           return;
         }
-        // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
         const derivedFields = primaryKey.derivedFields;
         entity.fields.unshift(...derivedFields);
       },
