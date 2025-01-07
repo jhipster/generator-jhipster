@@ -24,7 +24,7 @@ TranslatorContext.setDefaultLocale('<%= nativeLanguage %>');
 TranslatorContext.setRenderInnerTextForMissingKeys(false);
 
 export const languages: any = {
-  <%_ languagesDefinition.forEach((ln, i) => { _%>
+  <%_ languagesDefinition.forEach((ln) => { _%>
   '<%= ln.languageTag %>': { name: '<%= ln.displayName %>', rtl: <%= ln.rtl %> },
   <%_ }); _%>
   // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
