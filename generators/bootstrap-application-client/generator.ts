@@ -69,8 +69,7 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
         loadDerivedConfig(clientCommand.configs, { application });
         loadDerivedClientConfig({ application });
       },
-      prepareForTemplates({ application: app }) {
-        const application: any = app;
+      prepareForTemplates({ application }) {
         application.frontendAppName = getFrontendAppName({ baseName: application.baseName });
       },
     });
