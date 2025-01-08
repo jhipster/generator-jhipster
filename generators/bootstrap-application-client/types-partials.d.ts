@@ -16,19 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
-import type { Config as BaseSimpleApplicationConfig, Application as SimpleApplication } from '../base-simple-application/index.js';
-import type { Application as DockerApplication } from '../docker/index.js';
-import type command from './command.js';
-
-type Config = ExportApplicationPropertiesFromCommand<typeof command> &
-  BaseSimpleApplicationConfig & {
-    gitLabIndent?: string;
-    indent?: string;
-    testFrameworks?: string[];
-    cypressTests?: boolean;
-    javaVersion?: string;
-    ciCd: string[];
-  };
-
-export type Application = SimpleApplication & DockerApplication & Config;
+/**
+ * @deprecated will be deprecated in favor of a generator-dedicated class, every attribute will be moved there then.
+ */
+export type PartialApplicationBootstrapApplicationClient = {
+  clientBundlerWebpack?: boolean;
+  clientBundlerExperimentalEsbuild?: boolean;
+  clientBundlerVite?: boolean;
+};

@@ -65,7 +65,14 @@ describe(`generator - ${generator}`, () => {
 
     describe('with multiples values', () => {
       before(async () => {
-        await helpers.runCli('ci-cd github jenkins gitlab azure').withJHipsterConfig().withSkipWritingPriorities();
+        const deploymentConfig = {
+          ciCdIntegrations: ['deploy', 'sonar'],
+        };
+        await helpers
+          .runCli('ci-cd github jenkins gitlab azure')
+          // @ts-ignore
+          .withJHipsterConfig(deploymentConfig as any)
+          .withSkipWritingPriorities();
       });
 
       it('should match context snapshot', () => {

@@ -19,13 +19,15 @@
 
 import chalk from 'chalk';
 
+import { intersection } from 'lodash-es';
 import BaseApplicationGenerator from '../base-simple-application/index.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
-import type { Application as CiCdApplication } from './types.js';
 
-export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplication> {
+import type { Application as CiCdApplication, Config as CiCdConfig } from './types.js';
+import command from './command.js';
+
+export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplication, CiCdConfig> {
   insideDocker;
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -49,6 +51,20 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
     return this.asInitializingTaskGroup({
       sayHello() {
         this.log.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
+      },
+      validateSupportedCICD() {
+        if (this.jhipsterConfig.ciCd?.length > 0) {
+          if (
+            intersection(
+              command.configs.ciCd.choices.map(entry => entry.value),
+              this.jhipsterConfig.ciCd,
+            ).length !== this.jhipsterConfig.ciCd.length
+          ) {
+            throw new Error(
+              `error: command-argument value '${this.jhipsterConfig.ciCd}' is invalid for argument 'ciCd'. Allowed choices are github, jenkins, gitlab, azure, travis, circle.`,
+            );
+          }
+        }
       },
     });
   }
