@@ -173,6 +173,14 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           preparePostEntityServerDerivedProperties(entity);
         }
       },
+      processDerivedPrimaryKeyFields({ entity }) {
+        const primaryKey = entity.primaryKey;
+        if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
+          return;
+        }
+        const derivedFields = primaryKey.derivedFields;
+        entity.fields.unshift(...derivedFields);
+      },
     });
   }
 
