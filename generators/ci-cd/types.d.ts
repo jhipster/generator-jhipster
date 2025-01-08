@@ -19,6 +19,7 @@
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
 import type { Config as BaseSimpleApplicationConfig, Application as SimpleApplication } from '../base-simple-application/index.js';
 import type { Application as DockerApplication } from '../docker/index.js';
+import type { ApplicationClientProperties } from '../client/types.js';
 import type command from './command.js';
 
 type Config = ExportApplicationPropertiesFromCommand<typeof command> &
@@ -31,4 +32,10 @@ type Config = ExportApplicationPropertiesFromCommand<typeof command> &
     ciCd: string[];
   };
 
-export type Application = SimpleApplication & DockerApplication & Config;
+export type Application = SimpleApplication &
+  DockerApplication &
+  Config &
+  ApplicationClientProperties & {
+    frontTestCommand: string;
+    ciCdIntegrations: string[];
+  };

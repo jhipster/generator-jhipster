@@ -22,9 +22,11 @@ import chalk from 'chalk';
 import { intersection } from 'lodash-es';
 import BaseApplicationGenerator from '../base-simple-application/index.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
-
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
+import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
 import type { Application as CiCdApplication, Config as CiCdConfig } from './types.js';
 import command from './command.js';
+const { REACT } = clientFrameworkTypes;
 
 export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplication, CiCdConfig> {
   insideDocker;
@@ -76,23 +78,38 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
   // Public API method used by the getter and also by Blueprints
   get loading() {
     return this.asLoadingTaskGroup({
-      loading({ applicationDefaults }) {
-        applicationDefaults({
-          ciCdIntegrations: [] as any,
-          gitLabIndent: ({ sendBuildToGitlab }) => (sendBuildToGitlab ? '    ' : ''),
-          indent: ({ insideDocker, gitLabIndent }) => {
-            let indent = insideDocker ? '    ' : '';
-            indent += gitLabIndent;
-            return indent;
-          },
-          cypressTests: ({ testFrameworks }) => testFrameworks?.includes('cypress') ?? false,
-        });
+      loadSharedConfig({ application }) {
+        loadConfig(command.configs, { config: this.jhipsterConfigWithDefaults, application });
       },
     });
   }
 
   get [BaseApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      setTemplateConstants({ application }) {
+        loadDerivedConfig(command.configs, { application });
+
+        if (application.ciCdIntegrations === undefined) {
+          application.ciCdIntegrations = [];
+        }
+        application.gitLabIndent = application.sendBuildToGitlab ? '    ' : '';
+        application.indent = application.insideDocker ? '    ' : '';
+        application.indent += application.gitLabIndent;
+        if (application.clientFramework === REACT) {
+          application.frontTestCommand = 'test-ci';
+        } else {
+          application.frontTestCommand = 'test';
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   // Public API method used by the getter and also by Blueprints
