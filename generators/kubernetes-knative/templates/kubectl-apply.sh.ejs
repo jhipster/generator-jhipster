@@ -57,7 +57,7 @@ kubectl apply -f registry-${suffix}/
 <%_ if (istio) { _%>
 kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled --overwrite=true
 <%_ } _%>
-<%_ appConfigs.forEach((appConfig, index) =>  { _%>
+<%_ appConfigs.forEach((appConfig) =>  { _%>
 kubectl apply -f <%- appConfig.baseName.toLowerCase() %>-${suffix}/
 <%_ }) _%>
 <%_ if (useKafka) { _%>
