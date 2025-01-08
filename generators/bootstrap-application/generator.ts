@@ -31,6 +31,7 @@ import { preparePostEntityServerDerivedProperties } from '../server/support/inde
 import { loadStoredAppOptions } from '../app/support/index.js';
 import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.js';
 import type { Field } from '../../lib/types/base/field.js';
+import { computeDerivedFieldsOfPrimaryKey } from './support/fields.js';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
@@ -163,14 +164,11 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
       processEntityPrimaryKeysDerivedProperties({ entity }) {
-        const primaryKey = entity.primaryKey;
-        if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
-          return;
-        }
-        const derivedFields = primaryKey.derivedFields;
-        entity.fields.unshift(...derivedFields);
-
         if (!entity.primaryKey) return;
+        const derivedFields = computeDerivedFieldsOfPrimaryKey(entity.primaryKey);
+        if (derivedFields) {
+          entity.fields.unshift(...derivedFields);
+        }
         derivedPrimaryKeyProperties(entity.primaryKey);
       },
 
