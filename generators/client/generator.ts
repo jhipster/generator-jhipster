@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 
@@ -137,6 +138,13 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get preparing() {
     return this.asPreparingTaskGroup({
+      preparing({ applicationDefaults }) {
+        applicationDefaults({
+          clientBundlerName: ctx => (ctx.clientBundlerExperimentalEsbuild ? 'esbuild' : startCase(ctx.clientBundler)),
+          clientTestFramework: ctx => (ctx.clientFrameworkVue ? 'vitest' : 'jest'),
+          clientTestFrameworkName: ctx => startCase(ctx.clientTestFramework),
+        });
+      },
       microservice({ application }) {
         if (application.applicationTypeMicroservice) {
           application.withAdminUi = false;
