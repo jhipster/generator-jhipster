@@ -65,52 +65,46 @@ describe(`generator - ${generator}`, () => {
 
     describe('with multiples values', () => {
       before(async () => {
-        await helpers.runCli('ci-cd github jenkins gitlab azure').withJHipsterConfig().withSkipWritingPriorities();
+        const deploymentConfig = {
+          ciCdIntegrations: ['deploy', 'sonar'],
+        };
+        await helpers
+          .runCli('ci-cd github jenkins gitlab azure')
+          // @ts-ignore
+          .withJHipsterConfig(deploymentConfig as any)
+          .withSkipWritingPriorities();
       });
 
       it('should match context snapshot', () => {
-        expect(runResult.generator.context).toMatchInlineSnapshot(`
+        expect(runResult.generator.jhipsterConfig).toMatchInlineSnapshot(`
 {
   "artifactoryReleasesId": "releases",
   "artifactoryReleasesUrl": "http://artifactory:8081/artifactory/libs-release",
   "artifactorySnapshotsId": "snapshots",
   "artifactorySnapshotsUrl": "http://artifactory:8081/artifactory/libs-snapshot",
+  "baseName": "jhipster",
   "ciCd": [
     "github",
     "jenkins",
     "gitlab",
     "azure",
   ],
-  "ciCdAny": true,
-  "ciCdAzure": true,
-  "ciCdCircle": false,
-  "ciCdGithub": true,
-  "ciCdGitlab": true,
-  "ciCdIntegrations": [],
-  "ciCdIntegrationsAny": false,
-  "ciCdIntegrationsCypressDashboard": false,
-  "ciCdIntegrationsDeploy": false,
-  "ciCdIntegrationsHeroku": false,
-  "ciCdIntegrationsPublishDocker": false,
-  "ciCdIntegrationsSnyk": false,
-  "ciCdIntegrationsSonar": false,
-  "ciCdJenkins": true,
-  "ciCdTravis": false,
-  "dockerImage": undefined,
-  "frontTestCommand": "test",
-  "gitLabIndent": "",
-  "herokuAppName": "jhipster",
-  "indent": "",
+  "ciCdIntegrations": [
+    "deploy",
+    "sonar",
+  ],
+  "creationTimestamp": 1577836800000,
+  "dockerImage": null,
+  "entities": [],
+  "herokuAppName": null,
   "insideDocker": false,
+  "jhipsterVersion": "8.8.0",
   "sendBuildToGitlab": false,
   "sonarName": "sonar",
-  "sonarOrga": undefined,
+  "sonarOrga": null,
   "sonarUrl": "https://sonarcloud.io",
 }
 `);
-      });
-      it('should populate context', () => {
-        expect(runResult.generator.context!.ciCd).toEqual(['github', 'jenkins', 'gitlab', 'azure']);
       });
     });
 
