@@ -163,6 +163,13 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
       processEntityPrimaryKeysDerivedProperties({ entity }) {
+        const primaryKey = entity.primaryKey;
+        if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
+          return;
+        }
+        const derivedFields = primaryKey.derivedFields;
+        entity.fields.unshift(...derivedFields);
+
         if (!entity.primaryKey) return;
         derivedPrimaryKeyProperties(entity.primaryKey);
       },
@@ -172,14 +179,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
         if (!entity.skipServer) {
           preparePostEntityServerDerivedProperties(entity);
         }
-      },
-      processDerivedPrimaryKeyFields({ entity }) {
-        const primaryKey = entity.primaryKey;
-        if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
-          return;
-        }
-        const derivedFields = primaryKey.derivedFields;
-        entity.fields.unshift(...derivedFields);
       },
     });
   }
