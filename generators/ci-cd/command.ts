@@ -29,8 +29,7 @@ const command = {
       cli: {
         type: Array,
       },
-      prompt: gen => ({
-        when: () => !gen.commandArgs,
+      prompt: () => ({
         type: 'checkbox',
         message: 'What CI/CD pipeline do you want to generate?',
       }),
@@ -156,7 +155,7 @@ const command = {
         type: String,
       },
       prompt: gen => ({
-        when: answers => (answers.ciCd?.includes('jenkins') || gen.ciCd?.includes('jenkins')) && answers.ciCdIntegrations?.includes('sonar'),
+        when: answers => answers.ciCd?.includes('jenkins') && answers.ciCdIntegrations?.includes('sonar'),
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the name of the Sonar server ?`,
         default: 'sonar',

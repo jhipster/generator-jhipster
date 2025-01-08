@@ -69,7 +69,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
   // Public API method used by the getter and also by Blueprints
   get loading() {
     return this.asLoadingTaskGroup({
-      async loadSharedConfig({ application }) {
+      loadSharedConfig({ application }) {
         loadConfig(command.configs, { config: this.jhipsterConfigWithDefaults, application });
       },
     });
