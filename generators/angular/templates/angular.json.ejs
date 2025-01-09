@@ -46,9 +46,8 @@
             "main": "<%= this.relativeDir(clientRootDir, clientSrcDir) %>main.ts",
             "polyfills": [
 <%_ if (communicationSpringWebsocket) { _%>
-              "./<%= this.relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill",
+              "./<%= this.relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill"
 <%_ } _%>
-              "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",

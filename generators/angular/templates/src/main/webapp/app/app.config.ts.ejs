@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ApplicationConfig, LOCALE_ID, importProvidersFrom, inject } from '@angular/core';
+import { ApplicationConfig, LOCALE_ID, importProvidersFrom, inject, provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { Router, RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing, withNavigationErrorHandler, NavigationError } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -59,6 +59,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, ...routerFeatures),
     importProvidersFrom(BrowserModule),
+    provideExperimentalZonelessChangeDetection(),
     // Set this to true to enable service worker (PWA)
     importProvidersFrom(ServiceWorkerModule.register('ngsw-worker.js', { enabled: false })),
 <%_ if (enableTranslation) { _%>
