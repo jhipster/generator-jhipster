@@ -50,7 +50,6 @@ import { mutateData } from '../base/support/index.js';
 import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
-import { computeDerivedFieldsOfPrimaryKey } from '../bootstrap-application/support/fields.js';
 import { hibernateSnakeCase } from './support/index.js';
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
@@ -347,19 +346,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
-      /**
-       * @deprecated duplicated code that is in bootstrap-application kept to avoid V8 API breaking change: will be removed in V9.
-       * @FIXME remove in V9.
-       * @param entity the entity
-       */
-      processEntityPrimaryKeysDerivedProperties({ entity }) {
-        if (!entity.primaryKey) return;
-        const derivedFields = computeDerivedFieldsOfPrimaryKey(entity.primaryKey);
-        if (derivedFields) {
-          entity.fields.unshift(...derivedFields);
-          entity.fields = [...new Set(entity.fields)];
-        }
-      },
       checkForTableName({ application, entity }) {
         const databaseType =
           (entity as any).prodDatabaseType ?? application.prodDatabaseType ?? entity.databaseType ?? application.databaseType;

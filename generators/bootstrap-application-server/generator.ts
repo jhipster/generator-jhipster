@@ -205,7 +205,17 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
   }
 
   get postPreparingEachEntity() {
-    return this.asPostPreparingEachEntityTaskGroup;
+    return this.asPostPreparingEachEntityTaskGroup({
+      processDerivedPrimaryKeyFields({ entity }) {
+        const primaryKey = entity.primaryKey;
+        if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
+          return;
+        }
+        // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
+        const derivedFields = primaryKey.derivedFields;
+        entity.fields.unshift(...derivedFields);
+      },
+    });
   }
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
