@@ -168,6 +168,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
         const derivedFields = computeDerivedFieldsOfPrimaryKey(entity.primaryKey);
         if (derivedFields) {
           entity.fields.unshift(...derivedFields);
+          entity.fields = [...new Set(entity.fields)]; // Can be remove once the generator-server duplicated method will (V9).
         }
         derivedPrimaryKeyProperties(entity.primaryKey);
       },

@@ -1,5 +1,5 @@
-import { PrimaryKey } from '../../../lib/types/application/entity.js';
-import { Field } from '../../../lib/types/application/index.js';
+import type { PrimaryKey } from '../../../lib/types/application/entity.js';
+import type { Field } from '../../../lib/types/application/index.js';
 
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
