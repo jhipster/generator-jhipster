@@ -27,6 +27,7 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import clientCommand from '../client/command.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
+import { getFrontendAppName } from '../base/support/index.js';
 
 export default class BootStrapApplicationClient extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
@@ -67,6 +68,9 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
       prepareApplication({ application }) {
         loadDerivedConfig(clientCommand.configs, { application });
         loadDerivedClientConfig({ application });
+      },
+      prepareForTemplates({ application }) {
+        application.frontendAppName = getFrontendAppName({ baseName: application.baseName });
       },
     });
   }

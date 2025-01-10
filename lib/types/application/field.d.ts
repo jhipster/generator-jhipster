@@ -32,13 +32,6 @@ export interface Field extends Property, BaseField {
   // Validation
   fieldValidate?: boolean;
   unique?: boolean;
-  fieldValidateRules?: string[];
-  fieldValidateRulesPattern?: string | RegExp;
-  fieldValidateRulesMaxlength?: number;
-  fieldValidateRulesMax?: number;
-  fieldValidateRulesMin?: number;
-  fieldValidateRulesMinlength?: number;
-  fieldValidationRequired?: boolean;
   maxlength?: number;
 
   // Temporary fields for Faker
