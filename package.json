@@ -144,7 +144,7 @@
     "eslint-plugin-unused-imports": "4.1.4",
     "execa": "9.5.2",
     "fast-xml-parser": "4.5.1",
-    "glob": "11.0.0",
+    "glob": "11.0.1",
     "globals": "15.14.0",
     "globby": "14.0.2",
     "isbinaryfile": "5.0.4",
