@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, Input } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
 <%_ if (enableTranslation) { _%>
 import TranslateDirective from '../language/translate.directive';
 <%_ } _%>
@@ -28,7 +28,7 @@ import TranslateDirective from '../language/translate.directive';
   selector: '<%= jhiPrefixDashed %>-item-count',
   template: `
 <%_ if (enableTranslation) { _%>
-    <div <%= jhiPrefix %>Translate="global.item-count" [translateValues]="{ first: first, second: second, total: total }"></div>
+    <div <%= jhiPrefix %>Translate="global.item-count" [translateValues]="{ first: first(), second: second(), total: total() }"></div>
 <%_ } else { _%>
     <div>__jhiTransformTranslate__('global.item-count')</div>
 <%_ } _%>
@@ -44,18 +44,27 @@ export default class ItemCountComponent {
    *                    totalItems    Total number of items
    *                    itemsPerPage  Number of items per page
    */
-  @Input() set params(params: { page?: number; totalItems?: number; itemsPerPage?: number }) {
-    if (params.page && params.totalItems !== undefined && params.itemsPerPage) {
-      this.first = (params.page - 1) * params.itemsPerPage + 1;
-      this.second = params.page * params.itemsPerPage < params.totalItems ? params.page * params.itemsPerPage : params.totalItems;
-    } else {
-      this.first = undefined;
-      this.second = undefined;
-    }
-    this.total = params.totalItems;
-  }
+  params = input<{
+    page?: number;
+    totalItems?: number;
+    itemsPerPage?: number;
+  }>();
 
-  first?: number;
-  second?: number;
-  total?: number;
+  first = computed(() => {
+    const params = this.params();
+    if (params?.page && params.totalItems !== undefined && params.itemsPerPage) {
+      return (params.page - 1) * params.itemsPerPage + 1;
+    }
+    return undefined;
+  });
+
+  second = computed(() => {
+    const params = this.params();
+    if (params?.page && params.totalItems !== undefined && params.itemsPerPage) {
+      return params.page * params.itemsPerPage < params.totalItems ? params.page * params.itemsPerPage : params.totalItems;
+    }
+    return undefined;
+  });
+
+  total = computed(() => this.params()?.totalItems);
 }
