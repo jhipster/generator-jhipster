@@ -67,6 +67,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 <%_ } if (anyFieldIsZonedDateTime) { _%>
 import java.time.ZonedDateTime;
+<%_ } if (anyFieldIsLocalTime) { _%>
+import java.time.LocalTime;
 <%_ } if (anyFieldIsDuration) { _%>
 import java.time.Duration;
 <%_ } if (entityContainsCollectionField) { _%>

@@ -192,6 +192,9 @@ import java.time.ZoneId;
 <%_ if (anyFieldIsInstant) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
+<%_ if (anyFieldIsLocalTime) { _%>
+import java.time.LocalTime;
+<%_ } _%>
 <%_ if (!reactive && implementsEagerLoadApis) { _%>
 import java.util.ArrayList;
 <%_ } _%>
@@ -412,6 +415,13 @@ if (field.fieldTypeString || field.blobContentTypeText) {
     private static final ZonedDateTime <%= updatedValueName %> = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     <%_ if (needsSmallerValueName) { _%>
     private static final ZonedDateTime <%= smallerValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
+    <%_ } _%>
+  <%_ } else if (field.fieldTypeLocalTime) { _%>
+
+    private static final LocalTime <%= defaultValueName %> = LocalTime.NOON;
+    private static final LocalTime <%= updatedValueName %> = LocalTime.MAX.withNano(0);
+    <%_ if (needsSmallerValueName) { _%>
+    private static final LocalTime <%= smallerValueName %> = LocalTime.MIN;
     <%_ } _%>
   <%_ } else if (field.fieldTypeDuration) { _%>
 

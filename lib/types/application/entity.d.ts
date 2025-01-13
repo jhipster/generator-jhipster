@@ -129,6 +129,7 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   anyFieldIsDuration: boolean;
   anyFieldIsInstant: boolean;
   anyFieldIsLocalDate: boolean;
+  anyFieldIsLocalTime: boolean;
   /**
    * Any field is of type ZonedDateTime or Instant
    */

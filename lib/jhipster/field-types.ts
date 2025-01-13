@@ -47,6 +47,7 @@ export const CommonDBTypes = {
   DURATION: 'Duration',
   BYTES: 'byte[]', // Supported by mongodb at CI samples
   BYTE_BUFFER: 'ByteBuffer', // Supported by cassandra at CI samples
+  LOCAL_TIME: 'LocalTime',
 };
 
 export const RelationalOnlyDBTypes = {
@@ -78,6 +79,7 @@ const CommonDBValidations = {
   UUID: new Set([REQUIRED, UNIQUE]),
   Instant: new Set([REQUIRED, UNIQUE]),
   Duration: new Set([REQUIRED, UNIQUE]),
+  LocalTime: new Set([REQUIRED, UNIQUE]),
 };
 
 export default {

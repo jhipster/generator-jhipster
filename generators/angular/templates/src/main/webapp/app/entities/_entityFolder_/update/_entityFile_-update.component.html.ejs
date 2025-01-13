@@ -99,6 +99,9 @@ _%>
     <%_ } else if (field.fieldTypeBoolean) { _%>
                     <input type="<%= fieldInputType %>" class="form-check" name="<%= fieldName %>" id="field_<%= fieldName %>"
                            data-cy="<%= fieldName %>" formControlName="<%= fieldName %>" <% if (readonly) { %> [readonly]="true"<% } %>/>
+    <%_ } else if (field.fieldTypeLocalTime) { _%>
+                    <input type="time" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
+                           formControlName="<%= fieldName %>"<% if (readonly) { %> [readonly]="true"<% } %>/>
     <%_ } else { _%>
                     <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
                            formControlName="<%= fieldName %>"<% if (field.id && !field.autoGenerate) { %> [readonly]="editForm.get('<%= primaryKey.name %>')!.disabled"<% } else if (readonly) { %> [readonly]="true"<% } %>/>
