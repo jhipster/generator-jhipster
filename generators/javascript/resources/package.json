@@ -3,6 +3,6 @@
     "eslint-config-prettier": "10.0.1",
     "eslint-plugin-prettier": "5.2.2",
     "husky": "9.1.7",
-    "lint-staged": "15.3.0"
+    "lint-staged": "15.4.1"
   }
 }
