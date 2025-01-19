@@ -45,8 +45,8 @@
 
 <%_ if (authenticationUsesCsrf) { _%>
         function getCSRF() {
-          var name = 'XSRF-TOKEN=';
-          var ca = document.cookie.split(';');
+          const name = 'XSRF-TOKEN=';
+          const ca = document.cookie.split(';');
           for (var i = 0; i < ca.length; i++) {
             var c = ca[i];
             while (c.charAt(0) === ' ') c = c.substring(1);
