@@ -20,4 +20,3 @@ export const BASE_NAME = 'baseName';
 export const BASE_NAME_DESCRIPTION = 'Application base name';
 
 export const JHIPSTER_VERSION = 'jhipsterVersion';
-export const JHIPSTER_VERSION_DESCRIPTION = 'Force jhipsterVersion for reproducibility';

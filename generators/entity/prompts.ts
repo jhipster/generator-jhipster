@@ -69,12 +69,7 @@ const prompts = {
 
 export default prompts;
 
-const getFieldNameUndercored = fields =>
-  ['id'].concat(
-    fields.map(field => {
-      return snakeCase(field.fieldName);
-    }),
-  );
+const getFieldNameUndercored = fields => ['id'].concat(fields.map(field => snakeCase(field.fieldName)));
 
 function askForMicroserviceJson(this: EntityGenerator) {
   const context = this.entityData;

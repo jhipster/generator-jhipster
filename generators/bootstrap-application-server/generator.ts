@@ -44,7 +44,6 @@ import { getPomVersionProperties } from '../maven/support/index.js';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.js';
 import { getDockerfileContainers } from '../docker/utils.js';
 import { normalizePathEnd } from '../base/support/path.js';
-import { getFrontendAppName } from '../base/support/index.js';
 import { getMainClassName } from '../java/support/index.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import serverCommand from '../server/command.js';
@@ -126,11 +125,8 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
       prepareForTemplates({ application: app }) {
         const application: any = app;
         // Application name modified, using each technology's conventions
-        application.frontendAppName = getFrontendAppName({ baseName: application.baseName });
         application.mainClass = getMainClassName({ baseName: application.baseName });
-
         application.jhiTablePrefix = hibernateSnakeCase(application.jhiPrefix);
-
         application.mainJavaDir = SERVER_MAIN_SRC_DIR;
         application.mainJavaPackageDir = normalizePathEnd(`${SERVER_MAIN_SRC_DIR}${application.packageFolder}`);
         application.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
@@ -186,8 +182,8 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
-      prepareDatabase({ entity, field }) {
-        prepareFieldForLiquibaseTemplates(entity, field);
+      prepareDatabase({ application, field }) {
+        prepareFieldForLiquibaseTemplates(application, field);
       },
     });
   }

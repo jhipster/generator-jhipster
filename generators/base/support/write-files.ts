@@ -52,9 +52,7 @@ export function addSectionsCondition(files: Record<string, any[]>, commonConditi
         const { condition } = block;
         let newCondition = commonCondition;
         if (typeof condition === 'function') {
-          newCondition = (...args) => {
-            return commonCondition(...args) && condition(...args);
-          };
+          newCondition = (...args) => commonCondition(...args) && condition(...args);
         } else if (condition !== undefined) {
           newCondition = (...args) => commonCondition(...args) && condition;
         }

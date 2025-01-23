@@ -32,13 +32,6 @@ export interface Field extends Property, BaseField {
   // Validation
   fieldValidate?: boolean;
   unique?: boolean;
-  fieldValidateRules?: string[];
-  fieldValidateRulesPattern?: string | RegExp;
-  fieldValidateRulesMaxlength?: number;
-  fieldValidateRulesMax?: number;
-  fieldValidateRulesMin?: number;
-  fieldValidateRulesMinlength?: number;
-  fieldValidationRequired?: boolean;
   maxlength?: number;
 
   // Temporary fields for Faker
@@ -74,6 +67,7 @@ export interface Field extends Property, BaseField {
   fieldTypeBoolean: boolean;
   fieldTypeTimed?: boolean;
   fieldTypeLocalDate?: boolean;
+  fieldTypeDateTime?: boolean;
   /** @deprecated */
   fieldTypeTemporal: boolean;
   /** @deprecated */
@@ -84,4 +78,13 @@ export interface Field extends Property, BaseField {
   /** @deprecated */
   reference?: any;
   relationshipsPath?: string[];
+
+  liquibaseDefaultValueAttributeName?: string;
+  shouldDropDefaultValue?: boolean;
+  shouldCreateContentType?: boolean;
+  loadColumnType?: string;
+  liquibaseGenerateFakeData?: boolean;
+  columnType?: string;
+  defaultValueComputed: any;
+  defaultValue: any;
 }

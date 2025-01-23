@@ -1,7 +1,7 @@
 import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
-import type { IsNever, RequireAtLeastOne, SetOptional, Simplify, TaggedUnion, TupleToUnion, ValueOf } from 'type-fest';
+import type { IsNever, RequireAtLeastOne, SetOptional, Simplify, TupleToUnion, ValueOf } from 'type-fest';
 import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
-import type { DerivedPropertiesOf, DerivedPropertiesWithInferenceUnion } from '../types/utils/derived-properties.js';
+import type { DerivedPropertiesOf } from '../types/utils/derived-properties.js';
 import type { MergeUnion } from './support/merge-union.js';
 
 type CommandConfigScope = 'storage' | 'blueprint' | 'generator' | 'context' | 'none';
@@ -130,8 +130,6 @@ type ParseableCommand = {
 /** Extract contructor return type, eg: Boolean, String */
 type ConstructorReturn<T> = T extends new () => infer R ? R : undefined;
 type FilteredConfigScope = ConfigScope | undefined;
-/** Add name to Options/Configs */
-type TaggedParseableConfigUnion<D> = D extends Record<string, any> ? Simplify<TaggedUnion<'name', D>> : never;
 
 /** Filter Options/Config by scope */
 type FilterScope<D extends ParseableConfig, S extends FilteredConfigScope> = D extends Record<'scope', S> ? D : never;
@@ -173,35 +171,6 @@ type GetChoiceValue<Choice extends string | { value: string }> = Choice extends 
  */
 type NormalizeChoices<Choices extends readonly [...(string | { value: string })[]]> = {
   [Index in keyof Choices]: GetChoiceValue<Choices[Index]>;
-};
-
-/**
- * @example
- * ```ts
- * type ExplodedCommandChoices = ExplodeCommandChoicesWithInference<{ clientFramework: { choices: ['angular', 'no'] }, clientTestFramework: { choices: ['cypress', 'no'] } }>
- * {
- *   clientFramework:
- *     | { clientFrameworkAngular: true; clientFrameworkNo: false; clientFramework: 'angular'; clientFrameworkAny: true; };
- *     | { clientFrameworkAngular: false; clientFrameworkNo: true; clientFramework: 'no'; clientFrameworkAny: false; }
- *   clientTestFramework:
- *     |{ clientTestFrameworkCypress: true; clientTestFrameworkNo: false; clientTestFramework: 'cypress'; clientTestFrameworkAny: true; };
- *     |{ clientTestFrameworkCypress: false; clientTestFrameworkNo: true; clientTestFramework: 'no'; clientTestFrameworkAny: false; };
- * }
- * ```
- */
-type DerivedPropertiesWithInferenceUnionFromParseableConfigs<U extends ParseableConfigs> = {
-  [K in keyof U]: U[K] extends infer RequiredChoices
-    ? RequiredChoices extends { choices: JHipsterChoices }
-      ? K extends infer StringKey
-        ? StringKey extends string
-          ? NormalizeChoices<RequiredChoices['choices']> extends infer NormalizedChoices
-            ? // @ts-expect-error Mapped typle type is loosy https://github.com/microsoft/TypeScript/issues/27995
-              Simplify<DerivedPropertiesWithInferenceUnion<NormalizedChoices, StringKey>>
-            : never
-          : never
-        : never
-      : never
-    : never;
 };
 
 /**

@@ -118,6 +118,4 @@ export const postgresqlReservedKeywords = [
   'WITH',
 ];
 
-export const isReservedPostgresqlKeyword = (keyword: string) => {
-  return postgresqlReservedKeywords.includes(keyword.toUpperCase());
-};
+export const isReservedPostgresqlKeyword = (keyword: string) => postgresqlReservedKeywords.includes(keyword.toUpperCase());

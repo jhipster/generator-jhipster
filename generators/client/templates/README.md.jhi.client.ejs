@@ -52,7 +52,7 @@ You will only need to run this command when dependencies change in [package.json
 <%= clientPackageMngrWrapper %> install
 ```
 
-We use <%= clientPackageManager %> scripts and <&- fragments.customCliSection(' ') &>[Webpack][] as our build system.
+We use <%= clientPackageManager %> scripts and <&- fragments.customCliSection(' ') &>[<%= clientBundlerName %>][] as our build system.
 
   <%_ if (cacheProviderRedis || cacheProviderHazelcast || cacheProviderMemcached) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
@@ -139,7 +139,7 @@ To benefit from TypeScript type definitions from [DefinitelyTyped][] repository 
 <%= clientPackageMngrWrapper %> <%= clientPackageMngrAddDev %> @types/leaflet
 ```
 
-Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
+Then you would import the JS and CSS files specified in library's installation instructions so that [<%= clientBundlerName %>][] knows about them:
   <%_ if (clientFrameworkAngular) { _%>
 Edit [<%= clientSrcDir %>app/app.config.ts](<%= clientSrcDir %>app/app.config.ts) file:
 
@@ -196,7 +196,7 @@ cd microfrontend
 <&_ if (fragment.testingSection) { -&>
 ### Client tests
 
-Unit tests are run by [Jest][]. They're located in [<%= clientTestDir %>](<%= clientTestDir %>) and can be run with:
+Unit tests are run by [<%= clientTestFrameworkName %>][]. They're located near components and can be run with:
 
 ```
 <%= clientPackageMngrWrapper %> test
@@ -214,12 +214,18 @@ The lighthouse report is created in <% if (buildToolMaven) { %>`target/cypress/l
   <%_ } _%>
 <&_ } -&>
 <&_ if (fragment.referenceSection) { -&>
+<%_ if (clientBundlerWebpack) { _%>
 [Webpack]: https://webpack.github.io/
+<%_ } -%>
+<%_ if (clientFrameworkReact || clientFrameworkAngular || microfrontend) { _%>
 [BrowserSync]: https://www.browsersync.io/
-[Jest]: https://facebook.github.io/jest/
-  <%_ if (cypressTests) { _%>
+<%_ } -%>
+<%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
+[Jest]: https://jestjs.io
+<%_ } -%>
+<%_ if (cypressTests) { _%>
 [Cypress]: https://www.cypress.io/
-  <%_ } -%>
+<%_ } -%>
 [Leaflet]: https://leafletjs.com/
 [DefinitelyTyped]: https://definitelytyped.org/
 <&_ } -&>

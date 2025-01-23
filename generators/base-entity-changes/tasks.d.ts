@@ -1,3 +1,6 @@
+import type { TaskParamWithApplication } from '../../lib/types/application/tasks.js';
+import type { BaseChangelog } from './types.js';
+
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -16,7 +19,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-const isReproducible = generator => generator.options.reproducible;
-
-export { isReproducible };
+export type TaskParamWithChangelogsAndApplication = TaskParamWithApplication & {
+  entityChanges: BaseChangelog[];
+};

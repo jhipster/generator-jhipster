@@ -31,6 +31,7 @@ import {
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
 import { fieldTypes } from '../../lib/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
+import type { Field } from '../../lib/types/application/index.js';
 import { liquibaseFiles } from './files.js';
 import {
   liquibaseComment,
@@ -114,9 +115,9 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
-      prepareEntityField({ entity, field }) {
+      prepareEntityField({ application, field }) {
         if (!field.transient) {
-          prepareFieldForLiquibase(entity, field);
+          prepareFieldForLiquibase(application, field);
         }
       },
       validateConsistencyOfField({ entity, field }) {
@@ -175,7 +176,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
             }
             for (const field of entity.fields ?? []) {
               prepareField(entity, field, this);
-              prepareFieldForLiquibase(entity, field);
+              prepareFieldForLiquibase(application, field);
             }
           }
         }
@@ -695,7 +696,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
    * @param leadingWhitespace
    * @returns
    */
-  createDefaultValueLiquibaseAttribute(field, leadingWhitespace = false) {
+  createDefaultValueLiquibaseAttribute(field: Field, leadingWhitespace = false) {
     if (field.liquibaseDefaultValueAttributeValue === undefined) {
       return '';
     }
@@ -858,7 +859,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
    * @param {string} prodDatabaseType - database type
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
-  getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+  getFKConstraintName(entityName: string, relationshipName: string, prodDatabaseType: string, noSnakeCase: boolean): string {
     const result = getFKConstraintName(entityName, relationshipName, { prodDatabaseType, noSnakeCase });
     (this as any).validateResult(result);
     return result.value;
@@ -873,7 +874,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
    * @param {string} prodDatabaseType - database type
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
-  getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
+  getUXConstraintName(entityName: string, columnName: string, prodDatabaseType: string, noSnakeCase: boolean): string {
     const result = getUXConstraintName(entityName, columnName, { prodDatabaseType, noSnakeCase });
     (this as any).validateResult(result);
     return result.value;

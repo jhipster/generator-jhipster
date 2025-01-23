@@ -377,15 +377,9 @@ const createHandler = ({ log }: { log: (msg: string) => void } = { log: msg => c
         'set',
       ].map(method => [method, (...args) => console.log(`Fixme: template data called ${method}(${args?.pop() ?? ''})`)]),
     ),
-    ownKeys: ({ data }) => {
-      return Reflect.ownKeys(data);
-    },
-    getPrototypeOf: ({ data }) => {
-      return Object.getPrototypeOf(data);
-    },
-    getOwnPropertyDescriptor: ({ data }, prop) => {
-      return Object.getOwnPropertyDescriptor(data, prop);
-    },
+    ownKeys: ({ data }) => Reflect.ownKeys(data),
+    getPrototypeOf: ({ data }) => Object.getPrototypeOf(data),
+    getOwnPropertyDescriptor: ({ data }, prop) => Object.getOwnPropertyDescriptor(data, prop),
     has: (context, prop) => {
       if (ejsBuiltInProperties.includes(prop)) {
         return false;
@@ -398,7 +392,7 @@ const createHandler = ({ log }: { log: (msg: string) => void } = { log: msg => c
       if (propValue === undefined) {
         return prop in context.data;
       }
-      return propValue !== undefined;
+      return true;
     },
     get: getProperty,
   };

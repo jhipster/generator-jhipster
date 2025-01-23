@@ -65,7 +65,3 @@ export const typescriptReservedKeywords = [
   'STATIC',
   'YIELD',
 ];
-
-export const isReservedTypescriptKeyword = (keyword: string) => {
-  return typescriptReservedKeywords.includes(keyword.toUpperCase());
-};

@@ -17,5 +17,3 @@
  * limitations under the License.
  */
 export const MAVEN = 'maven';
-export const MAVEN_DESCRIPTION = 'Maven';
-export const BUILD_DESTINATION_VALUE = 'target';

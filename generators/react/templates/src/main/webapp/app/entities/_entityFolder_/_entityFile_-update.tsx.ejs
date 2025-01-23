@@ -49,7 +49,7 @@ for (const otherEntity of otherEntitiesWithPersistableRelationship) {
       action: `get${otherEntity.entityNamePlural}`,
       instance: otherEntity.entityInstancePlural,
       entity: otherEntity.entityAngularName,
-      reducer: otherEntity.builtInUser ? `userManagement.${otherEntity.entityInstancePlural}` : `${otherEntity.entityReactState}.entities`,
+      reducer: otherEntity.builtInUser ? `userManagement.${otherEntity.entityInstancePlural}` : `${otherEntity.entityReactState}.entities`
     });
   if (otherEntity.builtInUser) {
 _%>

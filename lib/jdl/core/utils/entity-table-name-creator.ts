@@ -49,6 +49,5 @@ export const getTableNameFromEntityNameFallback = (entityName: string): string |
 /**
  * @deprecated TODO v9 drop this function and always write entityTableName if exists.
  */
-export const shouldWriteEntityTableName = (entityName: string, entityTableName: string): boolean => {
-  return entityTableName !== snakeCase(entityName) || entityTableName !== hibernateSnakeCase(entityName);
-};
+export const shouldWriteEntityTableName = (entityName: string, entityTableName: string): boolean =>
+  entityTableName !== snakeCase(entityName) || entityTableName !== hibernateSnakeCase(entityName);

@@ -275,7 +275,3 @@ export const mysqlReservedKeywords = [
   'SLOW',
   'WINDOW',
 ];
-
-export const isReservedMysqlKeyword = (keyword: string) => {
-  return mysqlReservedKeywords.includes(keyword.toUpperCase());
-};

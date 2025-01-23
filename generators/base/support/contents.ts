@@ -36,6 +36,4 @@ export function normalizeLineEndings(str: string, lineEnding: string): string {
  *  @param {string} content - the string to process
  */
 
-export const stripMargin = content => {
-  return content.replace(/^[ ]*\|/gm, '');
-};
+export const stripMargin = content => content.replace(/^[ ]*\|/gm, '');

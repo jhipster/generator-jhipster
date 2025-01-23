@@ -165,7 +165,7 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
     );
   }
 
-  getArgsForPriority(priorityName): any {
+  getArgsForPriority(priorityName: string): any {
     const args = super.getArgsForPriority(priorityName);
     if (
       ![

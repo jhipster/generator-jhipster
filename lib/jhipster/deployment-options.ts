@@ -35,9 +35,6 @@ export const DeploymentTypes = {
   exists: (deploymentType?: any) => !!deploymentType && !!DeploymentTypes[deploymentType.toUpperCase().replace('-', '')],
 };
 
-export const DOCKERCOMPOSE = DeploymentTypes.DOCKERCOMPOSE;
-export const KUBERNETES = DeploymentTypes.KUBERNETES;
-
 const kubernetesRelatedOptions = {
   kubernetesNamespace: 'default',
   kubernetesServiceType: {

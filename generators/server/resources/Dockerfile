@@ -13,10 +13,10 @@ LABEL ALIAS=consul-config-loader
 FROM postgres:17.2
 LABEL ALIAS=postgresql
 
-FROM quay.io/keycloak/keycloak:26.0.7
+FROM quay.io/keycloak/keycloak:26.1.0
 LABEL ALIAS=keycloak
 
-FROM mysql:9.1.0
+FROM mysql:9.2.0
 
 FROM mariadb:11.6.2
 
@@ -31,31 +31,31 @@ FROM cassandra:5.0
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.26.0
+FROM neo4j:5.26.1
 
 FROM hazelcast/management-center:5.6.0
 LABEL ALIAS=hazelcast
 
 FROM memcached:1.6.34-alpine
 
-FROM redis:7.4.1
+FROM redis:7.4.2
 
 FROM apache/kafka-native:3.9.0
 LABEL ALIAS=kafka
 
-FROM apachepulsar/pulsar:4.0.1
+FROM apachepulsar/pulsar:4.0.2
 LABEL ALIAS=pulsar
 
-FROM sonarqube:24.12.0.100206-community
+FROM sonarqube:25.1.0.102122-community
 LABEL ALIAS=sonar
 
-FROM docker.io/bitnami/consul:1.20.1
+FROM docker.io/bitnami/consul:1.20.2
 LABEL ALIAS=consul
 
-FROM prom/prometheus:v3.0.1
+FROM prom/prometheus:v3.1.0
 LABEL ALIAS=prometheus
 
-FROM prom/alertmanager:v0.27.0
+FROM prom/alertmanager:v0.28.0
 LABEL ALIAS=prometheus-alertmanager
 
 FROM quay.io/coreos/prometheus-operator:v0.42.1
@@ -76,5 +76,5 @@ LABEL ALIAS=java-jre
 FROM swaggerapi/swagger-editor:latest
 LABEL ALIAS=swagger-editor
 
-FROM openzipkin/zipkin:3.4
+FROM openzipkin/zipkin:3.4.3
 LABEL ALIAS=zipkin

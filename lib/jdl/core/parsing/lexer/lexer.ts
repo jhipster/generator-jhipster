@@ -166,6 +166,4 @@ export const buildTokens = (tokens: { applicationTokens: TokenParam; deploymentT
 // with 'ensureOptimizations' the lexer initialization will throw a descriptive error
 // instead of silently reverting to an unoptimized algorithm.
 // This will avoid performance regressions.
-export const createJDLLexer = (tokens: Record<string, TokenType>) => {
-  return new Lexer(Object.values(tokens), { ensureOptimizations: true });
-};
+export const createJDLLexer = (tokens: Record<string, TokenType>) => new Lexer(Object.values(tokens), { ensureOptimizations: true });

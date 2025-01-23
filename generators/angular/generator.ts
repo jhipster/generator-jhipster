@@ -204,9 +204,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<DefaultTa
             ...(entity.entityReadAuthority?.split(',') ?? []),
           ]),
         });
-        entity.generateEntityClientEnumImports = fields => {
-          return getClientEnumImportsFormat(fields, ANGULAR);
-        };
+        entity.generateEntityClientEnumImports = fields => getClientEnumImportsFormat(fields, ANGULAR);
       },
     });
   }

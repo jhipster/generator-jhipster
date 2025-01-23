@@ -70,6 +70,4 @@ export const javaReservedKeywords = [
   'WHILE',
 ];
 
-export const isReservedJavaKeyword = (keyword: string) => {
-  return javaReservedKeywords.includes(keyword.toUpperCase());
-};
+export const isReservedJavaKeyword = (keyword: string) => javaReservedKeywords.includes(keyword.toUpperCase());

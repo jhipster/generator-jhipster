@@ -109,7 +109,7 @@ import <%= entityAbsolutePackage %>.service.<%= entityClass %>Service;
 import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
 import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
-<%_ if (jpaMetamodelFiltering & !reactive) { _%>
+<%_ if (jpaMetamodelFiltering && !reactive) { _%>
 import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
 <%_ } _%>
 import com.fasterxml.jackson.databind.ObjectMapper;

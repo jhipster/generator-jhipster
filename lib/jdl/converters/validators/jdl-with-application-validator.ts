@@ -42,7 +42,6 @@ const { BLUEPRINTS, BASE_NAME } = OptionNames;
  * Constructor taking the jdl object to check against application settings.
  * @param {JDLObject} jdlObject -  the jdl object to check.
  * @param {Object} logger - the logger to use, default to the console.
- * @param {Object} [options]
  */
 export default function createValidator(jdlObject: JDLObject, logger: any = console) {
   if (!jdlObject) {

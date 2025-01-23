@@ -108,9 +108,10 @@ function getAllFieldDeclarations(entityDeclarations: EntityDeclaration[]) {
   if (!entityDeclarations) {
     return [];
   }
-  return entityDeclarations.reduce((fieldDeclarations, entityDeclaration) => {
-    return fieldDeclarations.concat(getFieldDeclarationsFromEntity(entityDeclaration));
-  }, []);
+  return entityDeclarations.reduce(
+    (fieldDeclarations, entityDeclaration) => fieldDeclarations.concat(getFieldDeclarationsFromEntity(entityDeclaration)),
+    [],
+  );
 }
 
 function getFieldDeclarationsFromEntity(entityDeclaration: EntityDeclaration) {

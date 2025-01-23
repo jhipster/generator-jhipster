@@ -32,9 +32,7 @@ class RandexpWithFaker extends Randexp {
       throw new Error('Faker is required');
     }
     // In order to have consistent results with RandExp, the RNG is seeded.
-    this.randInt = (from: number, to?: number): number => {
-      return faker.number.int({ min: from, max: to });
-    };
+    this.randInt = (from: number, to?: number): number => faker.number.int({ min: from, max: to });
   }
 }
 

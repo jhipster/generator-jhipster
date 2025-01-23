@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import languages from '@/shared/config/languages';
 
 export default class TranslationService {
-  private i18n: Composer;
+  private readonly i18n: Composer;
   private languages = languages();
 
   constructor(i18n: Composer) {

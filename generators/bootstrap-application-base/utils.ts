@@ -29,46 +29,7 @@ const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
 const { CommonDBTypes } = fieldTypes;
 
-const { STRING: TYPE_STRING, BOOLEAN: TYPE_BOOLEAN, INSTANT } = CommonDBTypes;
-
-export const auditableEntityFields = () => [
-  {
-    fieldName: 'createdBy',
-    fieldType: TYPE_STRING,
-    readonly: true,
-    skipServer: true,
-    builtIn: true,
-    fieldValidateRules: [Validations.MAXLENGTH],
-    fieldValidateRulesMaxlength: 50,
-    autoGenerate: true,
-  },
-  {
-    fieldName: 'createdDate',
-    fieldType: INSTANT,
-    readonly: true,
-    skipServer: true,
-    builtIn: true,
-    autoGenerate: true,
-  },
-  {
-    fieldName: 'lastModifiedBy',
-    fieldType: TYPE_STRING,
-    readonly: true,
-    skipServer: true,
-    builtIn: true,
-    fieldValidateRules: [Validations.MAXLENGTH],
-    fieldValidateRulesMaxlength: 50,
-    autoGenerate: true,
-  },
-  {
-    fieldName: 'lastModifiedDate',
-    fieldType: INSTANT,
-    readonly: true,
-    skipServer: true,
-    builtIn: true,
-    autoGenerate: true,
-  },
-];
+const { STRING: TYPE_STRING, BOOLEAN: TYPE_BOOLEAN } = CommonDBTypes;
 
 const authorityEntityName = 'Authority';
 

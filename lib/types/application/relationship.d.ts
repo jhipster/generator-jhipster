@@ -1,6 +1,7 @@
-import type { Entity } from '../base/entity.js';
+import type { Entity as BaseEntity } from '../base/entity.js';
 import type { Relationship as BaseRelationship } from '../base/relationship.js';
 import type { DerivedPropertiesOnlyOf } from '../utils/derived-properties.js';
+import type { Entity } from './entity.js';
 import type { Property } from './property.js';
 
 type RelationshipProperties = DerivedPropertiesOnlyOf<
@@ -8,7 +9,7 @@ type RelationshipProperties = DerivedPropertiesOnlyOf<
   'LeftSide' | 'RightSide' | 'ManyToOne' | 'OneToMany' | 'OneToOne' | 'ManyToMany'
 >;
 
-export interface Relationship<E extends Entity = Entity> extends BaseRelationship, Property, RelationshipProperties {
+export interface Relationship<E extends BaseEntity = Entity> extends BaseRelationship, Property, RelationshipProperties {
   propertyName: string;
   relationshipNameCapitalized: string;
 

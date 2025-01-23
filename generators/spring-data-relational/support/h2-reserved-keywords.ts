@@ -19,6 +19,4 @@
 
 export const h2ReservedKeywords = ['KEY'];
 
-export const isReservedH2Keyword = (keyword: string) => {
-  return h2ReservedKeywords.includes(keyword.toUpperCase());
-};
+export const isReservedH2Keyword = (keyword: string) => h2ReservedKeywords.includes(keyword.toUpperCase());

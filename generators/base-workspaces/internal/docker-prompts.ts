@@ -368,7 +368,7 @@ async function askForDockerPushCommand() {
 
 /**
  * Get App Folders
- * @param input path to join to destination path
+ * @param directory path to join to destination path
  * @param deploymentApplicationType type of application being composed
  * @returns {Array} array of string representing app folders
  */

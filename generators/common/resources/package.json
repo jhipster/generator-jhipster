@@ -1,7 +1,7 @@
 {
   "devDependencies": {
-    "concurrently": "9.1.1",
+    "concurrently": "9.1.2",
     "npm": "11.0.0",
-    "wait-on": "8.0.1"
+    "wait-on": "8.0.2"
   }
 }

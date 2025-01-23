@@ -5,9 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export const isDistFolder = () => {
-  return basename(dirname(__dirname)) === 'dist';
-};
+export const isDistFolder = () => basename(dirname(__dirname)) === 'dist';
 
 export const getPackageRoot = (relativePath?: string) => {
   const sourceRoot = dirname(__dirname);

@@ -40,7 +40,7 @@ export default defineComponent({
   setup() {
     const <%= entityInstance %>Service = inject('<%= entityInstance %>Service', () => new <%= entityAngularName %>Service());
     const alertService = inject('alertService', () => useAlertService(), true);
-  
+
     const <%= entityInstance %>: Ref<I<%= entityAngularName %>> = ref(new <%= entityAngularName %>());
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
   <%_ if (relationship.otherEntity.builtInUser) { _%>
@@ -186,10 +186,6 @@ _%>
   methods: {
     save() : void {
       this.isSaving = true;
-    <%_ for (field of fields.filter(field => !field.id)) {
-          const fieldName = field.fieldName;
-          const fieldType = field.fieldType;
-    } _%>
     if (this.<%= entityInstance %>.<%= primaryKey.name %>) {
         this.<%= entityInstance %>Service().update(this.<%= entityInstance %>).then((param) => {
           this.isSaving = false;
