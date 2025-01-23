@@ -57,9 +57,6 @@ export default class DockerGenerator extends BaseApplicationGenerator {
     return this.asPreparingTaskGroup({
       dockerServices({ application }) {
         const dockerServices = application.dockerServices!;
-        if (application.backendTypeSpringBoot) {
-          dockerServices.push('app');
-        }
         if (application.authenticationTypeOauth2) {
           dockerServices.push('keycloak');
         }

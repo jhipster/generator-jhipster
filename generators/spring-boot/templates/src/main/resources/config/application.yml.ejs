@@ -269,7 +269,7 @@ spring:
           group: <%= dasherizedBaseName %>
   <%_ } _%>
 <%_ } _%>
-<%_ if ('dockerServices' in locals && dockerServices && dockerServices.length > 1) { _%>
+<%_ if ('dockerServices' in locals && dockerServices?.length) { _%>
   docker:
     compose:
       enabled: true
