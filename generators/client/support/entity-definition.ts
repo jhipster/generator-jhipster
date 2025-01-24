@@ -39,6 +39,7 @@ const {
   ZONED_DATE_TIME: TYPE_ZONED_DATE_TIME,
   INSTANT: TYPE_INSTANT,
   DURATION: TYPE_DURATION,
+  LOCAL_TIME: TYPE_TIME,
 } = dbTypes.CommonDBTypes;
 
 const TYPE_BYTES = dbTypes.RelationalOnlyDBTypes.BYTES;
@@ -85,7 +86,7 @@ const generateEntityClientFields = (
       tsType = 'boolean';
     } else if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(fieldType)) {
       tsType = 'number';
-    } else if ([TYPE_STRING, TYPE_UUID, TYPE_DURATION, TYPE_BYTES, TYPE_BYTE_BUFFER].includes(fieldType)) {
+    } else if ([TYPE_STRING, TYPE_UUID, TYPE_DURATION, TYPE_BYTES, TYPE_BYTE_BUFFER, TYPE_TIME].includes(fieldType)) {
       tsType = 'string';
       if ([TYPE_BYTES, TYPE_BYTE_BUFFER].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
         variablesWithTypes.push(`${fieldName}ContentType?: ${nullable ? 'string | null' : 'string'}`);

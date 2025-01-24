@@ -52,7 +52,7 @@ const NO_MAPPER = MapperTypes.NO;
 
 const { CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = databaseTypes;
 
-const { INSTANT, ZONED_DATE_TIME, DURATION, LOCAL_DATE, BIG_DECIMAL } = fieldTypes.CommonDBTypes;
+const { INSTANT, ZONED_DATE_TIME, DURATION, LOCAL_DATE, BIG_DECIMAL, LOCAL_TIME } = fieldTypes.CommonDBTypes;
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 const { IMAGE, TEXT } = fieldTypes.BlobTypes;
@@ -549,6 +549,7 @@ export function preparePostEntityCommonDerivedProperties(entity: Entity) {
 
   entity.anyFieldIsZonedDateTime = fieldsType.includes(ZONED_DATE_TIME);
   entity.anyFieldIsInstant = fieldsType.includes(INSTANT);
+  entity.anyFieldIsLocalTime = fieldsType.includes(LOCAL_TIME);
   entity.anyFieldIsDuration = fieldsType.includes(DURATION);
   entity.anyFieldIsLocalDate = fieldsType.includes(LOCAL_DATE);
   entity.anyFieldIsBigDecimal = fieldsType.includes(BIG_DECIMAL);

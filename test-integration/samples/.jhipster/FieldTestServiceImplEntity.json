@@ -37,6 +37,8 @@
     { "fieldName": "instanteRequiredMika", "fieldType": "Instant", "fieldValidateRules": ["required"] },
     { "fieldName": "zonedDateTimeMika", "fieldType": "ZonedDateTime" },
     { "fieldName": "zonedDateTimeRequiredMika", "fieldType": "ZonedDateTime", "fieldValidateRules": ["required"] },
+    { "fieldName": "localTimeMika", "fieldType": "LocalTime" },
+    { "fieldName": "localTimeRequiredMika", "fieldType": "LocalTime", "fieldValidateRules": ["required"] },
     { "fieldName": "durationMika", "fieldType": "Duration" },
     { "fieldName": "durationRequiredMika", "fieldType": "Duration", "fieldValidateRules": ["required"] },
     { "fieldName": "booleanMika", "fieldType": "Boolean" },

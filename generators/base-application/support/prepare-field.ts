@@ -51,6 +51,7 @@ const {
   ANY_BLOB,
   TEXT_BLOB,
   BLOB,
+  LOCAL_TIME,
 } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 
@@ -162,12 +163,17 @@ function generateFakeDataForField(
       max: field.fieldValidateRulesMax ?? 32767,
       min: field.fieldValidateRulesMin ?? 0,
     });
-  } else if ([INSTANT, ZONED_DATE_TIME, LOCAL_DATE].includes(field.fieldType)) {
+  } else if ([INSTANT, ZONED_DATE_TIME, LOCAL_DATE, LOCAL_TIME].includes(field.fieldType)) {
     // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
     const date = faker.date.recent({ days: 1, refDate: changelogDate });
     originalData = date.toISOString();
     if (field.fieldType === LOCAL_DATE) {
       data = originalData.split('T')[0];
+    } else if (field.fieldType === LOCAL_TIME) {
+      // time without seconds by default
+      const timeWithoutMilliseconds = originalData.split('T')[1].split('.')[0];
+      // default time input fields are set to support HH:mm. Some databases require :00 during loading of fake data to detect the datatype.
+      data = `${timeWithoutMilliseconds.substring(0, timeWithoutMilliseconds.lastIndexOf(':'))}:00`;
     } else if (type === 'json-serializable') {
       data = date;
     } else {
@@ -262,6 +268,7 @@ function _derivedProperties(field) {
     fieldTypeTimed: fieldType === ZONED_DATE_TIME || fieldType === INSTANT,
     fieldTypeCharSequence: fieldType === STRING || fieldType === UUID || fieldType === TEXT_BLOB,
     fieldTypeTemporal: fieldType === ZONED_DATE_TIME || fieldType === INSTANT || fieldType === LOCAL_DATE,
+    fieldTypeLocalTime: fieldType === LOCAL_TIME,
     fieldValidationRequired: validationRules.includes(REQUIRED),
     fieldValidationMin: validationRules.includes(MIN),
     fieldValidationMinLength: validationRules.includes(MINLENGTH),

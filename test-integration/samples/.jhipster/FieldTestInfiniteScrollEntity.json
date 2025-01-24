@@ -37,6 +37,8 @@
     { "fieldName": "instanteRequiredHugo", "fieldType": "Instant", "fieldValidateRules": ["required"] },
     { "fieldName": "zonedDateTimeHugo", "fieldType": "ZonedDateTime" },
     { "fieldName": "zonedDateTimeRequiredHugo", "fieldType": "ZonedDateTime", "fieldValidateRules": ["required"] },
+    { "fieldName": "localTimeHugo", "fieldType": "LocalTime" },
+    { "fieldName": "localTimeRequiredHugo", "fieldType": "LocalTime", "fieldValidateRules": ["required"] },
     { "fieldName": "durationHugo", "fieldType": "Duration" },
     { "fieldName": "durationRequiredHugo", "fieldType": "Duration", "fieldValidateRules": ["required"] },
     { "fieldName": "booleanHugo", "fieldType": "Boolean" },

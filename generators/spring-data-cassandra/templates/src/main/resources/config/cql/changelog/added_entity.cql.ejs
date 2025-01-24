@@ -43,6 +43,8 @@ CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
     <%= fieldName %> text,
   <%_ } else if (field.fieldTypeZonedDateTime) { _%>
     <%= fieldName %> tuple<timestamp,varchar>,
+  <%_ } else if (field.fieldTypeLocalTime) { _%>
+    <%= fieldName %> time,
   <%_ } else if (field.fieldTypeBoolean) { _%>
     <%= fieldName %> boolean,
   <%_ } else if (field.fieldTypeByteBuffer) { _%>

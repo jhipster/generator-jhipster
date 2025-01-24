@@ -37,6 +37,8 @@
     { "fieldName": "instanteRequiredAlice", "fieldType": "Instant", "fieldValidateRules": ["required"] },
     { "fieldName": "zonedDateTimeAlice", "fieldType": "ZonedDateTime" },
     { "fieldName": "zonedDateTimeRequiredAlice", "fieldType": "ZonedDateTime", "fieldValidateRules": ["required"] },
+    { "fieldName": "localTimeAlice", "fieldType": "LocalTime" },
+    { "fieldName": "localTimeRequiredAlice", "fieldType": "LocalTime", "fieldValidateRules": ["required"] },
     { "fieldName": "durationAlice", "fieldType": "Duration" },
     { "fieldName": "durationRequiredAlice", "fieldType": "Duration", "fieldValidateRules": ["required"] },
     { "fieldName": "booleanAlice", "fieldType": "Boolean" },

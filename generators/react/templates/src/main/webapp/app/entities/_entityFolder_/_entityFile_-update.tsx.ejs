@@ -250,6 +250,11 @@ _%>
             type="date"
             <%- include('react_validators'); %>
           />
+  <%_ } else if (field.fieldTypeLocalTime) { _%>
+            type="time"
+            placeholder="HH:mm"
+            <%- include('react_validators'); %>
+          />
   <%_ } else if (field.fieldIsEnum) {_%>
             type="select"
           >

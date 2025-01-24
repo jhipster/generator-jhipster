@@ -25,7 +25,8 @@ import type { ApplicationType } from '../../../lib/types/application/application
 const { MYSQL, MARIADB } = databaseTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
 
-const { STRING, INTEGER, LONG, BIG_DECIMAL, FLOAT, DOUBLE, UUID, BOOLEAN, LOCAL_DATE, ZONED_DATE_TIME, INSTANT, DURATION } = CommonDBTypes;
+const { STRING, INTEGER, LONG, BIG_DECIMAL, FLOAT, DOUBLE, UUID, BOOLEAN, LOCAL_DATE, ZONED_DATE_TIME, INSTANT, DURATION, LOCAL_TIME } =
+  CommonDBTypes;
 const { BYTES } = RelationalOnlyDBTypes;
 const { TEXT } = BlobTypes;
 
@@ -74,6 +75,11 @@ function parseLiquibaseColumnType(field: Field) {
     return 'bigint';
   }
 
+  if (fieldType === LOCAL_TIME) {
+    // eslint-disable-next-line no-template-curly-in-string
+    return '${timeType}';
+  }
+
   if (fieldType === UUID) {
     // eslint-disable-next-line no-template-curly-in-string
     return '${uuidType}';
@@ -110,6 +116,11 @@ function parseLiquibaseLoadColumnType(application: ApplicationType, field: Field
   // eslint-disable-next-line no-template-curly-in-string
   if (['date', '${datetimeType}'].includes(columnType)) {
     return 'date';
+  }
+
+  // eslint-disable-next-line no-template-curly-in-string
+  if (columnType === '${timeType}') {
+    return 'time';
   }
 
   if (columnType === 'boolean') {

@@ -68,6 +68,7 @@ export interface Field extends Property, BaseField {
   fieldTypeTimed?: boolean;
   fieldTypeLocalDate?: boolean;
   fieldTypeDateTime?: boolean;
+  fieldTypeLocalTime?: boolean;
   /** @deprecated */
   fieldTypeTemporal: boolean;
   /** @deprecated */

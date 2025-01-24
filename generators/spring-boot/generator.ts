@@ -382,6 +382,10 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
             field.fieldTypeBoolean
           ) {
             field.propertyJavaFilterType = `${fieldType}Filter`;
+          } else if (field.fieldTypeLocalTime) {
+            const filterType = `${fieldType}Filter`;
+            field.propertyJavaFilterType = filterType;
+            field.propertyJavaCustomFilter = { type: filterType, superType: `RangeFilter<${fieldType}>`, fieldType };
           } else {
             field.propertyJavaFilterType = `Filter<${fieldType}>`;
           }
