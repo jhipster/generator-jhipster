@@ -87,7 +87,7 @@ spring:
       additional-exclude: static/**<% if (devDatabaseTypeH2Any) { %>,.h2.server.properties<% } %>
     livereload:
       enabled: false # we use Webpack dev server + BrowserSync for livereload
-<%_ if (devDatabaseTypeH2Any && 'dockerServices' in locals && dockerServices && dockerServices.length > 1) { _%>
+<%_ if (devDatabaseTypeH2Any && 'dockerServices' in locals && dockerServices?.length) { _%>
   docker:
     compose:
       enabled: <%- authenticationTypeOauth2 || messageBrokerAny || serviceDiscoveryAny || cacheProviderRedis %>

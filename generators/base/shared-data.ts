@@ -20,6 +20,7 @@ import assert from 'node:assert';
 import { existsSync, readFileSync, statSync } from 'fs';
 import { rm } from 'fs/promises';
 import { isAbsolute, join, relative } from 'path';
+import { execaCommandSync } from 'execa';
 import { lt as semverLessThan } from 'semver';
 import { defaults } from 'lodash-es';
 import type { MemFsEditor } from 'mem-fs-editor';
@@ -104,7 +105,8 @@ export default class SharedData<EntityType extends BaseEntity = Entity, Applicat
       );
     };
 
-    defaults(this._storage.control, {
+    const control = this._storage.control;
+    defaults(control, {
       jhipsterOldVersion,
       removeFiles,
       customizeRemoveFiles: [],
@@ -136,6 +138,18 @@ export default class SharedData<EntityType extends BaseEntity = Entity, Applicat
         );
       },
     });
+
+    if (!('enviromentHasDockerCompose' in control)) {
+      Object.defineProperty(control, 'enviromentHasDockerCompose', {
+        get: () => {
+          if (control._enviromentHasDockerCompose === undefined) {
+            const { exitCode } = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
+            control._enviromentHasDockerCompose = exitCode === 0;
+          }
+          return control._enviromentHasDockerCompose;
+        },
+      });
+    }
 
     customizeRemoveFiles = this._storage.control.customizeRemoveFiles;
   }

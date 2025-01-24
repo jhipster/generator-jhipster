@@ -42,7 +42,7 @@ const NO_DATABASE = databaseTypes.NO;
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 const { GATLING, CUCUMBER } = testFrameworkTypes;
 
-export async function askForServerSideOpts(this: CoreGenerator, { control }) {
+export const askForServerSideOpts = asPromptingTask(async function ({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
   const { applicationType, authenticationType, reactive } = this.jhipsterConfigWithDefaults;
@@ -105,17 +105,18 @@ export async function askForServerSideOpts(this: CoreGenerator, { control }) {
         type: 'list',
         name: 'devDatabaseType',
         message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
-        choices: response =>
-          [SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)].concat([
+        choices: response => {
+          const currentDatabase = SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)!;
+          return [
             {
-              value: H2_DISK,
-              name: 'H2 with disk-based persistence',
+              ...currentDatabase,
+              name: `${currentDatabase.name} (requires Docker or manually configured database)`,
             },
-            {
-              value: H2_MEMORY,
-              name: 'H2 with in-memory persistence',
-            },
-          ]) as any,
+          ].concat([
+            { value: H2_DISK, name: `H2 with disk-based persistence` },
+            { value: H2_MEMORY, name: `H2 with in-memory persistence` },
+          ]);
+        },
         default: this.jhipsterConfigWithDefaults.devDatabaseType,
       },
       {
@@ -168,7 +169,7 @@ export async function askForServerSideOpts(this: CoreGenerator, { control }) {
     ],
     this.config,
   );
-}
+});
 
 export const askForOptionalItems = asPromptingTask(async function askForOptionalItems(this: CoreGenerator, { control }) {
   if (control.existingProject && !this.options.askAnswered) return;

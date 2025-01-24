@@ -240,6 +240,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "blueprints": [],
   "buildTool": "maven",
   "buildToolAny": true,
+  "buildToolExecutable": "mvnw",
   "buildToolGradle": false,
   "buildToolMaven": true,
   "buildToolUnknown": false,
@@ -455,7 +456,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "zipkinTag": "zipkin-tag-placeholder",
   },
   "dockerServices": [
-    "app",
     "postgresql",
   ],
   "dockerServicesDir": "src/main/docker/",
@@ -912,6 +912,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "blueprints": [],
   "buildTool": "maven",
   "buildToolAny": true,
+  "buildToolExecutable": "mvnw",
   "buildToolGradle": false,
   "buildToolMaven": true,
   "buildToolUnknown": false,
@@ -1127,7 +1128,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "zipkinTag": "zipkin-tag-placeholder",
   },
   "dockerServices": [
-    "app",
     "consul",
     "zipkin",
     "postgresql",
@@ -1578,6 +1578,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "blueprints": [],
   "buildTool": "maven",
   "buildToolAny": true,
+  "buildToolExecutable": "mvnw",
   "buildToolGradle": false,
   "buildToolMaven": true,
   "buildToolUnknown": false,
@@ -1793,7 +1794,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "zipkinTag": "zipkin-tag-placeholder",
   },
   "dockerServices": [
-    "app",
     "consul",
     "zipkin",
     "hazelcast",

@@ -65,11 +65,10 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
       checkDocker,
-      async checkDockerCompose() {
+      async checkDockerCompose({ control }) {
         if (this.skipChecks) return;
 
-        const { exitCode } = await this.spawnCommand('docker compose version', { reject: false, stdio: 'pipe' });
-        if (exitCode !== 0) {
+        if (!control.enviromentHasDockerCompose) {
           throw new Error(`Docker Compose V2 is not installed on your computer.
          Read https://docs.docker.com/compose/install/
 `);
