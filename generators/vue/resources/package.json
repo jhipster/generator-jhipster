@@ -70,5 +70,6 @@
     "webpack-dev-server": "5.2.0",
     "webpack-merge": "6.0.1",
     "workbox-webpack-plugin": "7.3.0"
-  }
+  },
+  "packageManager": "npm@11"
 }
