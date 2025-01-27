@@ -57,5 +57,6 @@
     "webpack-bundle-analyzer": "4.10.2",
     "webpack-merge": "6.0.1",
     "webpack-notifier": "1.15.0"
-  }
+  },
+  "packageManager": "npm@11"
 }
