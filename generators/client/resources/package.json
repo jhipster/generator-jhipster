@@ -12,5 +12,6 @@
     "lighthouse": "12.3.0",
     "nyc": "17.1.0",
     "swagger-ui-dist": "5.18.2"
-  }
+  },
+  "packageManager": "npm@11"
 }
