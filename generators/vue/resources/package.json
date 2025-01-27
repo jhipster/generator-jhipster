@@ -59,7 +59,7 @@
     "typescript-eslint": "8.20.0",
     "vite": "6.0.7",
     "vite-plugin-static-copy": "2.2.0",
-    "vitest": "3.0.2",
+    "vitest": "3.0.4",
     "vitest-sonar-reporter": "2.0.0",
     "vue-loader": "17.4.2",
     "vue-style-loader": "4.1.3",
