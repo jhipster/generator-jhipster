@@ -6,7 +6,7 @@ import { getUnknownGitHubMatrixGroupProperties } from './github-matrix.js';
 export const getGithubSamplesGroups = async (samplesGroupFolder: string, keepExtensions = false): Promise<string[]> => {
   const samplesFolderContent = await readdir(samplesGroupFolder);
   return samplesFolderContent
-    .filter(sample => ['.json', '.js', '.ts', ''].includes(extname(sample)))
+    .filter(sample => !sample.startsWith('_') && ['.json', '.js', '.ts', ''].includes(extname(sample)))
     .map(sample => (keepExtensions ? sample : sample.split('.')[0]));
 };
 
