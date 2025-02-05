@@ -118,14 +118,6 @@ export default class ReactGenerator extends BaseApplicationGenerator {
             }),
           );
         };
-        if (application.clientRootDir) {
-          // Overrides only works if added in root package.json
-          this.packageJson.merge({
-            overrides: {
-              'browser-sync': application.nodeDependencies['browser-sync'],
-            },
-          });
-        }
       },
     });
   }
@@ -217,6 +209,13 @@ export default class ReactGenerator extends BaseApplicationGenerator {
             'browser-sync': nodeDependencies['browser-sync'],
           },
         });
+        if (application.clientRootDir) {
+          this.packageJson.merge({
+            overrides: {
+              'browser-sync': application.nodeDependencies['browser-sync'],
+            },
+          });
+        }
       },
       addMicrofrontendDependencies({ application, source }) {
         if (!application.microfrontend) return;
