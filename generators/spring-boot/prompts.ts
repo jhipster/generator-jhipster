@@ -134,7 +134,7 @@ export async function askForServerSideOpts(this: CoreGenerator, { control }) {
           },
           {
             value: HAZELCAST,
-            name: 'Hazelcast (distributed cache, for multiple nodes)',
+            name: 'Hazelcast (distributed cache for multiple nodes)',
           },
           {
             value: INFINISPAN,
