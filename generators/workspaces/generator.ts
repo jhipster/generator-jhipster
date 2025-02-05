@@ -19,7 +19,7 @@
 
 import { existsSync } from 'fs';
 
-import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT } from '../generator-list.js';
+import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENERATOR_REACT } from '../generator-list.js';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import { packageJson } from '../../lib/index.js';
@@ -198,6 +198,18 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
             overrides: {
               'browser-sync': browserSyncVersion,
               webpack: webpackVersion,
+            },
+          });
+        }
+
+        if (applications.some(app => app.clientFrameworkReact)) {
+          const {
+            devDependencies: { 'browser-sync': browserSyncVersion },
+          } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_REACT, 'resources', 'package.json'));
+
+          this.packageJson.merge({
+            overrides: {
+              'browser-sync': browserSyncVersion,
             },
           });
         }

@@ -42,7 +42,7 @@
     "@types/redux": "3.6.31",
     "@types/webpack-env": "1.18.8",
     "autoprefixer": "10.4.20",
-    "browser-sync": "2.29.3",
+    "browser-sync": "3.0.3",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "12.0.2",
     "core-js": "3.40.0",

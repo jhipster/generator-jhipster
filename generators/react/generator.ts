@@ -202,6 +202,21 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      clientBundler({ application, source }) {
+        const { nodeDependencies } = application;
+        source.mergeClientPackageJson!({
+          overrides: {
+            'browser-sync': nodeDependencies['browser-sync'],
+          },
+        });
+        if (application.clientRootDir) {
+          this.packageJson.merge({
+            overrides: {
+              'browser-sync': application.nodeDependencies['browser-sync'],
+            },
+          });
+        }
+      },
       addMicrofrontendDependencies({ application, source }) {
         if (!application.microfrontend) return;
         const { applicationTypeGateway } = application;
