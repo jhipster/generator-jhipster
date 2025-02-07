@@ -38,7 +38,6 @@
     "eslint": "9.19.0",
     "eslint-config-prettier": "10.0.1",
     "eslint-plugin-prettier": "5.2.3",
-    "eslint-webpack-plugin": "4.2.0",
     "folder-hash": "4.1.1",
     "globals": "15.14.0",
     "globby": "14.0.2",
