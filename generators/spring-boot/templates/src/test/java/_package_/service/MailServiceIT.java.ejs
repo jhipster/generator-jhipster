@@ -227,7 +227,7 @@ class MailServiceIT {
 
             String propertyFilePath = "i18n/messages_" + getMessageSourceSuffixForLanguage(langKey) + ".properties";
             URL resource = this.getClass().getClassLoader().getResource(propertyFilePath);
-            Path filePath = Path.of(new URI(resource.getFile()).getPath());
+            Path filePath = Path.of(new URI(resource.getFile()));
             Properties properties = new Properties();
             properties.load(new InputStreamReader(Files.newInputStream(filePath), Charset.forName("UTF-8")));
 
