@@ -324,7 +324,6 @@ export default class AngularGenerator extends BaseApplicationGenerator<DefaultTa
               '@angular-builders/custom-webpack': null,
               'browser-sync-webpack-plugin': null,
               'copy-webpack-plugin': null,
-              'eslint-webpack-plugin': null,
               'webpack-bundle-analyzer': null,
               'webpack-merge': null,
               'webpack-notifier': null,
