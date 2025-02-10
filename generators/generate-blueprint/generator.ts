@@ -394,7 +394,6 @@ export default class extends BaseGenerator {
           existed,
           [GENERATE_SNAPSHOTS]: generateSnapshots = !localBlueprint && !skipInstall && !skipGit && !existed,
         } = this.options;
-        if (!generateSnapshots) return;
 
         if (this.recreatePackageLock) {
           await rm(this.destinationPath('package-lock.json'), { force: true });
@@ -402,22 +401,24 @@ export default class extends BaseGenerator {
           await this.spawnCommand('npm', ['install'], { stdio: 'inherit' });
         }
 
-        try {
-          if (this.options[LINK_JHIPSTER_DEPENDENCY]) {
-            this.log.verboseInfo('Linking generator-jhipster');
-            await this.spawnCommand('npm', ['link', 'generator-jhipster'], { stdio: 'inherit' });
-          }
+        if (this.options[LINK_JHIPSTER_DEPENDENCY]) {
+          this.log.verboseInfo('Linking generator-jhipster');
+          await this.spawnCommand('npm', ['link', 'generator-jhipster'], { stdio: 'inherit' });
+        }
 
-          // Generate snapshots to add to git.
-          this.log.verboseInfo(`
+        if (generateSnapshots) {
+          try {
+            // Generate snapshots to add to git.
+            this.log.verboseInfo(`
 This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' to generate snapshots and commit to git.`);
-          await this.spawnCommand('npm', ['run', 'update-snapshot']);
-        } catch (error) {
-          if (generateSnapshots !== undefined) {
-            // We are forcing to generate snapshots fail the generation.
-            throw error;
+            await this.spawnCommand('npm', ['run', 'update-snapshot']);
+          } catch (error) {
+            if (generateSnapshots !== undefined) {
+              // We are forcing to generate snapshots fail the generation.
+              throw error;
+            }
+            this.log.warn('Fail to generate snapshots');
           }
-          this.log.warn('Fail to generate snapshots');
         }
 
         if (control.jhipsterOldVersion) {
