@@ -24,6 +24,8 @@ import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.web.util.HeaderUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 import org.springframework.dao.ConcurrencyFailureException;
@@ -111,6 +113,8 @@ _%>
     private static final String PATH_KEY = "path";
     private static final boolean CASUAL_CHAIN_ENABLED = false;
 
+    private static final Logger LOG = LoggerFactory.getLogger(ExceptionTranslator.class);
+
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
@@ -124,6 +128,7 @@ _%>
     <%_ if (reactive) { _%>@Override<%_ } _%>
     public <%- returnType %> handleAnyException(Throwable ex, <%= requestClass %> request
     ) {
+        LOG.debug("Converting Exception to Problem Details : {}", ex);
         ProblemDetailWithCause pdCause = wrapAndCustomizeProblem(ex, request);
         return handleExceptionInternal((Exception) ex, pdCause, buildHeaders(ex), HttpStatusCode.valueOf(pdCause.getStatus()), request);
     }
@@ -149,9 +154,9 @@ _%>
 
     private ProblemDetailWithCause getProblemDetailWithCause(Throwable ex) {
 <%_ if (!skipUserManagement) { _%>
-        if(ex instanceof <%= packageName %>.service.UsernameAlreadyUsedException ) 
-            return (ProblemDetailWithCause) new LoginAlreadyUsedException().getBody();    
-        if(ex instanceof <%= packageName %>.service.EmailAlreadyUsedException ) 
+        if(ex instanceof <%= packageName %>.service.UsernameAlreadyUsedException )
+            return (ProblemDetailWithCause) new LoginAlreadyUsedException().getBody();
+        if(ex instanceof <%= packageName %>.service.EmailAlreadyUsedException )
             return (ProblemDetailWithCause) new EmailAlreadyUsedException().getBody();
         if(ex instanceof <%= packageName %>.service.InvalidPasswordException )
             return (ProblemDetailWithCause) new InvalidPasswordException().getBody();
