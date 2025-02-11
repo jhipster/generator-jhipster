@@ -125,16 +125,18 @@
 <%_ } _%>
 
         if (!urls || urls.length === 0) {
-          const response = await axios.get('/management/jhiopenapigroups', axiosConfig);
-          if (Array.isArray(response.data)) {
-            urls = response.data.map(({ group, description }) => ({ name: description, url: `${serverBaseUri}${baseUrl}/${group}` }));
-          } else {
-            urls = [{ name: 'default', url: `${serverBaseUri}${baseUrl}` }];
+          try {
+            const response = await axios.get('/management/jhiopenapigroups', axiosConfig);
+            if (Array.isArray(response.data)) {
+              urls = response.data.map(({ group, description }) => ({ name: description, url: `${serverBaseUri}${baseUrl}/${group}` }));
+            }
+          } catch (error) {
+            console.error('Failed to fetch default API docs', error);
           }
         }
         console.log(`Swagger urls`, urls);
 
-        return urls;
+        return urls?.length ? urls : [{ name: 'default', url: `${serverBaseUri}${baseUrl}` }];
       }
 
       function sortUrls(urls) {

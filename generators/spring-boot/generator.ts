@@ -544,6 +544,11 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
         source.addJavaDependencies?.([
           { groupId: 'org.springdoc', artifactId: springdocDependency, version: application.javaDependencies!.springdoc },
         ]);
+        if (application.reactive) {
+          source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.OpenAPIService', method: 'build' });
+          source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.OpenAPIService', method: 'getWebhooks' });
+          source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.AbstractRequestService', method: 'build' });
+        }
       },
       addFeignReactor({ application, source }) {
         const { applicationTypeGateway, applicationTypeMicroservice, javaDependencies, reactive } = application;
