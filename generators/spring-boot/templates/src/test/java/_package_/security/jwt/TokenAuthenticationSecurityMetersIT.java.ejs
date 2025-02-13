@@ -97,10 +97,7 @@ class TokenAuthenticationSecurityMetersIT {
             .get()
             .uri("/api/authenticate")
             .headers(headers -> headers.setBearerAuth(token))
-            .exchange()
-            .returnResult(String.class)
-            .getResponseBody()
-            .blockLast();
+            .exchange();
     }
 <%_ } else { _%>
 
