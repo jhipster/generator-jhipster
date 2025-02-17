@@ -170,7 +170,7 @@
     "sort-keys": "5.1.0",
     "type-fest": "4.34.1",
     "typescript": "5.7.3",
-    "typescript-eslint": "8.24.0",
+    "typescript-eslint": "8.24.1",
     "yaml": "2.7.0",
     "yeoman-environment": "4.4.3",
     "yeoman-generator": "7.4.0"
