@@ -76,5 +76,5 @@ LABEL ALIAS=java-jre
 FROM swaggerapi/swagger-editor:latest
 LABEL ALIAS=swagger-editor
 
-FROM openzipkin/zipkin:3.4.3
+FROM openzipkin/zipkin:3.5.0
 LABEL ALIAS=zipkin
