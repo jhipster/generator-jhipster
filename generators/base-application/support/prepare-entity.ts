@@ -482,6 +482,20 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
     entity.fields.some(field => !field.id && !field.transient) ||
     entity.relationships.some(relationship => !relationship.id && relationship.persistableRelationship);
 
+  entity.hasAnyReadonlyField = entity.fields.some(field => field.readonly && !(field.id && field.autoGenerate));
+
+  entity.allReferences
+    .filter(reference => reference.relationship?.relatedField)
+    .forEach(reference => {
+      reference.relatedReference = reference.relationship.relatedField.reference;
+    });
+
+  entity.relationships.forEach(relationship => {
+    relationship.relationshipCollection = ['one-to-many', 'many-to-many'].includes(relationship.relationshipType);
+    relationship.relationshipReferenceField = relationship.relationshipCollection
+      ? relationship.relationshipFieldNamePlural
+      : relationship.relationshipFieldName;
+  });
   entity.entityContainsCollectionField = entity.relationships.some(relationship => relationship.collection);
 
   if (entity.primaryKey) {
