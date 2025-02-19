@@ -146,25 +146,25 @@ class PublicUserResourceIT {
     private Long numberOfUsers;
 
     @BeforeEach
-    public void countUsers() {
+    void countUsers() {
         numberOfUsers = userRepository.count()<%- reactorBlock %>;
     }
 
 <%_ } _%>
 <%_ if (reactive && authenticationUsesCsrf) { _%>
     @BeforeEach
-    public void setupCsrf() {
+    void setupCsrf() {
         webTestClient = webTestClient.mutateWith(csrf());
     }
 
 <%_ } _%>
     @BeforeEach
-    public void initTest() {
+    void initTest() {
         user = UserResourceIT.initTestUser();
     }
 
     @AfterEach
-    public void cleanupAndCheck() {
+    void cleanupAndCheck() {
 <%_ if (cacheProviderAny) { _%>
         cacheManager.getCacheNames().stream()
             .map(cacheName -> this.cacheManager.getCache(cacheName))

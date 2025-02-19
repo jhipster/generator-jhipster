@@ -64,7 +64,7 @@ class UserMapperTest {
     private <%= user.adminUserDto %> userDto;
 
     @BeforeEach
-    public void init() {
+    void init() {
         userMapper = new UserMapper();
         user = new <%= user.persistClass %>();
         user.setLogin(DEFAULT_LOGIN);

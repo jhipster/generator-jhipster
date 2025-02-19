@@ -205,13 +205,13 @@ class UserServiceIT {
     private Long numberOfUsers;
 
     @BeforeEach
-    public void countUsers() {
+    void countUsers() {
         numberOfUsers = userRepository.count()<%- reactorBlock %>;
     }
 
 <%_ } _%>
     @BeforeEach
-    public void init() {
+    void init() {
 <%_ if (databaseTypeCouchbase) { _%>
         mockAuthentication();
 <%_ } _%>
@@ -255,7 +255,7 @@ class UserServiceIT {
     }
 
     @AfterEach
-    public void cleanupAndCheck() {
+    void cleanupAndCheck() {
 <%_ if (cacheProviderAny) { _%>
         cacheManager.getCacheNames().stream()
             .map(cacheName -> this.cacheManager.getCache(cacheName))

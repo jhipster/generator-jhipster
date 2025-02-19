@@ -51,7 +51,7 @@ class ExceptionTranslatorIT {
 <%_ if (authenticationUsesCsrf) { _%>
 
     @BeforeEach
-    public void setupCsrf() {
+    void setupCsrf() {
         webTestClient = webTestClient.mutateWith(csrf());
     }
 <%_ } _%>
