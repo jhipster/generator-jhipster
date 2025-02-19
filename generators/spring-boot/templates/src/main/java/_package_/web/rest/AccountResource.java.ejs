@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 <%_ if (reactive) { _%>
 import java.util.Objects;
@@ -135,15 +136,15 @@ public class AccountResource {
 
   <%_ if (!authenticationTypeJwt) { _%>
     /**
-     * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
+     * {@code GET  /authenticate} : check if the user is authenticated.
      *
-     * @param principal the authentication principal.
-     * @return the login if the user is authenticated.
+     * @return the {@link ResponseEntity} with status {@code 204 (No Content)},
+     * or with status {@code 401 (Unauthorized)} if not authenticated.
      */
-    @GetMapping(value = "/authenticate", produces = MediaType.TEXT_PLAIN_VALUE)
-    public String isAuthenticated(Principal principal) {
+    @GetMapping("/authenticate")
+    public ResponseEntity<Void> isAuthenticated(Principal principal) {
         LOG.debug("REST request to check if the current user is authenticated");
-        return principal == null ? null : principal.getName();
+        return ResponseEntity.status(principal == null ? HttpStatus.UNAUTHORIZED : HttpStatus.NO_CONTENT).build();
     }
 
   <%_ } _%>
