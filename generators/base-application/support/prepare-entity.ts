@@ -139,10 +139,9 @@ export const entityDefaultConfig = {
 };
 
 export default function prepareEntity(entityWithConfig: Entity, generator, application: ApplicationType) {
-  const { applicationTypeMicroservice, microfrontend } = application;
+  const { applicationTypeMicroservice, microfrontend, dtoSuffix = '' } = application;
 
   const entityName = upperFirst(entityWithConfig.name);
-  const entitySuffix = entityWithConfig.entitySuffix ?? application.entitySuffix;
   mutateData(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
   if (entityWithConfig.changelogDate) {
@@ -170,45 +169,33 @@ export default function prepareEntity(entityWithConfig: Entity, generator, appli
 
   mutateData(entityWithConfig, {
     entityNameCapitalized: entityName,
-    entityClass: upperFirst(entityName),
-    entityInstance: lowerFirst(entityName),
-    entityTableName: hibernateSnakeCase(entityName),
     entityNamePlural: pluralize(entityName),
+    entityNamePluralizedAndSpinalCased: ({ entityNamePlural }) => kebabCase(entityNamePlural),
+    entityClass: upperFirst(entityName),
+    entityClassPlural: ({ entityNamePlural }) => upperFirst(entityNamePlural),
+    entityInstance: lowerFirst(entityName),
+    entityInstancePlural: ({ entityNamePlural }) => lowerFirst(entityNamePlural),
+    entityTableName: hibernateSnakeCase(entityName),
     entityAuthority: entityWithConfig.adminEntity ? 'ROLE_ADMIN' : undefined,
   });
 
+  const entitySuffix = entityWithConfig.entitySuffix ?? application.entitySuffix;
+  const dto = entityWithConfig.dto && entityWithConfig.dto !== NO_DTO;
   mutateData(entityWithConfig, {
     persistClass: `${entityWithConfig.entityClass}${entitySuffix ?? ''}`,
     persistInstance: `${entityWithConfig.entityInstance}${entitySuffix ?? ''}`,
-  });
-
-  const dto = entityWithConfig.dto && entityWithConfig.dto !== NO_DTO;
-  if (dto) {
-    const { dtoSuffix = '' } = application;
-    mutateData(entityWithConfig, {
-      dtoClass: `${entityWithConfig.entityClass}${dtoSuffix}`,
-      dtoInstance: `${entityWithConfig.entityInstance}${dtoSuffix}`,
-      restClass: ({ dtoClass }) => dtoClass!,
-      restInstance: ({ dtoInstance }) => dtoInstance!,
-    });
-  } else {
-    mutateData(entityWithConfig, {
-      restClass: ({ persistClass }) => persistClass!,
-      restInstance: ({ persistInstance }) => persistInstance!,
-    });
-  }
-
-  mutateData(entityWithConfig, {
-    entityNamePluralizedAndSpinalCased: kebabCase(entityWithConfig.entityNamePlural),
-    entityClassPlural: upperFirst(entityWithConfig.entityNamePlural),
-    entityInstancePlural: lowerFirst(entityWithConfig.entityNamePlural),
+    // Even if dto is not used, we need to generate the dtoClass and dtoInstance is added to avoid errors in rendered relationships templates. The resulting class will not exist then.
+    dtoClass: `${entityWithConfig.entityClass}${dtoSuffix}`,
+    dtoInstance: `${entityWithConfig.entityInstance}${dtoSuffix}`,
+    restClass: dto ? ({ dtoClass }) => dtoClass! : ({ persistClass }) => persistClass!,
+    restInstance: dto ? ({ dtoInstance }) => dtoInstance! : ({ persistInstance }) => persistInstance!,
   });
 
   mutateData(entityWithConfig, {
     // Implement i18n variant ex: 'male', 'female' when applied
     entityI18nVariant: 'default',
-    entityClassHumanized: startCase(entityWithConfig.entityNameCapitalized),
-    entityClassPluralHumanized: startCase(entityWithConfig.entityClassPlural),
+    entityClassHumanized: ({ entityNameCapitalized }) => startCase(entityNameCapitalized),
+    entityClassPluralHumanized: ({ entityNamePlural }) => startCase(entityNamePlural),
   });
 
   mutateData(entityWithConfig, {
@@ -218,6 +205,7 @@ export default function prepareEntity(entityWithConfig: Entity, generator, appli
     entityAngularNamePlural: data => pluralize(data.entityAngularName),
     entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
   });
+
   entityWithConfig.entityFolderName = entityWithConfig.clientRootFolder
     ? `${entityWithConfig.clientRootFolder}/${entityWithConfig.entityFileName}`
     : entityWithConfig.entityFileName;
