@@ -145,7 +145,7 @@
     "execa": "9.5.2",
     "fast-xml-parser": "5.0.6",
     "glob": "11.0.1",
-    "globals": "15.15.0",
+    "globals": "16.0.0",
     "globby": "14.1.0",
     "isbinaryfile": "5.0.4",
     "java-lint": "0.3.0",
