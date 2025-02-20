@@ -649,18 +649,18 @@ _%>
 <%_ } _%>
 <%_ if (reactive && authenticationUsesCsrf) { _%>
     @BeforeEach
-    public void setupCsrf() {
+    void setupCsrf() {
         webTestClient = webTestClient.mutateWith(csrf());
     }
 
 <%_ } _%>
     @BeforeEach
-    public void initTest() {
+    void initTest() {
         <%= persistInstance %> = createEntity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>em<% } %>);
     }
 
     @AfterEach
-    public void cleanup() {
+    void cleanup() {
         if (inserted<%= persistClass %> != null) {
             <%= entityInstance %>Repository.delete(inserted<%= persistClass %>)<%= reactorBlock %>;
 <%_ if (searchEngineElasticsearch) { _%>

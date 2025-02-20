@@ -67,7 +67,7 @@ class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
 <%_ if (authenticationUsesCsrf) { _%>
 
     @BeforeEach
-    public void setupCsrf() {
+    void setupCsrf() {
         client = client.mutateWith(csrf());
     }
 <%_ } _%>

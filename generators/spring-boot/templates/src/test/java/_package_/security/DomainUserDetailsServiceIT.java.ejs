@@ -142,14 +142,14 @@ class DomainUserDetailsServiceIT {
     }
 
     @BeforeEach
-    public void init() {
+    void init() {
         userRepository.save(getUserOne())<%- callBlock %>;
         userRepository.save(getUserTwo())<%- callBlock %>;
         userRepository.save(getUserThree())<%- callBlock %>;
     }
 
     @AfterEach
-    public void cleanup () {
+    void cleanup () {
         userService.deleteUser(USER_ONE_LOGIN)<%- callBlock %>;
         userService.deleteUser(USER_TWO_LOGIN)<%- callBlock %>;
         userService.deleteUser(USER_THREE_LOGIN)<%- callBlock %>;

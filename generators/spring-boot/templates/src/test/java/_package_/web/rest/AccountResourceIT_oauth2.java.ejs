@@ -110,7 +110,7 @@ class AccountResourceIT {
 
 <%_ if (reactive) { _%>
     @BeforeEach
-    public void setup() {
+    void setup() {
         claims = new HashMap<>();
         claims.put("groups", Collections.singletonList(AuthoritiesConstants.ADMIN));
         claims.put("sub", "jane");
@@ -120,7 +120,7 @@ class AccountResourceIT {
 <%_ } _%>
 <%_ if (syncUserWithIdp) { _%>
     @AfterEach
-    public void cleanup() {
+    void cleanup() {
         // Remove syncUserWithIdp users
     <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
