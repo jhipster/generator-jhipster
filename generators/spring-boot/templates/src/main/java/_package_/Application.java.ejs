@@ -91,6 +91,11 @@ public class <%= mainClass %> {
      * @param args the command line arguments.
      */
     public static void main(String[] args) {
+<%_ if (cacheProvidedHazelcast) { _%>
+        // Workaround Hazelcast issue: https://github.com/hazelcast/hazelcast/issues/26361#issuecomment-2489778475
+        System.setProperty("spring.devtools.restart.enabled", "false");
+
+<%_ } _%>
         SpringApplication app = new SpringApplication(<%= mainClass %>.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
