@@ -159,7 +159,7 @@ function convertAnnotationsToOptions(
   const result = {};
   annotations.forEach(annotation => {
     const annotationName = lowerFirst(annotation.optionName);
-    const value = annotation.optionValue ? annotation.optionValue : true;
+    const value = annotation.optionValue ?? true;
     if (annotationName in result) {
       const previousValue = result[annotationName];
       if (Array.isArray(previousValue)) {
