@@ -120,7 +120,7 @@
     "update-snapshots": "esmocha lib/jdl generators cli .blueprint --update-snapshot --no-insight --forbid-only"
   },
   "dependencies": {
-    "@eslint/js": "9.20.0",
+    "@eslint/js": "9.21.0",
     "@faker-js/faker": "9.5.0",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
@@ -139,7 +139,7 @@
     "dockerfile-ast": "0.7.0",
     "dot-properties": "1.1.0",
     "ejs": "3.1.10",
-    "eslint": "9.20.1",
+    "eslint": "9.21.0",
     "eslint-plugin-import-x": "4.6.1",
     "eslint-plugin-unused-imports": "4.1.4",
     "execa": "9.5.2",
@@ -177,7 +177,7 @@
   },
   "devDependencies": {
     "@actions/core": "1.11.1",
-    "@eslint/core": "0.11.0",
+    "@eslint/core": "0.12.0",
     "@node-loaders/esbuild": "2.0.0",
     "@types/chai": "5.0.1",
     "@types/estree": "1.0.6",
