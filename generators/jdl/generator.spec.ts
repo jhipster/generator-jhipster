@@ -467,4 +467,108 @@ application { config { baseName gatewayApp applicationType gateway } }
       });
     });
   });
+
+  describe('importing jdl', () => {
+    describe('with Entity annotations', () => {
+      before(async () => {
+        await helpers
+          .runJDL(
+            `
+application { config { baseName jhipster } entities * }
+
+@EntityFalse(false)
+@EntityZero(0)
+@EntityEmpty("")
+entity AnnotatedEntity {
+  @FieldFalse(false)
+  @FieldZero(0)
+  @FieldEmpty("")
+  annotatedField String
+}
+
+entity RelatedEntity
+
+relationship ManyToOne {
+  @RelationshipFalse(false)
+  @RelationshipZero(0)
+  @RelationshipEmpty("")
+  RelatedEntity to AnnotatedEntity
+}
+`,
+          )
+          .withOptions({
+            jsonOnly: true,
+            skipApplication: true,
+          });
+      });
+
+      it('should generate expected Entity config', () => {
+        expect(runResult.getSnapshot('**/.jhipster/**')).toMatchInlineSnapshot(`
+{
+  ".jhipster/AnnotatedEntity.json": {
+    "contents": "{
+  "annotations": {
+    "entityEmpty": "",
+    "entityFalse": false,
+    "entityZero": 0
+  },
+  "applications": [
+    "jhipster"
+  ],
+  "fields": [
+    {
+      "fieldName": "annotatedField",
+      "fieldType": "String",
+      "options": {
+        "fieldEmpty": "",
+        "fieldFalse": false,
+        "fieldZero": 0
+      }
+    }
+  ],
+  "name": "AnnotatedEntity",
+  "relationships": [
+    {
+      "options": {
+        "relationshipEmpty": "",
+        "relationshipFalse": false,
+        "relationshipZero": 0
+      },
+      "otherEntityName": "relatedEntity",
+      "otherEntityRelationshipName": "annotatedEntity",
+      "relationshipName": "relatedEntity",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ]
+}
+",
+    "stateCleared": "modified",
+  },
+  ".jhipster/RelatedEntity.json": {
+    "contents": "{
+  "annotations": {},
+  "applications": [
+    "jhipster"
+  ],
+  "fields": [],
+  "name": "RelatedEntity",
+  "relationships": [
+    {
+      "otherEntityName": "annotatedEntity",
+      "otherEntityRelationshipName": "relatedEntity",
+      "relationshipName": "annotatedEntity",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ]
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`);
+      });
+    });
+  });
 });
