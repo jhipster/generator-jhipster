@@ -25,7 +25,7 @@ export const updateApplicationEntitiesTransform = ({
         yoRcFileInMemory = file;
         return undefined;
       }
-      if (entitiesMatcher.match(file.path)) {
+      if (entitiesMatcher.match(normalizePath(file.path))) {
         entities.push(basename(file.path).replace('.json', ''));
       }
       return file;
