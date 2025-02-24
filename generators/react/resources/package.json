@@ -3,7 +3,7 @@
     "@fortawesome/fontawesome-svg-core": "6.7.2",
     "@fortawesome/free-solid-svg-icons": "6.7.2",
     "@fortawesome/react-fontawesome": "0.2.2",
-    "@reduxjs/toolkit": "2.5.1",
+    "@reduxjs/toolkit": "2.6.0",
     "axios": "1.7.9",
     "bootstrap": "5.3.3",
     "bootswatch": "5.3.3",
