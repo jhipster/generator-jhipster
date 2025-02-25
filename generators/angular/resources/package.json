@@ -19,8 +19,8 @@
     "zone.js": "0.15.0"
   },
   "devDependencies": {
-    "@angular-architects/module-federation": "19.0.1",
-    "@angular-architects/module-federation-runtime": "19.0.1",
+    "@angular-architects/module-federation": "19.0.2",
+    "@angular-architects/module-federation-runtime": "19.0.2",
     "@angular-builders/custom-esbuild": "19.0.0",
     "@angular-builders/custom-webpack": "19.0.0",
     "@angular-builders/jest": "19.0.0",
