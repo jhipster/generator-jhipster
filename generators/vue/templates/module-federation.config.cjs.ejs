@@ -36,8 +36,8 @@ module.exports = {
   name: '<%= lowercaseBaseName %>',
 <%_ if (applicationTypeMicroservice) { _%>
   exposes: {
-    './entities-router': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities.ts',
-    './entities-menu': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
+    './entities-router': './app/router/entities.ts',
+    './entities-menu': './app/entities/entities-menu.vue',
   },
 <%_ } _%>
   filename: 'remoteEntry.js',
