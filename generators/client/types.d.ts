@@ -5,13 +5,15 @@ import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/
 import type { PostWritingEntitiesTaskParam } from '../../lib/types/application/tasks.js';
 import type { PartialAngularApplication } from '../angular/types-partial.js';
 import type { Language } from '../languages/support/languages.ts';
+import type { PartialApplicationBootstrapApplicationClient } from '../bootstrap-application-client/types-partials.js';
 import type Command from './command.ts';
 
 type ApplicationClientProperties = ExportApplicationPropertiesFromCommand<typeof Command>;
 
 export type FrontendApplication = ApplicationClientProperties &
   JavaScriptApplication &
-  CypressApplication & {
+  CypressApplication &
+  PartialApplicationBootstrapApplicationClient & {
     webappLoginRegExp: string;
     clientWebappDir?: string;
     webappEnumerationsDir?: string;
