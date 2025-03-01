@@ -30,7 +30,7 @@ import TranslateDirective from '../language/translate.directive';
 <%_ if (enableTranslation) { _%>
     <div <%= jhiPrefix %>Translate="global.item-count" [translateValues]="{ first: first(), second: second(), total: total() }"></div>
 <%_ } else { _%>
-    <div>__jhiTransformTranslate__('global.item-count')</div>
+    <div>__jhiTransformTranslate__('global.item-count', { "first": "{{ first() }}", "second": "{{ second() }}", "total": "{{ total() }}" })</div>
 <%_ } _%>
   `,
 <%_ if (enableTranslation) { _%>
