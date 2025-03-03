@@ -19,8 +19,8 @@
     "zone.js": "0.15.0"
   },
   "devDependencies": {
-    "@angular-architects/module-federation": "19.0.2",
-    "@angular-architects/module-federation-runtime": "19.0.2",
+    "@angular-architects/module-federation": "19.0.3",
+    "@angular-architects/module-federation-runtime": "19.0.3",
     "@angular-builders/custom-esbuild": "19.0.0",
     "@angular-builders/custom-webpack": "19.0.0",
     "@angular-builders/jest": "19.0.0",
@@ -50,7 +50,7 @@
     "postcss-rtlcss": "5.6.0",
     "rimraf": "5.0.8",
     "ts-jest": "29.2.6",
-    "typescript": "5.7.3",
+    "typescript": "5.8.2",
     "typescript-eslint": "8.25.0",
     "webpack": "5.98.0",
     "webpack-bundle-analyzer": "4.10.2",
