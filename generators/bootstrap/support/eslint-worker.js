@@ -18,6 +18,12 @@ export default async ({ cwd, filePath, fileContents, extensions, config, additio
         ts.configs.base,
         ...additionalConfig,
         config ? JSON.parse(config) : jhipster.base,
+        {
+          files: ['**/*.tsx'],
+          rules: {
+            'unused-imports/no-unused-imports': 'off',
+          },
+        },
       ),
     });
   }
