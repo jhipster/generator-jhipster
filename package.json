@@ -130,7 +130,7 @@
     "@yeoman/namespace": "1.0.1",
     "@yeoman/transform": "2.1.0",
     "@yeoman/types": "1.5.0",
-    "axios": "1.8.1",
+    "axios": "1.8.2",
     "chalk": "5.4.1",
     "chevrotain": "11.0.3",
     "commander": "13.1.0",
