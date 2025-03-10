@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "eslint-config-prettier": "10.0.2",
+    "eslint-config-prettier": "10.1.1",
     "eslint-plugin-prettier": "5.2.3",
     "husky": "9.1.7",
     "lint-staged": "15.4.3"
