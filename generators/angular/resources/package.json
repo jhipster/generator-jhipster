@@ -8,7 +8,7 @@
     "@ngx-translate/core": "16.0.4",
     "@ngx-translate/http-loader": "16.0.1",
     "@popperjs/core": "2.11.8",
-    "@stomp/rx-stomp": "2.0.0",
+    "@stomp/rx-stomp": "2.0.1",
     "bootstrap": "5.3.3",
     "bootswatch": "5.3.3",
     "ngx-cookie-service": "19.1.2",
