@@ -41,7 +41,7 @@
     "@types/react-redux": "7.1.34",
     "@types/redux": "3.6.31",
     "@types/webpack-env": "1.18.8",
-    "autoprefixer": "10.4.20",
+    "autoprefixer": "10.4.21",
     "browser-sync": "3.0.3",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "13.0.0",
