@@ -187,7 +187,7 @@
     "cpy-cli": "5.0.0",
     "ejs-lint": "2.0.1",
     "eslint-config-prettier": "10.1.1",
-    "eslint-import-resolver-typescript": "3.8.5",
+    "eslint-import-resolver-typescript": "3.8.6",
     "eslint-plugin-chai-friendly": "1.0.1",
     "eslint-plugin-prettier": "5.2.3",
     "esmocha": "3.0.0",
