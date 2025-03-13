@@ -61,7 +61,7 @@ const command = {
         type: 'list',
         message: 'which sample do you want to generate?',
         choices: async answers => {
-          const samples = await getGithubSamplesGroup(gen.templatePath(), answers.samplesFolder ?? gen.samplesFolder);
+          const samples = await getGithubSamplesGroup(gen.templatePath(), answers.samplesGroup ?? gen.samplesGroup);
           return Object.keys(samples.samples);
         },
       }),
