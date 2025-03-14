@@ -143,7 +143,7 @@
     "eslint-plugin-import-x": "4.6.1",
     "eslint-plugin-unused-imports": "4.1.4",
     "execa": "9.5.2",
-    "fast-xml-parser": "5.0.8",
+    "fast-xml-parser": "5.0.9",
     "glob": "11.0.1",
     "globals": "16.0.0",
     "globby": "14.1.0",
