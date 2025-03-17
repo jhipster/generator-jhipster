@@ -65,7 +65,7 @@ jobs:
       #----------------------------------------------------------------------
       - uses: jhipster/actions/build-jhipster-bom@v0
         with:
-          jhipster-bom-ref: main
+          jhipster-bom-ref: nullable_specification
       - name: 'GENERATION: generate blueprint'
         run: |
           cd ..
