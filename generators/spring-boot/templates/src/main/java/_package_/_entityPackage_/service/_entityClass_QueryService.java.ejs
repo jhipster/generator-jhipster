@@ -126,29 +126,18 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
         Specification<<%= persistClass %>> specification = Specification.where(null);
         if (criteria != null) {
             // This has to be called first, because the distinct method returns null
-            if (criteria.getDistinct() != null) {
-                specification = specification.and(distinct(criteria.getDistinct()));
-            }
-            if (criteria.get<%= primaryKey.nameCapitalized %>() != null) {
-                specification = specification.and(<%= primaryKey.javaBuildSpecification %>(criteria.get<%= primaryKey.nameCapitalized %>(), <%= persistClass %>_.<%= primaryKey.name %>));
-            }
-<%_
-fields.forEach((field) => {
-  if (field.id || field.transient) return;
-  if (field.filterableField) { _%>
-            if (criteria.get<%= field.fieldInJavaBeanMethod %>() != null) {
-                specification = specification.and(<%= field.fieldJavaBuildSpecification %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= persistClass %>_.<%= field.fieldName %>));
-            }
-  <%_ }
-});
-
-relationships.forEach((relationship) => {
-  const metamodelFieldName = (relationship.relationshipManyToMany || relationship.relationshipOneToMany) ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName; _%>
-if (criteria.get<%= relationship.relationshipNameCapitalized %>Id() != null) {
-    specification = specification.and(buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(),
-        root -> root.join(<%= persistClass %>_.<%= metamodelFieldName %>, JoinType.LEFT).get(<%= relationship.otherEntity.persistClass %>_.<%= relationship.otherEntity.primaryKey.name %>)));
-}
-<%_ }); /* forEach */ _%>
+            specification = Specification.allOf(
+                Boolean.TRUE.equals(criteria.getDistinct()) ? distinct(criteria.getDistinct()) : null
+<%_ for (const field of fields.filter(field => !field.transient && field.filterableField)) { _%>
+                ,
+                <%= field.fieldJavaBuildSpecification %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= persistClass %>_.<%= field.fieldName %>)
+<%_ } _%>
+<%_ for (const relationship of relationships) { _%>
+                ,
+                buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(),
+                    root -> root.join(<%= persistClass %>_.<%= relationship.propertyName %>, JoinType.LEFT).get(<%= relationship.otherEntity.persistClass %>_.<%= relationship.otherEntity.primaryKey.name %>))
+<%_ } _%>
+            );
         }
         return specification;
     }
