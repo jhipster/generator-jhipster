@@ -48,6 +48,8 @@ jobs:
             liquibase: jdl
             environment: prod
             war: 0
+    env:
+      JHIPSTER_DEPENDENCIES_VERSION: '0.0.0-CICD'
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
@@ -69,28 +71,33 @@ jobs:
           node-version: ${{ steps.setup.outputs.node-version }}
           java-version: ${{ steps.setup.outputs.java-version }}
           maven-cache: true
+          binary-dir: ${{ github.workspace }}/generator-jhipster/bin
+      - run: npm ci --ignore-scripts
+        working-directory: ${{ github.workspace }}/generator-jhipster
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - name: 'GENERATION: install JHipster'
-        run: $JHI_SCRIPTS/10-install-jhipster.sh
+      - uses: jhipster/actions/build-jhipster-bom@v0
+        with:
+          jhipster-bom-ref: main
       - name: 'GENERATION: config'
         run: $JHI_SCRIPTS/11-generate-config.sh
       - name: 'GENERATION: project'
         run: $JHI_SCRIPTS/12-generate-project.sh --force --creation-timestamp '2020-01-01'
         env:
           JHI_SAMPLES: ${{ github.workspace }}/generator-jhipster/test-integration/incremental-changelog-samples
+          JHI_CLI: jhipster.cjs
       - name: 'GENERATION: incremental project'
         run: $JHI_SCRIPTS/12-generate-project.sh --incremental-changelog --force
         env:
           JHI_SAMPLES: ${{ github.workspace }}/generator-jhipster/test-integration/incremental-changelog-samples
           JHI_APP: ${{ matrix.app-type }}-post
+          JHI_CLI: jhipster.cjs
       - name: 'GENERATION: incremental changes'
         run: |
           git add .
           git -c color.ui=always diff --cached
-      - name: 'GENERATION: jhipster info'
-        run: $JHI_SCRIPTS/14-jhipster-info.sh
+      - run: jhipster.cjs info
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
