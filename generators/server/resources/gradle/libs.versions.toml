@@ -9,7 +9,7 @@ feign-reactor-bom = { module = 'com.playtika.reactivefeign:feign-reactor-bom', v
 testng = { module = 'org.testng:testng', version = '7.11.0' }
 cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.21.1' }
 
-mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.5.0' }
+mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.5.1' }
 
 neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '2.17.0' }
 
