@@ -79,7 +79,7 @@ jobs:
       #----------------------------------------------------------------------
       - uses: jhipster/actions/build-jhipster-bom@v0
         with:
-          jhipster-bom-ref: nullable_specification
+          jhipster-bom-ref: main
       - name: 'GENERATION: config'
         run: $JHI_SCRIPTS/11-generate-config.sh
       - name: 'GENERATION: project'
