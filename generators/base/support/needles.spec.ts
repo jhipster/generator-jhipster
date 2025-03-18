@@ -242,19 +242,37 @@ ${needlePrefix} jhipster-needle-a-needle"
     it('returned function should add contentToAdd', () => {
       const log = test.mock.fn(createJHipsterLogger());
       const needleCallback = createNeedleCallback({ contentToAdd, needle });
-      expect(needleCallback.call({ log } as any, `\\\\ jhipster-needle-${needle}`, 'file')).toMatchInlineSnapshot(`
+      expect(needleCallback.call({ log } as any, `// jhipster-needle-${needle}`, 'file')).toMatchInlineSnapshot(`
 "content to add
-\\\\ jhipster-needle-a-needle"
+// jhipster-needle-a-needle"
 `);
     });
 
     it('returned function should add contentToAdd array', () => {
       const log = test.mock.fn(createJHipsterLogger());
       const needleCallback = createNeedleCallback({ contentToAdd: [contentToAdd, `${contentToAdd}2`], needle });
-      expect(needleCallback.call({ log } as any, `\\\\ jhipster-needle-${needle}`, 'any-file')).toMatchInlineSnapshot(`
+      expect(needleCallback.call({ log } as any, `// jhipster-needle-${needle}`, 'any-file')).toMatchInlineSnapshot(`
 "content to add
 content to add2
-\\\\ jhipster-needle-a-needle"
+// jhipster-needle-a-needle"
+`);
+    });
+
+    it('contentToAdd should be called', () => {
+      const log = test.mock.fn(createJHipsterLogger());
+      const contentToAdd = test.mock.fn((_arg0: string, _arg1: any) => 'result content');
+      const needleCallback = createNeedleCallback({ contentToAdd, needle });
+      const content = `  // jhipster-needle-${needle}`;
+      expect(needleCallback.call({ log } as any, content, 'file')).toMatchInlineSnapshot(`"result content"`);
+      expect(contentToAdd.mock.callCount()).toBe(1);
+      expect(contentToAdd.mock.calls[0].arguments[0]).toBe(content);
+      expect(contentToAdd.mock.calls[0].arguments[1]).toMatchInlineSnapshot(`
+{
+  "indentPrefix": "  ",
+  "needleIndent": 2,
+  "needleIndex": 2,
+  "needleLineIndex": 0,
+}
 `);
     });
   });
