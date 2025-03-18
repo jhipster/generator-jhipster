@@ -34,6 +34,7 @@ import command from './command.<%- blueprintMjsExtension %>';
 <%_ if (application.dynamic) { _%>
 // eslint-disable-next-line import/prefer-default-export
 export async function createGenerator(env) {
+  /** @type {typeof import('generator-jhipster/generators/<%= jhipsterGenerator %>').default} */
   let <%= generatorClass %>Generator;
   try {
     // Try to use locally installed generator-jhipster
