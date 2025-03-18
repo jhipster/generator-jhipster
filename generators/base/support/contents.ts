@@ -24,7 +24,7 @@
  * @returns normalized line ending string
  */
 
-export function normalizeLineEndings(str: string, lineEnding: string): string {
+export function normalizeLineEndings(str: string, lineEnding: '\n' | '\r\n'): string {
   return str.replace(/\r\n|\r|\n/g, lineEnding);
 }
 
