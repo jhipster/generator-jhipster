@@ -22,6 +22,7 @@ export * from './checks/index.js';
 export * from './doc.js';
 export * from './files.js';
 export { default as generatedAnnotationTransform } from './generated-annotation-transform.js';
+export * from './java-enum.js';
 export * from './java-file-edit.js';
 export * from './java-formatting.js';
 export * from './key-store.js';

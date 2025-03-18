@@ -24,6 +24,7 @@ import {
   addJavaAnnotation,
   addJavaImport,
   checkJava,
+  createEnumNeedleCallback,
   generatedAnnotationTransform,
   injectJavaConstructorParam,
   injectJavaConstructorSetter,
@@ -112,7 +113,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
         source.hasJavaProperty = (property: string) => application.javaProperties![property] !== undefined;
         source.hasJavaManagedProperty = (property: string) => application.javaManagedProperties![property] !== undefined;
       },
-      needles({ source }) {
+      editJavaFileNeedles({ source }) {
         source.editJavaFile = (
           file,
           { staticImports = [], imports = [], annotations = [], constructorParams = [], fields = [], springBeans = [] },
@@ -137,6 +138,10 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
             ...editFileCallback,
           );
         };
+      },
+      addItemsToJavaEnumFile({ source }) {
+        source.addItemsToJavaEnumFile = (file: string, { enumName = basename(file, '.java'), enumValues }) =>
+          this.editFile(file, createEnumNeedleCallback({ enumName, enumValues }));
       },
       imperativeOrReactive({ applicationDefaults }) {
         applicationDefaults({
