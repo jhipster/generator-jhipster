@@ -60,9 +60,6 @@ jobs:
         with:
           path: generator-jhipster
           fetch-depth: 2
-      - name: 'SETUP: environment'
-        id: setup
-        uses: ./generator-jhipster/.github/actions/setup
       - uses: jhipster/actions/setup-runner@v0
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
@@ -73,8 +70,9 @@ jobs:
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - name: 'GENERATION: install JHipster'
-        run: $JHI_SCRIPTS/10-install-jhipster.sh
+      - uses: jhipster/actions/build-jhipster-bom@v0
+        with:
+          jhipster-bom-ref: main
       - name: 'GENERATION: project'
         id: project
         run: jhipster from-issue ${{ inputs.issue || github.event.issue.number }} --no-code-workspace --disable-blueprints
