@@ -5,6 +5,7 @@ import { snakeCase } from 'lodash-es';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import { defaultHelpers as helpers, result } from '../../lib/testing/index.js';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -26,6 +27,36 @@ describe(`generator - ${generator}`, () => {
 
     it('should match files snapshot', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
+
+  describe('source api', () => {
+    describe('editJavaFile with springBeans', () => {
+      before(async () => {
+        const javaFile = 'src/main/java/com/exampla/Test.java';
+        const fileContent = `package com.example;
+public class Test {
+    public Test() {}
+}
+`;
+
+        await helpers
+          .runJHipster(generator)
+          .withFiles({ [javaFile]: fileContent })
+          .withJHipsterConfig()
+          .withTask(
+            'postWriting',
+            asPostWritingTask(function ({ source }) {
+              source.editJavaFile!(javaFile, {
+                springBeans: [{ beanClass: 'BeanClass', beanName: 'beanName', package: 'com.example' }],
+              });
+            }),
+          );
+      });
+
+      it('should match file content snapshot', () => {
+        expect(result.getSnapshot('**/Test.java')).toMatchSnapshot();
+      });
     });
   });
 });

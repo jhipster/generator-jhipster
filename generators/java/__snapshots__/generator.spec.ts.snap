@@ -1,5 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`generator - java source api editJavaFile with springBeans should match files snapshot 1`] = `
+{
+  "src/main/java/com/exampla/Test.java": {
+    "contents": "package com.example;
+import com.example.BeanClass;
+public class Test {
+    private final BeanClass beanName;
+
+    public Test(BeanClass beanName) {
+        this.beanName = beanName;
+}
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - java with default config should match files snapshot 1`] = `
 {
   ".yo-rc.json": {

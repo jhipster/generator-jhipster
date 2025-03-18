@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { basename } from 'node:path';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../../../base-application/index.js';
 import { JAVA_COMPATIBLE_VERSIONS } from '../../../generator-constants.js';
@@ -24,6 +25,9 @@ import {
   addJavaImport,
   checkJava,
   generatedAnnotationTransform,
+  injectJavaConstructorParam,
+  injectJavaConstructorSetter,
+  injectJavaField,
   isReservedJavaKeyword,
   javaMainPackageTemplatesBlock,
   matchMainJavaFiles,
@@ -109,14 +113,30 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
         source.hasJavaManagedProperty = (property: string) => application.javaManagedProperties![property] !== undefined;
       },
       needles({ source }) {
-        source.editJavaFile = (file, { staticImports = [], imports = [], annotations = [] }, ...editFileCallback) =>
-          this.editFile(
+        source.editJavaFile = (
+          file,
+          { staticImports = [], imports = [], annotations = [], constructorParams = [], fields = [], springBeans = [] },
+          ...editFileCallback
+        ) => {
+          const className = basename(file, '.java');
+          return this.editFile(
             file,
             ...staticImports.map(classPath => addJavaImport(classPath, { staticImport: true })),
             ...imports.map(classPath => addJavaImport(classPath)),
             ...annotations.map(annotation => addJavaAnnotation(annotation)),
+            constructorParams.length > 0 ? injectJavaConstructorParam({ className, param: constructorParams }) : c => c,
+            fields.length > 0 ? injectJavaField({ className, field: fields }) : c => c,
+            ...springBeans
+              .map(({ package: javaPackage, beanClass, beanName }) => [
+                addJavaImport(`${javaPackage}.${beanClass}`),
+                injectJavaField({ className, field: `private final ${beanClass} ${beanName};` }),
+                injectJavaConstructorParam({ className, param: `${beanClass} ${beanName}` }),
+                injectJavaConstructorSetter({ className, setter: `this.${beanName} = ${beanName};` }),
+              ])
+              .flat(),
             ...editFileCallback,
           );
+        };
       },
       imperativeOrReactive({ applicationDefaults }) {
         applicationDefaults({
