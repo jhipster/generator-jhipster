@@ -181,8 +181,8 @@ export default class EnvironmentBuilder {
       // Register jhipster generators.
       const generators = await this.env.lookup({
         packagePaths: [this.localBlueprintPath],
-        lookups: ['.'],
-        customizeNamespace: ns => ns?.replace('.blueprint', '@jhipster/jhipster-local'),
+        lookups: ['.', './*/generators'],
+        customizeNamespace: ns => ns?.replaceAll(':generators:', ':').replace('.blueprint', '@jhipster/jhipster-local'),
       });
       if (generators.length > 0) {
         this.env.sharedOptions.composeWithLocalBlueprint = true;

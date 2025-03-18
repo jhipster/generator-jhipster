@@ -69,7 +69,7 @@ export const generatorFiles = asWriteFilesSection<any>({
   generator: [
     {
       path: 'generators/generator',
-      to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
+      to: ctx => `${ctx.application.blueprintsPath}${ctx.generator.replaceAll(':', '/generators/')}`,
       templates: [
         { sourceFile: 'index.mjs', destinationFile: ctx => `index.${ctx.blueprintMjsExtension}` },
         {
@@ -92,7 +92,7 @@ export const generatorFiles = asWriteFilesSection<any>({
     },
     {
       path: 'generators/generator',
-      to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
+      to: ctx => `${ctx.application.blueprintsPath}${ctx.generator.replaceAll(':', '/generators/')}`,
       condition(ctx) {
         return !ctx.written && ctx.priorities.find(priority => priority.name === 'writing');
       },
