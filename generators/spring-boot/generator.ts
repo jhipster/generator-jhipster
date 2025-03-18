@@ -284,6 +284,13 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
             annotations: [annotation],
           });
       },
+      addApplicationYamlDocument({ application, source }) {
+        source.addApplicationYamlDocument = content =>
+          this.editFile(
+            this.destinationPath(`${application.srcMainResources}config/application.yml`),
+            createNeedleCallback({ needle: 'add-application-yaml-document', autoIndent: false, contentToAdd: `---\n${content}` }),
+          );
+      },
       addLogNeedles({ source }) {
         source.addLogbackLogEntry = ({ file, name, level }) =>
           this.editFile(

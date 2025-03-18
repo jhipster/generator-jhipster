@@ -59,6 +59,16 @@ export type SpringBootSourceType = JavaSourceType &
       resources?: string[];
       publicConstructors?: string[];
     }): void;
+    /**
+     * Injects a document into the application.yml file using '---' document separator.
+     *
+     * @example
+     * addApplicationYamlDocument(`
+     * spring:
+     *  key: value
+     * `);
+     */
+    addApplicationYamlDocument?(document: string): void;
   };
 
 type CacheProviderApplication = OptionWithDerivedProperties<

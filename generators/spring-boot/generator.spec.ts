@@ -8,6 +8,7 @@ import Generator from '../server/index.js';
 
 import { filterBasicServerGenerators } from '../server/__test-support/index.js';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
+import { PRIORITY_NAMES } from '../base-application/priorities.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -69,6 +70,26 @@ describe(`generator - ${generator}`, () => {
 
       it('should match file content snapshot', () => {
         expect(runResult.getSnapshot('**/ApplicationProperties.java')).toMatchSnapshot();
+      });
+    });
+
+    describe('addApplicationYamlDocument', () => {
+      const content = `spring:\n  application:\n    name: myApp`;
+
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ skipClient: true })
+          .withTask(
+            PRIORITY_NAMES.POST_WRITING,
+            asPostWritingTask(function ({ source }) {
+              source.addApplicationYamlDocument!(content);
+            }),
+          );
+      });
+
+      it('should inject content', () => {
+        runResult.assertFileContent('src/main/resources/config/application.yml', `---\n${content}`);
       });
     });
   });
