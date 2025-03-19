@@ -304,25 +304,9 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
       },
       customizeApplicationProperties({ source, application }) {
         if (application.databaseTypeSql && !application.reactive) {
-          source.addApplicationPropertiesContent?.({
-            property: 'private final Liquibase liquibase = new Liquibase();\n',
-            propertyGetter: `public Liquibase getLiquibase() {
-    return liquibase;
-}
-`,
-            propertyClass: `public static class Liquibase {
-
-    private Boolean asyncStart = true;
-
-    public Boolean getAsyncStart() {
-        return asyncStart;
-    }
-
-    public void setAsyncStart(Boolean asyncStart) {
-        this.asyncStart = asyncStart;
-    }
-}
-`,
+          source.addApplicationPropertiesClass?.({
+            propertyType: 'Liquibase',
+            classStructure: { asyncStart: ['Boolean', 'true'] },
           });
         }
       },

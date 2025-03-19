@@ -18,7 +18,7 @@
  */
 import os from 'node:os';
 import chalk from 'chalk';
-import { sortedUniqBy } from 'lodash-es';
+import { lowerFirst, sortedUniqBy } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import {
   GENERATOR_CUCUMBER,
@@ -315,6 +315,30 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
 }
 `,
           });
+        source.addApplicationPropertiesClass = ({ propertyType, propertyName = lowerFirst(propertyType), classStructure }) => {
+          const classProperties = Object.entries(classStructure).map(([name, type]) => ({
+            name,
+            type: Array.isArray(type) ? type[0] : type,
+            defaultVaue: Array.isArray(type) ? ` = ${type[1]}` : '',
+            beanName: javaBeanCase(name),
+          }));
+          return source.addApplicationPropertiesContent!({
+            property: `private final ${propertyType} ${propertyName} = new ${propertyType}();`,
+            propertyGetter: `
+public ${propertyType} get${javaBeanCase(propertyName)}() {
+    return ${propertyName};
+}
+`,
+            propertyClass: `public static class ${propertyType} {
+${classProperties.map(({ name, type, defaultVaue }) => `\n    private ${type} ${name}${defaultVaue};`).join('\n')}
+${classProperties.map(({ name, type, beanName }) => `\n    public ${type} get${beanName}() {\n        return ${name};\n    }\n`).join('\n')}
+${classProperties
+  .map(({ name, type, beanName }) => `\n    public void set${beanName}(${type} ${name}) {\n        this.${name} = ${name};\n    }`)
+  .join('\n')}
+}
+`,
+          });
+        };
       },
       blockhound({ application, source }) {
         source.addAllowBlockingCallsInside = ({ classPath, method }) => {
