@@ -1,4 +1,5 @@
 import assert from 'node:assert';
+import { randomInt } from 'node:crypto';
 import { basename, dirname, isAbsolute, join } from 'node:path';
 import { mock } from 'node:test';
 import { merge, set, snakeCase } from 'lodash-es';
@@ -22,6 +23,7 @@ import { getDefaultJDLApplicationConfig } from '../command/jdl.js';
 import type { Entity } from '../types/base/entity.js';
 import { buildJHipster, createProgram } from '../../cli/program.mjs';
 import type { CliCommand } from '../../cli/types.js';
+import type BaseApplicationGenerator from '../../generators/base-application/generator.js';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
@@ -470,6 +472,21 @@ plugins {
     };
 
     return runResult as any;
+  }
+
+  withTask(priorityName: string, method: (...args: any[]) => any): this {
+    return this.onGenerator(async gen => {
+      const generator = gen as BaseApplicationGenerator;
+      generator.on('queueOwnTasks', () => {
+        const priority = generator._queues[priorityName];
+        const queueName = priority.queueName ?? priority.priorityName;
+        generator.queueTask({
+          taskName: `test-task${randomInt(1000)}`,
+          queueName,
+          method,
+        });
+      });
+    });
   }
 }
 
