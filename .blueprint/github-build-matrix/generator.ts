@@ -106,9 +106,6 @@ export default class extends BaseGenerator {
                       ...sample,
                       sample: sample.name ?? jobName,
                       workspaces,
-                      'build-jhipster-bom': BUILD_JHIPSTER_BOM,
-                      'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,
-                      'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
                     },
                   ];
                 })
@@ -116,6 +113,14 @@ export default class extends BaseGenerator {
             );
           }
         }
+
+        Object.values(matrix).forEach(job => {
+          Object.assign(job, {
+            'build-jhipster-bom': BUILD_JHIPSTER_BOM,
+            'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,
+            'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
+          });
+        });
 
         const { useVersionPlaceholders } = this;
         this.matrix = JSON.stringify(convertToGitHubMatrix(matrix, { randomEnvironment, useVersionPlaceholders }), null, 2);
