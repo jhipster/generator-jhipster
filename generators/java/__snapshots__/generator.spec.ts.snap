@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`generator - java source api editJavaFile with springBeans should match files snapshot 1`] = `
+exports[`generator - java source api editJavaFile with springBeans should match file content snapshot 1`] = `
 {
   "src/main/java/com/exampla/Test.java": {
     "contents": "package com.example;
