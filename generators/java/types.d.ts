@@ -80,6 +80,8 @@ export type JavaApplication = JavaBootstrapStorageProperties &
 
 export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };
 
+export type SpringBean = { package: string; beanClass: string; beanName: string };
+
 export type JavaSourceType = {
   /**
    * Add a JavaDefinition to the application.
@@ -101,7 +103,24 @@ export type JavaSourceType = {
    */
   editJavaFile?: (
     file: string,
-    { staticImports, imports, annotations }: { staticImports?: string[]; imports?: string[]; annotations?: JavaAnnotation[] },
+    options: {
+      staticImports?: string[];
+      imports?: string[];
+      annotations?: JavaAnnotation[];
+      /**
+       * Constructor parameters to add to the class.
+       */
+      constructorParams?: string[];
+      /**
+       * Fields to add to the class.
+       * Requires a valid constructor.
+       */
+      fields?: string[];
+      /**
+       * Spring beans to add to the class.
+       */
+      springBeans?: SpringBean[];
+    },
     ...editFileCallback: EditFileCallback[]
   ) => void;
 };
