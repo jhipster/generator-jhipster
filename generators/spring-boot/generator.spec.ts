@@ -7,6 +7,7 @@ import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '
 import Generator from '../server/index.js';
 
 import { filterBasicServerGenerators } from '../server/__test-support/index.js';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -46,6 +47,29 @@ describe(`generator - ${generator}`, () => {
 
     it('should match generated files snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
+
+  describe('source api', () => {
+    describe('editJavaFile with springBeans', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ skipClient: true })
+          .withTask(
+            'postWriting',
+            asPostWritingTask(function ({ source }) {
+              source.addApplicationPropertiesClass!({
+                propertyType: 'SomeNestedProperties',
+                classStructure: { enabled: ['Boolean', 'true'], tag: 'String' },
+              });
+            }),
+          );
+      });
+
+      it('should match file content snapshot', () => {
+        expect(runResult.getSnapshot('**/ApplicationProperties.java')).toMatchSnapshot();
+      });
     });
   });
 });
