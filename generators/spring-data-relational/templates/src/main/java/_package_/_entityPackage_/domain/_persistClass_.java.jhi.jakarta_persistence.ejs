@@ -60,7 +60,7 @@ import org.hibernate.type.SqlTypes;
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", length = 36<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
   <%_ } else { _%>
-    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>"<% if (field.fieldValidate === true) { %><% if (field.fieldValidationMaxLength) { %>, length = <%= field.fieldValidateRulesMaxlength %><% } %><% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %><% } %>)
+    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>"<% if (field.fieldValidate === true) { %><% if (field.fieldValidationMaxLength) { %>, length = <%= field.fieldValidateRulesMaxlength %><% } %><% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %><% } %><% if (field.fieldIsEnum && prodDatabaseTypeMysql) { %>, columnDefinition = "VARCHAR(255)"<% } %>)
   <%_ } _%>
 <&_ } -&>
 <%_ } -%>

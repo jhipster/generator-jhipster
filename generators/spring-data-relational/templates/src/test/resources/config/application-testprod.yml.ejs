@@ -53,7 +53,11 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
+  <%_ if (prodDatabaseTypeMysql) { _%>
+      ddl-auto: validate
+  <%_ } else { _%>
       ddl-auto: none
+  <%_ } _%>
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
@@ -63,8 +67,15 @@ spring:
       hibernate.cache.use_second_level_cache: false
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
+  <%_ if (prodDatabaseTypeMysql) { _%>
+      hibernate.hbm2ddl.auto: validate
+  <%_ } else { _%>
       hibernate.hbm2ddl.auto: none #TODO: temp relief for integration tests, revisit required
+  <%_ } _%>
       hibernate.type.preferred_instant_jdbc_type: TIMESTAMP
       hibernate.jdbc.time_zone: UTC
       hibernate.timezone.default_storage: NORMALIZE
       hibernate.query.fail_on_pagination_over_collection_fetch: true
+  <%_ if (prodDatabaseTypeMysql) { _%>
+      hibernate.type.preferred_boolean_jdbc_type: TINYINT
+  <%_ } _%>
