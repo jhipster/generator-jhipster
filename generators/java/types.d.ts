@@ -123,4 +123,21 @@ export type JavaSourceType = {
     },
     ...editFileCallback: EditFileCallback[]
   ) => void;
+  /**
+   * Add enum values to a Java enum.
+   *
+   * @example
+   * ```js
+   * addItemsToJavaEnumFile('src/main/java/my/package/MyEnum.java', {
+   *   enumValues: ['VALUE1', 'VALUE2'],
+   * });
+   * ```
+   */
+  addItemsToJavaEnumFile?: (
+    file: string,
+    options: {
+      enumName?: string;
+      enumValues: string[];
+    },
+  ) => void;
 };

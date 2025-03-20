@@ -1,5 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`generator - java source api addItemsToJavaEnumFile should match file content 1`] = `
+{
+  "src/main/java/com/exampla/Test.java": {
+    "contents": "package com.example;
+public enum Test {
+    VALUE,
+    VALUE_WITH_PARAMS(1, "value");
+    // jhipster-needle-add-item-to-enum - JHipster will add new enum values here
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - java source api addItemsToJavaEnumFile with existing value to a inner enum should match file content 1`] = `
+{
+  "src/main/java/com/exampla/Test.java": {
+    "contents": "package com.example;
+public class Test {
+    public static enum TestEnum {
+        EXISTING_VALUE,
+        VALUE,
+        VALUE_WITH_PARAMS(1, "value");
+        // jhipster-needle-add-item-to-enum - JHipster will add new enum values here
+    }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - java source api editJavaFile with springBeans should match file content snapshot 1`] = `
 {
   "src/main/java/com/exampla/Test.java": {
