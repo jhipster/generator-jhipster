@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "19.2.2",
+    "@angular/common": "19.2.3",
     "@fortawesome/angular-fontawesome": "1.0.0",
     "@fortawesome/fontawesome-svg-core": "6.7.2",
     "@fortawesome/free-solid-svg-icons": "6.7.2",
@@ -24,7 +24,7 @@
     "@angular-builders/custom-esbuild": "19.0.0",
     "@angular-builders/custom-webpack": "19.0.0",
     "@angular-builders/jest": "19.0.0",
-    "@angular/cli": "19.2.3",
+    "@angular/cli": "19.2.4",
     "@eslint/js": "9.22.0",
     "@types/jest": "29.5.14",
     "@types/node": "20.11.25",
