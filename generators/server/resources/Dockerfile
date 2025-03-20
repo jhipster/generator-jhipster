@@ -40,7 +40,7 @@ FROM memcached:1.6.37-alpine
 
 FROM redis:7.4.2
 
-FROM apache/kafka-native:3.9.0
+FROM apache/kafka-native:4.0.0
 LABEL ALIAS=kafka
 
 FROM apachepulsar/pulsar:4.0.3
