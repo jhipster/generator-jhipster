@@ -91,10 +91,16 @@ jobs:
         working-directory: ${{ github.workspace }}/generator-jhipster
       - name: 'GENERATION: project'
         run: jhipster.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.args }}
+        env:
+          JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
+          JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
       - run: jhipster.cjs info
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
+      - uses: jhipster/actions/build-jhipster-bom@v0
+        with:
+          jhipster-bom-ref: ${{ matrix.jhipster-bom-branch }}
       - name: 'E2E: Run'
         id: e2e
         run: |
