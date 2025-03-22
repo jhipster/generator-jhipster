@@ -175,7 +175,7 @@ export default class SqlGenerator extends BaseApplicationGenerator {
               { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
               { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
               { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
-              { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa', version: '3.4.3' },
+              { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa' },
               { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
               { scope: 'annotationProcessor', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' },
             ],
