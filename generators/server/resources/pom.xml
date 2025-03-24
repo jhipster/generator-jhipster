@@ -21,7 +21,7 @@
         <checkstyle.version>10.21.4</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <frontend-maven-plugin.version>1.15.1</frontend-maven-plugin.version>
-        <gatling-maven-plugin.version>4.16.1</gatling-maven-plugin.version>
+        <gatling-maven-plugin.version>4.16.2</gatling-maven-plugin.version>
         <git-commit-id-maven-plugin.version>9.0.1</git-commit-id-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
