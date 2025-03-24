@@ -137,15 +137,7 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
         source.addJavaDefinition = (definition, options) => {
           const { dependencies, versions, mavenDefinition } = definition;
           if (dependencies) {
-            source.addJavaDependencies!(
-              dependencies.filter(dep => {
-                if (dep.versionRef) {
-                  return versions?.find(({ name }) => name === dep.versionRef)?.version;
-                }
-                return true;
-              }),
-              options,
-            );
+            source.addJavaDependencies!(dependencies, options);
           }
           if (versions) {
             if (application.buildToolMaven) {
