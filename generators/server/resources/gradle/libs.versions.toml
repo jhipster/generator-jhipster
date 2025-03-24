@@ -1,7 +1,7 @@
 [libraries]
 spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2024.0.1' }
 
-springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '2.8.5' }
+springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '2.8.6' }
 
 feign-reactor-bom = { module = 'com.playtika.reactivefeign:feign-reactor-bom', version = '4.2.1' }
 
