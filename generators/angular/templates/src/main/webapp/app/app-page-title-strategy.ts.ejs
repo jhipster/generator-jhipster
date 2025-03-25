@@ -30,9 +30,7 @@ export class AppPageTitleStrategy extends TitleStrategy {
 
   override updateTitle(routerState: RouterStateSnapshot): void {
     let pageTitle = this.buildTitle(routerState);
-    if (!pageTitle) {
-      pageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= humanizedBaseName %><% } %>';
-    }
+    pageTitle ??= '<% if (enableTranslation) { %>global.title<% } else { %><%= humanizedBaseName %><% } %>';
     <%_ if (enableTranslation) { _%>
     this.translateService.get(pageTitle).subscribe(title => {
         document.title = title;
