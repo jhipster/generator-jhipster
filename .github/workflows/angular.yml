@@ -155,6 +155,7 @@ jobs:
         run: npm run ci:frontend:test
         timeout-minutes: 15
       - name: 'TESTS: Start docker compose containers for e2e tests'
+        id: docker-compose
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:prepare
         timeout-minutes: 5
@@ -165,7 +166,7 @@ jobs:
         timeout-minutes: 15
       - name: Store the application
         uses: actions/upload-artifact@v4
-        if: always() && (steps.backend.outcome == 'failure' || steps.e2e.outcome == 'failure' || steps.frontend.outcome == 'failure' || steps.packaging.outcome == 'failure')
+        if: always() && (steps.backend.outcome == 'failure' || steps.e2e.outcome == 'failure' || steps.frontend.outcome == 'failure' || steps.packaging.outcome == 'failure' || steps.docker-compose.outcome == 'failure')
         with:
           name: app-${{ matrix.sample }}
           include-hidden-files: true
