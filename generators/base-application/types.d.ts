@@ -42,6 +42,11 @@ export type BaseApplication = {
   blueprints?: { name: string; version: string }[];
   testFrameworks?: string[];
 
+  /**
+   * True if the application has at least one non-builtin entity.
+   */
+  hasNonBuiltInEntity?: boolean;
+
   /** Customize templates sourceFile and destinationFile */
   customizeTemplatePaths: ((
     this: CoreGenerator,

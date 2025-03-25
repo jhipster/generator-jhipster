@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 import React<%_ if (applicationTypeMicroservice) { %>, { useEffect, useState } <% } %> from 'react';
-import { Translate } from 'react-jhipster';
+import { Translate } from 'react-jhipster';<% if (!hasNonBuiltInEntity) { %> // eslint-disable-line unused-imports/no-unused-imports<% } %>
 
-import MenuItem from 'app/shared/layout/menus/menu-item';
+import MenuItem from 'app/shared/layout/menus/menu-item';<% if (!hasNonBuiltInEntity) { %> // eslint-disable-line unused-imports/no-unused-imports<% } %>
 <%_ if (applicationTypeMicroservice) { _%>
 import { addTranslationSourcePrefix } from 'app/shared/reducers/locale';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
