@@ -179,7 +179,6 @@ export default class SqlGenerator extends BaseApplicationGenerator {
               { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
               { scope: 'annotationProcessor', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' },
             ],
-            versions: [{ name: 'hibernate', version: '6.6.9.Final' }],
             mavenDefinition: { dependencies: [{ inProfile: 'IDE', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' }] },
           },
           {
@@ -216,6 +215,11 @@ export default class SqlGenerator extends BaseApplicationGenerator {
             );
           }
         }
+      },
+      hibernateVersion({ application, source }) {
+        if (application.reactive) return;
+        source.addMavenProperty?.({ property: 'hibernate.version', value: '6.6.8.Final' });
+        source.addGradleProperty?.({ property: 'hibernate.version', value: '6.6.8.Final' });
       },
       nativeHints({ application, source }) {
         if (application.reactive || !application.graalvmSupport) return;
