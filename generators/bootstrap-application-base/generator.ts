@@ -479,6 +479,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           commandsConfigs: await lookupCommandsConfigs(),
         });
       },
+      hasNonBuiltInEntity({ application, entities }) {
+        application.hasNonBuiltInEntity = entities.filter(e => !e.builtIn).length > 0;
+      },
       task({ application }) {
         const packageJsonFiles = [this.destinationPath('package.json')];
         if (application.clientRootDir) {
