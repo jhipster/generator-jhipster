@@ -37,7 +37,7 @@
     "deepmerge": "4.3.1",
     "eslint": "9.23.0",
     "eslint-config-prettier": "10.1.1",
-    "eslint-plugin-prettier": "5.2.4",
+    "eslint-plugin-prettier": "5.2.5",
     "folder-hash": "4.1.1",
     "globals": "16.0.0",
     "globby": "14.1.0",
