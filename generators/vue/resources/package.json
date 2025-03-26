@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.23.0",
-    "@module-federation/enhanced": "0.11.1",
+    "@module-federation/enhanced": "0.11.2",
     "@pinia/testing": "1.0.0",
     "@tsconfig/node18": "18.2.4",
     "@types/node": "20.11.25",
