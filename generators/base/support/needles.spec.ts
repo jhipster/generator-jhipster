@@ -19,9 +19,32 @@
 import test from 'node:test';
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
 import { createJHipsterLogger } from '../../../lib/utils/logger.js';
-import { checkContentIn, createBaseNeedle, createNeedleCallback, insertContentBeforeNeedle } from './needles.js';
+import {
+  checkContentIn,
+  convertToPrettierExpressions,
+  createBaseNeedle,
+  createNeedleCallback,
+  insertContentBeforeNeedle,
+} from './needles.js';
 
 describe('needles - support', () => {
+  describe('convertToPrettierExpressions', () => {
+    it('should add whitespaces pattern to spaces', () => {
+      expect(convertToPrettierExpressions('1 2 3')).toBe('1[\\s\\n]*2[\\s\\n]*3');
+    });
+    it('should add whitespaces pattern to before >', () => {
+      expect(convertToPrettierExpressions('>')).toBe(',?\\n?[\\s]*>');
+    });
+    it('should add whitespaces pattern to after <', () => {
+      expect(convertToPrettierExpressions('<')).toBe('<\\n?[\\s]*');
+    });
+    it('should add whitespaces pattern to before )', () => {
+      expect(convertToPrettierExpressions('\\)')).toBe(',?\\n?[\\s]*\\)');
+    });
+    it('should add whitespaces pattern to after (', () => {
+      expect(convertToPrettierExpressions('\\(')).toBe('\\(\\n?[\\s]*');
+    });
+  });
   describe('checkContentIn', () => {
     it('should throw without content', () => {
       // @ts-expect-error
@@ -61,6 +84,42 @@ describe('needles - support', () => {
           `bar
  foo`,
           'foo    bar foo',
+        ),
+      ).toBeTruthy();
+    });
+
+    it('should be truthy for function params', () => {
+      expect(
+        checkContentIn(
+          `foo(bar)`,
+          `
+  foo(
+   bar
+  )`,
+        ),
+      ).toBeTruthy();
+    });
+
+    it('should be truthy for function params with last param separator', () => {
+      expect(
+        checkContentIn(
+          `foo(bar)`,
+          `
+  foo(
+   bar,
+  )`,
+        ),
+      ).toBeTruthy();
+    });
+
+    it('should be truthy for generic params', () => {
+      expect(
+        checkContentIn(
+          `foo<bar>`,
+          `
+  foo<
+   bar,
+  >`,
         ),
       ).toBeTruthy();
     });
