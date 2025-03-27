@@ -38,7 +38,7 @@ gradle-modernizer-plugin = { id = 'com.github.andygoossens.gradle-modernizer-plu
 
 gradle-enterprise = { id = 'com.gradle.enterprise', version = '3.19.2' }
 
-common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.1' }
+common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.2' }
 
 gatling-gradle = { id = 'io.gatling.gradle', version = '3.13.5.1' }
 
