@@ -6,7 +6,7 @@ exports[`generator - init help should print expected information 1`] = `
 Init project (alpha)
 
 Options:
-  --auto-crlf                   Detect line endings
+  --auto-crlf                   Detect line endings (defaults to true on Windows)
   --skip-cache                  Do not remember prompt answers (default: false)
   --skip-install                Do not automatically install dependencies (default: false)
   --force-install               Fail on install dependencies error (default: false)
