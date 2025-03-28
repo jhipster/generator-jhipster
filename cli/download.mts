@@ -19,19 +19,18 @@
 import { writeFile } from 'fs/promises';
 import path from 'path';
 import { inspect } from 'util';
-import axios from 'axios';
 
 import { packageJson } from '../lib/index.js';
 import { logger } from './utils.mjs';
 
 const downloadFile = async (url: string, filename: string): Promise<string> => {
   logger.verboseInfo(`Downloading file: ${url}`);
-  const response = await axios.get(url);
+  const response = await fetch(url, { method: 'GET' });
   if (response.status !== 200) {
     throw new Error(`Error downloading ${url}: ${response.status} - ${response.statusText}`);
   }
   logger.debug(`Creating file: ${path.join(filename)}`);
-  await writeFile(filename, response.data, 'utf8');
+  await writeFile(filename, await response.body!, 'utf8');
   return filename;
 };
 
