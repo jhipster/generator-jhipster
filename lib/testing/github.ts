@@ -2,7 +2,6 @@ import { randomUUID } from 'node:crypto';
 import { appendFileSync, existsSync } from 'node:fs';
 import { EOL } from 'node:os';
 import process from 'node:process';
-import axios from 'axios';
 
 type GithubIssue = { owner: string; repository: string; issue: string };
 
@@ -32,15 +31,19 @@ export const setGithubTaskOutput = (name: string, value: string | boolean | numb
   }
 };
 
-export const getGithubIssue = async ({ owner, repository, issue }: { owner: string; repository: string; issue: string }) => {
+export const getGithubIssue = async ({ owner, repository, issue }: { owner: string; repository: string; issue: string }): Promise<any> => {
   const token = process.env.GITHUB_TOKEN;
-  const response = await axios.get(`https://api.github.com/repos/${owner}/${repository}/issues/${issue}`, {
+  const response = await fetch(`https://api.github.com/repos/${owner}/${repository}/issues/${issue}`, {
+    method: 'GET',
     headers: {
       'X-GitHub-Api-Version': '2022-11-28',
       Authorization: token ? `Bearer ${token}` : undefined,
-    },
+    } as Record<string, string>,
   });
-  return response.data;
+  if (!response.ok) {
+    throw new Error(`Response status: ${response.status}`);
+  }
+  return await response.json();
 };
 
 export const getGithubSummaryFile = (): string | undefined => {
