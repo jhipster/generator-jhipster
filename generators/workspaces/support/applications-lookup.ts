@@ -18,7 +18,7 @@
  */
 import { readFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
-import { globby } from 'globby';
+import { glob } from 'tinyglobby';
 
 const isApplication = async (cwd: string): Promise<boolean> => {
   const content = await readFile(cwd, { encoding: 'utf-8' });
@@ -27,7 +27,7 @@ const isApplication = async (cwd: string): Promise<boolean> => {
 };
 
 export const applicationsLookup = async (cwd: string): Promise<string[]> => {
-  const yoRcFiles = await globby('**/.yo-rc.json', { cwd });
+  const yoRcFiles = await glob('**/.yo-rc.json', { cwd });
   const result = await Promise.all(yoRcFiles.map(async file => ({ file, isApp: await isApplication(file) })));
   return result.filter(({ isApp }) => isApp).map(({ file }) => dirname(file));
 };
