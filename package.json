@@ -175,7 +175,6 @@
     "yeoman-generator": "7.5.1"
   },
   "devDependencies": {
-    "@actions/core": "1.11.1",
     "@eslint/core": "0.12.0",
     "@node-loaders/esbuild": "2.0.0",
     "@types/chai": "5.2.1",
