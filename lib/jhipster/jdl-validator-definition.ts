@@ -193,10 +193,10 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: ALPHANUMERIC_DASH,
     msg: 'websocket property',
   },
-  ENABLE_GRADLE_ENTERPRISE: { type: 'BOOLEAN' },
-  GRADLE_ENTERPRISE_HOST: {
+  ENABLE_GRADLE_DEVELOCITY: { type: 'BOOLEAN' },
+  GRADLE_DEVELOCITY_HOST: {
     type: 'STRING',
     pattern: JWT_SECRET_KEY_PATTERN,
-    msg: 'gradleEnterpriseHost property',
+    msg: 'gradleDevelocityHost property',
   },
 };

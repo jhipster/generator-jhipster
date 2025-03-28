@@ -256,7 +256,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     defaults(configWithDefaults, {
       skipFakeData: false,
       skipCheckLengthOfIdentifier: false,
-      enableGradleEnterprise: false,
+      enableGradleDevelocity: false,
       pages: [],
     });
     return configWithDefaults as ApplicationConfiguration;
