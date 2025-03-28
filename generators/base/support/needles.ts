@@ -74,9 +74,13 @@ type NeedleContentInsertion = NeedleInsertion & {
 };
 
 /**
- * Change spaces sequences and '>' to allow any number of spaces or new line prefix
+ * Change spaces sequences and characters that prettier breaks line (<>()) to allow any number of spaces or new line prefix
  */
-export const convertToPrettierExpressions = (str: string): string => str.replace(/\s+/g, '([\\s\n]*)').replace(/>+/g, '(\n?[\\s]*)>');
+export const convertToPrettierExpressions = (str: string): string =>
+  str
+    .replace(/(<|\\\()(?! )/g, '$1\\n?[\\s]*')
+    .replace(/(?! )(>|\\\))/g, ',?\\n?[\\s]*$1')
+    .replace(/\s+/g, '[\\s\\n]*');
 
 /**
  * Check if contentToCheck existing in content
