@@ -61,7 +61,7 @@
 <%_ } _%>
 
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-    <<%= jhiPrefixDashed %>-filter [filters]="filters"></<%= jhiPrefixDashed %>-filter>
+    <<%= jhiPrefixDashed %>-filter [filters]="filters" />
 <%_ } _%>
 
 @if (<%= entityInstancePlural %>().length === 0) {
