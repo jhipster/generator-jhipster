@@ -21,7 +21,7 @@
     <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="myUserLabel">__jhiTranslateTag__('userManagement.home.createOrEditLabel')</h2>
 
-      <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
+      <<%= jhiPrefixDashed %>-alert-error />
 
       <div class="mb-3" [hidden]="!editForm.value.id">
         <label class="form-label" for="field_id">__jhiTranslateTag__('global.field.id')</label>
