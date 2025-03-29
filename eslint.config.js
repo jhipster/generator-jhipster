@@ -4,6 +4,7 @@ import ts from 'typescript-eslint';
 import prettier from 'eslint-plugin-prettier/recommended';
 import chai from 'eslint-plugin-chai-friendly';
 import imports from 'eslint-plugin-import-x';
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import jhipster from './lib/eslint/index.js';
 
 export default ts.config(
@@ -56,9 +57,7 @@ export default ts.config(
       },
     },
     settings: {
-      'import-x/resolver': {
-        typescript: true,
-      },
+      'import-x/resolver-next': [createTypeScriptImportResolver()],
     },
     rules: {
       'import-x/no-named-as-default-member': 'off',
