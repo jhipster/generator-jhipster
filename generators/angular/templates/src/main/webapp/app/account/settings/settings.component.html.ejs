@@ -27,7 +27,7 @@
       <div class="alert alert-success">__jhiTranslateTag__('settings.messages.success')</div>
     }
 
-      <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
+      <<%= jhiPrefixDashed %>-alert-error />
 
     @if (settingsForm.value.login) {
       <form name="form" (ngSubmit)="save()" [formGroup]="settingsForm" novalidate>
