@@ -63,8 +63,7 @@
 @if (metricsRef?.cache; as metricsRefCache) {
   <<%= jhiPrefixDashed %>-metrics-cache
     [updating]="updatingMetrics()"
-    [cacheMetrics]="metricsRefCache"
-  ></<%= jhiPrefixDashed %>-metrics-cache>
+    [cacheMetrics]="metricsRefCache" />
 }
 
 @if (metricsRef && metricsKeyExistsAndObjectNotEmpty('databases')) {
