@@ -32,7 +32,7 @@
   <div class="row">
     <<%= jhiPrefixDashed %>-jvm-memory class="col-md-4" [updating]="updatingMetrics()" [jvmMemoryMetrics]="metricsRef.jvm" />
 
-    <<%= jhiPrefixDashed %>-jvm-threads class="col-md-4" [threads]="threads()"></<%= jhiPrefixDashed %>-jvm-threads>
+    <<%= jhiPrefixDashed %>-jvm-threads class="col-md-4" [threads]="threads()" />
 
     <<%= jhiPrefixDashed %>-metrics-system class="col-md-4" [updating]="updatingMetrics()" [systemMetrics]="metricsRef.processMetrics"></<%= jhiPrefixDashed %>-metrics-system>
   </div>
