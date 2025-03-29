@@ -57,8 +57,7 @@
 @if (metricsRef?.services; as metricsRefServices) {
   <<%= jhiPrefixDashed %>-metrics-endpoints-requests
     [updating]="updatingMetrics()"
-    [endpointsRequestsMetrics]="metricsRefServices"
-  ></<%= jhiPrefixDashed %>-metrics-endpoints-requests>
+    [endpointsRequestsMetrics]="metricsRefServices" />
 }
 
 @if (metricsRef?.cache; as metricsRefCache) {
