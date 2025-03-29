@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import os from 'os';
 import { lowerFirst } from 'lodash-es';
 import chalk from 'chalk';
 import { passthrough } from '@yeoman/transform';
@@ -41,13 +40,11 @@ import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../ap
 import { lookupCommandsConfigs } from '../../lib/command/lookup-commands-configs.js';
 import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../lib/command/load.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
-import { removeFieldsWithNullishValues } from '../base/support/index.js';
+import { isWin32, removeFieldsWithNullishValues } from '../base/support/index.js';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../lib/application/field-types.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
-
-const isWin32 = os.platform() === 'win32';
 
 export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {

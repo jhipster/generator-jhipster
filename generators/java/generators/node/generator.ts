@@ -19,6 +19,7 @@
 import chalk from 'chalk';
 import type { ExecaError } from 'execa';
 import BaseApplicationGenerator from '../../../base-application/index.js';
+import { isWin32 } from '../../../base/support/os.js';
 
 export default class NodeGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -117,7 +118,7 @@ export default class NodeGenerator extends BaseApplicationGenerator {
           return;
         }
 
-        const npmCommand = process.platform === 'win32' ? 'npmw' : './npmw';
+        const npmCommand = isWin32 ? 'npmw' : './npmw';
         try {
           await this.spawn(npmCommand, ['install'], { preferLocal: true });
         } catch (error: unknown) {

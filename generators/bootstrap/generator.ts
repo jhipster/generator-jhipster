@@ -223,7 +223,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     }
 
     const autoCrlfTransforms: FileTransform<MemFsEditorFile>[] = [];
-    if (this.jhipsterConfig.autoCrlf) {
+    if (this.jhipsterConfigWithDefaults.autoCrlf) {
       autoCrlfTransforms.push(await autoCrlfTransform({ baseDir: this.destinationPath() }));
     }
 

@@ -16,21 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from '../../../lib/utils/derived-property.js';
-export * from '../../../lib/utils/logger.js';
-export * from '../../../lib/utils/object.js';
-export * from '../../../lib/utils/string.js';
-export * from './basename.js';
-export * from './configuration-helpers/options.js';
-export * from './contents.js';
-export * from './faker.js';
-export { default as getHipster } from './hipster.js';
-export * from './jhipster7-context.js';
-export * from './namespace.js';
-export * from './needles.js';
-export * from './os.js';
-export * from './path.js';
-export { default as httpsGet } from './remote.js';
-export * from './secret.js';
-export * from './timestamp.js';
-export * from './write-files.js';
+import { platform } from 'os';
+
+export const isWin32 = platform() === 'win32';

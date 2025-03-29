@@ -21,7 +21,6 @@ import { escapeRegExp, kebabCase } from 'lodash-es';
 import type CoreGenerator from '../../base-core/index.js';
 import type { CascatedEditFileCallback, EditFileCallback, NeedleCallback } from '../api.js';
 import { joinCallbacks } from './write-files.js';
-import { normalizeLineEndings } from './contents.js';
 
 type NeedleContentToAddCallback = {
   /**
@@ -119,10 +118,6 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
   assert(content, 'content is required');
   assert(contentToAdd, 'contentToAdd is required');
 
-  const isCrLr = content.includes('\r\n');
-  content = isCrLr ? normalizeLineEndings(content, '\n') : content;
-  const lineEnding = isCrLr ? '\r\n' : '\n';
-
   needle = needle.includes('jhipster-needle-') ? needle : `jhipster-needle-${needle}`;
 
   const regexp = new RegExp(`(?://|<!--|/\\*|#) ${needle}(?:$|\n| )`, 'g');
@@ -150,7 +145,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
       needleIndent,
       indentPrefix: ' '.repeat(needleIndent),
     });
-    return isCrLr ? normalizeLineEndings(newContent, lineEnding) : newContent;
+    return newContent;
   }
   contentToAdd = Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd];
   if (autoIndent) {
@@ -182,7 +177,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
   }
 
   const newContent = `${beforeContent}${contentToAdd.join('\n')}\n${afterContent}`;
-  return isCrLr ? normalizeLineEndings(newContent, lineEnding) : newContent;
+  return newContent;
 };
 
 /**

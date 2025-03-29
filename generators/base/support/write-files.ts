@@ -16,12 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { platform } from 'os';
-
 import type { EditFileCallback } from '../api.js';
-import { normalizeLineEndings } from './contents.js';
-
-const isWin32 = platform() === 'win32';
 
 /**
  * TODO move to utils when converted to typescripts
@@ -30,11 +25,6 @@ const isWin32 = platform() === 'win32';
 
 export function joinCallbacks<Generator>(...callbacks: EditFileCallback<Generator>[]): EditFileCallback<Generator> {
   return function (this: Generator, content: string, filePath: string) {
-    if (isWin32 && /\r\n/.exec(content)) {
-      const removeSlashRSlashN: EditFileCallback<Generator> = ct => normalizeLineEndings(ct, '\n');
-      const addSlashRSlashN: EditFileCallback<Generator> = ct => normalizeLineEndings(ct, '\r\n');
-      callbacks = [removeSlashRSlashN, ...callbacks, addSlashRSlashN];
-    }
     for (const callback of callbacks) {
       content = callback.call(this, content, filePath);
     }

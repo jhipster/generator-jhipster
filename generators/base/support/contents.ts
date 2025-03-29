@@ -16,6 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+export const CRLF = '\r\n';
+export const LF = '\n';
+
+/**
+ * Check if a string contains CRLF line endings.
+ *
+ * @param str
+ * @returns
+ */
+export const hasCrlr = (str?: string): boolean => Boolean(str?.includes(CRLF));
+
 /**
  * Replace line endings with the specified one.
  *
@@ -24,7 +36,7 @@
  * @returns normalized line ending string
  */
 
-export function normalizeLineEndings(str: string, lineEnding: '\n' | '\r\n'): string {
+export function normalizeLineEndings(str: string, lineEnding: typeof LF | typeof CRLF): string {
   return str.replace(/\r\n|\r|\n/g, lineEnding);
 }
 

@@ -24,7 +24,7 @@ import { isBinaryFile } from 'isbinaryfile';
 import { simpleGit } from 'simple-git';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import type { MemFsEditorFile } from 'mem-fs-editor';
-import { normalizeLineEndings } from '../../base/support/index.js';
+import { CRLF, normalizeLineEndings } from '../../base/support/index.js';
 
 /**
  * Detect the file first line endings
@@ -80,7 +80,7 @@ const autoCrlfTransform = async ({ baseDir }: { baseDir: string }) => {
         );
 
         if (attrs.eol === 'crlf' || (attrs.binary !== 'set' && attrs.eol !== 'lf' && (await detectCrLf(file.path)))) {
-          file.contents = Buffer.from(normalizeLineEndings(file.contents!.toString(), '\r\n'));
+          file.contents = Buffer.from(normalizeLineEndings(file.contents!.toString(), CRLF));
         }
       }
     } catch {
