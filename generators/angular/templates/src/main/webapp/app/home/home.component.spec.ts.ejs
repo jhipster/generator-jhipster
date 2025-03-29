@@ -90,7 +90,7 @@ describe('Home Component', () => {
   });
 
   describe('ngOnInit', () => {
-    it('Should synchronize account variable with current account', () => {
+    it('should synchronize account variable with current account', () => {
 <%_ if (!authenticationTypeOauth2) { _%>
       // GIVEN
       const authenticationState = new Subject<Account | null>();
@@ -128,7 +128,7 @@ describe('Home Component', () => {
 
   describe('login', () => {
 <%_ if (!authenticationTypeOauth2) { _%>
-    it('Should navigate to /login on login', () => {
+    it('should navigate to /login on login', () => {
       // WHEN
       comp.login();
 
@@ -136,7 +136,7 @@ describe('Home Component', () => {
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
     });
 <%_ } else { _%>
-    it('Should call loginService.login on login', () => {
+    it('should call loginService.login on login', () => {
       // WHEN
       comp.login();
 
@@ -148,7 +148,7 @@ describe('Home Component', () => {
 
 <%_ if (!authenticationTypeOauth2) { _%>
   describe('ngOnDestroy', () => {
-    it('Should destroy authentication state subscription on component destroy', () => {
+    it('should destroy authentication state subscription on component destroy', () => {
       // GIVEN
       const authenticationState = new Subject<Account | null>();
       mockAccountService.getAuthenticationState = jest.fn(() => authenticationState.asObservable());

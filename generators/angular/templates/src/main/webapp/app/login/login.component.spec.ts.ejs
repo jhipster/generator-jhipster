@@ -65,7 +65,7 @@ describe('LoginComponent', () => {
   });
 
   describe('ngOnInit', () => {
-    it('Should call accountService.identity on Init', () => {
+    it('should call accountService.identity on Init', () => {
       // GIVEN
       mockAccountService.identity = jest.fn(() => of(null));
       mockAccountService.getAuthenticationState = jest.fn(() => of(null));
@@ -77,7 +77,7 @@ describe('LoginComponent', () => {
       expect(mockAccountService.identity).toHaveBeenCalled();
     });
 
-    it('Should call accountService.isAuthenticated on Init', () => {
+    it('should call accountService.isAuthenticated on Init', () => {
       // GIVEN
       mockAccountService.identity = jest.fn(() => of(null));
 
