@@ -24,7 +24,7 @@ env:
 jobs:
   check-generator-database-changelog-liquibase:
     name: ${{ matrix.app-type }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ${{ github.workspace }}/app
