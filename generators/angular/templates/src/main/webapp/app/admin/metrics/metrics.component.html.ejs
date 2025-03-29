@@ -51,8 +51,7 @@
 @if (metricsRef?.['http.server.requests']; as metricsRefHttpServerRequests) {
   <<%= jhiPrefixDashed %>-metrics-request
     [updating]="updatingMetrics()"
-    [requestMetrics]="metricsRefHttpServerRequests"
-  ></<%= jhiPrefixDashed %>-metrics-request>
+    [requestMetrics]="metricsRefHttpServerRequests" />
 }
 
 @if (metricsRef?.services; as metricsRefServices) {
