@@ -41,8 +41,7 @@
 @if (metricsRef?.garbageCollector; as metricsRefGarbageCollector) {
   <<%= jhiPrefixDashed %>-metrics-garbagecollector
     [updating]="updatingMetrics()"
-    [garbageCollectorMetrics]="metricsRefGarbageCollector"
-  ></<%= jhiPrefixDashed %>-metrics-garbagecollector>
+    [garbageCollectorMetrics]="metricsRefGarbageCollector" />
 }
 
 @if (updatingMetrics()) {
