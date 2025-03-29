@@ -69,7 +69,6 @@
 @if (metricsRef && metricsKeyExistsAndObjectNotEmpty('databases')) {
   <<%= jhiPrefixDashed %>-metrics-datasource
     [updating]="updatingMetrics()"
-    [datasourceMetrics]="metricsRef.databases"
-  ></<%= jhiPrefixDashed %>-metrics-datasource>
+    [datasourceMetrics]="metricsRef.databases" />
 }
 </div>
