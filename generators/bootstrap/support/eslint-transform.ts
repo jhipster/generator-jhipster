@@ -76,7 +76,7 @@ export const createESLintTransform = function (
       }
     },
     async () => {
-      await pool.destroy();
+      // await pool.destroy();
     },
   );
 };
