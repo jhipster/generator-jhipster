@@ -30,7 +30,7 @@
 @let metricsRef = metrics();
 @if (metricsRef && !updatingMetrics()) {
   <div class="row">
-    <<%= jhiPrefixDashed %>-jvm-memory class="col-md-4" [updating]="updatingMetrics()" [jvmMemoryMetrics]="metricsRef.jvm"></<%= jhiPrefixDashed %>-jvm-memory>
+    <<%= jhiPrefixDashed %>-jvm-memory class="col-md-4" [updating]="updatingMetrics()" [jvmMemoryMetrics]="metricsRef.jvm" />
 
     <<%= jhiPrefixDashed %>-jvm-threads class="col-md-4" [threads]="threads()"></<%= jhiPrefixDashed %>-jvm-threads>
 
