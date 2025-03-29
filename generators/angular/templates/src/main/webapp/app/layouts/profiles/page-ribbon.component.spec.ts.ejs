@@ -27,7 +27,7 @@ describe('Page Ribbon Component', () => {
     profileService = TestBed.inject(ProfileService);
   });
 
-  it('Should call profileService.getProfileInfo on init', () => {
+  it('should call profileService.getProfileInfo on init', () => {
     // GIVEN
     jest.spyOn(profileService, 'getProfileInfo').mockReturnValue(of(new ProfileInfo()));
 

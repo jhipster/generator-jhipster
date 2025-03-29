@@ -68,7 +68,7 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
   });
 
   describe('OnInit', () => {
-    it('Should load <%= entityInstance %> on init', async () => {
+    it('should load <%= entityInstance %> on init', async () => {
       const harness = await RouterTestingHarness.create();
       const instance = await harness.navigateByUrl('/', <%= entityAngularName %>DetailComponent);
 
@@ -78,7 +78,7 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
   });
 
   describe('PreviousState', () => {
-    it('Should navigate to previous state', () => {
+    it('should navigate to previous state', () => {
       jest.spyOn(window.history, 'back');
       comp.previousState();
       expect(window.history.back).toHaveBeenCalled();
@@ -87,7 +87,7 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
 
 <%_ if (anyFieldIsBlobDerived) { _%>
   describe('byteSize', () => {
-    it('Should call byteSize from DataUtils', () => {
+    it('should call byteSize from DataUtils', () => {
       // GIVEN
       jest.spyOn(dataUtils, 'byteSize');
       const fakeBase64 = 'fake base64';
@@ -101,7 +101,7 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
   });
 
   describe('openFile', () => {
-    it('Should call openFile from DataUtils', () => {
+    it('should call openFile from DataUtils', () => {
       const newWindow = { ...window };
       window.open = jest.fn(() => newWindow);
       window.onload = jest.fn(() => newWindow) as any;
