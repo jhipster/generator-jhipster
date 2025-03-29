@@ -39,7 +39,7 @@ env:
   FORCE_COLOR: 2
 jobs:
   build-matrix:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.build.outputs.matrix }}
       client: ${{ steps.build.outputs.client }}
@@ -58,7 +58,7 @@ jobs:
         run: bin/jhipster.cjs github-build-matrix react --event-name ${{ github.event_name }}
   applications:
     name: ${{ matrix.job-name }}
-    runs-on: ${{ matrix.os || 'ubuntu-20.04' }}
+    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     needs: build-matrix
     defaults:
       run:

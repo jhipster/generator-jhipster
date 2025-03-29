@@ -46,7 +46,7 @@ jobs:
   application:
     name: Check issue ${{ inputs.issue || github.event.issue.number }}
     needs: comment
-    runs-on: 'ubuntu-20.04'
+    runs-on: 'ubuntu-latest'
     defaults:
       run:
         working-directory: ${{ github.workspace }}/app
