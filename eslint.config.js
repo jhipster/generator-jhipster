@@ -62,7 +62,6 @@ export default ts.config(
     rules: {
       'import-x/no-named-as-default-member': 'off',
       'import-x/namespace': 'off',
-      'import-x/no-unresolved': 'error',
     },
   },
   {
