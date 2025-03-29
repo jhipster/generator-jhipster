@@ -55,8 +55,8 @@ Options:
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --package-name <value>                   The package name for the generated application
   --build <value>                          Provide build tool for the application when skipping server side generation (default: maven) (choices: "maven", "gradle")
-  --enable-gradle-enterprise               Enable Gradle Enterprise integration (default: false)
-  --gradle-enterprise-host <value>         Gradle Enterprise Host
+  --enable-gradle-develocity               Enable Gradle Develocity integration (default: false)
+  --gradle-develocity-host <value>         Gradle Develocity Host
   --incremental-changelog                  Creates incremental database changelogs
   --dev-database-type <value>              Development database
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
@@ -465,7 +465,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   ],
   "dtoSuffix": "DTO",
   "embeddableLaunchScript": undefined,
-  "enableGradleEnterprise": false,
+  "enableGradleDevelocity": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
   "enableSwaggerCodegen": false,
@@ -492,7 +492,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "githubRepository": undefined,
   "githubWorkflows": undefined,
   "graalvmSupport": undefined,
-  "gradleEnterpriseHost": undefined,
+  "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": false,
   "hipster": "jhipster_family_member_3",
   "hipsterBugTrackerLink": "https://github.com/jhipster/generator-jhipster/issues?state=open",
@@ -531,7 +531,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "gatling-gradle": "'GATLING-GRADLE-VERSION'",
     "gatling-maven-plugin": "'GATLING-MAVEN-PLUGIN-VERSION'",
     "git-commit-id-maven-plugin": "'GIT-COMMIT-ID-MAVEN-PLUGIN-VERSION'",
-    "gradle-enterprise": "'GRADLE-ENTERPRISE-VERSION'",
+    "gradle-develocity": "'GRADLE-DEVELOCITY-VERSION'",
     "gradle-git-properties": "'GRADLE-GIT-PROPERTIES-VERSION'",
     "gradle-liquibase": "'GRADLE-LIQUIBASE-VERSION'",
     "gradle-modernizer-plugin": "'GRADLE-MODERNIZER-PLUGIN-VERSION'",
@@ -1139,7 +1139,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   ],
   "dtoSuffix": "DTO",
   "embeddableLaunchScript": undefined,
-  "enableGradleEnterprise": false,
+  "enableGradleDevelocity": false,
   "enableHibernateCache": false,
   "enableI18nRTL": false,
   "enableSwaggerCodegen": false,
@@ -1166,7 +1166,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "githubRepository": undefined,
   "githubWorkflows": undefined,
   "graalvmSupport": undefined,
-  "gradleEnterpriseHost": undefined,
+  "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": false,
   "hipster": "jhipster_family_member_3",
   "hipsterBugTrackerLink": "https://github.com/jhipster/generator-jhipster/issues?state=open",
@@ -1205,7 +1205,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "gatling-gradle": "'GATLING-GRADLE-VERSION'",
     "gatling-maven-plugin": "'GATLING-MAVEN-PLUGIN-VERSION'",
     "git-commit-id-maven-plugin": "'GIT-COMMIT-ID-MAVEN-PLUGIN-VERSION'",
-    "gradle-enterprise": "'GRADLE-ENTERPRISE-VERSION'",
+    "gradle-develocity": "'GRADLE-DEVELOCITY-VERSION'",
     "gradle-git-properties": "'GRADLE-GIT-PROPERTIES-VERSION'",
     "gradle-liquibase": "'GRADLE-LIQUIBASE-VERSION'",
     "gradle-modernizer-plugin": "'GRADLE-MODERNIZER-PLUGIN-VERSION'",
@@ -1806,7 +1806,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   ],
   "dtoSuffix": "DTO",
   "embeddableLaunchScript": undefined,
-  "enableGradleEnterprise": false,
+  "enableGradleDevelocity": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
   "enableSwaggerCodegen": false,
@@ -1832,7 +1832,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "githubRepository": undefined,
   "githubWorkflows": undefined,
   "graalvmSupport": undefined,
-  "gradleEnterpriseHost": undefined,
+  "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": false,
   "hipster": "jhipster_family_member_3",
   "hipsterBugTrackerLink": "https://github.com/jhipster/generator-jhipster/issues?state=open",
@@ -1871,7 +1871,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "gatling-gradle": "'GATLING-GRADLE-VERSION'",
     "gatling-maven-plugin": "'GATLING-MAVEN-PLUGIN-VERSION'",
     "git-commit-id-maven-plugin": "'GIT-COMMIT-ID-MAVEN-PLUGIN-VERSION'",
-    "gradle-enterprise": "'GRADLE-ENTERPRISE-VERSION'",
+    "gradle-develocity": "'GRADLE-DEVELOCITY-VERSION'",
     "gradle-git-properties": "'GRADLE-GIT-PROPERTIES-VERSION'",
     "gradle-liquibase": "'GRADLE-LIQUIBASE-VERSION'",
     "gradle-modernizer-plugin": "'GRADLE-MODERNIZER-PLUGIN-VERSION'",

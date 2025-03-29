@@ -67,14 +67,14 @@ export const loadServerConfig = ({ config, application }: { config: any; applica
       'messageBroker',
       'websocket',
       'embeddableLaunchScript',
-      'enableGradleEnterprise',
-      'gradleEnterpriseHost',
+      'enableGradleDevelocity',
+      'gradleDevelocityHost',
       'feignClient',
     ]),
     {
       packageFolder: ({ packageFolder }) => (packageFolder ? normalizePathEnd(packageFolder) : packageFolder),
-      gradleEnterpriseHost: ({ gradleEnterpriseHost }) =>
-        !gradleEnterpriseHost || gradleEnterpriseHost.startsWith('https://') ? gradleEnterpriseHost : `https://${gradleEnterpriseHost}`,
+      gradleDevelocityHost: ({ gradleDevelocityHost }) =>
+        !gradleDevelocityHost || gradleDevelocityHost.startsWith('https://') ? gradleDevelocityHost : `https://${gradleDevelocityHost}`,
     },
   );
 };

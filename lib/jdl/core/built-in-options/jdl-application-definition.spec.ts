@@ -85,7 +85,7 @@ describe('jdl - ApplicationOptions', () => {
       OptionNames.JHIPSTER_VERSION,
       OptionNames.REMEMBER_ME_KEY,
       OptionNames.JWT_SECRET_KEY,
-      OptionNames.GRADLE_ENTERPRISE_HOST,
+      OptionNames.GRADLE_DEVELOCITY_HOST,
     ]);
     const optionsThatShouldNotBeQuoted = new Set(
       Object.values(OptionNames).filter(optionName => !optionsThatShouldBeQuoted.has(optionName)),

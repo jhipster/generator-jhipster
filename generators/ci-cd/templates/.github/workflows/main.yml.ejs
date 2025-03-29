@@ -48,8 +48,8 @@ if (!databaseTypeNo && !skipServer ) { _%>
 <%_ if (clientFrameworkAngular) { _%>
             NG_CLI_ANALYTICS: false
 <%_ } _%>
-<%_ if (enableGradleEnterprise) { _%>
-            GRADLE_ENTERPRISE_ACCESS_KEY: ${{secrets.GRADLE_ENTERPRISE_ACCESS_KEY}}
+<%_ if (enableGradleDevelocity) { _%>
+            GRADLE_DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_DEVELOCITY_ACCESS_KEY }}
 <%_ } _%>
         steps:
             - uses: actions/checkout@v4

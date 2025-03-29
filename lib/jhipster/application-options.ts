@@ -116,8 +116,8 @@ const optionNames = {
   SKIP_USER_MANAGEMENT: 'skipUserManagement',
   TEST_FRAMEWORKS: 'testFrameworks',
   WEBSOCKET: 'websocket',
-  ENABLE_GRADLE_ENTERPRISE: 'enableGradleEnterprise',
-  GRADLE_ENTERPRISE_HOST: 'gradleEnterpriseHost',
+  ENABLE_GRADLE_DEVELOCITY: 'enableGradleDevelocity',
+  GRADLE_DEVELOCITY_HOST: 'gradleDevelocityHost',
 };
 
 export const jhipsterOptionValues: Record<string, JDLApplicationOptionValue> = {
@@ -231,8 +231,8 @@ export const jhipsterOptionValues: Record<string, JDLApplicationOptionValue> = {
     no: NO_WEBSOCKET,
   },
   [optionNames.WITH_ADMIN_UI]: true,
-  [optionNames.ENABLE_GRADLE_ENTERPRISE]: false,
-  [optionNames.GRADLE_ENTERPRISE_HOST]: '',
+  [optionNames.ENABLE_GRADLE_DEVELOCITY]: false,
+  [optionNames.GRADLE_DEVELOCITY_HOST]: '',
 };
 
 export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
@@ -284,15 +284,15 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.TEST_FRAMEWORKS]: { type: ApplicationOptionTypes.LIST },
   [optionNames.WEBSOCKET]: { type: ApplicationOptionTypes.STRING },
   [optionNames.WITH_ADMIN_UI]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.ENABLE_GRADLE_ENTERPRISE]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.GRADLE_ENTERPRISE_HOST]: { type: ApplicationOptionTypes.STRING },
+  [optionNames.ENABLE_GRADLE_DEVELOCITY]: { type: ApplicationOptionTypes.BOOLEAN },
+  [optionNames.GRADLE_DEVELOCITY_HOST]: { type: ApplicationOptionTypes.STRING },
 };
 
 export const jhipsterQuotedOptionNames: string[] = [
   optionNames.JHIPSTER_VERSION,
   optionNames.REMEMBER_ME_KEY,
   optionNames.JWT_SECRET_KEY,
-  optionNames.GRADLE_ENTERPRISE_HOST,
+  optionNames.GRADLE_DEVELOCITY_HOST,
 ];
 
 export const builtInJDLApplicationConfig: JDLApplicationConfig = {
