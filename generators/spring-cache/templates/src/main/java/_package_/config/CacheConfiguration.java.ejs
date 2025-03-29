@@ -571,20 +571,6 @@ public class CacheConfiguration {
 
         };
     }
-  <%_ if (enableHibernateCache) { _%>
-    /**
-    * Hibernate properties customizer.
-    * This component ensures that Hibernate L2 cache region factory uses, as cache manager, the
-    * same instance already configured in Spring Context with {@link CacheConfiguration}
-    *
-    * @param cacheFactoryConfiguration custom infinispan region factory
-    * @return hibernate properties with custom cache region factory
-    */
-    @Bean
-    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(CacheFactoryConfiguration cacheFactoryConfiguration) {
-        return hibernateProperties -> hibernateProperties.put(AvailableSettings.CACHE_REGION_FACTORY, cacheFactoryConfiguration);
-    }
-  <%_ } _%>
 
   <%_ if (serviceDiscoveryAny) { _%>
     /**

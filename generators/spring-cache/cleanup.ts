@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type Generator from './generator.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupTask(this: Generator, { application }: any) {
+export default asWritingTask(async function cleanupTask(this, { application, control }) {
   if (application.cacheProviderHazelcast) {
     if (this.isJhipsterVersionLessThan('3.12.0')) {
       this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/HazelcastCacheRegionFactory.java`);
@@ -39,4 +39,7 @@ export default function cleanupTask(this: Generator, { application }: any) {
       this.removeFile('gradle/cache.gradle');
     }
   }
-}
+  await control.cleanupFiles({
+    '8.9.1': [[application.cacheProviderInfinispan, `${application.javaPackageSrcDir}config/CacheFactoryConfiguration.java`]],
+  });
+});
