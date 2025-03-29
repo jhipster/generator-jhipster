@@ -702,14 +702,12 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
       "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
-        "browser-sync-webpack-plugin": null,
         "copy-webpack-plugin": null,
         "webpack-bundle-analyzer": null,
         "webpack-merge": null,
         "webpack-notifier": null,
       },
       "overrides": {
-        "browser-sync": "BROWSER_SYNC_VERSION",
         "webpack": "WEBPACK_VERSION",
       },
     },
@@ -1644,7 +1642,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
       },
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
-        "browser-sync-webpack-plugin": null,
         "copy-webpack-plugin": null,
         "folder-hash": null,
         "merge-jsons-webpack-plugin": null,
@@ -1653,7 +1650,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
         "webpack-notifier": null,
       },
       "overrides": {
-        "browser-sync": "BROWSER_SYNC_VERSION",
         "webpack": "WEBPACK_VERSION",
       },
     },
@@ -2347,15 +2343,21 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
       "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
-        "browser-sync-webpack-plugin": null,
         "copy-webpack-plugin": null,
         "webpack-bundle-analyzer": null,
         "webpack-merge": null,
         "webpack-notifier": null,
       },
       "overrides": {
-        "browser-sync": "BROWSER_SYNC_VERSION",
         "webpack": "WEBPACK_VERSION",
+      },
+    },
+    {
+      "devDependencies": {
+        "browser-sync-webpack-plugin": null,
+      },
+      "overrides": {
+        "browser-sync": "BROWSER_SYNC_VERSION",
       },
     },
   ],
@@ -3056,7 +3058,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
       },
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
-        "browser-sync-webpack-plugin": null,
         "copy-webpack-plugin": null,
         "folder-hash": null,
         "merge-jsons-webpack-plugin": null,
@@ -3065,8 +3066,15 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
         "webpack-notifier": null,
       },
       "overrides": {
-        "browser-sync": "BROWSER_SYNC_VERSION",
         "webpack": "WEBPACK_VERSION",
+      },
+    },
+    {
+      "devDependencies": {
+        "browser-sync-webpack-plugin": null,
+      },
+      "overrides": {
+        "browser-sync": "BROWSER_SYNC_VERSION",
       },
     },
   ],
@@ -4168,7 +4176,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       },
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
-        "browser-sync-webpack-plugin": null,
         "copy-webpack-plugin": null,
         "folder-hash": null,
         "merge-jsons-webpack-plugin": null,
@@ -4177,7 +4184,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
         "webpack-notifier": null,
       },
       "overrides": {
-        "browser-sync": "BROWSER_SYNC_VERSION",
         "webpack": "WEBPACK_VERSION",
       },
     },
@@ -4857,14 +4863,12 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
       "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
-        "browser-sync-webpack-plugin": null,
         "copy-webpack-plugin": null,
         "webpack-bundle-analyzer": null,
         "webpack-merge": null,
         "webpack-notifier": null,
       },
       "overrides": {
-        "browser-sync": "BROWSER_SYNC_VERSION",
         "webpack": "WEBPACK_VERSION",
       },
     },
@@ -5553,14 +5557,12 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
       "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-webpack": null,
-        "browser-sync-webpack-plugin": null,
         "copy-webpack-plugin": null,
         "webpack-bundle-analyzer": null,
         "webpack-merge": null,
         "webpack-notifier": null,
       },
       "overrides": {
-        "browser-sync": "BROWSER_SYNC_VERSION",
         "webpack": "WEBPACK_VERSION",
       },
     },
