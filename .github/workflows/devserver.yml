@@ -44,7 +44,7 @@ on:
       - '*'
 jobs:
   build-matrix:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.build.outputs.matrix }}
       empty-matrix: ${{ steps.build.outputs.empty-matrix }}
