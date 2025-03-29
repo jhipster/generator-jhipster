@@ -37,7 +37,7 @@ jobs:
   check-npm-test:
     if: >-
       github.event.action != 'closed'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     # Windows requires 60 min to finish
     timeout-minutes: 20
     strategy:
