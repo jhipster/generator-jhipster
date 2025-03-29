@@ -119,7 +119,7 @@ export function getConfigForClientApplication(options: ApplicationDefaults = {})
     options[CLIENT_THEME_VARIANT] = 'primary';
   }
   if (clientFramework === 'vue') {
-    options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'vite';
+    options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'rsbuild' : 'vite';
     options.devServerPort ??= options.clientBundler === 'webpack' ? 9060 : 9000;
   } else if (clientFramework === 'react') {
     options.clientBundler ??= 'webpack';
