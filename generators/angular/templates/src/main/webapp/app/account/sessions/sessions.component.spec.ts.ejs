@@ -92,7 +92,7 @@ describe('SessionsComponent', () => {
     fakeAsync((mockAccountService: AccountService, service: SessionsService) => {
       mockAccountService.identity = jest.fn(() => of(account));
       jest.spyOn(service, 'findAll').mockReturnValue(of(sessions));
-      jest.spyOn(service, 'delete').mockReturnValue(throwError(() => {}));
+      jest.spyOn(service, 'delete').mockReturnValue(throwError(Error));
 
       comp.ngOnInit();
       comp.invalidate('xyz');
