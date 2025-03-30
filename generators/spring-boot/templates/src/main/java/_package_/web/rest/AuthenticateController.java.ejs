@@ -44,7 +44,7 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.*;
-import <%= packageName %>.domain.User;
+import <%= user.entityAbsoluteClass %>;
 import <%= packageName %>.service.UserService;
 import java.util.Optional;
 import java.security.Principal;
@@ -67,7 +67,8 @@ public class AuthenticateController {
 
     private final JwtEncoder jwtEncoder;
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
     @Value("${jhipster.security.authentication.jwt.token-validity-in-seconds:0}")
     private long tokenValidityInSeconds;
@@ -145,7 +146,7 @@ public class AuthenticateController {
             validity = now.plus(this.tokenValidityInSeconds, ChronoUnit.SECONDS);
         }
 
-        Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(authentication.getName());
+        Optional<<%= user.persistClass %>> userOptional = userService.getUserWithAuthoritiesByLogin(authentication.getName());
         Long userId = userOptional.map(User::getId).orElse(null);
 
         // only for be shure, because at this moment the server already validate the user
