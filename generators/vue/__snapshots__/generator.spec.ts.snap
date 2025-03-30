@@ -1476,25 +1476,10 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/vitest.config.mts": {
     "stateCleared": "modified",
   },
-  "clientRoot/webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.microfrontend.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.prod.js": {
-    "stateCleared": "modified",
-  },
   "package.json": {
+    "stateCleared": "modified",
+  },
+  "rsbuild.config.ts": {
     "stateCleared": "modified",
   },
 }
@@ -1571,6 +1556,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "package.json": {
+    "stateCleared": "modified",
+  },
+  "rsbuild.config.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": {
@@ -1988,24 +1976,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "vitest.config.mts": {
-    "stateCleared": "modified",
-  },
-  "webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.microfrontend.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
