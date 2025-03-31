@@ -65,6 +65,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 <%_ } _%>
+<%_ if (user.primaryKey.hasUUID) { _%>
+import java.util.UUID;
+<%_ } _%>
 
 /**
  * Utility class for Spring Security.
