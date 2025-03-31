@@ -27,6 +27,7 @@ import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 <%_ if (reactive) { _%>
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 <%_ } _%>
@@ -41,6 +42,9 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
+<%_ } _%>
+<%_ if (user?.primaryKey?.hasUUID) { _%>
+import java.util.UUID;
 <%_ } _%>
 
 import java.util.*;
@@ -89,10 +93,54 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
         if (!user.isActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }
-        List<SimpleGrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>
-            .map(Authority::getName)<% } %>
-            .map(SimpleGrantedAuthority::new)
-            .toList();
-        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), grantedAuthorities);
+<%_ if (user) { _%>
+        return UserWithId.fromUser(user);
+<%_ } else { _%>
+        return org.springframework.security.core.userdetails.User.withUsername(user.getLogin())
+            .password(user.getPassword())
+            .authorities(grantedAuthorities)
+            .build();
+<%_ } _%>
     }
+<%_ if (user) { _%>
+
+    public static class UserWithId extends org.springframework.security.core.userdetails.User {
+
+        private final <%= user.primaryKey.type %> id;
+
+        public UserWithId(String login, String password, Collection<? extends GrantedAuthority> authorities, <%= user.primaryKey.type %> id) {
+            super(login, password, authorities);
+            this.id = id;
+        }
+
+        public <%= user.primaryKey.type %> getId() {
+            return id;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return super.equals(obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return super.hashCode();
+        }
+
+        public static UserWithId fromUser(<%= user.persistClass %> user) {
+            return new UserWithId(
+                user.getLogin(),
+                user.getPassword(),
+                user.getAuthorities()
+                    .stream()
+  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+                    .map(Authority::getName)
+  <%_ } _%>
+                    .map(SimpleGrantedAuthority::new)
+                    .toList(),
+                user.getId()
+            );
+        }
+    }
+<%_ } _%>
 }

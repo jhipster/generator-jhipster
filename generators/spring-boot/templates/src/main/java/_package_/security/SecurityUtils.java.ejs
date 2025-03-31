@@ -34,6 +34,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 <%_ if (authenticationTypeJwt) { _%>
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.core.ClaimAccessor;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -65,6 +66,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 <%_ } _%>
+<%_ if (user?.primaryKey?.hasUUID) { _%>
+import java.util.UUID;
+<%_ } _%>
 
 /**
  * Utility class for Spring Security.
@@ -76,7 +80,11 @@ public final class SecurityUtils {
 
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
 
-    public static final String AUTHORITIES_KEY = "auth";
+    public static final String AUTHORITIES_CLAIM = "auth";
+  <%_ if (user) { _%>
+
+    public static final String USER_ID_CLAIM = "userId";
+  <%_ } _%>
 <%_ } _%>
 
     private SecurityUtils() {}
@@ -139,6 +147,26 @@ public final class SecurityUtils {
             .filter(authentication -> authentication.getCredentials() instanceof String)
             .map(authentication -> (String) authentication.getCredentials());
     }
+  <%_ if (user) { _%>
+
+    /**
+     * Get the Id of the current user.
+     *
+     * @return the Id of the current user.
+     */
+    public static <%- optionalOrMono %><<%= user.primaryKey.type %>> getCurrentUserId() {
+    <%_ if (reactive) { _%>
+        return ReactiveSecurityContextHolder.getContext()
+            .map(SecurityContext::getAuthentication)
+    <%_ } else { _%>
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        return Optional.ofNullable(securityContext.getAuthentication())
+    <%_ } _%>
+            .filter(authentication -> authentication.getPrincipal() instanceof ClaimAccessor)
+            .map(authentication -> (ClaimAccessor) authentication.getPrincipal())
+            .map(principal -> principal.getClaim(USER_ID_CLAIM));
+    }
+  <%_ } _%>
 <%_ } _%>
 
     /**
