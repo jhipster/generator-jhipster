@@ -78,7 +78,7 @@ public final class SecurityUtils {
 
     public static final String AUTHORITIES_KEY = "auth";
 
-    public static final String USER_ID = "userId";
+    public static final String USER_ID_CLAIM = "userId";
 <%_ } _%>
 
     private SecurityUtils() {}
@@ -153,7 +153,7 @@ public final class SecurityUtils {
             return null;
         }
         Jwt jwt = (Jwt) authentication.getPrincipal();
-        return jwt.getClaim(USER_ID);
+        return jwt.getClaim(USER_ID_CLAIM);
     }
 
 <%_ } _%>

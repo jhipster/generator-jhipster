@@ -67,8 +67,9 @@ public class AuthenticateController {
 
     private final JwtEncoder jwtEncoder;
 
-
     private UserService userService;
+
+    private static final String USER_ID_CLAIM = "userId";
 
     @Value("${jhipster.security.authentication.jwt.token-validity-in-seconds:0}")
     private long tokenValidityInSeconds;
@@ -137,33 +138,38 @@ public class AuthenticateController {
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {
-        String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
+         String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
 
-        Instant now = Instant.now();
-        Instant validity;
-        if (rememberMe) {
-            validity = now.plus(this.tokenValidityInSecondsForRememberMe, ChronoUnit.SECONDS);
-        } else {
-            validity = now.plus(this.tokenValidityInSeconds, ChronoUnit.SECONDS);
-        }
+         Instant now = Instant.now();
+         Instant validity;
+         if (rememberMe) {
+             validity = now.plus(this.tokenValidityInSecondsForRememberMe, ChronoUnit.SECONDS);
+         } else {
+             validity = now.plus(this.tokenValidityInSeconds, ChronoUnit.SECONDS);
+         }
 
-        Optional<<%= user.persistClass %>> userOptional = userService.getUserWithAuthoritiesByLogin(authentication.getName());
-        Long userId = userOptional.map(User::getId).orElse(null);
+         <%_ if (reactive) { _%>
+         Optional<<%= user.persistClass %>> userOptional = userService.getUserWithAuthoritiesByLogin(authentication.getName());
+         var userId = userOptional.map(User::getId).orElse(null);
+         assert userId != null;
+         <%_ } _%>
 
-        // only for be shure, because at this moment the server already validate the user
-        assert userId != null;
+         // @formatter:off
+         JwtClaimsSet.Builder claimsBuilder = JwtClaimsSet.builder()
+             .issuedAt(now)
+             .expiresAt(validity)
+             .subject(authentication.getName())
+             .claim(AUTHORITIES_KEY, authorities);
 
-        // @formatter:off
-        JwtClaimsSet claims = JwtClaimsSet.builder()
-            .issuedAt(now)
-            .expiresAt(validity)
-            .subject(authentication.getName())
-            .claim(AUTHORITIES_KEY, authorities)
-            .claim("userId", userId)
-            .build();
+         <%_ if (reactive) { _%>
+         if (userId != null) {
+             claimsBuilder.claim(USER_ID_CLAIM, userId);
+         }
+         <%_ } _%>
+         JwtClaimsSet claims = claimsBuilder.build();
 
-        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
-        return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
+         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
     }
 
     /**
