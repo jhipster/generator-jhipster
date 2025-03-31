@@ -147,7 +147,7 @@ public final class SecurityUtils {
      *
      * @return the id of the current user.
      */
-    public static <%- user.primaryKey.type %> getCurrentUserId() {
+    public static <%= user.primaryKey.type %> getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             return null;
