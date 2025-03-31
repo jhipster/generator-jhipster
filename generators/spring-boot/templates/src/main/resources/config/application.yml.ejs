@@ -327,6 +327,7 @@ spring:
       hibernate.cache.hazelcast.instance_name: <%= baseName %>
       hibernate.cache.hazelcast.use_lite_member: true
     <%_ } else if (cacheProviderInfinispan) { _%>
+      hibernate.cache.region.factory_class: infinispan
       hibernate.cache.infinispan.statistics: false
       hibernate.cache.use_minimal_puts: true
       hibernate.cache.infinispan.entity.expiration.lifespan: 3600000

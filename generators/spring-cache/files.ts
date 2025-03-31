@@ -33,12 +33,6 @@ const files: WriteFileSection = {
       templates: ['config/CacheConfiguration.java'],
     },
     {
-      condition: data => data.cacheProviderInfinispan,
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/CacheFactoryConfiguration.java'],
-    },
-    {
       condition: data => data.cacheProviderRedis,
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
