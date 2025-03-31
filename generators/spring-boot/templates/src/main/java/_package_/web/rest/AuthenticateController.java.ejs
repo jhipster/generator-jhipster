@@ -124,7 +124,7 @@ public class AuthenticateController {
         var userId = userOptional.map(<%= user.persistClass %>::getId).orElse(null);
         assert userId != null;
 
-        String jwt = this.createToken(authentication, userId loginVM.isRememberMe());
+        String jwt = this.createToken(authentication, userId, loginVM.isRememberMe());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(jwt);
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
