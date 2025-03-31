@@ -147,7 +147,7 @@ public final class SecurityUtils {
      *
      * @return the id of the current user.
      */
-    public static Long getCurrentUserId() {
+    public static <%- user.primaryKey.type %> getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             return null;
@@ -227,8 +227,6 @@ public final class SecurityUtils {
     public static <% if (reactive) { %>Mono<Boolean><% } else { %>boolean<% } %> hasCurrentUserThisAuthority(String authority) {
         return hasCurrentUserAnyOfAuthorities(authority);
     }
-
-
 
 <%_ if (!reactive) { _%>
     private static Stream<String> getAuthorities(Authentication authentication) {

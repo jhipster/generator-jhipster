@@ -88,17 +88,18 @@ public class AuthenticateController {
 
     @PostMapping("/authenticate")
     public Mono<ResponseEntity<JWTToken>> authorize(@Valid @RequestBody Mono<LoginVM> loginVM) {
-        return loginVM
-            .flatMap(login ->
-                authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()))
-                    .flatMap(auth -> Mono.fromCallable(() -> this.createToken(auth, login.isRememberMe())))
-            )
-            .map(jwt -> {
-                HttpHeaders httpHeaders = new HttpHeaders();
-                httpHeaders.setBearerAuth(jwt);
-                return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
-            });
+        return loginVM.flatMap(login ->
+            authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()))
+                .flatMap(auth ->
+                    userService.getUserWithAuthoritiesByLogin(auth.getName())
+                        .map(user -> this.createToken(auth, user.getId(), login.isRememberMe()))
+                )
+        ).map(jwt -> {
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setBearerAuth(jwt);
+            return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+        });
     }
 <%_ } else { _%>
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -118,7 +119,12 @@ public class AuthenticateController {
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = this.createToken(authentication, loginVM.isRememberMe());
+
+        Optional<<%= user.persistClass %>> userOptional = userService.getUserWithAuthoritiesByLogin(authentication.getName());
+        var userId = userOptional.map(<%= user.persistClass %>::getId).orElse(null);
+        assert userId != null;
+
+        String jwt = this.createToken(authentication, userId loginVM.isRememberMe());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(jwt);
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
@@ -137,39 +143,33 @@ public class AuthenticateController {
         return ResponseEntity.status(principal == null ? HttpStatus.UNAUTHORIZED : HttpStatus.NO_CONTENT).build();
     }
 
-    public String createToken(Authentication authentication, boolean rememberMe) {
-         String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
+    public String createToken(Authentication authentication, <%= user.primaryKey.type %> userId, boolean rememberMe) {
+        String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
 
-         Instant now = Instant.now();
-         Instant validity;
-         if (rememberMe) {
-             validity = now.plus(this.tokenValidityInSecondsForRememberMe, ChronoUnit.SECONDS);
-         } else {
-             validity = now.plus(this.tokenValidityInSeconds, ChronoUnit.SECONDS);
-         }
+        Instant now = Instant.now();
+        Instant validity;
+        if (rememberMe) {
+            validity = now.plus(this.tokenValidityInSecondsForRememberMe, ChronoUnit.SECONDS);
+        } else {
+            validity = now.plus(this.tokenValidityInSeconds, ChronoUnit.SECONDS);
+        }
 
-         <%_ if (reactive) { _%>
-         Optional<<%= user.persistClass %>> userOptional = userService.getUserWithAuthoritiesByLogin(authentication.getName());
-         var userId = userOptional.map(User::getId).orElse(null);
-         assert userId != null;
-         <%_ } _%>
+        // @formatter:off
+        JwtClaimsSet.Builder claimsBuilder = JwtClaimsSet.builder()
+            .issuedAt(now)
+            .expiresAt(validity)
+            .subject(authentication.getName())
+            .claim(AUTHORITIES_KEY, authorities);
 
-         // @formatter:off
-         JwtClaimsSet.Builder claimsBuilder = JwtClaimsSet.builder()
-             .issuedAt(now)
-             .expiresAt(validity)
-             .subject(authentication.getName())
-             .claim(AUTHORITIES_KEY, authorities);
+        <%_ if (!reactive) { _%>
+        if (userId != null) {
+            claimsBuilder.claim(USER_ID_CLAIM, userId);
+        }
+        <%_ } _%>
+        JwtClaimsSet claims = claimsBuilder.build();
 
-         <%_ if (reactive) { _%>
-         if (userId != null) {
-             claimsBuilder.claim(USER_ID_CLAIM, userId);
-         }
-         <%_ } _%>
-         JwtClaimsSet claims = claimsBuilder.build();
-
-         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
-         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
+        return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
     }
 
     /**
