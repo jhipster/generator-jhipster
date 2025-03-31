@@ -77,6 +77,8 @@ public final class SecurityUtils {
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
 
     public static final String AUTHORITIES_KEY = "auth";
+
+    public static final String USER_ID = "userId";
 <%_ } _%>
 
     private SecurityUtils() {}
@@ -139,6 +141,21 @@ public final class SecurityUtils {
             .filter(authentication -> authentication.getCredentials() instanceof String)
             .map(authentication -> (String) authentication.getCredentials());
     }
+
+    /**
+     * Get the id of the current user.
+     *
+     * @return the id of the current user.
+     */
+    public static Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return null;
+        }
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        return jwt.getClaim(USER_ID);
+    }
+
 <%_ } _%>
 
     /**
@@ -211,20 +228,7 @@ public final class SecurityUtils {
         return hasCurrentUserAnyOfAuthorities(authority);
     }
 
-    
-    /**
-     * Get the id of the current user.
-     *
-     * @return the id of the current user.
-     */
-    public static Long getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            return null;
-        }
-        Jwt jwt = (Jwt) authentication.getPrincipal();
-        return jwt.getClaim("userId");
-    }
+
 
 <%_ if (!reactive) { _%>
     private static Stream<String> getAuthorities(Authentication authentication) {

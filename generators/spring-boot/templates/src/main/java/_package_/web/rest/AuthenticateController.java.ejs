@@ -43,7 +43,6 @@ import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import <%= user.entityAbsoluteClass %>;
 import <%= packageName %>.service.UserService;
@@ -68,7 +67,7 @@ public class AuthenticateController {
 
     private final JwtEncoder jwtEncoder;
 
-    @Autowired
+
     private UserService userService;
 
     @Value("${jhipster.security.authentication.jwt.token-validity-in-seconds:0}")
@@ -103,9 +102,10 @@ public class AuthenticateController {
 <%_ } else { _%>
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public AuthenticateController(JwtEncoder jwtEncoder, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    public AuthenticateController(JwtEncoder jwtEncoder, AuthenticationManagerBuilder authenticationManagerBuilder, UserService userService) {
         this.jwtEncoder = jwtEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.userService = userService;
     }
 
     @PostMapping("/authenticate")
