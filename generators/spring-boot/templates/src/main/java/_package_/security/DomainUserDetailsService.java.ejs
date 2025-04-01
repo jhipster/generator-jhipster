@@ -98,7 +98,15 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
 <%_ } else { _%>
         return org.springframework.security.core.userdetails.User.withUsername(user.getLogin())
             .password(user.getPassword())
-            .authorities(grantedAuthorities)
+            .authorities(
+                user.getAuthorities()
+                    .stream()
+  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+                    .map(Authority::getName)
+  <%_ } _%>
+                    .map(SimpleGrantedAuthority::new)
+                    .toList()
+            )
             .build();
 <%_ } _%>
     }
