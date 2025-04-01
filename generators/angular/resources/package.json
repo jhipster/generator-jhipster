@@ -44,7 +44,7 @@
     "jest": "29.7.0",
     "jest-date-mock": "1.0.10",
     "jest-junit": "16.0.0",
-    "jest-preset-angular": "14.5.3",
+    "jest-preset-angular": "14.5.4",
     "jest-sonar": "0.2.16",
     "merge-jsons-webpack-plugin": "2.0.1",
     "postcss-rtlcss": "5.6.0",
