@@ -37,7 +37,6 @@ import reactor.util.context.Context;
 
 <%_ if (authenticationTypeJwt) { _%>
 import java.time.Instant;
-import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.oauth2.jwt.Jwt;
 import reactor.core.publisher.Mono;
 <%_ } _%>
@@ -84,11 +83,10 @@ class SecurityUtilsUnitTest {
             .build();
 
         var authentication = new UsernamePasswordAuthenticationToken(jwt, "token");
-        var securityContext = new SecurityContextImpl(authentication);
+        var contextUserId = SecurityUtils.getCurrentUserId()
+            .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication))
+            .block();
 
-        ReactiveSecurityContextHolder.withSecurityContext(Mono.just(securityContext)).block();
-
-        var contextUserId = SecurityUtils.getCurrentUserId().block();
         assertThat(contextUserId).isEqualTo(userId);
     }
   <%_ } _%>
