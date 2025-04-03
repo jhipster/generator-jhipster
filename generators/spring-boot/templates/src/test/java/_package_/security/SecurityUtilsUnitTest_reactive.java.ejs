@@ -18,6 +18,14 @@
 -%>
 package <%= packageName %>.security;
 
+import static org.assertj.core.api.Assertions.assertThat;
+<%_ if (authenticationTypeOauth2) { _%>
+import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames.ID_TOKEN;
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+import static <%= packageName %>.security.SecurityUtils.USER_ID_CLAIM;
+<%_ } _%>
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,21 +34,19 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import reactor.util.context.Context;
-<%_ if (authenticationTypeJwt) { _%>
-import static <%= packageName %>.security.SecurityUtils.USER_ID_CLAIM;
-<%_ } _%>
 
+<%_ if (authenticationTypeJwt) { _%>
+import java.time.Instant;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.oauth2.jwt.Jwt;
+import reactor.core.publisher.Mono;
+<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import java.time.Instant;
 import java.util.*;
 <%_ } else { _%>
 import java.util.ArrayList;
 import java.util.Collection;
-<%_ } _%>
-
-import static org.assertj.core.api.Assertions.assertThat;
-<%_ if (authenticationTypeOauth2) { _%>
-import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames.ID_TOKEN;
 <%_ } _%>
 
 /**
@@ -55,7 +61,7 @@ class SecurityUtilsUnitTest {
             .block();
         assertThat(login).isEqualTo("admin");
     }
-  <%_ if (authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeJwt) { _%>
 
     @Test
     void testgetCurrentUserJWT() {
@@ -65,28 +71,28 @@ class SecurityUtilsUnitTest {
         assertThat(jwt).isEqualTo("token");
     }
 
-    <%_ if (user) { _%>
-        @Test
-        void testGetCurrentUserId() {
-            var userId = <%- user.primaryKey.javaSampleValues[0] %>;
-            var now = Instant.now();
-            var jwt = Jwt.withTokenValue("token")
-                .issuedAt(now)
-                .expiresAt(now.plusSeconds(60))
-                .claim(USER_ID_CLAIM, userId)
-                .header("Test", "test")
-                .build();
-        
-            var authentication = new UsernamePasswordAuthenticationToken(jwt, "token");
-            var securityContext = new SecurityContextImpl(authentication);
-        
-            ReactiveSecurityContextHolder.withSecurityContext(Mono.just(securityContext)).block();
-        
-            var contextUserId = SecurityUtils.getCurrentUserId().block();
-            assertThat(contextUserId).isEqualTo(userId);
-        }
-    <%_ } _%>
+  <%_ if (user) { _%>
+    @Test
+    void testGetCurrentUserId() {
+        var userId = <%- user.primaryKey.javaSampleValues[0] %>;
+        var now = Instant.now();
+        var jwt = Jwt.withTokenValue("token")
+            .issuedAt(now)
+            .expiresAt(now.plusSeconds(60))
+            .claim(USER_ID_CLAIM, userId)
+            .header("Test", "test")
+            .build();
+
+        var authentication = new UsernamePasswordAuthenticationToken(jwt, "token");
+        var securityContext = new SecurityContextImpl(authentication);
+
+        ReactiveSecurityContextHolder.withSecurityContext(Mono.just(securityContext)).block();
+
+        var contextUserId = SecurityUtils.getCurrentUserId().block();
+        assertThat(contextUserId).isEqualTo(userId);
+    }
   <%_ } _%>
+<%_ } _%>
 
     @Test
     void testIsAuthenticated() {
