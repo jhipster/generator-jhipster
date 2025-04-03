@@ -26,6 +26,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import reactor.util.context.Context;
+<%_ if (authenticationTypeJwt) { _%>
+import static <%= packageName %>.security.SecurityUtils.USER_ID_CLAIM;
+<%_ } _%>
 
 <%_ if (authenticationTypeOauth2) { _%>
 import java.time.Instant;
@@ -61,6 +64,28 @@ class SecurityUtilsUnitTest {
             .block();
         assertThat(jwt).isEqualTo("token");
     }
+
+    <%_ if (user) { _%>
+        @Test
+        void testGetCurrentUserId() {
+            var userId = <%- user.primaryKey.javaSampleValues[0] %>;
+            var now = Instant.now();
+            var jwt = Jwt.withTokenValue("token")
+                .issuedAt(now)
+                .expiresAt(now.plusSeconds(60))
+                .claim(USER_ID_CLAIM, userId)
+                .header("Test", "test")
+                .build();
+        
+            var authentication = new UsernamePasswordAuthenticationToken(jwt, "token");
+            var securityContext = new SecurityContextImpl(authentication);
+        
+            ReactiveSecurityContextHolder.withSecurityContext(Mono.just(securityContext)).block();
+        
+            var contextUserId = SecurityUtils.getCurrentUserId().block();
+            assertThat(contextUserId).isEqualTo(userId);
+        }
+    <%_ } _%>
   <%_ } _%>
 
     @Test
