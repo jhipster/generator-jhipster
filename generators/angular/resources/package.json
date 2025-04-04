@@ -9,7 +9,7 @@
     "@ngx-translate/http-loader": "16.0.1",
     "@popperjs/core": "2.11.8",
     "@stomp/rx-stomp": "2.0.1",
-    "bootstrap": "5.3.3",
+    "bootstrap": "5.3.4",
     "bootswatch": "5.3.3",
     "ngx-cookie-service": "19.1.2",
     "ngx-infinite-scroll": "19.0.0",
