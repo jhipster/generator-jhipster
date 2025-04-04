@@ -67,6 +67,7 @@ jobs:
           npm-version: ${{ steps.setup.outputs.npm-version }}
           maven-cache: true
           gradle-cache: true
+          binary-dir: ${{ github.workspace }}/generator-jhipster/bin
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
