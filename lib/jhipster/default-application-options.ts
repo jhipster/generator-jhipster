@@ -71,8 +71,8 @@ const {
   SKIP_USER_MANAGEMENT,
   TEST_FRAMEWORKS,
   WEBSOCKET,
-  ENABLE_GRADLE_ENTERPRISE,
-  GRADLE_ENTERPRISE_HOST,
+  ENABLE_GRADLE_DEVELOCITY,
+  GRADLE_DEVELOCITY_HOST,
 } = OptionNames;
 
 type ApplicationDefaults = Partial<ApplicationConfiguration>;
@@ -298,8 +298,8 @@ export function getDefaultConfigForNewApplication(customOptions: ApplicationDefa
     [BASE_NAME]: OptionValues[BASE_NAME],
     [LANGUAGES]: OptionValues[LANGUAGES],
     [TEST_FRAMEWORKS]: [],
-    [ENABLE_GRADLE_ENTERPRISE]: OptionValues[ENABLE_GRADLE_ENTERPRISE],
-    [GRADLE_ENTERPRISE_HOST]: OptionValues[GRADLE_ENTERPRISE_HOST],
+    [ENABLE_GRADLE_DEVELOCITY]: OptionValues[ENABLE_GRADLE_DEVELOCITY],
+    [GRADLE_DEVELOCITY_HOST]: OptionValues[GRADLE_DEVELOCITY_HOST],
     ...customOptions,
   };
   return getConfigWithDefaults(options);

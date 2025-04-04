@@ -128,13 +128,13 @@ type BuildToolApplication = DeterministicOptionWithDerivedProperties<
   [
     Record<string, never>,
     {
-      enableGradleEnterprise: boolean;
+      enableGradleDevelocity: boolean;
     },
   ]
 >;
 */
 type BuildToolApplication = OptionWithDerivedProperties<'buildTool', ['maven', 'gradle']> & {
-  enableGradleEnterprise: boolean;
+  enableGradleDevelocity: boolean;
 };
 
 type SearchEngine = {
