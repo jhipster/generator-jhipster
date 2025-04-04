@@ -79,6 +79,8 @@ jobs:
       - name: 'GENERATION: project'
         id: project
         run: jhipster.cjs from-issue ${{ inputs.issue || github.event.issue.number }} --no-code-workspace --disable-blueprints
+        env:
+          JHI_FOLDER_APP: ${{ github.workspace }}/app
       - name: 'GENERATION: jhipster info'
         run: $JHI_SCRIPTS/14-jhipster-info.sh
       #----------------------------------------------------------------------
