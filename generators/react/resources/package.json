@@ -5,7 +5,7 @@
     "@fortawesome/react-fontawesome": "0.2.2",
     "@reduxjs/toolkit": "2.6.1",
     "axios": "1.8.4",
-    "bootstrap": "5.3.4",
+    "bootstrap": "5.3.5",
     "bootswatch": "5.3.5",
     "lodash": "4.17.21",
     "path-browserify": "1.0.1",
