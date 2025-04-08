@@ -158,7 +158,7 @@ Create entities from the JDL file/URL/content passed in argument.
     Use the '--interactive' flag to generate multiple applications in series.
 
 Options:
-  --auto-crlf                              Detect line endings (defaults to true on Windows)
+  --auto-crlf                              Detect line endings
   --interactive                            Generate multiple applications in series so that questions can be interacted with. This is the default when there is an existing application configuration in any of the folders
   --json-only                              Generate only the JSON files and skip entity regeneration
   --ignore-application                     Ignores application generation

@@ -43,7 +43,6 @@ import {
   createJHipster7Context,
   formatDateForChangelog,
   hasCrlr,
-  isWin32,
   joinCallbacks,
   normalizeLineEndings,
   removeFieldsWithNullishValues,
@@ -267,7 +266,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       skipFakeData: false,
       skipCheckLengthOfIdentifier: false,
       enableGradleEnterprise: false,
-      autoCrlf: isWin32,
+      autoCrlf: false,
       pages: [],
     });
     return configWithDefaults as ApplicationConfiguration;

@@ -21,7 +21,7 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 const command: JHipsterCommandDefinition = {
   options: {
     autoCrlf: {
-      description: 'Detect line endings (defaults to true on Windows)',
+      description: 'Detect line endings',
       type: Boolean,
       scope: 'storage',
     },
