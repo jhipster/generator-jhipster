@@ -21,9 +21,9 @@
   "devDependencies": {
     "@angular-architects/module-federation": "19.0.3",
     "@angular-architects/module-federation-runtime": "19.0.3",
-    "@angular-builders/custom-esbuild": "19.0.0",
-    "@angular-builders/custom-webpack": "19.0.0",
-    "@angular-builders/jest": "19.0.0",
+    "@angular-builders/custom-esbuild": "19.1.0",
+    "@angular-builders/custom-webpack": "19.0.1",
+    "@angular-builders/jest": "19.0.1",
     "@angular/cli": "19.2.6",
     "@eslint/js": "9.24.0",
     "@types/jest": "29.5.14",
