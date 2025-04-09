@@ -6,7 +6,7 @@ exports[`generator - app help should print expected information 1`] = `
 [Default] Create a new JHipster application based on the selected options
 
 Options:
-  --auto-crlf                              Detect line endings (defaults to true on Windows)
+  --auto-crlf                              Detect line endings
   --defaults                               Execute jhipster with default config
   --skip-client                            Skip the client-side application generation
   --skip-server                            Skip the server-side application generation
