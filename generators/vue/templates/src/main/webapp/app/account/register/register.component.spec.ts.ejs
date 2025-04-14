@@ -1,13 +1,31 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import { vitest } from 'vitest';
 import { computed } from 'vue';
 import { shallowMount } from '@vue/test-utils';
+import { createTestingPinia } from '@pinia/testing';
 import axios from 'axios';
 import sinon from 'sinon';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
+import { useLoginModal } from '@/account/login-modal';
 import Register from './register.vue';
-import RegisterService from './register.service';
-import LoginService from '../login.service';
 
 type RegisterComponentType = InstanceType<typeof Register>;
 
@@ -18,7 +36,6 @@ const axiosStub = {
 
 describe('Register Component', () => {
   let register: RegisterComponentType;
-  let loginService: LoginService;
   const filledRegisterAccount = {
     email: 'jhi@pster.net',
     langKey: '<%= nativeLanguage %>',
@@ -29,13 +46,11 @@ describe('Register Component', () => {
   beforeEach(() => {
     axiosStub.get.resolves({});
     axiosStub.post.reset();
-    loginService = new LoginService({ emit: vitest.fn() });
-    vitest.spyOn(loginService, 'openLogin');
 
     const wrapper = shallowMount(Register, {
       global: {
+        plugins: [createTestingPinia()],
         provide: {
-          loginService,
           currentLanguage: computed(() => '<%= nativeLanguage %>'),
         },
       },
@@ -55,8 +70,9 @@ describe('Register Component', () => {
   });
 
   it('should open login modal when asked to', () => {
-    register.openLogin();
-    expect(loginService.openLogin).toBeCalledTimes(1);
+    const login = useLoginModal();
+    register.showLogin();
+    expect(login.showLogin).toBeCalledTimes(1);
   });
 
   it('should register when password match', async () => {

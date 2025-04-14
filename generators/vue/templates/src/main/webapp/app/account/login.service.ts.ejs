@@ -1,27 +1,7 @@
-<%_ if (!authenticationTypeOauth2) { _%>
-import Vue from 'vue';
-<%_ } _%>
-<%_ if (!authenticationTypeJwt) { _%>
 import axios, { type AxiosPromise } from 'axios';
-<%_ } _%>
 
 export default class LoginService {
-<%_ if (!authenticationTypeOauth2) { _%>
-  private readonly emit: (event: string, ...args: any[]) => void;
-
-  constructor({ emit }: { emit: (event: string, ...args: any[]) => void }) {
-    this.emit = emit;
-  }
-
-  public openLogin(): void {
-    this.emit('bv::show::modal', 'login-page');
-  }
-
-  public hideLogin(): void {
-    this.emit('bv::hide::modal', 'login-page');
-  }
-<%_ } else { _%>
-
+<%_ if (authenticationTypeOauth2) { _%>
   public login(loc: { href: string; hostname: string; pathname: string; port?: string } = window.location) {
     const port = loc.port ? `:${loc.port}` : '';
     let contextPath = loc.pathname;
@@ -39,10 +19,8 @@ export default class LoginService {
     loc.href = `//${loc.hostname}${port}${contextPath}oauth2/authorization/oidc`;
   }
 <%_ } _%>
-<%_ if (!authenticationTypeJwt) { _%>
 
   public logout(): AxiosPromise<any> {
     return axios.post('api/logout');
   }
-<%_ } _%>
 }
