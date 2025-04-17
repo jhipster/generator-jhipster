@@ -27,8 +27,9 @@ import { getEntity, deleteEntity } from './<%= entityFileName %>.reducer';
 
 export const <%= entityReactName %>DeleteDialog = () => {
   const dispatch = useAppDispatch();
-
+<%_ if (paginationPagination) { _%>
   const pageLocation = useLocation();
+<%_ } _%>
   const navigate = useNavigate();
   const { id } = useParams<'id'>();
 
