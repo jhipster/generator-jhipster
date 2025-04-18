@@ -72,7 +72,7 @@ describe('Register Component', () => {
   it('should open login modal when asked to', () => {
     const login = useLoginModal();
     register.showLogin();
-    expect(login.showLogin).toBeCalledTimes(1);
+    expect(login.showLogin).toHaveBeenCalledOnce();
   });
 
   it('should register when password match', async () => {

@@ -84,7 +84,7 @@ describe('Error component', () => {
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeFalsy();
 <%_ if (generateUserManagement) { _%>
-    expect(login.showLogin).toHaveBeenCalledTimes(0);
+    expect(login.showLogin).not.toHaveBeenCalled();
 <%_ } else { _%>
     expect(loginService.login).toHaveBeenCalledTimes(0);
 <%_ } _%>
@@ -124,7 +124,7 @@ describe('Error component', () => {
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeTruthy();
 <%_ if (generateUserManagement) { _%>
-    expect(login.showLogin).toHaveBeenCalledTimes(0);
+    expect(login.showLogin).not.toHaveBeenCalled();
 <%_ } else { _%>
     expect(loginService.login).toHaveBeenCalledTimes(0);
 <%_ } _%>
@@ -141,7 +141,7 @@ describe('Error component', () => {
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeFalsy();
 <%_ if (generateUserManagement) { _%>
-    expect(login.showLogin).toHaveBeenCalledTimes(0);
+    expect(login.showLogin).not.toHaveBeenCalled();
 <%_ } else { _%>
     expect(loginService.login).toHaveBeenCalledTimes(0);
 <%_ } _%>
