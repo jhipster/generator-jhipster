@@ -18,7 +18,6 @@
 -%>
 import axios from 'axios';
 import sinon from 'sinon';
-import { configureStore } from '@reduxjs/toolkit';
 
 import administration, {
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
@@ -260,17 +259,12 @@ describe('Administration reducer tests', () => {
   });
 <%_ } _%>
   describe('Actions', () => {
-    let store;
-
     const resolvedObject = { value: 'whatever' };
     const getState = jest.fn();
     const dispatch = jest.fn();
     const extra = {};
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable || withAdminUi) { _%>
     beforeEach(() => {
-      store = configureStore({
-        reducer: (state = [], action) => [...state, action],
-      });
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
