@@ -1,6 +1,5 @@
 import axios from 'axios';
 import sinon from 'sinon';
-import { configureStore, createReducer } from '@reduxjs/toolkit';
 import { TranslatorContext } from 'react-jhipster';
 
 import locale, { setLocale, updateLocale, loaded, addTranslationSourcePrefix } from 'app/shared/reducers/locale';
@@ -45,14 +44,7 @@ describe('Locale reducer tests', () => {
 
   describe('setLocale reducer', () => {
     describe('with default language loaded', () => {
-      let store;
-      const reducer = createReducer({ locale: { sourcePrefixes: '', loadedLocales: [defaultLocale], loadedKeys: [] } }, builder => {
-        builder.addDefaultCase(() => {});
-      });
       beforeEach(() => {
-        store = configureStore({
-          reducer,
-        });
         axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
       });
 
@@ -71,14 +63,7 @@ describe('Locale reducer tests', () => {
     });
 
     describe('with no language loaded', () => {
-      let store;
-      const reducer = createReducer({ locale: { sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } }, builder => {
-        builder.addDefaultCase(() => {});
-      });
       beforeEach(() => {
-        store = configureStore({
-          reducer,
-        });
         axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
       });
 
@@ -101,17 +86,7 @@ describe('Locale reducer tests', () => {
     const sourcePrefix = 'foo/';
 
     describe('with no prefixes and keys loaded', () => {
-      let store;
-      const reducer = createReducer(
-        { locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } },
-        builder => {
-          builder.addDefaultCase(() => {});
-        },
-      );
       beforeEach(() => {
-        store = configureStore({
-          reducer,
-        });
         axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
       });
 
@@ -129,17 +104,7 @@ describe('Locale reducer tests', () => {
     });
 
     describe('with prefix already added', () => {
-      let store;
-      const reducer = createReducer(
-        { locale: { currentLocale: defaultLocale, sourcePrefixes: [sourcePrefix], loadedLocales: [], loadedKeys: [] } },
-        builder => {
-          builder.addDefaultCase(() => {});
-        },
-      );
       beforeEach(() => {
-        store = configureStore({
-          reducer,
-        });
         axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
       });
 
@@ -157,19 +122,7 @@ describe('Locale reducer tests', () => {
     });
 
     describe('with key already loaded', () => {
-      let store;
-      const reducer = createReducer(
-        {
-          locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [`${sourcePrefix}${defaultLocale}`] },
-        },
-        builder => {
-          builder.addDefaultCase(() => {});
-        },
-      );
       beforeEach(() => {
-        store = configureStore({
-          reducer,
-        });
         axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
       });
 
