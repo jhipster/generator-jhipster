@@ -69,6 +69,7 @@ export default class SharedData<EntityType extends BaseEntity = Entity, Applicat
     defaults(this._storage.sharedApplication, {
       nodeDependencies: {},
       customizeTemplatePaths: [],
+      user: undefined,
     });
 
     let customizeRemoveFiles: ((file: string) => string | undefined)[] = [];

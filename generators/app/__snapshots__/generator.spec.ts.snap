@@ -2125,6 +2125,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "typescriptEslint": undefined,
   "upperFirstCamelCaseBaseName": "Jhipster",
   "useNpmWrapper": false,
+  "user": undefined,
   "websocket": "no",
   "withAdminUi": false,
   "wrapMono": [Function],
