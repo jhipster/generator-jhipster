@@ -1,11 +1,32 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import { vitest } from 'vitest';
 import { type Ref, ref } from 'vue';
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, type ComponentMountingOptions } from '@vue/test-utils';
 import { type RouteLocation } from 'vue-router';
+import { createTestingPinia } from '@pinia/testing';
 
+<%_ if (generateUserManagement) { _%>
+import { useLoginModal } from '@/account/login-modal';
+
+<%_ } _%>
 import Error from './error.vue';
-
-import <% if (authenticationTypeOauth2) { %>type <% } %>LoginService from '@/account/login.service';
 
 type ErrorComponentType = InstanceType<typeof Error>;
 
@@ -19,22 +40,32 @@ const customErrorMsg = 'An error occurred.';
 
 describe('Error component', () => {
   let error: ErrorComponentType;
+<%_ if (authenticationTypeOauth2) { _%>
   let loginService: LoginService;
+<%_ } _%>
+<%_ if (generateUserManagement) { _%>
+  let login: ReturnType<typeof useLoginModal>;
+<%_ } _%>
   let authenticated: Ref<boolean>;
+  let mountOptions: ComponentMountingOptions<ErrorComponentType>;
 
   beforeEach(() => {
     route = {};
     authenticated = ref(false);
-<%_ if (authenticationTypeJwt) { _%>
-    loginService = new LoginService({ emit: vitest.fn() });
-    vitest.spyOn(loginService, 'openLogin');
-<%_ } else if (authenticationTypeSession) { _%>
-    loginService = new LoginService({ emit: vitest.fn() });
-    vitest.spyOn(loginService, 'openLogin');
-    vitest.spyOn(loginService, 'logout');
-<%_ } else if (authenticationTypeOauth2) { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     loginService = { login: vitest.fn(), logout: vitest.fn() };
 <%_ } _%>
+    mountOptions = {
+      global: {
+        plugins: [createTestingPinia()],
+        provide: {
+<%_ if (authenticationTypeOauth2) { _%>
+          loginService,
+<%_ } _%>
+          authenticated,
+        },
+      },
+    };
   });
 
   it('should have retrieve custom error on routing', () => {
@@ -43,21 +74,17 @@ describe('Error component', () => {
       name: 'CustomMessage',
       meta: { errorMessage: customErrorMsg },
     };
-    const wrapper = shallowMount(Error, {
-      global: {
-        provide: {
-          loginService,
-          authenticated,
-        },
-      },
-    });
+    const wrapper = shallowMount(Error, mountOptions);
     error = wrapper.vm;
+<%_ if (generateUserManagement) { _%>
+    login = useLoginModal();
+<%_ } _%>
 
     expect(error.errorMessage).toBe(customErrorMsg);
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeFalsy();
-<%_ if (!authenticationTypeOauth2) { _%>
-    expect(loginService.openLogin).toHaveBeenCalledTimes(0);
+<%_ if (generateUserManagement) { _%>
+    expect(login.showLogin).not.toHaveBeenCalled();
 <%_ } else { _%>
     expect(loginService.login).toHaveBeenCalledTimes(0);
 <%_ } _%>
@@ -67,21 +94,17 @@ describe('Error component', () => {
     route = {
       meta: { error403: true },
     };
-    const wrapper = shallowMount(Error, {
-      global: {
-        provide: {
-          loginService,
-          authenticated,
-        },
-      },
-    });
+    const wrapper = shallowMount(Error, mountOptions);
     error = wrapper.vm;
+<%_ if (generateUserManagement) { _%>
+    login = useLoginModal();
+<%_ } _%>
 
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeTruthy();
     expect(error.error404).toBeFalsy();
-<%_ if (!authenticationTypeOauth2) { _%>
-    expect(loginService.openLogin).toHaveBeenCalled();
+<%_ if (generateUserManagement) { _%>
+    expect(login.showLogin).toHaveBeenCalled();
 <%_ } else { _%>
     expect(loginService.login).toHaveBeenCalled();
 <%_ } _%>
@@ -91,42 +114,34 @@ describe('Error component', () => {
     route = {
       meta: { error404: true },
     };
-    const wrapper = shallowMount(Error, {
-      global: {
-        provide: {
-          loginService,
-          authenticated,
-        },
-      },
-    });
+    const wrapper = shallowMount(Error, mountOptions);
     error = wrapper.vm;
+<%_ if (generateUserManagement) { _%>
+    login = useLoginModal();
+<%_ } _%>
 
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeTruthy();
-<%_ if (!authenticationTypeOauth2) { _%>
-    expect(loginService.openLogin).toHaveBeenCalledTimes(0);
+<%_ if (generateUserManagement) { _%>
+    expect(login.showLogin).not.toHaveBeenCalled();
 <%_ } else { _%>
     expect(loginService.login).toHaveBeenCalledTimes(0);
 <%_ } _%>
   });
 
   it('should have set default on no error', () => {
-    const wrapper = shallowMount(Error, {
-      global: {
-        provide: {
-          loginService,
-          authenticated,
-        },
-      },
-    });
+    const wrapper = shallowMount(Error, mountOptions);
     error = wrapper.vm;
+<%_ if (generateUserManagement) { _%>
+    login = useLoginModal();
+<%_ } _%>
 
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeFalsy();
-<%_ if (!authenticationTypeOauth2) { _%>
-    expect(loginService.openLogin).toHaveBeenCalledTimes(0);
+<%_ if (generateUserManagement) { _%>
+    expect(login.showLogin).not.toHaveBeenCalled();
 <%_ } else { _%>
     expect(loginService.login).toHaveBeenCalledTimes(0);
 <%_ } _%>

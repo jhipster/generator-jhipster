@@ -11,12 +11,17 @@ import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 
 import App from './app.vue';
 import router<% if (applicationTypeGateway && microfrontend) { %>, { lazyRoutes }<% } %> from './router';
-import { initFortAwesome<% if (enableTranslation) { %>, initI18N<% } %> } from './shared/config/config';
-import { initBootstrapVue } from './shared/config/config-bootstrap-vue';
-import JhiItemCountComponent from './shared/jhi-item-count.vue';
-import JhiSortIndicatorComponent from './shared/sort/jhi-sort-indicator.vue';
-import LoginService from './account/login.service';
-import AccountService from './account/account.service';
+import { initFortAwesome<% if (enableTranslation) { %>, initI18N<% } %> } from '@/shared/config/config';
+import { initBootstrapVue } from '@/shared/config/config-bootstrap-vue';
+import JhiItemCountComponent from '@/shared/jhi-item-count.vue';
+import JhiSortIndicatorComponent from '@/shared/sort/jhi-sort-indicator.vue';
+<%_ if (authenticationUsesCsrf) { _%>
+import LoginService from '@/account/login.service';
+<%_ } _%>
+<%_ if (generateUserManagement) { _%>
+import { useLoginModal } from '@/account/login-modal';
+<%_ } _%>
+import AccountService from '@/account/account.service';
 
 import '../content/scss/global.scss';
 import '../content/scss/vendor.scss';
@@ -86,13 +91,12 @@ const app = createApp({
   compatConfig: { MODE: 3 },
   components: { App },
   template: '<App/>',
-<%_ if (!authenticationTypeOauth2) { _%>
-  setup(_props, { emit }) {
-    const loginService = new LoginService({ emit });
-    provide('loginService', loginService);
-<%_ } else { _%>
   setup() {
+<%_ if (authenticationUsesCsrf) { _%>
     provide('loginService', new LoginService());
+<%_ } _%>
+<%_ if (generateUserManagement) { _%>
+    const { hideLogin, showLogin } = useLoginModal();
 <%_ } _%>
     const store = useStore();
     const accountService = new AccountService(store);
@@ -143,7 +147,7 @@ const app = createApp({
     router.beforeResolve(async (to, from, next) => {
 <%_ if (!authenticationTypeOauth2) { _%>
       // Make sure login modal is closed
-      loginService.hideLogin();
+      hideLogin();
 
 <%_ } _%>
       if (!store.authenticated) {
@@ -173,7 +177,7 @@ const app = createApp({
 <%_ if (authenticationTypeOauth2) { _%>
             window.location.reload();
 <%_ } else { _%>
-            loginService.openLogin();
+            showLogin();
 <%_ } _%>
             return;
           }

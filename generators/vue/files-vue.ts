@@ -149,7 +149,7 @@ export const vueFiles = {
         'account/login-form/login-form.vue',
         'account/login-form/login-form.component.ts',
         'account/login-form/login-form.component.spec.ts',
-        'account/login.service.ts',
+        'account/login-modal.ts',
         'router/account.ts',
       ],
     },
@@ -182,15 +182,10 @@ export const vueFiles = {
     {
       condition: generator => generator.authenticationTypeSession && generator.generateUserManagement,
       ...clientApplicationTemplatesBlock(),
-      templates: [
-        'account/sessions/sessions.vue',
-        'account/sessions/sessions.component.ts',
-        'account/sessions/sessions.component.spec.ts',
-        'account/login.service.spec.ts',
-      ],
+      templates: ['account/sessions/sessions.vue', 'account/sessions/sessions.component.ts', 'account/sessions/sessions.component.spec.ts'],
     },
     {
-      condition: generator => generator.authenticationTypeOauth2,
+      condition: generator => generator.authenticationUsesCsrf,
       ...clientApplicationTemplatesBlock(),
       templates: ['account/login.service.ts', 'account/login.service.spec.ts'],
     },
