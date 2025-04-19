@@ -93,7 +93,7 @@ export const getEntity = createAsyncThunk(
 <%_ if (!readOnly) { _%>
 export const createEntity = createAsyncThunk(
   '<%= entityInstance %>/create_entity',
-  async (entity: I<%= entityReactName %>, thunkAPI) => {
+  async (entity: I<%= entityReactName %><%_ if (!paginationInfiniteScroll) { _%>, thunkAPI<%_ } _%>) => {
   <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.post<I<%= entityReactName %>>(apiUrl, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
@@ -107,7 +107,7 @@ export const createEntity = createAsyncThunk(
 
 export const updateEntity = createAsyncThunk(
   '<%= entityInstance %>/update_entity',
-  async (entity: I<%= entityReactName %>, thunkAPI) => {
+  async (entity: I<%= entityReactName %><%_ if (!paginationInfiniteScroll) { _%>, thunkAPI<%_ } _%>) => {
   <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.put<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
@@ -121,7 +121,7 @@ export const updateEntity = createAsyncThunk(
 
 export const partialUpdateEntity = createAsyncThunk(
   '<%= entityInstance %>/partial_update_entity',
-  async (entity: I<%= entityReactName %>, thunkAPI) => {
+  async (entity: I<%= entityReactName %><%_ if (!paginationInfiniteScroll) { _%>, thunkAPI<%_ } _%>) => {
   <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.patch<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
@@ -135,7 +135,7 @@ export const partialUpdateEntity = createAsyncThunk(
 
 export const deleteEntity = createAsyncThunk(
   '<%= entityInstance %>/delete_entity',
-  async (id: string | number, thunkAPI) => {
+  async (id: string | number<%_ if (!paginationInfiniteScroll) { _%>, thunkAPI<%_ } _%>) => {
     const requestUrl = `${apiUrl}/${id}`;
   <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.delete<I<%= entityReactName %>>(requestUrl);
