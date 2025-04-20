@@ -21,7 +21,7 @@ export default class AccountService {
         this.store.setActiveProfiles(res.data.activeProfiles);
       }
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -34,7 +34,7 @@ export default class AccountService {
         this.store.setAuthentication(account);
         return true;
       }
-    } catch (error) {
+    } catch {
       // Ignore error
     }
 
