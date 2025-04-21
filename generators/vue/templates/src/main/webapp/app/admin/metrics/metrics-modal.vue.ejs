@@ -18,7 +18,7 @@
     <div class="mt-2">&nbsp;</div>
     Filter
     <input type="text" v-model="threadDumpFilter" class="form-control" />
-    <div class="pad" v-for="(entry, key) of filteredThreadDump" :key="key">
+    <div class="pad" v-for="(entry, key1) of filteredThreadDump" :key="key1">
       <h6>
         <span class="badge" :class="getBadgeClass(entry.threadState)">{{ entry.threadState }}</span
         >&nbsp;{{ entry.threadName }} (ID {{ entry.threadId }})
@@ -29,7 +29,7 @@
       </h6>
       <div class="card" :hidden="!entry.show">
         <div class="card-body">
-          <div v-for="(st, key) of entry.stackTrace" :key="key" class="break">
+          <div v-for="(st, key2) of entry.stackTrace" :key="key2" class="break">
             <samp
               >{{ st.className }}.{{ st.methodName }}(<code>{{ st.fileName }}:{{ st.lineNumber }}</code
               >)</samp
