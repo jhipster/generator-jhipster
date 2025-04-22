@@ -126,11 +126,9 @@ import angular from 'angular-eslint';
   {
     files: ['**/*.html'],
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
-    rules: {},
-  },
-  {
-    // Html templates require some work
-    ignores: ['**/*.html'],
-    extends: [prettier],
+    rules: {
+      '@angular-eslint/template/click-events-have-key-events': 'off',
+      '@angular-eslint/template/interactive-supports-focus': 'off',
+    },
   },
 <&_ } -&>
