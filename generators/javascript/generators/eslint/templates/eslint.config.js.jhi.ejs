@@ -50,7 +50,15 @@ export default [
   },
 <&- fragments.configSection() -&>
   // jhipster-needle-eslint-add-config - JHipster will add additional config here
+<%_ if (locals.clientFrameworkAngular) { _%>
+  {
+    // Html templates require some work
+    ignores: ['**/*.html'],
+    extends: [prettier],
+  },
+<%_ } else { _%>
   prettier,
+<%_ } _%>
 <&- fragments.endConfigSection() -&>
 <%_ if (typescriptEslint) { _%>
 );

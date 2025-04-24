@@ -177,7 +177,7 @@ _%>
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } else { _%>
-                    @if (editForm.get(['<%- relationship.propertyName %>'])!.value == null) {
+                    @if (editForm.get(['<%- relationship.propertyName %>'])!.value === null) {
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } _%>
