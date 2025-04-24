@@ -7,27 +7,27 @@ import { type IUser } from '@/shared/model/user.model';
 
 export default class UserManagementService {
 
-  public get(userId: string): Promise<any> {
+  get(userId: string): Promise<any> {
     return axios.get(`api/admin/users/${userId}`);
   }
 
-  public create(user: IUser): Promise<any> {
+  create(user: IUser): Promise<any> {
     return axios.post('api/admin/users', user);
   }
 
-  public update(user: IUser): Promise<any> {
+  update(user: IUser): Promise<any> {
     return axios.put('api/admin/users', user);
   }
 
-  public remove(userId: <%- user.primaryKey.tsType %>): Promise<any> {
+  remove(userId: <%- user.primaryKey.tsType %>): Promise<any> {
     return axios.delete(`api/admin/users/${userId}`);
   }
 
-  public retrieve(<%_ if (!databaseTypeCassandra) { _%>req?: any <%_ } _%>): Promise<any> {
+  retrieve(<%_ if (!databaseTypeCassandra) { _%>req?: any <%_ } _%>): Promise<any> {
     return axios.get(`api/admin/users<%_ if (!databaseTypeCassandra) { _%>?${buildPaginationQueryOpts(req)}<%_ } _%>`);
   }
 
-  public retrieveAuthorities(): Promise<any> {
+  retrieveAuthorities(): Promise<any> {
 <%_ if (!databaseTypeCassandra) { _%>
     return axios.get('api/authorities').then(response => {
       response.data = response.data.map(authority => authority.name);
