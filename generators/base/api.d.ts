@@ -18,6 +18,8 @@ export type JHipsterGeneratorOptions = BaseOptions &
     programName: string;
     positionalArguments?: unknown[];
     createEnvBuilder?: any;
+    devBlueprintEnabled?: boolean;
+
     /** @experimental */
     jdlDefinition?: JDLApplicationConfig;
     /** @experimental */
