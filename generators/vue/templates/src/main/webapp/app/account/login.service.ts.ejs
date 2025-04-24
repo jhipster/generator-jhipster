@@ -2,7 +2,7 @@ import axios, { type AxiosPromise } from 'axios';
 
 export default class LoginService {
 <%_ if (authenticationTypeOauth2) { _%>
-  public login(loc: { href: string; hostname: string; pathname: string; port?: string } = window.location) {
+  login(loc: { href: string; hostname: string; pathname: string; port?: string } = window.location) {
     const port = loc.port ? `:${loc.port}` : '';
     let contextPath = loc.pathname;
     if (contextPath.endsWith('accessdenied')) {
@@ -20,7 +20,7 @@ export default class LoginService {
   }
 <%_ } _%>
 
-  public logout(): AxiosPromise<any> {
+  logout(): AxiosPromise<any> {
     return axios.post('api/logout');
   }
 }

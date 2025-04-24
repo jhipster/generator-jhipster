@@ -1,11 +1,11 @@
 import axios, { type AxiosPromise } from 'axios';
 
 export default class MetricsService {
-  public getMetrics(): AxiosPromise<any> {
+  getMetrics(): AxiosPromise<any> {
     return axios.get('management/jhimetrics');
   }
 
-  public retrieveThreadDump(): AxiosPromise<any> {
+  retrieveThreadDump(): AxiosPromise<any> {
     return axios.get('management/threaddump');
   }
 }
