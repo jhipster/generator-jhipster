@@ -4,7 +4,7 @@
     "@fortawesome/free-solid-svg-icons": "6.7.2",
     "@fortawesome/react-fontawesome": "0.2.2",
     "@reduxjs/toolkit": "2.7.0",
-    "axios": "1.8.4",
+    "axios": "1.9.0",
     "bootstrap": "5.3.5",
     "bootswatch": "5.3.5",
     "lodash": "4.17.21",
