@@ -1,0 +1,16 @@
+{
+    "sessions": {
+      "title": "הפעלות פעילות עבור [<strong>{{username}}</strong>]",
+      "table": {
+        "ipaddress": "כתובת IP",
+        "useragent": "סוכן משתמש (User Agent)",
+        "date": "תאריך",
+        "button": "בטל הפעלה"
+      },
+      "messages": {
+        "success": "<strong>ההפעלה בוטלה בהצלחה!</strong>",
+        "error": "<strong>אירעה שגיאה!</strong> לא ניתן היה לבטל את ההפעלה."
+      }
+    }
+}
+  

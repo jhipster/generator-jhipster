@@ -1,0 +1,103 @@
+{
+    "metrics": {
+      "title": "מדדי מערכת",
+      "refresh.button": "רענן",
+      "updating": "מעדכן...",
+      "jvm": {
+        "title": "מדדי JVM",
+        "memory": {
+          "title": "זיכרון",
+          "total": "סך הזיכרון",
+          "heap": "זיכרון ערימה (Heap)",
+          "nonheap": "זיכרון שאינו ערימה (Non-Heap)"
+        },
+        "threads": {
+          "title": "תהליכונים (Threads)",
+          "all": "הכול",
+          "runnable": "ניתן להרצה",
+          "timedwaiting": "ממתין עם טיימר",
+          "waiting": "ממתין",
+          "blocked": "חסום",
+          "dump": {
+            "title": "תצלום תהליכונים",
+            "id": "מזהה: ",
+            "blockedtime": "משך חסימה",
+            "blockedcount": "כמות חסימות",
+            "waitedtime": "משך המתנה",
+            "waitedcount": "כמות המתנות",
+            "lockname": "שם הנעילה",
+            "stacktrace": "עקבת שגיאה (Stacktrace)",
+            "show": "הצג עקבת שגיאה",
+            "hide": "הסתר עקבת שגיאה"
+          }
+        },
+        "gc": {
+          "title": "איסוף זבל (GC)",
+          "marksweepcount": "כמות איסוף Mark Sweep",
+          "marksweeptime": "זמן איסוף Mark Sweep",
+          "scavengecount": "כמות Scavenge",
+          "scavengetime": "זמן Scavenge"
+        },
+        "http": {
+          "title": "בקשות HTTP (באלפיות שנייה)",
+          "active": "בקשות פעילות:",
+          "total": "סה\"כ בקשות:",
+          "table": {
+            "code": "קוד",
+            "count": "כמות",
+            "mean": "ממוצע",
+            "average": "ממוצע",
+            "max": "מקסימום"
+          },
+          "code": {
+            "ok": "הצלחה",
+            "notfound": "לא נמצא",
+            "servererror": "שגיאת שרת"
+          }
+        }
+      },
+      "servicesstats": {
+        "title": "סטטיסטיקת שירותים (באלפיות שנייה)",
+        "table": {
+          "name": "שם השירות",
+          "count": "כמות",
+          "mean": "ממוצע",
+          "min": "מינימום",
+          "max": "מקסימום",
+          "p50": "p50",
+          "p75": "p75",
+          "p95": "p95",
+          "p99": "p99"
+        }
+      },
+      "cache": {
+        "title": "סטטיסטיקת מטמון (Cache)",
+        "cachename": "שם המטמון",
+        "hits": "פגיעות במטמון",
+        "misses": "פספוסים במטמון",
+        "gets": "שאילתות מהמטמון",
+        "puts": "הוספות למטמון",
+        "removals": "הסרות מהמטמון",
+        "evictions": "הרחקות מהמטמון",
+        "hitPercent": "אחוז פגיעות במטמון",
+        "missPercent": "אחוז פספוסים במטמון",
+        "averageGetTime": "זמן ממוצע לשליפה (µs)",
+        "averagePutTime": "זמן ממוצע להוספה (µs)",
+        "averageRemoveTime": "זמן ממוצע להסרה (µs)"
+      },
+      "datasource": {
+        "usage": "שימוש בבריכת חיבורים",
+        "title": "סטטיסטיקת מקור הנתונים (באלפיות שנייה)",
+        "name": "שימוש בבריכה",
+        "count": "כמות",
+        "mean": "ממוצע",
+        "min": "מינימום",
+        "max": "מקסימום",
+        "p50": "p50",
+        "p75": "p75",
+        "p95": "p95",
+        "p99": "p99"
+      }
+    }
+}
+  

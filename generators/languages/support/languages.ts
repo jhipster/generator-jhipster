@@ -190,6 +190,7 @@ const partialLanguages: PartialLanguage[] = [
   { name: 'Galician', displayName: 'Galego', languageTag: 'gl' },
   { name: 'German', displayName: 'Deutsch', languageTag: 'de' },
   { name: 'Greek', displayName: 'Ελληνικά', languageTag: 'el' },
+  { name: 'Hebrew', displayName: 'עברית', languageTag: 'he', rtl: true },
   { name: 'Hindi', displayName: 'हिंदी', languageTag: 'hi' },
   { name: 'Hungarian', displayName: 'Magyar', languageTag: 'hu' },
   { name: 'Indonesian', displayName: 'Bahasa Indonesia', languageTag: 'id' },
