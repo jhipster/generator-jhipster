@@ -56,7 +56,7 @@
     "terser-webpack-plugin": "5.3.14",
     "ts-loader": "9.5.2",
     "typescript": "5.8.3",
-    "typescript-eslint": "8.31.0",
+    "typescript-eslint": "8.31.1",
     "vite": "6.3.3",
     "vite-plugin-static-copy": "2.3.1",
     "vitest": "3.1.2",
