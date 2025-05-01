@@ -190,7 +190,7 @@
     "eslint-plugin-prettier": "5.2.6",
     "esmocha": "3.0.0",
     "jsdoc": "4.0.4",
-    "mocha": "11.1.0",
+    "mocha": "11.2.2",
     "open-cli": "8.0.0",
     "prettier2": "npm:prettier@2.8.8",
     "rimraf": "6.0.1",
