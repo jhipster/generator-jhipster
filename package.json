@@ -119,6 +119,11 @@
     "update-snapshot": "esmocha --no-insight --no-parallel --update-snapshot --",
     "update-snapshots": "esmocha lib/jdl generators cli .blueprint --update-snapshot --no-insight --forbid-only"
   },
+  "overrides": {
+    "ejs-lint": {
+      "ejs": "$ejs"
+    }
+  },
   "dependencies": {
     "@eslint/js": "9.26.0",
     "@faker-js/faker": "9.7.0",
@@ -160,7 +165,7 @@
     "pluralize": "8.0.0",
     "prettier": "3.5.3",
     "prettier-plugin-java": "2.6.7",
-    "prettier-plugin-packagejson": "2.5.10",
+    "prettier-plugin-packagejson": "2.5.11",
     "prettier-plugin-properties": "0.3.0",
     "randexp": "0.5.3",
     "semver": "7.7.1",
@@ -214,10 +219,5 @@
     "type": "opencollective",
     "url": "https://opencollective.com/generator-jhipster",
     "logo": "https://opencollective.com/opencollective/logo.txt"
-  },
-  "overrides": {
-    "ejs-lint": {
-      "ejs": "$ejs"
-    }
   }
 }
