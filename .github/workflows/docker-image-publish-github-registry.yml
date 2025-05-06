@@ -32,7 +32,7 @@ env:
   FORCE_COLOR: 1
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -74,7 +74,7 @@ jobs:
           images: ghcr.io/${{ github.repository }}${{ (steps.login-hub.outcome == 'success' && ',jhipster/jhipster') || ''}}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6.15.0
+        uses: docker/build-push-action@v6.16.0
         with:
           context: .
           platforms: linux/amd64,linux/arm64

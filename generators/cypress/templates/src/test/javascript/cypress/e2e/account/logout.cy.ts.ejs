@@ -26,13 +26,21 @@ describe('logout', () => {
   const username = Cypress.env('E2E_USERNAME') ?? '<%- generateInMemoryUserCredentials ? 'admin' : 'user' %>';
   const password = Cypress.env('E2E_PASSWORD') ?? '<%- generateInMemoryUserCredentials ? 'admin' : 'user' %>';
 
+<%_ if (authenticationUsesCsrf) { _%>
+  beforeEach(() => {
+    cy.intercept('POST', '/api/logout').as('logout');
+  });
+
+<%_ } _%>
   it<%- clientFrameworkReact ? '.skip' : '' %>('go to home page when successfully logs out', () => {
     cy.login(username, password);
     cy.visit('');
+
     cy.clickOnLogoutItem();
-    // Wait logout
-    cy.wait(500); // eslint-disable-line cypress/no-unnecessary-waiting
-    cy.visit('');
+
+<%_ if (authenticationUsesCsrf) { _%>
+    cy.wait('@logout');
+<%_ } _%>
     cy.get(navbarSelector).get(accountMenuSelector).click();
     cy.get(navbarSelector).get(accountMenuSelector).get(loginItemSelector).should('be.visible');
   });

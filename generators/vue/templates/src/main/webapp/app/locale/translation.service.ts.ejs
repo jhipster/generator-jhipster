@@ -12,7 +12,7 @@ export default class TranslationService {
   }
 <%_ if (microfrontend) { _%>
 
-  public loadTranslations({ currentLanguage, urlPrefix, hash }: { currentLanguage: string; urlPrefix: string; hash: string }) {
+  loadTranslations({ currentLanguage, urlPrefix, hash }: { currentLanguage: string; urlPrefix: string; hash: string }) {
     if (!this.i18n) return;
     axios.get(`${urlPrefix}i18n/${currentLanguage}.json?_=${hash}`).then((res: any) => {
       if (res.data) {
@@ -22,7 +22,7 @@ export default class TranslationService {
   }
 <%_ } _%>
 
-  public async refreshTranslation(newLanguage: string) {
+  async refreshTranslation(newLanguage: string) {
     if (this.i18n && !this.i18n.messages[newLanguage]) {
 <%_ if (microfrontend) { _%>
       const res = await axios.get(`i18n/${newLanguage}.json?_=${I18N_HASH}`);
@@ -34,7 +34,7 @@ export default class TranslationService {
     }
   }
 
-  public setLocale(lang: string) {
+  setLocale(lang: string) {
     dayjs.locale(lang);
     this.i18n.locale.value = lang;
     axios.defaults.headers.common['Accept-Language'] = lang;
@@ -54,11 +54,11 @@ export default class TranslationService {
     }
 <%_ } _%>
 
-  public isLanguageSupported(lang: string) {
+  isLanguageSupported(lang: string) {
     return Boolean(this.languages[lang]);
   }
 
-  public getLocalStoreLanguage(): string | null {
+  getLocalStoreLanguage(): string | null {
     return localStorage.getItem('currentLanguage');
   }
 }

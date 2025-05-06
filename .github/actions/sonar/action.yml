@@ -94,6 +94,7 @@ runs:
       run: >-
         echo "::group::Scanning main branch application" &&
         ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
+        -Denforcer.skip=true
         -Dsonar.host.url=http://localhost:9000
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
         -Dsonar.login=admin

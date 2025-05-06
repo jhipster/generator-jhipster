@@ -22,7 +22,7 @@
             <h2 id="<%= jhiPrefixDashed %>-<%= entityFileName %>-heading" data-cy="<%= entityClass %>CreateUpdateHeading">__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.createOrEditLabel')</h2>
 
             <div>
-                <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
+                <<%= jhiPrefixDashed %>-alert-error />
 <%_ for (const field of fields.filter(field => !field.hidden)) {
   const fieldName = field.fieldName;
   const fieldNameHumanized = field.fieldNameHumanized;
@@ -177,7 +177,7 @@ _%>
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } else { _%>
-                    @if (editForm.get(['<%- relationship.propertyName %>'])!.value == null) {
+                    @if (editForm.get(['<%- relationship.propertyName %>'])!.value === null) {
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } _%>

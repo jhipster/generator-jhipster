@@ -1,0 +1,75 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "health": {
+      "title": "בדיקות תקינות",
+      "refresh.button": "רענן",
+      "stacktrace": "עקבת שגיאה (Stacktrace)",
+      "details": {
+        "details": "פרטים",
+        "properties": "מאפיינים",
+        "name": "שם",
+        "value": "ערך",
+        "error": "שגיאה"
+      },
+      "indicator": {
+  <%_ if (messageBrokerAny) { _%>
+        "binders": "מתווך הודעות",
+  <%_ } _%>
+  <%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>
+        "discoveryComposite": "רכיב גילוי שירותים (Discovery Composite)",
+        "refreshScope": "רענון שירותים (Microservice Refresh Scope)",
+        "clientConfigServer": "שרת תצורת שירותים (Microservice Config Server)",
+        "hystrix": "Hystrix",
+    <%_ if (serviceDiscoveryConsul) { _%>
+        "consul": "Consul",<% } else if (reactive) { %>
+        "reactiveDiscoveryClients": "לקוחות גילוי שירותים (Reactive Discovery Clients)",
+    <%_ } _%>
+  <%_ } _%>
+  <%_ if (cacheProviderHazelcast) { _%>
+        "hazelcast": "Hazelcast",
+  <%_ } _%>
+        "diskSpace": "שטח דיסק",
+        "mail": "דוא\"ל",
+        "livenessState": "מצב חיוניות (Liveness)",
+        "readinessState": "מצב מוכנות (Readiness)",
+        "ping": "אפליקציה"<% if (searchEngineElasticsearch) { %>,
+        "elasticsearch": "Elasticsearch"<% } %><% if (databaseTypeSql && !reactive) { %>,
+        "db": "מסד נתונים"<% } %><% if (databaseTypeSql && reactive) { %>,
+        "r2dbc": "מסד נתונים (R2DBC)"<% } %><% if (databaseTypeMongodb) { %>,
+        "mongo": "MongoDB"<% } %><% if (databaseTypeCassandra) { %>,
+        "cassandra": "Cassandra"<% } %><% if (databaseTypeCouchbase) { %>,
+        "couchbase": "Couchbase"<% } %><% if (databaseTypeNeo4j) { %>,
+        "neo4j": "Neo4j"<% } %>
+      },
+      "table": {
+        "service": "שם השירות",
+        "status": "מצב"
+      },
+      "status": {
+        "UNKNOWN": "לא ידוע",
+        "UP": "פעיל",
+  <%_ if (clientFrameworkAngular) { _%>
+        "OUT_OF_SERVICE": "לא זמין",
+  <%_ } _%>
+        "DOWN": "מושבת"
+      }
+    }
+}
+  

@@ -58,8 +58,8 @@ Cypress.Commands.add('keycloakLogin', (oauth2Data, username: string, password: s
         followRedirect: false,
         form: true,
         body: {
-          username: username,
-          password: password,
+          username,
+          password,
         },
       });
     })
@@ -91,8 +91,8 @@ Cypress.Commands.add('auth0Login', (oauth2Data, username: string, password: stri
         body: {
           state: state,
           action: 'default',
-          username: username,
-          password: password,
+          username,
+          password,
         },
       });
     })

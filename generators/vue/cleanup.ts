@@ -23,7 +23,7 @@ import { asWritingTask } from '../base-application/support/task-type-inference.j
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default asWritingTask(function cleanupOldFilesTask({ application }) {
+export default asWritingTask(async function cleanupOldFilesTask({ application, control }) {
   if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
     this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.component.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.service.ts`);
@@ -108,4 +108,11 @@ export default asWritingTask(function cleanupOldFilesTask({ application }) {
     this.removeFile('vite.config.ts');
     this.removeFile('vitest.config.ts');
   }
+
+  await control.cleanupFiles({
+    '8.10.1': [
+      [application.authenticationTypeJwt, `${application.clientSrcDir}app/account/login.service.ts`],
+      [application.authenticationTypeJwt, `${application.clientSrcDir}app/account/login.service.spec.ts`],
+    ],
+  });
 });

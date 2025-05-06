@@ -35,9 +35,9 @@
         </div>
     </h2>
 
-    <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
+    <<%= jhiPrefixDashed %>-alert-error />
 
-    <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
+    <<%= jhiPrefixDashed %>-alert />
 <%_ if (searchEngineAny) { _%>
 
     <form name="searchForm" class="row row-cols-sm-auto align-items-center">
@@ -61,7 +61,7 @@
 <%_ } _%>
 
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-    <<%= jhiPrefixDashed %>-filter [filters]="filters"></<%= jhiPrefixDashed %>-filter>
+    <<%= jhiPrefixDashed %>-filter [filters]="filters" />
 <%_ } _%>
 
 @if (<%= entityInstancePlural %>().length === 0) {
@@ -221,7 +221,7 @@ _%>
 @if (<%= entityInstancePlural %>().length > 0) {
     <div>
         <div class="d-flex justify-content-center">
-            <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
+            <<%= jhiPrefixDashed %>-item-count [params]="{ page, totalItems, itemsPerPage }" />
         </div>
 
         <div class="d-flex justify-content-center">

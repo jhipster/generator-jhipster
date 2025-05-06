@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import os from 'node:os';
 import chalk from 'chalk';
 import { lowerFirst, sortedUniqBy } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
@@ -46,7 +45,7 @@ import {
   javaBeanCase,
 } from '../server/support/index.js';
 import { generateKeyStore } from '../java/support/index.js';
-import { createNeedleCallback, mutateData } from '../base/support/index.js';
+import { createNeedleCallback, isWin32, mutateData } from '../base/support/index.js';
 import {
   APPLICATION_TYPE_MICROSERVICE,
   applicationTypes,
@@ -683,7 +682,7 @@ in your ${chalk.yellow.bold(`${application.srcMainResources}config/application.y
         }
 
         let logMsgComment = '';
-        if (os.platform() === 'win32') {
+        if (isWin32) {
           logMsgComment = ` (${chalk.yellow.bold(buildToolExecutable)} if using Windows Command Prompt)`;
         }
         this.log.log(

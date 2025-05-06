@@ -124,7 +124,7 @@ describe('<%= entityAngularName %> Management Component', () => {
           );
         });
 
-    it('Should call load all on init', () => {
+    it('should call load all on init', () => {
         // WHEN
         comp.ngOnInit();
 
@@ -134,7 +134,7 @@ describe('<%= entityAngularName %> Management Component', () => {
     });
 
     describe('track<%= primaryKey.nameCapitalized %>', () => {
-        it('Should forward to <%= entityInstance %>Service', () => {
+        it('should forward to <%= entityInstance %>Service', () => {
             const entity = <%- tsPrimaryKeySamples[0] %>;
             jest.spyOn(service, 'get<%= entityAngularName %>Identifier');
             const <%= primaryKey.name %> = comp.track<%= primaryKey.nameCapitalized %>(entity);

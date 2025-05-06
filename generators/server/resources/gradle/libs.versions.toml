@@ -1,17 +1,17 @@
 [libraries]
 spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2024.0.1' }
 
-springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '2.8.6' }
+springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '2.8.8' }
 
 feign-reactor-bom = { module = 'com.playtika.reactivefeign:feign-reactor-bom', version = '4.2.1' }
 
 # Cucumber
 testng = { module = 'org.testng:testng', version = '7.11.0' }
-cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.21.1' }
+cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.22.1' }
 
 mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.5.1' }
 
-neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '2.17.0' }
+neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '2.17.3' }
 
 # Cassandra
 lz4-java = { module = 'org.lz4:lz4-java', version = '1.8.0' }
@@ -32,14 +32,14 @@ gradle-liquibase = { id = 'org.liquibase.gradle', version = '3.0.2' }
 
 gradle-sonarqube = { id = 'org.sonarqube', version = '6.1.0.5360' }
 
-spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '7.0.2' }
+spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '7.0.3' }
 
 gradle-modernizer-plugin = { id = 'com.github.andygoossens.gradle-modernizer-plugin', version = '1.11.0' }
 
 gradle-develocity = { id = 'com.gradle.develocity', version = '3.19.2' }
 
-common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.1' }
+common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.2.1' }
 
-gatling-gradle = { id = 'io.gatling.gradle', version = '3.13.5.1' }
+gatling-gradle = { id = 'io.gatling.gradle', version = '3.13.5.4' }
 
-gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.12.0' }
+gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.13.0' }

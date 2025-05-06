@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { rm } from 'fs/promises';
 import { createConflicterTransform, createYoResolveTransform, forceYoFiles } from '@yeoman/conflicter';
 import { transform } from '@yeoman/transform';
 import type { MemFsEditorFile } from 'mem-fs-editor';
@@ -223,8 +224,39 @@ export default class BootstrapGenerator extends BaseGenerator {
     }
 
     const autoCrlfTransforms: FileTransform<MemFsEditorFile>[] = [];
-    if (this.jhipsterConfig.autoCrlf) {
+    if (this.jhipsterConfigWithDefaults.autoCrlf) {
       autoCrlfTransforms.push(await autoCrlfTransform({ baseDir: this.destinationPath() }));
+    }
+
+    let customizeActions;
+    if (this.options.devBlueprintEnabled) {
+      customizeActions = (actions, { separator }) => {
+        return [
+          ...actions,
+          ...(separator ? [separator()] : []),
+          {
+            key: 't',
+            name: 'apply to template',
+            value: async ({ file }) => {
+              const { applyChangesToFileOrCopy } = await import('../../lib/testing/apply-patch-to-template.js');
+
+              if (file.history?.[0] && file.conflicterData?.diskContents) {
+                const templateFile = file.history[0];
+                if (!file.contents) {
+                  await rm(templateFile, { force: true });
+                } else {
+                  const oldFileContents = file.conflicterData.diskContents.toString();
+                  const newFileContents = file.contents.toString();
+
+                  applyChangesToFileOrCopy({ templateFile, oldFileContents, newFileContents });
+                }
+              }
+
+              return 'skip';
+            },
+          },
+        ];
+      };
     }
 
     const transformStreams = [
@@ -234,7 +266,7 @@ export default class BootstrapGenerator extends BaseGenerator {
       createForceWriteConfigFilesTransform(),
       ...prettierTransforms,
       ...autoCrlfTransforms,
-      createConflicterTransform(this.env.adapter, { ...(this.env as any).conflicterOptions }),
+      createConflicterTransform(this.env.adapter, { ...(this.env as any).conflicterOptions, customizeActions }),
       createCommitTransform(),
     ];
 

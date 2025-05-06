@@ -37,7 +37,16 @@ import latestVersion from 'latest-version';
 import SharedData from '../base/shared-data.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
 import type { Logger } from '../base/support/index.js';
-import { createJHipster7Context, formatDateForChangelog, joinCallbacks, removeFieldsWithNullishValues } from '../base/support/index.js';
+import {
+  CRLF,
+  LF,
+  createJHipster7Context,
+  formatDateForChangelog,
+  hasCrlr,
+  joinCallbacks,
+  normalizeLineEndings,
+  removeFieldsWithNullishValues,
+} from '../base/support/index.js';
 
 import type {
   CascatedEditFileCallback,
@@ -257,6 +266,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       skipFakeData: false,
       skipCheckLengthOfIdentifier: false,
       enableGradleDevelocity: false,
+      autoCrlf: false,
       pages: [],
     });
     return configWithDefaults as ApplicationConfiguration;
@@ -1187,16 +1197,18 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     let newContent = originalContent;
     const writeCallback = (...callbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this> => {
+      const { autoCrlf = this.jhipsterConfigWithDefaults.autoCrlf, assertModified } = actualOptions;
       try {
-        newContent = joinCallbacks(...callbacks).call(this, newContent, filePath);
-        if (actualOptions.assertModified && originalContent === newContent) {
+        const fileHasCrlf = autoCrlf && hasCrlr(newContent);
+        newContent = joinCallbacks(...callbacks).call(this, fileHasCrlf ? normalizeLineEndings(newContent, LF) : newContent, filePath);
+        if (assertModified && originalContent === newContent) {
           const errorMessage = `${chalk.yellow('Fail to modify ')}${filePath}.`;
           if (!this.ignoreNeedlesError) {
             throw new Error(errorMessage);
           }
           this.log(errorMessage);
         }
-        this.writeDestination(filePath, newContent);
+        this.writeDestination(filePath, fileHasCrlf ? normalizeLineEndings(newContent, CRLF) : newContent);
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);
