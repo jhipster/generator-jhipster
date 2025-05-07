@@ -49,7 +49,7 @@ LABEL ALIAS=pulsar
 FROM sonarqube:25.5.0.107428-community
 LABEL ALIAS=sonar
 
-FROM docker.io/bitnami/consul:1.20.6
+FROM docker.io/bitnami/consul:1.21.0
 LABEL ALIAS=consul
 
 FROM prom/prometheus:v3.3.1
