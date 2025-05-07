@@ -33,7 +33,12 @@
       <%_ if (field.fieldIsEnum) { _%>
       @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
       <%_ } else if (field.blobContentTypeText || field.fieldTypeString) { _%>
-      @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+      @org.springframework.data.elasticsearch.annotations.MultiField(
+          mainField = @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text),
+          otherFields = { 
+              @org.springframework.data.elasticsearch.annotations.InnerField(suffix = "keyword", type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword, ignoreAbove = 256)
+          }
+      )
       <%_ } else if (field.fieldTypeBoolean) { _%>
       @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
       <%_ } else if (field.fieldTypeInteger) { _%>
