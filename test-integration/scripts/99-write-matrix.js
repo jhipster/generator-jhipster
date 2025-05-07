@@ -42,7 +42,7 @@ writeFileSync(
                 .include.filter(sample => !sample.disabled)
                 .map(({ generatorOptions, name, ...sample }) => {
                   const javaVersion = randomReproducibleValue(`java-${name}`, [JAVA_VERSION, ...JAVA_COMPATIBLE_VERSIONS]);
-                  const nodeVersion = randomReproducibleValue(`node-${name}`, [NODE_VERSION, '18', '20']);
+                  const nodeVersion = randomReproducibleValue(`node-${name}`, [NODE_VERSION, '20', '22']);
                   return {
                     name,
                     workspaces: generatorOptions?.workspaces ? 'true' : undefined,
