@@ -171,4 +171,6 @@ export default function prepareField(entityWithConfig, field: Field & any, gener
     }
     field.javaValueGenerator = getJavaValueGeneratorForType(field.javaFieldType);
   }
+
+  field.fieldSupportsSortBy = !field.transient;
 }

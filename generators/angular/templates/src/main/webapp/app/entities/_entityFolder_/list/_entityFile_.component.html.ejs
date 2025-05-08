@@ -73,11 +73,13 @@
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
                 <tr <%= jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
-<%_ for (const field of fields.filter(field => !field.hidden)) { _%>
-                    <th scope="col" <%= jhiPrefix %>SortBy="<%= field.fieldName %>">
+<%_ for (const field of fields.filter(field => !field.hidden)) {
+    const { fieldSupportsSortBy } = field;
+_%>
+                    <th scope="col"<% if (fieldSupportsSortBy) { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>>
                         <div class="d-flex">
                             <span>__jhiTranslateTag__('<%- field.fieldTranslationKey %>')</span>
-  <%_ if (!field.transient) { _%>
+  <%_ if (fieldSupportsSortBy) { _%>
                         <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>@if (!currentSearch) {<% } %>
                             <fa-icon class="p-1" icon="sort"></fa-icon>
                         <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>}<% } %>
@@ -88,11 +90,14 @@
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
   <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) {
     const fieldName = "." + relationship.otherEntityField;
+    const { fieldSupportsSortBy: relatedFieldSupportsSortBy } = relationship.relatedField;
   _%>
-                    <th scope="col" <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>">
+                    <th scope="col"<% if (relatedFieldSupportsSortBy) { %> <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>"<% } %>>
                         <div class="d-flex">
                             <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.<%- relationship.relationshipName %>')</span>
+    <%_ if (relatedFieldSupportsSortBy) { _%>
                             <fa-icon class="p-1" icon="sort"></fa-icon>
+    <%_ } _%>
                         </div>
                     </th>
   <%_ } _%>
