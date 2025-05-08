@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
-import type CoreGenerator from '../base-core/generator.ts';
 import type { ClientApplication } from '../client/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import type { SpringBootApplication } from '../server/types.js';
+import { CoreApplication } from '../base-core/types.js';
 import type { OptionWithDerivedProperties } from './application-options.js';
 
-export type BaseApplication = {
+export type BaseApplication = CoreApplication<any, any> & {
   jhipsterVersion: string;
   baseName: string;
   capitalizedBaseName: string;
@@ -48,17 +48,8 @@ export type BaseApplication = {
   hasNonBuiltInEntity?: boolean;
 
   /** Customize templates sourceFile and destinationFile */
-  customizeTemplatePaths: ((
-    this: CoreGenerator,
-    file: {
-      namespace: string;
-      sourceFile: string;
-      resolvedSourceFile: string;
-      destinationFile: string;
-      templatesRoots: string[];
-    },
-    context: any,
-  ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
+
+  context: any;
 } & I18nApplication;
 
 /* ApplicationType Start */

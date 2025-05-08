@@ -2,10 +2,14 @@ import type { JHipsterConfigs } from '../../lib/command/index.js';
 import type CoreGenerator from '../../generators/base-core/index.js';
 import { applyDerivedProperty } from '../utils/derived-property.js';
 
-export function loadConfig(this: CoreGenerator, configsDef: JHipsterConfigs | undefined, data: { application: any });
+export function loadConfig<Generator extends CoreGenerator<any, any, any, any, any, any, any>>(
+  this: Generator,
+  configsDef: JHipsterConfigs | undefined,
+  data: { application: any },
+);
 export function loadConfig(configsDef: JHipsterConfigs | undefined, data: { application: any; config?: any });
-export function loadConfig(
-  this: CoreGenerator | void,
+export function loadConfig<Generator extends CoreGenerator<any, any, any, any, any, any, any>>(
+  this: Generator | void,
   configsDef: JHipsterConfigs | undefined,
   { application, config }: { application: any; config?: any },
 ) {
@@ -16,11 +20,11 @@ export function loadConfig(
         let source = config;
         if (!source) {
           if (def.scope === 'context') {
-            source = (this as CoreGenerator).context!;
+            source = (this as Generator).context!;
           } else if (def.scope === 'blueprint') {
             source = (this as any).blueprintStorage.getAll();
           } else if (def.scope === 'storage' || def.scope === undefined) {
-            source = (this as CoreGenerator).jhipsterConfigWithDefaults;
+            source = (this as Generator).jhipsterConfigWithDefaults;
           }
         }
 

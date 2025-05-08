@@ -2,6 +2,7 @@
 import type { Simplify } from 'type-fest';
 import type { ExportStoragePropertiesFromCommand } from '../../command/types.js';
 import type { YO_RC_CONFIG_KEY } from '../../utils/yo-rc.ts';
+import { BaseConfiguration } from '../../../generators/base/api.js';
 
 export type ApplicationConfiguration = Simplify<
   {
@@ -12,8 +13,8 @@ export type ApplicationConfiguration = Simplify<
     blueprints?: { name: string }[];
     testFrameworks?: string[];
     microfrontends?: { baseName: string }[];
-  } & ExportStoragePropertiesFromCommand<typeof import('../../../generators/app/command.js').default> &
-    ExportStoragePropertiesFromCommand<typeof import('../../../generators/base/command.js').default> &
+  } & BaseConfiguration &
+    ExportStoragePropertiesFromCommand<typeof import('../../../generators/app/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/bootstrap-application-base/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/client/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/git/command.js').default> &

@@ -43,6 +43,17 @@ const command = {
       type: Boolean,
       scope: 'generator',
     },
+    blueprint: {
+      description: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
+      type: Array,
+      scope: 'none',
+    },
+    blueprints: {
+      description:
+        'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
+      type: String,
+      scope: 'none',
+    },
     debugEnabled: {
       name: 'debug',
       description: 'Enable debugger',
