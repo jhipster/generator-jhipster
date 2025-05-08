@@ -74,9 +74,11 @@ export default class extends BaseGenerator {
       async generateSample() {
         const issue = await getGithubIssue({ owner: this.owner, repository: this.repository, issue: this.issueNumber });
 
-        this.destinationRoot(
-          this.destinationPath(this.projectFolder ?? join(this._globalConfig.get('samplesFolder'), `issues/${this.issueNumber}`)),
-        );
+        if (this.projectFolder || this._globalConfig.get('samplesFolder')) {
+          this.destinationRoot(
+            this.destinationPath(this.projectFolder ?? join(this._globalConfig.get('samplesFolder'), `issues/${this.issueNumber}`)),
+          );
+        }
 
         this.data = extractDataFromInfo(issue.body ?? '');
         if (this.data.yoRcBlank) {

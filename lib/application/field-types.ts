@@ -25,6 +25,7 @@ const fieldTypes = {
   ZONED_DATE_TIME: 'ZonedDateTime',
   INSTANT: 'Instant',
   DURATION: 'Duration',
+  TIME: 'LocalTime',
   BYTES: 'byte[]', // Supported by mongodb at CI samples
   BYTE_BUFFER: 'ByteBuffer',
   ...blobFieldTypes,

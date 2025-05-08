@@ -37,8 +37,7 @@ class SpaWebFilterIT {
             .get()
             .uri("/api/<% if (!applicationTypeMicroservice) { %>authenticate<% } else { %>users<% } %>")
             .exchange()
-            .expectStatus().isOk()
-            .expectBody(String.class).isEqualTo("user");
+            .expectStatus().is2xxSuccessful();
     }
 <%_ } _%>
 

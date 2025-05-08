@@ -1,0 +1,32 @@
+{
+    "userManagement": {
+      "home": {
+        "title": "משתמשים",
+        "refreshListLabel": "רענן רשימה",
+        "createLabel": "צור משתמש חדש",
+        "createOrEditLabel": "צור או ערוך משתמש"
+      },
+      "created": "נוצר משתמש חדש עם מזהה {{ param }}",
+      "updated": "משתמש עודכן עם מזהה {{ param }}",
+      "deleted": "משתמש נמחק עם מזהה {{ param }}",
+      "delete": {
+        "question": "האם אתה בטוח שברצונך למחוק את המשתמש {{ login }}?"
+      },
+      "detail": {
+        "title": "משתמש"
+      },
+      "login": "שם משתמש",
+      "firstName": "שם פרטי",
+      "lastName": "שם משפחה",
+      "email": "דוא\"ל",
+      "activated": "מאופשר",
+      "deactivated": "מבוטל",
+      "profiles": "פרופילים",
+      "langKey": "שפה",
+      "createdBy": "נוצר על ידי",
+      "createdDate": "תאריך יצירה",
+      "lastModifiedBy": "נערך על ידי",
+      "lastModifiedDate": "תאריך עריכה"
+    }
+}
+  

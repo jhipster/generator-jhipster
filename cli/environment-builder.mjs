@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -110,7 +110,9 @@ export default class EnvironmentBuilder {
   }
 
   async prepare({ blueprints, lookups, devBlueprintPath = jhipsterDevBlueprintPath } = {}) {
-    this.devBlueprintPath = existsSync(devBlueprintPath) ? devBlueprintPath : undefined;
+    const devBlueprintEnabled = existsSync(devBlueprintPath);
+    this.env.sharedOptions.devBlueprintEnabled = devBlueprintEnabled;
+    this.devBlueprintPath = devBlueprintEnabled ? devBlueprintPath : undefined;
     this.localBlueprintPath = path.join(process.cwd(), '.blueprint');
     this.localBlueprintExists = this.localBlueprintPath !== this.devBlueprintPath && existsSync(this.localBlueprintPath);
 
@@ -181,8 +183,8 @@ export default class EnvironmentBuilder {
       // Register jhipster generators.
       const generators = await this.env.lookup({
         packagePaths: [this.localBlueprintPath],
-        lookups: ['.'],
-        customizeNamespace: ns => ns?.replace('.blueprint', '@jhipster/jhipster-local'),
+        lookups: ['.', './*/generators'],
+        customizeNamespace: ns => ns?.replaceAll(':generators:', ':').replace('.blueprint', '@jhipster/jhipster-local'),
       });
       if (generators.length > 0) {
         this.env.sharedOptions.composeWithLocalBlueprint = true;

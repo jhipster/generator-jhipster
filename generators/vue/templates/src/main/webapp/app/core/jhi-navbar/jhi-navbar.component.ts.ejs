@@ -2,7 +2,12 @@ import { computed, <% if (applicationTypeGateway && microfrontend) { %>defineAsy
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
+<%_ if (authenticationUsesCsrf) { _%>
 import type LoginService from '@/account/login.service';
+<%_ } %>
+<%_ if (generateUserManagement) { %>
+import { useLoginModal } from '@/account/login-modal';
+<%_ } _%>
 import type AccountService from '@/account/account.service';
 <%_ if (enableTranslation) { _%>
 import languages from '@/shared/config/languages';
@@ -30,7 +35,15 @@ export default defineComponent({
 <%_ } _%>
   },
   setup() {
+<%_ if (authenticationUsesCsrf) { _%>
     const loginService = inject<LoginService>('loginService');
+  <%_ if (authenticationTypeOauth2) { _%>
+    const { login } = loginService;
+  <%_ } %>
+<%_ } %>
+<%_ if (generateUserManagement) { %>
+    const { showLogin } = useLoginModal();
+<%_ } _%>
     const accountService = inject<AccountService>('accountService');
     const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 <%_ if (enableTranslation) { _%>
@@ -50,14 +63,6 @@ export default defineComponent({
     const openAPIEnabled = computed(() => store.activeProfiles.indexOf('api-docs') > -1);
     const inProduction = computed(() => store.activeProfiles.indexOf('prod') > -1);
     const authenticated = computed(() => store.authenticated);
-
-    const openLogin = () => {
-<%_ if (!authenticationTypeOauth2) { _%>
-      loginService.openLogin();
-<%_ } else { %>
-      loginService.login();
-<%_ } _%>
-    };
 
     const subIsActive = (input: string | string[]) => {
       const paths = Array.isArray(input) ? input : [input];
@@ -95,7 +100,7 @@ export default defineComponent({
       logout,
       subIsActive,
       accountService,
-      openLogin,
+      <% if (authenticationTypeOauth2) { %>login<% } else { %>showLogin<% } %>,
 <%_ if (enableTranslation) { _%>
       changeLanguage,
       languages: languages(),

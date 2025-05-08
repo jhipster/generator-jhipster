@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2024 the original author or authors from the JHipster project.
+ Copyright 2013-2025 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -43,6 +43,8 @@ CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
     <%= fieldName %> text,
   <%_ } else if (field.fieldTypeZonedDateTime) { _%>
     <%= fieldName %> tuple<timestamp,varchar>,
+  <%_ } else if (field.fieldTypeLocalTime) { _%>
+    <%= fieldName %> time,
   <%_ } else if (field.fieldTypeBoolean) { _%>
     <%= fieldName %> boolean,
   <%_ } else if (field.fieldTypeByteBuffer) { _%>

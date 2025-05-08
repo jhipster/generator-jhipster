@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -59,7 +59,7 @@ export const files = {
       condition: ctx => ctx.clientBundlerExperimentalEsbuild,
       templates: [
         { sourceFile: 'angular.json.esbuild', destinationFile: 'angular.json' },
-        'proxy.conf.json',
+        'proxy.config.mjs',
         'build-plugins/define-esbuild.mjs',
       ],
     }),

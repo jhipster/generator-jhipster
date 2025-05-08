@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2024 the original author or authors from the JHipster project.
+ Copyright 2013-2025 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -191,6 +191,9 @@ import java.time.ZoneId;
 <%_ } _%>
 <%_ if (anyFieldIsInstant) { _%>
 import java.time.temporal.ChronoUnit;
+<%_ } _%>
+<%_ if (anyFieldIsLocalTime) { _%>
+import java.time.LocalTime;
 <%_ } _%>
 <%_ if (!reactive && implementsEagerLoadApis) { _%>
 import java.util.ArrayList;
@@ -412,6 +415,13 @@ if (field.fieldTypeString || field.blobContentTypeText) {
     private static final ZonedDateTime <%= updatedValueName %> = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     <%_ if (needsSmallerValueName) { _%>
     private static final ZonedDateTime <%= smallerValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
+    <%_ } _%>
+  <%_ } else if (field.fieldTypeLocalTime) { _%>
+
+    private static final LocalTime <%= defaultValueName %> = LocalTime.NOON;
+    private static final LocalTime <%= updatedValueName %> = LocalTime.MAX.withNano(0);
+    <%_ if (needsSmallerValueName) { _%>
+    private static final LocalTime <%= smallerValueName %> = LocalTime.MIN;
     <%_ } _%>
   <%_ } else if (field.fieldTypeDuration) { _%>
 
@@ -639,18 +649,18 @@ _%>
 <%_ } _%>
 <%_ if (reactive && authenticationUsesCsrf) { _%>
     @BeforeEach
-    public void setupCsrf() {
+    void setupCsrf() {
         webTestClient = webTestClient.mutateWith(csrf());
     }
 
 <%_ } _%>
     @BeforeEach
-    public void initTest() {
+    void initTest() {
         <%= persistInstance %> = createEntity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>em<% } %>);
     }
 
     @AfterEach
-    public void cleanup() {
+    void cleanup() {
         if (inserted<%= persistClass %> != null) {
             <%= entityInstance %>Repository.delete(inserted<%= persistClass %>)<%= reactorBlock %>;
 <%_ if (searchEngineElasticsearch) { _%>

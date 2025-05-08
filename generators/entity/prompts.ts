@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -44,8 +44,22 @@ const { NO: NO_MAPPER, MAPSTRUCT } = MapperTypes;
 
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
 
-const { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, ENUM, FLOAT, INTEGER, INSTANT, LOCAL_DATE, LONG, STRING, UUID, ZONED_DATE_TIME } =
-  CommonDBTypes;
+const {
+  BIG_DECIMAL,
+  BOOLEAN,
+  DOUBLE,
+  DURATION,
+  ENUM,
+  FLOAT,
+  INTEGER,
+  INSTANT,
+  LOCAL_DATE,
+  LONG,
+  STRING,
+  UUID,
+  ZONED_DATE_TIME,
+  LOCAL_TIME,
+} = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { ANY, IMAGE, TEXT } = BlobTypes;
 
@@ -485,7 +499,7 @@ async function askForField(this: EntityGenerator) {
         { value: BOOLEAN, name: 'Boolean' },
         { value: ENUM, name: 'Enumeration (Java enum type)' },
         { value: UUID, name: 'UUID' },
-        { value: UUID, name: 'UUID' },
+        { value: LOCAL_TIME, name: 'LocalTime' },
         ...(databaseType === CASSANDRA ? [{ value: BYTE_BUFFER, name: '[BETA] Blob' }] : [{ value: BYTES, name: '[BETA] Blob' }]),
       ],
       default: 0,

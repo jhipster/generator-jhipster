@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -27,6 +27,7 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import clientCommand from '../client/command.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
+import { getFrontendAppName } from '../base/support/index.js';
 
 export default class BootStrapApplicationClient extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
@@ -67,6 +68,9 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
       prepareApplication({ application }) {
         loadDerivedConfig(clientCommand.configs, { application });
         loadDerivedClientConfig({ application });
+      },
+      prepareForTemplates({ application }) {
+        application.frontendAppName = getFrontendAppName({ baseName: application.baseName });
       },
     });
   }

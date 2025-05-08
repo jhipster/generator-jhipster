@@ -1,0 +1,172 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+      "title": "<%= capitalizedBaseName %>",
+      "browsehappy": "אתה משתמש בדפדפן <strong>מיושן</strong>. אנא <a href=\"http://browsehappy.com/?locale=he\">שדרג את הדפדפן שלך</a> כדי לשפר את חוויית השימוש.",
+      "menu": {
+        "home": "דף הבית",
+        "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+        "entities": {
+          "main": "ישויות",
+          "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        },
+        "account": {
+          "main": "חשבון",
+          "settings": "הגדרות",
+          "password": "סיסמה",
+          "sessions": "הפעלות",
+          "login": "התחברות",
+          "logout": "התנתקות",
+          "register": "הרשמה"
+        },
+        "admin": {
+          "main": "ניהול",
+  <%_ if (applicationTypeGateway) { _%>
+          "gateway": "שער (Gateway)",
+  <%_ } _%>
+          "userManagement": "ניהול משתמשים",
+          "tracker": "מעקב משתמשים",
+          "metrics": "מדדים",
+          "health": "מצב בריאות",
+          "configuration": "תצורה",
+          "logs": "יומנים",
+          "apidocs": "API",
+          "database": "מסד נתונים",
+          "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+        },
+        "language": "שפה"
+      },
+      "form": {
+        "username.label": "שם משתמש",
+        "username.placeholder": "הזן את שם המשתמש שלך",
+        "currentpassword.label": "סיסמה נוכחית",
+        "currentpassword.placeholder": "הזן את הסיסמה הנוכחית",
+        "newpassword.label": "סיסמה חדשה",
+        "newpassword.placeholder": "הזן סיסמה חדשה",
+        "confirmpassword.label": "אימות סיסמה חדשה",
+        "confirmpassword.placeholder": "אמת את הסיסמה החדשה",
+        "email.label": "דוא\"ל",
+        "email.placeholder": "הזן את כתובת הדוא\"ל שלך"
+      },
+      "messages": {
+        "info": {
+          "authenticated": {
+            "prefix": "אם ברצונך ",
+            "link": "להתחבר",
+            "suffix": ", תוכל לנסות את החשבונות הבאים:<br/>- מנהל (שם משתמש=\"admin\" וסיסמה=\"admin\") <br/>- משתמש (שם משתמש=\"user\" וסיסמה=\"user\")."
+          },
+          "register": {
+            "noaccount": "עדיין אין לך חשבון?",
+            "link": "צור חשבון חדש"
+          }
+        },
+        "error": {
+          "dontmatch": "הסיסמה ואימות הסיסמה אינם תואמים!"
+        },
+        "validate": {
+          "newpassword": {
+            "required": "יש להזין סיסמה.",
+            "minlength": "הסיסמה צריכה להיות באורך של לפחות 4 תווים.",
+            "maxlength": "הסיסמה לא יכולה להיות ארוכה מ-50 תווים.",
+            "strength": "חוזק הסיסמה:"
+          },
+          "confirmpassword": {
+            "required": "יש להזין סיסמה לאימות.",
+            "minlength": "סיסמת האימות צריכה להיות באורך של לפחות 4 תווים.",
+            "maxlength": "סיסמת האימות לא יכולה להיות ארוכה מ-50 תווים."
+          },
+          "email": {
+            "required": "יש להזין כתובת דוא\"ל.",
+            "invalid": "כתובת הדוא\"ל אינה תקינה.",
+            "minlength": "כתובת הדוא\"ל צריכה להיות באורך של לפחות 5 תווים.",
+            "maxlength": "כתובת הדוא\"ל לא יכולה להיות ארוכה מ-50 תווים."
+          }
+        }
+      },
+      "field": {
+        "id": "מזהה"
+      },
+      "ribbon": {
+        "dev": "פיתוח"
+      },
+      "item-count": "מציג {{first}} - {{second}} מתוך {{total}} פריטים."
+    },
+    "entity": {
+      "action": {
+        "addblob": "הוסף blob",
+        "addimage": "הוסף תמונה",
+        "back": "חזור",
+        "cancel": "ביטול",
+        "delete": "מחק",
+        "edit": "ערוך",
+        "open": "פתח",
+        "save": "שמור",
+        "view": "צפייה",
+        "show": "הצג {{otherEntity}}"
+      },
+      "detail": {
+        "field": "שדה",
+        "value": "ערך"
+      },
+      "delete": {
+        "title": "אישור פעולת מחיקה"
+      },
+      "validation": {
+        "required": "שדה זה הינו שדה חובה.",
+        "minlength": "שדה זה צריך להכיל לפחות {{ min }} תווים.",
+        "maxlength": "שדה זה לא יכול להכיל יותר מ־{{ max }} תווים.",
+        "min": "הערך צריך להיות לפחות {{ min }}.",
+        "max": "הערך לא יכול להיות יותר מ־{{ max }}.",
+        "minbytes": "שדה זה צריך להכיל לפחות {{ min }} בתים.",
+        "maxbytes": "שדה זה לא יכול להכיל יותר מ־{{ max }} בתים.",
+        "pattern": "השדה צריך להתאים לתבנית עבור {{ pattern }}.",
+        "number": "שדה זה צריך להיות מספר.",
+        "datetimelocal": "שדה זה צריך להכיל תאריך ושעה.",
+        "patternLogin": "שדה זה יכול להכיל רק אותיות, מספרים וכתובות דוא\"ל."
+      },
+      "filters": {
+        "set": "המסננים הבאים הופעלו",
+        "clear": "נקה מסנן",
+        "clearAll": "נקה את כל המסננים"
+      }
+    },
+    "error": {
+      "internalServerError": "שגיאת שרת פנימית",
+      "server.not.reachable": "לא ניתן להגיע לשרת",
+      "url.not.found": "לא נמצא",
+      "NotNull": "השדה {{ fieldName }} לא יכול להיות ריק!",
+      "Size": "השדה {{ fieldName }} לא עומד בדרישות הגודל המינימלי או המקסימלי!",
+      "userexists": "שם המשתמש כבר בשימוש!",
+      "emailexists": "כתובת הדוא\"ל כבר בשימוש!",
+      "idexists": "לא ניתן ליצור {{ entityName }} חדש עם מזהה קיים",
+      "idnull": "מזהה לא תקין",
+      "idinvalid": "מזהה לא תקין",
+      "idnotfound": "לא ניתן למצוא את המזהה",
+  <%_ if (searchEngineElasticsearch) { _%>
+      "querySyntaxError": "שאילתת חיפוש לא תקינה",
+  <%_ } _%>
+      "file": {
+        "could.not.extract": "לא ניתן היה לחלץ את הקובץ",
+        "not.image": "ציפינו לקובץ תמונה אך התקבל \"{{ fileType }}\""
+      }
+    },
+    "footer": "זהו אזור התחתית שלך"
+}
+  

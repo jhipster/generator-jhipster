@@ -1,0 +1,11 @@
+{
+    "configuration": {
+        "title": "תצורה",
+        "filter": "סינון (לפי קידומת)",
+        "table": {
+        "prefix": "קידומת",
+        "properties": "מאפיינים"
+        }
+    }
+}
+  

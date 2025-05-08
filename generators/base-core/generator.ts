@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -37,7 +37,16 @@ import latestVersion from 'latest-version';
 import SharedData from '../base/shared-data.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
 import type { Logger } from '../base/support/index.js';
-import { createJHipster7Context, formatDateForChangelog, joinCallbacks, removeFieldsWithNullishValues } from '../base/support/index.js';
+import {
+  CRLF,
+  LF,
+  createJHipster7Context,
+  formatDateForChangelog,
+  hasCrlr,
+  joinCallbacks,
+  normalizeLineEndings,
+  removeFieldsWithNullishValues,
+} from '../base/support/index.js';
 
 import type {
   CascatedEditFileCallback,
@@ -257,6 +266,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       skipFakeData: false,
       skipCheckLengthOfIdentifier: false,
       enableGradleEnterprise: false,
+      autoCrlf: false,
       pages: [],
     });
     return configWithDefaults as ApplicationConfiguration;
@@ -280,7 +290,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    *
    * @param {string} version - A valid semver version string
    */
-  isJhipsterVersionLessThan(version) {
+  isJhipsterVersionLessThan(version: string): boolean {
     const jhipsterOldVersion = this.sharedData.getControl().jhipsterOldVersion;
     return this.isVersionLessThan(jhipsterOldVersion, version);
   }
@@ -289,7 +299,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Wrapper for `semver.lt` to check if the oldVersion exists and is less than the newVersion.
    * Can be used by blueprints.
    */
-  isVersionLessThan(oldVersion: string | null, newVersion: string) {
+  isVersionLessThan(oldVersion: string | null, newVersion: string): boolean {
     return oldVersion ? semverLessThan(oldVersion, newVersion) : false;
   }
 
@@ -647,7 +657,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    *                                 Set false to create a changelog date incrementing the last one.
    * @return {String} Changelog date.
    */
-  dateFormatForLiquibase(reproducible?: boolean) {
+  dateFormatForLiquibase(reproducible?: boolean): string {
     const control = this.sharedData.getControl();
     reproducible = reproducible ?? Boolean(control.reproducible);
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
@@ -693,7 +703,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
    */
-  jhipsterTemplatePath(...path: string[]) {
+  jhipsterTemplatePath(...path: string[]): string {
     let existingGenerator: string;
     try {
       existingGenerator = this._jhipsterGenerator ?? requireNamespace(this.options.namespace).generator;
@@ -751,7 +761,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * Remove File
    */
-  removeFile(...path: string[]) {
+  removeFile(...path: string[]): string {
     const destinationFile = this.destinationPath(...path);
     const relativePath = relative((this.env as any).logCwd, destinationFile);
     // Delete from memory fs to keep updated.
@@ -771,7 +781,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Remove Folder
    * @param path
    */
-  removeFolder(...path: string[]) {
+  removeFolder(...path: string[]): void {
     const destinationFolder = this.destinationPath(...path);
     const relativePath = relative((this.env as any).logCwd, destinationFolder);
     // Delete from memory fs to keep updated.
@@ -789,7 +799,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * Fetch files from the generator-jhipster instance installed
    */
-  fetchFromInstalledJHipster(...path: string[]) {
+  fetchFromInstalledJHipster(...path: string[]): string {
     if (path) {
       return joinPath(__dirname, '..', ...path);
     }
@@ -1187,16 +1197,18 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     let newContent = originalContent;
     const writeCallback = (...callbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this> => {
+      const { autoCrlf = this.jhipsterConfigWithDefaults.autoCrlf, assertModified } = actualOptions;
       try {
-        newContent = joinCallbacks(...callbacks).call(this, newContent, filePath);
-        if (actualOptions.assertModified && originalContent === newContent) {
+        const fileHasCrlf = autoCrlf && hasCrlr(newContent);
+        newContent = joinCallbacks(...callbacks).call(this, fileHasCrlf ? normalizeLineEndings(newContent, LF) : newContent, filePath);
+        if (assertModified && originalContent === newContent) {
           const errorMessage = `${chalk.yellow('Fail to modify ')}${filePath}.`;
           if (!this.ignoreNeedlesError) {
             throw new Error(errorMessage);
           }
           this.log(errorMessage);
         }
-        this.writeDestination(filePath, newContent);
+        this.writeDestination(filePath, fileHasCrlf ? normalizeLineEndings(newContent, CRLF) : newContent);
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2021 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -32,10 +32,12 @@ import {
 import type {
   ConfiguringEachEntityTaskParam,
   TaskTypes as DefaultTaskTypes,
-  EntityTaskParam,
   EntityToLoad,
   LoadingEntitiesTaskParam,
   PostWritingEntitiesTaskParam,
+  PreparingEachEntityFieldTaskParam,
+  PreparingEachEntityRelationshipTaskParam,
+  PreparingEachEntityTaskParam,
   PreparingTaskParam,
   TaskParamWithApplication,
   TaskParamWithEntities,
@@ -482,7 +484,7 @@ export default class BaseApplicationGenerator<
    * Get entities to prepare.
    * @returns {object[]}
    */
-  getEntitiesDataToPrepare(): EntityTaskParam[] {
+  getEntitiesDataToPrepare(): Pick<PreparingEachEntityTaskParam, 'entity' | 'entityName' | 'description'>[] {
     return this.sharedData.getEntities().map(({ entityName, ...data }) => ({
       description: entityName,
       entityName,
@@ -495,7 +497,10 @@ export default class BaseApplicationGenerator<
    * Get entities and fields to prepare.
    * @returns {object[]}
    */
-  getEntitiesFieldsDataToPrepare() {
+  getEntitiesFieldsDataToPrepare(): Pick<
+    PreparingEachEntityFieldTaskParam,
+    'entity' | 'entityName' | 'field' | 'fieldName' | 'description'
+  >[] {
     return this.getEntitiesDataToPrepare()
       .map(({ entity, entityName, ...data }) => {
         if (!entity.fields) return [];
@@ -517,7 +522,10 @@ export default class BaseApplicationGenerator<
    * Get entities and relationships to prepare.
    * @returns {object[]}
    */
-  getEntitiesRelationshipsDataToPrepare() {
+  getEntitiesRelationshipsDataToPrepare(): Pick<
+    PreparingEachEntityRelationshipTaskParam,
+    'entity' | 'entityName' | 'relationship' | 'relationshipName' | 'description'
+  >[] {
     return this.getEntitiesDataToPrepare()
       .map(({ entity, entityName, ...data }) => {
         if (!entity.relationships) return [];

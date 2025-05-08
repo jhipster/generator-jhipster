@@ -1,0 +1,24 @@
+const backendHost = '127.0.0.1';
+const backendPort = <%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>;
+
+<%_ if (clientBundlerExperimentalEsbuild) { _%>
+/**
+ * @type {import('vite').CommonServerOptions['proxy']}
+ */
+<%_ } _%>
+export default {
+<%_ if (communicationSpringWebsocket) { _%>
+  '/websocket': {
+    target: `ws://${backendHost}:${backendPort}`,
+    ws: true,
+  },
+<%_ } _%>
+  '^/(api|management|v3/api-docs<% if (databaseTypeSql && devDatabaseTypeH2Any) { %>|h2-console<% } %><% if (authenticationTypeOauth2) { %>|oauth2|login<% } %><% if (authenticationTypeSession) { %>|login<% } %><% if (applicationTypeGateway || applicationTypeMicroservice) { %>|services<% } %>)': {
+<%_ if (clientBundlerExperimentalEsbuild) { _%>
+    target: `http://${backendHost}:${backendPort}`,
+<%_ } else { _%>
+    router: req => `http${req.socket.ssl ? 's' : ''}://${backendHost}:${backendPort}`,
+<%_ } _%>
+    xfwd: true,
+  },
+};

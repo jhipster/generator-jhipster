@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2024 the original author or authors from the JHipster project.
+ Copyright 2013-2025 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -33,11 +33,18 @@
       <%_ if (field.fieldIsEnum) { _%>
       @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
       <%_ } else if (field.blobContentTypeText || field.fieldTypeString) { _%>
-      @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
+      @org.springframework.data.elasticsearch.annotations.MultiField(
+          mainField = @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text),
+          otherFields = { 
+              @org.springframework.data.elasticsearch.annotations.InnerField(suffix = "keyword", type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword, ignoreAbove = 256)
+          }
+      )
       <%_ } else if (field.fieldTypeBoolean) { _%>
       @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
       <%_ } else if (field.fieldTypeInteger) { _%>
       @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
+      <%_ } else if (field.fieldTypeLocalTime) { _%>
+      @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Date, format = org.springframework.data.elasticsearch.annotations.DateFormat.hour_minute_second_millis)
       <%_ } _%>
     <%_ } _%>
   <&_ } -&>

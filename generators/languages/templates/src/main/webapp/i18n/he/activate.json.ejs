@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2024 the original author or authors from the JHipster project.
+ Copyright 2013-2025 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 {
-<%_ if (communicationSpringWebsocket) { _%>
-  "/websocket": {
-    "target": "ws://localhost:8080",
-    "ws": true
-  },
-<%_ } _%>
-  "^/(api|management|v3/api-docs<% if (databaseTypeSql && devDatabaseTypeH2Any) { %>|h2-console<% } %><% if (authenticationTypeOauth2) { %>|oauth2|login<% } %><% if (authenticationTypeSession) { %>|login<% } %><% if (applicationTypeGateway || applicationTypeMicroservice) { %>|services<% } %>)": "http://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>"
+    "activate": {
+      "title": "אקטיבציה",
+      "messages": {
+        "success": "<strong>החשבון שלך הופעל בהצלחה.</strong> אנא ",
+        "error": "<strong>לא ניתן היה להפעיל את החשבון שלך.</strong> אנא השתמש בטופס ההרשמה כדי להירשם מחדש."
+      }
+    }
 }

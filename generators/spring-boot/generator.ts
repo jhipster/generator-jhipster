@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,9 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import os from 'node:os';
 import chalk from 'chalk';
-import { sortedUniqBy } from 'lodash-es';
+import { lowerFirst, sortedUniqBy } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import {
   GENERATOR_CUCUMBER,
@@ -46,7 +45,7 @@ import {
   javaBeanCase,
 } from '../server/support/index.js';
 import { generateKeyStore } from '../java/support/index.js';
-import { createNeedleCallback, mutateData } from '../base/support/index.js';
+import { createNeedleCallback, isWin32, mutateData } from '../base/support/index.js';
 import {
   APPLICATION_TYPE_MICROSERVICE,
   applicationTypes,
@@ -284,6 +283,13 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
             annotations: [annotation],
           });
       },
+      addApplicationYamlDocument({ application, source }) {
+        source.addApplicationYamlDocument = content =>
+          this.editFile(
+            this.destinationPath(`${application.srcMainResources}config/application.yml`),
+            createNeedleCallback({ needle: 'add-application-yaml-document', autoIndent: false, contentToAdd: `---\n${content}` }),
+          );
+      },
       addLogNeedles({ source }) {
         source.addLogbackLogEntry = ({ file, name, level }) =>
           this.editFile(
@@ -315,6 +321,30 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
 }
 `,
           });
+        source.addApplicationPropertiesClass = ({ propertyType, propertyName = lowerFirst(propertyType), classStructure }) => {
+          const classProperties = Object.entries(classStructure).map(([name, type]) => ({
+            name,
+            type: Array.isArray(type) ? type[0] : type,
+            defaultVaue: Array.isArray(type) ? ` = ${type[1]}` : '',
+            beanName: javaBeanCase(name),
+          }));
+          return source.addApplicationPropertiesContent!({
+            property: `private final ${propertyType} ${propertyName} = new ${propertyType}();`,
+            propertyGetter: `
+public ${propertyType} get${javaBeanCase(propertyName)}() {
+    return ${propertyName};
+}
+`,
+            propertyClass: `public static class ${propertyType} {
+${classProperties.map(({ name, type, defaultVaue }) => `\n    private ${type} ${name}${defaultVaue};`).join('\n')}
+${classProperties.map(({ name, type, beanName }) => `\n    public ${type} get${beanName}() {\n        return ${name};\n    }\n`).join('\n')}
+${classProperties
+  .map(({ name, type, beanName }) => `\n    public void set${beanName}(${type} ${name}) {\n        this.${name} = ${name};\n    }`)
+  .join('\n')}
+}
+`,
+          });
+        };
       },
       blockhound({ application, source }) {
         source.addAllowBlockingCallsInside = ({ classPath, method }) => {
@@ -382,6 +412,10 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
             field.fieldTypeBoolean
           ) {
             field.propertyJavaFilterType = `${fieldType}Filter`;
+          } else if (field.fieldTypeLocalTime) {
+            const filterType = `${fieldType}Filter`;
+            field.propertyJavaFilterType = filterType;
+            field.propertyJavaCustomFilter = { type: filterType, superType: `RangeFilter<${fieldType}>`, fieldType };
           } else {
             field.propertyJavaFilterType = `Filter<${fieldType}>`;
           }
@@ -540,6 +574,11 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
         source.addJavaDependencies?.([
           { groupId: 'org.springdoc', artifactId: springdocDependency, version: application.javaDependencies!.springdoc },
         ]);
+        if (application.reactive) {
+          source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.OpenAPIService', method: 'build' });
+          source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.OpenAPIService', method: 'getWebhooks' });
+          source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.AbstractRequestService', method: 'build' });
+        }
       },
       addFeignReactor({ application, source }) {
         const { applicationTypeGateway, applicationTypeMicroservice, javaDependencies, reactive } = application;
@@ -591,6 +630,8 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
         }
       },
       addSpringBootCompose({ application, source }) {
+        if (!application.dockerServices?.length) return;
+
         source.addLogbackMainLog!({ name: 'org.springframework.boot.docker', level: 'WARN' });
 
         const dockerComposeArtifact = { groupId: 'org.springframework.boot', artifactId: 'spring-boot-docker-compose' };
@@ -621,18 +662,32 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
 
   get end() {
     return this.asEndTaskGroup({
-      end({ application }) {
+      end({ application, control }) {
+        const { buildToolExecutable } = application;
         this.log.ok('Spring Boot application generated successfully.');
 
-        let executable = 'mvnw';
-        if (application.buildToolGradle) {
-          executable = 'gradlew';
+        if (application.dockerServices?.length && !control.enviromentHasDockerCompose) {
+          const dockerComposeCommand = chalk.yellow.bold('docker compose');
+          this.log('');
+          this.log
+            .warn(`${dockerComposeCommand} command was not found in your environment. The generated Spring Boot application uses ${dockerComposeCommand} integration by default. You can disable it by setting
+${chalk.yellow.bold(`
+spring:
+  docker:
+    compose:
+      enabled: false
+`)}
+in your ${chalk.yellow.bold(`${application.srcMainResources}config/application.yml`)} file or removing 'spring-boot-docker-compose' dependency.
+`);
         }
+
         let logMsgComment = '';
-        if (os.platform() === 'win32') {
-          logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
+        if (isWin32) {
+          logMsgComment = ` (${chalk.yellow.bold(buildToolExecutable)} if using Windows Command Prompt)`;
         }
-        this.log.log(chalk.green(`  Run your Spring Boot application:\n  ${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+        this.log.log(
+          chalk.green(`  Run your Spring Boot application:\n  ${chalk.yellow.bold(`./${buildToolExecutable}`)}${logMsgComment}`),
+        );
       },
     });
   }

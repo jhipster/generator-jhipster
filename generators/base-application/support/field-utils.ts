@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -33,6 +33,7 @@ const {
   STRING,
   UUID,
   ZONED_DATE_TIME,
+  LOCAL_TIME,
   IMAGE_BLOB,
   ANY_BLOB,
   TEXT_BLOB,
@@ -50,6 +51,7 @@ export function fieldIsEnum(fieldType) {
     LOCAL_DATE,
     INSTANT,
     ZONED_DATE_TIME,
+    LOCAL_TIME,
     DURATION,
     UUID,
     BOOLEAN,

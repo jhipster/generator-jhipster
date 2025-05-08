@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -28,6 +28,7 @@ export { default as getHipster } from './hipster.js';
 export * from './jhipster7-context.js';
 export * from './namespace.js';
 export * from './needles.js';
+export * from './os.js';
 export * from './path.js';
 export { default as httpsGet } from './remote.js';
 export * from './secret.js';

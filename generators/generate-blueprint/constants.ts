@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -103,7 +103,7 @@ export const prompts = () => {
       message: 'Comma separated additional sub-generators.',
       validate: input => {
         if (input) {
-          return /^([\w,-]*)$/.test(input) ? true : 'Please provide valid generator names';
+          return /^([\w,-:]*)$/.test(input) ? true : 'Please provide valid generator names (must match ([w,-:]*))';
         }
         return true;
       },

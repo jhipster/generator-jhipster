@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,9 +19,32 @@
 import test from 'node:test';
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
 import { createJHipsterLogger } from '../../../lib/utils/logger.js';
-import { checkContentIn, createBaseNeedle, createNeedleCallback, insertContentBeforeNeedle } from './needles.js';
+import {
+  checkContentIn,
+  convertToPrettierExpressions,
+  createBaseNeedle,
+  createNeedleCallback,
+  insertContentBeforeNeedle,
+} from './needles.js';
 
 describe('needles - support', () => {
+  describe('convertToPrettierExpressions', () => {
+    it('should add whitespaces pattern to spaces', () => {
+      expect(convertToPrettierExpressions('1 2 3')).toBe('1[\\s\\n]*2[\\s\\n]*3');
+    });
+    it('should add whitespaces pattern to before >', () => {
+      expect(convertToPrettierExpressions('>')).toBe(',?\\n?[\\s]*>');
+    });
+    it('should add whitespaces pattern to after <', () => {
+      expect(convertToPrettierExpressions('<')).toBe('<\\n?[\\s]*');
+    });
+    it('should add whitespaces pattern to before )', () => {
+      expect(convertToPrettierExpressions('\\)')).toBe(',?\\n?[\\s]*\\)');
+    });
+    it('should add whitespaces pattern to after (', () => {
+      expect(convertToPrettierExpressions('\\(')).toBe('\\(\\n?[\\s]*');
+    });
+  });
   describe('checkContentIn', () => {
     it('should throw without content', () => {
       // @ts-expect-error
@@ -61,6 +84,42 @@ describe('needles - support', () => {
           `bar
  foo`,
           'foo    bar foo',
+        ),
+      ).toBeTruthy();
+    });
+
+    it('should be truthy for function params', () => {
+      expect(
+        checkContentIn(
+          `foo(bar)`,
+          `
+  foo(
+   bar
+  )`,
+        ),
+      ).toBeTruthy();
+    });
+
+    it('should be truthy for function params with last param separator', () => {
+      expect(
+        checkContentIn(
+          `foo(bar)`,
+          `
+  foo(
+   bar,
+  )`,
+        ),
+      ).toBeTruthy();
+    });
+
+    it('should be truthy for generic params', () => {
+      expect(
+        checkContentIn(
+          `foo<bar>`,
+          `
+  foo<
+   bar,
+  >`,
         ),
       ).toBeTruthy();
     });
@@ -242,19 +301,37 @@ ${needlePrefix} jhipster-needle-a-needle"
     it('returned function should add contentToAdd', () => {
       const log = test.mock.fn(createJHipsterLogger());
       const needleCallback = createNeedleCallback({ contentToAdd, needle });
-      expect(needleCallback.call({ log } as any, `\\\\ jhipster-needle-${needle}`, 'file')).toMatchInlineSnapshot(`
+      expect(needleCallback.call({ log } as any, `// jhipster-needle-${needle}`, 'file')).toMatchInlineSnapshot(`
 "content to add
-\\\\ jhipster-needle-a-needle"
+// jhipster-needle-a-needle"
 `);
     });
 
     it('returned function should add contentToAdd array', () => {
       const log = test.mock.fn(createJHipsterLogger());
       const needleCallback = createNeedleCallback({ contentToAdd: [contentToAdd, `${contentToAdd}2`], needle });
-      expect(needleCallback.call({ log } as any, `\\\\ jhipster-needle-${needle}`, 'any-file')).toMatchInlineSnapshot(`
+      expect(needleCallback.call({ log } as any, `// jhipster-needle-${needle}`, 'any-file')).toMatchInlineSnapshot(`
 "content to add
 content to add2
-\\\\ jhipster-needle-a-needle"
+// jhipster-needle-a-needle"
+`);
+    });
+
+    it('contentToAdd should be called', () => {
+      const log = test.mock.fn(createJHipsterLogger());
+      const contentToAdd = test.mock.fn((_arg0: string, _arg1: any) => 'result content');
+      const needleCallback = createNeedleCallback({ contentToAdd, needle });
+      const content = `  // jhipster-needle-${needle}`;
+      expect(needleCallback.call({ log } as any, content, 'file')).toMatchInlineSnapshot(`"result content"`);
+      expect(contentToAdd.mock.callCount()).toBe(1);
+      expect(contentToAdd.mock.calls[0].arguments[0]).toBe(content);
+      expect(contentToAdd.mock.calls[0].arguments[1]).toMatchInlineSnapshot(`
+{
+  "indentPrefix": "  ",
+  "needleIndent": 2,
+  "needleIndex": 2,
+  "needleLineIndex": 0,
+}
 `);
     });
   });

@@ -24,6 +24,7 @@ describe('generator - client - support - type-utils', () => {
   "Instant": "dayjs.Dayjs",
   "Integer": "number",
   "LocalDate": "dayjs.Dayjs",
+  "LocalTime": "string",
   "Long": "number",
   "String": "string",
   "TextBlob": "string",

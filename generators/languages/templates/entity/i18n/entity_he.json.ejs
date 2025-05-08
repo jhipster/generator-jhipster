@@ -1,0 +1,78 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "<%= frontendAppName %>": {
+      "<%= entityTranslationKey %>" : {
+        "home": {
+          "title": "<%= entityClassPluralHumanized %>",
+          "refreshListLabel": "רענן רשימה",
+  <%_ if (!readOnly) { _%>
+          "createLabel": "צור חדש <%= entityClassHumanized %>",
+          "createOrEditLabel": "צור או ערוך <%= entityClassHumanized %>",
+  <%_ } _%>
+  <%_ if (searchEngineAny) { _%>
+          "search": "חפש <%= entityClassHumanized %>",
+  <%_ } _%>
+          "notFound": "לא נמצאו <%= entityClassPluralHumanized %>"
+        },
+  <%_ if (!microserviceAppName && !readOnly) { _%>
+        "created": "<%= entityClassHumanized %> חדש נוצר עם מזהה {{ param }}",
+        "updated": "<%= entityClassHumanized %> עודכן עם מזהה {{ param }}",
+        "deleted": "<%= entityClassHumanized %> נמחק עם מזהה {{ param }}",
+  <%_ } _%>
+  <%_ if (!readOnly) { _%>
+        "delete": {
+          "question": "האם אתה בטוח שברצונך למחוק את <%= entityClassHumanized %> {{ id }}?"
+        },
+  <%_ } _%>
+        "detail": {
+          "title": "<%= entityClassHumanized %>"
+        }
+  <%_ for (const field of fields) { -%>
+        ,
+        "<%= field.fieldName %>": "<%= field.fieldNameHumanized %>"
+  <%_ } -%>
+  <% for (const relationship of relationships) { -%>
+        ,
+        "<%= relationship.relationshipName %>": "<%= relationship.relationshipNameHumanized %>"
+  <%_ } -%>
+  <%_ const fieldsWithDoc = fields.filter(field => field.documentation); -%>
+  <%_ if (fieldsWithDoc.length > 0) { -%>
+    <%_ const lastField = fieldsWithDoc[fieldsWithDoc.length - 1]; -%>
+        ,
+        "help": {
+    <%_ for (const field of fieldsWithDoc) { _%>
+          "<%= field.fieldName %>": "<%= field.documentation %>"<% if (field !== lastField) { %>,<% } %>
+    <%_ } _%>
+        }
+  <%_ } _%>
+      }
+    }
+  <%_ if (microserviceAppName && !readOnly) { -%>
+    ,
+    "<%= microserviceAppName %>": {
+      "<%= entityTranslationKey %>": {
+        "created": "<%= entityClassHumanized %> חדש נוצר עם מזהה {{ param }}",
+        "updated": "<%= entityClassHumanized %> עודכן עם מזהה {{ param }}",
+        "deleted": "<%= entityClassHumanized %> נמחק עם מזהה {{ param }}"
+      }
+    }
+  <%_ } _%>
+}
+  

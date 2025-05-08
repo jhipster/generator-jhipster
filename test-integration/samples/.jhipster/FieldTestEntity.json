@@ -49,6 +49,8 @@
     { "fieldName": "instantRequiredTom", "fieldType": "Instant", "fieldValidateRules": ["required"] },
     { "fieldName": "zonedDateTimeTom", "fieldType": "ZonedDateTime" },
     { "fieldName": "zonedDateTimeRequiredTom", "fieldType": "ZonedDateTime", "fieldValidateRules": ["required"] },
+    { "fieldName": "localTimeTom", "fieldType": "LocalTime" },
+    { "fieldName": "localTimeRequiredTom", "fieldType": "LocalTime", "fieldValidateRules": ["required"] },
     { "fieldName": "durationTom", "fieldType": "Duration" },
     { "fieldName": "durationRequiredTom", "fieldType": "Duration", "fieldValidateRules": ["required"] },
     { "fieldName": "booleanTom", "fieldType": "Boolean" },

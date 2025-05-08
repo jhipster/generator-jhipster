@@ -41,12 +41,34 @@ export type SpringBootSourceType = JavaSourceType &
     addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
     addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
     addApplicationPropertiesProperty?({ propertyName, propertyType }: { propertyName: string; propertyType: string }): void;
+    /**
+     * @example
+     * addApplicationPropertiesClass({
+     *   propertyType: 'Liquibase',
+     *   classStructure: { enabled: ['PropertyType', '"default value"'], asyncStart: 'PropertyTypeOnly' },
+     * });
+     */
+    addApplicationPropertiesClass?(opts: {
+      propertyName?: string;
+      propertyType: string;
+      classStructure: Record<string, string | string[]>;
+    }): void;
     addNativeHint?(hints: {
       advanced?: string[];
       declaredConstructors?: string[];
       resources?: string[];
       publicConstructors?: string[];
     }): void;
+    /**
+     * Injects a document into the application.yml file using '---' document separator.
+     *
+     * @example
+     * addApplicationYamlDocument(`
+     * spring:
+     *  key: value
+     * `);
+     */
+    addApplicationYamlDocument?(document: string): void;
   };
 
 type CacheProviderApplication = OptionWithDerivedProperties<

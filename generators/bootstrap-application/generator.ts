@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -30,6 +30,7 @@ import {
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.js';
+import type { Field } from '../../lib/types/base/field.js';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
@@ -102,7 +103,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           entityConfig.name = entityName;
         }
 
-        entityConfig.fields!.forEach((field: any) => {
+        entityConfig.fields!.forEach((field: Field) => {
           const { fieldName, fieldType, fieldValidateRules } = field;
 
           assert(fieldName, `fieldName is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);

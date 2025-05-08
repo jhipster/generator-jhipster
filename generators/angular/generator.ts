@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -324,7 +324,6 @@ export default class AngularGenerator extends BaseApplicationGenerator<DefaultTa
               '@angular-builders/custom-webpack': null,
               'browser-sync-webpack-plugin': null,
               'copy-webpack-plugin': null,
-              'eslint-webpack-plugin': null,
               'webpack-bundle-analyzer': null,
               'webpack-merge': null,
               'webpack-notifier': null,

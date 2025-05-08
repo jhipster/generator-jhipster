@@ -1,30 +1,30 @@
 import axios, { type AxiosPromise } from 'axios';
 
 export default class HealthService {
-  public separator: string;
+  separator: string;
 
   constructor() {
     this.separator = '.';
   }
 
-  public checkHealth(): AxiosPromise<any> {
+  checkHealth(): AxiosPromise<any> {
     return axios.get('management/health');
   }
 
-  public transformHealthData(data: any): any {
+  transformHealthData(data: any): any {
     const response = [];
     this.flattenHealthData(response, null, data.components);
     return response;
   }
 
-  public getBaseName(name: string): string {
+  getBaseName(name: string): string {
     if (name) {
       const split = name.split('.');
       return split[0];
     }
   }
 
-  public getSubSystemName(name: string): string {
+  getSubSystemName(name: string): string {
     if (name) {
       const split = name.split('.');
       split.splice(0, 1);
@@ -33,7 +33,7 @@ export default class HealthService {
     }
   }
 
-  public addHealthObject(result: any, isLeaf: boolean, healthObject: any, name: string) {
+  addHealthObject(result: any, isLeaf: boolean, healthObject: any, name: string) {
     const healthData = {
       name,
       details: undefined,
@@ -69,7 +69,7 @@ export default class HealthService {
     return healthData;
   }
 
-  public flattenHealthData(result: any, path: any, data: any): any {
+  flattenHealthData(result: any, path: any, data: any): any {
     for (const key in data) {
       if (Object.hasOwn(data, key)) {
         const value = data[key];
@@ -86,7 +86,7 @@ export default class HealthService {
     return result;
   }
 
-  public getModuleName(path: any, name: string) {
+  getModuleName(path: any, name: string) {
     if (path && name) {
       return path + this.separator + name;
     } else if (path) {
@@ -97,7 +97,7 @@ export default class HealthService {
     return '';
   }
 
-  public hasSubSystem(healthObject: any): any {
+  hasSubSystem(healthObject: any): any {
     let result = false;
 
     for (const key in healthObject) {
@@ -111,7 +111,7 @@ export default class HealthService {
     return result;
   }
 
-  public isHealthObject(healthObject: any): any {
+  isHealthObject(healthObject: any): any {
     let result = false;
 
     for (const key in healthObject) {

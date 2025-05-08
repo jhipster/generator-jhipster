@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -159,7 +159,7 @@ function convertAnnotationsToOptions(
   const result = {};
   annotations.forEach(annotation => {
     const annotationName = lowerFirst(annotation.optionName);
-    const value = annotation.optionValue ? annotation.optionValue : true;
+    const value = annotation.optionValue ?? true;
     if (annotationName in result) {
       const previousValue = result[annotationName];
       if (Array.isArray(previousValue)) {

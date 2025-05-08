@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,6 +22,8 @@ export * from './checks/index.js';
 export * from './doc.js';
 export * from './files.js';
 export { default as generatedAnnotationTransform } from './generated-annotation-transform.js';
+export * from './java-enum.js';
+export * from './java-file-edit.js';
 export * from './java-formatting.js';
 export * from './key-store.js';
 export { default as packageInfoTransform } from './package-info-transform.js';

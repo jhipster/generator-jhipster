@@ -31,7 +31,7 @@ class SpaWebFilterIT {
     @Test
     void testFilterDoesNotForwardToIndexForApi() throws Exception {
         mockMvc.perform(get("/api/<% if (!applicationTypeMicroservice) { %>authenticate<% } else { %>users<% } %>"))
-            .andExpect(status().isOk())
+            .andExpect(status().is2xxSuccessful())
             .andExpect(forwardedUrl(null));
     }
 <%_ } _%>

@@ -42,6 +42,11 @@ export type BaseApplication = {
   blueprints?: { name: string; version: string }[];
   testFrameworks?: string[];
 
+  /**
+   * True if the application has at least one non-builtin entity.
+   */
+  hasNonBuiltInEntity?: boolean;
+
   /** Customize templates sourceFile and destinationFile */
   customizeTemplatePaths: ((
     this: CoreGenerator,
@@ -148,6 +153,8 @@ export type CommonClientServerApplication<Entity> = BaseApplication &
   SpringBootApplication &
   ClientApplication &
   ExportApplicationPropertiesFromCommand<typeof import('../git/command.ts').default> &
+  ExportApplicationPropertiesFromCommand<typeof import('../docker/command.ts').default> &
+  import('../docker/types.d.ts').DockerApplicationType &
   ExportApplicationPropertiesFromCommand<typeof import('../project-name/command.ts').default> &
   ApplicationProperties & {
     clientRootDir: string;

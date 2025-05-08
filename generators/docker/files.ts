@@ -123,7 +123,7 @@ export const dockerFiles = {
   applicationFiles: [
     {
       path: TEMPLATES_DOCKER_DIR,
-      condition: ctx => ctx.dockerServices.includes('app'),
+      condition: ctx => ctx.dockerServices.includes('app') || ctx.backendTypeSpringBoot,
       renameTo,
       templates: ['app.yml'],
     },

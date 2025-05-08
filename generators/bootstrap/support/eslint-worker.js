@@ -10,7 +10,6 @@ export default async ({ cwd, filePath, fileContents, extensions, config, additio
     eslintInstance = new eslint.ESLint({
       fix: true,
       overrideConfigFile: true,
-      allowInlineConfig: false,
       cache: false,
       cwd,
       baseConfig: ts.config(
@@ -18,6 +17,11 @@ export default async ({ cwd, filePath, fileContents, extensions, config, additio
         ts.configs.base,
         ...additionalConfig,
         config ? JSON.parse(config) : jhipster.base,
+        {
+          linterOptions: {
+            reportUnusedDisableDirectives: 'off',
+          },
+        },
       ),
     });
   }

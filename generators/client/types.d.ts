@@ -18,6 +18,7 @@ export type FrontendApplication = ApplicationClientProperties &
     clientWebappDir?: string;
     webappEnumerationsDir?: string;
     clientFrameworkBuiltIn?: boolean;
+    frontendAppName?: string;
   };
 
 /**

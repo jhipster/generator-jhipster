@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default class ConfigurationService {
-  public loadConfiguration(): Promise<any> {
+  loadConfiguration(): Promise<any> {
     return new Promise(resolve => {
       axios.get('management/configprops').then(res => {
         const properties = [];
@@ -21,7 +21,7 @@ export default class ConfigurationService {
     });
   }
 
-  public loadEnvConfiguration(): Promise<any> {
+  loadEnvConfiguration(): Promise<any> {
     return new Promise(resolve => {
       axios.get<any>('management/env').then(res => {
         const properties = {};

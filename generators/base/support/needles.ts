@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,12 +22,25 @@ import type CoreGenerator from '../../base-core/index.js';
 import type { CascatedEditFileCallback, EditFileCallback, NeedleCallback } from '../api.js';
 import { joinCallbacks } from './write-files.js';
 
+type NeedleContentToAddCallback = {
+  /**
+   * Position of the needle start.
+   */
+  needleIndex: number;
+  /**
+   * Position of the needle line's new line char.
+   */
+  needleLineIndex: number;
+  needleIndent: number;
+  indentPrefix: string;
+};
+
 export type NeedleInsertion = {
   needle: string;
   /**
    * Content to add.
    */
-  contentToAdd: string | string[] | ((content: string, options: { needleIndent: number; indentPrefix: string }) => string);
+  contentToAdd: string | string[] | ((content: string, options: NeedleContentToAddCallback) => string);
   contentToCheck?: string | RegExp;
   /**
    * check existing content ignoring white spaces and new lines.
@@ -60,9 +73,13 @@ type NeedleContentInsertion = NeedleInsertion & {
 };
 
 /**
- * Change spaces sequences and '>' to allow any number of spaces or new line prefix
+ * Change spaces sequences and characters that prettier breaks line (<>()) to allow any number of spaces or new line prefix
  */
-export const convertToPrettierExpressions = (str: string): string => str.replace(/\s+/g, '([\\s\n]*)').replace(/>+/g, '(\n?[\\s]*)>');
+export const convertToPrettierExpressions = (str: string): string =>
+  str
+    .replace(/(<|\\\()(?! )/g, '$1\\n?[\\s]*')
+    .replace(/(?! )(>|\\\))/g, ',?\\n?[\\s]*$1')
+    .replace(/\s+/g, '[\\s\\n]*');
 
 /**
  * Check if contentToCheck existing in content
@@ -103,14 +120,10 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
 
   needle = needle.includes('jhipster-needle-') ? needle : `jhipster-needle-${needle}`;
 
-  let regexp = new RegExp(`(?://|<!--|/*|#) ${needle}(?:$|\n| )`, 'g');
-  let firstMatch = regexp.exec(content);
+  const regexp = new RegExp(`(?://|<!--|/\\*|#) ${needle}(?:$|\n| )`, 'g');
+  const firstMatch = regexp.exec(content);
   if (!firstMatch) {
-    regexp = new RegExp(`"${needle}": `, 'g');
-    firstMatch = regexp.exec(content);
-    if (!firstMatch) {
-      return null;
-    }
+    return null;
   }
 
   // Replacements using functions allows to replace multiples needles
@@ -120,16 +133,19 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
 
   const needleIndex = firstMatch.index;
 
-  const needleLineIndex = content.lastIndexOf('\n', needleIndex);
-  const beforeContent = content.substring(0, needleLineIndex + 1);
-  const afterContent = content.substring(needleLineIndex + 1);
-
-  // Find needle ident
-  const needleLine = afterContent.split('\n', 2)[0];
-  const needleIndent = needleLine.length - needleLine.trimStart().length;
+  const needleLineIndex = content.lastIndexOf('\n', needleIndex) + 1;
+  const beforeContent = content.substring(0, needleLineIndex);
+  const afterContent = content.substring(needleLineIndex);
+  const needleIndent = needleIndex - needleLineIndex;
 
   if (typeof contentToAdd === 'function') {
-    return contentToAdd(content, { needleIndent, indentPrefix: ' '.repeat(needleIndent) });
+    const newContent = contentToAdd(content, {
+      needleIndex,
+      needleLineIndex,
+      needleIndent,
+      indentPrefix: ' '.repeat(needleIndent),
+    });
+    return newContent;
   }
   contentToAdd = Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd];
   if (autoIndent) {
@@ -160,7 +176,8 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
     contentToAdd = contentToAdd.map(line => (line.length > identToRemove ? line.substring(identToRemove) : ''));
   }
 
-  return `${beforeContent}${contentToAdd.join('\n')}\n${afterContent}`;
+  const newContent = `${beforeContent}${contentToAdd.join('\n')}\n${afterContent}`;
+  return newContent;
 };
 
 /**

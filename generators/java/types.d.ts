@@ -41,6 +41,7 @@ export type JavaNeedleOptions = GradleNeedleOptions;
 
 export type JavaApplication = JavaBootstrapStorageProperties &
   GradleApplication & {
+    buildToolExecutable: string;
     javaVersion: string;
 
     packageFolder: string;
@@ -79,6 +80,8 @@ export type JavaApplication = JavaBootstrapStorageProperties &
 
 export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };
 
+export type SpringBean = { package: string; beanClass: string; beanName: string };
+
 export type JavaSourceType = {
   /**
    * Add a JavaDefinition to the application.
@@ -100,7 +103,41 @@ export type JavaSourceType = {
    */
   editJavaFile?: (
     file: string,
-    { staticImports, imports, annotations }: { staticImports?: string[]; imports?: string[]; annotations?: JavaAnnotation[] },
+    options: {
+      staticImports?: string[];
+      imports?: string[];
+      annotations?: JavaAnnotation[];
+      /**
+       * Constructor parameters to add to the class.
+       */
+      constructorParams?: string[];
+      /**
+       * Fields to add to the class.
+       * Requires a valid constructor.
+       */
+      fields?: string[];
+      /**
+       * Spring beans to add to the class.
+       */
+      springBeans?: SpringBean[];
+    },
     ...editFileCallback: EditFileCallback[]
+  ) => void;
+  /**
+   * Add enum values to a Java enum.
+   *
+   * @example
+   * ```js
+   * addItemsToJavaEnumFile('src/main/java/my/package/MyEnum.java', {
+   *   enumValues: ['VALUE1', 'VALUE2'],
+   * });
+   * ```
+   */
+  addItemsToJavaEnumFile?: (
+    file: string,
+    options: {
+      enumName?: string;
+      enumValues: string[];
+    },
   ) => void;
 };

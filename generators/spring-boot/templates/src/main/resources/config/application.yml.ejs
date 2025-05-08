@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2024 the original author or authors from the JHipster project.
+ Copyright 2013-2025 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -269,7 +269,7 @@ spring:
           group: <%= dasherizedBaseName %>
   <%_ } _%>
 <%_ } _%>
-<%_ if ('dockerServices' in locals && dockerServices && dockerServices.length > 1) { _%>
+<%_ if ('dockerServices' in locals && dockerServices?.length) { _%>
   docker:
     compose:
       enabled: true
@@ -327,6 +327,7 @@ spring:
       hibernate.cache.hazelcast.instance_name: <%= baseName %>
       hibernate.cache.hazelcast.use_lite_member: true
     <%_ } else if (cacheProviderInfinispan) { _%>
+      hibernate.cache.region.factory_class: infinispan
       hibernate.cache.infinispan.statistics: false
       hibernate.cache.use_minimal_puts: true
       hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
@@ -463,6 +464,8 @@ jhipster:
         - api://default
 <%_ } _%>
 
+# jhipster-needle-add-application-yaml-document
+---
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

@@ -37,6 +37,8 @@
     { "fieldName": "instanteRequiredEva", "fieldType": "Instant", "fieldValidateRules": ["required"] },
     { "fieldName": "zonedDateTimeEva", "fieldType": "ZonedDateTime" },
     { "fieldName": "zonedDateTimeRequiredEva", "fieldType": "ZonedDateTime", "fieldValidateRules": ["required"] },
+    { "fieldName": "localTimeEva", "fieldType": "LocalTime" },
+    { "fieldName": "localTimeRequiredEva", "fieldType": "LocalTime", "fieldValidateRules": ["required"] },
     { "fieldName": "durationEva", "fieldType": "Duration" },
     { "fieldName": "durationRequiredEva", "fieldType": "Duration", "fieldValidateRules": ["required"] },
     { "fieldName": "booleanEva", "fieldType": "Boolean" },

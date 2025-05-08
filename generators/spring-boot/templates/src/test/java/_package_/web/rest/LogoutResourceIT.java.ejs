@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2024 the original author or authors from the JHipster project.
+ Copyright 2013-2025 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -81,7 +81,7 @@ class LogoutResourceIT {
     private Map<String, Object> claims;
 
     @BeforeEach
-    public void before() <% if (!reactive) { %>throws Exception <% } %>{
+    void before() <% if (!reactive) { %>throws Exception <% } %>{
         claims = new HashMap<>();
         claims.put("groups", Collections.singletonList(AuthoritiesConstants.USER));
         claims.put("sub", 123);

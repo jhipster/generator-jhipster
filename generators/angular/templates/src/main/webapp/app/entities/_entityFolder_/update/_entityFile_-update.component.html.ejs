@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2024 the original author or authors from the JHipster project.
+ Copyright 2013-2025 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,7 +22,7 @@
             <h2 id="<%= jhiPrefixDashed %>-<%= entityFileName %>-heading" data-cy="<%= entityClass %>CreateUpdateHeading">__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.createOrEditLabel')</h2>
 
             <div>
-                <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
+                <<%= jhiPrefixDashed %>-alert-error />
 <%_ for (const field of fields.filter(field => !field.hidden)) {
   const fieldName = field.fieldName;
   const fieldNameHumanized = field.fieldNameHumanized;
@@ -99,6 +99,9 @@ _%>
     <%_ } else if (field.fieldTypeBoolean) { _%>
                     <input type="<%= fieldInputType %>" class="form-check" name="<%= fieldName %>" id="field_<%= fieldName %>"
                            data-cy="<%= fieldName %>" formControlName="<%= fieldName %>" <% if (readonly) { %> [readonly]="true"<% } %>/>
+    <%_ } else if (field.fieldTypeLocalTime) { _%>
+                    <input type="time" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
+                           formControlName="<%= fieldName %>"<% if (readonly) { %> [readonly]="true"<% } %>/>
     <%_ } else { _%>
                     <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
                            formControlName="<%= fieldName %>"<% if (field.id && !field.autoGenerate) { %> [readonly]="editForm.get('<%= primaryKey.name %>')!.disabled"<% } else if (readonly) { %> [readonly]="true"<% } %>/>
@@ -174,7 +177,7 @@ _%>
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } else { _%>
-                    @if (editForm.get(['<%- relationship.propertyName %>'])!.value == null) {
+                    @if (editForm.get(['<%- relationship.propertyName %>'])!.value === null) {
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } _%>

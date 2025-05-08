@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2024 the original author or authors from the JHipster project.
+ Copyright 2013-2025 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -39,7 +39,6 @@ import java.io.ByteArrayOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Properties;
@@ -76,7 +75,7 @@ class MailServiceIT {
     private MailService mailService;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         doNothing().when(javaMailSender).send(any(MimeMessage.class));
         when(javaMailSender.createMimeMessage()).thenReturn(new MimeMessage((Session) null));
     }
@@ -227,7 +226,7 @@ class MailServiceIT {
 
             String propertyFilePath = "i18n/messages_" + getMessageSourceSuffixForLanguage(langKey) + ".properties";
             URL resource = this.getClass().getClassLoader().getResource(propertyFilePath);
-            Path filePath = Path.of(new URI(resource.getFile()).getPath());
+            Path filePath = Path.of(resource.toURI());
             Properties properties = new Properties();
             properties.load(new InputStreamReader(Files.newInputStream(filePath), Charset.forName("UTF-8")));
 

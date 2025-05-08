@@ -37,7 +37,7 @@ export const useTrackerService = ({ stomp, authenticated }: { stomp?: RxStomp; a
 };
 
 export default class TrackerService {
-  public status = ref<'open' | 'connecting' | 'closing' | 'closed'>('closed');
+  status = ref<'open' | 'connecting' | 'closing' | 'closed'>('closed');
   private rxStomp: RxStomp;
 
   constructor({ stomp }: { stomp?: RxStomp }) {
@@ -74,12 +74,12 @@ export default class TrackerService {
     });
   }
 
-  public connect(): void {
+  connect(): void {
     this.updateCredentials();
     this.rxStomp.activate();
   }
 
-  public async disconnect(): Promise<void> {
+  async disconnect(): Promise<void> {
     await this.rxStomp.deactivate();
   }
 <%_ if (authenticationTypeJwt) { _%>
@@ -121,14 +121,14 @@ export default class TrackerService {
     });
   }
 
-  public sendActivity(page: string): void {
+  sendActivity(page: string): void {
     this.rxStomp.publish({
       destination: DESTINATION_ACTIVITY,
       body: JSON.stringify({ page }),
     });
   }
 
-  public subscribe(observer) {
+  subscribe(observer) {
     return this.rxStomp
       .watch(DESTINATION_TRACKER)
       .pipe(map(imessage => JSON.parse(imessage.body)))

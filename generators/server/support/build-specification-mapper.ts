@@ -12,6 +12,7 @@ const {
   ZONED_DATE_TIME: TYPE_ZONED_DATE_TIME,
   INSTANT: TYPE_INSTANT,
   DURATION: TYPE_DURATION,
+  LOCAL_TIME: TYPE_LOCAL_TIME,
 } = fieldTypes.CommonDBTypes;
 
 /**
@@ -30,6 +31,7 @@ export const getSpecificationBuildForType = (fieldType: FieldType) => {
       TYPE_ZONED_DATE_TIME,
       TYPE_INSTANT,
       TYPE_DURATION,
+      TYPE_LOCAL_TIME,
     ].includes(fieldType)
   ) {
     return 'buildRangeSpecification';

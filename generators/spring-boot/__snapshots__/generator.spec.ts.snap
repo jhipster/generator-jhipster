@@ -1,5 +1,81 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`generator - spring-boot source api editJavaFile with springBeans should match file content snapshot 1`] = `
+{
+  "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
+    "contents": "package com.mycompany.myapp.config;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+/**
+ * Properties specific to JHipster.
+ * <p>
+ * Properties are configured in the {@code application.yml} file.
+ * See {@link tech.jhipster.config.JHipsterProperties} for a good example.
+ */
+@ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
+public class ApplicationProperties {
+    private final SomeNestedProperties someNestedProperties = new SomeNestedProperties();
+    private final Liquibase liquibase = new Liquibase();
+    // jhipster-needle-application-properties-property
+
+    public SomeNestedProperties getSomeNestedProperties() {
+        return someNestedProperties;
+    }
+
+    public Liquibase getLiquibase() {
+        return liquibase;
+    }
+
+    // jhipster-needle-application-properties-property-getter
+
+    public static class SomeNestedProperties {
+
+        private Boolean enabled = true;
+
+        private String tag;
+
+        public Boolean getEnabled() {
+            return enabled;
+        }
+
+
+        public String getTag() {
+            return tag;
+        }
+
+
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public void setTag(String tag) {
+            this.tag = tag;
+        }
+    }
+
+    public static class Liquibase {
+
+        private Boolean asyncStart = true;
+
+        public Boolean getAsyncStart() {
+            return asyncStart;
+        }
+
+
+        public void setAsyncStart(Boolean asyncStart) {
+            this.asyncStart = asyncStart;
+        }
+    }
+
+    // jhipster-needle-application-properties-property-class
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - spring-boot with jwt should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {

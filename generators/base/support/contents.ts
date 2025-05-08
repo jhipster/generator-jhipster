@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,6 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+export const CRLF = '\r\n';
+export const LF = '\n';
+
+/**
+ * Check if a string contains CRLF line endings.
+ *
+ * @param str
+ * @returns
+ */
+export const hasCrlr = (str?: string): boolean => Boolean(str?.includes(CRLF));
+
 /**
  * Replace line endings with the specified one.
  *
@@ -24,7 +36,7 @@
  * @returns normalized line ending string
  */
 
-export function normalizeLineEndings(str: string, lineEnding: string): string {
+export function normalizeLineEndings(str: string, lineEnding: typeof LF | typeof CRLF): string {
   return str.replace(/\r\n|\r|\n/g, lineEnding);
 }
 

@@ -1,14 +1,36 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import { vitest } from 'vitest';
 import { computed } from 'vue';
 import { shallowMount } from '@vue/test-utils';
-import JhiNavbar from './jhi-navbar.vue';
 import { type Router } from 'vue-router';
 import { createTestingPinia } from '@pinia/testing';
 
 import { useStore } from '@/store';
 import { createRouter } from '@/router';
-import <% if (authenticationTypeOauth2) { %>type <% } %>LoginService from '@/account/login.service';
-
+<%_ if (authenticationUsesCsrf) { _%>
+import type LoginService from '@/account/login.service';
+<%_ } _%>
+<%_ if (generateUserManagement) { _%>
+import { useLoginModal } from '@/account/login-modal';
+<%_ } _%>
+import JhiNavbar from './jhi-navbar.vue';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 
 vitest.mock('@module-federation/enhanced/runtime', () => ({
@@ -23,7 +45,12 @@ const store = useStore();
 
 describe('JhiNavbar', () => {
   let jhiNavbar: JhiNavbarComponentType;
+<%_ if (authenticationUsesCsrf) { _%>
   let loginService: LoginService;
+<%_ } _%>
+<%_ if (generateUserManagement) { _%>
+  let login: ReturnType<typeof useLoginModal>;
+<%_ } _%>
   const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 <%_ if (enableTranslation) { _%>
   const changeLanguage = vitest.fn();
@@ -32,14 +59,7 @@ describe('JhiNavbar', () => {
 
   beforeEach(() => {
     router = createRouter();
-<%_ if (authenticationTypeJwt) { _%>
-    loginService = new LoginService({ emit: vitest.fn() });
-    vitest.spyOn(loginService, 'openLogin');
-<%_ } else if (authenticationTypeSession) { _%>
-    loginService = new LoginService({ emit: vitest.fn() });
-    vitest.spyOn(loginService, 'openLogin');
-    vitest.spyOn(loginService, 'logout');
-<%_ } else if (authenticationTypeOauth2) { _%>
+<%_ if (authenticationUsesCsrf) { _%>
     loginService = { login: vitest.fn(), logout: vitest.fn() };
 <%_ } _%>
     const wrapper = shallowMount(JhiNavbar, {
@@ -57,7 +77,9 @@ describe('JhiNavbar', () => {
           'b-navbar-brand': true,
         },
         provide: {
+<%_ if (authenticationUsesCsrf) { _%>
           loginService,
+<%_ } _%>
           currentLanguage: computed(() => 'foo'),
 <%_ if (enableTranslation) { _%>
           changeLanguage,
@@ -67,6 +89,9 @@ describe('JhiNavbar', () => {
       },
     });
     jhiNavbar = wrapper.vm;
+<%_ if (generateUserManagement) { _%>
+    login = useLoginModal();
+<%_ } _%>
   });
 
   it('should not have user data set', () => {
@@ -89,11 +114,12 @@ describe('JhiNavbar', () => {
   });
 
   it('should use login service', () => {
-    jhiNavbar.openLogin();
-<%_ if (!authenticationTypeOauth2) { _%>
-    expect(loginService.openLogin).toHaveBeenCalled();
-<%_ } else { _%>
+    jhiNavbar.<% if (authenticationTypeOauth2) { %>login<% } else { %>showLogin<% } %>();
+
+<%_ if (authenticationTypeOauth2) { _%>
     expect(loginService.login).toHaveBeenCalled();
+<%_ } else { _%>
+    expect(login.showLogin).toHaveBeenCalled();
 <%_ } _%>
   });
 
@@ -108,9 +134,10 @@ describe('JhiNavbar', () => {
 <%_ if (authenticationTypeOauth2) { _%>
     const logoutUrl = '/to-match';
     (loginService.logout as any).mockReturnValue(Promise.resolve({ data: { logoutUrl } }));
-<%_ } else if (!authenticationTypeJwt) { _%>
+<%_ } else if (authenticationUsesCsrf) { _%>
     (loginService.logout as any).mockReturnValue(Promise.resolve({}));
 <%_ } _%>
+
     await jhiNavbar.logout();
 
 <%_ if (!authenticationTypeJwt) { _%>

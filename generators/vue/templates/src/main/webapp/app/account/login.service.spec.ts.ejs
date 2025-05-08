@@ -1,5 +1,4 @@
 import LoginService from './login.service';
-<%_ if (!authenticationTypeJwt) { _%>
 import axios from 'axios';
 import sinon from 'sinon';
 
@@ -7,7 +6,6 @@ const axiosStub = {
   get: sinon.stub(axios, 'get'),
   post: sinon.stub(axios, 'post'),
 };
-<%_ } _%>
 
 describe('Login Service test suite', () => {
   let loginService: LoginService;
@@ -66,11 +64,9 @@ describe('Login Service test suite', () => {
   });
 <%_ } _%>
 
-<%_ if (!authenticationTypeJwt) { _%>
   it('should call global logout when asked to', () => {
     loginService.logout();
 
     expect(axiosStub.post.calledWith('api/logout')).toBeTruthy();
   });
-<%_ } _%>
 });

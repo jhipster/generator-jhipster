@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -49,8 +49,8 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   changelogDateForRecent: any;
   /** @experimental */
   auditableEntity?: boolean;
-  relationships: (IsNever<R> extends true ? Relationship<Omit<Entity, 'relationships'>> : R)[];
-  otherRelationships: (IsNever<R> extends true ? Relationship<Omit<Entity, 'relationships'>> : R)[];
+  relationships: (IsNever<R> extends true ? Relationship : R)[];
+  otherRelationships: (IsNever<R> extends true ? Relationship : R)[];
 
   primaryKey?: PrimaryKey<F>;
 
@@ -129,6 +129,7 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   anyFieldIsDuration: boolean;
   anyFieldIsInstant: boolean;
   anyFieldIsLocalDate: boolean;
+  anyFieldIsLocalTime: boolean;
   /**
    * Any field is of type ZonedDateTime or Instant
    */

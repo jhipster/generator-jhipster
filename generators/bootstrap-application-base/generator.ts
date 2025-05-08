@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import os from 'os';
 import { lowerFirst } from 'lodash-es';
 import chalk from 'chalk';
 import { passthrough } from '@yeoman/transform';
@@ -41,12 +40,11 @@ import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../ap
 import { lookupCommandsConfigs } from '../../lib/command/lookup-commands-configs.js';
 import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../lib/command/load.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
-import { removeFieldsWithNullishValues } from '../base/support/index.js';
+import { isWin32, removeFieldsWithNullishValues } from '../base/support/index.js';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../lib/application/field-types.js';
+import type { Entity } from '../../lib/types/application/entity.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
-
-const isWin32 = os.platform() === 'win32';
 
 export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
@@ -443,7 +441,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         entity.anyRelationshipIsRequired = entity.relationships.some(rel => rel.relationshipRequired || rel.id);
       },
       checkForCircularRelationships({ entity }) {
-        const detectCyclicRequiredRelationship = (entity, relatedEntities) => {
+        const detectCyclicRequiredRelationship = (entity: Entity, relatedEntities: Set<Entity>) => {
           if (relatedEntities.has(entity)) return true;
           relatedEntities.add(entity);
           return entity.relationships
@@ -477,6 +475,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           templatesContext: application,
           commandsConfigs: await lookupCommandsConfigs(),
         });
+      },
+      hasNonBuiltInEntity({ application, entities }) {
+        application.hasNonBuiltInEntity = entities.filter(e => !e.builtIn).length > 0;
       },
       task({ application }) {
         const packageJsonFiles = [this.destinationPath('package.json')];

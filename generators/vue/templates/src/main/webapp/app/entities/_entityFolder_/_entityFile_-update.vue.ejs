@@ -23,6 +23,8 @@
     fieldInputType = 'date';
   } else if (field.fieldTypeTimed) {
     fieldInputType = 'datetime-local';
+  } else if (field.fieldTypeLocalTime) {
+    fieldInputType = 'time';
   } else if (field.fieldTypeBoolean) {
     fieldInputType = 'checkbox';
     fieldInputClass = 'form-check';

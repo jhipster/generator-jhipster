@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2024 the original author or authors from the JHipster project.
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { DockerComposeService } from '../types.js';
+
 /**
  * Creates EditFileCallback that creates a base docker compose yml file if empty.
  *
@@ -28,7 +30,7 @@ export const createDockerComposeFile = (
 name: ${name}
 `;
 
-export const createDockerExtendedServices = (...services) => ({
+export const createDockerExtendedServices = (...services: DockerComposeService[]) => ({
   services: Object.fromEntries(
     services.map(({ serviceName, serviceFile = `./${serviceName}.yml`, extendedServiceName = serviceName, additionalConfig = {} }) => [
       serviceName,
