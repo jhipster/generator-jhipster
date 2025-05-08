@@ -20,7 +20,6 @@ import type { ComposeOptions } from 'yeoman-generator';
 
 import type GeneratorsByNamespace from '../types.js';
 import BaseGenerator from '../base/index.js';
-import type { JHipsterGeneratorOptions } from '../base/api.js';
 import { mutateData } from '../../lib/utils/object.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
 import type { SimpleTaskTypes } from '../../lib/types/application/tasks.js';
@@ -28,11 +27,13 @@ import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-application/support/index.js';
-import { PRIORITY_NAMES } from '../base/priorities.js';
+import { PRIORITY_NAMES } from '../base-core/priorities.js';
+import type { BaseControl, BaseEntity, BaseSources } from '../base/types.js';
+import type { BaseOptions } from '../base/api.js';
 import type {
   Config as BaseApplicationConfig,
   Features as BaseApplicationFeatures,
-  Options as BaseApplicationOptions,
+  Options as BaseSimpleOptions,
   Application as SimpleApplication,
 } from './types.js';
 
@@ -63,12 +64,15 @@ const getFirstArgForPriority = (priorityName: string) => ({
  * This is the base class for a generator that generates entities.
  */
 export default class BaseApplicationGenerator<
+  Options extends BaseOptions = BaseOptions & BaseSimpleOptions,
+  Entity extends BaseEntity = BaseEntity,
   Application extends SimpleApplication = SimpleApplication,
+  Control extends BaseControl = BaseControl,
+  Source extends BaseSources<Entity, Application> = BaseSources<Entity, Application>,
   ConfigType extends BaseApplicationConfig = BaseApplicationConfig & ApplicationConfiguration,
-  Options extends BaseApplicationOptions = BaseApplicationOptions & JHipsterGeneratorOptions,
-  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
   TaskTypes extends SimpleTaskTypes<Application> = SimpleTaskTypes<Application>,
-> extends BaseGenerator<ConfigType, Options, Features, TaskTypes> {
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseGenerator<Options, Entity, Application, Source, Control, TaskTypes, ConfigType, Features> {
   constructor(args: string | string[], options: Options, features: Features) {
     super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features });
   }

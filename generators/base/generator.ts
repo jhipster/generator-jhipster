@@ -28,20 +28,20 @@ import { execaCommandSync } from 'execa';
 import type { PackageJson } from 'type-fest';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
-import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from '../../lib/types/base/tasks.js';
+import { PRIORITY_NAMES } from '../base-core/priorities.js';
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base-application/support/constants.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
+import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from './tasks.js';
 import { formatDateForChangelog, packageNameToNamespace } from './support/index.js';
 import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.js';
-import { PRIORITY_NAMES } from './priorities.js';
+import type { BaseConfiguration, BaseOptions, JHipsterGeneratorFeatures } from './api.js';
 import {
   CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE,
   CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,
   LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
 } from './support/constants.js';
-import type { Config as BaseConfig, Features as BaseFeatures, Options as BaseOptions, CleanupArgumentType, Control } from './types.js';
+import type { BaseApplication, BaseControl, BaseEntity, BaseSources, CleanupArgumentType } from './types.js';
 
 const { WRITING } = PRIORITY_NAMES;
 
@@ -50,11 +50,15 @@ const { WRITING } = PRIORITY_NAMES;
  * Provides built-in state support with control object.
  */
 export default class BaseGenerator<
-  ConfigType extends BaseConfig = BaseConfig,
-  Options extends BaseOptions = BaseOptions,
-  Features extends BaseFeatures = BaseFeatures,
-  TaskTypes extends BaseTaskTypes = BaseTaskTypes,
-> extends CoreGenerator<ConfigType, Options, Features> {
+  Options extends BaseOptions,
+  Entity extends BaseEntity,
+  Application extends BaseApplication<Entity>,
+  Sources extends BaseSources<Entity, Application>,
+  Control extends BaseControl,
+  TaskTypes extends BaseTaskTypes<Control, Sources>,
+  Configuration extends BaseConfiguration,
+  Features extends JHipsterGeneratorFeatures,
+> extends CoreGenerator<Options, Entity, Application, Sources, Configuration, Features> {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
   delegateToBlueprint = false;
@@ -63,7 +67,8 @@ export default class BaseGenerator<
 
   constructor(args: string | string[], options: Options, features: Features) {
     const { jhipsterContext, ...opts } = options ?? {};
-    super(args, opts as Options, { blueprintSupport: true, ...features });
+    // @ts-ignore FIXME types
+    super(args, opts, { blueprintSupport: true, ...features });
 
     if (this.options.help) {
       return;
@@ -150,6 +155,7 @@ export default class BaseGenerator<
   get #control(): Control {
     const generator = this;
     return this.getContextData<Control>('jhipster:control', {
+      // @ts-ignore FIXME types
       factory: () => {
         let jhipsterOldVersion: string | null;
         let enviromentHasDockerCompose: undefined | boolean;
@@ -182,8 +188,22 @@ export default class BaseGenerator<
             const jhipsterOldVersion = this.jhipsterOldVersion;
             return jhipsterOldVersion ? semverLessThan(jhipsterOldVersion, version) : false;
           },
-          async removeFiles(assertions: { oldVersion?: string; removedInVersion?: string } | string, ...files: string[]) {
-            const versions = typeof assertions === 'string' ? { removedInVersion: undefined, oldVersion: undefined } : assertions;
+          async removeFiles(
+            assertions:
+              | {
+                  oldVersion?: string;
+                  removedInVersion?: string;
+                }
+              | string,
+            ...files: string[]
+          ) {
+            const versions =
+              typeof assertions === 'string'
+                ? {
+                    removedInVersion: undefined,
+                    oldVersion: undefined,
+                  }
+                : assertions;
             if (typeof assertions === 'string') {
               files = [assertions, ...files];
             }
@@ -237,7 +257,7 @@ export default class BaseGenerator<
                     stringFiles.push(file);
                   }
                 }
-                await this.removeFiles({ oldVersion, removedInVersion: version }, ...stringFiles);
+                await this.removeFiles({ oldVersion, removedInVersion: version } as any, ...stringFiles);
               }),
             );
           },
@@ -267,7 +287,7 @@ export default class BaseGenerator<
         },
       });
       now.setMinutes(now.getMinutes() + 1);
-      this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, { replacement: now });
+      this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, { override: now });
 
       // Reproducible build can create future timestamp, save it.
       const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
@@ -413,7 +433,7 @@ export default class BaseGenerator<
    *
    * ComposingComponent priority should be used to handle component configuration order.
    */
-  get composingComponent() {
+  get composingComponent(): any {
     return {};
   }
 
@@ -652,7 +672,9 @@ export default class BaseGenerator<
    * Check if the blueprint implements every priority implemented by the parent generator
    * @param {BaseGenerator} blueprintGenerator
    */
-  #checkBlueprintImplementsPriorities(blueprintGenerator: BaseGenerator) {
+  #checkBlueprintImplementsPriorities(
+    blueprintGenerator: BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, Configuration, Features>,
+  ) {
     const { taskPrefix: baseGeneratorTaskPrefix = '' } = this.features;
     const { taskPrefix: blueprintTaskPrefix = '' } = blueprintGenerator.features;
     // v8 remove deprecated priorities
@@ -696,7 +718,7 @@ export default class BaseGenerator<
       .filter(blueprint => !this.env.isPackageRegistered(packageNameToNamespace(blueprint.name)))
       .map(blueprint => blueprint.name);
     if (missingBlueprints.length > 0) {
-      await this.env.lookup({ filterPaths: true, packagePatterns: missingBlueprints });
+      await this.env.lookup({ filterPaths: true, packagePatterns: missingBlueprints } as any);
     }
 
     if (blueprints && blueprints.length > 0) {
@@ -728,7 +750,10 @@ export default class BaseGenerator<
   /**
    * Compose external blueprint module
    */
-  async #composeBlueprint<G extends BaseGenerator = BaseGenerator>(blueprint: string, subGen: string): Promise<G | undefined> {
+  async #composeBlueprint<G extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, Configuration, Features>>(
+    blueprint: string,
+    subGen: string,
+  ): Promise<G | undefined> {
     blueprint = normalizeBlueprintName(blueprint);
     if (!this.skipChecks && blueprint !== LOCAL_BLUEPRINT_PACKAGE_NAMESPACE) {
       this.#checkBlueprint(blueprint);
@@ -748,10 +773,13 @@ export default class BaseGenerator<
       `Found blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(generatorNamespace)}`,
     );
 
-    const blueprintGenerator = await this.composeWith<BaseGenerator>(generatorNamespace, {
+    const blueprintGenerator = await this.composeWith<
+      BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, Configuration, Features>
+    >(generatorNamespace, {
       forwardOptions: true,
-      schedule: generator => (generator as any).sbsBlueprint,
+      schedule: generator => generator.sbsBlueprint!,
       generatorArgs: this._args,
+      // @ts-ignore FIXME types
       generatorOptions: {
         jhipsterContext: this,
       },
@@ -838,14 +866,3 @@ export default class BaseGenerator<
     this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
   }
 }
-
-export class CommandBaseGenerator<
-  Command extends ParseableCommand,
-  AdditionalOptions = unknown,
-  AdditionalFeatures = unknown,
-> extends BaseGenerator<
-  BaseConfig & ExportStoragePropertiesFromCommand<Command>,
-  BaseOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions,
-  BaseFeatures & AdditionalFeatures,
-  BaseTaskTypes
-> {}

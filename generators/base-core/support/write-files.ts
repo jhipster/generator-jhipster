@@ -16,19 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from '../../../lib/utils/derived-property.js';
-export * from '../../../lib/utils/logger.js';
-export * from '../../../lib/utils/object.js';
-export * from '../../../lib/utils/string.js';
-export * from './basename.js';
-export * from './configuration-helpers/options.js';
-export * from './faker.js';
-export { default as getHipster } from './hipster.js';
-export * from './namespace.js';
-export * from './needles.js';
-export * from './os.js';
-export * from './path.js';
-export { default as httpsGet } from './remote.js';
-export * from './secret.js';
-export * from './timestamp.js';
-export * from './write-files.js';
+import type { EditFileCallback } from '../api.js';
+import type CoreGenerator from '../generator.js';
+
+/**
+ * TODO move to utils when converted to typescripts
+ * Converts multiples EditFileCallback callbacks into one.
+ */
+
+export function joinCallbacks<Generator extends CoreGenerator<any, any, any, any, any, any, any>>(
+  ...callbacks: EditFileCallback<Generator>[]
+): EditFileCallback<Generator> {
+  // @ts-ignore
+  return function (this: Generator, content: string, filePath: string) {
+    for (const callback of callbacks) {
+      content = callback.call(this, content, filePath);
+    }
+    return content;
+  };
+}

@@ -21,27 +21,25 @@ import { escape, min } from 'lodash-es';
 
 import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
 import { getFKConstraintName, getUXConstraintName, prepareEntity as prepareEntityForServer } from '../server/support/index.js';
+
+import { prepareField, prepareRelationship } from '../base-application/support/index.js';
 import {
   loadRequiredConfigIntoEntity,
   prepareEntity,
   prepareEntityPrimaryKeyForTemplates,
-  prepareField,
-  prepareRelationship,
-} from '../base-application/support/index.js';
+} from '../base-application/support/prepare-entity.js';
+
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
 import { fieldTypes } from '../../lib/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
 import type { Field } from '../../lib/types/application/index.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
-import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../base-entity-changes/types.js';
-import { liquibaseFiles } from './files.js';
 import {
   liquibaseComment,
   postPrepareEntity,
   prepareField as prepareFieldForLiquibase,
   prepareRelationshipForLiquibase,
 } from './support/index.js';
+import { liquibaseFiles } from './files.js';
 import mavenPlugin from './support/maven-plugin.js';
 import {
   addLiquibaseChangelogCallback,
@@ -49,21 +47,12 @@ import {
   addLiquibaseIncrementalChangelogCallback,
 } from './internal/needles.js';
 import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.js';
-import type command from './command.js';
-import type { LiquibaseEntity } from './types.js';
 
 const {
   CommonDBTypes: { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER },
 } = fieldTypes;
 
-type CommandType = HandleCommandTypes<typeof command>;
-
-export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
-  LiquibaseEntity,
-  ApplicationType<LiquibaseEntity>,
-  BaseApplicationConfig & CommandType['Config'],
-  BaseApplicationOptions & CommandType['Options']
-> {
+export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
   recreateInitialChangelog: boolean;
   numberOfRows: number;
   databaseChangelogs: any[] = [];

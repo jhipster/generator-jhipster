@@ -72,6 +72,11 @@ const command = {
       },
       scope: 'storage',
     },
+    ignoreErrors: {
+      description: "Don't fail on prettier errors.",
+      type: Boolean,
+      scope: 'none',
+    },
     pkType: {
       cli: {
         description: 'Default primary key type (beta)',

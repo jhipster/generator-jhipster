@@ -1,87 +1,33 @@
-/* eslint-disable @typescript-eslint/consistent-type-imports */
-import type { ExportGeneratorOptionsFromCommand } from '../../lib/command/types.js';
-import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/types.js';
-import type { ApplicationWithConfig } from './api.js';
+import type { CoreApplication, CoreControl, CoreEntity, CoreSources } from '../base-core/types.js';
+import type BaseGenerator from './generator.js';
+
+/**
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
-
-export type Control = {
+export type BaseEntity = CoreEntity & {};
+export type BaseApplication<Entity extends BaseEntity> = CoreApplication<Entity> & {};
+export type BaseSources<Entity extends BaseEntity, DataType extends BaseApplication<Entity>> = CoreSources<
+  Entity,
+  DataType,
+  BaseGenerator<any, Entity, DataType, any, any, any, any, any>
+> & {};
+export type BaseControl = CoreControl & {
   readonly existingProject: boolean;
-  readonly jhipsterOldVersion: string | null;
-  readonly enviromentHasDockerCompose?: boolean;
-  readonly customizeRemoveFiles: ((file: string) => string | undefined)[];
-  /**
-   * Check if the JHipster version used to generate an existing project is less than the passed version argument
-   *
-   * @param {string} version - A valid semver version string
-   */
-  isJhipsterVersionLessThan(version: string): boolean;
-  removeFiles: (options: { oldVersion?: string; removedInVersion: string } | string, ...files: string[]) => Promise<void>;
-  /**
-   * Cleanup files conditionally based on version and condition.
-   * @example
-   * cleanupFiles({ '6.0.0': ['file1', 'file2', [application.shouldRemove, 'file3']] })
-   * @example
-   * cleanupFiles('4.0.0', { '6.0.0': ['file1', 'file2', [application.shouldRemove, 'file3']] })
-   */
-  cleanupFiles: (cleanup: CleanupArgumentType) => Promise<void> | ((oldVersion: string, cleanup: CleanupArgumentType) => Promise<void>);
-};
-
-export type Config = CoreConfig & {
-  jhipsterVersion?: string;
-  lastLiquibaseTimestamp?: number;
-  blueprints?: { name: string; version?: string }[];
-};
-
-export type Options = CoreOptions &
-  ExportGeneratorOptionsFromCommand<typeof import('./command.js').default> & {
-    /* base options */
-    applicationWithConfig?: ApplicationWithConfig;
-    /**
-     * @deprecated
-     */
-    applicationWithEntities?: any;
-    reproducibleTests?: boolean;
-    entities?: string[];
-
-    jhipsterContext?: any;
-    composeWithLocalBlueprint?: boolean;
-  };
-
-export type Features = CoreFeatures & {
-  /**
-   * Compose with bootstrap generator.
-   *
-   * Bootstrap generator adds support to:
-   *  - multistep templates.
-   *  - sort jhipster configuration json.
-   *  - force jhipster configuration commit.
-   *  - earlier prettier config commit for correct prettier.
-   *  - prettier and eslint.
-   *
-   * Defaults to false for generators that extends base-core directly and generators with namespaces matching *:bootstrap*.
-   * Defaults to true for others generators that extends base.
-   */
-  jhipsterBootstrap?: boolean;
-
-  /**
-   * Indicates if the generator is a side-by-side blueprint.
-   */
-  sbsBlueprint?: boolean;
-  /**
-   * Check if the generator is composed as a blueprint.
-   */
-  checkBlueprint?: boolean;
-
-  /**
-   * Store current version at .yo-rc.json.
-   * Defaults to true.
-   */
-  storeJHipsterVersion?: boolean;
-
-  /**
-   * Store current version at .yo-rc.json.
-   * Defaults to true.
-   */
-  storeBlueprintVersion?: boolean;
 };

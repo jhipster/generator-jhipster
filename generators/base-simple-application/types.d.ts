@@ -1,8 +1,9 @@
 import type { PackageJson } from 'type-fest';
 import type CoreGenerator from '../base-core/generator.ts';
 import { type Config as BaseConfig, type Features as BaseFeatures, type Options as BaseOptions } from '../base/index.js';
+import type { BaseApplication } from '../base/types.js';
 
-export type Application = {
+export type Application = BaseApplication<any> & {
   jhipsterVersion: string;
   baseName: string;
   capitalizedBaseName: string;
@@ -27,7 +28,7 @@ export type Application = {
 
   /** Customize templates sourceFile and destinationFile */
   customizeTemplatePaths: ((
-    this: CoreGenerator,
+    this: CoreGenerator<any, any, any, any, any, any>,
     file: {
       namespace: string;
       sourceFile: string;

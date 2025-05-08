@@ -27,6 +27,7 @@ describe('generator - base - support - writeFiles', () => {
     });
 
     it('without callbacks, should return the original content', () => {
+      // @ts-ignore
       expect(joinCallbacks()('original', '')).toBe('original');
     });
 
@@ -35,6 +36,7 @@ describe('generator - base - support - writeFiles', () => {
 
       const callback = joinCallbacks(mock as EditFileCallback<any>);
 
+      // @ts-ignore
       expect(callback('original', 'file')).toBe('return1');
 
       expect(mock.mock.calls[0][0]).toBe('original');
@@ -47,6 +49,7 @@ describe('generator - base - support - writeFiles', () => {
 
       const callback = joinCallbacks(mock1 as EditFileCallback<any>, mock2 as EditFileCallback<any>);
 
+      // @ts-ignore
       expect(callback('original', 'file')).toBe('return2');
 
       expect(mock2.mock.calls[0][0]).toBe('return1');

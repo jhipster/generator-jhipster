@@ -34,8 +34,34 @@ import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-gener
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
 
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
-import type { Logger } from '../base/support/index.js';
+import type { CascatedEditFileCallback, EditFileOptions, ValidationResult } from '../base/api.js';
+
+import type {
+  ExportGeneratorOptionsFromCommand,
+  ExportStoragePropertiesFromCommand,
+  JHipsterArguments,
+  JHipsterCommandDefinition,
+  JHipsterConfigs,
+  JHipsterOptions,
+  ParseableCommand,
+} from '../../lib/command/index.js';
+
+import { convertConfigToOption } from '../../lib/command/index.js';
+import { packageJson } from '../../lib/index.js';
+import baseCommand from '../base/command.js'; // FIXME Don't know how to remove this one
+import { GENERATOR_JHIPSTER } from '../generator-constants.js';
+import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
+import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
+import { dockerPlaceholderGenerator } from '../docker/utils.js';
+// TODO remove
+import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
+import type { GenericTaskGroup } from '../base/tasks.js';
+import type GeneratorsByNamespace from '../types.js';
+import type { GeneratorBaseCore } from '../index.js';
+import type { CoreConfiguration, CoreFeatures, CoreOptions, EditFileCallback, WriteFileOptions } from './api.js';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.js';
+import type { CoreApplication, CoreEntity, CoreSources } from './types.js';
+import type { Logger } from './support/index.js';
 import {
   CRLF,
   LF,
@@ -44,32 +70,8 @@ import {
   joinCallbacks,
   normalizeLineEndings,
   removeFieldsWithNullishValues,
-} from '../base/support/index.js';
-
-import type { CascatedEditFileCallback, EditFileCallback, EditFileOptions, ValidationResult, WriteFileOptions } from '../base/api.js';
-import {
-  type ExportGeneratorOptionsFromCommand,
-  type ExportStoragePropertiesFromCommand,
-  type JHipsterArguments,
-  type JHipsterCommandDefinition,
-  type JHipsterConfigs,
-  type JHipsterOptions,
-  type ParseableCommand,
-  convertConfigToOption,
-} from '../../lib/command/index.js';
-import { packageJson } from '../../lib/index.js';
-import type { BaseApplication } from '../base-application/types.js';
-import baseCommand from '../base/command.js';
-import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
-import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
-import { dockerPlaceholderGenerator } from '../docker/utils.js';
-import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
-import type GeneratorsByNamespace from '../types.js';
-import type { GeneratorBaseCore } from '../index.js';
-import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
-import { convertWriteFileSectionsToBlocks } from './internal/index.js';
-import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from './types.js';
+} from './support/index.js';
+import { convertWriteFileSectionsToBlocks } from './internal/write-files.js';
 
 const {
   INITIALIZING,
@@ -104,9 +106,12 @@ const deepMerge = (source1: any, source2: any) => mergeWith({}, source1, source2
  * This is the base class for a generator for every generator.
  */
 export default class CoreGenerator<
-  ConfigType extends CoreConfig = CoreConfig,
-  Options extends CoreOptions = CoreOptions,
-  Features extends CoreFeatures = CoreFeatures,
+  Options extends CoreOptions,
+  E extends CoreEntity,
+  Application extends CoreApplication<E>,
+  Sources extends CoreSources<E, Application, any>,
+  Configuration extends CoreConfiguration,
+  Features extends CoreFeatures,
 > extends YeomanGenerator<Options, Features> {
   static asPriority = asPriority;
 
@@ -148,7 +153,7 @@ export default class CoreGenerator<
   relative = posixRelative;
 
   readonly logger: Logger;
-  jhipsterConfig!: ConfigType;
+  jhipsterConfig!: Configuration;
   /**
    * @deprecated
    */
@@ -184,7 +189,7 @@ export default class CoreGenerator<
       this._config = this._getStorage('generator-jhipster');
 
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
-      this.jhipsterConfig = this.config.createProxy() as ConfigType;
+      this.jhipsterConfig = this.config.createProxy() as Configuration;
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.#parseJHipsterOptions({}, baseCommand.configs);
@@ -220,8 +225,8 @@ export default class CoreGenerator<
   /**
    * JHipster config with default values fallback
    */
-  get jhipsterConfigWithDefaults(): Readonly<ConfigType> {
-    return removeFieldsWithNullishValues(this.config.getAll()) as ConfigType;
+  get jhipsterConfigWithDefaults(): Readonly<Configuration> {
+    return removeFieldsWithNullishValues(this.config.getAll()) as Configuration;
   }
 
   /**
@@ -597,8 +602,14 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     gen: G,
     options?: ComposeOptions<GeneratorsByNamespace[G]>,
   ): Promise<GeneratorsByNamespace[G]>;
-  async composeWithJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore>;
-  async composeWithJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore> {
+  async composeWithJHipster(
+    gen: string,
+    options?: ComposeOptions<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>>,
+  ): Promise<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>>;
+  async composeWithJHipster(
+    gen: string,
+    options?: ComposeOptions<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>>,
+  ): Promise<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>> {
     assert(typeof gen === 'string', 'generator should to be a string');
     let generator: string = gen;
     if (!isAbsolute(generator)) {
@@ -617,7 +628,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         ...this.options,
         positionalArguments: undefined,
         ...options?.generatorOptions,
-      },
+      } as any,
     });
   }
 
@@ -628,8 +639,14 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     gen: G,
     options?: ComposeOptions<GeneratorsByNamespace[G]>,
   ): Promise<GeneratorsByNamespace[G]>;
-  async dependsOnJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore>;
-  async dependsOnJHipster(generator: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore> {
+  async dependsOnJHipster(
+    gen: string,
+    options?: ComposeOptions<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>>,
+  ): Promise<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>>;
+  async dependsOnJHipster(
+    generator: string,
+    options?: ComposeOptions<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>>,
+  ): Promise<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>> {
     return this.composeWithJHipster(generator, {
       ...options,
       schedule: false,
@@ -707,7 +724,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * write the given files using provided options.
    */
-  async writeFiles<DataType = any>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
+  async writeFiles(options: WriteFileOptions<Sources, this>): Promise<string[]> {
     const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
@@ -715,7 +732,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     const { context = {} } = options;
     const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const startTime = new Date().getMilliseconds();
-    const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = context as BaseApplication;
+    const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = context as Application;
 
     const { jhipster7Migration } = this.getFeatures();
     const templateData = jhipster7Migration
@@ -888,9 +905,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     let parsedTemplates: RenderTemplateParam[];
     if ('sections' in options || 'blocks' in options) {
+      // @ts-ignore
       const sectionTransform = 'sections' in options ? (options.sections._?.transform ?? []) : [];
 
-      parsedTemplates = ('sections' in options ? convertWriteFileSectionsToBlocks<DataType, this>(options.sections) : options.blocks)
+      parsedTemplates = ('sections' in options ? convertWriteFileSectionsToBlocks<Sources, this>(options.sections) : options.blocks)
         .map((block, blockIdx) => {
           const {
             path: blockPathValue = './',
@@ -922,6 +940,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               `File must be an object, a string or a function for ${fileSpecPath}`,
             );
             if (typeof fileSpec === 'function') {
+              // @ts-ignore FIXME types
               fileSpec = fileSpec.call(this, context);
             }
             let noEjs: boolean | undefined;
@@ -936,6 +955,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               const sourceFile = join(blockPath, fileSpec);
               let destinationFile;
               if (blockRenameTo) {
+                // @ts-ignore FIXME types
                 destinationFile = this.destinationPath(blockRenameTo.call(this, context, fileSpec));
               } else {
                 destinationFile = this.destinationPath(blockTo, fileSpec);
@@ -958,6 +978,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             sourceFile = join(blockPath, normalizedFile);
             destinationFile = join(resolveCallback(destinationFile || renameTo, normalizedFile));
             if (blockRenameTo) {
+              // @ts-ignore FIXME types
               destinationFile = this.destinationPath(blockRenameTo.call(this, context, destinationFile));
             } else {
               destinationFile = this.destinationPath(blockTo, destinationFile);
@@ -1059,6 +1080,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       const { autoCrlf = this.jhipsterConfigWithDefaults.autoCrlf, assertModified } = actualOptions;
       try {
         const fileHasCrlf = autoCrlf && hasCrlr(newContent);
+        // @ts-ignore FIXME types
         newContent = joinCallbacks(...callbacks).call(this, fileHasCrlf ? normalizeLineEndings(newContent, LF) : newContent, filePath);
         if (assertModified && originalContent === newContent) {
           const errorMessage = `${chalk.yellow('Fail to modify ')}${filePath}.`;
@@ -1257,7 +1279,10 @@ export class CommandCoreGenerator<
   AdditionalOptions = unknown,
   AdditionalFeatures = unknown,
 > extends CoreGenerator<
-  CoreConfig & ExportStoragePropertiesFromCommand<Command>,
   CoreOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions,
+  any,
+  any,
+  any,
+  CoreConfiguration & ExportStoragePropertiesFromCommand<Command>,
   CoreFeatures & AdditionalFeatures
 > {}
