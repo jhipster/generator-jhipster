@@ -21,29 +21,29 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 const command = {
   options: {},
   configs: {
-    enableGradleEnterprise: {
+    enableGradleDevelocity: {
       cli: {
         type: Boolean,
       },
       prompt: {
         type: 'confirm',
-        message: 'Do you want to enable Gradle Enterprise integration?',
+        message: 'Do you want to enable Gradle Develocity integration?',
       },
       default: false,
-      description: 'Enable Gradle Enterprise integration',
+      description: 'Enable Gradle Develocity integration',
       scope: 'storage',
     },
-    gradleEnterpriseHost: {
+    gradleDevelocityHost: {
       cli: {
         type: String,
       },
       prompt: {
-        when: answers => answers.enableGradleEnterprise,
+        when: answers => answers.enableGradleDevelocity,
         type: 'input',
-        message: 'Enter your Gradle Enterprise host',
-        validate: input => (input.length === 0 ? 'Please enter your Gradle Enterprise host' : true),
+        message: 'Enter your Gradle Develocity host',
+        validate: input => (input.length === 0 ? 'Please enter your Gradle Develocity host' : true),
       },
-      description: 'Gradle Enterprise Host',
+      description: 'Gradle Develocity Host',
       scope: 'storage',
     },
   },

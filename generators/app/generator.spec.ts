@@ -218,7 +218,7 @@ describe(`generator - ${generator}`, () => {
   "prodDatabaseType",
   "devDatabaseType",
   "serverSideOptions",
-  "enableGradleEnterprise",
+  "enableGradleDevelocity",
   "clientFramework",
   "microfrontend",
   "clientTestFrameworks",

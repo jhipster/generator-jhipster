@@ -67,8 +67,8 @@ const {
   TEST_FRAMEWORKS,
   WEBSOCKET,
   WITH_ADMIN_UI,
-  ENABLE_GRADLE_ENTERPRISE,
-  GRADLE_ENTERPRISE_HOST,
+  ENABLE_GRADLE_DEVELOCITY,
+  GRADLE_DEVELOCITY_HOST,
 } = OptionNames;
 
 export const applicationConfigCategoryToken = createTokenFromConfig({ name: 'CONFIG_KEY', pattern: Lexer.NA });
@@ -114,8 +114,8 @@ export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
     { name: 'SKIP_CLIENT', pattern: SKIP_CLIENT },
     { name: 'SKIP_SERVER', pattern: SKIP_SERVER },
     { name: 'REMEMBER_ME_KEY', pattern: REMEMBER_ME_KEY },
-    { name: 'ENABLE_GRADLE_ENTERPRISE', pattern: ENABLE_GRADLE_ENTERPRISE },
-    { name: 'GRADLE_ENTERPRISE_HOST', pattern: GRADLE_ENTERPRISE_HOST },
+    { name: 'ENABLE_GRADLE_DEVELOCITY', pattern: ENABLE_GRADLE_DEVELOCITY },
+    { name: 'GRADLE_DEVELOCITY_HOST', pattern: GRADLE_DEVELOCITY_HOST },
     { name: 'MICROFRONTENDS', pattern: MICROFRONTENDS },
     { name: 'MICROFRONTEND', pattern: MICROFRONTEND },
     ...tokenConfigs,

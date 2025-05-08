@@ -38,22 +38,22 @@ pluginManagement {
 <%_ } _%>
     plugins {
         id 'com.gorylenko.gradle-git-properties' version "${gitPropertiesPluginVersion}"
-<%_ if (enableGradleEnterprise) { _%>
-        id "com.gradle.enterprise" version "${gradleEnterprisePluginVersion}"
+<%_ if (enableGradleDevelocity) { _%>
+        id "com.gradle.develocity" version "${gradleDevelocityPluginVersion}"
         id "com.gradle.common-custom-user-data-gradle-plugin" version "${gradleCommonCustomUserDataPluginVersion}"
 <%_ } _%>
         // jhipster-needle-gradle-plugin-management-plugins - JHipster will add additional entries here
     }
 }
 
-<%_ if (enableGradleEnterprise) { _%>
+<%_ if (enableGradleDevelocity) { _%>
 plugins {
-    id 'com.gradle.enterprise'
+    id 'com.gradle.develocity'
     id 'com.gradle.common-custom-user-data-gradle-plugin'
 }
 
-gradleEnterprise {
-    server = "<%= gradleEnterpriseHost %>"
+develocity {
+    server = "<%= gradleDevelocityHost %>"
     buildScan {
         captureTaskInputFiles = true
         uploadInBackground = System.getenv("CI") == null // adjust to your CI provider
@@ -66,7 +66,7 @@ buildCache {
     remote(HttpBuildCache) {
         push = true
         enabled = false // Disabled as this might not always desired
-        url = '<%= gradleEnterpriseHost %>/cache/' // note the trailing slash!
+        url = '<%= gradleDevelocityHost %>/cache/' // note the trailing slash!
     }
 }
 <%_ } _%>
