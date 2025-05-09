@@ -85,8 +85,6 @@ jhipster:
     authentication:
       jwt:
         base64-secret: SECRET--50
-
-
 ",
     "stateCleared": "modified",
   },
@@ -274,8 +272,6 @@ jhipster:
     authentication:
       jwt:
         base64-secret: SECRET--50
-
-
 ",
     "stateCleared": "modified",
   },
@@ -527,8 +523,6 @@ jhipster:
     authentication:
       jwt:
         base64-secret: SECRET--50
-
-
 ",
     "stateCleared": "modified",
   },
@@ -901,8 +895,6 @@ jhipster:
     authentication:
       jwt:
         base64-secret: SECRET--50
-
-
 ",
     "stateCleared": "modified",
   },
@@ -1327,8 +1319,6 @@ jhipster:
     authentication:
       jwt:
         base64-secret: SECRET--50
-
-
 ",
     "stateCleared": "modified",
   },
@@ -1657,8 +1647,6 @@ jhipster:
     authentication:
       jwt:
         base64-secret: SECRET--50
-
-
 ",
     "stateCleared": "modified",
   },
@@ -1976,8 +1964,6 @@ jhipster:
     authentication:
       jwt:
         base64-secret: SECRET--50
-
-
 ",
     "stateCleared": "modified",
   },
@@ -2164,8 +2150,6 @@ jhipster:
     authentication:
       jwt:
         base64-secret: SECRET--50
-
-
 ",
     "stateCleared": "modified",
   },
@@ -2377,8 +2361,6 @@ management:
     metrics:
       export:
         enabled: true
-
-
 ",
     "stateCleared": "modified",
   },
@@ -2654,8 +2636,6 @@ jhipster:
     authentication:
       jwt:
         base64-secret: SECRET--50
-
-
 ",
     "stateCleared": "modified",
   },
@@ -2941,8 +2921,6 @@ jhipster:
     authentication:
       jwt:
         base64-secret: SECRET--50
-
-
 ",
     "stateCleared": "modified",
   },
@@ -3071,8 +3049,6 @@ jhipster:
     authentication:
       jwt:
         base64-secret: SECRET--50
-
-
 ",
     "stateCleared": "modified",
   },
@@ -3203,8 +3179,6 @@ jhipster:
     authentication:
       jwt:
         base64-secret: SECRET--50
-
-
 ",
     "stateCleared": "modified",
   },

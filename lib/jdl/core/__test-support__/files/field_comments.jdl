@@ -8,7 +8,6 @@ entity TestEntity {
   fourth String
 }
 
-
 entity TestEntity2 {
   /** first comment */
   first String required

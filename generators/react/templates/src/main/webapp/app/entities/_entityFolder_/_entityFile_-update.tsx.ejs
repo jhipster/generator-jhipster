@@ -86,7 +86,6 @@ export const <%= entityReactName %>Update = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
-
   <%_ otherEntityActions.forEach(val => { _%>
   const <%= val.instance %> = useAppSelector(state => state.<%= val.reducer %>);
   <%_ }) _%>
@@ -157,7 +156,6 @@ _%>
       dispatch(updateEntity(entity));
     }
   }
-
 
   const defaultValues = () =>
     isNew
