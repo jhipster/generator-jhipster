@@ -10,7 +10,7 @@
                 <router-link :to="{name: '<%= entityAngularName %>Create'}" custom v-slot="{ navigate }">
                     <button @click="navigate" id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>">
                         <font-awesome-icon icon="plus"></font-awesome-icon>
-                        <span  v-text="t$('<%= i18nKeyPrefix %>.home.createLabel')">
+                        <span v-text="t$('<%= i18nKeyPrefix %>.home.createLabel')">
                             Create a new <%= entityClassHumanized %>
                         </span>
                     </button>
