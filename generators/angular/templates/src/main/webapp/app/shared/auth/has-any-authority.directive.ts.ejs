@@ -35,7 +35,7 @@ import { AccountService } from 'app/core/auth/account.service';
   selector: '[<%= jhiPrefix %>HasAnyAuthority]',
 })
 export default class HasAnyAuthorityDirective {
-  public authorities = input<string | string[]>([], { alias: '<%= jhiPrefix %>HasAnyAuthority' });
+  authorities = input<string | string[]>([], { alias: '<%= jhiPrefix %>HasAnyAuthority' });
 
   private readonly templateRef = inject(TemplateRef<any>);
   private readonly viewContainerRef = inject(ViewContainerRef);
