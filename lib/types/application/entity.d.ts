@@ -164,7 +164,6 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
 
   propertyJavaFilteredType?: string;
 
-  resetFakerSeed(suffix?: string): void;
   generateFakeData?: (type?: any) => any;
   faker: FakerWithRandexp;
 

@@ -1,14 +1,28 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
-import type CoreGenerator from '../base-core/generator.ts';
 import type { ClientApplication } from '../client/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import type { SpringBootApplication } from '../server/types.js';
+import { BaseApplication, BaseControl, BaseEntity, BaseSources } from '../base/types.js';
 import type { OptionWithDerivedProperties } from './application-options.js';
 
-export type BaseApplication = {
-  jhipsterVersion: string;
+export type BaseApplicationEntity = BaseEntity & {
+  name: string;
+};
+export type BaseApplicationApplication<Entity extends BaseApplicationEntity> = BaseApplication<Entity> & {
   baseName: string;
+};
+
+export type BaseApplicationSources<
+  Entity extends BaseApplicationEntity,
+  DataType extends BaseApplicationApplication<Entity>,
+> = BaseApplicationApplication<Entity> & BaseSources<Entity, DataType> & {};
+
+export type BaseApplicationControl = BaseControl & {};
+
+export type TemporaryBaseApplicationToMoveToDownstream = BaseApplicationSources<any, any> & {
+  jhipsterVersion: string;
+
   capitalizedBaseName: string;
   dasherizedBaseName: string;
   humanizedBaseName: string;
@@ -48,17 +62,8 @@ export type BaseApplication = {
   hasNonBuiltInEntity?: boolean;
 
   /** Customize templates sourceFile and destinationFile */
-  customizeTemplatePaths: ((
-    this: CoreGenerator,
-    file: {
-      namespace: string;
-      sourceFile: string;
-      resolvedSourceFile: string;
-      destinationFile: string;
-      templatesRoots: string[];
-    },
-    context: any,
-  ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
+
+  context: any;
 } & I18nApplication;
 
 /* ApplicationType Start */
@@ -147,7 +152,7 @@ type QuirksApplication = {
   cypressBootstrapEntities?: boolean;
 };
 
-export type CommonClientServerApplication<Entity> = BaseApplication &
+export type CommonClientServerApplication<Entity> = TemporaryBaseApplicationToMoveToDownstream &
   QuirksApplication &
   AuthenticationProperties<Entity> &
   SpringBootApplication &

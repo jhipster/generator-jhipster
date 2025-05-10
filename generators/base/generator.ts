@@ -26,25 +26,38 @@ import { union } from 'lodash-es';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
-import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from '../../lib/types/base/tasks.js';
+import { PRIORITY_NAMES } from '../base-core/priorities.js';
+import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from './tasks.js';
 import { packageNameToNamespace } from './support/index.js';
 import { loadBlueprintsFromConfiguration, mergeBlueprints, normalizeBlueprintName, parseBluePrints } from './internal/index.js';
-import { PRIORITY_NAMES } from './priorities.js';
-import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';
+import type { BaseConfiguration, BaseOptions, JHipsterGeneratorFeatures } from './api.js';
 import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.js';
+import type { BaseApplication, BaseControl, BaseEntity, BaseSources } from './types.js';
+import type BaseSharedData from './shared-data.js';
 
 /**
  * Base class that contains blueprints support.
  */
-export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTypes = BaseTaskTypes> extends CoreGenerator {
+export default class JHipsterBaseBlueprintGenerator<
+  Options extends BaseOptions,
+  Entity extends BaseEntity,
+  Application extends BaseApplication<Entity>,
+  Sources extends BaseSources<Entity, Application>,
+  Control extends BaseControl,
+  TaskTypes extends BaseTaskTypes<Control, Sources>,
+  SharedData extends BaseSharedData<Entity, Application, Sources, Control>,
+  Configuration extends BaseConfiguration,
+  Features extends JHipsterGeneratorFeatures,
+> extends CoreGenerator<Options, Entity, Application, Sources, Control, SharedData, Configuration, Features> {
   fromBlueprint!: boolean;
-  sbsBlueprint?: boolean;
+  sbsBlueprint = false;
   delegateToBlueprint?: boolean;
   blueprintConfig?: Record<string, any>;
   jhipsterContext?: any;
 
-  constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
-    const { jhipsterContext, ...opts } = options ?? {};
+  constructor(args: string | string[], options: Options, features: Features) {
+    const { jhipsterContext, ...opts } = options ?? { jhipsterContext: undefined };
+    // @ts-ignore
     super(args, opts, features);
 
     if (this.options.help) {
@@ -473,7 +486,7 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
       return [];
     }
 
-    const control = this.sharedData.getControl();
+    const control: Control = this.sharedData.getControl();
     if (!control.blueprintConfigured) {
       control.blueprintConfigured = true;
       await this._configureBlueprints();
@@ -591,11 +604,19 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
    * @param {any} [extraOptions] - options to pass to blueprint generator
    * @return {Generator|undefined}
    */
-  private async _composeBlueprint<G extends CoreGenerator = CoreGenerator>(
-    blueprint,
-    subGen,
-    extraOptions: ComposeOptions = {},
-  ): Promise<G | undefined> {
+  private async _composeBlueprint<
+    G extends JHipsterBaseBlueprintGenerator<
+      Options,
+      Entity,
+      Application,
+      Sources,
+      Control,
+      TaskTypes,
+      SharedData,
+      Configuration,
+      Features
+    > = JHipsterBaseBlueprintGenerator<Options, Entity, Application, Sources, Control, TaskTypes, SharedData, Configuration, Features>,
+  >(blueprint, subGen, extraOptions: ComposeOptions = {}): Promise<G | undefined> {
     blueprint = normalizeBlueprintName(blueprint);
     if (!this.skipChecks && blueprint !== LOCAL_BLUEPRINT_PACKAGE_NAMESPACE) {
       this._checkBlueprint(blueprint);
@@ -615,9 +636,9 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
       `Found blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(generatorNamespace)}`,
     );
 
-    const finalOptions: ComposeOptions = {
+    const finalOptions: ComposeOptions<G> = {
       forwardOptions: true,
-      schedule: generator => (generator as any).sbsBlueprint,
+      schedule: generator => generator.sbsBlueprint!,
       generatorArgs: this._args,
       ...extraOptions,
       generatorOptions: {
@@ -626,7 +647,7 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
       } as any,
     };
 
-    const blueprintGenerator = await this.composeWith<G>(generatorNamespace, finalOptions as any);
+    const blueprintGenerator: any = await this.composeWith<G>(generatorNamespace, finalOptions);
     if (blueprintGenerator instanceof Error) {
       throw blueprintGenerator;
     }
@@ -640,7 +661,7 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
    * @param {string} blueprintPkgName - generator name
    * @return {object} packageJson - retrieved package.json as an object or undefined if not found
    */
-  private _findBlueprintPackageJson(blueprintPkgName) {
+  private _findBlueprintPackageJson(blueprintPkgName: string) {
     const blueprintGeneratorName = packageNameToNamespace(blueprintPkgName);
     const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
     if (!blueprintPackagePath) {
@@ -660,7 +681,7 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
    * @param {string} blueprintPkgName - generator name
    * @return {string} version - retrieved version or empty string if not found
    */
-  private _findBlueprintVersion(blueprintPkgName) {
+  private _findBlueprintVersion(blueprintPkgName: string) {
     const blueprintPackageJson = this._findBlueprintPackageJson(blueprintPkgName);
     if (!blueprintPackageJson?.version) {
       this.log.warn(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
@@ -686,7 +707,7 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
    * Check if the generator specified as blueprint has a version compatible with current JHipster.
    * @param {string} blueprintPkgName - generator name
    */
-  protected _checkJHipsterBlueprintVersion(blueprintPkgName) {
+  protected _checkJHipsterBlueprintVersion(blueprintPkgName: string) {
     const blueprintPackageJson = this._findBlueprintPackageJson(blueprintPkgName);
     if (!blueprintPackageJson) {
       this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);

@@ -1,0 +1,103 @@
+/**
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import type CoreGenerator from './generator.js';
+
+type DataCallback<Type, DataType, Generator> = Type | ((this: Generator, data: DataType) => Type);
+
+export type WriteFileTemplate<DataType, Generator> =
+  | string
+  | ((this: Generator, data: DataType, filePath: string) => string)
+  | {
+      condition?: DataCallback<boolean, DataType, Generator>;
+      /** source file */
+      sourceFile?: DataCallback<string, DataType, Generator>;
+      /** destination file */
+      destinationFile?: DataCallback<string, DataType, Generator>;
+      /** @deprecated, use sourceFile instead */
+      file?: DataCallback<string, DataType, Generator>;
+      /** @deprecated, use destinationFile instead */
+      renameTo?: string | ((this: Generator, data: DataType, filePath: string) => string);
+      /** transforms (files processing) to be applied */
+      transform?: boolean | (() => string)[];
+      /** binary files skips ejs render, ejs extension and file transform */
+      binary?: boolean;
+      /** ejs options. Refer to https://ejs.co/#docs */
+      options?: Record<string, object>;
+      override?: DataCallback<boolean, DataType, Generator>;
+    };
+
+export type WriteFileBlock<DataType, Generator> = {
+  /** relative path were sources are placed */
+  from?: ((this: Generator, data: DataType) => string) | string;
+  /** relative path were the files should be written, fallbacks to from/path */
+  to?: ((this: Generator, data: DataType, filePath: string) => string) | string;
+  path?: ((this: Generator, data: DataType) => string) | string;
+  /** generate destinationFile based on sourceFile */
+  renameTo?: ((this: Generator, data: DataType, filePath: string) => string) | string;
+  /** condition to enable to write the block */
+  condition?: (this: Generator, data: DataType) => boolean | undefined;
+  /** transforms (files processing) to be applied */
+  transform?: boolean | (() => string)[];
+  templates: WriteFileTemplate<DataType, Generator>[];
+};
+
+export type WriteFileSection<DataType, Generator> = Record<string, WriteFileBlock<DataType, Generator>[]>;
+export type CoreEntity = {
+  resetFakerSeed(suffix?: string): void;
+};
+
+export type CoreApplication<Entity extends CoreEntity> = {
+  sharedEntities: Record<string, Entity>;
+};
+export type CoreSources<
+  Entity extends CoreEntity,
+  Application extends CoreApplication<Entity>,
+  Generator extends CoreGenerator<any, Entity, Application, any, any, any, any, any>,
+> = {
+  customizeTemplatePath?: ((file: {
+    sourceFile: string;
+    resolvedSourceFile: string;
+    destinationFile: string;
+  }) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
+} & (
+  | {
+      sections: WriteFileSection<Application, Generator>;
+    }
+  | {
+      /** templates to be written */
+      templates: WriteFileTemplate<Application, Generator>[];
+    }
+  | {
+      /** blocks to be written */
+      blocks: WriteFileBlock<Application, Generator>[];
+    }
+);
+
+export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
+
+export type CoreControl = {
+  /**
+   * Configure blueprints once per application.
+   */
+  jhipsterOldVersion: string | null;
+  removeFiles: (options: { removedInVersion: string } | string, ...files: string[]) => Promise<void>;
+  customizeRemoveFiles: ((file: string) => string | undefined)[];
+  blueprintConfigured?: boolean;
+  ignoreNeedlesError?: boolean;
+};

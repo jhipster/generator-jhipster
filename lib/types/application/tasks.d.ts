@@ -16,13 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { OmitIndexSignature, Simplify } from 'type-fest';
 import type { Storage } from 'yeoman-generator';
-import type { Merge, OmitIndexSignature, Simplify } from 'type-fest';
 import type { Entity as BaseEntity } from '../base/entity.js';
-import type { GetFieldType, GetRelationshipType } from '../utils/entity-utils.ts';
-import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource } from '../base/tasks.js';
+
 import type { Entity } from './entity.js';
-import type { ApplicationType, BaseApplicationSource } from './application.js';
+import type { ApplicationType } from './application.js';
 
 type ApplicationDefaultsTaskParam<E = Entity, A = ApplicationType<E>> = {
   /**
@@ -53,29 +52,6 @@ type ApplicationDefaultsTaskParam<E = Entity, A = ApplicationType<E>> = {
   ) => void;
 };
 
-type TaskParamWithApplication<E = Entity, A = ApplicationType<E>> = TaskParamWithControl & {
-  application: A;
-};
-
-type TaskParamWithEntities<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A> & {
-  entities: E[];
-};
-
-type TaskParamWithApplicationDefaults<E = Entity, A = ApplicationType<E>> = TaskParamWithControl &
-  TaskParamWithApplication<E, A> &
-  ApplicationDefaultsTaskParam<E, A>;
-
-type PreparingTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplicationDefaults<E, A> &
-  TaskParamWithSource<BaseApplicationSource>;
-
-type ConfiguringEachEntityTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A> & {
-  entityName: string;
-  /** Entity storage */
-  entityStorage: Storage;
-  /** Proxy object for the entitystorage */
-  entityConfig: BaseEntity & Record<string, any>;
-};
-
 type EntityToLoad = {
   entityName: string;
   /** Entity storage */
@@ -86,57 +62,8 @@ type EntityToLoad = {
   entityBootstrap: Entity;
 };
 
-type LoadingEntitiesTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A> & {
-  entitiesToLoad: EntityToLoad[];
-};
-
 type EntityTaskParam<E = Entity> = {
   entity: E;
   entityName: string;
   description: string;
 };
-
-type PreparingEachEntityTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A> & EntityTaskParam<E>;
-
-type PreparingEachEntityFieldTaskParam<E = Entity, A = ApplicationType<E>> = PreparingEachEntityTaskParam<E, A> & {
-  field: GetFieldType<E>;
-  fieldName: string;
-};
-
-type PreparingEachEntityRelationshipTaskParam<E = Entity, A = ApplicationType<E>> = PreparingEachEntityTaskParam<E, A> & {
-  relationship: GetRelationshipType<E>;
-  relationshipName: string;
-};
-
-type WritingTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A> & {
-  configChanges?: Record<string, { newValue: any; oldValue: any }>;
-};
-
-type PostWritingTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A> & TaskParamWithSource<BaseApplicationSource>;
-
-type PostWritingEntitiesTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithEntities<E, A> &
-  TaskParamWithSource<BaseApplicationSource>;
-
-export type TaskTypes<E = Entity, A = ApplicationType<E>> = Merge<
-  BaseTaskTypes,
-  {
-    LoadingTaskParam: TaskParamWithApplicationDefaults<E, A>;
-    PreparingTaskParam: PreparingTaskParam<E, A>;
-    ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<E, A>;
-    LoadingEntitiesTaskParam: LoadingEntitiesTaskParam<E, A>;
-    PreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;
-    PreparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<E, A>;
-    PreparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<E, A>;
-    PostPreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;
-    PostPreparingTaskParam: TaskParamWithSource<BaseApplicationSource> & TaskParamWithApplication<E, A>;
-    DefaultTaskParam: TaskParamWithEntities<E, A>;
-    WritingTaskParam: WritingTaskParam<E, A>;
-    WritingEntitiesTaskParam: TaskParamWithEntities<E, A>;
-    PostWritingTaskParam: PostWritingTaskParam<E, A>;
-    PostWritingEntitiesTaskParam: PostWritingEntitiesTaskParam<E, A>;
-    PreConflictsTaskParam: TaskParamWithApplication<E, A>;
-    InstallTaskParam: TaskParamWithApplication<E, A>;
-    PostInstallTaskParam: TaskParamWithApplication<E, A>;
-    EndTaskParam: TaskParamWithApplication<E, A>;
-  }
->;
