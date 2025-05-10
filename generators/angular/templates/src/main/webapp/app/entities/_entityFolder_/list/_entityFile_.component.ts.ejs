@@ -144,7 +144,7 @@ export class <%= componentName %> implements OnInit {
     isFirstFetch = computed(() => Object.keys(this.links()).length === 0);
 <%_ } _%>
 
-    public readonly router = inject(Router);
+    readonly router = inject(Router);
     protected readonly <%= entityInstance %>Service = inject(<%= entityAngularName %>Service);
     protected readonly activatedRoute = inject(ActivatedRoute);
     protected readonly sortService = inject(SortService);
