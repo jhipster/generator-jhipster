@@ -1,5 +1,5 @@
 import CoreSharedData from '../base-core/shared-data.js';
-import type { BaseApplication, BaseApplicationSource, BaseControl, BaseEntity } from './types.js';
+import type { BaseApplication, BaseControl, BaseEntity, BaseSources } from './types.js';
 
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
@@ -21,35 +21,7 @@ import type { BaseApplication, BaseApplicationSource, BaseControl, BaseEntity } 
  */
 export default class BaseSharedData<
   Entity extends BaseEntity,
-  ApplicationSource extends BaseApplicationSource,
-  Application extends BaseApplication<any>,
+  StoredApplication extends BaseApplication<Entity>,
+  ApplicationType extends BaseSources<Entity, StoredApplication>,
   Control extends BaseControl,
-> extends CoreSharedData<ApplicationSource, Control> {
-  getApplication(): Application {
-    if (!this._storage.sharedApplication) throw new Error('Shared application not loaded');
-    return this._storage.sharedApplication;
-  }
-  setEntity(entityName: string, entity: { name: string } & Partial<Entity>): void {
-    this._storage.sharedEntities[entityName] = entity;
-  }
-
-  hasEntity(entityName: string): boolean {
-    return Boolean(this._storage.sharedEntities[entityName]);
-  }
-
-  getEntity(entityName: string): Entity {
-    const entity = this._storage.sharedEntities[entityName];
-    if (!entity) {
-      throw new Error(`Entity definition not loaded for ${entityName}`);
-    }
-    return entity;
-  }
-
-  getEntities(entityNames = Object.keys(this._storage.sharedEntities)): { entityName: string; entity: Entity }[] {
-    return entityNames.map(entityName => ({ entityName, entity: this.getEntity(entityName) }));
-  }
-
-  getEntitiesMap(): Record<string, Entity> {
-    return this._storage.sharedEntities;
-  }
-}
+> extends CoreSharedData<Entity, StoredApplication, ApplicationType, Control> {}

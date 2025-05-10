@@ -3,12 +3,26 @@ import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/t
 import type { ClientApplication } from '../client/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import type { SpringBootApplication } from '../server/types.js';
-import { CoreApplication } from '../base-core/types.js';
+import { BaseApplication, BaseControl, BaseEntity, BaseSources } from '../base/types.js';
 import type { OptionWithDerivedProperties } from './application-options.js';
 
-export type BaseApplication = CoreApplication<any, any> & {
-  jhipsterVersion: string;
+export type BaseApplicationEntity = BaseEntity & {
+  name: string;
+};
+export type BaseApplicationApplication<Entity extends BaseApplicationEntity> = BaseApplication<Entity> & {
   baseName: string;
+};
+
+export type BaseApplicationSources<
+  Entity extends BaseApplicationEntity,
+  DataType extends BaseApplicationApplication<Entity>,
+> = BaseApplicationApplication<Entity> & BaseSources<Entity, DataType> & {};
+
+export type BaseApplicationControl = BaseControl & {};
+
+export type TemporaryBaseApplicationToMoveToDownstream = BaseApplicationSources<any, any> & {
+  jhipsterVersion: string;
+
   capitalizedBaseName: string;
   dasherizedBaseName: string;
   humanizedBaseName: string;
@@ -138,7 +152,7 @@ type QuirksApplication = {
   cypressBootstrapEntities?: boolean;
 };
 
-export type CommonClientServerApplication<Entity> = BaseApplication &
+export type CommonClientServerApplication<Entity> = TemporaryBaseApplicationToMoveToDownstream &
   QuirksApplication &
   AuthenticationProperties<Entity> &
   SpringBootApplication &

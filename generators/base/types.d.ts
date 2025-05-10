@@ -1,7 +1,7 @@
 import type { Entity } from '../base-application/index.js';
 import type { ExportControlPropertiesFromCommand } from '../../lib/command/index.js';
 import type { GetWebappTranslationCallback } from '../../lib/types/base/translation.js';
-import type { CleanupArgumentType, CoreApplication, CoreApplicationSource, CoreControl } from '../base-core/types.js';
+import type { CleanupArgumentType, CoreApplication, CoreControl, CoreEntity, CoreSources } from '../base-core/types.js';
 import type command from './command.ts';
 import type JHipsterBaseBlueprintGenerator from './generator.js';
 
@@ -25,13 +25,16 @@ import type JHipsterBaseBlueprintGenerator from './generator.js';
  */
 
 type BaseApplicationControlProperties = ExportControlPropertiesFromCommand<typeof command>;
-export type BaseEntity = {};
-export type BaseApplicationSource = CoreApplicationSource & {};
-export type BaseApplication<DataType> = CoreApplication<
+export type BaseEntity = CoreEntity & {};
+export type BaseApplication<Entity extends BaseEntity> = CoreApplication<Entity> & {};
+export type BaseSources<Entity extends BaseEntity, DataType extends BaseApplication<Entity>> = CoreSources<
+  Entity,
   DataType,
-  JHipsterBaseBlueprintGenerator<any, any, any, any, any, any, any, any>
+  JHipsterBaseBlueprintGenerator<any, Entity, DataType, any, any, any, any, any, any>
 > & {};
-export type BaseControl = CoreControl &
+export type BaseControl = CoreControl & {};
+
+export type TemporaryControlToMoveToDownstream = BaseControl &
   BaseApplicationControlProperties & {
     existingProject: boolean;
     ignoreNeedlesError: boolean;

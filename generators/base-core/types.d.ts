@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type CoreGenerator from './generator.js';
 
 type DataCallback<Type, DataType, Generator> = Type | ((this: Generator, data: DataType) => Type);
 
@@ -57,8 +58,18 @@ export type WriteFileBlock<DataType, Generator> = {
 };
 
 export type WriteFileSection<DataType, Generator> = Record<string, WriteFileBlock<DataType, Generator>[]>;
+export type CoreEntity = {
+  resetFakerSeed(suffix?: string): void;
+};
 
-export type CoreApplication<DataType, Generator> = {
+export type CoreApplication<Entity extends CoreEntity> = {
+  sharedEntities: Record<string, Entity>;
+};
+export type CoreSources<
+  Entity extends CoreEntity,
+  Application extends CoreApplication<Entity>,
+  Generator extends CoreGenerator<any, Entity, Application, any, any, any, any, any>,
+> = {
   customizeTemplatePath?: ((file: {
     sourceFile: string;
     resolvedSourceFile: string;
@@ -66,19 +77,17 @@ export type CoreApplication<DataType, Generator> = {
   }) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
 } & (
   | {
-      sections: WriteFileSection<DataType, Generator>;
+      sections: WriteFileSection<Application, Generator>;
     }
   | {
       /** templates to be written */
-      templates: WriteFileTemplate<DataType, Generator>[];
+      templates: WriteFileTemplate<Application, Generator>[];
     }
   | {
       /** blocks to be written */
-      blocks: WriteFileBlock<DataType, Generator>[];
+      blocks: WriteFileBlock<Application, Generator>[];
     }
 );
-
-export type CoreApplicationSource = {};
 
 export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
 

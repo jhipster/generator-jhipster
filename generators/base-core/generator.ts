@@ -57,7 +57,7 @@ import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type { CoreConfiguration, CoreFeatures, CoreOptions, EditFileCallback, WriteFileOptions } from './api.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.js';
 import CoreSharedData from './shared-data.js';
-import type { CoreApplication, CoreApplicationSource, CoreControl } from './types.js';
+import type { CoreApplication, CoreControl, CoreEntity, CoreSources } from './types.js';
 import type { Logger } from './support/index.js';
 import {
   CRLF,
@@ -103,10 +103,11 @@ const deepMerge = (source1: any, source2: any) => mergeWith({}, source1, source2
  */
 export default class CoreGenerator<
   Options extends CoreOptions,
-  ApplicationSource extends CoreApplicationSource,
-  Application extends CoreApplication<any, any>,
+  Entity extends CoreEntity,
+  Application extends CoreApplication<Entity>,
+  Sources extends CoreSources<Entity, Application, any>,
   Control extends CoreControl,
-  SharedData extends CoreSharedData<ApplicationSource, Control>,
+  SharedData extends CoreSharedData<Entity, Application, Sources, Control>,
   Configuration extends CoreConfiguration,
   Features extends CoreFeatures,
 > extends YeomanGenerator<Options, JHipsterGeneratorFeatures> {
@@ -191,7 +192,7 @@ export default class CoreGenerator<
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
 
-      this.sharedData = this.createSharedData({ help: this.options.help }) as any;
+      this.sharedData = this.createSharedData({ help: this.options.help });
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.parseJHipsterOptions(baseCommand.options);
@@ -675,10 +676,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Compose with a jhipster generator using default jhipster config.
    * @return {object} the composed generator
    */
-  async composeWithJHipster<const G extends string>(
-    gen: G,
-    options?: ComposeOptions<CoreGenerator<Options, ApplicationSource, Application, Control, SharedData, Configuration, Features>>,
-  ) {
+  async composeWithJHipster<
+    CURRENT_GENERATOR extends CoreGenerator<Options, Entity, Application, Sources, Control, SharedData, Configuration, Features>,
+  >(gen: string, options?: ComposeOptions<CURRENT_GENERATOR>) {
     assert(typeof gen === 'string', 'generator should to be a string');
     let generator: string = gen;
     if (!isAbsolute(generator)) {
@@ -704,9 +704,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * Compose with a jhipster generator using default jhipster config, but queue it immediately.
    */
-  async dependsOnJHipster(
+  async dependsOnJHipster<G extends CoreGenerator<Options, Entity, Application, Sources, Control, SharedData, Configuration, Features>>(
     generator: string,
-    options?: ComposeOptions<CoreGenerator<Options, ApplicationSource, Application, Control, SharedData, Configuration, Features>>,
+    options?: ComposeOptions<G>,
   ) {
     return this.composeWithJHipster(generator, {
       ...options,
@@ -785,7 +785,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * write the given files using provided options.
    */
-  async writeFiles<DataType extends CoreApplication<any, any> = Application>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
+  async writeFiles<DataType extends CoreSources<Entity, any, any> = Sources>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
     const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
@@ -797,7 +797,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     const { transform: sectionTransform = [] } = commonSpec;
     const startTime = new Date().getMilliseconds();
     // @ts-ignore
-    const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = context as Application;
+    const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = context as Sources;
 
     const templateData = this.jhipster7Migration
       ? createJHipster7Context(this, context, { log: this.jhipster7Migration === 'verbose' ? msg => this.log.info(msg) : () => {} })
@@ -927,8 +927,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             }
             const sourceBasename = basename(sourceFileFrom);
             const seed = `${context.entityClass}-${sourceBasename}${context.fakerSeed ?? ''}`;
-            Object.values((this.sharedData as any).getApplication()?.sharedEntities ?? {}).forEach((entity: any) => {
-              entity.resetFakerSeed(seed);
+            Object.values(this.sharedData.getApplication()?.sharedEntities ?? {}).forEach(entity => {
+              (entity as Entity).resetFakerSeed(seed);
             });
             // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
             useAsync = false;
@@ -1371,11 +1371,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
     const { ignoreNeedlesError } = this.options;
 
-    return new CoreSharedData<ApplicationSource, Control>(
+    return new CoreSharedData<Entity, Application, Sources, Control>(
       sharedApplications[applicationId],
       { destinationPath: this.destinationPath(), memFs: this.env.sharedFs, log: this.log, logCwd: this.env.logCwd },
       // @ts-ignore
       { ignoreNeedlesError },
-    ) as any;
+    ) as SharedData;
   }
 }

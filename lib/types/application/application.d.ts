@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-import type { BaseApplication, CommonClientServerApplication } from '../../../generators/base-application/types.js';
+import type { CommonClientServerApplication } from '../../../generators/base-application/types.js';
 import type { ClientSourceType } from '../../../generators/client/types.js';
 import type { LanguagesSource } from '../../../generators/languages/types.js';
 import type { SpringBootSourceType } from '../../../generators/server/types.js';

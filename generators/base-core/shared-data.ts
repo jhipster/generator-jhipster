@@ -26,9 +26,14 @@ import type { MemFsEditor } from 'mem-fs-editor';
 import { create } from 'mem-fs-editor';
 import type { Storage } from 'yeoman-generator';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import type { CleanupArgumentType, CoreApplicationSource, CoreControl } from './types.js';
+import type { CleanupArgumentType, CoreApplication, CoreControl, CoreEntity, CoreSources } from './types.js';
 
-export default class CoreSharedData<ApplicationSource extends CoreApplicationSource, Control extends CoreControl> {
+export default class CoreSharedData<
+  Entity extends CoreEntity,
+  Application extends CoreApplication<Entity>,
+  Sources extends CoreSources<Entity, Application, any>,
+  Control extends CoreControl,
+> {
   _storage: any;
   _editor: MemFsEditor;
   _log: any;
@@ -139,11 +144,16 @@ export default class CoreSharedData<ApplicationSource extends CoreApplicationSou
     customizeRemoveFiles = this._storage.control.customizeRemoveFiles;
   }
 
-  getSource(): ApplicationSource {
+  getSource(): Sources {
     return this._storage.sharedSource;
   }
 
   getControl(): Control {
     return this._storage.control;
+  }
+
+  getApplication(): Application {
+    if (!this._storage.sharedApplication) throw new Error('Shared application not loaded');
+    return this._storage.sharedApplication;
   }
 }

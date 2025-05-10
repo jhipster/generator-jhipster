@@ -44,15 +44,15 @@ export type CoreFeatures = BaseFeatures & {
    */
   storeJHipsterVersion?: boolean;
 };
-export type EditFileCallback<Generator = CoreGenerator<any, any, any, any, any, any, any>> = (
+export type EditFileCallback<Generator = CoreGenerator<any, any, any, any, any, any, any, any, any>> = (
   this: Generator,
   content: string,
   filePath: string,
 ) => string;
 
 export type WriteFileOptions<
-  DataType extends CoreApplication<any, any> = CoreApplication<any, any>,
-  Generator = CoreGenerator<any, any, any, any, any, any, any>,
+  DataType extends CoreApplication,
+  Generator = CoreGenerator<any, any, any, DataType, any, any, any, any, any>,
 > = {
   /** transforms (files processing) to be applied */
   transform?: EditFileCallback[];

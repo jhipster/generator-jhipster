@@ -1,6 +1,6 @@
 import type { Storage } from 'yeoman-generator';
 import { execaCommandSync } from 'execa';
-import type { BaseApplication, BaseEntity } from '../base/types.js';
+import type { BaseEntity, BaseSources } from '../base/types.js';
 import SharedData from '../base/shared-data.js';
 import type { DockerComposeControl } from './types.js';
 /**
@@ -25,7 +25,7 @@ import type { DockerComposeControl } from './types.js';
 export default class DockerComposeSharedData<
   C extends DockerComposeControl,
   EntityType extends BaseEntity,
-  Application extends BaseApplication,
+  Application extends BaseSources,
 > extends SharedData<C, EntityType, Application> {
   constructor(storage: Storage, { memFs, destinationPath, log, logCwd }, initialControl: Partial<C> = {}) {
     super(storage, { memFs, destinationPath, log, logCwd }, initialControl);

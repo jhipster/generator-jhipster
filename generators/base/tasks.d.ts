@@ -1,4 +1,4 @@
-import type { BaseControl } from './types.js';
+import type { BaseControl, BaseSources } from './types.js';
 
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
@@ -23,21 +23,21 @@ export type TaskParamWithControl<C extends BaseControl> = {
   control: C & Record<string, boolean | string | object>;
 };
 
-export type TaskParamWithSource<C extends BaseControl, Source = any> = TaskParamWithControl<C> & {
+export type TaskParamWithSource<C extends BaseControl, Source extends BaseSources<any, any>> = TaskParamWithControl<C> & {
   source: Source;
 };
 
-export type TaskTypes<C extends BaseControl> = {
+export type TaskTypes<C extends BaseControl, Source extends BaseSources<any, any>> = {
   InitializingTaskParam: TaskParamWithControl<C>;
   PromptingTaskParam: TaskParamWithControl<C>;
   ConfiguringTaskParam: TaskParamWithControl<C>;
   ComposingTaskParam: TaskParamWithControl<C>;
   LoadingTaskParam: TaskParamWithControl<C>;
-  PreparingTaskParam: TaskParamWithSource<C>;
-  PostPreparingTaskParam: TaskParamWithSource<C>;
+  PreparingTaskParam: TaskParamWithSource<C, Source>;
+  PostPreparingTaskParam: TaskParamWithSource<C, Source>;
   DefaultTaskParam: TaskParamWithControl<C>;
   WritingTaskParam: TaskParamWithControl<C>;
-  PostWritingTaskParam: TaskParamWithSource<C>;
+  PostWritingTaskParam: TaskParamWithSource<C, Source>;
   PreConflictsTaskParam: TaskParamWithControl<C>;
   InstallTaskParam: TaskParamWithControl<C>;
   PostInstallTaskParam: TaskParamWithControl<C>;
