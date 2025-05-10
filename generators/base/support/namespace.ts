@@ -22,6 +22,6 @@
  * @returns {string} namespace of the blueprint
  */
 
-export function packageNameToNamespace(packageName) {
+export function packageNameToNamespace(packageName: string) {
   return packageName.replace('generator-', '');
 }

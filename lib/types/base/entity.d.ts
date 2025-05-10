@@ -6,7 +6,6 @@ type MicroserviceEntity = {
 };
 
 export type Entity<F extends Field = Field, R extends Relationship = Relationship> = MicroserviceEntity & {
-  name: string;
   changelogDate?: string;
   dto?: 'no' | 'mapstruct' | 'any';
   entitySuffix?: string;

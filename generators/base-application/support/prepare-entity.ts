@@ -19,7 +19,6 @@
 import { camelCase, intersection, kebabCase, lowerFirst, sortedUniq, startCase, uniq, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
-import type BaseGenerator from '../../base-core/index.js';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.js';
 import {
   createFaker,
@@ -34,10 +33,10 @@ import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngin
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
 import type { Entity } from '../../../lib/types/application/index.js';
-import type CoreGenerator from '../../base-core/generator.js';
 import type { PrimaryKey } from '../../../lib/types/application/entity.js';
 import type { ApplicationConfiguration } from '../../../lib/types/application/yo-rc.js';
-import type { ApplicationType } from '../../../lib/types/application/application.js';
+import type BaseApplicationGenerator from '../generator.js';
+import type { BaseApplicationEntity, BaseApplicationSources } from '../types.js';
 import { fieldToReference } from './prepare-field.js';
 import { fieldIsEnum } from './field-utils.js';
 
@@ -138,7 +137,12 @@ export const entityDefaultConfig = {
   },
 };
 
-export default function prepareEntity(entityWithConfig: Entity, generator, application: ApplicationType) {
+export default function prepareEntity<
+  E extends BaseApplicationEntity,
+  DataType,
+  A extends BaseApplicationSources<E, DataType>,
+  G extends BaseApplicationGenerator<any, any, any, any, any, any, any, any, any>,
+>(entityWithConfig: E, generator: G, application: A) {
   const { applicationTypeMicroservice, microfrontend, dtoSuffix = '' } = application;
 
   const entityName = upperFirst(entityWithConfig.name);
@@ -280,8 +284,8 @@ export function derivedPrimaryKeyProperties(primaryKey: PrimaryKey) {
   } as any);
 }
 
-export function prepareEntityPrimaryKeyForTemplates(
-  this: CoreGenerator | void,
+export function prepareEntityPrimaryKeyForTemplates<G extends BaseApplicationGenerator<any, any, any, any, any, any, any, any, any>>(
+  this: G | void,
   { entity: entityWithConfig, enableCompositeId = true, application }: { entity: any; enableCompositeId?: boolean; application?: any },
 ) {
   const idFields = entityWithConfig.fields.filter(field => field.id);
@@ -489,11 +493,10 @@ function fieldToId(field) {
  * @param {Object} config - config object.
  * @returns {Object} the entity parameter for chaining.
  */
-export function loadRequiredConfigIntoEntity<E extends Partial<Entity>>(
-  this: BaseGenerator | void,
-  entity: E,
-  config: ApplicationConfiguration,
-): E {
+export function loadRequiredConfigIntoEntity<
+  E extends Partial<BaseApplicationEntity>,
+  G extends BaseApplicationGenerator<any, any, any, any, any, any, any, any, any>,
+>(this: G | void, entity: E, config: ApplicationConfiguration): E {
   mutateData(entity, {
     __override__: false,
     applicationType: config.applicationType,
@@ -528,7 +531,7 @@ export function loadRequiredConfigIntoEntity<E extends Partial<Entity>>(
   return entity;
 }
 
-export function preparePostEntityCommonDerivedProperties(entity: Entity) {
+export function preparePostEntityCommonDerivedProperties<E extends BaseApplicationEntity>(entity: E) {
   const { fields } = entity;
   const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 
@@ -558,7 +561,7 @@ export function preparePostEntityCommonDerivedProperties(entity: Entity) {
   preparePostEntityCommonDerivedPropertiesNotTyped(entity);
 }
 
-function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
+function preparePostEntityCommonDerivedPropertiesNotTyped<E extends BaseApplicationEntity>(entity: E) {
   const { relationships, fields } = entity;
   const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
   entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
@@ -659,7 +662,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.reactiveRegularEagerRelations = entity.reactiveEagerRelations.filter(rel => rel.id !== true);
 }
 
-export function preparePostEntitiesCommonDerivedProperties(entities) {
+export function preparePostEntitiesCommonDerivedProperties<E extends BaseApplicationEntity>(entities: E[]) {
   for (const entity of entities.filter(entity => !entity.dtoReferences)) {
     entity.dtoReferences = [
       ...entity.fields.map(field => field.reference),
