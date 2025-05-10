@@ -61,7 +61,6 @@ class <%- entityClass %>CriteriaTest {
             criteria -> assertThat(criteria).hasSameHashCodeAs(copy)
         );
 
-
         assertThat(copy).satisfies(
             criteria -> assertThat(criteria).is(criteriaFiltersAre(Objects::nonNull)),
             criteria -> assertThat(criteria).isEqualTo(<%- persistInstance %>Criteria)

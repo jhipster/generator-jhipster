@@ -98,7 +98,6 @@ task integrationTest(type: Test) {
 }
 integrationTest.dependsOn test
 
-
 <%_ if (!skipClient) { _%>
 processResources.dependsOn webapp
 bootJar.dependsOn processResources

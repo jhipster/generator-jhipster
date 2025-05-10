@@ -893,7 +893,6 @@ _%>
         // Create the <%= entityClass %>, which fails.<% if (dtoMapstruct) { %>
         <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);<% } %>
 
-
         <%_ if (reactive) { _%>
         webTestClient.post().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
