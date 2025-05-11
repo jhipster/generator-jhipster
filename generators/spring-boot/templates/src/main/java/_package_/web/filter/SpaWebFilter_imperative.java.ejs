@@ -39,7 +39,7 @@ public class SpaWebFilter extends OncePerRequestFilter {
             !path.startsWith("/api") &&
             !path.startsWith("/management") &&
             !path.startsWith("/v3/api-docs") &&
-<%_ if (devDatabaseTypeH2Any) { _%>            
+<%_ if (devDatabaseTypeH2Any) { _%>
             !path.startsWith("/h2-console") &&
 <%_ } _%>
 <%_ if (authenticationTypeOauth2 && (applicationTypeGateway || applicationTypeMonolith)) { _%>

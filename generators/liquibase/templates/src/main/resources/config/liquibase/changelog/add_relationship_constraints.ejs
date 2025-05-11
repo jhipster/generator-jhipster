@@ -40,7 +40,7 @@ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && 
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="<%= referencedColumnNames %>"
                                  referencedTableName="<%= otherEntityTableName %>"
-        <%_ if (onDelete) { _%>                                 
+        <%_ if (onDelete) { _%>
                                  onDelete="<%= onDelete %>"
         <%_ } _%>
         <%_ if (onUpdate) { _%>
@@ -54,7 +54,7 @@ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && 
                                  constraintName="<%= relationship.joinTable.constraintName %>"
                                  referencedColumnNames="<%= entity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%= entity.entityTableName %>"
-        <%_ if (onDelete) { _%>                                 
+        <%_ if (onDelete) { _%>
                                  onDelete="<%= onDelete %>"
         <%_ } _%>
         <%_ if (onUpdate) { _%>
@@ -70,7 +70,7 @@ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && 
         <%_ if (relationship.otherRelationship) { 
             // User object is not supporting this right now
             _%>
-            <%_ if (relationship.otherRelationship.onDelete) { _%>                                 
+            <%_ if (relationship.otherRelationship.onDelete) { _%>
                                  onDelete="<%= relationship.otherRelationship.onDelete %>"
             <%_ } _%>
             <%_ if (relationship.otherRelationship.onUpdate) { _%>
