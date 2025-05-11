@@ -25,7 +25,7 @@ export default class BaseApplicationSharedData<
   Source extends BaseApplicationSources<Entity, Application>,
   Control extends BaseApplicationControl,
 > extends BaseSharedData<Entity, Application, Source, Control> {
-  setEntity(entityName: string, entity: { name: string } & Partial<Entity>): void {
+  setEntity(entityName: string, entity: Partial<Entity> & { name: string }): void {
     this._storage.sharedEntities[entityName] = entity;
   }
 
