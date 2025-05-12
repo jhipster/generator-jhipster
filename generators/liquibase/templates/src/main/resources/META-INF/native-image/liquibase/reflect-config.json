@@ -12,7 +12,7 @@
   {
     "name": "liquibase.command.CommandFactory",
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
-  },  
+  },
   {
     "name": "liquibase.changelog.ChangeLogHistoryServiceFactory",
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
