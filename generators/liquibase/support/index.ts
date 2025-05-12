@@ -18,6 +18,5 @@
  */
 export { default as liquibaseComment } from './formatting.js';
 export { default as postPrepareEntity } from './post-prepare-entity.js';
-export { default as prepareEntity } from './prepare-entity.js';
 export { default as prepareField } from './prepare-field.js';
 export * from './relationship.js';
