@@ -1,6 +1,6 @@
 import type { BaseFeatures, BaseOptions } from 'yeoman-generator';
 import type CoreGenerator from './generator.js';
-import type { CoreApplication, WriteFileBlock, WriteFileSection, WriteFileTemplate } from './types.js';
+import type { CoreSources, WriteFileBlock, WriteFileSection, WriteFileTemplate } from './types.js';
 
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
@@ -44,15 +44,15 @@ export type CoreFeatures = BaseFeatures & {
    */
   storeJHipsterVersion?: boolean;
 };
-export type EditFileCallback<Generator = CoreGenerator<any, any, any, any, any, any, any, any, any>> = (
+export type EditFileCallback<Generator = CoreGenerator<any, any, any, any, any, any, any, any>> = (
   this: Generator,
   content: string,
   filePath: string,
 ) => string;
 
 export type WriteFileOptions<
-  DataType extends CoreApplication,
-  Generator = CoreGenerator<any, any, any, DataType, any, any, any, any, any>,
+  Sources extends CoreSources<any, any, any>,
+  Generator = CoreGenerator<any, any, any, Sources, any, any, any, any>,
 > = {
   /** transforms (files processing) to be applied */
   transform?: EditFileCallback[];
@@ -74,14 +74,14 @@ export type WriteFileOptions<
   }) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string };
 } & (
   | {
-      sections: WriteFileSection<DataType, Generator>;
+      sections: WriteFileSection<Sources, Generator>;
     }
   | {
       /** templates to be written */
-      templates: WriteFileTemplate<DataType, Generator>[];
+      templates: WriteFileTemplate<Sources, Generator>[];
     }
   | {
       /** blocks to be written */
-      blocks: WriteFileBlock<DataType, Generator>[];
+      blocks: WriteFileBlock<Sources, Generator>[];
     }
 );
