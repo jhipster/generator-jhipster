@@ -168,7 +168,7 @@
     "prettier-plugin-packagejson": "2.5.12",
     "prettier-plugin-properties": "0.3.0",
     "randexp": "0.5.3",
-    "semver": "7.7.1",
+    "semver": "7.7.2",
     "simple-git": "3.27.0",
     "sort-keys": "5.1.0",
     "tinyglobby": "0.2.13",
