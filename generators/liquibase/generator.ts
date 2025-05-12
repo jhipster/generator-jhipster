@@ -23,7 +23,6 @@ import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
 import { getFKConstraintName, getUXConstraintName, prepareEntity as prepareEntityForServer } from '../server/support/index.js';
 import {
   loadRequiredConfigIntoEntity,
-  prepareEntity,
   prepareEntityPrimaryKeyForTemplates,
   prepareField,
   prepareRelationship,
@@ -33,13 +32,14 @@ import { fieldTypes } from '../../lib/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
 import type { Field } from '../../lib/types/application/index.js';
 import { formatDateForChangelog } from '../base/support/index.js';
-import { liquibaseFiles } from './files.js';
 import {
   liquibaseComment,
   postPrepareEntity,
+  prepareEntity,
   prepareField as prepareFieldForLiquibase,
   prepareRelationshipForLiquibase,
 } from './support/index.js';
+import { liquibaseFiles } from './files.js';
 import mavenPlugin from './support/maven-plugin.js';
 import {
   addLiquibaseChangelogCallback,

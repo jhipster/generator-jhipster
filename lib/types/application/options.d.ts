@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { Simplify } from 'type-fest';
-import type { ExportGeneratorOptionsFromCommand } from '../../command/types.js';
-import { BaseOptions } from '../../../generators/base/api.js';
+import type { ExportGeneratorOptionsFromCommand, JHipsterConfigs } from '../../command/types.js';
+import { ApplicationWithConfig, BaseOptions } from '../../../generators/base/api.js';
+import type { JDLApplicationConfig } from '../../jdl/core/types/parsing.js';
 
 export type ApplicationOptions = BaseOptions &
   Simplify<
@@ -23,3 +24,43 @@ export type ApplicationOptions = BaseOptions &
       ExportGeneratorOptionsFromCommand<typeof import('../../../generators/spring-cloud/generators/gateway/command.js').default> &
       ExportGeneratorOptionsFromCommand<typeof import('../../../generators/spring-data-relational/command.js').default>
   >;
+
+export type JHipsterGeneratorOptions = ApplicationOptions & {
+  /* cli options */
+  commandName: string;
+  programName: string;
+  createEnvBuilder?: any;
+  devBlueprintEnabled?: boolean;
+
+  /** @experimental */
+  jdlDefinition?: JDLApplicationConfig;
+  /** @experimental */
+  commandsConfigs?: JHipsterConfigs;
+
+  /* yeoman options */
+  skipYoResolve?: boolean;
+  force?: boolean;
+
+  /* base options */
+  applicationWithConfig?: ApplicationWithConfig;
+
+  /** boostrap options */
+  applyDefaults?: <const data = any>(data: data) => data;
+
+  /* generate-blueprint options */
+  localBlueprint?: boolean;
+
+  /* jdl generator options */
+  jdlFile?: string;
+
+  /* application options */
+  db?: string;
+
+  /* workspaces options */
+  generateApplications?: boolean;
+  generateWorkspaces?: boolean;
+  generateWith?: string;
+  monorepository?: boolean;
+  workspaces?: boolean;
+  workspacesFolders?: string[];
+};

@@ -1,7 +1,5 @@
 import type { Simplify } from 'type-fest';
-import type { ApplicationOptions } from '../../lib/types/application/options.js';
-import type { JDLApplicationConfig } from '../../lib/jdl/core/types/parsing.js';
-import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, JHipsterConfigs } from '../../lib/command/types.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/types.js';
 import type { CoreConfiguration, CoreFeatures, CoreOptions, EditFileCallback } from '../base-core/api.js';
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
@@ -34,52 +32,6 @@ export type BaseOptions = CoreOptions &
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 export type BaseConfiguration = CoreConfiguration & Simplify<ExportStoragePropertiesFromCommand<typeof import('./command.js').default>>;
-
-export type TemporaryJHipsterGeneratorOptions = BaseOptions &
-  ApplicationOptions & {
-    /* cli options */
-    commandName: string;
-    programName: string;
-    createEnvBuilder?: any;
-    devBlueprintEnabled?: boolean;
-
-    /** @experimental */
-    jdlDefinition?: JDLApplicationConfig;
-    /** @experimental */
-    commandsConfigs?: JHipsterConfigs;
-
-    /* yeoman options */
-    skipYoResolve?: boolean;
-    force?: boolean;
-
-    /* base options */
-    applicationWithConfig?: ApplicationWithConfig;
-    /**
-     * @deprecated
-     */
-    skipWriting?: boolean;
-    entities?: string[];
-
-    /** boostrap options */
-    applyDefaults?: <const data = any>(data: data) => data;
-
-    /* generate-blueprint options */
-    localBlueprint?: boolean;
-
-    /* jdl generator options */
-    jdlFile?: string;
-
-    /* application options */
-    db?: string;
-
-    /* workspaces options */
-    generateApplications?: boolean;
-    generateWorkspaces?: boolean;
-    generateWith?: string;
-    monorepository?: boolean;
-    workspaces?: boolean;
-    workspacesFolders?: string[];
-  };
 
 export type JHipsterGeneratorFeatures = CoreFeatures & {
   priorityArgs?: boolean;

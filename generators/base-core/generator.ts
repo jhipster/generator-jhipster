@@ -785,7 +785,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * write the given files using provided options.
    */
-  async writeFiles<DataType extends CoreSources<Entity, any, any> = Sources>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
+  async writeFiles(options: WriteFileOptions<Sources, this>): Promise<string[]> {
     const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');

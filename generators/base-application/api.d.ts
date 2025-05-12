@@ -19,6 +19,8 @@ import type { BaseConfiguration, BaseOptions, JHipsterGeneratorFeatures } from '
  */
 export type BaseApplicationOptions = BaseOptions & {
   applicationWithEntities?: any;
+  entities?: string[];
+  skipWriting?: boolean;
 };
 
 export type BaseApplicationConfiguration = BaseConfiguration & {
