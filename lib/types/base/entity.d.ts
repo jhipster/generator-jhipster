@@ -6,7 +6,7 @@ type MicroserviceEntity = {
   databaseType?: string;
 };
 
-export type Entity<F extends Field = Field, R extends Relationship = Relationship> = BaseApplicationEntity &
+export type Entity<F extends Field = Field, R extends Relationship = Relationship> = BaseApplicationEntity<F, R> &
   MicroserviceEntity & {
     changelogDate?: string;
     dto?: 'no' | 'mapstruct' | 'any';

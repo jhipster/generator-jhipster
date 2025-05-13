@@ -32,10 +32,10 @@ import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/
 import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
-import type { Entity } from '../../../lib/types/application/index.js';
 import type { PrimaryKey } from '../../../lib/types/application/entity.js';
 import type { ApplicationConfiguration } from '../../../lib/types/application/yo-rc.js';
-import type { ApplicationType } from '../../../lib/types/application/application.js';
+import type { BaseApplicationApplication, BaseApplicationEntity, BaseApplicationField, BaseApplicationRelationship } from '../types.js';
+import type BaseApplicationGenerator from '../generator.js';
 import { fieldToReference } from './prepare-field.js';
 import { fieldIsEnum } from './field-utils.js';
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
@@ -100,7 +100,9 @@ const BASE_TEMPLATE_DATA = {
   },
 };
 
-function _derivedProperties(entityWithConfig: Entity) {
+function _derivedProperties<F extends BaseApplicationField, R extends BaseApplicationRelationship, E extends BaseApplicationEntity<F, R>>(
+  entityWithConfig: E,
+) {
   const pagination = entityWithConfig.pagination;
   const dto = entityWithConfig.dto;
   const service = entityWithConfig.service;
@@ -135,7 +137,12 @@ export const entityDefaultConfig = {
   },
 };
 
-export default function prepareEntity(entityWithConfig: Entity, generator, application: ApplicationType) {
+export default function prepareEntity<
+  F extends BaseApplicationField,
+  R extends BaseApplicationRelationship,
+  E extends BaseApplicationEntity<F, R>,
+  A extends BaseApplicationApplication<F, R, E>,
+>(entityWithConfig: E, generator, application: A) {
   const { applicationTypeMicroservice, microfrontend, dtoSuffix = '' } = application;
 
   const entityName = upperFirst(entityWithConfig.name);
@@ -489,8 +496,10 @@ function fieldToId(field) {
  * @returns {Object} the entity parameter for chaining.
  */
 export function loadRequiredConfigIntoEntity<
-  E extends Partial<BaseApplicationEntity>,
-  G extends BaseApplicationGenerator<any, any, any, any, any, any, any, any, any>,
+  F extends BaseApplicationField,
+  R extends BaseApplicationRelationship,
+  E extends BaseApplicationEntity<F, R>,
+  G extends BaseApplicationGenerator<any, F, R, E, any, any, any, any, any, any, any>,
 >(this: G | void, entity: E, config: ApplicationConfiguration): E {
   mutateData(entity, {
     __override__: false,
@@ -526,7 +535,11 @@ export function loadRequiredConfigIntoEntity<
   return entity;
 }
 
-export function preparePostEntityCommonDerivedProperties<E extends BaseApplicationEntity>(entity: E) {
+export function preparePostEntityCommonDerivedProperties<
+  F extends BaseApplicationField,
+  R extends BaseApplicationRelationship,
+  E extends BaseApplicationEntity<F, R>,
+>(entity: E) {
   const { fields } = entity;
   const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 
@@ -556,7 +569,11 @@ export function preparePostEntityCommonDerivedProperties<E extends BaseApplicati
   preparePostEntityCommonDerivedPropertiesNotTyped(entity);
 }
 
-function preparePostEntityCommonDerivedPropertiesNotTyped<E extends BaseApplicationEntity>(entity: E) {
+function preparePostEntityCommonDerivedPropertiesNotTyped<
+  F extends BaseApplicationField,
+  R extends BaseApplicationRelationship,
+  E extends BaseApplicationEntity<F, R>,
+>(entity: E) {
   const { relationships, fields } = entity;
   const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
   entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
@@ -657,7 +674,11 @@ function preparePostEntityCommonDerivedPropertiesNotTyped<E extends BaseApplicat
   entity.reactiveRegularEagerRelations = entity.reactiveEagerRelations.filter(rel => rel.id !== true);
 }
 
-export function preparePostEntitiesCommonDerivedProperties<E extends BaseApplicationEntity>(entities: E[]) {
+export function preparePostEntitiesCommonDerivedProperties<
+  F extends BaseApplicationField,
+  R extends BaseApplicationRelationship,
+  E extends BaseApplicationEntity<F, R>,
+>(entities: E[]) {
   for (const entity of entities.filter(entity => !entity.dtoReferences)) {
     entity.dtoReferences = [
       ...entity.fields.map(field => field.reference),
@@ -680,7 +701,11 @@ export function preparePostEntitiesCommonDerivedProperties<E extends BaseApplica
   }
 }
 
-export async function addFakerToEntity(entityWithConfig: any, nativeLanguage = 'en') {
+export async function addFakerToEntity<
+  F extends BaseApplicationField,
+  R extends BaseApplicationRelationship,
+  E extends BaseApplicationEntity<F, R>,
+>(entityWithConfig: E, nativeLanguage = 'en') {
   entityWithConfig.faker = entityWithConfig.faker || (await createFaker(nativeLanguage));
   entityWithConfig.resetFakerSeed = (suffix = '') =>
     entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
