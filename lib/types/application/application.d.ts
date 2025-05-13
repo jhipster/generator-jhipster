@@ -7,8 +7,9 @@ import type { ExportApplicationPropertiesFromCommand } from '../../command/types
 import type { DockerSourceType } from '../../../generators/docker/types.ts';
 import type { BaseApplicationSources } from '../../../generators/base-application/types.js';
 import type { OptionWithDerivedProperties } from '../../../generators/base-application/application-options.js';
-import { Entity } from './entity.js';
-export type BaseApplicationToRefactor = BaseApplicationApplication<any> & {
+import { Field } from './field.js';
+import { Relationship } from './relationship.js';
+export type BaseApplicationToRefactor = BaseApplicationApplication<any, any, any> & {
   jhipsterVersion: string;
 
   capitalizedBaseName: string;
@@ -98,7 +99,7 @@ type UserManagement =
       authority: any;
     };
     */
-type UserManagement<Entity extends BaseApplicationEntity> = {
+type UserManagement<Entity extends BaseApplicationEntity<any, any>> = {
   skipUserManagement: boolean;
   user: Entity;
   userManagement: Entity;
@@ -125,7 +126,7 @@ type AuthenticationType = DeterministicOptionWithDerivedProperties<
   [JwtApplication, Oauth2Application, SessionApplication]
 >;
 */
-type AuthenticationProperties<Entity extends BaseApplicationEntity> = OptionWithDerivedProperties<
+type AuthenticationProperties<Entity extends BaseApplicationEntity<any, any>> = OptionWithDerivedProperties<
   'authenticationType',
   ['jwt', 'oauth2', 'session']
 > &
@@ -140,7 +141,7 @@ type QuirksApplication = {
   cypressBootstrapEntities?: boolean;
 };
 
-export type CommonClientServerApplication<Entity extends BaseApplicationEntity> = BaseApplicationToRefactor &
+export type CommonClientServerApplication<Entity extends BaseApplicationEntity<any, any>> = BaseApplicationToRefactor &
   QuirksApplication &
   AuthenticationProperties<Entity> &
   SpringBootApplication &
@@ -189,12 +190,13 @@ type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'e
 
 export type PlatformApplication = ServiceDiscoveryApplication & MonitoringApplication;
 
-export type ApplicationType<E extends BaseApplicationEntity = Entity> = BaseApplicationApplication<Entity> &
-  CommonClientServerApplication<E> &
+export type ApplicationType<F extends Field> = BaseApplicationApplication<any, any, any> &
+  CommonClientServerApplication<any> &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/gradle/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/spring-boot/command.ts').default>;
 
 export type BaseApplicationSource<
-  E extends BaseApplicationEntity = Entity,
-  A extends BaseApplicationApplication<E> = BaseApplicationApplication<E>,
-> = BaseApplicationSources<E, A> & SpringBootSourceType & ClientSourceType & LanguagesSource & DockerSourceType;
+  F extends Field,
+  R extends Relationship,
+  A extends BaseApplicationApplication<F, R, any> = BaseApplicationApplication<any, any, any>,
+> = BaseApplicationSources<any, any, any, A> & SpringBootSourceType & ClientSourceType & LanguagesSource & DockerSourceType;
