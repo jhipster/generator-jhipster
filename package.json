@@ -201,10 +201,10 @@
     "rimraf": "6.0.1",
     "sinon": "20.0.0",
     "sinon-chai": "4.0.0",
-    "yeoman-test": "10.1.0"
+    "yeoman-test": "10.1.1"
   },
   "peerDependencies": {
-    "yeoman-test": "10.1.0"
+    "yeoman-test": "10.1.1"
   },
   "peerDependenciesMeta": {
     "yeoman-test": {
