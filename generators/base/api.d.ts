@@ -31,7 +31,6 @@ export type JHipsterGeneratorOptions = BaseOptions &
     force?: boolean;
 
     /* base options */
-    applicationId?: string;
     applicationWithConfig?: ApplicationWithConfig;
     /**
      * @deprecated

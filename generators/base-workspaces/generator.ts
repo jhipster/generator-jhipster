@@ -81,6 +81,10 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
     }
   }
 
+  get sharedWorkspaces(): any {
+    return this.getContextData('jhipster:workspaces', () => ({}));
+  }
+
   protected loadWorkspacesConfig(opts?) {
     const { context = this } = opts ?? {};
     context.appsFolders = this.jhipsterConfig.appsFolders;
@@ -155,13 +159,14 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
         generatorOptions: { destinationRoot: resolvedFolder, reproducible: true },
       } as any);
     }
-    this.getSharedApplication(this.destinationPath()).workspacesApplications = Object.entries(resolvedApplicationFolders).map(
-      ([appFolder, resolvedFolder], index) => {
-        const application = this.getSharedApplication(resolvedFolder)?.sharedApplication;
+    this.getContextData('jhipster:workspacesApplications', () =>
+      Object.entries(resolvedApplicationFolders).map(([appFolder, resolvedFolder], index) => {
+        const contextMap = this.env.getContextMap(resolvedFolder);
+        const application = contextMap.get('jhipster:shared-data')?.sharedApplication;
         application.appFolder = appFolder;
         application.composePort = 8080 + index;
         return application;
-      },
+      }),
     );
   }
 
@@ -184,10 +189,10 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
       return args;
     }
     const [first, ...others] = args ?? [];
-    const sharedData = this.getSharedApplication(this.destinationPath());
+    const sharedData = this.getSharedApplication();
     const deployment = sharedData.sharedDeployment;
-    const workspaces = sharedData.sharedWorkspaces;
-    const applications = sharedData.workspacesApplications;
+    const workspaces = this.sharedWorkspaces;
+    const applications = this.getContextData('jhipster:workspacesApplications');
     return [
       {
         ...first,

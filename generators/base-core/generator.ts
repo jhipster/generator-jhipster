@@ -18,7 +18,6 @@
  */
 import { basename, dirname, extname, isAbsolute, join, join as joinPath, relative } from 'path';
 import { relative as posixRelative } from 'path/posix';
-import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
 import { existsSync, readFileSync, rmSync, statSync } from 'fs';
 import assert from 'assert';
@@ -1392,18 +1391,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     });
   }
 
-  private calculateApplicationId(applicationPath: string) {
-    const dirname = basename(applicationPath);
-    return `${createHash('shake256', { outputLength: 1 }).update(applicationPath, 'utf8').digest('hex')}-${dirname}`;
-  }
-
-  protected getSharedApplication(applicationFolder: string = this.destinationPath()) {
-    return this.options.sharedData.applications?.[this.calculateApplicationId(applicationFolder)];
+  protected getSharedApplication() {
+    return this.sharedData.getApplication();
   }
 
   private createSharedData(): SharedData {
-    const applicationId = this.options.applicationId ?? this.calculateApplicationId(this.destinationPath());
-    const application = this.getContextData(`application-${applicationId}`, () => ({}));
+    const application = this.getContextData(`jhipster:shared-data`, () => ({}));
 
     const { ignoreNeedlesError } = this.options;
 

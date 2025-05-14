@@ -57,7 +57,6 @@ export default class SharedData<EntityType extends BaseEntity = Entity, Applicat
 
     defaults(this._storage, {
       sharedDeployment: {},
-      sharedWorkspaces: {},
       sharedEntities: {},
       sharedApplication: {},
       sharedSource: {},

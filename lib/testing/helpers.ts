@@ -420,12 +420,9 @@ plugins {
 
   private withSharedData(sharedData: Record<string, any>): this {
     if (!this.sharedData) {
-      const applicationId = 'test-application';
       this.sharedData = { ...sharedData };
-      this.withContextData(`application-${applicationId}`, this.sharedData);
-      return this.withOptions({
-        applicationId,
-      });
+      this.withContextData('jhipster:shared-data', this.sharedData);
+      return this;
     }
     Object.assign(this.sharedData, sharedData);
     return this;
