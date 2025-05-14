@@ -20,8 +20,8 @@ const { NO: NO_DATABASE } = databaseTypes;
  */
 export function loadStoredAppOptions(this: any, { options = this.options, jhipsterConfig = this.jhipsterConfig, log = this.log } = {}) {
   // Parse options only once.
-  if (this.sharedData.getControl().optionsParsed) return;
-  this.sharedData.getControl().optionsParsed = true;
+  if (this.control.optionsParsed) return;
+  this.control.optionsParsed = true;
 
   if (options.db) {
     const databaseType = getDBTypeFromDBValue(options.db);

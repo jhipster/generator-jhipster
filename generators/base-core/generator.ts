@@ -76,6 +76,7 @@ import { getConfigWithDefaults } from '../../lib/jhipster/index.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { Control } from '../base/types.js';
 
 const {
   INITIALIZING,
@@ -256,6 +257,12 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     return this._needleApi;
   }
 
+  get control(): Control {
+    // TODO use contextData api.
+    // return this.getContextData<Control>('jhipster:control', () => ({}) as unknown as Control);
+    return this.sharedData.getControl();
+  }
+
   /**
    * JHipster config with default values fallback
    */
@@ -290,7 +297,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * @param {string} version - A valid semver version string
    */
   isJhipsterVersionLessThan(version: string): boolean {
-    const jhipsterOldVersion = this.sharedData.getControl().jhipsterOldVersion;
+    const jhipsterOldVersion = this.control.jhipsterOldVersion;
     return this.isVersionLessThan(jhipsterOldVersion, version);
   }
 
@@ -306,7 +313,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Get arguments for the priority
    */
   getArgsForPriority(priorityName: string) {
-    const control = this.sharedData.getControl();
+    const control = this.control;
     if (priorityName === POST_WRITING || priorityName === PREPARING || priorityName === POST_PREPARING) {
       const source = this.sharedData.getSource();
       return [{ control, source }];
@@ -556,7 +563,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           } else if (optionDesc.scope === 'blueprint') {
             this.blueprintStorage!.set(optionName, optionValue);
           } else if (optionDesc.scope === 'control') {
-            this.sharedData.getControl()[optionName] = optionValue;
+            this.control[optionName] = optionValue;
           } else if (optionDesc.scope === 'generator') {
             this[optionName] = optionValue;
           } else if (optionDesc.scope === 'context') {
@@ -657,7 +664,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * @return {String} Changelog date.
    */
   dateFormatForLiquibase(reproducible?: boolean): string {
-    const control = this.sharedData.getControl();
+    const control = this.control;
     reproducible = reproducible ?? Boolean(control.reproducible);
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;

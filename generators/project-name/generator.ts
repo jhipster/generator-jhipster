@@ -36,7 +36,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
     validateProjectName(input, { javaApplication: this.javaApplication });
 
   async beforeQueue() {
-    this.sharedData.getControl().existingProject = Boolean(
+    this.control.existingProject = Boolean(
       this.options.defaults || this.options.applicationWithConfig || (this.jhipsterConfig.baseName !== undefined && this.config.existed),
     );
 

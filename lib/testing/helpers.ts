@@ -352,6 +352,8 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   withControl(sharedControl: Record<string, any>): this {
     this.sharedControl = this.sharedControl ?? {};
     Object.assign(this.sharedControl, sharedControl);
+    // TODO use contextData api.
+    // return this.withContextData('jhipster:control', this.sharedControl);
     return this.withSharedData({ control: this.sharedControl });
   }
 

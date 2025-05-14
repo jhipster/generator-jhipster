@@ -31,8 +31,7 @@ export default class extends needleClientBase {
     entityTranslationValue: string = startCase(routerName),
   ) {
     const ignoreNonExisting =
-      this.generator.sharedData.getControl().ignoreNeedlesError &&
-      `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
+      this.generator.control.ignoreNeedlesError && `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
     const filePath = `${this.clientSrcDir}/app/entities/entities-menu.vue`;
 
     const menuI18nTitle = enableTranslation ? ` v-text="$t('global.menu.entities.${entityTranslationKeyMenu}')"` : '';
@@ -59,7 +58,7 @@ export default class extends needleClientBase {
 
   addEntityToRouterImport(entityName: string, fileName: string, folderName: string, readOnly?: string) {
     const ignoreNonExisting =
-      this.generator.sharedData.getControl().ignoreNeedlesError &&
+      this.generator.control.ignoreNeedlesError &&
       `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities import.\n')}`;
     const filePath = `${this.clientSrcDir}/app/router/entities.ts`;
 
@@ -99,7 +98,7 @@ export default class extends needleClientBase {
 
   addEntityToRouter(entityInstance: string, entityName: string, entityFileName: string, readOnly?: boolean) {
     const ignoreNonExisting =
-      this.generator.sharedData.getControl().ignoreNeedlesError &&
+      this.generator.control.ignoreNeedlesError &&
       `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities.\n')}`;
     const filePath = `${this.clientSrcDir}/app/router/entities.ts`;
 

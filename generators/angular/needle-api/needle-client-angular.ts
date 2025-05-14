@@ -99,7 +99,7 @@ export default class extends needleClientBase {
 
   addIcon(iconName) {
     const iconsPath = `${this.clientSrcDir}app/config/font-awesome-icons.ts`;
-    const ignoreNonExisting = this.generator.sharedData.getControl().ignoreNeedlesError && 'Icon imports not updated with icon';
+    const ignoreNonExisting = this.generator.control.ignoreNeedlesError && 'Icon imports not updated with icon';
     const iconImport = `fa${upperFirstCamelCase(iconName)}`;
     this.generator.editFile(
       iconsPath,

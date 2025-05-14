@@ -473,7 +473,7 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
       return [];
     }
 
-    const control = this.sharedData.getControl();
+    const control = this.control;
     if (!control.blueprintConfigured) {
       control.blueprintConfigured = true;
       await this._configureBlueprints();
