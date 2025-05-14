@@ -176,8 +176,8 @@
     "typescript": "5.8.3",
     "typescript-eslint": "8.32.1",
     "yaml": "2.7.1",
-    "yeoman-environment": "4.4.3",
-    "yeoman-generator": "7.5.1"
+    "yeoman-environment": "5.0.0-beta.0",
+    "yeoman-generator": "8.0.0-beta.0"
   },
   "devDependencies": {
     "@eslint/core": "0.14.0",

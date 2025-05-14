@@ -2,7 +2,7 @@ import assert from 'node:assert';
 import { randomInt } from 'node:crypto';
 import { basename, dirname, isAbsolute, join } from 'node:path';
 import { mock } from 'node:test';
-import { merge, set, snakeCase } from 'lodash-es';
+import { merge, snakeCase } from 'lodash-es';
 import type { RunContextSettings, RunResult } from 'yeoman-test';
 import { RunContext, YeomanTest, result } from 'yeoman-test';
 import type Environment from 'yeoman-environment';
@@ -422,12 +422,20 @@ plugins {
     if (!this.sharedData) {
       const applicationId = 'test-application';
       this.sharedData = { ...sharedData };
-      set((this as any).envOptions, `sharedOptions.sharedData.applications.${applicationId}`, this.sharedData);
+      this.withContextData(`application-${applicationId}`, this.sharedData);
       return this.withOptions({
         applicationId,
       });
     }
     Object.assign(this.sharedData, sharedData);
+    return this;
+  }
+
+  private withContextData(key: string, sharedData: any): this {
+    this.onEnvironment((env: any) => {
+      const contextMap: Map<string, any> = env.getContextMap(this.targetDirectory);
+      contextMap.set(key, sharedData);
+    });
     return this;
   }
 

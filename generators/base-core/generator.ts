@@ -192,7 +192,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
 
-      this.sharedData = this.createSharedData({ help: this.options.help }) as any;
+      this.sharedData = this.createSharedData() as any;
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.parseJHipsterOptions(baseCommand.options);
@@ -1401,19 +1401,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     return this.options.sharedData.applications?.[this.calculateApplicationId(applicationFolder)];
   }
 
-  private createSharedData({ help }: { help?: boolean }): SharedData {
+  private createSharedData(): SharedData {
     const applicationId = this.options.applicationId ?? this.calculateApplicationId(this.destinationPath());
-    if (this.options.sharedData.applications === undefined) {
-      this.options.sharedData.applications = {};
-    }
-    const sharedApplications = help ? {} : this.options.sharedData.applications;
-    if (!sharedApplications[applicationId]) {
-      sharedApplications[applicationId] = {};
-    }
+    const application = this.getContextData(`application-${applicationId}`, () => ({}));
+
     const { ignoreNeedlesError } = this.options;
 
     return new SharedData(
-      sharedApplications[applicationId],
+      application,
       { destinationPath: this.destinationPath(), memFs: this.env.sharedFs, log: this.log, logCwd: this.env.logCwd },
       { ignoreNeedlesError },
     );
