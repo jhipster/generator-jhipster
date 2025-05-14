@@ -166,6 +166,11 @@ export default class SharedData<EntityType extends BaseEntity = Entity, Applicat
     return this._storage.sharedApplication;
   }
 
+  getDeployment(): Application {
+    if (!this._storage.sharedDeployment) throw new Error('Shared application not loaded');
+    return this._storage.sharedDeployment;
+  }
+
   setEntity(entityName: string, entity: { name: string } & Partial<EntityType>): void {
     this._storage.sharedEntities[entityName] = entity;
   }

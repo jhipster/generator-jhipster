@@ -189,10 +189,10 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
       return args;
     }
     const [first, ...others] = args ?? [];
-    const sharedData = this.getSharedApplication();
-    const deployment = sharedData.sharedDeployment;
+    const sharedData = this.sharedData;
+    const deployment = sharedData.getDeployment();
     const workspaces = this.sharedWorkspaces;
-    const applications = this.getContextData('jhipster:workspacesApplications');
+    const applications = this.getContextData('jhipster:workspacesApplications', () => ({}));
     return [
       {
         ...first,
