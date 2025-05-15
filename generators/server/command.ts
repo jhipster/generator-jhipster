@@ -20,14 +20,10 @@ import chalk from 'chalk';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/jhipster/index.js';
+import { getDBTypeFromDBValue } from './support/database.js';
 
 const command = {
   options: {
-    db: {
-      description: 'Provide DB name for the application when skipping server side generation',
-      type: String,
-      scope: 'none',
-    },
     skipUserManagement: {
       description: 'Skip the user management module during app generation',
       type: Boolean,
@@ -92,6 +88,27 @@ const command = {
     },
   },
   configs: {
+    db: {
+      description: 'Provide DB name for the application when skipping server side generation',
+      cli: {
+        type: String,
+      },
+      configure: (gen, value) => {
+        if (value) {
+          const databaseType = getDBTypeFromDBValue(value);
+          if (databaseType) {
+            gen.jhipsterConfig.databaseType = databaseType;
+          } else if (!gen.jhipsterConfig.databaseType) {
+            throw new Error(`Could not detect databaseType for database ${value}`);
+          }
+          if (value !== value) {
+            gen.jhipsterConfig.devDatabaseType = value;
+            gen.jhipsterConfig.prodDatabaseType = value;
+          }
+        }
+      },
+      scope: 'none',
+    },
     applicationType: {
       description: 'Application type to generate',
       cli: {

@@ -194,7 +194,6 @@ Options:
   --jdl-store <value>                      JDL store
   --prettier-tab-width <value>             Default tab width for prettier (default: 2)
   --skip-commit-hook                       Skip adding husky commit hooks
-  --db <value>                             Provide DB name for the application when skipping server side generation
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --cache-provider <value>                 Cache provider
   --enable-swagger-codegen                 API first development using OpenAPI-generator
@@ -206,6 +205,7 @@ Options:
   --websocket <value>                      Provide websocket option for the application when skipping server side generation
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
   --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
+  --db <value>                             Provide DB name for the application when skipping server side generation
   --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
   --reactive                               Generate a reactive backend
   --service-discovery-type <value>         Service discovery type (choices: "consul", "eureka", "no")

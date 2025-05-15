@@ -69,7 +69,7 @@ export type ConfigSpec<ConfigContext> = {
   /**
    * Configure the generator according to the selected configuration.
    */
-  readonly configure?: (gen: ConfigContext) => void;
+  readonly configure?: (gen: ConfigContext, value: any) => void;
 };
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;

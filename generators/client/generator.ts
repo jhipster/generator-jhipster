@@ -25,7 +25,6 @@ import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS } from '../genera
 
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.js';
 import { createNeedleCallback } from '../base/support/index.js';
-import { loadStoredAppOptions } from '../app/support/index.js';
 import { addEnumerationFiles } from './entity-files.js';
 import { writeFiles as writeCommonFiles } from './files-common.js';
 import { askForClientTheme, askForClientThemeVariant } from './prompts.js';
@@ -35,8 +34,6 @@ const { CYPRESS } = testFrameworkTypes;
 
 export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    loadStoredAppOptions.call(this);
-
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }

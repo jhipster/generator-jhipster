@@ -24,7 +24,6 @@ import {
   preparePostEntityClientDerivedProperties,
 } from '../client/support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
-import { loadStoredAppOptions } from '../app/support/index.js';
 import clientCommand from '../client/command.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import { getFrontendAppName } from '../base/support/index.js';
@@ -32,10 +31,6 @@ import { getFrontendAppName } from '../base/support/index.js';
 export default class BootStrapApplicationClient extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
     super(args, options, { jhipsterBootstrap: false, ...features });
-
-    if (this.options.help) return;
-
-    loadStoredAppOptions.call(this);
   }
 
   async beforeQueue() {

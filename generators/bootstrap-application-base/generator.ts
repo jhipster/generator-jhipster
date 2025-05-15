@@ -36,7 +36,7 @@ import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
 import { loadLanguagesConfig } from '../languages/support/index.js';
-import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.js';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.js';
 import { lookupCommandsConfigs } from '../../lib/command/lookup-commands-configs.js';
 import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../lib/command/load.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
@@ -49,10 +49,6 @@ import { exportJDLTransform, importJDLTransform } from './support/index.js';
 export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
     super(args, options, { jhipsterBootstrap: false, ...features });
-
-    if (this.options.help) return;
-
-    loadStoredAppOptions.call(this);
   }
 
   async beforeQueue() {
