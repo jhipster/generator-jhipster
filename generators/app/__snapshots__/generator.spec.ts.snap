@@ -30,7 +30,6 @@ Options:
   --prettier-tab-width <value>             Default tab width for prettier (default: 2)
   --monorepository                         Use monorepository
   --skip-commit-hook                       Skip adding husky commit hooks
-  --db <value>                             Provide DB name for the application when skipping server side generation
   --skip-user-management                   Skip the user management module during app generation
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --cache-provider <value>                 Cache provider
@@ -43,6 +42,7 @@ Options:
   --websocket <value>                      Provide websocket option for the application when skipping server side generation
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
   --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
+  --db <value>                             Provide DB name for the application when skipping server side generation
   --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
   --reactive                               Generate a reactive backend
   --service-discovery-type <value>         Service discovery type (choices: "consul", "eureka", "no")
@@ -305,6 +305,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "databaseTypeNeo4j": false,
   "databaseTypeNo": false,
   "databaseTypeSql": true,
+  "db": undefined,
   "defaultEnvironment": "prod",
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
@@ -977,6 +978,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "databaseTypeNeo4j": false,
   "databaseTypeNo": false,
   "databaseTypeSql": true,
+  "db": undefined,
   "defaultEnvironment": "prod",
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
@@ -1643,6 +1645,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "databaseTypeNeo4j": false,
   "databaseTypeNo": false,
   "databaseTypeSql": true,
+  "db": undefined,
   "defaultEnvironment": "prod",
   "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,

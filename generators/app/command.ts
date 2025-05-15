@@ -86,9 +86,18 @@ const command = {
       type: String,
       scope: 'storage',
     },
+  },
+  configs: {
     testFrameworks: {
       description: 'Test frameworks to be generated',
-      type: Array,
+      cli: {
+        type: Array,
+      },
+      configure(gen, value) {
+        if (value) {
+          gen.jhipsterConfig.testFrameworks = [...new Set([...(gen.jhipsterConfig.testFrameworks || []), ...value])];
+        }
+      },
       scope: 'none',
     },
   },

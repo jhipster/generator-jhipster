@@ -31,7 +31,6 @@ import {
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.js';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.js';
-import { loadStoredAppOptions } from '../app/support/index.js';
 import command from './command.js';
 import { writeFiles } from './files.js';
 
@@ -41,8 +40,6 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   command = command;
 
   async beforeQueue() {
-    loadStoredAppOptions.call(this);
-
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }

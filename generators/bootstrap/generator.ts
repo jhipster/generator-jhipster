@@ -29,7 +29,6 @@ import BaseGenerator from '../base/index.js';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
 import { GENERATOR_UPGRADE } from '../generator-list.js';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.js';
-import { loadStoredAppOptions } from '../app/support/index.js';
 import type { GenericTaskGroup, TaskParamWithControl } from '../../lib/types/base/tasks.js';
 import {
   autoCrlfTransform,
@@ -66,8 +65,6 @@ export default class BootstrapGenerator extends BaseGenerator {
   }
 
   async beforeQueue() {
-    loadStoredAppOptions.call(this);
-
     // Force npm override later if needed
     (this.env as any).options.nodePackageManager = 'npm';
     this.upgradeCommand = this.options.commandName === GENERATOR_UPGRADE;

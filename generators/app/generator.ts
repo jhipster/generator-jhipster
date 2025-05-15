@@ -27,14 +27,12 @@ import { packageJson } from '../../lib/index.js';
 
 import { applicationTypes } from '../../lib/jhipster/index.js';
 import cleanupOldFilesTask from './cleanup.js';
-import { checkNode, loadStoredAppOptions } from './support/index.js';
+import { checkNode } from './support/index.js';
 
 const { MICROSERVICE } = applicationTypes;
 
 export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    loadStoredAppOptions.call(this);
-
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }

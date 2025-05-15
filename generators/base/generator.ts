@@ -25,7 +25,6 @@ import type { ComposeOptions } from 'yeoman-generator';
 import { union } from 'lodash-es';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
-import { loadStoredAppOptions } from '../app/support/index.js';
 import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import { packageNameToNamespace } from './support/index.js';
 import { loadBlueprintsFromConfiguration, mergeBlueprints, normalizeBlueprintName, parseBluePrints } from './internal/index.js';
@@ -50,8 +49,6 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
     if (this.options.help) {
       return;
     }
-
-    loadStoredAppOptions.call(this);
 
     this.sbsBlueprint = this.features.sbsBlueprint ?? false;
     this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
