@@ -30,7 +30,7 @@ node-gradle = { id = 'com.github.node-gradle.node', version = '7.1.0' }
 
 gradle-liquibase = { id = 'org.liquibase.gradle', version = '3.0.2' }
 
-gradle-sonarqube = { id = 'org.sonarqube', version = '6.1.0.5360' }
+gradle-sonarqube = { id = 'org.sonarqube', version = '6.2.0.5505' }
 
 spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '7.0.3' }
 
@@ -40,6 +40,6 @@ gradle-develocity = { id = 'com.gradle.develocity', version = '4.0.1' }
 
 common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.2.1' }
 
-gatling-gradle = { id = 'io.gatling.gradle', version = '3.14.1' }
+gatling-gradle = { id = 'io.gatling.gradle', version = '3.14.1.2' }
 
 gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.13.0' }

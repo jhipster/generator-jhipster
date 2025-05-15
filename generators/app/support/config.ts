@@ -2,8 +2,6 @@ import { camelCase, kebabCase, startCase, upperFirst } from 'lodash-es';
 import { NODE_VERSION } from '../../generator-constants.js';
 import { applicationTypes, authenticationTypes, databaseTypes, testFrameworkTypes } from '../../../lib/jhipster/index.js';
 import { getHipster, mutateData, pickFields, upperFirstCamelCase } from '../../base/support/index.js';
-import { getDBTypeFromDBValue } from '../../server/support/index.js';
-import detectLanguage from '../../languages/support/detect-language.js';
 import { loadConfig, loadDerivedConfig } from '../../../lib/internal/index.js';
 import serverCommand from '../../server/command.js';
 import { packageJson } from '../../../lib/index.js';
@@ -13,57 +11,6 @@ const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { NO: NO_DATABASE } = databaseTypes;
-
-/**
- * Load common options to be stored.
- * @deprecated
- */
-export function loadStoredAppOptions(this: any, { options = this.options, jhipsterConfig = this.jhipsterConfig, log = this.log } = {}) {
-  // Parse options only once.
-  if (this.control.optionsParsed) return;
-  this.control.optionsParsed = true;
-
-  if (options.db) {
-    const databaseType = getDBTypeFromDBValue(options.db);
-    if (databaseType) {
-      jhipsterConfig.databaseType = databaseType;
-    } else if (!jhipsterConfig.databaseType) {
-      throw new Error(`Could not detect databaseType for database ${options.db}`);
-    }
-    jhipsterConfig.devDatabaseType = options.db;
-    jhipsterConfig.prodDatabaseType = options.db;
-  }
-  if (options.testFrameworks) {
-    jhipsterConfig.testFrameworks = [...new Set([...(jhipsterConfig.testFrameworks || []), ...options.testFrameworks])];
-  }
-  if (options.language) {
-    // workaround double options parsing, remove once generator supports skipping parse options
-    const languages = options.language.flat();
-    if (languages.length === 1 && languages[0] === 'false') {
-      jhipsterConfig.enableTranslation = false;
-    } else {
-      jhipsterConfig.languages = [...(jhipsterConfig.languages || []), ...languages];
-    }
-  }
-  if (options.nativeLanguage) {
-    if (typeof options.nativeLanguage === 'string') {
-      jhipsterConfig.nativeLanguage = options.nativeLanguage;
-      if (!jhipsterConfig.languages) {
-        jhipsterConfig.languages = [options.nativeLanguage];
-      }
-    } else if (options.nativeLanguage === true) {
-      jhipsterConfig.nativeLanguage = detectLanguage();
-    }
-  }
-
-  if (jhipsterConfig.clientPackageManager) {
-    const usingNpm = jhipsterConfig.clientPackageManager === 'npm';
-    if (!usingNpm) {
-      log?.warn(`Using unsupported package manager: ${jhipsterConfig.clientPackageManager}. Install will not be executed.`);
-      options.skipInstall = true;
-    }
-  }
-}
 
 /**
  * Load app configs into application.

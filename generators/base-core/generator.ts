@@ -493,8 +493,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
 
-    for (const def of Object.values(generatorCommand.configs)) {
-      def.configure?.(this);
+    for (const [name, def] of Object.entries(generatorCommand.configs)) {
+      def.configure?.(this, this.options[name]);
     }
   }
 

@@ -28,7 +28,6 @@ import {
 } from '../base-application/support/index.js';
 
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.js';
-import { loadStoredAppOptions } from '../app/support/index.js';
 import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.js';
 import type { Field } from '../../lib/types/base/field.js';
 
@@ -40,10 +39,6 @@ const {
 export default class BootstrapApplicationGenerator extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
     super(args, options, { jhipsterBootstrap: false, ...features });
-
-    if (this.options.help) return;
-
-    loadStoredAppOptions.call(this);
   }
 
   async beforeQueue() {

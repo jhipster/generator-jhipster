@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+import detectLanguage from './support/detect-language.js';
 
 const command = {
   arguments: {
@@ -54,6 +55,11 @@ const command = {
         description: 'Language to be added to application (existing languages are not removed)',
         type: Array,
       },
+      configure(gen, value) {
+        if (value) {
+          gen.jhipsterConfig.languages = [...(gen.jhipsterConfig.languages ?? []), ...value];
+        }
+      },
       scope: 'none',
     },
     nativeLanguage: {
@@ -62,6 +68,18 @@ const command = {
         description: 'Set application native language',
         type: String,
         required: false,
+      },
+      configure(gen, value) {
+        if (value) {
+          if (value === true || value === 'true') {
+            gen.jhipsterConfig.nativeLanguage = detectLanguage();
+          } else if (typeof value === 'string') {
+            gen.jhipsterConfig.nativeLanguage = value;
+          }
+          if (!gen.jhipsterConfig.languages) {
+            gen.jhipsterConfig.languages = [gen.jhipsterConfig.nativeLanguage];
+          }
+        }
       },
       scope: 'storage',
     },

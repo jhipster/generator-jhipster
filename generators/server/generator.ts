@@ -48,7 +48,6 @@ import {
 import { stringifyApplicationData } from '../base-application/support/index.js';
 import { mutateData } from '../base/support/index.js';
 import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.js';
-import { loadStoredAppOptions } from '../app/support/index.js';
 import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
 import { hibernateSnakeCase } from './support/index.js';
 
@@ -78,7 +77,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      loadStoredAppOptions.call(this);
       await this.composeWithBlueprints();
     }
 
