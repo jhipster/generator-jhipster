@@ -259,6 +259,13 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     return this._needleApi;
   }
 
+  setContextData<const T = any>(key: string, value: T): T | undefined  {
+    const map = this.env.getContextMap(this.destinationRoot());
+    const oldValue = map.get(key);
+    map.set(key, value);
+    return oldValue;
+  }
+
   get #jhipsterOldVersion(): string | null {
     return this.getContextData<string>('jhipster:old-version', () => {
       if (existsSync(this.config.path)) {
@@ -732,7 +739,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   dateFormatForLiquibase(reproducible?: boolean): string {
     const control = this.#control;
-    reproducible = reproducible ?? Boolean(control.reproducible);
+    reproducible = reproducible ?? Boolean(this.options.reproducible);
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
     let now = new Date();
@@ -1540,7 +1547,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     return new SharedData(
       application,
-      { destinationPath: this.destinationPath(), memFs, log, logCwd, jhipsterOldVersion: this.#jhipsterOldVersion },
+      { memFs, log, logCwd, jhipsterOldVersion: this.#jhipsterOldVersion },
       { ignoreNeedlesError },
     );
   }
