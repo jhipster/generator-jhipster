@@ -9,9 +9,9 @@ type MicroserviceEntity = {
 export type Entity<F extends Field = Field, R extends Relationship = Relationship> = BaseApplicationEntity<F, R> &
   MicroserviceEntity & {
     changelogDate?: string;
-    dto?: 'no' | 'mapstruct' | 'any';
+
     entitySuffix?: string;
-    service?: 'no' | 'serviceClass' | 'serviceImpl';
+
     documentation?: string;
     searchEngine?: string;
     entityPackage?: string;
@@ -28,7 +28,7 @@ export type Entity<F extends Field = Field, R extends Relationship = Relationshi
 
     microserviceName?: string;
     clientRootFolder?: string;
-    pagination?: 'no' | 'infinite-scroll' | 'pagination';
+
     jpaMetamodelFiltering?: boolean;
 
     angularJSSuffix?: string;
