@@ -11,6 +11,17 @@ export type BaseApplicationEntity<Field extends BaseApplicationField, Relationsh
   name: string;
   fields: Field[];
   relationships: Relationship[];
+  pagination?: 'no' | 'infinite-scroll' | 'pagination';
+  dto?: 'no' | 'mapstruct' | 'any';
+  service?: 'no' | 'serviceClass' | 'serviceImpl';
+  paginationPagination: boolean;
+  paginationInfiniteScroll: boolean;
+  paginationNo: boolean;
+  dtoMapstruct: boolean;
+  dtoAny: boolean;
+  serviceClass: boolean;
+  serviceImpl: boolean;
+  serviceNo: boolean;
 };
 export type BaseApplicationApplication<
   Field extends BaseApplicationField,

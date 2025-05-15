@@ -151,17 +151,6 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   anyRelationshipIsRequired: boolean;
   hasRelationshipWithBuiltInUser: boolean;
 
-  paginationPagination: boolean;
-  paginationInfiniteScroll: boolean;
-  paginationNo: boolean;
-
-  serviceClass: boolean;
-  serviceImpl: boolean;
-  serviceNo: boolean;
-
-  dtoMapstruct: boolean;
-  dtoAny: boolean;
-
   propertyJavaFilteredType?: string;
 
   generateFakeData?: (type?: any) => any;

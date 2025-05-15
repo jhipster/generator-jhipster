@@ -106,7 +106,7 @@ function _derivedProperties<F extends BaseApplicationField, R extends BaseApplic
   const pagination = entityWithConfig.pagination;
   const dto = entityWithConfig.dto;
   const service = entityWithConfig.service;
-  mutateData(entityWithConfig, {
+  mutateData(entityWithConfig as BaseApplicationEntity<any, any>, {
     paginationPagination: pagination === 'pagination',
     paginationInfiniteScroll: pagination === 'infinite-scroll',
     paginationNo: pagination === 'no',
