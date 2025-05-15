@@ -80,7 +80,7 @@
     "style-loader": "4.0.0",
     "terser-webpack-plugin": "5.3.14",
     "thread-loader": "4.0.4",
-    "ts-jest": "29.3.2",
+    "ts-jest": "29.3.3",
     "ts-loader": "9.5.2",
     "typescript": "5.8.3",
     "typescript-eslint": "8.32.1",
