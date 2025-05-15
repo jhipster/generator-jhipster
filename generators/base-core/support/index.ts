@@ -16,18 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export * from './debug.js';
-export * from './doc.js';
-export * from './enum.js';
-export * from './entity.js';
-export { default as prepareEntity } from './prepare-entity.js';
-export * from './entities.js';
-export * from './field-utils.js';
-export { default as prepareField } from './prepare-field.js';
-export * from './prepare-field.js';
-export * from './prepare-property.js';
-export { default as prepareRelationship } from './prepare-relationship.js';
-export * from './relationship.js';
-export * from './task-type-inference.js';
-export * from './update-application-entities-transform.js';
+export * from '../../../lib/utils/derived-property.js';
+export * from '../../../lib/utils/logger.js';
+export * from '../../../lib/utils/object.js';
+export * from '../../../lib/utils/string.js';
+export * from './jhipster7-context.js';
+export * from './contents.js';
+export * from './write-files.js';

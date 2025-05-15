@@ -49,7 +49,7 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   changelogDateForRecent: any;
   /** @experimental */
   auditableEntity?: boolean;
-  relationships: (IsNever<R> extends true ? Relationship : R)[];
+
   otherRelationships: (IsNever<R> extends true ? Relationship : R)[];
 
   primaryKey?: PrimaryKey<F>;
@@ -164,7 +164,6 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
 
   propertyJavaFilteredType?: string;
 
-  resetFakerSeed(suffix?: string): void;
   generateFakeData?: (type?: any) => any;
   faker: FakerWithRandexp;
 

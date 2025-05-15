@@ -16,18 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { EditFileCallback } from '../api.js';
+import type CoreGenerator from '../generator.js';
 
-export * from './debug.js';
-export * from './doc.js';
-export * from './enum.js';
-export * from './entity.js';
-export { default as prepareEntity } from './prepare-entity.js';
-export * from './entities.js';
-export * from './field-utils.js';
-export { default as prepareField } from './prepare-field.js';
-export * from './prepare-field.js';
-export * from './prepare-property.js';
-export { default as prepareRelationship } from './prepare-relationship.js';
-export * from './relationship.js';
-export * from './task-type-inference.js';
-export * from './update-application-entities-transform.js';
+/**
+ * TODO move to utils when converted to typescripts
+ * Converts multiples EditFileCallback callbacks into one.
+ */
+
+export function joinCallbacks<Generator extends CoreGenerator<any, any, any, any, any, any, any, any>>(
+  ...callbacks: EditFileCallback<Generator>[]
+): EditFileCallback<Generator> {
+  // @ts-ignore
+  return function (this: Generator, content: string, filePath: string) {
+    for (const callback of callbacks) {
+      content = callback.call(this, content, filePath);
+    }
+    return content;
+  };
+}

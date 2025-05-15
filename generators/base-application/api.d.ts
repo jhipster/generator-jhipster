@@ -1,3 +1,4 @@
+import type { BaseConfiguration, BaseOptions, JHipsterGeneratorFeatures } from '../base/api.js';
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -16,18 +17,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export type BaseApplicationOptions = BaseOptions & {
+  applicationWithEntities?: any;
+  entities?: string[];
+  skipWriting?: boolean;
+};
 
-export * from './debug.js';
-export * from './doc.js';
-export * from './enum.js';
-export * from './entity.js';
-export { default as prepareEntity } from './prepare-entity.js';
-export * from './entities.js';
-export * from './field-utils.js';
-export { default as prepareField } from './prepare-field.js';
-export * from './prepare-field.js';
-export * from './prepare-property.js';
-export { default as prepareRelationship } from './prepare-relationship.js';
-export * from './relationship.js';
-export * from './task-type-inference.js';
-export * from './update-application-entities-transform.js';
+export type BaseApplicationConfiguration = BaseConfiguration & {
+  entities: string[];
+};
+
+export type BaseApplicationFeatures = JHipsterGeneratorFeatures & {};

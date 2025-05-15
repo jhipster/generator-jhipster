@@ -16,7 +16,7 @@ import { fieldTypes } from '../../../lib/jhipster/index.js';
 import { upperFirstCamelCase } from '../../../lib/utils/string.js';
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
-
+// TODO ideally split into downstream generators
 export const jhipster7deprecatedProperties = {
   devDatabaseType: {
     behaviorOnlyReason: 'v8: devDatabaseType is only used in jhipster:spring-data-relational generator',

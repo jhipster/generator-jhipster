@@ -34,29 +34,9 @@ import semver, { lt as semverLessThan } from 'semver';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
-import SharedData from '../base/shared-data.js';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
-import type { Logger } from '../base/support/index.js';
-import {
-  CRLF,
-  LF,
-  createJHipster7Context,
-  formatDateForChangelog,
-  hasCrlr,
-  joinCallbacks,
-  normalizeLineEndings,
-  removeFieldsWithNullishValues,
-} from '../base/support/index.js';
 
-import type {
-  CascatedEditFileCallback,
-  EditFileCallback,
-  EditFileOptions,
-  JHipsterGeneratorFeatures,
-  JHipsterGeneratorOptions,
-  ValidationResult,
-  WriteFileOptions,
-} from '../base/api.js';
+import type { CascatedEditFileCallback, EditFileOptions, JHipsterGeneratorFeatures, ValidationResult } from '../base/api.js';
+
 import {
   type JHipsterArguments,
   type JHipsterCommandDefinition,
@@ -65,18 +45,29 @@ import {
   convertConfigToOption,
 } from '../../lib/command/index.js';
 import { packageJson } from '../../lib/index.js';
-import type { BaseApplication } from '../base-application/types.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import NeedleApi from '../needle-api.js';
-import baseCommand from '../base/command.js';
+import baseCommand from '../base/command.js'; // FIXME Don't know how to remove this one
 import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
-import { getConfigWithDefaults } from '../../lib/jhipster/index.js';
+import { getConfigWithDefaults } from '../../lib/jhipster/index.js'; // TODO remove
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
-import type BaseApplicationGenerator from '../base-application/generator.js';
-import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { CoreConfiguration, CoreFeatures, CoreOptions, EditFileCallback, WriteFileOptions } from './api.js';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.js';
+import CoreSharedData from './shared-data.js';
+import type { CoreApplication, CoreControl, CoreEntity, CoreSources } from './types.js';
+import type { Logger } from './support/index.js';
+import {
+  CRLF,
+  LF,
+  createJHipster7Context,
+  hasCrlr,
+  joinCallbacks,
+  normalizeLineEndings,
+  removeFieldsWithNullishValues,
+} from './support/index.js';
 
 const {
   INITIALIZING,
@@ -110,7 +101,16 @@ const deepMerge = (source1: any, source2: any) => mergeWith({}, source1, source2
 /**
  * This is the base class for a generator for every generator.
  */
-export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOptions, JHipsterGeneratorFeatures> {
+export default class CoreGenerator<
+  Options extends CoreOptions,
+  Entity extends CoreEntity,
+  Application extends CoreApplication<Entity>,
+  Sources extends CoreSources<Entity, Application, any>,
+  Control extends CoreControl,
+  SharedData extends CoreSharedData<Entity, Application, Sources, Control>,
+  Configuration extends CoreConfiguration,
+  Features extends CoreFeatures,
+> extends YeomanGenerator<Options, JHipsterGeneratorFeatures> {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -151,7 +151,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   relativeDir = relativeDir;
   relative = posixRelative;
 
-  readonly sharedData!: SharedData<any>;
+  readonly sharedData!: SharedData;
   readonly logger: Logger;
   jhipsterConfig!: Record<string, any>;
   /**
@@ -176,7 +176,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   declare log: Logger;
   declare _meta?: GeneratorMeta;
 
-  constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
+  constructor(args: string | string[], options: Options, features: Features) {
     super(args, options, {
       skipParseOptions: true,
       tasksMatchingPriority: true,
@@ -192,7 +192,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
 
-      this.sharedData = this.createSharedData({ help: this.options.help }) as any;
+      this.sharedData = this.createSharedData({ help: this.options.help });
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.parseJHipsterOptions(baseCommand.options);
@@ -260,7 +260,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   /**
    * JHipster config with default values fallback
    */
-  get jhipsterConfigWithDefaults(): Readonly<ApplicationConfiguration & Record<string, any>> {
+  get jhipsterConfigWithDefaults(): Readonly<Configuration & Record<string, any>> {
     const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
     defaults(configWithDefaults, {
       skipFakeData: false,
@@ -269,7 +269,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       autoCrlf: false,
       pages: [],
     });
-    return configWithDefaults as ApplicationConfiguration;
+    // @ts-ignore
+    return configWithDefaults as Configuration;
   }
 
   /**
@@ -651,56 +652,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   }
 
   /**
-   * Generate a date to be used by Liquibase changelogs.
-   *
-   * @param {Boolean} [reproducible=true] - Set true if the changelog date can be reproducible.
-   *                                 Set false to create a changelog date incrementing the last one.
-   * @return {String} Changelog date.
-   */
-  dateFormatForLiquibase(reproducible?: boolean): string {
-    const control = this.sharedData.getControl();
-    reproducible = reproducible ?? Boolean(control.reproducible);
-    // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
-    const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
-    let now = new Date();
-    // Miliseconds is ignored for changelogDate.
-    now.setMilliseconds(0);
-    // Run reproducible timestamp when regenerating the project with reproducible option or an specific timestamp.
-    if (reproducible || creationTimestamp) {
-      if (control.reproducibleLiquibaseTimestamp) {
-        // Counter already started.
-        now = control.reproducibleLiquibaseTimestamp;
-      } else {
-        // Create a new counter
-        const newCreationTimestamp: string = (creationTimestamp as string) ?? this.config.get('creationTimestamp');
-        now = newCreationTimestamp ? new Date(newCreationTimestamp) : now;
-        now.setMilliseconds(0);
-      }
-      now.setMinutes(now.getMinutes() + 1);
-      control.reproducibleLiquibaseTimestamp = now;
-
-      // Reproducible build can create future timestamp, save it.
-      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
-      if (!lastLiquibaseTimestamp || now.getTime() > lastLiquibaseTimestamp) {
-        this.config.set('lastLiquibaseTimestamp', now.getTime());
-      }
-    } else {
-      // Get and store lastLiquibaseTimestamp, a future timestamp can be used
-      let lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
-      if (lastLiquibaseTimestamp) {
-        lastLiquibaseTimestamp = new Date(lastLiquibaseTimestamp);
-        if (lastLiquibaseTimestamp >= now) {
-          now = lastLiquibaseTimestamp;
-          now.setSeconds(now.getSeconds() + 1);
-          now.setMilliseconds(0);
-        }
-      }
-      this.jhipsterConfig.lastLiquibaseTimestamp = now.getTime();
-    }
-    return formatDateForChangelog(now);
-  }
-
-  /**
    * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
    */
   jhipsterTemplatePath(...path: string[]): string {
@@ -725,7 +676,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Compose with a jhipster generator using default jhipster config.
    * @return {object} the composed generator
    */
-  async composeWithJHipster<const G extends string>(gen: G, options?: ComposeOptions<BaseApplicationGenerator>) {
+  async composeWithJHipster<
+    CURRENT_GENERATOR extends CoreGenerator<Options, Entity, Application, Sources, Control, SharedData, Configuration, Features>,
+  >(gen: string, options?: ComposeOptions<CURRENT_GENERATOR>) {
     assert(typeof gen === 'string', 'generator should to be a string');
     let generator: string = gen;
     if (!isAbsolute(generator)) {
@@ -751,7 +704,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * Compose with a jhipster generator using default jhipster config, but queue it immediately.
    */
-  async dependsOnJHipster(generator: string, options?: ComposeOptions<BaseApplicationGenerator>) {
+  async dependsOnJHipster<G extends CoreGenerator<Options, Entity, Application, Sources, Control, SharedData, Configuration, Features>>(
+    generator: string,
+    options?: ComposeOptions<G>,
+  ) {
     return this.composeWithJHipster(generator, {
       ...options,
       schedule: false,
@@ -829,17 +785,19 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * write the given files using provided options.
    */
-  async writeFiles<DataType = any>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
+  async writeFiles(options: WriteFileOptions<Sources, this>): Promise<string[]> {
     const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
-    const { sections, blocks, context = this, templates } = options as any;
+    // @ts-ignore
+    const { sections, blocks, context = this, templates } = options;
     const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const { _: commonSpec = {} } = sections || {};
     const { transform: sectionTransform = [] } = commonSpec;
     const startTime = new Date().getMilliseconds();
-    const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = context as BaseApplication;
+    // @ts-ignore
+    const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = context as Sources;
 
     const templateData = this.jhipster7Migration
       ? createJHipster7Context(this, context, { log: this.jhipster7Migration === 'verbose' ? msg => this.log.info(msg) : () => {} })
@@ -969,8 +927,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             }
             const sourceBasename = basename(sourceFileFrom);
             const seed = `${context.entityClass}-${sourceBasename}${context.fakerSeed ?? ''}`;
-            Object.values((this.sharedData as any).getApplication()?.sharedEntities ?? {}).forEach((entity: any) => {
-              entity.resetFakerSeed(seed);
+            Object.values(this.sharedData.getApplication()?.sharedEntities ?? {}).forEach(entity => {
+              (entity as Entity).resetFakerSeed(seed);
             });
             // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
             useAsync = false;
@@ -1200,6 +1158,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       const { autoCrlf = this.jhipsterConfigWithDefaults.autoCrlf, assertModified } = actualOptions;
       try {
         const fileHasCrlf = autoCrlf && hasCrlr(newContent);
+        // @ts-ignore
         newContent = joinCallbacks(...callbacks).call(this, fileHasCrlf ? normalizeLineEndings(newContent, LF) : newContent, filePath);
         if (assertModified && originalContent === newContent) {
           const errorMessage = `${chalk.yellow('Fail to modify ')}${filePath}.`;
@@ -1412,10 +1371,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
     const { ignoreNeedlesError } = this.options;
 
-    return new SharedData(
+    return new CoreSharedData<Entity, Application, Sources, Control>(
       sharedApplications[applicationId],
       { destinationPath: this.destinationPath(), memFs: this.env.sharedFs, log: this.log, logCwd: this.env.logCwd },
+      // @ts-ignore
       { ignoreNeedlesError },
-    );
+    ) as SharedData;
   }
 }
