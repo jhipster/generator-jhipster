@@ -398,12 +398,12 @@ export default class extends BaseGenerator {
         if (this.recreatePackageLock) {
           await rm(this.destinationPath('package-lock.json'), { force: true });
           await rm(this.destinationPath('node_modules'), { force: true, recursive: true });
-          await this.spawnCommand('npm', ['install'], { stdio: 'inherit' });
+          await this.spawn('npm', ['install'], { stdio: 'inherit' });
         }
 
         if (this.options[LINK_JHIPSTER_DEPENDENCY]) {
           this.log.verboseInfo('Linking generator-jhipster');
-          await this.spawnCommand('npm', ['link', 'generator-jhipster'], { stdio: 'inherit' });
+          await this.spawn('npm', ['link', 'generator-jhipster'], { stdio: 'inherit' });
         }
 
         if (generateSnapshots) {
@@ -411,7 +411,7 @@ export default class extends BaseGenerator {
             // Generate snapshots to add to git.
             this.log.verboseInfo(`
 This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' to generate snapshots and commit to git.`);
-            await this.spawnCommand('npm', ['run', 'update-snapshot']);
+            await this.spawn('npm', ['run', 'update-snapshot']);
           } catch (error) {
             if (generateSnapshots !== undefined) {
               // We are forcing to generate snapshots fail the generation.
@@ -424,13 +424,13 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
         if (control.jhipsterOldVersion) {
           // Apply prettier and eslint to fix non generated files on upgrade.
           try {
-            await this.spawnCommand('npm', ['run', 'prettier-format']);
+            await this.spawn('npm', ['run', 'prettier-format']);
           } catch {
             // Ignore error
           }
 
           try {
-            await this.spawnCommand('npm', ['run', 'lint-fix']);
+            await this.spawn('npm', ['run', 'lint-fix']);
           } catch {
             // Ignore error
           }

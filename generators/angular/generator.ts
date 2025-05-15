@@ -157,14 +157,14 @@ export default class AngularGenerator extends BaseApplicationGenerator<DefaultTa
 
         source.addIconImport = args => {
           const iconsPath = `${application.srcMainWebapp}app/config/font-awesome-icons.ts`;
-          const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Icon imports not updated with icon';
+          const ignoreNonExisting = this.control.ignoreNeedlesError && 'Icon imports not updated with icon';
           this.editFile(iconsPath, { ignoreNonExisting }, addIconImport(args));
         };
 
         if (application.clientBundlerWebpack) {
           source.addWebpackConfig = args => {
             const webpackPath = `${application.clientRootDir}webpack/webpack.custom.js`;
-            const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
+            const ignoreNonExisting = this.control.ignoreNeedlesError && 'Webpack configuration file not found';
             this.editFile(
               webpackPath,
               { ignoreNonExisting },

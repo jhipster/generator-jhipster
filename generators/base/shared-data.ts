@@ -25,7 +25,6 @@ import { lt as semverLessThan } from 'semver';
 import { defaults } from 'lodash-es';
 import type { MemFsEditor } from 'mem-fs-editor';
 import { create } from 'mem-fs-editor';
-import type { Storage } from 'yeoman-generator';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import type { ApplicationType, BaseApplicationSource } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
@@ -38,7 +37,7 @@ export default class SharedData<EntityType extends BaseEntity = Entity, Applicat
   _log: any;
   _logCwd: string;
 
-  constructor(storage: Storage, { memFs, destinationPath, log, logCwd }, initialControl: Partial<Control> = {}) {
+  constructor(storage: any, { memFs, destinationPath, log, logCwd }, initialControl: Partial<Control> = {}) {
     if (!storage) {
       throw new Error('Storage is required for SharedData');
     }
@@ -58,7 +57,6 @@ export default class SharedData<EntityType extends BaseEntity = Entity, Applicat
 
     defaults(this._storage, {
       sharedDeployment: {},
-      sharedWorkspaces: {},
       sharedEntities: {},
       sharedApplication: {},
       sharedSource: {},
@@ -166,6 +164,11 @@ export default class SharedData<EntityType extends BaseEntity = Entity, Applicat
   getApplication(): Application {
     if (!this._storage.sharedApplication) throw new Error('Shared application not loaded');
     return this._storage.sharedApplication;
+  }
+
+  getDeployment(): Application {
+    if (!this._storage.sharedDeployment) throw new Error('Shared application not loaded');
+    return this._storage.sharedDeployment;
   }
 
   setEntity(entityName: string, entity: { name: string } & Partial<EntityType>): void {

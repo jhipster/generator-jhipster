@@ -357,11 +357,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
 
 export const shouldSupportFeatures = Generator => {
   it('should support features parameter', () => {
-    const instance = new Generator(
-      [],
-      { help: true, namespace: 'foo', resolved: 'bar', env: { cwd: 'foo' }, sharedData: {} },
-      { unique: 'bar' },
-    );
+    const instance = new Generator([], { help: true, namespace: 'foo', resolved: 'bar', env: { cwd: 'foo' } }, { unique: 'bar' });
     expect(instance.features.unique).toBe('bar');
   });
 };

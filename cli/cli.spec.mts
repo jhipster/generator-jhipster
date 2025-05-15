@@ -169,7 +169,7 @@ describe('cli', () => {
       const BaseGenerator = (await import('../generators/base/index.js')).default;
       env = (await helpers.createTestEnv()) as FullEnvironment;
       // @ts-expect-error
-      generator = new (helpers.createDummyGenerator(BaseGenerator))({ env, sharedData: {} });
+      generator = new (helpers.createDummyGenerator(BaseGenerator))({ env });
       generator._options = {
         foo: {
           description: 'Foo',

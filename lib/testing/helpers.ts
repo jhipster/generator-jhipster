@@ -2,7 +2,7 @@ import assert from 'node:assert';
 import { randomInt } from 'node:crypto';
 import { basename, dirname, isAbsolute, join } from 'node:path';
 import { mock } from 'node:test';
-import { merge, set, snakeCase } from 'lodash-es';
+import { merge, snakeCase } from 'lodash-es';
 import type { RunContextSettings, RunResult } from 'yeoman-test';
 import { RunContext, YeomanTest, result } from 'yeoman-test';
 import type Environment from 'yeoman-environment';
@@ -352,6 +352,8 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   withControl(sharedControl: Record<string, any>): this {
     this.sharedControl = this.sharedControl ?? {};
     Object.assign(this.sharedControl, sharedControl);
+    // TODO use contextData api.
+    // return this.withContextData('jhipster:control', this.sharedControl);
     return this.withSharedData({ control: this.sharedControl });
   }
 
@@ -420,14 +422,19 @@ plugins {
 
   private withSharedData(sharedData: Record<string, any>): this {
     if (!this.sharedData) {
-      const applicationId = 'test-application';
       this.sharedData = { ...sharedData };
-      set((this as any).envOptions, `sharedOptions.sharedData.applications.${applicationId}`, this.sharedData);
-      return this.withOptions({
-        applicationId,
-      });
+      this.withContextData('jhipster:shared-data', this.sharedData);
+      return this;
     }
     Object.assign(this.sharedData, sharedData);
+    return this;
+  }
+
+  private withContextData(key: string, sharedData: any): this {
+    this.onEnvironment((env: any) => {
+      const contextMap: Map<string, any> = env.getContextMap(this.targetDirectory);
+      contextMap.set(key, sharedData);
+    });
     return this;
   }
 

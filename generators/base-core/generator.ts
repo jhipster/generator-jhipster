@@ -18,7 +18,6 @@
  */
 import { basename, dirname, extname, isAbsolute, join, join as joinPath, relative } from 'path';
 import { relative as posixRelative } from 'path/posix';
-import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
 import { existsSync, readFileSync, rmSync, statSync } from 'fs';
 import assert from 'assert';
@@ -77,6 +76,7 @@ import { getConfigWithDefaults } from '../../lib/jhipster/index.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { Control } from '../base/types.js';
 
 const {
   INITIALIZING,
@@ -192,7 +192,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
 
-      this.sharedData = this.createSharedData({ help: this.options.help }) as any;
+      this.sharedData = this.createSharedData() as any;
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.parseJHipsterOptions(baseCommand.options);
@@ -257,6 +257,12 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     return this._needleApi;
   }
 
+  get control(): Control {
+    // TODO use contextData api.
+    // return this.getContextData<Control>('jhipster:control', () => ({}) as unknown as Control);
+    return this.sharedData.getControl();
+  }
+
   /**
    * JHipster config with default values fallback
    */
@@ -291,7 +297,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * @param {string} version - A valid semver version string
    */
   isJhipsterVersionLessThan(version: string): boolean {
-    const jhipsterOldVersion = this.sharedData.getControl().jhipsterOldVersion;
+    const jhipsterOldVersion = this.control.jhipsterOldVersion;
     return this.isVersionLessThan(jhipsterOldVersion, version);
   }
 
@@ -307,7 +313,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Get arguments for the priority
    */
   getArgsForPriority(priorityName: string) {
-    const control = this.sharedData.getControl();
+    const control = this.control;
     if (priorityName === POST_WRITING || priorityName === PREPARING || priorityName === POST_PREPARING) {
       const source = this.sharedData.getSource();
       return [{ control, source }];
@@ -557,7 +563,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           } else if (optionDesc.scope === 'blueprint') {
             this.blueprintStorage!.set(optionName, optionValue);
           } else if (optionDesc.scope === 'control') {
-            this.sharedData.getControl()[optionName] = optionValue;
+            this.control[optionName] = optionValue;
           } else if (optionDesc.scope === 'generator') {
             this[optionName] = optionValue;
           } else if (optionDesc.scope === 'context') {
@@ -658,7 +664,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * @return {String} Changelog date.
    */
   dateFormatForLiquibase(reproducible?: boolean): string {
-    const control = this.sharedData.getControl();
+    const control = this.control;
     reproducible = reproducible ?? Boolean(control.reproducible);
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
@@ -1392,28 +1398,17 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     });
   }
 
-  private calculateApplicationId(applicationPath: string) {
-    const dirname = basename(applicationPath);
-    return `${createHash('shake256', { outputLength: 1 }).update(applicationPath, 'utf8').digest('hex')}-${dirname}`;
+  protected getSharedApplication() {
+    return this.sharedData.getApplication();
   }
 
-  protected getSharedApplication(applicationFolder: string = this.destinationPath()) {
-    return this.options.sharedData.applications?.[this.calculateApplicationId(applicationFolder)];
-  }
+  private createSharedData(): SharedData {
+    const application = this.getContextData(`jhipster:shared-data`, () => ({}));
 
-  private createSharedData({ help }: { help?: boolean }): SharedData {
-    const applicationId = this.options.applicationId ?? this.calculateApplicationId(this.destinationPath());
-    if (this.options.sharedData.applications === undefined) {
-      this.options.sharedData.applications = {};
-    }
-    const sharedApplications = help ? {} : this.options.sharedData.applications;
-    if (!sharedApplications[applicationId]) {
-      sharedApplications[applicationId] = {};
-    }
     const { ignoreNeedlesError } = this.options;
 
     return new SharedData(
-      sharedApplications[applicationId],
+      application,
       { destinationPath: this.destinationPath(), memFs: this.env.sharedFs, log: this.log, logCwd: this.env.logCwd },
       { ignoreNeedlesError },
     );

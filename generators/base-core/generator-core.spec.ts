@@ -22,7 +22,7 @@ describe('generator - base-core', () => {
     });
 
     it('no argument', async () => {
-      const base = new Dummy([], { sharedData: {}, env: await helpers.createTestEnv() });
+      const base = new Dummy([], { env: await helpers.createTestEnv() });
       base.parseJHipsterArguments({
         jdlFiles: {
           type: String,
@@ -31,7 +31,7 @@ describe('generator - base-core', () => {
       jestExpect(base.jdlFiles).toBe(undefined);
     });
     it('undefined positional arguments', async () => {
-      const base = new Dummy({ positionalArguments: [], sharedData: {}, env: await helpers.createTestEnv() });
+      const base = new Dummy({ positionalArguments: [], env: await helpers.createTestEnv() });
       base.parseJHipsterArguments({
         jdlFiles: {
           type: String,
@@ -40,7 +40,7 @@ describe('generator - base-core', () => {
       jestExpect(base.jdlFiles).toBe(undefined);
     });
     it('undefined argument', async () => {
-      const base = new Dummy([undefined], { sharedData: {}, env: await helpers.createTestEnv() });
+      const base = new Dummy([undefined], { env: await helpers.createTestEnv() });
       base.parseJHipsterArguments({
         jdlFiles: {
           type: String,
@@ -49,7 +49,7 @@ describe('generator - base-core', () => {
       jestExpect(base.jdlFiles).toBe(undefined);
     });
     it('undefined positional arguments', async () => {
-      const base = new Dummy({ positionalArguments: [undefined], sharedData: {}, env: await helpers.createTestEnv() });
+      const base = new Dummy({ positionalArguments: [undefined], env: await helpers.createTestEnv() });
       base.parseJHipsterArguments({
         jdlFiles: {
           type: String,
@@ -58,7 +58,7 @@ describe('generator - base-core', () => {
       jestExpect(base.jdlFiles).toBe(undefined);
     });
     it('string arguments', async () => {
-      const base = new Dummy(['foo'], { sharedData: {}, env: await helpers.createTestEnv() });
+      const base = new Dummy(['foo'], { env: await helpers.createTestEnv() });
       base.parseJHipsterArguments({
         jdlFiles: {
           type: String,
@@ -67,7 +67,7 @@ describe('generator - base-core', () => {
       jestExpect(base.jdlFiles).toBe('foo');
     });
     it('vararg arguments', async () => {
-      const base = new Dummy(['bar', 'foo'], { sharedData: {}, env: await helpers.createTestEnv() });
+      const base = new Dummy(['bar', 'foo'], { env: await helpers.createTestEnv() });
       base.parseJHipsterArguments({
         first: {
           type: String,
@@ -81,7 +81,7 @@ describe('generator - base-core', () => {
       jestExpect(base.jdlFiles[0]).toMatch('foo');
     });
     it('vararg arguments using positionalArguments', async () => {
-      const base = new Dummy({ positionalArguments: ['bar', ['foo']], sharedData: {}, env: await helpers.createTestEnv() });
+      const base = new Dummy({ positionalArguments: ['bar', ['foo']], env: await helpers.createTestEnv() });
       base.parseJHipsterArguments({
         first: {
           type: String,
