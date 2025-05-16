@@ -665,7 +665,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   dateFormatForLiquibase(reproducible?: boolean): string {
     const control = this.control;
-    reproducible = reproducible ?? Boolean(control.reproducible);
+    reproducible = reproducible ?? Boolean(this.options.reproducible);
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
     let now = new Date();
