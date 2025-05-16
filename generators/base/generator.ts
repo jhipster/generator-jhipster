@@ -97,6 +97,13 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
   }
 
   /**
+   * Configure blueprints once per application.
+   */
+  get #blueprintConfigured() {
+    return this.getContextData('jhipster:blueprintConfigured', { override: true });
+  }
+
+  /**
    * Utility method to get typed objects for autocomplete.
    */
   asAnyTaskGroup<const K extends string>(taskGroup: GenericTaskGroup<this, any, K>): GenericTaskGroup<any, any, K> {
@@ -470,9 +477,7 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
       return [];
     }
 
-    const control = this.control;
-    if (!control.blueprintConfigured) {
-      control.blueprintConfigured = true;
+    if (!this.#blueprintConfigured) {
       await this._configureBlueprints();
     }
 

@@ -1375,7 +1375,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   private createSharedData(): SharedData {
-    const application = this.getContextData(`jhipster:shared-data`, () => ({}));
+    const application = this.getContextData(`jhipster:shared-data`, { factory: () => ({}) });
 
     const { ignoreNeedlesError } = this.options;
 

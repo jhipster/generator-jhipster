@@ -113,7 +113,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         loadAppConfig({
           config: this.jhipsterConfigWithDefaults,
           application,
-          useVersionPlaceholders: (this as any).useVersionPlaceholders,
+          useVersionPlaceholders: this.useVersionPlaceholders,
         });
         loadLanguagesConfig({ application, config: this.jhipsterConfigWithDefaults, control });
 

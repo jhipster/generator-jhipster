@@ -6,11 +6,6 @@ export type Control = {
   existingProject: boolean;
   ignoreNeedlesError: boolean;
   jhipsterOldVersion: string | null;
-  useVersionPlaceholders?: boolean;
-  /**
-   * Configure blueprints once per application.
-   */
-  blueprintConfigured?: boolean;
   reproducibleLiquibaseTimestamp?: Date;
   enviromentHasDockerCompose?: boolean;
   filterEntitiesForClient?: (entity: Entity[]) => Entity[];
