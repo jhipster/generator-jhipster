@@ -126,7 +126,7 @@ type DataCallback<Type, DataType = ApplicationType<Entity>, Generator = CoreGene
 
 export type WriteFileTemplate<DataType = ApplicationType<Entity>, Generator = CoreGenerator> =
   | string
-  | ((this: Generator, data: DataType, filePath: string) => string)
+  | ((this: Generator, data: DataType) => string)
   | {
       condition?: DataCallback<boolean, DataType, Generator>;
       /** source file */
@@ -153,7 +153,7 @@ export type WriteFileBlock<DataType = ApplicationType<Entity>, Generator = CoreG
   to?: ((this: Generator, data: DataType, filePath: string) => string) | string;
   path?: ((this: Generator, data: DataType) => string) | string;
   /** generate destinationFile based on sourceFile */
-  renameTo?: ((this: Generator, data: DataType, filePath: string) => string) | string;
+  renameTo?: (this: Generator, data: DataType, filePath: string) => string;
   /** condition to enable to write the block */
   condition?: (this: Generator, data: DataType) => boolean | undefined;
   /** transforms (files processing) to be applied */
@@ -187,7 +187,7 @@ export type WriteFileOptions<DataType = ApplicationType<Entity>, Generator = Cor
   }) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string };
 } & (
   | {
-      sections: WriteFileSection<DataType, Generator>;
+      sections: WriteFileSection<DataType, Generator> & { _?: { transform?: (() => string)[] } };
     }
   | {
       /** templates to be written */

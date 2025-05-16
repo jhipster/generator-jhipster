@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asWriteFilesSection } from '../base-application/support/task-type-inference.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 
-export const addEntityFiles = {
+export const addEntityFiles = asWriteFilesSection({
   dbChangelog: [
     {
       path: SERVER_MAIN_RES_DIR,
@@ -30,7 +31,7 @@ export const addEntityFiles = {
       ],
     },
     {
-      condition: generator => generator.entity.anyRelationshipIsOwnerSide,
+      condition: (generator: any) => generator.entity.anyRelationshipIsOwnerSide,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
@@ -41,54 +42,54 @@ export const addEntityFiles = {
       ],
     },
   ],
-};
+});
 
-export const updateEntityFiles = {
+export const updateEntityFiles = asWriteFilesSection({
   dbChangelog: [
     {
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
           file: 'config/liquibase/changelog/updated_entity.xml',
-          renameTo: generator =>
+          renameTo: (generator: any) =>
             `config/liquibase/changelog/${generator.databaseChangelog.changelogDate}_updated_entity_${generator.entity.entityClass}.xml`,
         },
       ],
     },
   ],
-};
+});
 
-export const updateConstraintsFiles = {
+export const updateConstraintsFiles = asWriteFilesSection({
   dbChangelog: [
     {
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
           file: 'config/liquibase/changelog/updated_entity_constraints.xml',
-          renameTo: generator =>
+          renameTo: (generator: any) =>
             `config/liquibase/changelog/${generator.databaseChangelog.changelogDate}_updated_entity_constraints_${generator.entity.entityClass}.xml`,
         },
       ],
     },
   ],
-};
+});
 
-export const updateMigrateFiles = {
+export const updateMigrateFiles = asWriteFilesSection({
   dbChangelog: [
     {
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
           file: 'config/liquibase/changelog/updated_entity_migrate.xml',
-          renameTo: generator =>
+          renameTo: (generator: any) =>
             `config/liquibase/changelog/${generator.databaseChangelog.changelogDate}_updated_entity_migrate_${generator.entity.entityClass}.xml`,
         },
       ],
     },
   ],
-};
+});
 
-export const fakeFiles = {
+export const fakeFiles = asWriteFilesSection({
   fakeData: [
     {
       path: SERVER_MAIN_RES_DIR,
@@ -106,19 +107,19 @@ export const fakeFiles = {
       ],
     },
     {
-      condition: generator => generator.entity.anyFieldHasImageContentType || generator.entity.anyFieldIsBlobDerived,
+      condition: (generator: any) => generator.entity.anyFieldHasImageContentType || generator.entity.anyFieldIsBlobDerived,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
           file: 'config/liquibase/fake-data/blob/hipster.png',
-          noEjs: true,
+          transform: false,
         },
       ],
     },
     {
-      condition: generator => generator.entity.anyFieldHasTextContentType,
+      condition: (generator: any) => generator.entity.anyFieldHasTextContentType,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/fake-data/blob/hipster.txt'],
     },
   ],
-};
+});

@@ -33,6 +33,7 @@ import semver, { lt as semverLessThan } from 'semver';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
+
 import SharedData from '../base/shared-data.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
 import type { Logger } from '../base/support/index.js';
@@ -77,6 +78,7 @@ import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import type { Control } from '../base/types.js';
+import { convertWriteFileSectionsToBlocks } from './internal/index.js';
 
 const {
   INITIALIZING,
@@ -147,7 +149,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   ignoreNeedlesError?: boolean;
   experimental?: boolean;
   debugEnabled?: boolean;
-  jhipster7Migration?: boolean | 'verbose' | 'silent';
   relativeDir = relativeDir;
   relative = posixRelative;
 
@@ -227,7 +228,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];
-    this.jhipster7Migration = this.features.jhipster7Migration ?? false;
 
     if (this.features.queueCommandTasks === true) {
       this.on('before:queueOwnTasks', () => {
@@ -840,15 +840,14 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
-    const { sections, blocks, context = this, templates } = options as any;
+    const { context = {} } = options;
     const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
-    const { _: commonSpec = {} } = sections || {};
-    const { transform: sectionTransform = [] } = commonSpec;
     const startTime = new Date().getMilliseconds();
     const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = context as BaseApplication;
 
-    const templateData = this.jhipster7Migration
-      ? createJHipster7Context(this, context, { log: this.jhipster7Migration === 'verbose' ? msg => this.log.info(msg) : () => {} })
+    const { jhipster7Migration } = this.getFeatures();
+    const templateData = jhipster7Migration
+      ? createJHipster7Context(this, context, { log: jhipster7Migration === 'verbose' ? msg => this.log.info(msg) : () => {} })
       : context;
 
     /* Build lookup order first has preference.
@@ -889,7 +888,17 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       throw new Error(`Type not supported ${maybeCallback}`);
     };
 
-    const renderTemplate = async ({ condition, sourceFile, destinationFile, options, noEjs, transform, binary }) => {
+    type RenderTemplateParam = {
+      condition?: boolean;
+      sourceFile: string;
+      destinationFile: string;
+      options?: { renderOptions?: any };
+      noEjs?: boolean;
+      transform?: any[];
+      binary?: boolean;
+    };
+
+    const renderTemplate = async ({ condition, sourceFile, destinationFile, options, noEjs, transform, binary }: RenderTemplateParam) => {
       if (condition !== undefined && !resolveCallback(condition, true)) {
         return undefined;
       }
@@ -910,7 +919,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           .map(rootPath => this.templatePath(rootPath, sourceFile))
           .filter(templateFile => existsSync(appendEjs ? `${templateFile}.ejs` : templateFile));
 
-        if (existingTemplates.length === 0 && this.getFeatures().jhipster7Migration) {
+        if (existingTemplates.length === 0 && jhipster7Migration) {
           existingTemplates = rootTemplatesAbsolutePath
             .map(rootPath => this.templatePath(rootPath, appendEjs ? sourceFile : `${sourceFile}.ejs`))
             .filter(templateFile => existsSync(templateFile));
@@ -1008,34 +1017,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       return targetFile;
     };
 
-    let parsedBlocks = blocks;
-    if (sections) {
-      assert(typeof sections === 'object', 'sections must be an object');
-      const parsedSections = Object.entries(sections)
-        .map(([sectionName, sectionBlocks]) => {
-          if (sectionName.startsWith('_')) return undefined;
-          assert(Array.isArray(sectionBlocks), `Section must be an array for ${sectionName}`);
-          return { sectionName, sectionBlocks };
-        })
-        .filter(Boolean);
+    let parsedTemplates: RenderTemplateParam[];
+    if ('sections' in options || 'blocks' in options) {
+      const sectionTransform = 'sections' in options ? (options.sections._?.transform ?? []) : [];
 
-      parsedBlocks = parsedSections
-        .map(({ sectionName, sectionBlocks }: any) => {
-          return sectionBlocks.map((block, blockIdx) => {
-            const blockSpecPath = `${sectionName}[${blockIdx}]`;
-            assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
-            return { blockSpecPath, ...block };
-          });
-        })
-        .flat();
-    }
-
-    let parsedTemplates;
-    if (parsedBlocks) {
-      parsedTemplates = parsedBlocks
+      parsedTemplates = ('sections' in options ? convertWriteFileSectionsToBlocks<DataType, this>(options.sections) : options.blocks)
         .map((block, blockIdx) => {
           const {
-            blockSpecPath = `${blockIdx}`,
             path: blockPathValue = './',
             from: blockFromCallback,
             to: blockToCallback,
@@ -1043,6 +1031,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             transform: blockTransform = [],
             renameTo: blockRenameTo,
           } = block;
+
+          // Temporary variable added to identify section/block
+          const blockSpecPath: string = 'blockSpecPath' in block ? (block.blockSpecPath as string) : `${blockIdx}`;
+
           assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
           assert(Array.isArray(block.templates), `Block templates must be an array for ${blockSpecPath}`);
           const condition = resolveCallback(blockConditionCallback);
@@ -1063,7 +1055,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             if (typeof fileSpec === 'function') {
               fileSpec = fileSpec.call(this, context);
             }
-            let { noEjs } = fileSpec;
+            let noEjs: boolean | undefined;
             let derivedTransform;
             if (typeof blockTransform === 'boolean') {
               noEjs = !blockTransform;
@@ -1075,7 +1067,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               const sourceFile = join(blockPath, fileSpec);
               let destinationFile;
               if (blockRenameTo) {
-                destinationFile = this.destinationPath(blockRenameTo.call(this, context, fileSpec, this));
+                destinationFile = this.destinationPath(blockRenameTo.call(this, context, fileSpec));
               } else {
                 destinationFile = this.destinationPath(blockTo, fileSpec);
               }
@@ -1097,7 +1089,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             sourceFile = join(blockPath, normalizedFile);
             destinationFile = join(resolveCallback(destinationFile || renameTo, normalizedFile));
             if (blockRenameTo) {
-              destinationFile = this.destinationPath(blockRenameTo.call(this, context, destinationFile, this));
+              destinationFile = this.destinationPath(blockRenameTo.call(this, context, destinationFile));
             } else {
               destinationFile = this.destinationPath(blockTo, destinationFile);
             }
@@ -1106,14 +1098,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             if (override !== undefined && !override && (this as any).fs.exists(destinationFile.replace(/\.jhi$/, ''))) {
               this.log.debug(`skipping file ${destinationFile}`);
               return undefined;
-            }
-
-            // TODO remove for jhipster 8
-            if (noEjs === undefined) {
-              const { method } = fileSpec;
-              if (method === 'copy') {
-                noEjs = true;
-              }
             }
 
             return {
@@ -1128,14 +1112,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           });
         })
         .flat()
-        .filter(template => template);
+        .filter(template => template) as RenderTemplateParam[];
     } else {
-      parsedTemplates = templates.map(template => {
+      parsedTemplates = options.templates.map(template => {
         if (typeof template === 'string') {
           return { sourceFile: template, destinationFile: template };
         }
         return template;
-      });
+      }) as RenderTemplateParam[];
     }
 
     const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)).filter(Boolean));
