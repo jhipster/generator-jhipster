@@ -8,8 +8,8 @@ import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_REACT } from '../generator-list.js';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,16 +29,6 @@ const clientAdminFiles = clientSrcDir => [
   `${clientSrcDir}app/modules/administration/metrics/metrics.tsx`,
   `${clientSrcDir}app/modules/administration/logs/logs.tsx`,
 ];
-
-class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
-  get [BaseApplicationGenerator.PREPARING]() {
-    return {
-      mockTranslations({ control }) {
-        control.getWebappTranslation = () => 'translations';
-      },
-    };
-  }
-}
 
 describe(`generator - ${clientFramework}`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -60,8 +50,11 @@ describe(`generator - ${clientFramework}`, () => {
         await helpers
           .runJHipster(generator)
           .withJHipsterConfig(sampleConfig, entities)
-          .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
-          .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
+          .withSharedApplication({
+            gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway',
+            getWebappTranslation: () => 'translations',
+          })
+          .withMockedGenerators(['jhipster:languages'])
           .withMockedSource()
           .withMockedGenerators(['jhipster:common']);
       });
@@ -123,6 +116,82 @@ describe(`generator - ${clientFramework}`, () => {
           });
         }
       });
+    });
+  });
+
+  describe('addClientStyle needle api', () => {
+    before(async () => {
+      await helpers
+        .runJHipster('react')
+        .withJHipsterConfig({
+          clientFramework: 'react',
+          skipServer: true,
+        })
+        .withTask(
+          'postWriting',
+          asPostWritingTask(({ source }) => {
+            source.addClientStyle!({ style: '@import without-comment' });
+            source.addClientStyle!({ style: '@import with-comment', comment: 'my comment' });
+          }),
+        );
+    });
+
+    it('Assert app.scss is updated', () => {
+      runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/app.scss`, '@import without-comment');
+      runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/app.scss`, '@import with-comment');
+      runResult.assertFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/app.scss`,
+        '* ==========================================================================\n' +
+          'my comment\n' +
+          '========================================================================== */\n',
+      );
+    });
+  });
+
+  describe('addEntitiesToClient needle api', () => {
+    before(async () => {
+      await helpers
+        .runJHipster('react')
+        .withJHipsterConfig({
+          clientFramework: 'react',
+          enableTranslation: false,
+        })
+        .withTask(
+          'postWriting',
+          asPostWritingTask(({ application, source }) => {
+            source.addEntitiesToClient({
+              application,
+              entities: [
+                {
+                  entityAngularName: 'entityName',
+                  entityPage: 'routerName',
+                  entityInstance: 'entityInstance',
+                  entityFolderName: 'entityFolderName',
+                  entityFileName: 'entityFileName',
+                  entityClassHumanized: 'Router Name',
+                } as any,
+              ],
+            });
+          }),
+        );
+    });
+
+    it('Assert entity is added to module', () => {
+      const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/routes.tsx`;
+      const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/entities/reducers.ts`;
+
+      runResult.assertFileContent(indexModulePath, "import entityName from './entityFolderName';");
+      runResult.assertFileContent(indexModulePath, '<Route path="entityFileName/*" element={<entityName />} />');
+
+      runResult.assertFileContent(indexReducerPath, "import entityInstance from 'app/entities/entityFolderName/entityFileName.reducer';");
+      runResult.assertFileContent(indexReducerPath, 'entityInstance,');
+    });
+
+    it('Assert entity is added to menu', () => {
+      runResult.assertFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/menu.tsx`,
+        /<MenuItem icon="asterisk" to="\/routerName">\n( *)Router Name\n( *)<\/MenuItem>/,
+      );
     });
   });
 });

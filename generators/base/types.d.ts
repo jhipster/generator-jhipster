@@ -1,5 +1,4 @@
 import type { Entity } from '../base-application/index.js';
-import type { GetWebappTranslationCallback } from '../../lib/types/base/translation.js';
 
 export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
 
@@ -27,5 +26,4 @@ export type Control = {
    * cleanupFiles('4.0.0', { '6.0.0': ['file1', 'file2', [application.shouldRemove, 'file3']] })
    */
   cleanupFiles: (cleanup: CleanupArgumentType) => Promise<void> | ((oldVersion: string, cleanup: CleanupArgumentType) => Promise<void>);
-  getWebappTranslation?: GetWebappTranslationCallback;
 };

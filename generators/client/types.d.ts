@@ -5,6 +5,7 @@ import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/
 import type { PostWritingEntitiesTaskParam } from '../../lib/types/application/tasks.js';
 import type { PartialAngularApplication } from '../angular/types-partial.js';
 import type { Language } from '../languages/support/languages.ts';
+import type { GetWebappTranslationCallback } from '../../lib/types/base/translation.js';
 import type Command from './command.ts';
 
 type ApplicationClientProperties = ExportApplicationPropertiesFromCommand<typeof Command>;
@@ -17,6 +18,7 @@ export type FrontendApplication = ApplicationClientProperties &
     webappEnumerationsDir?: string;
     clientFrameworkBuiltIn?: boolean;
     frontendAppName?: string;
+    getWebappTranslation?: GetWebappTranslationCallback;
   };
 
 /**
@@ -36,6 +38,13 @@ export type ClientResources = {
 };
 
 export type ClientSourceType = JavaScriptSourceType & {
+  /**
+   * Add style to css file.
+   */
+  addClientStyle?: (args: { style: string; comment?: string }) => void;
+  /**
+   * Add entities to client.
+   */
   addEntitiesToClient: (arg1: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) => void;
   /**
    * Add external resources to root file(index.html).

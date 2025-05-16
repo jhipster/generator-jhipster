@@ -62,24 +62,9 @@ export const writeEntitiesFiles = asWritingEntitiesTask(async function ({ contro
   }
 });
 
-export const postWriteEntitiesFiles = asPostWritingEntitiesTask(async function ({ control, application, entities }) {
-  for (const entity of (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser)) {
-    if (!entity.embedded) {
-      const { entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName } = entity;
-
-      const { applicationTypeMicroservice, clientSrcDir } = application;
-      this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, {
-        applicationTypeMicroservice: applicationTypeMicroservice!,
-        clientSrcDir: clientSrcDir!,
-      });
-      (this as any).addEntityToMenu(
-        entity.entityPage,
-        application.enableTranslation,
-        entity.entityTranslationKeyMenu,
-        entity.entityClassHumanized,
-      );
-    }
-  }
+export const postWriteEntitiesFiles = asPostWritingEntitiesTask(async function ({ control, application, entities, source }) {
+  const clientEntities = (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser);
+  source.addEntitiesToClient({ application, entities: clientEntities });
 });
 
 export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ control, application, entities }) {

@@ -54,6 +54,7 @@ describe(`generator - ${generator}`, () => {
           userManagement: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
           springBootDependencies: expect.any(Object),
+          translations: expect.any(Object),
         });
       });
     });
@@ -76,6 +77,7 @@ describe(`generator - ${generator}`, () => {
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
           springBootDependencies: expect.any(Object),
+          translations: expect.any(Object),
         });
       });
     });

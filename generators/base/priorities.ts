@@ -183,7 +183,7 @@ export const PRIORITY_NAMES = {
   INSTALL,
   POST_INSTALL,
   END,
-};
+} as const;
 
 export const PRIORITY_NAMES_LIST = [
   INITIALIZING,
