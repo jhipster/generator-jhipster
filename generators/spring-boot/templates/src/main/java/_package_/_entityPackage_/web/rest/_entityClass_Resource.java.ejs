@@ -148,7 +148,7 @@ public class <%= entityClass %>Resource {
   } _%>
     private static final String ENTITY_NAME = "<%= entityName %>";
 
-    @Value("${jhipster.clientApp.name}")
+    @Value("${jhipster.clientApp.name:<%= camelizedBaseName %>}")
     private String applicationName;
 <%_ } _%>
     <%_

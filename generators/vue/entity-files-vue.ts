@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/index.js';
-import { clientApplicationTemplatesBlock } from '../client/support/index.js';
+import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.js';
 
 export const entityFiles = {
   client: [
@@ -51,8 +51,8 @@ export const entityFiles = {
   ],
 };
 
-export const writeEntityFiles = asWritingEntitiesTask(async function writeEntityFiles({ control, application, entities }) {
-  for (const entity of (control.filterEntitiesAndPropertiesForClient ?? (entities => entities))(entities).filter(
+export const writeEntityFiles = asWritingEntitiesTask(async function writeEntityFiles({ application, entities }) {
+  for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesForClient)(entities).filter(
     entity => !entity.skipClient && !entity.builtInUser,
   )) {
     await this.writeFiles({
@@ -62,22 +62,17 @@ export const writeEntityFiles = asWritingEntitiesTask(async function writeEntity
   }
 });
 
-export const postWriteEntityFiles = asPostWritingEntitiesTask(async function postWriteEntityFiles({
-  control,
-  application,
-  entities,
-  source,
-}) {
+export const postWriteEntityFiles = asPostWritingEntitiesTask(async function postWriteEntityFiles({ application, entities, source }) {
   source.addEntitiesToClient({
     application,
-    entities: (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(
+    entities: (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(
       entity => !entity.builtInUser && !entity.embedded,
     ),
   });
 });
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ control, application, entities }) {
-  for (const entity of (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(
+export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ application, entities }) {
+  for (const entity of (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(
     entity => !entity.builtInUser && !entity.embedded,
   )) {
     const { entityFolderName, entityFileName } = entity;

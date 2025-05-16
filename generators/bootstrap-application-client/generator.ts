@@ -47,6 +47,11 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
 
   get loading() {
     return this.asLoadingTaskGroup({
+      cancel({ application }) {
+        if (application.skipClient) {
+          this.cancelCancellableTasks();
+        }
+      },
       loadApplication({ application }) {
         loadConfig(clientCommand.configs, { config: this.jhipsterConfigWithDefaults, application });
         loadClientConfig({ config: this.jhipsterConfigWithDefaults, application });
@@ -76,12 +81,12 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
 
   get default() {
     return this.asDefaultTaskGroup({
-      control({ control }) {
-        control.filterEntitiesForClient ??= filterEntitiesForClient;
-        control.filterEntityPropertiesForClient ??= filterEntityPropertiesForClient;
-        control.filterEntitiesAndPropertiesForClient ??= entities => {
-          entities = control.filterEntitiesForClient!(entities);
-          entities.forEach(control.filterEntityPropertiesForClient!);
+      addFallback({ application }) {
+        application.filterEntitiesForClient ??= filterEntitiesForClient;
+        application.filterEntityPropertiesForClient ??= filterEntityPropertiesForClient;
+        application.filterEntitiesAndPropertiesForClient ??= entities => {
+          entities = application.filterEntitiesForClient!(entities);
+          entities.forEach(application.filterEntityPropertiesForClient!);
           return entities;
         };
       },

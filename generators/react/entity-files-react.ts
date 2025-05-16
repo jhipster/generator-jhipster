@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
-import { clientApplicationTemplatesBlock } from '../client/support/index.js';
+import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.js';
 
 export const reactFiles = {
   client: [
@@ -51,9 +51,9 @@ export const reactFiles = {
   ],
 };
 
-export const writeEntitiesFiles = asWritingEntitiesTask(async function ({ control, application, entities }) {
-  for (const entity of (control.filterEntitiesAndPropertiesForClient ?? (entities => entities))(entities).filter(
-    entity => !entity.builtInUser,
+export const writeEntitiesFiles = asWritingEntitiesTask(async function ({ application, entities }) {
+  for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesForClient)(entities).filter(
+    entity => !entity.builtInUser && !entity.embedded,
   )) {
     await this.writeFiles({
       sections: reactFiles,
@@ -62,13 +62,17 @@ export const writeEntitiesFiles = asWritingEntitiesTask(async function ({ contro
   }
 });
 
-export const postWriteEntitiesFiles = asPostWritingEntitiesTask(async function ({ control, application, entities, source }) {
-  const clientEntities = (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser);
+export const postWriteEntitiesFiles = asPostWritingEntitiesTask(async function ({ application, entities, source }) {
+  const clientEntities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(entities).filter(
+    entity => !entity.builtInUser && !entity.embedded,
+  );
   source.addEntitiesToClient({ application, entities: clientEntities });
 });
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ control, application, entities }) {
-  for (const entity of (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser)) {
+export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ application, entities }) {
+  for (const entity of (application.filterEntitiesForClient ?? filterEntitiesForClient)(entities).filter(
+    entity => !entity.builtInUser && !entity.embedded,
+  )) {
     const { entityFolderName, entityFileName } = entity;
 
     if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
