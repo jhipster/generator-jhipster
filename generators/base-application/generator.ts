@@ -347,7 +347,7 @@ export default class BaseApplicationGenerator<
     });
   }
 
-  getArgsForPriority(priorityName: string): TaskParamWithApplication[] {
+  getArgsForPriority(priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES]): TaskParamWithApplication[] {
     const args = super.getArgsForPriority(priorityName);
     let firstArg = this.getTaskFirstArgForPriority(priorityName);
     if (args.length > 0) {
@@ -359,29 +359,31 @@ export default class BaseApplicationGenerator<
   /**
    * @protected
    */
-  protected getTaskFirstArgForPriority(priorityName: string): TaskParamWithApplication {
+  protected getTaskFirstArgForPriority(priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES]): TaskParamWithApplication {
     if (
-      ![
-        LOADING,
-        PREPARING,
-        POST_PREPARING,
+      !(
+        [
+          LOADING,
+          PREPARING,
+          POST_PREPARING,
 
-        CONFIGURING_EACH_ENTITY,
-        LOADING_ENTITIES,
-        PREPARING_EACH_ENTITY,
-        PREPARING_EACH_ENTITY_FIELD,
-        PREPARING_EACH_ENTITY_RELATIONSHIP,
-        POST_PREPARING_EACH_ENTITY,
+          CONFIGURING_EACH_ENTITY,
+          LOADING_ENTITIES,
+          PREPARING_EACH_ENTITY,
+          PREPARING_EACH_ENTITY_FIELD,
+          PREPARING_EACH_ENTITY_RELATIONSHIP,
+          POST_PREPARING_EACH_ENTITY,
 
-        DEFAULT,
-        WRITING,
-        WRITING_ENTITIES,
-        POST_WRITING,
-        POST_WRITING_ENTITIES,
-        PRE_CONFLICTS,
-        INSTALL,
-        END,
-      ].includes(priorityName)
+          DEFAULT,
+          WRITING,
+          WRITING_ENTITIES,
+          POST_WRITING,
+          POST_WRITING_ENTITIES,
+          PRE_CONFLICTS,
+          INSTALL,
+          END,
+        ] as string[]
+      ).includes(priorityName as any)
     ) {
       return {} as any;
     }
@@ -390,7 +392,7 @@ export default class BaseApplicationGenerator<
     }
     const application = this.sharedData.getApplication();
 
-    if ([PREPARING, LOADING].includes(priorityName)) {
+    if (([PREPARING, LOADING] as string[]).includes(priorityName)) {
       return {
         application,
         applicationDefaults: data => mutateData(application, { __override__: false, ...data }),
@@ -402,13 +404,13 @@ export default class BaseApplicationGenerator<
         entitiesToLoad: this.getEntitiesDataToLoad(),
       } as LoadingEntitiesTaskParam;
     }
-    if ([DEFAULT].includes(priorityName)) {
+    if (([DEFAULT] as string[]).includes(priorityName)) {
       return {
         application,
         ...this.getEntitiesDataForPriorities(),
       } as TaskParamWithEntities;
     }
-    if ([WRITING_ENTITIES, POST_WRITING_ENTITIES].includes(priorityName)) {
+    if (([WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
       const applicationAndEntities = {
         application,
         ...this.getEntitiesDataToWrite(),

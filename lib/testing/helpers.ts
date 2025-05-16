@@ -24,6 +24,8 @@ import type { Entity } from '../types/base/entity.js';
 import { buildJHipster, createProgram } from '../../cli/program.mjs';
 import type { CliCommand } from '../../cli/types.js';
 import type BaseApplicationGenerator from '../../generators/base-application/generator.js';
+import type { PRIORITY_NAMES as APPLICATION_PRIORITY_NAMES } from '../../generators/base-application/priorities.js';
+import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
@@ -481,7 +483,12 @@ plugins {
     return runResult as any;
   }
 
-  withTask(priorityName: string, method: (...args: any[]) => any): this {
+  withTask(
+    priorityName:
+      | (typeof APPLICATION_PRIORITY_NAMES)[keyof typeof APPLICATION_PRIORITY_NAMES]
+      | (typeof WORKSPACES_PRIORITY_NAMES)[keyof typeof WORKSPACES_PRIORITY_NAMES],
+    method: (...args: any[]) => any,
+  ): this {
     return this.onGenerator(async gen => {
       const generator = gen as BaseApplicationGenerator;
       generator.on('queueOwnTasks', () => {
