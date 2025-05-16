@@ -16,21 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Base from './needle-base.js';
-import Client from './client/needle-api/needle-client.js';
-import ClientAngular from './angular/needle-api/needle-client-angular.js';
 import ClientVue from './client/needle-api/needle-client-vue.js';
 
 export default class NeedleApi {
-  base: Base;
-  client: Client;
-  clientAngular: ClientAngular;
   clientVue: ClientVue;
 
   constructor(generator) {
-    this.base = new Base(generator);
-    this.client = new Client(generator);
-    this.clientAngular = new ClientAngular(generator);
     this.clientVue = new ClientVue(generator);
   }
 }
