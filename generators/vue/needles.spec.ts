@@ -32,18 +32,6 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
               } as any,
             ],
           });
-          /*
-        this.addEntityToMenu('routerName', false);
-        this.addEntityToModule(
-          'entityInstance',
-          'entityClass',
-          'entityName',
-          'entityFolderName',
-          'entityFileName',
-          'entityUrl',
-          'microserviceName',
-        );
-        */
         }),
       ),
   );
