@@ -141,9 +141,8 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get default() {
     return this.asDefaultTaskGroup({
-      async queueTranslateTransform({ control, application }) {
-        const { enableTranslation, clientSrcDir } = application;
-        const { getWebappTranslation } = control;
+      async queueTranslateTransform({ application }) {
+        const { enableTranslation, clientSrcDir, getWebappTranslation } = application;
 
         assert.ok(getWebappTranslation, 'getWebappTranslation is required');
 

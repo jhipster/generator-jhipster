@@ -220,10 +220,10 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
   get default() {
     return this.asDefaultTaskGroup({
-      async loadNativeLanguage({ application, control }) {
+      async loadNativeLanguage({ application }) {
         if (application.skipClient) return;
-        control.translations = control.translations ?? {};
-        this.translationData = new TranslationData({ generator: this, translations: control.translations });
+        application.translations = application.translations ?? {};
+        this.translationData = new TranslationData({ generator: this, translations: application.translations });
         const { clientSrcDir, enableTranslation, nativeLanguage } = application;
         const fallbackLanguage = 'en';
         this.queueLoadLanguages({ clientSrcDir, enableTranslation, nativeLanguage, fallbackLanguage });
@@ -236,7 +236,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         };
         this.env.sharedFs.on('change', listener);
 
-        control.getWebappTranslation = (...args) => this.translationData.getClientTranslation(...args);
+        application.getWebappTranslation = (...args) => this.translationData.getClientTranslation(...args);
       },
     });
   }
