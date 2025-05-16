@@ -59,15 +59,17 @@ export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseAp
 
   abstract isChangelogNew({ entityName, changelogDate }): boolean;
 
-  protected getTaskFirstArgForPriority(priorityName: string): TaskParamWithChangelogsAndApplication | TaskParamWithApplication {
+  protected getTaskFirstArgForPriority(
+    priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES],
+  ): TaskParamWithChangelogsAndApplication | TaskParamWithApplication {
     const firstArg = super.getTaskFirstArgForPriority(priorityName);
-    if ([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES].includes(priorityName)) {
+    if (([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
       this.entityChanges = this.generateIncrementalChanges();
     }
-    if ([DEFAULT].includes(priorityName)) {
+    if (([DEFAULT] as string[]).includes(priorityName)) {
       return { ...firstArg, entityChanges: this.entityChanges };
     }
-    if ([WRITING_ENTITIES, POST_WRITING_ENTITIES].includes(priorityName)) {
+    if (([WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
       // const { entities = [] } = this.options;
       // const filteredEntities = data.entities.filter(entity => entities.includes(entity.name));
       return { ...firstArg, entityChanges: this.entityChanges };

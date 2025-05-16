@@ -173,18 +173,20 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
   getArgsForPriority(priorityName: string): any {
     const args = super.getArgsForPriority(priorityName);
     if (
-      ![
-        PROMPTING_WORKSPACES,
-        CONFIGURING_WORKSPACES,
-        LOADING_WORKSPACES,
-        PREPARING_WORKSPACES,
-        DEFAULT,
-        WRITING,
-        POST_WRITING,
-        PRE_CONFLICTS,
-        INSTALL,
-        END,
-      ].includes(priorityName)
+      !(
+        [
+          PROMPTING_WORKSPACES,
+          CONFIGURING_WORKSPACES,
+          LOADING_WORKSPACES,
+          PREPARING_WORKSPACES,
+          DEFAULT,
+          WRITING,
+          POST_WRITING,
+          PRE_CONFLICTS,
+          INSTALL,
+          END,
+        ] as string[]
+      ).includes(priorityName)
     ) {
       return args;
     }

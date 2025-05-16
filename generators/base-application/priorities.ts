@@ -126,12 +126,12 @@ export const ENTITY_PRIORITY_NAMES = {
   POST_PREPARING_EACH_ENTITY,
   WRITING_ENTITIES,
   POST_WRITING_ENTITIES,
-};
+} as const;
 
 export const PRIORITY_NAMES = {
   ...PRIORITY_NAMES_BASE,
   ...ENTITY_PRIORITY_NAMES,
-};
+} as const;
 
 export const QUEUES = {
   ...QUEUES_BASE,
