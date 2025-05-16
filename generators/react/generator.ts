@@ -18,7 +18,6 @@
  */
 import { isFileStateModified } from 'mem-fs-editor/state';
 import chalk from 'chalk';
-import { camelCase, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.js';
@@ -117,6 +116,72 @@ export default class ReactGenerator extends BaseApplicationGenerator {
               contentToAdd: `,${args.config}`,
             }),
           );
+        };
+
+        source.addClientStyle = ({ style, comment }) => {
+          comment = comment
+            ? `/* ==========================================================================
+${comment}
+========================================================================== */
+`
+            : '';
+          this.editFile(
+            `${application.clientSrcDir}app/app.scss`,
+            createNeedleCallback({
+              needle: 'scss-add-main',
+              contentToAdd: `${comment}${style}`,
+              contentToCheck: style,
+            }),
+          );
+        };
+
+        source.addEntitiesToClient = ({ application, entities }) => {
+          const entityRoutes = `${application.clientSrcDir}app/entities/routes.tsx`;
+          const entityReducers = `${application.clientSrcDir}app/entities/reducers.ts`;
+          const entityMenu = `${application.clientSrcDir}app/entities/menu.tsx`;
+          for (const entity of entities) {
+            const {
+              entityAngularName,
+              entityInstance,
+              entityFolderName,
+              entityFileName,
+              entityPage,
+              entityTranslationKeyMenu,
+              entityClassHumanized,
+            } = entity;
+
+            this.editFile(
+              entityMenu,
+              createNeedleCallback({
+                needle: 'add-entity-to-menu',
+                contentToAdd: `<MenuItem icon="asterisk" to="/${entityPage}">
+  ${application.enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${entityClassHumanized}`}
+</MenuItem>`,
+              }),
+            );
+            this.editFile(
+              entityRoutes,
+              createNeedleCallback({
+                needle: 'add-route-import',
+                contentToAdd: `import ${entityAngularName} from './${entityFolderName}';`,
+              }),
+              createNeedleCallback({
+                needle: 'add-route-path',
+                contentToAdd: `<Route path="${application.applicationTypeMicroservice ? '/' : ''}${entityFileName}/*" element={<${entityAngularName} />} />`,
+              }),
+            );
+            this.editFile(
+              entityReducers,
+              createNeedleCallback({
+                needle: 'add-reducer-import',
+                contentToAdd: `import ${entityInstance} from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`,
+              }),
+              createNeedleCallback({
+                needle: 'add-reducer-combine',
+                contentToAdd: `${entityInstance},`,
+              }),
+            );
+          }
         };
       },
     });
@@ -271,49 +336,6 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   /**
    * @private
-   * Add a new entity in the "entities" menu.
-   *
-   * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
-   * @param {string} entityTranslationValue - i18n value for entity entry in menu
-   */
-  addEntityToMenu(
-    routerName,
-    enableTranslation,
-    entityTranslationKeyMenu = camelCase(routerName),
-    entityTranslationValue = startCase(routerName),
-  ) {
-    this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
-  }
-
-  /**
-   * @experimental
-   * Add a new entity in the TS modules file.
-   *
-   * @param {string} entityInstance - Entity Instance
-   * @param {string} entityClass - Entity Class
-   * @param {string} entityName - Entity Name
-   * @param {string} entityFolderName - Entity Folder Name
-   * @param {string} entityFileName - Entity File Name
-   * @param {string} entityUrl - Entity router URL
-   */
-  addEntityToModule(
-    entityInstance,
-    entityClass,
-    entityName,
-    entityFolderName,
-    entityFileName,
-    { applicationTypeMicroservice, clientSrcDir },
-  ) {
-    this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName, {
-      applicationTypeMicroservice,
-      clientSrcDir,
-    });
-  }
-
-  /**
-   * @private
    * Generate Entity Client Field Default Values
    *
    * @param {Array|Object} fields - array of fields
@@ -341,30 +363,6 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   generateEntityClientEnumImports(fields) {
     return getClientEnumImportsFormat(fields, REACT);
-  }
-
-  /**
-   * @private
-   * Add new scss style to the react application in "app.scss".
-   *
-   * @param {string} style - css to add in the file
-   * @param {string} comment - comment to add before css code
-   *
-   * example:
-   *
-   * style = '.jhipster {\n     color: #baa186;\n}'
-   * comment = 'New JHipster color'
-   *
-   * * ==========================================================================
-   * New JHipster color
-   * ========================================================================== *
-   * .jhipster {
-   *     color: #baa186;
-   * }
-   *
-   */
-  addAppSCSSStyle(style, comment?) {
-    this.needleApi.clientReact.addAppSCSSStyle(style, comment);
   }
 
   /**

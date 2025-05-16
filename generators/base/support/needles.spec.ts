@@ -156,7 +156,7 @@ describe('needles - support', () => {
       ).toThrow();
     });
 
-    ['//', '<!--', '/*', '#'].forEach(needlePrefix => {
+    ['//', '<!--', '/*', '#', '{/*'].forEach(needlePrefix => {
       describe(`${needlePrefix} prefixed needles`, () => {
         const needle = 'a-needle';
         const contentToAdd = `a bar value
