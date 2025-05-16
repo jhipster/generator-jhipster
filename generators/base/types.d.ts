@@ -10,7 +10,6 @@ export type Control = BaseApplicationControlProperties & {
   existingProject: boolean;
   ignoreNeedlesError: boolean;
   jhipsterOldVersion: string | null;
-  useVersionPlaceholders?: boolean;
   reproducibleLiquibaseTimestamp?: Date;
   enviromentHasDockerCompose?: boolean;
   filterEntitiesForClient?: (entity: Entity[]) => Entity[];
