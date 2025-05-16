@@ -42,8 +42,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
   }
 
   async beforeQueue() {
-    loadStoredAppOptions.call(this);
-
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
