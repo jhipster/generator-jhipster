@@ -1,12 +1,8 @@
 import type { Entity } from '../base-application/index.js';
-import type { ExportControlPropertiesFromCommand } from '../../lib/command/index.js';
-import type command from './command.ts';
-
-type BaseApplicationControlProperties = ExportControlPropertiesFromCommand<typeof command>;
 
 export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
 
-export type Control = BaseApplicationControlProperties & {
+export type Control = {
   existingProject: boolean;
   ignoreNeedlesError: boolean;
   jhipsterOldVersion: string | null;

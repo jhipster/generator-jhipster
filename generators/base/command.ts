@@ -53,7 +53,7 @@ const command = {
     reproducible: {
       description: 'Try to reproduce changelog',
       type: Boolean,
-      scope: 'control',
+      scope: 'none',
     },
     skipPrompts: {
       description: 'Skip prompts',
