@@ -183,8 +183,10 @@ server:
 # Full reference is available at: https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 jhipster:
+<%_ if (!skipClient) { _%>
   clientApp:
     name: "<%= frontendAppName %>"
+<%_ } _%>
   mail:
     from: <%= baseName %>@localhost.com
     base-url: http://127.0.0.1:8080
