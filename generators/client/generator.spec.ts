@@ -49,7 +49,7 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         await helpers
           .runJHipster(generator)
-          .withControl({ getWebappTranslation: () => 'translations' })
+          .withSharedApplication({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
           .withMockedGenerators(mockedComposedGenerators);
@@ -68,7 +68,7 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         await helpers
           .runJHipster(generator)
-          .withControl({ getWebappTranslation: () => 'translations' })
+          .withSharedApplication({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
           .withMockedGenerators(mockedComposedGenerators);
@@ -87,7 +87,7 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         await helpers
           .runJHipster(generator)
-          .withControl({ getWebappTranslation: () => 'translations' })
+          .withSharedApplication({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
           .withMockedGenerators(mockedComposedGenerators);
@@ -109,7 +109,7 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         await helpers
           .runJHipster(generator)
-          .withControl({ getWebappTranslation: () => 'translations' })
+          .withSharedApplication({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
           .withMockedGenerators(mockedComposedGenerators);
@@ -139,7 +139,7 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
-        .withControl({ getWebappTranslation: () => 'translations' })
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
         .withJHipsterConfig({ applicationType: 'microservice' })
         .withSkipWritingPriorities()
         .withMockedGenerators(mockedComposedGenerators);

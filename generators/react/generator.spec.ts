@@ -8,7 +8,6 @@ import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_REACT } from '../generator-list.js';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
 import Generator from './index.js';
@@ -31,16 +30,6 @@ const clientAdminFiles = clientSrcDir => [
   `${clientSrcDir}app/modules/administration/logs/logs.tsx`,
 ];
 
-class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
-  get [BaseApplicationGenerator.PREPARING]() {
-    return {
-      mockTranslations({ control }) {
-        control.getWebappTranslation = () => 'translations';
-      },
-    };
-  }
-}
-
 describe(`generator - ${clientFramework}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
@@ -61,8 +50,11 @@ describe(`generator - ${clientFramework}`, () => {
         await helpers
           .runJHipster(generator)
           .withJHipsterConfig(sampleConfig, entities)
-          .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
-          .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
+          .withSharedApplication({
+            gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway',
+            getWebappTranslation: () => 'translations',
+          })
+          .withMockedGenerators(['jhipster:languages'])
           .withMockedSource()
           .withMockedGenerators(['jhipster:common']);
       });

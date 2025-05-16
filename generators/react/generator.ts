@@ -205,7 +205,7 @@ ${comment}
 
   get default() {
     return this.asDefaultTaskGroup({
-      queueTranslateTransform({ control, application }) {
+      queueTranslateTransform({ application }) {
         if (!application.enableTranslation) {
           this.queueTransformStream(
             {
@@ -213,7 +213,7 @@ ${comment}
               filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedReactFile(file),
               refresh: false,
             },
-            translateReactFilesTransform(control.getWebappTranslation!),
+            translateReactFilesTransform(application.getWebappTranslation!),
           );
         }
       },

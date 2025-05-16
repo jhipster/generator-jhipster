@@ -90,7 +90,7 @@ describe(`generator - ${clientFramework}`, () => {
           .runJHipster(generator)
           .withJHipsterConfig(sampleConfig, entities)
           .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
-          .withControl({ getWebappTranslation: () => 'translations' })
+          .withSharedApplication({ getWebappTranslation: () => 'translations' })
           .withMockedSource()
           .withMockedGenerators(['jhipster:common', 'jhipster:languages']);
       });

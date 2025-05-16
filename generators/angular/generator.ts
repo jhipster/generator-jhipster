@@ -254,7 +254,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<DefaultTa
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);
         application.angularEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient) as AngularEntity[];
       },
-      queueTranslateTransform({ control, application }) {
+      queueTranslateTransform({ application }) {
         const { enableTranslation, jhiPrefix } = application;
         this.queueTransformStream(
           {
@@ -262,7 +262,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<DefaultTa
             filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedAngularFile(file),
             refresh: false,
           },
-          translateAngularFilesTransform(control.getWebappTranslation!, { enableTranslation, jhiPrefix }),
+          translateAngularFilesTransform(application.getWebappTranslation!, { enableTranslation, jhiPrefix }),
         );
       },
     });
