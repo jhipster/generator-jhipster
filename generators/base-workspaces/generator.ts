@@ -82,7 +82,7 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
   }
 
   get sharedWorkspaces(): any {
-    return this.getContextData('jhipster:workspaces', () => ({}));
+    return this.getContextData('jhipster:workspaces', { factory: () => ({}) });
   }
 
   protected loadWorkspacesConfig(opts?) {
@@ -159,15 +159,16 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
         generatorOptions: { destinationRoot: resolvedFolder, reproducible: true },
       } as any);
     }
-    this.getContextData('jhipster:workspacesApplications', () =>
-      Object.entries(resolvedApplicationFolders).map(([appFolder, resolvedFolder], index) => {
-        const contextMap = this.env.getContextMap(resolvedFolder);
-        const application = contextMap.get('jhipster:shared-data')?.sharedApplication;
-        application.appFolder = appFolder;
-        application.composePort = 8080 + index;
-        return application;
-      }),
-    );
+    this.getContextData('jhipster:workspacesApplications', {
+      factory: () =>
+        Object.entries(resolvedApplicationFolders).map(([appFolder, resolvedFolder], index) => {
+          const contextMap = this.env.getContextMap(resolvedFolder);
+          const application = contextMap.get('jhipster:shared-data')?.sharedApplication;
+          application.appFolder = appFolder;
+          application.composePort = 8080 + index;
+          return application;
+        }),
+    });
   }
 
   getArgsForPriority(priorityName: string): any {
@@ -194,7 +195,7 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
     const sharedData = this.sharedData;
     const deployment = sharedData.getDeployment();
     const workspaces = this.sharedWorkspaces;
-    const applications = this.getContextData('jhipster:workspacesApplications', () => ({}));
+    const applications = this.getContextData('jhipster:workspacesApplications', { factory: () => ({}) });
     return [
       {
         ...first,

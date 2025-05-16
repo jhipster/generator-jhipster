@@ -100,7 +100,7 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
    * Configure blueprints once per application.
    */
   get #blueprintConfigured() {
-    return this.setContextData('jhipster:blueprintConfigured', true);
+    return this.getContextData('jhipster:blueprintConfigured', { override: true });
   }
 
   /**
