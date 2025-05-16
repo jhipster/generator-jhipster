@@ -47,7 +47,7 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
 
   get loading() {
     return this.asLoadingTaskGroup({
-      cancel({ application}) {
+      cancel({ application }) {
         if (application.skipClient) {
           this.cancelCancellableTasks();
         }

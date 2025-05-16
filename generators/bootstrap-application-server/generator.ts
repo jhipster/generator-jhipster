@@ -67,7 +67,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get loading() {
     return this.asLoadingTaskGroup({
-      cancel({ application}) {
+      cancel({ application }) {
         if (application.skipServer) {
           // TODO fix preparation for skipServer
           // this.cancelCancellableTasks();
