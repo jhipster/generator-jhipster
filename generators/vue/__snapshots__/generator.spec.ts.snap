@@ -454,6 +454,16 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
 
 exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(true) should match source calls snapshot 1`] = `
 {
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Simple]",
+        "Entity[Microservice]",
+        "Entity[EntityWithCustomId]",
+      ],
+    },
+  ],
   "addExternalResourceToRoot": [
     {
       "comment": "Workaround https://github.com/axios/axios/issues/5622",
@@ -1005,6 +1015,16 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
 
 exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-clientRoot/-websocket(true) should match source calls snapshot 1`] = `
 {
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Simple]",
+        "Entity[Microservice]",
+        "Entity[EntityWithCustomId]",
+      ],
+    },
+  ],
   "addExternalResourceToRoot": [
     {
       "comment": "Workaround https://github.com/axios/axios/issues/5622",
@@ -1502,6 +1522,16 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
 
 exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false) should match source calls snapshot 1`] = `
 {
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Simple]",
+        "Entity[Microservice]",
+        "Entity[EntityWithCustomId]",
+      ],
+    },
+  ],
   "addWebpackConfig": [
     {
       "config": "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })",
@@ -2013,6 +2043,16 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
 
 exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false) should match source calls snapshot 1`] = `
 {
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Simple]",
+        "Entity[Microservice]",
+        "Entity[EntityWithCustomId]",
+      ],
+    },
+  ],
   "addWebpackConfig": [
     {
       "config": "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })",
@@ -2667,6 +2707,16 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
 
 exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(true) should match source calls snapshot 1`] = `
 {
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Simple]",
+        "Entity[Microservice]",
+        "Entity[EntityWithCustomId]",
+      ],
+    },
+  ],
   "addExternalResourceToRoot": [
     {
       "comment": "Workaround https://github.com/axios/axios/issues/5622",
@@ -3122,6 +3172,16 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
 
 exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false) should match source calls snapshot 1`] = `
 {
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Simple]",
+        "Entity[Microservice]",
+        "Entity[EntityWithCustomId]",
+      ],
+    },
+  ],
   "addExternalResourceToRoot": [
     {
       "comment": "Workaround https://github.com/axios/axios/issues/5622",
@@ -3592,6 +3652,16 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
 
 exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(true) should match source calls snapshot 1`] = `
 {
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "entities": [
+        "Entity[Simple]",
+        "Entity[Microservice]",
+        "Entity[EntityWithCustomId]",
+      ],
+    },
+  ],
   "addExternalResourceToRoot": [
     {
       "comment": "Workaround https://github.com/axios/axios/issues/5622",
