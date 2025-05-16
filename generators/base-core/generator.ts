@@ -1547,7 +1547,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     return new SharedData(
       application,
-      { memFs, log, logCwd, jhipsterOldVersion: this.#jhipsterOldVersion },
+      { memFs, log, logCwd },
       { ignoreNeedlesError },
     );
   }
