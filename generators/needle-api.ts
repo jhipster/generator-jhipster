@@ -19,21 +19,18 @@
 import Base from './needle-base.js';
 import Client from './client/needle-api/needle-client.js';
 import ClientAngular from './angular/needle-api/needle-client-angular.js';
-import ClientReact from './react/needle-api/needle-client-react.js';
 import ClientVue from './client/needle-api/needle-client-vue.js';
 
 export default class NeedleApi {
   base: Base;
   client: Client;
   clientAngular: ClientAngular;
-  clientReact: ClientReact;
   clientVue: ClientVue;
 
   constructor(generator) {
     this.base = new Base(generator);
     this.client = new Client(generator);
     this.clientAngular = new ClientAngular(generator);
-    this.clientReact = new ClientReact(generator);
     this.clientVue = new ClientVue(generator);
   }
 }

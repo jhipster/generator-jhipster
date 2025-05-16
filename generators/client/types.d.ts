@@ -36,6 +36,13 @@ export type ClientResources = {
 };
 
 export type ClientSourceType = JavaScriptSourceType & {
+  /**
+   * Add style to css file.
+   */
+  addClientStyle?: (args: { style: string; comment?: string }) => void;
+  /**
+   * Add entities to client.
+   */
   addEntitiesToClient: (arg1: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) => void;
   /**
    * Add external resources to root file(index.html).

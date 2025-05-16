@@ -120,7 +120,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
 
   needle = needle.includes('jhipster-needle-') ? needle : `jhipster-needle-${needle}`;
 
-  const regexp = new RegExp(`(?://|<!--|/\\*|#) ${needle}(?:$|\n| )`, 'g');
+  const regexp = new RegExp(`(?://|<!--|\\{?/\\*|#) ${needle}(?:$|\n| )`, 'g');
   const firstMatch = regexp.exec(content);
   if (!firstMatch) {
     return null;
