@@ -19,7 +19,6 @@
 import assert from 'node:assert';
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
-import { camelCase, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.js';
@@ -130,6 +129,97 @@ export default class VueGenerator extends BaseApplicationGenerator {
               contentToAdd: `,${args.config}`,
             }),
           );
+        };
+
+        source.addEntitiesToClient = ({ application, entities }) => {
+          const { enableTranslation } = application;
+          for (const entity of entities) {
+            const {
+              entityInstance,
+              entityFolderName,
+              entityFileName,
+              entityClassHumanized,
+              entityPage,
+              entityTranslationKeyMenu,
+              entityAngularName,
+              readOnly,
+            } = entity;
+
+            this.editFile(
+              `${application.clientSrcDir}/app/router/entities.ts`,
+              createNeedleCallback({
+                needle: 'jhipster-needle-add-entity-to-router-import',
+                contentToAdd: `const ${entityAngularName} = () => import('@/entities/${entityFolderName}/${entityFileName}.vue');
+const ${entityAngularName}Details = () => import('@/entities/${entityFolderName}/${entityFileName}-details.vue');${
+                  readOnly
+                    ? ''
+                    : `
+const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/${entityFileName}-update.vue');`
+                }`,
+                contentToCheck: `import('@/entities/${entityFolderName}/${entityFileName}.vue');`,
+              }),
+            );
+
+            this.editFile(
+              `${application.clientSrcDir}/app/router/entities.ts`,
+              createNeedleCallback({
+                needle: 'jhipster-needle-add-entity-to-router',
+                contentToAdd: `{
+  path: '${entityPage}',
+  name: '${entityAngularName}',
+  component: ${entityAngularName},
+  meta: { authorities: [Authority.USER] }
+},
+{
+  path: '${entityPage}/:${entityInstance}Id/view',
+  name: '${entityAngularName}View',
+  component: ${entityAngularName}Details,
+  meta: { authorities: [Authority.USER] }
+},${
+                  readOnly
+                    ? ''
+                    : `
+{
+  path: '${entityPage}/new',
+  name: '${entityAngularName}Create',
+  component: ${entityAngularName}Update,
+  meta: { authorities: [Authority.USER] }
+},
+{
+  path: '${entityPage}/:${entityInstance}Id/edit',
+  name: '${entityAngularName}Edit',
+  component: ${entityAngularName}Update,
+  meta: { authorities: [Authority.USER] }
+},`
+                }`,
+                contentToCheck: `path: '${entityFileName}'`,
+              }),
+            );
+
+            this.editFile(
+              `${application.clientSrcDir}/app/entities/entities.component.ts`,
+              createNeedleCallback({
+                needle: 'jhipster-needle-add-entity-service-to-entities-component-import',
+                contentToAdd: `import ${entityAngularName}Service from './${entityFolderName}/${entityFileName}.service';`,
+              }),
+              createNeedleCallback({
+                needle: 'add-entity-service-to-entities-component',
+                contentToAdd: `provide('${entityInstance}Service', () => new ${entityAngularName}Service());`,
+              }),
+            );
+
+            this.editFile(
+              `${application.clientSrcDir}/app/entities/entities-menu.vue`,
+              createNeedleCallback({
+                needle: 'add-entity-to-menu',
+                contentToAdd: `<b-dropdown-item to="/${entityPage}">
+  <font-awesome-icon icon="asterisk" />
+  <span${enableTranslation ? ` v-text="$t('global.menu.entities.${entityTranslationKeyMenu}')"` : ''}>${entityClassHumanized}</span>
+</b-dropdown-item>`,
+                contentToCheck: `<b-dropdown-item to="/${entityPage}">`,
+              }),
+            );
+          }
         };
       },
     });
@@ -322,44 +412,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
-  }
-
-  /**
-   * @private
-   * Add a new entity in the "entities" menu.
-   *
-   * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
-   * @param {string} entityTranslationValue - i18n value for entity entry in menu
-   */
-  addEntityToMenu(
-    routerName,
-    enableTranslation,
-    entityTranslationKeyMenu = camelCase(routerName),
-    entityTranslationValue = startCase(routerName),
-  ) {
-    this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
-  }
-
-  /**
-   * @private
-   * Add a new entity in the TS modules file.
-   *
-   * @param {string} entityInstance - Entity Instance
-   * @param {string} entityClass - Entity Class
-   * @param {string} entityName - Entity Name
-   * @param {string} entityFolderName - Entity Folder Name
-   * @param {string} entityFileName - Entity File Name
-   * @param {string} entityUrl - Entity router URL
-   * @param {string} microserviceName - Microservice Name
-   * @param {boolean} readOnly - If the entity is read-only or not
-   */
-  addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName, _entityUrl, _microserviceName, readOnly?) {
-    this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
-    this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
-    this.needleApi.clientVue.addEntityServiceToEntitiesComponentImport(entityName, entityClass, entityFileName, entityFolderName);
-    this.needleApi.clientVue.addEntityServiceToEntitiesComponent(entityInstance, entityName);
   }
 
   /**

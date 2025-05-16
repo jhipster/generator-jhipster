@@ -67,7 +67,6 @@ import {
 import { packageJson } from '../../lib/index.js';
 import type { BaseApplication } from '../base-application/types.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
-import NeedleApi from '../needle-api.js';
 import baseCommand from '../base/command.js';
 import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
@@ -170,7 +169,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   generatorsToCompose: string[] = [];
 
   private _jhipsterGenerator?: string;
-  private _needleApi?: NeedleApi;
 
   // Override the type of `env` to be a full Environment
   declare env: Environment;
@@ -245,16 +243,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
   storeCurrentJHipsterVersion(): void {
     this.jhipsterConfig.jhipsterVersion = packageJson.version;
-  }
-
-  /**
-   * @deprecated
-   */
-  get needleApi() {
-    if (this._needleApi === undefined || this._needleApi === null) {
-      this._needleApi = new NeedleApi(this);
-    }
-    return this._needleApi;
   }
 
   get control(): Control {

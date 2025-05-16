@@ -1,28 +1,39 @@
 import { before, describe, it } from 'esmocha';
 import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
-import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.js';
-import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
-import VueGenerator from '../../generators/vue/index.js';
-import BaseApplicationGenerator from '../../generators/base-application/index.js';
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
 
-const { VUE } = clientFrameworkTypes;
-
-const mockBlueprintSubGen: any = class extends VueGenerator {
-  constructor(args, opts, features) {
-    super(args, opts, features);
-    if (!this.jhipsterContext) {
-      throw new Error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
-    }
-    this.sbsBlueprint = true;
-  }
-
-  get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.asPostWritingTaskGroup({
-      addCustomMethods() {
+describe('needle API Vue: JHipster client generator with blueprint', () => {
+  before(() =>
+    helpers
+      .runJHipster('vue')
+      .withJHipsterConfig({
+        clientFramework: 'vue',
+        skipServer: true,
+        enableTranslation: false,
+      })
+      .withTask(
+        'postWriting',
+        asPostWritingTask(function ({ application, source }) {
+          source.addEntitiesToClient({
+            application,
+            entities: [
+              {
+                entityInstance: 'entityInstance',
+                entityClass: 'entityClass',
+                entityAngularName: 'entityName',
+                entityFolderName: 'entityFolderName',
+                entityFileName: 'entityFileName',
+                entityUrl: 'entityUrl',
+                microserviceName: 'microserviceName',
+                entityPage: 'routerName',
+                entityClassHumanized: 'Router Name',
+              } as any,
+            ],
+          });
+          /*
         this.addEntityToMenu('routerName', false);
-      },
-      addToModuleStep() {
         this.addEntityToModule(
           'entityInstance',
           'entityClass',
@@ -32,29 +43,9 @@ const mockBlueprintSubGen: any = class extends VueGenerator {
           'entityUrl',
           'microserviceName',
         );
-      },
-    });
-  }
-};
-
-describe('needle API Vue: JHipster client generator with blueprint', () => {
-  before(() =>
-    helpers
-      .runJHipster('vue')
-      .withOptions({
-        build: 'maven',
-        auth: 'jwt',
-        db: 'mysql',
-        blueprint: ['myblueprint'],
-      })
-      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:vue' }]])
-      .withAnswers({
-        baseName: 'jhipster',
-        clientFramework: VUE,
-        enableTranslation: false,
-        nativeLanguage: 'en',
-        languages: ['fr'],
-      }),
+        */
+        }),
+      ),
   );
 
   it('menu contains the item and the root', () => {
@@ -73,12 +64,9 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
     runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/router/entities.ts`,
       `
-// prettier-ignore
 const entityName = () => import('@/entities/entityFolderName/entityFileName.vue');
-// prettier-ignore
-const entityNameUpdate = () => import('@/entities/entityFolderName/entityFileName-update.vue');
-// prettier-ignore
 const entityNameDetails = () => import('@/entities/entityFolderName/entityFileName-details.vue');
+const entityNameUpdate = () => import('@/entities/entityFolderName/entityFileName-update.vue');
 `,
     );
   });
@@ -88,27 +76,27 @@ const entityNameDetails = () => import('@/entities/entityFolderName/entityFileNa
       `${CLIENT_MAIN_SRC_DIR}app/router/entities.ts`,
       `
     {
-      path: 'entityFileName',
+      path: 'routerName',
       name: 'entityName',
       component: entityName,
       meta: { authorities: [Authority.USER] },
     },
     {
-      path: 'entityFileName/new',
+      path: 'routerName/:entityInstanceId/view',
+      name: 'entityNameView',
+      component: entityNameDetails,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'routerName/new',
       name: 'entityNameCreate',
       component: entityNameUpdate,
       meta: { authorities: [Authority.USER] },
     },
     {
-      path: 'entityFileName/:entityInstanceId/edit',
+      path: 'routerName/:entityInstanceId/edit',
       name: 'entityNameEdit',
       component: entityNameUpdate,
-      meta: { authorities: [Authority.USER] },
-    },
-    {
-      path: 'entityFileName/:entityInstanceId/view',
-      name: 'entityNameView',
-      component: entityNameDetails,
       meta: { authorities: [Authority.USER] },
     },
 `,

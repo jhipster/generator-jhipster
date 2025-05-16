@@ -62,47 +62,24 @@ export const writeEntityFiles = asWritingEntitiesTask(async function writeEntity
   }
 });
 
-export const postWriteEntityFiles = asPostWritingEntitiesTask(async function postWriteEntityFiles({ control, application, entities }) {
-  for (const entity of (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser)) {
-    if (!entity.embedded) {
-      const { enableTranslation } = application;
-      const {
-        entityInstance,
-        entityClass,
-        entityAngularName,
-        entityFolderName,
-        entityFileName,
-        entityUrl,
-        microserviceName,
-        readOnly,
-        entityClassPlural,
-        i18nKeyPrefix,
-      } = entity;
-      const pageTitle = ((entity as any).pageTitle ?? enableTranslation) ? `${i18nKeyPrefix}.home.title` : entityClassPlural;
-
-      (this as any).addEntityToModule(
-        entityInstance,
-        entityClass,
-        entityAngularName,
-        entityFolderName,
-        entityFileName,
-        entityUrl,
-        microserviceName,
-        readOnly,
-        pageTitle,
-      );
-      (this as any).addEntityToMenu(
-        entity.entityPage,
-        application.enableTranslation,
-        entity.entityTranslationKeyMenu,
-        entity.entityClassHumanized,
-      );
-    }
-  }
+export const postWriteEntityFiles = asPostWritingEntitiesTask(async function postWriteEntityFiles({
+  control,
+  application,
+  entities,
+  source,
+}) {
+  source.addEntitiesToClient({
+    application,
+    entities: (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(
+      entity => !entity.builtInUser && !entity.embedded,
+    ),
+  });
 });
 
 export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ control, application, entities }) {
-  for (const entity of (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser)) {
+  for (const entity of (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(
+    entity => !entity.builtInUser && !entity.embedded,
+  )) {
     const { entityFolderName, entityFileName } = entity;
     if (this.isJhipsterVersionLessThan('8.0.0-beta.3')) {
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.component.spec.ts`);
