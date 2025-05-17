@@ -22,3 +22,10 @@ export type Control = {
    */
   cleanupFiles: (cleanup: CleanupArgumentType) => Promise<void> | ((oldVersion: string, cleanup: CleanupArgumentType) => Promise<void>);
 };
+
+export type Config = {
+  jhipsterVersion?: string;
+  autoCrlf?: boolean;
+  lastLiquibaseTimestamp?: number;
+  blueprints?: { name: string; version?: string }[];
+};

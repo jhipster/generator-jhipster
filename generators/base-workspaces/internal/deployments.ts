@@ -19,7 +19,7 @@
 import { defaults } from 'lodash-es';
 import { applicationOptions, deploymentOptions } from '../../../lib/jhipster/index.js';
 import { loadDerivedPlatformConfig, loadDerivedServerAndPlatformProperties, loadPlatformConfig } from '../../server/support/index.js';
-import type { GeneratorBaseCore } from '../../index.js';
+import type BaseWorkspacesGenerator from '../index.js';
 
 const { OptionNames } = applicationOptions;
 const { Options: DeploymentOptions } = deploymentOptions;
@@ -27,7 +27,7 @@ const { Options: DeploymentOptions } = deploymentOptions;
 const { JWT_SECRET_KEY } = OptionNames;
 
 export function loadDeploymentConfig(
-  this: GeneratorBaseCore,
+  this: BaseWorkspacesGenerator,
   {
     config = defaults({}, this.jhipsterConfig, DeploymentOptions.defaults(this.jhipsterConfig.deploymentType)),
     deployment = this,

@@ -86,8 +86,11 @@ const asPriority = BaseGenerator.asPriority;
  * This is the base class for a generator that generates entities.
  */
 export default class BaseApplicationGenerator<
+  ConfigType = unknown,
   TaskTypes extends DefaultTaskTypes<any, any> = DefaultTaskTypes,
-> extends BaseGenerator<TaskTypes> {
+  Options = unknown,
+  Features = unknown,
+> extends BaseGenerator<ConfigType & ApplicationConfiguration, TaskTypes, Options, Features> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
   static LOADING_ENTITIES = asPriority(LOADING_ENTITIES);
@@ -104,7 +107,6 @@ export default class BaseApplicationGenerator<
 
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
-  declare jhipsterConfig: ApplicationConfiguration & Record<string, any>;
   declare sharedData: SharedData;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
