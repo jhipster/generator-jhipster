@@ -28,6 +28,7 @@ import { createNeedleCallback } from '../base/support/index.js';
 import { addEnumerationFiles } from './entity-files.js';
 import { writeFiles as writeCommonFiles } from './files-common.js';
 import { askForClientTheme, askForClientThemeVariant } from './prompts.js';
+import { filterEntitiesAndPropertiesForClient } from './support/filter-entities.js';
 
 const { ANGULAR, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
@@ -207,11 +208,11 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
-      async writeEnumerationFiles({ control, application, entities }) {
+      async writeEnumerationFiles({ application, entities }) {
         if (!application.webappEnumerationsDir || !application.clientFrameworkBuiltIn) {
           return;
         }
-        for (const entity of (control.filterEntitiesAndPropertiesForClient ?? (entities => entities))(entities)) {
+        for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesAndPropertiesForClient)(entities)) {
           await addEnumerationFiles.call(this, { application, entity });
         }
       },

@@ -1,5 +1,3 @@
-import type { Entity } from '../base-application/index.js';
-
 export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
 
 export type Control = {
@@ -8,9 +6,6 @@ export type Control = {
   jhipsterOldVersion: string | null;
   reproducibleLiquibaseTimestamp?: Date;
   enviromentHasDockerCompose?: boolean;
-  filterEntitiesForClient?: (entity: Entity[]) => Entity[];
-  filterEntitiesAndPropertiesForClient?: (entity: Entity[]) => Entity[];
-  filterEntityPropertiesForClient?: (entity: Entity) => Entity;
   customizeRemoveFiles: ((file: string) => string | undefined)[];
   removeFiles: (options: { removedInVersion: string } | string, ...files: string[]) => Promise<void>;
   /**
