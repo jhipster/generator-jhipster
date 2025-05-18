@@ -85,7 +85,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         if (this.jhipsterConfig.devServerPort !== undefined || this.jhipsterConfig.applicationIndex === undefined) return;
 
         const { applicationIndex, devServerPort } = this.jhipsterConfigWithDefaults;
-        this.jhipsterConfig.devServerPort = devServerPort + applicationIndex;
+        this.jhipsterConfig.devServerPort = devServerPort! + applicationIndex!;
       },
     });
   }

@@ -26,10 +26,10 @@ export interface AngularEntity extends Entity {
    * @param fields returns the import of enums that are referenced by the fields
    * @returns {typeImports:Map} the fields that potentially contains some enum types
    */
-  generateEntityClientEnumImports: (fields: any) => Map<any, any>;
+  generateEntityClientEnumImports?: (fields: any) => Map<any, any>;
 }
 
 export type AngularApplication = {
   /** @experimental to be replaced with needles */
-  angularEntities: AngularEntity[];
+  angularEntities?: AngularEntity[];
 } & ApplicationType<AngularEntity>;

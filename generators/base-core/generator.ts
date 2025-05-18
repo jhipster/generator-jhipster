@@ -76,8 +76,7 @@ import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/index.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
-import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
-import type { CleanupArgumentType, Control } from '../base/types.js';
+import type { CleanupArgumentType, Config, Control } from '../base/types.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import { convertWriteFileSectionsToBlocks } from './internal/index.js';
 
@@ -113,7 +112,12 @@ const deepMerge = (source1: any, source2: any) => mergeWith({}, source1, source2
 /**
  * This is the base class for a generator for every generator.
  */
-export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOptions, JHipsterGeneratorFeatures> {
+export default class CoreGenerator<
+  ConfigType extends Config = Config,
+  ConfigDefaultsType extends Readonly<ConfigType> = Readonly<ConfigType>,
+  Options = unknown,
+  Features = unknown,
+> extends YeomanGenerator<JHipsterGeneratorOptions & Options, JHipsterGeneratorFeatures & Features> {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -154,7 +158,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   relative = posixRelative;
 
   readonly logger: Logger;
-  jhipsterConfig!: Record<string, any>;
+  jhipsterConfig!: ConfigType;
   /**
    * @deprecated
    */
@@ -190,7 +194,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       this._config = this._getStorage('generator-jhipster');
 
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
-      this.jhipsterConfig = this.config.createProxy();
+      this.jhipsterConfig = this.config.createProxy() as ConfigType;
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.parseJHipsterOptions(baseCommand.options);
@@ -341,7 +345,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   /**
    * JHipster config with default values fallback
    */
-  get jhipsterConfigWithDefaults(): Readonly<ApplicationConfiguration & Record<string, any>> {
+  get jhipsterConfigWithDefaults(): ConfigDefaultsType {
     const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
     defaults(configWithDefaults, {
       skipFakeData: false,
@@ -350,7 +354,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       autoCrlf: false,
       pages: [],
     });
-    return configWithDefaults as ApplicationConfiguration;
+    return configWithDefaults as ConfigDefaultsType;
   }
 
   /**
@@ -768,11 +772,11 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       }
     } else {
       // Get and store lastLiquibaseTimestamp, a future timestamp can be used
-      let lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
+      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
       if (lastLiquibaseTimestamp) {
-        lastLiquibaseTimestamp = new Date(lastLiquibaseTimestamp);
-        if (lastLiquibaseTimestamp >= now) {
-          now = lastLiquibaseTimestamp;
+        const lastTimeStampDate = new Date(lastLiquibaseTimestamp);
+        if (lastTimeStampDate >= now) {
+          now = lastTimeStampDate;
           now.setSeconds(now.getSeconds() + 1);
           now.setMilliseconds(0);
         }

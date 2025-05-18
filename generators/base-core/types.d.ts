@@ -16,19 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../../../lib/command/index.js';
-
-const command = {
-  configs: {
-    skipCommitHook: {
-      description: 'Skip adding husky commit hooks',
-      cli: {
-        type: Boolean,
-      },
-      scope: 'storage',
-    },
-  },
-  import: [],
-} as const satisfies JHipsterCommandDefinition;
-
-export default command;
+export type Config = {
+  jhipsterVersion?: string;
+  autoCrlf?: boolean;
+  lastLiquibaseTimestamp?: number;
+  blueprints?: { name: string; version?: string }[];
+};

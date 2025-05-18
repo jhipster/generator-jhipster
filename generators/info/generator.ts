@@ -21,19 +21,19 @@
  */
 import chalk from 'chalk';
 
-import BaseApplicationGenerator from '../base-application/index.js';
+import BaseCoreGenerator from '../base-core/index.js';
 import JSONToJDLEntityConverter from '../../lib/jdl/converters/json-to-jdl-entity-converter.js';
 import JSONToJDLOptionConverter from '../../lib/jdl/converters/json-to-jdl-option-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
-import { YO_RC_FILE } from '../generator-constants.js';
+import { JHIPSTER_CONFIG_DIR, YO_RC_FILE } from '../generator-constants.js';
 import { applicationsLookup } from '../workspaces/support/applications-lookup.js';
 import type { Entity } from '../../lib/types/base/entity.js';
-import { convertFieldBlobType } from '../../lib/application/field-types.js';
+import { getEntitiesFromDir } from '../base-application/support/index.js';
 import { replaceSensitiveConfig } from './support/utils.js';
 
 const isInfoCommand = commandName => commandName === 'info' || undefined;
 
-export default class InfoGenerator extends BaseApplicationGenerator {
+export default class InfoGenerator extends BaseCoreGenerator<{ appsFolders?: string[]; baseName?: string; packages?: string[] }> {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, {
       jhipsterBootstrap: false,
@@ -44,8 +44,8 @@ export default class InfoGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup({
+  get [BaseCoreGenerator.INITIALIZING]() {
+    return this.asAnyTaskGroup({
       sayHello() {
         this.log.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
       },
@@ -143,16 +143,13 @@ export default class InfoGenerator extends BaseApplicationGenerator {
     let jdlObject;
     const entities = new Map<string, Entity>();
     try {
-      this.getExistingEntities().forEach(({ name, definition: entity }) => {
-        if (entity.fields) {
-          for (const field of entity.fields) {
-            if (field.fieldType === 'byte[]') {
-              convertFieldBlobType(field);
-            }
-          }
+      const foundEntities = getEntitiesFromDir(this.destinationPath(JHIPSTER_CONFIG_DIR));
+      for (const entity of foundEntities) {
+        const entityJson = this.readDestinationJSON(this.destinationPath(JHIPSTER_CONFIG_DIR, `${entity}.json`));
+        if (entityJson) {
+          entities.set(entity, entityJson);
         }
-        entities.set(name, entity);
-      });
+      }
       jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL(entities);
       JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
     } catch (error) {

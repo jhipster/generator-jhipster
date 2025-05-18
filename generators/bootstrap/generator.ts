@@ -212,7 +212,7 @@ export default class BootstrapGenerator extends BaseGenerator {
         await createPrettierTransform.call(this, {
           ignoreErrors,
           prettierPackageJson: true,
-          prettierJava: !this.jhipsterConfig.skipServer,
+          prettierJava: !(this.jhipsterConfig as any).skipServer,
           extensions: this.prettierExtensions.join(','),
           prettierOptions: this.prettierOptions,
           skipForks: this.skipForks,

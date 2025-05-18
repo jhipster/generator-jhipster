@@ -47,7 +47,7 @@ const toJdlFile = file => {
 
 type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: string; sharedFs?: MemFs };
 
-export default class JdlGenerator extends BaseGenerator {
+export default class JdlGenerator extends BaseGenerator<{ baseName: string; prodDatabaseType: string }> {
   jdlFiles?: string[];
   inline?: string;
   jdlContents: string[] = [];

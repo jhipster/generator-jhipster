@@ -29,7 +29,6 @@ import {
   testFrameworkTypes,
 } from '../../lib/jhipster/index.js';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.js';
-import type CoreGenerator from '../base-core/generator.js';
 import { asPromptingTask } from '../base-application/support/task-type-inference.js';
 
 const { OptionNames } = applicationOptions;
@@ -171,7 +170,7 @@ export const askForServerSideOpts = asPromptingTask(async function ({ control })
   );
 });
 
-export const askForOptionalItems = asPromptingTask(async function askForOptionalItems(this: CoreGenerator, { control }) {
+export const askForOptionalItems = asPromptingTask(async function askForOptionalItems({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
   const { applicationType, reactive, databaseType } = this.jhipsterConfigWithDefaults;
@@ -242,7 +241,7 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
   }
 });
 
-export const askForServerTestOpts = asPromptingTask(async function (this: CoreGenerator, { control }) {
+export const askForServerTestOpts = asPromptingTask(async function ({ control }) {
   if (control.existingProject && this.options.askAnswered !== true) return;
 
   const testFrameworks = this.jhipsterConfigWithDefaults.testFrameworks ?? [];

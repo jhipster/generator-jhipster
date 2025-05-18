@@ -61,7 +61,17 @@ type WorkspacesTypes<E extends Entity = Entity, A extends ApplicationType<E> = A
 /**
  * This is the base class for a generator that generates entities.
  */
-export default abstract class BaseWorkspacesGenerator extends BaseGenerator<WorkspacesTypes> {
+export default abstract class BaseWorkspacesGenerator<Config = unknown> extends BaseGenerator<
+  Config & {
+    appsFolders: string[];
+    directoryPath: string;
+    deploymentType: string;
+    jwtSecretKey: string;
+    adminPassword: string;
+    serviceDiscoveryType: string;
+  },
+  WorkspacesTypes
+> {
   static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 
   static CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);
