@@ -16,7 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition, PromptSpec } from '../../../../lib/command/index.js';
+import type { JHipsterCommandDefinition } from '../../../../lib/command/index.js';
+import { GENERATOR_BASE_APPLICATION } from '../../../generator-list.js';
 
 const command = {
   options: {
@@ -34,22 +35,6 @@ const command = {
     },
   },
   configs: {
-    packageName: {
-      cli: {
-        type: String,
-      },
-      prompt: (gen): PromptSpec => ({
-        type: 'input',
-        message: 'What is your default Java package name?',
-        default: gen.jhipsterConfigWithDefaults.packageName,
-        validate: input =>
-          /^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)
-            ? true
-            : 'The package name you have provided is not a valid Java package name.',
-      }),
-      scope: 'storage',
-      description: 'The package name for the generated application',
-    },
     packageFolder: {
       cli: {
         type: String,
@@ -58,7 +43,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: [],
+  import: [GENERATOR_BASE_APPLICATION],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

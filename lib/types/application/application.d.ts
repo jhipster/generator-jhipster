@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-import type { BaseApplicationApplication, BaseApplicationEntity } from '../../../generators/base-application/types.js';
+import type {
+  BaseApplicationApplication,
+  BaseApplicationEntity,
+  BaseApplicationPrimaryKey,
+  BaseApplicationRelationship,
+} from '../../../generators/base-application/types.js';
 import type { ClientApplication, ClientSourceType } from '../../../generators/client/types.js';
 import type { I18nApplication, LanguagesSource } from '../../../generators/languages/types.js';
 import type { SpringBootApplication, SpringBootSourceType } from '../../../generators/server/types.js';
@@ -9,7 +14,8 @@ import type { BaseApplicationSources } from '../../../generators/base-applicatio
 import type { OptionWithDerivedProperties } from '../../../generators/base-application/application-options.js';
 import { Field } from './field.js';
 import { Relationship } from './relationship.js';
-export type BaseApplicationToRefactor = BaseApplicationApplication<any, any, any> & {
+import { PrimaryKey } from './entity.js';
+export type BaseApplicationToRefactor = BaseApplicationApplication<any, any, any, any> & {
   jhipsterVersion: string;
 
   capitalizedBaseName: string;
@@ -25,8 +31,6 @@ export type BaseApplicationToRefactor = BaseApplicationApplication<any, any, any
   projectDescription: string;
 
   jhiPrefix: string;
-  entitySuffix: string;
-  dtoSuffix: string;
 
   skipCommitHook: boolean;
   skipJhipsterDependencies: boolean;
@@ -57,7 +61,6 @@ export type BaseApplicationToRefactor = BaseApplicationApplication<any, any, any
 
 /* ApplicationType Start */
 type MicroservicesArchitectureApplication = {
-  microfrontend: boolean;
   gatewayServerPort: number;
 };
 
@@ -99,7 +102,7 @@ type UserManagement =
       authority: any;
     };
     */
-type UserManagement<Entity extends BaseApplicationEntity<any, any>> = {
+type UserManagement<Entity extends BaseApplicationEntity<any, any, any>> = {
   skipUserManagement: boolean;
   user: Entity;
   userManagement: Entity;
@@ -126,7 +129,7 @@ type AuthenticationType = DeterministicOptionWithDerivedProperties<
   [JwtApplication, Oauth2Application, SessionApplication]
 >;
 */
-type AuthenticationProperties<Entity extends BaseApplicationEntity<any, any>> = OptionWithDerivedProperties<
+type AuthenticationProperties<Entity extends BaseApplicationEntity<any, any, any>> = OptionWithDerivedProperties<
   'authenticationType',
   ['jwt', 'oauth2', 'session']
 > &
@@ -141,7 +144,7 @@ type QuirksApplication = {
   cypressBootstrapEntities?: boolean;
 };
 
-export type CommonClientServerApplication<Entity extends BaseApplicationEntity<any, any>> = BaseApplicationToRefactor &
+export type CommonClientServerApplication<Entity extends BaseApplicationEntity<any, any, any>> = BaseApplicationToRefactor &
   QuirksApplication &
   AuthenticationProperties<Entity> &
   SpringBootApplication &
@@ -190,7 +193,11 @@ type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'e
 
 export type PlatformApplication = ServiceDiscoveryApplication & MonitoringApplication;
 
-export type ApplicationType<F extends Field> = BaseApplicationApplication<any, any, any> &
+export type ApplicationType<
+  F extends Field = Field,
+  PK extends BaseApplicationPrimaryKey<F> = PrimaryKey<F>,
+  R extends BaseApplicationRelationship<any> = Relationship,
+> = BaseApplicationApplication<F, PK, R, any> &
   CommonClientServerApplication<any> &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/gradle/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/spring-boot/command.ts').default>;
@@ -198,5 +205,5 @@ export type ApplicationType<F extends Field> = BaseApplicationApplication<any, a
 export type BaseApplicationSource<
   F extends Field,
   R extends Relationship,
-  A extends BaseApplicationApplication<F, R, any> = BaseApplicationApplication<any, any, any>,
-> = BaseApplicationSources<any, any, any, A> & SpringBootSourceType & ClientSourceType & LanguagesSource & DockerSourceType;
+  A extends BaseApplicationApplication<F, any, R, any> = BaseApplicationApplication<any, any, any, any>,
+> = BaseApplicationSources<any, any, any, any, A> & SpringBootSourceType & ClientSourceType & LanguagesSource & DockerSourceType;

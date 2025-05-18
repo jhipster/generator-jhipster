@@ -57,7 +57,7 @@ export type WriteFileBlock<DataType, Generator> = {
   templates: WriteFileTemplate<DataType, Generator>[];
 };
 
-export type WriteFileSection<DataType, Generator> = Record<string, WriteFileBlock<DataType, Generator>[]>;
+export type WriteFileSection<A, G> = Record<string, WriteFileBlock<A, G>[]>;
 export type CoreEntity = {
   resetFakerSeed(suffix?: string): void;
 };

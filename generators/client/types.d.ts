@@ -2,7 +2,7 @@ import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/index.js';
 import type { CypressApplication } from '../cypress/types.js';
 import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
-import type { PostWritingEntitiesTaskParam } from '../../lib/types/application/tasks.js';
+import type { PostWritingEntitiesTaskParam } from '../base-application/tasks.js';
 import type { PartialAngularApplication } from '../angular/types-partial.js';
 import type { Language } from '../languages/support/languages.ts';
 import type Command from './command.ts';
@@ -16,7 +16,6 @@ export type FrontendApplication = ApplicationClientProperties &
     clientWebappDir?: string;
     webappEnumerationsDir?: string;
     clientFrameworkBuiltIn?: boolean;
-    frontendAppName?: string;
   };
 
 /**
@@ -36,7 +35,7 @@ export type ClientResources = {
 };
 
 export type ClientSourceType = JavaScriptSourceType & {
-  addEntitiesToClient: (arg1: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) => void;
+  addEntitiesToClient: (arg1: Pick<PostWritingEntitiesTaskParam<any, any, any, any, any, any>, 'application' | 'entities'>) => void;
   /**
    * Add external resources to root file(index.html).
    */

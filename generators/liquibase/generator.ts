@@ -21,6 +21,7 @@ import { escape, min } from 'lodash-es';
 
 import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
 import { getFKConstraintName, getUXConstraintName, prepareEntity as prepareEntityForServer } from '../server/support/index.js';
+
 import {
   loadRequiredConfigIntoEntity,
   prepareEntityPrimaryKeyForTemplates,
@@ -31,7 +32,6 @@ import { prepareSqlApplicationProperties } from '../spring-data-relational/suppo
 import { fieldTypes } from '../../lib/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
 import type { Field } from '../../lib/types/application/index.js';
-import { formatDateForChangelog } from '../base/support/index.js';
 import {
   liquibaseComment,
   postPrepareEntity,

@@ -16,10 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import chalk from 'chalk';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/jhipster/index.js';
+import { GENERATOR_BASE, GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 
 const command = {
   options: {
@@ -51,11 +49,6 @@ const command = {
     enableHibernateCache: {
       description: 'Enable hibernate cache',
       type: Boolean,
-      scope: 'storage',
-    },
-    searchEngine: {
-      description: 'Provide search engine for the application when skipping server side generation',
-      type: String,
       scope: 'storage',
     },
     skipCheckLengthOfIdentifier: {
@@ -91,34 +84,7 @@ const command = {
       scope: 'generator',
     },
   },
-  configs: {
-    applicationType: {
-      description: 'Application type to generate',
-      cli: {
-        type: String,
-      },
-      prompt: {
-        type: 'list',
-        message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
-      },
-      choices: [
-        {
-          value: APPLICATION_TYPE_MONOLITH,
-          name: 'Monolithic application (recommended for simple projects)',
-        },
-        {
-          value: APPLICATION_TYPE_GATEWAY,
-          name: 'Gateway application',
-        },
-        {
-          value: APPLICATION_TYPE_MICROSERVICE,
-          name: 'Microservice application',
-        },
-      ],
-      scope: 'storage',
-    },
-  },
-  import: [GENERATOR_COMMON, GENERATOR_SPRING_BOOT],
+  import: [GENERATOR_BASE, GENERATOR_COMMON, GENERATOR_SPRING_BOOT],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

@@ -20,13 +20,9 @@
 import type { BaseApplicationRelationship } from '../../../generators/base-application/types.js';
 import type { Property } from './property.js';
 
-export type Relationship = BaseApplicationRelationship &
+export type Relationship = BaseApplicationRelationship<any> &
   Property & {
-    otherEntityName: string;
-    relationshipType: 'one-to-one' | 'one-to-many' | 'many-to-one' | 'many-to-many';
-
     relationshipSide?: 'left' | 'right';
-    otherEntityRelationshipName?: string;
     otherEntityField?: string;
 
     options?: Record<string, boolean | string | number>;

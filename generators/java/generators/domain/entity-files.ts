@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { WriteFileSection } from '../../../base/api.js';
+import type { WriteFileSection } from '../../../base-core/types.js';
 import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from '../../support/index.js';
 
-export const entityServerFiles: WriteFileSection = {
+export const entityServerFiles: WriteFileSection<any, any> = {
   model: [
     javaMainPackageTemplatesBlock({
       condition: ctx => ctx.entityDomainLayer,
@@ -48,7 +48,7 @@ export const entityServerFiles: WriteFileSection = {
   ],
 };
 
-export const enumFiles: WriteFileSection = {
+export const enumFiles: WriteFileSection<any, any> = {
   enumFiles: [
     javaMainPackageTemplatesBlock({
       renameTo: (data, filepath) => filepath.replace('_enumName_', (data as any).enumName),

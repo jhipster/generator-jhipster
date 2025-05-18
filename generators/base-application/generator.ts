@@ -28,7 +28,11 @@ import {
   GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
   GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
 } from '../generator-list.js';
+import type { Entity as DeprecatedEntity, PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { Field as DeprecatedField } from '../../lib/types/application/field.js';
+import type { Relationship as DeprecatedRelationship } from '../../lib/types/application/relationship.js';
 import type { GenericTaskGroup } from '../base/tasks.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 import type {
   ConfiguringEachEntityTaskParam,
   TaskTypes as DefaultTaskTypes,
@@ -51,6 +55,7 @@ import type {
   BaseApplicationControl,
   BaseApplicationEntity,
   BaseApplicationField,
+  BaseApplicationPrimaryKey,
   BaseApplicationRelationship,
   BaseApplicationSources,
 } from './types.js';
@@ -91,18 +96,41 @@ const asPriority = BaseGenerator.asPriority;
 /**
  * This is the base class for a generator that generates entities.
  */
-export default class BaseApplicationGenerator<
-  Options extends BaseApplicationOptions,
-  Field extends BaseApplicationField,
-  Relationship extends BaseApplicationRelationship,
-  Entity extends BaseApplicationEntity<Field, Relationship>,
-  Application extends BaseApplicationApplication<Field, Relationship, Entity>,
-  Sources extends BaseApplicationSources<Field, Relationship, Entity, Application>,
-  Control extends BaseApplicationControl,
-  TaskTypes extends DefaultTaskTypes<Field, Relationship, Entity, Application, Sources, Control>,
-  SharedData extends BaseApplicationSharedData<Entity, Application, Sources, Control>,
-  Configuration extends BaseApplicationConfiguration,
-  Features extends BaseApplicationFeatures,
+export default // @ts-ignore
+class BaseApplicationGenerator<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends BaseApplicationOptions = BaseApplicationOptions,
+  Field extends BaseApplicationField = DeprecatedField,
+  PK extends BaseApplicationPrimaryKey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends BaseApplicationRelationship<any> = DeprecatedRelationship<any>,
+  // @ts-ignore
+  Entity extends BaseApplicationEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends BaseApplicationApplication<Field, PK, Relationship, Entity> = ApplicationType,
+  Sources extends BaseApplicationSources<Field, PK, Relationship, Entity, Application> = BaseApplicationSources<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application
+  >,
+  Control extends BaseApplicationControl = BaseApplicationControl,
+  TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  SharedData extends BaseApplicationSharedData<Entity, Application, Sources, Control> = BaseApplicationSharedData<
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends BaseApplicationConfiguration = BaseApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
 > extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, SharedData, Configuration, Features> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
@@ -371,7 +399,7 @@ export default class BaseApplicationGenerator<
     });
   }
 
-  getArgsForPriority(priorityName: string): TaskParamWithApplication<Field, Relationship, Entity, Application, Control>[] {
+  getArgsForPriority(priorityName: string): TaskParamWithApplication<Field, PK, Relationship, Entity, Application, Control>[] {
     const args = super.getArgsForPriority(priorityName);
     let firstArg = this.getTaskFirstArgForPriority(priorityName);
     if (args.length > 0) {
@@ -383,7 +411,9 @@ export default class BaseApplicationGenerator<
   /**
    * @protected
    */
-  protected getTaskFirstArgForPriority(priorityName: string): TaskParamWithApplication<Field, Relationship, Entity, Application, Control> {
+  protected getTaskFirstArgForPriority(
+    priorityName: string,
+  ): TaskParamWithApplication<Field, PK, Relationship, Entity, Application, Control> {
     if (
       ![
         LOADING,
@@ -418,35 +448,35 @@ export default class BaseApplicationGenerator<
       return {
         application,
         applicationDefaults: data => mutateData(application, { __override__: false, ...data }),
-      } as PreparingTaskParam<Field, Relationship, Entity, Application, Sources, Control>;
+      } as PreparingTaskParam<Field, PK, Relationship, Entity, Application, Sources, Control>;
     }
     if (LOADING_ENTITIES === priorityName) {
       return {
         application,
         entitiesToLoad: this.getEntitiesDataToLoad(),
-      } as LoadingEntitiesTaskParam<Field, Relationship, Entity, Application, Sources, Control>;
+      } as LoadingEntitiesTaskParam<Field, PK, Relationship, Entity, Application, Control>;
     }
     if ([DEFAULT].includes(priorityName)) {
       return {
         application,
         ...this.getEntitiesDataForPriorities(),
-      } as TaskParamWithEntities<Field, Relationship, Entity, Application, Control>;
+      } as TaskParamWithEntities<Field, PK, Relationship, Entity, Application, Control>;
     }
     if ([WRITING_ENTITIES, POST_WRITING_ENTITIES].includes(priorityName)) {
       const applicationAndEntities = {
         application,
         ...this.getEntitiesDataToWrite(),
-      } as TaskParamWithEntities<Field, Relationship, Entity, Application, Control>;
+      } as TaskParamWithEntities<Field, PK, Relationship, Entity, Application, Control>;
       if (priorityName === WRITING_ENTITIES) {
-        return applicationAndEntities as TaskParamWithEntities<Field, Relationship, Entity, Application, Control>;
+        return applicationAndEntities as TaskParamWithEntities<Field, PK, Relationship, Entity, Application, Control>;
       }
       return {
         ...applicationAndEntities,
         source: this.sharedData.getSource(),
-      } as PostWritingEntitiesTaskParam<Field, Relationship, Entity, Application, Sources, Control>;
+      } as PostWritingEntitiesTaskParam<Field, PK, Relationship, Entity, Application, Sources, Control>;
     }
 
-    return { application } as TaskParamWithApplication<Field, Relationship, Entity, Application, Control>;
+    return { application } as TaskParamWithApplication<Field, PK, Relationship, Entity, Application, Control>;
   }
 
   /**
@@ -455,11 +485,12 @@ export default class BaseApplicationGenerator<
    * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
-  getEntitiesDataToConfigure(): ConfiguringEachEntityTaskParam<Field, Relationship, Entity, Application, Control>[] {
+  getEntitiesDataToConfigure(): ConfiguringEachEntityTaskParam<Field, PK, Relationship, Entity, Application, Control>[] {
     return this.getExistingEntityNames().map(entityName => {
       const entityStorage = this.getEntityConfig(entityName, true);
       return { entityName, entityStorage, entityConfig: entityStorage!.createProxy() } as ConfiguringEachEntityTaskParam<
         Field,
+        PK,
         Relationship,
         Entity,
         Application,
@@ -474,7 +505,7 @@ export default class BaseApplicationGenerator<
    * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
-  getEntitiesDataToLoad(): EntityToLoad<Field, Relationship, Entity>[] {
+  getEntitiesDataToLoad(): EntityToLoad<Field, PK, Relationship, Entity>[] {
     const application = this.sharedData.getApplication();
     const builtInEntities: string[] = [];
     if (application.generateBuiltInUserEntity) {
@@ -515,7 +546,7 @@ export default class BaseApplicationGenerator<
    * @returns {object[]}
    */
   getEntitiesDataToPrepare(): Pick<
-    PreparingEachEntityTaskParam<Field, Relationship, Entity, Application, Control>,
+    PreparingEachEntityTaskParam<Field, PK, Relationship, Entity, Application, Control>,
     'entity' | 'entityName' | 'description'
   >[] {
     return this.sharedData.getEntities().map(({ entityName, ...data }) => ({
@@ -531,7 +562,7 @@ export default class BaseApplicationGenerator<
    * @returns {object[]}
    */
   getEntitiesFieldsDataToPrepare(): Pick<
-    PreparingEachEntityFieldTaskParam<Field, Relationship, Entity, Application, Control>,
+    PreparingEachEntityFieldTaskParam<Field, PK, Relationship, Entity, Application, Control>,
     'entity' | 'entityName' | 'field' | 'fieldName' | 'description'
   >[] {
     return this.getEntitiesDataToPrepare()
@@ -556,7 +587,7 @@ export default class BaseApplicationGenerator<
    * @returns {object[]}
    */
   getEntitiesRelationshipsDataToPrepare(): Pick<
-    PreparingEachEntityRelationshipTaskParam<Field, Relationship, Entity, Application, Control>,
+    PreparingEachEntityRelationshipTaskParam<Field, PK, Relationship, Entity, Application, Control>,
     'entity' | 'entityName' | 'relationship' | 'relationshipName' | 'description'
   >[] {
     return this.getEntitiesDataToPrepare()

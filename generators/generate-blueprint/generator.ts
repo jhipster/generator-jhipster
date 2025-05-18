@@ -22,7 +22,7 @@ import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 
 import BaseGenerator from '../base-application/index.js';
-import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.js';
+import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.js';
 
 import * as GENERATOR_LIST from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';

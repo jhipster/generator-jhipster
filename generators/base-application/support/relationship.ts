@@ -20,14 +20,18 @@
 import { lowerFirst, upperFirst } from 'lodash-es';
 
 import type { ValidationResult } from '../../base/api.js';
-import type { Entity } from '../../../lib/types/application/entity.js';
 import type { Relationship } from '../../../lib/types/application/relationship.js';
+import type { BaseApplicationEntity, BaseApplicationRelationship } from '../types.js';
 import { findEntityInEntities } from './entity.js';
 import { stringifyApplicationData } from './debug.js';
 
 export const otherRelationshipType = relationshipType => relationshipType.split('-').reverse().join('-');
 
-export const findOtherRelationshipInRelationships = (entityName: string, relationship: Relationship, inRelationships: Relationship[]) => {
+export const findOtherRelationshipInRelationships = (
+  entityName: string,
+  relationship: BaseApplicationRelationship<any>,
+  inRelationships: BaseApplicationRelationship<any>[],
+) => {
   return inRelationships.find(otherRelationship => {
     if (upperFirst(otherRelationship.otherEntityName) !== entityName) {
       return false;
@@ -44,7 +48,7 @@ export const findOtherRelationshipInRelationships = (entityName: string, relatio
   });
 };
 
-export const loadEntitiesAnnotations = (entities: Entity[]) => {
+export const loadEntitiesAnnotations = (entities: BaseApplicationEntity<any, any, any>[]) => {
   for (const entity of entities) {
     // Load field annotations
     for (const field of entity.fields ?? []) {
@@ -62,11 +66,14 @@ export const loadEntitiesAnnotations = (entities: Entity[]) => {
   }
 };
 
-export const loadEntitiesOtherSide = (entities: Entity[], { application }: { application?: any } = {}): ValidationResult => {
+export const loadEntitiesOtherSide = (
+  entities: BaseApplicationEntity<any, any, any>[],
+  { application }: { application?: any } = {},
+): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
   for (const entity of entities) {
     for (const relationship of entity.relationships ?? []) {
-      const otherEntity = findEntityInEntities(upperFirst(relationship.otherEntityName), entities);
+      const otherEntity = findEntityInEntities(upperFirst(relationship.otherEntityName), entities as any);
       if (!otherEntity) {
         if (upperFirst(relationship.otherEntityName) === 'User') {
           const errors: string[] = [];
@@ -81,10 +88,15 @@ export const loadEntitiesOtherSide = (entities: Entity[], { application }: { app
         throw new Error(`Error at entity ${entity.name}: could not find the entity ${relationship.otherEntityName}`);
       }
       otherEntity.otherRelationships = otherEntity.otherRelationships || [];
+      // @ts-ignore
       otherEntity.otherRelationships.push(relationship);
 
       relationship.otherEntity = otherEntity;
-      const otherRelationship = findOtherRelationshipInRelationships(entity.name, relationship, otherEntity.relationships ?? []);
+      const otherRelationship = findOtherRelationshipInRelationships(
+        entity.name,
+        relationship,
+        (otherEntity as unknown as BaseApplicationEntity<any, any, any>).relationships ?? [],
+      );
       if (otherRelationship) {
         relationship.otherRelationship = otherRelationship;
         otherRelationship.otherEntityRelationshipName = otherRelationship.otherEntityRelationshipName ?? relationship.relationshipName;
@@ -112,7 +124,11 @@ export const loadEntitiesOtherSide = (entities: Entity[], { application }: { app
   return result;
 };
 
-export const addOtherRelationship = (entity: Entity, otherEntity: Entity, relationship: Relationship): Relationship => {
+export const addOtherRelationship = (
+  entity: BaseApplicationEntity<any, any, any>,
+  otherEntity: BaseApplicationEntity<any, any, any>,
+  relationship: BaseApplicationRelationship<any>,
+): Relationship => {
   relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? lowerFirst(entity.name);
   const otherRelationship = {
     otherEntityName: lowerFirst(entity.name),

@@ -16,14 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import chalk from 'chalk';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
-import { createBase64Secret, createSecret } from '../base/support/secret.js';
+import { GENERATOR_BASE_APPLICATION, GENERATOR_JAVA, GENERATOR_LIQUIBASE } from '../generator-list.js';
 import { applicationTypes, authenticationTypes } from '../../lib/jhipster/index.js';
 
-const { OAUTH2, SESSION, JWT } = authenticationTypes;
-const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
+const { OAUTH2 } = authenticationTypes;
+const { MICROSERVICE } = applicationTypes;
 
 const ALPHANUMERIC_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
 
@@ -38,18 +36,6 @@ const command = {
     },
   },
   configs: {
-    reactive: {
-      cli: {
-        description: 'Generate a reactive backend',
-        type: Boolean,
-      },
-      prompt: gen => ({
-        when: () => ['monolith', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
-        type: 'confirm',
-        message: 'Do you want to make it reactive with Spring WebFlux?',
-      }),
-      scope: 'storage',
-    },
     serverPort: {
       prompt: gen => ({
         when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
@@ -99,41 +85,7 @@ const command = {
       },
       scope: 'storage',
     },
-    authenticationType: {
-      cli: {
-        name: 'auth',
-        description: 'Provide authentication type for the application when skipping server side generation',
-        type: String,
-      },
-      prompt: (gen, config) => ({
-        type: 'list',
-        message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
-        choices: () =>
-          gen.jhipsterConfigWithDefaults.applicationType !== MONOLITH
-            ? (config.choices as any).filter(({ value }) => value !== SESSION)
-            : config.choices,
-        default: () => gen.jhipsterConfigWithDefaults.authenticationType,
-      }),
-      choices: [
-        { value: 'jwt', name: 'JWT authentication (stateless, with a token)' },
-        { value: 'oauth2', name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)' },
-        { value: 'session', name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)' },
-      ],
-      configure: gen => {
-        const { jwtSecretKey, rememberMeKey, authenticationType, applicationType } = gen.jhipsterConfigWithDefaults;
-        if (authenticationType === SESSION && !rememberMeKey) {
-          gen.jhipsterConfig.rememberMeKey = createSecret();
-        } else if (authenticationType === OAUTH2 && gen.jhipsterConfig.skipUserManagement === undefined) {
-          gen.jhipsterConfig.skipUserManagement = true;
-        } else if (
-          jwtSecretKey === undefined &&
-          (authenticationType === JWT || applicationType === MICROSERVICE || applicationType === GATEWAY)
-        ) {
-          gen.jhipsterConfig.jwtSecretKey = createBase64Secret(64, gen.options.reproducibleTests);
-        }
-      },
-      scope: 'storage',
-    },
+
     feignClient: {
       description: 'Generate a feign client',
       cli: {
@@ -193,14 +145,6 @@ const command = {
         }
       },
     },
-    databaseType: {
-      cli: {
-        type: String,
-        hide: true,
-      },
-      choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
-      scope: 'storage',
-    },
     messageBroker: {
       description: 'message broker',
       cli: {
@@ -239,7 +183,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL, 'jhipster:spring-cloud:gateway'],
+  import: [GENERATOR_BASE_APPLICATION, GENERATOR_JAVA, GENERATOR_LIQUIBASE, 'jhipster:spring-cloud:gateway'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

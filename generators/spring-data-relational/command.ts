@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+import { GENERATOR_SPRING_BOOT } from '../generator-list.js';
 
 const command = {
   options: {
@@ -26,16 +27,8 @@ const command = {
       scope: 'storage',
     },
   },
-  configs: {
-    prodDatabaseType: {
-      cli: {
-        type: String,
-        hide: true,
-      },
-      choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql'],
-      scope: 'storage',
-    },
-  },
+  configs: {},
+  import: [GENERATOR_SPRING_BOOT],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

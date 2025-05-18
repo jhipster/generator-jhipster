@@ -18,6 +18,7 @@
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import {
+  GENERATOR_BASE_APPLICATION,
   GENERATOR_BOOTSTRAP,
   GENERATOR_BOOTSTRAP_APPLICATION_BASE,
   GENERATOR_CLIENT,
@@ -45,21 +46,6 @@ const command = {
       type: Boolean,
       scope: 'storage',
     },
-    jhiPrefix: {
-      description: 'Add prefix before services, controllers and states name',
-      type: String,
-      scope: 'storage',
-    },
-    entitySuffix: {
-      description: 'Add suffix after entities name',
-      type: String,
-      scope: 'storage',
-    },
-    dtoSuffix: {
-      description: 'Add suffix after dtos name',
-      type: String,
-      scope: 'storage',
-    },
     ignoreErrors: {
       description: "Don't fail on prettier errors.",
       type: Boolean,
@@ -82,6 +68,7 @@ const command = {
     },
   },
   import: [
+    GENERATOR_BASE_APPLICATION,
     GENERATOR_BOOTSTRAP,
     GENERATOR_BOOTSTRAP_APPLICATION_BASE,
     GENERATOR_COMMON,

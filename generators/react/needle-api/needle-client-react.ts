@@ -20,7 +20,7 @@ import chalk from 'chalk';
 import { startCase } from 'lodash-es';
 
 import needleClientBase from '../../client/needle-api/needle-client.js';
-import { stripMargin } from '../../base/support/index.js';
+import { stripMargin } from '../../base-core/support/index.js';
 
 export default class extends needleClientBase {
   addAppSCSSStyle(style: string, comment?: string) {
