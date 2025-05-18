@@ -87,6 +87,7 @@ describe(`generator - ${generator}`, () => {
     describe('default config', () => {
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig({}, [
+          // @ts-ignore
           {
             name: 'EntityA',
             changelogDate: '20220129025419',
@@ -285,7 +286,6 @@ describe(`generator - ${generator}`, () => {
   "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
-  "fieldNameChoices": [],
   "fields": [
     {
       "autoGenerate": true,
@@ -1272,7 +1272,6 @@ describe(`generator - ${generator}`, () => {
   "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
-  "fieldNameChoices": [],
   "fields": [
     {
       "autoGenerate": true,
@@ -1696,6 +1695,7 @@ describe(`generator - ${generator}`, () => {
             skipUserManagement: true,
           },
           [
+            //@ts-ignore
             {
               name: 'EntityA',
               changelogDate: '20220129025419',
@@ -1832,7 +1832,6 @@ describe(`generator - ${generator}`, () => {
   "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
-  "fieldNameChoices": [],
   "fields": [
     {
       "autoGenerate": true,

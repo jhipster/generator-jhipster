@@ -18,6 +18,8 @@
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import {
+  GENERATOR_BASE,
+  GENERATOR_BASE_APPLICATION,
   GENERATOR_BOOTSTRAP,
   GENERATOR_BOOTSTRAP_APPLICATION_BASE,
   GENERATOR_CLIENT,
@@ -72,11 +74,6 @@ const command = {
       },
       scope: 'storage',
     },
-    ignoreErrors: {
-      description: "Don't fail on prettier errors.",
-      type: Boolean,
-      scope: 'none',
-    },
     pkType: {
       cli: {
         description: 'Default primary key type (beta)',
@@ -98,8 +95,8 @@ const command = {
     },
   },
   import: [
-    'base',
-    'base-application',
+    GENERATOR_BASE,
+    GENERATOR_BASE_APPLICATION,
     GENERATOR_BOOTSTRAP,
     GENERATOR_BOOTSTRAP_APPLICATION_BASE,
     GENERATOR_COMMON,

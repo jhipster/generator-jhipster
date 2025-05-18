@@ -26,6 +26,7 @@ import type { Field } from '../../../lib/types/application/field.js';
 import type { Entity } from '../../../lib/types/application/entity.js';
 import { fieldTypeValues, isFieldEnumType } from '../../../lib/application/field-types.js';
 import type { FakerWithRandexp } from '../../base/support/faker.js';
+import type { BaseApplicationField } from '../types.js';
 import { prepareProperty } from './prepare-property.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -104,9 +105,9 @@ const fakeStringTemplateForFieldName = columnName => {
 /**
  * @returns fake value
  */
-function generateFakeDataForField(
-  this: CoreGenerator,
-  field: Field,
+function generateFakeDataForField<F extends BaseApplicationField>(
+  this: CoreGenerator<any, any, any, any, any, any, any, any>,
+  field: F,
   faker: FakerWithRandexp,
   changelogDate,
   type: 'csv' | 'cypress' | 'json-serializable' | 'ts' = 'csv',

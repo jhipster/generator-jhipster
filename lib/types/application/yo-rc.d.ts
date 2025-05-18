@@ -3,12 +3,15 @@ import type { Simplify } from 'type-fest';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../command/types.js';
 import type { YO_RC_CONFIG_KEY } from '../../utils/yo-rc.ts';
 import { BaseApplicationConfiguration } from '../../../generators/base-application/api.js';
+<<<<<<< HEAD
 
 type BaseApplicationConfig = BaseApplicationConfiguration & {
   entities?: string[];
   backendType?: string;
   projectDescription?: string;
 };
+=======
+>>>>>>> c7fde155e0 (start to reconcile current generator code with new types)
 
 export type ApplicationConfiguration = Simplify<
   {
@@ -19,11 +22,15 @@ export type ApplicationConfiguration = Simplify<
     blueprints?: { name: string; version?: string }[];
     testFrameworks?: string[];
     microfrontends?: { baseName: string }[];
+<<<<<<< HEAD
     skipCommitHook?: boolean;
     skipGit?: boolean;
     appsFolders?: string[];
     packages?: string[];
   } & BaseApplicationConfig &
+=======
+  } & BaseApplicationConfiguration &
+>>>>>>> c7fde155e0 (start to reconcile current generator code with new types)
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/app/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/bootstrap-application-base/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/client/command.js').default> &

@@ -2,10 +2,10 @@ import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/index.js';
 import type { CypressApplication } from '../cypress/types.js';
 import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
-import type { PostWritingEntitiesTaskParam } from '../../lib/types/application/tasks.js';
+import type { PostWritingEntitiesTaskParam } from '../base-application/tasks.js';
+import type { PartialAngularApplication } from '../angular/types-partial.js';
 import type { Language } from '../languages/support/languages.ts';
-import type { GetWebappTranslationCallback } from '../../lib/types/base/translation.js';
-import type { Entity } from '../base-application/index.js';
+import type { BaseApplicationEntity } from '../base-application/types.js';
 import type Command from './command.ts';
 
 type ApplicationClientProperties = ExportApplicationPropertiesFromCommand<typeof Command>;
@@ -17,17 +17,18 @@ export type FrontendApplication = ApplicationClientProperties &
     clientWebappDir?: string;
     webappEnumerationsDir?: string;
     clientFrameworkBuiltIn?: boolean;
-    frontendAppName?: string;
-    filterEntitiesForClient?: (entity: Entity[]) => Entity[];
-    filterEntitiesAndPropertiesForClient?: (entity: Entity[]) => Entity[];
-    filterEntityPropertiesForClient?: (entity: Entity) => Entity;
-    getWebappTranslation?: GetWebappTranslationCallback;
   };
 
 /**
  * @deprecated in favor of frontend application.
  */
-export type ClientApplication = JavaScriptApplication & FrontendApplication;
+export type ClientApplication<E extends BaseApplicationEntity<any, any, any>> = JavaScriptApplication &
+  PartialAngularApplication &
+  FrontendApplication & {
+    filterEntitiesForClient?: (entities: E[]) => E[];
+    filterEntityPropertiesForClient?: (entity: E) => E;
+    filterEntitiesAndPropertiesForClient?: (entities: E[]) => E[];
+  };
 
 export type ClientResources = {
   /**
@@ -41,14 +42,7 @@ export type ClientResources = {
 };
 
 export type ClientSourceType = JavaScriptSourceType & {
-  /**
-   * Add style to css file.
-   */
-  addClientStyle?: (args: { style: string; comment?: string }) => void;
-  /**
-   * Add entities to client.
-   */
-  addEntitiesToClient: (arg1: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) => void;
+  addEntitiesToClient: (arg1: Pick<PostWritingEntitiesTaskParam<any, any, any, any, any, any, any>, 'application' | 'entities'>) => void;
   /**
    * Add external resources to root file(index.html).
    */
