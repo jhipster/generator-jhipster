@@ -23,11 +23,7 @@ import type { QueuedAdapter } from '@yeoman/types';
 import BaseGenerator from '../base/index.js';
 import { files } from './files.js';
 
-/**
- * @class
- * @extends {BaseGenerator}
- */
-export default class GitGenerator extends BaseGenerator {
+export default class GitGenerator extends BaseGenerator<{ baseName?: string; monorepository?: boolean }> {
   gitInitialized!: boolean;
   skipGit!: boolean;
   forceGit!: boolean;
@@ -68,7 +64,7 @@ export default class GitGenerator extends BaseGenerator {
       async preparing() {
         if (!this.skipGit) {
           // Force write .yo-rc.json to disk, it's used to check if the application is regenerated
-          this.jhipsterConfig.skipGit = undefined;
+          this.jhipsterConfig.monorepository ??= undefined;
         }
       },
     });

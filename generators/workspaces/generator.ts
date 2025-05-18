@@ -24,7 +24,7 @@ import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENER
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import { packageJson } from '../../lib/index.js';
 
-export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
+export default class WorkspacesGenerator extends BaseWorkspacesGenerator<{ baseName: string; monorepository: boolean }> {
   workspaces!: boolean;
   generateApplications!: () => Promise<undefined>;
   generateWith!: string;

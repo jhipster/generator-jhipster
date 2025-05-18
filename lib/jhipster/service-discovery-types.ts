@@ -20,5 +20,5 @@ const serviceDiscoveryTypes = {
   EUREKA: 'eureka',
   CONSUL: 'consul',
   NO: 'no',
-};
+} as const;
 export default serviceDiscoveryTypes;

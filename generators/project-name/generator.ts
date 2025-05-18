@@ -66,7 +66,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
       load({ application }) {
         const { baseName, projectDescription } = this.jhipsterConfig;
         application.baseName = baseName;
-        application.projectDescription = projectDescription;
+        application.projectDescription = projectDescription!;
       },
     });
   }

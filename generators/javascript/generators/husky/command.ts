@@ -18,7 +18,7 @@
  */
 import type { JHipsterCommandDefinition } from '../../../../lib/command/index.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   configs: {
     skipCommitHook: {
       description: 'Skip adding husky commit hooks',
@@ -29,6 +29,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

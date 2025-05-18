@@ -7,7 +7,7 @@ import { GENERATOR_APP, GENERATOR_INFO, GENERATOR_JDL } from '../../generators/g
 import { entitiesByType, generateSample } from './support/index.js';
 import assert from 'assert';
 
-export default class extends BaseGenerator {
+export default class extends BaseGenerator<{ entities: string[] }> {
   sampleName;
   global;
   projectFolder;

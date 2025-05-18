@@ -1,4 +1,4 @@
-import type { Control } from '../../../generators/base/types.js';
+import type { Control } from '../../../generators/base-core/types.js';
 
 export type TaskParamWithControl = {
   control: Control & Record<string, boolean | string | object>;

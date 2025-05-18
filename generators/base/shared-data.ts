@@ -29,7 +29,7 @@ import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import type { ApplicationType, BaseApplicationSource } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
-import type { CleanupArgumentType, Control } from './types.js';
+import type { CleanupArgumentType, Control } from '../base-core/types.js';
 
 export default class SharedData<EntityType extends BaseEntity = Entity, Application = ApplicationType> {
   _storage: any;

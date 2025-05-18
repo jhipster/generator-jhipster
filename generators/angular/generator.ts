@@ -43,7 +43,7 @@ import type { AngularApplication, AngularEntity } from './types.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
-export default class AngularGenerator extends BaseApplicationGenerator<DefaultTaskTypes<AngularEntity, AngularApplication>> {
+export default class AngularGenerator extends BaseApplicationGenerator<unknown, DefaultTaskTypes<AngularEntity, AngularApplication>> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -109,6 +109,26 @@ export default class AngularGenerator extends BaseApplicationGenerator<DefaultTa
           const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
           const editCallback = addToEntitiesMenu(param);
           this.editFile(filePath, { ignoreNonExisting }, editCallback);
+
+          this.editFile(
+            `${application.clientSrcDir}app/entities/entity-navbar-items.ts`,
+            createNeedleCallback({
+              needle: 'add-entity-navbar',
+              contentToAdd: param.entities
+                .filter(e => !e.adminEntity)
+                .map(
+                  entity => `{
+  name: '${entity.entityAngularName}',
+  route: '/${entity.entityPage}',${
+    application.enableTranslation
+      ? `
+  translationKey: 'global.menu.entities.${entity.entityTranslationKey}',`
+      : ''
+  }
+  },`,
+                ),
+            }),
+          );
         };
         source.addAdminRoute = (args: Omit<Parameters<typeof addRoute>[0], 'needle'>) =>
           this.editFile(
@@ -250,10 +270,6 @@ export default class AngularGenerator extends BaseApplicationGenerator<DefaultTa
 
   get default() {
     return this.asDefaultTaskGroup({
-      loadEntities({ application }) {
-        const entities = this.sharedData.getEntities().map(({ entity }) => entity);
-        application.angularEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient) as AngularEntity[];
-      },
       queueTranslateTransform({ application }) {
         const { enableTranslation, jhiPrefix } = application;
         this.queueTransformStream(
