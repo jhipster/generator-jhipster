@@ -67,6 +67,12 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get loading() {
     return this.asLoadingTaskGroup({
+      cancel({ application }) {
+        if (application.skipServer) {
+          // TODO fix preparation for skipServer
+          // this.cancelCancellableTasks();
+        }
+      },
       async loadApplication({ application, applicationDefaults }) {
         loadConfig(serverCommand.configs, { config: this.jhipsterConfigWithDefaults, application });
         loadServerConfig({ config: this.jhipsterConfigWithDefaults, application });

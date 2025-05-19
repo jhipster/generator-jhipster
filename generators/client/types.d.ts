@@ -6,6 +6,7 @@ import type { PostWritingEntitiesTaskParam } from '../../lib/types/application/t
 import type { PartialAngularApplication } from '../angular/types-partial.js';
 import type { Language } from '../languages/support/languages.ts';
 import type { GetWebappTranslationCallback } from '../../lib/types/base/translation.js';
+import type { Entity } from '../base-application/index.js';
 import type Command from './command.ts';
 
 type ApplicationClientProperties = ExportApplicationPropertiesFromCommand<typeof Command>;
@@ -18,6 +19,9 @@ export type FrontendApplication = ApplicationClientProperties &
     webappEnumerationsDir?: string;
     clientFrameworkBuiltIn?: boolean;
     frontendAppName?: string;
+    filterEntitiesForClient?: (entity: Entity[]) => Entity[];
+    filterEntitiesAndPropertiesForClient?: (entity: Entity[]) => Entity[];
+    filterEntityPropertiesForClient?: (entity: Entity) => Entity;
     getWebappTranslation?: GetWebappTranslationCallback;
   };
 

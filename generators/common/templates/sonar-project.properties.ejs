@@ -36,7 +36,9 @@ sonar.javascript.lcov.reportPaths=<%_ if (buildToolMaven) { _%>target<%_ } else 
 <%_ } _%>
 
 sonar.sourceEncoding=UTF-8
+<%_ if (!skipClient) { _%>
 sonar.exclusions=<%= clientSrcDir %>content/**/*.*, <%= clientSrcDir %>i18n/*.js, <%= clientDistDir %>**/*.*
+<%_ } _%>
 <%_ if (!skipServer && backendTypeJavaAny) { _%>
 
 sonar.issue.ignore.multicriteria=\
