@@ -104,19 +104,7 @@ When using Kubernetes, importing should be done using init-containers (with a vo
 
 ### Okta
 
-If you'd like to use Okta instead of Keycloak, it's pretty quick using the [Okta CLI](https://cli.okta.com/). After you've installed it, run:
-
-```shell
-okta register
-```
-
-Then, in your JHipster app's directory, run `okta apps create` and select **JHipster**. This will set up an Okta app for you, create `ROLE_ADMIN` and `ROLE_USER` groups, create a `.okta.env` file with your Okta settings, and configure a `groups` claim in your ID token.
-
-Run `source .okta.env` and start your app with Maven or Gradle. You should be able to sign in with the credentials you registered with.
-
-If you're on Windows, you should install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) so the `source` command will work.
-
-If you'd like to configure things manually through the Okta developer console, see the instructions below.
+If you'd like to use Okta instead of Keycloak, it's pretty quick. 
 
 First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
 
