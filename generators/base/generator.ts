@@ -41,7 +41,7 @@ export default class JHipsterBaseBlueprintGenerator<
   TaskTypes extends BaseTaskTypes = BaseTaskTypes,
   Options = unknown,
   Features = unknown,
-> extends CoreGenerator<ConfigType & Config, Readonly<ConfigType & Config>, Options, Features> {
+> extends CoreGenerator<ConfigType & Config, Options, Features> {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
   delegateToBlueprint?: boolean;

@@ -112,12 +112,10 @@ const deepMerge = (source1: any, source2: any) => mergeWith({}, source1, source2
 /**
  * This is the base class for a generator for every generator.
  */
-export default class CoreGenerator<
-  ConfigType extends Config = Config,
-  ConfigDefaultsType extends Readonly<ConfigType> = Readonly<ConfigType>,
-  Options = unknown,
-  Features = unknown,
-> extends YeomanGenerator<JHipsterGeneratorOptions & Options, JHipsterGeneratorFeatures & Features> {
+export default class CoreGenerator<ConfigType extends Config = Config, Options = unknown, Features = unknown> extends YeomanGenerator<
+  JHipsterGeneratorOptions & Options,
+  JHipsterGeneratorFeatures & Features
+> {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -345,7 +343,7 @@ export default class CoreGenerator<
   /**
    * JHipster config with default values fallback
    */
-  get jhipsterConfigWithDefaults(): ConfigDefaultsType {
+  get jhipsterConfigWithDefaults(): Readonly<ConfigType> {
     const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
     defaults(configWithDefaults, {
       skipFakeData: false,
@@ -354,7 +352,7 @@ export default class CoreGenerator<
       autoCrlf: false,
       pages: [],
     });
-    return configWithDefaults as ConfigDefaultsType;
+    return configWithDefaults as Readonly<ConfigType>;
   }
 
   /**
