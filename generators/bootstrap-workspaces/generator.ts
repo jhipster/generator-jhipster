@@ -67,24 +67,24 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
-  get preparing() {
-    return this.asPreparingTaskGroup({
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
       async bootstrapApplications() {
         await this.bootstrapApplications();
       },
     });
   }
 
-  get [BaseWorkspacesGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+  get [BaseWorkspacesGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   get loadingWorkspaces() {
-    return {
+    return this.asAnyTaskGroup({
       loadWorkspacesConfig({ workspaces }) {
-        (this as any).loadWorkspacesConfig({ context: workspaces });
+        this.loadWorkspacesConfig({ context: workspaces });
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {

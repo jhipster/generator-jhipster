@@ -31,7 +31,6 @@ import { convertSecretToBase64, createBase64Secret, createFaker, stringHashCode 
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
 import { loadDerivedPlatformConfig, loadPlatformConfig } from '../server/support/index.js';
-import command from './command.js';
 import { writeFiles } from './files.js';
 
 const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;
@@ -47,7 +46,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   jwtSecretKey!: string;
 
   async beforeQueue() {
-    this.parseJHipsterArguments(command.arguments);
     if (this.appsFolders && this.appsFolders.length > 0) {
       this.jhipsterConfig.appsFolders = this.appsFolders;
     }

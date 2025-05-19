@@ -65,7 +65,7 @@ const expectGeneratorTestOption = () => expect((runResult.generator as any).test
 const expectContextTestOption = () => expect(runResult.generator.context!.testOption);
 const expectJHipsterConfigTestOption = () => expect(runResult.generator.jhipsterConfig.testOption);
 const expectBlueprintConfigTestOption = () => expect((runResult.generator as any).blueprintConfig.testOption);
-const expectApplicationTestOption = () => expect(runResult.generator.sharedData.getApplication().testOption);
+const expectApplicationTestOption = () => expect(runResult.application?.testOption);
 
 describe('generator commands', () => {
   for (const scope of ['generator', 'context', 'storage', 'blueprint', 'none'] as const) {

@@ -46,7 +46,9 @@ import type { Entity } from '../../lib/types/application/entity.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import type SharedData from '../base/shared-data.js';
-import { getEntitiesFromDir } from './support/index.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
+import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, CONTEXT_DATA_APPLICATION_KEY, getEntitiesFromDir } from './support/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 
 const {
@@ -122,6 +124,11 @@ export default class BaseApplicationGenerator<
       this.queueEntityTasks();
     });
 
+    this.on('before:render', (sourceBasename, context) => {
+      const seed = `${context.entityClass}-${sourceBasename}${context.fakerSeed ?? ''}`;
+      this.resetEntitiesFakeData(seed);
+    });
+
     if (this.options.applicationWithEntities) {
       this.log.warn('applicationWithEntities option is deprecated');
       // Write new definitions to memfs
@@ -140,6 +147,24 @@ export default class BaseApplicationGenerator<
       }
       delete this.options.applicationWithEntities;
     }
+  }
+
+  get #application(): ApplicationType {
+    return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
+      factory: () => ({ nodeDependencies: {}, customizeTemplatePaths: [], user: undefined }) as unknown as ApplicationType,
+    });
+  }
+
+  get #entities(): Map<string, BaseEntity> {
+    return this.getContextData(CONTEXT_DATA_APPLICATION_ENTITIES_KEY, { factory: () => new Map() });
+  }
+
+  get #entitiesForTasks() {
+    return [...this.#entities.entries()].map(([key, value]) => ({
+      description: key,
+      entityName: key,
+      entity: value as any,
+    }));
   }
 
   dependsOnBootstrapApplication(options?: ComposeOptions | undefined) {
@@ -340,11 +365,11 @@ export default class BaseApplicationGenerator<
    * @param {string} seed
    */
   resetEntitiesFakeData(seed: string | undefined): void {
-    seed = `${this.sharedData.getApplication().baseName}-${seed}`;
+    seed = `${this.#application.baseName}-${seed}`;
     this.log.debug(`Resetting entities seed with '${seed}'`);
-    this.sharedData.getEntities().forEach(({ entity }) => {
-      entity.resetFakerSeed(seed);
-    });
+    for (const entity of this.#entities.values()) {
+      (entity as any).resetFakerSeed?.(seed);
+    }
   }
 
   getArgsForPriority(priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES]): TaskParamWithApplication[] {
@@ -390,7 +415,7 @@ export default class BaseApplicationGenerator<
     if (!this.jhipsterConfig.baseName) {
       throw new Error(`BaseName (${this.jhipsterConfig.baseName}) application not available for priority ${priorityName}`);
     }
-    const application = this.sharedData.getApplication();
+    const application = this.#application;
 
     if (([PREPARING, LOADING] as string[]).includes(priorityName)) {
       return {
@@ -447,7 +472,7 @@ export default class BaseApplicationGenerator<
    * @returns {string[]}
    */
   getEntitiesDataToLoad(): EntityToLoad[] {
-    const application = this.sharedData.getApplication();
+    const application = this.#application;
     const builtInEntities: string[] = [];
     if (application.generateBuiltInUserEntity) {
       // Reorder User entity to be the first one to be loaded
@@ -464,10 +489,10 @@ export default class BaseApplicationGenerator<
     const entitiesToLoad = [...new Set([...builtInEntities, ...this.getExistingEntityNames()])];
     return entitiesToLoad.map(entityName => {
       const generator = this;
-      if (!this.sharedData.hasEntity(entityName)) {
-        this.sharedData.setEntity(entityName, { name: entityName });
+      if (!this.#entities.has(entityName)) {
+        this.#entities.set(entityName, { name: entityName, fields: [], relationships: [] });
       }
-      const entityBootstrap = this.sharedData.getEntity(entityName);
+      const entityBootstrap = this.#entities.get(entityName);
       return {
         entityName,
         get entityStorage() {
@@ -487,11 +512,7 @@ export default class BaseApplicationGenerator<
    * @returns {object[]}
    */
   getEntitiesDataToPrepare(): Pick<PreparingEachEntityTaskParam, 'entity' | 'entityName' | 'description'>[] {
-    return this.sharedData.getEntities().map(({ entityName, ...data }) => ({
-      description: entityName,
-      entityName,
-      ...data,
-    }));
+    return this.#entitiesForTasks;
   }
 
   /**
@@ -559,8 +580,7 @@ export default class BaseApplicationGenerator<
    * @returns {object[]}
    */
   getEntitiesDataForPriorities() {
-    const entitiesDefinitions = this.sharedData.getEntities();
-    return { entities: entitiesDefinitions.map(({ entity }) => entity) };
+    return { entities: [...this.#entities.values()] };
   }
 
   /**

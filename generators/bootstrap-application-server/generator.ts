@@ -152,13 +152,12 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
   get loadingEntities() {
     return this.asLoadingEntitiesTaskGroup({
       loadingEntities({ entitiesToLoad }) {
-        for (const { entityName } of entitiesToLoad) {
-          const entity = this.sharedData.getEntity(entityName);
-          loadRequiredConfigIntoEntity.call(this, entity, this.jhipsterConfigWithDefaults);
+        for (const { entityBootstrap } of entitiesToLoad) {
+          loadRequiredConfigIntoEntity.call(this, entityBootstrap, this.jhipsterConfigWithDefaults);
         }
       },
-      requiredOtherSideRelationships() {
-        this.validateResult(addEntitiesOtherRelationships(this.sharedData.getEntities().map(({ entity }) => entity)));
+      requiredOtherSideRelationships({ entitiesToLoad }) {
+        this.validateResult(addEntitiesOtherRelationships(entitiesToLoad.map(({ entityBootstrap }) => entityBootstrap)));
       },
     });
   }

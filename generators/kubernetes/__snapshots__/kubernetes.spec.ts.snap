@@ -28,6 +28,21 @@ exports[`generator - Kubernetes Kafka application should match files snapshot 1`
 ",
     "stateCleared": "modified",
   },
+  "09-kafka/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleKafka",
+    "entities": [],
+    "messageBroker": "kafka",
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
@@ -481,6 +496,36 @@ exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gatew
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -1447,6 +1492,20 @@ exports[`generator - Kubernetes gateway and ingress should match files snapshot 
 ",
     "stateCleared": "modified",
   },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
@@ -2142,6 +2201,20 @@ exports[`generator - Kubernetes gateway and ingressType gke should match files s
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
     "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "authenticationType": "oauth2",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080
   }
 }
 ",
@@ -5663,6 +5736,20 @@ exports[`generator - Kubernetes gateway and ingressType nginx should match files
 ",
     "stateCleared": "modified",
   },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "authenticationType": "oauth2",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
@@ -9093,6 +9180,35 @@ exports[`generator - Kubernetes gateway and mysql microservice should match file
 ",
     "stateCleared": "modified",
   },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
@@ -9949,6 +10065,20 @@ exports[`generator - Kubernetes gateway with istio routing should match files sn
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -10957,6 +11087,93 @@ exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql mi
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "04-mongo/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmongodb",
+    "databaseType": "mongodb",
+    "entities": [],
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "07-mariadb/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmariadb",
+    "entities": [],
+    "prodDatabaseType": "mariadb",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "11-mssql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmssqldb",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mssql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -12972,6 +13189,22 @@ exports[`generator - Kubernetes monolith application should match files snapshot
 ",
     "stateCleared": "modified",
   },
+  "08-monolith/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8080
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
@@ -13432,6 +13665,21 @@ exports[`generator - Kubernetes mysql microservice with custom namespace and jhi
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "prometheus",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -16789,6 +17037,20 @@ exports[`generator - Kubernetes mysql microservice with custom namespace should 
 ",
     "stateCleared": "modified",
   },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
@@ -17467,6 +17729,93 @@ exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservic
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "04-mongo/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmongodb",
+    "databaseType": "mongodb",
+    "entities": [],
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "07-mariadb/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmariadb",
+    "entities": [],
+    "prodDatabaseType": "mariadb",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "11-mssql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmssqldb",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mssql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -19483,6 +19832,19 @@ exports[`generator - Kubernetes only gateway should match files snapshot 1`] = `
 ",
     "stateCleared": "modified",
   },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
@@ -20162,6 +20524,20 @@ exports[`generator - Kubernetes only gateway with eureka should match files snap
     "kubernetesStorageClassName": "",
     "kubernetesUseDynamicStorage": true,
     "monitoring": "no",
+    "serviceDiscoveryType": "eureka"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
     "serviceDiscoveryType": "eureka"
   }
 }

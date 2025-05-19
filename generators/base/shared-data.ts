@@ -26,12 +26,10 @@ import { defaults } from 'lodash-es';
 import type { MemFsEditor } from 'mem-fs-editor';
 import { create } from 'mem-fs-editor';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import type { ApplicationType, BaseApplicationSource } from '../../lib/types/application/application.js';
-import type { Entity } from '../../lib/types/application/entity.js';
-import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
+import type { BaseApplicationSource } from '../../lib/types/application/application.js';
 import type { CleanupArgumentType, Control } from './types.js';
 
-export default class SharedData<EntityType extends BaseEntity = Entity, Application = ApplicationType> {
+export default class SharedData {
   _storage: any;
   _editor: MemFsEditor;
   _log: any;
@@ -56,18 +54,9 @@ export default class SharedData<EntityType extends BaseEntity = Entity, Applicat
     this._storage = storage;
 
     defaults(this._storage, {
-      sharedDeployment: {},
-      sharedEntities: {},
-      sharedApplication: {},
       sharedSource: {},
       control: initialControl,
       props: {},
-    });
-
-    defaults(this._storage.sharedApplication, {
-      nodeDependencies: {},
-      customizeTemplatePaths: [],
-      user: undefined,
     });
 
     let customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
@@ -159,39 +148,5 @@ export default class SharedData<EntityType extends BaseEntity = Entity, Applicat
 
   getControl(): Control {
     return this._storage.control;
-  }
-
-  getApplication(): Application {
-    if (!this._storage.sharedApplication) throw new Error('Shared application not loaded');
-    return this._storage.sharedApplication;
-  }
-
-  getDeployment(): Application {
-    if (!this._storage.sharedDeployment) throw new Error('Shared application not loaded');
-    return this._storage.sharedDeployment;
-  }
-
-  setEntity(entityName: string, entity: { name: string } & Partial<EntityType>): void {
-    this._storage.sharedEntities[entityName] = entity;
-  }
-
-  hasEntity(entityName: string): boolean {
-    return Boolean(this._storage.sharedEntities[entityName]);
-  }
-
-  getEntity(entityName: string): EntityType {
-    const entity = this._storage.sharedEntities[entityName];
-    if (!entity) {
-      throw new Error(`Entity definition not loaded for ${entityName}`);
-    }
-    return entity;
-  }
-
-  getEntities(entityNames = Object.keys(this._storage.sharedEntities)): { entityName: string; entity: EntityType }[] {
-    return entityNames.map(entityName => ({ entityName, entity: this.getEntity(entityName) }));
-  }
-
-  getEntitiesMap(): Record<string, EntityType> {
-    return this._storage.sharedEntities;
   }
 }

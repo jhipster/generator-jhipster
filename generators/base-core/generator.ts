@@ -151,7 +151,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   relativeDir = relativeDir;
   relative = posixRelative;
 
-  readonly sharedData!: SharedData<any>;
+  readonly sharedData!: SharedData;
   readonly logger: Logger;
   jhipsterConfig!: Record<string, any>;
   /**
@@ -971,10 +971,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               throw new Error('baseName is required at templates context');
             }
             const sourceBasename = basename(sourceFileFrom);
-            const seed = `${context.entityClass}-${sourceBasename}${context.fakerSeed ?? ''}`;
-            Object.values((this.sharedData as any).getApplication()?.sharedEntities ?? {}).forEach((entity: any) => {
-              entity.resetFakerSeed(seed);
-            });
+            this.emit('before:render', sourceBasename, context);
             // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
             useAsync = false;
           }
@@ -1368,10 +1365,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       ...process.env,
       LANG: 'en',
     });
-  }
-
-  protected getSharedApplication() {
-    return this.sharedData.getApplication();
   }
 
   private createSharedData(): SharedData {

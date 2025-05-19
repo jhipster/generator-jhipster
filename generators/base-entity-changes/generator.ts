@@ -64,7 +64,8 @@ export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseAp
   ): TaskParamWithChangelogsAndApplication | TaskParamWithApplication {
     const firstArg = super.getTaskFirstArgForPriority(priorityName);
     if (([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
-      this.entityChanges = this.generateIncrementalChanges();
+      const { application, entities } = firstArg as TaskTypes['DefaultTaskParam'];
+      this.entityChanges = this.generateIncrementalChanges({ application, entities });
     }
     if (([DEFAULT] as string[]).includes(priorityName)) {
       return { ...firstArg, entityChanges: this.entityChanges };
@@ -80,30 +81,32 @@ export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseAp
   /**
    * Generate changelog from differences between the liquibase entity and current entity.
    */
-  protected generateIncrementalChanges(): BaseChangelog[] {
+  protected generateIncrementalChanges({
+    application,
+    entities: paramEntities,
+  }: Pick<TaskTypes['DefaultTaskParam'], 'application' | 'entities'>): BaseChangelog[] {
     const recreateInitialChangelog = this.recreateInitialChangelog;
-    const { generateBuiltInUserEntity, generateBuiltInAuthorityEntity, incrementalChangelog } = this.sharedData.getApplication();
-    const entityNames = this.getExistingEntityNames();
+    const { incrementalChangelog } = application;
+    const entityNames = paramEntities.filter(e => !e.builtIn).map(e => e.name);
 
-    const entitiesByName = Object.fromEntries(entityNames.map(entityName => [entityName, this.sharedData.getEntity(entityName)]));
+    const entitiesByName = Object.fromEntries(paramEntities.map(entity => [entity.name, entity]));
     const entitiesWithExistingChangelog = entityNames.filter(
       entityName => !this.isChangelogNew({ entityName, changelogDate: entitiesByName[entityName].annotations?.changelogDate }),
     );
     const previousEntitiesByName = Object.fromEntries(
       entityNames
-        .filter(entityName => existsSync(this.getEntityConfigPath(entityName)))
-        .map(entityName => [
+        .map(entityName => ({ entityName, entityConfigPath: this.getEntityConfigPath(entityName) }))
+        .filter(({ entityConfigPath }) => existsSync(entityConfigPath))
+        .map(({ entityName, entityConfigPath }) => [
           entityName,
-          { name: entityName, ...JSON.parse(readFileSync(this.getEntityConfigPath(entityName)).toString()) },
+          { name: entityName, ...JSON.parse(readFileSync(entityConfigPath).toString()) },
         ]),
     );
-    if (generateBuiltInUserEntity) {
-      const user = this.sharedData.getEntity('User');
-      previousEntitiesByName.User = user;
-    }
-    if (generateBuiltInAuthorityEntity) {
-      const authority = this.sharedData.getEntity('Authority');
-      previousEntitiesByName.Authority = authority;
+
+    for (const [entityName, entity] of Object.entries(entitiesByName)) {
+      if (entity.builtIn) {
+        previousEntitiesByName[entityName] = entity;
+      }
     }
 
     const entities: any[] = Object.values(previousEntitiesByName);

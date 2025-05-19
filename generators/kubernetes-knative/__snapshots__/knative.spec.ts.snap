@@ -25,6 +25,36 @@ exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL micr
 ",
     "stateCleared": "modified",
   },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
@@ -1092,6 +1122,20 @@ exports[`generator - Knative Using Helm generator type gateway and ingress shoul
 ",
     "stateCleared": "modified",
   },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
@@ -1910,6 +1954,35 @@ exports[`generator - Knative Using Helm generator type gateway and mysql microse
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -2952,6 +3025,20 @@ exports[`generator - Knative Using Helm generator type gateway with istio routin
 ",
     "stateCleared": "modified",
   },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
@@ -3774,6 +3861,78 @@ exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mon
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "04-mongo/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmongodb",
+    "databaseType": "mongodb",
+    "entities": [],
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "07-mariadb/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmariadb",
+    "entities": [],
+    "prodDatabaseType": "mariadb",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -5538,6 +5697,21 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "monitoring": "prometheus",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -8721,6 +8895,21 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
 ",
     "stateCleared": "modified",
   },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
@@ -9495,6 +9684,20 @@ exports[`generator - Knative Using Helm generator type only gateway should match
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "jhipsternamespace",
     "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -10329,6 +10532,36 @@ exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL micro
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -11324,6 +11557,20 @@ exports[`generator - Knative Using K8s generator type gateway and ingress should
 ",
     "stateCleared": "modified",
   },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
@@ -12071,6 +12318,35 @@ exports[`generator - Knative Using K8s generator type gateway and mysql microser
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -13027,6 +13303,20 @@ exports[`generator - Knative Using K8s generator type gateway with istio routing
 ",
     "stateCleared": "modified",
   },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
@@ -13779,6 +14069,93 @@ exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mong
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "04-mongo/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmongodb",
+    "databaseType": "mongodb",
+    "entities": [],
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "07-mariadb/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmariadb",
+    "entities": [],
+    "prodDatabaseType": "mariadb",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "11-mssql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmssqldb",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mssql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -15913,6 +16290,21 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "monitoring": "prometheus",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -19319,6 +19711,21 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
 ",
     "stateCleared": "modified",
   },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
@@ -20021,6 +20428,20 @@ exports[`generator - Knative Using K8s generator type only gateway should match 
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "jhipsternamespace",
     "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
     "serviceDiscoveryType": "consul"
   }
 }

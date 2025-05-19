@@ -26,6 +26,11 @@ import type { CliCommand } from '../../cli/types.js';
 import type BaseApplicationGenerator from '../../generators/base-application/generator.js';
 import type { PRIORITY_NAMES as APPLICATION_PRIORITY_NAMES } from '../../generators/base-application/priorities.js';
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
+import {
+  CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
+  CONTEXT_DATA_APPLICATION_KEY,
+} from '../../generators/base-application/support/constants.js';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
@@ -68,6 +73,10 @@ type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = Om
 
   // eslint-disable-next-line no-use-before-define
   createJHipster: (ns: string, options?: WithJHipsterGenerators) => JHipsterRunContext;
+
+  application?: ApplicationType;
+
+  entities?: Record<string, Entity>;
 };
 
 type HelpersDefaults = {
@@ -98,8 +107,6 @@ const filterBootstrapGenerators = (gen: string): boolean => !gen.startsWith('jhi
 const composedGeneratorsToCheck = allGenerators
   .filter(filterBootstrapGenerators)
   .filter(gen => !['jhipster:bootstrap', 'jhipster:project-name'].includes(gen));
-
-const defaultSharedApplication = Object.fromEntries(['CLIENT_WEBPACK_DIR'].map(key => [key, undefined]));
 
 let defaultMockFactory: (original?: any) => any;
 let defaultAccumulateMockArgs: (mocks: Record<string, any>) => Record<string, any>;
@@ -351,24 +358,16 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
     return this.onBeforePrepare(() => defineDefaults()).withSharedData({ sharedSource: this.sharedSource });
   }
 
-  withControl(sharedControl: Record<string, any>): this {
-    this.sharedControl = this.sharedControl ?? {};
-    Object.assign(this.sharedControl, sharedControl);
-    // TODO use contextData api.
-    // return this.withContextData('jhipster:control', this.sharedControl);
-    return this.withSharedData({ control: this.sharedControl });
-  }
-
   withSharedApplication(sharedApplication: Record<string, any>): this {
-    this.sharedApplication = this.sharedApplication ?? { ...defaultSharedApplication };
+    this.sharedApplication ??= { nodeDependencies: {}, customizeTemplatePaths: [] };
     merge(this.sharedApplication, sharedApplication);
-    return this.withSharedData({ sharedApplication: this.sharedApplication });
+    return this.withContextData(CONTEXT_DATA_APPLICATION_KEY, this.sharedApplication);
   }
 
   withMockedNodeDependencies() {
     return this.withSharedApplication({
       nodeDependencies: new Proxy({}, { get: (_target, prop) => `${snakeCase(prop.toString()).toUpperCase()}_VERSION` }),
-    });
+    } as unknown as ApplicationType);
   }
 
   /**
@@ -479,6 +478,12 @@ plugins {
       const context = runResult.create(ns) as JHipsterRunContext;
       return context.withJHipsterGenerators(options);
     };
+
+    runResult.application = runResult.generator.getContextData(CONTEXT_DATA_APPLICATION_KEY, { factory: () => undefined });
+    const entitiesMap: Map<string, Entity> | undefined = runResult.generator.getContextData(CONTEXT_DATA_APPLICATION_ENTITIES_KEY, {
+      factory: (): any => undefined,
+    });
+    runResult.entities = entitiesMap ? Object.fromEntries(entitiesMap.entries()) : undefined;
 
     return runResult as any;
   }

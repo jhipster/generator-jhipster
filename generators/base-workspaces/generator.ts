@@ -28,8 +28,10 @@ import { normalizePathEnd } from '../base/support/path.js';
 import type { TaskTypes } from '../../lib/types/base/tasks.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
+import { CONTEXT_DATA_APPLICATION_KEY } from '../base-application/support/constants.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 import command from './command.js';
+import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/index.js';
 
 const {
   PROMPTING_WORKSPACES,
@@ -81,8 +83,28 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
     }
   }
 
+  get #deployment() {
+    return this.getContextData(CONTEXT_DATA_DEPLOYMENT_KEY, { factory: () => ({}) });
+  }
+
+  get #applications() {
+    return this.getContextData(CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, {
+      factory: () =>
+        Object.entries(this.resolveApplicationFolders()).map(([appFolder, resolvedFolder], index) => {
+          const contextMap = this.env.getContextMap(resolvedFolder);
+          const application = contextMap.get(CONTEXT_DATA_APPLICATION_KEY);
+          if (!application) {
+            throw new Error(`No application found in ${resolvedFolder}`);
+          }
+          application.appFolder = appFolder;
+          application.composePort = 8080 + index;
+          return application;
+        }),
+    });
+  }
+
   get sharedWorkspaces(): any {
-    return this.getContextData('jhipster:workspaces', { factory: () => ({}) });
+    return this.getContextData(CONTEXT_DATA_WORKSPACES_KEY, { factory: () => ({}) });
   }
 
   protected loadWorkspacesConfig(opts?) {
@@ -145,7 +167,7 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
       );
   }
 
-  private async resolveApplicationFolders({
+  private resolveApplicationFolders({
     directoryPath = this.directoryPath,
     appsFolders = this.appsFolders ?? [],
   }: { directoryPath?: string; appsFolders?: string[] } = {}) {
@@ -153,22 +175,12 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
   }
 
   async bootstrapApplications() {
-    const resolvedApplicationFolders = await this.resolveApplicationFolders();
+    const resolvedApplicationFolders = this.resolveApplicationFolders();
     for (const [_appFolder, resolvedFolder] of Object.entries(resolvedApplicationFolders)) {
       await this.composeWithJHipster(GENERATOR_BOOTSTRAP_APPLICATION, {
         generatorOptions: { destinationRoot: resolvedFolder, reproducible: true },
-      } as any);
+      });
     }
-    this.getContextData('jhipster:workspacesApplications', {
-      factory: () =>
-        Object.entries(resolvedApplicationFolders).map(([appFolder, resolvedFolder], index) => {
-          const contextMap = this.env.getContextMap(resolvedFolder);
-          const application = contextMap.get('jhipster:shared-data')?.sharedApplication;
-          application.appFolder = appFolder;
-          application.composePort = 8080 + index;
-          return application;
-        }),
-    });
   }
 
   getArgsForPriority(priorityName: string): any {
@@ -192,16 +204,12 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
       return args;
     }
     const [first, ...others] = args ?? [];
-    const sharedData = this.sharedData;
-    const deployment = sharedData.getDeployment();
-    const workspaces = this.sharedWorkspaces;
-    const applications = this.getContextData('jhipster:workspacesApplications', { factory: () => ({}) });
     return [
       {
         ...first,
-        workspaces,
-        deployment,
-        applications,
+        workspaces: this.sharedWorkspaces,
+        deployment: this.#deployment,
+        applications: this.#applications,
       },
       ...others,
     ];
