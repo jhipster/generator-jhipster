@@ -6,8 +6,8 @@ import { matchWrittenConfig, matchWrittenFiles, runResult } from '../../../lib/t
 const expectedElasticsearchFiles = () => [`${JAVA_DOCKER_DIR}elasticsearch.yml`];
 
 const expectedElasticsearchUserFiles = () => {
-  const application = runResult.generator.sharedData.getApplication();
-  return application.generateBuiltInUserEntity
+  const application = runResult.application;
+  return application?.generateBuiltInUserEntity
     ? [`${SERVER_MAIN_SRC_DIR}${application.packageFolder}/repository/search/UserSearchRepository.java`]
     : [];
 };

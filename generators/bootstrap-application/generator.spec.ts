@@ -177,7 +177,7 @@ describe(`generator - ${generator}`, () => {
 `);
       });
       it('should prepare entities', () => {
-        expect(Object.keys(runResult.generator.sharedData.getEntitiesMap())).toMatchInlineSnapshot(`
+        expect(Object.keys(runResult.entities!)).toMatchInlineSnapshot(`
 [
   "User",
   "UserManagement",
@@ -187,7 +187,7 @@ describe(`generator - ${generator}`, () => {
 `);
       });
       it('should prepare User', () => {
-        const entity = runResult.generator.sharedData.getEntitiesMap().User;
+        const entity = runResult.entities!.User;
         expect(entity).toMatchInlineSnapshot(
           expectedEntity(entity),
           `
@@ -1182,7 +1182,7 @@ describe(`generator - ${generator}`, () => {
         );
       });
       it('should prepare EntityA', () => {
-        const entity = runResult.generator.sharedData.getEntitiesMap().EntityA;
+        const entity = runResult.entities!.EntityA;
         expect(entity).toMatchInlineSnapshot(
           expectedEntity(entity),
           `
@@ -1735,14 +1735,14 @@ describe(`generator - ${generator}`, () => {
 `);
       });
       it('should prepare entities', () => {
-        expect(Object.keys(runResult.generator.sharedData.getEntitiesMap())).toMatchInlineSnapshot(`
+        expect(Object.keys(runResult.entities!)).toMatchInlineSnapshot(`
 [
   "EntityA",
 ]
 `);
       });
       it('should prepare EntityA', () => {
-        const entity = runResult.generator.sharedData.getEntitiesMap().EntityA;
+        const entity = runResult.entities!.EntityA;
         expect(entity).toMatchInlineSnapshot(
           expectedEntity(entity),
           `

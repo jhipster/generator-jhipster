@@ -348,7 +348,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
         }
 
-        const entities = this.sharedData.getEntities().map(({ entity }) => entity);
+        const entities = entitiesToLoad.map(({ entityBootstrap }) => entityBootstrap);
         loadEntitiesAnnotations(entities);
         this.validateResult(loadEntitiesOtherSide(entities, { application }));
 

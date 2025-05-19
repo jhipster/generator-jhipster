@@ -31,6 +31,7 @@ import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-worksp
 import { checkDocker } from '../docker/support/index.js';
 import { loadDerivedServerConfig } from '../server/support/index.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
+import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { checkKubernetes, derivedKubernetesPlatformProperties, loadConfig, setupKubernetesConstants } from './kubernetes-base.js';
 import { writeFiles } from './files.js';
 import prompts from './prompts.js';
@@ -45,6 +46,7 @@ const { MAVEN } = buildToolTypes;
 export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
       await this.composeWithBlueprints();
     }
   }

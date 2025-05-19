@@ -35,7 +35,7 @@ describe('generator - server - support - needles', () => {
 
     describe('insertContentIntoApplicationProperties needle', () => {
       it('with a non existing needle', () => {
-        const application = runResult.generator.sharedData.getApplication();
+        const application = runResult.application!;
         expect(() => {
           // @ts-expect-error invalid needle
           insertContentIntoApplicationProperties.call(runResult.generator, application, { foo: 'foo' });
@@ -43,7 +43,7 @@ describe('generator - server - support - needles', () => {
       });
 
       it('without a needle', () => {
-        const application = runResult.generator.sharedData.getApplication();
+        const application = runResult.application!;
         expect(() => insertContentIntoApplicationProperties.call(runResult.generator, application, {})).toThrow(
           /At least 1 needle is required/,
         );
@@ -69,7 +69,7 @@ describe('generator - server - support - needles', () => {
         let snapshot;
 
         before(() => {
-          const application = runResult.generator.sharedData.getApplication();
+          const application = runResult.application!;
           insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property,
             propertyGetter,
@@ -122,7 +122,7 @@ public class ApplicationProperties {
         });
 
         it('should not be add the content at second call', () => {
-          const application = runResult.generator.sharedData.getApplication();
+          const application = runResult.application!;
           insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property,
             propertyGetter,
@@ -132,7 +132,7 @@ public class ApplicationProperties {
         });
 
         it('should not be add new content with prettier differences', () => {
-          const application = runResult.generator.sharedData.getApplication();
+          const application = runResult.application!;
           insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property: '  private   Foo   foo;',
           });
@@ -140,7 +140,7 @@ public class ApplicationProperties {
         });
 
         it('should not be add new content with prettier differences and new lines', () => {
-          const application = runResult.generator.sharedData.getApplication();
+          const application = runResult.application!;
           insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property: `  private Foo getFoo() {
 

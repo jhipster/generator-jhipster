@@ -250,8 +250,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<DefaultTa
 
   get default() {
     return this.asDefaultTaskGroup({
-      loadEntities({ application }) {
-        const entities = this.sharedData.getEntities().map(({ entity }) => entity);
+      loadEntities({ application, entities }) {
         application.angularEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient) as AngularEntity[];
       },
       queueTranslateTransform({ application }) {
