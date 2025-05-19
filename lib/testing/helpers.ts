@@ -30,6 +30,7 @@ import type { ApplicationType } from '../../lib/types/application/application.js
 import {
   CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
   CONTEXT_DATA_APPLICATION_KEY,
+  CONTEXT_DATA_SOURCE_KEY,
 } from '../../generators/base-application/support/constants.js';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
@@ -355,7 +356,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
       },
     );
 
-    return this.onBeforePrepare(() => defineDefaults()).withSharedData({ sharedSource: this.sharedSource });
+    return this.onBeforePrepare(() => defineDefaults()).withContextData(CONTEXT_DATA_SOURCE_KEY, this.sharedSource);
   }
 
   withSharedApplication(sharedApplication: Record<string, any>): this {

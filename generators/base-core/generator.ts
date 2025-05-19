@@ -302,10 +302,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   getArgsForPriority(priorityName: string) {
     const control = this.control;
-    if (priorityName === POST_WRITING || priorityName === PREPARING || priorityName === POST_PREPARING) {
-      const source = this.sharedData.getSource();
-      return [{ control, source }];
-    }
     if (priorityName === WRITING) {
       if (existsSync(this.destinationPath(YO_RC_FILE))) {
         try {

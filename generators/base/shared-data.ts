@@ -26,7 +26,6 @@ import { defaults } from 'lodash-es';
 import type { MemFsEditor } from 'mem-fs-editor';
 import { create } from 'mem-fs-editor';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import type { BaseApplicationSource } from '../../lib/types/application/application.js';
 import type { CleanupArgumentType, Control } from './types.js';
 
 export default class SharedData {
@@ -54,9 +53,7 @@ export default class SharedData {
     this._storage = storage;
 
     defaults(this._storage, {
-      sharedSource: {},
       control: initialControl,
-      props: {},
     });
 
     let customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
@@ -140,10 +137,6 @@ export default class SharedData {
     }
 
     customizeRemoveFiles = this._storage.control.customizeRemoveFiles;
-  }
-
-  getSource(): BaseApplicationSource {
-    return this._storage.sharedSource;
   }
 
   getControl(): Control {
