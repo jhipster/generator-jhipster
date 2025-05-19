@@ -21,6 +21,7 @@ import { camelCase, defaults, kebabCase, startCase, upperFirst } from 'lodash-es
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { getHipster } from '../base/support/index.js';
+import { CONTEXT_DATA_EXISTING_PROJECT, EVENT_SET_CONTROL } from '../base-core/support/constants.js';
 import { getDefaultAppName } from './support/index.js';
 
 import { validateProjectName } from './support/name-resolver.js';
@@ -36,9 +37,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
     validateProjectName(input, { javaApplication: this.javaApplication });
 
   async beforeQueue() {
-    this.control.existingProject = Boolean(
-      this.options.defaults || this.options.applicationWithConfig || (this.jhipsterConfig.baseName !== undefined && this.config.existed),
-    );
+    this.emit(EVENT_SET_CONTROL, CONTEXT_DATA_EXISTING_PROJECT, true);
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

@@ -121,9 +121,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           }
         }
       },
-      exportControl({ control }) {
-        control.supportedLanguages = this.supportedLanguages;
-      },
     });
   }
 

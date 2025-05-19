@@ -16,18 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'node:assert';
-import { existsSync, readFileSync, statSync } from 'fs';
-import { rm } from 'fs/promises';
-import { isAbsolute, join, relative } from 'path';
-import { execaCommandSync } from 'execa';
-import { lt as semverLessThan } from 'semver';
 import { defaults } from 'lodash-es';
 import type { MemFsEditor } from 'mem-fs-editor';
 import { create } from 'mem-fs-editor';
-import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import type { BaseApplicationSource } from '../../lib/types/application/application.js';
-import type { CleanupArgumentType, Control } from './types.js';
 
 export default class SharedData {
   _storage: any;
@@ -35,7 +27,7 @@ export default class SharedData {
   _log: any;
   _logCwd: string;
 
-  constructor(storage: any, { memFs, destinationPath, log, logCwd }, initialControl: Partial<Control> = {}) {
+  constructor(storage: any, { memFs, log, logCwd }) {
     if (!storage) {
       throw new Error('Storage is required for SharedData');
     }
@@ -44,109 +36,16 @@ export default class SharedData {
     this._log = log;
     this._logCwd = logCwd;
 
-    let jhipsterOldVersion;
-    if (existsSync(join(destinationPath, '.yo-rc.json'))) {
-      jhipsterOldVersion = JSON.parse(readFileSync(join(destinationPath, '.yo-rc.json'), 'utf-8').toString())[GENERATOR_JHIPSTER]
-        ?.jhipsterVersion;
-    }
-
     // Backward compatibility sharedData
     this._storage = storage;
 
     defaults(this._storage, {
       sharedSource: {},
-      control: initialControl,
       props: {},
     });
-
-    let customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
-    const removeFiles = async (assertions: { oldVersion?: string; removedInVersion?: string } | string, ...files: string[]) => {
-      if (typeof assertions === 'string') {
-        files = [assertions, ...files];
-        assertions = {};
-      }
-
-      for (const customize of customizeRemoveFiles) {
-        files = files.map(customize).filter(file => file) as string[];
-      }
-
-      const { removedInVersion, oldVersion = jhipsterOldVersion } = assertions;
-      if (removedInVersion && oldVersion && !semverLessThan(oldVersion, removedInVersion)) {
-        return;
-      }
-
-      const absolutePaths = files.map(file => (isAbsolute(file) ? file : join(destinationPath, file)));
-      // Delete from memory fs to keep updated.
-      this._editor.delete(absolutePaths);
-      await Promise.all(
-        absolutePaths.map(async file => {
-          const relativePath = relative(logCwd, file);
-          try {
-            if (statSync(file).isFile()) {
-              this._log.info(`Removing legacy file ${relativePath}`);
-              await rm(file, { force: true });
-            }
-          } catch {
-            this._log.info(`Could not remove legacy file ${relativePath}`);
-          }
-        }),
-      );
-    };
-
-    const control = this._storage.control;
-    defaults(control, {
-      jhipsterOldVersion,
-      removeFiles,
-      customizeRemoveFiles: [],
-      cleanupFiles: async (oldVersionOrCleanup: string | CleanupArgumentType, cleanup?: CleanupArgumentType) => {
-        if (!jhipsterOldVersion) return;
-        let oldVersion: string;
-        if (typeof oldVersionOrCleanup === 'string') {
-          oldVersion = oldVersionOrCleanup;
-          assert(cleanup, 'cleanupFiles requires cleanup object');
-        } else {
-          cleanup = oldVersionOrCleanup;
-          oldVersion = jhipsterOldVersion;
-        }
-        await Promise.all(
-          Object.entries(cleanup).map(async ([version, files]) => {
-            const stringFiles: string[] = [];
-            for (const file of files) {
-              if (Array.isArray(file)) {
-                const [condition, ...fileParts] = file;
-                if (condition) {
-                  stringFiles.push(join(...fileParts));
-                }
-              } else {
-                stringFiles.push(file);
-              }
-            }
-            await removeFiles({ oldVersion, removedInVersion: version }, ...stringFiles);
-          }),
-        );
-      },
-    });
-
-    if (!('enviromentHasDockerCompose' in control)) {
-      Object.defineProperty(control, 'enviromentHasDockerCompose', {
-        get: () => {
-          if (control._enviromentHasDockerCompose === undefined) {
-            const { exitCode } = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
-            control._enviromentHasDockerCompose = exitCode === 0;
-          }
-          return control._enviromentHasDockerCompose;
-        },
-      });
-    }
-
-    customizeRemoveFiles = this._storage.control.customizeRemoveFiles;
   }
 
   getSource(): BaseApplicationSource {
     return this._storage.sharedSource;
-  }
-
-  getControl(): Control {
-    return this._storage.control;
   }
 }

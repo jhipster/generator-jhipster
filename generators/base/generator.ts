@@ -30,7 +30,7 @@ import { packageNameToNamespace } from './support/index.js';
 import { loadBlueprintsFromConfiguration, mergeBlueprints, normalizeBlueprintName, parseBluePrints } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';
-import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.js';
+import { CONTEXT_DATA_BLUEPRINT_CONFIGURED, LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.js';
 
 /**
  * Base class that contains blueprints support.
@@ -100,7 +100,7 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
    * Configure blueprints once per application.
    */
   get #blueprintConfigured() {
-    return this.getContextData('jhipster:blueprintConfigured', { override: true });
+    return this.getContextData(CONTEXT_DATA_BLUEPRINT_CONFIGURED, { override: true });
   }
 
   /**

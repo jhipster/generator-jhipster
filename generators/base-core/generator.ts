@@ -21,11 +21,12 @@ import { relative as posixRelative } from 'path/posix';
 import { fileURLToPath } from 'url';
 import { existsSync, readFileSync, rmSync, statSync } from 'fs';
 import assert from 'assert';
+import { rm, stat } from 'fs/promises';
 import { requireNamespace } from '@yeoman/namespace';
 import type { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import { defaults, get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
+import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
@@ -33,6 +34,7 @@ import semver, { lt as semverLessThan } from 'semver';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
+import { execaCommandSync } from 'execa';
 
 import SharedData from '../base/shared-data.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
@@ -72,12 +74,18 @@ import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
-import { getConfigWithDefaults } from '../../lib/jhipster/index.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
-import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
-import type { Control } from '../base/types.js';
+import type { CleanupArgumentType, Control } from '../base/types.js';
 import { convertWriteFileSectionsToBlocks } from './internal/index.js';
+import {
+  CONTEXT_DATA_CUSTOMIZE_REMOVE_FILES,
+  CONTEXT_DATA_EXISTING_PROJECT,
+  CONTEXT_DATA_OLD_VERSION,
+  CONTEXT_ENVIRONMENT_DOCKER_COMPOSE,
+  EVENT_SET_CONTROL,
+  JHIPSTER_CONTEXT_MAP_KEY,
+} from './support/constants.js';
 
 const {
   INITIALIZING,
@@ -191,7 +199,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
 
-      this.sharedData = this.createSharedData() as any;
+      this.sharedData = this.createSharedData();
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.parseJHipsterOptions(baseCommand.options);
@@ -232,6 +240,10 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
         this.queueCurrentJHipsterCommandTasks();
       });
     }
+
+    this.on(EVENT_SET_CONTROL, (key, value) => {
+      this.getContextData(key, { override: value });
+    });
   }
 
   /**
@@ -245,25 +257,105 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     this.jhipsterConfig.jhipsterVersion = packageJson.version;
   }
 
-  get control(): Control {
-    // TODO use contextData api.
-    // return this.getContextData<Control>('jhipster:control', () => ({}) as unknown as Control);
-    return this.sharedData.getControl();
+  get #jhipsterOldVersion(): string | null {
+    return this.getContextData<string>(CONTEXT_DATA_OLD_VERSION, {
+      factory: () => {
+        if (existsSync(this.config.path)) {
+          return JSON.parse(readFileSync(this.config.path, 'utf-8').toString())[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null;
+        }
+        return null;
+      },
+    });
+  }
+
+  get #customizeRemoveFiles(): ((file: string) => string | undefined)[] {
+    return this.getContextData<((file: string) => string | undefined)[]>(CONTEXT_DATA_CUSTOMIZE_REMOVE_FILES, { factory: () => [] });
+  }
+
+  get #existingProject(): boolean {
+    return this.getContextData<boolean>(CONTEXT_DATA_EXISTING_PROJECT, {
+      factory: () =>
+        Boolean(
+          this.options.defaults ||
+            this.options.applicationWithConfig ||
+            (this.jhipsterConfig.baseName !== undefined && this.config.existed),
+        ),
+    });
+  }
+
+  get #enviromentHasDockerCompose(): boolean {
+    return this.getContextData(
+      { context: JHIPSTER_CONTEXT_MAP_KEY, key: CONTEXT_ENVIRONMENT_DOCKER_COMPOSE },
+      {
+        factory: () => {
+          const { exitCode } = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
+          return exitCode === 0;
+        },
+      },
+    );
+  }
+
+  get #control(): Control {
+    const generator = this;
+    return {
+      get ignoreNeedlesError(): boolean {
+        return Boolean(generator.options.ignoreNeedlesError);
+      },
+      get existingProject(): boolean {
+        return generator.#existingProject;
+      },
+      get jhipsterOldVersion(): string | null {
+        return generator.#jhipsterOldVersion;
+      },
+      get customizeRemoveFiles() {
+        return generator.#customizeRemoveFiles;
+      },
+      get enviromentHasDockerCompose() {
+        return generator.#enviromentHasDockerCompose;
+      },
+      removeFiles: async (assertions: { oldVersion?: string; removedInVersion?: string } | string, ...files: string[]): Promise<void> => {
+        for (const customize of this.#customizeRemoveFiles) {
+          files = files.map(customize).filter(file => file) as string[];
+        }
+
+        await this.removeFiles(assertions, ...files);
+      },
+      cleanupFiles: async (oldVersionOrCleanup: string | CleanupArgumentType, cleanup?: CleanupArgumentType) => {
+        const jhipsterOldVersion = this.#jhipsterOldVersion;
+        if (!jhipsterOldVersion) return;
+        let oldVersion: string;
+        if (typeof oldVersionOrCleanup === 'string') {
+          oldVersion = oldVersionOrCleanup;
+          assert(cleanup, 'cleanupFiles requires cleanup object');
+        } else {
+          cleanup = oldVersionOrCleanup;
+          oldVersion = jhipsterOldVersion;
+        }
+        await Promise.all(
+          Object.entries(cleanup).map(async ([version, files]) => {
+            const stringFiles: string[] = [];
+            for (const file of files) {
+              if (Array.isArray(file)) {
+                const [condition, ...fileParts] = file;
+                if (condition) {
+                  stringFiles.push(join(...fileParts));
+                }
+              } else {
+                stringFiles.push(file);
+              }
+            }
+            await this.removeFiles({ oldVersion, removedInVersion: version }, ...stringFiles);
+          }),
+        );
+      },
+    };
   }
 
   /**
    * JHipster config with default values fallback
    */
-  get jhipsterConfigWithDefaults(): Readonly<ApplicationConfiguration & Record<string, any>> {
-    const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
-    defaults(configWithDefaults, {
-      skipFakeData: false,
-      skipCheckLengthOfIdentifier: false,
-      enableGradleDevelocity: false,
-      autoCrlf: false,
-      pages: [],
-    });
-    return configWithDefaults as ApplicationConfiguration;
+  get jhipsterConfigWithDefaults(): Readonly<Record<string, any>> {
+    return removeFieldsWithNullishValues(this.config.getAll());
   }
 
   /**
@@ -285,8 +377,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * @param {string} version - A valid semver version string
    */
   isJhipsterVersionLessThan(version: string): boolean {
-    const jhipsterOldVersion = this.control.jhipsterOldVersion;
-    return this.isVersionLessThan(jhipsterOldVersion, version);
+    return this.isVersionLessThan(this.#jhipsterOldVersion, version);
   }
 
   /**
@@ -301,7 +392,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Get arguments for the priority
    */
   getArgsForPriority(priorityName: string) {
-    const control = this.control;
+    const control = this.#control;
     if (priorityName === POST_WRITING || priorityName === PREPARING || priorityName === POST_PREPARING) {
       const source = this.sharedData.getSource();
       return [{ control, source }];
@@ -550,8 +641,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
             this.config.set(optionName, optionValue);
           } else if (optionDesc.scope === 'blueprint') {
             this.blueprintStorage!.set(optionName, optionValue);
-          } else if (optionDesc.scope === 'control') {
-            this.control[optionName] = optionValue;
           } else if (optionDesc.scope === 'generator') {
             this[optionName] = optionValue;
           } else if (optionDesc.scope === 'context') {
@@ -652,7 +741,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * @return {String} Changelog date.
    */
   dateFormatForLiquibase(reproducible?: boolean): string {
-    const control = this.control;
+    const control = this.#control;
     reproducible = reproducible ?? Boolean(this.options.reproducible);
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
@@ -769,6 +858,68 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       this.log.info(`Could not remove legacy file ${relativePath}`);
     }
     return destinationFile;
+  }
+
+  /**
+   * Remove File
+   */
+  async removeFileAsync(...path: string[]): Promise<string> {
+    const destinationFile = this.destinationPath(...path);
+    const relativePath = relative((this.env as any).logCwd, destinationFile);
+    // Delete from memory fs to keep updated.
+    this.fs.delete(destinationFile);
+    try {
+      if (destinationFile && (await stat(destinationFile)).isFile()) {
+        this.log.info(`Removing legacy file ${relativePath}`);
+        await rm(destinationFile, { force: true });
+      }
+    } catch {
+      this.log.info(`Could not remove legacy file ${relativePath}`);
+    }
+    return destinationFile;
+  }
+
+  async removeFiles(assertions: { oldVersion?: string | null; removedInVersion?: string } | string, ...files: string[]): Promise<void> {
+    if (typeof assertions === 'string') {
+      files = [assertions, ...files];
+      assertions = {};
+    }
+
+    const { removedInVersion, oldVersion } = assertions;
+    if (removedInVersion && oldVersion && !semverLessThan(oldVersion, removedInVersion)) {
+      return;
+    }
+
+    await Promise.all(
+      files.map(async file => {
+        await this.removeFileAsync(file);
+      }),
+    );
+  }
+
+  /**
+   * Cleanup files conditionally based on version and condition.
+   * @example
+   * cleanupFiles('4.0.0', { '6.0.0': ['file1', 'file2', [application.shouldRemove, 'file3']] })
+   */
+  async cleanupFiles(oldVersion: string | null, cleanup?: CleanupArgumentType) {
+    assert(cleanup, 'cleanupFiles requires cleanup object');
+    await Promise.all(
+      Object.entries(cleanup).map(async ([version, files]) => {
+        const stringFiles: string[] = [];
+        for (const file of files) {
+          if (Array.isArray(file)) {
+            const [condition, ...fileParts] = file;
+            if (condition) {
+              stringFiles.push(join(...fileParts));
+            }
+          } else {
+            stringFiles.push(file);
+          }
+        }
+        await this.removeFiles({ oldVersion, removedInVersion: version }, ...stringFiles);
+      }),
+    );
   }
 
   /**
@@ -1370,12 +1521,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   private createSharedData(): SharedData {
     const application = this.getContextData(`jhipster:shared-data`, { factory: () => ({}) });
 
-    const { ignoreNeedlesError } = this.options;
+    const { log } = this;
+    const { sharedFs: memFs, logCwd } = this.env;
 
-    return new SharedData(
-      application,
-      { destinationPath: this.destinationPath(), memFs: this.env.sharedFs, log: this.log, logCwd: this.env.logCwd },
-      { ignoreNeedlesError },
-    );
+    return new SharedData(application, { memFs, log, logCwd });
   }
 }

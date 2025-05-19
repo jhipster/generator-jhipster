@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { upperFirst } from 'lodash-es';
+import { defaults, upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import BaseGenerator from '../base/index.js';
@@ -48,8 +48,10 @@ import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc
 import type SharedData from '../base/shared-data.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
-import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, CONTEXT_DATA_APPLICATION_KEY, getEntitiesFromDir } from './support/index.js';
+import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
+import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, CONTEXT_DATA_APPLICATION_KEY } from './support/constants.js';
+import { getEntitiesFromDir } from './support/entities.js';
 
 const {
   LOADING,
@@ -165,6 +167,21 @@ export default class BaseApplicationGenerator<
       entityName: key,
       entity: value as any,
     }));
+  }
+
+  /**
+   * JHipster config with default values fallback
+   */
+  get jhipsterConfigWithDefaults(): Readonly<ApplicationConfiguration & Record<string, any>> {
+    const configWithDefaults = getConfigWithDefaults(super.jhipsterConfigWithDefaults);
+    defaults(configWithDefaults, {
+      skipFakeData: false,
+      skipCheckLengthOfIdentifier: false,
+      enableGradleDevelocity: false,
+      autoCrlf: false,
+      pages: [],
+    });
+    return configWithDefaults as ApplicationConfiguration;
   }
 
   dependsOnBootstrapApplication(options?: ComposeOptions | undefined) {
