@@ -21,7 +21,8 @@ import { startCase } from 'lodash-es';
 
 import needleClientBase from '../../client/needle-api/needle-client.js';
 import { LINE_LENGTH } from '../../generator-constants.js';
-import { stripMargin, upperFirstCamelCase } from '../../base/support/index.js';
+import { stripMargin } from '../../base-core/support/index.js';
+import { upperFirstCamelCase } from '../../base/support/index.js';
 import { clientFrameworkTypes } from '../../../lib/jhipster/index.js';
 import { createNeedleCallback } from '../../base/support/needles.js';
 

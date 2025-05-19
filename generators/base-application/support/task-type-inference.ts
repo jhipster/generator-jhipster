@@ -42,7 +42,7 @@ export function asPromptingTask<
   E extends BaseApplicationEntity<F, PK, R>,
   A extends BaseApplicationApplication<F, PK, R, E>,
   G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any, any, any>,
->(task: (this: G, params: TaskTypes<F, R, E, A, any, any>['PromptingTaskParam']) => void) {
+>(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['PromptingTaskParam']) => void) {
   return task;
 }
 
@@ -53,7 +53,7 @@ export function asPostPreparingEachEntityTask<
   E extends BaseApplicationEntity<F, PK, R>,
   A extends BaseApplicationApplication<F, PK, R, E>,
   G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any, any, any>,
->(task: (this: G, params: TaskTypes<F, R, E, A, any, any>['PostPreparingEachEntityTaskParam']) => void) {
+>(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['PostPreparingEachEntityTaskParam']) => void) {
   return task;
 }
 
@@ -64,7 +64,7 @@ export function asWritingTask<
   E extends BaseApplicationEntity<F, PK, R>,
   A extends BaseApplicationApplication<F, PK, R, E>,
   G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any, any, any>,
->(task: (this: G, params: TaskTypes<F, R, E, A, any, any>['WritingTaskParam']) => void) {
+>(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['WritingTaskParam']) => void) {
   return task;
 }
 
@@ -75,7 +75,7 @@ export function asWritingEntitiesTask<
   E extends BaseApplicationEntity<F, PK, R>,
   A extends BaseApplicationApplication<F, PK, R, E>,
   G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any, any, any>,
->(task: (this: G, params: TaskTypes<F, R, E, A, any, any>['WritingEntitiesTaskParam']) => void) {
+>(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['WritingEntitiesTaskParam']) => void) {
   return task;
 }
 
@@ -86,7 +86,7 @@ export function asPostWritingTask<
   E extends BaseApplicationEntity<F, PK, R>,
   A extends BaseApplicationApplication<F, PK, R, E>,
   G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any, any, any>,
->(task: (this: G, params: TaskTypes<F, R, E, A, any, any>['PostWritingTaskParam']) => void) {
+>(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['PostWritingTaskParam']) => void) {
   return task;
 }
 
@@ -97,6 +97,6 @@ export function asPostWritingEntitiesTask<
   E extends BaseApplicationEntity<F, PK, R>,
   A extends BaseApplicationApplication<F, PK, R, E>,
   G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any, any, any>,
->(task: (this: G, params: TaskTypes<F, R, E, A, any, any>['PostWritingEntitiesTaskParam']) => void) {
+>(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['PostWritingEntitiesTaskParam']) => void) {
   return task;
 }

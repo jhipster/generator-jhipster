@@ -22,7 +22,7 @@ import type BaseGenerator from '../base-core/index.js';
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupTask(this: BaseGenerator, { application }: any) {
+export default function cleanupTask(this: BaseGenerator<any, any, any, any, any, any, any, any>, { application }: any) {
   if (this.isJhipsterVersionLessThan('8.0.1')) {
     if (application.authenticationTypeOauth2) {
       this.removeFile(`${application.javaPackageSrcDir}security/oauth2/AuthorizationHeaderUtil.java`);

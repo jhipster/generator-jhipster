@@ -23,8 +23,9 @@ import { passthrough } from '@yeoman/transform';
 
 import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../base-application/index.js';
+import { addFakerToEntity } from '../base-application/support/prepare-entity.js';
+
 import {
-  addFakerToEntity,
   loadEntitiesAnnotations,
   loadEntitiesOtherSide,
   prepareEntity as prepareEntityForTemplates,
@@ -306,6 +307,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
 
           const customUserData: any = customUser?.entityStorage.getAll() ?? {};
+          // @ts-ignore
           Object.assign(bootstrap, createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application));
           application.user = bootstrap;
         }

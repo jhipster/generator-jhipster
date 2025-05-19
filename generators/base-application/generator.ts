@@ -32,7 +32,10 @@ import type { Entity as DeprecatedEntity, PrimaryKey as DeprecatedPrimarykey } f
 import type { Field as DeprecatedField } from '../../lib/types/application/field.js';
 import type { Relationship as DeprecatedRelationship } from '../../lib/types/application/relationship.js';
 import type { GenericTaskGroup } from '../base/tasks.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type { TemporaryControlToMoveToDownstream } from '../base/types.js';
 import type {
   ConfiguringEachEntityTaskParam,
   TaskTypes as DefaultTaskTypes,
@@ -99,21 +102,19 @@ const asPriority = BaseGenerator.asPriority;
 export default // @ts-ignore
 class BaseApplicationGenerator<
   // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
-  Options extends BaseApplicationOptions = BaseApplicationOptions,
+  Options extends BaseApplicationOptions = JHipsterGeneratorOptions,
   Field extends BaseApplicationField = DeprecatedField,
   PK extends BaseApplicationPrimaryKey<Field> = DeprecatedPrimarykey<Field>,
   Relationship extends BaseApplicationRelationship<any> = DeprecatedRelationship<any>,
   // @ts-ignore
   Entity extends BaseApplicationEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
   Application extends BaseApplicationApplication<Field, PK, Relationship, Entity> = ApplicationType,
-  Sources extends BaseApplicationSources<Field, PK, Relationship, Entity, Application> = BaseApplicationSources<
+  Sources extends BaseApplicationSources<Field, PK, Relationship, Entity, Application> = DeprecatedBaseApplicationSource<
     Field,
-    PK,
     Relationship,
-    Entity,
     Application
   >,
-  Control extends BaseApplicationControl = BaseApplicationControl,
+  Control extends BaseApplicationControl = TemporaryControlToMoveToDownstream,
   TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
     Field,
     PK,
@@ -123,13 +124,16 @@ class BaseApplicationGenerator<
     Sources,
     Control
   >,
-  SharedData extends BaseApplicationSharedData<Entity, Application, Sources, Control> = BaseApplicationSharedData<
+  SharedData extends BaseApplicationSharedData<Field, PK, Relationship, Entity, Application, Sources, Control> = BaseApplicationSharedData<
+    Field,
+    PK,
+    Relationship,
     Entity,
     Application,
     Sources,
     Control
   >,
-  Configuration extends BaseApplicationConfiguration = BaseApplicationConfiguration,
+  Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
 > extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, SharedData, Configuration, Features> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);

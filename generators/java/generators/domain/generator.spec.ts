@@ -21,13 +21,16 @@ describe(`generator - ${generator}`, () => {
         {
           name: 'Foo',
           fields: [
+            // @ts-ignore
             { fieldName: 'name', documentation: 'My Name', fieldType: 'String', fieldValidateRules: ['required'] },
+            // @ts-ignore
             { fieldName: 'myEnum', fieldType: 'MyEnum', fieldValues: 'FRENCH,ENGLISH', fieldTypeDocumentation: 'Enum Doc' },
           ],
         },
         {
           name: 'Bar',
           documentation: 'Custom Bar',
+          // @ts-ignore
           fields: [{ fieldName: 'name2', fieldType: 'String', fieldValidateRules: ['required'] }],
         },
       ]);
@@ -76,7 +79,9 @@ describe(`generator - ${generator}`, () => {
           {
             name: 'Foo',
             fields: [
+              // @ts-ignore
               { fieldName: 'name', fieldType: 'String', fieldValidateRules: ['required'] },
+              // @ts-ignore
               { fieldName: 'myEnum', fieldType: 'MyEnum', fieldValues: 'FRENCH,ENGLISH' },
             ],
           },
@@ -101,7 +106,9 @@ describe(`generator - ${generator}`, () => {
           {
             name: 'Foo',
             fields: [
+              // @ts-ignore
               { fieldName: 'name', fieldType: 'String', fieldValidateRules: ['required'] },
+              // @ts-ignore
               { fieldName: 'myEnum', fieldType: 'MyEnum', fieldValues: 'FRENCH,ENGLISH' },
             ],
           },

@@ -23,7 +23,7 @@ import { PRIORITY_NAMES } from '../base-application/priorities.js';
 import { loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.js';
 import { relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from '../liquibase/support/index.js';
 import { addEntitiesOtherRelationships } from '../server/support/index.js';
-import type { TaskTypes as ApplicationTaskTypes, TaskParamWithApplication } from '../../lib/types/application/tasks.js';
+import type { TaskTypes as ApplicationTaskTypes, TaskParamWithApplication } from '../base-application/tasks.js';
 import type { BaseChangelog } from './types.js';
 import type { TaskParamWithChangelogsAndApplication } from './tasks.js';
 
@@ -44,7 +44,7 @@ const baseChangelog: () => Omit<BaseChangelog, 'changelogDate' | 'entityName' | 
   changelogData: {},
 });
 
-type TaskTypes = ApplicationTaskTypes & {
+type TaskTypes = ApplicationTaskTypes<any, any, any, any, any, any, any> & {
   DefaultTaskParam: { entityChanges?: BaseChangelog[] };
   WritingEntitiesTaskParam: { entityChanges?: BaseChangelog[] };
   PostWritingEntitiesTaskParam: { entityChanges?: BaseChangelog[] };
@@ -53,13 +53,25 @@ type TaskTypes = ApplicationTaskTypes & {
 /**
  * This is the base class for a generator for every generator.
  */
-export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseApplication<TaskTypes> {
+export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseApplication<
+  any,
+  any,
+  any,
+  any,
+  any,
+  any,
+  any,
+  any,
+  TaskTypes
+> {
   recreateInitialChangelog!: boolean;
   private entityChanges!: any[];
 
   abstract isChangelogNew({ entityName, changelogDate }): boolean;
 
-  protected getTaskFirstArgForPriority(priorityName: string): TaskParamWithChangelogsAndApplication | TaskParamWithApplication {
+  protected getTaskFirstArgForPriority(
+    priorityName: string,
+  ): TaskParamWithChangelogsAndApplication | TaskParamWithApplication<any, any, any, any, any, any> {
     const firstArg = super.getTaskFirstArgForPriority(priorityName);
     if ([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES].includes(priorityName)) {
       this.entityChanges = this.generateIncrementalChanges();

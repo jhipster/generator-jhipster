@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 import type { ApplicationType } from '../../lib/types/application/application.js';
-import type { Entity } from '../../lib/types/application/index.js';
+import type { Entity as DeprecatedEntity, PrimaryKey as DeprecatedPrimarykey, PrimaryKey } from '../../lib/types/application/entity.js';
+import type { Field as DeprecatedField, Field } from '../../lib/types/application/field.js';
+import type { Relationship as DeprecatedRelationship, Relationship } from '../../lib/types/application/relationship.js';
 
-export interface AngularEntity extends Entity {
+export interface AngularEntity<F extends Field, PK extends PrimaryKey<F>, R extends Relationship<any>> extends DeprecatedEntity<F, PK, R> {
   /**
    * @experimental to be replaced with a calculated property
    * Returns the typescript import section of enums referenced by all fields of the entity.
@@ -29,7 +31,12 @@ export interface AngularEntity extends Entity {
   generateEntityClientEnumImports: (fields: any) => Map<any, any>;
 }
 
-export type AngularApplication = {
+export type AngularApplication<
+  F extends DeprecatedField,
+  PK extends DeprecatedPrimarykey<F>,
+  R extends DeprecatedRelationship<any>,
+  E extends AngularEntity<F, PK, R>,
+> = {
   /** @experimental to be replaced with needles */
-  angularEntities: AngularEntity[];
-} & ApplicationType<AngularEntity>;
+  angularEntities: E[];
+} & ApplicationType<F, PK, R>;

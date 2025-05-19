@@ -44,6 +44,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
 
       before(() => {
         jdlObject = convertApplicationsToJDL({
+          // @ts-ignore
           applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: MONOLITH } }],
         });
       });
@@ -59,6 +60,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
         const previousJDLObject = new JDLObject();
         previousJDLObject.addApplication(createJDLApplication({ baseName: 'tata', applicationType: MONOLITH }, undefined));
         jdlObject = convertApplicationsToJDL({
+          // @ts-ignore
           applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: MONOLITH } }],
           jdl: previousJDLObject,
         });

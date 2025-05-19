@@ -22,7 +22,7 @@ import type BaseGenerator from '../base-core/index.js';
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupOldServerFilesTask(this: BaseGenerator) {
+export default function cleanupOldServerFilesTask(this: BaseGenerator<any, any, any, any, any, any, any, any>) {
   if (this.isJhipsterVersionLessThan('5.0.0')) {
     this.removeFile('gradle/mapstruct.gradle');
   }

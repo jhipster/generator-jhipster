@@ -5,9 +5,23 @@ import type { GitHubMatrix, GitHubMatrixGroup } from '../../lib/testing/index.js
 import { convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from '../../lib/testing/index.js';
 import { getPackageRoot } from '../../lib/index.js';
 import { BUILD_JHIPSTER_BOM, JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from '../../test-integration/integration-test-constants.js';
-import { getGitChanges } from './support/git-changes.js';
-import { devServerMatrix } from './samples/dev-server.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { BaseApplicationControl } from '../../generators/base-application/types.js';
+import type { TemporaryControlToMoveToDownstream } from '../../generators/base/types.js';
+import type { TaskTypes as DefaultTaskTypes } from '../../generators/base-application/tasks.js';
+import type BaseApplicationSharedData from '../../generators/base-application/shared-data.js';
+import type { BaseApplicationConfiguration, BaseApplicationFeatures } from '../../generators/base-application/api.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import type { eventNameChoices, workflowChoices } from './command.js';
+import { devServerMatrix } from './samples/dev-server.js';
+import { getGitChanges } from './support/git-changes.js';
 
 type JHipsterGitHubMatrix = GitHubMatrix & {
   name: string;
@@ -27,7 +41,42 @@ type JHipsterGitHubInputMatrix = JHipsterGitHubMatrix & {
   generatorOptions: Record<string, any>;
 };
 
-export default class extends BaseGenerator {
+export default class<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  // @ts-ignore
+  Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends ApplicationType<Field, PK, Relationship> = ApplicationType<Field, PK, Relationship>,
+  Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends BaseApplicationControl = TemporaryControlToMoveToDownstream,
+  TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  SharedData extends BaseApplicationSharedData<Field, PK, Relationship, Entity, Application, Sources, Control> = BaseApplicationSharedData<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, SharedData, Configuration, Features> {
   workflow!: (typeof workflowChoices)[number];
   eventName?: (typeof eventNameChoices)[number];
   matrix!: string;

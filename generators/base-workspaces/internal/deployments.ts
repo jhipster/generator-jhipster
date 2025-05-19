@@ -27,7 +27,7 @@ const { Options: DeploymentOptions } = deploymentOptions;
 const { JWT_SECRET_KEY } = OptionNames;
 
 export function loadDeploymentConfig(
-  this: GeneratorBaseCore,
+  this: GeneratorBaseCore<any, any, any, any, any, any, any, any>,
   {
     config = defaults({}, this.jhipsterConfig, DeploymentOptions.defaults(this.jhipsterConfig.deploymentType)),
     deployment = this,

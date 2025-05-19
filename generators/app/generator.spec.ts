@@ -128,6 +128,7 @@ describe(`generator - ${generator}`, () => {
               skipServer: true,
               skipClient: true,
             },
+            // @ts-ignore
             [{ name: 'Foo' }, { name: 'Bar' }],
           )
           .withOptions({ refreshOnCommit: true })
@@ -150,6 +151,7 @@ describe(`generator - ${generator}`, () => {
               skipClient: true,
               incrementalChangelog: true,
             },
+            // @ts-ignore
             [{ name: 'Foo' }, { name: 'Bar' }],
           )
           .withOptions({ refreshOnCommit: true })

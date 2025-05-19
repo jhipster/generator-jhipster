@@ -18,8 +18,8 @@
  */
 import { createNeedleCallback } from '../../base/support/needles.js';
 import { upperFirstCamelCase } from '../../../lib/utils/string.js';
-import { joinCallbacks } from '../../base/support/write-files.js';
-import type { PostWritingEntitiesTaskParam } from '../../../lib/types/application/tasks.js';
+import { joinCallbacks } from '../../base-core/support/write-files.js';
+import type { PostWritingEntitiesTaskParam } from '../../base-application/tasks.js';
 
 export function addRoute({
   needle,
@@ -54,7 +54,10 @@ export function addRoute({
   });
 }
 
-export function addEntitiesRoute({ application, entities }: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) {
+export function addEntitiesRoute({
+  application,
+  entities,
+}: Pick<PostWritingEntitiesTaskParam<any, any, any, any, any, any, any>, 'application' | 'entities'>) {
   const { enableTranslation } = application;
   return joinCallbacks(
     ...entities.map(entity => {
@@ -126,7 +129,10 @@ export const addIconImport = ({ icon }: { icon: string }) => {
   });
 };
 
-export function addToEntitiesMenu({ application, entities }: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) {
+export function addToEntitiesMenu({
+  application,
+  entities,
+}: Pick<PostWritingEntitiesTaskParam<any, any, any, any, any, any, any>, 'application' | 'entities'>) {
   const { enableTranslation, jhiPrefix } = application;
   return joinCallbacks(
     ...entities.map(entity => {

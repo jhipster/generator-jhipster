@@ -8,7 +8,7 @@ import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 import { getJDLObjectFromSingleApplication } from '../../../lib/jdl/converters/json-to-jdl-converter.js';
 import { createRuntime } from '../../../lib/jdl/core/runtime.js';
 import type { JDLApplicationConfig } from '../../../lib/jdl/core/types/parsing.js';
-import type { Entity } from '../../../lib/types/base/entity.js';
+import type { JSONEntity } from '../../../lib/jdl/core/types/json-config.js';
 
 export const exportJDLTransform = ({
   destinationPath,
@@ -27,7 +27,7 @@ export const exportJDLTransform = ({
     const yoRcFilePath = join(destinationPath, '.yo-rc.json');
     const entitiesMatcher = new Minimatch(`${destinationPath}/.jhipster/*.json`);
     const entitiesFiles: MemFsEditorFile[] = [];
-    const entitiesMap = new Map<string, Entity>();
+    const entitiesMap = new Map<string, JSONEntity>();
 
     let yoRcFileInMemory: MemFsEditorFile | undefined;
     let jdlStoreFileInMemory: MemFsEditorFile | undefined;

@@ -92,6 +92,7 @@ describe(`generator - ${generator}`, () => {
             name: 'EntityA',
             changelogDate: '20220129025419',
             fields: [
+              // @ts-ignore
               {
                 fieldName: 'id',
                 fieldType: UUID,
@@ -102,6 +103,7 @@ describe(`generator - ${generator}`, () => {
             name: 'User',
             changelogDate: '20220129025420',
             fields: [
+              // @ts-ignore
               {
                 fieldName: 'id',
                 fieldType: UUID,
@@ -1487,6 +1489,7 @@ describe(`generator - ${generator}`, () => {
               name: 'EntityA',
               changelogDate: '20220129025419',
               fields: [
+                // @ts-ignore
                 {
                   fieldName: 'id',
                   fieldType: UUID,

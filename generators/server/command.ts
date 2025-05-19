@@ -20,6 +20,7 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_BASE, GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 
 const command = {
+  configs: {},
   options: {
     db: {
       description: 'Provide DB name for the application when skipping server side generation',

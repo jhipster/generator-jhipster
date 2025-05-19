@@ -2,8 +2,57 @@ import { join } from 'path';
 import BaseGenerator from '../../generators/base/index.js';
 import { getPackageRoot } from '../../lib/index.js';
 import { getWorkflowSamples } from '../generate-sample/support/get-workflow-samples.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { BaseApplicationControl } from '../../generators/base-application/types.js';
+import type { TemporaryControlToMoveToDownstream } from '../../generators/base/types.js';
+import type { TaskTypes as DefaultTaskTypes } from '../../generators/base-application/tasks.js';
+import type BaseApplicationSharedData from '../../generators/base-application/shared-data.js';
+import type { BaseApplicationConfiguration, BaseApplicationFeatures } from '../../generators/base-application/api.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 
-export default class extends BaseGenerator {
+export default class<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  // @ts-ignore
+  Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends ApplicationType<Field, PK, Relationship> = ApplicationType<Field, PK, Relationship>,
+  Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends BaseApplicationControl = TemporaryControlToMoveToDownstream,
+  TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  SharedData extends BaseApplicationSharedData<Field, PK, Relationship, Entity, Application, Sources, Control> = BaseApplicationSharedData<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, SharedData, Configuration, Features> {
   constructor(args, options, features) {
     super(args, options, { queueCommandTasks: true, ...features });
   }

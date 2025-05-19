@@ -1,5 +1,13 @@
 import BaseSharedData from '../base/shared-data.js';
-import type { BaseApplicationApplication, BaseApplicationControl, BaseApplicationEntity, BaseApplicationSources } from './types.js';
+import type {
+  BaseApplicationApplication,
+  BaseApplicationControl,
+  BaseApplicationEntity,
+  BaseApplicationField,
+  BaseApplicationPrimaryKey,
+  BaseApplicationRelationship,
+  BaseApplicationSources,
+} from './types.js';
 
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
@@ -20,9 +28,12 @@ import type { BaseApplicationApplication, BaseApplicationControl, BaseApplicatio
  * limitations under the License.
  */
 export default class BaseApplicationSharedData<
-  Entity extends BaseApplicationEntity,
-  Application extends BaseApplicationApplication<Entity>,
-  Source extends BaseApplicationSources<Entity, Application>,
+  Field extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<Field>,
+  R extends BaseApplicationRelationship<any>,
+  Entity extends BaseApplicationEntity<Field, PK, R>,
+  Application extends BaseApplicationApplication<Field, PK, R, Entity>,
+  Source extends BaseApplicationSources<Field, PK, R, Entity, Application>,
   Control extends BaseApplicationControl,
 > extends BaseSharedData<Entity, Application, Source, Control> {
   setEntity(entityName: string, entity: Partial<Entity> & { name: string }): void {

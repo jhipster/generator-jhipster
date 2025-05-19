@@ -5,7 +5,7 @@ export const samplesFolderConfig = 'samplesFolder';
 
 export { defaultSamplesFolder };
 
-export const promptSamplesFolder = async function (this: CoreGenerator) {
+export const promptSamplesFolder = async function (this: CoreGenerator<any, any, any, any, any, any, any, any>) {
   await this.prompt(
     {
       name: samplesFolderConfig,

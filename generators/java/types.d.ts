@@ -1,6 +1,6 @@
 import type { RequireOneOrNone } from 'type-fest';
 import type { GradleApplication, GradleNeedleOptions } from '../gradle/types.js';
-import type { EditFileCallback } from '../base/api.js';
+import type { EditFileCallback } from '../base-core/api.js';
 import type { MavenDefinition } from '../maven/types.js';
 import type { ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
 import type { JavaAnnotation } from './support/add-java-annotation.ts';

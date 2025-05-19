@@ -1,6 +1,6 @@
 import type { Simplify } from 'type-fest';
 import type { BaseConfiguration, BaseOptions, JHipsterGeneratorFeatures } from '../base/api.js';
-import type { ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -23,12 +23,15 @@ export type BaseApplicationOptions = BaseOptions & {
   applicationWithEntities?: any;
   entities?: string[];
   skipWriting?: boolean;
-};
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+} & Simplify<ExportGeneratorOptionsFromCommand<typeof import('./command.js').default>>;
 
 export type BaseApplicationConfiguration = Simplify<
-  BaseConfiguration &
+  BaseConfiguration & {
+    languages: any[];
+    nativeLanguage: string;
     // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-    ExportStoragePropertiesFromCommand<typeof import('./command.js').default> & {
+  } & ExportStoragePropertiesFromCommand<typeof import('./command.js').default> & {
       entities: string[];
     }
 >;

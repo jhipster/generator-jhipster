@@ -36,6 +36,7 @@ export type BaseControl = CoreControl & {};
 
 export type TemporaryControlToMoveToDownstream = BaseControl &
   BaseApplicationControlProperties & {
+    supportedLanguages: any;
     existingProject: boolean;
     ignoreNeedlesError: boolean;
     useVersionPlaceholders?: boolean;
@@ -52,4 +53,5 @@ export type TemporaryControlToMoveToDownstream = BaseControl &
      */
     cleanupFiles: (cleanup: CleanupArgumentType) => Promise<void> | ((oldVersion: string, cleanup: CleanupArgumentType) => Promise<void>);
     getWebappTranslation?: GetWebappTranslationCallback;
+    translations: any;
   };

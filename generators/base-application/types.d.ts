@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
+
 import { BaseApplication, BaseControl, BaseEntity, BaseSources } from '../base/types.js';
 import type { FieldType } from '../../lib/application/field-types.js';
 import type { FakerWithRandexp } from '../base/support/index.js';
-
-export type BaseApplicationField = {
+export type Property = {
+  propertyName: string;
+  propertyNameCapitalized?: string;
+  propertyNameUpperSnakeCase?: string;
+};
+export type BaseApplicationField = Property & {
   fieldName: string;
   fieldType: FieldType | string;
   documentation?: string;
@@ -12,7 +17,7 @@ export type BaseApplicationField = {
   autoGenerate?: boolean;
   generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts') => any;
   nullable?: boolean;
-  fieldTypeBlobContent: 'image' | 'any' | 'text';
+  fieldTypeBlobContent?: 'image' | 'any' | 'text';
   // Validation
   fieldValidate?: boolean;
   /** @deprecated */
@@ -31,6 +36,8 @@ export type BaseApplicationField = {
   fieldValidateRulesPattern?: string | RegExp;
   fieldIsEnum?: boolean;
   enumValues?: { name: string; value: string }[];
+  unique?: boolean;
+  maxlength?: number;
   fieldValidateRulesMax?: number;
   fieldValidateRulesMin?: number;
   fieldValidateRulesMaxlength?: number;
@@ -39,6 +46,16 @@ export type BaseApplicationField = {
 
   // Derived properties
   fieldTypeBinary?: boolean;
+  fieldValues: any;
+  enumFileName?: string;
+  // Blob
+  fieldWithContentType?: boolean;
+  contentTypeFieldName?: string;
+  /** @deprecated */
+  createRandexp: () => any;
+  // Temporary fields for Faker
+  uniqueValue?: any[];
+  relationshipsPath?: string[];
 };
 
 export type BaseApplicationPrimaryKey<F extends BaseApplicationField> = {
@@ -55,7 +72,7 @@ export type BaseApplicationPrimaryKey<F extends BaseApplicationField> = {
   typeNumeric: boolean;
 };
 
-export type BaseApplicationRelationship<E extends BaseEntity> = {
+export type BaseApplicationRelationship<E extends BaseEntity> = Property & {
   relationshipName: string;
   relationshipType: 'one-to-one' | 'one-to-many' | 'many-to-one' | 'many-to-many';
   ownerSide?: boolean;

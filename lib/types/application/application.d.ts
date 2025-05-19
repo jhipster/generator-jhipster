@@ -2,15 +2,16 @@
 import type {
   BaseApplicationApplication,
   BaseApplicationEntity,
+  BaseApplicationField,
   BaseApplicationPrimaryKey,
   BaseApplicationRelationship,
+  BaseApplicationSources,
 } from '../../../generators/base-application/types.js';
 import type { ClientApplication, ClientSourceType } from '../../../generators/client/types.js';
 import type { I18nApplication, LanguagesSource } from '../../../generators/languages/types.js';
 import type { SpringBootApplication, SpringBootSourceType } from '../../../generators/server/types.js';
 import type { ExportApplicationPropertiesFromCommand } from '../../command/types.js';
 import type { DockerSourceType } from '../../../generators/docker/types.ts';
-import type { BaseApplicationSources } from '../../../generators/base-application/types.js';
 import type { OptionWithDerivedProperties } from '../../../generators/base-application/application-options.js';
 import { Field } from './field.js';
 import { Relationship } from './relationship.js';
@@ -202,8 +203,17 @@ export type ApplicationType<
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/gradle/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/spring-boot/command.ts').default>;
 
-export type BaseApplicationSource<
-  F extends Field,
-  R extends Relationship,
+export type DeprecatedBaseApplicationSource<
+  F extends BaseApplicationField = Field,
+  R extends BaseApplicationRelationship<any> = Relationship,
   A extends BaseApplicationApplication<F, any, R, any> = BaseApplicationApplication<any, any, any, any>,
-> = BaseApplicationSources<any, any, any, any, A> & SpringBootSourceType & ClientSourceType & LanguagesSource & DockerSourceType;
+> = BaseApplicationSources<any, any, any, any, A> & {
+  generatorPath: string;
+  srcMainResources: string;
+  srcTestResources: string;
+  skipUserManagement: boolean;
+  nativeLanguage: string;
+} & SpringBootSourceType &
+  ClientSourceType &
+  LanguagesSource &
+  DockerSourceType;

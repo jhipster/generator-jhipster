@@ -22,12 +22,11 @@ import { getTypescriptType, prepareField as prepareClientFieldForTemplates } fro
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/object.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import type { Field } from '../../../lib/types/application/field.js';
-import type { Entity } from '../../../lib/types/application/entity.js';
-import { fieldTypeValues, isFieldEnumType } from '../../../lib/application/field-types.js';
 import type { FakerWithRandexp } from '../../base/support/faker.js';
-import type { BaseApplicationField } from '../types.js';
+import type { BaseApplicationEntity, BaseApplicationField, BaseApplicationPrimaryKey, BaseApplicationRelationship } from '../types.js';
+import { fieldTypeValues } from '../../../lib/application/field-types.js';
 import { prepareProperty } from './prepare-property.js';
+import { isFieldEnumType } from './enum.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const {
@@ -293,7 +292,12 @@ export default function prepareField(entityWithConfig, field, generator) {
   return field;
 }
 
-function prepareCommonFieldForTemplates(entityWithConfig: Entity, field: Field, generator) {
+function prepareCommonFieldForTemplates<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+>(entityWithConfig: E, field: F, generator) {
   mutateData(field, {
     __override__: false,
     path: [field.fieldName],

@@ -22,20 +22,21 @@ import { escape, min } from 'lodash-es';
 import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
 import { getFKConstraintName, getUXConstraintName, prepareEntity as prepareEntityForServer } from '../server/support/index.js';
 
+import { prepareField, prepareRelationship } from '../base-application/support/index.js';
 import {
   loadRequiredConfigIntoEntity,
+  prepareEntity,
   prepareEntityPrimaryKeyForTemplates,
-  prepareField,
-  prepareRelationship,
-} from '../base-application/support/index.js';
+} from '../base-application/support/prepare-entity.js';
+
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
 import { fieldTypes } from '../../lib/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
 import type { Field } from '../../lib/types/application/index.js';
+import { formatDateForChangelog } from '../base/support/index.js';
 import {
   liquibaseComment,
   postPrepareEntity,
-  prepareEntity,
   prepareField as prepareFieldForLiquibase,
   prepareRelationshipForLiquibase,
 } from './support/index.js';
@@ -193,7 +194,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
       }
     } else {
       // Get and store lastLiquibaseTimestamp, a future timestamp can be used
-      let lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
+      let lastLiquibaseTimestamp: any = this.jhipsterConfig.lastLiquibaseTimestamp!;
       if (lastLiquibaseTimestamp) {
         lastLiquibaseTimestamp = new Date(lastLiquibaseTimestamp);
         if (lastLiquibaseTimestamp >= now) {

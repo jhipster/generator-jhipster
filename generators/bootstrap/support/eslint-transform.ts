@@ -42,7 +42,7 @@ export class ESLintPool extends Piscina {
 }
 
 export const createESLintTransform = function (
-  this: BaseGenerator | void,
+  this: BaseGenerator<any, any, any, any, any, any, any, any> | void,
   transformOptions: { ignoreErrors?: boolean; poolOptions?: PoolOptions } & Partial<ESLintWorkerOptions> = {},
 ) {
   const { extensions = 'js,cjs,mjs,ts,cts,mts,jsx,tsx', ignoreErrors, cwd, poolOptions, recreateEslint } = transformOptions;

@@ -18,12 +18,12 @@
  */
 import { defaults } from 'lodash-es';
 import { Validations, authenticationTypes, databaseTypes, fieldTypes } from '../../lib/jhipster/index.js';
-import { loadRequiredConfigIntoEntity } from '../base-application/support/index.js';
+import { loadRequiredConfigIntoEntity } from '../base-application/support/prepare-entity.js';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
 import { getDatabaseTypeData } from '../server/support/database.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import { formatDateForChangelog } from '../base/support/timestamp.js';
-import type { Entity as ApplicationEntity, UserEntity } from '../../lib/types/application/entity.js';
+import type { Entity as ApplicationEntity, Entity, UserEntity } from '../../lib/types/application/entity.js';
 
 const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -73,9 +73,9 @@ export function createUserEntity(this: BaseApplicationGenerator, customUserData 
     ...customUserData,
   };
 
-  loadRequiredConfigIntoEntity(user, application);
+  loadRequiredConfigIntoEntity(user as Entity, application);
   // Fallback to defaults for test cases.
-  loadRequiredConfigIntoEntity(user, this.jhipsterConfigWithDefaults);
+  loadRequiredConfigIntoEntity(user as Entity, this.jhipsterConfigWithDefaults);
 
   const oauth2 = (user as any).authenticationType === OAUTH2;
   // If oauth2 or databaseType is cassandra, force type string, otherwise keep undefined for later processing.
@@ -245,9 +245,9 @@ export function createAuthorityEntity(this: BaseApplicationGenerator, customAuth
     ...customAuthorityData,
   };
 
-  loadRequiredConfigIntoEntity(authorityEntity, application);
+  loadRequiredConfigIntoEntity(authorityEntity as Entity, application);
   // Fallback to defaults for test cases.
-  loadRequiredConfigIntoEntity(authorityEntity, this.jhipsterConfigWithDefaults);
+  loadRequiredConfigIntoEntity(authorityEntity as Entity, this.jhipsterConfigWithDefaults);
 
   addOrExtendFields(authorityEntity.fields, [
     {

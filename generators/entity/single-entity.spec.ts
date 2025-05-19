@@ -24,6 +24,7 @@ describe('generator - entity --single-entity', () => {
         await helpers
           .runJHipster(GENERATOR_ENTITY)
           .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
+          // @ts-ignore
           .withJHipsterConfig({}, [entityFoo, entityBar])
           .withArguments(['Foo'])
           .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true })
@@ -56,6 +57,7 @@ describe('generator - entity --single-entity', () => {
         await helpers
           .runJHipster(GENERATOR_ENTITY)
           .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
+          // @ts-ignore
           .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo, entityBar])
           .withArguments(['Foo'])
           .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true });

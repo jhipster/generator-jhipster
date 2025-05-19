@@ -190,7 +190,8 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
  * @param options
  */
 export const createNeedleCallback = <
-  Generator extends JHipsterBaseBlueprintGenerator<any, any, any, any, any, any, any, any> = JHipsterBaseBlueprintGenerator<
+  Generator extends JHipsterBaseBlueprintGenerator<any, any, any, any, any, any, any, any, any> = JHipsterBaseBlueprintGenerator<
+    any,
     any,
     any,
     any,
@@ -256,7 +257,8 @@ export function createBaseNeedle(
 ): NeedleCallback;
 export function createBaseNeedle(needles: Record<string, string>): NeedleCallback;
 export function createBaseNeedle<
-  Generator extends JHipsterBaseBlueprintGenerator<any, any, any, any, any, any, any, any> = JHipsterBaseBlueprintGenerator<
+  Generator extends JHipsterBaseBlueprintGenerator<any, any, any, any, any, any, any, any, any> = JHipsterBaseBlueprintGenerator<
+    any,
     any,
     any,
     any,
@@ -273,7 +275,8 @@ export function createBaseNeedle<
 ): CascatedEditFileCallback<Generator>;
 
 export function createBaseNeedle<
-  Generator extends JHipsterBaseBlueprintGenerator<any, any, any, any, any, any, any, any> = JHipsterBaseBlueprintGenerator<
+  Generator extends JHipsterBaseBlueprintGenerator<any, any, any, any, any, any, any, any, any> = JHipsterBaseBlueprintGenerator<
+    any,
     any,
     any,
     any,

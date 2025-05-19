@@ -25,7 +25,10 @@ import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
-import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/tasks.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { Field as DeprecatedField } from '../../lib/types/application/field.js';
+import type { Relationship as DeprecatedRelationship } from '../../lib/types/application/relationship.js';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.js';
 import { writeFiles } from './files-angular.js';
 import cleanupOldFilesTask from './cleanup.js';
@@ -43,7 +46,14 @@ import type { AngularApplication, AngularEntity } from './types.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
-export default class AngularGenerator extends BaseApplicationGenerator<DefaultTaskTypes<AngularEntity, AngularApplication>> {
+export default class AngularGenerator<
+  O extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  F extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<F> = DeprecatedPrimarykey<F>,
+  R extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  E extends AngularEntity<F, PK, R> = AngularEntity<F, PK, R>,
+  A extends AngularApplication<F, PK, R, E> = AngularApplication<F, PK, R, E>,
+> extends BaseApplicationGenerator<O, F, PK, R, E, A, any> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -67,7 +77,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<DefaultTa
         applicationDefaults({
           __override__: true,
           typescriptEslint: true,
-        });
+        } as any);
       },
     });
   }
@@ -84,7 +94,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<DefaultTa
           eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
           angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!,
-        });
+        } as any);
         application.addPrettierExtensions?.(['html', 'css', 'scss']);
       },
       async javaNodeBuildPaths({ application }) {
@@ -203,7 +213,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<DefaultTa
             ...(entity.entityAuthority?.split(',') ?? []),
             ...(entity.entityReadAuthority?.split(',') ?? []),
           ]),
-        });
+        } as any);
         entity.generateEntityClientEnumImports = fields => getClientEnumImportsFormat(fields, ANGULAR);
       },
     });
@@ -252,7 +262,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<DefaultTa
     return this.asDefaultTaskGroup({
       loadEntities({ application }) {
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);
-        application.angularEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient) as AngularEntity[];
+        application.angularEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient) as E[];
       },
       queueTranslateTransform({ control, application }) {
         const { enableTranslation, jhiPrefix } = application;

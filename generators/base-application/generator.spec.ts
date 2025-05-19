@@ -163,20 +163,27 @@ describe(`generator - ${generator}`, () => {
         .withJHipsterConfig({}, [
           {
             name: 'One',
+            // @ts-ignore
             fields: [{ fieldName: 'id', fieldType: 'Long' }],
+            // @ts-ignore
             relationships: [{ relationshipName: 'two', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
           },
           {
             name: 'Two',
             fields: [
+              // @ts-ignore
               { fieldName: 'id', fieldType: 'Long' },
+              // @ts-ignore
               { fieldName: 'name', fieldType: 'String' },
             ],
             relationships: [
+              // @ts-ignore
               { relationshipName: 'one', otherEntityName: 'One', relationshipType: 'many-to-one' },
+              // @ts-ignore
               { relationshipName: 'three', otherEntityName: 'Three', relationshipType: 'many-to-one' },
             ],
           },
+          // @ts-ignore
           {
             name: 'Three',
           },
@@ -404,20 +411,27 @@ describe(`generator - ${generator}`, () => {
         .withJHipsterConfig({}, [
           {
             name: 'One',
+            // @ts-ignore
             fields: [{ fieldName: 'id', fieldType: 'Long' }],
+            // @ts-ignore
             relationships: [{ relationshipName: 'two', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
           },
           {
             name: 'Two',
             fields: [
+              // @ts-ignore
               { fieldName: 'id', fieldType: 'Long' },
+              // @ts-ignore
               { fieldName: 'name', fieldType: 'String' },
             ],
             relationships: [
+              // @ts-ignore
               { relationshipName: 'one', otherEntityName: 'One', relationshipType: 'many-to-one' },
+              // @ts-ignore
               { relationshipName: 'three', otherEntityName: 'Three', relationshipType: 'many-to-one' },
             ],
           },
+          // @ts-ignore
           {
             name: 'Three',
           },

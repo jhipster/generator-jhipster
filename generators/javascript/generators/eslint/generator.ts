@@ -71,6 +71,7 @@ export default class EslintGenerator extends BaseApplicationGenerator {
         await this.writeFiles({
           blocks: [
             {
+              // @ts-ignore
               templates: [{ sourceFile: 'eslint.config.js.jhi', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi` }],
             },
           ],

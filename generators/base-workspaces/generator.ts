@@ -25,9 +25,16 @@ import BaseGenerator from '../base/index.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import { normalizePathEnd } from '../base/support/path.js';
-import type { TaskTypes } from '../../lib/types/base/tasks.js';
-import type { Entity } from '../../lib/types/application/entity.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { TaskTypes } from '../base/tasks.js';
+import type { Entity as DeprecatedEntity, PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type { Field as DeprecatedField, Relationship as DeprecatedRelationship } from '../../lib/types/application/index.js';
+import type { BaseApplicationConfiguration, BaseApplicationFeatures, BaseApplicationOptions } from '../base-application/api.js';
+import type { BaseApplicationEntity } from '../base-application/types.js';
+import type { TemporaryControlToMoveToDownstream } from '../base/types.js';
+import type BaseApplicationSharedData from '../base-application/shared-data.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 import command from './command.js';
 
@@ -44,22 +51,62 @@ const {
   END,
 } = PRIORITY_NAMES;
 
-type WorkspacesTypes<E extends Entity = Entity, A extends ApplicationType<E> = ApplicationType<E>> = TaskTypes & {
-  LoadingTaskParam: TaskTypes['LoadingTaskParam'] & { applications: A[] };
-  PreparingTaskParam: TaskTypes['PreparingTaskParam'] & { applications: A[] };
-  PostPreparingTaskParam: TaskTypes['PostPreparingTaskParam'] & { applications: A[] };
-  DefaultTaskParam: TaskTypes['DefaultTaskParam'] & { applications: A[] };
-  WritingTaskParam: TaskTypes['WritingTaskParam'] & { applications: A[] };
-  PostWritingTaskParam: TaskTypes['PostWritingTaskParam'] & { applications: A[] };
-  InstallTaskParam: TaskTypes['InstallTaskParam'] & { applications: A[] };
-  PostInstallTaskParam: TaskTypes['PostInstallTaskParam'] & { applications: A[] };
-  EndTaskParam: TaskTypes['EndTaskParam'] & { applications: A[] };
+type WorkspacesTypes<
+  F extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<F> = DeprecatedPrimarykey<F>,
+  R extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  C extends TemporaryControlToMoveToDownstream = TemporaryControlToMoveToDownstream,
+  A extends ApplicationType<F, PK, R> = ApplicationType<F, PK, R>,
+  Sources extends DeprecatedBaseApplicationSource<F, R, A> = DeprecatedBaseApplicationSource<F, R, A>,
+> = TaskTypes<C, Sources> & {
+  LoadingTaskParam: TaskTypes<C, Sources>['LoadingTaskParam'] & { applications: A[] };
+  PreparingTaskParam: TaskTypes<C, Sources>['PreparingTaskParam'] & { applications: A[] };
+  PostPreparingTaskParam: TaskTypes<C, Sources>['PostPreparingTaskParam'] & { applications: A[] };
+  DefaultTaskParam: TaskTypes<C, Sources>['DefaultTaskParam'] & { applications: A[] };
+  WritingTaskParam: TaskTypes<C, Sources>['WritingTaskParam'] & { applications: A[] };
+  PostWritingTaskParam: TaskTypes<C, Sources>['PostWritingTaskParam'] & { applications: A[] };
+  InstallTaskParam: TaskTypes<C, Sources>['InstallTaskParam'] & { applications: A[] };
+  PostInstallTaskParam: TaskTypes<C, Sources>['PostInstallTaskParam'] & { applications: A[] };
+  EndTaskParam: TaskTypes<C, Sources>['EndTaskParam'] & { applications: A[] };
 };
 
 /**
  * This is the base class for a generator that generates entities.
  */
-export default abstract class BaseWorkspacesGenerator extends BaseGenerator<WorkspacesTypes> {
+export default abstract class BaseWorkspacesGenerator<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends BaseApplicationOptions = JHipsterGeneratorOptions,
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  Entity extends BaseApplicationEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends ApplicationType<Field, PK, Relationship> = ApplicationType<Field, PK, Relationship>,
+  Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends TemporaryControlToMoveToDownstream = TemporaryControlToMoveToDownstream,
+  TaskTypes extends WorkspacesTypes<Field, PK, Relationship, Control, Application, Sources> = WorkspacesTypes<
+    Field,
+    PK,
+    Relationship,
+    Control,
+    Application,
+    Sources
+  >,
+  SharedData extends BaseApplicationSharedData<Field, PK, Relationship, Entity, Application, Sources, Control> = BaseApplicationSharedData<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, SharedData, Configuration, Features> {
   static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 
   static CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);
@@ -71,7 +118,7 @@ export default abstract class BaseWorkspacesGenerator extends BaseGenerator<Work
   appsFolders?: string[];
   directoryPath!: string;
 
-  constructor(args, options, features) {
+  constructor(args, options: Options, features: Features) {
     super(args, options, features);
 
     if (!this.options.help) {

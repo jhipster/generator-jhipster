@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import { startCase } from 'lodash-es';
 
-import { stripMargin } from '../../base/support/index.js';
+import { stripMargin } from '../../base-core/support/index.js';
 import { createNeedleCallback } from '../../base/support/needles.js';
 import needleClientBase from './needle-client.js';
 

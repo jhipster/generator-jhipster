@@ -18,6 +18,9 @@
  */
 import { asWritingTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
+import type { Field as DeprecatedField, Relationship as DeprecatedRelationship } from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { AngularApplication, AngularEntity } from './types.js';
 
 export const files = {
   jhipsterProject: [
@@ -472,7 +475,19 @@ export const files = {
   ],
 };
 
-export const writeFiles = asWritingTask(async function writeFiles({ application }) {
+export const writeFiles = asWritingTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  AngularEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  AngularApplication<
+    DeprecatedField,
+    DeprecatedPrimarykey<DeprecatedField>,
+    DeprecatedRelationship<any>,
+    AngularEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>
+  >,
+  any
+>(async function writeFiles({ application }) {
   if (!application.clientFrameworkAngular) return;
 
   await this.writeFiles({

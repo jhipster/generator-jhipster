@@ -17,6 +17,13 @@
  * limitations under the License.
  */
 import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
 import { clientRootTemplatesBlock, clientSrcTemplatesBlock } from './support/files.js';
 
 export const files = {
@@ -76,7 +83,14 @@ export const files = {
   ],
 };
 
-export const writeFiles = asWritingTask(async function writeFiles({ application }) {
+export const writeFiles = asWritingTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  any
+>(async function writeFiles({ application }) {
   if (!application.clientFrameworkBuiltIn) {
     return;
   }

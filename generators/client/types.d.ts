@@ -35,7 +35,7 @@ export type ClientResources = {
 };
 
 export type ClientSourceType = JavaScriptSourceType & {
-  addEntitiesToClient: (arg1: Pick<PostWritingEntitiesTaskParam<any, any, any, any, any, any>, 'application' | 'entities'>) => void;
+  addEntitiesToClient: (arg1: Pick<PostWritingEntitiesTaskParam<any, any, any, any, any, any, any>, 'application' | 'entities'>) => void;
   /**
    * Add external resources to root file(index.html).
    */

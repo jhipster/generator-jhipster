@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { Simplify } from 'type-fest';
 import type { ExportGeneratorOptionsFromCommand, JHipsterConfigs } from '../../command/types.js';
-import { ApplicationWithConfig, BaseOptions } from '../../../generators/base/api.js';
+import { ApplicationWithConfig } from '../../../generators/base/api.js';
 import type { JDLApplicationConfig } from '../../jdl/core/types/parsing.js';
+import { BaseApplicationOptions } from '../../../generators/base-application/api.js';
 
-export type ApplicationOptions = BaseOptions &
+export type ApplicationOptions = BaseApplicationOptions &
   Simplify<
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/app/command.js').default> &
       ExportGeneratorOptionsFromCommand<typeof import('../../../generators/bootstrap-application-base/command.js').default> &

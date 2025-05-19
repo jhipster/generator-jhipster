@@ -24,11 +24,12 @@ import chalk from 'chalk';
 import BaseApplicationGenerator from '../base-application/index.js';
 import JSONToJDLEntityConverter from '../../lib/jdl/converters/json-to-jdl-entity-converter.js';
 import JSONToJDLOptionConverter from '../../lib/jdl/converters/json-to-jdl-option-converter.js';
-import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
+import type { JHipsterGeneratorFeatures } from '../base/api.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { applicationsLookup } from '../workspaces/support/applications-lookup.js';
 import type { Entity } from '../../lib/types/base/entity.js';
 import { convertFieldBlobType } from '../../lib/application/field-types.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
 import { replaceSensitiveConfig } from './support/utils.js';
 
 const isInfoCommand = commandName => commandName === 'info' || undefined;
@@ -153,7 +154,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
         }
         entities.set(name, entity);
       });
-      jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL(entities);
+      jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL(entities as any); // TODO fix type
       JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
     } catch (error) {
       this.log.error('Error while parsing entities to JDL', error);
