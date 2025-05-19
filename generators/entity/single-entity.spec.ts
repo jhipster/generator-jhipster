@@ -12,7 +12,12 @@ describe('generator - entity --single-entity', () => {
       before(async () => {
         await helpers
           .runJHipster(GENERATOR_ENTITY)
+<<<<<<< HEAD
           .withMockedGenerators(['jhipster:languages'])
+=======
+          .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
+          // @ts-ignore
+>>>>>>> 843e76094b (rework most of the type regressions)
           .withJHipsterConfig({}, [entityFoo, entityBar])
           .withSharedApplication({ getWebappTranslation: () => 'translations' })
           .withArguments(['Foo'])
@@ -45,7 +50,12 @@ describe('generator - entity --single-entity', () => {
       before(async () => {
         await helpers
           .runJHipster(GENERATOR_ENTITY)
+<<<<<<< HEAD
           .withMockedGenerators(['jhipster:languages'])
+=======
+          .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
+          // @ts-ignore
+>>>>>>> 843e76094b (rework most of the type regressions)
           .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo, entityBar])
           .withSharedApplication({ getWebappTranslation: () => 'translations' })
           .withArguments(['Foo'])

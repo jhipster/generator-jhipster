@@ -18,12 +18,12 @@
  */
 import { CLIENT_TEST_SRC_DIR } from '../generator-constants.js';
 
-import type { WriteFileSection } from '../base/api.js';
+import type { WriteFileSection } from '../base-core/types.js';
 import { clientRootTemplatesBlock } from '../client/support/index.js';
 
 const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;
 
-export const cypressFiles: WriteFileSection = {
+export const cypressFiles: WriteFileSection<any, any> = {
   common: [
     {
       templates: ['README.md.jhi.cypress'],
@@ -105,7 +105,7 @@ export const cypressFiles: WriteFileSection = {
   ],
 };
 
-export const cypressEntityFiles: WriteFileSection = {
+export const cypressEntityFiles: WriteFileSection<any, any> = {
   testsCypress: [
     {
       path: CYPRESS_TEMPLATE_SOURCE_DIR,

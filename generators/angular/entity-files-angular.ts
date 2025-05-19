@@ -17,9 +17,17 @@
  * limitations under the License.
  */
 import { clientApplicationTemplatesBlock } from '../client/support/files.js';
-import type { WriteFileSection } from '../base/api.js';
+import type { WriteFileSection } from '../base-core/types.js';
 import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/index.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 import { filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/filter-entities.js';
+import type { AngularApplication, AngularEntity } from './types.js';
 
 const entityModelFiles = clientApplicationTemplatesBlock({
   templates: ['entities/_entityFolder_/_entityFile_.model.ts', 'entities/_entityFolder_/_entityFile_.test-samples.ts'],
@@ -30,7 +38,7 @@ const entityServiceFiles = clientApplicationTemplatesBlock({
   templates: ['entities/_entityFolder_/service/_entityFile_.service.ts', 'entities/_entityFolder_/service/_entityFile_.service.spec.ts'],
 });
 
-export const builtInFiles: WriteFileSection = {
+export const builtInFiles: WriteFileSection<any, any> = {
   model: [entityModelFiles],
   service: [entityServiceFiles],
 };
@@ -69,7 +77,7 @@ export const angularFiles = {
   ],
 };
 
-export const userManagementFiles: WriteFileSection = {
+export const userManagementFiles: WriteFileSection<any, any> = {
   userManagement: [
     clientApplicationTemplatesBlock({
       templates: [
@@ -94,7 +102,19 @@ export const userManagementFiles: WriteFileSection = {
   ],
 };
 
-export const writeEntitiesFiles = asWritingEntitiesTask(async function ({ application, entities }) {
+export const writeEntitiesFiles = asWritingEntitiesTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  AngularEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  AngularApplication<
+    DeprecatedField,
+    DeprecatedPrimarykey<DeprecatedField>,
+    DeprecatedRelationship<any>,
+    AngularEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>
+  >,
+  any
+>(async function ({ application, entities }) {
   for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesAndPropertiesForClient)(entities)) {
     if (entity.builtInUser) {
       await this.writeFiles({
@@ -128,7 +148,14 @@ export const writeEntitiesFiles = asWritingEntitiesTask(async function ({ applic
   }
 });
 
-export const postWriteEntitiesFiles = asPostWritingEntitiesTask(async function (this, taskParam) {
+export const postWriteEntitiesFiles = asPostWritingEntitiesTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  any
+>(async function (this, taskParam) {
   const { application, source } = taskParam;
   const entities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(taskParam.entities).filter(
     entity => !entity.builtInUser && !entity.embedded && !entity.entityClientModelOnly,
@@ -136,7 +163,19 @@ export const postWriteEntitiesFiles = asPostWritingEntitiesTask(async function (
   source.addEntitiesToClient({ ...taskParam, entities });
 });
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask(function ({ application, entities, control }) {
+export const cleanupEntitiesFiles = asWritingEntitiesTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  AngularEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  AngularApplication<
+    DeprecatedField,
+    DeprecatedPrimarykey<DeprecatedField>,
+    DeprecatedRelationship<any>,
+    AngularEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>
+  >,
+  any
+>(function ({ application, entities, control }) {
   for (const entity of (application.filterEntitiesForClient ?? filterEntitiesForClient)(entities).filter(entity => !entity.builtIn)) {
     const { entityFolderName, entityFileName, name: entityName } = entity;
     if (control.isJhipsterVersionLessThan('5.0.0')) {

@@ -20,7 +20,11 @@
 import chalk from 'chalk';
 import { padEnd, startCase } from 'lodash-es';
 
-import BaseApplicationGenerator from '../base-application/index.js';
+import BaseApplicationGenerator, {
+  type Entity as DeprecatedEntity,
+  type Field as DeprecatedField,
+  type Relationship as DeprecatedRelationship,
+} from '../base-application/index.js';
 import { updateLanguagesTask as updateLanguagesInAngularTask } from '../angular/support/index.js';
 import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/index.js';
 import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/index.js';
@@ -29,6 +33,7 @@ import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants
 import { QUEUES } from '../base-application/priorities.js';
 import { PRIORITY_NAMES } from '../base-core/priorities.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
+<<<<<<< HEAD
 import type { Language } from './support/languages.js';
 import { findLanguageForTag, supportedLanguages } from './support/languages.js';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
@@ -36,13 +41,76 @@ import { writeEntityFiles } from './entity-files.js';
 import { clientI18nFiles } from './files.js';
 import { askForLanguages, askI18n } from './prompts.js';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.js';
+=======
+import type { BaseApplicationConfiguration, BaseApplicationFeatures } from '../base-application/api.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { TemporaryControlToMoveToDownstream } from '../base/types.js';
+import type { TaskTypes as DefaultTaskTypes } from '../base-application/tasks.js';
+import type BaseApplicationSharedData from '../base-application/shared-data.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import { askForLanguages, askI18n } from './prompts.js';
+import { clientI18nFiles } from './files.js';
+import { writeEntityFiles } from './entity-files.js';
+import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
+import { findLanguageForTag, supportedLanguages } from './support/languages.js';
+>>>>>>> 843e76094b (rework most of the type regressions)
 
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 
 /**
  * This is the base class for a generator that generates entities.
  */
-export default class LanguagesGenerator extends BaseApplicationGenerator {
+export default class LanguagesGenerator<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  // @ts-ignore
+  Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends ApplicationType = ApplicationType,
+  Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends TemporaryControlToMoveToDownstream = TemporaryControlToMoveToDownstream,
+  TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  SharedData extends BaseApplicationSharedData<Field, PK, Relationship, Entity, Application, Sources, Control> = BaseApplicationSharedData<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseApplicationGenerator<
+  Options,
+  Field,
+  PK,
+  Relationship,
+  Entity,
+  Application,
+  Sources,
+  Control,
+  TaskTypes,
+  SharedData,
+  Configuration,
+  Features
+> {
   askForMoreLanguages!: boolean;
   askForNativeLanguage!: boolean;
   translationData!: TranslationData;
@@ -346,6 +414,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           application.backendTypeJavaAny &&
           application.backendTypeSpringBoot
         ) {
+          // @ts-ignore TODO fix types
           updateLanguagesInJava.call(this, { application, control, source });
         }
       },

@@ -33,6 +33,7 @@ import { prepareSqlApplicationProperties } from '../spring-data-relational/suppo
 import { fieldTypes } from '../../lib/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
 import type { Field } from '../../lib/types/application/index.js';
+import { formatDateForChangelog } from '../base/support/index.js';
 import {
   liquibaseComment,
   postPrepareEntity,
@@ -157,6 +158,59 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
     return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
+<<<<<<< HEAD
+=======
+  /**
+   * Generate a date to be used by Liquibase changelogs.
+   *
+   * @param {Boolean} [reproducible=true] - Set true if the changelog date can be reproducible.
+   *                                 Set false to create a changelog date incrementing the last one.
+   * @return {String} Changelog date.
+   */
+  dateFormatForLiquibase(reproducible?: boolean): string {
+    const control = this.sharedData.getControl();
+    reproducible = reproducible ?? Boolean(control.reproducible);
+    // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
+    const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
+    let now = new Date();
+    // Miliseconds is ignored for changelogDate.
+    now.setMilliseconds(0);
+    // Run reproducible timestamp when regenerating the project with reproducible option or an specific timestamp.
+    if (reproducible || creationTimestamp) {
+      if (control.reproducibleLiquibaseTimestamp) {
+        // Counter already started.
+        now = control.reproducibleLiquibaseTimestamp;
+      } else {
+        // Create a new counter
+        const newCreationTimestamp: string = (creationTimestamp as string) ?? this.config.get('creationTimestamp');
+        now = newCreationTimestamp ? new Date(newCreationTimestamp) : now;
+        now.setMilliseconds(0);
+      }
+      now.setMinutes(now.getMinutes() + 1);
+      control.reproducibleLiquibaseTimestamp = now;
+
+      // Reproducible build can create future timestamp, save it.
+      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
+      if (!lastLiquibaseTimestamp || now.getTime() > lastLiquibaseTimestamp) {
+        this.config.set('lastLiquibaseTimestamp', now.getTime());
+      }
+    } else {
+      // Get and store lastLiquibaseTimestamp, a future timestamp can be used
+      let lastLiquibaseTimestamp: any = this.jhipsterConfig.lastLiquibaseTimestamp!;
+      if (lastLiquibaseTimestamp) {
+        lastLiquibaseTimestamp = new Date(lastLiquibaseTimestamp);
+        if (lastLiquibaseTimestamp >= now) {
+          now = lastLiquibaseTimestamp;
+          now.setSeconds(now.getSeconds() + 1);
+          now.setMilliseconds(0);
+        }
+      }
+      this.jhipsterConfig.lastLiquibaseTimestamp = now.getTime();
+    }
+    return formatDateForChangelog(now);
+  }
+
+>>>>>>> 843e76094b (rework most of the type regressions)
   get default() {
     return this.asDefaultTaskGroup({
       async calculateChangelogs({ application, entities, entityChanges }) {

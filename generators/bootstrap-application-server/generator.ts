@@ -28,7 +28,7 @@ import {
   TEST_DIR,
   dockerContainers,
 } from '../generator-constants.js';
-import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } from '../base-application/support/index.js';
+import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } from '../base-application/support/prepare-entity.js';
 import {
   addEntitiesOtherRelationships,
   getPrimaryKeyValue,

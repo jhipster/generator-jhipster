@@ -390,6 +390,7 @@ describe('jdl - JSONToJDLConverter', () => {
       let jdl;
       beforeEach(() => {
         jdl = convertSingleContentToJDL({
+          // @ts-ignore
           'generator-jhipster': {
             baseName: 'x',
             microfrontends: [
@@ -411,6 +412,7 @@ describe('jdl - JSONToJDLConverter', () => {
     describe('with nullish attributes', () => {
       it('should not fail', () => {
         convertSingleContentToJDL({
+          // @ts-ignore
           'generator-jhipster': {
             baseName: 'x',
           },

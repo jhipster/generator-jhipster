@@ -25,8 +25,8 @@ import type { DockerComposeControl } from './types.js';
 export default class DockerComposeSharedData<
   C extends DockerComposeControl,
   EntityType extends BaseEntity,
-  Application extends BaseSources,
-> extends SharedData<C, EntityType, Application> {
+  ApplicationSources extends BaseSources<EntityType, any>,
+> extends SharedData<EntityType, any, ApplicationSources, C> {
   constructor(storage: Storage, { memFs, destinationPath, log, logCwd }, initialControl: Partial<C> = {}) {
     super(storage, { memFs, destinationPath, log, logCwd }, initialControl);
     const control: C = this._storage.control;

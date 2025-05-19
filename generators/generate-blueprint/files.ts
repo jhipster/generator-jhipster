@@ -17,9 +17,22 @@
  * limitations under the License.
  */
 import { asWriteFilesSection } from '../base-application/support/index.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 import { LOCAL_BLUEPRINT_OPTION } from './constants.js';
 
-export const files = asWriteFilesSection<any>({
+export const files = asWriteFilesSection<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>
+>({
   baseFiles: [
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION],
@@ -59,16 +72,24 @@ export const files = asWriteFilesSection<any>({
       templates: ['.blueprint/generate-sample/templates/samples/sample.jdl'],
     },
     {
+      //@ts-ignore
       condition: ctx => ctx.commands.length > 0,
       templates: ['cli/commands.cjs'],
     },
   ],
 });
 
-export const generatorFiles = asWriteFilesSection<any>({
+export const generatorFiles = asWriteFilesSection<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>
+>({
   generator: [
     {
       path: 'generators/generator',
+      //@ts-ignore
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator.replaceAll(':', '/generators/')}`,
       templates: [
         { sourceFile: 'index.mjs', destinationFile: ctx => `index.${ctx.blueprintMjsExtension}` },
@@ -83,6 +104,7 @@ export const generatorFiles = asWriteFilesSection<any>({
           override: data => !data.ignoreExistingGenerators,
         },
         {
+          //@ts-ignore
           condition: data => !data.generator.startsWith('entity') && !data.application[LOCAL_BLUEPRINT_OPTION],
           sourceFile: 'generator.spec.mjs',
           destinationFile: data => `generator.spec.${data.blueprintMjsExtension}`,
@@ -92,8 +114,10 @@ export const generatorFiles = asWriteFilesSection<any>({
     },
     {
       path: 'generators/generator',
+      //@ts-ignore
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator.replaceAll(':', '/generators/')}`,
       condition(ctx) {
+        //@ts-ignore
         return !ctx.written && ctx.priorities.find(priority => priority.name === 'writing');
       },
       transform: false,

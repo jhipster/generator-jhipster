@@ -19,13 +19,28 @@
 
 import { asWritingTask } from '../base-application/support/task-type-inference.js';
 import { CLIENT_WEBPACK_DIR } from '../generator-constants.js';
+import type { Field as DeprecatedField, Relationship as DeprecatedRelationship } from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { AngularApplication, AngularEntity } from './types.js';
 
 /**
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
 
-export default asWritingTask(function cleanupOldFilesTask({ application, control }) {
+export default asWritingTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  AngularEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  AngularApplication<
+    DeprecatedField,
+    DeprecatedPrimarykey<DeprecatedField>,
+    DeprecatedRelationship<any>,
+    AngularEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>
+  >,
+  any
+>(function cleanupOldFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('3.2.0')) {
     // removeFile and removeFolder methods should be called here for files and folders to cleanup
     this.removeFile(`${application.clientSrcDir}app/components/form/uib-pager.config.js`);

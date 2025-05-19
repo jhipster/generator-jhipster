@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 
-import type { BaseApplicationRelationship } from '../../../generators/base-application/types.js';
+import type { BaseApplicationEntity, BaseApplicationRelationship } from '../../../generators/base-application/types.js';
+import type { Entity } from '../application/index.js';
 import type { Property } from './property.js';
 
-export type Relationship = BaseApplicationRelationship<any> &
+export type Relationship<OE extends BaseApplicationEntity<any, any, any> = Entity<any, any, any>> = BaseApplicationRelationship<OE> &
   Property & {
     relationshipSide?: 'left' | 'right';
     otherEntityField?: string;

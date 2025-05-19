@@ -17,7 +17,12 @@
  * limitations under the License.
  */
 import { lowerFirst } from 'lodash-es';
+import type { SetRequired } from 'type-fest';
 import { formatDocAsJavaDoc } from '../../java/support/doc.js';
+import type { BaseApplicationField } from '../types.js';
+
+export const isFieldEnumType = (field: BaseApplicationField): field is SetRequired<BaseApplicationField, 'enumFileName' | 'enumValues'> =>
+  Boolean(field.fieldValues);
 
 const doesTheEnumValueHaveACustomValue = enumValue => enumValue.includes('(');
 

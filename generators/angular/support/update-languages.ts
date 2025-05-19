@@ -20,7 +20,10 @@ import type BaseGenerator from '../../base-core/index.js';
 import { type UpdateClientLanguagesTaskParam, updateLanguagesInDayjsConfigurationTask } from '../../client/support/index.js';
 import { generateLanguagesWebappOptions } from '../../languages/support/index.js';
 
-function updateLanguagesInPipeTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
+function updateLanguagesInPipeTask(
+  this: BaseGenerator<any, any, any, any, any, any, any, any>,
+  { application, control = {} }: UpdateClientLanguagesTaskParam,
+) {
   const { clientSrcDir, languagesDefinition = [] } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
   const newContent = `{
@@ -33,7 +36,10 @@ function updateLanguagesInPipeTask(this: BaseGenerator, { application, control =
   );
 }
 
-function updateLanguagesInConstantsTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
+function updateLanguagesInConstantsTask(
+  this: BaseGenerator<any, any, any, any, any, any, any, any>,
+  { application, control = {} }: UpdateClientLanguagesTaskParam,
+) {
   const { clientSrcDir, languages } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
   let newContent = 'export const LANGUAGES: string[] = [\n';
@@ -47,7 +53,10 @@ function updateLanguagesInConstantsTask(this: BaseGenerator, { application, cont
   );
 }
 
-function updateLanguagesInWebpackTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
+function updateLanguagesInWebpackTask(
+  this: BaseGenerator<any, any, any, any, any, any, any, any>,
+  { application, control = {} }: UpdateClientLanguagesTaskParam,
+) {
   const { clientSrcDir, clientRootDir, languages } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
   let newContent = 'groupBy: [\n';
@@ -64,7 +73,10 @@ function updateLanguagesInWebpackTask(this: BaseGenerator, { application, contro
   );
 }
 
-export default function updateLanguagesTask(this: BaseGenerator, param: UpdateClientLanguagesTaskParam) {
+export default function updateLanguagesTask(
+  this: BaseGenerator<any, any, any, any, any, any, any, any>,
+  param: UpdateClientLanguagesTaskParam,
+) {
   updateLanguagesInPipeTask.call(this, param);
   updateLanguagesInConstantsTask.call(this, param);
   if (param.application.clientBundlerWebpack) {

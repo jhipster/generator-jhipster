@@ -1,21 +1,21 @@
 import type { DerivedPropertiesOnlyOf } from '../utils/derived-properties.js';
-import type { BaseApplicationEntity, BaseApplicationRelationship } from '../../../generators/base-application/types.js';
+import type { BaseApplicationEntity } from '../../../generators/base-application/types.js';
+import type { Relationship as BaseRelationship } from '../base/relationship.js';
 import type { Entity } from './entity.js';
 import type { Property } from './property.js';
-
 type RelationshipProperties = DerivedPropertiesOnlyOf<
   'relationship',
   'LeftSide' | 'RightSide' | 'ManyToOne' | 'OneToMany' | 'OneToOne' | 'ManyToMany'
 >;
 
-export interface Relationship<OE extends Omit<Required<BaseApplicationEntity<any, any, any>>, 'relationships'> = Entity<any, any, any>>
-  extends BaseApplicationRelationship<OE>,
+export interface Relationship<OE extends BaseApplicationEntity<any, any, any> = Entity<any, any, any>>
+  extends BaseRelationship<OE>,
     Property,
     RelationshipProperties {
   propertyName: string;
   relationshipNameCapitalized: string;
 
-  otherRelationship: Relationship<Omit<OE, 'relationships'>>;
+  otherRelationship?: Relationship<OE>;
 
   collection: boolean;
   skipClient?: boolean;
@@ -34,4 +34,5 @@ export interface Relationship<OE extends Omit<Required<BaseApplicationEntity<any
   relationshipJavadoc?: string;
   relationshipApiDescription?: string;
   columnDataType?: string;
+  relationshipSide?: 'left' | 'right';
 }

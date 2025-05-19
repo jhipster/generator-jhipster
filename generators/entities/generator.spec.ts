@@ -75,6 +75,7 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         await helpers
           .runJHipster(generator)
+          // @ts-ignore
           .withJHipsterConfig({}, entities)
           .withArguments(['Foo', 'Bar'])
           .withOptions({
@@ -110,6 +111,7 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         await helpers
           .runJHipster(generator)
+          // @ts-ignore
           .withJHipsterConfig({}, entities)
           .withOptions({
             regenerate: true,

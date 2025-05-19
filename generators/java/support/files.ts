@@ -17,11 +17,10 @@
  * limitations under the License.
  */
 
-import type { WriteFileBlock } from '../../base/api.js';
+import type { WriteFileBlock } from '../../base-core/types.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../../generator-constants.js';
 import type { ApplicationType } from '../../../lib/types/application/application.js';
-import type { Entity } from '../../../lib/types/application/entity.js';
 
 export const replaceEntityFilePathVariables = (data: any, filePath: string) => {
   filePath = filePath
@@ -51,15 +50,15 @@ export const moveToJavaPackageTestDir = (data: any, filePath: string) =>
 export const moveToSrcMainResourcesDir = (data: any, filePath: string) =>
   `${data.srcMainResources}${replaceEntityFilePathVariables(data, filePath) ?? ''}`;
 
-type RelativeWriteFileBlock = WriteFileBlock & { relativePath?: string };
+type RelativeWriteFileBlock = WriteFileBlock<any, any> & { relativePath?: string };
 
-export function javaMainPackageTemplatesBlock<Data = ApplicationType<Entity>>(
+export function javaMainPackageTemplatesBlock<Data = ApplicationType<any, any, any>>(
   blockOrRelativePath?: string,
-): Pick<WriteFileBlock<Data>, 'path' | 'renameTo'>;
-export function javaMainPackageTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock;
+): Pick<WriteFileBlock<Data, any>, 'path' | 'renameTo'>;
+export function javaMainPackageTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock<any, any>;
 export function javaMainPackageTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
-): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
+): WriteFileBlock<any, any> | Pick<WriteFileBlock<any, any>, 'path' | 'renameTo'> {
   return javaBlock({
     srcPath: `${SERVER_MAIN_SRC_DIR}_package_/`,
     destProperty: 'javaPackageSrcDir',
@@ -67,11 +66,11 @@ export function javaMainPackageTemplatesBlock(
   });
 }
 
-export function javaMainResourceTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock, 'path' | 'renameTo'>;
-export function javaMainResourceTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock;
+export function javaMainResourceTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock<any, any>, 'path' | 'renameTo'>;
+export function javaMainResourceTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock<any, any>;
 export function javaMainResourceTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
-): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
+): WriteFileBlock<any, any> | Pick<WriteFileBlock<any, any>, 'path' | 'renameTo'> {
   return javaBlock({
     srcPath: SERVER_MAIN_RES_DIR,
     destProperty: 'srcMainResources',
@@ -79,11 +78,11 @@ export function javaMainResourceTemplatesBlock(
   });
 }
 
-export function javaTestResourceTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock, 'path' | 'renameTo'>;
-export function javaTestResourceTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock;
+export function javaTestResourceTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock<any, any>, 'path' | 'renameTo'>;
+export function javaTestResourceTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock<any, any>;
 export function javaTestResourceTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
-): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
+): WriteFileBlock<any, any> | Pick<WriteFileBlock<any, any>, 'path' | 'renameTo'> {
   return javaBlock({
     srcPath: SERVER_TEST_RES_DIR,
     destProperty: 'srcTestResources',
@@ -91,11 +90,11 @@ export function javaTestResourceTemplatesBlock(
   });
 }
 
-export function javaTestPackageTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock, 'path' | 'renameTo'>;
-export function javaTestPackageTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock;
+export function javaTestPackageTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock<any, any>, 'path' | 'renameTo'>;
+export function javaTestPackageTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock<any, any>;
 export function javaTestPackageTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
-): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
+): WriteFileBlock<any, any> | Pick<WriteFileBlock<any, any>, 'path' | 'renameTo'> {
   return javaBlock({
     srcPath: `${SERVER_TEST_SRC_DIR}_package_/`,
     destProperty: 'javaPackageTestDir',
@@ -111,14 +110,14 @@ function javaBlock({
   srcPath: string;
   destProperty: string;
   blockOrRelativePath: string | RelativeWriteFileBlock;
-}): WriteFileBlock | Pick<WriteFileBlock, 'path' | 'renameTo'> {
+}): WriteFileBlock<any, any> | Pick<WriteFileBlock<any, any>, 'path' | 'renameTo'> {
   const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath !== 'string' ? blockOrRelativePath : undefined;
   const blockRenameTo = typeof block?.renameTo === 'function' ? block.renameTo : undefined;
   const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : (blockOrRelativePath.relativePath ?? '');
   return {
     path: `${srcPath}${relativePath}`,
     ...block,
-    renameTo(this: CoreGenerator, data: any, filePath: string) {
+    renameTo(this: CoreGenerator<any, any, any, any, any, any, any, any>, data: any, filePath: string) {
       return `${data[destProperty]}${replaceEntityFilePathVariables(data, relativePath) ?? ''}${
         replaceEntityFilePathVariables(data, blockRenameTo?.call?.(this, data, filePath) ?? filePath) ?? ''
       }`;

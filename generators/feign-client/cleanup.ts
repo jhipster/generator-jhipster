@@ -22,8 +22,13 @@ import { asWritingTask } from '../base-application/support/task-type-inference.j
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
+<<<<<<< HEAD
 export default asWritingTask(function cleanupTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('8.0.1')) {
+=======
+export default function cleanupTask(this: BaseGenerator<any, any, any, any, any, any, any, any>, { application }: any) {
+  if (this.isJhipsterVersionLessThan('8.0.1')) {
+>>>>>>> 843e76094b (rework most of the type regressions)
     if (application.authenticationTypeOauth2) {
       this.removeFile(`${application.javaPackageSrcDir}security/oauth2/AuthorizationHeaderUtil.java`);
       this.removeFile(`${application.javaPackageTestDir}security/oauth2/AuthorizationHeaderUtilTest.java`);

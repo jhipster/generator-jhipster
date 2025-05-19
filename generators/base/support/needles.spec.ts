@@ -365,7 +365,7 @@ content to add2
 
     it('should throw with filePath without generator', () => {
       const filePath = 'file.foo';
-      // @ts-expect-error invalid params
+      // @ts-ignore
       expect(() => createBaseNeedle({ filePath }, needles)).toThrow(/when passing filePath, the generator is required/);
     });
 

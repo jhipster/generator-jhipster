@@ -148,7 +148,7 @@ export default function prepareEntity<
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
   A extends BaseApplicationApplication<F, PK, R, E>,
-  G extends BaseApplicationGenerator<any, F, R, E, A, any, any, any, any, any, any>,
+  G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any, any, any>,
 >(entityWithConfig: E, generator: G, application: A) {
   const { applicationTypeMicroservice, microfrontend, dtoSuffix = '' } = application;
 
@@ -508,7 +508,7 @@ export function loadRequiredConfigIntoEntity<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  G extends BaseApplicationGenerator<any, F, R, E, any, any, any, any, any, any, any>,
+  G extends BaseApplicationGenerator<any, F, PK, R, E, any, any, any, any, any, any, any>,
 >(this: G | void, entity: E, config: BaseApplicationConfiguration): E {
   mutateData(entity, {
     __override__: false,

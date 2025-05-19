@@ -1,4 +1,4 @@
-import type { SetFieldType, SetRequired } from 'type-fest';
+import type { SetFieldType } from 'type-fest';
 import type { Field } from '../types/application/field.js';
 import type { Field as BaseField } from '../types/base/field.js';
 
@@ -30,10 +30,9 @@ const fieldTypes = {
   BYTE_BUFFER: 'ByteBuffer',
   ...blobFieldTypes,
 } as const;
+export const fieldTypeValues: string[] = Object.values(fieldTypes);
 
 export default fieldTypes;
-
-export const fieldTypeValues: string[] = Object.values(fieldTypes);
 
 export type FieldType = (typeof fieldTypes)[keyof typeof fieldTypes];
 
@@ -58,8 +57,6 @@ export const isFieldBlobType = (field: Field): field is SetFieldType<Field, 'fie
 
 export const isFieldBinaryType = (field: Field): field is SetFieldType<Field, 'fieldType', FieldBinaryType> =>
   isBlobType(field.fieldType) || field.fieldType === 'byte[]';
-
-export const isFieldEnumType = (field: Field): field is SetRequired<Field, 'enumFileName' | 'enumValues'> => Boolean(field.fieldValues);
 
 export const isFieldNotEnumType = (field: Field): field is SetFieldType<Field, 'fieldType', FieldType> => !field.fieldValues;
 

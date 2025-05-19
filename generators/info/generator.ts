@@ -25,11 +25,20 @@ import BaseCoreGenerator from '../base-core/index.js';
 import type { Config } from '../base/index.js';
 import JSONToJDLEntityConverter from '../../lib/jdl/converters/json-to-jdl-entity-converter.js';
 import JSONToJDLOptionConverter from '../../lib/jdl/converters/json-to-jdl-option-converter.js';
+<<<<<<< HEAD
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
 import { JHIPSTER_CONFIG_DIR, YO_RC_FILE } from '../generator-constants.js';
 import { applicationsLookup } from '../workspaces/support/applications-lookup.js';
 import type { Entity } from '../../lib/types/base/entity.js';
 import { getEntitiesFromDir } from '../base-application/support/index.js';
+=======
+import type { JHipsterGeneratorFeatures } from '../base/api.js';
+import { YO_RC_FILE } from '../generator-constants.js';
+import { applicationsLookup } from '../workspaces/support/applications-lookup.js';
+import type { Entity } from '../../lib/types/base/entity.js';
+import { convertFieldBlobType } from '../../lib/application/field-types.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+>>>>>>> 843e76094b (rework most of the type regressions)
 import { replaceSensitiveConfig } from './support/utils.js';
 
 const isInfoCommand = commandName => commandName === 'info' || undefined;
@@ -149,8 +158,14 @@ export default class InfoGenerator extends BaseCoreGenerator<Config & { appsFold
         if (entityJson) {
           entities.set(entity, entityJson);
         }
+<<<<<<< HEAD
       }
       jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL(entities);
+=======
+        entities.set(name, entity);
+      });
+      jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL(entities as any); // TODO fix type
+>>>>>>> 843e76094b (rework most of the type regressions)
       JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
     } catch (error) {
       this.log.error('Error while parsing entities to JDL', error);

@@ -2,13 +2,13 @@ import type { JHipsterConfigs } from '../../lib/command/index.js';
 import type CoreGenerator from '../../generators/base-core/index.js';
 import { applyDerivedProperty } from '../utils/derived-property.js';
 
-export function loadConfig<Generator extends CoreGenerator<any, any, any, any, any, any, any>>(
+export function loadConfig<Generator extends CoreGenerator<any, any, any, any, any, any, any, any>>(
   this: Generator,
   configsDef: JHipsterConfigs | undefined,
   data: { application: any },
 );
 export function loadConfig(configsDef: JHipsterConfigs | undefined, data: { application: any; config?: any });
-export function loadConfig<Generator extends CoreGenerator<any, any, any, any, any, any, any>>(
+export function loadConfig<Generator extends CoreGenerator<any, any, any, any, any, any, any, any>>(
   this: Generator | void,
   configsDef: JHipsterConfigs | undefined,
   { application, config }: { application: any; config?: any },

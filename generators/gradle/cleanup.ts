@@ -22,8 +22,13 @@ import { asWritingTask } from '../base-application/support/task-type-inference.j
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
+<<<<<<< HEAD
 export default asWritingTask(function cleanupOldServerFilesTask({ control }) {
   if (control.isJhipsterVersionLessThan('5.0.0')) {
+=======
+export default function cleanupOldServerFilesTask(this: BaseGenerator<any, any, any, any, any, any, any, any>) {
+  if (this.isJhipsterVersionLessThan('5.0.0')) {
+>>>>>>> 843e76094b (rework most of the type regressions)
     this.removeFile('gradle/mapstruct.gradle');
   }
   if (control.isJhipsterVersionLessThan('5.2.2')) {

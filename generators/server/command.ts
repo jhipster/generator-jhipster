@@ -23,7 +23,17 @@ import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TY
 import { getDBTypeFromDBValue } from './support/database.js';
 
 const command = {
+<<<<<<< HEAD
   configs: {
+=======
+  configs: {},
+  options: {
+    db: {
+      description: 'Provide DB name for the application when skipping server side generation',
+      type: String,
+      scope: 'none',
+    },
+>>>>>>> 843e76094b (rework most of the type regressions)
     skipUserManagement: {
       description: 'Skip the user management module during app generation',
       cli: {

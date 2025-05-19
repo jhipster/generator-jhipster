@@ -78,6 +78,7 @@ describe(`generator - ${generator}`, () => {
   Object.entries(e2eSamples).forEach(([name, sampleConfig]) => {
     describe(name, () => {
       before(async () => {
+        // @ts-ignore
         await helpers.runJHipster(generator).withJHipsterConfig(sampleConfig, entities);
       });
 

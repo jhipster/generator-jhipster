@@ -20,10 +20,78 @@
 import chalk from 'chalk';
 import type { QueuedAdapter } from '@yeoman/types';
 
+<<<<<<< HEAD
 import BaseGenerator, { type Config as BaseConfig } from '../base/index.js';
 import { files } from './files.js';
 
 export default class GitGenerator extends BaseGenerator<{ baseName?: string; monorepository?: boolean } & BaseConfig> {
+=======
+import BaseGenerator from '../base/index.js';
+import type { BaseApplicationConfiguration, BaseApplicationFeatures, BaseApplicationOptions } from '../base-application/api.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type {
+  BaseApplicationApplication,
+  BaseApplicationControl,
+  BaseApplicationEntity,
+  BaseApplicationField,
+  BaseApplicationPrimaryKey,
+  BaseApplicationRelationship,
+  BaseApplicationSources,
+} from '../base-application/types.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { TemporaryControlToMoveToDownstream } from '../base/types.js';
+import type { TaskTypes as DefaultTaskTypes } from '../base-application/tasks.js';
+import type BaseApplicationSharedData from '../base-application/shared-data.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import { files } from './files.js';
+
+/**
+ * @class
+ * @extends {BaseGenerator}
+ */
+export default class GitGenerator<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends BaseApplicationOptions = JHipsterGeneratorOptions,
+  Field extends BaseApplicationField = DeprecatedField,
+  PK extends BaseApplicationPrimaryKey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends BaseApplicationRelationship<any> = DeprecatedRelationship<any>,
+  // @ts-ignore
+  Entity extends BaseApplicationEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends BaseApplicationApplication<Field, PK, Relationship, Entity> = ApplicationType,
+  Sources extends BaseApplicationSources<Field, PK, Relationship, Entity, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends BaseApplicationControl = TemporaryControlToMoveToDownstream,
+  TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  SharedData extends BaseApplicationSharedData<Field, PK, Relationship, Entity, Application, Sources, Control> = BaseApplicationSharedData<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, SharedData, Configuration, Features> {
+>>>>>>> 843e76094b (rework most of the type regressions)
   gitInitialized!: boolean;
   skipGit!: boolean;
   forceGit!: boolean;
