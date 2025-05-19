@@ -40,6 +40,6 @@ gradle-develocity = { id = 'com.gradle.develocity', version = '4.0.1' }
 
 common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.2.1' }
 
-gatling-gradle = { id = 'io.gatling.gradle', version = '3.14.1.3' }
+gatling-gradle = { id = 'io.gatling.gradle', version = '3.14.1.4' }
 
 gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.13.0' }
