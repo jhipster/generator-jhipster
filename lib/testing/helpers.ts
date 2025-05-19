@@ -30,6 +30,7 @@ import type { ApplicationType } from '../../lib/types/application/application.js
 import {
   CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
   CONTEXT_DATA_APPLICATION_KEY,
+  CONTEXT_DATA_SOURCE_KEY,
 } from '../../generators/base-application/support/constants.js';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
@@ -207,9 +208,7 @@ export const createBlueprintFiles = (
 
 class JHipsterRunContext extends RunContext<GeneratorTestType> {
   public sharedSource!: Record<string, any>;
-  private sharedData!: Record<string, any>;
   private sharedApplication!: Record<string, any>;
-  private sharedControl!: Record<string, any>;
   private workspaceApplications: string[] = [];
   private commonWorkspacesConfig!: Record<string, unknown>;
   private generateApplicationsSet = false;
@@ -355,7 +354,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
       },
     );
 
-    return this.onBeforePrepare(() => defineDefaults()).withSharedData({ sharedSource: this.sharedSource });
+    return this.onBeforePrepare(() => defineDefaults()).withContextData(CONTEXT_DATA_SOURCE_KEY, this.sharedSource);
   }
 
   withSharedApplication(sharedApplication: Record<string, any>): this {
@@ -419,16 +418,6 @@ plugins {
 }
 `,
     }).withJHipsterConfig({ buildTool: 'gradle' });
-  }
-
-  private withSharedData(sharedData: Record<string, any>): this {
-    if (!this.sharedData) {
-      this.sharedData = { ...sharedData };
-      this.withContextData('jhipster:shared-data', this.sharedData);
-      return this;
-    }
-    Object.assign(this.sharedData, sharedData);
-    return this;
   }
 
   private withContextData(key: string, sharedData: any): this {

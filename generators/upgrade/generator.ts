@@ -322,9 +322,6 @@ export default class UpgradeGenerator extends BaseGenerator {
     const envOptions = { sharedFs, adapter };
     const generatorOptions = { ...inheritedOptions, ...DEFAULT_NON_INTERATIVE_OPTIONS };
 
-    // We should not reuse sharedData at non interactive runs
-    delete (generatorOptions as any).sharedData;
-
     const envBuilder = await this.createEnvBuilder(envOptions);
     const env = envBuilder.getEnvironment();
     await env.run([`jhipster:${GENERATOR_APP}`], generatorOptions);

@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import BaseGenerator from '../../generators/base/index.js';
+import BaseGenerator from '../../generators/base-core/index.js';
 import type { GitHubMatrix, GitHubMatrixGroup } from '../../lib/testing/index.js';
 import { convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from '../../lib/testing/index.js';
 import { getPackageRoot } from '../../lib/index.js';
@@ -37,7 +37,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.WRITING]() {
-    return this.asWritingTaskGroup({
+    return this.asAnyTaskGroup({
       async buildMatrix() {
         // Push events requires a base commit for diff. Diff cannot be checked by @~1 if PR was merged with a rebase.
         const useChanges = this.eventName === 'pull_request';

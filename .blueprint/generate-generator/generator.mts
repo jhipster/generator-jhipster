@@ -1,5 +1,5 @@
 import { camelCase, upperFirst } from 'lodash-es';
-import BaseGenerator from '../../generators/base/index.js';
+import BaseGenerator from '../../generators/base-core/index.js';
 
 export default class extends BaseGenerator {
   generatorNamespace;
@@ -9,7 +9,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.WRITING]() {
-    return this.asWritingTaskGroup({
+    return this.asAnyTaskGroup({
       async writing() {
         const { generatorNamespace } = this;
         const namespaceParts = generatorNamespace.split('/');
