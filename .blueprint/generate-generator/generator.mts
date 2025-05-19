@@ -1,5 +1,5 @@
 import { camelCase, upperFirst } from 'lodash-es';
-import BaseGenerator from '../../generators/base/index.js';
+import BaseGenerator from '../../generators/base-core/index.js';
 
 export default class extends BaseGenerator {
   generatorNamespace;

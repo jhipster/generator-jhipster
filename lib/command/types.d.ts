@@ -6,7 +6,7 @@ import type { MergeUnion } from './support/merge-union.js';
 
 type CommandConfigScope = 'storage' | 'blueprint' | 'generator' | 'context' | 'none';
 
-export type ConfigScope = CommandConfigScope | 'control';
+export type ConfigScope = CommandConfigScope;
 type CliSpecType = CliOptionSpec['type'];
 
 export type JHipsterNamedChoice = { value: string; name: string };
@@ -243,5 +243,3 @@ type ExportScopedPropertiesFromCommand<C extends ParseableCommand, S extends Fil
 export type ExportStoragePropertiesFromCommand<C extends ParseableCommand> = ExportScopedPropertiesFromCommand<C, 'storage'>;
 
 export type ExportGeneratorOptionsFromCommand<C extends ParseableCommand> = ExportScopedPropertiesFromCommand<C, any>;
-
-export type ExportControlPropertiesFromCommand<C extends ParseableCommand> = ExportScopedPropertiesFromCommand<C, 'control'>;

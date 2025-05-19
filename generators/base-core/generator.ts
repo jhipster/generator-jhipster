@@ -69,7 +69,7 @@ import { packageJson } from '../../lib/index.js';
 import type { BaseApplication } from '../base-application/types.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import baseCommand from '../base/command.js';
-import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
+import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
@@ -246,13 +246,27 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   get control(): Control {
     return this.getContextData<Control>('jhipster:control', {
       factory: () => {
-        const control: any = {};
-        let jhipsterOldVersion;
-        if (existsSync(this.config.path)) {
-          jhipsterOldVersion = JSON.parse(readFileSync(this.config.path, 'utf-8').toString())[GENERATOR_JHIPSTER]?.jhipsterVersion;
-        }
+        let jhipsterOldVersion: string | null;
+        const customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
+        const control: any = {
+          get jhipsterOldVersion(): string | null {
+            if (jhipsterOldVersion === undefined) {
+              jhipsterOldVersion = existsSync(this.config.path)
+                ? (JSON.parse(readFileSync(this.config.path, 'utf-8').toString())[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null)
+                : null;
+            }
+            return jhipsterOldVersion;
+          },
+          get enviromentHasDockerCompose(): boolean {
+            if (control._enviromentHasDockerCompose === undefined) {
+              const { exitCode } = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
+              control._enviromentHasDockerCompose = exitCode === 0;
+            }
+            return control._enviromentHasDockerCompose;
+          },
+          customizeRemoveFiles,
+        };
 
-        let customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
         const removeFiles = async (assertions: { oldVersion?: string; removedInVersion?: string } | string, ...files: string[]) => {
           if (typeof assertions === 'string') {
             files = [assertions, ...files];
@@ -263,7 +277,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
             files = files.map(customize).filter(file => file) as string[];
           }
 
-          const { removedInVersion, oldVersion = jhipsterOldVersion } = assertions;
+          const { removedInVersion, oldVersion = control.jhipsterOldVersion } = assertions;
           if (removedInVersion && oldVersion && !semverLessThan(oldVersion, removedInVersion)) {
             return;
           }
@@ -287,9 +301,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
         };
 
         defaults(control, {
-          jhipsterOldVersion,
           removeFiles,
-          customizeRemoveFiles: [],
           cleanupFiles: async (oldVersionOrCleanup: string | CleanupArgumentType, cleanup?: CleanupArgumentType) => {
             if (!jhipsterOldVersion) return;
             let oldVersion: string;
@@ -319,19 +331,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
           },
         });
 
-        if (!('enviromentHasDockerCompose' in control)) {
-          Object.defineProperty(control, 'enviromentHasDockerCompose', {
-            get: () => {
-              if (control._enviromentHasDockerCompose === undefined) {
-                const { exitCode } = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
-                control._enviromentHasDockerCompose = exitCode === 0;
-              }
-              return control._enviromentHasDockerCompose;
-            },
-          });
-        }
-
-        customizeRemoveFiles = control.customizeRemoveFiles;
         return control;
       },
     });
@@ -389,9 +388,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   getArgsForPriority(priorityName: string) {
     const control = this.control;
     if (priorityName === WRITING) {
-      if (existsSync(this.destinationPath(YO_RC_FILE))) {
+      if (existsSync(this.config.path)) {
         try {
-          const oldConfig = JSON.parse(readFileSync(this.destinationPath(YO_RC_FILE)).toString())[GENERATOR_JHIPSTER];
+          const oldConfig = JSON.parse(readFileSync(this.config.path).toString())[GENERATOR_JHIPSTER];
           const newConfig: any = this.config.getAll();
           const keys = [...new Set([...Object.keys(oldConfig), ...Object.keys(newConfig)])];
           const configChanges = Object.fromEntries(
@@ -632,8 +631,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
             this.config.set(optionName, optionValue);
           } else if (optionDesc.scope === 'blueprint') {
             this.blueprintStorage!.set(optionName, optionValue);
-          } else if (optionDesc.scope === 'control') {
-            this.control[optionName] = optionValue;
           } else if (optionDesc.scope === 'generator') {
             this[optionName] = optionValue;
           } else if (optionDesc.scope === 'context') {
