@@ -29,11 +29,12 @@ import { JHIPSTER_CONFIG_DIR, YO_RC_FILE } from '../generator-constants.js';
 import { applicationsLookup } from '../workspaces/support/applications-lookup.js';
 import type { Entity } from '../../lib/types/base/entity.js';
 import { getEntitiesFromDir } from '../base-application/support/index.js';
+import type { Config } from '../base-core/types.js';
 import { replaceSensitiveConfig } from './support/utils.js';
 
 const isInfoCommand = commandName => commandName === 'info' || undefined;
 
-export default class InfoGenerator extends BaseCoreGenerator<{ appsFolders?: string[]; baseName?: string; packages?: string[] }> {
+export default class InfoGenerator extends BaseCoreGenerator<Config & { appsFolders?: string[]; baseName?: string; packages?: string[] }> {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, {
       jhipsterBootstrap: false,

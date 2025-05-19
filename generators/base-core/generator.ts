@@ -76,7 +76,8 @@ import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/index.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
-import type { CleanupArgumentType, Config, Control } from '../base/types.js';
+import type { CleanupArgumentType, Control } from '../base/types.js';
+import type { Config } from '../base-core/types.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import { convertWriteFileSectionsToBlocks } from './internal/index.js';
 

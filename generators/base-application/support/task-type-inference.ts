@@ -31,9 +31,11 @@ export function asPromptingTask<E = Entity, A = ApplicationType<E>, const G exte
   return task;
 }
 
-export function asPostPreparingEachEntityTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = BaseApplicationGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['PostPreparingEachEntityTaskParam']) => void,
-) {
+export function asPostPreparingEachEntityTask<
+  E = Entity,
+  A = ApplicationType<E>,
+  const G extends BaseApplicationGenerator = BaseApplicationGenerator,
+>(task: (this: G, params: TaskTypes<E, A>['PostPreparingEachEntityTaskParam']) => void) {
   return task;
 }
 
@@ -43,9 +45,11 @@ export function asWritingTask<E = Entity, A = ApplicationType<E>, const G extend
   return task;
 }
 
-export function asWritingEntitiesTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = BaseApplicationGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['WritingEntitiesTaskParam']) => void,
-) {
+export function asWritingEntitiesTask<
+  E = Entity,
+  A = ApplicationType<E>,
+  const G extends BaseApplicationGenerator = BaseApplicationGenerator,
+>(task: (this: G, params: TaskTypes<E, A>['WritingEntitiesTaskParam']) => void) {
   return task;
 }
 
@@ -55,8 +59,10 @@ export function asPostWritingTask<E = Entity, A = ApplicationType<E>, const G ex
   return task;
 }
 
-export function asPostWritingEntitiesTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = BaseApplicationGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['PostWritingEntitiesTaskParam']) => void,
-) {
+export function asPostWritingEntitiesTask<
+  E = Entity,
+  A = ApplicationType<E>,
+  const G extends BaseApplicationGenerator = BaseApplicationGenerator,
+>(task: (this: G, params: TaskTypes<E, A>['PostWritingEntitiesTaskParam']) => void) {
   return task;
 }
