@@ -27,7 +27,6 @@ export type JHipsterGeneratorOptions = BaseOptions &
 
     /* yeoman options */
     skipYoResolve?: boolean;
-    sharedData: any;
     force?: boolean;
 
     /* base options */

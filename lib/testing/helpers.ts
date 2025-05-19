@@ -208,9 +208,7 @@ export const createBlueprintFiles = (
 
 class JHipsterRunContext extends RunContext<GeneratorTestType> {
   public sharedSource!: Record<string, any>;
-  private sharedData!: Record<string, any>;
   private sharedApplication!: Record<string, any>;
-  private sharedControl!: Record<string, any>;
   private workspaceApplications: string[] = [];
   private commonWorkspacesConfig!: Record<string, unknown>;
   private generateApplicationsSet = false;
@@ -420,16 +418,6 @@ plugins {
 }
 `,
     }).withJHipsterConfig({ buildTool: 'gradle' });
-  }
-
-  private withSharedData(sharedData: Record<string, any>): this {
-    if (!this.sharedData) {
-      this.sharedData = { ...sharedData };
-      this.withContextData('jhipster:shared-data', this.sharedData);
-      return this;
-    }
-    Object.assign(this.sharedData, sharedData);
-    return this;
   }
 
   private withContextData(key: string, sharedData: any): this {

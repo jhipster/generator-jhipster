@@ -274,9 +274,6 @@ export default class JdlGenerator extends BaseGenerator {
         const envOptions: any = { cwd, logCwd: rootCwd, sharedFs: application.sharedFs, adapter };
         const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
 
-        // We should not reuse sharedData at non interactive runs
-        delete generatorOptions.sharedData;
-
         // Install should happen at the root of the monorepository. Force skip install at childs.
         if (this.options.monorepository) {
           generatorOptions.skipInstall = true;

@@ -41,7 +41,6 @@ import type {
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
-import type SharedData from '../base/shared-data.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
 import {
@@ -135,7 +134,6 @@ export default class BaseApplicationGenerator<
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
   declare jhipsterConfig: ApplicationConfiguration & Record<string, any>;
-  declare sharedData: SharedData;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, features);

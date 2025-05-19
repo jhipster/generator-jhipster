@@ -108,7 +108,6 @@ export default class extends BaseGenerator {
       async generateSample() {
         const envOptions = { cwd: this.destinationPath(), logCwd: this.logCwd };
         const generatorOptions = { ...this.options, skipPriorities: ['prompting'], skipInstall: true, experimental: true, force: true };
-        delete generatorOptions.sharedData;
 
         const { workspacesFolders, jdlEntitiesDefinitions, yoRcContent, jdlApplications = 0, files } = this.data;
         try {

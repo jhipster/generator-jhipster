@@ -21,6 +21,7 @@ import { relative as posixRelative } from 'path/posix';
 import { fileURLToPath } from 'url';
 import { existsSync, readFileSync, rmSync, statSync } from 'fs';
 import assert from 'assert';
+import { rm } from 'fs/promises';
 import { requireNamespace } from '@yeoman/namespace';
 import type { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
@@ -34,7 +35,7 @@ import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-gener
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
 
-import SharedData from '../base/shared-data.js';
+import { execaCommandSync } from 'execa';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
 import type { Logger } from '../base/support/index.js';
 import {
@@ -76,7 +77,7 @@ import { getConfigWithDefaults } from '../../lib/jhipster/index.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
-import type { Control } from '../base/types.js';
+import type { CleanupArgumentType, Control } from '../base/types.js';
 import { convertWriteFileSectionsToBlocks } from './internal/index.js';
 
 const {
@@ -151,7 +152,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   relativeDir = relativeDir;
   relative = posixRelative;
 
-  readonly sharedData!: SharedData;
   readonly logger: Logger;
   jhipsterConfig!: Record<string, any>;
   /**
@@ -190,8 +190,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
-
-      this.sharedData = this.createSharedData() as any;
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.parseJHipsterOptions(baseCommand.options);
@@ -246,9 +244,97 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   }
 
   get control(): Control {
-    // TODO use contextData api.
-    // return this.getContextData<Control>('jhipster:control', () => ({}) as unknown as Control);
-    return this.sharedData.getControl();
+    return this.getContextData<Control>('jhipster:control', {
+      factory: () => {
+        const control: any = {};
+        let jhipsterOldVersion;
+        if (existsSync(this.config.path)) {
+          jhipsterOldVersion = JSON.parse(readFileSync(this.config.path, 'utf-8').toString())[GENERATOR_JHIPSTER]?.jhipsterVersion;
+        }
+
+        let customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
+        const removeFiles = async (assertions: { oldVersion?: string; removedInVersion?: string } | string, ...files: string[]) => {
+          if (typeof assertions === 'string') {
+            files = [assertions, ...files];
+            assertions = {};
+          }
+
+          for (const customize of customizeRemoveFiles) {
+            files = files.map(customize).filter(file => file) as string[];
+          }
+
+          const { removedInVersion, oldVersion = jhipsterOldVersion } = assertions;
+          if (removedInVersion && oldVersion && !semverLessThan(oldVersion, removedInVersion)) {
+            return;
+          }
+
+          const absolutePaths = files.map(file => this.destinationPath(file));
+          // Delete from memory fs to keep updated.
+          this.fs.delete(absolutePaths);
+          await Promise.all(
+            absolutePaths.map(async file => {
+              const relativePath = relative(this.env.logCwd, file);
+              try {
+                if (statSync(file).isFile()) {
+                  this.log.info(`Removing legacy file ${relativePath}`);
+                  await rm(file, { force: true });
+                }
+              } catch {
+                this.log.info(`Could not remove legacy file ${relativePath}`);
+              }
+            }),
+          );
+        };
+
+        defaults(control, {
+          jhipsterOldVersion,
+          removeFiles,
+          customizeRemoveFiles: [],
+          cleanupFiles: async (oldVersionOrCleanup: string | CleanupArgumentType, cleanup?: CleanupArgumentType) => {
+            if (!jhipsterOldVersion) return;
+            let oldVersion: string;
+            if (typeof oldVersionOrCleanup === 'string') {
+              oldVersion = oldVersionOrCleanup;
+              assert(cleanup, 'cleanupFiles requires cleanup object');
+            } else {
+              cleanup = oldVersionOrCleanup;
+              oldVersion = jhipsterOldVersion;
+            }
+            await Promise.all(
+              Object.entries(cleanup).map(async ([version, files]) => {
+                const stringFiles: string[] = [];
+                for (const file of files) {
+                  if (Array.isArray(file)) {
+                    const [condition, ...fileParts] = file;
+                    if (condition) {
+                      stringFiles.push(join(...fileParts));
+                    }
+                  } else {
+                    stringFiles.push(file);
+                  }
+                }
+                await removeFiles({ oldVersion, removedInVersion: version }, ...stringFiles);
+              }),
+            );
+          },
+        });
+
+        if (!('enviromentHasDockerCompose' in control)) {
+          Object.defineProperty(control, 'enviromentHasDockerCompose', {
+            get: () => {
+              if (control._enviromentHasDockerCompose === undefined) {
+                const { exitCode } = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
+                control._enviromentHasDockerCompose = exitCode === 0;
+              }
+              return control._enviromentHasDockerCompose;
+            },
+          });
+        }
+
+        customizeRemoveFiles = control.customizeRemoveFiles;
+        return control;
+      },
+    });
   }
 
   /**
@@ -1361,17 +1447,5 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       ...process.env,
       LANG: 'en',
     });
-  }
-
-  private createSharedData(): SharedData {
-    const application = this.getContextData(`jhipster:shared-data`, { factory: () => ({}) });
-
-    const { ignoreNeedlesError } = this.options;
-
-    return new SharedData(
-      application,
-      { destinationPath: this.destinationPath(), memFs: this.env.sharedFs, log: this.log, logCwd: this.env.logCwd },
-      { ignoreNeedlesError },
-    );
   }
 }
