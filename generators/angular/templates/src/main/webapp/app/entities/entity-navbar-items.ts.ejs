@@ -19,13 +19,5 @@
 import NavbarItem from 'app/layouts/navbar/navbar-item.model';
 
 export const EntityNavbarItems: NavbarItem[] = [
-<%_ for (const entity of angularEntities) { _%>
-  {
-    name: '<%= entity.entityAngularName %>',
-    route: '/<%= entity.entityPage %>',
-  <%_ if (enableTranslation) { _%>
-    translationKey: 'global.menu.entities.<%= entity.entityTranslationKey %>',
-  <%_ } _%>
-  },
-<%_ } _%>
+  /* jhipster-needle-add-entity-navbar - JHipster will add entity navbar items here */
 ];

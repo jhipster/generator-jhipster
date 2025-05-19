@@ -150,7 +150,31 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
           const editCallback = addToEntitiesMenu(param);
           this.editFile(filePath, { ignoreNonExisting }, editCallback);
+
+          if (application.applicationTypeMicroservice) {
+            this.editFile(
+              `${application.clientSrcDir}app/entities/entity-navbar-items.ts`,
+              createNeedleCallback({
+                needle: 'add-entity-navbar',
+                contentToAdd: param.entities
+                  .filter(e => !e.adminEntity)
+                  .map(entity => ({
+                    contentToCheck: `route: '/${entity.entityPage}',`,
+                    content: `{
+  name: '${entity.entityAngularName}',
+  route: '/${entity.entityPage}',${
+    application.enableTranslation
+      ? `
+  translationKey: 'global.menu.entities.${entity.entityTranslationKey}',`
+      : ''
+  }
+  },`,
+                  })),
+              }),
+            );
+          }
         };
+
         source.addAdminRoute = (args: Omit<Parameters<typeof addRoute>[0], 'needle'>) =>
           this.editFile(
             `${application.clientSrcDir}app/admin/admin.routes.ts`,
@@ -270,9 +294,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get default() {
     return this.asDefaultTaskGroup({
-      loadEntities({ application, entities }) {
-        application.angularEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient) as AngularEntity[];
-      },
       queueTranslateTransform({ application }) {
         const { enableTranslation, jhiPrefix } = application;
         this.queueTransformStream(
