@@ -78,6 +78,7 @@ import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import type { CleanupArgumentType, Control } from '../base/types.js';
+import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import { convertWriteFileSectionsToBlocks } from './internal/index.js';
 
 const {
@@ -244,6 +245,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   }
 
   get control(): Control {
+    const generator = this;
     return this.getContextData<Control>('jhipster:control', {
       factory: () => {
         let jhipsterOldVersion: string | null;
@@ -251,8 +253,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
         const control: any = {
           get jhipsterOldVersion(): string | null {
             if (jhipsterOldVersion === undefined) {
-              jhipsterOldVersion = existsSync(this.config.path)
-                ? (JSON.parse(readFileSync(this.config.path, 'utf-8').toString())[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null)
+              jhipsterOldVersion = existsSync(generator.config.path)
+                ? (JSON.parse(readFileSync(generator.config.path, 'utf-8').toString())[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null)
                 : null;
             }
             return jhipsterOldVersion;
@@ -349,6 +351,13 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       pages: [],
     });
     return configWithDefaults as ApplicationConfiguration;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asAnyTaskGroup(taskGroup: GenericTaskGroup<this, any, any>): GenericTaskGroup<any, any, any> {
+    return taskGroup;
   }
 
   /**

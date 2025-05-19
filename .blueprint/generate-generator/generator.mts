@@ -9,7 +9,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.WRITING]() {
-    return this.asWritingTaskGroup({
+    return this.asAnyTaskGroup({
       async writing() {
         const { generatorNamespace } = this;
         const namespaceParts = generatorNamespace.split('/');

@@ -20,7 +20,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup({
+    return this.asAnyTaskGroup({
       projectVersion() {
         this.projectVersion = `${packageJson.version}-git`;
       },
@@ -28,7 +28,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.PROMPTING]() {
-    return this.asPromptingTaskGroup({
+    return this.asAnyTaskGroup({
       async promptOptions() {
         if (this.global) {
           await promptSamplesFolder.call(this);
@@ -50,7 +50,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.END]() {
-    return this.asEndTaskGroup({
+    return this.asAnyTaskGroup({
       async generateJdlSample() {
         if (extname(this.sampleName) !== '.jdl') return;
 

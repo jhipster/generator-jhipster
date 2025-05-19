@@ -60,7 +60,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.PROMPTING]() {
-    return this.asPromptingTaskGroup({
+    return this.asAnyTaskGroup({
       async promptOptions() {
         if (this.codeWorkspace) {
           await promptSamplesFolder.call(this);
@@ -70,7 +70,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.DEFAULT]() {
-    return this.asDefaultTaskGroup({
+    return this.asAnyTaskGroup({
       async generateSample() {
         const issue = await getGithubIssue({ owner: this.owner, repository: this.repository, issue: this.issueNumber });
 
@@ -104,7 +104,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.END]() {
-    return this.asEndTaskGroup({
+    return this.asAnyTaskGroup({
       async generateSample() {
         const envOptions = { cwd: this.destinationPath(), logCwd: this.logCwd };
         const generatorOptions = { ...this.options, skipPriorities: ['prompting'], skipInstall: true, experimental: true, force: true };

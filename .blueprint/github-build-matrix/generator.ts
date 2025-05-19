@@ -37,7 +37,7 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.WRITING]() {
-    return this.asWritingTaskGroup({
+    return this.asAnyTaskGroup({
       async buildMatrix() {
         // Push events requires a base commit for diff. Diff cannot be checked by @~1 if PR was merged with a rebase.
         const useChanges = this.eventName === 'pull_request';

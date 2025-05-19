@@ -12,13 +12,13 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.PROMPTING]() {
-    return this.asPromptingTaskGroup({
+    return this.asAnyTaskGroup({
       promptSamplesFolder,
     });
   }
 
   get [BaseGenerator.WRITING]() {
-    return this.asEndTaskGroup({
+    return this.asAnyTaskGroup({
       async generateCodeWorkspace() {
         this.addSampleToCodeWorkspace(this.samplePath);
       },
