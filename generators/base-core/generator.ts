@@ -773,9 +773,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       // Get and store lastLiquibaseTimestamp, a future timestamp can be used
       const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
       if (lastLiquibaseTimestamp) {
-        const lastTimeStampDate = new Date(lastLiquibaseTimestamp);
-        if (lastTimeStampDate >= now) {
-          now = lastTimeStampDate;
+        const lastTimestampDate = new Date(lastLiquibaseTimestamp);
+        if (lastTimestampDate >= now) {
+          now = lastTimestampDate;
           now.setSeconds(now.getSeconds() + 1);
           now.setMilliseconds(0);
         }
