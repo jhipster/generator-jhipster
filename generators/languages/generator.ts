@@ -29,11 +29,13 @@ import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants
 import { QUEUES } from '../base-application/priorities.js';
 import { PRIORITY_NAMES } from '../base/priorities.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
+import type { Language } from './support/languages.js';
 import { findLanguageForTag, supportedLanguages } from './support/languages.js';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
 import { writeEntityFiles } from './entity-files.js';
 import { clientI18nFiles } from './files.js';
 import { askForLanguages, askI18n } from './prompts.js';
+import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.js';
 
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 
@@ -44,14 +46,12 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   askForMoreLanguages!: boolean;
   askForNativeLanguage!: boolean;
   translationData!: TranslationData;
-  supportedLanguages;
   languages;
   /**
    * Languages to be generated.
    * Can be incremental or every language.
    */
   languagesToApply;
-  composedBlueprints: any[] = [];
   languageCommand;
   writeJavaLanguageFiles;
   regenerateLanguages;
@@ -63,9 +63,11 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   async beforeQueue() {
-    this.supportedLanguages = supportedLanguages;
     if (!this.fromBlueprint) {
-      this.composedBlueprints = await this.composeWithBlueprints();
+      supportedLanguages.forEach(lang => {
+        this.supportedLanguages.set(lang.languageTag, lang);
+      });
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
@@ -84,6 +86,10 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     }
   }
 
+  get supportedLanguages(): Map<string, Language> {
+    return this.getContextData<Map<string, Language>>(CONTEXT_DATA_SUPPORTED_LANGUAGES, { factory: () => new Map() });
+  }
+
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return this.asInitializingTaskGroup({
@@ -93,17 +99,13 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         this.languagesToApply = [this.options.nativeLanguage, ...(this.languages ?? [])].filter(Boolean);
       },
       validateSupportedLanguages() {
-        for (const blueprint of this.composedBlueprints) {
-          if (blueprint.supportedLanguages) {
-            this.supportedLanguages = [...this.supportedLanguages, ...blueprint.supportedLanguages];
-          }
-        }
         if (this.languagesToApply.length > 0) {
-          const unsupportedLanguage = this.languagesToApply.find(lang => !findLanguageForTag(lang, this.supportedLanguages));
+          const supportedLanguages = [...this.supportedLanguages.values()];
+          const unsupportedLanguage = this.languagesToApply.find(lang => !findLanguageForTag(lang, supportedLanguages));
           if (unsupportedLanguage) {
             throw new Error(
               `Unsupported language "${unsupportedLanguage}" passed as argument to language generator.` +
-                `\nSupported languages: ${this.supportedLanguages
+                `\nSupported languages: ${supportedLanguages
                   .map(language => `\n  ${padEnd(language.languageTag, 5)} (${language.name})`)
                   .join('')}`,
             );
@@ -120,9 +122,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
             this.log.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
           }
         }
-      },
-      exportControl({ control }) {
-        control.supportedLanguages = this.supportedLanguages;
       },
     });
   }

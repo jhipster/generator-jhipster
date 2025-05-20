@@ -16,9 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './constants.js';
-export * from './languages.js';
-export { default as generateDateTimeFormat } from './json/dates.js';
-export { default as detectLanguage } from './detect-language.js';
-export { default as loadLanguagesConfig } from './load-config.js';
-export * from './translate.js';
+export const CONTEXT_DATA_SUPPORTED_LANGUAGES = 'jhipster:supportedLanguages';
