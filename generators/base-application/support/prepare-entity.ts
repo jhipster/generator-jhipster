@@ -142,7 +142,7 @@ export const entityDefaultConfig: Partial<BaseApplicationEntity<any, any, any>> 
   },
 };
 
-export default function prepareEntity<
+export function prepareEntity<
   F extends BaseApplicationField,
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
