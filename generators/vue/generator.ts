@@ -112,7 +112,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
           javaNodeBuildPaths?.push('vite.config.mts');
         }
       },
-      prepareForTemplates({ application, control, source }) {
+      prepareForTemplates({ application, source }) {
         application.addPrettierExtensions?.(['html', 'vue', 'css', 'scss']);
 
         source.addWebpackConfig = args => {
@@ -120,7 +120,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
             throw new Error('This application is not webpack based');
           }
           const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
-          const ignoreNonExisting = control.ignoreNeedlesError && 'Webpack configuration file not found';
+          const ignoreNonExisting = this.ignoreNeedlesError && 'Webpack configuration file not found';
           this.editFile(
             webpackPath,
             { ignoreNonExisting },

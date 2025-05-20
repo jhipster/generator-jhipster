@@ -1,7 +1,7 @@
 import type { Control } from '../../../generators/base/types.js';
 
 export type TaskParamWithControl = {
-  control: Control & Record<string, boolean | string | object>;
+  control: Control;
 };
 
 export type TaskParamWithSource<Source = any> = TaskParamWithControl & {

@@ -1,12 +1,10 @@
 export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
 
 export type Control = {
-  existingProject: boolean;
-  ignoreNeedlesError: boolean;
-  jhipsterOldVersion: string | null;
-  reproducibleLiquibaseTimestamp?: Date;
-  enviromentHasDockerCompose?: boolean;
-  customizeRemoveFiles: ((file: string) => string | undefined)[];
+  readonly existingProject: boolean;
+  readonly jhipsterOldVersion: string | null;
+  readonly enviromentHasDockerCompose?: boolean;
+  readonly customizeRemoveFiles: ((file: string) => string | undefined)[];
   /**
    * Check if the JHipster version used to generate an existing project is less than the passed version argument
    *
