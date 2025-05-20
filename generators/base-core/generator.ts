@@ -79,6 +79,7 @@ import type BaseApplicationGenerator from '../base-application/generator.js';
 import type { CleanupArgumentType, Control } from '../base/types.js';
 import type { Config } from '../base-core/types.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
+import { CONTEXT_DATA_EXISTING_PROJECT, CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP } from '../base-application/support/constants.js';
 import { convertWriteFileSectionsToBlocks } from './internal/index.js';
 
 const {
@@ -254,6 +255,13 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
         let jhipsterOldVersion: string | null;
         const customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
         const control: any = {
+          get existingProject(): boolean {
+            try {
+              return generator.getContextData<boolean>(CONTEXT_DATA_EXISTING_PROJECT);
+            } catch {
+              return false;
+            }
+          },
           get jhipsterOldVersion(): string | null {
             if (jhipsterOldVersion === undefined) {
               jhipsterOldVersion = existsSync(generator.config.path)
@@ -743,7 +751,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * @return {String} Changelog date.
    */
   dateFormatForLiquibase(reproducible?: boolean): string {
-    const control = this.control;
     reproducible = reproducible ?? Boolean(this.options.reproducible);
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
@@ -752,17 +759,16 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     now.setMilliseconds(0);
     // Run reproducible timestamp when regenerating the project with reproducible option or an specific timestamp.
     if (reproducible || creationTimestamp) {
-      if (control.reproducibleLiquibaseTimestamp) {
-        // Counter already started.
-        now = control.reproducibleLiquibaseTimestamp;
-      } else {
-        // Create a new counter
-        const newCreationTimestamp: string = (creationTimestamp as string) ?? this.config.get('creationTimestamp');
-        now = newCreationTimestamp ? new Date(newCreationTimestamp) : now;
-        now.setMilliseconds(0);
-      }
+      now = this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, {
+        factory: () => {
+          const newCreationTimestamp: string = (creationTimestamp as string) ?? this.config.get('creationTimestamp');
+          const newDate = newCreationTimestamp ? new Date(newCreationTimestamp) : now;
+          newDate.setMilliseconds(0);
+          return newDate;
+        },
+      });
       now.setMinutes(now.getMinutes() + 1);
-      control.reproducibleLiquibaseTimestamp = now;
+      this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, { override: now });
 
       // Reproducible build can create future timestamp, save it.
       const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;

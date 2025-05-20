@@ -35,7 +35,7 @@ export async function askI18n(this: LanguagesGenerator) {
         type: 'list',
         name: 'nativeLanguage',
         message: 'Please choose the native language of the application',
-        choices: () => languagesAsChoices(this.supportedLanguages),
+        choices: () => languagesAsChoices([...this.supportedLanguages.values()]),
         default: () => (this.options.reproducible ? 'en' : detectLanguage()),
         store: true,
       },
@@ -59,7 +59,7 @@ export async function askForLanguages(this: LanguagesGenerator, { control }) {
       name: 'languages',
       message: 'Please choose additional languages to install',
       choices: () => {
-        const languageOptions = this.supportedLanguages;
+        const languageOptions = [...this.supportedLanguages.values()];
         const nativeLanguage = this.jhipsterConfigWithDefaults.nativeLanguage;
         const choices = languagesAsChoices(languageOptions.filter(l => l.languageTag !== nativeLanguage));
         const defaults = this.jhipsterConfigWithDefaults.languages ?? [];
