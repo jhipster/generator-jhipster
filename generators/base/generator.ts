@@ -91,7 +91,7 @@ export default class JHipsterBaseBlueprintGenerator<
     this.on('before:queueOwnTasks', () => {
       const { storeBlueprintVersion, storeJHipsterVersion, queueCommandTasks = true } = this.getFeatures();
       if (this.fromBlueprint) {
-        if (storeBlueprintVersion && !this.options.reproducibleTests && !this.blueprintConfig!.blueprintVersion) {
+        if (storeBlueprintVersion && !this.options.reproducibleTests) {
           try {
             const blueprintPackageJson = JSON.parse(readFileSync(this._meta!.packagePath!, 'utf8'));
             this.blueprintConfig!.blueprintVersion = blueprintPackageJson.version;
@@ -101,7 +101,7 @@ export default class JHipsterBaseBlueprintGenerator<
         }
       }
       if (!this.fromBlueprint && !this.delegateToBlueprint) {
-        if (storeJHipsterVersion && !this.options.reproducibleTests && !this.jhipsterConfig.jhipsterVersion) {
+        if (storeJHipsterVersion && !this.options.reproducibleTests) {
           this.jhipsterConfig.jhipsterVersion = packageJson.version;
         }
       }
