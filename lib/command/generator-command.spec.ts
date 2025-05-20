@@ -63,7 +63,7 @@ const runDummyCli = (cliArgs: string, config: JHipsterConfig<any>) => {
 const expectGeneratorOptionsTestOption = () => expect((runResult.generator.options as any).testOption);
 const expectGeneratorTestOption = () => expect((runResult.generator as any).testOption);
 const expectContextTestOption = () => expect(runResult.generator.context!.testOption);
-const expectJHipsterConfigTestOption = () => expect(runResult.generator.jhipsterConfig.testOption);
+const expectJHipsterConfigTestOption = () => expect((runResult.generator.jhipsterConfig as any).testOption);
 const expectBlueprintConfigTestOption = () => expect((runResult.generator as any).blueprintConfig.testOption);
 const expectApplicationTestOption = () => expect(runResult.application?.testOption);
 

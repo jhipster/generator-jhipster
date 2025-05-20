@@ -1,13 +1,14 @@
+import assert from 'assert';
 import { basename, extname, resolve } from 'path';
 import { transform } from '@yeoman/transform';
+import type { Config } from '../../generators/base-core/types.js';
 import BaseGenerator from '../../generators/base-core/index.js';
 import { packageJson } from '../../lib/index.js';
 import { promptSamplesFolder } from '../support.mjs';
 import { GENERATOR_APP, GENERATOR_INFO, GENERATOR_JDL } from '../../generators/generator-list.js';
 import { entitiesByType, generateSample } from './support/index.js';
-import assert from 'assert';
 
-export default class extends BaseGenerator {
+export default class extends BaseGenerator<Config & { entities: string[] }> {
   sampleName;
   global;
   projectFolder;

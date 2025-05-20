@@ -43,7 +43,7 @@ import type { AngularApplication, AngularEntity } from './types.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
-export default class AngularGenerator extends BaseApplicationGenerator<DefaultTaskTypes<AngularEntity, AngularApplication>> {
+export default class AngularGenerator extends BaseApplicationGenerator<unknown, DefaultTaskTypes<AngularEntity, AngularApplication>> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

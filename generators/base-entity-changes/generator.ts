@@ -53,7 +53,7 @@ type TaskTypes = ApplicationTaskTypes & {
 /**
  * This is the base class for a generator for every generator.
  */
-export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseApplication<TaskTypes> {
+export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseApplication<unknown, TaskTypes> {
   recreateInitialChangelog!: boolean;
   private entityChanges!: any[];
 

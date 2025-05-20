@@ -26,6 +26,7 @@ import { union } from 'lodash-es';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
 import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from '../../lib/types/base/tasks.js';
+import type { Config } from '../base-core/types.js';
 import { packageNameToNamespace } from './support/index.js';
 import { loadBlueprintsFromConfiguration, mergeBlueprints, normalizeBlueprintName, parseBluePrints } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
@@ -35,7 +36,12 @@ import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.js';
 /**
  * Base class that contains blueprints support.
  */
-export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTypes = BaseTaskTypes> extends CoreGenerator {
+export default class JHipsterBaseBlueprintGenerator<
+  ConfigType = unknown,
+  TaskTypes extends BaseTaskTypes = BaseTaskTypes,
+  Options = unknown,
+  Features = unknown,
+> extends CoreGenerator<ConfigType & Config, Options, Features> {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
   delegateToBlueprint?: boolean;
