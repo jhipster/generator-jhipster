@@ -34,8 +34,8 @@ import semver, { lt as semverLessThan } from 'semver';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
-
 import { execaCommandSync } from 'execa';
+
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
 import type { Logger } from '../base/support/index.js';
 import {
@@ -73,7 +73,6 @@ import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
-import { getConfigWithDefaults } from '../../lib/jhipster/index.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import type { CleanupArgumentType, Control } from '../base/types.js';
@@ -336,16 +335,8 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
   /**
    * JHipster config with default values fallback
    */
-  get jhipsterConfigWithDefaults(): Readonly<ConfigType> {
-    const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
-    defaults(configWithDefaults, {
-      skipFakeData: false,
-      skipCheckLengthOfIdentifier: false,
-      enableGradleDevelocity: false,
-      autoCrlf: false,
-      pages: [],
-    });
-    return configWithDefaults as Readonly<ConfigType>;
+  get jhipsterConfigWithDefaults(): Readonly<Record<string, any>> {
+    return removeFieldsWithNullishValues(this.config.getAll());
   }
 
   /**
