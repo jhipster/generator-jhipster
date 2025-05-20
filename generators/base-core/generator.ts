@@ -198,17 +198,6 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.parseJHipsterOptions(baseCommand.options);
-
-      // Don't write jhipsterVersion to .yo-rc.json when reproducible
-      if (
-        this.options.namespace.startsWith('jhipster:') &&
-        !this.options.namespace.startsWith('jhipster:bootstrap') &&
-        this.getFeatures().storeJHipsterVersion !== false &&
-        !this.options.reproducibleTests &&
-        !this.jhipsterConfig.jhipsterVersion
-      ) {
-        this.storeCurrentJHipsterVersion();
-      }
     }
 
     this.logger = this.log as any;
@@ -230,7 +219,7 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];
 
-    if (this.features.queueCommandTasks === true) {
+    if (this.features.queueCommandTasks !== false) {
       this.on('before:queueOwnTasks', () => {
         this.queueCurrentJHipsterCommandTasks();
       });
@@ -242,10 +231,6 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
    */
   usage(): string {
     return super.usage().replace('yo jhipster:', 'jhipster ');
-  }
-
-  storeCurrentJHipsterVersion(): void {
-    this.jhipsterConfig.jhipsterVersion = packageJson.version;
   }
 
   get control(): Control {

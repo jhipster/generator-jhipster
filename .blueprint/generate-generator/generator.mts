@@ -4,10 +4,6 @@ import BaseGenerator from '../../generators/base-core/index.js';
 export default class extends BaseGenerator {
   generatorNamespace;
 
-  constructor(args, options, features) {
-    super(args, options, { queueCommandTasks: true, ...features });
-  }
-
   get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async writing() {

@@ -16,10 +16,6 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
   entitiesSample;
   sampleYorcFolder;
 
-  constructor(args, options, features) {
-    super(args, options, { queueCommandTasks: true, ...features });
-  }
-
   get [BaseGenerator.INITIALIZING]() {
     return this.asAnyTaskGroup({
       projectVersion() {

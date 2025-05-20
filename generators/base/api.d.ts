@@ -87,11 +87,18 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
    *  - prettier and eslint.
    */
   jhipsterBootstrap?: boolean;
+
   /**
    * Store current version at .yo-rc.json.
    * Defaults to true.
    */
   storeJHipsterVersion?: boolean;
+
+  /**
+   * Store current version at .yo-rc.json.
+   * Defaults to true.
+   */
+  storeBlueprintVersion?: boolean;
 
   /**
    * Create transforms for commit.

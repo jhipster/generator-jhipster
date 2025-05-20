@@ -19,10 +19,6 @@
 import BaseApplicationGenerator from '../../../base-application/index.js';
 
 export default class HuskyGenerator extends BaseApplicationGenerator {
-  constructor(args, options, features) {
-    super(args, options, { queueCommandTasks: true, ...features });
-  }
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

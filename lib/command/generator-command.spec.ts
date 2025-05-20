@@ -23,7 +23,7 @@ class CommandGenerator extends BaseApplicationGenerator {
   context = {};
 
   constructor(args, opts, features) {
-    super(args, opts, { ...features, queueCommandTasks: true, jhipsterBootstrap: false });
+    super(args, opts, { ...features, jhipsterBootstrap: false });
     this.customLifecycle = true;
   }
 }
