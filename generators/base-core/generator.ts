@@ -79,7 +79,7 @@ import type BaseApplicationGenerator from '../base-application/generator.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import type { CleanupArgumentType, Control } from '../base/types.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
-import { CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP } from '../base-application/support/constants.js';
+import { CONTEXT_DATA_EXISTING_PROJECT, CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP } from '../base-application/support/constants.js';
 import { convertWriteFileSectionsToBlocks } from './internal/index.js';
 
 const {
@@ -252,6 +252,13 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
         let jhipsterOldVersion: string | null;
         const customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
         const control: any = {
+          get existingProject(): boolean {
+            try {
+              return generator.getContextData<boolean>(CONTEXT_DATA_EXISTING_PROJECT);
+            } catch {
+              return false;
+            }
+          },
           get jhipsterOldVersion(): string | null {
             if (jhipsterOldVersion === undefined) {
               jhipsterOldVersion = existsSync(generator.config.path)

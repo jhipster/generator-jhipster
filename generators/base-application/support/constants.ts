@@ -18,5 +18,6 @@
  */
 export const CONTEXT_DATA_APPLICATION_KEY = 'jhipster:application';
 export const CONTEXT_DATA_APPLICATION_ENTITIES_KEY = 'jhipster:application:entities';
+export const CONTEXT_DATA_EXISTING_PROJECT = 'jhipster:existingProject';
 export const CONTEXT_DATA_SOURCE_KEY = 'jhipster:source';
 export const CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP = 'jhipster:reproducibleTimestamp';
