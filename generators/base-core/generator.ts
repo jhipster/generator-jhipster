@@ -208,7 +208,11 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
 
     this.registerPriorities(CUSTOM_PRIORITIES);
 
-    const { jhipsterBootstrap = true, blueprintSupport = false, queueCommandTasks = true } = this.getFeatures();
+    const {
+      blueprintSupport = false,
+      jhipsterBootstrap = blueprintSupport ? !this._namespace.split(':')[1].startsWith('bootstrap') : false,
+      queueCommandTasks = true,
+    } = this.getFeatures();
     if (jhipsterBootstrap) {
       // jhipster:bootstrap is always required. Run it once the environment starts.
       this.env.queueTask('environment:run', async () => this.composeWithJHipster(GENERATOR_BOOTSTRAP).then(), {

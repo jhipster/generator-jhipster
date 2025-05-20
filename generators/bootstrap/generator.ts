@@ -61,7 +61,7 @@ export default class BootstrapGenerator extends BaseGenerator {
   refreshOnCommit = false;
 
   constructor(args: any, options: any, features: any) {
-    super(args, options, { jhipsterBootstrap: false, uniqueGlobally: true, customCommitTask: () => this.commitTask(), ...features });
+    super(args, options, { uniqueGlobally: true, customCommitTask: () => this.commitTask(), ...features });
   }
 
   async beforeQueue() {

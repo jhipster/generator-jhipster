@@ -37,10 +37,6 @@ const {
 } = validations;
 
 export default class BootstrapApplicationGenerator extends BaseApplicationGenerator {
-  constructor(args: any, options: any, features: any) {
-    super(args, options, { jhipsterBootstrap: false, ...features });
-  }
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

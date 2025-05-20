@@ -1,10 +1,10 @@
 import { readdir } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
-import BaseGenerator from 'generator-jhipster/generators/base';
+import BaseCoreGenerator from 'generator-jhipster/generators/base-core';
 import { getGithubSamplesGroup } from 'generator-jhipster/testing';
 
-export default class extends BaseGenerator {
+export default class extends BaseCoreGenerator {
   /** @type {string | undefined} */
   samplesFolder;
   /** @type {string} */
@@ -20,11 +20,7 @@ export default class extends BaseGenerator {
   /** @type {any} */
   generatorOptions;
 
-  constructor(args, opts, features) {
-    super(args, opts, { ...features,  jhipsterBootstrap: false });
-  }
-
-  get [BaseGenerator.WRITING]() {
+  get [BaseCoreGenerator.WRITING]() {
     return this.asWritingTaskGroup({
       async copySample() {
         const { samplesFolder, samplesGroup, all, sampleName } = this;
@@ -61,7 +57,7 @@ export default class extends BaseGenerator {
     });
   }
 
-  get [BaseGenerator.END]() {
+  get [BaseCoreGenerator.END]() {
     return this.asEndTaskGroup({
       async generateYoRcSample() {
         if (this.sampleType !== 'yo-rc') return;

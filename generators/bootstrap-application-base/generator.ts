@@ -47,10 +47,6 @@ import { createAuthorityEntity, createUserEntity, createUserManagementEntity } f
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
 
 export default class BootstrapApplicationBase extends BaseApplicationGenerator {
-  constructor(args: any, options: any, features: any) {
-    super(args, options, { jhipsterBootstrap: false, ...features });
-  }
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
