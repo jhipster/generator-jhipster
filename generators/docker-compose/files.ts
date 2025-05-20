@@ -25,8 +25,8 @@ const { OAUTH2 } = authenticationTypes;
 
 export function writeFiles() {
   return {
-    cleanup() {
-      if (this.isJhipsterVersionLessThan('7.10.0')) {
+    cleanup({ control }) {
+      if (control.isJhipsterVersionLessThan('7.10.0')) {
         this.removeFile('realm-config/jhipster-users-0.json');
       }
     },

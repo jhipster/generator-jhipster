@@ -103,7 +103,14 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      feignMigration() {
+      syncUserWithIdpMigration({ control }) {
+        if (this.jhipsterConfig.syncUserWithIdp === undefined && this.jhipsterConfigWithDefaults.authenticationType === 'oauth2') {
+          if (control.isJhipsterVersionLessThan('8.1.1')) {
+            this.jhipsterConfig.syncUserWithIdp = true;
+          }
+        }
+      },
+      feignMigration({ control }) {
         const { reactive, applicationType, feignClient } = this.jhipsterConfigWithDefaults;
         if (feignClient) {
           if (reactive) {
@@ -115,7 +122,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         }
         if (
           feignClient === undefined &&
-          this.isJhipsterVersionLessThan('8.0.1') &&
+          control.isJhipsterVersionLessThan('8.0.1') &&
           !reactive &&
           applicationType === APPLICATION_TYPE_MICROSERVICE
         ) {

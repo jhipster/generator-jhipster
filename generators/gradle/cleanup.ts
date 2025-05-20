@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type BaseGenerator from '../base-core/index.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupOldServerFilesTask(this: BaseGenerator) {
-  if (this.isJhipsterVersionLessThan('5.0.0')) {
+export default asWritingTask(function cleanupOldServerFilesTask({ control }) {
+  if (control.isJhipsterVersionLessThan('5.0.0')) {
     this.removeFile('gradle/mapstruct.gradle');
   }
-  if (this.isJhipsterVersionLessThan('5.2.2')) {
+  if (control.isJhipsterVersionLessThan('5.2.2')) {
     this.removeFile('gradle/liquibase.gradle');
   }
-}
+});

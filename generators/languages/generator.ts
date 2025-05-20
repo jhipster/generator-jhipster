@@ -152,8 +152,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get configuring() {
     return this.asConfiguringTaskGroup({
-      migrateLanguages() {
-        if (this.isJhipsterVersionLessThan('7.10.0')) {
+      migrateLanguages({ control }) {
+        if (control.isJhipsterVersionLessThan('7.10.0')) {
           this.migrateLanguages({ in: 'id' });
         }
       },

@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type BaseGenerator from '../base-core/index.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupTask(this: BaseGenerator, { application }: any) {
-  if (this.isJhipsterVersionLessThan('7.8.1')) {
+export default asWritingTask(function cleanupTask({ application, control }) {
+  if (control.isJhipsterVersionLessThan('7.8.1')) {
     this.removeFile(`${application.javaPackageSrcDir}AbstractNeo4jIT.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.10.0')) {
+  if (control.isJhipsterVersionLessThan('7.10.0')) {
     this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
   }
-}
+});

@@ -51,8 +51,8 @@ export default class InitGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      cleanup() {
-        if (this.isJhipsterVersionLessThan('7.5.1')) {
+      cleanup({ control }) {
+        if (control.isJhipsterVersionLessThan('7.5.1')) {
           this.removeFile('.lintstagedrc.js');
         }
       },

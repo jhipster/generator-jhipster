@@ -278,6 +278,10 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
             return control._enviromentHasDockerCompose;
           },
           customizeRemoveFiles,
+          isJhipsterVersionLessThan(version: string): boolean {
+            const jhipsterOldVersion = this.jhipsterOldVersion;
+            return jhipsterOldVersion ? semverLessThan(jhipsterOldVersion, version) : false;
+          },
         };
 
         const removeFiles = async (assertions: { oldVersion?: string; removedInVersion?: string } | string, ...files: string[]) => {
@@ -382,16 +386,6 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
       throw new Error(`${message}
 You can ignore this error by passing '--skip-checks' to jhipster command.`);
     }
-  }
-
-  /**
-   * Check if the JHipster version used to generate an existing project is less than the passed version argument
-   *
-   * @param {string} version - A valid semver version string
-   */
-  isJhipsterVersionLessThan(version: string): boolean {
-    const jhipsterOldVersion = this.control.jhipsterOldVersion;
-    return this.isVersionLessThan(jhipsterOldVersion, version);
   }
 
   /**

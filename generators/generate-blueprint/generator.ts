@@ -275,9 +275,9 @@ export default class extends BaseGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      upgrade({ application }) {
+      upgrade({ application, control }) {
         if (!this.application[GENERATORS]) return;
-        if (!this.isJhipsterVersionLessThan('8.7.2')) return;
+        if (!control.isJhipsterVersionLessThan('8.7.2')) return;
         for (const generator of Object.keys(this.application[GENERATORS])) {
           const commandFile = `${this.application.blueprintsPath}${generator}/command.${application.blueprintMjsExtension}`;
           this.editFile(commandFile, { ignoreNonExisting: true }, content =>

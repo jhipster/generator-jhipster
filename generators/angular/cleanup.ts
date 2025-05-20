@@ -25,19 +25,19 @@ import { CLIENT_WEBPACK_DIR } from '../generator-constants.js';
  * need to be removed.
  */
 
-export default asWritingTask(function cleanupOldFilesTask(this, { application }) {
-  if (this.isJhipsterVersionLessThan('3.2.0')) {
+export default asWritingTask(function cleanupOldFilesTask({ application, control }) {
+  if (control.isJhipsterVersionLessThan('3.2.0')) {
     // removeFile and removeFolder methods should be called here for files and folders to cleanup
     this.removeFile(`${application.clientSrcDir}app/components/form/uib-pager.config.js`);
     this.removeFile(`${application.clientSrcDir}app/components/form/uib-pagination.config.js`);
   }
-  if (this.isJhipsterVersionLessThan('3.11.0')) {
+  if (control.isJhipsterVersionLessThan('3.11.0')) {
     this.removeFile(`${application.clientSrcDir}app/layouts/navbar/active-link.directive.js`);
   }
-  if (this.isJhipsterVersionLessThan('4.11.1')) {
+  if (control.isJhipsterVersionLessThan('4.11.1')) {
     this.removeFile(`${application.clientSrcDir}app/app.main-aot.ts`);
   }
-  if (this.isJhipsterVersionLessThan('5.0.0')) {
+  if (control.isJhipsterVersionLessThan('5.0.0')) {
     this.removeFile(`${application.clientSrcDir}app//app.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/shared/auth/account.service.ts`);
     this.removeFile(`${application.clientSrcDir}app/shared/auth/auth-jwt.service.ts`);
@@ -63,16 +63,16 @@ export default asWritingTask(function cleanupOldFilesTask(this, { application })
     this.removeFile(`${application.clientTestDir}spec/entry.ts`);
     this.removeFile(`${application.clientTestDir}karma.conf.js`);
   }
-  if (this.isJhipsterVersionLessThan('5.8.0')) {
+  if (control.isJhipsterVersionLessThan('5.8.0')) {
     this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics-modal.component.html`);
     this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics-modal.component.ts`);
     this.removeFile(`${application.clientTestDir}spec/app/admin/metrics/metrics-modal.component.spec.ts`);
   }
-  if (this.isJhipsterVersionLessThan('6.0.0')) {
+  if (control.isJhipsterVersionLessThan('6.0.0')) {
     this.removeFolder(`${application.clientSrcDir}app/shared/layout/header/menus`);
     this.removeFolder(`${application.clientTestDir}spec/app/shared/layout/header/menus`);
   }
-  if (this.isJhipsterVersionLessThan('6.3.0')) {
+  if (control.isJhipsterVersionLessThan('6.3.0')) {
     this.removeFile(`${application.clientSrcDir}app/account/index.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/index.ts`);
     this.removeFile(`${application.clientSrcDir}app/core/index.ts`);
@@ -81,17 +81,17 @@ export default asWritingTask(function cleanupOldFilesTask(this, { application })
     this.removeFile(`${application.clientSrcDir}app/shared/index.ts`);
     this.removeFile(`${application.clientSrcDir}app/shared/shared-common.module.ts`);
   }
-  if (this.isJhipsterVersionLessThan('6.4.0')) {
+  if (control.isJhipsterVersionLessThan('6.4.0')) {
     this.removeFile(`${application.clientSrcDir}app/admin/admin.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/admin.module.ts`);
   }
-  if (this.isJhipsterVersionLessThan('6.6.1')) {
+  if (control.isJhipsterVersionLessThan('6.6.1')) {
     this.removeFile(`${application.clientSrcDir}app/core/language/language.helper.ts`);
   }
-  if (this.isJhipsterVersionLessThan('6.8.0')) {
+  if (control.isJhipsterVersionLessThan('6.8.0')) {
     this.removeFile(`${application.clientSrcDir}app/tsconfig-aot.json`);
   }
-  if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
+  if (control.isJhipsterVersionLessThan('7.0.0-beta.0')) {
     this.removeFile(`${application.clientSrcDir}app/account/password/password-strength-bar.component.ts`);
     this.removeFile(`${application.clientSrcDir}app/account/password/password-strength-bar.scss`);
     this.removeFile(`${application.clientSrcDir}app/admin/docs/docs.scss`);
@@ -235,25 +235,25 @@ export default asWritingTask(function cleanupOldFilesTask(this, { application })
     this.removeFile(`${application.clientTestDir}spec/app/shared/sort/sort.directive.spec.ts`);
     this.removeFile(`${application.clientTestDir}jest.conf.js`);
   }
-  if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
+  if (control.isJhipsterVersionLessThan('7.0.0-beta.1')) {
     this.removeFile(`${application.clientSrcDir}app/core/user/account.model.ts`);
     this.removeFile(`${application.clientSrcDir}app/core/user/user.model.ts`);
     this.removeFile(`${application.clientSrcDir}app/core/user/user.service.ts`);
     this.removeFile(`${application.clientSrcDir}app/core/user/user.service.spec.ts`);
   }
-  if (this.isJhipsterVersionLessThan('7.0.0-beta.2')) {
+  if (control.isJhipsterVersionLessThan('7.0.0-beta.2')) {
     this.removeFile(`${application.clientSrcDir}app/core/config/config.service.ts`);
     this.removeFile(`${application.clientSrcDir}app/core/config/config.service.spec.ts`);
     this.removeFile('.npmrc');
   }
-  if (this.isJhipsterVersionLessThan('7.1.1')) {
+  if (control.isJhipsterVersionLessThan('7.1.1')) {
     this.removeFile('.npmrc');
   }
 
-  if (this.isJhipsterVersionLessThan('7.6.1')) {
+  if (control.isJhipsterVersionLessThan('7.6.1')) {
     this.removeFile(`${application.clientSrcDir}content/scss/rtl.scss`);
   }
-  if (this.isJhipsterVersionLessThan('7.10.0')) {
+  if (control.isJhipsterVersionLessThan('7.10.0')) {
     this.removeFile('.browserslistrc');
     this.removeFile(`${application.clientSrcDir}polyfills.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management.module.ts`);
@@ -280,14 +280,14 @@ export default asWritingTask(function cleanupOldFilesTask(this, { application })
     this.removeFile(`${application.clientSrcDir}app/admin/tracker/tracker.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/account/account.module.ts`);
   }
-  if (this.isJhipsterVersionLessThan('8.0.1')) {
+  if (control.isJhipsterVersionLessThan('8.0.1')) {
     this.removeFile(`${application.clientSrcDir}app/layouts/main/main.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/admin-routing.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/app.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/app-routing.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/entities/entity-routing.module.ts`);
   }
-  if (this.isJhipsterVersionLessThan('8.1.1')) {
+  if (control.isJhipsterVersionLessThan('8.1.1')) {
     this.removeFile(`${application.clientSrcDir}app/entities/user/user.service.ts`);
     this.removeFile(`${application.clientSrcDir}app/entities/user/user.service.spec.ts`);
   }

@@ -18,11 +18,11 @@ import { asWritingTask } from '../base-application/support/task-type-inference.j
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default asWritingTask(function cleanupMongodbFilesTask({ application }) {
-  if (this.isJhipsterVersionLessThan('3.10.0')) {
+export default asWritingTask(function cleanupMongodbFilesTask({ application, control }) {
+  if (control.isJhipsterVersionLessThan('3.10.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/CloudMongoDbConfiguration.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.7.1')) {
+  if (control.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${application.javaPackageTestDir}MongoDbTestContainerExtension.java`);
   }
 });

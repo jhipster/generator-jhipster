@@ -18,23 +18,23 @@ import { asWritingTask } from '../base-application/support/task-type-inference.j
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default asWritingTask(function cleanupCassandraFilesTask({ application }) {
-  if (this.isJhipsterVersionLessThan('4.3.0')) {
+export default asWritingTask(function cleanupCassandraFilesTask({ application, control }) {
+  if (control.isJhipsterVersionLessThan('4.3.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/cassandra/CustomZonedDateTimeCodec.java`);
   }
-  if (this.isJhipsterVersionLessThan('5.8.0')) {
+  if (control.isJhipsterVersionLessThan('5.8.0')) {
     this.removeFile(`${application.srcTestResources}cassandra-random-port.yml`);
   }
-  if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
+  if (control.isJhipsterVersionLessThan('7.0.0-beta.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/metrics/CassandraHealthIndicator.java`);
     this.removeFile(`${application.javaPackageSrcDir}config/cassandra/package-info.java`);
     this.removeFile(`${application.javaPackageSrcDir}config/cassandra/CassandraConfiguration.java`);
     this.removeFile(`${application.javaPackageTestDir}config/CassandraConfigurationIT.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.7.1')) {
+  if (control.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${application.javaPackageTestDir}AbstractCassandraTest.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.10.0')) {
+  if (control.isJhipsterVersionLessThan('7.10.0')) {
     this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
   }
 });

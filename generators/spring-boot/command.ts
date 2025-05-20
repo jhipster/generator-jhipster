@@ -168,11 +168,7 @@ const command = {
         tokenType: 'BOOLEAN',
       },
       configure: gen => {
-        if (gen.jhipsterConfig.syncUserWithIdp === undefined && gen.jhipsterConfigWithDefaults.authenticationType === OAUTH2) {
-          if (gen.isJhipsterVersionLessThan('8.1.1')) {
-            gen.jhipsterConfig.syncUserWithIdp = true;
-          }
-        } else if (gen.jhipsterConfig.syncUserWithIdp && gen.jhipsterConfig.authenticationType !== OAUTH2) {
+        if (gen.jhipsterConfig.syncUserWithIdp && gen.jhipsterConfig.authenticationType !== OAUTH2) {
           throw new Error('syncUserWithIdp is only supported with authenticationType oauth2');
         }
       },

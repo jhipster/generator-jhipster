@@ -23,8 +23,8 @@ import { asWritingTask } from '../base-application/support/index.js';
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default asWritingTask(function cleanupOldFilesTask() {
-  if (this.isJhipsterVersionLessThan('6.1.0')) {
+export default asWritingTask(function cleanupOldFilesTask({ control }) {
+  if (control.isJhipsterVersionLessThan('6.1.0')) {
     this.config.delete('blueprint');
     this.config.delete('blueprintVersion');
   }
