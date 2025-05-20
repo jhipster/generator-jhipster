@@ -18,22 +18,22 @@ import { asWritingTask } from '../base-application/support/task-type-inference.j
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default asWritingTask(function cleanupElasticsearchFilesTask({ application }) {
-  if (this.isJhipsterVersionLessThan('4.0.0')) {
+export default asWritingTask(function cleanupElasticsearchFilesTask({ application, control }) {
+  if (control.isJhipsterVersionLessThan('4.0.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/ElasticSearchConfiguration.java`);
   }
-  if (this.isJhipsterVersionLessThan('5.2.2')) {
+  if (control.isJhipsterVersionLessThan('5.2.2')) {
     this.removeFile(`${application.javaPackageSrcDir}config/ElasticsearchConfiguration.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
+  if (control.isJhipsterVersionLessThan('7.0.0-beta.0')) {
     this.removeFile(`${application.javaPackageTestDir}config/ElasticsearchTestConfiguration.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.7.1')) {
+  if (control.isJhipsterVersionLessThan('7.7.1')) {
     if (application.generateUserManagement) {
       this.removeFile(`${application.javaPackageTestDir}repository/search/UserSearchRepositoryMockConfiguration.java`);
     }
   }
-  if (this.isJhipsterVersionLessThan('7.9.3')) {
+  if (control.isJhipsterVersionLessThan('7.9.3')) {
     if (application.reactive) {
       this.removeFile(`${application.javaPackageTestDir}config/ElasticsearchReactiveTestConfiguration.java`);
     }

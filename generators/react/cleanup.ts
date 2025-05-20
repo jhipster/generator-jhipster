@@ -23,15 +23,15 @@ import { asWritingTask } from '../base-application/support/task-type-inference.j
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default asWritingTask(function cleanupOldFilesTask({ application }) {
-  if (this.isJhipsterVersionLessThan('6.3.0')) {
+export default asWritingTask(function cleanupOldFilesTask({ application, control }) {
+  if (control.isJhipsterVersionLessThan('6.3.0')) {
     this.removeFile('tslint.json');
   }
-  if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
+  if (control.isJhipsterVersionLessThan('7.0.0-beta.0')) {
     this.removeFile(`${application.clientSrcDir}app/modules/administration/audits/audits.tsx`);
     this.removeFile(`${application.clientTestDir}spec/enzyme-setup.ts`);
   }
-  if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
+  if (control.isJhipsterVersionLessThan('7.0.0-beta.1')) {
     this.removeFile(`${application.clientTestDir}jest.conf.js`);
     this.removeFile(`${application.clientTestDir}spec/icons-mock.ts`);
     this.removeFile(`${application.clientTestDir}spec/storage-mock.ts`);
@@ -55,25 +55,25 @@ export default asWritingTask(function cleanupOldFilesTask({ application }) {
     this.removeFile(`${application.clientTestDir}spec/app/shared/reducers/locale.spec.ts`);
     this.removeFile(`${application.clientTestDir}spec/app/shared/reducers/user-management.spec.ts`);
   }
-  if (this.isJhipsterVersionLessThan('7.1.0')) {
+  if (control.isJhipsterVersionLessThan('7.1.0')) {
     this.removeFile(`${application.clientSrcDir}app/shared/reducers/action-type.util.ts`);
     this.removeFile(`${application.clientSrcDir}app/config/devtools.tsx`);
   }
 
-  if (this.isJhipsterVersionLessThan('7.4.0') && application.enableI18nRTL) {
+  if (control.isJhipsterVersionLessThan('7.4.0') && application.enableI18nRTL) {
     this.removeFile(`${application.clientSrcDir}content/scss/rtl.scss`);
   }
-  if (this.isJhipsterVersionLessThan('7.4.1')) {
+  if (control.isJhipsterVersionLessThan('7.4.1')) {
     this.removeFile('.npmrc');
   }
-  if (this.isJhipsterVersionLessThan('7.7.1')) {
+  if (control.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${application.clientSrcDir}app/entities/index.tsx`);
   }
-  if (this.isJhipsterVersionLessThan('7.8.2')) {
+  if (control.isJhipsterVersionLessThan('7.8.2')) {
     this.removeFile(`${application.clientSrcDir}app/shared/error/error-boundary-route.tsx`);
     this.removeFile(`${application.clientSrcDir}app/shared/error/error-boundary-route.spec.tsx`);
   }
-  if (this.isJhipsterVersionLessThan('7.9.3')) {
+  if (control.isJhipsterVersionLessThan('7.9.3')) {
     this.removeFile(`${application.clientSrcDir}app/config/translation-middleware.ts`);
   }
 });

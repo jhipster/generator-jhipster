@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type BaseGenerator from '../base-core/index.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupTask(this: BaseGenerator, { application }: any) {
-  if (this.isJhipsterVersionLessThan('8.0.1')) {
+export default asWritingTask(function cleanupTask({ application, control }) {
+  if (control.isJhipsterVersionLessThan('8.0.1')) {
     if (application.authenticationTypeOauth2) {
       this.removeFile(`${application.javaPackageSrcDir}security/oauth2/AuthorizationHeaderUtil.java`);
       this.removeFile(`${application.javaPackageTestDir}security/oauth2/AuthorizationHeaderUtilTest.java`);
     }
   }
-}
+});

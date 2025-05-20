@@ -17,15 +17,15 @@
  * limitations under the License.
  */
 
-import type GatlingGenerator from './generator.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupTask(this: GatlingGenerator, { application }) {
-  if (this.isJhipsterVersionLessThan('8.1.1')) {
+export default asWritingTask(function cleanupTask({ application, control }) {
+  if (control.isJhipsterVersionLessThan('8.1.1')) {
     if (application.buildToolGradle) {
       this.removeFile('gradle/gatling.gradle');
     }
   }
-}
+});

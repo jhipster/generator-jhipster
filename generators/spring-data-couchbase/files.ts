@@ -72,8 +72,8 @@ export const couchbaseFiles = {
   ],
 };
 
-export const cleanupCouchbaseFilesTask = asWritingTask(function cleanupCouchbaseFilesTask({ application }) {
-  if (this.isJhipsterVersionLessThan('7.1.1')) {
+export const cleanupCouchbaseFilesTask = asWritingTask(function cleanupCouchbaseFilesTask({ application, control }) {
+  if (control.isJhipsterVersionLessThan('7.1.1')) {
     this.removeFile(`${application.javaPackageSrcDir}repository/CustomReactiveCouchbaseRepository.java `);
     this.removeFile(`${application.javaPackageSrcDir}config/DatabaseConfigurationIT.java`);
     this.removeFile(`${application.javaPackageSrcDir}repository/N1qlCouchbaseRepository.java`);
@@ -84,7 +84,7 @@ export const cleanupCouchbaseFilesTask = asWritingTask(function cleanupCouchbase
     this.removeFile(`${application.javaPackageTestDir}repository/CustomCouchbaseRepositoryTest.java`);
   }
 
-  if (this.isJhipsterVersionLessThan('7.6.1')) {
+  if (control.isJhipsterVersionLessThan('7.6.1')) {
     this.removeFile(`${application.javaPackageTestDir}repository/JHipsterCouchbaseRepositoryTest.java`);
     this.removeFolder(`${application.javaPackageSrcDir}config/couchbase`);
     this.removeFile(`${application.srcMainResources}config/couchmove/changelog/V0__create_indexes.n1ql`);

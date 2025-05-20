@@ -16,9 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ApplicationType } from '../../lib/types/application/application.js';
-import type { Entity } from '../../lib/types/application/entity.js';
-import type CoreGenerator from '../base-core/generator.js';
+import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
@@ -28,20 +26,20 @@ import type CoreGenerator from '../base-core/generator.js';
  * @param {Object} application
  * @param {Object} entity
  */
-export function cleanupOldFiles(
-  this: CoreGenerator,
-  {
-    application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch },
-    entity: { entityClass, entityAbsoluteFolder },
-  }: { application: ApplicationType<Entity>; entity: Entity },
-) {
-  if (this.isJhipsterVersionLessThan('7.6.1')) {
+export const cleanupOldFiles = asWritingEntitiesTask(function cleanupOldFiles({
+  application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch },
+  control,
+  entities,
+}) {
+  if (control.isJhipsterVersionLessThan('7.6.1')) {
     if (searchEngineElasticsearch) {
       this.removeFile(`${srcMainJava}${packageFolder}/repository/search/SortToFieldSortBuilderConverter.java`);
     }
   }
-  if (this.isJhipsterVersionLessThan('7.7.1')) {
+  if (control.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${srcMainJava}${packageFolder}/repository/search/SortToSortBuilderListConverter.java`);
-    this.removeFile(`${srcTestJava}${entityAbsoluteFolder}/repository/search/${entityClass}SearchRepositoryMockConfiguration.java`);
+    for (const { entityClass, entityAbsoluteFolder } of entities.filter(entity => !entity.skipServer)) {
+      this.removeFile(`${srcTestJava}${entityAbsoluteFolder}/repository/search/${entityClass}SearchRepositoryMockConfiguration.java`);
+    }
   }
-}
+});

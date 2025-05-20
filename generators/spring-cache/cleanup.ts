@@ -24,18 +24,18 @@ import { asWritingTask } from '../base-application/support/task-type-inference.j
  */
 export default asWritingTask(async function cleanupTask(this, { application, control }) {
   if (application.cacheProviderHazelcast) {
-    if (this.isJhipsterVersionLessThan('3.12.0')) {
+    if (control.isJhipsterVersionLessThan('3.12.0')) {
       this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/HazelcastCacheRegionFactory.java`);
       this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/package-info.java`);
     }
   }
   if (application.cacheProviderRedis) {
-    if (this.isJhipsterVersionLessThan('7.8.2')) {
+    if (control.isJhipsterVersionLessThan('7.8.2')) {
       this.removeFile(`${application.javaPackageTestDir}RedisTestContainerExtension.java`);
     }
   }
   if (application.buildToolGradle) {
-    if (this.isJhipsterVersionLessThan('8.1.1')) {
+    if (control.isJhipsterVersionLessThan('8.1.1')) {
       this.removeFile('gradle/cache.gradle');
     }
   }

@@ -151,11 +151,11 @@ export default class CypressGenerator extends BaseApplicationGenerator {
   get writing() {
     return this.asWritingTaskGroup({
       async cleanup({ control, application: { authenticationTypeOauth2, generateUserManagement, cypressDir } }) {
-        if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
+        if (control.isJhipsterVersionLessThan('7.0.0-beta.1')) {
           this.removeFile(`${cypressDir}support/keycloak-oauth2.ts`);
           this.removeFile(`${cypressDir}fixtures/users/user.json`);
         }
-        if (this.isJhipsterVersionLessThan('7.8.2')) {
+        if (control.isJhipsterVersionLessThan('7.8.2')) {
           this.removeFile('cypress.json');
           this.removeFile('cypress-audits.json');
 
@@ -192,9 +192,9 @@ export default class CypressGenerator extends BaseApplicationGenerator {
 
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
-      cleanupCypressEntityFiles({ application: { cypressDir }, entities }) {
+      cleanupCypressEntityFiles({ application: { cypressDir }, control, entities }) {
         for (const entity of entities) {
-          if (this.isJhipsterVersionLessThan('7.8.2')) {
+          if (control.isJhipsterVersionLessThan('7.8.2')) {
             this.removeFile(`${cypressDir}integration/entity/${entity.entityFileName}.spec.ts`);
           }
         }

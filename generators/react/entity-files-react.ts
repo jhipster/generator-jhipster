@@ -69,13 +69,13 @@ export const postWriteEntitiesFiles = asPostWritingEntitiesTask(async function (
   source.addEntitiesToClient({ application, entities: clientEntities });
 });
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ application, entities }) {
+export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ application, control, entities }) {
   for (const entity of (application.filterEntitiesForClient ?? filterEntitiesForClient)(entities).filter(
     entity => !entity.builtInUser && !entity.embedded,
   )) {
     const { entityFolderName, entityFileName } = entity;
 
-    if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
+    if (control.isJhipsterVersionLessThan('7.0.0-beta.1')) {
       this.removeFile(`${application.clientTestDir}spec/app/entities/${entityFolderName}/${entityFileName}-reducer.spec.ts`);
     }
   }

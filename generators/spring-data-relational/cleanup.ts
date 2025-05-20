@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type Generator from './generator.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupOldServerFilesTask(this: Generator, { application }: any) {
-  if (this.isJhipsterVersionLessThan('4.0.0')) {
+export default asWritingTask(function cleanupOldServerFilesTask({ application, control }) {
+  if (control.isJhipsterVersionLessThan('4.0.0')) {
     if (application.devDatabaseTypeH2Any) {
       this.removeFile(`${application.javaPackageSrcDir}domain/util/FixedH2Dialect.java`);
     }
@@ -31,13 +31,13 @@ export default function cleanupOldServerFilesTask(this: Generator, { application
       this.removeFile(`${application.javaPackageSrcDir}domain/util/FixedPostgreSQL82Dialect`);
     }
   }
-  if (this.isJhipsterVersionLessThan('7.8.2')) {
+  if (control.isJhipsterVersionLessThan('7.8.2')) {
     this.removeFile(`${application.srcTestResources}config/application-testcontainers.yml`);
     if (application.reactive) {
       this.removeFile(`${application.javaPackageTestDir}ReactiveSqlTestContainerExtension.java`);
     }
   }
-  if (application.prodDatabaseTypeMysql && this.isJhipsterVersionLessThan('7.9.0')) {
+  if (application.prodDatabaseTypeMysql && control.isJhipsterVersionLessThan('7.9.0')) {
     this.removeFile(`${application.srcTestResources}testcontainers/mysql/my.cnf`);
   }
-}
+});

@@ -7,7 +7,13 @@ export type Control = {
   reproducibleLiquibaseTimestamp?: Date;
   enviromentHasDockerCompose?: boolean;
   customizeRemoveFiles: ((file: string) => string | undefined)[];
-  removeFiles: (options: { removedInVersion: string } | string, ...files: string[]) => Promise<void>;
+  /**
+   * Check if the JHipster version used to generate an existing project is less than the passed version argument
+   *
+   * @param {string} version - A valid semver version string
+   */
+  isJhipsterVersionLessThan(version: string): boolean;
+  removeFiles: (options: { oldVersion?: string; removedInVersion: string } | string, ...files: string[]) => Promise<void>;
   /**
    * Cleanup files conditionally based on version and condition.
    * @example

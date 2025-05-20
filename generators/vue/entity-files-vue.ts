@@ -71,12 +71,12 @@ export const postWriteEntityFiles = asPostWritingEntitiesTask(async function pos
   });
 });
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ application, entities }) {
+export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ application, control, entities }) {
   for (const entity of (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(
     entity => !entity.builtInUser && !entity.embedded,
   )) {
     const { entityFolderName, entityFileName } = entity;
-    if (this.isJhipsterVersionLessThan('8.0.0-beta.3')) {
+    if (control.isJhipsterVersionLessThan('8.0.0-beta.3')) {
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.component.spec.ts`);
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-detail.component.spec.ts`);
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-update.component.spec.ts`);

@@ -136,18 +136,18 @@ export const postWriteEntitiesFiles = asPostWritingEntitiesTask(async function (
   source.addEntitiesToClient({ ...taskParam, entities });
 });
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask(function ({ application, entities }) {
+export const cleanupEntitiesFiles = asWritingEntitiesTask(function ({ application, entities, control }) {
   for (const entity of (application.filterEntitiesForClient ?? filterEntitiesForClient)(entities).filter(entity => !entity.builtIn)) {
     const { entityFolderName, entityFileName, name: entityName } = entity;
-    if (this.isJhipsterVersionLessThan('5.0.0')) {
+    if (control.isJhipsterVersionLessThan('5.0.0')) {
       this.removeFile(`${application.clientSrcDir}app/entities/${entityName}/${entityName}.model.ts`);
     }
 
-    if (this.isJhipsterVersionLessThan('6.3.0')) {
+    if (control.isJhipsterVersionLessThan('6.3.0')) {
       this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/index.ts`);
     }
 
-    if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
+    if (control.isJhipsterVersionLessThan('7.0.0-beta.0')) {
       this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.route.ts`);
       this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.component.ts`);
       this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.component.html`);
@@ -177,7 +177,7 @@ export const cleanupEntitiesFiles = asWritingEntitiesTask(function ({ applicatio
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
     }
 
-    if (this.isJhipsterVersionLessThan('7.10.0')) {
+    if (control.isJhipsterVersionLessThan('7.10.0')) {
       this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/${entityFileName}.module.ts`);
       this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/route/${entityFileName}-routing.module.ts`);
     }

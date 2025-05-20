@@ -31,21 +31,21 @@ export default asWritingTask(async function cleanupTask(this, taskParam) {
     cleanupOauth2.call(this, taskParam);
   }
 
-  if (this.isJhipsterVersionLessThan('3.5.0')) {
+  if (control.isJhipsterVersionLessThan('3.5.0')) {
     this.removeFile(`${application.javaPackageSrcDir}domain/util/JSR310DateTimeSerializer.java`);
     this.removeFile(`${application.javaPackageSrcDir}domain/util/JSR310LocalDateDeserializer.java`);
   }
-  if (this.isJhipsterVersionLessThan('3.6.0')) {
+  if (control.isJhipsterVersionLessThan('3.6.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/HerokuDatabaseConfiguration.java`);
   }
-  if (this.isJhipsterVersionLessThan('3.10.0')) {
+  if (control.isJhipsterVersionLessThan('3.10.0')) {
     this.removeFile(`${application.javaPackageSrcDir}security/CustomAccessDeniedHandler.java`);
     this.removeFile(`${application.javaPackageSrcDir}web/filter/CsrfCookieGeneratorFilter.java`);
   }
-  if (this.isJhipsterVersionLessThan('4.0.0')) {
+  if (control.isJhipsterVersionLessThan('4.0.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/locale/AngularCookieLocaleResolver.java`);
   }
-  if (this.isJhipsterVersionLessThan('4.0.0')) {
+  if (control.isJhipsterVersionLessThan('4.0.0')) {
     this.removeFile(`${application.javaPackageSrcDir}async/ExceptionHandlingAsyncTaskExecutor.java`);
     this.removeFile(`${application.javaPackageSrcDir}async/package-info.java`);
     this.removeFile(`${application.javaPackageSrcDir}config/jHipsterProperties.java`);
@@ -68,17 +68,17 @@ export default asWritingTask(async function cleanupTask(this, taskParam) {
     this.removeFile(`${application.javaPackageSrcDir}web/filter/CachingHttpHeadersFilter.java`);
     this.removeFile(`${application.javaPackageSrcDir}web/filter/package-info.java`);
   }
-  if (this.isJhipsterVersionLessThan('4.3.0')) {
+  if (control.isJhipsterVersionLessThan('4.3.0')) {
     this.removeFile(`${application.javaPackageSrcDir}gateway/ratelimiting/RateLimitingRepository.java`);
   }
-  if (this.isJhipsterVersionLessThan('4.7.1')) {
+  if (control.isJhipsterVersionLessThan('4.7.1')) {
     this.removeFile(`${application.javaPackageSrcDir}web/rest/errors/ErrorVM.java`);
     this.removeFile(`${application.javaPackageSrcDir}web/rest/errors/ParameterizedErrorVM.java`);
   }
-  if (this.isJhipsterVersionLessThan('4.13.1')) {
+  if (control.isJhipsterVersionLessThan('4.13.1')) {
     this.config.delete('hibernateCache');
   }
-  if (this.isJhipsterVersionLessThan('5.0.0')) {
+  if (control.isJhipsterVersionLessThan('5.0.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/ThymeleafConfiguration.java`);
     this.removeFile(`${application.javaPackageSrcDir}web/rest/ProfileInfoResource.java`);
     this.removeFile(`${application.srcMainResources}mails/activationEmail.html`);
@@ -88,16 +88,16 @@ export default asWritingTask(async function cleanupTask(this, taskParam) {
     this.removeFile(`${application.srcTestResources}mail/testEmail.html`);
     this.removeFile(`${application.javaPackageSrcDir}web/rest/ProfileInfoResourceIT.java`);
   }
-  if (this.isJhipsterVersionLessThan('5.2.2')) {
+  if (control.isJhipsterVersionLessThan('5.2.2')) {
     if (application.authenticationTypeOauth2 && application.applicationTypeMicroservice) {
       this.removeFolder(`${JAVA_DOCKER_DIR}realm-config`);
       this.removeFile(`${JAVA_DOCKER_DIR}keycloak.yml`);
     }
   }
-  if (this.isJhipsterVersionLessThan('5.8.0')) {
+  if (control.isJhipsterVersionLessThan('5.8.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/MetricsConfiguration.java`);
   }
-  if (this.isJhipsterVersionLessThan('6.0.0')) {
+  if (control.isJhipsterVersionLessThan('6.0.0')) {
     this.removeFile(`${application.javaPackageSrcDir}web/rest/errors/CustomParameterizedException.java`);
     this.removeFile(`${application.javaPackageSrcDir}web/rest/errors/InternalServerErrorException.java`);
     this.removeFile(`${application.javaPackageSrcDir}web/rest/util/PaginationUtil.java`);
@@ -107,25 +107,25 @@ export default asWritingTask(async function cleanupTask(this, taskParam) {
     this.removeFile(`${application.javaPackageSrcDir}web/rest/LogsResource.java`);
     this.removeFile(`${application.javaPackageSrcDir}web/rest/LogsResourceIT.java`);
   }
-  if (this.isJhipsterVersionLessThan('6.5.2')) {
+  if (control.isJhipsterVersionLessThan('6.5.2')) {
     this.removeFile(`${application.javaPackageSrcDir}service/mapper/UserMapperIT.java`);
     this.removeFile(`${application.javaPackageSrcDir}web/rest/ClientForwardControllerIT.java`);
   }
-  if (this.isJhipsterVersionLessThan('6.6.1')) {
+  if (control.isJhipsterVersionLessThan('6.6.1')) {
     this.removeFile(`${application.javaPackageSrcDir}web/rest/errors/EmailNotFoundException.java`);
     this.removeFile(`${application.javaPackageSrcDir}config/DefaultProfileUtil.java`);
     this.removeFolder(`${application.javaPackageSrcDir}service/util`);
   }
-  if (this.isJhipsterVersionLessThan('6.8.0')) {
+  if (control.isJhipsterVersionLessThan('6.8.0')) {
     this.removeFile(`${application.javaPackageSrcDir}security/oauth2/JwtAuthorityExtractor.java`);
   }
-  if (this.isJhipsterVersionLessThan('6.8.1')) {
+  if (control.isJhipsterVersionLessThan('6.8.1')) {
     if (application.reactive) {
       this.removeFile(`${application.javaPackageSrcDir}config/ReactivePageableHandlerMethodArgumentResolver.java`);
       this.removeFile(`${application.javaPackageSrcDir}config/ReactiveSortHandlerMethodArgumentResolver.java`);
     }
   }
-  if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
+  if (control.isJhipsterVersionLessThan('7.0.0-beta.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/apidoc/SwaggerConfiguration.java`);
     this.removeFile(`${application.javaPackageSrcDir}config/metrics/package-info.java`);
     this.removeFile(`${application.javaPackageSrcDir}config/metrics/JHipsterHealthIndicatorConfiguration.java`);
@@ -140,28 +140,28 @@ export default asWritingTask(async function cleanupTask(this, taskParam) {
     this.removeFile(`${application.javaPackageSrcDir}web/rest/AuditResourceIT.java`);
     this.removeFile(`${application.javaPackageSrcDir}repository/CustomAuditEventRepositoryIT.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
+  if (control.isJhipsterVersionLessThan('7.0.0-beta.1')) {
     this.removeFile(`${application.javaPackageSrcDir}config/CloudDatabaseConfiguration.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.4.2')) {
+  if (control.isJhipsterVersionLessThan('7.4.2')) {
     this.removeFile(`${application.javaPackageSrcDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
     this.removeFile(`${application.javaPackageSrcDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.5.1')) {
+  if (control.isJhipsterVersionLessThan('7.5.1')) {
     if (application.reactive && application.databaseTypeSql) {
       this.removeFile(`${application.javaPackageSrcDir}service/ColumnConverter.java`);
       this.removeFile(`${application.javaPackageSrcDir}service/EntityManager.java`);
       this.removeFile(`${application.javaPackageSrcDir}ArchTest.java`);
     }
   }
-  if (this.isJhipsterVersionLessThan('7.7.1')) {
+  if (control.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${application.javaPackageSrcDir}TestContainersSpringContextCustomizerFactory.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.8.2')) {
+  if (control.isJhipsterVersionLessThan('7.8.2')) {
     this.removeFile(`${JAVA_DOCKER_DIR}realm-config/jhipster-users-0.json`);
     this.removeFile(`${application.javaPackageSrcDir}NoOpMailConfiguration.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.10.0')) {
+  if (control.isJhipsterVersionLessThan('7.10.0')) {
     this.removeFile(`${application.srcTestResources}testcontainers.properties`);
     if (application.authenticationTypeJwt) {
       this.removeFile(`${application.javaPackageSrcDir}web/rest/UserJWTController.java`);
@@ -193,19 +193,19 @@ export default asWritingTask(async function cleanupTask(this, taskParam) {
     }
   }
 
-  if (this.isJhipsterVersionLessThan('8.0.1')) {
+  if (control.isJhipsterVersionLessThan('8.0.1')) {
     if (application.authenticationTypeOauth2) {
       this.removeFile(`${application.javaPackageSrcDir}security/oauth2/OAuthIdpTokenResponseDTO.java`);
     }
   }
 
-  if (this.isJhipsterVersionLessThan('8.1.1')) {
+  if (control.isJhipsterVersionLessThan('8.1.1')) {
     if (application.buildToolGradle) {
       this.removeFile('gradle/sonar.gradle');
     }
   }
 
-  if (this.isJhipsterVersionLessThan('8.4.0')) {
+  if (control.isJhipsterVersionLessThan('8.4.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/LocaleConfiguration.java`);
   }
 

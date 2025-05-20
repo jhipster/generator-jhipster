@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type KafkaGenerator from './generator.js';
+import { asWritingTask } from '../../../base-application/support/task-type-inference.js';
 
-export default function cleanupKafkaFilesTask(this: KafkaGenerator, { application }) {
-  if (this.isJhipsterVersionLessThan('6.5.2')) {
+export default asWritingTask(function cleanupKafkaFilesTask({ application, control }) {
+  if (control.isJhipsterVersionLessThan('6.5.2')) {
     this.removeFile(`${application.javaPackageSrcDir}service/${application.upperFirstCamelCaseBaseName}KafkaConsumer.java`);
     this.removeFile(`${application.javaPackageSrcDir}service/${application.upperFirstCamelCaseBaseName}KafkaProducer.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.7.1')) {
+  if (control.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${application.javaPackageSrcDir}config/KafkaProperties.java`);
   }
-  if (this.isJhipsterVersionLessThan('7.10.0')) {
+  if (control.isJhipsterVersionLessThan('7.10.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/KafkaSseConsumer.java`);
     this.removeFile(`${application.javaPackageSrcDir}config/KafkaSseProducer.java`);
 
@@ -34,7 +34,7 @@ export default function cleanupKafkaFilesTask(this: KafkaGenerator, { applicatio
     this.removeFile(`${application.srcTestResources}META-INF/spring.factories`);
     this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
   }
-  if (this.isJhipsterVersionLessThan('8.1.1')) {
+  if (control.isJhipsterVersionLessThan('8.1.1')) {
     if (application.messageBrokerPulsar) {
       this.removeFile('gradle/pulsar.gradle');
     }
@@ -42,4 +42,4 @@ export default function cleanupKafkaFilesTask(this: KafkaGenerator, { applicatio
       this.removeFile('gradle/kafka.gradle');
     }
   }
-}
+});

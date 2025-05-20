@@ -196,10 +196,8 @@ export const serverFiles = {
 
 export function writeFiles() {
   return {
-    cleanupOldServerFiles: asWritingEntitiesTask(function ({ application, entities }) {
-      for (const entity of entities.filter(entity => !entity.skipServer)) {
-        cleanupOldFiles.call(this, { application, entity });
-      }
+    cleanupOldServerFiles: asWritingEntitiesTask(function ({ application, control, entities }) {
+      cleanupOldFiles.call(this, { application, entities, control });
     }),
 
     writeServerFiles: asWritingEntitiesTask(async function ({ application, entities }) {
