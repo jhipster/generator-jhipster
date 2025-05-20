@@ -19,6 +19,13 @@
 import { asWritingTask } from '../base-application/support/task-type-inference.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/index.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 
 export const couchbaseFiles = {
   serverJavaConfig: [
@@ -72,7 +79,14 @@ export const couchbaseFiles = {
   ],
 };
 
-export const cleanupCouchbaseFilesTask = asWritingTask(function cleanupCouchbaseFilesTask({ application, control }) {
+export const cleanupCouchbaseFilesTask = asWritingTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  any
+>(function cleanupCouchbaseFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('7.1.1')) {
     this.removeFile(`${application.javaPackageSrcDir}repository/CustomReactiveCouchbaseRepository.java `);
     this.removeFile(`${application.javaPackageSrcDir}config/DatabaseConfigurationIT.java`);
