@@ -275,8 +275,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * Check if the generator should ask for prompts.
    */
-  shouldAskForPrompts({ control }): boolean {
-    return !control.existingProject || this.options.askAnswered === true;
+  shouldAskForPrompts(_firstArg: any): boolean {
+    return true;
   }
 
   /**
@@ -318,10 +318,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         } catch {
           return;
         }
-        const taskArgs = this.getArgsForPriority(PRIORITY_NAMES.INITIALIZING);
-        const [{ control }] = taskArgs;
-        if (!control) throw new Error(`Control object not found in ${this.options.namespace}`);
-        if (!this.shouldAskForPrompts({ control })) return;
+        const [firstArg] = this.getArgsForPriority(PRIORITY_NAMES.INITIALIZING);
+        if (!this.shouldAskForPrompts(firstArg)) return;
         await this.#promptCurrentJHipsterCommand();
       },
     });

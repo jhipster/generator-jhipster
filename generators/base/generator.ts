@@ -267,6 +267,14 @@ export default class JHipsterBaseBlueprintGenerator<
   }
 
   /**
+   * Check if the generator should ask for prompts.
+   */
+  override shouldAskForPrompts({ control }: { control: Control }): boolean {
+    if (!control) throw new Error(`Control object not found in ${this.options.namespace}`);
+    return !control.existingProject || this.options.askAnswered === true;
+  }
+
+  /**
    * Utility method to get typed objects for autocomplete.
    */
   asAnyTaskGroup<const K extends string>(taskGroup: GenericTaskGroup<this, any, K>): GenericTaskGroup<any, any, K> {
