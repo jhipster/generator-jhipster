@@ -234,13 +234,14 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
     return super.usage().replace('yo jhipster:', 'jhipster ');
   }
 
-  get control(): Control {
+  get #control(): Control {
     const generator = this;
     return this.getContextData<Control>('jhipster:control', {
       factory: () => {
         let jhipsterOldVersion: string | null;
+        let enviromentHasDockerCompose: undefined | boolean;
         const customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
-        const control: any = {
+        return {
           get existingProject(): boolean {
             try {
               return generator.getContextData<boolean>(CONTEXT_DATA_EXISTING_PROJECT);
@@ -257,55 +258,50 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
             return jhipsterOldVersion;
           },
           get enviromentHasDockerCompose(): boolean {
-            if (control._enviromentHasDockerCompose === undefined) {
+            if (enviromentHasDockerCompose === undefined) {
               const { exitCode } = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
-              control._enviromentHasDockerCompose = exitCode === 0;
+              enviromentHasDockerCompose = exitCode === 0;
             }
-            return control._enviromentHasDockerCompose;
+            return enviromentHasDockerCompose;
           },
           customizeRemoveFiles,
           isJhipsterVersionLessThan(version: string): boolean {
             const jhipsterOldVersion = this.jhipsterOldVersion;
             return jhipsterOldVersion ? semverLessThan(jhipsterOldVersion, version) : false;
           },
-        };
+          async removeFiles(assertions: { oldVersion?: string; removedInVersion?: string } | string, ...files: string[]) {
+            const versions = typeof assertions === 'string' ? { removedInVersion: undefined, oldVersion: undefined } : assertions;
+            if (typeof assertions === 'string') {
+              files = [assertions, ...files];
+            }
 
-        const removeFiles = async (assertions: { oldVersion?: string; removedInVersion?: string } | string, ...files: string[]) => {
-          if (typeof assertions === 'string') {
-            files = [assertions, ...files];
-            assertions = {};
-          }
+            for (const customize of this.customizeRemoveFiles) {
+              files = files.map(customize).filter(file => file) as string[];
+            }
 
-          for (const customize of customizeRemoveFiles) {
-            files = files.map(customize).filter(file => file) as string[];
-          }
+            const { removedInVersion, oldVersion = this.jhipsterOldVersion } = versions;
+            if (removedInVersion && oldVersion && !semverLessThan(oldVersion, removedInVersion)) {
+              return;
+            }
 
-          const { removedInVersion, oldVersion = control.jhipsterOldVersion } = assertions;
-          if (removedInVersion && oldVersion && !semverLessThan(oldVersion, removedInVersion)) {
-            return;
-          }
-
-          const absolutePaths = files.map(file => this.destinationPath(file));
-          // Delete from memory fs to keep updated.
-          this.fs.delete(absolutePaths);
-          await Promise.all(
-            absolutePaths.map(async file => {
-              const relativePath = relative(this.env.logCwd, file);
-              try {
-                if (statSync(file).isFile()) {
-                  this.log.info(`Removing legacy file ${relativePath}`);
-                  await rm(file, { force: true });
+            const absolutePaths = files.map(file => generator.destinationPath(file));
+            // Delete from memory fs to keep updated.
+            generator.fs.delete(absolutePaths);
+            await Promise.all(
+              absolutePaths.map(async file => {
+                const relativePath = relative(generator.env.logCwd, file);
+                try {
+                  if (statSync(file).isFile()) {
+                    generator.log.info(`Removing legacy file ${relativePath}`);
+                    await rm(file, { force: true });
+                  }
+                } catch {
+                  generator.log.info(`Could not remove legacy file ${relativePath}`);
                 }
-              } catch {
-                this.log.info(`Could not remove legacy file ${relativePath}`);
-              }
-            }),
-          );
-        };
-
-        defaults(control, {
-          removeFiles,
-          cleanupFiles: async (oldVersionOrCleanup: string | CleanupArgumentType, cleanup?: CleanupArgumentType) => {
+              }),
+            );
+          },
+          async cleanupFiles(oldVersionOrCleanup: string | CleanupArgumentType, cleanup?: CleanupArgumentType) {
             if (!jhipsterOldVersion) return;
             let oldVersion: string;
             if (typeof oldVersionOrCleanup === 'string') {
@@ -328,13 +324,11 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
                     stringFiles.push(file);
                   }
                 }
-                await removeFiles({ oldVersion, removedInVersion: version }, ...stringFiles);
+                await this.removeFiles({ oldVersion, removedInVersion: version }, ...stringFiles);
               }),
             );
           },
-        });
-
-        return control;
+        };
       },
     });
   }
@@ -386,7 +380,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Get arguments for the priority
    */
   getArgsForPriority(priorityName: string) {
-    const control = this.control;
+    const control = this.#control;
     if (priorityName === WRITING) {
       if (existsSync(this.config.path)) {
         try {
