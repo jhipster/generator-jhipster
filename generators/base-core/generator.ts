@@ -19,14 +19,13 @@
 import { basename, dirname, extname, isAbsolute, join, join as joinPath, relative } from 'path';
 import { relative as posixRelative } from 'path/posix';
 import { fileURLToPath } from 'url';
-import { existsSync, readFileSync, rmSync, statSync } from 'fs';
+import { existsSync, rmSync, statSync } from 'fs';
 import assert from 'assert';
-import { rm } from 'fs/promises';
 import { requireNamespace } from '@yeoman/namespace';
 import type { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import { defaults, get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
+import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
@@ -34,7 +33,6 @@ import semver, { lt as semverLessThan } from 'semver';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
-import { execaCommandSync } from 'execa';
 
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
 import type { Logger } from '../base/support/index.js';
@@ -75,10 +73,9 @@ import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gr
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
-import type { CleanupArgumentType, Control } from '../base/types.js';
 import type { Config } from '../base-core/types.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
-import { CONTEXT_DATA_EXISTING_PROJECT, CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP } from '../base-application/support/constants.js';
+import { CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP } from '../base-application/support/constants.js';
 import { convertWriteFileSectionsToBlocks } from './internal/index.js';
 
 const {
@@ -233,105 +230,6 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
     return super.usage().replace('yo jhipster:', 'jhipster ');
   }
 
-  get #control(): Control {
-    const generator = this;
-    return this.getContextData<Control>('jhipster:control', {
-      factory: () => {
-        let jhipsterOldVersion: string | null;
-        let enviromentHasDockerCompose: undefined | boolean;
-        const customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
-        return {
-          get existingProject(): boolean {
-            try {
-              return generator.getContextData<boolean>(CONTEXT_DATA_EXISTING_PROJECT);
-            } catch {
-              return false;
-            }
-          },
-          get jhipsterOldVersion(): string | null {
-            if (jhipsterOldVersion === undefined) {
-              jhipsterOldVersion = existsSync(generator.config.path)
-                ? (JSON.parse(readFileSync(generator.config.path, 'utf-8').toString())[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null)
-                : null;
-            }
-            return jhipsterOldVersion;
-          },
-          get enviromentHasDockerCompose(): boolean {
-            if (enviromentHasDockerCompose === undefined) {
-              const { exitCode } = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
-              enviromentHasDockerCompose = exitCode === 0;
-            }
-            return enviromentHasDockerCompose;
-          },
-          customizeRemoveFiles,
-          isJhipsterVersionLessThan(version: string): boolean {
-            const jhipsterOldVersion = this.jhipsterOldVersion;
-            return jhipsterOldVersion ? semverLessThan(jhipsterOldVersion, version) : false;
-          },
-          async removeFiles(assertions: { oldVersion?: string; removedInVersion?: string } | string, ...files: string[]) {
-            const versions = typeof assertions === 'string' ? { removedInVersion: undefined, oldVersion: undefined } : assertions;
-            if (typeof assertions === 'string') {
-              files = [assertions, ...files];
-            }
-
-            for (const customize of this.customizeRemoveFiles) {
-              files = files.map(customize).filter(file => file) as string[];
-            }
-
-            const { removedInVersion, oldVersion = this.jhipsterOldVersion } = versions;
-            if (removedInVersion && oldVersion && !semverLessThan(oldVersion, removedInVersion)) {
-              return;
-            }
-
-            const absolutePaths = files.map(file => generator.destinationPath(file));
-            // Delete from memory fs to keep updated.
-            generator.fs.delete(absolutePaths);
-            await Promise.all(
-              absolutePaths.map(async file => {
-                const relativePath = relative(generator.env.logCwd, file);
-                try {
-                  if (statSync(file).isFile()) {
-                    generator.log.info(`Removing legacy file ${relativePath}`);
-                    await rm(file, { force: true });
-                  }
-                } catch {
-                  generator.log.info(`Could not remove legacy file ${relativePath}`);
-                }
-              }),
-            );
-          },
-          async cleanupFiles(oldVersionOrCleanup: string | CleanupArgumentType, cleanup?: CleanupArgumentType) {
-            if (!jhipsterOldVersion) return;
-            let oldVersion: string;
-            if (typeof oldVersionOrCleanup === 'string') {
-              oldVersion = oldVersionOrCleanup;
-              assert(cleanup, 'cleanupFiles requires cleanup object');
-            } else {
-              cleanup = oldVersionOrCleanup;
-              oldVersion = jhipsterOldVersion;
-            }
-            await Promise.all(
-              Object.entries(cleanup).map(async ([version, files]) => {
-                const stringFiles: string[] = [];
-                for (const file of files) {
-                  if (Array.isArray(file)) {
-                    const [condition, ...fileParts] = file;
-                    if (condition) {
-                      stringFiles.push(join(...fileParts));
-                    }
-                  } else {
-                    stringFiles.push(file);
-                  }
-                }
-                await this.removeFiles({ oldVersion, removedInVersion: version }, ...stringFiles);
-              }),
-            );
-          },
-        };
-      },
-    });
-  }
-
   /**
    * JHipster config with default values fallback
    */
@@ -370,31 +268,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * Get arguments for the priority
    */
-  getArgsForPriority(priorityName: string) {
-    const control = this.#control;
-    if (priorityName === WRITING) {
-      if (existsSync(this.config.path)) {
-        try {
-          const oldConfig = JSON.parse(readFileSync(this.config.path).toString())[GENERATOR_JHIPSTER];
-          const newConfig: any = this.config.getAll();
-          const keys = [...new Set([...Object.keys(oldConfig), ...Object.keys(newConfig)])];
-          const configChanges = Object.fromEntries(
-            keys
-              .filter(key =>
-                Array.isArray(newConfig[key])
-                  ? newConfig[key].length === oldConfig[key].length &&
-                    newConfig[key].find((element, index) => element !== oldConfig[key][index])
-                  : newConfig[key] !== oldConfig[key],
-              )
-              .map(key => [key, { newValue: newConfig[key], oldValue: oldConfig[key] }]),
-          );
-          return [{ control, configChanges }];
-        } catch {
-          // Fail to parse
-        }
-      }
-    }
-    return [{ control }];
+  getArgsForPriority(_priorityName: string) {
+    return [{}];
   }
 
   /**

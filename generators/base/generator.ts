@@ -16,25 +16,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import fs, { readFileSync } from 'fs';
-import path from 'path';
+import assert from 'assert';
+import fs, { existsSync, readFileSync, statSync } from 'fs';
+import path, { join, relative } from 'path';
+import { rm } from 'fs/promises';
 import chalk from 'chalk';
-import semver from 'semver';
+import semver, { lt as semverLessThan } from 'semver';
 
 import type { ComposeOptions } from 'yeoman-generator';
 import { union } from 'lodash-es';
+import { execaCommandSync } from 'execa';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
 import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import type { Config } from '../base-core/types.js';
+import { CONTEXT_DATA_EXISTING_PROJECT } from '../base-application/support/constants.js';
+import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { packageNameToNamespace } from './support/index.js';
 import { loadBlueprintsFromConfiguration, mergeBlueprints, normalizeBlueprintName, parseBluePrints } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';
 import { CONTEXT_DATA_BLUEPRINT_CONFIGURED, LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.js';
+import type { CleanupArgumentType, Control } from './types.js';
+
+const { WRITING } = PRIORITY_NAMES;
 
 /**
  * Base class that contains blueprints support.
+ * Provides built-in state support with control object.
  */
 export default class JHipsterBaseBlueprintGenerator<
   ConfigType = unknown,
@@ -125,6 +134,136 @@ export default class JHipsterBaseBlueprintGenerator<
    */
   get #blueprintConfigured() {
     return this.getContextData(CONTEXT_DATA_BLUEPRINT_CONFIGURED, { override: true });
+  }
+
+  get #control(): Control {
+    const generator = this;
+    return this.getContextData<Control>('jhipster:control', {
+      factory: () => {
+        let jhipsterOldVersion: string | null;
+        let enviromentHasDockerCompose: undefined | boolean;
+        const customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
+        return {
+          get existingProject(): boolean {
+            try {
+              return generator.getContextData<boolean>(CONTEXT_DATA_EXISTING_PROJECT);
+            } catch {
+              return false;
+            }
+          },
+          get jhipsterOldVersion(): string | null {
+            if (jhipsterOldVersion === undefined) {
+              jhipsterOldVersion = existsSync(generator.config.path)
+                ? (JSON.parse(readFileSync(generator.config.path, 'utf-8').toString())[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null)
+                : null;
+            }
+            return jhipsterOldVersion;
+          },
+          get enviromentHasDockerCompose(): boolean {
+            if (enviromentHasDockerCompose === undefined) {
+              const { exitCode } = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
+              enviromentHasDockerCompose = exitCode === 0;
+            }
+            return enviromentHasDockerCompose;
+          },
+          customizeRemoveFiles,
+          isJhipsterVersionLessThan(version: string): boolean {
+            const jhipsterOldVersion = this.jhipsterOldVersion;
+            return jhipsterOldVersion ? semverLessThan(jhipsterOldVersion, version) : false;
+          },
+          async removeFiles(assertions: { oldVersion?: string; removedInVersion?: string } | string, ...files: string[]) {
+            const versions = typeof assertions === 'string' ? { removedInVersion: undefined, oldVersion: undefined } : assertions;
+            if (typeof assertions === 'string') {
+              files = [assertions, ...files];
+            }
+
+            for (const customize of this.customizeRemoveFiles) {
+              files = files.map(customize).filter(file => file) as string[];
+            }
+
+            const { removedInVersion, oldVersion = this.jhipsterOldVersion } = versions;
+            if (removedInVersion && oldVersion && !semverLessThan(oldVersion, removedInVersion)) {
+              return;
+            }
+
+            const absolutePaths = files.map(file => generator.destinationPath(file));
+            // Delete from memory fs to keep updated.
+            generator.fs.delete(absolutePaths);
+            await Promise.all(
+              absolutePaths.map(async file => {
+                const relativePath = relative(generator.env.logCwd, file);
+                try {
+                  if (statSync(file).isFile()) {
+                    generator.log.info(`Removing legacy file ${relativePath}`);
+                    await rm(file, { force: true });
+                  }
+                } catch {
+                  generator.log.info(`Could not remove legacy file ${relativePath}`);
+                }
+              }),
+            );
+          },
+          async cleanupFiles(oldVersionOrCleanup: string | CleanupArgumentType, cleanup?: CleanupArgumentType) {
+            if (!jhipsterOldVersion) return;
+            let oldVersion: string;
+            if (typeof oldVersionOrCleanup === 'string') {
+              oldVersion = oldVersionOrCleanup;
+              assert(cleanup, 'cleanupFiles requires cleanup object');
+            } else {
+              cleanup = oldVersionOrCleanup;
+              oldVersion = jhipsterOldVersion;
+            }
+            await Promise.all(
+              Object.entries(cleanup).map(async ([version, files]) => {
+                const stringFiles: string[] = [];
+                for (const file of files) {
+                  if (Array.isArray(file)) {
+                    const [condition, ...fileParts] = file;
+                    if (condition) {
+                      stringFiles.push(join(...fileParts));
+                    }
+                  } else {
+                    stringFiles.push(file);
+                  }
+                }
+                await this.removeFiles({ oldVersion, removedInVersion: version }, ...stringFiles);
+              }),
+            );
+          },
+        };
+      },
+    });
+  }
+
+  /**
+   * Get arguments for the priority
+   */
+  override getArgsForPriority(priorityName: string) {
+    const [fistArg] = super.getArgsForPriority(priorityName);
+    const control = this.#control;
+    if (priorityName === WRITING) {
+      if (existsSync(this.config.path)) {
+        try {
+          const oldConfig = JSON.parse(readFileSync(this.config.path).toString())[GENERATOR_JHIPSTER];
+          const newConfig: any = this.config.getAll();
+          const keys = [...new Set([...Object.keys(oldConfig), ...Object.keys(newConfig)])];
+          const configChanges = Object.fromEntries(
+            keys
+              .filter(key =>
+                Array.isArray(newConfig[key])
+                  ? newConfig[key].length === oldConfig[key].length &&
+                    newConfig[key].find((element, index) => element !== oldConfig[key][index])
+                  : newConfig[key] !== oldConfig[key],
+              )
+              .map(key => [key, { newValue: newConfig[key], oldValue: oldConfig[key] }]),
+          );
+          return [{ ...fistArg, control, configChanges }];
+        } catch {
+          // Fail to parse
+        }
+      }
+    }
+    return [{ ...fistArg, control }];
   }
 
   /**

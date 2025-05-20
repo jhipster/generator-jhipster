@@ -33,6 +33,7 @@ import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.
 import { mergeYoRcContent } from '../../lib/utils/yo-rc.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.js';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
+import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
 
 /**
@@ -129,10 +130,13 @@ export default class JdlGenerator extends BaseGenerator<{ baseName: string; prod
       async parseJDL() {
         const configuration = {
           applicationName: this.options.baseName ?? (this.existingProject ? this.jhipsterConfig.baseName : undefined),
-          databaseType: this.options.db ?? (this.existingProject ? this.jhipsterConfigWithDefaults.prodDatabaseType : undefined),
+          databaseType: this.options.db,
           applicationType: this.options.applicationType,
           skipUserManagement: this.options.skipUserManagement,
         };
+        if (this.existingProject) {
+          configuration.databaseType ??= getConfigWithDefaults(this.config.getAll()).prodDatabaseType;
+        }
 
         const importer = createImporterFromContent(this.jdlContents.join('\n'), configuration, this.options.jdlDefinition);
 
