@@ -19,7 +19,6 @@
  */
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_APP } from '../generator-list.js';
-import command from './command.js';
 
 export default class EntitiesGenerator extends BaseApplicationGenerator {
   entities;
@@ -35,7 +34,6 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
       loadArguments() {
         this.jhipsterConfig.entities = this.jhipsterConfig.entities || [];
 
-        this.parseJHipsterArguments(command.arguments);
         if (!this.entities || this.entities.length === 0) {
           this.entities = this.getExistingEntityNames();
         } else {

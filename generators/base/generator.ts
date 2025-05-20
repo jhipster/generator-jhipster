@@ -50,9 +50,7 @@ export default class JHipsterBaseBlueprintGenerator<
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     const { jhipsterContext, ...opts } = options ?? {};
-    // Handle locally due to blueprint support.
-    const { queueCommandTasks } = features ?? {};
-    super(args, opts, { queueCommandTasks: false, ...features });
+    super(args, opts, { blueprintSupport: true, ...features });
 
     if (this.options.help) {
       return;
@@ -91,7 +89,7 @@ export default class JHipsterBaseBlueprintGenerator<
     }
 
     this.on('before:queueOwnTasks', () => {
-      const { storeBlueprintVersion, storeJHipsterVersion } = this.getFeatures();
+      const { storeBlueprintVersion, storeJHipsterVersion, queueCommandTasks = true } = this.getFeatures();
       if (this.fromBlueprint) {
         if (storeBlueprintVersion && !this.options.reproducibleTests && !this.blueprintConfig!.blueprintVersion) {
           try {
@@ -108,8 +106,8 @@ export default class JHipsterBaseBlueprintGenerator<
         }
       }
       if (this.fromBlueprint || !this.delegateToBlueprint) {
-        if (queueCommandTasks !== false) {
-          this.queueCurrentJHipsterCommandTasks();
+        if (queueCommandTasks) {
+          this._queueCurrentJHipsterCommandTasks();
         }
       }
     });

@@ -197,7 +197,7 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
       this.jhipsterConfig = this.config.createProxy() as ConfigType;
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
-      this.parseJHipsterOptions(baseCommand.options);
+      this.#parseJHipsterOptions(baseCommand.options);
     }
 
     this.logger = this.log as any;
@@ -208,7 +208,8 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
 
     this.registerPriorities(CUSTOM_PRIORITIES);
 
-    if (this.getFeatures().jhipsterBootstrap ?? true) {
+    const { jhipsterBootstrap = true, blueprintSupport = false, queueCommandTasks = true } = this.getFeatures();
+    if (jhipsterBootstrap) {
       // jhipster:bootstrap is always required. Run it once the environment starts.
       this.env.queueTask('environment:run', async () => this.composeWithJHipster(GENERATOR_BOOTSTRAP).then(), {
         once: 'queueJhipsterBootstrap',
@@ -219,9 +220,9 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];
 
-    if (this.features.queueCommandTasks !== false) {
+    if (!blueprintSupport && queueCommandTasks) {
       this.on('before:queueOwnTasks', () => {
-        this.queueCurrentJHipsterCommandTasks();
+        this._queueCurrentJHipsterCommandTasks();
       });
     }
   }
@@ -431,18 +432,18 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     return priorities;
   }
 
-  queueCurrentJHipsterCommandTasks() {
+  _queueCurrentJHipsterCommandTasks() {
     this.queueTask({
       queueName: QUEUES.INITIALIZING_QUEUE,
       taskName: 'parseCurrentCommand',
       cancellable: true,
       async method() {
         try {
-          await this.getCurrentJHipsterCommand();
+          await this.#getCurrentJHipsterCommand();
         } catch {
           return;
         }
-        await this.parseCurrentJHipsterCommand();
+        await this.#parseCurrentJHipsterCommand();
       },
     });
 
@@ -452,7 +453,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       cancellable: true,
       async method() {
         try {
-          const command = await this.getCurrentJHipsterCommand();
+          const command = await this.#getCurrentJHipsterCommand();
           if (!command.configs) return;
         } catch {
           return;
@@ -461,7 +462,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         const [{ control }] = taskArgs;
         if (!control) throw new Error(`Control object not found in ${this.options.namespace}`);
         if (!this.shouldAskForPrompts({ control })) return;
-        await this.promptCurrentJHipsterCommand();
+        await this.#promptCurrentJHipsterCommand();
       },
     });
 
@@ -471,12 +472,12 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       cancellable: true,
       async method() {
         try {
-          const command = await this.getCurrentJHipsterCommand();
+          const command = await this.#getCurrentJHipsterCommand();
           if (!command.configs) return;
         } catch {
           return;
         }
-        await this.configureCurrentJHipsterCommandConfig();
+        await this.#configureCurrentJHipsterCommandConfig();
       },
     });
 
@@ -486,11 +487,11 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       cancellable: true,
       async method() {
         try {
-          await this.getCurrentJHipsterCommand();
+          await this.#getCurrentJHipsterCommand();
         } catch {
           return;
         }
-        await this.composeCurrentJHipsterCommand();
+        await this.#composeCurrentJHipsterCommand();
       },
     });
 
@@ -500,7 +501,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       cancellable: true,
       async method() {
         try {
-          const command = await this.getCurrentJHipsterCommand();
+          const command = await this.#getCurrentJHipsterCommand();
           if (!command.configs) return;
 
           const taskArgs = this.getArgsForPriority(PRIORITY_NAMES.LOADING);
@@ -518,7 +519,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Get the current Command Definition for the generator.
    * `generatorCommand` takes precedence.
    */
-  async getCurrentJHipsterCommand(): Promise<JHipsterCommandDefinition> {
+  async #getCurrentJHipsterCommand(): Promise<JHipsterCommandDefinition> {
     if (!this.generatorCommand) {
       const { command } = ((await this._meta?.importModule?.()) ?? {}) as any;
       if (!command) {
@@ -534,29 +535,29 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Parse command definition arguments, options and configs.
    * Blueprints with command override takes precedence.
    */
-  async parseCurrentJHipsterCommand() {
-    const generatorCommand = await this.getCurrentJHipsterCommand();
-    this.parseJHipsterCommand(generatorCommand);
+  async #parseCurrentJHipsterCommand() {
+    const generatorCommand = await this.#getCurrentJHipsterCommand();
+    this.#parseJHipsterCommand(generatorCommand);
   }
 
   /**
    * Prompts for command definition configs.
    * Blueprints with command override takes precedence.
    */
-  async promptCurrentJHipsterCommand() {
-    const generatorCommand = await this.getCurrentJHipsterCommand();
+  async #promptCurrentJHipsterCommand() {
+    const generatorCommand = await this.#getCurrentJHipsterCommand();
     if (!generatorCommand.configs) {
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
-    return this.prompt(this.prepareQuestions(generatorCommand.configs) as any);
+    return this.prompt(this.#prepareQuestions(generatorCommand.configs) as any);
   }
 
   /**
    * Configure the current JHipster command.
    * Blueprints with command override takes precedence.
    */
-  async configureCurrentJHipsterCommandConfig() {
-    const generatorCommand = await this.getCurrentJHipsterCommand();
+  async #configureCurrentJHipsterCommandConfig() {
+    const generatorCommand = await this.#getCurrentJHipsterCommand();
     if (!generatorCommand.configs) {
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
@@ -571,7 +572,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Blueprints with command override takes precedence.
    */
   async loadCurrentJHipsterCommandConfig(context: any) {
-    const generatorCommand = await this.getCurrentJHipsterCommand();
+    const generatorCommand = await this.#getCurrentJHipsterCommand();
     if (!generatorCommand.configs) {
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
@@ -584,8 +585,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Compose the current JHipster command compose.
    * Blueprints commands compose without generators will be composed.
    */
-  async composeCurrentJHipsterCommand() {
-    const generatorCommand = await this.getCurrentJHipsterCommand();
+  async #composeCurrentJHipsterCommand() {
+    const generatorCommand = await this.#getCurrentJHipsterCommand();
     for (const compose of generatorCommand.compose ?? []) {
       await this.composeWithJHipster(compose);
     }
@@ -595,18 +596,18 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     }
   }
 
-  parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {
+  #parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {
     if (commandDef.arguments) {
-      this.parseJHipsterArguments(commandDef.arguments);
+      this._parseJHipsterArguments(commandDef.arguments);
     } else if (commandDef.configs) {
-      this.parseJHipsterArguments(extractArgumentsFromConfigs(commandDef.configs));
+      this._parseJHipsterArguments(extractArgumentsFromConfigs(commandDef.configs));
     }
     if (commandDef.options || commandDef.configs) {
-      this.parseJHipsterOptions(commandDef.options, commandDef.configs);
+      this.#parseJHipsterOptions(commandDef.options, commandDef.configs);
     }
   }
 
-  parseJHipsterOptions(options: JHipsterOptions | undefined, configs: JHipsterConfigs | boolean = {}, common = false) {
+  #parseJHipsterOptions(options: JHipsterOptions | undefined, configs: JHipsterConfigs | boolean = {}, common = false) {
     if (typeof configs === 'boolean') {
       common = configs;
       configs = {};
@@ -643,7 +644,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       });
   }
 
-  parseJHipsterArguments(jhipsterArguments: JHipsterArguments = {}) {
+  _parseJHipsterArguments(jhipsterArguments: JHipsterArguments = {}) {
     const hasPositionalArguments = Boolean(this.options.positionalArguments);
     let positionalArguments: unknown[] = hasPositionalArguments ? this.options.positionalArguments! : this._args;
     const argumentEntries = Object.entries(jhipsterArguments);
@@ -689,7 +690,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     this.options.positionalArguments = [];
   }
 
-  prepareQuestions(configs: JHipsterConfigs = {}) {
+  #prepareQuestions(configs: JHipsterConfigs = {}) {
     return Object.entries(configs)
       .filter(([_name, def]) => def?.prompt)
       .map(([name, def]) => {

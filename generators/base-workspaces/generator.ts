@@ -30,7 +30,6 @@ import type { Entity } from '../../lib/types/application/entity.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-application/support/constants.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
-import command from './command.js';
 import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/index.js';
 
 const {
@@ -86,11 +85,11 @@ export default abstract class BaseWorkspacesGenerator<Config = unknown> extends 
   constructor(args, options, features) {
     super(args, options, features);
 
-    if (!this.options.help) {
-      this.registerPriorities(CUSTOM_PRIORITIES);
-
-      this.parseJHipsterOptions(command.options);
+    if (this.options.help) {
+      return;
     }
+
+    this.registerPriorities(CUSTOM_PRIORITIES);
   }
 
   get #deployment() {
