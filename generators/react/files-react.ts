@@ -18,6 +18,13 @@
  */
 import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, clientRootTemplatesBlock } from '../client/support/files.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 
 export const files = asWriteFilesSection({
   common: [
@@ -302,7 +309,14 @@ export const files = asWriteFilesSection({
   ],
 });
 
-export const writeFiles = asWritingTask(async function writeFiles({ application }) {
+export const writeFiles = asWritingTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  any
+>(async function writeFiles({ application }) {
   if (!application.clientFrameworkReact) return;
 
   await this.writeFiles({

@@ -24,6 +24,7 @@ export const entityAnotherSimple = {
   clientRootFolder: 'test-root',
 } satisfies Entity;
 
+// @ts-ignore
 export const entitiesSimple = [entitySimple, entityAnotherSimple] satisfies Entity[];
 
 export const entitiesWithRelationships = [

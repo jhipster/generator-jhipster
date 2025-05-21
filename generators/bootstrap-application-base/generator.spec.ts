@@ -70,6 +70,7 @@ describe(`generator - ${generator}`, () => {
       let firstChangelogDate;
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig();
+        // @ts-ignore
         firstChangelogDate = runResult.generator.nextTimestamp();
       });
       it('should return a valid changelog date', () => {
@@ -84,6 +85,7 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         const lastLiquibaseTimestamp = new Date(2000, 1, 1);
         await helpers.runJHipster(generator).withJHipsterConfig({ lastLiquibaseTimestamp: lastLiquibaseTimestamp.getTime() });
+        // @ts-ignore
         firstChangelogDate = runResult.generator.nextTimestamp();
       });
       it('should return a valid changelog date', () => {
@@ -105,7 +107,9 @@ describe(`generator - ${generator}`, () => {
           .runJHipster(generator)
           .withJHipsterConfig({ lastLiquibaseTimestamp: lastLiquibaseTimestamp.getTime(), creationTimestamp: undefined })
           .withOptions({ reproducible: false });
+        // @ts-ignore
         firstChangelogDate = runResult.generator.nextTimestamp();
+        // @ts-ignore
         secondChangelogDate = runResult.generator.nextTimestamp();
       });
       it('should return a valid changelog date', () => {
@@ -127,7 +131,9 @@ describe(`generator - ${generator}`, () => {
       let secondChangelogDate;
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig();
+        // @ts-ignore
         firstChangelogDate = runResult.generator.nextTimestamp();
+        // @ts-ignore
         secondChangelogDate = runResult.generator.nextTimestamp();
       });
       it('should return a valid changelog date', () => {
@@ -148,7 +154,9 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig().withOptions({ creationTimestamp: '2000-01-01' });
 
+        // @ts-ignore
         firstChangelogDate = runResult.generator.nextTimestamp();
+        // @ts-ignore
         secondChangelogDate = runResult.generator.nextTimestamp();
       });
       it('should return a valid changelog date', () => {

@@ -19,6 +19,13 @@
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { javaMainPackageTemplatesBlock } from '../server/support/index.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 
 const domainFiles = [
   {
@@ -64,7 +71,14 @@ export const entityFiles = {
   repositoryFiles,
 };
 
-export const cleanupCouchbaseEntityFilesTask = asWritingEntitiesTask(function ({ application, control, entities }) {
+export const cleanupCouchbaseEntityFilesTask = asWritingEntitiesTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  any
+>(function ({ application, control, entities }) {
   for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
     if (control.isJhipsterVersionLessThan('7.6.1')) {
       this.removeFile(

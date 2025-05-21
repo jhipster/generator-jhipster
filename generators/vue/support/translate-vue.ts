@@ -46,7 +46,7 @@ export function removeDeclarations({ content }: { content: string }) {
 }
 
 export function replaceTranslationTags(
-  this: CoreGenerator | void,
+  this: CoreGenerator<any, any, any, any, any, any, any, any> | void,
   {
     body,
     enableTranslation,
@@ -154,7 +154,7 @@ const minimatch = new Minimatch('**/*.{vue,ts}');
 export const isTranslatedVueFile = file => minimatch.match(file.path);
 
 function translateVueFilesTransform(
-  this: CoreGenerator | void,
+  this: CoreGenerator<any, any, any, any, any, any, any, any> | void,
   {
     enableTranslation,
     getWebappTranslation,

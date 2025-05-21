@@ -1,4 +1,11 @@
 import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
@@ -18,7 +25,14 @@ import { asWritingTask } from '../base-application/support/task-type-inference.j
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default asWritingTask(function cleanupMongodbFilesTask({ application, control }) {
+export default asWritingTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  any
+>(function cleanupMongodbFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('3.10.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/CloudMongoDbConfiguration.java`);
   }

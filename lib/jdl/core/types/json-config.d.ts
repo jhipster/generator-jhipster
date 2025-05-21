@@ -7,6 +7,7 @@ export type JSONField = Field & Record<string, any>;
 
 export type JSONRelationship = Relationship & Record<string, any>;
 
+// @ts-ignore
 export type JSONEntity = Entity<JSONField, JSONRelationship> & Record<string, any>;
 
 type JSONBlueprint = {

@@ -19,6 +19,7 @@
 import assert from 'assert';
 import type CoreGenerator from '../../base-core/index.js';
 import { createBaseNeedle } from '../../base/support/needles.js';
+import type JHipsterBaseBlueprintGenerator from '../../base/index.js';
 
 export type ApplicationPropertiesNeedles = {
   property?: string;
@@ -58,15 +59,23 @@ export type ApplicationPropertiesNeedles = {
  */
 export function insertContentIntoApplicationProperties(needles: ApplicationPropertiesNeedles);
 export function insertContentIntoApplicationProperties(
-  this: CoreGenerator,
+  this: CoreGenerator<any, any, any, any, any, any, any, any>,
   application: { javaPackageSrcDir: string },
   needles: ApplicationPropertiesNeedles,
 );
-export function insertContentIntoApplicationProperties(
-  this: CoreGenerator | void,
-  application: { javaPackageSrcDir: string } | ApplicationPropertiesNeedles,
-  needles?: ApplicationPropertiesNeedles,
-) {
+export function insertContentIntoApplicationProperties<
+  G extends JHipsterBaseBlueprintGenerator<any, any, any, any, any, any, any, any, any> = JHipsterBaseBlueprintGenerator<
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any
+  >,
+>(this: G | void, application: { javaPackageSrcDir: string } | ApplicationPropertiesNeedles, needles?: ApplicationPropertiesNeedles) {
   if (needles) {
     assert.ok(this, 'Generator context is required');
 

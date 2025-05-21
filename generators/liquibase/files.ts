@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { WriteFileSection } from '../base/api.js';
+import type { WriteFileSection } from '../base-core/types.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
 import { moveToJavaPackageSrcDir } from '../server/support/index.js';
 
-export const liquibaseFiles: WriteFileSection = {
+export const liquibaseFiles: WriteFileSection<any, any> = {
   liquibase: [
     {
       condition: ctx => ctx.backendTypeSpringBoot,

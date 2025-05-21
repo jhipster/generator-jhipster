@@ -17,6 +17,13 @@
  * limitations under the License.
  */
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
@@ -26,11 +33,14 @@ import { asWritingEntitiesTask } from '../base-application/support/task-type-inf
  * @param {Object} application
  * @param {Object} entity
  */
-export const cleanupOldFiles = asWritingEntitiesTask(function cleanupOldFiles({
-  application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch },
-  control,
-  entities,
-}) {
+export const cleanupOldFiles = asWritingEntitiesTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  any
+>(function cleanupOldFiles({ application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch }, control, entities }) {
   if (control.isJhipsterVersionLessThan('7.6.1')) {
     if (searchEngineElasticsearch) {
       this.removeFile(`${srcMainJava}${packageFolder}/repository/search/SortToFieldSortBuilderConverter.java`);
