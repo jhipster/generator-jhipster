@@ -45,6 +45,7 @@ export function cleanupEntitiesTask() {}
 export default async function writeEntitiesTask(this: Generator, { application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {
     await this.writeFiles({
+      // @ts-ignore
       sections: entityFiles,
       context: { ...application, ...entity },
     });

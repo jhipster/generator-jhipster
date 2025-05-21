@@ -51,9 +51,9 @@ export type NeedleFileModel = {
 };
 
 export default class {
-  generator: BaseGenerator;
+  generator: BaseGenerator<any, any, any, any, any, any, any, any, any>;
 
-  constructor(generator: BaseGenerator) {
+  constructor(generator: BaseGenerator<any, any, any, any, any, any, any, any, any>) {
     this.generator = generator;
   }
 

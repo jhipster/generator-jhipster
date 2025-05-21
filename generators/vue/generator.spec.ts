@@ -68,6 +68,7 @@ describe(`generator - ${clientFramework}`, () => {
       before(async () => {
         await helpers
           .runJHipster(generator)
+          // @ts-ignore
           .withJHipsterConfig(sampleConfig, entities)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withMockedSource()

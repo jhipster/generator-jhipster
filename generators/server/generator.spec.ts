@@ -161,11 +161,13 @@ describe(`generator - ${generator}`, () => {
         .runJHipster(GENERATOR_SERVER)
         .withMockedSource({ except: ['addTestSpringFactory'] })
         .withJHipsterConfig({ skipClient: true }, [
+          // @ts-ignore
           { name: 'Foo', changelogDate: '20160926101210', fields: [{ fieldName: 'name', fieldType: 'String' }] },
           {
             name: 'Bar',
             changelogDate: '20160926101211',
             dto: 'mapstruct',
+            // @ts-ignore
             fields: [{ fieldName: 'name', fieldType: 'String', fieldValidateRules: ['required'] }],
           },
         ]);

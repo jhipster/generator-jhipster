@@ -20,8 +20,7 @@ import {
   SERVER_TEST_RES_DIR,
   SERVER_TEST_SRC_DIR,
 } from '../../generator-constants.js';
-import type { PlatformApplication } from '../../base-application/types.js';
-import type { ApplicationType } from '../../../lib/types/application/application.js';
+import type { ApplicationType, PlatformApplication } from '../../../lib/types/application/application.js';
 
 const { NO: NO_DATABASE, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA } = databaseTypes;
 const { PROMETHEUS, ELK } = monitoringTypes;

@@ -74,6 +74,7 @@ describe(`generator - ${databaseType} - entities`, () => {
       before(async () => {
         await helpers
           .runJHipster(GENERATOR_SERVER)
+          // @ts-ignore
           .withJHipsterConfig(sampleConfig, entities)
           .withOptions({ skipPriorities })
           .withMockedJHipsterGenerators({ except: ['jhipster:spring-data-relational'], filter: filterBasicServerGenerators });

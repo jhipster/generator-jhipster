@@ -19,11 +19,25 @@
 import { fieldTypes } from '../../../lib/jhipster/index.js';
 import type { LiquibaseEntity } from '../types.js';
 import { asPostPreparingEachEntityTask } from '../../base-application/support/task-type-inference.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../../lib/types/application/application.js';
 
 const { CommonDBTypes } = fieldTypes;
 const { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER } = CommonDBTypes;
 
-export default asPostPreparingEachEntityTask(function postPrepareEntity({ application, entity }) {
+export default asPostPreparingEachEntityTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  any
+>(function postPrepareEntity({ application, entity }) {
   const { relationships, builtIn, name, primaryKey } = entity;
   if (builtIn && name === 'User' && primaryKey) {
     const userIdType = primaryKey.type;

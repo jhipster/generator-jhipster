@@ -22,7 +22,7 @@ import type CoreGenerator from '../base-core/index.js';
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupOldServerFilesTask(this: CoreGenerator) {
+export default function cleanupOldServerFilesTask(this: CoreGenerator<any, any, any, any, any, any, any, any>) {
   if (this.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile('.mvn/wrapper/MavenWrapperDownloader.java');
   }

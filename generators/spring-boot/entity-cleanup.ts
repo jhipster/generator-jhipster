@@ -29,11 +29,11 @@ import type CoreGenerator from '../base-core/generator.js';
  * @param {Object} entity
  */
 export function cleanupOldFiles(
-  this: CoreGenerator,
+  this: CoreGenerator<any, any, any, any, any, any, any, any>,
   {
     application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch },
     entity: { entityClass, entityAbsoluteFolder },
-  }: { application: ApplicationType<Entity>; entity: Entity },
+  }: { application: ApplicationType<any, any, any>; entity: Entity },
 ) {
   if (this.isJhipsterVersionLessThan('7.6.1')) {
     if (searchEngineElasticsearch) {

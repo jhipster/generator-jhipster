@@ -18,7 +18,13 @@
  */
 
 import { asPostWritingTask } from '../../base-application/support/task-type-inference.js';
-import type { Language } from '../../languages/support/languages.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../../lib/types/application/application.js';
 
 /**
  * Update Languages In MailServiceIT
@@ -26,8 +32,12 @@ import type { Language } from '../../languages/support/languages.js';
  * @param application
  */
 export const updateLanguagesInMailServiceITTask = asPostWritingTask<
-  any,
-  { javaPackageTestDir?: string; languagesDefinition?: readonly Language[] }
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  any
 >(function updateLanguagesInMailServiceITTask({ application, control }) {
   const { javaPackageTestDir, languagesDefinition } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
@@ -42,8 +52,13 @@ export const updateLanguagesInMailServiceITTask = asPostWritingTask<
   );
 });
 
-export default asPostWritingTask<any, { javaPackageTestDir?: string; languagesDefinition?: readonly Language[] }>(
-  function updateLanguagesTask(this, taskParam) {
-    updateLanguagesInMailServiceITTask.call(this, taskParam);
-  },
-);
+export default asPostWritingTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  any
+>(function updateLanguagesTask(this, taskParam) {
+  updateLanguagesInMailServiceITTask.call(this, taskParam);
+});

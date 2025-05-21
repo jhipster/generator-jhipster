@@ -84,6 +84,7 @@ describe(`generator - ${databaseType}`, () => {
       before(async () => {
         await helpers
           .runJHipster('server')
+          // @ts-ignore
           .withJHipsterConfig(sampleConfig, entities)
           .withMockedSource({ except: ['addTestSpringFactory'] })
           .withMockedJHipsterGenerators({

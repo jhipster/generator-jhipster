@@ -138,7 +138,7 @@ type BuildToolApplication = OptionWithDerivedProperties<'buildTool', ['maven', '
 };
 
 type SearchEngine = {
-  searchEngine: string;
+  searchEngine: 'no' | 'elasticsearch' | 'couchbase';
 };
 
 /*

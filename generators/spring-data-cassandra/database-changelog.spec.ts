@@ -12,6 +12,7 @@ describe('generator - app - database changelogs', () => {
       before(async () => {
         await helpers
           .runJHipster(GENERATOR_SPRING_DATA_CASSANDRA)
+          // @ts-ignore
           .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo])
           .withOptions({ force: true, skipClient: true });
       });

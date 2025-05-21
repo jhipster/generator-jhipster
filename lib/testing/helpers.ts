@@ -15,7 +15,7 @@ import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.js';
 import { GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
 import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '../../generators/base/support/index.js';
 import BaseGenerator from '../../generators/base/index.js';
-import type { JHipsterGeneratorOptions } from '../../generators/base/api.js';
+
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.js';
 import type CoreGenerator from '../../generators/base-core/generator.js';
 import type { ApplicationConfiguration } from '../types/application/yo-rc.js';
@@ -24,6 +24,7 @@ import type { Entity } from '../types/base/entity.js';
 import { buildJHipster, createProgram } from '../../cli/program.mjs';
 import type { CliCommand } from '../../cli/types.js';
 import type BaseApplicationGenerator from '../../generators/base-application/generator.js';
+import type { JHipsterGeneratorOptions } from '../types/application/options.js';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
@@ -51,7 +52,9 @@ type RunJHipster = WithJHipsterGenerators & {
   useEnvironmentBuilder?: boolean;
 };
 
-type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = Omit<RunResult<GeneratorType>, 'env'> & {
+type JHipsterRunResult<
+  GeneratorType extends CoreGenerator<any, any, any, any, any, any, any, any> = CoreGenerator<any, any, any, any, any, any, any, any>,
+> = Omit<RunResult<GeneratorType>, 'env'> & {
   env: Environment;
 
   /**
@@ -597,7 +600,7 @@ class JHipsterTest extends YeomanTest {
 
   runTestBlueprintGenerator() {
     const blueprintNS = 'jhipster:test-blueprint';
-    class BlueprintedGenerator extends BaseGenerator {
+    class BlueprintedGenerator extends BaseGenerator<any, any, any, any, any, any, any, any, any> {
       async beforeQueue() {
         if (!this.fromBlueprint) {
           await this.composeWithBlueprints();

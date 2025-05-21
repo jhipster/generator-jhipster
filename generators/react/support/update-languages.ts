@@ -20,7 +20,10 @@ import type BaseGenerator from '../../base-core/index.js';
 import { type UpdateClientLanguagesTaskParam, updateLanguagesInDayjsConfigurationTask } from '../../client/support/index.js';
 import { generateLanguagesWebappOptions } from '../../languages/support/index.js';
 
-function updateLanguagesInPipeTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
+function updateLanguagesInPipeTask(
+  this: BaseGenerator<any, any, any, any, any, any, any, any>,
+  { application, control = {} }: UpdateClientLanguagesTaskParam,
+) {
   const { clientSrcDir, languagesDefinition = [] } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
   const newContent = `{
@@ -33,7 +36,10 @@ function updateLanguagesInPipeTask(this: BaseGenerator, { application, control =
   );
 }
 
-function updateLanguagesInWebpackReactTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
+function updateLanguagesInWebpackReactTask(
+  this: BaseGenerator<any, any, any, any, any, any, any, any>,
+  { application, control = {} }: UpdateClientLanguagesTaskParam,
+) {
   const { clientRootDir, clientSrcDir, languages } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
   let newContent = 'groupBy: [\n';
@@ -50,7 +56,10 @@ function updateLanguagesInWebpackReactTask(this: BaseGenerator, { application, c
   );
 }
 
-export default function updateLanguagesTask(this: BaseGenerator, taskParam: UpdateClientLanguagesTaskParam) {
+export default function updateLanguagesTask(
+  this: BaseGenerator<any, any, any, any, any, any, any, any>,
+  taskParam: UpdateClientLanguagesTaskParam,
+) {
   updateLanguagesInPipeTask.call(this, taskParam);
   updateLanguagesInWebpackReactTask.call(this, taskParam);
   updateLanguagesInDayjsConfigurationTask.call(this, taskParam, {
