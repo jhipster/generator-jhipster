@@ -7,10 +7,6 @@ import { defaultSamplesFolder, promptSamplesFolder, samplesFolderConfig } from '
 export default class extends BaseGenerator {
   samplePath;
 
-  constructor(args, options, features) {
-    super(args, options, { queueCommandTasks: true, ...features });
-  }
-
   get [BaseGenerator.PROMPTING]() {
     return this.asAnyTaskGroup({
       promptSamplesFolder,

@@ -55,10 +55,6 @@ export default class extends BaseGenerator {
   summaryFooter = '';
   summaryDiffs = '';
 
-  constructor(args, options, features) {
-    super(args, options, { queueCommandTasks: true, ...features });
-  }
-
   get [BaseGenerator.PROMPTING]() {
     return this.asAnyTaskGroup({
       async promptOptions() {

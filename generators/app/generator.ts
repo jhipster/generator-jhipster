@@ -23,7 +23,6 @@ import { camelCase } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_SERVER } from '../generator-list.js';
 import { getDefaultAppName } from '../project-name/support/index.js';
-import { packageJson } from '../../lib/index.js';
 
 import { applicationTypes } from '../../lib/jhipster/index.js';
 import cleanupOldFilesTask from './cleanup.js';
@@ -72,10 +71,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   get configuring() {
     return this.asConfiguringTaskGroup({
       setup() {
-        if (!this.options.reproducibleTests) {
-          this.jhipsterConfig.jhipsterVersion = packageJson.version;
-        }
-
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
           this.jhipsterConfig.skipUserManagement = true;
         }

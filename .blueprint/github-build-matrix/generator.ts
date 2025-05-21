@@ -33,7 +33,7 @@ export default class extends BaseGenerator {
   matrix!: string;
 
   constructor(args, opts, features) {
-    super(args, opts, { queueCommandTasks: true, ...features, jhipsterBootstrap: false });
+    super(args, opts, { ...features, jhipsterBootstrap: false });
   }
 
   get [BaseGenerator.WRITING]() {

@@ -11,7 +11,7 @@ export default class extends BaseGenerator {
   matrix;
 
   constructor(args, opts, features) {
-    super(args, opts, { ...features, queueCommandTasks: true, jhipsterBootstrap: false });
+    super(args, opts, { ...features,  jhipsterBootstrap: false });
   }
 
   get [BaseGenerator.WRITING]() {

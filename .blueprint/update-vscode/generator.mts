@@ -4,10 +4,6 @@ import { getPackageRoot } from '../../lib/index.js';
 import { getWorkflowSamples } from '../generate-sample/support/get-workflow-samples.js';
 
 export default class extends BaseGenerator {
-  constructor(args, options, features) {
-    super(args, options, { queueCommandTasks: true, ...features });
-  }
-
   get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async generateVscodeLaunch() {

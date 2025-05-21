@@ -59,6 +59,10 @@ export default class extends BaseGenerator {
   ignoreExistingGenerators!: boolean;
   gitDependency!: string;
 
+  constructor(args, options, features) {
+    super(args, options, { storeJHipsterVersion: true, ...features });
+  }
+
   async _beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -147,9 +151,6 @@ export default class extends BaseGenerator {
 
   get composing() {
     return this.asComposingTaskGroup({
-      storeCurrentVersion() {
-        this.storeCurrentJHipsterVersion();
-      },
       async compose() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const initGenerator = await this.composeWithJHipster(GENERATOR_INIT, { generatorOptions: { packageJsonType: 'module' } });

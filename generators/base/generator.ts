@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import fs from 'fs';
+import fs, { readFileSync } from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
@@ -50,7 +50,7 @@ export default class JHipsterBaseBlueprintGenerator<
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     const { jhipsterContext, ...opts } = options ?? {};
-    super(args, opts, features);
+    super(args, opts, { blueprintSupport: true, ...features });
 
     if (this.options.help) {
       return;
@@ -86,13 +86,31 @@ export default class JHipsterBaseBlueprintGenerator<
         this.log.warn('Error adding current blueprint templates as alternative for JHipster templates.');
         this.log.log(error);
       }
-    } else if (this.features.queueCommandTasks === undefined) {
-      this.on('before:queueOwnTasks', () => {
-        if (!this.delegateToBlueprint) {
-          this.queueCurrentJHipsterCommandTasks();
-        }
-      });
     }
+
+    this.on('before:queueOwnTasks', () => {
+      const { storeBlueprintVersion, storeJHipsterVersion, queueCommandTasks = true } = this.getFeatures();
+      if (this.fromBlueprint) {
+        if (storeBlueprintVersion && !this.options.reproducibleTests) {
+          try {
+            const blueprintPackageJson = JSON.parse(readFileSync(this._meta!.packagePath!, 'utf8'));
+            this.blueprintConfig!.blueprintVersion = blueprintPackageJson.version;
+          } catch {
+            this.log(`Could not retrieve version of blueprint '${this.options.namespace}'`);
+          }
+        }
+      }
+      if (!this.fromBlueprint && !this.delegateToBlueprint) {
+        if (storeJHipsterVersion && !this.options.reproducibleTests) {
+          this.jhipsterConfig.jhipsterVersion = packageJson.version;
+        }
+      }
+      if (this.fromBlueprint || !this.delegateToBlueprint) {
+        if (queueCommandTasks) {
+          this._queueCurrentJHipsterCommandTasks();
+        }
+      }
+    });
   }
 
   /**

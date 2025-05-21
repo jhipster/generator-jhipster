@@ -24,10 +24,6 @@ export default class PrettierGenerator extends BaseApplicationGenerator {
   prettierConfigFile!: string;
   monorepositoryRoot?: boolean;
 
-  constructor(args, opts, features) {
-    super(args, opts, { queueCommandTasks: true, ...features });
-  }
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
