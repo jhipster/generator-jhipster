@@ -34,7 +34,7 @@
     "@module-federation/utilities": "3.1.55",
     "@testing-library/react": "16.3.0",
     "@types/jest": "29.5.14",
-    "@types/lodash": "4.17.16",
+    "@types/lodash": "4.17.17",
     "@types/node": "20.11.25",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
