@@ -17,7 +17,7 @@ export type TaskTypes = {
   PreparingTaskParam: TaskParamWithSource;
   PostPreparingTaskParam: TaskParamWithSource;
   DefaultTaskParam: TaskParamWithControl;
-  WritingTaskParam: TaskParamWithControl;
+  WritingTaskParam: TaskParamWithControl & { configChanges?: Record<string, { newValue: any; oldValue: any }> };
   PostWritingTaskParam: TaskParamWithSource;
   PreConflictsTaskParam: TaskParamWithControl;
   InstallTaskParam: TaskParamWithControl;
