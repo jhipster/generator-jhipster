@@ -127,8 +127,8 @@ describe(`generator - ${generator}`, () => {
       let secondChangelogDate;
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig();
-        firstChangelogDate = runResult.generator.nextTimestamp(false);
-        secondChangelogDate = runResult.generator.nextTimestamp(false);
+        firstChangelogDate = runResult.generator.nextTimestamp();
+        secondChangelogDate = runResult.generator.nextTimestamp();
       });
       it('should return a valid changelog date', () => {
         expect(/^\d{14}$/.test(firstChangelogDate)).toBe(true);
