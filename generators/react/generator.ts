@@ -104,10 +104,10 @@ export default class ReactGenerator extends BaseApplicationGenerator {
           javaNodeBuildPaths?.push('webpack/');
         }
       },
-      prepareForTemplates({ control, application, source }) {
+      prepareForTemplates({ application, source }) {
         source.addWebpackConfig = args => {
           const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
-          const ignoreNonExisting = control.ignoreNeedlesError && 'Webpack configuration file not found';
+          const ignoreNonExisting = this.ignoreNeedlesError && 'Webpack configuration file not found';
           this.editFile(
             webpackPath,
             { ignoreNonExisting },

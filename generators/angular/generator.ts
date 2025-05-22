@@ -98,7 +98,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<unknown, 
           }
         }
       },
-      addNeedles({ control, source, application }) {
+      addNeedles({ source, application }) {
         source.addEntitiesToClient = param => {
           const routeTemplatePath = `${param.application.clientSrcDir}app/entities/entity.routes.ts`;
           const ignoreNonExistingRoute = chalk.yellow(`Route(s) not added to ${routeTemplatePath}.`);
@@ -157,14 +157,14 @@ export default class AngularGenerator extends BaseApplicationGenerator<unknown, 
 
         source.addIconImport = args => {
           const iconsPath = `${application.srcMainWebapp}app/config/font-awesome-icons.ts`;
-          const ignoreNonExisting = control.ignoreNeedlesError && 'Icon imports not updated with icon';
+          const ignoreNonExisting = this.ignoreNeedlesError && 'Icon imports not updated with icon';
           this.editFile(iconsPath, { ignoreNonExisting }, addIconImport(args));
         };
 
         if (application.clientBundlerWebpack) {
           source.addWebpackConfig = args => {
             const webpackPath = `${application.clientRootDir}webpack/webpack.custom.js`;
-            const ignoreNonExisting = control.ignoreNeedlesError && 'Webpack configuration file not found';
+            const ignoreNonExisting = this.ignoreNeedlesError && 'Webpack configuration file not found';
             this.editFile(
               webpackPath,
               { ignoreNonExisting },
