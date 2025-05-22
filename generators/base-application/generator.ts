@@ -19,6 +19,7 @@
 import { defaults, upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
+import type GeneratorsByNamespace from '../types.js';
 import BaseGenerator from '../base/index.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
@@ -214,20 +215,28 @@ export default class BaseApplicationGenerator<
     return configWithDefaults as ApplicationConfiguration;
   }
 
-  dependsOnBootstrapApplication(options?: ComposeOptions | undefined) {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION, options);
+  dependsOnBootstrapApplication(
+    options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION]> | undefined,
+  ): GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION] {
+    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION, options as any) as any;
   }
 
-  dependsOnBootstrapApplicationBase(options?: ComposeOptions | undefined) {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE, options);
+  dependsOnBootstrapApplicationBase(
+    options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_BASE]> | undefined,
+  ): GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_BASE][] {
+    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE, options as any) as any;
   }
 
-  dependsOnBootstrapApplicationServer(options?: ComposeOptions | undefined) {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER, options);
+  dependsOnBootstrapApplicationServer(
+    options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_SERVER]> | undefined,
+  ): GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_SERVER][] {
+    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER, options as any) as any;
   }
 
-  dependsOnBootstrapApplicationClient(options?: ComposeOptions | undefined) {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, options);
+  dependsOnBootstrapApplicationClient(
+    options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_CLIENT]> | undefined,
+  ): GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_CLIENT][] {
+    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, options as any) as any;
   }
 
   /**
