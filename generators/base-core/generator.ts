@@ -72,7 +72,8 @@ import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
-import type BaseApplicationGenerator from '../base-application/generator.js';
+import type GeneratorsByNamespace from '../types.js';
+import type { GeneratorBaseCore } from '../index.js';
 import type { Config } from '../base-core/types.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import { CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP } from '../base-application/support/constants.js';
@@ -658,7 +659,12 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Compose with a jhipster generator using default jhipster config.
    * @return {object} the composed generator
    */
-  async composeWithJHipster<const G extends string>(gen: G, options?: ComposeOptions<BaseApplicationGenerator>) {
+  async composeWithJHipster<const G extends keyof GeneratorsByNamespace>(
+    gen: G,
+    options?: ComposeOptions<GeneratorsByNamespace[G]>,
+  ): Promise<GeneratorsByNamespace[G][]>;
+  async composeWithJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore[]>;
+  async composeWithJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore[]> {
     assert(typeof gen === 'string', 'generator should to be a string');
     let generator: string = gen;
     if (!isAbsolute(generator)) {
@@ -677,14 +683,19 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         ...this.options,
         positionalArguments: undefined,
         ...options?.generatorOptions,
-      } as any,
+      },
     });
   }
 
   /**
    * Compose with a jhipster generator using default jhipster config, but queue it immediately.
    */
-  async dependsOnJHipster(generator: string, options?: ComposeOptions<BaseApplicationGenerator>) {
+  async dependsOnJHipster<const G extends keyof GeneratorsByNamespace>(
+    gen: G,
+    options?: ComposeOptions<GeneratorsByNamespace[G]>,
+  ): Promise<GeneratorsByNamespace[G][]>;
+  async dependsOnJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore[]>;
+  async dependsOnJHipster(generator: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore[]> {
     return this.composeWithJHipster(generator, {
       ...options,
       schedule: false,

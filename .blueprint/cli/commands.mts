@@ -42,6 +42,10 @@ const defaultCommands = {
     desc: 'Update generator-jhipster vscode files',
     blueprint: '@jhipster/jhipster-dev',
   },
+  'update-generators': {
+    desc: 'Update generator-jhipster generators files',
+    blueprint: '@jhipster/jhipster-dev',
+  },
 };
 
 export default defaultCommands;

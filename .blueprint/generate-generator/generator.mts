@@ -9,6 +9,10 @@ export default class extends BaseGenerator {
       async writing() {
         const { generatorNamespace } = this;
         const namespaceParts = generatorNamespace.split('/');
+        const devBlueprint = namespaceParts[0] === '@dev-blueprint';
+        if (devBlueprint) {
+          namespaceParts.shift();
+        }
         await this.writeFiles({
           sections: {
             generatorFiles: [
@@ -20,9 +24,9 @@ export default class extends BaseGenerator {
           },
           context: {
             generatorNamespace,
-            generatorClass: upperFirst(camelCase(generatorNamespace.split('/').pop())),
-            generatorPath: `generators/${namespaceParts.join('/generators/')}`,
-            generatorRelativePath: '../'.repeat((namespaceParts.length - 1) * 2 + 1),
+            generatorClass: upperFirst(camelCase([...namespaceParts].pop())),
+            generatorPath: `${devBlueprint ? '.blueprint' : 'generators'}/${namespaceParts.join('/generators/')}`,
+            generatorRelativePath: devBlueprint ? '../../generators/' : '../'.repeat((namespaceParts.length - 1) * 2 + 1),
           },
         });
       },
