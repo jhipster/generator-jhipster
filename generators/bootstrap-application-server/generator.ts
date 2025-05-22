@@ -49,10 +49,6 @@ import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import serverCommand from '../server/command.js';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator {
-  constructor(args: any, options: any, features: any) {
-    super(args, options, { jhipsterBootstrap: false, ...features });
-  }
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

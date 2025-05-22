@@ -32,10 +32,6 @@ export default class extends BaseGenerator {
   eventName?: (typeof eventNameChoices)[number];
   matrix!: string;
 
-  constructor(args, opts, features) {
-    super(args, opts, { ...features, jhipsterBootstrap: false });
-  }
-
   get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async buildMatrix() {

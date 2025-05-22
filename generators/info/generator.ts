@@ -37,7 +37,6 @@ const isInfoCommand = commandName => commandName === 'info' || undefined;
 export default class InfoGenerator extends BaseCoreGenerator<Config & { appsFolders?: string[]; baseName?: string; packages?: string[] }> {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, {
-      jhipsterBootstrap: false,
       storeJHipsterVersion: false,
       customInstallTask: isInfoCommand(options.commandName),
       customCommitTask: isInfoCommand(options.commandName),

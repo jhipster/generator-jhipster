@@ -29,10 +29,6 @@ import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import { getFrontendAppName } from '../base/support/index.js';
 
 export default class BootStrapApplicationClient extends BaseApplicationGenerator {
-  constructor(args: any, options: any, features: any) {
-    super(args, options, { jhipsterBootstrap: false, ...features });
-  }
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
