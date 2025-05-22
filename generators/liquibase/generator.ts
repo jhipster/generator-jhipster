@@ -690,7 +690,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
   prepareChangelog({ databaseChangelog, application }) {
     if (!databaseChangelog.changelogDate) {
-      databaseChangelog.changelogDate = this.dateFormatForLiquibase();
+      databaseChangelog.changelogDate = this.nextTimestamp();
     }
     const entity = databaseChangelog.entity;
 
