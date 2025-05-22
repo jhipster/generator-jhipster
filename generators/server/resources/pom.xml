@@ -18,7 +18,7 @@
         <picocli.version>4.7.7</picocli.version>
 
         <!-- Plugin versions -->
-        <checkstyle.version>10.23.1</checkstyle.version>
+        <checkstyle.version>10.24.0</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <frontend-maven-plugin.version>1.15.1</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>4.19.0</gatling-maven-plugin.version>
