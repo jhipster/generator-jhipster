@@ -46,20 +46,15 @@ import {
   removeFieldsWithNullishValues,
 } from '../base/support/index.js';
 
-import type {
-  CascatedEditFileCallback,
-  EditFileCallback,
-  EditFileOptions,
-  JHipsterGeneratorFeatures,
-  JHipsterGeneratorOptions,
-  ValidationResult,
-  WriteFileOptions,
-} from '../base/api.js';
+import type { CascatedEditFileCallback, EditFileCallback, EditFileOptions, ValidationResult, WriteFileOptions } from '../base/api.js';
 import {
+  type ExportGeneratorOptionsFromCommand,
+  type ExportStoragePropertiesFromCommand,
   type JHipsterArguments,
   type JHipsterCommandDefinition,
   type JHipsterConfigs,
   type JHipsterOptions,
+  type ParseableCommand,
   convertConfigToOption,
 } from '../../lib/command/index.js';
 import { packageJson } from '../../lib/index.js';
@@ -73,9 +68,9 @@ import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type GeneratorsByNamespace from '../types.js';
 import type { GeneratorBaseCore } from '../index.js';
-import type { Config } from '../base-core/types.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import { convertWriteFileSectionsToBlocks } from './internal/index.js';
+import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from './types.js';
 
 const {
   INITIALIZING,
@@ -109,10 +104,11 @@ const deepMerge = (source1: any, source2: any) => mergeWith({}, source1, source2
 /**
  * This is the base class for a generator for every generator.
  */
-export default class CoreGenerator<ConfigType extends Config = Config, Options = unknown, Features = unknown> extends YeomanGenerator<
-  JHipsterGeneratorOptions & Options,
-  JHipsterGeneratorFeatures & Features
-> {
+export default class CoreGenerator<
+  ConfigType extends CoreConfig = CoreConfig,
+  Options extends CoreOptions = CoreOptions,
+  Features extends CoreFeatures = CoreFeatures,
+> extends YeomanGenerator<Options, Features> {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -175,7 +171,7 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
   declare log: Logger;
   declare _meta?: GeneratorMeta;
 
-  constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
+  constructor(args: string | string[], options: Options, features: Features) {
     super(args, options, {
       skipParseOptions: true,
       tasksMatchingPriority: true,
@@ -236,8 +232,8 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
   /**
    * JHipster config with default values fallback
    */
-  get jhipsterConfigWithDefaults(): Readonly<Record<string, any>> {
-    return removeFieldsWithNullishValues(this.config.getAll());
+  get jhipsterConfigWithDefaults(): Readonly<ConfigType> {
+    return removeFieldsWithNullishValues(this.config.getAll()) as ConfigType;
   }
 
   /**
@@ -1267,3 +1263,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     });
   }
 }
+
+export class CommandCoreGenerator<
+  Command extends ParseableCommand,
+  AdditionalOptions = unknown,
+  AdditionalFeatures = unknown,
+> extends CoreGenerator<
+  ExportStoragePropertiesFromCommand<Command>,
+  ExportGeneratorOptionsFromCommand<Command> & CoreOptions & AdditionalOptions,
+  CoreFeatures & AdditionalFeatures
+> {}

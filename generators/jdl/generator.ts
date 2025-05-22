@@ -34,6 +34,8 @@ import { mergeYoRcContent } from '../../lib/utils/yo-rc.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.js';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
+import type { JHipsterGeneratorOptions } from '../base/api.js';
+import type { TaskTypes as BaseTaskTypes } from '../../lib/types/base/tasks.js';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
 
 /**
@@ -48,7 +50,11 @@ const toJdlFile = file => {
 
 type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: string; sharedFs?: MemFs };
 
-export default class JdlGenerator extends BaseGenerator<{ baseName: string; prodDatabaseType: string }> {
+export default class JdlGenerator extends BaseGenerator<
+  { baseName: string; prodDatabaseType: string },
+  BaseTaskTypes,
+  JHipsterGeneratorOptions
+> {
   jdlFiles?: string[];
   inline?: string;
   jdlContents: string[] = [];

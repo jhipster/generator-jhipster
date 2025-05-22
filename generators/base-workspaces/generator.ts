@@ -29,6 +29,7 @@ import type { TaskTypes } from '../../lib/types/base/tasks.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-application/support/constants.js';
+import type { JHipsterGeneratorOptions } from '../base/api.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/index.js';
 
@@ -69,7 +70,8 @@ export default abstract class BaseWorkspacesGenerator<Config = unknown> extends 
     adminPassword: string;
     serviceDiscoveryType: string;
   },
-  WorkspacesTypes
+  WorkspacesTypes,
+  JHipsterGeneratorOptions
 > {
   static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 

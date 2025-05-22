@@ -121,7 +121,12 @@ export default class BaseApplicationGenerator<
   TaskTypes extends DefaultTaskTypes<any, any> = DefaultTaskTypes,
   Options = unknown,
   Features = unknown,
-> extends BaseGenerator<ConfigType & ApplicationConfiguration, TaskTypes, Options, Features> {
+> extends BaseGenerator<
+  ConfigType & ApplicationConfiguration,
+  TaskTypes,
+  Options & JHipsterGeneratorOptions,
+  Features & JHipsterGeneratorFeatures
+> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
   static LOADING_ENTITIES = asPriority(LOADING_ENTITIES);
@@ -138,7 +143,7 @@ export default class BaseApplicationGenerator<
 
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
-  constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
+  constructor(args: string | string[], options: Options & JHipsterGeneratorOptions, features: Features & JHipsterGeneratorFeatures) {
     super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features });
 
     if (this.options.help) {
@@ -203,7 +208,7 @@ export default class BaseApplicationGenerator<
   /**
    * JHipster config with default values fallback
    */
-  override get jhipsterConfigWithDefaults() {
+  override get jhipsterConfigWithDefaults(): ConfigType & ApplicationConfiguration {
     const configWithDefaults = getConfigWithDefaults(super.jhipsterConfigWithDefaults);
     defaults(configWithDefaults, {
       skipFakeData: false,
@@ -212,7 +217,7 @@ export default class BaseApplicationGenerator<
       autoCrlf: false,
       pages: [],
     });
-    return configWithDefaults as ApplicationConfiguration;
+    return configWithDefaults as ConfigType & ApplicationConfiguration;
   }
 
   dependsOnBootstrapApplication(

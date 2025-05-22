@@ -60,29 +60,8 @@ const command = {
       type: String,
       scope: 'storage',
     },
-    blueprint: {
-      description: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
-      type: Array,
-      scope: 'none',
-    },
-    blueprints: {
-      description:
-        'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
-      type: String,
-      scope: 'none',
-    },
-    ignoreErrors: {
-      description: "Don't fail on prettier errors.",
-      type: Boolean,
-      scope: 'none',
-    },
     pkType: {
       description: 'Default primary key type (beta)',
-      type: String,
-      scope: 'storage',
-    },
-    clientPackageManager: {
-      description: 'Force an unsupported client package manager',
       type: String,
       scope: 'storage',
     },

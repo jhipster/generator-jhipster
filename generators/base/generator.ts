@@ -29,19 +29,17 @@ import { execaCommandSync } from 'execa';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
 import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from '../../lib/types/base/tasks.js';
-import type { Config } from '../base-core/types.js';
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base-application/support/constants.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { formatDateForChangelog, packageNameToNamespace } from './support/index.js';
 import { loadBlueprintsFromConfiguration, mergeBlueprints, normalizeBlueprintName, parseBluePrints } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
-import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';
 import {
   CONTEXT_DATA_BLUEPRINT_CONFIGURED,
   CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,
   LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
 } from './support/constants.js';
-import type { CleanupArgumentType, Control } from './types.js';
+import type { Config as BaseConfig, Features as BaseFeatures, Options as BaseOptions, CleanupArgumentType, Control } from './types.js';
 
 const { WRITING } = PRIORITY_NAMES;
 
@@ -49,21 +47,21 @@ const { WRITING } = PRIORITY_NAMES;
  * Base class that contains blueprints support.
  * Provides built-in state support with control object.
  */
-export default class JHipsterBaseBlueprintGenerator<
-  ConfigType = unknown,
+export default class BaseGenerator<
+  ConfigType = BaseConfig,
   TaskTypes extends BaseTaskTypes = BaseTaskTypes,
-  Options = unknown,
-  Features = unknown,
-> extends CoreGenerator<ConfigType & Config, Options, Features> {
+  Options extends BaseOptions = BaseOptions,
+  Features extends BaseFeatures = BaseFeatures,
+> extends CoreGenerator<ConfigType & BaseConfig, Options, Features> {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
   delegateToBlueprint?: boolean;
   blueprintConfig?: Record<string, any>;
   jhipsterContext?: any;
 
-  constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
+  constructor(args: string | string[], options: Options, features: Features) {
     const { jhipsterContext, ...opts } = options ?? {};
-    super(args, opts, { blueprintSupport: true, ...features });
+    super(args, opts as Options, { blueprintSupport: true, ...features });
 
     if (this.options.help) {
       return;

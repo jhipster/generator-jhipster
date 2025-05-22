@@ -1,10 +1,9 @@
-import type { BaseFeatures, BaseOptions } from 'yeoman-generator';
+import type { BaseFeatures as YeomanFeatures } from 'yeoman-generator';
 import type CoreGenerator from '../base-core/index.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { ApplicationOptions } from '../../lib/types/application/options.js';
-import type { JDLApplicationConfig } from '../../lib/jdl/core/types/parsing.js';
-import type { JHipsterConfigs } from '../../lib/command/types.js';
+import type { Features as BaseFeatures, Options as BaseOptions } from '../base/types.d.ts';
 
 export type ApplicationWithConfig = {
   config: Record<string, string | boolean | number | string[]>;
@@ -13,44 +12,11 @@ export type ApplicationWithConfig = {
 
 export type JHipsterGeneratorOptions = BaseOptions &
   ApplicationOptions & {
-    /* cli options */
-    commandName: string;
-    programName: string;
-    positionalArguments?: unknown[];
-    createEnvBuilder?: any;
-    devBlueprintEnabled?: boolean;
-
-    /** @experimental */
-    jdlDefinition?: JDLApplicationConfig;
-    /** @experimental */
-    commandsConfigs?: JHipsterConfigs;
-
-    /* yeoman options */
-    skipYoResolve?: boolean;
-    force?: boolean;
-
-    /* base options */
-    applicationWithConfig?: ApplicationWithConfig;
-    /**
-     * @deprecated
-     */
-    applicationWithEntities?: any;
-    reproducibleTests?: boolean;
-    skipPriorities?: string[];
-    skipWriting?: boolean;
-    entities?: string[];
-
-    jhipsterContext?: any;
-    composeWithLocalBlueprint?: boolean;
-
     /** boostrap options */
     applyDefaults?: <const data = any>(data: data) => data;
 
     /* generate-blueprint options */
     localBlueprint?: boolean;
-
-    /* jdl generator options */
-    jdlFile?: string;
 
     /* application options */
     db?: string;
@@ -64,63 +30,7 @@ export type JHipsterGeneratorOptions = BaseOptions &
     workspacesFolders?: string[];
   };
 
-export type JHipsterGeneratorFeatures = BaseFeatures & {
-  priorityArgs?: boolean;
-  /**
-   * Wraps write context and shows removed fields and replacements if exists.
-   */
-  jhipster7Migration?: boolean | 'verbose' | 'silent';
-  blueprintSupport?: boolean;
-  sbsBlueprint?: boolean;
-  checkBlueprint?: boolean;
-  /**
-   * Disable skipPriorities flag.
-   */
-  disableSkipPriorities?: boolean;
-  /**
-   * Compose with bootstrap generator.
-   *
-   * Bootstrap generator adds support to:
-   *  - multistep templates.
-   *  - sort jhipster configuration json.
-   *  - force jhipster configuration commit.
-   *  - earlier prettier config commit for correct prettier.
-   *  - prettier and eslint.
-   *
-   * Defaults to false for generators that extends base-core directly and generators with namespaces matching *:bootstrap*.
-   * Defaults to true for others generators that extends base.
-   */
-  jhipsterBootstrap?: boolean;
-
-  /**
-   * Store current version at .yo-rc.json.
-   * Defaults to true.
-   */
-  storeJHipsterVersion?: boolean;
-
-  /**
-   * Store current version at .yo-rc.json.
-   * Defaults to true.
-   */
-  storeBlueprintVersion?: boolean;
-
-  /**
-   * Create transforms for commit.
-   */
-  commitTransformFactory?: () => any;
-
-  /**
-   * Queue tasks to handle command definitions.
-   *  - parse options and configurations from cli.
-   *  - prompt configurations.
-   *  - configure configurations.
-   *  - compose with generators defined in command.
-   *  - load configurations.
-   *
-   * Defaults to true for built-in generator-jhipster generators and false for blueprints.
-   */
-  queueCommandTasks?: boolean;
-};
+export type JHipsterGeneratorFeatures = YeomanFeatures & BaseFeatures;
 
 export type NeedleCallback = (content: string) => string;
 
