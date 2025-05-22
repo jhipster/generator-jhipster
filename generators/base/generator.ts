@@ -31,6 +31,7 @@ import CoreGenerator from '../base-core/index.js';
 import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base-application/support/constants.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
 import { formatDateForChangelog, packageNameToNamespace } from './support/index.js';
 import { loadBlueprintsFromConfiguration, mergeBlueprints, normalizeBlueprintName, parseBluePrints } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
@@ -48,11 +49,11 @@ const { WRITING } = PRIORITY_NAMES;
  * Provides built-in state support with control object.
  */
 export default class BaseGenerator<
-  ConfigType = BaseConfig,
+  ConfigType extends BaseConfig = BaseConfig,
   TaskTypes extends BaseTaskTypes = BaseTaskTypes,
   Options extends BaseOptions = BaseOptions,
   Features extends BaseFeatures = BaseFeatures,
-> extends CoreGenerator<ConfigType & BaseConfig, Options, Features> {
+> extends CoreGenerator<ConfigType, Options, Features> {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
   delegateToBlueprint?: boolean;
@@ -933,3 +934,14 @@ export default class BaseGenerator<
     this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
   }
 }
+
+export class CommandBaseGenerator<
+  Command extends ParseableCommand,
+  AdditionalOptions = unknown,
+  AdditionalFeatures = unknown,
+> extends BaseGenerator<
+  BaseConfig & ExportStoragePropertiesFromCommand<Command>,
+  BaseTaskTypes,
+  BaseOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions,
+  BaseFeatures & AdditionalFeatures
+> {}

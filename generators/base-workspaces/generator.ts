@@ -21,7 +21,7 @@ import { readdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 
-import BaseGenerator from '../base/index.js';
+import BaseGenerator, { type Config as BaseConfig } from '../base/index.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import { normalizePathEnd } from '../base/support/path.js';
@@ -62,14 +62,15 @@ type WorkspacesTypes<E extends Entity = Entity, A extends ApplicationType<E> = A
  * This is the base class for a generator that generates entities.
  */
 export default abstract class BaseWorkspacesGenerator<Config = unknown> extends BaseGenerator<
-  Config & {
-    appsFolders: string[];
-    directoryPath: string;
-    deploymentType: string;
-    jwtSecretKey: string;
-    adminPassword: string;
-    serviceDiscoveryType: string;
-  },
+  Config &
+    BaseConfig & {
+      appsFolders: string[];
+      directoryPath: string;
+      deploymentType: string;
+      jwtSecretKey: string;
+      adminPassword: string;
+      serviceDiscoveryType: string;
+    },
   WorkspacesTypes,
   JHipsterGeneratorOptions
 > {

@@ -22,7 +22,7 @@ import { upperFirst } from 'lodash-es';
 import { type Store as MemFs, create as createMemFs } from 'mem-fs';
 import { type MemFsEditor, create as createMemFsEditor } from 'mem-fs-editor';
 
-import BaseGenerator from '../base/index.js';
+import BaseGenerator, { type Config as BaseConfig } from '../base/index.js';
 import { downloadJdlFile } from '../../cli/download.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { CLI_NAME } from '../../cli/utils.mjs';
@@ -51,7 +51,7 @@ const toJdlFile = file => {
 type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: string; sharedFs?: MemFs };
 
 export default class JdlGenerator extends BaseGenerator<
-  { baseName: string; prodDatabaseType: string },
+  { baseName: string; prodDatabaseType: string } & BaseConfig,
   BaseTaskTypes,
   JHipsterGeneratorOptions
 > {

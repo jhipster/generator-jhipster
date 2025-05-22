@@ -1269,7 +1269,7 @@ export class CommandCoreGenerator<
   AdditionalOptions = unknown,
   AdditionalFeatures = unknown,
 > extends CoreGenerator<
-  ExportStoragePropertiesFromCommand<Command>,
-  ExportGeneratorOptionsFromCommand<Command> & CoreOptions & AdditionalOptions,
+  CoreConfig & ExportStoragePropertiesFromCommand<Command>,
+  CoreOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions,
   CoreFeatures & AdditionalFeatures
 > {}
