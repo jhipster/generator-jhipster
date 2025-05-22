@@ -88,9 +88,10 @@ type HelpersDefaults = {
   entrypointGenerator?: string;
 };
 
-const runResult = result as JHipsterRunResult;
+const runResult = result as JHipsterRunResult<BaseApplicationGenerator>;
+const coreRunResult = result as JHipsterRunResult;
 
-export { runResult, runResult as result };
+export { runResult, runResult as result, coreRunResult };
 
 const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
 const DEFAULT_TEST_OPTIONS = { skipInstall: true };
