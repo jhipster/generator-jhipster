@@ -16,5 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.js';
-export { default as command } from './command.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
+
+const command = {
+  configs: {
+    jdlFile: {
+      argument: {
+        type: String,
+      },
+      scope: 'generator',
+      configure: gen => {
+        gen.jdlFile ??= `${gen.jhipsterConfig.baseName}.jdl`;
+      },
+    },
+    jdlDefinition: {
+      internal: true,
+      scope: 'none',
+    },
+  },
+  import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
+} as const satisfies JHipsterCommandDefinition;
+
+export default command;
