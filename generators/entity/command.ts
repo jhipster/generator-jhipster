@@ -18,7 +18,7 @@
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   arguments: {
     name: {
       type: String,
@@ -62,6 +62,6 @@ const command: JHipsterCommandDefinition = {
       type: Boolean,
     },
   },
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

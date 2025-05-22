@@ -18,7 +18,7 @@
  */
 import type { JHipsterCommandDefinition } from '../../../../lib/command/index.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {
     generateEntities: {
       type: Boolean,
@@ -46,6 +46,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

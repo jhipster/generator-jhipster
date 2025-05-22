@@ -18,7 +18,7 @@
  */
 import { type JHipsterCommandDefinition } from '../../lib/command/index.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   arguments: {},
   options: {
     samplePath: {
@@ -27,6 +27,6 @@ const command: JHipsterCommandDefinition = {
       scope: 'generator',
     },
   },
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

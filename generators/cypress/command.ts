@@ -18,7 +18,7 @@
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {
     cypressCoverage: {
       description: 'Enable Cypress code coverage report generation',
@@ -31,6 +31,6 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
   },
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

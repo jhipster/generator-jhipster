@@ -19,7 +19,7 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import serverCommand from '../server/command.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   arguments: {
     entities: {
       type: Array,
@@ -30,6 +30,6 @@ const command: JHipsterCommandDefinition = {
   options: {
     skipDbChangelog: serverCommand.options!.skipDbChangelog,
   },
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

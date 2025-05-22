@@ -20,7 +20,7 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_APP, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
 import { parseIssue } from '../../lib/testing/github.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   configs: {
     issue: {
       argument: {
@@ -68,6 +68,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [GENERATOR_APP, GENERATOR_WORKSPACES],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;
