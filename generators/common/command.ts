@@ -19,7 +19,7 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   configs: {
     defaultEnvironment: {
       description: 'Default environment for the application',
@@ -34,6 +34,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

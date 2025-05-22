@@ -1,7 +1,7 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_APP, GENERATOR_GIT } from '../generator-list.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {
     appsFolders: {
       name: 'workspacesFolders',
@@ -34,6 +34,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [GENERATOR_GIT],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

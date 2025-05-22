@@ -22,7 +22,7 @@ import { defaultSamplesFolder } from '../constants.js';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_APP, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   arguments: {
     sampleName: {
       type: String,
@@ -76,6 +76,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [GENERATOR_APP, GENERATOR_WORKSPACES],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;
