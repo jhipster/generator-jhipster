@@ -27,9 +27,12 @@ export type AngularEntity = Entity & {
    * @returns {typeImports:Map} the fields that potentially contains some enum types
    */
   generateEntityClientEnumImports?: (fields: any) => Map<any, any>;
+  entityAngularAuthorities?: string;
+  entityAngularReadAuthorities?: string;
 };
 
 export type AngularApplication = {
   /** @experimental to be replaced with needles */
   angularEntities?: AngularEntity[];
+  angularLocaleId: string;
 } & ApplicationType<AngularEntity>;
