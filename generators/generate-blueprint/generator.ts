@@ -63,7 +63,7 @@ export default class extends BaseGenerator {
     super(args, options, { storeJHipsterVersion: true, ...features });
   }
 
-  async _beforeQueue() {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }

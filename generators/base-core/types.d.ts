@@ -61,21 +61,6 @@ export type Features = YeomanFeatures & {
   disableSkipPriorities?: boolean;
 
   /**
-   * Compose with bootstrap generator.
-   *
-   * Bootstrap generator adds support to:
-   *  - multistep templates.
-   *  - sort jhipster configuration json.
-   *  - force jhipster configuration commit.
-   *  - earlier prettier config commit for correct prettier.
-   *  - prettier and eslint.
-   *
-   * Defaults to false for generators that extends base-core directly and generators with namespaces matching *:bootstrap*.
-   * Defaults to true for others generators that extends base.
-   */
-  jhipsterBootstrap?: boolean;
-
-  /**
    * Create transforms for commit.
    */
   commitTransformFactory?: () => any;

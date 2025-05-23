@@ -50,6 +50,21 @@ export type Options = CoreOptions &
 
 export type Features = CoreFeatures & {
   /**
+   * Compose with bootstrap generator.
+   *
+   * Bootstrap generator adds support to:
+   *  - multistep templates.
+   *  - sort jhipster configuration json.
+   *  - force jhipster configuration commit.
+   *  - earlier prettier config commit for correct prettier.
+   *  - prettier and eslint.
+   *
+   * Defaults to false for generators that extends base-core directly and generators with namespaces matching *:bootstrap*.
+   * Defaults to true for others generators that extends base.
+   */
+  jhipsterBootstrap?: boolean;
+
+  /**
    * Indicates if the generator is a side-by-side blueprint.
    */
   sbsBlueprint?: boolean;
