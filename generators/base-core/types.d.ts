@@ -16,9 +16,79 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { BaseFeatures as YeomanFeatures, BaseOptions as YeomanOptions } from 'yeoman-generator';
+import type { JDLApplicationConfig } from '../../lib/jdl/core/types/parsing.js';
+import type { JHipsterConfigs } from '../../lib/command/types.js';
+
 export type Config = {
-  jhipsterVersion?: string;
   autoCrlf?: boolean;
-  lastLiquibaseTimestamp?: number;
-  blueprints?: { name: string; version?: string }[];
+};
+
+export type Options = YeomanOptions & {
+  /* yeoman options */
+  skipYoResolve?: boolean;
+  force?: boolean;
+
+  /* cli options */
+  commandName: string;
+  programName: string;
+  positionalArguments?: unknown[];
+  createEnvBuilder?: any;
+  devBlueprintEnabled?: boolean;
+
+  skipPriorities?: string[];
+
+  /** @experimental */
+  jdlDefinition?: JDLApplicationConfig;
+  /** @experimental */
+  commandsConfigs?: JHipsterConfigs;
+};
+
+export type Features = YeomanFeatures & {
+  /**
+   * Wraps write context and shows removed fields and replacements if exists.
+   */
+  jhipster7Migration?: boolean | 'verbose' | 'silent';
+
+  /**
+   * Indicates that the generators extends base.
+   */
+  blueprintSupport?: boolean;
+
+  /**
+   * Disable skipPriorities flag.
+   */
+  disableSkipPriorities?: boolean;
+
+  /**
+   * Compose with bootstrap generator.
+   *
+   * Bootstrap generator adds support to:
+   *  - multistep templates.
+   *  - sort jhipster configuration json.
+   *  - force jhipster configuration commit.
+   *  - earlier prettier config commit for correct prettier.
+   *  - prettier and eslint.
+   *
+   * Defaults to false for generators that extends base-core directly and generators with namespaces matching *:bootstrap*.
+   * Defaults to true for others generators that extends base.
+   */
+  jhipsterBootstrap?: boolean;
+
+  /**
+   * Create transforms for commit.
+   */
+  commitTransformFactory?: () => any;
+
+  /**
+   * Queue tasks to handle command definitions.
+   *  - parse options and configurations from cli.
+   *  - prompt configurations.
+   *  - configure configurations.
+   *  - compose with generators defined in command.
+   *  - load configurations.
+   *
+   * Defaults to true for built-in generator-jhipster generators and false for blueprints.
+   */
+  queueCommandTasks?: boolean;
 };

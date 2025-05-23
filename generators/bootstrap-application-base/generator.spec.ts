@@ -65,12 +65,12 @@ describe(`generator - ${generator}`, () => {
       });
     });
   });
-  describe('dateFormatForLiquibase', () => {
+  describe('nextTimestamp', () => {
     describe('when there is no configured lastLiquibaseTimestamp', () => {
       let firstChangelogDate;
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig();
-        firstChangelogDate = runResult.generator.dateFormatForLiquibase();
+        firstChangelogDate = runResult.generator.nextTimestamp();
       });
       it('should return a valid changelog date', () => {
         expect(/^\d{14}$/.test(firstChangelogDate)).toBe(true);
@@ -84,7 +84,7 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         const lastLiquibaseTimestamp = new Date(2000, 1, 1);
         await helpers.runJHipster(generator).withJHipsterConfig({ lastLiquibaseTimestamp: lastLiquibaseTimestamp.getTime() });
-        firstChangelogDate = runResult.generator.dateFormatForLiquibase();
+        firstChangelogDate = runResult.generator.nextTimestamp();
       });
       it('should return a valid changelog date', () => {
         expect(/^\d{14}$/.test(firstChangelogDate)).toBe(true);
@@ -105,8 +105,8 @@ describe(`generator - ${generator}`, () => {
           .runJHipster(generator)
           .withJHipsterConfig({ lastLiquibaseTimestamp: lastLiquibaseTimestamp.getTime(), creationTimestamp: undefined })
           .withOptions({ reproducible: false });
-        firstChangelogDate = runResult.generator.dateFormatForLiquibase();
-        secondChangelogDate = runResult.generator.dateFormatForLiquibase();
+        firstChangelogDate = runResult.generator.nextTimestamp();
+        secondChangelogDate = runResult.generator.nextTimestamp();
       });
       it('should return a valid changelog date', () => {
         expect(/^\d{14}$/.test(firstChangelogDate)).toBe(true);
@@ -127,8 +127,8 @@ describe(`generator - ${generator}`, () => {
       let secondChangelogDate;
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig();
-        firstChangelogDate = runResult.generator.dateFormatForLiquibase(false);
-        secondChangelogDate = runResult.generator.dateFormatForLiquibase(false);
+        firstChangelogDate = runResult.generator.nextTimestamp();
+        secondChangelogDate = runResult.generator.nextTimestamp();
       });
       it('should return a valid changelog date', () => {
         expect(/^\d{14}$/.test(firstChangelogDate)).toBe(true);
@@ -148,8 +148,8 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig().withOptions({ creationTimestamp: '2000-01-01' });
 
-        firstChangelogDate = runResult.generator.dateFormatForLiquibase();
-        secondChangelogDate = runResult.generator.dateFormatForLiquibase();
+        firstChangelogDate = runResult.generator.nextTimestamp();
+        secondChangelogDate = runResult.generator.nextTimestamp();
       });
       it('should return a valid changelog date', () => {
         expect(/^\d{14}$/.test(firstChangelogDate)).toBe(true);

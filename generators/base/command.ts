@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/types.js';
+import { parseCreationTimestamp } from './support/timestamp.js';
 
 const command = {
   options: {
@@ -37,6 +38,17 @@ const command = {
         'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
       type: Boolean,
       scope: 'generator',
+    },
+    blueprint: {
+      description: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
+      type: Array,
+      scope: 'none',
+    },
+    blueprints: {
+      description:
+        'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
+      type: String,
+      scope: 'none',
     },
     disableBlueprints: {
       description: 'Disable blueprints support',
@@ -65,6 +77,21 @@ const command = {
       type: Boolean,
       hide: true,
       scope: 'generator',
+    },
+    clientPackageManager: {
+      description: 'Force an unsupported client package manager',
+      type: String,
+      scope: 'storage',
+    },
+    ignoreErrors: {
+      description: "Don't fail on prettier errors.",
+      type: Boolean,
+      scope: 'none',
+    },
+    creationTimestamp: {
+      description: 'Project creation timestamp (used for reproducible builds)',
+      type: parseCreationTimestamp,
+      scope: 'storage',
     },
   },
 } as const satisfies JHipsterCommandDefinition;

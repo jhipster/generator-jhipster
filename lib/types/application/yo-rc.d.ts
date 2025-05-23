@@ -2,7 +2,7 @@
 import type { Simplify } from 'type-fest';
 import type { ExportStoragePropertiesFromCommand } from '../../command/types.js';
 import type { YO_RC_CONFIG_KEY } from '../../utils/yo-rc.ts';
-import type { Config } from '../../../generators/base-core/types.js';
+import type { Config } from '../../../generators/base/types.js';
 
 type BaseApplicationConfig = {
   entities?: string[];

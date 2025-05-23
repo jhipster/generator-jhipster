@@ -75,6 +75,7 @@ exports[`public api generator-jhipster/generators should match snapshot 2`] = `
   "buildServerSamples",
   "clientSamples",
   "convertToGitHubMatrix",
+  "coreRunResult",
   "createBlueprintFiles",
   "createJHipsterConfigFiles",
   "createTestHelpers",

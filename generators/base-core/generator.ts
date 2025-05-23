@@ -40,27 +40,21 @@ import {
   CRLF,
   LF,
   createJHipster7Context,
-  formatDateForChangelog,
   hasCrlr,
   joinCallbacks,
   normalizeLineEndings,
   removeFieldsWithNullishValues,
 } from '../base/support/index.js';
 
-import type {
-  CascatedEditFileCallback,
-  EditFileCallback,
-  EditFileOptions,
-  JHipsterGeneratorFeatures,
-  JHipsterGeneratorOptions,
-  ValidationResult,
-  WriteFileOptions,
-} from '../base/api.js';
+import type { CascatedEditFileCallback, EditFileCallback, EditFileOptions, ValidationResult, WriteFileOptions } from '../base/api.js';
 import {
+  type ExportGeneratorOptionsFromCommand,
+  type ExportStoragePropertiesFromCommand,
   type JHipsterArguments,
   type JHipsterCommandDefinition,
   type JHipsterConfigs,
   type JHipsterOptions,
+  type ParseableCommand,
   convertConfigToOption,
 } from '../../lib/command/index.js';
 import { packageJson } from '../../lib/index.js';
@@ -74,10 +68,9 @@ import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type GeneratorsByNamespace from '../types.js';
 import type { GeneratorBaseCore } from '../index.js';
-import type { Config } from '../base-core/types.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
-import { CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP } from '../base-application/support/constants.js';
 import { convertWriteFileSectionsToBlocks } from './internal/index.js';
+import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from './types.js';
 
 const {
   INITIALIZING,
@@ -111,10 +104,11 @@ const deepMerge = (source1: any, source2: any) => mergeWith({}, source1, source2
 /**
  * This is the base class for a generator for every generator.
  */
-export default class CoreGenerator<ConfigType extends Config = Config, Options = unknown, Features = unknown> extends YeomanGenerator<
-  JHipsterGeneratorOptions & Options,
-  JHipsterGeneratorFeatures & Features
-> {
+export default class CoreGenerator<
+  ConfigType extends CoreConfig = CoreConfig,
+  Options extends CoreOptions = CoreOptions,
+  Features extends CoreFeatures = CoreFeatures,
+> extends YeomanGenerator<Options, Features> {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -177,7 +171,7 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
   declare log: Logger;
   declare _meta?: GeneratorMeta;
 
-  constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
+  constructor(args: string | string[], options: Options, features: Features) {
     super(args, options, {
       skipParseOptions: true,
       tasksMatchingPriority: true,
@@ -238,8 +232,8 @@ export default class CoreGenerator<ConfigType extends Config = Config, Options =
   /**
    * JHipster config with default values fallback
    */
-  get jhipsterConfigWithDefaults(): Readonly<Record<string, any>> {
-    return removeFieldsWithNullishValues(this.config.getAll());
+  get jhipsterConfigWithDefaults(): Readonly<ConfigType> {
+    return removeFieldsWithNullishValues(this.config.getAll()) as ConfigType;
   }
 
   /**
@@ -584,54 +578,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           storage,
         };
       });
-  }
-
-  /**
-   * Generate a date to be used by Liquibase changelogs.
-   *
-   * @param {Boolean} [reproducible=true] - Set true if the changelog date can be reproducible.
-   *                                 Set false to create a changelog date incrementing the last one.
-   * @return {String} Changelog date.
-   */
-  dateFormatForLiquibase(reproducible?: boolean): string {
-    reproducible = reproducible ?? Boolean(this.options.reproducible);
-    // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
-    const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
-    let now = new Date();
-    // Miliseconds is ignored for changelogDate.
-    now.setMilliseconds(0);
-    // Run reproducible timestamp when regenerating the project with reproducible option or an specific timestamp.
-    if (reproducible || creationTimestamp) {
-      now = this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, {
-        factory: () => {
-          const newCreationTimestamp: string = (creationTimestamp as string) ?? this.config.get('creationTimestamp');
-          const newDate = newCreationTimestamp ? new Date(newCreationTimestamp) : now;
-          newDate.setMilliseconds(0);
-          return newDate;
-        },
-      });
-      now.setMinutes(now.getMinutes() + 1);
-      this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, { override: now });
-
-      // Reproducible build can create future timestamp, save it.
-      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
-      if (!lastLiquibaseTimestamp || now.getTime() > lastLiquibaseTimestamp) {
-        this.config.set('lastLiquibaseTimestamp', now.getTime());
-      }
-    } else {
-      // Get and store lastLiquibaseTimestamp, a future timestamp can be used
-      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
-      if (lastLiquibaseTimestamp) {
-        const lastTimestampDate = new Date(lastLiquibaseTimestamp);
-        if (lastTimestampDate >= now) {
-          now = lastTimestampDate;
-          now.setSeconds(now.getSeconds() + 1);
-          now.setMilliseconds(0);
-        }
-      }
-      this.jhipsterConfig.lastLiquibaseTimestamp = now.getTime();
-    }
-    return formatDateForChangelog(now);
   }
 
   /**
@@ -1317,3 +1263,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     });
   }
 }
+
+export class CommandCoreGenerator<
+  Command extends ParseableCommand,
+  AdditionalOptions = unknown,
+  AdditionalFeatures = unknown,
+> extends CoreGenerator<
+  CoreConfig & ExportStoragePropertiesFromCommand<Command>,
+  CoreOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions,
+  CoreFeatures & AdditionalFeatures
+> {}

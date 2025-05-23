@@ -233,7 +233,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           delete entityConfig.changelogDate;
         }
         if (!entityConfig.annotations!.changelogDate) {
-          entityConfig.annotations!.changelogDate = this.dateFormatForLiquibase();
+          entityConfig.annotations!.changelogDate = this.nextTimestamp();
           entityStorage.save();
         }
       },

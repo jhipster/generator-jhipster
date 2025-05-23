@@ -1,5 +1,5 @@
 import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
-import type { IsNever, RequireAtLeastOne, SetOptional, Simplify, TupleToUnion, ValueOf } from 'type-fest';
+import type { EmptyObject, IsNever, RequireAtLeastOne, SetOptional, Simplify, TupleToUnion, ValueOf } from 'type-fest';
 import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
 import type { DerivedPropertiesOf } from '../types/utils/derived-properties.js';
 import type { MergeUnion } from './support/merge-union.js';
@@ -122,7 +122,7 @@ type ParseableConfig = {
 
 type ParseableConfigs = Record<string, ParseableConfig>;
 
-type ParseableCommand = {
+export type ParseableCommand = {
   readonly options?: ParseableConfigs;
   readonly configs?: ParseableConfigs;
 };
@@ -238,8 +238,16 @@ export type ExportApplicationPropertiesFromCommand<C extends ParseableCommand> =
     : never;
 
 type ExportScopedPropertiesFromCommand<C extends ParseableCommand, S extends FilteredConfigScope> =
-  MergeConfigsOptions<C, S> extends infer Merged ? (Merged extends ParseableConfigs ? PrepareConfigsWithType<Merged> : never) : never;
+  MergeConfigsOptions<C, S> extends infer Merged
+    ? Merged extends ParseableConfigs
+      ? PrepareConfigsWithType<Merged>
+      : EmptyObject
+    : EmptyObject;
 
 export type ExportStoragePropertiesFromCommand<C extends ParseableCommand> = ExportScopedPropertiesFromCommand<C, 'storage'>;
 
 export type ExportGeneratorOptionsFromCommand<C extends ParseableCommand> = ExportScopedPropertiesFromCommand<C, any>;
+
+export type HandleCommandTypes<C1 extends ParseableCommand> = Record<'Config', ExportStoragePropertiesFromCommand<C1>> &
+  Record<'Options', ExportGeneratorOptionsFromCommand<C1>> &
+  Record<'Application', ExportApplicationPropertiesFromCommand<C1>>;

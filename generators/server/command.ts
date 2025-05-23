@@ -29,11 +29,6 @@ const command = {
       type: Boolean,
       scope: 'storage',
     },
-    recreateInitialChangelog: {
-      description: 'Recreate the initial database changelog based on the current config',
-      type: Boolean,
-      scope: 'none',
-    },
     cacheProvider: {
       description: 'Cache provider',
       type: String,
@@ -58,11 +53,6 @@ const command = {
       description: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
       type: Boolean,
       scope: 'storage',
-    },
-    skipDbChangelog: {
-      description: 'Skip the generation of database migrations',
-      type: Boolean,
-      scope: 'none',
     },
     skipFakeData: {
       description: 'Skip generation of fake data for development',

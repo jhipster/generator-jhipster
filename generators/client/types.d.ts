@@ -3,7 +3,6 @@ import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/i
 import type { CypressApplication } from '../cypress/types.js';
 import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
 import type { PostWritingEntitiesTaskParam } from '../../lib/types/application/tasks.js';
-import type { PartialAngularApplication } from '../angular/types-partial.js';
 import type { Language } from '../languages/support/languages.ts';
 import type { GetWebappTranslationCallback } from '../../lib/types/base/translation.js';
 import type { Entity } from '../base-application/index.js';
@@ -28,7 +27,7 @@ export type FrontendApplication = ApplicationClientProperties &
 /**
  * @deprecated in favor of frontend application.
  */
-export type ClientApplication = JavaScriptApplication & PartialAngularApplication & FrontendApplication;
+export type ClientApplication = JavaScriptApplication & FrontendApplication;
 
 export type ClientResources = {
   /**

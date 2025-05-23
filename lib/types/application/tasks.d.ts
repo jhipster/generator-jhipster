@@ -108,9 +108,7 @@ type PreparingEachEntityRelationshipTaskParam<E = Entity, A = ApplicationType<E>
   relationshipName: string;
 };
 
-type WritingTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A> & {
-  configChanges?: Record<string, { newValue: any; oldValue: any }>;
-};
+type WritingTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A>;
 
 type PostWritingTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A> & TaskParamWithSource<BaseApplicationSource>;
 

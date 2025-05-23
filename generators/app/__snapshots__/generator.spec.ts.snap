@@ -13,31 +13,35 @@ Options:
   --jhi-prefix <value>                     Add prefix before services, controllers and states name
   --entity-suffix <value>                  Add suffix after entities name
   --dto-suffix <value>                     Add suffix after dtos name
-  --blueprint <value...>                   DEPRECATED: Specify a generator blueprint to use for the sub generators
-  --blueprints <value>                     A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs
-  --ignore-errors                          Don't fail on prettier errors.
   --pk-type <value>                        Default primary key type (beta)
-  --client-package-manager <value>         Force an unsupported client package manager
   --test-frameworks <value...>             Test frameworks to be generated
   --skip-cache                             Do not remember prompt answers (default: false)
   --skip-install                           Do not automatically install dependencies (default: false)
   --force-install                          Fail on install dependencies error (default: false)
   --ask-answered                           Show prompts for already configured options (default: false)
+  --skip-checks                            Check the status of the required tools
+  --experimental                           Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time
+  --blueprint <value...>                   DEPRECATED: Specify a generator blueprint to use for the sub generators
+  --blueprints <value>                     A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs
+  --disable-blueprints                     Disable blueprints support
+  -d, --debug                              Enable debugger
+  --reproducible                           Try to reproduce changelog
+  --skip-prompts                           Skip prompts
+  --client-package-manager <value>         Force an unsupported client package manager
+  --ignore-errors                          Don't fail on prettier errors.
+  --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
   --base-name <value>                      Application base name
   --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json. (env: JHI_SKIP_JHIPSTER_DEPENDENCIES)
-  --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
   --jdl-store <value>                      JDL store
   --prettier-tab-width <value>             Default tab width for prettier (default: 2)
   --monorepository                         Use monorepository
   --skip-commit-hook                       Skip adding husky commit hooks
   --skip-user-management                   Skip the user management module during app generation
-  --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --cache-provider <value>                 Cache provider
   --enable-swagger-codegen                 API first development using OpenAPI-generator
   --enable-hibernate-cache                 Enable hibernate cache
   --search-engine <value>                  Provide search engine for the application when skipping server side generation
   --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
-  --skip-db-changelog                      Skip the generation of database migrations
   --skip-fake-data                         Skip generation of fake data for development
   --websocket <value>                      Provide websocket option for the application when skipping server side generation
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
@@ -57,6 +61,8 @@ Options:
   --build <value>                          Provide build tool for the application when skipping server side generation (default: maven) (choices: "maven", "gradle")
   --enable-gradle-develocity               Enable Gradle Develocity integration (default: false)
   --gradle-develocity-host <value>         Gradle Develocity Host
+  --recreate-initial-changelog             Recreate the initial database changelog based on the current config
+  --skip-db-changelog                      Skip the generation of database migrations
   --incremental-changelog                  Creates incremental database changelogs
   --dev-database-type <value>              Development database
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")

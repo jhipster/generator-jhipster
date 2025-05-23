@@ -29,15 +29,18 @@ import { execaCommandSync } from 'execa';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
 import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from '../../lib/types/base/tasks.js';
-import type { Config } from '../base-core/types.js';
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base-application/support/constants.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import { packageNameToNamespace } from './support/index.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
+import { formatDateForChangelog, packageNameToNamespace } from './support/index.js';
 import { loadBlueprintsFromConfiguration, mergeBlueprints, normalizeBlueprintName, parseBluePrints } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
-import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';
-import { CONTEXT_DATA_BLUEPRINT_CONFIGURED, LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.js';
-import type { CleanupArgumentType, Control } from './types.js';
+import {
+  CONTEXT_DATA_BLUEPRINT_CONFIGURED,
+  CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,
+  LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
+} from './support/constants.js';
+import type { Config as BaseConfig, Features as BaseFeatures, Options as BaseOptions, CleanupArgumentType, Control } from './types.js';
 
 const { WRITING } = PRIORITY_NAMES;
 
@@ -45,21 +48,21 @@ const { WRITING } = PRIORITY_NAMES;
  * Base class that contains blueprints support.
  * Provides built-in state support with control object.
  */
-export default class JHipsterBaseBlueprintGenerator<
-  ConfigType = unknown,
+export default class BaseGenerator<
+  ConfigType extends BaseConfig = BaseConfig,
+  Options extends BaseOptions = BaseOptions,
+  Features extends BaseFeatures = BaseFeatures,
   TaskTypes extends BaseTaskTypes = BaseTaskTypes,
-  Options = unknown,
-  Features = unknown,
-> extends CoreGenerator<ConfigType & Config, Options, Features> {
+> extends CoreGenerator<ConfigType, Options, Features> {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
   delegateToBlueprint?: boolean;
   blueprintConfig?: Record<string, any>;
   jhipsterContext?: any;
 
-  constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
+  constructor(args: string | string[], options: Options, features: Features) {
     const { jhipsterContext, ...opts } = options ?? {};
-    super(args, opts, { blueprintSupport: true, ...features });
+    super(args, opts as Options, { blueprintSupport: true, ...features });
 
     if (this.options.help) {
       return;
@@ -236,6 +239,50 @@ export default class JHipsterBaseBlueprintGenerator<
   }
 
   /**
+   * Generate a timestamp to be used by Liquibase changelogs.
+   */
+  nextTimestamp(): string {
+    const reproducible = Boolean(this.options.reproducible);
+    // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
+    const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
+    let now = new Date();
+    // Miliseconds is ignored for changelogDate.
+    now.setMilliseconds(0);
+    // Run reproducible timestamp when regenerating the project with reproducible option or an specific timestamp.
+    if (reproducible || creationTimestamp) {
+      now = this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, {
+        factory: () => {
+          const newCreationTimestamp: string = (creationTimestamp as string) ?? this.config.get('creationTimestamp');
+          const newDate = newCreationTimestamp ? new Date(newCreationTimestamp) : now;
+          newDate.setMilliseconds(0);
+          return newDate;
+        },
+      });
+      now.setMinutes(now.getMinutes() + 1);
+      this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, { override: now });
+
+      // Reproducible build can create future timestamp, save it.
+      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
+      if (!lastLiquibaseTimestamp || now.getTime() > lastLiquibaseTimestamp) {
+        this.config.set('lastLiquibaseTimestamp', now.getTime());
+      }
+    } else {
+      // Get and store lastLiquibaseTimestamp, a future timestamp can be used
+      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
+      if (lastLiquibaseTimestamp) {
+        const lastTimestampDate = new Date(lastLiquibaseTimestamp);
+        if (lastTimestampDate >= now) {
+          now = lastTimestampDate;
+          now.setSeconds(now.getSeconds() + 1);
+          now.setMilliseconds(0);
+        }
+      }
+      this.jhipsterConfig.lastLiquibaseTimestamp = now.getTime();
+    }
+    return formatDateForChangelog(now);
+  }
+
+  /**
    * Get arguments for the priority
    */
   override getArgsForPriority(priorityName: string) {
@@ -277,7 +324,7 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asAnyTaskGroup<const K extends string>(taskGroup: GenericTaskGroup<this, any, K>): GenericTaskGroup<any, any, K> {
+  asAnyTaskGroup(taskGroup: GenericTaskGroup<this, any>): GenericTaskGroup<any, any> {
     return taskGroup;
   }
 
@@ -301,9 +348,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asInitializingTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['InitializingTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['InitializingTaskParam'], K> {
+  asInitializingTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['InitializingTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['InitializingTaskParam']> {
     return taskGroup;
   }
 
@@ -327,9 +374,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPromptingTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PromptingTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['PromptingTaskParam'], K> {
+  asPromptingTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PromptingTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['PromptingTaskParam']> {
     return taskGroup;
   }
 
@@ -353,9 +400,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asConfiguringTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['ConfiguringTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['ConfiguringTaskParam'], K> {
+  asConfiguringTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['ConfiguringTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['ConfiguringTaskParam']> {
     return taskGroup;
   }
 
@@ -379,9 +426,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asComposingTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['ComposingTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['ComposingTaskParam'], K> {
+  asComposingTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['ComposingTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['ComposingTaskParam']> {
     return taskGroup;
   }
 
@@ -397,9 +444,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asComposingComponentTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['ComposingTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['ComposingTaskParam'], K> {
+  asComposingComponentTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['ComposingTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['ComposingTaskParam']> {
     return taskGroup;
   }
 
@@ -424,9 +471,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asLoadingTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['LoadingTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['LoadingTaskParam'], K> {
+  asLoadingTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['LoadingTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['LoadingTaskParam']> {
     return taskGroup;
   }
 
@@ -435,7 +482,7 @@ export default class JHipsterBaseBlueprintGenerator<
    *
    * Preparing should be used to generate derived properties.
    */
-  get preparing() {
+  get preparing(): GenericTaskGroup<this, TaskTypes['PreparingTaskParam']> {
     return this._preparing();
   }
 
@@ -450,9 +497,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PreparingTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['PreparingTaskParam'], K> {
+  asPreparingTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PreparingTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['PreparingTaskParam']> {
     return taskGroup;
   }
 
@@ -468,9 +515,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostPreparingTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PostPreparingTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['PostPreparingTaskParam'], K> {
+  asPostPreparingTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PostPreparingTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['PostPreparingTaskParam']> {
     return taskGroup;
   }
 
@@ -494,9 +541,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asDefaultTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['DefaultTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['DefaultTaskParam'], K> {
+  asDefaultTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['DefaultTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['DefaultTaskParam']> {
     return taskGroup;
   }
 
@@ -520,9 +567,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asWritingTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['WritingTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['WritingTaskParam'], K> {
+  asWritingTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['WritingTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['WritingTaskParam']> {
     return taskGroup;
   }
 
@@ -546,9 +593,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostWritingTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PostWritingTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['PostWritingTaskParam'], K> {
+  asPostWritingTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PostWritingTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['PostWritingTaskParam']> {
     return taskGroup;
   }
 
@@ -572,9 +619,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asInstallTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['InstallTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['InstallTaskParam'], K> {
+  asInstallTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['InstallTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['InstallTaskParam']> {
     return taskGroup;
   }
 
@@ -598,9 +645,9 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostInstallTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PostInstallTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['PostInstallTaskParam'], K> {
+  asPostInstallTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PostInstallTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['PostInstallTaskParam']> {
     return taskGroup;
   }
 
@@ -624,9 +671,7 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asEndTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['EndTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['EndTaskParam'], K> {
+  asEndTaskGroup(taskGroup: GenericTaskGroup<this, TaskTypes['EndTaskParam']>): GenericTaskGroup<any, TaskTypes['EndTaskParam']> {
     return taskGroup;
   }
 
@@ -887,3 +932,14 @@ export default class JHipsterBaseBlueprintGenerator<
     this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
   }
 }
+
+export class CommandBaseGenerator<
+  Command extends ParseableCommand,
+  AdditionalOptions = unknown,
+  AdditionalFeatures = unknown,
+> extends BaseGenerator<
+  BaseConfig & ExportStoragePropertiesFromCommand<Command>,
+  BaseOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions,
+  BaseFeatures & AdditionalFeatures,
+  BaseTaskTypes
+> {}
