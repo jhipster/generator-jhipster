@@ -16,10 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { JHipsterCommandDefinition } from '../../lib/command/types.js';
 
-/*
- * Register generator-base at yeoman-environment
- */
-export { default } from './generator.js';
-export { default as comand } from './command.js';
-export type { Entity, Field, Relationship } from '../../lib/types/application/index.js';
+const command = {
+  configs: {},
+  import: ['base'],
+} as const satisfies JHipsterCommandDefinition;
+
+export default command;
