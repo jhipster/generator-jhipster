@@ -206,7 +206,7 @@ export default class BaseApplicationGenerator<
   /**
    * JHipster config with default values fallback
    */
-  override get jhipsterConfigWithDefaults(): ConfigType & ApplicationConfiguration {
+  override get jhipsterConfigWithDefaults(): Readonly<ConfigType & ApplicationConfiguration> {
     const configWithDefaults = getConfigWithDefaults(super.jhipsterConfigWithDefaults);
     defaults(configWithDefaults, {
       skipFakeData: false,
