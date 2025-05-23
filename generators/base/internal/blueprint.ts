@@ -20,32 +20,12 @@ import { requireNamespace } from '@yeoman/namespace';
 
 /**
  * @private
- * Loads the blueprint information from the configuration of the specified generator.
- * @param config - the generator's configuration object.
- * @returns {Array} an array that contains the info for each blueprint
- */
-export function loadBlueprintsFromConfiguration(config) {
-  // handle both config based on yeoman's Storage object, and direct configuration loaded from .yo-rc.json
-  const configuration = config?.getAll && typeof config.getAll === 'function' ? config.getAll() || {} : config;
-  // load blueprints from config file
-  const blueprints = configuration.blueprints || [];
-
-  const oldBlueprintName = configuration.blueprint;
-  if (oldBlueprintName && blueprints.findIndex(e => e.name === oldBlueprintName) === -1) {
-    const version = configuration.blueprintVersion || 'latest';
-    blueprints.push(parseBlueprintInfo(`${oldBlueprintName}@${version}`));
-  }
-  return blueprints;
-}
-
-/**
- * @private
  * Splits and normalizes a comma separated list of blueprint names with optional versions.
  * @param {string|any[]} [blueprints] - comma separated list of blueprint names, e.g kotlin,vuewjs@1.0.1. If an array then
  * no processing is performed and it is returned as is.
  * @returns {Array} an array that contains the info for each blueprint
  */
-export function parseBluePrints(blueprints?: string | { name: string; version: string }[]) {
+export function parseBlueprints(blueprints?: string | { name: string; version: string }[]) {
   if (Array.isArray(blueprints)) {
     return blueprints;
   }

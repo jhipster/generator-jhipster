@@ -25,6 +25,7 @@ import { lt as semverLessThan } from 'semver';
 
 import { union } from 'lodash-es';
 import { execaCommandSync } from 'execa';
+import type { PackageJson } from 'type-fest';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
 import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from '../../lib/types/base/tasks.js';
@@ -32,7 +33,7 @@ import { CONTEXT_DATA_EXISTING_PROJECT } from '../base-application/support/const
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
 import { formatDateForChangelog, packageNameToNamespace } from './support/index.js';
-import { loadBlueprintsFromConfiguration, mergeBlueprints, normalizeBlueprintName, parseBluePrints } from './internal/index.js';
+import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
 import {
   CONTEXT_DATA_BLUEPRINT_CONFIGURED,
@@ -664,7 +665,7 @@ export default class BaseGenerator<
    * @private
    * Configure blueprints.
    */
-  async #configureBlueprints() {
+  async #configureBlueprints(): Promise<void> {
     let argvBlueprints = this.options.blueprints || '';
     // check for old single blueprint declaration
     let { blueprint } = this.options;
@@ -675,7 +676,7 @@ export default class BaseGenerator<
       this.log.warn('--blueprint option is deprecated. Please use --blueprints instead');
       argvBlueprints = union(blueprint, argvBlueprints.split(',')).join(',');
     }
-    const blueprints = mergeBlueprints(parseBluePrints(argvBlueprints), loadBlueprintsFromConfiguration(this.config));
+    const blueprints = mergeBlueprints(parseBlueprints(argvBlueprints), this.jhipsterConfig.blueprints ?? []);
 
     // EnvironmentBuilder already looks for blueprint when running from cli, this is required for tests.
     // Can be removed once the tests uses EnvironmentBuilder.
@@ -747,7 +748,7 @@ export default class BaseGenerator<
    * @param {string} blueprintPkgName - generator name
    * @return {object} packageJson - retrieved package.json as an object or undefined if not found
    */
-  findBlueprintPackageJson(blueprintPkgName: string) {
+  findBlueprintPackageJson(blueprintPkgName: string): PackageJson | undefined {
     const blueprintGeneratorName = packageNameToNamespace(blueprintPkgName);
     const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
     if (!blueprintPackagePath) {
@@ -767,7 +768,7 @@ export default class BaseGenerator<
    * @param {string} blueprintPkgName - generator name
    * @return {string} version - retrieved version or empty string if not found
    */
-  #findBlueprintVersion(blueprintPkgName: string) {
+  #findBlueprintVersion(blueprintPkgName: string): string | undefined {
     const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
     if (!blueprintPackageJson?.version) {
       this.log.warn(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
@@ -785,7 +786,6 @@ export default class BaseGenerator<
     if (blueprint === 'generator-jhipster') {
       throw new Error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
     }
-    this.findBlueprintPackageJson(blueprint);
   }
 }
 

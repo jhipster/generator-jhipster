@@ -26,7 +26,7 @@ import Environment from 'yeoman-environment';
 import { QueuedAdapter } from '@yeoman/adapter';
 
 import { createJHipsterLogger, packageNameToNamespace } from '../generators/base/support/index.js';
-import { loadBlueprintsFromConfiguration, mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.js';
+import { mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.js';
 import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.js';
 import { CLI_NAME, logger } from './utils.mjs';
 
@@ -331,11 +331,7 @@ export default class EnvironmentBuilder {
    * @returns {Blueprint[]}
    */
   _getBlueprintsFromYoRc() {
-    const yoRc = readCurrentPathYoRcFile();
-    if (!yoRc?.['generator-jhipster']) {
-      return [];
-    }
-    return loadBlueprintsFromConfiguration(yoRc['generator-jhipster']);
+    return readCurrentPathYoRcFile()?.['generator-jhipster']?.blueprints ?? [];
   }
 
   /**
