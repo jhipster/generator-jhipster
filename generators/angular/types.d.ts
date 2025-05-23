@@ -19,7 +19,7 @@
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/index.js';
 
-export interface AngularEntity extends Entity {
+export type AngularEntity = Entity & {
   /**
    * @experimental to be replaced with a calculated property
    * Returns the typescript import section of enums referenced by all fields of the entity.
@@ -27,7 +27,7 @@ export interface AngularEntity extends Entity {
    * @returns {typeImports:Map} the fields that potentially contains some enum types
    */
   generateEntityClientEnumImports?: (fields: any) => Map<any, any>;
-}
+};
 
 export type AngularApplication = {
   /** @experimental to be replaced with needles */

@@ -25,7 +25,6 @@ import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
-import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/tasks.js';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.js';
 import { writeFiles } from './files-angular.js';
 import cleanupOldFilesTask from './cleanup.js';
@@ -43,7 +42,7 @@ import type { AngularApplication, AngularEntity } from './types.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
-export default class AngularGenerator extends BaseApplicationGenerator<unknown, DefaultTaskTypes<AngularEntity, AngularApplication>> {
+export default class AngularGenerator extends BaseApplicationGenerator<AngularEntity, AngularApplication> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

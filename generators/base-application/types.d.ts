@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
 import type CoreGenerator from '../base-core/generator.ts';
+import { type Config as BaseConfig, type Features as BaseFeatures, type Options as BaseOptions } from '../base/index.js';
 import type { ClientApplication } from '../client/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import type { SpringBootApplication } from '../server/types.js';
@@ -195,3 +196,12 @@ type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscovery
 type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'elk', 'prometheus']>;
 
 export type PlatformApplication = ServiceDiscoveryApplication & MonitoringApplication;
+
+export type Config = BaseConfig & {
+  baseName?: string;
+  entities?: string[];
+};
+
+export type Options = BaseOptions;
+
+export type Features = BaseFeatures;

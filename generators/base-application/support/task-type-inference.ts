@@ -17,7 +17,6 @@
 import type { ApplicationType } from '../../../lib/types/application/application.js';
 import type { TaskTypes } from '../../../lib/types/application/tasks.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import type BaseApplicationGenerator from '../../base-application/generator.js';
 import type { WriteFileSection } from '../../base/api.js';
 import type { Entity } from '../../../lib/types/application/entity.js';
 
@@ -25,44 +24,38 @@ export function asWriteFilesSection<Data = ApplicationType<Entity>>(section: Wri
   return section;
 }
 
-export function asPromptingTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = BaseApplicationGenerator>(
+export function asPromptingTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = CoreGenerator>(
   task: (this: G, params: TaskTypes<E, A>['PromptingTaskParam']) => void,
 ) {
   return task;
 }
 
-export function asPostPreparingEachEntityTask<
-  E = Entity,
-  A = ApplicationType<E>,
-  const G extends BaseApplicationGenerator = BaseApplicationGenerator,
->(task: (this: G, params: TaskTypes<E, A>['PostPreparingEachEntityTaskParam']) => void) {
+export function asPostPreparingEachEntityTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = CoreGenerator>(
+  task: (this: G, params: TaskTypes<E, A>['PostPreparingEachEntityTaskParam']) => void,
+) {
   return task;
 }
 
-export function asWritingTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = BaseApplicationGenerator>(
+export function asWritingTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = CoreGenerator>(
   task: (this: G, params: TaskTypes<E, A>['WritingTaskParam']) => void,
 ) {
   return task;
 }
 
-export function asWritingEntitiesTask<
-  E = Entity,
-  A = ApplicationType<E>,
-  const G extends BaseApplicationGenerator = BaseApplicationGenerator,
->(task: (this: G, params: TaskTypes<E, A>['WritingEntitiesTaskParam']) => void) {
+export function asWritingEntitiesTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = CoreGenerator>(
+  task: (this: G, params: TaskTypes<E, A>['WritingEntitiesTaskParam']) => void,
+) {
   return task;
 }
 
-export function asPostWritingTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = BaseApplicationGenerator>(
+export function asPostWritingTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = CoreGenerator>(
   task: (this: G, params: TaskTypes<E, A>['PostWritingTaskParam']) => void,
 ) {
   return task;
 }
 
-export function asPostWritingEntitiesTask<
-  E = Entity,
-  A = ApplicationType<E>,
-  const G extends BaseApplicationGenerator = BaseApplicationGenerator,
->(task: (this: G, params: TaskTypes<E, A>['PostWritingEntitiesTaskParam']) => void) {
+export function asPostWritingEntitiesTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = CoreGenerator>(
+  task: (this: G, params: TaskTypes<E, A>['PostWritingEntitiesTaskParam']) => void,
+) {
   return task;
 }

@@ -22,7 +22,7 @@ import type { ComposeOptions, Storage } from 'yeoman-generator';
 import type GeneratorsByNamespace from '../types.js';
 import BaseGenerator from '../base/index.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
+import type { JHipsterGeneratorOptions } from '../base/api.js';
 import { mutateData } from '../../lib/utils/object.js';
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
@@ -39,7 +39,7 @@ import type {
   PreparingEachEntityTaskParam,
   TaskParamWithApplication,
 } from '../../lib/types/application/tasks.js';
-import type { Entity } from '../../lib/types/application/entity.js';
+import type { Entity as ApplicationEntity } from '../../lib/types/application/entity.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
@@ -52,6 +52,7 @@ import {
   getEntitiesFromDir,
 } from './support/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
+import type { Config as BaseApplicationConfig, Features as BaseApplicationFeatures, Options as BaseApplicationOptions } from './types.js';
 
 const {
   LOADING,
@@ -117,16 +118,13 @@ const PRIORITY_WITH_APPLICATION: string[] = [
  * This is the base class for a generator that generates entities.
  */
 export default class BaseApplicationGenerator<
-  ConfigType = unknown,
-  TaskTypes extends DefaultTaskTypes<any, any> = DefaultTaskTypes,
-  Options = unknown,
-  Features = unknown,
-> extends BaseGenerator<
-  ConfigType & ApplicationConfiguration,
-  TaskTypes,
-  Options & JHipsterGeneratorOptions,
-  Features & JHipsterGeneratorFeatures
-> {
+  Entity extends ApplicationEntity = ApplicationEntity,
+  Application extends ApplicationType<ApplicationEntity> = ApplicationType<ApplicationEntity>,
+  ConfigType extends BaseApplicationConfig = BaseApplicationConfig & ApplicationConfiguration,
+  Options extends BaseApplicationOptions = BaseApplicationOptions & JHipsterGeneratorOptions,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+  TaskTypes extends DefaultTaskTypes<Entity, Application> = DefaultTaskTypes<Entity, Application>,
+> extends BaseGenerator<ConfigType, Options, Features, TaskTypes> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
   static LOADING_ENTITIES = asPriority(LOADING_ENTITIES);
@@ -143,7 +141,7 @@ export default class BaseApplicationGenerator<
 
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
-  constructor(args: string | string[], options: Options & JHipsterGeneratorOptions, features: Features & JHipsterGeneratorFeatures) {
+  constructor(args: string | string[], options: Options, features: Features) {
     super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features });
 
     if (this.options.help) {
@@ -282,16 +280,16 @@ export default class BaseApplicationGenerator<
   /**
    * get sorted list of entities according to changelog date (i.e. the order in which they were added)
    */
-  getExistingEntities(): { name: string; definition: Entity }[] {
+  getExistingEntities(): { name: string; definition: ApplicationEntity }[] {
     function isBefore(e1, e2) {
       return (e1.definition.annotations?.changelogDate ?? 0) - (e2.definition.annotations?.changelogDate ?? 0);
     }
 
     const configDir = this.getEntitiesConfigPath();
 
-    const entities: { name: string; definition: Entity }[] = [];
+    const entities: { name: string; definition: ApplicationEntity }[] = [];
     for (const entityName of [...new Set(((this.jhipsterConfig.entities as string[]) || []).concat(getEntitiesFromDir(configDir)))]) {
-      const definition: Entity = this.getEntityConfig(entityName)?.getAll() as unknown as Entity;
+      const definition: ApplicationEntity = this.getEntityConfig(entityName)?.getAll() as unknown as ApplicationEntity;
       if (definition) {
         entities.push({ name: entityName, definition });
       }

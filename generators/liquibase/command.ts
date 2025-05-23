@@ -25,6 +25,16 @@ const command = {
       type: Boolean,
       scope: 'storage',
     },
+    recreateInitialChangelog: {
+      description: 'Recreate the initial database changelog based on the current config',
+      type: Boolean,
+      scope: 'none',
+    },
+    skipDbChangelog: {
+      description: 'Skip the generation of database migrations',
+      type: Boolean,
+      scope: 'none',
+    },
   },
   configs: {
     incrementalChangelog: {

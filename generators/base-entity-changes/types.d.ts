@@ -1,3 +1,9 @@
+import type {
+  Config as BaseApplicationConfig,
+  Features as BaseApplicationFeatures,
+  Options as BaseApplicationOptions,
+} from '../base-application/types.d.ts';
+
 export type BaseChangelog = {
   newEntity: boolean;
   changedEntity: boolean;
@@ -18,3 +24,9 @@ export type BaseChangelog = {
   addedDefaultValueFields: any[];
   changelogData: any;
 };
+
+export type Config = BaseApplicationConfig;
+
+export type Options = BaseApplicationOptions;
+
+export type Features = BaseApplicationFeatures;

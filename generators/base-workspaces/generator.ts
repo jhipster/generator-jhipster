@@ -21,7 +21,7 @@ import { readdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 
-import BaseGenerator, { type Config as BaseConfig } from '../base/index.js';
+import BaseGenerator, { type Config as BaseConfig, type Features as BaseFeatures } from '../base/index.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import { normalizePathEnd } from '../base/support/path.js';
@@ -71,8 +71,9 @@ export default abstract class BaseWorkspacesGenerator<Config = unknown> extends 
       adminPassword: string;
       serviceDiscoveryType: string;
     },
-  WorkspacesTypes,
-  JHipsterGeneratorOptions
+  JHipsterGeneratorOptions,
+  BaseFeatures,
+  WorkspacesTypes
 > {
   static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 

@@ -35,7 +35,6 @@ import { normalizeBlueprintName } from '../base/internal/blueprint.js';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import type { JHipsterGeneratorOptions } from '../base/api.js';
-import type { TaskTypes as BaseTaskTypes } from '../../lib/types/base/tasks.js';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
 
 /**
@@ -52,7 +51,6 @@ type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: strin
 
 export default class JdlGenerator extends BaseGenerator<
   { baseName: string; prodDatabaseType: string } & BaseConfig,
-  BaseTaskTypes,
   JHipsterGeneratorOptions
 > {
   jdlFiles?: string[];

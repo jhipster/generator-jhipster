@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import serverCommand from '../server/command.js';
+import liquibaseCommand from '../liquibase/command.js';
 
 const command = {
   arguments: {
@@ -28,7 +28,7 @@ const command = {
     },
   },
   options: {
-    skipDbChangelog: serverCommand.options!.skipDbChangelog,
+    skipDbChangelog: liquibaseCommand.options.skipDbChangelog,
   },
 } as const satisfies JHipsterCommandDefinition;
 
