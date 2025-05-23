@@ -748,7 +748,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queueWritingEachEntity',
       cancellable: true,
       method: () => {
-        if (this.options.skipWriting || this.options.skipPriorities?.includes(WRITING_ENTITIES)) return;
+        if (this.options.skipPriorities?.includes(WRITING_ENTITIES)) return;
         const tasks = this.extractTasksFromPriority(WRITING_ENTITIES, { skip: false });
         const args = this.getArgsForPriority(WRITING_ENTITIES);
         tasks.forEach(task => {
@@ -765,7 +765,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queuePostWritingEachEntity',
       cancellable: true,
       method: () => {
-        if (this.options.skipWriting || this.options.skipPriorities?.includes(POST_WRITING_ENTITIES)) return;
+        if (this.options.skipPriorities?.includes(POST_WRITING_ENTITIES)) return;
         const tasks = this.extractTasksFromPriority(POST_WRITING_ENTITIES, { skip: false });
         const args = this.getArgsForPriority(POST_WRITING_ENTITIES);
         tasks.forEach(task => {
