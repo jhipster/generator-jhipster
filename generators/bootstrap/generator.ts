@@ -24,10 +24,7 @@ import { isFilePending, isFileStateModified } from 'mem-fs-editor/state';
 import { createCommitTransform } from 'mem-fs-editor/transform';
 import type { Options as PrettierOptions } from 'prettier';
 import type { FileTransform, PipelineOptions } from 'mem-fs';
-import chalk from 'chalk';
-import semver from 'semver';
 
-import { packageJson } from '../../lib/index.js';
 import BaseGenerator from '../base/index.js';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
 import { GENERATOR_UPGRADE } from '../generator-list.js';
@@ -79,23 +76,6 @@ export default class BootstrapGenerator extends BaseGenerator {
     if (this.delegateToBlueprint) {
       throw new Error('Only sbs blueprint is supported');
     }
-  }
-
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      validateBlueprint() {
-        if (this.jhipsterConfig.blueprints && !this.skipChecks) {
-          this.jhipsterConfig.blueprints.forEach(blueprint => {
-            this.#checkJHipsterBlueprintVersion(blueprint.name);
-            this._checkBlueprint(blueprint.name);
-          });
-        }
-      },
-    });
-  }
-
-  get [BaseGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get multistepTransform(): Record<string, (this: this) => unknown | Promise<unknown>> {
@@ -285,36 +265,5 @@ export default class BootstrapGenerator extends BaseGenerator {
       ...transformStreams,
     );
     this.log.ok(log ?? 'files committed to disk');
-  }
-
-  /**
-   * Check if the generator specified as blueprint has a version compatible with current JHipster.
-   */
-  #checkJHipsterBlueprintVersion(blueprintPkgName: string) {
-    const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
-    if (!blueprintPackageJson) {
-      this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
-      return;
-    }
-    const mainGeneratorJhipsterVersion = packageJson.version;
-    const compatibleJhipsterRange =
-      blueprintPackageJson.engines?.['generator-jhipster'] ??
-      blueprintPackageJson.dependencies?.['generator-jhipster'] ??
-      blueprintPackageJson.peerDependencies?.['generator-jhipster'];
-    if (compatibleJhipsterRange) {
-      if (!semver.valid(compatibleJhipsterRange) && !semver.validRange(compatibleJhipsterRange)) {
-        this.log.verboseInfo(`Blueprint ${blueprintPkgName} contains generator-jhipster dependency with non comparable version`);
-        return;
-      }
-      if (semver.satisfies(mainGeneratorJhipsterVersion, compatibleJhipsterRange, { includePrerelease: true })) {
-        return;
-      }
-      throw new Error(
-        `The installed ${chalk.yellow(
-          blueprintPkgName,
-        )} blueprint targets JHipster v${compatibleJhipsterRange} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`,
-      );
-    }
-    this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
   }
 }

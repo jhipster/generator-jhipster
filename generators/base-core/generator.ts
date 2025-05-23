@@ -59,7 +59,6 @@ import {
 } from '../../lib/command/index.js';
 import { packageJson } from '../../lib/index.js';
 import type { BaseApplication } from '../base-application/types.js';
-import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import baseCommand from '../base/command.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
@@ -199,18 +198,7 @@ export default class CoreGenerator<
 
     this.registerPriorities(CUSTOM_PRIORITIES);
 
-    const {
-      blueprintSupport = false,
-      jhipsterBootstrap = blueprintSupport ? !this._namespace.split(':')[1].startsWith('bootstrap') : false,
-      queueCommandTasks = true,
-    } = this.getFeatures();
-    if (jhipsterBootstrap) {
-      // jhipster:bootstrap is always required. Run it once the environment starts.
-      this.env.queueTask('environment:run', async () => this.composeWithJHipster(GENERATOR_BOOTSTRAP).then(), {
-        once: 'queueJhipsterBootstrap',
-        startQueue: false,
-      });
-    }
+    const { blueprintSupport = false, queueCommandTasks = true } = this.getFeatures();
 
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];
