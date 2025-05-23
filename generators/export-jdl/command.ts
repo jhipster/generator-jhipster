@@ -30,10 +30,6 @@ const command = {
         gen.jdlFile ??= `${gen.jhipsterConfig.baseName}.jdl`;
       },
     },
-    jdlDefinition: {
-      internal: true,
-      scope: 'none',
-    },
   },
   import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
 } as const satisfies JHipsterCommandDefinition;

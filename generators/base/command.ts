@@ -97,6 +97,10 @@ const command = {
       },
       scope: 'none',
     },
+    jdlDefinition: {
+      internal: true,
+      scope: 'none',
+    },
   },
 } as const satisfies JHipsterCommandDefinition;
 

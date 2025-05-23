@@ -32,7 +32,7 @@ export default class extends CommandCoreGenerator<typeof command> {
     return this.asAnyTaskGroup({
       convertToJDL() {
         try {
-          const jdlObject = convertToJDL(this.destinationPath(), false, this.options.jdlDefinition as any);
+          const jdlObject = convertToJDL(this.destinationPath(), false, this.options.jdlDefinition);
           if (jdlObject) {
             this.jdlContent = jdlObject.toString();
           }
