@@ -239,7 +239,7 @@ export default class BaseGenerator<
   }
 
   /**
-   * Generate a timestrap to be used by Liquibase changelogs.
+   * Generate a timestamp to be used by Liquibase changelogs.
    */
   nextTimestamp(): string {
     const reproducible = Boolean(this.options.reproducible);
