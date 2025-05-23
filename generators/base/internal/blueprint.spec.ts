@@ -1,35 +1,35 @@
 import assert from 'assert';
 import { describe, expect, it } from 'esmocha';
-import { mergeBlueprints, normalizeBlueprintName, parseBluePrints, removeBlueprintDuplicates } from './blueprint.js';
+import { mergeBlueprints, normalizeBlueprintName, parseBlueprints, removeBlueprintDuplicates } from './blueprint.js';
 
 describe('generator - base - internal - blueprint', () => {
-  describe('::parseBluePrints', () => {
+  describe('::parseBlueprints', () => {
     it('does nothing if an array', () => {
       const expected = [{ name: 'generator-jhipster-foo', version: 'latest' }];
-      const actual = parseBluePrints(expected);
+      const actual = parseBlueprints(expected);
       assert.deepStrictEqual(actual, expected);
     });
     it('returns a array if empty string', () => {
       const expected = [];
-      const actual = parseBluePrints('');
+      const actual = parseBlueprints('');
       assert.deepStrictEqual(actual, expected);
     });
     it('returns a array if not string', () => {
-      assert.deepStrictEqual(parseBluePrints(), []);
+      assert.deepStrictEqual(parseBlueprints(), []);
     });
     it('adds generator-jhipster prefix if it is absent', () => {
       const expected = [{ name: 'generator-jhipster-foo' }];
-      const actual = parseBluePrints('foo');
+      const actual = parseBlueprints('foo');
       assert.deepStrictEqual(actual, expected);
     });
     it('keeps generator-jhipster prefix if it is present', () => {
       const expected = [{ name: 'generator-jhipster-foo', version: '1.0.1' }];
-      const actual = parseBluePrints('generator-jhipster-foo@1.0.1');
+      const actual = parseBlueprints('generator-jhipster-foo@1.0.1');
       assert.deepStrictEqual(actual, expected);
     });
     it('adds generator-jhipster prefix to scoped package and extracts version', () => {
       const expected = [{ name: '@corp/generator-jhipster-foo', version: '1.0.1' }];
-      const actual = parseBluePrints('@corp/foo@1.0.1');
+      const actual = parseBlueprints('@corp/foo@1.0.1');
       assert.deepStrictEqual(actual, expected);
     });
     it('parses comma separated list', () => {
@@ -38,7 +38,7 @@ describe('generator - base - internal - blueprint', () => {
         { name: 'generator-jhipster-bar', version: '1.0.1' },
         { name: '@corp/generator-jhipster-foo' },
       ];
-      const actual = parseBluePrints('foo,bar@1.0.1,@corp/foo');
+      const actual = parseBlueprints('foo,bar@1.0.1,@corp/foo');
       assert.deepStrictEqual(actual, expected);
     });
   });

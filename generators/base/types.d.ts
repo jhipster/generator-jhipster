@@ -42,7 +42,6 @@ export type Options = CoreOptions &
      */
     applicationWithEntities?: any;
     reproducibleTests?: boolean;
-    skipWriting?: boolean;
     entities?: string[];
 
     jhipsterContext?: any;

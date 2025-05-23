@@ -39,11 +39,6 @@ const command = {
       type: Boolean,
       scope: 'generator',
     },
-    blueprint: {
-      description: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
-      type: Array,
-      scope: 'none',
-    },
     blueprints: {
       description:
         'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
@@ -92,6 +87,19 @@ const command = {
       description: 'Project creation timestamp (used for reproducible builds)',
       type: parseCreationTimestamp,
       scope: 'storage',
+    },
+  },
+  configs: {
+    blueprint: {
+      description: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
+      internal: {
+        type: Array,
+      },
+      scope: 'none',
+    },
+    jdlDefinition: {
+      internal: true,
+      scope: 'none',
     },
   },
 } as const satisfies JHipsterCommandDefinition;

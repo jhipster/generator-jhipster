@@ -186,7 +186,6 @@ Options:
   --test-frameworks <value...>             Test frameworks to be generated
   --skip-checks                            Check the status of the required tools
   --experimental                           Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time
-  --blueprint <value...>                   DEPRECATED: Specify a generator blueprint to use for the sub generators
   --blueprints <value>                     A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs
   --disable-blueprints                     Disable blueprints support
   -d, --debug                              Enable debugger

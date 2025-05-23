@@ -153,7 +153,7 @@ export default class BaseApplicationGenerator<
     /* Add tasks allowing entities priorities to match normal priorities pattern */
     this.on('queueOwnTasks', () => {
       this.log.debug('Queueing entity tasks');
-      this.queueEntityTasks();
+      this.#queueEntityTasks();
     });
 
     this.on('before:render', (sourceBasename, context) => {
@@ -350,72 +350,72 @@ export default class BaseApplicationGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asConfiguringEachEntityTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['ConfiguringEachEntityTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['ConfiguringEachEntityTaskParam'], K> {
+  asConfiguringEachEntityTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['ConfiguringEachEntityTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['ConfiguringEachEntityTaskParam']> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asLoadingEntitiesTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['LoadingEntitiesTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['LoadingEntitiesTaskParam'], K> {
+  asLoadingEntitiesTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['LoadingEntitiesTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['LoadingEntitiesTaskParam']> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingEachEntityTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PreparingEachEntityTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['PreparingEachEntityTaskParam'], K> {
+  asPreparingEachEntityTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PreparingEachEntityTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['PreparingEachEntityTaskParam']> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingEachEntityFieldTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PreparingEachEntityFieldTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['PreparingEachEntityFieldTaskParam'], K> {
+  asPreparingEachEntityFieldTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PreparingEachEntityFieldTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['PreparingEachEntityFieldTaskParam']> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingEachEntityRelationshipTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PreparingEachEntityRelationshipTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['PreparingEachEntityRelationshipTaskParam'], K> {
+  asPreparingEachEntityRelationshipTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PreparingEachEntityRelationshipTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['PreparingEachEntityRelationshipTaskParam']> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostPreparingEachEntityTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PostPreparingEachEntityTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['PostPreparingEachEntityTaskParam'], K> {
+  asPostPreparingEachEntityTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PostPreparingEachEntityTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['PostPreparingEachEntityTaskParam']> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asWritingEntitiesTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['WritingEntitiesTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['WritingEntitiesTaskParam'], K> {
+  asWritingEntitiesTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['WritingEntitiesTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['WritingEntitiesTaskParam']> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostWritingEntitiesTaskGroup<const K extends string>(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PostWritingEntitiesTaskParam'], K>,
-  ): GenericTaskGroup<any, TaskTypes['PostWritingEntitiesTaskParam'], K> {
+  asPostWritingEntitiesTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['PostWritingEntitiesTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['PostWritingEntitiesTaskParam']> {
     return taskGroup;
   }
 
@@ -457,7 +457,7 @@ export default class BaseApplicationGenerator<
       args.applicationDefaults = data => mutateData(application, { __override__: false, ...data });
     }
     if (PRIORITY_WITH_ENTITIES_TO_LOAD.includes(priorityName)) {
-      args.entitiesToLoad = this.getEntitiesDataToLoad();
+      args.entitiesToLoad = this.#getEntitiesDataToLoad();
     }
     if (PRIORITY_WITH_ENTITIES.includes(priorityName)) {
       args.entities = [...this.#entities.values()];
@@ -479,7 +479,7 @@ export default class BaseApplicationGenerator<
    * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
-  getEntitiesDataToConfigure(): ConfiguringEachEntityTaskParam[] {
+  #getEntitiesDataToConfigure(): ConfiguringEachEntityTaskParam[] {
     return this.getExistingEntityNames().map(entityName => {
       const entityStorage = this.getEntityConfig(entityName, true);
       return { entityName, entityStorage, entityConfig: entityStorage!.createProxy() } as ConfiguringEachEntityTaskParam;
@@ -492,7 +492,7 @@ export default class BaseApplicationGenerator<
    * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
-  getEntitiesDataToLoad(): EntityToLoad[] {
+  #getEntitiesDataToLoad(): EntityToLoad[] {
     const application = this.#application;
     const builtInEntities: string[] = [];
     if (application.generateBuiltInUserEntity) {
@@ -532,7 +532,7 @@ export default class BaseApplicationGenerator<
    * Get entities to prepare.
    * @returns {object[]}
    */
-  getEntitiesDataToPrepare(): Pick<PreparingEachEntityTaskParam, 'entity' | 'entityName' | 'description'>[] {
+  #getEntitiesDataToPrepare(): Pick<PreparingEachEntityTaskParam, 'entity' | 'entityName' | 'description'>[] {
     return this.#entitiesForTasks;
   }
 
@@ -541,11 +541,11 @@ export default class BaseApplicationGenerator<
    * Get entities and fields to prepare.
    * @returns {object[]}
    */
-  getEntitiesFieldsDataToPrepare(): Pick<
+  #getEntitiesFieldsDataToPrepare(): Pick<
     PreparingEachEntityFieldTaskParam,
     'entity' | 'entityName' | 'field' | 'fieldName' | 'description'
   >[] {
-    return this.getEntitiesDataToPrepare()
+    return this.#getEntitiesDataToPrepare()
       .map(({ entity, entityName, ...data }) => {
         if (!entity.fields) return [];
 
@@ -566,11 +566,11 @@ export default class BaseApplicationGenerator<
    * Get entities and relationships to prepare.
    * @returns {object[]}
    */
-  getEntitiesRelationshipsDataToPrepare(): Pick<
+  #getEntitiesRelationshipsDataToPrepare(): Pick<
     PreparingEachEntityRelationshipTaskParam,
     'entity' | 'entityName' | 'relationship' | 'relationshipName' | 'description'
   >[] {
-    return this.getEntitiesDataToPrepare()
+    return this.#getEntitiesDataToPrepare()
       .map(({ entity, entityName, ...data }) => {
         if (!entity.relationships) return [];
 
@@ -591,37 +591,15 @@ export default class BaseApplicationGenerator<
    * Get entities to post prepare.
    * @returns {object[]}
    */
-  getEntitiesDataToPostPrepare() {
-    return this.getEntitiesDataToPrepare();
-  }
-
-  /**
-   * @private
-   * Get entities to write.
-   * @returns {object[]}
-   */
-  getEntitiesDataForPriorities() {
-    return { entities: [...this.#entities.values()] };
-  }
-
-  /**
-   * @private
-   * Get entities to write.
-   * @returns {object[]}
-   */
-  getEntitiesDataToWrite() {
-    const { entities = [] } = this.options;
-    const data = this.getEntitiesDataForPriorities();
-    if (entities.length === 0) return data;
-    const filteredEntities = data.entities.filter(entity => entities.includes(entity.name));
-    return { ...data, entities: filteredEntities };
+  #getEntitiesDataToPostPrepare() {
+    return this.#getEntitiesDataToPrepare();
   }
 
   /**
    * @private
    * Queue entity tasks.
    */
-  queueEntityTasks() {
+  #queueEntityTasks() {
     this.queueTask({
       queueName: CONFIGURING_EACH_ENTITY_QUEUE,
       taskName: 'queueConfiguringEachEntity',
@@ -630,7 +608,7 @@ export default class BaseApplicationGenerator<
         if (this.options.skipPriorities?.includes(CONFIGURING_EACH_ENTITY)) return;
         this.log.debug(`Queueing entity tasks ${CONFIGURING_EACH_ENTITY}`);
         const tasks = this.extractTasksFromPriority(CONFIGURING_EACH_ENTITY, { skip: false });
-        this.getEntitiesDataToConfigure().forEach(({ entityName, entityStorage, entityConfig }) => {
+        this.#getEntitiesDataToConfigure().forEach(({ entityName, entityStorage, entityConfig }) => {
           this.log.debug(`Queueing entity tasks ${CONFIGURING_EACH_ENTITY} for ${entityName}`);
           const args = this.getArgsForPriority(CONFIGURING_EACH_ENTITY);
           tasks.forEach(task => {
@@ -670,7 +648,7 @@ export default class BaseApplicationGenerator<
         if (this.options.skipPriorities?.includes(PREPARING_EACH_ENTITY)) return;
         this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY}`);
         const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY, { skip: false });
-        this.getEntitiesDataToPrepare().forEach(({ description, ...data }) => {
+        this.#getEntitiesDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY);
           tasks.forEach(task => {
@@ -690,7 +668,7 @@ export default class BaseApplicationGenerator<
       method: () => {
         if (this.options.skipPriorities?.includes(PREPARING_EACH_ENTITY_FIELD)) return;
         const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY_FIELD, { skip: false });
-        this.getEntitiesFieldsDataToPrepare().forEach(({ description, ...data }) => {
+        this.#getEntitiesFieldsDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_FIELD} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_FIELD);
           tasks.forEach(task => {
@@ -710,7 +688,7 @@ export default class BaseApplicationGenerator<
       method: () => {
         if (this.options.skipPriorities?.includes(PREPARING_EACH_ENTITY_RELATIONSHIP)) return;
         const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY_RELATIONSHIP, { skip: false });
-        this.getEntitiesRelationshipsDataToPrepare().forEach(({ description, ...data }) => {
+        this.#getEntitiesRelationshipsDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_RELATIONSHIP} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_RELATIONSHIP);
           tasks.forEach(task => {
@@ -730,7 +708,7 @@ export default class BaseApplicationGenerator<
       method: () => {
         if (this.options.skipPriorities?.includes(POST_PREPARING_EACH_ENTITY)) return;
         const tasks = this.extractTasksFromPriority(POST_PREPARING_EACH_ENTITY, { skip: false });
-        this.getEntitiesDataToPostPrepare().forEach(({ description, ...data }) => {
+        this.#getEntitiesDataToPostPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${POST_PREPARING_EACH_ENTITY} for ${description}`);
           const args = this.getArgsForPriority(POST_PREPARING_EACH_ENTITY);
           tasks.forEach(task => {
@@ -748,7 +726,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queueWritingEachEntity',
       cancellable: true,
       method: () => {
-        if (this.options.skipWriting || this.options.skipPriorities?.includes(WRITING_ENTITIES)) return;
+        if (this.options.skipPriorities?.includes(WRITING_ENTITIES)) return;
         const tasks = this.extractTasksFromPriority(WRITING_ENTITIES, { skip: false });
         const args = this.getArgsForPriority(WRITING_ENTITIES);
         tasks.forEach(task => {
@@ -765,7 +743,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queuePostWritingEachEntity',
       cancellable: true,
       method: () => {
-        if (this.options.skipWriting || this.options.skipPriorities?.includes(POST_WRITING_ENTITIES)) return;
+        if (this.options.skipPriorities?.includes(POST_WRITING_ENTITIES)) return;
         const tasks = this.extractTasksFromPriority(POST_WRITING_ENTITIES, { skip: false });
         const args = this.getArgsForPriority(POST_WRITING_ENTITIES);
         tasks.forEach(task => {
