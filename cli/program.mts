@@ -210,7 +210,6 @@ export const createProgram = ({
       .option('--skip-regenerate', "Don't regenerate identical files", false)
       .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
       .addJHipsterOptions(baseCommand.options)
-      // @ts-expect-error configs is not defined, but can be added later
       .addJHipsterConfigs(baseCommand.configs)
   );
 };

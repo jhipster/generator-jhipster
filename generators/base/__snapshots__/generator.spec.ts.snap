@@ -17,7 +17,6 @@ Options:
   --skip-yo-resolve                 Ignore .yo-resolve files (default: false)
   --skip-checks                     Check the status of the required tools
   --experimental                    Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time
-  --blueprint <value...>            DEPRECATED: Specify a generator blueprint to use for the sub generators
   --disable-blueprints              Disable blueprints support
   -d, --debug                       Enable debugger
   --reproducible                    Try to reproduce changelog

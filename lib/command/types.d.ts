@@ -46,7 +46,7 @@ export type ConfigSpec<ConfigContext> = {
   readonly choices?: JHipsterChoices;
   readonly cli?: CliSpec;
   readonly argument?: JHipsterArgumentConfig;
-  readonly internal?: true;
+  readonly internal?: true | { type: typeof String | typeof Boolean | typeof Number | ((opt: string) => any) };
   readonly prompt?:
     | PromptSpec
     | ((gen: ConfigContext & { jhipsterConfigWithDefaults: Record<string, any> }, config: ConfigSpec<ConfigContext>) => PromptSpec);
@@ -153,7 +153,13 @@ type MergeConfigsOptions<D extends ParseableCommand, S extends FilteredConfigSco
 >;
 
 type GetType<C extends ParseableConfig> =
-  C extends Record<'type', CliSpecType> ? C['type'] : C extends Record<'cli', Record<'type', CliSpecType>> ? C['cli']['type'] : undefined;
+  C extends Record<'type', CliSpecType>
+    ? C['type']
+    : C extends Record<'cli', Record<'type', CliSpecType>>
+      ? C['cli']['type']
+      : C extends Record<'internal', Record<'type', CliSpecType>>
+        ? C['internal']['type']
+        : undefined;
 
 // eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
 type WrapperToPrimitive<T> = T extends Boolean ? boolean : T extends String ? string : T extends Number ? number : T;
