@@ -21,9 +21,8 @@ import fs, { existsSync, readFileSync, statSync } from 'fs';
 import path, { join, relative } from 'path';
 import { rm } from 'fs/promises';
 import chalk from 'chalk';
-import semver, { lt as semverLessThan } from 'semver';
+import { lt as semverLessThan } from 'semver';
 
-import type { ComposeOptions } from 'yeoman-generator';
 import { union } from 'lodash-es';
 import { execaCommandSync } from 'execa';
 import { packageJson } from '../../lib/index.js';
@@ -56,7 +55,7 @@ export default class BaseGenerator<
 > extends CoreGenerator<ConfigType, Options, Features> {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
-  delegateToBlueprint?: boolean;
+  delegateToBlueprint = false;
   blueprintConfig?: Record<string, any>;
   jhipsterContext?: any;
 
@@ -334,14 +333,6 @@ export default class BaseGenerator<
    * Initializing priority is used to show logo and tasks related to preparing for prompts, like loading constants.
    */
   get initializing() {
-    return this.asInitializingTaskGroup(this._initializing());
-  }
-
-  /**
-   * @deprecated
-   * Public API method used by the getter and also by Blueprints
-   */
-  _initializing() {
     return {};
   }
 
@@ -360,14 +351,6 @@ export default class BaseGenerator<
    * Prompting priority is used to prompt users for configuration values.
    */
   get prompting() {
-    return this._prompting();
-  }
-
-  /**
-   * @deprecated
-   * Public API method used by the getter and also by Blueprints
-   */
-  _prompting() {
     return {};
   }
 
@@ -386,14 +369,6 @@ export default class BaseGenerator<
    * Configuring priority is used to customize and validate the configuration.
    */
   get configuring() {
-    return this._configuring();
-  }
-
-  /**
-   * @deprecated
-   * Public API method used by the getter and also by Blueprints
-   */
-  _configuring() {
     return {};
   }
 
@@ -412,14 +387,6 @@ export default class BaseGenerator<
    * Composing should be used to compose with others generators.
    */
   get composing() {
-    return this._composing();
-  }
-
-  /**
-   * @deprecated
-   * Public API method used by the getter and also by Blueprints
-   */
-  _composing() {
     return {};
   }
 
@@ -437,7 +404,7 @@ export default class BaseGenerator<
    *
    * ComposingComponent priority should be used to handle component configuration order.
    */
-  get composingComponent(): any {
+  get composingComponent() {
     return {};
   }
 
@@ -456,15 +423,7 @@ export default class BaseGenerator<
    * Loading should be used to load application configuration from jhipster configuration.
    * Before this priority the configuration should be considered dirty, while each generator configures itself at configuring priority, another generator composed at composing priority can still change it.
    */
-  get loading(): any {
-    return this.asLoadingTaskGroup(this._loading());
-  }
-
-  /**
-   * @deprecated
-   * Public API method used by the getter and also by Blueprints
-   */
-  _loading() {
+  get loading() {
     return {};
   }
 
@@ -482,15 +441,7 @@ export default class BaseGenerator<
    *
    * Preparing should be used to generate derived properties.
    */
-  get preparing(): GenericTaskGroup<this, TaskTypes['PreparingTaskParam']> {
-    return this._preparing();
-  }
-
-  /**
-   * @deprecated
-   * Public API method used by the getter and also by Blueprints
-   */
-  _preparing() {
+  get preparing() {
     return {};
   }
 
@@ -527,14 +478,6 @@ export default class BaseGenerator<
    * Default priority should used as misc customizations.
    */
   get default() {
-    return this._default();
-  }
-
-  /**
-   * @deprecated
-   * Public API method used by the getter and also by Blueprints
-   */
-  _default() {
     return {};
   }
 
@@ -553,14 +496,6 @@ export default class BaseGenerator<
    * Writing priority should used to write files.
    */
   get writing() {
-    return this._writing();
-  }
-
-  /**
-   * @deprecated
-   * Public API method used by the getter and also by Blueprints
-   */
-  _writing() {
     return {};
   }
 
@@ -579,14 +514,6 @@ export default class BaseGenerator<
    * PostWriting priority should used to customize files.
    */
   get postWriting() {
-    return this._postWriting();
-  }
-
-  /**
-   * @deprecated
-   * Public API method used by the getter and also by Blueprints
-   */
-  _postWriting() {
     return {};
   }
 
@@ -605,14 +532,6 @@ export default class BaseGenerator<
    * Install priority should used to prepare the project.
    */
   get install() {
-    return this._install();
-  }
-
-  /**
-   * @deprecated
-   * Public API method used by the getter and also by Blueprints
-   */
-  _install() {
     return {};
   }
 
@@ -631,14 +550,6 @@ export default class BaseGenerator<
    * PostWriting priority should used to customize files.
    */
   get postInstall() {
-    return this._postInstall();
-  }
-
-  /**
-   * @deprecated
-   * Public API method used by the getter and also by Blueprints
-   */
-  _postInstall() {
     return {};
   }
 
@@ -657,14 +568,6 @@ export default class BaseGenerator<
    * End priority should used to say good bye and print instructions.
    */
   get end() {
-    return this._end();
-  }
-
-  /**
-   * @deprecated
-   * Public API method used by the getter and also by Blueprints
-   */
-  _end() {
     return {};
   }
 
@@ -679,14 +582,13 @@ export default class BaseGenerator<
    * @protected
    * Composes with blueprint generators, if any.
    */
-  protected async composeWithBlueprints(subGen?: string, options?: ComposeOptions) {
-    if (subGen === undefined) {
-      const { namespace } = this.options;
-      if (!namespace?.startsWith('jhipster:')) {
-        throw new Error(`Generator is not blueprintable ${namespace}`);
-      }
-      subGen = namespace.substring('jhipster:'.length);
+  protected async composeWithBlueprints() {
+    const { namespace } = this.options;
+    if (!namespace?.startsWith('jhipster:')) {
+      throw new Error(`Generator is not blueprintable ${namespace}`);
     }
+    const subGen = namespace.substring('jhipster:'.length);
+
     this.delegateToBlueprint = false;
 
     if (this.options.disableBlueprints) {
@@ -694,7 +596,7 @@ export default class BaseGenerator<
     }
 
     if (!this.#blueprintConfigured) {
-      await this._configureBlueprints();
+      await this.#configureBlueprints();
     }
 
     let blueprints = this.jhipsterConfig.blueprints || [];
@@ -703,7 +605,7 @@ export default class BaseGenerator<
     }
     const composedBlueprints: any[] = [];
     for (const blueprint of blueprints) {
-      const blueprintGenerator = await this._composeBlueprint(blueprint.name, subGen, options);
+      const blueprintGenerator = await this.#composeBlueprint(blueprint.name, subGen);
       let blueprintCommand;
       if (blueprintGenerator) {
         composedBlueprints.push(blueprintGenerator);
@@ -713,7 +615,7 @@ export default class BaseGenerator<
         } else {
           // If the blueprints does not sets sbsBlueprint property, ignore normal workflow.
           this.delegateToBlueprint = true;
-          this.checkBlueprintImplementsPriorities(blueprintGenerator);
+          this.#checkBlueprintImplementsPriorities(blueprintGenerator);
         }
         const blueprintModule = (await blueprintGenerator._meta?.importModule?.()) as any;
         blueprintCommand = blueprintModule?.command;
@@ -742,7 +644,7 @@ export default class BaseGenerator<
    * Check if the blueprint implements every priority implemented by the parent generator
    * @param {BaseGenerator} blueprintGenerator
    */
-  private checkBlueprintImplementsPriorities(blueprintGenerator) {
+  #checkBlueprintImplementsPriorities(blueprintGenerator: BaseGenerator) {
     const { taskPrefix: baseGeneratorTaskPrefix = '' } = this.features;
     const { taskPrefix: blueprintTaskPrefix = '' } = blueprintGenerator.features;
     // v8 remove deprecated priorities
@@ -762,7 +664,7 @@ export default class BaseGenerator<
    * @private
    * Configure blueprints.
    */
-  private async _configureBlueprints() {
+  async #configureBlueprints() {
     let argvBlueprints = this.options.blueprints || '';
     // check for old single blueprint declaration
     let { blueprint } = this.options;
@@ -786,7 +688,7 @@ export default class BaseGenerator<
 
     if (blueprints && blueprints.length > 0) {
       blueprints.forEach(blueprint => {
-        blueprint.version = this._findBlueprintVersion(blueprint.name) || blueprint.version;
+        blueprint.version = this.#findBlueprintVersion(blueprint.name) || blueprint.version;
       });
       this.jhipsterConfig.blueprints = blueprints;
     }
@@ -802,18 +704,9 @@ export default class BaseGenerator<
   }
 
   /**
-   * @private
    * Compose external blueprint module
-   * @param {string} blueprint - name of the blueprint
-   * @param {string} subGen - sub generator
-   * @param {any} [extraOptions] - options to pass to blueprint generator
-   * @return {Generator|undefined}
    */
-  private async _composeBlueprint<G extends CoreGenerator = CoreGenerator>(
-    blueprint,
-    subGen,
-    extraOptions: ComposeOptions = {},
-  ): Promise<G | undefined> {
+  async #composeBlueprint<G extends BaseGenerator = BaseGenerator>(blueprint: string, subGen: string): Promise<G | undefined> {
     blueprint = normalizeBlueprintName(blueprint);
     if (!this.skipChecks && blueprint !== LOCAL_BLUEPRINT_PACKAGE_NAMESPACE) {
       this._checkBlueprint(blueprint);
@@ -833,23 +726,19 @@ export default class BaseGenerator<
       `Found blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(generatorNamespace)}`,
     );
 
-    const finalOptions: ComposeOptions = {
+    const blueprintGenerator = await this.composeWith<BaseGenerator>(generatorNamespace, {
       forwardOptions: true,
       schedule: generator => (generator as any).sbsBlueprint,
       generatorArgs: this._args,
-      ...extraOptions,
       generatorOptions: {
         jhipsterContext: this,
-        ...extraOptions?.generatorOptions,
-      } as any,
-    };
-
-    const blueprintGenerator = await this.composeWith<G>(generatorNamespace, finalOptions as any);
+      },
+    });
     if (blueprintGenerator instanceof Error) {
       throw blueprintGenerator;
     }
-    (this as any)._debug(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
-    return blueprintGenerator;
+    this._debug(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
+    return blueprintGenerator as any;
   }
 
   /**
@@ -858,7 +747,7 @@ export default class BaseGenerator<
    * @param {string} blueprintPkgName - generator name
    * @return {object} packageJson - retrieved package.json as an object or undefined if not found
    */
-  private _findBlueprintPackageJson(blueprintPkgName) {
+  findBlueprintPackageJson(blueprintPkgName: string) {
     const blueprintGeneratorName = packageNameToNamespace(blueprintPkgName);
     const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
     if (!blueprintPackagePath) {
@@ -878,8 +767,8 @@ export default class BaseGenerator<
    * @param {string} blueprintPkgName - generator name
    * @return {string} version - retrieved version or empty string if not found
    */
-  private _findBlueprintVersion(blueprintPkgName) {
-    const blueprintPackageJson = this._findBlueprintPackageJson(blueprintPkgName);
+  #findBlueprintVersion(blueprintPkgName: string) {
+    const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
     if (!blueprintPackageJson?.version) {
       this.log.warn(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
       return undefined;
@@ -892,44 +781,11 @@ export default class BaseGenerator<
    * Check if the generator specified as blueprint is installed.
    * @param {string} blueprint - generator name
    */
-  protected _checkBlueprint(blueprint) {
+  protected _checkBlueprint(blueprint: string) {
     if (blueprint === 'generator-jhipster') {
       throw new Error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
     }
-    this._findBlueprintPackageJson(blueprint);
-  }
-
-  /**
-   * @private
-   * Check if the generator specified as blueprint has a version compatible with current JHipster.
-   * @param {string} blueprintPkgName - generator name
-   */
-  protected _checkJHipsterBlueprintVersion(blueprintPkgName) {
-    const blueprintPackageJson = this._findBlueprintPackageJson(blueprintPkgName);
-    if (!blueprintPackageJson) {
-      this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
-      return;
-    }
-    const mainGeneratorJhipsterVersion = packageJson.version;
-    const compatibleJhipsterRange =
-      blueprintPackageJson.engines?.['generator-jhipster'] ??
-      blueprintPackageJson.dependencies?.['generator-jhipster'] ??
-      blueprintPackageJson.peerDependencies?.['generator-jhipster'];
-    if (compatibleJhipsterRange) {
-      if (!semver.valid(compatibleJhipsterRange) && !semver.validRange(compatibleJhipsterRange)) {
-        this.log.verboseInfo(`Blueprint ${blueprintPkgName} contains generator-jhipster dependency with non comparable version`);
-        return;
-      }
-      if (semver.satisfies(mainGeneratorJhipsterVersion, compatibleJhipsterRange, { includePrerelease: true })) {
-        return;
-      }
-      throw new Error(
-        `The installed ${chalk.yellow(
-          blueprintPkgName,
-        )} blueprint targets JHipster v${compatibleJhipsterRange} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`,
-      );
-    }
-    this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
+    this.findBlueprintPackageJson(blueprint);
   }
 }
 
