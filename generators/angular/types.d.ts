@@ -32,7 +32,5 @@ export type AngularEntity = Entity & {
 };
 
 export type AngularApplication = {
-  /** @experimental to be replaced with needles */
-  angularEntities?: AngularEntity[];
-  angularLocaleId: string;
+  angularLocaleId?: string;
 } & ApplicationType<AngularEntity>;
