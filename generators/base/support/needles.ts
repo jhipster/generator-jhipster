@@ -21,7 +21,7 @@ import { escapeRegExp, kebabCase } from 'lodash-es';
 import type { CascatedEditFileCallback, NeedleCallback } from '../api.js';
 import type { EditFileCallback } from '../../base-core/api.js';
 import { joinCallbacks } from '../../base-core/support/write-files.js';
-import type JHipsterBaseBlueprintGenerator from '../generator.js';
+import type BaseGenerator from '../generator.js';
 
 type NeedleContentToAddCallback = {
   /**
@@ -190,17 +190,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
  * @param options
  */
 export const createNeedleCallback = <
-  Generator extends JHipsterBaseBlueprintGenerator<any, any, any, any, any, any, any, any, any> = JHipsterBaseBlueprintGenerator<
-    any,
-    any,
-    any,
-    any,
-    any,
-    any,
-    any,
-    any,
-    any
-  >,
+  Generator extends BaseGenerator<any, any, any, any, any, any, any, any> = BaseGenerator<any, any, any, any, any, any, any, any>,
 >({
   needle,
   contentToAdd,
@@ -257,17 +247,7 @@ export function createBaseNeedle(
 ): NeedleCallback;
 export function createBaseNeedle(needles: Record<string, string>): NeedleCallback;
 export function createBaseNeedle<
-  Generator extends JHipsterBaseBlueprintGenerator<any, any, any, any, any, any, any, any, any> = JHipsterBaseBlueprintGenerator<
-    any,
-    any,
-    any,
-    any,
-    any,
-    any,
-    any,
-    any,
-    any
-  >,
+  Generator extends BaseGenerator<any, any, any, any, any, any, any, any> = BaseGenerator<any, any, any, any, any, any, any, any>,
 >(
   this: Generator,
   options: Omit<NeedleFileInsertion, 'filePath' | 'needle' | 'contentToAdd'> & { filePath: string },
@@ -275,17 +255,7 @@ export function createBaseNeedle<
 ): CascatedEditFileCallback<Generator>;
 
 export function createBaseNeedle<
-  Generator extends JHipsterBaseBlueprintGenerator<any, any, any, any, any, any, any, any, any> = JHipsterBaseBlueprintGenerator<
-    any,
-    any,
-    any,
-    any,
-    any,
-    any,
-    any,
-    any,
-    any
-  >,
+  Generator extends BaseGenerator<any, any, any, any, any, any, any, any> = BaseGenerator<any, any, any, any, any, any, any, any>,
 >(
   this: Generator | void,
   options: Omit<NeedleFileInsertion, 'filePath' | 'needle' | 'contentToAdd'> | Record<string, string>,

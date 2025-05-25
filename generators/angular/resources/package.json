@@ -1,6 +1,10 @@
 {
   "dependencies": {
+<<<<<<< HEAD
     "@angular/common": "19.2.13",
+=======
+    "@angular/common": "19.2.12",
+>>>>>>> 936b492b5e (rebase with main)
     "@fortawesome/angular-fontawesome": "1.0.0",
     "@fortawesome/fontawesome-svg-core": "6.7.2",
     "@fortawesome/free-solid-svg-icons": "6.7.2",
@@ -29,7 +33,11 @@
     "@types/jest": "29.5.14",
     "@types/node": "20.11.25",
     "@types/sockjs-client": "1.5.4",
+<<<<<<< HEAD
     "angular-eslint": "19.5.0",
+=======
+    "angular-eslint": "19.4.0",
+>>>>>>> 936b492b5e (rebase with main)
     "browser-sync": "3.0.4",
     "browser-sync-webpack-plugin": "2.3.0",
     "buffer": "6.0.3",
@@ -39,7 +47,11 @@
     "eslint-config-prettier": "10.1.5",
     "eslint-plugin-prettier": "5.4.0",
     "folder-hash": "4.1.1",
+<<<<<<< HEAD
     "globals": "16.2.0",
+=======
+    "globals": "16.1.0",
+>>>>>>> 936b492b5e (rebase with main)
     "globby": "14.1.0",
     "jest": "29.7.0",
     "jest-date-mock": "1.0.10",

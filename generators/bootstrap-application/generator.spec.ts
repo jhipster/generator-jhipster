@@ -98,10 +98,12 @@ describe(`generator - ${generator}`, () => {
                 fieldName: 'id',
                 fieldType: UUID,
               },
+              // @ts-ignore
               {
                 fieldName: 'name',
                 fieldType: 'String',
               },
+              // @ts-ignore
               {
                 fieldName: 'details',
                 fieldType: 'String',
@@ -134,7 +136,6 @@ describe(`generator - ${generator}`, () => {
     "changelogDate": "20220129025419"
   },
   "changelogDate": "20220129025419",
-  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "id",
@@ -288,6 +289,7 @@ describe(`generator - ${generator}`, () => {
   "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
+  "fieldNameChoices": [],
   "fields": [
     {
       "autoGenerate": true,
@@ -1274,6 +1276,7 @@ describe(`generator - ${generator}`, () => {
   "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
+  "fieldNameChoices": [],
   "fields": [
     {
       "autoGenerate": true,
@@ -1835,6 +1838,7 @@ describe(`generator - ${generator}`, () => {
   "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
+  "fieldNameChoices": [],
   "fields": [
     {
       "autoGenerate": true,

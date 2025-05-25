@@ -28,10 +28,10 @@ import type {
 } from '../../lib/types/application/index.js';
 import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
 import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
-import type { TemporaryControlToMoveToDownstream } from '../../generators/base/types.js';
 import type { TaskTypes as DefaultTaskTypes } from '../../generators/base-application/tasks.js';
 import type BaseApplicationSharedData from '../../generators/base-application/shared-data.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import { TemporaryControlToMoveToDownstream } from '../../lib/types/application/control.js';
 
 const YO_RC_OUTPUT = 'yo-rc';
 const ENTITIES_JDL_OUTPUT = 'entities-jdl';
@@ -89,18 +89,9 @@ export default class<
     Sources,
     Control
   >,
-  SharedData extends BaseApplicationSharedData<Field, PK, Relationship, Entity, Application, Sources, Control> = BaseApplicationSharedData<
-    Field,
-    PK,
-    Relationship,
-    Entity,
-    Application,
-    Sources,
-    Control
-  >,
   Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
-> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, SharedData, Configuration, Features> {
+> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, Configuration, Features> {
   projectFolder!: string;
   issue!: string;
   codeWorkspace!: boolean;

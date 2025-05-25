@@ -242,6 +242,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedVueFile(file),
             refresh: false,
           },
+          // @ts-ignore FIXME types
           translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }),
         );
         if (enableTranslation) {

@@ -71,6 +71,11 @@ const command = {
       choices: ['no', 'elasticsearch', 'couchbase'],
       scope: 'storage',
     },
+    searchEngine: {
+      description: 'Provide search engine for the application when skipping server side generation',
+      type: String,
+      scope: 'storage',
+    },
     skipCheckLengthOfIdentifier: {
       description: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
       cli: {

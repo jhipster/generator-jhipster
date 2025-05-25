@@ -45,10 +45,9 @@ import type {
 } from '../../lib/types/application/index.js';
 import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
 import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
-import type { TemporaryControlToMoveToDownstream } from '../base/types.js';
 import type { TaskTypes as DefaultTaskTypes } from '../base-application/tasks.js';
-import type BaseApplicationSharedData from '../base-application/shared-data.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { TemporaryControlToMoveToDownstream } from '../../lib/types/application/control.js';
 import { GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES, UPGRADE_BRANCH } from './support/index.js';
 
 /* Constants used throughout */
@@ -89,18 +88,9 @@ export default class UpgradeGenerator<
     Sources,
     Control
   >,
-  SharedData extends BaseApplicationSharedData<Field, PK, Relationship, Entity, Application, Sources, Control> = BaseApplicationSharedData<
-    Field,
-    PK,
-    Relationship,
-    Entity,
-    Application,
-    Sources,
-    Control
-  >,
   Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
-> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, SharedData, Configuration, Features> {
+> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, Configuration, Features> {
   requiredPackage = GENERATOR_JHIPSTER;
   createEnvBuilder;
   actualApplicationBranch;

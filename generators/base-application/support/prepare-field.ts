@@ -105,7 +105,7 @@ const fakeStringTemplateForFieldName = columnName => {
  * @returns fake value
  */
 function generateFakeDataForField<F extends BaseApplicationField>(
-  this: CoreGenerator<any, any, any, any, any, any, any, any>,
+  this: CoreGenerator<any, any, any, any, any, any>,
   field: F,
   faker: FakerWithRandexp,
   changelogDate,

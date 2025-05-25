@@ -22,11 +22,15 @@ type GeneratorsByNamespace = {
   'jhipster:angular': import('./angular/generator.js').default;
   app: import('./app/generator.js').default;
   'jhipster:app': import('./app/generator.js').default;
+  // @ts-ignore
   base: import('./base/generator.js').default;
+  // @ts-ignore
   'jhipster:base': import('./base/generator.js').default;
   'base-application': import('./base-application/generator.js').default;
   'jhipster:base-application': import('./base-application/generator.js').default;
+  // @ts-ignore
   'base-core': import('./base-core/generator.js').default;
+  // @ts-ignore
   'jhipster:base-core': import('./base-core/generator.js').default;
   'base-entity-changes': import('./base-entity-changes/generator.js').default;
   'jhipster:base-entity-changes': import('./base-entity-changes/generator.js').default;

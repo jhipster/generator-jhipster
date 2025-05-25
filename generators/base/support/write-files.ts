@@ -16,6 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { EditFileCallback } from '../api.js';
+
+/**
+ * TODO move to utils when converted to typescripts
+ * Converts multiples EditFileCallback callbacks into one.
+ */
+
+export function joinCallbacks<Generator>(...callbacks: EditFileCallback<Generator>[]): EditFileCallback<Generator> {
+  return function (this: Generator, content: string, filePath: string) {
+    for (const callback of callbacks) {
+      content = callback.call(this, content, filePath);
+    }
+    return content;
+  };
+}
+
 /**
  * Utility function add condition to every block in addition to the already existing condition.
  */

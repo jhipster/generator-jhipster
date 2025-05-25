@@ -24,7 +24,7 @@ import type CoreGenerator from '../generator.js';
  * Converts multiples EditFileCallback callbacks into one.
  */
 
-export function joinCallbacks<Generator extends CoreGenerator<any, any, any, any, any, any, any, any>>(
+export function joinCallbacks<Generator extends CoreGenerator<any, any, any, any, any, any>>(
   ...callbacks: EditFileCallback<Generator>[]
 ): EditFileCallback<Generator> {
   // @ts-ignore

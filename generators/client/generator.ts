@@ -198,7 +198,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       webappFakeDataSeed({ application: { clientFramework } }) {
         this.resetEntitiesFakeData(clientFramework);
       },
-      // @ts-ignore TODO remove after type refactoring
+      // @ts-ignore FIXME types
       writeCommonFiles,
     });
   }

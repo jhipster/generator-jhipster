@@ -16,7 +16,11 @@
     "react-loadable": "5.5.0",
     "react-redux": "9.2.0",
     "react-redux-loading-bar": "5.0.8",
+<<<<<<< HEAD
     "react-router-dom": "7.6.1",
+=======
+    "react-router-dom": "7.6.0",
+>>>>>>> 936b492b5e (rebase with main)
     "react-toastify": "11.0.5",
     "react-transition-group": "4.4.5",
     "reactstrap": "9.2.3",

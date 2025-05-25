@@ -25,8 +25,12 @@ export type CoreConfiguration = {
   skipCheckLengthOfIdentifier: boolean;
   enableGradleEnterprise: boolean;
   autoCrlf: boolean;
+  jhipsterVersion?: string;
+  lastLiquibaseTimestamp?: number;
+  blueprints?: { name: string; version?: string }[];
   pages: [];
 };
+
 export type CoreOptions = BaseOptions & {
   jhipsterContext?: any;
   reproducibleTests?: boolean;
@@ -43,17 +47,11 @@ export type CoreFeatures = BaseFeatures & {
    * Defaults to true.
    */
   storeJHipsterVersion?: boolean;
+  blueprintSupport?: boolean;
 };
-export type EditFileCallback<Generator = CoreGenerator<any, any, any, any, any, any, any, any>> = (
-  this: Generator,
-  content: string,
-  filePath: string,
-) => string;
+export type EditFileCallback<G = CoreGenerator<any, any, any, any, any, any>> = (this: G, content: string, filePath: string) => string;
 
-export type WriteFileOptions<
-  Sources extends CoreSources<any, any, any>,
-  Generator = CoreGenerator<any, any, any, Sources, any, any, any, any>,
-> = {
+export type WriteFileOptions<S extends CoreSources<any, any, any>, G = CoreGenerator<any, any, any, S, any, any>> = {
   /** transforms (files processing) to be applied */
   transform?: EditFileCallback[];
   /** context to be used as template data */
@@ -74,14 +72,14 @@ export type WriteFileOptions<
   }) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string };
 } & (
   | {
-      sections: WriteFileSection<Sources, Generator>;
+      sections: WriteFileSection<S, G>;
     }
   | {
       /** templates to be written */
-      templates: WriteFileTemplate<Sources, Generator>[];
+      templates: WriteFileTemplate<S, G>[];
     }
   | {
       /** blocks to be written */
-      blocks: WriteFileBlock<Sources, Generator>[];
+      blocks: WriteFileBlock<S, G>[];
     }
 );

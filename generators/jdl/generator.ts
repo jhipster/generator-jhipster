@@ -22,7 +22,7 @@ import { upperFirst } from 'lodash-es';
 import { type Store as MemFs, create as createMemFs } from 'mem-fs';
 import { type MemFsEditor, create as createMemFsEditor } from 'mem-fs-editor';
 
-import BaseGenerator, { type Config as BaseConfig } from '../base/index.js';
+import BaseGenerator from '../base/index.js';
 import { downloadJdlFile } from '../../cli/download.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { CLI_NAME } from '../../cli/utils.mjs';
@@ -33,10 +33,7 @@ import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.
 import { mergeYoRcContent } from '../../lib/utils/yo-rc.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.js';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
-<<<<<<< HEAD
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
-import type { JHipsterGeneratorOptions } from '../base/api.js';
-=======
 import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
 import type {
   Entity as DeprecatedEntity,
@@ -45,12 +42,10 @@ import type {
 } from '../../lib/types/application/index.js';
 import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
 import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
-import type { TemporaryControlToMoveToDownstream } from '../base/types.js';
 import type { TaskTypes as DefaultTaskTypes } from '../base-application/tasks.js';
-import type BaseApplicationSharedData from '../base-application/shared-data.js';
-import type { BaseApplicationConfiguration, BaseApplicationFeatures } from '../base-application/api.js';
+import type { BaseApplicationFeatures } from '../base-application/api.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
->>>>>>> 843e76094b (rework most of the type regressions)
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
 
 /**
@@ -65,12 +60,6 @@ const toJdlFile = file => {
 
 type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: string; sharedFs?: MemFs };
 
-<<<<<<< HEAD
-export default class JdlGenerator extends BaseGenerator<
-  { baseName: string; prodDatabaseType: string } & BaseConfig,
-  JHipsterGeneratorOptions
-> {
-=======
 export default class JdlGenerator<
   // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
   Options extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
@@ -84,7 +73,7 @@ export default class JdlGenerator<
     Relationship,
     Application
   >,
-  Control extends TemporaryControlToMoveToDownstream = TemporaryControlToMoveToDownstream,
+  Control extends DeprecatedControl = DeprecatedControl,
   TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
     Field,
     PK,
@@ -94,19 +83,9 @@ export default class JdlGenerator<
     Sources,
     Control
   >,
-  SharedData extends BaseApplicationSharedData<Field, PK, Relationship, Entity, Application, Sources, Control> = BaseApplicationSharedData<
-    Field,
-    PK,
-    Relationship,
-    Entity,
-    Application,
-    Sources,
-    Control
-  >,
-  Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
+  Configuration extends ApplicationConfiguration = ApplicationConfiguration,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
-> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, SharedData, Configuration, Features> {
->>>>>>> 843e76094b (rework most of the type regressions)
+> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, Configuration, Features> {
   jdlFiles?: string[];
   inline?: string;
   jdlContents: string[] = [];

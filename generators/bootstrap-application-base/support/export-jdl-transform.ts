@@ -8,7 +8,7 @@ import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 import { getJDLObjectFromSingleApplication } from '../../../lib/jdl/converters/json-to-jdl-converter.js';
 import { createRuntime } from '../../../lib/jdl/core/runtime.js';
 import type { JDLApplicationConfig } from '../../../lib/jdl/core/types/parsing.js';
-import type { JSONEntity } from '../../../lib/jdl/core/types/json-config.js';
+import type { Entity } from '../../../lib/types/base/entity.js';
 
 export const exportJDLTransform = ({
   destinationPath,
@@ -27,7 +27,7 @@ export const exportJDLTransform = ({
     const yoRcFilePath = join(destinationPath, '.yo-rc.json');
     const entitiesMatcher = new Minimatch(`${destinationPath}/.jhipster/*.json`);
     const entitiesFiles: MemFsEditorFile[] = [];
-    const entitiesMap = new Map<string, JSONEntity>();
+    const entitiesMap = new Map<string, Entity>();
 
     let yoRcFileInMemory: MemFsEditorFile | undefined;
     let jdlStoreFileInMemory: MemFsEditorFile | undefined;
@@ -55,6 +55,7 @@ export const exportJDLTransform = ({
 
         const jdlObject = getJDLObjectFromSingleApplication(
           { ...contents, [GENERATOR_JHIPSTER]: { ...rest, incrementalChangelog } },
+          // @ts-ignore FIXME Fix types
           entitiesMap,
           undefined,
           createRuntime(jdlDefinition),

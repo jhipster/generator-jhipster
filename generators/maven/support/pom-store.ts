@@ -248,10 +248,7 @@ const emptyPomFile = `<?xml version="1.0" encoding="UTF-8"?>
 </project>
 `;
 
-export const createPomStorage = (
-  generator: CoreGenerator<any, any, any, any, any, any, any, any>,
-  { sortFile }: { sortFile?: boolean } = {},
-) => {
+export const createPomStorage = (generator: CoreGenerator<any, any, any, any, any, any>, { sortFile }: { sortFile?: boolean } = {}) => {
   const loadFile = () => generator.readDestination('pom.xml', { defaults: emptyPomFile })?.toString() ?? '';
   const pomStorage = new PomStorage({
     loadFile,

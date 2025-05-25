@@ -3665,7 +3665,7 @@ metadata:
 spec:
   selector:
     app: jhgate
-  type: 
+  type:
   ports:
   - name: http
     port: 8080

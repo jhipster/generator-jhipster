@@ -29,12 +29,8 @@ import BaseGenerator from '../base/index.js';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
 import { GENERATOR_UPGRADE } from '../generator-list.js';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.js';
-<<<<<<< HEAD
-import type { GenericTaskGroup, TaskParamWithControl } from '../../lib/types/base/tasks.js';
-=======
-import { loadStoredAppOptions } from '../app/support/index.js';
 import type { GenericTaskGroup, TaskParamWithControl } from '../base/tasks.js';
-import type { BaseApplicationConfiguration, BaseApplicationFeatures } from '../base-application/api.js';
+import type { BaseApplicationFeatures } from '../base-application/api.js';
 import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
 import type {
   Entity as DeprecatedEntity,
@@ -43,11 +39,9 @@ import type {
 } from '../../lib/types/application/index.js';
 import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
 import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
-import type { TemporaryControlToMoveToDownstream } from '../base/types.js';
-import type BaseApplicationSharedData from '../base-application/shared-data.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import type { TaskTypes as DefaultTaskTypes } from '../base-application/tasks.js';
->>>>>>> 843e76094b (rework most of the type regressions)
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
 import {
   autoCrlfTransform,
   createESLintTransform,
@@ -78,7 +72,7 @@ export default class BootstrapGenerator<
     Relationship,
     Application
   >,
-  Control extends TemporaryControlToMoveToDownstream = TemporaryControlToMoveToDownstream,
+  Control extends DeprecatedControl = DeprecatedControl,
   TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
     Field,
     PK,
@@ -88,18 +82,9 @@ export default class BootstrapGenerator<
     Sources,
     Control
   >,
-  SharedData extends BaseApplicationSharedData<Field, PK, Relationship, Entity, Application, Sources, Control> = BaseApplicationSharedData<
-    Field,
-    PK,
-    Relationship,
-    Entity,
-    Application,
-    Sources,
-    Control
-  >,
-  Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
+  Configuration extends ApplicationConfiguration = ApplicationConfiguration,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
-> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, SharedData, Configuration, Features> {
+> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, Configuration, Features> {
   static MULTISTEP_TRANSFORM = MULTISTEP_TRANSFORM_PRIORITY;
 
   static PRE_CONFLICTS = PRE_CONFLICTS_PRIORITY;
@@ -142,7 +127,7 @@ export default class BootstrapGenerator<
     return this.multistepTransform;
   }
 
-  get preConflicts(): GenericTaskGroup<this, TaskParamWithControl<any>> {
+  get preConflicts(): GenericTaskGroup<this, TaskParamWithControl<Control>> {
     return {
       queueCommitPrettierConfig() {
         this.queueCommitPrettierConfig();
@@ -247,7 +232,7 @@ export default class BootstrapGenerator<
         await createPrettierTransform.call(this, {
           ignoreErrors,
           prettierPackageJson: true,
-          prettierJava: !(this.jhipsterConfig as any).skipServer,
+          prettierJava: !this.jhipsterConfig.skipServer,
           extensions: this.prettierExtensions.join(','),
           prettierOptions: this.prettierOptions,
           skipForks: this.skipForks,

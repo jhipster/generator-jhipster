@@ -29,6 +29,7 @@ export type BaseApplicationOptions = BaseOptions & {
 export type BaseApplicationConfiguration = Simplify<
   BaseConfiguration & {
     languages: any[];
+    applicationIndex?: number;
     nativeLanguage: string;
     // eslint-disable-next-line @typescript-eslint/consistent-type-imports
   } & ExportStoragePropertiesFromCommand<typeof import('./command.js').default> & {

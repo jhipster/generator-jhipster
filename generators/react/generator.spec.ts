@@ -9,7 +9,11 @@ import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import { GENERATOR_REACT } from '../generator-list.js';
+<<<<<<< HEAD
 import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
+=======
+import { asPostWritingTask } from '../base-application/support/index.js';
+>>>>>>> 936b492b5e (rebase with main)
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);

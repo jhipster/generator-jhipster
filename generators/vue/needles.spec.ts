@@ -1,8 +1,13 @@
 import { before, describe, it } from 'esmocha';
 import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
+<<<<<<< HEAD:generators/vue/needles.spec.ts
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
+=======
+import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.js';
+import { asPostWritingTask } from '../../generators/base-application/support/task-type-inference.js';
+>>>>>>> 936b492b5e (rebase with main):test/needle-api/needle-client-vue-generator.spec.ts
 
 describe('needle API Vue: JHipster client generator with blueprint', () => {
   before(() =>

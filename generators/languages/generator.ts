@@ -33,30 +33,20 @@ import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants
 import { QUEUES } from '../base-application/priorities.js';
 import { PRIORITY_NAMES } from '../base-core/priorities.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
-<<<<<<< HEAD
-import type { Language } from './support/languages.js';
-import { findLanguageForTag, supportedLanguages } from './support/languages.js';
-import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
-import { writeEntityFiles } from './entity-files.js';
-import { clientI18nFiles } from './files.js';
-import { askForLanguages, askI18n } from './prompts.js';
-import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.js';
-=======
-import type { BaseApplicationConfiguration, BaseApplicationFeatures } from '../base-application/api.js';
+import type { BaseApplicationFeatures } from '../base-application/api.js';
 import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
 import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
 import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
-import type { TemporaryControlToMoveToDownstream } from '../base/types.js';
 import type { TaskTypes as DefaultTaskTypes } from '../base-application/tasks.js';
-import type BaseApplicationSharedData from '../base-application/shared-data.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
 import { askForLanguages, askI18n } from './prompts.js';
 import { clientI18nFiles } from './files.js';
 import { writeEntityFiles } from './entity-files.js';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
+import type { Language } from './support/languages.js';
 import { findLanguageForTag, supportedLanguages } from './support/languages.js';
->>>>>>> 843e76094b (rework most of the type regressions)
-
+import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.js';
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 
 /**
@@ -70,13 +60,13 @@ export default class LanguagesGenerator<
   Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
   // @ts-ignore
   Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
-  Application extends ApplicationType = ApplicationType,
+  Application extends ApplicationType<Field, PK, Relationship> = ApplicationType<Field, PK, Relationship>,
   Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
     Field,
     Relationship,
     Application
   >,
-  Control extends TemporaryControlToMoveToDownstream = TemporaryControlToMoveToDownstream,
+  Control extends DeprecatedControl = DeprecatedControl,
   TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
     Field,
     PK,
@@ -86,16 +76,7 @@ export default class LanguagesGenerator<
     Sources,
     Control
   >,
-  SharedData extends BaseApplicationSharedData<Field, PK, Relationship, Entity, Application, Sources, Control> = BaseApplicationSharedData<
-    Field,
-    PK,
-    Relationship,
-    Entity,
-    Application,
-    Sources,
-    Control
-  >,
-  Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
+  Configuration extends ApplicationConfiguration = ApplicationConfiguration,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
 > extends BaseApplicationGenerator<
   Options,
@@ -107,7 +88,6 @@ export default class LanguagesGenerator<
   Sources,
   Control,
   TaskTypes,
-  SharedData,
   Configuration,
   Features
 > {
@@ -124,7 +104,7 @@ export default class LanguagesGenerator<
   writeJavaLanguageFiles;
   regenerateLanguages;
 
-  constructor(args, options, features) {
+  constructor(args, options: Options, features: Features) {
     super(args, options, features);
 
     this.languageCommand = this.options.commandName === 'languages';
@@ -150,6 +130,7 @@ export default class LanguagesGenerator<
       // We must write languages files for translation process for entities only generation.
       // Angular frontend uses translation files even if enableTranslation is enabled.
       // As side effect, with angular frontends, translation files will be written for nativeLanguage for entity only generation.
+      // @ts-ignore FIXME types
       this.setFeatures({ disableSkipPriorities: true });
     }
   }
@@ -302,7 +283,7 @@ export default class LanguagesGenerator<
           }
         };
         this.env.sharedFs.on('change', listener);
-
+        // @ts-ignore FIXME types
         application.getWebappTranslation = (...args) => this.translationData.getClientTranslation(...args);
       },
     });

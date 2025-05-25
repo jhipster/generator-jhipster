@@ -21,7 +21,7 @@ import { type UpdateClientLanguagesTaskParam, updateLanguagesInDayjsConfiguratio
 import { generateLanguagesWebappOptions } from '../../languages/support/index.js';
 
 function updateLanguagesInPipeTask(
-  this: BaseGenerator<any, any, any, any, any, any, any, any>,
+  this: BaseGenerator<any, any, any, any, any, any>,
   { application, control = {} }: UpdateClientLanguagesTaskParam,
 ) {
   const { clientSrcDir, languagesDefinition = [] } = application;
@@ -37,7 +37,7 @@ function updateLanguagesInPipeTask(
 }
 
 function updateLanguagesInWebpackReactTask(
-  this: BaseGenerator<any, any, any, any, any, any, any, any>,
+  this: BaseGenerator<any, any, any, any, any, any>,
   { application, control = {} }: UpdateClientLanguagesTaskParam,
 ) {
   const { clientRootDir, clientSrcDir, languages } = application;
@@ -56,10 +56,7 @@ function updateLanguagesInWebpackReactTask(
   );
 }
 
-export default function updateLanguagesTask(
-  this: BaseGenerator<any, any, any, any, any, any, any, any>,
-  taskParam: UpdateClientLanguagesTaskParam,
-) {
+export default function updateLanguagesTask(this: BaseGenerator<any, any, any, any, any, any>, taskParam: UpdateClientLanguagesTaskParam) {
   updateLanguagesInPipeTask.call(this, taskParam);
   updateLanguagesInWebpackReactTask.call(this, taskParam);
   updateLanguagesInDayjsConfigurationTask.call(this, taskParam, {

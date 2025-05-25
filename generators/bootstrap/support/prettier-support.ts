@@ -52,7 +52,7 @@ export class PrettierPool extends Piscina {
 }
 
 export const createPrettierTransform = async function (
-  this: CoreGenerator<any, any, any, any, any, any, any, any>,
+  this: CoreGenerator<any, any, any, any, any, any>,
   options: PrettierWorkerOptions & { ignoreErrors?: boolean; extensions?: string; skipForks?: boolean } = {},
 ) {
   const { ignoreErrors = false, extensions = '*', skipForks, ...workerOptions } = options;

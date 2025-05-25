@@ -21,7 +21,7 @@ const relationshipType = relationship.relationshipType,
 relationshipName = relationship.relationshipName,
 ownerSide = relationship.ownerSide,
 otherEntityTableName = relationship.otherEntityTableName,
-onDelete = relationship.onDelete, 
+onDelete = relationship.onDelete,
 onUpdate = relationship.onUpdate;
 if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) {
     const constraintName = this.getFKConstraintName(entity.entityTableName, relationshipName, prodDatabaseType);
@@ -67,7 +67,7 @@ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && 
                                  constraintName="<%= relationship.joinTable.otherConstraintName %>"
                                  referencedColumnNames="<%= relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%= relationship.otherEntity.entityTableName %>"
-        <%_ if (relationship.otherRelationship) { 
+        <%_ if (relationship.otherRelationship) {
             // User object is not supporting this right now
             _%>
             <%_ if (relationship.otherRelationship.onDelete) { _%>

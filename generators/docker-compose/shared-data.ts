@@ -33,10 +33,13 @@ export default class DockerComposeSharedData<
     if (!('enviromentHasDockerCompose' in control)) {
       Object.defineProperty(control, 'enviromentHasDockerCompose', {
         get: () => {
+          // @ts-ignore FIXME types
           if (control.enviromentHasDockerCompose === undefined) {
             const { exitCode } = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
+            // @ts-ignore FIXME types
             control.enviromentHasDockerCompose = exitCode === 0;
           }
+          // @ts-ignore FIXME types
           return control.enviromentHasDockerCompose;
         },
       });
