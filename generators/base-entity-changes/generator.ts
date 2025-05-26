@@ -125,11 +125,11 @@ export default abstract class BaseEntityChangesGenerator<
     priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES],
   ): TaskParamWithChangelogsAndApplication | TaskParamWithApplication<Field, PK, Relationship, Entity, Application, Control> {
     const firstArg = super.getTaskFirstArgForPriority(priorityName);
-    if ([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES].includes(priorityName)) {
+    if (([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
       const { application, entities } = firstArg as TaskTypes['DefaultTaskParam'];
       this.entityChanges = this.generateIncrementalChanges({ application, entities });
     }
-    if ([DEFAULT].includes(priorityName)) {
+    if (([DEFAULT] as string[]).includes(priorityName)) {
       return { ...firstArg, entityChanges: this.entityChanges };
     }
     if (([WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {

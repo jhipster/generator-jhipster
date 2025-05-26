@@ -287,7 +287,7 @@ export default class BaseGenerator<
         },
       });
       now.setMinutes(now.getMinutes() + 1);
-      this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, { override: now });
+      this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, { replacement: now });
 
       // Reproducible build can create future timestamp, save it.
       const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;

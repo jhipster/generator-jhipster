@@ -33,9 +33,9 @@ import type { Field as DeprecatedField, Relationship as DeprecatedRelationship }
 import type { BaseApplicationFeatures, BaseApplicationOptions } from '../base-application/api.js';
 import type { BaseApplicationEntity } from '../base-application/types.js';
 import type { WorkspaceConfiguration } from '../../lib/types/application/yo-rc.js';
-import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from '../needle-api.js';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-application/support/constants.js';
 import type { DeprecatedControl } from '../../lib/types/application/control.js';
+import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/constants.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 
 const {

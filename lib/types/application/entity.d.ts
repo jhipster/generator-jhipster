@@ -19,7 +19,6 @@
 
 import type { ServerEntity } from '../../../generators/server/types.js';
 import type { Field as BaseField } from '../base/field.js';
-import type { PartialAngularEntity } from '../../../generators/angular/types-partial.js';
 import type { BaseApplicationEntity, BaseApplicationPrimaryKey } from '../../../generators/base-application/types.js';
 import type { Field } from './field.js';
 import type { Relationship } from './relationship.js';
@@ -37,8 +36,7 @@ export type PrimaryKey<F extends BaseField = Field> = BaseApplicationPrimaryKey<
 
 export interface Entity<F extends Field = Field, PK extends PrimaryKey<F> = PrimaryKey<F>, R extends Relationship<any> = Relationship<any>>
   extends BaseApplicationEntity<F, PK, R>,
-    ServerEntity,
-    PartialAngularEntity {
+    ServerEntity {
   annotations?: Record<string, string>;
   /** @experimental */
   auditableEntity?: boolean;

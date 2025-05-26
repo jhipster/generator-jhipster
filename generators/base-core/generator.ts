@@ -905,7 +905,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     let parsedTemplates: RenderTemplateParam[];
     if ('sections' in options || 'blocks' in options) {
-      // @ts-ignore
+      // @ts-ignore FIXME types
       const sectionTransform = 'sections' in options ? (options.sections._?.transform ?? []) : [];
 
       parsedTemplates = ('sections' in options ? convertWriteFileSectionsToBlocks<Sources, this>(options.sections) : options.blocks)

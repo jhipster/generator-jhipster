@@ -3,7 +3,6 @@ import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/i
 import type { CypressApplication } from '../cypress/types.js';
 import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
 import type { PostWritingEntitiesTaskParam } from '../base-application/tasks.js';
-import type { PartialAngularApplication } from '../angular/types-partial.js';
 import type { Language } from '../languages/support/languages.ts';
 import type { BaseApplicationEntity } from '../base-application/types.js';
 import type Command from './command.ts';
@@ -23,7 +22,6 @@ export type FrontendApplication = ApplicationClientProperties &
  * @deprecated in favor of frontend application.
  */
 export type ClientApplication<E extends BaseApplicationEntity<any, any, any>> = JavaScriptApplication &
-  PartialAngularApplication &
   FrontendApplication & {
     filterEntitiesForClient?: (entities: E[]) => E[];
     filterEntityPropertiesForClient?: (entity: E) => E;

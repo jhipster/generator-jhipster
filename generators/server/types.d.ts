@@ -144,7 +144,7 @@ type SearchEngine = {
 Deterministic option causes types to be too complex
 type ApplicationNature = (ImperativeApplication & CacheProviderApplication) | ReactiveApplication;
 */
-type ApplicationNature = { reactive: boolean };
+type ApplicationNature = { reactive: boolean } & CacheProviderApplication;
 
 export type SpringBootApplication = JavaApplication &
   ApplicationNature &
