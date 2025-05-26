@@ -35,7 +35,12 @@ describe(`generator - ${generator}`, () => {
 
   describe('with defaults options', () => {
     before(async () => {
-      await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig();
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap', 'jhipster:java:build-tool'] })
+        .withMockedSource()
+        .withSharedApplication({})
+        .withJHipsterConfig();
     });
 
     it('should match files snapshot', () => {
@@ -50,7 +55,7 @@ describe(`generator - ${generator}`, () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:bootstrap",
-  "jhipster:java:build-tool",
+  "jhipster:maven",
   "jhipster:project-name",
 ]
 `);
@@ -61,7 +66,7 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
-        .withMockedJHipsterGenerators()
+        .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap', 'jhipster:java:build-tool'] })
         .withMockedSource()
         .withSharedApplication({})
         .withJHipsterConfig({ serviceDiscoveryType: 'consul' });
@@ -79,7 +84,7 @@ describe(`generator - ${generator}`, () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:bootstrap",
-  "jhipster:java:build-tool",
+  "jhipster:maven",
   "jhipster:project-name",
 ]
 `);
@@ -91,7 +96,7 @@ describe(`generator - ${generator}`, () => {
       await expect(
         helpers
           .runJHipster(generator)
-          .withMockedJHipsterGenerators()
+          .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap', 'jhipster:java:build-tool'] })
           .withMockedSource()
           .withSharedApplication({})
           .withJHipsterConfig({ reactive: false }),
@@ -103,7 +108,7 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
-        .withMockedJHipsterGenerators()
+        .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap', 'jhipster:java:build-tool'] })
         .withMockedSource()
         .withSharedApplication({})
         .withOptions({ experimental: true })
@@ -122,7 +127,7 @@ describe(`generator - ${generator}`, () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:bootstrap",
-  "jhipster:java:build-tool",
+  "jhipster:maven",
   "jhipster:project-name",
 ]
 `);

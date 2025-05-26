@@ -40,6 +40,6 @@ export default asWritingTask(async function cleanupTask(this, { application, con
     }
   }
   await control.cleanupFiles({
-    '8.9.1': [[application.cacheProviderInfinispan, `${application.javaPackageSrcDir}config/CacheFactoryConfiguration.java`]],
+    '8.9.1': [[application.cacheProviderInfinispan!, `${application.javaPackageSrcDir}config/CacheFactoryConfiguration.java`]],
   });
 });

@@ -89,7 +89,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplicationServer();
+      await this.dependsOnJHipster('jhipster:java:bootstrap');
     }
   }
 

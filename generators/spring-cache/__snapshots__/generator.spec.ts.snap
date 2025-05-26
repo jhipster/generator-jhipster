@@ -8,7 +8,19 @@ exports[`generator - spring-cache caffeine-gradle should match files snapshot 1`
   "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -80,6 +92,21 @@ exports[`generator - spring-cache caffeine-gradle should match source calls 1`] 
       },
     ],
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
 }
 `;
 
@@ -88,7 +115,19 @@ exports[`generator - spring-cache caffeine-maven should match files snapshot 1`]
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -143,6 +182,21 @@ exports[`generator - spring-cache caffeine-maven should match source calls 1`] =
       },
     ],
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
 }
 `;
 
@@ -154,7 +208,19 @@ exports[`generator - spring-cache ehcache-gradle should match files snapshot 1`]
   "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -206,6 +272,21 @@ exports[`generator - spring-cache ehcache-gradle should match source calls 1`] =
       },
     ],
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
 }
 `;
 
@@ -214,7 +295,19 @@ exports[`generator - spring-cache ehcache-maven should match files snapshot 1`] 
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -261,6 +354,21 @@ exports[`generator - spring-cache ehcache-maven should match source calls 1`] = 
       },
     ],
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
 }
 `;
 
@@ -272,7 +380,19 @@ exports[`generator - spring-cache hazelcast-gradle should match files snapshot 1
   "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -345,6 +465,21 @@ exports[`generator - spring-cache hazelcast-gradle should match source calls 1`]
       },
     ],
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
 }
 `;
 
@@ -353,7 +488,19 @@ exports[`generator - spring-cache hazelcast-maven should match files snapshot 1`
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -401,6 +548,21 @@ exports[`generator - spring-cache hazelcast-maven should match source calls 1`] 
       },
     ],
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
 }
 `;
 
@@ -412,7 +574,19 @@ exports[`generator - spring-cache infinispan-gradle should match files snapshot 
   "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -474,6 +648,21 @@ exports[`generator - spring-cache infinispan-gradle should match source calls 1`
       },
     ],
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
 }
 `;
 
@@ -482,7 +671,19 @@ exports[`generator - spring-cache infinispan-maven should match files snapshot 1
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -539,6 +740,21 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
       },
     ],
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
 }
 `;
 
@@ -550,7 +766,19 @@ exports[`generator - spring-cache memcached-gradle should match files snapshot 1
   "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -612,6 +840,21 @@ exports[`generator - spring-cache memcached-gradle should match source calls 1`]
       },
     ],
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
 }
 `;
 
@@ -620,7 +863,19 @@ exports[`generator - spring-cache memcached-maven should match files snapshot 1`
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -677,6 +932,21 @@ exports[`generator - spring-cache memcached-maven should match source calls 1`] 
       },
     ],
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
 }
 `;
 
@@ -688,7 +958,19 @@ exports[`generator - spring-cache redis-gradle should match files snapshot 1`] =
   "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/EmbeddedRedis.java": {
@@ -761,6 +1043,21 @@ exports[`generator - spring-cache redis-gradle should match source calls 1`] = `
       "value": "com.mycompany.myapp.config.RedisTestContainersSpringContextCustomizerFactory",
     },
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
 }
 `;
 
@@ -769,7 +1066,19 @@ exports[`generator - spring-cache redis-maven should match files snapshot 1`] = 
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/EmbeddedRedis.java": {
@@ -835,6 +1144,21 @@ exports[`generator - spring-cache redis-maven should match source calls 1`] = `
     {
       "key": "org.springframework.test.context.ContextCustomizerFactory",
       "value": "com.mycompany.myapp.config.RedisTestContainersSpringContextCustomizerFactory",
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
     },
   ],
 }

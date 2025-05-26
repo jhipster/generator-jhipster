@@ -37,7 +37,6 @@ import {
 
 import {
   applicationTypes,
-  clientFrameworkTypes,
   databaseTypes,
   entityOptions,
   fieldTypes,
@@ -53,7 +52,6 @@ import { hibernateSnakeCase } from './support/index.js';
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
-const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const { SQL, NO: NO_DATABASE } = databaseTypes;
 const { GATEWAY } = applicationTypes;
 
@@ -102,40 +100,42 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      setupServerconsts({ application, applicationDefaults }) {
-        // Make constants available in templates
-        applicationDefaults({
-          MAIN_DIR,
-          TEST_DIR,
-          LOGIN_REGEX,
-          CLIENT_WEBPACK_DIR,
-          SERVER_MAIN_SRC_DIR,
-          SERVER_MAIN_RES_DIR,
-          SERVER_TEST_SRC_DIR,
-          SERVER_TEST_RES_DIR,
-          JAVA_VERSION: this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION,
-          JAVA_COMPATIBLE_VERSIONS,
-          javaCompatibleVersions: JAVA_COMPATIBLE_VERSIONS,
-          ANGULAR,
-          VUE,
-          REACT,
-        } as any);
-
-        if (this.projectVersion) {
-          application.projectVersion = this.projectVersion;
-          this.log.info(`Using projectVersion: ${application.projectVersion}`);
-        } else {
-          application.projectVersion = '0.0.1-SNAPSHOT';
-        }
-
-        if (this.useVersionPlaceholders) {
-          application.jhipsterDependenciesVersion = 'JHIPSTER_DEPENDENCIES_VERSION';
-        } else if (this.jhipsterDependenciesVersion) {
-          application.jhipsterDependenciesVersion = this.jhipsterDependenciesVersion;
-          this.log.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
-        } else {
-          application.jhipsterDependenciesVersion = JHIPSTER_DEPENDENCIES_VERSION;
-        }
+      setupServerconsts({ applicationDefaults }) {
+        applicationDefaults(
+          {
+            MAIN_DIR,
+            TEST_DIR,
+            LOGIN_REGEX,
+            CLIENT_WEBPACK_DIR,
+            SERVER_MAIN_SRC_DIR,
+            SERVER_MAIN_RES_DIR,
+            SERVER_TEST_SRC_DIR,
+            SERVER_TEST_RES_DIR,
+            JAVA_VERSION: this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION,
+            JAVA_COMPATIBLE_VERSIONS,
+            javaCompatibleVersions: JAVA_COMPATIBLE_VERSIONS,
+          } as any,
+          {
+            __override__: false,
+            javaCompatibleVersions: JAVA_COMPATIBLE_VERSIONS,
+            projectVersion: application => {
+              if (this.projectVersion) {
+                this.log.info(`Using projectVersion: ${application.projectVersion}`);
+                return this.projectVersion;
+              }
+              return '0.0.1-SNAPSHOT';
+            },
+            jhipsterDependenciesVersion: application => {
+              if (this.useVersionPlaceholders) {
+                return 'JHIPSTER_DEPENDENCIES_VERSION';
+              } else if (this.jhipsterDependenciesVersion) {
+                this.log.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
+                return this.jhipsterDependenciesVersion;
+              }
+              return JHIPSTER_DEPENDENCIES_VERSION;
+            },
+          },
+        );
       },
     });
   }

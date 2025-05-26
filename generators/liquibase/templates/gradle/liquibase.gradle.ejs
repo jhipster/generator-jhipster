@@ -42,7 +42,7 @@ dependencies {
   // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
-project.ext.diffChangelogFile = "<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
+project.ext.diffChangelogFile = "<%= srcMainResources %>config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
 if (!project.hasProperty("runList")) {
  project.ext.runList = "main"
 }
@@ -56,12 +56,12 @@ liquibase {
 <%_ if (devDatabasePassword) { _%>
       password "<%- devDatabasePassword %>"
 <%_ } _%>
-      changelogFile "<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml"
+      changelogFile "<%= srcMainResources %>config/liquibase/master.xml"
 <%_ if (liquibaseDefaultSchemaName) { _%>
       defaultSchemaName "<%- liquibaseDefaultSchemaName %>"
 <%_ } _%>
       logLevel "debug"
-      classpath "<%= SERVER_MAIN_RES_DIR %>"
+      classpath "<%= srcMainResources %>"
     }
     diffLog {
       driver "<%= devJdbcDriver %>"

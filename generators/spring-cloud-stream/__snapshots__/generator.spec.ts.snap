@@ -8,13 +8,28 @@ exports[`generator - spring-cloud-stream gateway-jwt-gradle-enableTranslation(tr
   "buildSrc/src/main/groovy/jhipster.kafka-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/broker/KafkaConsumer.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/broker/KafkaProducer.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/broker/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/web/rest/JhipsterKafkaResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedKafka.java": {
@@ -37,13 +52,28 @@ exports[`generator - spring-cloud-stream gateway-oauth2-maven-enableTranslation(
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/broker/KafkaConsumer.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/broker/KafkaProducer.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/broker/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/JhipsterKafkaResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedKafka.java": {
@@ -66,13 +96,28 @@ exports[`generator - spring-cloud-stream microservice-jwt-reactive(false)-maven-
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/broker/KafkaConsumer.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/broker/KafkaProducer.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/broker/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/JhipsterKafkaResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedKafka.java": {
@@ -98,13 +143,28 @@ exports[`generator - spring-cloud-stream microservice-jwt-reactive(true)-gradle-
   "buildSrc/src/main/groovy/jhipster.kafka-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/broker/KafkaConsumer.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/broker/KafkaProducer.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/broker/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/web/rest/JhipsterKafkaResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedKafka.java": {
@@ -127,13 +187,28 @@ exports[`generator - spring-cloud-stream microservice-oauth2-reactive(false)-mav
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/broker/KafkaConsumer.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/broker/KafkaProducer.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/broker/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/JhipsterKafkaResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedKafka.java": {
@@ -159,13 +234,28 @@ exports[`generator - spring-cloud-stream microservice-oauth2-reactive(true)-grad
   "buildSrc/src/main/groovy/jhipster.kafka-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/broker/KafkaConsumer.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/broker/KafkaProducer.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/broker/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/web/rest/JhipsterKafkaResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedKafka.java": {
@@ -188,13 +278,28 @@ exports[`generator - spring-cloud-stream monolith-jwt-reactive(false)-maven-enab
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/broker/KafkaConsumer.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/broker/KafkaProducer.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/broker/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/JhipsterKafkaResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedKafka.java": {
@@ -220,13 +325,28 @@ exports[`generator - spring-cloud-stream monolith-jwt-reactive(true)-gradle-enab
   "buildSrc/src/main/groovy/jhipster.kafka-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/broker/KafkaConsumer.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/broker/KafkaProducer.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/broker/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/web/rest/JhipsterKafkaResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedKafka.java": {
@@ -249,13 +369,28 @@ exports[`generator - spring-cloud-stream monolith-oauth2-reactive(false)-maven-e
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/broker/KafkaConsumer.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/broker/KafkaProducer.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/broker/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/JhipsterKafkaResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedKafka.java": {
@@ -281,13 +416,28 @@ exports[`generator - spring-cloud-stream monolith-oauth2-reactive(true)-gradle-e
   "buildSrc/src/main/groovy/jhipster.kafka-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/broker/KafkaConsumer.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/broker/KafkaProducer.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/broker/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/web/rest/JhipsterKafkaResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedKafka.java": {
@@ -310,13 +460,28 @@ exports[`generator - spring-cloud-stream monolith-session-reactive(false)-maven-
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/broker/KafkaConsumer.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/broker/KafkaProducer.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/broker/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/JhipsterKafkaResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedKafka.java": {
@@ -342,13 +507,28 @@ exports[`generator - spring-cloud-stream monolith-session-reactive(true)-gradle-
   "buildSrc/src/main/groovy/jhipster.kafka-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/broker/KafkaConsumer.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/broker/KafkaProducer.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/broker/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/web/rest/JhipsterKafkaResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedKafka.java": {
