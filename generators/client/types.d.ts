@@ -15,6 +15,8 @@ export type FrontendApplication = ApplicationClientProperties &
   CypressApplication & {
     webappLoginRegExp: string;
     clientWebappDir?: string;
+    clientThemeNone?: boolean;
+    clientThemeAny?: boolean;
     webappEnumerationsDir?: string;
     clientFrameworkBuiltIn?: boolean;
     frontendAppName?: string;

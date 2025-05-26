@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
+import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, beforeEach, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { shouldSupportFeatures } from '../../test/support/tests.js';
+import { basicTests, shouldSupportFeatures } from '../../test/support/tests.js';
 import { parseChangelog } from '../base/support/timestamp.js';
 import Generator from './index.js';
 
@@ -30,6 +30,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
+const generatorPath = join(__dirname, 'index.js');
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -39,6 +40,14 @@ describe(`generator - ${generator}`, () => {
     await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
+  basicTests({
+    requiredConfig: {},
+    defaultConfig: {},
+    customPrompts: {
+      baseName: 'BeautifulProject',
+    },
+    generatorPath,
+  });
 
   describe('with', () => {
     describe('default config', () => {

@@ -19,14 +19,13 @@
 import {
   filterEntitiesForClient,
   filterEntityPropertiesForClient,
-  loadClientConfig,
-  loadDerivedClientConfig,
   preparePostEntityClientDerivedProperties,
 } from '../client/support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import clientCommand from '../client/command.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import { getFrontendAppName } from '../base/support/index.js';
+import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../generator-constants.js';
 
 export default class BootStrapApplicationClient extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -50,7 +49,6 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
       },
       loadApplication({ application }) {
         loadConfig(clientCommand.configs, { config: this.jhipsterConfigWithDefaults, application });
-        loadClientConfig({ config: this.jhipsterConfigWithDefaults, application });
       },
     });
   }
@@ -61,12 +59,27 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      loadDefaults({ applicationDefaults }) {
+        applicationDefaults({
+          __override__: false,
+          clientRootDir: '',
+          clientDistDir: 'dist/',
+          clientSrcDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`,
+          clientTestDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'test/' : CLIENT_TEST_SRC_DIR}`,
+          frontendAppName: ({ baseName }) => getFrontendAppName({ baseName }),
+          microfrontend: application => {
+            if (application.applicationTypeMicroservice) {
+              return application.clientFrameworkAny ?? false;
+            }
+            if (application.applicationTypeGateway) {
+              return application.microfrontends && application.microfrontends.length > 0;
+            }
+            return false;
+          },
+        });
+      },
       prepareApplication({ application }) {
         loadDerivedConfig(clientCommand.configs, { application });
-        loadDerivedClientConfig({ application });
-      },
-      prepareForTemplates({ application }) {
-        application.frontendAppName = getFrontendAppName({ baseName: application.baseName });
       },
     });
   }

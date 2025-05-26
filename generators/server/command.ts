@@ -82,22 +82,6 @@ const command = {
       },
       scope: 'storage',
     },
-    projectVersion: {
-      description: 'project version to use, this option is not persisted',
-      cli: {
-        type: String,
-        env: 'JHI_PROJECT_VERSION',
-      },
-      scope: 'generator',
-    },
-    jhipsterDependenciesVersion: {
-      description: 'jhipster-dependencies version to use, this option is not persisted',
-      cli: {
-        type: String,
-        env: 'JHIPSTER_DEPENDENCIES_VERSION',
-      },
-      scope: 'generator',
-    },
     db: {
       description: 'Provide DB name for the application when skipping server side generation',
       cli: {

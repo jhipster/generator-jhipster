@@ -1,4 +1,5 @@
 export type CypressProperties = {
+  cypressTests: boolean;
   cypressAudit: boolean;
   cypressCoverage: boolean;
   cypressDir: string;

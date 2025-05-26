@@ -66,6 +66,12 @@ exports[`generator - maven with empty configuration should generate only maven f
   "mvnw.cmd": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -87,6 +93,12 @@ exports[`generator - maven with valid configuration should generate only maven f
     "stateCleared": "modified",
   },
   "mvnw.cmd": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
 }

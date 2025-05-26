@@ -42,6 +42,12 @@ const command = {
       }),
       scope: 'storage',
     },
+    defaults: {
+      internal: {
+        type: Boolean,
+      },
+      scope: 'none',
+    },
   },
 } as const satisfies JHipsterCommandDefinition;
 

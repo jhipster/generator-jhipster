@@ -1,5 +1,5 @@
 <template>
-  <b-navbar data-cy="navbar" toggleable="md" type="<%_ if (clientThemeNone || !clientThemeLight) { _%>dark<%_ } else { _%>light<%_ } _%>" class="<%_ if (clientThemeNone) { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
+  <b-navbar data-cy="navbar" toggleable="md" type="<%_ if (clientThemeNone || !clientThemeVariantLight) { _%>dark<%_ } else { _%>light<%_ } _%>" class="<%_ if (clientThemeNone) { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
     <b-navbar-brand class="logo" b-link to="/">
         <span class="logo-img"></span>
         <span v-text="t$('global.title')" class="navbar-title"><%= baseName %></span> <span class="navbar-version">{{version}}</span>
@@ -242,7 +242,7 @@
 
   .navbar-title {
     display: inline-block;
-<%_ if (clientThemeNone && !clientThemeDark) { _%>
+<%_ if (clientThemeNone && !clientThemeVariantDark) { _%>
     color: white;
 <%_ } _%>
   }

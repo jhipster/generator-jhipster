@@ -43,8 +43,6 @@ Options:
   --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
   --skip-fake-data                         Skip generation of fake data for development
   --websocket <value>                      Provide websocket option for the application when skipping server side generation
-  --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
-  --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
   --db <value>                             Provide DB name for the application when skipping server side generation
   --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
   --reactive                               Generate a reactive backend
@@ -57,6 +55,8 @@ Options:
   --graalvm-support                        Experimental GraalVM Native support
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --package-name <value>                   The package name for the generated application
+  --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
+  --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
   --build <value>                          Provide build tool for the application when skipping server side generation (default: maven) (choices: "maven", "gradle")
   --enable-gradle-develocity               Enable Gradle Develocity integration (default: false)
   --gradle-develocity-host <value>         Gradle Develocity Host
@@ -201,24 +201,6 @@ entity Bar
 
 exports[`generator - app with default config should match snapshot 1`] = `
 {
-  "ANGULAR": "angular",
-  "CLIENT_WEBPACK_DIR": "webpack/",
-  "DOCUMENTATION_ARCHIVE_PATH": "/documentation-archive/",
-  "DOCUMENTATION_URL": "https://www.jhipster.tech",
-  "JAVA_COMPATIBLE_VERSIONS": [
-    "17",
-    "21",
-    "24",
-  ],
-  "JAVA_VERSION": "JAVA_VERSION",
-  "LOGIN_REGEX": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
-  "MAIN_DIR": "src/main/",
-  "REACT": "react",
-  "SERVER_MAIN_RES_DIR": "src/main/resources/",
-  "SERVER_MAIN_SRC_DIR": "src/main/java/",
-  "SERVER_TEST_RES_DIR": "src/test/resources/",
-  "SERVER_TEST_SRC_DIR": "src/test/java/",
-  "TEST_DIR": "src/test/",
   "addOpenapiGeneratorPlugin": undefined,
   "addPrettierExtensions": [Function],
   "addSpringMilestoneRepository": false,
@@ -289,10 +271,8 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
   "clientTheme": "none",
-  "clientThemeDark": false,
-  "clientThemeLight": false,
+  "clientThemeAny": false,
   "clientThemeNone": true,
-  "clientThemePrimary": false,
   "clientThemeVariant": "",
   "clientThemeVariantAny": false,
   "clientThemeVariantDark": false,
@@ -475,6 +455,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   ],
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
+  "documentationUrl": "https://www.jhipster.tech",
   "domains": [
     "com.mycompany.myapp",
   ],
@@ -622,6 +603,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
   "js": undefined,
+  "jsLoginRegex": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "jwtSecretKey": "SECRET--64",
   "languages": [
     "en",
@@ -643,11 +625,9 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "listOrFlux": "List",
   "listOrFluxClassPath": "java.util.List",
   "localBlueprint": undefined,
+  "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
-  "mainJavaDir": "src/main/java/",
-  "mainJavaPackageDir": "src/main/java/com/mycompany/myapp/",
-  "mainJavaResourceDir": "src/main/resources/",
   "messageBroker": "no",
   "messageBrokerAny": false,
   "messageBrokerKafka": false,
@@ -859,11 +839,11 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "skipServer": undefined,
   "skipUserManagement": false,
   "springBootDependencies": Any<Object>,
-  "srcMainDir": "src/main/",
+  "srcMain": "src/main/",
   "srcMainJava": "src/main/java/",
   "srcMainResources": "src/main/resources/",
   "srcMainWebapp": "src/main/webapp/",
-  "srcTestDir": "src/test/",
+  "srcTest": "src/test/",
   "srcTestJava": "src/test/java/",
   "srcTestJavascript": "src/test/javascript/",
   "srcTestResources": "src/test/resources/",
@@ -871,9 +851,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "syncUserWithIdp": undefined,
   "temporaryDir": "target/",
   "testFrameworks": [],
-  "testJavaDir": "src/test/java/",
-  "testJavaPackageDir": "src/test/java/com/mycompany/myapp/",
-  "testResourceDir": "src/test/resources/",
   "translations": Any<Object>,
   "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
@@ -891,24 +868,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
 
 exports[`generator - app with gateway should match snapshot 1`] = `
 {
-  "ANGULAR": "angular",
-  "CLIENT_WEBPACK_DIR": "webpack/",
-  "DOCUMENTATION_ARCHIVE_PATH": "/documentation-archive/",
-  "DOCUMENTATION_URL": "https://www.jhipster.tech",
-  "JAVA_COMPATIBLE_VERSIONS": [
-    "17",
-    "21",
-    "24",
-  ],
-  "JAVA_VERSION": "JAVA_VERSION",
-  "LOGIN_REGEX": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
-  "MAIN_DIR": "src/main/",
-  "REACT": "react",
-  "SERVER_MAIN_RES_DIR": "src/main/resources/",
-  "SERVER_MAIN_SRC_DIR": "src/main/java/",
-  "SERVER_TEST_RES_DIR": "src/test/resources/",
-  "SERVER_TEST_SRC_DIR": "src/test/java/",
-  "TEST_DIR": "src/test/",
   "addOpenapiGeneratorPlugin": undefined,
   "addPrettierExtensions": [Function],
   "addSpringMilestoneRepository": false,
@@ -979,10 +938,8 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
   "clientTheme": "none",
-  "clientThemeDark": false,
-  "clientThemeLight": false,
+  "clientThemeAny": false,
   "clientThemeNone": true,
-  "clientThemePrimary": false,
   "clientThemeVariant": "",
   "clientThemeVariantAny": false,
   "clientThemeVariantDark": false,
@@ -1167,6 +1124,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   ],
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
+  "documentationUrl": "https://www.jhipster.tech",
   "domains": [
     "com.mycompany.myapp",
   ],
@@ -1308,6 +1266,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
   "js": undefined,
+  "jsLoginRegex": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",
@@ -1329,11 +1288,9 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "listOrFlux": "Flux",
   "listOrFluxClassPath": "reactor.core.publisher.Flux",
   "localBlueprint": undefined,
+  "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
-  "mainJavaDir": "src/main/java/",
-  "mainJavaPackageDir": "src/main/java/com/mycompany/myapp/",
-  "mainJavaResourceDir": "src/main/resources/",
   "messageBroker": "no",
   "messageBrokerAny": false,
   "messageBrokerKafka": false,
@@ -1546,11 +1503,11 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "skipServer": undefined,
   "skipUserManagement": false,
   "springBootDependencies": Any<Object>,
-  "srcMainDir": "src/main/",
+  "srcMain": "src/main/",
   "srcMainJava": "src/main/java/",
   "srcMainResources": "src/main/resources/",
   "srcMainWebapp": "src/main/webapp/",
-  "srcTestDir": "src/test/",
+  "srcTest": "src/test/",
   "srcTestJava": "src/test/java/",
   "srcTestJavascript": "src/test/javascript/",
   "srcTestResources": "src/test/resources/",
@@ -1558,9 +1515,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "syncUserWithIdp": undefined,
   "temporaryDir": "target/",
   "testFrameworks": [],
-  "testJavaDir": "src/test/java/",
-  "testJavaPackageDir": "src/test/java/com/mycompany/myapp/",
-  "testResourceDir": "src/test/resources/",
   "translations": Any<Object>,
   "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
@@ -1578,24 +1532,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
 
 exports[`generator - app with microservice should match snapshot 1`] = `
 {
-  "ANGULAR": "angular",
-  "CLIENT_WEBPACK_DIR": "webpack/",
-  "DOCUMENTATION_ARCHIVE_PATH": "/documentation-archive/",
-  "DOCUMENTATION_URL": "https://www.jhipster.tech",
-  "JAVA_COMPATIBLE_VERSIONS": [
-    "17",
-    "21",
-    "24",
-  ],
-  "JAVA_VERSION": "JAVA_VERSION",
-  "LOGIN_REGEX": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
-  "MAIN_DIR": "src/main/",
-  "REACT": "react",
-  "SERVER_MAIN_RES_DIR": "src/main/resources/",
-  "SERVER_MAIN_SRC_DIR": "src/main/java/",
-  "SERVER_TEST_RES_DIR": "src/test/resources/",
-  "SERVER_TEST_SRC_DIR": "src/test/java/",
-  "TEST_DIR": "src/test/",
   "addOpenapiGeneratorPlugin": undefined,
   "addPrettierExtensions": [Function],
   "addSpringMilestoneRepository": false,
@@ -1846,6 +1782,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   ],
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
+  "documentationUrl": "https://www.jhipster.tech",
   "domains": [
     "com.mycompany.myapp",
   ],
@@ -1978,6 +1915,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
   "js": undefined,
+  "jsLoginRegex": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",
@@ -1999,11 +1937,9 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "listOrFlux": "List",
   "listOrFluxClassPath": "java.util.List",
   "localBlueprint": undefined,
+  "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
-  "mainJavaDir": "src/main/java/",
-  "mainJavaPackageDir": "src/main/java/com/mycompany/myapp/",
-  "mainJavaResourceDir": "src/main/resources/",
   "messageBroker": "no",
   "messageBrokerAny": false,
   "messageBrokerKafka": false,
@@ -2153,11 +2089,11 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "skipServer": undefined,
   "skipUserManagement": true,
   "springBootDependencies": Any<Object>,
-  "srcMainDir": "src/main/",
+  "srcMain": "src/main/",
   "srcMainJava": "src/main/java/",
   "srcMainResources": "src/main/resources/",
   "srcMainWebapp": "src/main/webapp/",
-  "srcTestDir": "src/test/",
+  "srcTest": "src/test/",
   "srcTestJava": "src/test/java/",
   "srcTestJavascript": "src/test/javascript/",
   "srcTestResources": "src/test/resources/",
@@ -2165,9 +2101,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "syncUserWithIdp": undefined,
   "temporaryDir": "target/",
   "testFrameworks": [],
-  "testJavaDir": "src/test/java/",
-  "testJavaPackageDir": "src/test/java/com/mycompany/myapp/",
-  "testResourceDir": "src/test/resources/",
   "typescriptEslint": undefined,
   "upperFirstCamelCaseBaseName": "Jhipster",
   "useNpmWrapper": false,

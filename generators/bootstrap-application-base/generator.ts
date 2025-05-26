@@ -32,7 +32,7 @@ import {
   prepareRelationship,
   stringifyApplicationData,
 } from '../base-application/support/index.js';
-import { JAVA_DOCKER_DIR, NODE_VERSION } from '../generator-constants.js';
+import { JAVA_DOCKER_DIR, LOGIN_REGEX, LOGIN_REGEX_JS, NODE_VERSION } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
 import { loadLanguagesConfig } from '../languages/support/index.js';
@@ -219,6 +219,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
           backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
           clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
+
+          loginRegex: LOGIN_REGEX,
+          jsLoginRegex: LOGIN_REGEX_JS,
 
           jwtSecretKey: undefined,
           gatewayServerPort: undefined,
