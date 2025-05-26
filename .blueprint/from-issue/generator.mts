@@ -67,10 +67,9 @@ const generateDiffOutput = (title: string, content: string) => markdownDetails({
 export default class<
   // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
   Options extends BaseApplicationOptions = JHipsterGeneratorOptions,
-  Field extends BaseApplicationField = DeprecatedField,
-  PK extends BaseApplicationPrimaryKey<Field> = DeprecatedPrimarykey<Field>,
-  Relationship extends BaseApplicationRelationship<any> = DeprecatedRelationship<any>,
-  // @ts-ignore
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
   Entity extends BaseApplicationEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
   Application extends BaseApplicationApplication<Field, PK, Relationship, Entity> = ApplicationType,
   Sources extends BaseApplicationSources<Field, PK, Relationship, Entity, Application> = DeprecatedBaseApplicationSource<

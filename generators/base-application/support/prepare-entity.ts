@@ -44,6 +44,7 @@ import type { FieldType } from '../../../lib/application/field-types.js';
 import type { WorkspaceConfiguration } from '../../../lib/types/application/yo-rc.js';
 import { fieldToReference } from './prepare-field.js';
 import { fieldIsEnum } from './field-utils.js';
+
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { MapperTypes } = entityOptions;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
@@ -153,7 +154,7 @@ export function prepareEntity<
   const { applicationTypeMicroservice, microfrontend, dtoSuffix = '' } = application;
 
   const entityName = upperFirst(entityWithConfig.name);
-  // @ts-ignore
+  // @ts-ignore FIXME types
   mutateData(entityWithConfig, entityDefaultConfig as Partial<E>, BASE_TEMPLATE_DATA as Partial<E>);
 
   if (entityWithConfig.changelogDate) {
@@ -539,7 +540,7 @@ export function loadRequiredConfigIntoEntity<
     // If the entity belongs to this application and searchEngine is true.
     if (config.searchEngine && config.searchEngine !== NO_SEARCH_ENGINE) {
       // Replace with the searchEngine from the application.
-      // @ts-ignore
+      // @ts-ignore FIXME types
       entity.searchEngine = config.searchEngine;
     } else {
       entity.searchEngine = 'no';

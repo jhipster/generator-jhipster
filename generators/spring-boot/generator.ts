@@ -276,7 +276,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
             (!reactive && data.databaseTypeCassandra),
           reactorBlock: reactive ? '.block()' : '',
           reactorBlockOptional: reactive ? '.blockOptional()' : '',
-
+          // @ts-ignore FIXME types
           generateSpringAuditor: ctx =>
             ctx.databaseTypeSql || ctx.databaseTypeMongodb || ctx.databaseTypeNeo4j || ctx.databaseTypeCouchbase,
         });

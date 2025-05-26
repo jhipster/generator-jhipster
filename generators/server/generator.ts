@@ -117,6 +117,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           } as any,
           {
             __override__: false,
+            // @ts-ignore FIXME types
             javaCompatibleVersions: JAVA_COMPATIBLE_VERSIONS,
             projectVersion: application => {
               if (this.projectVersion) {
