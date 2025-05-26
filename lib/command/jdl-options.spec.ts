@@ -15,6 +15,7 @@ describe('jdl options', () => {
   "syncUserWithIdp",
   "messageBroker",
   "databaseMigration",
+  "graalvmSupport",
   "incrementalChangelog",
   "routes",
 ]

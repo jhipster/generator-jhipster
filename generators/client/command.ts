@@ -67,7 +67,6 @@ const command = {
         type: String,
         hide: true,
       },
-      choices: [{ value: 'none', name: 'None' }],
       scope: 'storage',
     },
     clientThemeVariant: {

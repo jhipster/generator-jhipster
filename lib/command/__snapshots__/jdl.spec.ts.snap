@@ -9,6 +9,9 @@ exports[`getDefaultJDLApplicationConfig() should return the default JDL applicat
     "feignClient": {
       "type": "boolean",
     },
+    "graalvmSupport": {
+      "type": "boolean",
+    },
     "incrementalChangelog": {
       "type": "boolean",
     },
@@ -25,6 +28,7 @@ exports[`getDefaultJDLApplicationConfig() should return the default JDL applicat
   "optionsValues": {
     "databaseMigration": {
       "liquibase": "liquibase",
+      "no": "no",
     },
     "messageBroker": {
       "kafka": "kafka",
@@ -41,6 +45,10 @@ exports[`getDefaultJDLApplicationConfig() should return the default JDL applicat
     {
       "name": "FEIGN CLIENT",
       "pattern": "feignClient",
+    },
+    {
+      "name": "GRAALVM SUPPORT",
+      "pattern": "graalvmSupport",
     },
     {
       "name": "INCREMENTAL CHANGELOG",
@@ -67,6 +75,11 @@ exports[`getDefaultJDLApplicationConfig() should return the default JDL applicat
     },
     "FEIGN CLIENT": {
       "msg": "feignClient property",
+      "pattern": undefined,
+      "type": "BOOLEAN",
+    },
+    "GRAALVM SUPPORT": {
+      "msg": "graalvmSupport property",
       "pattern": undefined,
       "type": "BOOLEAN",
     },

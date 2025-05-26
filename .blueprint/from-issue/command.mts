@@ -40,8 +40,6 @@ const command = {
       },
       scope: 'generator',
     },
-  },
-  configs: {
     owner: {
       cli: {
         type: String,
@@ -69,10 +67,10 @@ const command = {
     projectFolder: {
       cli: {
         type: String,
+        env: 'JHI_FOLDER_APP',
       },
       description: 'Folder to generate the sample',
       scope: 'generator',
-      env: 'JHI_FOLDER_APP',
     },
   },
   import: [GENERATOR_APP, GENERATOR_WORKSPACES],
