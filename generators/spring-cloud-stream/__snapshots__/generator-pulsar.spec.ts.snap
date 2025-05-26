@@ -8,6 +8,12 @@ exports[`generator - spring-cloud-stream gateway-jwt-gradle-enableTranslation(tr
   "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
@@ -31,6 +37,12 @@ exports[`generator - spring-cloud-stream gateway-oauth2-maven-enableTranslation(
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
@@ -52,6 +64,12 @@ exports[`generator - spring-cloud-stream gateway-oauth2-maven-enableTranslation(
 exports[`generator - spring-cloud-stream microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/broker/PulsarIT.java": {
@@ -80,6 +98,12 @@ exports[`generator - spring-cloud-stream microservice-jwt-reactive(true)-gradle-
   "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
@@ -101,6 +125,12 @@ exports[`generator - spring-cloud-stream microservice-jwt-reactive(true)-gradle-
 exports[`generator - spring-cloud-stream microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/broker/PulsarIT.java": {
@@ -129,6 +159,12 @@ exports[`generator - spring-cloud-stream microservice-oauth2-reactive(true)-grad
   "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
@@ -150,6 +186,12 @@ exports[`generator - spring-cloud-stream microservice-oauth2-reactive(true)-grad
 exports[`generator - spring-cloud-stream monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/broker/PulsarIT.java": {
@@ -178,6 +220,12 @@ exports[`generator - spring-cloud-stream monolith-jwt-reactive(true)-gradle-enab
   "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
@@ -199,6 +247,12 @@ exports[`generator - spring-cloud-stream monolith-jwt-reactive(true)-gradle-enab
 exports[`generator - spring-cloud-stream monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/broker/PulsarIT.java": {
@@ -227,6 +281,12 @@ exports[`generator - spring-cloud-stream monolith-oauth2-reactive(true)-gradle-e
   "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
@@ -248,6 +308,12 @@ exports[`generator - spring-cloud-stream monolith-oauth2-reactive(true)-gradle-e
 exports[`generator - spring-cloud-stream monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/broker/PulsarIT.java": {
@@ -274,6 +340,12 @@ exports[`generator - spring-cloud-stream monolith-session-reactive(true)-gradle-
     "stateCleared": "modified",
   },
   "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/broker/PulsarIT.java": {

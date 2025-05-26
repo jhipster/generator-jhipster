@@ -30,9 +30,9 @@ version = "0.0.1-SNAPSHOT"
 
 description = ""
 
-sourceCompatibility=<%= JAVA_VERSION %>
-targetCompatibility=<%= JAVA_VERSION %>
-assert System.properties["java.specification.version"] == <%- JAVA_COMPATIBLE_VERSIONS.map(ver => `"${ver}"`).join(' || '); %>
+sourceCompatibility=<%= javaVersion %>
+targetCompatibility=<%= javaVersion %>
+assert System.properties["java.specification.version"] == <%- javaCompatibleVersions.map(ver => `"${ver}"`).join(' || '); %>
 
 ext {
     springProfiles = ""

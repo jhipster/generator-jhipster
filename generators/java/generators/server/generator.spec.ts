@@ -47,7 +47,11 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should compose with generators', () => {
-      expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
+      expect(result.composedMockedGenerators).toMatchInlineSnapshot(`
+[
+  "jhipster:java:bootstrap",
+]
+`);
     });
   });
 });

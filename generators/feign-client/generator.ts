@@ -28,7 +28,7 @@ export default class FeignClientGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnJHipster('jhipster:java:bootstrap');
     }
   }
 

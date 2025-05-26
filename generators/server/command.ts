@@ -23,61 +23,81 @@ import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TY
 import { getDBTypeFromDBValue } from './support/database.js';
 
 const command = {
-  options: {
+  configs: {
     skipUserManagement: {
       description: 'Skip the user management module during app generation',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'storage',
     },
     cacheProvider: {
       description: 'Cache provider',
-      type: String,
+      cli: {
+        type: String,
+      },
+      choices: ['no', 'caffeine', 'ehcache', 'hazelcast', 'infinispan', 'memcached', 'redis'],
       scope: 'storage',
     },
     enableSwaggerCodegen: {
       description: 'API first development using OpenAPI-generator',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'storage',
     },
     enableHibernateCache: {
       description: 'Enable hibernate cache',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'storage',
     },
     searchEngine: {
       description: 'Provide search engine for the application when skipping server side generation',
-      type: String,
+      cli: {
+        type: String,
+      },
+      choices: ['no', 'elasticsearch', 'couchbase'],
       scope: 'storage',
     },
     skipCheckLengthOfIdentifier: {
       description: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'storage',
     },
     skipFakeData: {
       description: 'Skip generation of fake data for development',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'storage',
     },
     websocket: {
       description: 'Provide websocket option for the application when skipping server side generation',
-      type: String,
+      cli: {
+        type: String,
+      },
       scope: 'storage',
     },
     projectVersion: {
       description: 'project version to use, this option is not persisted',
-      type: String,
-      env: 'JHI_PROJECT_VERSION',
+      cli: {
+        type: String,
+        env: 'JHI_PROJECT_VERSION',
+      },
       scope: 'generator',
     },
     jhipsterDependenciesVersion: {
       description: 'jhipster-dependencies version to use, this option is not persisted',
-      type: String,
-      env: 'JHIPSTER_DEPENDENCIES_VERSION',
+      cli: {
+        type: String,
+        env: 'JHIPSTER_DEPENDENCIES_VERSION',
+      },
       scope: 'generator',
     },
-  },
-  configs: {
     db: {
       description: 'Provide DB name for the application when skipping server side generation',
       cli: {

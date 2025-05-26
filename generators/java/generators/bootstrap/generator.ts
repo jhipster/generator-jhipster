@@ -34,6 +34,8 @@ import {
   matchMainJavaFiles,
   packageInfoTransform,
 } from '../../support/index.js';
+import { normalizePathEnd } from '../../../base/support/path.js';
+import prepareEntity from '../../../server/support/prepare-entity.js';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator {
   packageInfoFile!: boolean;
@@ -44,6 +46,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
+      // TODO depends on application-server
       await this.dependsOnBootstrapApplication();
     }
   }
@@ -69,6 +72,11 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
         const reservedKeywork = packageName!.split('.').find(isReservedJavaKeyword);
         if (reservedKeywork) {
           throw new Error(`The package name "${packageName}" contains a reserved Java keyword "${reservedKeywork}".`);
+        }
+      },
+      fixConfig() {
+        if (this.jhipsterConfig.packageFolder) {
+          this.jhipsterConfig.packageFolder = normalizePathEnd(this.jhipsterConfig.packageFolder);
         }
       },
     });
@@ -161,6 +169,18 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntity({ application, entity }) {
+        prepareEntity(entity, application);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get default() {

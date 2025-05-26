@@ -45,7 +45,7 @@
         <spring.profiles.active>dev</spring.profiles.active>
         <maven.version>3.2.5</maven.version>
         <resource.delimiter>@</resource.delimiter>
-        <java.version><%= JAVA_VERSION %></java.version>
+        <java.version><%= javaVersion %></java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
@@ -406,7 +406,7 @@
                         <warSourceDirectory><%= clientDistDir %></warSourceDirectory>
                         <webResources>
                             <resource>
-                                <directory><%= MAIN_DIR %>webapp</directory>
+                                <directory><%= srcMainWebapp %></directory>
                                 <includes>
                                     <include>WEB-INF/**</include>
                                 </includes>
@@ -478,8 +478,8 @@
                                 <version>[${maven.version},)</version>
                             </requireMavenVersion>
                             <requireJavaVersion>
-                                <message>You are running an incompatible version of Java. JHipster supports JDK <%= JAVA_COMPATIBLE_VERSIONS[0] %> to <%= JAVA_COMPATIBLE_VERSIONS[JAVA_COMPATIBLE_VERSIONS.length -1] %>.</message>
-                                <version><%= JAVA_COMPATIBLE_VERSIONS.map(version => parseInt(version)).map(version => `[${version},${version +1})`).join(',') %></version>
+                                <message>You are running an incompatible version of Java. JHipster supports JDK <%= javaCompatibleVersions[0] %> to <%= javaCompatibleVersions[javaCompatibleVersions.length -1] %>.</message>
+                                <version><%= javaCompatibleVersions.map(version => parseInt(version)).map(version => `[${version},${version +1})`).join(',') %></version>
                             </requireJavaVersion>
                         </rules>
                     </configuration>

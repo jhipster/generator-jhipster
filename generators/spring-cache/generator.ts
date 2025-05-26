@@ -29,7 +29,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnJHipster('jhipster:java:bootstrap');
     }
   }
 

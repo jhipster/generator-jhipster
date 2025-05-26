@@ -38,7 +38,7 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         await helpers
           .runJHipster(generator)
-          .withMockedJHipsterGenerators()
+          .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap'] })
           .withMockedSource()
           .withOptions({ ignoreNeedlesError: true })
           .withSharedApplication({})

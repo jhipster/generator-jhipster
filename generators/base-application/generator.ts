@@ -454,7 +454,7 @@ export default class BaseApplicationGenerator<
       args.source = this.#source;
     }
     if (PRIORITY_WITH_APPLICATION_DEFAULTS.includes(priorityName)) {
-      args.applicationDefaults = data => mutateData(application, { __override__: false, ...data });
+      args.applicationDefaults = (...args) => mutateData(application, ...args.map(data => ({ __override__: false, ...data })));
     }
     if (PRIORITY_WITH_ENTITIES_TO_LOAD.includes(priorityName)) {
       args.entitiesToLoad = this.#getEntitiesDataToLoad();
