@@ -187,7 +187,7 @@ export default class CoreGenerator<
       this.jhipsterConfig = this.config.createProxy() as ConfigType;
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
-      this.#parseJHipsterOptions(baseCommand.options);
+      this.#parseJHipsterOptions({}, baseCommand.configs);
     }
 
     this.logger = this.log as any;

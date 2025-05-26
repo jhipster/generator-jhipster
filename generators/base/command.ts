@@ -20,76 +20,98 @@ import type { JHipsterCommandDefinition } from '../../lib/command/types.js';
 import { parseCreationTimestamp } from './support/timestamp.js';
 
 const command = {
-  options: {
+  configs: {
     useVersionPlaceholders: {
       description: 'replace mutable versions with placeholders',
-      type: Boolean,
-      env: 'VERSION_PLACEHOLDERS',
+      cli: {
+        type: Boolean,
+        env: 'VERSION_PLACEHOLDERS',
+        hide: true,
+      },
       scope: 'generator',
-      hide: true,
     },
     skipChecks: {
       description: 'Check the status of the required tools',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
     experimental: {
       description:
         'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
     blueprints: {
       description:
         'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
-      type: String,
+      cli: {
+        type: String,
+      },
       scope: 'none',
     },
     disableBlueprints: {
       description: 'Disable blueprints support',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
     debugEnabled: {
-      name: 'debug',
       description: 'Enable debugger',
-      alias: 'd',
-      type: Boolean,
+      cli: {
+        name: 'debug',
+        type: Boolean,
+        alias: 'd',
+      },
       scope: 'generator',
     },
     reproducible: {
       description: 'Try to reproduce changelog',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'none',
     },
     skipPrompts: {
       description: 'Skip prompts',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
     ignoreNeedlesError: {
       description: 'Ignore needles failures',
-      type: Boolean,
-      hide: true,
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
       scope: 'generator',
     },
     clientPackageManager: {
       description: 'Force an unsupported client package manager',
-      type: String,
+      cli: {
+        type: String,
+      },
       scope: 'storage',
     },
     ignoreErrors: {
       description: "Don't fail on prettier errors.",
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'none',
     },
     creationTimestamp: {
       description: 'Project creation timestamp (used for reproducible builds)',
-      type: parseCreationTimestamp,
+      cli: {
+        type: parseCreationTimestamp,
+      },
       scope: 'storage',
     },
-  },
-  configs: {
     blueprint: {
       description: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
       internal: {
