@@ -67,10 +67,10 @@ const command = {
       },
       scope: 'generator',
     },
-  },
-  options: {
     sampleYorcFolder: {
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       description: 'Treat sample arg as .yo-rc.json folder path',
       scope: 'generator',
     },

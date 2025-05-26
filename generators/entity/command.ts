@@ -26,40 +26,56 @@ const command = {
       description: 'Entity name',
     },
   },
-  options: {
+  configs: {
     regenerate: {
       description: 'Regenerate the entity without presenting an option to update it',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       default: false,
     },
     tableName: {
       description: 'Specify table name that will be used by the entity',
-      type: String,
+      cli: {
+        type: String,
+      },
     },
     fluentMethods: {
       description: 'Generate fluent methods in entity beans to allow chained object construction',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
     },
     angularSuffix: {
       description: 'Use a suffix to generate Angular routes and files, to avoid name clashes',
-      type: String,
+      cli: {
+        type: String,
+      },
     },
     clientRootFolder: {
       description:
         'Use a root folder name for entities on client side. By default its empty for monoliths and name of the microservice for gateways',
-      type: String,
+      cli: {
+        type: String,
+      },
     },
     skipUiGrouping: {
       description: 'Disables the UI grouping behaviour for entity client side code',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
     },
     skipDbChangelog: {
       description: 'Skip the generation of database changelog (liquibase for sql databases)',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
     },
     singleEntity: {
       description: 'Regenerate only a single entity, relationships can be not correctly generated',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
     },
   },
 } as const satisfies JHipsterCommandDefinition;

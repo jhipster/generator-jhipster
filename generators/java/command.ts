@@ -19,7 +19,7 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/types.js';
 
 const command = {
-  options: {},
+  configs: {},
   import: ['jhipster:java:bootstrap', 'jhipster:java:domain', 'jhipster:java:build-tool'],
 } as const satisfies JHipsterCommandDefinition;
 

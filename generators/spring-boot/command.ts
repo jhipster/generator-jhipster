@@ -28,16 +28,17 @@ const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const ALPHANUMERIC_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
 
 const command = {
-  options: {
+  configs: {
     fakeKeytool: {
       description: 'Add a fake certificate store file for test purposes',
-      type: Boolean,
-      env: 'FAKE_KEYTOOL',
+      cli: {
+        type: Boolean,
+        env: 'FAKE_KEYTOOL',
+        hide: true,
+      },
       scope: 'generator',
-      hide: true,
     },
-  },
-  configs: {
+
     reactive: {
       cli: {
         description: 'Generate a reactive backend',

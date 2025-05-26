@@ -41,27 +41,35 @@ const command = {
       scope: 'generator',
     },
   },
-  options: {
+  configs: {
     owner: {
-      type: String,
+      cli: {
+        type: String,
+      },
       description: 'Github repository owner',
       default: 'jhipster',
       scope: 'generator',
     },
     repository: {
-      type: String,
+      cli: {
+        type: String,
+      },
       description: 'Github repository',
       default: 'generator-jhipster',
       scope: 'generator',
     },
     codeWorkspace: {
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       description: 'Register to code workspace',
       default: true,
       scope: 'generator',
     },
     projectFolder: {
-      type: String,
+      cli: {
+        type: String,
+      },
       description: 'Folder to generate the sample',
       scope: 'generator',
       env: 'JHI_FOLDER_APP',

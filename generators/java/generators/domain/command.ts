@@ -19,30 +19,38 @@
 import type { JHipsterCommandDefinition } from '../../../../lib/command/index.js';
 
 const command = {
-  options: {
+  configs: {
     generateEntities: {
-      type: Boolean,
-      default: true,
+      cli: {
+        type: Boolean,
+        hide: true,
+        default: true,
+      },
       scope: 'generator',
-      hide: true,
     },
     useJakartaValidation: {
-      type: Boolean,
-      default: true,
+      cli: {
+        type: Boolean,
+        hide: true,
+        default: true,
+      },
       scope: 'generator',
-      hide: true,
     },
     useJacksonIdentityInfo: {
-      type: Boolean,
-      default: false,
+      cli: {
+        type: Boolean,
+        default: false,
+        hide: true,
+      },
       scope: 'generator',
-      hide: true,
     },
     generateEnums: {
-      type: Boolean,
-      default: true,
+      cli: {
+        type: Boolean,
+        default: true,
+        hide: true,
+      },
       scope: 'generator',
-      hide: true,
     },
   },
   import: [],

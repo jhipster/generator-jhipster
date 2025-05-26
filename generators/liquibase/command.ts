@@ -19,24 +19,28 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const command = {
-  options: {
+  configs: {
     skipFakeData: {
       description: 'Skip generation of fake data for development',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'storage',
     },
     recreateInitialChangelog: {
       description: 'Recreate the initial database changelog based on the current config',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'none',
     },
     skipDbChangelog: {
       description: 'Skip the generation of database migrations',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'none',
     },
-  },
-  configs: {
     incrementalChangelog: {
       cli: {
         description: 'Creates incremental database changelogs',

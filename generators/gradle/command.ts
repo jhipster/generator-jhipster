@@ -19,7 +19,6 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const command = {
-  options: {},
   configs: {
     enableGradleDevelocity: {
       cli: {

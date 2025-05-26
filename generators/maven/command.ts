@@ -19,7 +19,6 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const command = {
-  options: {},
   configs: {
     sortMavenPom: {
       description: 'Sort the pom.xml file',

@@ -19,14 +19,15 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const command = {
-  options: {
+  configs: {
     devDatabaseType: {
       description: 'Development database',
-      type: String,
+      cli: {
+        type: String,
+      },
+      choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql'],
       scope: 'storage',
     },
-  },
-  configs: {
     prodDatabaseType: {
       cli: {
         type: String,
