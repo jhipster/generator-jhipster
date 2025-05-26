@@ -596,9 +596,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   async composeWithJHipster<const G extends keyof GeneratorsByNamespace>(
     gen: G,
     options?: ComposeOptions<GeneratorsByNamespace[G]>,
-  ): Promise<GeneratorsByNamespace[G][]>;
-  async composeWithJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore[]>;
-  async composeWithJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore[]> {
+  ): Promise<GeneratorsByNamespace[G]>;
+  async composeWithJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore>;
+  async composeWithJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore> {
     assert(typeof gen === 'string', 'generator should to be a string');
     let generator: string = gen;
     if (!isAbsolute(generator)) {
@@ -627,9 +627,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   async dependsOnJHipster<const G extends keyof GeneratorsByNamespace>(
     gen: G,
     options?: ComposeOptions<GeneratorsByNamespace[G]>,
-  ): Promise<GeneratorsByNamespace[G][]>;
-  async dependsOnJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore[]>;
-  async dependsOnJHipster(generator: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore[]> {
+  ): Promise<GeneratorsByNamespace[G]>;
+  async dependsOnJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore>;
+  async dependsOnJHipster(generator: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore> {
     return this.composeWithJHipster(generator, {
       ...options,
       schedule: false,
