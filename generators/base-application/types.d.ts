@@ -1,40 +1,26 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
-import type CoreGenerator from '../base-core/generator.ts';
-import { type Config as BaseConfig, type Features as BaseFeatures, type Options as BaseOptions } from '../base/index.js';
+import {
+  type Config as BaseConfig,
+  type Features as BaseFeatures,
+  type Options as BaseOptions,
+  Application as SimpleApplication,
+} from '../base-simple-application/index.js';
 import type { ClientApplication } from '../client/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import type { SpringBootApplication } from '../server/types.js';
 import type { OptionWithDerivedProperties } from './application-options.js';
 
-export type BaseApplication = {
-  jhipsterVersion: string;
-  baseName: string;
-  capitalizedBaseName: string;
-  dasherizedBaseName: string;
-  humanizedBaseName: string;
-  camelizedBaseName: string;
-  hipster: string;
-  lowercaseBaseName: string;
-  upperFirstCamelCaseBaseName: string;
-  documentationArchiveUrl: string;
-
-  projectVersion: string;
-  projectDescription: string;
-
+export type BaseApplication = SimpleApplication & {
   jhiPrefix: string;
   entitySuffix: string;
   dtoSuffix: string;
 
   skipCommitHook: boolean;
-  skipJhipsterDependencies: boolean;
   fakerSeed?: string;
 
-  nodeVersion: string;
-  nodePackageManager: string;
   /* @deprecated use nodePackageManager */
   clientPackageManager: string;
-  nodeDependencies: Record<string, string>;
 
   skipClient?: boolean;
   skipServer?: boolean;
@@ -47,19 +33,6 @@ export type BaseApplication = {
    * True if the application has at least one non-builtin entity.
    */
   hasNonBuiltInEntity?: boolean;
-
-  /** Customize templates sourceFile and destinationFile */
-  customizeTemplatePaths: ((
-    this: CoreGenerator,
-    file: {
-      namespace: string;
-      sourceFile: string;
-      resolvedSourceFile: string;
-      destinationFile: string;
-      templatesRoots: string[];
-    },
-    context: any,
-  ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
 } & I18nApplication;
 
 /* ApplicationType Start */

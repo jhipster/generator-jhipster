@@ -20,8 +20,6 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_INIT } from '../generator-list.js';
 import {
   ADDITIONAL_SUB_GENERATORS,
-  ALL_GENERATORS,
-  ALL_PRIORITIES,
   CLI_OPTION,
   DYNAMIC,
   GENERATE_SNAPSHOTS,
@@ -146,14 +144,14 @@ const command = {
       },
       scope: 'storage',
     },
-    [ALL_GENERATORS]: {
+    allGenerators: {
       description: 'Generate every sub generator',
       cli: {
         type: Boolean,
       },
       scope: 'generator',
     },
-    [ALL_PRIORITIES]: {
+    allPriorities: {
       description: 'Generate every priority',
       cli: {
         type: Boolean,
