@@ -1,4 +1,4 @@
-import type { CoreApplication, CoreControl, CoreEntity, CoreSources } from '../base-core/types.js';
+import type { CoreApplication, CoreControl, CoreSources } from '../base-core/types.js';
 import type BaseGenerator from './generator.js';
 
 /**
@@ -21,10 +21,9 @@ import type BaseGenerator from './generator.js';
  */
 
 export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
-export type BaseEntity = CoreEntity & {};
-export type BaseApplication<Entity extends BaseEntity> = CoreApplication<Entity> & {};
-export type BaseSources<Entity extends BaseEntity, DataType extends BaseApplication<Entity>> = CoreSources<
-  Entity,
+export type BaseEntity = object;
+export type BaseApplication = CoreApplication & {};
+export type BaseSources<Entity extends BaseEntity, DataType extends BaseApplication> = CoreSources<
   DataType,
   BaseGenerator<any, Entity, DataType, any, any, any, any, any>
 > & {};

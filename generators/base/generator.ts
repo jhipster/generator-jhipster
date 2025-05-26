@@ -52,13 +52,13 @@ const { WRITING } = PRIORITY_NAMES;
 export default class BaseGenerator<
   Options extends BaseOptions,
   Entity extends BaseEntity,
-  Application extends BaseApplication<Entity>,
+  Application extends BaseApplication,
   Sources extends BaseSources<Entity, Application>,
   Control extends BaseControl,
   TaskTypes extends BaseTaskTypes<Control, Sources>,
   Configuration extends BaseConfiguration,
   Features extends JHipsterGeneratorFeatures,
-> extends CoreGenerator<Options, Entity, Application, Sources, Configuration, Features> {
+> extends CoreGenerator<Options, Application, Sources, Configuration, Features> {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
   delegateToBlueprint = false;

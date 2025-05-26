@@ -74,7 +74,7 @@ function clientBlock({
   return {
     path: `${srcPath}${relativeToSrc}${relativePath}`,
     ...block,
-    renameTo(this: CoreGenerator<any, any, any, any, any, any>, data: any, filePath: string) {
+    renameTo(this: CoreGenerator<any, any, any, any, any>, data: any, filePath: string) {
       return `${data[destProperty]}${relativeToSrc}${replaceEntityFilePath(data, relativePath) ?? ''}${
         replaceEntityFilePath(data, blockRenameTo?.call?.(this, data, filePath) ?? filePath) ?? ''
       }`;

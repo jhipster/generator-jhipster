@@ -59,27 +59,29 @@ type RunJHipster = WithJHipsterGenerators & {
   useEnvironmentBuilder?: boolean;
 };
 
-type JHipsterRunResult<GeneratorType extends CoreGenerator<any, any, any, any, any, any> = CoreGenerator<any, any, any, any, any, any>> =
-  Omit<RunResult<GeneratorType>, 'env'> & {
-    env: Environment;
+type JHipsterRunResult<GeneratorType extends CoreGenerator<any, any, any, any, any> = CoreGenerator<any, any, any, any, any>> = Omit<
+  RunResult<GeneratorType>,
+  'env'
+> & {
+  env: Environment;
 
-    /**
-     * First argument of mocked source calls.
-     */
-    sourceCallsArg: Record<string, unknown[]>;
+  /**
+   * First argument of mocked source calls.
+   */
+  sourceCallsArg: Record<string, unknown[]>;
 
-    /**
-     * Composed generators that were mocked.
-     */
-    composedMockedGenerators: string[];
+  /**
+   * Composed generators that were mocked.
+   */
+  composedMockedGenerators: string[];
 
-    // eslint-disable-next-line no-use-before-define
-    createJHipster: (ns: string, options?: WithJHipsterGenerators) => JHipsterRunContext;
+  // eslint-disable-next-line no-use-before-define
+  createJHipster: (ns: string, options?: WithJHipsterGenerators) => JHipsterRunContext;
 
-    application?: ApplicationType;
+  application?: ApplicationType;
 
-    entities?: Record<string, Entity>;
-  };
+  entities?: Record<string, Entity>;
+};
 
 type HelpersDefaults = {
   /** Blueprint namespace */

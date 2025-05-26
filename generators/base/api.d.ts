@@ -1,7 +1,7 @@
 import type { Simplify } from 'type-fest';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/types.js';
 import type { CoreConfiguration, CoreFeatures, CoreOptions } from '../base-core/api.js';
-import type CoreGenerator from '../base-core/index.js';
+import type BaseGenerator from './generator.js';
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -80,7 +80,7 @@ export type JHipsterGeneratorFeatures = CoreFeatures & {
 
 export type NeedleCallback = (content: string) => string;
 
-export type EditFileCallback<Generator = CoreGenerator<any, any, any, any, any, any>> = (
+export type EditFileCallback<Generator = BaseGenerator<any, any, any, any, any, any, any, any>> = (
   this: Generator,
   content: string,
   filePath: string,

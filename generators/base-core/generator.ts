@@ -60,7 +60,7 @@ import type GeneratorsByNamespace from '../types.js';
 import type { GeneratorBaseCore } from '../index.js';
 import type { CoreConfiguration, CoreFeatures, CoreOptions, EditFileCallback, WriteFileOptions } from './api.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.js';
-import type { CoreApplication, CoreEntity, CoreSources } from './types.js';
+import type { CoreApplication, CoreSources } from './types.js';
 import type { Logger } from './support/index.js';
 import {
   CRLF,
@@ -107,9 +107,8 @@ const deepMerge = (source1: any, source2: any) => mergeWith({}, source1, source2
  */
 export default class CoreGenerator<
   Options extends CoreOptions,
-  E extends CoreEntity,
-  Application extends CoreApplication<E>,
-  Sources extends CoreSources<E, Application, any>,
+  Application extends CoreApplication,
+  Sources extends CoreSources<Application, any>,
   Configuration extends CoreConfiguration,
   Features extends CoreFeatures,
 > extends YeomanGenerator<Options, Features> {
@@ -604,12 +603,12 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   ): Promise<GeneratorsByNamespace[G]>;
   async composeWithJHipster(
     gen: string,
-    options?: ComposeOptions<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>>,
-  ): Promise<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>>;
+    options?: ComposeOptions<GeneratorBaseCore<Options, Application, Sources, Configuration, Features>>,
+  ): Promise<GeneratorBaseCore<Options, Application, Sources, Configuration, Features>>;
   async composeWithJHipster(
     gen: string,
-    options?: ComposeOptions<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>>,
-  ): Promise<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>> {
+    options?: ComposeOptions<GeneratorBaseCore<Options, Application, Sources, Configuration, Features>>,
+  ): Promise<GeneratorBaseCore<Options, Application, Sources, Configuration, Features>> {
     assert(typeof gen === 'string', 'generator should to be a string');
     let generator: string = gen;
     if (!isAbsolute(generator)) {
@@ -641,12 +640,12 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   ): Promise<GeneratorsByNamespace[G]>;
   async dependsOnJHipster(
     gen: string,
-    options?: ComposeOptions<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>>,
-  ): Promise<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>>;
+    options?: ComposeOptions<GeneratorBaseCore<Options, Application, Sources, Configuration, Features>>,
+  ): Promise<GeneratorBaseCore<Options, Application, Sources, Configuration, Features>>;
   async dependsOnJHipster(
     generator: string,
-    options?: ComposeOptions<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>>,
-  ): Promise<GeneratorBaseCore<Options, E, Application, Sources, Configuration, Features>> {
+    options?: ComposeOptions<GeneratorBaseCore<Options, Application, Sources, Configuration, Features>>,
+  ): Promise<GeneratorBaseCore<Options, Application, Sources, Configuration, Features>> {
     return this.composeWithJHipster(generator, {
       ...options,
       schedule: false,
@@ -1280,7 +1279,6 @@ export class CommandCoreGenerator<
   AdditionalFeatures = unknown,
 > extends CoreGenerator<
   CoreOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions,
-  any,
   any,
   any,
   CoreConfiguration & ExportStoragePropertiesFromCommand<Command>,

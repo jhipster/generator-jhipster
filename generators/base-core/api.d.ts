@@ -51,9 +51,9 @@ export type CoreFeatures = BaseFeatures & {
   queueCommandTasks?: boolean;
   disableSkipPriorities?: boolean;
 };
-export type EditFileCallback<G = CoreGenerator<any, any, any, any, any, any>> = (this: G, content: string, filePath: string) => string;
+export type EditFileCallback<G = CoreGenerator<any, any, any, any, any>> = (this: G, content: string, filePath: string) => string;
 
-export type WriteFileOptions<S extends CoreSources<any, any, any>, G = CoreGenerator<any, any, any, S, any, any>> = {
+export type WriteFileOptions<S extends CoreSources<any, any>, G = CoreGenerator<any, any, S, any, any>> = {
   /** transforms (files processing) to be applied */
   transform?: EditFileCallback[];
   /** context to be used as template data */

@@ -21,10 +21,10 @@ import { fieldTypes, validations } from '../../../lib/jhipster/index.js';
 import { getTypescriptType, prepareField as prepareClientFieldForTemplates } from '../../client/support/index.js';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/object.js';
-import type CoreGenerator from '../../base-core/generator.js';
 import type { FakerWithRandexp } from '../../base/support/faker.js';
 import type { BaseApplicationEntity, BaseApplicationField, BaseApplicationPrimaryKey, BaseApplicationRelationship } from '../types.js';
 import { fieldTypeValues } from '../../../lib/application/field-types.js';
+import type BaseApplicationGenerator from '../generator.js';
 import { prepareProperty } from './prepare-property.js';
 import { isFieldEnumType } from './enum.js';
 
@@ -105,7 +105,7 @@ const fakeStringTemplateForFieldName = columnName => {
  * @returns fake value
  */
 function generateFakeDataForField<F extends BaseApplicationField>(
-  this: CoreGenerator<any, any, any, any, any, any>,
+  this: BaseApplicationGenerator<any, any, any, any, any>,
   field: F,
   faker: FakerWithRandexp,
   changelogDate,

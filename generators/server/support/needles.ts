@@ -59,7 +59,7 @@ export type ApplicationPropertiesNeedles = {
  */
 export function insertContentIntoApplicationProperties(needles: ApplicationPropertiesNeedles);
 export function insertContentIntoApplicationProperties(
-  this: CoreGenerator<any, any, any, any, any, any>,
+  this: CoreGenerator<any, any, any, any, any>,
   application: { javaPackageSrcDir: string },
   needles: ApplicationPropertiesNeedles,
 );

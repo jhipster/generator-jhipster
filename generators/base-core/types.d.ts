@@ -58,15 +58,11 @@ export type WriteFileBlock<S, G> = {
 };
 
 export type WriteFileSection<S, G> = Record<string, WriteFileBlock<S, G>[]>;
-export type CoreEntity = {
-  resetFakerSeed(suffix?: string): void;
-};
 
-export type CoreApplication<E extends CoreEntity> = {
-  sharedEntities: Record<string, E>;
+export type CoreApplication = {
   customizeTemplatePaths: any[];
 };
-export type CoreSources<E extends CoreEntity, A extends CoreApplication<E>, G extends CoreGenerator<any, E, A, any, any, any>> = {
+export type CoreSources<A extends CoreApplication, G extends CoreGenerator<any, A, any, any, any>> = {
   customizeTemplatePath?: ((file: {
     sourceFile: string;
     resolvedSourceFile: string;

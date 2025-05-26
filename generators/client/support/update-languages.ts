@@ -38,7 +38,7 @@ export type UpdateClientLanguagesTaskParam = {
  */
 
 export function updateLanguagesInDayjsConfigurationTask(
-  this: BaseGenerator<any, any, any, any, any, any>,
+  this: BaseGenerator<any, any, any, any, any>,
   { application, control = {} }: UpdateClientLanguagesTaskParam,
   { configurationFile, commonjs = false }: { configurationFile: string; commonjs?: boolean },
 ): void {

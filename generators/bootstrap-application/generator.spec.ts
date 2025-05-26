@@ -136,6 +136,7 @@ describe(`generator - ${generator}`, () => {
     "changelogDate": "20220129025419"
   },
   "changelogDate": "20220129025419",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "id",
@@ -245,7 +246,7 @@ describe(`generator - ${generator}`, () => {
   "entityAbsoluteClass": "com.mycompany.myapp.domain.User",
   "entityAbsoluteFolder": "com/mycompany/myapp/",
   "entityAbsolutePackage": "com.mycompany.myapp",
-  "entityAngularJSSuffix": undefined,
+  "entityAngularJSSuffix": "",
   "entityAngularName": "User",
   "entityAngularNamePlural": "Users",
   "entityApi": "",
@@ -274,7 +275,7 @@ describe(`generator - ${generator}`, () => {
   "entityPage": "user",
   "entityParentPathAddition": "",
   "entityPersistenceLayer": false,
-  "entityPluralFileName": "usersundefined",
+  "entityPluralFileName": "",
   "entityReactName": "User",
   "entityReadAuthority": undefined,
   "entityRestLayer": false,
@@ -289,7 +290,6 @@ describe(`generator - ${generator}`, () => {
   "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
-  "fieldNameChoices": [],
   "fields": [
     {
       "autoGenerate": true,
@@ -1236,7 +1236,7 @@ describe(`generator - ${generator}`, () => {
   "entityAbsoluteClass": "com.mycompany.myapp.domain.EntityA",
   "entityAbsoluteFolder": "com/mycompany/myapp/",
   "entityAbsolutePackage": "com.mycompany.myapp",
-  "entityAngularJSSuffix": undefined,
+  "entityAngularJSSuffix": "",
   "entityAngularName": "EntityA",
   "entityAngularNamePlural": "EntityAS",
   "entityApi": "",
@@ -1263,7 +1263,7 @@ describe(`generator - ${generator}`, () => {
   "entityPackage": undefined,
   "entityPage": "entity-a",
   "entityParentPathAddition": "",
-  "entityPluralFileName": "entity-asundefined",
+  "entityPluralFileName": "",
   "entityReactName": "EntityA",
   "entityReadAuthority": undefined,
   "entityServiceFileName": "entity-a",
@@ -1276,7 +1276,6 @@ describe(`generator - ${generator}`, () => {
   "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
-  "fieldNameChoices": [],
   "fields": [
     {
       "autoGenerate": true,
@@ -1798,7 +1797,7 @@ describe(`generator - ${generator}`, () => {
   "entityAbsoluteClass": "com.mycompany.myapp.domain.EntityA",
   "entityAbsoluteFolder": "com/mycompany/myapp/",
   "entityAbsolutePackage": "com.mycompany.myapp",
-  "entityAngularJSSuffix": undefined,
+  "entityAngularJSSuffix": "",
   "entityAngularName": "EntityA",
   "entityAngularNamePlural": "EntityAS",
   "entityApi": "",
@@ -1825,7 +1824,7 @@ describe(`generator - ${generator}`, () => {
   "entityPackage": undefined,
   "entityPage": "entity-a",
   "entityParentPathAddition": "",
-  "entityPluralFileName": "entity-asundefined",
+  "entityPluralFileName": "",
   "entityReactName": "EntityA",
   "entityReadAuthority": undefined,
   "entityServiceFileName": "entity-a",
@@ -1838,7 +1837,6 @@ describe(`generator - ${generator}`, () => {
   "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
-  "fieldNameChoices": [],
   "fields": [
     {
       "autoGenerate": true,

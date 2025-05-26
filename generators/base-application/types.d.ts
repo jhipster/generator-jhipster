@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 
 import { BaseApplication, BaseControl, BaseEntity, BaseSources } from '../base/types.js';
-import { Application as SimpleApplication } from '../base-simple-application/index.js';
 import type { FieldType } from '../../lib/application/field-types.js';
 import type { FakerWithRandexp } from '../base/support/index.js';
 export type Property = {
@@ -179,6 +178,7 @@ export type BaseApplicationEntity<
   enums: string[];
   relationshipsByOtherEntity: Record<string, Relationship[]>;
   differentRelationships: Record<string, Relationship[]>;
+  entityAngularName: string;
   entityNameCapitalized: string;
   entityNamePlural: string;
   entityNamePluralizedAndSpinalCased: string;
@@ -200,7 +200,6 @@ export type BaseApplicationEntity<
   entityClassPluralHumanized: string;
 
   entityFileName: string;
-  entityAngularName: string;
   entityAngularNamePlural: string;
   entityApiUrl: string;
 
@@ -244,25 +243,19 @@ export type BaseApplicationEntity<
   otherDtoReferences: any[];
   faker: FakerWithRandexp;
 };
-export type BaseApplicationApplication<
-  Field extends BaseApplicationField,
-  PrimaryKey extends BaseApplicationPrimaryKey<Field>,
-  Relationship extends BaseApplicationRelationship<any>,
-  Entity extends BaseApplicationEntity<Field, PrimaryKey, Relationship>,
-> = BaseApplication<Entity> &
-  SimpleApplication & {
-    baseName: string;
-    generateBuiltInUserEntity?: boolean;
-    generateUserManagement: boolean;
-    generateBuiltInAuthorityEntity: boolean;
-    applicationTypeMicroservice: boolean;
-    applicationTypeGateway: boolean;
-    microfrontend: boolean;
-    dtoSuffix: string;
-    entitySuffix: string;
-    frontendAppName?: string;
-    authenticationTypeOauth2: boolean;
-  };
+export type BaseApplicationApplication = BaseApplication & {
+  baseName: string;
+  generateBuiltInUserEntity?: boolean;
+  generateUserManagement: boolean;
+  generateBuiltInAuthorityEntity: boolean;
+  applicationTypeMicroservice: boolean;
+  applicationTypeGateway: boolean;
+  microfrontend: boolean;
+  dtoSuffix: string;
+  entitySuffix: string;
+  frontendAppName?: string;
+  authenticationTypeOauth2: boolean;
+};
 
 export type BaseApplicationSources<
   Field extends BaseApplicationField,

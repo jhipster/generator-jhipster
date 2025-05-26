@@ -117,7 +117,7 @@ function javaBlock({
   return {
     path: `${srcPath}${relativePath}`,
     ...block,
-    renameTo(this: CoreGenerator<any, any, any, any, any, any>, data: any, filePath: string) {
+    renameTo(this: CoreGenerator<any, any, any, any, any>, data: any, filePath: string) {
       return `${data[destProperty]}${replaceEntityFilePathVariables(data, relativePath) ?? ''}${
         replaceEntityFilePathVariables(data, blockRenameTo?.call?.(this, data, filePath) ?? filePath) ?? ''
       }`;

@@ -43,7 +43,7 @@ function generateDateTimeFormat(language: string, index: number, length: number)
 }
 
 function updateLanguagesInPipeTask(
-  this: BaseGenerator<any, any, any, any, any, any>,
+  this: BaseGenerator<any, any, any, any, any>,
   { application, control = {} }: UpdateClientLanguagesTaskParam,
 ) {
   const { clientSrcDir, languagesDefinition = [] } = application;
@@ -58,7 +58,7 @@ function updateLanguagesInPipeTask(
 }
 
 function updateLanguagesInConfigTask(
-  this: BaseGenerator<any, any, any, any, any, any>,
+  this: BaseGenerator<any, any, any, any, any>,
   { application, control = {} }: UpdateClientLanguagesTaskParam,
 ) {
   const { clientSrcDir, languages } = application;
@@ -77,7 +77,7 @@ function updateLanguagesInConfigTask(
 }
 
 function updateLanguagesInWebpackTask(
-  this: BaseGenerator<any, any, any, any, any, any>,
+  this: BaseGenerator<any, any, any, any, any>,
   { application, control = {} }: UpdateClientLanguagesTaskParam,
 ) {
   const { clientSrcDir, languages } = application;
@@ -93,7 +93,7 @@ function updateLanguagesInWebpackTask(
   );
 }
 
-export default function updateLanguagesTask(this: BaseGenerator<any, any, any, any, any, any>, taskParam: UpdateClientLanguagesTaskParam) {
+export default function updateLanguagesTask(this: BaseGenerator<any, any, any, any, any>, taskParam: UpdateClientLanguagesTaskParam) {
   updateLanguagesInPipeTask.call(this, taskParam);
   updateLanguagesInConfigTask.call(this, taskParam);
   if (taskParam.application.clientBundlerWebpack) {
