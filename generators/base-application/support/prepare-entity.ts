@@ -40,8 +40,8 @@ import type {
   BaseApplicationRelationship,
 } from '../types.js';
 import type BaseApplicationGenerator from '../generator.js';
-import type { BaseApplicationConfiguration } from '../api.js';
 import type { FieldType } from '../../../lib/application/field-types.js';
+import type { WorkspaceConfiguration } from '../../../lib/types/application/yo-rc.js';
 import { fieldToReference } from './prepare-field.js';
 import { fieldIsEnum } from './field-utils.js';
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
@@ -223,7 +223,10 @@ export function prepareEntity<
     : entityWithConfig.entityFileName;
   entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
   entityWithConfig.entityParentPathAddition = getEntityParentPathAddition(entityWithConfig.clientRootFolder);
-  entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
+  entityWithConfig.entityPluralFileName =
+    entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix
+      ? entityWithConfig.entityAngularJSSuffix
+      : '';
   entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
 
   entityWithConfig.entityReactName = entityWithConfig.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
@@ -508,8 +511,9 @@ export function loadRequiredConfigIntoEntity<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
+  C extends WorkspaceConfiguration, // FIXME types
   G extends BaseApplicationGenerator<any, F, PK, R, E, any, any, any, any, any>,
->(this: G | void, entity: E, config: BaseApplicationConfiguration): E {
+>(this: G | void, entity: E, config: C): E {
   mutateData(entity, {
     __override__: false,
     applicationType: config.applicationType,
@@ -535,6 +539,7 @@ export function loadRequiredConfigIntoEntity<
     // If the entity belongs to this application and searchEngine is true.
     if (config.searchEngine && config.searchEngine !== NO_SEARCH_ENGINE) {
       // Replace with the searchEngine from the application.
+      // @ts-ignore
       entity.searchEngine = config.searchEngine;
     } else {
       entity.searchEngine = 'no';

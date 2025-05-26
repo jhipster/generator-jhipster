@@ -31,6 +31,7 @@ export type BaseApplicationConfiguration = Simplify<
     languages: any[];
     applicationIndex?: number;
     nativeLanguage: string;
+    creationTimestamp?: string;
     // eslint-disable-next-line @typescript-eslint/consistent-type-imports
   } & ExportStoragePropertiesFromCommand<typeof import('./command.js').default> & {
       entities: string[];

@@ -18,12 +18,17 @@
  */
 import chalk from 'chalk';
 import { intersection } from 'lodash-es';
-import { APPLICATION_TYPE_GATEWAY, clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.js';
+import {
+  APPLICATION_TYPE_GATEWAY,
+  APPLICATION_TYPE_MICROSERVICE,
+  clientFrameworkTypes,
+  testFrameworkTypes,
+} from '../../lib/jhipster/index.js';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_BASE_APPLICATION, GENERATOR_COMMON } from '../generator-list.js';
-const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
+import { GENERATOR_COMMON } from '../generator-list.js';
 
 const { CYPRESS } = testFrameworkTypes;
+const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 
 const microfrontendsToPromptValue = answer => (Array.isArray(answer) ? answer.map(({ baseName }) => baseName).join(',') : answer);
 const promptValueToMicrofrontends = answer =>
@@ -37,6 +42,26 @@ const promptValueToMicrofrontends = answer =>
 
 const command = {
   configs: {
+    clientFramework: {
+      description: 'Provide client framework for the application',
+      cli: {
+        type: String,
+      },
+      prompt: generator => ({
+        type: 'list',
+        message: () =>
+          generator.jhipsterConfigWithDefaults.applicationType === APPLICATION_TYPE_MICROSERVICE
+            ? `Which ${chalk.yellow('*framework*')} would you like to use as microfrontend?`
+            : `Which ${chalk.yellow('*framework*')} would you like to use for the client?`,
+      }),
+      choices: [
+        { value: ANGULAR, name: 'Angular' },
+        { value: REACT, name: 'React' },
+        { value: VUE, name: 'Vue' },
+        { value: CLIENT_FRAMEWORK_NO, name: 'No client' },
+      ],
+      scope: 'storage',
+    },
     clientTheme: {
       cli: {
         type: String,
@@ -90,7 +115,21 @@ const command = {
       },
       scope: 'storage',
     },
-
+    microfrontend: {
+      description: 'Enable microfrontend support',
+      cli: {
+        type: Boolean,
+      },
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        type: 'confirm',
+        when: answers =>
+          [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? config.clientFramework) &&
+          config.applicationType === APPLICATION_TYPE_GATEWAY,
+        message: `Do you want to enable ${chalk.yellow('*microfrontends*')}?`,
+        default: false,
+      }),
+      scope: 'storage',
+    },
     microfrontends: {
       description: 'Microfrontends to load',
       cli: {
@@ -151,7 +190,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: [GENERATOR_COMMON, GENERATOR_BASE_APPLICATION],
+  import: [GENERATOR_COMMON],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

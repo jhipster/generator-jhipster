@@ -166,7 +166,7 @@ describe('cli', () => {
     beforeEach(async () => {
       getCommand.mockImplementation(actualGetCommonand as any);
 
-      const BaseGenerator = (await import('../generators/base/generator.js')).default;
+      const BaseGenerator = (await import('../generators/base/index.js')).default;
       env = (await helpers.createTestEnv()) as FullEnvironment;
       // @ts-expect-error
       generator = new (helpers.createDummyGenerator(BaseGenerator))({ env });

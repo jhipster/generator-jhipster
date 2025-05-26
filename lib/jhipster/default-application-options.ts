@@ -90,7 +90,7 @@ const commonDefaultOptions: ApplicationDefaults = {
   [WEBSOCKET]: (OptionValues[WEBSOCKET] as Record<string, string>).no,
 };
 
-export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}) {
+export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}): Partial<ApplicationConfiguration> {
   const applicationType = customOptions.applicationType;
   if (applicationType === GATEWAY) {
     return getConfigForGatewayApplication(customOptions);
@@ -101,7 +101,7 @@ export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}) {
   return getConfigForMonolithApplication(customOptions);
 }
 
-export function getConfigForClientApplication(options: ApplicationDefaults = {}): ApplicationDefaults {
+export function getConfigForClientApplication(options: ApplicationDefaults = {}): Partial<ApplicationConfiguration> {
   if (options[SKIP_CLIENT]) {
     options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
   }

@@ -23,7 +23,7 @@ import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
 import { getDatabaseTypeData } from '../server/support/database.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import { formatDateForChangelog } from '../base/support/timestamp.js';
-import type { Entity as ApplicationEntity, Entity, UserEntity } from '../../lib/types/application/entity.js';
+import type { Entity as DeprecatedEntity, UserEntity } from '../../lib/types/application/entity.js';
 
 const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -73,9 +73,9 @@ export function createUserEntity(this: BaseApplicationGenerator, customUserData 
     ...customUserData,
   };
 
-  loadRequiredConfigIntoEntity(user as Entity, application);
+  loadRequiredConfigIntoEntity(user as DeprecatedEntity, application);
   // Fallback to defaults for test cases.
-  loadRequiredConfigIntoEntity(user as Entity, this.jhipsterConfigWithDefaults);
+  loadRequiredConfigIntoEntity(user as DeprecatedEntity, this.jhipsterConfigWithDefaults);
 
   const oauth2 = (user as any).authenticationType === OAUTH2;
   // If oauth2 or databaseType is cassandra, force type string, otherwise keep undefined for later processing.
@@ -161,7 +161,7 @@ export function createUserManagementEntity(
   this: BaseApplicationGenerator,
   customUserManagementData = {},
   application,
-): Partial<ApplicationEntity> {
+): Partial<DeprecatedEntity> {
   const user = createUserEntity.call(this, {}, application);
   for (const field of user.fields ?? []) {
     // Login is used as the id field in rest api.
@@ -208,8 +208,8 @@ export function createUserManagementEntity(
   return userManagement;
 }
 
-export function createAuthorityEntity(this: BaseApplicationGenerator, customAuthorityData = {}, application): Partial<ApplicationEntity> {
-  const entityDefinition = this.getEntityConfig(authorityEntityName)?.getAll() as Partial<ApplicationEntity>;
+export function createAuthorityEntity(this: BaseApplicationGenerator, customAuthorityData = {}, application): Partial<DeprecatedEntity> {
+  const entityDefinition = this.getEntityConfig(authorityEntityName)?.getAll() as Partial<DeprecatedEntity>;
   if (entityDefinition) {
     if (entityDefinition.relationships && entityDefinition.relationships.length > 0) {
       this.log.warn(`Relationships on the ${authorityEntityName} entity side will be disregarded`);
@@ -222,7 +222,7 @@ export function createAuthorityEntity(this: BaseApplicationGenerator, customAuth
   const creationTimestamp = new Date(this.jhipsterConfig.creationTimestamp ?? Date.now());
   creationTimestamp.setMinutes(creationTimestamp.getMinutes() + 2);
   // Create entity definition for built-in entity to make easier to deal with relationships.
-  const authorityEntity: Partial<ApplicationEntity> = {
+  const authorityEntity: Partial<DeprecatedEntity> = {
     name: authorityEntityName,
     entitySuffix: '',
     clientRootFolder: 'admin',
@@ -245,9 +245,9 @@ export function createAuthorityEntity(this: BaseApplicationGenerator, customAuth
     ...customAuthorityData,
   };
 
-  loadRequiredConfigIntoEntity(authorityEntity as Entity, application);
+  loadRequiredConfigIntoEntity(authorityEntity as DeprecatedEntity, application);
   // Fallback to defaults for test cases.
-  loadRequiredConfigIntoEntity(authorityEntity as Entity, this.jhipsterConfigWithDefaults);
+  loadRequiredConfigIntoEntity(authorityEntity as DeprecatedEntity, this.jhipsterConfigWithDefaults);
 
   addOrExtendFields(authorityEntity.fields, [
     {

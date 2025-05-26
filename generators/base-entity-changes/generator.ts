@@ -153,6 +153,7 @@ export default abstract class BaseEntityChangesGenerator<
 
     const entitiesByName = Object.fromEntries(paramEntities.map(entity => [entity.name, entity]));
     const entitiesWithExistingChangelog = entityNames.filter(
+      // @ts-ignore
       entityName => !this.isChangelogNew({ entityName, changelogDate: entitiesByName[entityName].annotations?.changelogDate }),
     );
     const previousEntitiesByName = Object.fromEntries(

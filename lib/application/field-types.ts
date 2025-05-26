@@ -30,9 +30,10 @@ const fieldTypes = {
   BYTE_BUFFER: 'ByteBuffer',
   ...blobFieldTypes,
 } as const;
-export const fieldTypeValues: string[] = Object.values(fieldTypes);
 
 export default fieldTypes;
+
+export const fieldTypeValues: string[] = Object.values(fieldTypes);
 
 export type FieldType = (typeof fieldTypes)[keyof typeof fieldTypes];
 

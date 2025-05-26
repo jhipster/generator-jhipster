@@ -47,7 +47,7 @@ import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/applica
 import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
 import type { TaskTypes as DefaultTaskTypes } from '../base-application/tasks.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
-import type { TemporaryControlToMoveToDownstream } from '../../lib/types/application/control.js';
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
 import { GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES, UPGRADE_BRANCH } from './support/index.js';
 
 /* Constants used throughout */
@@ -78,7 +78,7 @@ export default class UpgradeGenerator<
     Relationship,
     Application
   >,
-  Control extends BaseApplicationControl = TemporaryControlToMoveToDownstream,
+  Control extends BaseApplicationControl = DeprecatedControl,
   TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
     Field,
     PK,

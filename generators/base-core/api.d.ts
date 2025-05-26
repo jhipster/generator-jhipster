@@ -48,6 +48,8 @@ export type CoreFeatures = BaseFeatures & {
    */
   storeJHipsterVersion?: boolean;
   blueprintSupport?: boolean;
+  queueCommandTasks?: boolean;
+  disableSkipPriorities?: boolean;
 };
 export type EditFileCallback<G = CoreGenerator<any, any, any, any, any, any>> = (this: G, content: string, filePath: string) => string;
 

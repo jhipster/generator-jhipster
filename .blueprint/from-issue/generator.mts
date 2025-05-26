@@ -29,9 +29,8 @@ import type {
 import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
 import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
 import type { TaskTypes as DefaultTaskTypes } from '../../generators/base-application/tasks.js';
-import type BaseApplicationSharedData from '../../generators/base-application/shared-data.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
-import { TemporaryControlToMoveToDownstream } from '../../lib/types/application/control.js';
+import { DeprecatedControl } from '../../lib/types/application/control.js';
 
 const YO_RC_OUTPUT = 'yo-rc';
 const ENTITIES_JDL_OUTPUT = 'entities-jdl';
@@ -79,7 +78,7 @@ export default class<
     Relationship,
     Application
   >,
-  Control extends BaseApplicationControl = TemporaryControlToMoveToDownstream,
+  Control extends BaseApplicationControl = DeprecatedControl,
   TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
     Field,
     PK,

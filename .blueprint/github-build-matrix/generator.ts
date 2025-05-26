@@ -17,7 +17,7 @@ import type { BaseApplicationControl } from '../../generators/base-application/t
 import type { TaskTypes as DefaultTaskTypes } from '../../generators/base-application/tasks.js';
 import type { BaseApplicationConfiguration, BaseApplicationFeatures } from '../../generators/base-application/api.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
-import type { TemporaryControlToMoveToDownstream } from '../../lib/types/application/control.js';
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
 import type { eventNameChoices, workflowChoices } from './command.js';
 import { devServerMatrix } from './samples/dev-server.js';
 import { getGitChanges } from './support/git-changes.js';
@@ -54,7 +54,7 @@ export default class<
     Relationship,
     Application
   >,
-  Control extends BaseApplicationControl = TemporaryControlToMoveToDownstream,
+  Control extends BaseApplicationControl = DeprecatedControl,
   TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
     Field,
     PK,

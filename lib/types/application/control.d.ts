@@ -20,7 +20,7 @@ import type { Entity } from './entity.js';
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export type TemporaryControlToMoveToDownstream = BaseControl & {
+export type DeprecatedControl = BaseControl & {
   supportedLanguages: any;
 
   isJhipsterVersionLessThan: (gen: string) => boolean;

@@ -22,7 +22,11 @@ import chalk from 'chalk';
 import { passthrough } from '@yeoman/transform';
 
 import { isFileStateModified } from 'mem-fs-editor/state';
-import BaseApplicationGenerator from '../base-application/index.js';
+import BaseApplicationGenerator, {
+  type Entity as DeprecatedEntity,
+  type Field as DeprecatedField,
+  type Relationship as DeprecatedRelationship,
+} from '../base-application/index.js';
 import { addFakerToEntity } from '../base-application/support/prepare-entity.js';
 
 import {
@@ -43,11 +47,55 @@ import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesC
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { isWin32, removeFieldsWithNullishValues } from '../base/support/index.js';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../lib/application/field-types.js';
-import type { Entity } from '../../lib/types/application/entity.js';
-import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
+import type { BaseApplicationFeatures } from '../base-application/api.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { TaskTypes as ApplicationTaskTypes } from '../base-application/tasks.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
+import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 
-export default class BootstrapApplicationBase extends BaseApplicationGenerator {
+export default class BootstrapApplicationBase<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  // @ts-ignore
+  Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends ApplicationType<Field, PK, Relationship> = ApplicationType<Field, PK, Relationship>,
+  Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends DeprecatedControl = DeprecatedControl,
+  TaskTypes extends ApplicationTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = ApplicationTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends ApplicationConfiguration = ApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseApplicationGenerator<
+  Options,
+  Field,
+  PK,
+  Relationship,
+  Entity,
+  Application,
+  Sources,
+  Control,
+  TaskTypes,
+  Configuration,
+  Features
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -119,7 +167,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           syncUserWithIdp: this.jhipsterConfig.syncUserWithIdp,
           packageJsonScripts: {},
           clientPackageJsonScripts: {},
-        });
+        } as any);
       },
       loadNodeDependencies({ application }) {
         this.loadNodeDependencies(application.nodeDependencies, {
@@ -182,7 +230,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
           backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
           clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
-        });
+        } as any);
       },
       userRelationship({ applicationDefaults }) {
         applicationDefaults({
@@ -190,7 +238,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           anyEntityHasRelationshipWithUser: this.getExistingEntities().some(entity =>
             (entity.definition.relationships ?? []).some(relationship => relationship.otherEntityName.toLowerCase() === 'user'),
           ),
-        });
+        } as any);
       },
       syncUserWithIdp({ application, applicationDefaults }) {
         if (!application.backendTypeSpringBoot) return;
@@ -200,7 +248,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
             __override__: false,
             syncUserWithIdp: data =>
               data.databaseType !== 'no' && (data.applicationType === 'gateway' || data.anyEntityHasRelationshipWithUser),
-          });
+          } as any);
         } else if (application.syncUserWithIdp && application.authenticationType !== 'oauth2') {
           throw new Error('syncUserWithIdp is only supported with oauth2 authenticationType');
         }
@@ -210,7 +258,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => generateUserManagement || syncUserWithIdp,
           generateBuiltInAuthorityEntity: ({ generateBuiltInUserEntity, databaseType }) =>
             generateBuiltInUserEntity! && databaseType !== 'cassandra',
-        });
+        } as any);
       },
     });
   }
@@ -299,7 +347,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
 
           const customUserData: any = customUser?.entityStorage.getAll() ?? {};
-          // @ts-ignore
+          // @ts-ignore FIXME types
           Object.assign(bootstrap, createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application));
           application.user = bootstrap;
         }
@@ -316,6 +364,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           const customUserManagementData: any = customUserManagement?.entityStorage.getAll() ?? {};
           Object.assign(
             bootstrap,
+            // @ts-ignore FIXME types
             createUserManagementEntity.call(this, { ...customUserManagementData, ...customUserManagementData.annotations }, application),
           );
           application.userManagement = bootstrap;
@@ -332,6 +381,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
 
           const customEntityData: any = customEntity?.entityStorage.getAll() ?? {};
+          // @ts-ignore FIXME types
           Object.assign(bootstrap, createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application));
           application.authority = bootstrap;
         }
@@ -420,6 +470,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationshipsForTemplates({ entity, relationship }) {
+        // @ts-ignore FIXME types
         prepareRelationship(entity, relationship, this);
       },
     });

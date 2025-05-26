@@ -162,7 +162,7 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
             ],
             gradle: [
               {
-                // @ts-ignore
+                // @ts-ignore FIXME types
                 condition: ctx => ctx.buildToolGradle,
                 templates: ['gradle/native.gradle'],
               },
