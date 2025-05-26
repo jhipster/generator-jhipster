@@ -17,20 +17,14 @@
  * limitations under the License.
  */
 import { asWritingTask } from '../base-application/support/task-type-inference.js';
-<<<<<<< HEAD
-=======
 import type { Field as DeprecatedField, Relationship as DeprecatedRelationship } from '../../lib/types/application/index.js';
 import type { Entity as DeprecatedEntity, PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
 import type { ApplicationType as DeprecatedApplication } from '../../lib/types/application/application.js';
->>>>>>> 936b492b5e (rebase with main)
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-<<<<<<< HEAD
-export default asWritingTask(function cleanupOldServerFilesTask({ application, control }) {
-=======
 export default asWritingTask<
   DeprecatedField,
   DeprecatedPrimarykey<DeprecatedField>,
@@ -39,7 +33,6 @@ export default asWritingTask<
   DeprecatedApplication<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
   any
 >(function cleanupOldServerFilesTask({ application, control }) {
->>>>>>> 936b492b5e (rebase with main)
   if (control.isJhipsterVersionLessThan('4.0.0')) {
     if (application.devDatabaseTypeH2Any) {
       this.removeFile(`${application.javaPackageSrcDir}domain/util/FixedH2Dialect.java`);

@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-export * from './constants.js';
 export * from './debug.js';
 export * from './doc.js';
 export * from './enum.js';

@@ -10,45 +10,15 @@ exports[`generator - spring-cloud:gateway with defaults options should call sour
       },
     ],
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
 exports[`generator - spring-cloud:gateway with defaults options should match files snapshot 1`] = `
 {
-  ".editorconfig.jhi.java": {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/security/jwt/JWTRelayGatewayFilterFactory.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/security/jwt/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -64,51 +34,18 @@ exports[`generator - spring-cloud:gateway with imperative option should call sou
       },
     ],
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
 exports[`generator - spring-cloud:gateway with imperative option should match files snapshot 1`] = `
 {
-  ".editorconfig.jhi.java": {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/GatewayResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/vm/RouteVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -124,57 +61,21 @@ exports[`generator - spring-cloud:gateway with serviceDiscovery option should ca
       },
     ],
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
 exports[`generator - spring-cloud:gateway with serviceDiscovery option should match files snapshot 1`] = `
 {
-  ".editorconfig.jhi.java": {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/JWTRelayGatewayFilterFactory.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/security/jwt/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/GatewayResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/vm/RouteVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
 }

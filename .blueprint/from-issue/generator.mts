@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 
-import BaseGenerator from '../../generators/base-core/index.js';
+import BaseGenerator from '../../generators/base/index.js';
 import { getGithubIssue, setGithubTaskOutput, prepareSample, appendToSummary } from '../../lib/testing/index.js';
 import { promptSamplesFolder } from '../support.mjs';
 import { GENERATOR_APP, GENERATOR_JDL, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';

@@ -18,4 +18,3 @@
  */
 
 export { default } from './generator.js';
-export type { Config, Features, Options } from './types.js';

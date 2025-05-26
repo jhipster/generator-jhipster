@@ -17,5 +17,4 @@
  * limitations under the License.
  */
 
-export { default, CommandCoreGenerator } from './generator.js';
-export type { Config, Options, Features } from './types.js';
+export { default } from './generator.js';

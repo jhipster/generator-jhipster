@@ -70,6 +70,11 @@ export type SpringBootSourceType = JavaSourceType &
     addApplicationYamlDocument?(document: string): void;
   };
 
+type CacheProviderApplication = OptionWithDerivedProperties<
+  'cacheProvider',
+  ['no', 'caffeine', 'ehcache', 'hazelcast', 'infinispan', 'memcached', 'redis']
+>;
+
 type ImperativeApplication = {
   reactive: false;
 };
@@ -157,9 +162,6 @@ export type SpringBootApplication = JavaApplication &
     embeddableLaunchScript: boolean;
     skipFakeData: boolean;
     skipCheckLengthOfIdentifier: boolean;
-    srcMain: string;
-    srcTest: string;
-    documentationUrl: string;
 
     imperativeOrReactive: string;
     optionalOrMono: string;
