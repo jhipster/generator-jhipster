@@ -7,48 +7,64 @@ const command = {
       type: Array,
     },
   },
-  options: {
+  configs: {
     entrypointGenerator: {
       description: 'Entrypoint generator to be used',
-      type: String,
+      cli: {
+        type: String,
+        hide: true,
+      },
       scope: 'generator',
-      hide: true,
     },
     interactive: {
       description:
         'Generate multiple applications in series so that questions can be interacted with. This is the default when there is an existing application configuration in any of the folders',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
     jsonOnly: {
       description: 'Generate only the JSON files and skip entity regeneration',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
     ignoreApplication: {
       description: 'Ignores application generation',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
     ignoreDeployments: {
       description: 'Ignores deployments generation',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
     skipSampleRepository: {
       description: 'Disable fetching sample files when the file is not a URL',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
     inline: {
       description: 'Pass JDL content inline. Argument can be skipped when passing this',
-      type: String,
+      cli: {
+        type: String,
+        env: 'JHI_JDL',
+      },
       scope: 'generator',
-      env: 'JHI_JDL',
     },
     skipUserManagement: {
       description: 'Skip the user management module during app generation',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
   },

@@ -23,7 +23,6 @@ import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.js';
 const { GRADLE, MAVEN } = buildToolTypes;
 
 const command = {
-  options: {},
   configs: {
     buildTool: {
       cli: {

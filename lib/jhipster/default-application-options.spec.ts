@@ -271,7 +271,7 @@ describe('jdl - DefaultApplicationOptions', () => {
           skipClient: false,
           clientFramework: 'react',
           clientTheme: 'something',
-          clientThemeVariant: 'somethingElse',
+          clientThemeVariant: 'dark',
           skipServer: true,
         });
       });
@@ -289,7 +289,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(options.clientTheme).to.equal('something');
       });
       it('should remove the client theme variant option', () => {
-        expect(options.clientThemeVariant).to.equal('somethingElse');
+        expect(options.clientThemeVariant).to.equal('dark');
       });
       it('should remove the withAdminUi option', () => {
         expect(options.withAdminUi).to.be.false;

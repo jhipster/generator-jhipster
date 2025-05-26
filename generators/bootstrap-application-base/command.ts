@@ -19,20 +19,22 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const command = {
-  options: {
+  configs: {
     baseName: {
       description: 'Application base name',
-      type: String,
+      cli: {
+        type: String,
+      },
       scope: 'storage',
     },
     skipJhipsterDependencies: {
       description: "Don't write jhipster dependencies to package.json.",
-      type: Boolean,
-      env: 'JHI_SKIP_JHIPSTER_DEPENDENCIES',
+      cli: {
+        type: Boolean,
+        env: 'JHI_SKIP_JHIPSTER_DEPENDENCIES',
+      },
       scope: 'storage',
     },
-  },
-  configs: {
     jdlStore: {
       description: 'JDL store',
       cli: {

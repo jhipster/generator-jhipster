@@ -19,21 +19,24 @@
 import type { JHipsterCommandDefinition, PromptSpec } from '../../../../lib/command/index.js';
 
 const command = {
-  options: {
+  configs: {
     withGeneratedFlag: {
       description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'storage',
     },
     packageInfoFile: {
       description: 'write package-info.java file for every package',
-      type: Boolean,
-      default: true,
+      cli: {
+        type: Boolean,
+        default: true,
+        hide: true,
+      },
       scope: 'generator',
-      hide: true,
     },
-  },
-  configs: {
+
     packageName: {
       cli: {
         type: String,

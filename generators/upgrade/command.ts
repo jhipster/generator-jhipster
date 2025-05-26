@@ -20,22 +20,28 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_APP } from '../generator-list.js';
 
 const command = {
-  options: {
+  configs: {
     silent: {
       description: 'Hides output of the generation process',
-      type: Boolean,
-      default: false,
+      cli: {
+        type: Boolean,
+        default: false,
+      },
       scope: 'generator',
     },
     applyConfig: {
       description: 'Apply configuration changes',
-      type: Boolean,
-      default: false,
+      cli: {
+        type: Boolean,
+        default: false,
+      },
       scope: 'generator',
     },
     executable: {
       description: 'Executable command',
-      type: String,
+      cli: {
+        type: String,
+      },
       scope: 'generator',
     },
   },

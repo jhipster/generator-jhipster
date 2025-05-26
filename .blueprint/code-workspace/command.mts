@@ -20,9 +20,11 @@ import { type JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const command = {
   arguments: {},
-  options: {
+  configs: {
     samplePath: {
-      type: String,
+      cli: {
+        type: String,
+      },
       description: 'Relative or absolute path',
       scope: 'generator',
     },

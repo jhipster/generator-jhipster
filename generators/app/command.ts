@@ -29,44 +29,56 @@ import {
 } from '../generator-list.js';
 
 const command = {
-  options: {
+  configs: {
     defaults: {
-      description: 'Execute jhipster with default config',
-      type: Boolean,
+      cli: {
+        description: 'Execute jhipster with default config',
+        type: Boolean,
+      },
       scope: 'none',
     },
     skipClient: {
-      description: 'Skip the client-side application generation',
-      type: Boolean,
+      cli: {
+        description: 'Skip the client-side application generation',
+        type: Boolean,
+      },
       scope: 'storage',
     },
     skipServer: {
-      description: 'Skip the server-side application generation',
-      type: Boolean,
+      cli: {
+        description: 'Skip the server-side application generation',
+        type: Boolean,
+      },
       scope: 'storage',
     },
     jhiPrefix: {
-      description: 'Add prefix before services, controllers and states name',
-      type: String,
+      cli: {
+        description: 'Add prefix before services, controllers and states name',
+        type: String,
+      },
       scope: 'storage',
     },
     entitySuffix: {
-      description: 'Add suffix after entities name',
-      type: String,
+      cli: {
+        description: 'Add suffix after entities name',
+        type: String,
+      },
       scope: 'storage',
     },
     dtoSuffix: {
-      description: 'Add suffix after dtos name',
-      type: String,
+      cli: {
+        description: 'Add suffix after dtos name',
+        type: String,
+      },
       scope: 'storage',
     },
     pkType: {
-      description: 'Default primary key type (beta)',
-      type: String,
+      cli: {
+        description: 'Default primary key type (beta)',
+        type: String,
+      },
       scope: 'storage',
     },
-  },
-  configs: {
     testFrameworks: {
       description: 'Test frameworks to be generated',
       cli: {

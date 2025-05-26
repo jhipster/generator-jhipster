@@ -27,8 +27,8 @@ const command = {
       description: 'Entities to regenerate.',
     },
   },
-  options: {
-    skipDbChangelog: liquibaseCommand.options.skipDbChangelog,
+  configs: {
+    skipDbChangelog: liquibaseCommand.configs.skipDbChangelog,
   },
 } as const satisfies JHipsterCommandDefinition;
 

@@ -23,7 +23,6 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 const includesValue = (prop, values) => answers => answers[prop] && intersection(answers[prop], values).length > 0;
 
 const command = {
-  options: {},
   configs: {
     ciCd: {
       argument: {

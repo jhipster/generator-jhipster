@@ -89,55 +89,76 @@ const command = {
       },
       scope: 'storage',
     },
-  },
-  options: {
     [GENERATE_SNAPSHOTS]: {
       description: 'Generate test snapshots',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
+      scope: 'none',
     },
     [LINK_JHIPSTER_DEPENDENCY]: {
       description: 'Link JHipster dependency for testing',
-      type: Boolean,
-      hide: true,
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
+      scope: 'none',
     },
     [SUB_GENERATORS]: {
       description: 'Sub generators to generate',
-      type: Array,
+      cli: {
+        type: Array,
+      },
       scope: 'storage',
     },
     [ADDITIONAL_SUB_GENERATORS]: {
       description: 'Comma separated additional sub generators to generate',
-      type: String,
+      cli: {
+        type: String,
+      },
       scope: 'storage',
     },
     [DYNAMIC]: {
       description: 'Generate dynamic generators (advanced)',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'storage',
     },
     [JS]: {
       description: 'Use js extension',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'storage',
     },
     [LOCAL_BLUEPRINT_OPTION]: {
       description: 'Generate a local blueprint',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'storage',
     },
     [CLI_OPTION]: {
       description: 'Generate a cli for the blueprint',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'storage',
     },
     [ALL_GENERATORS]: {
       description: 'Generate every sub generator',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
     [ALL_PRIORITIES]: {
       description: 'Generate every priority',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
+      scope: 'none',
     },
   },
   import: [GENERATOR_INIT],

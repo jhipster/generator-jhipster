@@ -19,34 +19,44 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const command = {
-  options: {
+  configs: {
     autoCrlf: {
       description: 'Detect line endings',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'storage',
     },
     skipPrettier: {
       description: 'Skip prettier transformation',
-      type: Boolean,
-      hide: true,
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
       scope: 'generator',
     },
     skipEslint: {
       description: 'Skip ESlint transformation',
-      type: Boolean,
-      hide: true,
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
       scope: 'generator',
     },
     refreshOnCommit: {
       description: 'Refresh files on commit',
-      type: Boolean,
-      hide: true,
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
       scope: 'generator',
     },
     skipForks: {
       description: 'Dont use forks',
-      type: Boolean,
-      hide: true,
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
       scope: 'generator',
     },
   },

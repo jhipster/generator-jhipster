@@ -22,11 +22,6 @@ import { command as jhipsterCommand } from 'generator-jhipster/generators/<%- su
 <%_ } _%>
 
 export default asCommand({
-<%_ if (!sbs && !customGenerator) { _%>
-  options: {
-    ...jhipsterCommand.options,
-  },
-<%_ } _%>
   configs: {
 <%_ if (!sbs && !customGenerator) { _%>
     ...jhipsterCommand.configs,

@@ -209,7 +209,6 @@ export const createProgram = ({
       .option('--install-path', 'Show jhipster install path', false)
       .option('--skip-regenerate', "Don't regenerate identical files", false)
       .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
-      .addJHipsterOptions(baseCommand.options)
       .addJHipsterConfigs(baseCommand.configs)
   );
 };

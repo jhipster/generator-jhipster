@@ -41,7 +41,6 @@ const promptValueToMicrofrontends = answer =>
     : [];
 
 const command = {
-  options: {},
   configs: {
     clientFramework: {
       description: 'Provide client framework for the application',
@@ -75,6 +74,11 @@ const command = {
         type: String,
         hide: true,
       },
+      choices: [
+        { value: 'primary', name: 'Primary' },
+        { value: 'dark', name: 'Dark' },
+        { value: 'light', name: 'Light' },
+      ],
       scope: 'storage',
     },
     clientBundler: {
