@@ -6,14 +6,7 @@ import type {
   BaseApplicationOptions,
 } from '../../generators/base-application/api.js';
 import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
-import type {
-  BaseApplicationApplication,
-  BaseApplicationControl,
-  BaseApplicationEntity,
-  BaseApplicationField,
-  BaseApplicationPrimaryKey,
-  BaseApplicationRelationship,
-} from '../../generators/base-application/types.js';
+import type { BaseApplicationApplication, BaseApplicationControl, BaseApplicationEntity } from '../../generators/base-application/types.js';
 import type {
   Entity as DeprecatedEntity,
   Field as DeprecatedField,
@@ -32,7 +25,7 @@ export default class<
   PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
   Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
   Entity extends BaseApplicationEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
-  Application extends BaseApplicationApplication<Field, PK, Relationship, Entity> = ApplicationType,
+  Application extends BaseApplicationApplication = ApplicationType,
   Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
     Field,
     Relationship,

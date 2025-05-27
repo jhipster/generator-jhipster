@@ -275,7 +275,7 @@ describe(`generator - ${generator}`, () => {
   "entityPage": "user",
   "entityParentPathAddition": "",
   "entityPersistenceLayer": false,
-  "entityPluralFileName": "",
+  "entityPluralFileName": "users",
   "entityReactName": "User",
   "entityReadAuthority": undefined,
   "entityRestLayer": false,
@@ -290,6 +290,7 @@ describe(`generator - ${generator}`, () => {
   "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
+  "fieldNameChoices": [],
   "fields": [
     {
       "autoGenerate": true,
@@ -1263,7 +1264,7 @@ describe(`generator - ${generator}`, () => {
   "entityPackage": undefined,
   "entityPage": "entity-a",
   "entityParentPathAddition": "",
-  "entityPluralFileName": "",
+  "entityPluralFileName": "entity-as",
   "entityReactName": "EntityA",
   "entityReadAuthority": undefined,
   "entityServiceFileName": "entity-a",
@@ -1276,6 +1277,7 @@ describe(`generator - ${generator}`, () => {
   "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
+  "fieldNameChoices": [],
   "fields": [
     {
       "autoGenerate": true,
@@ -1824,7 +1826,7 @@ describe(`generator - ${generator}`, () => {
   "entityPackage": undefined,
   "entityPage": "entity-a",
   "entityParentPathAddition": "",
-  "entityPluralFileName": "",
+  "entityPluralFileName": "entity-as",
   "entityReactName": "EntityA",
   "entityReadAuthority": undefined,
   "entityServiceFileName": "entity-a",
@@ -1837,6 +1839,7 @@ describe(`generator - ${generator}`, () => {
   "enums": [],
   "existingEnum": false,
   "faker": Any<Object>,
+  "fieldNameChoices": [],
   "fields": [
     {
       "autoGenerate": true,

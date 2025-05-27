@@ -32,6 +32,9 @@ export type AngularEntity<
    * @param fields returns the import of enums that are referenced by the fields
    * @returns {typeImports:Map} the fields that potentially contains some enum types
    */
+  entityAngularNamePlural: string;
+  entityAngularAuthorities?: string;
+  entityAngularReadAuthorities?: string;
   generateEntityClientEnumImports: (fields: F[]) => Map<any, any>;
 };
 
@@ -43,4 +46,5 @@ export type AngularApplication<
 > = {
   /** @experimental to be replaced with needles */
   angularEntities: E[];
-} & ApplicationType<F, PK, R>;
+  angularLocaleId: string;
+} & ApplicationType;

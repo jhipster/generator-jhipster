@@ -63,7 +63,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(async function ({ application, entities }) {
   for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesForClient)(entities).filter(
@@ -81,7 +81,7 @@ export const postWriteEntitiesFiles = asPostWritingEntitiesTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(async function ({ application, entities, source }) {
   const clientEntities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(entities).filter(
@@ -95,7 +95,7 @@ export const cleanupEntitiesFiles = asWritingEntitiesTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(function cleanupEntitiesFiles({ application, control, entities }) {
   for (const entity of (application.filterEntitiesForClient ?? filterEntitiesForClient)(entities).filter(

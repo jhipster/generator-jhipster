@@ -65,7 +65,7 @@ type BaseEntityChangesTaskTypes<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   S extends BaseApplicationSources<F, PK, R, E, A>,
   C extends BaseControl,
 > = ApplicationTaskTypes<F, PK, R, E, A, S, C> & {
@@ -85,7 +85,7 @@ export default abstract class BaseEntityChangesGenerator<
   Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
   // @ts-ignore
   Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
-  Application extends ApplicationType<Field, PK, Relationship> = ApplicationType<Field, PK, Relationship>,
+  Application extends ApplicationType = ApplicationType,
   Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
     Field,
     Relationship,
@@ -123,7 +123,7 @@ export default abstract class BaseEntityChangesGenerator<
 
   protected getTaskFirstArgForPriority(
     priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES],
-  ): TaskParamWithChangelogsAndApplication | TaskParamWithApplication<Field, PK, Relationship, Entity, Application, Control> {
+  ): TaskParamWithChangelogsAndApplication | TaskParamWithApplication<Application, Control> {
     const firstArg = super.getTaskFirstArgForPriority(priorityName);
     if (([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
       const { application, entities } = firstArg as TaskTypes['DefaultTaskParam'];

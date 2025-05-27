@@ -1,5 +1,5 @@
-import type { CoreApplication, CoreControl, CoreSources } from '../base-core/types.js';
-import type BaseGenerator from './generator.js';
+import type { Simplify } from 'type-fest';
+import type { ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
 
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
@@ -19,14 +19,5 @@ import type BaseGenerator from './generator.js';
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
-export type BaseEntity = object;
-export type BaseApplication = CoreApplication & {};
-export type BaseSources<Entity extends BaseEntity, Application extends BaseApplication> = CoreSources<
-  Application,
-  BaseGenerator<any, Entity, Application, any, any, any, any, any>
-> & {};
-export type BaseControl = CoreControl & {
-  readonly existingProject: boolean;
-};
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+export type ProjectNameConfiguration = Simplify<ExportStoragePropertiesFromCommand<typeof import('./command.js').default>>;

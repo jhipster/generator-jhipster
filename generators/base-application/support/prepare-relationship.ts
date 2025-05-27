@@ -38,7 +38,7 @@ const { MAPSTRUCT } = MapperTypes;
 
 function _defineOnUpdateAndOnDelete<R extends BaseApplicationRelationship<any>>(
   relationship: R,
-  generator: BaseApplicationGenerator<any, any, any, any, any, any, any, any, any, any, any>,
+  generator: BaseApplicationGenerator<any, any, any, R, any, any, any, any, any, any, any>,
 ) {
   relationship.onDelete = checkAndReturnRelationshipOnValue(relationship.options?.onDelete, generator);
   relationship.onUpdate = checkAndReturnRelationshipOnValue(relationship.options?.onUpdate, generator);

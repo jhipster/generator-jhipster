@@ -52,7 +52,7 @@ export const moveToSrcMainResourcesDir = (data: any, filePath: string) =>
 
 type RelativeWriteFileBlock = WriteFileBlock<any, any> & { relativePath?: string };
 
-export function javaMainPackageTemplatesBlock<Data = ApplicationType<any, any, any>>(
+export function javaMainPackageTemplatesBlock<Data = ApplicationType>(
   blockOrRelativePath?: string,
 ): Pick<WriteFileBlock<Data, any>, 'path' | 'renameTo'>;
 export function javaMainPackageTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock<any, any>;

@@ -56,7 +56,7 @@ export default class GitGenerator<
   Relationship extends BaseApplicationRelationship<any> = DeprecatedRelationship<any>,
   // @ts-ignore
   Entity extends BaseApplicationEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
-  Application extends BaseApplicationApplication<Field, PK, Relationship, Entity> = ApplicationType,
+  Application extends BaseApplicationApplication = ApplicationType,
   Sources extends BaseApplicationSources<Field, PK, Relationship, Entity, Application> = DeprecatedBaseApplicationSource<
     Field,
     Relationship,

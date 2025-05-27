@@ -98,6 +98,11 @@ const BASE_TEMPLATE_DATA: Partial<BaseApplicationEntity<any, any, any>> = {
   get enums() {
     return [];
   },
+  // these variable hold field and relationship names for question options during update
+  // @ts-ignore FIXME types
+  get fieldNameChoices() {
+    return [];
+  },
   get differentRelationships() {
     return {};
   },
@@ -112,7 +117,7 @@ function _derivedProperties<
   const pagination = entityWithConfig.pagination;
   const dto = entityWithConfig.dto;
   const service = entityWithConfig.service;
-  mutateData(entityWithConfig as BaseApplicationEntity<any, any, any>, {
+  mutateData(entityWithConfig as BaseApplicationEntity<F, PK, R>, {
     paginationPagination: pagination === 'pagination',
     paginationInfiniteScroll: pagination === 'infinite-scroll',
     paginationNo: pagination === 'no',
@@ -148,7 +153,7 @@ export function prepareEntity<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
 >(entityWithConfig: E, generator: G, application: A) {
   const { applicationTypeMicroservice, microfrontend, dtoSuffix = '' } = application;
@@ -165,7 +170,7 @@ export function prepareEntity<
     }
   }
 
-  entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix || '';
+  entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix ?? '';
   if (entityWithConfig.entityAngularJSSuffix && !entityWithConfig.entityAngularJSSuffix.startsWith('-')) {
     entityWithConfig.entityAngularJSSuffix = `-${entityWithConfig.entityAngularJSSuffix}`;
   }
@@ -225,9 +230,7 @@ export function prepareEntity<
   entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
   entityWithConfig.entityParentPathAddition = getEntityParentPathAddition(entityWithConfig.clientRootFolder);
   entityWithConfig.entityPluralFileName =
-    entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix
-      ? entityWithConfig.entityAngularJSSuffix
-      : '';
+    entityWithConfig.entityNamePluralizedAndSpinalCased + (entityWithConfig.entityAngularJSSuffix ?? '');
   entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
 
   entityWithConfig.entityReactName = entityWithConfig.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);

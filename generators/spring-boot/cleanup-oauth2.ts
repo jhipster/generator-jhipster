@@ -34,7 +34,7 @@ export default asWritingTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(function cleanupOldServerFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('6.0.0')) {

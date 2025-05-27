@@ -65,7 +65,7 @@ export default class BootstrapApplicationBase<
   Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
   // @ts-ignore
   Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
-  Application extends ApplicationType<Field, PK, Relationship> = ApplicationType<Field, PK, Relationship>,
+  Application extends ApplicationType = ApplicationType,
   Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
     Field,
     Relationship,

@@ -38,7 +38,7 @@ export const cleanupOldFiles = asWritingEntitiesTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(function cleanupOldFiles({ application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch }, control, entities }) {
   if (control.isJhipsterVersionLessThan('7.6.1')) {

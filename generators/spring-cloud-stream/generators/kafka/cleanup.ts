@@ -30,7 +30,7 @@ export default asWritingTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(function cleanupKafkaFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('6.5.2')) {

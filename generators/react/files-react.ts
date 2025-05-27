@@ -314,7 +314,7 @@ export const writeFiles = asWritingTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(async function writeFiles({ application }) {
   if (!application.clientFrameworkReact) return;

@@ -16,9 +16,6 @@ import type {
   BaseApplicationApplication,
   BaseApplicationControl,
   BaseApplicationEntity,
-  BaseApplicationField,
-  BaseApplicationPrimaryKey,
-  BaseApplicationRelationship,
   BaseApplicationSources,
 } from '../../generators/base-application/types.js';
 import type {
@@ -71,7 +68,7 @@ export default class<
   PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
   Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
   Entity extends BaseApplicationEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
-  Application extends BaseApplicationApplication<Field, PK, Relationship, Entity> = ApplicationType,
+  Application extends BaseApplicationApplication = ApplicationType,
   Sources extends BaseApplicationSources<Field, PK, Relationship, Entity, Application> = DeprecatedBaseApplicationSource<
     Field,
     Relationship,

@@ -208,7 +208,7 @@ export function writeFiles() {
       DeprecatedPrimarykey<DeprecatedField>,
       DeprecatedRelationship<any>,
       DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-      ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+      ApplicationType,
       any
     >(function ({ application, control, entities }) {
       cleanupOldFiles.call(this, { application, entities, control });
@@ -219,7 +219,7 @@ export function writeFiles() {
       DeprecatedPrimarykey<DeprecatedField>,
       DeprecatedRelationship<any>,
       DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-      ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+      ApplicationType,
       any
     >(async function ({ application, entities }) {
       const rootTemplatesPath = application.reactive

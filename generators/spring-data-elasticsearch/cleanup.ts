@@ -30,7 +30,7 @@ export default asWritingTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(function cleanupElasticsearchFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('4.0.0')) {

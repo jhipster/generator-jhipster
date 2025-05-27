@@ -303,7 +303,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(async function writeEntitiesFiles({ application, entities }) {
   entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);

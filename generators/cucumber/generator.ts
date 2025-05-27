@@ -32,7 +32,7 @@ export default class CucumberGenerator<
   PK extends DeprecatedPrimarykey<F> = DeprecatedPrimarykey<F>,
   R extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
   E extends DeprecatedEntity<F, PK, R> = DeprecatedEntity<F, PK, R>,
-  A extends DeprecatedApplication<F, PK, R> = DeprecatedApplication<F, PK, R>,
+  A extends DeprecatedApplication = DeprecatedApplication,
 > extends BaseApplicationGenerator<O, F, PK, R, E, A> {
   async beforeQueue() {
     if (!this.fromBlueprint) {

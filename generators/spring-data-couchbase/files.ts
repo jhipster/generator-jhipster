@@ -84,7 +84,7 @@ export const cleanupCouchbaseFilesTask = asWritingTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(function cleanupCouchbaseFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('7.1.1')) {

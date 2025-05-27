@@ -76,7 +76,7 @@ export const cleanupCouchbaseEntityFilesTask = asWritingEntitiesTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(function ({ application, control, entities }) {
   for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {

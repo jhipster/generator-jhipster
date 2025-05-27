@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// FIXME Remove this index while docker is fixed
 export * from '../../../lib/utils/derived-property.js';
 export * from '../../../lib/utils/logger.js';
 export * from '../../../lib/utils/object.js';

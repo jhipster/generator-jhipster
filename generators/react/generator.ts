@@ -51,7 +51,7 @@ export default class ReactGenerator<
   PK extends DeprecatedPrimarykey<F> = DeprecatedPrimarykey<F>,
   R extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
   E extends DeprecatedEntity<F, PK, R> = DeprecatedEntity<F, PK, R>,
-  A extends DeprecatedApplication<F, PK, R> = DeprecatedApplication<F, PK, R>,
+  A extends DeprecatedApplication = DeprecatedApplication,
 > extends BaseApplicationGenerator<O, F, PK, R, E, A, any> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -103,12 +103,12 @@ export default class ReactGenerator<
     return this.asPreparingTaskGroup({
       applicationDefauts({ application, applicationDefaults }) {
         application.addPrettierExtensions?.(['html', 'tsx', 'css', 'scss']);
-        // @ts-ignore FIXME types
         applicationDefaults({
           __override__: true,
+          // @ts-ignore FIXME types
           eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
-        });
+        } as any);
       },
       async javaNodeBuildPaths({ application }) {
         const { clientBundlerWebpack, javaNodeBuildPaths } = application;

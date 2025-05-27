@@ -67,7 +67,7 @@ export default asWritingEntitiesTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(async function writeEntityCassandraFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {

@@ -36,7 +36,7 @@ export const updateLanguagesInMailServiceITTask = asPostWritingTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(function updateLanguagesInMailServiceITTask({ application, control }) {
   const { javaPackageTestDir, languagesDefinition } = application;
@@ -57,7 +57,7 @@ export default asPostWritingTask<
   DeprecatedPrimarykey<DeprecatedField>,
   DeprecatedRelationship<any>,
   DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
   any
 >(function updateLanguagesTask(this, taskParam) {
   updateLanguagesInMailServiceITTask.call(this, taskParam);

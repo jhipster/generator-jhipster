@@ -173,6 +173,7 @@ export type BaseApplicationEntity<
    * Any field has image or any contentType
    */
   anyFieldHasFileBasedContentType: boolean;
+
   fieldsContainNoOwnerOneToOne: boolean;
   otherRelationships: Relationship[];
   enums: string[];
@@ -200,7 +201,10 @@ export type BaseApplicationEntity<
   entityClassPluralHumanized: string;
 
   entityFileName: string;
+<<<<<<< HEAD
   entityAngularNamePlural: string;
+=======
+>>>>>>> 26da07270d (shrink types)
   entityApiUrl: string;
 
   entityFolderName: string;
@@ -262,7 +266,7 @@ export type BaseApplicationSources<
   PrimaryKey extends BaseApplicationPrimaryKey<Field>,
   Relationship extends BaseApplicationRelationship<any>,
   Entity extends BaseApplicationEntity<Field, PrimaryKey, Relationship>,
-  Application extends BaseApplicationApplication<Field, PrimaryKey, Relationship, Entity>,
-> = BaseApplicationApplication<Field, PrimaryKey, Relationship, Entity> & BaseSources<Entity, Application> & {};
+  Application extends BaseApplicationApplication,
+> = BaseApplicationApplication & BaseSources<Entity, Application> & {};
 
 export type BaseApplicationControl = BaseControl & {};

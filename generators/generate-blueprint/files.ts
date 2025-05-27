@@ -17,22 +17,10 @@
  * limitations under the License.
  */
 import { asWriteFilesSection } from '../base-application/support/index.js';
-import type {
-  Entity as DeprecatedEntity,
-  Field as DeprecatedField,
-  Relationship as DeprecatedRelationship,
-} from '../../lib/types/application/index.js';
-import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import { LOCAL_BLUEPRINT_OPTION } from './constants.js';
 
-export const files = asWriteFilesSection<
-  DeprecatedField,
-  DeprecatedPrimarykey<DeprecatedField>,
-  DeprecatedRelationship<any>,
-  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>
->({
+export const files = asWriteFilesSection<ApplicationType>({
   baseFiles: [
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION],
@@ -79,13 +67,7 @@ export const files = asWriteFilesSection<
   ],
 });
 
-export const generatorFiles = asWriteFilesSection<
-  DeprecatedField,
-  DeprecatedPrimarykey<DeprecatedField>,
-  DeprecatedRelationship<any>,
-  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-  ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>
->({
+export const generatorFiles = asWriteFilesSection<ApplicationType>({
   generator: [
     {
       path: 'generators/generator',

@@ -51,7 +51,7 @@ export default class InfoGenerator<
   PK extends DeprecatedPrimarykey<F> = DeprecatedPrimarykey<F>,
   R extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
   E extends DeprecatedEntity<F, PK, R> = DeprecatedEntity<F, PK, R>,
-  A extends DeprecatedApplication<F, PK, R> = DeprecatedApplication<F, PK, R>,
+  A extends DeprecatedApplication = DeprecatedApplication,
   S extends BaseApplicationSources<F, PK, R, E, A> = DeprecatedBaseApplicationSource<F, R, A>,
   C extends BaseApplicationControl = DeprecatedControl,
   TaskTypes extends DefaultTaskTypes<F, PK, R, E, A, S, C> = DefaultTaskTypes<F, PK, R, E, A, S, C>,

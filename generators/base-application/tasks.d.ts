@@ -57,13 +57,7 @@ type EntityTaskParam<
   description: string;
 };
 
-type ApplicationDefaultsTaskParam<
-  F extends BaseApplicationField,
-  PK extends BaseApplicationPrimaryKey<F>,
-  R extends BaseApplicationRelationship<any>,
-  E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
-> = {
+type ApplicationDefaultsTaskParam<A extends BaseApplicationApplication> = {
   /**
    * Parameter properties accepts:
    * - functions: receives the application and the return value is set at the application property.
@@ -91,14 +85,7 @@ type ApplicationDefaultsTaskParam<
     >[]
   ) => void;
 };
-type TaskParamWithApplication<
-  F extends BaseApplicationField,
-  PK extends BaseApplicationPrimaryKey<F>,
-  R extends BaseApplicationRelationship<any>,
-  E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
-  C extends BaseApplicationControl,
-> = TaskParamWithControl<C> & {
+type TaskParamWithApplication<A extends BaseApplicationApplication, C extends BaseApplicationControl> = TaskParamWithControl<C> & {
   application: A;
 };
 type TaskParamWithEntities<
@@ -106,39 +93,34 @@ type TaskParamWithEntities<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   C extends BaseApplicationControl,
-> = TaskParamWithApplication<F, PK, R, E, A, C> & {
+> = TaskParamWithApplication<A, C> & {
   entities: E[];
 };
 
-type TaskParamWithApplicationDefaults<
-  F extends BaseApplicationField,
-  PK extends BaseApplicationPrimaryKey<F>,
-  R extends BaseApplicationRelationship<any>,
-  E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
-  C extends BaseApplicationControl,
-> = TaskParamWithControl<C> & TaskParamWithApplication<F, PK, R, E, A, C> & ApplicationDefaultsTaskParam<F, PK, R, E, A>;
+type TaskParamWithApplicationDefaults<A extends BaseApplicationApplication, C extends BaseApplicationControl> = TaskParamWithControl<C> &
+  TaskParamWithApplication<A, C> &
+  ApplicationDefaultsTaskParam<A>;
 
 type PreparingTaskParam<
   F extends BaseApplicationField,
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   S extends BaseApplicationSources<F, PK, R, E, A>,
   C extends BaseApplicationControl,
-> = TaskParamWithApplicationDefaults<F, PK, R, E, A, C> & TaskParamWithSource<C, S>;
+> = TaskParamWithApplicationDefaults<A, C> & TaskParamWithSource<C, S>;
 
 type ConfiguringEachEntityTaskParam<
   F extends BaseApplicationField,
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   C extends BaseApplicationControl,
-> = TaskParamWithApplication<F, PK, R, E, A, C> & {
+> = TaskParamWithApplication<A, C> & {
   entityName: string;
   /** Entity storage */
   entityStorage: Storage;
@@ -151,9 +133,9 @@ type LoadingEntitiesTaskParam<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   C extends BaseApplicationControl,
-> = TaskParamWithApplication<F, PK, R, E, A, C> & {
+> = TaskParamWithApplication<A, C> & {
   entitiesToLoad: EntityToLoad<F, PK, R, E>[];
 };
 
@@ -162,16 +144,16 @@ type PreparingEachEntityTaskParam<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   C extends BaseApplicationControl,
-> = TaskParamWithApplication<F, PK, R, E, A, C> & EntityTaskParam<F, PK, R, E>;
+> = TaskParamWithApplication<A, C> & EntityTaskParam<F, PK, R, E>;
 
 type PreparingEachEntityFieldTaskParam<
   F extends BaseApplicationField,
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   C extends BaseApplicationControl,
 > = PreparingEachEntityTaskParam<F, PK, R, E, A, C> & {
   field: F;
@@ -183,21 +165,14 @@ type PreparingEachEntityRelationshipTaskParam<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   C extends BaseApplicationControl,
 > = PreparingEachEntityTaskParam<F, PK, R, E, A, C> & {
   relationship: R;
   relationshipName: string;
 };
 
-type WritingTaskParam<
-  F extends BaseApplicationField,
-  PK extends BaseApplicationPrimaryKey<F>,
-  R extends BaseApplicationRelationship<any>,
-  E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
-  C extends BaseApplicationControl,
-> = TaskParamWithApplication<F, PK, R, E, A, C> & {
+type WritingTaskParam<A extends BaseApplicationApplication, C extends BaseApplicationControl> = TaskParamWithApplication<A, C> & {
   configChanges?: Record<string, { newValue: any; oldValue: any }>;
 };
 
@@ -206,17 +181,17 @@ type PostWritingTaskParam<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   S extends BaseApplicationSources<F, PK, R, E, A>,
   C extends BaseApplicationControl,
-> = TaskParamWithApplication<F, PK, R, E, A, C> & TaskParamWithSource<C, S>;
+> = TaskParamWithApplication<A, C> & TaskParamWithSource<C, S>;
 
 type PostWritingEntitiesTaskParam<
   F extends BaseApplicationField,
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   S extends BaseApplicationSources<F, PK, R, E, A>,
   C extends BaseApplicationControl,
 > = TaskParamWithEntities<F, PK, R, E, A, C> & TaskParamWithSource<C, S>;
@@ -226,13 +201,13 @@ export type TaskTypes<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   S extends BaseApplicationSources<F, PK, R, E, A>,
   C extends BaseControl,
 > = Merge<
   BaseTaskTypes<C, S>,
   {
-    LoadingTaskParam: TaskParamWithApplicationDefaults<F, PK, R, E, A, C>;
+    LoadingTaskParam: TaskParamWithApplicationDefaults<A, C>;
     PreparingTaskParam: PreparingTaskParam<F, PK, R, E, A, S, C>;
     ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<F, PK, R, E, A, C>;
     LoadingEntitiesTaskParam: LoadingEntitiesTaskParam<F, PK, R, E, A, C>;
@@ -240,15 +215,15 @@ export type TaskTypes<
     PreparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<F, PK, R, E, A, C>;
     PreparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<F, PK, R, E, A, C>;
     PostPreparingEachEntityTaskParam: PreparingEachEntityTaskParam<F, PK, R, E, A, C>;
-    PostPreparingTaskParam: TaskParamWithSource<C, S> & TaskParamWithApplication<F, PK, R, E, A, C>;
+    PostPreparingTaskParam: TaskParamWithSource<C, S> & TaskParamWithApplication<A, C>;
     DefaultTaskParam: TaskParamWithEntities<F, PK, R, E, A, C>;
-    WritingTaskParam: WritingTaskParam<F, PK, R, E, A, C>;
+    WritingTaskParam: WritingTaskParam<A, C>;
     WritingEntitiesTaskParam: TaskParamWithEntities<F, PK, R, E, A, C>;
     PostWritingTaskParam: PostWritingTaskParam<F, PK, R, E, A, S, C>;
     PostWritingEntitiesTaskParam: PostWritingEntitiesTaskParam<F, PK, R, E, A, S, C>;
-    PreConflictsTaskParam: TaskParamWithApplication<F, PK, R, E, A, C>;
-    InstallTaskParam: TaskParamWithApplication<F, PK, R, E, A, C>;
-    PostInstallTaskParam: TaskParamWithApplication<F, PK, R, E, A, C>;
-    EndTaskParam: TaskParamWithApplication<F, PK, R, E, A, C>;
+    PreConflictsTaskParam: TaskParamWithApplication<A, C>;
+    InstallTaskParam: TaskParamWithApplication<A, C>;
+    PostInstallTaskParam: TaskParamWithApplication<A, C>;
+    EndTaskParam: TaskParamWithApplication<A, C>;
   }
 >;

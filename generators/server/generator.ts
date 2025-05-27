@@ -153,7 +153,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             entityConfig.microserviceName = application.baseName;
           }
           if (entityConfig.clientRootFolder === undefined) {
-            entityConfig.clientRootFolder = entityConfig.microserviceName;
+            entityConfig.clientRootFolder = entityConfig.microserviceName!;
           }
           if (entityConfig.databaseType === undefined) {
             entityConfig.databaseType = application.databaseType;

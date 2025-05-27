@@ -53,10 +53,9 @@ const {
 
 type WorkspacesTypes<
   F extends DeprecatedField = DeprecatedField,
-  PK extends DeprecatedPrimarykey<F> = DeprecatedPrimarykey<F>,
   R extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
   C extends DeprecatedControl = DeprecatedControl,
-  A extends ApplicationType<F, PK, R> = ApplicationType<F, PK, R>,
+  A extends ApplicationType = ApplicationType,
   Sources extends DeprecatedBaseApplicationSource<F, R, A> = DeprecatedBaseApplicationSource<F, R, A>,
 > = TaskTypes<C, Sources> & {
   LoadingTaskParam: TaskTypes<C, Sources>['LoadingTaskParam'] & { applications: A[] };
@@ -80,16 +79,15 @@ export default abstract class BaseWorkspacesGenerator<
   PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
   Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
   Entity extends BaseApplicationEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
-  Application extends ApplicationType<Field, PK, Relationship> = ApplicationType<Field, PK, Relationship>,
+  Application extends ApplicationType = ApplicationType,
   Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
     Field,
     Relationship,
     Application
   >,
   Control extends DeprecatedControl = DeprecatedControl,
-  TaskTypes extends WorkspacesTypes<Field, PK, Relationship, Control, Application, Sources> = WorkspacesTypes<
+  TaskTypes extends WorkspacesTypes<Field, Relationship, Control, Application, Sources> = WorkspacesTypes<
     Field,
-    PK,
     Relationship,
     Control,
     Application,

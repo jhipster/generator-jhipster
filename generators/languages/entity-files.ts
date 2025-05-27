@@ -75,7 +75,7 @@ export function writeEntityFiles() {
       DeprecatedPrimarykey<DeprecatedField>,
       DeprecatedRelationship<any>,
       DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-      ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+      ApplicationType,
       any
     >(async function (this: LanguagesGenerator, { entities, application }) {
       if (application.skipClient) return;
@@ -112,7 +112,7 @@ export function writeEntityFiles() {
       DeprecatedPrimarykey<DeprecatedField>,
       DeprecatedRelationship<any>,
       DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
-      ApplicationType<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+      ApplicationType,
       any
     >(async function (this: LanguagesGenerator, { application, entities }) {
       if (application.skipClient) return;

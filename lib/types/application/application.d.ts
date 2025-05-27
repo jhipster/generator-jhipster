@@ -3,7 +3,6 @@ import type {
   BaseApplicationApplication,
   BaseApplicationEntity,
   BaseApplicationField,
-  BaseApplicationPrimaryKey,
   BaseApplicationRelationship,
   BaseApplicationSources,
 } from '../../../generators/base-application/types.js';
@@ -15,8 +14,7 @@ import type { DockerSourceType } from '../../../generators/docker/types.ts';
 import type { OptionWithDerivedProperties } from '../../../generators/base-application/application-options.js';
 import { Field } from './field.js';
 import { Relationship } from './relationship.js';
-import { PrimaryKey } from './entity.js';
-export type BaseApplicationToRefactor = BaseApplicationApplication<any, any, any, any> & {
+export type BaseApplicationToRefactor = BaseApplicationApplication & {
   jhipsterVersion: string;
 
   capitalizedBaseName: string;
@@ -194,15 +192,11 @@ type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'e
 
 export type PlatformApplication = ServiceDiscoveryApplication & MonitoringApplication;
 
-export type ApplicationType<
-  F extends BaseApplicationField = Field,
-  PK extends BaseApplicationPrimaryKey<F> = PrimaryKey<F>,
-  R extends BaseApplicationRelationship<any> = Relationship,
-> = {
+export type ApplicationType = {
   gradleDevelocityHost?: string;
   translations: string[];
   getWebappTranslation: (t: any[]) => string;
-} & BaseApplicationApplication<F, PK, R, any> &
+} & BaseApplicationApplication &
   CommonClientServerApplication<any> &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/gradle/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/spring-boot/command.ts').default>;
@@ -210,7 +204,7 @@ export type ApplicationType<
 export type DeprecatedBaseApplicationSource<
   F extends BaseApplicationField = Field,
   R extends BaseApplicationRelationship<any> = Relationship,
-  A extends BaseApplicationApplication<F, any, R, any> = BaseApplicationApplication<F, any, R, any>,
+  A extends BaseApplicationApplication = BaseApplicationApplication,
 > = BaseApplicationSources<F, any, R, any, A> & {
   generatorPath: string;
   srcMainResources: string;

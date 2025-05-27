@@ -18,24 +18,9 @@
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/types.js';
 import { GENERATOR_BASE } from '../generator-list.js';
-import { BASE_NAME_DESCRIPTION } from '../project-name/constants.js';
 
 const command = {
-  configs: {
-    baseName: {
-      description: BASE_NAME_DESCRIPTION,
-      cli: {
-        type: String,
-      },
-      prompt: gen => ({
-        type: 'input',
-        validate: input => gen.validateBaseName(input),
-        message: 'What is the base name of your application?',
-        default: () => gen.defaultBaseName(),
-      }),
-      scope: 'storage',
-    },
-  },
+  configs: {},
   import: [GENERATOR_BASE],
 } as const satisfies JHipsterCommandDefinition;
 

@@ -25,13 +25,7 @@ import type {
 } from '../types.js';
 import type BaseApplicationGenerator from '../generator.js';
 
-export function asWriteFilesSection<
-  F extends BaseApplicationField,
-  PK extends BaseApplicationPrimaryKey<F>,
-  R extends BaseApplicationRelationship<any>,
-  E extends BaseApplicationEntity<F, PK, R>,
-  A = BaseApplicationApplication<F, PK, R, E>,
->(section: WriteFileSection<A, any>) {
+export function asWriteFilesSection<A = BaseApplicationApplication>(section: WriteFileSection<A, any>) {
   return section;
 }
 
@@ -40,7 +34,7 @@ export function asPromptingTask<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
 >(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['PromptingTaskParam']) => void) {
   return task;
@@ -51,7 +45,7 @@ export function asPostPreparingEachEntityTask<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
 >(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['PostPreparingEachEntityTaskParam']) => void) {
   return task;
@@ -62,7 +56,7 @@ export function asWritingTask<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
 >(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['WritingTaskParam']) => void) {
   return task;
@@ -73,7 +67,7 @@ export function asWritingEntitiesTask<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
 >(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['WritingEntitiesTaskParam']) => void) {
   return task;
@@ -84,7 +78,7 @@ export function asPostWritingTask<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
 >(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['PostWritingTaskParam']) => void) {
   return task;
@@ -95,7 +89,7 @@ export function asPostWritingEntitiesTask<
   PK extends BaseApplicationPrimaryKey<F>,
   R extends BaseApplicationRelationship<any>,
   E extends BaseApplicationEntity<F, PK, R>,
-  A extends BaseApplicationApplication<F, PK, R, E>,
+  A extends BaseApplicationApplication,
   G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
 >(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['PostWritingEntitiesTaskParam']) => void) {
   return task;

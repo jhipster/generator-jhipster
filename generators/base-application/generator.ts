@@ -144,7 +144,7 @@ class BaseApplicationGenerator<
   Relationship extends BaseApplicationRelationship<any> = DeprecatedRelationship<any>,
   // @ts-ignore
   Entity extends BaseApplicationEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
-  Application extends BaseApplicationApplication<Field, PK, Relationship, Entity> = ApplicationType<Field, PK, Relationship>,
+  Application extends BaseApplicationApplication = ApplicationType,
   Sources extends BaseApplicationSources<Field, PK, Relationship, Entity, Application> = DeprecatedBaseApplicationSource<
     Field,
     Relationship,
@@ -483,7 +483,7 @@ class BaseApplicationGenerator<
    */
   protected getTaskFirstArgForPriority(
     priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES],
-  ): TaskParamWithApplication<Field, PK, Relationship, Entity, Application, Control> {
+  ): TaskParamWithApplication<Application, Control> {
     if (!this.jhipsterConfig.baseName) {
       throw new Error(`BaseName (${this.jhipsterConfig.baseName}) application not available for priority ${priorityName}`);
     }
@@ -512,7 +512,7 @@ class BaseApplicationGenerator<
         args.entities = [...this.#entities.values()].filter(entity => entitiesToFilter.includes(entity.name));
       }
     }
-    return args as TaskParamWithApplication<Field, PK, Relationship, Entity, Application, Control>;
+    return args as TaskParamWithApplication<Application, Control>;
   }
 
   /**
