@@ -139,7 +139,7 @@ export default class JdlGenerator extends BaseGenerator<
           skipUserManagement: this.options.skipUserManagement,
         };
         if (this.existingProject) {
-          configuration.databaseType ??= getConfigWithDefaults(this.config.getAll()).prodDatabaseType;
+          configuration.databaseType ??= getConfigWithDefaults(this.config.getAll() as any).prodDatabaseType;
         }
 
         const importer = createImporterFromContent(this.jdlContents.join('\n'), configuration, this.options.jdlDefinition);

@@ -30,6 +30,7 @@ export type Control = {
 export type Config = CoreConfig & {
   jhipsterVersion?: string;
   lastLiquibaseTimestamp?: number;
+  creationTimestamp?: number;
   blueprints?: { name: string; version?: string }[];
 };
 

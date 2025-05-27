@@ -18,6 +18,7 @@
  */
 import chalk from 'chalk';
 
+import type { WritableDeep } from 'type-fest';
 import * as GENERATOR_LIST from '../generator-list.js';
 import { PRIORITY_NAMES_LIST } from '../base-application/priorities.js';
 
@@ -79,7 +80,7 @@ export const allGeneratorsConfig = () => ({
 
 export const prompts = () => {
   const { [LOCAL_BLUEPRINT_OPTION]: LOCAL_BLUEPRINT_OPTION_DEFAULT_VALUE, [CLI_OPTION]: CLI_OPTION_DEFAULT_VALUE } = defaultConfig();
-  return [
+  const ret = [
     {
       type: 'confirm',
       name: LOCAL_BLUEPRINT_OPTION,
@@ -113,6 +114,8 @@ export const prompts = () => {
       default: CLI_OPTION_DEFAULT_VALUE,
     },
   ] as const;
+  // Inquirer doen't support readonly prompts, so we need to cast it
+  return ret as WritableDeep<typeof ret>;
 };
 
 export const subGeneratorPrompts = ({
@@ -125,7 +128,7 @@ export const subGeneratorPrompts = ({
   localBlueprint: boolean;
 }) => {
   const { [SBS]: SBS_DEFAULT_VALUE } = defaultSubGeneratorConfig();
-  return [
+  const prompts = [
     {
       type: 'confirm',
       name: SBS,
@@ -149,5 +152,7 @@ export const subGeneratorPrompts = ({
       default: answers => (answers.sbs || additionalSubGenerator ? [] : prioritiesForSub(subGenerator)),
       loop: false,
     },
-  ];
+  ] as const;
+  // Inquirer doen't support readonly prompts, so we need to cast it
+  return prompts as WritableDeep<typeof prompts>;
 };

@@ -107,7 +107,7 @@ export default class CoreGenerator<
   ConfigType extends CoreConfig = CoreConfig,
   Options extends CoreOptions = CoreOptions,
   Features extends CoreFeatures = CoreFeatures,
-> extends YeomanGenerator<Options, Features> {
+> extends YeomanGenerator<ConfigType, Options, Features> {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -473,7 +473,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         if (optionValue !== undefined) {
           optionValue = optionDesc.type !== Array && optionDesc.type !== Function ? optionDesc.type(optionValue) : optionValue;
           if (optionDesc.scope === 'storage') {
-            this.config.set(optionName, optionValue);
+            this.config.set(optionName as keyof ConfigType, optionValue);
           } else if (optionDesc.scope === 'blueprint') {
             this.blueprintStorage!.set(optionName, optionValue);
           } else if (optionDesc.scope === 'generator') {
@@ -517,7 +517,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           } else if (argumentDef.scope === 'context') {
             this.context![argumentName] = convertedValue;
           } else if (argumentDef.scope === 'storage') {
-            this.config.set(argumentName, convertedValue);
+            this.config.set(argumentName as keyof ConfigType, convertedValue);
           } else if (argumentDef.scope === 'blueprint') {
             this.blueprintStorage!.set(argumentName, convertedValue);
           }
