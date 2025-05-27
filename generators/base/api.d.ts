@@ -35,7 +35,7 @@ export type BaseOptions = CoreOptions & {
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 export type BaseConfiguration = CoreConfiguration & Simplify<ExportStoragePropertiesFromCommand<typeof import('./command.js').default>>;
 
-export type JHipsterGeneratorFeatures = CoreFeatures & {
+export type BaseFeatures = CoreFeatures & {
   priorityArgs?: boolean;
   baseGeneratorTaskPrefix?: string;
   storeBlueprintVersion?: boolean;

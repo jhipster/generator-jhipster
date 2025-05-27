@@ -22,20 +22,29 @@ import type GeneratorsByNamespace from '../types.js';
 import BaseGenerator from '../base/index.js';
 import { mutateData } from '../../lib/utils/object.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
-import type { SimpleTaskTypes } from '../../lib/types/application/tasks.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
-import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-application/support/index.js';
+import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-application/support/constants.js';
 import { PRIORITY_NAMES } from '../base-core/priorities.js';
-import type { BaseControl, BaseEntity, BaseSources } from '../base/types.js';
-import type { BaseOptions } from '../base/api.js';
+import type { BaseControl } from '../base/types.js';
 import type {
-  Config as BaseApplicationConfig,
-  Features as BaseApplicationFeatures,
-  Options as BaseSimpleOptions,
-  Application as SimpleApplication,
+  BaseApplicationApplication,
+  BaseApplicationEntity,
+  BaseApplicationField,
+  BaseApplicationPrimaryKey,
+  BaseApplicationRelationship,
+  BaseApplicationSources,
+} from '../base-application/types.js';
+import type { Field as DeprecatedField, Relationship as DeprecatedRelationship } from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type {
+  BaseSimpleConfiguration as BaseApplicationConfig,
+  BaseSimpleFeatures as BaseApplicationFeatures,
+  BaseSimpleOptions,
+  BaseSimpleApplication as SimpleApplication,
 } from './types.js';
+import type { SimpleTaskTypes } from './tasks.js';
 
 const { LOADING, PREPARING, POST_PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
 
@@ -64,15 +73,33 @@ const getFirstArgForPriority = (priorityName: string) => ({
  * This is the base class for a generator that generates entities.
  */
 export default class BaseApplicationGenerator<
-  Options extends BaseOptions = BaseOptions & BaseSimpleOptions,
-  Entity extends BaseEntity = BaseEntity,
-  Application extends SimpleApplication = SimpleApplication,
+  Options extends BaseSimpleOptions = BaseSimpleOptions,
+  Field extends BaseApplicationField = DeprecatedField,
+  PK extends BaseApplicationPrimaryKey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends BaseApplicationRelationship<any> = DeprecatedRelationship<any>,
+  // @ts-ignore
+  Entity extends BaseApplicationEntity = BaseApplicationEntity,
+  Application extends BaseApplicationApplication = SimpleApplication,
+  Source extends BaseApplicationSources<Field, PK, Relationship, Entity, Application> = BaseApplicationSources<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application
+  >,
   Control extends BaseControl = BaseControl,
-  Source extends BaseSources<Entity, Application> = BaseSources<Entity, Application>,
-  ConfigType extends BaseApplicationConfig = BaseApplicationConfig & ApplicationConfiguration,
-  TaskTypes extends SimpleTaskTypes<Application> = SimpleTaskTypes<Application>,
+  TaskTypes extends SimpleTaskTypes<Field, PK, Relationship, Entity, Application, Source, Control> = SimpleTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Source,
+    Control
+  >,
+  Configuration extends BaseApplicationConfig = BaseApplicationConfig & ApplicationConfiguration,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
-> extends BaseGenerator<Options, Entity, Application, Source, Control, TaskTypes, ConfigType, Features> {
+> extends BaseGenerator<Options, Entity, Application, Source, Control, TaskTypes, Configuration, Features> {
   constructor(args: string | string[], options: Options, features: Features) {
     super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features });
   }
@@ -90,9 +117,10 @@ export default class BaseApplicationGenerator<
   /**
    * JHipster config with default values fallback
    */
-  override get jhipsterConfigWithDefaults(): Readonly<ConfigType & ApplicationConfiguration> {
+  override get jhipsterConfigWithDefaults(): Configuration {
+    // @ts-ignore FIXME types
     const configWithDefaults = getConfigWithDefaults(super.jhipsterConfigWithDefaults);
-    return configWithDefaults as ConfigType & ApplicationConfiguration;
+    return configWithDefaults as Configuration & ApplicationConfiguration;
   }
 
   dependsOnBootstrapApplicationBase(

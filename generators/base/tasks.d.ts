@@ -23,8 +23,8 @@ export type TaskParamWithControl<C extends BaseControl> = {
   control: C & Record<string, boolean | string | object>;
 };
 
-export type TaskParamWithSource<C extends BaseControl, Source extends BaseSources<any, any>> = TaskParamWithControl<C> & {
-  source: Source;
+export type TaskParamWithSource<C extends BaseControl, S extends BaseSources<any, any>> = TaskParamWithControl<C> & {
+  source: S;
 };
 
 export type TaskTypes<C extends BaseControl, Source extends BaseSources<any, any>> = {

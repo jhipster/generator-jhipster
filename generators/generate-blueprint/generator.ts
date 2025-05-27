@@ -20,13 +20,20 @@ import { rm } from 'node:fs/promises';
 import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 
-import BaseGenerator from '../base-application/index.js';
+import BaseGenerator from '../base-simple-application/index.js';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.js';
 
 import * as GENERATOR_LIST from '../generator-list.js';
 import { BLUEPRINT_API_VERSION } from '../generator-constants.js';
-import type { ExportGeneratorOptionsFromCommand } from '../../lib/command/types.js';
-import { files, generatorFiles } from './files.js';
+import type {
+  BaseApplicationEntity,
+  BaseApplicationField,
+  BaseApplicationPrimaryKey,
+  BaseApplicationRelationship,
+  BaseApplicationSources,
+} from '../base-application/types.js';
+import type { BaseControl } from '../base/types.js';
+import type { SimpleTaskTypes } from '../base-simple-application/tasks.js';
 import {
   DYNAMIC,
   GENERATE_SNAPSHOTS,
@@ -41,43 +48,26 @@ import {
   requiredConfig,
   subGeneratorPrompts,
 } from './constants.js';
-import type command from './command.js';
+import { files, generatorFiles } from './files.js';
+import type { BlueprintApplication, BlueprintConfiguration, BlueprintFeatures, BlueprintOptions } from './types.js';
 
 const { GENERATOR_INIT } = GENERATOR_LIST;
 
 const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spec.?(c|m)js'];
 
-type BlueprintConfig = {
-  sampleWritten?: boolean;
-  githubRepository?: string;
-  cli?: boolean;
-  cliName?: string;
-  blueprintMjsExtension: string;
-  generators: Record<string, any>;
-};
-
-type BlueprintApplication = BlueprintConfig & { commands: string[]; blueprintsPath?: string; js?: boolean };
-
-type BlueprintOptions = ExportGeneratorOptionsFromCommand<typeof command> & {
-  skipGit: boolean;
-  existed: boolean;
-  defaults: boolean;
-};
-
-export default class extends BaseGenerator<
-  Application & BlueprintApplication,
-  Config &
-    BlueprintConfig & {
-      cli?: boolean;
-      caret: boolean;
-      dynamic: boolean;
-      localBlueprint: boolean;
-      subGenerators: string[];
-      additionalSubGenerators: string;
-      generators: Record<string, any>;
-    },
-  Options & BlueprintOptions
-> {
+export default class<
+  Options extends BlueprintOptions,
+  Field extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<Field>,
+  Relationship extends BaseApplicationRelationship<any>,
+  Entity extends BaseApplicationEntity<Field, PK, Relationship>,
+  Application extends BlueprintApplication,
+  Source extends BaseApplicationSources<Field, PK, Relationship, Entity, Application>,
+  Control extends BaseControl,
+  TaskTypes extends SimpleTaskTypes<Field, PK, Relationship, Entity, Application, Source, Control>,
+  Configuration extends BlueprintConfiguration,
+  Features extends BlueprintFeatures,
+> extends BaseGenerator<Options, Field, PK, Relationship, Entity, Application, Source, Control, TaskTypes, Configuration, Features> {
   recreatePackageLock!: boolean;
   skipWorkflows!: boolean;
   ignoreExistingGenerators!: boolean;
@@ -197,7 +187,7 @@ export default class extends BaseGenerator<
   get loading() {
     return this.asLoadingTaskGroup({
       async loadDefaults({ applicationDefaults }) {
-        applicationDefaults(this.config.getAll(), defaultConfig(), { commands: [] });
+        applicationDefaults(this.config.getAll() as any, defaultConfig() as any, { commands: [] } as any);
       },
     });
   }
@@ -248,6 +238,7 @@ export default class extends BaseGenerator<
         application.sampleWritten = this.jhipsterConfig.sampleWritten;
         const { skipWorkflows, ignoreExistingGenerators } = this;
         await this.writeFiles({
+          // @ts-ignore FIXME types
           sections: files,
           context: {
             skipWorkflows,
@@ -285,6 +276,7 @@ export default class extends BaseGenerator<
             priorities,
           };
           await this.writeFiles({
+            // @ts-ignore FIXME types
             sections: generatorFiles,
             context: subTemplateData,
           });

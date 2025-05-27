@@ -201,10 +201,7 @@ export type BaseApplicationEntity<
   entityClassPluralHumanized: string;
 
   entityFileName: string;
-<<<<<<< HEAD
   entityAngularNamePlural: string;
-=======
->>>>>>> 26da07270d (shrink types)
   entityApiUrl: string;
 
   entityFolderName: string;

@@ -35,7 +35,7 @@ import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from './tasks.js';
 import { formatDateForChangelog, packageNameToNamespace } from './support/index.js';
 import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.js';
-import type { BaseConfiguration, BaseOptions, JHipsterGeneratorFeatures } from './api.js';
+import type { BaseConfiguration, BaseFeatures, BaseOptions } from './api.js';
 import {
   CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE,
   CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,
@@ -57,7 +57,7 @@ export default class BaseGenerator<
   Control extends BaseControl,
   TaskTypes extends BaseTaskTypes<Control, Sources>,
   Configuration extends BaseConfiguration,
-  Features extends JHipsterGeneratorFeatures,
+  Features extends BaseFeatures,
 > extends CoreGenerator<Options, Application, Sources, Configuration, Features> {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;

@@ -1,5 +1,5 @@
 import type { Simplify } from 'type-fest';
-import type { BaseConfiguration, BaseOptions, JHipsterGeneratorFeatures } from '../base/api.js';
+import type { BaseConfiguration, BaseFeatures, BaseOptions } from '../base/api.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
 import type { ProjectNameConfiguration } from '../project-name/api.js';
 /**
@@ -41,4 +41,4 @@ export type BaseApplicationConfiguration = ProjectNameConfiguration &
       }
   >;
 
-export type BaseApplicationFeatures = JHipsterGeneratorFeatures & {};
+export type BaseApplicationFeatures = BaseFeatures & {};

@@ -22,11 +22,12 @@ import type BaseGenerator from './generator.js';
 
 export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
 export type BaseEntity = object;
-export type BaseApplication = CoreApplication & {};
+export type BaseApplication = CoreApplication;
 export type BaseSources<Entity extends BaseEntity, Application extends BaseApplication> = CoreSources<
   Application,
   BaseGenerator<any, Entity, Application, any, any, any, any, any>
-> & {};
+>;
 export type BaseControl = CoreControl & {
   readonly existingProject: boolean;
+  isJhipsterVersionLessThan: (string) => boolean;
 };

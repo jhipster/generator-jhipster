@@ -60,7 +60,17 @@ export type WriteFileBlock<S, G> = {
 export type WriteFileSection<S, G> = Record<string, WriteFileBlock<S, G>[]>;
 
 export type CoreApplication = {
-  customizeTemplatePaths: any[];
+  customizeTemplatePaths: ((
+    this: CoreGenerator<any, any, any, any, any>,
+    file: {
+      namespace: string;
+      sourceFile: string;
+      resolvedSourceFile: string;
+      destinationFile: string;
+      templatesRoots: string[];
+    },
+    context: any,
+  ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
 };
 export type CoreSources<A extends CoreApplication, G extends CoreGenerator<any, A, any, any, any>> = {
   customizeTemplatePath?: ((file: {

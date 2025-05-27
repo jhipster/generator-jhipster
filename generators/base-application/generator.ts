@@ -162,7 +162,7 @@ class BaseApplicationGenerator<
   >,
   Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
-> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, Configuration, Features> {
+> extends BaseGenerator<Options, Field, PK, Relationship, Entity, Application, Sources, Control, TaskTypes, Configuration, Features> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
   static LOADING_ENTITIES = asPriority(LOADING_ENTITIES);
@@ -484,10 +484,7 @@ class BaseApplicationGenerator<
   protected getTaskFirstArgForPriority(
     priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES],
   ): TaskParamWithApplication<Application, Control> {
-    if (!this.jhipsterConfig.baseName) {
-      throw new Error(`BaseName (${this.jhipsterConfig.baseName}) application not available for priority ${priorityName}`);
-    }
-
+    const { source, application, applicationDefaults, entitiesToLoad, entities, filteredEntities } = getFirstArgForPriority(priorityName);
     const args: Record<string, any> = {};
     if (source) {
       args.source = this.#source;

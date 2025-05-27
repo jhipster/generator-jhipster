@@ -72,7 +72,9 @@ type GeneratorsByNamespace = {
   'jhipster:feign-client': import('./feign-client/generator.js').default;
   gatling: import('./gatling/generator.js').default;
   'jhipster:gatling': import('./gatling/generator.js').default;
+  // @ts-ignore
   'generate-blueprint': import('./generate-blueprint/generator.js').default;
+  // @ts-ignore
   'jhipster:generate-blueprint': import('./generate-blueprint/generator.js').default;
   git: import('./git/generator.js').default;
   'jhipster:git': import('./git/generator.js').default;

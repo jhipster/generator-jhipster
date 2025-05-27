@@ -194,6 +194,7 @@ export type PlatformApplication = ServiceDiscoveryApplication & MonitoringApplic
 
 export type ApplicationType = {
   gradleDevelocityHost?: string;
+  jhipsterPackageJson: string;
   translations: string[];
   getWebappTranslation: (t: any[]) => string;
 } & BaseApplicationApplication &
