@@ -20,7 +20,7 @@ import { defaults, upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import type GeneratorsByNamespace from '../types.js';
-import BaseGenerator from '../base/index.js';
+import BaseGenerator from '../base-simple-application/index.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import type { JHipsterGeneratorOptions } from '../base/api.js';
 import { mutateData } from '../../lib/utils/object.js';
@@ -37,7 +37,6 @@ import type {
   PreparingEachEntityFieldTaskParam,
   PreparingEachEntityRelationshipTaskParam,
   PreparingEachEntityTaskParam,
-  TaskParamWithApplication,
 } from '../../lib/types/application/tasks.js';
 import type { Entity as ApplicationEntity } from '../../lib/types/application/entity.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
@@ -87,15 +86,23 @@ const {
 
 const asPriority = BaseGenerator.asPriority;
 
-const PRIORITY_WITH_APPLICATION_DEFAULTS: string[] = [PREPARING, LOADING];
 const PRIORITY_WITH_ENTITIES_TO_LOAD: string[] = [LOADING_ENTITIES];
 const PRIORITY_WITH_ENTITIES: string[] = [DEFAULT];
 const PRIORITY_WITH_FILTERED_ENTITIES: string[] = [WRITING_ENTITIES, POST_WRITING_ENTITIES];
+
 const PRIORITY_WITH_SOURCE: string[] = [PREPARING, POST_PREPARING, POST_WRITING, POST_WRITING_ENTITIES];
+const PRIORITY_WITH_APPLICATION_DEFAULTS: string[] = [PREPARING, LOADING];
 const PRIORITY_WITH_APPLICATION: string[] = [
   LOADING,
   PREPARING,
   POST_PREPARING,
+
+  DEFAULT,
+  WRITING,
+  POST_WRITING,
+  PRE_CONFLICTS,
+  INSTALL,
+  END,
 
   CONFIGURING_EACH_ENTITY,
   LOADING_ENTITIES,
@@ -104,15 +111,18 @@ const PRIORITY_WITH_APPLICATION: string[] = [
   PREPARING_EACH_ENTITY_RELATIONSHIP,
   POST_PREPARING_EACH_ENTITY,
 
-  DEFAULT,
-  WRITING,
   WRITING_ENTITIES,
-  POST_WRITING,
   POST_WRITING_ENTITIES,
-  PRE_CONFLICTS,
-  INSTALL,
-  END,
 ];
+
+const getFirstArgForPriority = (priorityName: string) => ({
+  source: PRIORITY_WITH_SOURCE.includes(priorityName),
+  application: PRIORITY_WITH_APPLICATION.includes(priorityName),
+  applicationDefaults: PRIORITY_WITH_APPLICATION_DEFAULTS.includes(priorityName),
+  entitiesToLoad: PRIORITY_WITH_ENTITIES_TO_LOAD.includes(priorityName),
+  entities: PRIORITY_WITH_ENTITIES.includes(priorityName),
+  filteredEntities: PRIORITY_WITH_FILTERED_ENTITIES.includes(priorityName),
+});
 
 /**
  * This is the base class for a generator that generates entities.
@@ -124,7 +134,7 @@ export default class BaseApplicationGenerator<
   Options extends BaseApplicationOptions = BaseApplicationOptions & JHipsterGeneratorOptions,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
   TaskTypes extends DefaultTaskTypes<Entity, Application> = DefaultTaskTypes<Entity, Application>,
-> extends BaseGenerator<ConfigType, Options, Features, TaskTypes> {
+> extends BaseGenerator<Application, ConfigType, Options, Features, TaskTypes> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
   static LOADING_ENTITIES = asPriority(LOADING_ENTITIES);
@@ -432,8 +442,8 @@ export default class BaseApplicationGenerator<
   }
 
   getArgsForPriority(priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES]): any {
-    const args = super.getArgsForPriority(priorityName);
-    let firstArg = PRIORITY_WITH_APPLICATION.includes(priorityName) ? this.getTaskFirstArgForPriority(priorityName) : {};
+    const args = super.getArgsForPriority(priorityName as any);
+    let firstArg = this.getTaskFirstArgForPriority(priorityName);
     if (args.length > 0) {
       firstArg = { ...args[0], ...firstArg };
     }
@@ -443,26 +453,26 @@ export default class BaseApplicationGenerator<
   /**
    * @protected
    */
-  protected getTaskFirstArgForPriority(priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES]): TaskParamWithApplication {
-    if (!this.jhipsterConfig.baseName) {
-      throw new Error(`BaseName (${this.jhipsterConfig.baseName}) application not available for priority ${priorityName}`);
-    }
+  protected getTaskFirstArgForPriority(priorityName: string): any {
+    const { source, application, applicationDefaults, entitiesToLoad, entities, filteredEntities } = getFirstArgForPriority(priorityName);
 
-    const application = this.#application;
-    const args: Record<string, any> = { application };
-    if (PRIORITY_WITH_SOURCE.includes(priorityName)) {
+    const args: Record<string, any> = {};
+    if (source) {
       args.source = this.#source;
     }
-    if (PRIORITY_WITH_APPLICATION_DEFAULTS.includes(priorityName)) {
-      args.applicationDefaults = (...args) => mutateData(application, ...args.map(data => ({ __override__: false, ...data })));
+    if (application) {
+      args.application = this.#application;
     }
-    if (PRIORITY_WITH_ENTITIES_TO_LOAD.includes(priorityName)) {
+    if (applicationDefaults) {
+      args.applicationDefaults = (...args) => mutateData(this.#application, ...args.map(data => ({ __override__: false, ...data })));
+    }
+    if (entitiesToLoad) {
       args.entitiesToLoad = this.#getEntitiesDataToLoad();
     }
-    if (PRIORITY_WITH_ENTITIES.includes(priorityName)) {
+    if (entities) {
       args.entities = [...this.#entities.values()];
     }
-    if (PRIORITY_WITH_FILTERED_ENTITIES.includes(priorityName)) {
+    if (filteredEntities) {
       const { entities: entitiesToFilter = [] } = this.options;
       if (entitiesToFilter.length === 0) {
         args.entities = [...this.#entities.values()];
@@ -470,7 +480,7 @@ export default class BaseApplicationGenerator<
         args.entities = [...this.#entities.values()].filter(entity => entitiesToFilter.includes(entity.name));
       }
     }
-    return args as TaskParamWithApplication;
+    return args;
   }
 
   /**

@@ -25,7 +25,6 @@ const prioritiesForSub = (_subGen: string) => PRIORITY_NAMES_LIST;
 
 export const GENERATE_SNAPSHOTS = 'generateSnapshots';
 export const LINK_JHIPSTER_DEPENDENCY = 'linkJhipsterDependency';
-export const GENERATORS = 'generators';
 export const SUB_GENERATORS = 'subGenerators';
 export const ADDITIONAL_SUB_GENERATORS = 'additionalSubGenerators';
 export const DYNAMIC = 'dynamic';
@@ -36,8 +35,6 @@ export const CLI_OPTION = 'cli';
 export const SBS = 'sbs';
 export const COMMAND = 'command';
 export const PRIORITIES = 'priorities';
-export const ALL_GENERATORS = 'allGenerators';
-export const ALL_PRIORITIES = 'allPriorities';
 export const WRITTEN = 'written';
 
 /**
@@ -54,7 +51,7 @@ export const defaultConfig = ({ config = {} } = {}) => ({
   [JS]: !config[LOCAL_BLUEPRINT_OPTION],
   [LOCAL_BLUEPRINT_OPTION]: false,
   [CLI_OPTION]: !config[LOCAL_BLUEPRINT_OPTION],
-  [SUB_GENERATORS]: [],
+  [SUB_GENERATORS]: [] as string[],
   [ADDITIONAL_SUB_GENERATORS]: '',
 });
 
@@ -77,7 +74,7 @@ export const allGeneratorsConfig = () => ({
   [ADDITIONAL_SUB_GENERATORS]: '',
   [DYNAMIC]: false,
   [JS]: true,
-  [GENERATORS]: Object.fromEntries(Object.values(GENERATOR_LIST).map(subGenerator => [subGenerator, allSubGeneratorConfig(subGenerator)])),
+  generators: Object.fromEntries(Object.values(GENERATOR_LIST).map(subGenerator => [subGenerator, allSubGeneratorConfig(subGenerator)])),
 });
 
 export const prompts = () => {
@@ -115,10 +112,18 @@ export const prompts = () => {
       message: 'Add a cli?',
       default: CLI_OPTION_DEFAULT_VALUE,
     },
-  ];
+  ] as const;
 };
 
-export const subGeneratorPrompts = ({ subGenerator, additionalSubGenerator, localBlueprint }) => {
+export const subGeneratorPrompts = ({
+  subGenerator,
+  additionalSubGenerator,
+  localBlueprint,
+}: {
+  subGenerator: string;
+  additionalSubGenerator: boolean;
+  localBlueprint: boolean;
+}) => {
   const { [SBS]: SBS_DEFAULT_VALUE } = defaultSubGeneratorConfig();
   return [
     {

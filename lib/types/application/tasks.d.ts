@@ -21,10 +21,11 @@ import type { Merge, OmitIndexSignature, Simplify } from 'type-fest';
 import type { Entity as BaseEntity } from '../base/entity.js';
 import type { GetFieldType, GetRelationshipType } from '../utils/entity-utils.ts';
 import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource } from '../base/tasks.js';
+import type { Application as SimpleApplication } from '../../../generators/base-simple-application/index.js';
 import type { Entity } from './entity.js';
 import type { ApplicationType, BaseApplicationSource } from './application.js';
 
-type ApplicationDefaultsTaskParam<E = Entity, A = ApplicationType<E>> = {
+type ApplicationDefaultsTaskParam<A> = {
   /**
    * Parameter properties accepts:
    * - functions: receives the application and the return value is set at the application property.
@@ -53,22 +54,15 @@ type ApplicationDefaultsTaskParam<E = Entity, A = ApplicationType<E>> = {
   ) => void;
 };
 
-type TaskParamWithApplication<E = Entity, A = ApplicationType<E>> = TaskParamWithControl & {
+type TaskParamWithApplication<A = ApplicationType<Entity>> = TaskParamWithControl & {
   application: A;
 };
 
-type TaskParamWithEntities<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A> & {
+type TaskParamWithEntities<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<A> & {
   entities: E[];
 };
 
-type TaskParamWithApplicationDefaults<E = Entity, A = ApplicationType<E>> = TaskParamWithControl &
-  TaskParamWithApplication<E, A> &
-  ApplicationDefaultsTaskParam<E, A>;
-
-type PreparingTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplicationDefaults<E, A> &
-  TaskParamWithSource<BaseApplicationSource>;
-
-type ConfiguringEachEntityTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A> & {
+type ConfiguringEachEntityTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<A> & {
   entityName: string;
   /** Entity storage */
   entityStorage: Storage;
@@ -86,7 +80,7 @@ type EntityToLoad = {
   entityBootstrap: Entity;
 };
 
-type LoadingEntitiesTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A> & {
+type LoadingEntitiesTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<A> & {
   entitiesToLoad: EntityToLoad[];
 };
 
@@ -96,7 +90,7 @@ type EntityTaskParam<E = Entity> = {
   description: string;
 };
 
-type PreparingEachEntityTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A> & EntityTaskParam<E>;
+type PreparingEachEntityTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<A> & EntityTaskParam<E>;
 
 type PreparingEachEntityFieldTaskParam<E = Entity, A = ApplicationType<E>> = PreparingEachEntityTaskParam<E, A> & {
   field: GetFieldType<E>;
@@ -108,33 +102,33 @@ type PreparingEachEntityRelationshipTaskParam<E = Entity, A = ApplicationType<E>
   relationshipName: string;
 };
 
-type WritingTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A>;
-
-type PostWritingTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<E, A> & TaskParamWithSource<BaseApplicationSource>;
-
 type PostWritingEntitiesTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithEntities<E, A> &
   TaskParamWithSource<BaseApplicationSource>;
 
-export type TaskTypes<E = Entity, A = ApplicationType<E>> = Merge<
+export type SimpleTaskTypes<A = SimpleApplication> = Merge<
   BaseTaskTypes,
   {
-    LoadingTaskParam: TaskParamWithApplicationDefaults<E, A>;
-    PreparingTaskParam: PreparingTaskParam<E, A>;
-    ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<E, A>;
-    LoadingEntitiesTaskParam: LoadingEntitiesTaskParam<E, A>;
-    PreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;
-    PreparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<E, A>;
-    PreparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<E, A>;
-    PostPreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;
-    PostPreparingTaskParam: TaskParamWithSource<BaseApplicationSource> & TaskParamWithApplication<E, A>;
-    DefaultTaskParam: TaskParamWithEntities<E, A>;
-    WritingTaskParam: WritingTaskParam<E, A>;
-    WritingEntitiesTaskParam: TaskParamWithEntities<E, A>;
-    PostWritingTaskParam: PostWritingTaskParam<E, A>;
-    PostWritingEntitiesTaskParam: PostWritingEntitiesTaskParam<E, A>;
-    PreConflictsTaskParam: TaskParamWithApplication<E, A>;
-    InstallTaskParam: TaskParamWithApplication<E, A>;
-    PostInstallTaskParam: TaskParamWithApplication<E, A>;
-    EndTaskParam: TaskParamWithApplication<E, A>;
+    LoadingTaskParam: TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
+    PreparingTaskParam: TaskParamWithSource<BaseApplicationSource> & TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
+    PostPreparingTaskParam: TaskParamWithSource<BaseApplicationSource> & TaskParamWithApplication<A>;
+    DefaultTaskParam: TaskParamWithApplication<A>;
+    WritingTaskParam: TaskParamWithApplication<A>;
+    PostWritingTaskParam: TaskParamWithSource<BaseApplicationSource> & TaskParamWithApplication<A>;
+    PreConflictsTaskParam: TaskParamWithApplication<A>;
+    InstallTaskParam: TaskParamWithApplication<A>;
+    PostInstallTaskParam: TaskParamWithApplication<A>;
+    EndTaskParam: TaskParamWithApplication<A>;
   }
 >;
+
+export type TaskTypes<E = Entity, A = ApplicationType<E>> = SimpleTaskTypes<A> & {
+  ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<E, A>;
+  LoadingEntitiesTaskParam: LoadingEntitiesTaskParam<E, A>;
+  PreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;
+  PreparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<E, A>;
+  PreparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<E, A>;
+  PostPreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;
+  DefaultTaskParam: TaskParamWithEntities<E, A>;
+  WritingEntitiesTaskParam: TaskParamWithEntities<E, A>;
+  PostWritingEntitiesTaskParam: PostWritingEntitiesTaskParam<E, A>;
+};
