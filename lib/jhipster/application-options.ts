@@ -193,7 +193,6 @@ export const jhipsterOptionValues: Record<string, JDLApplicationOptionValue> = {
   [optionNames.MICROFRONTEND]: false,
   [optionNames.MICROFRONTENDS]: [],
   [optionNames.NPM]: true,
-  [optionNames.PACKAGE_FOLDER]: 'com/mycompany/myapp',
   [optionNames.PACKAGE_NAME]: 'com.mycompany.myapp',
   [optionNames.PROD_DATABASE_TYPE]: {
     [MYSQL]: MYSQL,

@@ -147,14 +147,12 @@ export function getConfigForAuthenticationType(options: ApplicationDefaults = {}
 }
 
 export function getConfigForPackageName(options: ApplicationDefaults = {}): ApplicationDefaults {
-  if (!options[PACKAGE_NAME] && !options[PACKAGE_FOLDER]) {
-    options[PACKAGE_FOLDER] = OptionValues[PACKAGE_FOLDER];
-  }
-  if (!options[PACKAGE_NAME] && options[PACKAGE_FOLDER]) {
-    options[PACKAGE_NAME] = options[PACKAGE_FOLDER].replace(/\//g, '.');
-  }
-  if (!options[PACKAGE_FOLDER] && options[PACKAGE_NAME]) {
-    options[PACKAGE_FOLDER] = options[PACKAGE_NAME].replace(/\./g, '/');
+  if (!options[PACKAGE_NAME]) {
+    if (!options[PACKAGE_FOLDER]) {
+      options[PACKAGE_NAME] = OptionValues[PACKAGE_NAME];
+    } else {
+      options[PACKAGE_NAME] = options[PACKAGE_FOLDER].split('/').filter(Boolean).join('.');
+    }
   }
   return options;
 }

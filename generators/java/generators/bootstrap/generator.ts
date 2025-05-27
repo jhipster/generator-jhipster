@@ -77,6 +77,13 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
       fixConfig() {
         if (this.jhipsterConfig.packageFolder) {
           this.jhipsterConfig.packageFolder = normalizePathEnd(this.jhipsterConfig.packageFolder);
+          const packageName = this.jhipsterConfig.packageFolder.split('/').filter(Boolean).join('.');
+          this.jhipsterConfig.packageName ??= packageName;
+          if (this.jhipsterConfig.packageName !== packageName) {
+            throw new Error(
+              `The package name "${this.jhipsterConfig.packageName}" does not match the package folder "${this.jhipsterConfig.packageFolder}". Using "${packageName}" as package name.`,
+            );
+          }
         }
       },
     });
