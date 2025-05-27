@@ -89,7 +89,7 @@ export default class JdlGenerator extends BaseGenerator<
         }
       },
       existingProject() {
-        this.existingProject = this.jhipsterConfig.baseName !== undefined && (this.config as any).existed;
+        this.existingProject = this.jhipsterConfig.baseName !== undefined && this.config.existed;
       },
       checkOptions() {
         if (!this.skipChecks && !this.inline && !this.jdlFiles?.length) {

@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseWorkspacesGenerator from '../base-workspaces/index.js';
+import { CommandBaseWorkspacesGenerator as BaseWorkspacesGenerator } from '../base-workspaces/index.js';
+import type command from './command.js';
 
-export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
+export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerator<typeof command> {
   customWorkspacesConfig?: boolean;
 
   async beforeQueue() {

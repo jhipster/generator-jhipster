@@ -728,7 +728,7 @@ export default class BaseGenerator<
   /**
    * Compose external blueprint module
    */
-  async #composeBlueprint<G extends BaseGenerator = BaseGenerator>(blueprint: string, subGen: string): Promise<G | undefined> {
+  async #composeBlueprint(blueprint: string, subGen: string) {
     blueprint = normalizeBlueprintName(blueprint);
     if (!this.skipChecks && blueprint !== LOCAL_BLUEPRINT_PACKAGE_NAMESPACE) {
       this.#checkBlueprint(blueprint);
@@ -760,7 +760,7 @@ export default class BaseGenerator<
       throw blueprintGenerator;
     }
     this._debug(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
-    return blueprintGenerator as any;
+    return blueprintGenerator;
   }
 
   /**

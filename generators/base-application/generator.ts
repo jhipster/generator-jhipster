@@ -26,7 +26,6 @@ import type { JHipsterGeneratorOptions } from '../base/api.js';
 import { mutateData } from '../../lib/utils/object.js';
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
-  GENERATOR_BOOTSTRAP_APPLICATION_BASE,
   GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
   GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
 } from '../generator-list.js';
@@ -51,7 +50,12 @@ import {
   getEntitiesFromDir,
 } from './support/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
-import type { Config as BaseApplicationConfig, Features as BaseApplicationFeatures, Options as BaseApplicationOptions } from './types.js';
+import type {
+  Config as BaseApplicationConfig,
+  Features as BaseApplicationFeatures,
+  Options as BaseApplicationOptions,
+  CommonClientServerApplication,
+} from './types.js';
 
 const {
   LOADING,
@@ -129,7 +133,7 @@ const getFirstArgForPriority = (priorityName: string) => ({
  */
 export default class BaseApplicationGenerator<
   Entity extends ApplicationEntity = ApplicationEntity,
-  Application extends ApplicationType<ApplicationEntity> = ApplicationType<ApplicationEntity>,
+  Application extends CommonClientServerApplication<Entity> = ApplicationType<Entity>,
   ConfigType extends BaseApplicationConfig = BaseApplicationConfig & ApplicationConfiguration,
   Options extends BaseApplicationOptions = BaseApplicationOptions & JHipsterGeneratorOptions,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
@@ -230,26 +234,20 @@ export default class BaseApplicationGenerator<
 
   dependsOnBootstrapApplication(
     options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION]> | undefined,
-  ): GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION] {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION, options as any) as any;
-  }
-
-  dependsOnBootstrapApplicationBase(
-    options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_BASE]> | undefined,
-  ): GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_BASE][] {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE, options as any) as any;
+  ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION]> {
+    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION, options);
   }
 
   dependsOnBootstrapApplicationServer(
     options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_SERVER]> | undefined,
-  ): GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_SERVER][] {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER, options as any) as any;
+  ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_SERVER]> {
+    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER, options);
   }
 
   dependsOnBootstrapApplicationClient(
     options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_CLIENT]> | undefined,
-  ): GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_CLIENT][] {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, options as any) as any;
+  ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_CLIENT]> {
+    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, options);
   }
 
   /**

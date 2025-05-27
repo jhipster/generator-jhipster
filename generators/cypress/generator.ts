@@ -45,7 +45,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
     return this.asPromptingTaskGroup({
       async askForCypressOptions({ control }) {
         if (control.existingProject && !this.options.askAnswered) return;
-        await (this.prompt as any)(
+        await this.prompt(
           [
             {
               when: this.jhipsterConfig?.clientFramework === ANGULAR,
@@ -177,7 +177,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
       async writeFiles({ application }) {
         const faker = await createFaker();
         faker.seed(stringHashCode(application.baseName));
-        const context = { ...application, faker } as any;
+        const context = { ...application, faker };
         return this.writeFiles({
           sections: cypressFiles,
           context,
@@ -204,7 +204,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
         for (const entity of entities.filter(
           entity => !entity.skipClient && !entity.embedded && !entity.builtInUser && !entity.entityClientModelOnly,
         )) {
-          const context = { ...application, ...entity } as any;
+          const context = { ...application, ...entity };
           await this.writeFiles({
             sections: cypressEntityFiles,
             context,

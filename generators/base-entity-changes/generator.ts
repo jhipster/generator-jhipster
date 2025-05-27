@@ -147,7 +147,7 @@ export default abstract class BaseEntityChangesGenerator<
         };
       }
 
-      (this as any)._debug(`Calculating diffs for ${entityName}`);
+      this._debug(`Calculating diffs for ${entityName}`);
 
       const oldFields: any[] = (oldConfig.fields || []).filter((field: any) => !field.transient);
       const oldFieldNames: string[] = oldFields.filter(field => !field.id).map(field => field.fieldName);
