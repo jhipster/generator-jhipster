@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { CliCommand } from './types.js';
+import type { CliCommand } from './types.js';
 
 const removedV8 = chalk.yellow(`
 
