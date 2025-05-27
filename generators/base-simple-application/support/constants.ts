@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const CONTEXT_DATA_APPLICATION_ENTITIES_KEY = 'jhipster:application:entities';
-export const CONTEXT_DATA_EXISTING_PROJECT = 'jhipster:existingProject';
+export const CONTEXT_DATA_APPLICATION_KEY = 'jhipster:application';
+export const CONTEXT_DATA_SOURCE_KEY = 'jhipster:source';

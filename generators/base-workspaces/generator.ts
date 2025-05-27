@@ -28,7 +28,7 @@ import { normalizePathEnd } from '../base/support/path.js';
 import type { TaskTypes } from '../../lib/types/base/tasks.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
-import { CONTEXT_DATA_APPLICATION_KEY } from '../base-application/support/constants.js';
+import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/index.js';

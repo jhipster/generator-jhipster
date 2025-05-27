@@ -20,21 +20,18 @@ import type { ComposeOptions } from 'yeoman-generator';
 
 import type GeneratorsByNamespace from '../types.js';
 import BaseGenerator from '../base/index.js';
-import type { JHipsterGeneratorOptions } from '../base/api.js';
 import { mutateData } from '../../lib/utils/object.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
 import type { SimpleTaskTypes } from '../../lib/types/application/tasks.js';
-import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
-import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-application/support/index.js';
 import { PRIORITY_NAMES } from '../base/priorities.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
+import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.js';
 import type {
-  Config as BaseApplicationConfig,
-  Features as BaseApplicationFeatures,
-  Options as BaseApplicationOptions,
   Application as SimpleApplication,
+  Config as SimpleApplicationConfig,
+  Features as SimpleApplicationFeatures,
+  Options as SimpleApplicationOptions,
 } from './types.js';
 import { BOOTSTRAP_APPLICATION, CUSTOM_PRIORITIES } from './priorities.js';
 
@@ -64,14 +61,14 @@ const getFirstArgForPriority = (priorityName: string) => ({
 /**
  * This is the base class for a generator that generates entities.
  */
-export default class BaseApplicationGenerator<
+export default class BaseSimpleApplicationGenerator<
   Application extends SimpleApplication = SimpleApplication,
-  ConfigType extends BaseApplicationConfig = BaseApplicationConfig & ApplicationConfiguration,
-  Options extends BaseApplicationOptions = BaseApplicationOptions & JHipsterGeneratorOptions,
-  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+  ConfigType extends SimpleApplicationConfig = SimpleApplicationConfig,
+  Options extends SimpleApplicationOptions = SimpleApplicationOptions,
+  Features extends SimpleApplicationFeatures = SimpleApplicationFeatures,
   TaskTypes extends SimpleTaskTypes<Application> = SimpleTaskTypes<Application>,
 > extends BaseGenerator<ConfigType, Options, Features, TaskTypes> {
-  static BOOTSTRAP_APPLICATION = BaseApplicationGenerator.asPriority(BOOTSTRAP_APPLICATION);
+  static BOOTSTRAP_APPLICATION = BaseSimpleApplicationGenerator.asPriority(BOOTSTRAP_APPLICATION);
 
   constructor(args: string | string[], options: Options, features: Features) {
     super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features });
@@ -83,9 +80,9 @@ export default class BaseApplicationGenerator<
     this.registerPriorities(CUSTOM_PRIORITIES);
   }
 
-  get #application(): ApplicationType {
+  get #application(): Application {
     return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
-      factory: () => ({ nodeDependencies: {}, customizeTemplatePaths: [], user: undefined }) as unknown as ApplicationType,
+      factory: () => ({ nodeDependencies: {}, customizeTemplatePaths: [], user: undefined }) as unknown as Application,
     });
   }
 
@@ -96,9 +93,9 @@ export default class BaseApplicationGenerator<
   /**
    * JHipster config with default values fallback
    */
-  override get jhipsterConfigWithDefaults(): Readonly<ConfigType & ApplicationConfiguration> {
+  override get jhipsterConfigWithDefaults(): Readonly<ConfigType> {
     const configWithDefaults = getConfigWithDefaults(super.jhipsterConfigWithDefaults);
-    return configWithDefaults as ConfigType & ApplicationConfiguration;
+    return configWithDefaults as ConfigType;
   }
 
   dependsOnBootstrapApplicationBase(
