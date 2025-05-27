@@ -28,7 +28,7 @@ import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
 } from '../client/support/index.js';
-import { createNeedleCallback } from '../base/support/index.js';
+import { createNeedleCallback } from '../base/support/needles.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
 import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.js';
 import cleanupOldFilesTask from './cleanup.js';
@@ -66,6 +66,20 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composing() {
+        if (this.jhipsterConfigWithDefaults.clientBundler === 'rsbuild') {
+          await this.composeWithJHipster('jhipster:javascript:rsbuild');
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get loading() {
@@ -327,19 +341,26 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           });
         }
       },
-      addMicrofrontendDependencies({ application, source }) {
-        const { clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
+      addMicrofrontendDependencies({ application }) {
+        const { applicationTypeGateway, clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } =
+          application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
-          source.mergeClientPackageJson!({
+          this.packageJson.merge({
             devDependencies: {
               '@originjs/vite-plugin-federation': '1.3.6',
             },
           });
         } else if (clientBundlerWebpack) {
-          source.mergeClientPackageJson!({
+          if (applicationTypeGateway) {
+            this.packageJson.merge({
+              devDependencies: {
+                '@module-federation/utilities': null,
+              },
+            });
+          }
+          this.packageJson.merge({
             devDependencies: {
-              '@module-federation/enhanced': null,
               'browser-sync-webpack-plugin': null,
               'copy-webpack-plugin': null,
               'css-loader': null,
@@ -359,6 +380,26 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               'webpack-merge': null,
               'workbox-webpack-plugin': null,
               ...(enableTranslation
+                ? {
+                    'folder-hash': null,
+                    'merge-jsons-webpack-plugin': null,
+                  }
+                : {}),
+            },
+          });
+        } else if (clientBundlerRsbuild) {
+          this.packageJson.merge({
+            devDependencies: {
+              ...(applicationTypeGateway
+                ? {
+                    '@module-federation/utilities': null,
+                  }
+                : undefined),
+              '@rsbuild/plugin-sass': 'latest',
+              '@rsbuild/plugin-vue': 'latest',
+              'vue-loader': null,
+              'vue-style-loader': null,
+              ...(application.enableTranslation
                 ? {
                     'folder-hash': null,
                     'merge-jsons-webpack-plugin': null,
