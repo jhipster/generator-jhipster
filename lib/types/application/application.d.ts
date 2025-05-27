@@ -10,6 +10,7 @@ import { Entity } from './entity.js';
 export type ApplicationType<E = Entity> = BaseApplication &
   CommonClientServerApplication<E> &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/gradle/command.ts').default> &
+  ExportApplicationPropertiesFromCommand<typeof import('../../../generators/server/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../../../generators/spring-boot/command.ts').default>;
 
 export type BaseApplicationSource = SpringBootSourceType & ClientSourceType & LanguagesSource & DockerSourceType;

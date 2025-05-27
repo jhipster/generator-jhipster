@@ -18,7 +18,6 @@
  */
 import { packageJson } from '../../../../lib/index.js';
 import BaseApplicationGenerator from '../../../base-application/index.js';
-import { GENERATOR_PROJECT_NAME } from '../../../generator-list.js';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -27,7 +26,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
+      await this.dependsOnBootstrapApplicationBase();
     }
   }
 

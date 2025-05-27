@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 
+import type { Priority } from 'yeoman-generator';
 import { PRIORITY_NAMES as PRIORITY_NAMES_BASE, QUEUES as QUEUES_BASE, QUEUE_PREFIX } from '../base/priorities.js';
+import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
 
 const { DEFAULT, TRANSFORM, MULTISTEP_TRANSFORM } = PRIORITY_NAMES_BASE;
 
@@ -48,62 +50,64 @@ const POST_WRITING_ENTITIES_QUEUE = `${QUEUE_PREFIX}${POST_WRITING_ENTITIES}`;
 const LOADING_TRANSLATIONS = 'loadingTranslations';
 const LOADING_TRANSLATIONS_QUEUE = `${QUEUE_PREFIX}${LOADING_TRANSLATIONS}`;
 
-export const CUSTOM_PRIORITIES = [
-  {
-    priorityName: CONFIGURING_EACH_ENTITY,
-    queueName: CONFIGURING_EACH_ENTITY_QUEUE,
-    before: LOADING_ENTITIES,
-    skip: true,
-  },
-  {
-    priorityName: LOADING_ENTITIES,
-    queueName: LOADING_ENTITIES_QUEUE,
-    before: PREPARING_EACH_ENTITY,
-    skip: true,
-  },
-  {
-    priorityName: PREPARING_EACH_ENTITY,
-    queueName: PREPARING_EACH_ENTITY_QUEUE,
-    before: PREPARING_EACH_ENTITY_FIELD,
-    skip: true,
-  },
-  {
-    priorityName: PREPARING_EACH_ENTITY_FIELD,
-    queueName: PREPARING_EACH_ENTITY_FIELD_QUEUE,
-    before: PREPARING_EACH_ENTITY_RELATIONSHIP,
-    skip: true,
-  },
-  {
-    priorityName: PREPARING_EACH_ENTITY_RELATIONSHIP,
-    queueName: PREPARING_EACH_ENTITY_RELATIONSHIP_QUEUE,
-    before: POST_PREPARING_EACH_ENTITY,
-    skip: true,
-  },
-  {
-    priorityName: POST_PREPARING_EACH_ENTITY,
-    queueName: POST_PREPARING_EACH_ENTITY_QUEUE,
-    before: DEFAULT,
-    skip: true,
-  },
-  {
-    priorityName: WRITING_ENTITIES,
-    queueName: WRITING_ENTITIES_QUEUE,
-    before: MULTISTEP_TRANSFORM,
-    skip: true,
-  },
-  {
-    priorityName: POST_WRITING_ENTITIES,
-    queueName: POST_WRITING_ENTITIES_QUEUE,
-    before: LOADING_TRANSLATIONS,
-    skip: true,
-  },
-  {
-    priorityName: LOADING_TRANSLATIONS,
-    queueName: LOADING_TRANSLATIONS_QUEUE,
-    before: TRANSFORM,
-    skip: true,
-  },
-].reverse();
+export const CUSTOM_PRIORITIES = (
+  [
+    {
+      priorityName: CONFIGURING_EACH_ENTITY,
+      queueName: CONFIGURING_EACH_ENTITY_QUEUE,
+      before: LOADING_ENTITIES,
+      skip: true,
+    },
+    {
+      priorityName: LOADING_ENTITIES,
+      queueName: LOADING_ENTITIES_QUEUE,
+      before: PREPARING_EACH_ENTITY,
+      skip: true,
+    },
+    {
+      priorityName: PREPARING_EACH_ENTITY,
+      queueName: PREPARING_EACH_ENTITY_QUEUE,
+      before: PREPARING_EACH_ENTITY_FIELD,
+      skip: true,
+    },
+    {
+      priorityName: PREPARING_EACH_ENTITY_FIELD,
+      queueName: PREPARING_EACH_ENTITY_FIELD_QUEUE,
+      before: PREPARING_EACH_ENTITY_RELATIONSHIP,
+      skip: true,
+    },
+    {
+      priorityName: PREPARING_EACH_ENTITY_RELATIONSHIP,
+      queueName: PREPARING_EACH_ENTITY_RELATIONSHIP_QUEUE,
+      before: POST_PREPARING_EACH_ENTITY,
+      skip: true,
+    },
+    {
+      priorityName: POST_PREPARING_EACH_ENTITY,
+      queueName: POST_PREPARING_EACH_ENTITY_QUEUE,
+      before: DEFAULT,
+      skip: true,
+    },
+    {
+      priorityName: WRITING_ENTITIES,
+      queueName: WRITING_ENTITIES_QUEUE,
+      before: MULTISTEP_TRANSFORM,
+      skip: true,
+    },
+    {
+      priorityName: POST_WRITING_ENTITIES,
+      queueName: POST_WRITING_ENTITIES_QUEUE,
+      before: LOADING_TRANSLATIONS,
+      skip: true,
+    },
+    {
+      priorityName: LOADING_TRANSLATIONS,
+      queueName: LOADING_TRANSLATIONS_QUEUE,
+      before: TRANSFORM,
+      skip: true,
+    },
+  ] satisfies Priority[]
+).reverse();
 
 const ENTITY_QUEUES = {
   CONFIGURING_EACH_ENTITY_QUEUE,
@@ -135,6 +139,7 @@ export const PRIORITY_NAMES = {
 
 export const QUEUES = {
   ...QUEUES_BASE,
+  BOOTSTRAP_APPLICATION,
   ...ENTITY_QUEUES,
 };
 
@@ -144,6 +149,7 @@ export const PRIORITY_NAMES_LIST = [
   PRIORITY_NAMES.CONFIGURING,
   PRIORITY_NAMES.COMPOSING,
   PRIORITY_NAMES.COMPOSING_COMPONENT,
+  BOOTSTRAP_APPLICATION,
   PRIORITY_NAMES.LOADING,
   PRIORITY_NAMES.PREPARING,
   CONFIGURING_EACH_ENTITY,

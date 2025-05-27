@@ -16,7 +16,7 @@ exports[`generator - javascript:bootstrap customVersion-commonjs should match fi
     "node": "customVersion"
   },
   "scripts": {},
-  "name": "dasherizedBaseName",
+  "name": "jhipster",
   "version": "0.0.0",
   "description": "projectDescription",
   "license": "UNLICENSED"
@@ -41,7 +41,7 @@ exports[`generator - javascript:bootstrap packageJsonNodeEngine(false)-module sh
   "devDependencies": {},
   "engines": {},
   "scripts": {},
-  "name": "dasherizedBaseName",
+  "name": "jhipster",
   "version": "0.0.0",
   "description": "projectDescription",
   "license": "UNLICENSED",
@@ -69,7 +69,7 @@ exports[`generator - javascript:bootstrap packageJsonNodeEngine(true) should mat
     "node": "^20.17.0 || >=22.9.0"
   },
   "scripts": {},
-  "name": "dasherizedBaseName",
+  "name": "jhipster",
   "version": "0.0.0",
   "description": "projectDescription",
   "license": "UNLICENSED"

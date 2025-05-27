@@ -108,6 +108,7 @@ type PostWritingEntitiesTaskParam<E = Entity, A = ApplicationType<E>> = TaskPara
 export type SimpleTaskTypes<A = SimpleApplication> = Merge<
   BaseTaskTypes,
   {
+    BootstrapApplicationTaskParam: TaskParamWithControl & ApplicationDefaultsTaskParam<A>;
     LoadingTaskParam: TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
     PreparingTaskParam: TaskParamWithSource<BaseApplicationSource> & TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
     PostPreparingTaskParam: TaskParamWithSource<BaseApplicationSource> & TaskParamWithApplication<A>;
