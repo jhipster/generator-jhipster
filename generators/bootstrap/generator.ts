@@ -29,7 +29,8 @@ import BaseGenerator from '../base/index.js';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
 import { GENERATOR_UPGRADE } from '../generator-list.js';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.js';
-import type { GenericTaskGroup, TaskParamWithControl } from '../../lib/types/base/tasks.js';
+import type { TaskParamWithControl } from '../base/tasks.js';
+import type { GenericTaskGroup } from '../base-core/types.js';
 import {
   autoCrlfTransform,
   createESLintTransform,

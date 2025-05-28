@@ -1,4 +1,4 @@
-import type { Control } from '../../../generators/base/types.js';
+import type { Control } from './types.js';
 
 export type TaskParamWithControl = {
   control: Control;
@@ -24,7 +24,3 @@ export type TaskTypes = {
   PostInstallTaskParam: TaskParamWithControl;
   EndTaskParam: TaskParamWithControl;
 };
-
-type GenericTask<Arg1Type, ThisType> = (this: ThisType, arg1: Arg1Type) => unknown;
-
-export type GenericTaskGroup<ThisType, Arg1Type, N extends string = string> = Record<N, GenericTask<Arg1Type, ThisType>>;

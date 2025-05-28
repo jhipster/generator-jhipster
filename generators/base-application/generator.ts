@@ -21,6 +21,7 @@ import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import type GeneratorsByNamespace from '../types.js';
 import BaseGenerator from '../base-simple-application/index.js';
+import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-simple-application/support/index.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import type { JHipsterGeneratorOptions } from '../base/api.js';
 import { mutateData } from '../../lib/utils/object.js';
@@ -38,18 +39,13 @@ import type {
   PreparingEachEntityTaskParam,
 } from '../../lib/types/application/tasks.js';
 import type { Entity as ApplicationEntity } from '../../lib/types/application/entity.js';
-import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
+import type { GenericTaskGroup } from '../base-core/types.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
-import {
-  CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
-  CONTEXT_DATA_APPLICATION_KEY,
-  CONTEXT_DATA_SOURCE_KEY,
-  getEntitiesFromDir,
-} from './support/index.js';
+import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, getEntitiesFromDir } from './support/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 import type {
   Config as BaseApplicationConfig,
