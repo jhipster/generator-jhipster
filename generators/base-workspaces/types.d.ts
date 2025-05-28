@@ -16,6 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default, CommandBaseWorkspacesGenerator } from './generator.js';
-export { default as command } from './command.js';
-export { type Config, type Options, type Features } from './types.js';
+import type { Config as BaseConfig, Features as BaseFeatures, Options as BaseOptions } from '../base/index.js';
+
+export type Config = BaseConfig & {
+  appsFolders: string[];
+  directoryPath: string;
+  deploymentType: string;
+  jwtSecretKey: string;
+  adminPassword: string;
+  serviceDiscoveryType: string;
+};
+
+export type Features = BaseFeatures;
+
+export type Options = BaseOptions;
