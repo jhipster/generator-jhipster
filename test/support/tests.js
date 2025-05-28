@@ -6,7 +6,7 @@ import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
 import { getGenerator, skipPrettierHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { ENTITY_PRIORITY_NAMES, PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.js';
 import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
-import { CONTEXT_DATA_APPLICATION_KEY } from '../../generators/base-application/support/constants.js';
+import { CONTEXT_DATA_APPLICATION_KEY } from '../../generators/base-simple-application/support/constants.js';
 
 const workspacesPriorityList = Object.values(WORKSPACES_PRIORITY_NAMES);
 
