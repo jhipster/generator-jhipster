@@ -675,7 +675,7 @@ export default class BaseGenerator<
   async #configureBlueprints(): Promise<string[]> {
     try {
       return this.getContextData(CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE);
-    } catch (error) {
+    } catch {
       // Ignore
     }
     let argvBlueprints = this.options.blueprints || '';

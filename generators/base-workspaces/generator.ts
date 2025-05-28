@@ -21,7 +21,7 @@ import { readdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 
-import BaseGenerator, { type Features as BaseFeatures } from '../base/index.js';
+import BaseGenerator from '../base/index.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import { normalizePathEnd } from '../base/support/path.js';
