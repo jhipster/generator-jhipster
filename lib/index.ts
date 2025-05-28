@@ -1,6 +1,7 @@
-import { readFileSync } from 'fs';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+
+import packageJson from '../package.json' with { type: 'json' };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,4 +19,4 @@ export const getSourceRoot = (relativePath?: string) => {
   return relativePath ? join(sourceRoot, relativePath) : sourceRoot;
 };
 
-export const packageJson = JSON.parse(readFileSync(getPackageRoot('package.json')).toString());
+export { packageJson };

@@ -29,7 +29,7 @@ import { packageJson } from '../lib/index.js';
 import { packageNameToNamespace } from '../generators/base/support/index.js';
 import baseCommand from '../generators/base/command.js';
 import { GENERATOR_APP, GENERATOR_BOOTSTRAP, GENERATOR_JDL } from '../generators/generator-list.js';
-import { extractArgumentsFromConfigs, JHipsterCommandDefinition } from '../lib/command/index.js';
+import { extractArgumentsFromConfigs, type JHipsterCommandDefinition } from '../lib/command/index.js';
 import { buildJDLApplicationConfig } from '../lib/command/jdl.js';
 import logo from './logo.mjs';
 import EnvironmentBuilder from './environment-builder.mjs';

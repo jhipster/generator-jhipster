@@ -109,7 +109,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
     return this.asBootstrapApplicationTaskGroup({
       loadConfig({ applicationDefaults }) {
         applicationDefaults(
-          removeFieldsWithNullishValues(this.config.getAll()),
+          removeFieldsWithNullishValues(this.config.getAll()) as any,
           {
             nodeDependencies: {},
             customizeTemplatePaths: [],
