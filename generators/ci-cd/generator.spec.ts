@@ -76,7 +76,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should match context snapshot', () => {
-        expect(runResult.generator.jhipsterConfig).toMatchInlineSnapshot(`
+        expect(runResult.generator.jhipsterConfig).toMatchInlineSnapshot({ jhipsterVersion: expect.any(String) }, `
 {
   "artifactoryReleasesId": "releases",
   "artifactoryReleasesUrl": "http://artifactory:8081/artifactory/libs-release",
