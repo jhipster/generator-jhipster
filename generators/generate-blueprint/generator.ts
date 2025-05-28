@@ -55,6 +55,7 @@ type BlueprintConfig = {
   cliName?: string;
   blueprintMjsExtension: string;
   generators: Record<string, any>;
+  js: boolean;
 };
 
 type BlueprintApplication = BlueprintConfig & { commands: string[]; blueprintsPath?: string; js?: boolean };
@@ -119,7 +120,7 @@ export default class extends BaseGenerator<
   get prompting() {
     return this.asPromptingTaskGroup({
       async prompting() {
-        await this.prompt(prompts() as any, this.config);
+        await this.prompt(prompts(), this.config);
       },
       async eachSubGenerator() {
         const { localBlueprint } = this.jhipsterConfig;
@@ -148,10 +149,7 @@ export default class extends BaseGenerator<
           if (allPriorities) {
             subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
           }
-          await this.prompt(
-            subGeneratorPrompts({ subGenerator, localBlueprint, additionalSubGenerator: true }) as any,
-            subGeneratorStorage,
-          );
+          await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint, additionalSubGenerator: true }), subGeneratorStorage);
         }
       },
     });

@@ -25,7 +25,9 @@ import { asWritingTask } from '../base-application/support/index.js';
  */
 export default asWritingTask(function cleanupOldFilesTask({ control }) {
   if (control.isJhipsterVersionLessThan('6.1.0')) {
+    // @ts-expect-error deprecated config
     this.config.delete('blueprint');
+    // @ts-expect-error deprecated config
     this.config.delete('blueprintVersion');
   }
 });

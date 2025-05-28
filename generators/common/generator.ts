@@ -212,7 +212,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       setConfig({ application }) {
-        const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
+        const packageJsonConfigStorage = this.packageJson.createStorage<Record<string, string>>('config').createProxy();
         if (application.defaultEnvironment) {
           packageJsonConfigStorage.default_environment = application.defaultEnvironment;
         }

@@ -260,7 +260,7 @@ export default class BaseGenerator<
     if (reproducible || creationTimestamp) {
       now = this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, {
         factory: () => {
-          const newCreationTimestamp: string = (creationTimestamp as string) ?? this.config.get('creationTimestamp');
+          const newCreationTimestamp: string | number | undefined = creationTimestamp ?? this.config.get('creationTimestamp');
           const newDate = newCreationTimestamp ? new Date(newCreationTimestamp) : now;
           newDate.setMilliseconds(0);
           return newDate;

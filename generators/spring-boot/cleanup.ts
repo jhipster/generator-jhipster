@@ -76,6 +76,7 @@ export default asWritingTask(async function cleanupTask(this, taskParam) {
     this.removeFile(`${application.javaPackageSrcDir}web/rest/errors/ParameterizedErrorVM.java`);
   }
   if (control.isJhipsterVersionLessThan('4.13.1')) {
+    // @ts-expect-error deprecated config
     this.config.delete('hibernateCache');
   }
   if (control.isJhipsterVersionLessThan('5.0.0')) {
