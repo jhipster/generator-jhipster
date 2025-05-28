@@ -30,7 +30,7 @@
     "noImplicitAny": false,
     "rewriteRelativeImportExtensions": true,
     "erasableSyntaxOnly": true,
-    "verbatimModuleSyntax": true,
+    // "verbatimModuleSyntax": true,
 
     /* Completeness */
     "skipLibCheck": false /* Skip type checking all .d.ts files. */
