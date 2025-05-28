@@ -21,14 +21,11 @@ import { existsSync } from 'fs';
 
 import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENERATOR_REACT } from '../generator-list.js';
 
-import type { Config, Options } from '../base-workspaces/index.js';
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import { packageJson } from '../../lib/index.js';
+import type { Config as WorkspacesConfig, Options as WorkspacesOptions } from './types.js';
 
-export default class WorkspacesGenerator extends BaseWorkspacesGenerator<
-  Config & { baseName: string; monorepository: boolean },
-  Options & { customWorkspacesConfig?: boolean; monorepository: boolean }
-> {
+export default class WorkspacesGenerator extends BaseWorkspacesGenerator<WorkspacesConfig, WorkspacesOptions> {
   workspaces!: boolean;
   generateApplications!: () => Promise<undefined>;
   generateWith!: string;
