@@ -20,6 +20,10 @@ import type { BaseFeatures as YeomanFeatures, BaseOptions as YeomanOptions } fro
 import type { JDLApplicationConfig } from '../../lib/jdl/core/types/parsing.js';
 import type { JHipsterConfigs } from '../../lib/command/types.js';
 
+type GenericTask<Arg1Type, ThisType> = (this: ThisType, arg1: Arg1Type) => unknown;
+
+export type GenericTaskGroup<ThisType, Arg1Type, N extends string = string> = Record<N, GenericTask<Arg1Type, ThisType>>;
+
 export type Config = {
   autoCrlf?: boolean;
 };

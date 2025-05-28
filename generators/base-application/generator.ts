@@ -39,7 +39,7 @@ import type {
   PreparingEachEntityTaskParam,
 } from '../../lib/types/application/tasks.js';
 import type { Entity as ApplicationEntity } from '../../lib/types/application/entity.js';
-import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
+import type { GenericTaskGroup } from '../base-core/types.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';

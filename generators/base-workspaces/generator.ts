@@ -25,7 +25,7 @@ import BaseGenerator from '../base/index.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import { normalizePathEnd } from '../base/support/path.js';
-import type { TaskTypes } from '../../lib/types/base/tasks.js';
+import type { TaskTypes } from '../base/tasks.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.js';
