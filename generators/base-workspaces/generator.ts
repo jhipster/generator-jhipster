@@ -234,7 +234,6 @@ export default abstract class BaseWorkspacesGenerator<
 export class CommandBaseWorkspacesGenerator<
   Command extends ParseableCommand,
   AdditionalOptions = unknown,
-  AdditionalFeatures = unknown,
 > extends BaseWorkspacesGenerator<
   BaseConfig & ExportStoragePropertiesFromCommand<Command>,
   BaseOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions
