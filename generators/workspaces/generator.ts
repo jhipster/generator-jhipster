@@ -23,8 +23,9 @@ import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENER
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import { packageJson } from '../../lib/index.js';
+import type { Config as WorkspacesConfig, Options as WorkspacesOptions } from './types.js';
 
-export default class WorkspacesGenerator extends BaseWorkspacesGenerator<{ baseName: string; monorepository: boolean }> {
+export default class WorkspacesGenerator extends BaseWorkspacesGenerator<WorkspacesConfig, WorkspacesOptions> {
   workspaces!: boolean;
   generateApplications!: () => Promise<undefined>;
   generateWith!: string;
@@ -40,7 +41,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<{ baseN
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES, { generatorOptions: { customWorkspacesConfig: true } as any });
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES, { generatorOptions: { customWorkspacesConfig: true } });
     }
   }
 

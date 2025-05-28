@@ -544,7 +544,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         if ((def.scope ?? 'storage') === 'storage') {
           storage = this.config;
           if (promptSpec.default === undefined) {
-            promptSpec = { ...promptSpec, default: () => (this as any).jhipsterConfigWithDefaults?.[name] };
+            promptSpec = { ...promptSpec, default: () => this.jhipsterConfigWithDefaults?.[name] };
           }
         } else if (def.scope === 'blueprint') {
           storage = this.blueprintStorage;
@@ -641,7 +641,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   removeFile(...path: string[]): string {
     const destinationFile = this.destinationPath(...path);
-    const relativePath = relative((this.env as any).logCwd, destinationFile);
+    const relativePath = relative(this.env.logCwd, destinationFile);
     // Delete from memory fs to keep updated.
     this.fs.delete(destinationFile);
     try {
@@ -661,7 +661,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   removeFolder(...path: string[]): void {
     const destinationFolder = this.destinationPath(...path);
-    const relativePath = relative((this.env as any).logCwd, destinationFolder);
+    const relativePath = relative(this.env.logCwd, destinationFolder);
     // Delete from memory fs to keep updated.
     this.fs.delete(`${destinationFolder}/**`);
     try {
@@ -734,11 +734,11 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
      */
     let rootTemplatesAbsolutePath;
     if (!rootTemplatesPath) {
-      rootTemplatesAbsolutePath = (this as any).jhipsterTemplatesFolders;
+      rootTemplatesAbsolutePath = this.jhipsterTemplatesFolders;
     } else if (typeof rootTemplatesPath === 'string' && isAbsolute(rootTemplatesPath)) {
       rootTemplatesAbsolutePath = rootTemplatesPath;
     } else {
-      rootTemplatesAbsolutePath = (this as any).jhipsterTemplatesFolders
+      rootTemplatesAbsolutePath = this.jhipsterTemplatesFolders
         .map(templateFolder => ([] as string[]).concat(rootTemplatesPath).map(relativePath => join(templateFolder, relativePath)))
         .flat();
     }
@@ -755,7 +755,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         return maybeCallback;
       }
       if (typeof maybeCallback === 'function') {
-        return (maybeCallback as any).call(this, templateData) || false;
+        return maybeCallback.call(this, templateData) || false;
       }
       throw new Error(`Type not supported ${maybeCallback}`);
     };
@@ -847,7 +847,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
       try {
         if (!appendEjs && extname(sourceFileFrom) !== '.ejs') {
-          await (this as any).copyTemplateAsync(sourceFileFrom, targetFile);
+          await this.copyTemplateAsync(sourceFileFrom, targetFile);
         } else {
           let useAsync = true;
           if (context.entityClass) {
@@ -872,9 +872,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             sourceFileFrom = `${sourceFileFrom}.ejs`;
           }
           if (useAsync) {
-            await (this as any).renderTemplateAsync(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
+            await this.renderTemplateAsync(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
           } else {
-            (this as any).renderTemplate(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
+            this.renderTemplate(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
           }
         }
       } catch (error) {
@@ -964,7 +964,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             }
 
             const override = resolveCallback(fileSpec.override);
-            if (override !== undefined && !override && (this as any).fs.exists(destinationFile.replace(/\.jhi$/, ''))) {
+            if (override !== undefined && !override && this.fs.exists(destinationFile.replace(/\.jhi$/, ''))) {
               this.log.debug(`skipping file ${destinationFile}`);
               return undefined;
             }

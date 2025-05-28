@@ -246,7 +246,7 @@ export default class BootstrapGenerator extends BaseGenerator {
       createForceWriteConfigFilesTransform(),
       ...prettierTransforms,
       ...autoCrlfTransforms,
-      createConflicterTransform(this.env.adapter, { ...(this.env as any).conflicterOptions, customizeActions }),
+      createConflicterTransform(this.env.adapter, { ...this.env.conflicterOptions, customizeActions }),
       createCommitTransform(),
     ];
 

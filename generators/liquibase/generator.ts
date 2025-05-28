@@ -857,7 +857,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
    */
   getFKConstraintName(entityName: string, relationshipName: string, prodDatabaseType: string, noSnakeCase: boolean): string {
     const result = getFKConstraintName(entityName, relationshipName, { prodDatabaseType, noSnakeCase });
-    (this as any).validateResult(result);
+    this.validateResult(result);
     return result.value;
   }
 
@@ -872,7 +872,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
    */
   getUXConstraintName(entityName: string, columnName: string, prodDatabaseType: string, noSnakeCase: boolean): string {
     const result = getUXConstraintName(entityName, columnName, { prodDatabaseType, noSnakeCase });
-    (this as any).validateResult(result);
+    this.validateResult(result);
     return result.value;
   }
 }

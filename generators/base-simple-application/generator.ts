@@ -103,8 +103,8 @@ export default class BaseApplicationGenerator<
 
   dependsOnBootstrapApplicationBase(
     options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_BASE]> | undefined,
-  ): GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_BASE][] {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE, options as any) as any;
+  ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_BASE]> {
+    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE, options);
   }
 
   getArgsForPriority(priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES]): any {

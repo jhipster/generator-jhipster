@@ -21,7 +21,7 @@ import { readdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 
-import BaseGenerator, { type Config as BaseConfig, type Features as BaseFeatures } from '../base/index.js';
+import BaseGenerator from '../base/index.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import { normalizePathEnd } from '../base/support/path.js';
@@ -29,9 +29,10 @@ import type { TaskTypes } from '../../lib/types/base/tasks.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-application/support/constants.js';
-import type { JHipsterGeneratorOptions } from '../base/api.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/index.js';
+import type { Config as BaseWorkspacesConfig, Features as BaseWorkspacesFeatures, Options as BaseWorkspacesOptions } from './types.js';
 
 const {
   PROMPTING_WORKSPACES,
@@ -61,20 +62,11 @@ type WorkspacesTypes<E extends Entity = Entity, A extends ApplicationType<E> = A
 /**
  * This is the base class for a generator that generates entities.
  */
-export default abstract class BaseWorkspacesGenerator<Config = unknown> extends BaseGenerator<
-  Config &
-    BaseConfig & {
-      appsFolders: string[];
-      directoryPath: string;
-      deploymentType: string;
-      jwtSecretKey: string;
-      adminPassword: string;
-      serviceDiscoveryType: string;
-    },
-  JHipsterGeneratorOptions,
-  BaseFeatures,
-  WorkspacesTypes
-> {
+export default abstract class BaseWorkspacesGenerator<
+  Config extends BaseWorkspacesConfig = BaseWorkspacesConfig,
+  Options extends BaseWorkspacesOptions = BaseWorkspacesOptions,
+  Features extends BaseWorkspacesFeatures = BaseWorkspacesFeatures,
+> extends BaseGenerator<Config, Options, Features, WorkspacesTypes> {
   static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 
   static CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);
@@ -228,3 +220,8 @@ export default abstract class BaseWorkspacesGenerator<Config = unknown> extends 
     ];
   }
 }
+
+export class CommandBaseWorkspacesGenerator<Command extends ParseableCommand, AdditionalOptions = unknown> extends BaseWorkspacesGenerator<
+  BaseWorkspacesConfig & ExportStoragePropertiesFromCommand<Command>,
+  BaseWorkspacesOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions
+> {}

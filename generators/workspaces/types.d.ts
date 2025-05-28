@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.js';
-export { default as command } from './command.js';
-export type { Config, Options } from './types.js';
+import type { Config as BaseWorkspacesConfig, Options as BaseWorkspacesOptions } from '../base-workspaces/index.js';
+
+export type Config = BaseWorkspacesConfig & { baseName: string; monorepository: boolean };
+export type Options = BaseWorkspacesOptions & { customWorkspacesConfig?: boolean; monorepository: boolean };
