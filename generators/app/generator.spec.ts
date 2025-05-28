@@ -221,6 +221,7 @@ describe(`generator - ${generator}`, () => {
   "devDatabaseType",
   "serverSideOptions",
   "enableGradleDevelocity",
+  "gradleDevelocityHost",
   "clientFramework",
   "microfrontend",
   "clientTestFrameworks",

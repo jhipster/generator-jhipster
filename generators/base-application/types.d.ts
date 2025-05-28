@@ -13,6 +13,9 @@ import type { OptionWithDerivedProperties } from './application-options.js';
 
 export type BaseApplication = SimpleApplication & {
   jhiPrefix: string;
+  jhiPrefixCapitalized: string;
+  jhiPrefixDashed: string;
+
   entitySuffix: string;
   dtoSuffix: string;
 
@@ -162,6 +165,9 @@ export type CommonClientServerApplication<Entity> = BaseApplication &
     dockerServices?: string[];
     prettierFolders?: string;
     prettierExtensions?: string;
+
+    loginRegex?: string;
+    jsLoginRegex?: string;
   };
 
 type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscoveryType', ['no', 'eureka', 'consul']>;

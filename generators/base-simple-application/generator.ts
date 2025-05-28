@@ -29,17 +29,19 @@ import type { ApplicationType } from '../../lib/types/application/application.js
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-application/support/index.js';
 import { PRIORITY_NAMES } from '../base/priorities.js';
+import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import type {
   Config as BaseApplicationConfig,
   Features as BaseApplicationFeatures,
   Options as BaseApplicationOptions,
   Application as SimpleApplication,
 } from './types.js';
+import { BOOTSTRAP_APPLICATION, CUSTOM_PRIORITIES } from './priorities.js';
 
 const { LOADING, PREPARING, POST_PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
 
 const PRIORITY_WITH_SOURCE: string[] = [PREPARING, POST_PREPARING, POST_WRITING];
-const PRIORITY_WITH_APPLICATION_DEFAULTS: string[] = [PREPARING, LOADING];
+const PRIORITY_WITH_APPLICATION_DEFAULTS: string[] = [BOOTSTRAP_APPLICATION, PREPARING, LOADING];
 const PRIORITY_WITH_APPLICATION: string[] = [
   LOADING,
   PREPARING,
@@ -69,8 +71,16 @@ export default class BaseApplicationGenerator<
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
   TaskTypes extends SimpleTaskTypes<Application> = SimpleTaskTypes<Application>,
 > extends BaseGenerator<ConfigType, Options, Features, TaskTypes> {
+  static BOOTSTRAP_APPLICATION = BaseApplicationGenerator.asPriority(BOOTSTRAP_APPLICATION);
+
   constructor(args: string | string[], options: Options, features: Features) {
     super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features });
+
+    if (this.options.help) {
+      return;
+    }
+
+    this.registerPriorities(CUSTOM_PRIORITIES);
   }
 
   get #application(): ApplicationType {
@@ -123,5 +133,18 @@ export default class BaseApplicationGenerator<
       args.applicationDefaults = (...args) => mutateData(this.#application, ...args.map(data => ({ __override__: false, ...data })));
     }
     return args;
+  }
+
+  get bootstrapApplication() {
+    return {};
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asBootstrapApplicationTaskGroup(
+    taskGroup: GenericTaskGroup<this, TaskTypes['BootstrapApplicationTaskParam']>,
+  ): GenericTaskGroup<any, TaskTypes['BootstrapApplicationTaskParam']> {
+    return taskGroup;
   }
 }

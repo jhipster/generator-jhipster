@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { defaults, upperFirst } from 'lodash-es';
+import { upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import type GeneratorsByNamespace from '../types.js';
@@ -44,6 +44,7 @@ import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
+import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
 import {
   CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
   CONTEXT_DATA_APPLICATION_KEY,
@@ -91,7 +92,7 @@ const PRIORITY_WITH_ENTITIES: string[] = [DEFAULT];
 const PRIORITY_WITH_FILTERED_ENTITIES: string[] = [WRITING_ENTITIES, POST_WRITING_ENTITIES];
 
 const PRIORITY_WITH_SOURCE: string[] = [PREPARING, POST_PREPARING, POST_WRITING, POST_WRITING_ENTITIES];
-const PRIORITY_WITH_APPLICATION_DEFAULTS: string[] = [PREPARING, LOADING];
+const PRIORITY_WITH_APPLICATION_DEFAULTS: string[] = [BOOTSTRAP_APPLICATION, PREPARING, LOADING];
 const PRIORITY_WITH_APPLICATION: string[] = [
   LOADING,
   PREPARING,
@@ -193,7 +194,7 @@ export default class BaseApplicationGenerator<
 
   get #application(): ApplicationType {
     return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
-      factory: () => ({ nodeDependencies: {}, customizeTemplatePaths: [], user: undefined }) as unknown as ApplicationType,
+      factory: () => ({}) as unknown as ApplicationType,
     });
   }
 
@@ -217,15 +218,7 @@ export default class BaseApplicationGenerator<
    * JHipster config with default values fallback
    */
   override get jhipsterConfigWithDefaults(): Readonly<ConfigType & ApplicationConfiguration> {
-    const configWithDefaults = getConfigWithDefaults(super.jhipsterConfigWithDefaults);
-    defaults(configWithDefaults, {
-      skipFakeData: false,
-      skipCheckLengthOfIdentifier: false,
-      enableGradleDevelocity: false,
-      autoCrlf: false,
-      pages: [],
-    });
-    return configWithDefaults as ConfigType & ApplicationConfiguration;
+    return getConfigWithDefaults(super.jhipsterConfigWithDefaults) as ConfigType & ApplicationConfiguration;
   }
 
   dependsOnBootstrapApplication(

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import { lowerFirst } from 'lodash-es';
+import { kebabCase, lowerFirst } from 'lodash-es';
 import chalk from 'chalk';
 import { passthrough } from '@yeoman/transform';
 
@@ -32,17 +32,19 @@ import {
   prepareRelationship,
   stringifyApplicationData,
 } from '../base-application/support/index.js';
-import { JAVA_DOCKER_DIR } from '../generator-constants.js';
+import { JAVA_DOCKER_DIR, NODE_VERSION } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
 import { loadLanguagesConfig } from '../languages/support/index.js';
-import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.js';
+import { loadDerivedAppConfig } from '../app/support/index.js';
 import { lookupCommandsConfigs } from '../../lib/command/lookup-commands-configs.js';
 import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../lib/command/load.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { isWin32, removeFieldsWithNullishValues } from '../base/support/index.js';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../lib/application/field-types.js';
 import type { Entity } from '../../lib/types/application/entity.js';
+import { upperFirst } from '../../lib/jdl/core/utils/string-utils.js';
+import { baseNameProperties } from '../project-name/support/index.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
 
@@ -103,22 +105,61 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
     return this.configuring;
   }
 
+  get [BaseApplicationGenerator.BOOTSTRAP_APPLICATION]() {
+    return this.asBootstrapApplicationTaskGroup({
+      loadConfig({ applicationDefaults }) {
+        applicationDefaults(
+          removeFieldsWithNullishValues(this.config.getAll()),
+          {
+            nodeDependencies: {},
+            customizeTemplatePaths: [],
+            user: undefined,
+            packageJsonScripts: {},
+            clientPackageJsonScripts: {},
+            testFrameworks: [],
+          },
+          {
+            communicationSpringWebsocket: undefined,
+            embeddableLaunchScript: undefined,
+          },
+        );
+      },
+    });
+  }
+
   get loading() {
     return this.asLoadingTaskGroup({
+      loadDefaults({ application, applicationDefaults }) {
+        applicationDefaults(getConfigWithDefaults(application as any) as any);
+      },
       loadApplication({ application, control, applicationDefaults }) {
-        loadAppConfig({
-          config: this.jhipsterConfigWithDefaults,
-          application,
-          useVersionPlaceholders: this.useVersionPlaceholders,
-        });
-        loadLanguagesConfig({ application, config: this.jhipsterConfigWithDefaults, control });
-
         applicationDefaults({
-          backendType: this.jhipsterConfig.backendType ?? 'Java',
-          syncUserWithIdp: this.jhipsterConfig.syncUserWithIdp,
-          packageJsonScripts: {},
-          clientPackageJsonScripts: {},
+          ...baseNameProperties,
+          nodeVersion: this.useVersionPlaceholders ? 'NODE_VERSION' : NODE_VERSION,
+          jhipsterVersion: this.useVersionPlaceholders ? 'JHIPSTER_VERSION' : packageJson.version,
+          jhipsterPackageJson: packageJson,
+
+          jhiPrefixCapitalized: ({ jhiPrefix }) => upperFirst(jhiPrefix),
+          jhiPrefixDashed: ({ jhiPrefix }) => kebabCase(jhiPrefix),
+
+          projectDescription: ({ projectDescription, humanizedBaseName }) => projectDescription ?? `Description for ${humanizedBaseName}`,
+
+          backendType: 'Java',
+          temporaryDir: ({ backendType, buildTool }) => {
+            if (['Java'].includes(backendType!)) {
+              return buildTool === 'gradle' ? 'build/' : 'target/';
+            }
+            return 'temp/';
+          },
+          clientDistDir: ({ backendType, temporaryDir, buildTool }) => {
+            if (['Java'].includes(backendType!)) {
+              return `${temporaryDir}${buildTool === 'gradle' ? 'resources/main/' : 'classes/'}static/`;
+            }
+            return 'dist/';
+          },
         });
+
+        loadLanguagesConfig({ application, config: this.jhipsterConfigWithDefaults, control });
       },
       loadNodeDependencies({ application }) {
         this.loadNodeDependencies(application.nodeDependencies, {
@@ -131,9 +172,6 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           application.nodeDependencies,
           this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json'),
         );
-      },
-      loadPackageJson({ application }) {
-        application.jhipsterPackageJson = packageJson;
       },
     });
   }
@@ -181,6 +219,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
           backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
           clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
+
+          jwtSecretKey: undefined,
+          gatewayServerPort: undefined,
         });
       },
       userRelationship({ applicationDefaults }) {
