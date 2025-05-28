@@ -58,7 +58,7 @@ describe(`generator - ${generator}`, () => {
     const writing = esmocha.fn();
     const postWriting = esmocha.fn();
 
-    class CustomGenerator extends BaseGenerator {
+    class CustomGenerator extends BaseGenerator<any, any, any, any, any, any, any, any> {
       get [BaseGenerator.INITIALIZING]() {
         initializing();
         return {};

@@ -14,48 +14,83 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ApplicationType } from '../../../lib/types/application/application.js';
-import type { TaskTypes } from '../../../lib/types/application/tasks.js';
-import type CoreGenerator from '../../base-core/generator.js';
-import type { WriteFileSection } from '../../base/api.js';
-import type { Entity } from '../../../lib/types/application/entity.js';
+import type { TaskTypes } from '../tasks.js';
+import type { WriteFileSection } from '../../base-core/types.js';
+import type {
+  BaseApplicationApplication,
+  BaseApplicationEntity,
+  BaseApplicationField,
+  BaseApplicationPrimaryKey,
+  BaseApplicationRelationship,
+} from '../types.js';
+import type BaseApplicationGenerator from '../generator.js';
 
-export function asWriteFilesSection<Data = ApplicationType<Entity>>(section: WriteFileSection<Data>) {
+export function asWriteFilesSection<A = BaseApplicationApplication>(section: WriteFileSection<A, any>) {
   return section;
 }
 
-export function asPromptingTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['PromptingTaskParam']) => void,
-) {
+export function asPromptingTask<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+  A extends BaseApplicationApplication,
+  G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
+>(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['PromptingTaskParam']) => void) {
   return task;
 }
 
-export function asPostPreparingEachEntityTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['PostPreparingEachEntityTaskParam']) => void,
-) {
+export function asPostPreparingEachEntityTask<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+  A extends BaseApplicationApplication,
+  G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
+>(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['PostPreparingEachEntityTaskParam']) => void) {
   return task;
 }
 
-export function asWritingTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['WritingTaskParam']) => void,
-) {
+export function asWritingTask<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+  A extends BaseApplicationApplication,
+  G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
+>(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['WritingTaskParam']) => void) {
   return task;
 }
 
-export function asWritingEntitiesTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['WritingEntitiesTaskParam']) => void,
-) {
+export function asWritingEntitiesTask<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+  A extends BaseApplicationApplication,
+  G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
+>(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['WritingEntitiesTaskParam']) => void) {
   return task;
 }
 
-export function asPostWritingTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['PostWritingTaskParam']) => void,
-) {
+export function asPostWritingTask<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+  A extends BaseApplicationApplication,
+  G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
+>(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['PostWritingTaskParam']) => void) {
   return task;
 }
 
-export function asPostWritingEntitiesTask<E = Entity, A = ApplicationType<E>, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['PostWritingEntitiesTaskParam']) => void,
-) {
+export function asPostWritingEntitiesTask<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+  A extends BaseApplicationApplication,
+  G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
+>(task: (this: G, params: TaskTypes<F, PK, R, E, A, any, any>['PostWritingEntitiesTaskParam']) => void) {
   return task;
 }

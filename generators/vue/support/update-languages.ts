@@ -42,7 +42,10 @@ function generateDateTimeFormat(language: string, index: number, length: number)
   return config;
 }
 
-function updateLanguagesInPipeTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
+function updateLanguagesInPipeTask(
+  this: BaseGenerator<any, any, any, any, any>,
+  { application, control = {} }: UpdateClientLanguagesTaskParam,
+) {
   const { clientSrcDir, languagesDefinition = [] } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
   const newContent = `$1{
@@ -54,7 +57,10 @@ function updateLanguagesInPipeTask(this: BaseGenerator, { application, control =
   );
 }
 
-function updateLanguagesInConfigTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
+function updateLanguagesInConfigTask(
+  this: BaseGenerator<any, any, any, any, any>,
+  { application, control = {} }: UpdateClientLanguagesTaskParam,
+) {
   const { clientSrcDir, languages } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
   // Add i18n config snippets for all languages
@@ -70,7 +76,10 @@ function updateLanguagesInConfigTask(this: BaseGenerator, { application, control
   );
 }
 
-function updateLanguagesInWebpackTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
+function updateLanguagesInWebpackTask(
+  this: BaseGenerator<any, any, any, any, any>,
+  { application, control = {} }: UpdateClientLanguagesTaskParam,
+) {
   const { clientSrcDir, languages } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
   let newContent = 'groupBy: [\n';
@@ -84,7 +93,7 @@ function updateLanguagesInWebpackTask(this: BaseGenerator, { application, contro
   );
 }
 
-export default function updateLanguagesTask(this: BaseGenerator, taskParam: UpdateClientLanguagesTaskParam) {
+export default function updateLanguagesTask(this: BaseGenerator<any, any, any, any, any>, taskParam: UpdateClientLanguagesTaskParam) {
   updateLanguagesInPipeTask.call(this, taskParam);
   updateLanguagesInConfigTask.call(this, taskParam);
   if (taskParam.application.clientBundlerWebpack) {

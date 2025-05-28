@@ -17,8 +17,22 @@
  * limitations under the License.
  */
 import { asWritingTask } from '../../../base-application/support/task-type-inference.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../../../lib/types/application/application.js';
 
-export default asWritingTask(function cleanupKafkaFilesTask({ application, control }) {
+export default asWritingTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
+  any
+>(function cleanupKafkaFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('6.5.2')) {
     this.removeFile(`${application.javaPackageSrcDir}service/${application.upperFirstCamelCaseBaseName}KafkaConsumer.java`);
     this.removeFile(`${application.javaPackageSrcDir}service/${application.upperFirstCamelCaseBaseName}KafkaProducer.java`);

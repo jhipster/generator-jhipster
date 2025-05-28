@@ -17,22 +17,31 @@
  * limitations under the License.
  */
 import { existsSync, readFileSync } from 'fs';
-import type { Field } from '../base-application/index.js';
-import GeneratorBaseEntityChanges from '../base-application/index.js';
+import type { Field as DeprecatedField, Relationship as DeprecatedRelationship } from '../base-application/index.js';
+import GeneratorBaseApplication from '../base-application/index.js';
 import { PRIORITY_NAMES } from '../base-application/priorities.js';
 import { loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.js';
 import { relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from '../liquibase/support/index.js';
 import { addEntitiesOtherRelationships } from '../server/support/index.js';
-import type { TaskTypes as ApplicationTaskTypes, TaskParamWithApplication } from '../../lib/types/application/tasks.js';
-import type { Entity as ApplicationEntity } from '../../lib/types/application/entity.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { TaskTypes as ApplicationTaskTypes, TaskParamWithApplication } from '../base-application/tasks.js';
+import type { Entity as DeprecatedEntity, PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { BaseApplicationConfiguration, BaseApplicationFeatures } from '../base-application/api.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import type {
-  BaseChangelog,
-  Config as BaseEntityChangesConfig,
-  Features as BaseEntityChangesFeatures,
-  Options as BaseEntityChangesOptions,
-} from './types.js';
+  BaseApplicationApplication,
+  BaseApplicationEntity,
+  BaseApplicationField,
+  BaseApplicationPrimaryKey,
+  BaseApplicationRelationship,
+  BaseApplicationSources,
+} from '../base-application/types.js';
+import type { BaseControl } from '../base/types.js';
 import type { TaskParamWithChangelogsAndApplication } from './tasks.js';
+import type { BaseChangelog } from './types.js';
 
 const { DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES } = PRIORITY_NAMES;
 
@@ -51,7 +60,15 @@ const baseChangelog: () => Omit<BaseChangelog, 'changelogDate' | 'entityName' | 
   changelogData: {},
 });
 
-type BaseEntityChangesTaskTypes<E, A> = ApplicationTaskTypes<E, A> & {
+type BaseEntityChangesTaskTypes<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+  A extends BaseApplicationApplication,
+  S extends BaseApplicationSources<F, PK, R, E, A>,
+  C extends BaseControl,
+> = ApplicationTaskTypes<F, PK, R, E, A, S, C> & {
   DefaultTaskParam: { entityChanges?: BaseChangelog[] };
   WritingEntitiesTaskParam: { entityChanges?: BaseChangelog[] };
   PostWritingEntitiesTaskParam: { entityChanges?: BaseChangelog[] };
@@ -61,13 +78,44 @@ type BaseEntityChangesTaskTypes<E, A> = ApplicationTaskTypes<E, A> & {
  * This is the base class for a generator for every generator.
  */
 export default abstract class BaseEntityChangesGenerator<
-  Entity extends ApplicationEntity = ApplicationEntity,
-  Application extends ApplicationType<Entity> = ApplicationType<Entity>,
-  ConfigType extends BaseEntityChangesConfig = BaseEntityChangesConfig,
-  Options extends BaseEntityChangesOptions = BaseEntityChangesOptions,
-  Features extends BaseEntityChangesFeatures = BaseEntityChangesFeatures,
-  TaskTypes extends BaseEntityChangesTaskTypes<Entity, Application> = BaseEntityChangesTaskTypes<Entity, Application>,
-> extends GeneratorBaseEntityChanges<Entity, Application, ConfigType, Options, Features, TaskTypes> {
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  // @ts-ignore
+  Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends ApplicationType = ApplicationType,
+  Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends DeprecatedControl = DeprecatedControl,
+  TaskTypes extends BaseEntityChangesTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = BaseEntityChangesTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends GeneratorBaseApplication<
+  Options,
+  Field,
+  PK,
+  Relationship,
+  Entity,
+  Application,
+  Sources,
+  Control,
+  TaskTypes,
+  Configuration,
+  Features
+> {
   recreateInitialChangelog!: boolean;
   private entityChanges!: any[];
 
@@ -75,7 +123,7 @@ export default abstract class BaseEntityChangesGenerator<
 
   protected getTaskFirstArgForPriority(
     priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES],
-  ): TaskParamWithChangelogsAndApplication | TaskParamWithApplication {
+  ): TaskParamWithChangelogsAndApplication | TaskParamWithApplication<Application, Control> {
     const firstArg = super.getTaskFirstArgForPriority(priorityName);
     if (([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
       const { application, entities } = firstArg as TaskTypes['DefaultTaskParam'];

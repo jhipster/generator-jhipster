@@ -1,0 +1,44 @@
+import type { Simplify } from 'type-fest';
+import type { BaseConfiguration, BaseFeatures, BaseOptions } from '../base/api.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
+import type { ProjectNameConfiguration } from '../project-name/api.js';
+/**
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+export type BaseApplicationOptions = BaseOptions & {
+  applicationWithEntities?: any;
+  entities?: string[];
+  skipWriting?: boolean;
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+} & Simplify<ExportGeneratorOptionsFromCommand<typeof import('./command.js').default>>;
+
+export type BaseApplicationConfiguration = ProjectNameConfiguration &
+  Simplify<
+    ProjectNameConfiguration &
+      BaseConfiguration & {
+        languages: any[];
+        applicationIndex?: number;
+        nativeLanguage: string;
+        creationTimestamp?: string;
+        // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+      } & ExportStoragePropertiesFromCommand<typeof import('./command.js').default> & {
+        entities: string[];
+      }
+  >;
+
+export type BaseApplicationFeatures = BaseFeatures & {};

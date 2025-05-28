@@ -19,8 +19,47 @@
 import { dirname } from 'path';
 import BaseCoreGenerator from '../../generators/base-core/index.js';
 import { createNeedleCallback } from '../../generators/base/support/needles.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { BaseApplicationControl } from '../../generators/base-application/types.js';
+import type { TaskTypes as DefaultTaskTypes } from '../../generators/base-application/tasks.js';
+import type { BaseApplicationConfiguration, BaseApplicationFeatures } from '../../generators/base-application/api.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
+import BaseGenerator from '../../generators/base/index.js';
 
-export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
+export default class UpdateGeneratorsGenerator<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends ApplicationType = ApplicationType,
+  Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends BaseApplicationControl = DeprecatedControl,
+  TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, Configuration, Features> {
   get [BaseCoreGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async writing() {

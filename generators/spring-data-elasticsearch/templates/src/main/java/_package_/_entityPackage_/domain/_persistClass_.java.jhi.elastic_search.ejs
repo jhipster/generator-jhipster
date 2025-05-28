@@ -35,7 +35,7 @@
       <%_ } else if (field.blobContentTypeText || field.fieldTypeString) { _%>
       @org.springframework.data.elasticsearch.annotations.MultiField(
           mainField = @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text),
-          otherFields = { 
+          otherFields = {
               @org.springframework.data.elasticsearch.annotations.InnerField(suffix = "keyword", type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword, ignoreAbove = 256)
           }
       )

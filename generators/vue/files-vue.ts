@@ -19,6 +19,13 @@
 
 import { asWritingEntitiesTask, asWritingTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 
 export const vueFiles = {
   common: [
@@ -291,7 +298,14 @@ export const writeFiles = asWritingTask(async function writeFiles({ application 
   });
 });
 
-export const writeEntitiesFiles = asWritingEntitiesTask(async function writeEntitiesFiles({ application, entities }) {
+export const writeEntitiesFiles = asWritingEntitiesTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
+  any
+>(async function writeEntitiesFiles({ application, entities }) {
   entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
   await this.writeFiles({
     sections: entitiesFiles,

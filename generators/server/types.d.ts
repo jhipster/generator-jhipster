@@ -70,6 +70,11 @@ export type SpringBootSourceType = JavaSourceType &
     addApplicationYamlDocument?(document: string): void;
   };
 
+type CacheProviderApplication = OptionWithDerivedProperties<
+  'cacheProvider',
+  ['no', 'caffeine', 'ehcache', 'hazelcast', 'infinispan', 'memcached', 'redis']
+>;
+
 type ImperativeApplication = {
   reactive: false;
 };
@@ -132,14 +137,14 @@ type BuildToolApplication = OptionWithDerivedProperties<'buildTool', ['maven', '
 };
 
 type SearchEngine = {
-  searchEngine: string;
+  searchEngine: 'no' | 'elasticsearch' | 'couchbase';
 };
 
 /*
 Deterministic option causes types to be too complex
 type ApplicationNature = (ImperativeApplication & CacheProviderApplication) | ReactiveApplication;
 */
-type ApplicationNature = { reactive: boolean };
+type ApplicationNature = { reactive: boolean } & CacheProviderApplication;
 
 export type SpringBootApplication = JavaApplication &
   ApplicationNature &
@@ -157,9 +162,6 @@ export type SpringBootApplication = JavaApplication &
     embeddableLaunchScript: boolean;
     skipFakeData: boolean;
     skipCheckLengthOfIdentifier: boolean;
-    srcMain: string;
-    srcTest: string;
-    documentationUrl: string;
 
     imperativeOrReactive: string;
     optionalOrMono: string;

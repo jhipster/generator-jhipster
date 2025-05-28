@@ -87,19 +87,23 @@ describe(`generator - ${generator}`, () => {
     describe('default config', () => {
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig({}, [
+          // @ts-ignore
           {
             name: 'EntityA',
             changelogDate: '20220129025419',
             dto: 'mapstruct',
             fields: [
+              // @ts-ignore
               {
                 fieldName: 'id',
                 fieldType: UUID,
               },
+              // @ts-ignore
               {
                 fieldName: 'name',
                 fieldType: 'String',
               },
+              // @ts-ignore
               {
                 fieldName: 'details',
                 fieldType: 'String',
@@ -113,6 +117,7 @@ describe(`generator - ${generator}`, () => {
             name: 'User',
             changelogDate: '20220129025420',
             fields: [
+              // @ts-ignore
               {
                 fieldName: 'id',
                 fieldType: UUID,
@@ -241,7 +246,7 @@ describe(`generator - ${generator}`, () => {
   "entityAbsoluteClass": "com.mycompany.myapp.domain.User",
   "entityAbsoluteFolder": "com/mycompany/myapp/",
   "entityAbsolutePackage": "com.mycompany.myapp",
-  "entityAngularJSSuffix": undefined,
+  "entityAngularJSSuffix": "",
   "entityAngularName": "User",
   "entityAngularNamePlural": "Users",
   "entityApi": "",
@@ -270,7 +275,7 @@ describe(`generator - ${generator}`, () => {
   "entityPage": "user",
   "entityParentPathAddition": "",
   "entityPersistenceLayer": false,
-  "entityPluralFileName": "usersundefined",
+  "entityPluralFileName": "users",
   "entityReactName": "User",
   "entityReadAuthority": undefined,
   "entityRestLayer": false,
@@ -1232,7 +1237,7 @@ describe(`generator - ${generator}`, () => {
   "entityAbsoluteClass": "com.mycompany.myapp.domain.EntityA",
   "entityAbsoluteFolder": "com/mycompany/myapp/",
   "entityAbsolutePackage": "com.mycompany.myapp",
-  "entityAngularJSSuffix": undefined,
+  "entityAngularJSSuffix": "",
   "entityAngularName": "EntityA",
   "entityAngularNamePlural": "EntityAS",
   "entityApi": "",
@@ -1259,7 +1264,7 @@ describe(`generator - ${generator}`, () => {
   "entityPackage": undefined,
   "entityPage": "entity-a",
   "entityParentPathAddition": "",
-  "entityPluralFileName": "entity-asundefined",
+  "entityPluralFileName": "entity-as",
   "entityReactName": "EntityA",
   "entityReadAuthority": undefined,
   "entityServiceFileName": "entity-a",
@@ -1696,10 +1701,12 @@ describe(`generator - ${generator}`, () => {
             skipUserManagement: true,
           },
           [
+            //@ts-ignore
             {
               name: 'EntityA',
               changelogDate: '20220129025419',
               fields: [
+                // @ts-ignore
                 {
                   fieldName: 'id',
                   fieldType: UUID,
@@ -1792,7 +1799,7 @@ describe(`generator - ${generator}`, () => {
   "entityAbsoluteClass": "com.mycompany.myapp.domain.EntityA",
   "entityAbsoluteFolder": "com/mycompany/myapp/",
   "entityAbsolutePackage": "com.mycompany.myapp",
-  "entityAngularJSSuffix": undefined,
+  "entityAngularJSSuffix": "",
   "entityAngularName": "EntityA",
   "entityAngularNamePlural": "EntityAS",
   "entityApi": "",
@@ -1819,7 +1826,7 @@ describe(`generator - ${generator}`, () => {
   "entityPackage": undefined,
   "entityPage": "entity-a",
   "entityParentPathAddition": "",
-  "entityPluralFileName": "entity-asundefined",
+  "entityPluralFileName": "entity-as",
   "entityReactName": "EntityA",
   "entityReadAuthority": undefined,
   "entityServiceFileName": "entity-a",

@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type BaseApplicationGenerator from '../base-application/generator.js';
 import { asPromptingTask } from '../base-application/support/task-type-inference.js';
 import { httpsGet } from '../base/support/index.js';
+import type BaseApplicationGenerator from '../base-application/index.js';
 
 type Choice = { value: string; name: string };
 

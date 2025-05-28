@@ -9,7 +9,7 @@ import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import { GENERATOR_REACT } from '../generator-list.js';
-import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
+import { asPostWritingTask } from '../base-application/support/index.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -49,6 +49,7 @@ describe(`generator - ${clientFramework}`, () => {
       before(async () => {
         await helpers
           .runJHipster(generator)
+          // @ts-ignore
           .withJHipsterConfig(sampleConfig, entities)
           .withSharedApplication({
             gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway',

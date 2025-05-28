@@ -18,9 +18,10 @@
  */
 import assert from 'assert';
 import { escapeRegExp, kebabCase } from 'lodash-es';
-import type CoreGenerator from '../../base-core/index.js';
-import type { CascatedEditFileCallback, EditFileCallback, NeedleCallback } from '../api.js';
-import { joinCallbacks } from './write-files.js';
+import type { CascatedEditFileCallback, NeedleCallback } from '../api.js';
+import type { EditFileCallback } from '../../base-core/api.js';
+import { joinCallbacks } from '../../base-core/support/write-files.js';
+import type BaseGenerator from '../generator.js';
 
 type NeedleContentToAddCallback = {
   /**
@@ -188,7 +189,9 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
  *
  * @param options
  */
-export const createNeedleCallback = <Generator extends CoreGenerator = CoreGenerator>({
+export const createNeedleCallback = <
+  Generator extends BaseGenerator<any, any, any, any, any, any, any, any> = BaseGenerator<any, any, any, any, any, any, any, any>,
+>({
   needle,
   contentToAdd,
   contentToCheck,
@@ -243,12 +246,17 @@ export function createBaseNeedle(
   needles: Record<string, string>,
 ): NeedleCallback;
 export function createBaseNeedle(needles: Record<string, string>): NeedleCallback;
-export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator>(
+export function createBaseNeedle<
+  Generator extends BaseGenerator<any, any, any, any, any, any, any, any> = BaseGenerator<any, any, any, any, any, any, any, any>,
+>(
   this: Generator,
   options: Omit<NeedleFileInsertion, 'filePath' | 'needle' | 'contentToAdd'> & { filePath: string },
   needles: Record<string, string>,
 ): CascatedEditFileCallback<Generator>;
-export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator>(
+
+export function createBaseNeedle<
+  Generator extends BaseGenerator<any, any, any, any, any, any, any, any> = BaseGenerator<any, any, any, any, any, any, any, any>,
+>(
   this: Generator | void,
   options: Omit<NeedleFileInsertion, 'filePath' | 'needle' | 'contentToAdd'> | Record<string, string>,
   needles?: Record<string, string>,

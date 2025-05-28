@@ -18,6 +18,13 @@
  */
 import { asWritingEntitiesTask, getEnumInfo } from '../base-application/support/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 import type LanguagesGenerator from './generator.js';
 
 /**
@@ -63,7 +70,14 @@ export const enumClientI18nFiles = {
 
 export function writeEntityFiles() {
   return {
-    writeEnumFiles: asWritingEntitiesTask(async function (this: LanguagesGenerator, { entities, application }) {
+    writeEnumFiles: asWritingEntitiesTask<
+      DeprecatedField,
+      DeprecatedPrimarykey<DeprecatedField>,
+      DeprecatedRelationship<any>,
+      DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+      ApplicationType,
+      any
+    >(async function (this: LanguagesGenerator, { entities, application }) {
       if (application.skipClient) return;
       const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage, 'en'])];
       entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
@@ -93,7 +107,14 @@ export function writeEntityFiles() {
       );
     }),
 
-    writeClientFiles: asWritingEntitiesTask(async function (this: LanguagesGenerator, { application, entities }) {
+    writeClientFiles: asWritingEntitiesTask<
+      DeprecatedField,
+      DeprecatedPrimarykey<DeprecatedField>,
+      DeprecatedRelationship<any>,
+      DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+      ApplicationType,
+      any
+    >(async function (this: LanguagesGenerator, { application, entities }) {
       if (application.skipClient) return;
       const entitiesToWriteTranslationFor = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
       if (application.userManagement?.skipClient) {

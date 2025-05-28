@@ -1,6 +1,6 @@
 import type { RequireOneOrNone } from 'type-fest';
 import type { GradleApplication, GradleNeedleOptions } from '../gradle/types.js';
-import type { EditFileCallback } from '../base/api.js';
+import type { EditFileCallback } from '../base-core/api.js';
 import type { MavenDefinition } from '../maven/types.js';
 import type { ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
 import type { JavaAnnotation } from './support/add-java-annotation.ts';
@@ -39,27 +39,10 @@ export type JavaDefinition = {
 
 export type JavaNeedleOptions = GradleNeedleOptions;
 
-type DatabaseApplication = {
-  jhiTablePrefix: string;
-};
-
-type CommonProperties = {
-  authenticationUsesCsrf: boolean;
-};
-
-type SpringApplication = {
-  generateSpringAuditor: boolean;
-};
-
 export type JavaApplication = JavaBootstrapStorageProperties &
-  CommonProperties &
-  SpringApplication &
-  DatabaseApplication &
   GradleApplication & {
     buildToolExecutable: string;
     javaVersion: string;
-    javaCompatibleVersions: string[];
-    mainClass: string;
 
     packageFolder: string;
     entityPackages: string[];
@@ -93,9 +76,6 @@ export type JavaApplication = JavaBootstrapStorageProperties &
     useNpmWrapper: boolean;
     graalvmReachabilityMetadata: string;
     javaNodeBuildPaths: string[];
-
-    cucumberTests: boolean;
-    gatlingTests: boolean;
   };
 
 export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };

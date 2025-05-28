@@ -18,15 +18,29 @@
  */
 
 import { asPostWritingTask } from '../../base-application/support/task-type-inference.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../../lib/types/application/application.js';
 
 /**
  * Update Languages In MailServiceIT
  *
  * @param application
  */
-export const updateLanguagesInMailServiceITTask = asPostWritingTask(function updateLanguagesInMailServiceITTask({ application, control }) {
+export const updateLanguagesInMailServiceITTask = asPostWritingTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
+  any
+>(function updateLanguagesInMailServiceITTask({ application, control }) {
   const { javaPackageTestDir, languagesDefinition } = application;
-  const { ignoreNeedlesError: ignoreNonExisting } = control as any;
+  const { ignoreNeedlesError: ignoreNonExisting } = control;
   let newContent = 'private static final String[] languages = {\n';
   languagesDefinition?.forEach((language, i) => {
     newContent += `        "${language.languageTag}"${i !== languagesDefinition.length - 1 ? ',' : ''}\n`;
@@ -38,6 +52,13 @@ export const updateLanguagesInMailServiceITTask = asPostWritingTask(function upd
   );
 });
 
-export default asPostWritingTask(function updateLanguagesTask(this, taskParam) {
+export default asPostWritingTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
+  any
+>(function updateLanguagesTask(this, taskParam) {
   updateLanguagesInMailServiceITTask.call(this, taskParam);
 });

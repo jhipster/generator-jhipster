@@ -171,7 +171,10 @@ export const askForServerSideOpts = asPromptingTask(async function (this: BaseAp
   );
 });
 
-export const askForOptionalItems = asPromptingTask(async function askForOptionalItems(this: BaseApplicationGenerator, { control }) {
+export const askForOptionalItems = asPromptingTask(async function askForOptionalItems(
+  this: BaseApplicationGenerator<any, any, any, any, any, any>,
+  { control },
+) {
   if (control.existingProject && !this.options.askAnswered) return;
 
   const { applicationType, reactive, databaseType } = this.jhipsterConfigWithDefaults;
@@ -242,7 +245,10 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
   }
 });
 
-export const askForServerTestOpts = asPromptingTask(async function (this: BaseApplicationGenerator, { control }) {
+export const askForServerTestOpts = asPromptingTask(async function (
+  this: BaseApplicationGenerator<any, any, any, any, any, any, any>,
+  { control },
+) {
   if (control.existingProject && this.options.askAnswered !== true) return;
 
   const testFrameworks = this.jhipsterConfigWithDefaults.testFrameworks ?? [];

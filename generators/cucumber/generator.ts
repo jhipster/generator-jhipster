@@ -16,11 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../base-application/index.js';
-import writeTask from './files.js';
+import BaseApplicationGenerator, {
+  type Field as DeprecatedField,
+  type Relationship as DeprecatedRelationship,
+} from '../base-application/index.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type { Entity as DeprecatedEntity, PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType as DeprecatedApplication } from '../../lib/types/application/application.js';
 import cleanupTask from './cleanup.js';
+import writeTask from './files.js';
 
-export default class CucumberGenerator extends BaseApplicationGenerator {
+export default class CucumberGenerator<
+  O extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  F extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<F> = DeprecatedPrimarykey<F>,
+  R extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  E extends DeprecatedEntity<F, PK, R> = DeprecatedEntity<F, PK, R>,
+  A extends DeprecatedApplication = DeprecatedApplication,
+> extends BaseApplicationGenerator<O, F, PK, R, E, A> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

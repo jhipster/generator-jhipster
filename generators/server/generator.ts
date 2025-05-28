@@ -117,6 +117,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           } as any,
           {
             __override__: false,
+            // @ts-ignore FIXME types
             javaCompatibleVersions: JAVA_COMPATIBLE_VERSIONS,
             projectVersion: application => {
               if (this.projectVersion) {
@@ -152,7 +153,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             entityConfig.microserviceName = application.baseName;
           }
           if (entityConfig.clientRootFolder === undefined) {
-            entityConfig.clientRootFolder = entityConfig.microserviceName;
+            entityConfig.clientRootFolder = entityConfig.microserviceName!;
           }
           if (entityConfig.databaseType === undefined) {
             entityConfig.databaseType = application.databaseType;
@@ -165,9 +166,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             entityConfig.databaseType = application.databaseType;
           }
           if (entityConfig.clientRootFolder === undefined) {
-            entityConfig.clientRootFolder = entityConfig.clientRootFolder = entityConfig.skipUiGrouping
-              ? ''
-              : entityConfig.microserviceName;
+            entityConfig.clientRootFolder = entityConfig.skipUiGrouping ? '' : entityConfig.microserviceName!;
           }
         }
       },
@@ -176,6 +175,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (entityConfig.microserviceName && !(applicationTypeMicroservice && clientFrameworkAny)) {
           if (!entityConfig.searchEngine) {
             // If a non-microfrontend microservice entity, should be disabled by default.
+            // @ts-ignore FIXME types
             entityConfig.searchEngine = NO_SEARCH_ENGINE;
           }
         }
@@ -189,6 +189,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             this.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
           }
           // Search engine can only be enabled at entity level and disabled at application level for gateways publishing a microservice entity
+          // @ts-ignore FIXME types
           entityConfig.searchEngine = NO_SEARCH_ENGINE;
         }
       },

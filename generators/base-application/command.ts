@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/types.js';
+import { GENERATOR_BASE } from '../generator-list.js';
 
 const command = {
   configs: {},
-  import: ['base'],
+  import: [GENERATOR_BASE],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

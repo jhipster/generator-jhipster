@@ -23,6 +23,13 @@ import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock, moveToJav
 import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import { databaseTypes, entityOptions } from '../../lib/jhipster/index.js';
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 import { cleanupOldFiles } from './entity-cleanup.js';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
@@ -196,11 +203,25 @@ export const serverFiles = {
 
 export function writeFiles() {
   return {
-    cleanupOldServerFiles: asWritingEntitiesTask(function ({ application, control, entities }) {
+    cleanupOldServerFiles: asWritingEntitiesTask<
+      DeprecatedField,
+      DeprecatedPrimarykey<DeprecatedField>,
+      DeprecatedRelationship<any>,
+      DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+      ApplicationType,
+      any
+    >(function ({ application, control, entities }) {
       cleanupOldFiles.call(this, { application, entities, control });
     }),
 
-    writeServerFiles: asWritingEntitiesTask(async function ({ application, entities }) {
+    writeServerFiles: asWritingEntitiesTask<
+      DeprecatedField,
+      DeprecatedPrimarykey<DeprecatedField>,
+      DeprecatedRelationship<any>,
+      DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+      ApplicationType,
+      any
+    >(async function ({ application, entities }) {
       const rootTemplatesPath = application.reactive
         ? ['reactive', '', '../../server/templates/', '../../java/generators/domain/templates/']
         : ['', '../../server/templates/', '../../java/generators/domain/templates/'];

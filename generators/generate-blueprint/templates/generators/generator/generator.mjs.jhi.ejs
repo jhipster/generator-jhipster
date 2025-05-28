@@ -52,7 +52,7 @@ export default class extends <%= generatorClass %>Generator {
   constructor(args, opts, features) {
     super(args, opts, {
       ...features,
-      
+
 <%_ if (sbs) { _%>
       sbsBlueprint: true,
 <%_ } else if (!customGenerator) { _%>

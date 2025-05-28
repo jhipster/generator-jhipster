@@ -22,7 +22,6 @@ import type { ComposeOptions, Storage } from 'yeoman-generator';
 import type GeneratorsByNamespace from '../types.js';
 import BaseGenerator from '../base-simple-application/index.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import type { JHipsterGeneratorOptions } from '../base/api.js';
 import { mutateData } from '../../lib/utils/object.js';
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
@@ -30,6 +29,15 @@ import {
   GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
   GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
 } from '../generator-list.js';
+import type { Entity as DeprecatedEntity, PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { Field as DeprecatedField } from '../../lib/types/application/field.js';
+import type { Relationship as DeprecatedRelationship } from '../../lib/types/application/relationship.js';
+import type { GenericTaskGroup } from '../base/tasks.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
+import { getConfigWithDefaults } from '../../lib/jhipster/index.js';
 import type {
   ConfiguringEachEntityTaskParam,
   TaskTypes as DefaultTaskTypes,
@@ -37,21 +45,21 @@ import type {
   PreparingEachEntityFieldTaskParam,
   PreparingEachEntityRelationshipTaskParam,
   PreparingEachEntityTaskParam,
-} from '../../lib/types/application/tasks.js';
-import type { Entity as ApplicationEntity } from '../../lib/types/application/entity.js';
-import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
-import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
-import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
-import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
-import {
-  CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
-  CONTEXT_DATA_APPLICATION_KEY,
-  CONTEXT_DATA_SOURCE_KEY,
-  getEntitiesFromDir,
-} from './support/index.js';
+  TaskParamWithApplication,
+} from './tasks.js';
+import { getEntitiesFromDir } from './support/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
-import type { Config as BaseApplicationConfig, Features as BaseApplicationFeatures, Options as BaseApplicationOptions } from './types.js';
+import type { BaseApplicationConfiguration, BaseApplicationFeatures, BaseApplicationOptions } from './api.js';
+import type {
+  BaseApplicationApplication,
+  BaseApplicationControl,
+  BaseApplicationEntity,
+  BaseApplicationField,
+  BaseApplicationPrimaryKey,
+  BaseApplicationRelationship,
+  BaseApplicationSources,
+} from './types.js';
+import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/constants.js';
 
 const {
   LOADING,
@@ -127,14 +135,34 @@ const getFirstArgForPriority = (priorityName: string) => ({
 /**
  * This is the base class for a generator that generates entities.
  */
-export default class BaseApplicationGenerator<
-  Entity extends ApplicationEntity = ApplicationEntity,
-  Application extends ApplicationType<ApplicationEntity> = ApplicationType<ApplicationEntity>,
-  ConfigType extends BaseApplicationConfig = BaseApplicationConfig & ApplicationConfiguration,
-  Options extends BaseApplicationOptions = BaseApplicationOptions & JHipsterGeneratorOptions,
+export default // @ts-ignore
+class BaseApplicationGenerator<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends BaseApplicationOptions = JHipsterGeneratorOptions,
+  Field extends BaseApplicationField = DeprecatedField,
+  PK extends BaseApplicationPrimaryKey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends BaseApplicationRelationship<any> = DeprecatedRelationship<any>,
+  // @ts-ignore
+  Entity extends BaseApplicationEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends BaseApplicationApplication = ApplicationType,
+  Sources extends BaseApplicationSources<Field, PK, Relationship, Entity, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends BaseApplicationControl = DeprecatedControl,
+  TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
-  TaskTypes extends DefaultTaskTypes<Entity, Application> = DefaultTaskTypes<Entity, Application>,
-> extends BaseGenerator<Application, ConfigType, Options, Features, TaskTypes> {
+> extends BaseGenerator<Options, Field, PK, Relationship, Entity, Application, Sources, Control, TaskTypes, Configuration, Features> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
   static LOADING_ENTITIES = asPriority(LOADING_ENTITIES);
@@ -179,7 +207,7 @@ export default class BaseApplicationGenerator<
         ...this.options.applicationWithEntities.config,
       });
       if (this.options.applicationWithEntities.entities) {
-        const entities = this.options.applicationWithEntities.entities.map(entity => {
+        const entities: string[] = this.options.applicationWithEntities.entities.map((entity: Entity) => {
           const entityName = upperFirst(entity.name);
           const file = this.getEntityConfigPath(entityName);
           this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
@@ -191,13 +219,13 @@ export default class BaseApplicationGenerator<
     }
   }
 
-  get #application(): ApplicationType {
+  get #application(): Application {
     return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
-      factory: () => ({ nodeDependencies: {}, customizeTemplatePaths: [], user: undefined }) as unknown as ApplicationType,
+      factory: () => ({ nodeDependencies: {}, customizeTemplatePaths: [], user: undefined }) as unknown as Application,
     });
   }
 
-  get #entities(): Map<string, BaseEntity> {
+  get #entities(): Map<string, Entity> {
     return this.getContextData(CONTEXT_DATA_APPLICATION_ENTITIES_KEY, { factory: () => new Map() });
   }
 
@@ -216,7 +244,7 @@ export default class BaseApplicationGenerator<
   /**
    * JHipster config with default values fallback
    */
-  override get jhipsterConfigWithDefaults(): Readonly<ConfigType & ApplicationConfiguration> {
+  override get jhipsterConfigWithDefaults() {
     const configWithDefaults = getConfigWithDefaults(super.jhipsterConfigWithDefaults);
     defaults(configWithDefaults, {
       skipFakeData: false,
@@ -225,7 +253,7 @@ export default class BaseApplicationGenerator<
       autoCrlf: false,
       pages: [],
     });
-    return configWithDefaults as ConfigType & ApplicationConfiguration;
+    return configWithDefaults as Configuration;
   }
 
   dependsOnBootstrapApplication(
@@ -290,16 +318,16 @@ export default class BaseApplicationGenerator<
   /**
    * get sorted list of entities according to changelog date (i.e. the order in which they were added)
    */
-  getExistingEntities(): { name: string; definition: ApplicationEntity }[] {
+  getExistingEntities(): { name: string; definition: Entity }[] {
     function isBefore(e1, e2) {
       return (e1.definition.annotations?.changelogDate ?? 0) - (e2.definition.annotations?.changelogDate ?? 0);
     }
 
     const configDir = this.getEntitiesConfigPath();
 
-    const entities: { name: string; definition: ApplicationEntity }[] = [];
+    const entities: { name: string; definition: Entity }[] = [];
     for (const entityName of [...new Set(((this.jhipsterConfig.entities as string[]) || []).concat(getEntitiesFromDir(configDir)))]) {
-      const definition: ApplicationEntity = this.getEntityConfig(entityName)?.getAll() as unknown as ApplicationEntity;
+      const definition: Entity = this.getEntityConfig(entityName)?.getAll() as unknown as Entity;
       if (definition) {
         entities.push({ name: entityName, definition });
       }
@@ -453,9 +481,10 @@ export default class BaseApplicationGenerator<
   /**
    * @protected
    */
-  protected getTaskFirstArgForPriority(priorityName: string): any {
+  protected getTaskFirstArgForPriority(
+    priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES],
+  ): TaskParamWithApplication<Application, Control> {
     const { source, application, applicationDefaults, entitiesToLoad, entities, filteredEntities } = getFirstArgForPriority(priorityName);
-
     const args: Record<string, any> = {};
     if (source) {
       args.source = this.#source;
@@ -480,7 +509,7 @@ export default class BaseApplicationGenerator<
         args.entities = [...this.#entities.values()].filter(entity => entitiesToFilter.includes(entity.name));
       }
     }
-    return args;
+    return args as TaskParamWithApplication<Application, Control>;
   }
 
   /**
@@ -489,10 +518,17 @@ export default class BaseApplicationGenerator<
    * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
-  #getEntitiesDataToConfigure(): ConfiguringEachEntityTaskParam[] {
+  #getEntitiesDataToConfigure(): ConfiguringEachEntityTaskParam<Field, PK, Relationship, Entity, Application, Control>[] {
     return this.getExistingEntityNames().map(entityName => {
       const entityStorage = this.getEntityConfig(entityName, true);
-      return { entityName, entityStorage, entityConfig: entityStorage!.createProxy() } as ConfiguringEachEntityTaskParam;
+      return { entityName, entityStorage, entityConfig: entityStorage!.createProxy() } as ConfiguringEachEntityTaskParam<
+        Field,
+        PK,
+        Relationship,
+        Entity,
+        Application,
+        Control
+      >;
     });
   }
 
@@ -502,7 +538,7 @@ export default class BaseApplicationGenerator<
    * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
-  #getEntitiesDataToLoad(): EntityToLoad[] {
+  #getEntitiesDataToLoad(): EntityToLoad<Field, PK, Relationship, Entity>[] {
     const application = this.#application;
     const builtInEntities: string[] = [];
     if (application.generateBuiltInUserEntity) {
@@ -521,6 +557,7 @@ export default class BaseApplicationGenerator<
     return entitiesToLoad.map(entityName => {
       const generator = this;
       if (!this.#entities.has(entityName)) {
+        // @ts-ignore FIXME types
         this.#entities.set(entityName, { name: entityName, fields: [], relationships: [] });
       }
       const entityBootstrap = this.#entities.get(entityName);
@@ -530,10 +567,10 @@ export default class BaseApplicationGenerator<
           return generator.getEntityConfig(entityName, true);
         },
         get entityConfig() {
-          return generator.getEntityConfig(entityName, true)!.createProxy();
+          return generator.getEntityConfig(entityName, true)!.createProxy() as unknown as Entity;
         },
         entityBootstrap,
-      } as EntityToLoad;
+      } as EntityToLoad<Field, PK, Relationship, Entity>;
     });
   }
 
@@ -542,7 +579,10 @@ export default class BaseApplicationGenerator<
    * Get entities to prepare.
    * @returns {object[]}
    */
-  #getEntitiesDataToPrepare(): Pick<PreparingEachEntityTaskParam, 'entity' | 'entityName' | 'description'>[] {
+  #getEntitiesDataToPrepare(): Pick<
+    PreparingEachEntityTaskParam<Field, PK, Relationship, Entity, Application, Control>,
+    'entity' | 'entityName' | 'description'
+  >[] {
     return this.#entitiesForTasks;
   }
 
@@ -552,7 +592,7 @@ export default class BaseApplicationGenerator<
    * @returns {object[]}
    */
   #getEntitiesFieldsDataToPrepare(): Pick<
-    PreparingEachEntityFieldTaskParam,
+    PreparingEachEntityFieldTaskParam<Field, PK, Relationship, Entity, Application, Control>,
     'entity' | 'entityName' | 'field' | 'fieldName' | 'description'
   >[] {
     return this.#getEntitiesDataToPrepare()
@@ -577,7 +617,7 @@ export default class BaseApplicationGenerator<
    * @returns {object[]}
    */
   #getEntitiesRelationshipsDataToPrepare(): Pick<
-    PreparingEachEntityRelationshipTaskParam,
+    PreparingEachEntityRelationshipTaskParam<Field, PK, Relationship, Entity, Application, Control>,
     'entity' | 'entityName' | 'relationship' | 'relationshipName' | 'description'
   >[] {
     return this.#getEntitiesDataToPrepare()

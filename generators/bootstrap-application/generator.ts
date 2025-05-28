@@ -20,12 +20,12 @@ import assert from 'assert';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { validations } from '../../lib/jhipster/index.js';
+import { stringifyApplicationData } from '../base-application/support/index.js';
 import {
   derivedPrimaryKeyProperties,
   preparePostEntitiesCommonDerivedProperties,
   preparePostEntityCommonDerivedProperties,
-  stringifyApplicationData,
-} from '../base-application/support/index.js';
+} from '../base-application/support/prepare-entity.js';
 
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.js';
 import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.js';

@@ -18,10 +18,10 @@
  */
 import chalk from 'chalk';
 
-import CoreGenerator from '../base-core/index.js';
-
 import { convertToJDL } from '../../lib/jdl/converters/json-to-jdl-converter.js';
 import { CommandCoreGenerator } from '../base-core/generator.js';
+
+import CoreGenerator from '../base-core/index.js';
 import type command from './command.js';
 
 export default class extends CommandCoreGenerator<typeof command> {
@@ -32,6 +32,7 @@ export default class extends CommandCoreGenerator<typeof command> {
     return this.asAnyTaskGroup({
       convertToJDL() {
         try {
+          // @ts-ignore FIXME types
           const jdlObject = convertToJDL(this.destinationPath(), false, this.options.jdlDefinition);
           if (jdlObject) {
             this.jdlContent = jdlObject.toString();

@@ -20,29 +20,77 @@
 import chalk from 'chalk';
 import { padEnd, startCase } from 'lodash-es';
 
-import BaseApplicationGenerator from '../base-application/index.js';
+import BaseApplicationGenerator, {
+  type Entity as DeprecatedEntity,
+  type Field as DeprecatedField,
+  type Relationship as DeprecatedRelationship,
+} from '../base-application/index.js';
 import { updateLanguagesTask as updateLanguagesInAngularTask } from '../angular/support/index.js';
 import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/index.js';
 import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/index.js';
 import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.js';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
 import { QUEUES } from '../base-application/priorities.js';
-import { PRIORITY_NAMES } from '../base/priorities.js';
+import { PRIORITY_NAMES } from '../base-core/priorities.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
+import type { BaseApplicationFeatures } from '../base-application/api.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { TaskTypes as DefaultTaskTypes } from '../base-application/tasks.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
+import { askForLanguages, askI18n } from './prompts.js';
+import { clientI18nFiles } from './files.js';
+import { writeEntityFiles } from './entity-files.js';
+import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
 import type { Language } from './support/languages.js';
 import { findLanguageForTag, supportedLanguages } from './support/languages.js';
-import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
-import { writeEntityFiles } from './entity-files.js';
-import { clientI18nFiles } from './files.js';
-import { askForLanguages, askI18n } from './prompts.js';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.js';
-
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 
 /**
  * This is the base class for a generator that generates entities.
  */
-export default class LanguagesGenerator extends BaseApplicationGenerator {
+export default class LanguagesGenerator<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  // @ts-ignore
+  Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends ApplicationType = ApplicationType,
+  Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends DeprecatedControl = DeprecatedControl,
+  TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends ApplicationConfiguration = ApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseApplicationGenerator<
+  Options,
+  Field,
+  PK,
+  Relationship,
+  Entity,
+  Application,
+  Sources,
+  Control,
+  TaskTypes,
+  Configuration,
+  Features
+> {
   askForMoreLanguages!: boolean;
   askForNativeLanguage!: boolean;
   translationData!: TranslationData;
@@ -56,7 +104,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   writeJavaLanguageFiles;
   regenerateLanguages;
 
-  constructor(args, options, features) {
+  constructor(args, options: Options, features: Features) {
     super(args, options, features);
 
     this.languageCommand = this.options.commandName === 'languages';
@@ -82,6 +130,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       // We must write languages files for translation process for entities only generation.
       // Angular frontend uses translation files even if enableTranslation is enabled.
       // As side effect, with angular frontends, translation files will be written for nativeLanguage for entity only generation.
+      // @ts-ignore FIXME types
       this.setFeatures({ disableSkipPriorities: true });
     }
   }
@@ -234,7 +283,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           }
         };
         this.env.sharedFs.on('change', listener);
-
+        // @ts-ignore FIXME types
         application.getWebappTranslation = (...args) => this.translationData.getClientTranslation(...args);
       },
     });
@@ -346,6 +395,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           application.backendTypeJavaAny &&
           application.backendTypeSpringBoot
         ) {
+          // @ts-ignore TODO fix types
           updateLanguagesInJava.call(this, { application, control, source });
         }
       },

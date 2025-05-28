@@ -19,6 +19,13 @@
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { javaMainPackageTemplatesBlock } from '../server/support/index.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 
 const domainFiles = [
   {
@@ -55,7 +62,14 @@ export const entityFiles = {
 
 export function cleanupCassandraEntityFilesTask() {}
 
-export default asWritingEntitiesTask(async function writeEntityCassandraFiles({ application, entities }) {
+export default asWritingEntitiesTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
+  any
+>(async function writeEntityCassandraFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {
     await this.writeFiles({
       sections: entity.builtIn ? { domainFiles } : entityFiles,

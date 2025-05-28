@@ -15,7 +15,7 @@ import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.js';
 import { GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
 import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '../../generators/base/support/index.js';
 import BaseGenerator from '../../generators/base/index.js';
-import type { JHipsterGeneratorOptions } from '../../generators/base/api.js';
+import type { PRIORITY_NAMES as APPLICATION_PRIORITY_NAMES } from '../../generators/base-application/priorities.js';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.js';
 import type CoreGenerator from '../../generators/base-core/generator.js';
 import type { ApplicationConfiguration } from '../types/application/yo-rc.js';
@@ -24,14 +24,14 @@ import type { Entity } from '../types/base/entity.js';
 import { buildJHipster, createProgram } from '../../cli/program.mjs';
 import type { CliCommand } from '../../cli/types.js';
 import type BaseApplicationGenerator from '../../generators/base-application/generator.js';
-import type { PRIORITY_NAMES as APPLICATION_PRIORITY_NAMES } from '../../generators/base-application/priorities.js';
-import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { JHipsterGeneratorOptions } from '../types/application/options.js';
 import {
   CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
   CONTEXT_DATA_APPLICATION_KEY,
   CONTEXT_DATA_SOURCE_KEY,
 } from '../../generators/base-application/support/constants.js';
+import type { ApplicationType } from '../types/application/application.js';
+import type { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
@@ -59,7 +59,10 @@ type RunJHipster = WithJHipsterGenerators & {
   useEnvironmentBuilder?: boolean;
 };
 
-type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = Omit<RunResult<GeneratorType>, 'env'> & {
+type JHipsterRunResult<GeneratorType extends CoreGenerator<any, any, any, any, any> = CoreGenerator<any, any, any, any, any>> = Omit<
+  RunResult<GeneratorType>,
+  'env'
+> & {
   env: Environment;
 
   /**
@@ -367,7 +370,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   withMockedNodeDependencies() {
     return this.withSharedApplication({
       nodeDependencies: new Proxy({}, { get: (_target, prop) => `${snakeCase(prop.toString()).toUpperCase()}_VERSION` }),
-    } as unknown as ApplicationType);
+    } as unknown as ApplicationType); // FIXME types
   }
 
   /**
@@ -606,7 +609,7 @@ class JHipsterTest extends YeomanTest {
 
   runTestBlueprintGenerator() {
     const blueprintNS = 'jhipster:test-blueprint';
-    class BlueprintedGenerator extends BaseGenerator {
+    class BlueprintedGenerator extends BaseGenerator<any, any, any, any, any, any, any, any> {
       async beforeQueue() {
         if (!this.fromBlueprint) {
           await this.composeWithBlueprints();

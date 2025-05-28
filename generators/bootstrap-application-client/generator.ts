@@ -23,12 +23,62 @@ import {
   loadDerivedClientConfig,
   preparePostEntityClientDerivedProperties,
 } from '../client/support/index.js';
-import BaseApplicationGenerator from '../base-application/index.js';
+import BaseApplicationGenerator, {
+  type Entity as DeprecatedEntity,
+  type Field as DeprecatedField,
+  type Relationship as DeprecatedRelationship,
+} from '../base-application/index.js';
 import clientCommand from '../client/command.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import { getFrontendAppName } from '../base/support/index.js';
+import type { BaseApplicationFeatures } from '../base-application/api.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type { BaseApplicationSources } from '../base-application/types.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
+import type { TaskTypes as DefaultTaskTypes } from '../base-application/tasks.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 
-export default class BootStrapApplicationClient extends BaseApplicationGenerator {
+export default class BootStrapApplicationClient<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  // @ts-ignore
+  Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends ApplicationType = ApplicationType,
+  Sources extends BaseApplicationSources<Field, PK, Relationship, Entity, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends DeprecatedControl = DeprecatedControl,
+  TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends ApplicationConfiguration = ApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseApplicationGenerator<
+  Options,
+  Field,
+  PK,
+  Relationship,
+  Entity,
+  Application,
+  Sources,
+  Control,
+  TaskTypes,
+  Configuration,
+  Features
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

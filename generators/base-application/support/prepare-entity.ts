@@ -19,7 +19,6 @@
 import { camelCase, intersection, kebabCase, lowerFirst, sortedUniq, startCase, uniq, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
-import type BaseGenerator from '../../base-core/index.js';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.js';
 import {
   createFaker,
@@ -33,11 +32,16 @@ import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/
 import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
-import type { Entity } from '../../../lib/types/application/index.js';
-import type CoreGenerator from '../../base-core/generator.js';
-import type { PrimaryKey } from '../../../lib/types/application/entity.js';
-import type { ApplicationConfiguration } from '../../../lib/types/application/yo-rc.js';
-import type { ApplicationType } from '../../../lib/types/application/application.js';
+import type {
+  BaseApplicationApplication,
+  BaseApplicationEntity,
+  BaseApplicationField,
+  BaseApplicationPrimaryKey,
+  BaseApplicationRelationship,
+} from '../types.js';
+import type BaseApplicationGenerator from '../generator.js';
+import type { FieldType } from '../../../lib/application/field-types.js';
+import type { WorkspaceConfiguration } from '../../../lib/types/application/yo-rc.js';
 import { fieldToReference } from './prepare-field.js';
 import { fieldIsEnum } from './field-utils.js';
 
@@ -57,13 +61,13 @@ const { INSTANT, ZONED_DATE_TIME, DURATION, LOCAL_DATE, BIG_DECIMAL, LOCAL_TIME 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 const { IMAGE, TEXT } = fieldTypes.BlobTypes;
 
-const BASE_TEMPLATE_DATA = {
+const BASE_TEMPLATE_DATA: Partial<BaseApplicationEntity<any, any, any>> = {
   primaryKey: undefined,
   entityPackage: undefined,
   skipUiGrouping: false,
   anyFieldHasDocumentation: false,
   existingEnum: false,
-  searchEngine: NO_SEARCH_ENGINE,
+  searchEngine: 'no',
   microserviceName: undefined,
   entityAuthority: undefined,
   entityReadAuthority: undefined,
@@ -95,6 +99,7 @@ const BASE_TEMPLATE_DATA = {
     return [];
   },
   // these variable hold field and relationship names for question options during update
+  // @ts-ignore FIXME types
   get fieldNameChoices() {
     return [];
   },
@@ -103,11 +108,16 @@ const BASE_TEMPLATE_DATA = {
   },
 };
 
-function _derivedProperties(entityWithConfig: Entity) {
+function _derivedProperties<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+>(entityWithConfig: E) {
   const pagination = entityWithConfig.pagination;
   const dto = entityWithConfig.dto;
   const service = entityWithConfig.service;
-  mutateData(entityWithConfig, {
+  mutateData(entityWithConfig as BaseApplicationEntity<F, PK, R>, {
     paginationPagination: pagination === 'pagination',
     paginationInfiniteScroll: pagination === 'infinite-scroll',
     paginationNo: pagination === 'no',
@@ -119,7 +129,7 @@ function _derivedProperties(entityWithConfig: Entity) {
   });
 }
 
-export const entityDefaultConfig = {
+export const entityDefaultConfig: Partial<BaseApplicationEntity<any, any, any>> = {
   pagination: binaryOptions.DefaultValues[binaryOptions.Options.PAGINATION],
   anyPropertyHasValidation: false,
   dto: binaryOptions.DefaultValues[binaryOptions.Options.DTO],
@@ -138,11 +148,19 @@ export const entityDefaultConfig = {
   },
 };
 
-export default function prepareEntity(entityWithConfig: Entity, generator, application: ApplicationType) {
+export function prepareEntity<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+  A extends BaseApplicationApplication,
+  G extends BaseApplicationGenerator<any, F, PK, R, E, A, any, any, any, any>,
+>(entityWithConfig: E, generator: G, application: A) {
   const { applicationTypeMicroservice, microfrontend, dtoSuffix = '' } = application;
 
   const entityName = upperFirst(entityWithConfig.name);
-  mutateData(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
+  // @ts-ignore FIXME types
+  mutateData(entityWithConfig, entityDefaultConfig as Partial<E>, BASE_TEMPLATE_DATA as Partial<E>);
 
   if (entityWithConfig.changelogDate) {
     try {
@@ -152,7 +170,7 @@ export default function prepareEntity(entityWithConfig: Entity, generator, appli
     }
   }
 
-  entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;
+  entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix ?? '';
   if (entityWithConfig.entityAngularJSSuffix && !entityWithConfig.entityAngularJSSuffix.startsWith('-')) {
     entityWithConfig.entityAngularJSSuffix = `-${entityWithConfig.entityAngularJSSuffix}`;
   }
@@ -177,7 +195,7 @@ export default function prepareEntity(entityWithConfig: Entity, generator, appli
     entityInstancePlural: ({ entityNamePlural }) => lowerFirst(entityNamePlural),
     entityTableName: hibernateSnakeCase(entityName),
     entityAuthority: entityWithConfig.adminEntity ? 'ROLE_ADMIN' : undefined,
-  });
+  } as any);
 
   const entitySuffix = entityWithConfig.entitySuffix ?? application.entitySuffix;
   const dto = entityWithConfig.dto && entityWithConfig.dto !== NO_DTO;
@@ -189,14 +207,14 @@ export default function prepareEntity(entityWithConfig: Entity, generator, appli
     dtoInstance: `${entityWithConfig.entityInstance}${dtoSuffix}`,
     restClass: dto ? ({ dtoClass }) => dtoClass! : ({ persistClass }) => persistClass!,
     restInstance: dto ? ({ dtoInstance }) => dtoInstance! : ({ persistInstance }) => persistInstance!,
-  });
+  } as any);
 
   mutateData(entityWithConfig, {
     // Implement i18n variant ex: 'male', 'female' when applied
     entityI18nVariant: 'default',
     entityClassHumanized: ({ entityNameCapitalized }) => startCase(entityNameCapitalized),
     entityClassPluralHumanized: ({ entityNamePlural }) => startCase(entityNamePlural),
-  });
+  } as any);
 
   mutateData(entityWithConfig, {
     __override__: false,
@@ -204,14 +222,15 @@ export default function prepareEntity(entityWithConfig: Entity, generator, appli
     entityAngularName: data => data.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix!),
     entityAngularNamePlural: data => pluralize(data.entityAngularName),
     entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
-  });
+  } as any);
 
   entityWithConfig.entityFolderName = entityWithConfig.clientRootFolder
     ? `${entityWithConfig.clientRootFolder}/${entityWithConfig.entityFileName}`
     : entityWithConfig.entityFileName;
   entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
   entityWithConfig.entityParentPathAddition = getEntityParentPathAddition(entityWithConfig.clientRootFolder);
-  entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
+  entityWithConfig.entityPluralFileName =
+    entityWithConfig.entityNamePluralizedAndSpinalCased + (entityWithConfig.entityAngularJSSuffix ?? '');
   entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
 
   entityWithConfig.entityReactName = entityWithConfig.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
@@ -243,7 +262,7 @@ export default function prepareEntity(entityWithConfig: Entity, generator, appli
       microserviceName && microfrontend && applicationTypeMicroservice
         ? `${microserviceName.toLowerCase()}/${entityFileName}`
         : `${entityFileName}`,
-  });
+  } as any);
 
   entityWithConfig.generateFakeData = type => {
     const fieldsToGenerate =
@@ -267,7 +286,7 @@ export default function prepareEntity(entityWithConfig: Entity, generator, appli
   return entityWithConfig;
 }
 
-export function derivedPrimaryKeyProperties(primaryKey: PrimaryKey) {
+export function derivedPrimaryKeyProperties<F extends BaseApplicationField, PK extends BaseApplicationPrimaryKey<F>>(primaryKey: PK) {
   mutateData(primaryKey, {
     hasUUID: primaryKey.fields?.some(field => field.fieldType === UUID),
     hasLong: primaryKey.fields?.some(field => field.fieldType === LONG),
@@ -280,8 +299,10 @@ export function derivedPrimaryKeyProperties(primaryKey: PrimaryKey) {
   } as any);
 }
 
-export function prepareEntityPrimaryKeyForTemplates(
-  this: CoreGenerator | void,
+export function prepareEntityPrimaryKeyForTemplates<
+  G extends BaseApplicationGenerator<any, any, any, any, any, any, any, any, any, any, any>,
+>(
+  this: G | void,
   { entity: entityWithConfig, enableCompositeId = true, application }: { entity: any; enableCompositeId?: boolean; application?: any },
 ) {
   const idFields = entityWithConfig.fields.filter(field => field.id);
@@ -489,11 +510,14 @@ function fieldToId(field) {
  * @param {Object} config - config object.
  * @returns {Object} the entity parameter for chaining.
  */
-export function loadRequiredConfigIntoEntity<E extends Partial<Entity>>(
-  this: BaseGenerator | void,
-  entity: E,
-  config: ApplicationConfiguration,
-): E {
+export function loadRequiredConfigIntoEntity<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+  C extends WorkspaceConfiguration, // FIXME types
+  G extends BaseApplicationGenerator<any, F, PK, R, E, any, any, any, any, any>,
+>(this: G | void, entity: E, config: C): E {
   mutateData(entity, {
     __override__: false,
     applicationType: config.applicationType,
@@ -519,16 +543,22 @@ export function loadRequiredConfigIntoEntity<E extends Partial<Entity>>(
     // If the entity belongs to this application and searchEngine is true.
     if (config.searchEngine && config.searchEngine !== NO_SEARCH_ENGINE) {
       // Replace with the searchEngine from the application.
+      // @ts-ignore FIXME types
       entity.searchEngine = config.searchEngine;
     } else {
-      entity.searchEngine = NO_SEARCH_ENGINE;
+      entity.searchEngine = 'no';
       this?.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
     }
   }
   return entity;
 }
 
-export function preparePostEntityCommonDerivedProperties(entity: Entity) {
+export function preparePostEntityCommonDerivedProperties<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+>(entity: E) {
   const { fields } = entity;
   const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 
@@ -558,7 +588,12 @@ export function preparePostEntityCommonDerivedProperties(entity: Entity) {
   preparePostEntityCommonDerivedPropertiesNotTyped(entity);
 }
 
-function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
+function preparePostEntityCommonDerivedPropertiesNotTyped<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+>(entity: E) {
   const { relationships, fields } = entity;
   const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
   entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
@@ -566,7 +601,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.anyPropertyHasValidation =
     entity.anyPropertyHasValidation || relationships.some(({ relationshipValidate }) => relationshipValidate);
 
-  const relationshipsByOtherEntity: Record<string, any> = relationships
+  const relationshipsByOtherEntity: Record<string, R[]> = relationships
     .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship])
     .reduce((relationshipsByOtherEntity: any, [type, relationship]) => {
       if (!relationshipsByOtherEntity[type]) {
@@ -614,17 +649,17 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.entityContainsCollectionField = entity.relationships.some(relationship => relationship.relationshipCollection);
 
   if (entity.primaryKey) {
-    derivedPrimaryKeyProperties(entity.primaryKey);
+    derivedPrimaryKeyProperties(entity.primaryKey!);
     entity.requiresPersistableImplementation =
       entity.requiresPersistableImplementation || entity.fields.some(field => field.requiresPersistableImplementation);
   }
 
-  const types = entity.relationships
+  const types: FieldType[] | string[] = entity.relationships
     .filter(rel => rel.otherEntity.primaryKey)
     .map(rel => rel.otherEntity.primaryKey.fields.map(f => f.fieldType))
     .flat();
   entity.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
-  entity.otherEntityPrimaryKeyTypesIncludesUUID = types.includes(UUID);
+  entity.otherEntityPrimaryKeyTypesIncludesUUID = types.includes(UUID as any);
 
   entity.relationships.forEach(relationship => {
     if (!relationship.otherEntity.primaryKey) {
@@ -659,7 +694,12 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.reactiveRegularEagerRelations = entity.reactiveEagerRelations.filter(rel => rel.id !== true);
 }
 
-export function preparePostEntitiesCommonDerivedProperties(entities) {
+export function preparePostEntitiesCommonDerivedProperties<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+>(entities: E[]) {
   for (const entity of entities.filter(entity => !entity.dtoReferences)) {
     entity.dtoReferences = [
       ...entity.fields.map(field => field.reference),
@@ -682,7 +722,12 @@ export function preparePostEntitiesCommonDerivedProperties(entities) {
   }
 }
 
-export async function addFakerToEntity(entityWithConfig: any, nativeLanguage = 'en') {
+export async function addFakerToEntity<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+>(entityWithConfig: E, nativeLanguage = 'en') {
   entityWithConfig.faker = entityWithConfig.faker || (await createFaker(nativeLanguage));
   entityWithConfig.resetFakerSeed = (suffix = '') =>
     entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));

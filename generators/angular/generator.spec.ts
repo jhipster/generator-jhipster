@@ -88,6 +88,7 @@ describe(`generator - ${clientFramework}`, () => {
       before(async () => {
         await helpers
           .runJHipster(generator)
+          // @ts-ignore
           .withJHipsterConfig(sampleConfig, entities)
           .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
           .withSharedApplication({ getWebappTranslation: () => 'translations' })

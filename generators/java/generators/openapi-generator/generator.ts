@@ -45,6 +45,7 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
             { templates: ['README.md.jhi.openapi-generator'] },
             javaMainResourceTemplatesBlock({ templates: ['swagger/api.yml'] }),
             {
+              // @ts-ignore FIXME types
               condition: ctx => ctx.buildToolGradle && ctx.addOpenapiGeneratorPlugin,
               templates: [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.openapi-generator-conventions.gradle`],
             },

@@ -22,7 +22,7 @@ import { upperFirst } from 'lodash-es';
 import { type Store as MemFs, create as createMemFs } from 'mem-fs';
 import { type MemFsEditor, create as createMemFsEditor } from 'mem-fs-editor';
 
-import BaseGenerator, { type Config as BaseConfig } from '../base/index.js';
+import BaseGenerator from '../base/index.js';
 import { downloadJdlFile } from '../../cli/download.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { CLI_NAME } from '../../cli/utils.mjs';
@@ -34,7 +34,18 @@ import { mergeYoRcContent } from '../../lib/utils/yo-rc.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.js';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
-import type { JHipsterGeneratorOptions } from '../base/api.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { TaskTypes as DefaultTaskTypes } from '../base-application/tasks.js';
+import type { BaseApplicationFeatures } from '../base-application/api.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
 
 /**
@@ -49,10 +60,32 @@ const toJdlFile = file => {
 
 type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: string; sharedFs?: MemFs };
 
-export default class JdlGenerator extends BaseGenerator<
-  { baseName: string; prodDatabaseType: string } & BaseConfig,
-  JHipsterGeneratorOptions
-> {
+export default class JdlGenerator<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends ApplicationType = ApplicationType,
+  Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends DeprecatedControl = DeprecatedControl,
+  TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends ApplicationConfiguration = ApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, Configuration, Features> {
   jdlFiles?: string[];
   inline?: string;
   jdlContents: string[] = [];

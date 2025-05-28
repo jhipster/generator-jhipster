@@ -18,6 +18,13 @@
  */
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 
 const domainFiles = [
   {
@@ -89,7 +96,14 @@ const sqlFiles = {
 
 export function cleanupEntitiesTask() {}
 
-export default asWritingEntitiesTask(async function writeEntitiesTask({ application, entities }) {
+export default asWritingEntitiesTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
+  any
+>(async function writeEntitiesTask({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {
     if (entity.builtInUser) {
       await this.writeFiles({

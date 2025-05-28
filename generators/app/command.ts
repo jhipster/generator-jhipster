@@ -18,6 +18,8 @@
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import {
+  GENERATOR_BASE,
+  GENERATOR_BASE_APPLICATION,
   GENERATOR_BOOTSTRAP,
   GENERATOR_BOOTSTRAP_APPLICATION_BASE,
   GENERATOR_CLIENT,
@@ -93,8 +95,8 @@ const command = {
     },
   },
   import: [
-    'base',
-    'base-application',
+    GENERATOR_BASE,
+    GENERATOR_BASE_APPLICATION,
     GENERATOR_BOOTSTRAP,
     GENERATOR_BOOTSTRAP_APPLICATION_BASE,
     GENERATOR_COMMON,

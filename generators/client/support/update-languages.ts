@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { CommonClientServerApplication } from '../../base-application/types.js';
+import type { CommonClientServerApplication } from '../../../lib/types/application/application.js';
 import type BaseGenerator from '../../base-core/index.js';
 
 type UpdateLanguagesApplication = Pick<
@@ -38,7 +38,7 @@ export type UpdateClientLanguagesTaskParam = {
  */
 
 export function updateLanguagesInDayjsConfigurationTask(
-  this: BaseGenerator,
+  this: BaseGenerator<any, any, any, any, any>,
   { application, control = {} }: UpdateClientLanguagesTaskParam,
   { configurationFile, commonjs = false }: { configurationFile: string; commonjs?: boolean },
 ): void {
@@ -47,7 +47,8 @@ export function updateLanguagesInDayjsConfigurationTask(
 
   const uniqueDayjsLocales = [...new Map(languagesDefinition.map(v => [v.dayjsLocale, v])).values()];
   const newContent = uniqueDayjsLocales.reduce(
-    (content, language) => `${content}import 'dayjs/${commonjs ? '' : 'esm/'}locale/${language.dayjsLocale}'\n`,
+    // FIXME types
+    (content, language) => `${content}import 'dayjs/${commonjs ? '' : 'esm/'}locale/${(language as any).dayjsLocale}'\n`,
     '// jhipster-needle-i18n-language-dayjs-imports - JHipster will import languages from dayjs here\n',
   );
 

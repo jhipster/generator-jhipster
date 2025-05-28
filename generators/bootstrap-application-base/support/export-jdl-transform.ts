@@ -55,6 +55,7 @@ export const exportJDLTransform = ({
 
         const jdlObject = getJDLObjectFromSingleApplication(
           { ...contents, [GENERATOR_JHIPSTER]: { ...rest, incrementalChangelog } },
+          // @ts-ignore FIXME types
           entitiesMap,
           undefined,
           createRuntime(jdlDefinition),

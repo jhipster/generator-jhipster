@@ -1,14 +1,51 @@
-import assert from 'assert';
 import { basename, extname, resolve } from 'path';
 import { transform } from '@yeoman/transform';
-import type { Config } from '../../generators/base-core/types.js';
-import BaseGenerator from '../../generators/base-core/index.js';
+import BaseGenerator from '../../generators/base/index.js';
 import { packageJson } from '../../lib/index.js';
 import { promptSamplesFolder } from '../support.mjs';
 import { GENERATOR_APP, GENERATOR_INFO, GENERATOR_JDL } from '../../generators/generator-list.js';
 import { entitiesByType, generateSample } from './support/index.js';
+import assert from 'assert';
+import type { BaseApplicationConfiguration, BaseApplicationFeatures } from '../../generators/base-application/api.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type { BaseApplicationControl } from '../../generators/base-application/types.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { TaskTypes as DefaultTaskTypes } from '../../generators/base-application/tasks.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import { DeprecatedControl } from '../../lib/types/application/control.js';
 
-export default class extends BaseGenerator<Config & { entities: string[] }> {
+export default class<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends ApplicationType = ApplicationType,
+  Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends BaseApplicationControl = DeprecatedControl,
+  TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends BaseApplicationConfiguration = ApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, Configuration, Features> {
   sampleName;
   global;
   projectFolder;
@@ -53,6 +90,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
 
         await this.composeWithJHipster(GENERATOR_JDL, {
           generatorArgs: [this.templatePath('samples', this.sampleName)],
+          // @ts-ignore FIXME types
           generatorOptions: { projectVersion: this.projectVersion, destinationRoot: this.projectFolder },
         });
       },
@@ -87,8 +125,10 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
           });
         } else {
           if (sample.jdlFiles) {
+            // @ts-ignore FIXME types
             await this.composeWithJHipster(GENERATOR_JDL, {
               generatorArgs: sample.jdlFiles,
+              // @ts-ignore FIXME types
               generatorOptions: { jsonOnly: true, destinationRoot: this.projectFolder },
             });
           }
@@ -108,6 +148,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
             { noGlob: true, fromBasePath: this.templatePath('../../../test-integration/samples/') },
           );
         }
+        // @ts-ignore FIXME types
         await this.composeWithJHipster(GENERATOR_APP, { generatorOptions: { destinationRoot: this.projectFolder } });
       },
       async updateVscodeWorkspace() {
@@ -120,7 +161,8 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         }
       },
       async info() {
-        await this.composeWithJHipster(GENERATOR_INFO, { generatorOptions: { destinationRoot: this.projectFolder } });
+        // @ts-ignore FIXME types
+        await this.composeWithJHipster(GENERATOR_INFO, { generatorOptions: { destinationRoot: this.projectFolder as string } });
       },
     });
   }

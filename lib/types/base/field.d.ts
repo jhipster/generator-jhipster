@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { FieldType } from '../../application/field-types.ts';
+import type { BaseApplicationField } from '../../../generators/base-application/types.js';
 import type { Property } from './property.js';
 
 type FieldEnum = {
@@ -25,22 +25,10 @@ type FieldEnum = {
   fieldValuesJavadocs?: Record<string, string>;
 };
 
-type FieldBlob = {
-  fieldTypeBlobContent: 'image' | 'any' | 'text';
-};
-
-export type Field = Partial<FieldEnum> &
-  Partial<FieldBlob> &
+export type Field = BaseApplicationField &
+  Partial<FieldEnum> &
   Property & {
-    fieldName: string;
-    fieldType: FieldType | string;
     options?: Record<string, boolean | string | number>;
-    fieldValidateRules?: string[];
-    fieldValidateRulesPattern?: string | RegExp;
-    fieldValidateRulesMaxlength?: number;
-    fieldValidateRulesMax?: number;
-    fieldValidateRulesMin?: number;
-    fieldValidateRulesMinlength?: number;
     fieldValidationRequired?: boolean;
     fieldValidateRulesMaxbytes?: number;
     fieldValidateRulesMinbytes?: number;

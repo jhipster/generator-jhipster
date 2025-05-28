@@ -229,7 +229,7 @@ describe('generator - base - with blueprints disabled', () => {
 });
 
 describe('generator - base - with blueprint with constructor error', () => {
-  class BlueprintBlueprintedGenerator extends BaseGenerator {
+  class BlueprintBlueprintedGenerator extends BaseGenerator<any, any, any, any, any, any, any, any> {
     constructor(args, opts, features) {
       super(args, opts, features);
       throw new Error('blueprint with error');
@@ -348,7 +348,7 @@ describe('generator - base-blueprint', () => {
      * @class
      * @extends {BaseGenerator}
      */
-    return class extends BaseGenerator {
+    return class extends BaseGenerator<any, any, any, any, any, any, any, any> {
       get initializing() {
         return {
           mockedInitializing() {

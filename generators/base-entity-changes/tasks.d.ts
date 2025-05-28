@@ -1,4 +1,4 @@
-import type { TaskParamWithApplication } from '../../lib/types/application/tasks.js';
+import type { TaskParamWithApplication } from '../base-application/tasks.js';
 import type { BaseChangelog } from './types.js';
 
 /**
@@ -19,6 +19,6 @@ import type { BaseChangelog } from './types.js';
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export type TaskParamWithChangelogsAndApplication = TaskParamWithApplication & {
+export type TaskParamWithChangelogsAndApplication = TaskParamWithApplication<any, any> & {
   entityChanges: BaseChangelog[];
 };

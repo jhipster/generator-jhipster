@@ -19,13 +19,27 @@
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 
 import { asWritingTask } from '../base-application/support/index.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 import cleanupOauth2 from './cleanup-oauth2.js';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default asWritingTask(async function cleanupTask(this, taskParam) {
+export default asWritingTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
+  any
+>(async function cleanupTask(this, taskParam) {
   const { application, control } = taskParam;
   if (application.authenticationTypeOauth2) {
     cleanupOauth2.call(this, taskParam);

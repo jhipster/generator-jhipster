@@ -17,15 +17,13 @@
  * limitations under the License.
  */
 
-export * from './constants.js';
 export * from './debug.js';
 export * from './doc.js';
 export * from './enum.js';
 export * from './entity.js';
+export { prepareEntity as prepareEntity } from './prepare-entity.js';
 export * from './entities.js';
 export * from './field-utils.js';
-export { default as prepareEntity } from './prepare-entity.js';
-export * from './prepare-entity.js';
 export { default as prepareField } from './prepare-field.js';
 export * from './prepare-field.js';
 export * from './prepare-property.js';

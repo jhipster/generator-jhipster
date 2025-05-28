@@ -29,7 +29,19 @@ import BaseGenerator from '../base/index.js';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
 import { GENERATOR_UPGRADE } from '../generator-list.js';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.js';
-import type { GenericTaskGroup, TaskParamWithControl } from '../../lib/types/base/tasks.js';
+import type { GenericTaskGroup, TaskParamWithControl } from '../base/tasks.js';
+import type { BaseApplicationFeatures } from '../base-application/api.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { TaskTypes as DefaultTaskTypes } from '../base-application/tasks.js';
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
 import {
   autoCrlfTransform,
   createESLintTransform,
@@ -47,7 +59,32 @@ const { MULTISTEP_TRANSFORM_QUEUE, PRE_CONFLICTS_QUEUE } = QUEUES;
 const MULTISTEP_TRANSFORM_PRIORITY = BaseGenerator.asPriority(MULTISTEP_TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
 
-export default class BootstrapGenerator extends BaseGenerator {
+export default class BootstrapGenerator<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  Entity extends DeprecatedEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends ApplicationType = ApplicationType,
+  Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends DeprecatedControl = DeprecatedControl,
+  TaskTypes extends DefaultTaskTypes<Field, PK, Relationship, Entity, Application, Sources, Control> = DefaultTaskTypes<
+    Field,
+    PK,
+    Relationship,
+    Entity,
+    Application,
+    Sources,
+    Control
+  >,
+  Configuration extends ApplicationConfiguration = ApplicationConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, Configuration, Features> {
   static MULTISTEP_TRANSFORM = MULTISTEP_TRANSFORM_PRIORITY;
 
   static PRE_CONFLICTS = PRE_CONFLICTS_PRIORITY;
@@ -90,7 +127,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     return this.multistepTransform;
   }
 
-  get preConflicts(): GenericTaskGroup<this, TaskParamWithControl> {
+  get preConflicts(): GenericTaskGroup<this, TaskParamWithControl<Control>> {
     return {
       queueCommitPrettierConfig() {
         this.queueCommitPrettierConfig();
@@ -195,7 +232,7 @@ export default class BootstrapGenerator extends BaseGenerator {
         await createPrettierTransform.call(this, {
           ignoreErrors,
           prettierPackageJson: true,
-          prettierJava: !(this.jhipsterConfig as any).skipServer,
+          prettierJava: !this.jhipsterConfig.skipServer,
           extensions: this.prettierExtensions.join(','),
           prettierOptions: this.prettierOptions,
           skipForks: this.skipForks,

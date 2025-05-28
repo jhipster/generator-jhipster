@@ -18,6 +18,13 @@
  */
 import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 
 export const entityFiles = {
   client: [
@@ -51,7 +58,14 @@ export const entityFiles = {
   ],
 };
 
-export const writeEntityFiles = asWritingEntitiesTask(async function writeEntityFiles({ application, entities }) {
+export const writeEntityFiles = asWritingEntitiesTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
+  any
+>(async function writeEntityFiles({ application, entities }) {
   for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesForClient)(entities).filter(
     entity => !entity.skipClient && !entity.builtInUser,
   )) {
@@ -62,7 +76,14 @@ export const writeEntityFiles = asWritingEntitiesTask(async function writeEntity
   }
 });
 
-export const postWriteEntityFiles = asPostWritingEntitiesTask(async function postWriteEntityFiles({ application, entities, source }) {
+export const postWriteEntityFiles = asPostWritingEntitiesTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
+  any
+>(async function postWriteEntityFiles({ application, entities, source }) {
   source.addEntitiesToClient({
     application,
     entities: (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(
@@ -71,7 +92,14 @@ export const postWriteEntityFiles = asPostWritingEntitiesTask(async function pos
   });
 });
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ application, control, entities }) {
+export const cleanupEntitiesFiles = asWritingEntitiesTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
+  any
+>(function cleanupEntitiesFiles({ application, control, entities }) {
   for (const entity of (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(
     entity => !entity.builtInUser && !entity.embedded,
   )) {

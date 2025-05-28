@@ -17,12 +17,26 @@
  * limitations under the License.
  */
 import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import type {
+  Entity as DeprecatedEntity,
+  Field as DeprecatedField,
+  Relationship as DeprecatedRelationship,
+} from '../../lib/types/application/index.js';
+import type { PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default asWritingTask(function cleanupTask({ application, control }) {
+export default asWritingTask<
+  DeprecatedField,
+  DeprecatedPrimarykey<DeprecatedField>,
+  DeprecatedRelationship<any>,
+  DeprecatedEntity<DeprecatedField, DeprecatedPrimarykey<DeprecatedField>, DeprecatedRelationship<any>>,
+  ApplicationType,
+  any
+>(function cleanupTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('7.4.2')) {
     this.removeFile(`${application.javaPackageTestDir}cucumber.properties`);
     this.removeFile(`${application.srcTestJava}features/gitkeep`);

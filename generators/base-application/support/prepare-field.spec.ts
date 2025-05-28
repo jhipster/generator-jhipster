@@ -23,7 +23,7 @@ import { formatDateForChangelog } from '../../base/support/index.js';
 import BaseGenerator from '../../base/index.js';
 import { getConfigWithDefaults } from '../../../lib/jhipster/index.js';
 import prepareFieldForTemplates, { getEnumValuesWithCustomValues } from './prepare-field.js';
-import prepareEntityForTemplates, { loadRequiredConfigIntoEntity } from './prepare-entity.js';
+import { loadRequiredConfigIntoEntity, prepareEntity as prepareEntityForTemplates } from './prepare-entity.js';
 
 const defaultConfig = getConfigWithDefaults();
 
@@ -33,7 +33,7 @@ describe('generator - base-application - support - prepareField', () => {
 
   const defaultEntity = prepareEntityForTemplates(
     loadRequiredConfigIntoEntity({ changelogDate: formatDateForChangelog(new Date()), name: 'Entity' } as any, defaultConfig as any),
-    defaultGenerator,
+    defaultGenerator as any,
     defaultConfig as any,
   );
 

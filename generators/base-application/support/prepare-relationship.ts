@@ -23,9 +23,8 @@ import pluralize from 'pluralize';
 import { checkAndReturnRelationshipOnValue, databaseTypes, entityOptions, validations } from '../../../lib/jhipster/index.js';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/object.js';
-import type CoreGenerator from '../../base-core/generator.js';
-import type { Relationship } from '../../../lib/types/application/relationship.js';
-import type { Entity } from '../../../lib/types/application/entity.js';
+import type { BaseApplicationEntity, BaseApplicationField, BaseApplicationPrimaryKey, BaseApplicationRelationship } from '../types.js';
+import type BaseApplicationGenerator from '../generator.js';
 import { prepareProperty } from './prepare-property.js';
 import { stringifyApplicationData } from './debug.js';
 
@@ -37,15 +36,23 @@ const {
 
 const { MAPSTRUCT } = MapperTypes;
 
-function _defineOnUpdateAndOnDelete(relationship: Relationship, generator: CoreGenerator) {
+function _defineOnUpdateAndOnDelete<R extends BaseApplicationRelationship<any>>(
+  relationship: R,
+  generator: BaseApplicationGenerator<any, any, any, R, any, any, any, any, any, any, any>,
+) {
   relationship.onDelete = checkAndReturnRelationshipOnValue(relationship.options?.onDelete, generator);
   relationship.onUpdate = checkAndReturnRelationshipOnValue(relationship.options?.onUpdate, generator);
 }
 
-export default function prepareRelationship(
-  entityWithConfig: Entity,
-  relationship: Relationship<Omit<Entity, 'relationships'>>,
-  generator: CoreGenerator,
+export default function prepareRelationship<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<F>,
+  E extends BaseApplicationEntity<F, PK, R>,
+>(
+  entityWithConfig: E,
+  relationship: R<Omit<E, 'relationships'>>,
+  generator: BaseApplicationGenerator,
   ignoreMissingRequiredRelationship = false,
 ) {
   const entityName = entityWithConfig.name;
@@ -253,7 +260,12 @@ export default function prepareRelationship(
   return relationship;
 }
 
-function relationshipToReference(entity, relationship, pathPrefix = []) {
+function relationshipToReference<
+  F extends BaseApplicationField,
+  PK extends BaseApplicationPrimaryKey<F>,
+  R extends BaseApplicationRelationship<any>,
+  E extends BaseApplicationEntity<F, PK, R>,
+>(entity: E, relationship: R, pathPrefix = []) {
   const collection = relationship.collection;
   const name = collection ? relationship.relationshipNamePlural : relationship.relationshipName;
   const reference = {

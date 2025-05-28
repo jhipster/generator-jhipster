@@ -19,7 +19,10 @@
 import { isFileStateModified } from 'mem-fs-editor/state';
 import chalk from 'chalk';
 
-import BaseApplicationGenerator from '../base-application/index.js';
+import BaseApplicationGenerator, {
+  type Field as DeprecatedField,
+  type Relationship as DeprecatedRelationship,
+} from '../base-application/index.js';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.js';
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.js';
 import {
@@ -29,6 +32,9 @@ import {
 } from '../client/support/index.js';
 import { createNeedleCallback, upperFirstCamelCase } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type { Entity as DeprecatedEntity, PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType as DeprecatedApplication } from '../../lib/types/application/application.js';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files-react.js';
@@ -39,7 +45,14 @@ const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 const { REACT } = clientFrameworkTypes;
 
-export default class ReactGenerator extends BaseApplicationGenerator {
+export default class ReactGenerator<
+  O extends JHipsterGeneratorOptions = JHipsterGeneratorOptions,
+  F extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<F> = DeprecatedPrimarykey<F>,
+  R extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  E extends DeprecatedEntity<F, PK, R> = DeprecatedEntity<F, PK, R>,
+  A extends DeprecatedApplication = DeprecatedApplication,
+> extends BaseApplicationGenerator<O, F, PK, R, E, A, any> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -73,6 +86,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
         );
       },
       applicationDefauts({ applicationDefaults }) {
+        // @ts-ignore FIXME types
         applicationDefaults({
           __override__: true,
           typescriptEslint: true,
@@ -89,12 +103,12 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     return this.asPreparingTaskGroup({
       applicationDefauts({ application, applicationDefaults }) {
         application.addPrettierExtensions?.(['html', 'tsx', 'css', 'scss']);
-
         applicationDefaults({
           __override__: true,
+          // @ts-ignore FIXME types
           eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
-        });
+        } as any);
       },
       async javaNodeBuildPaths({ application }) {
         const { clientBundlerWebpack, javaNodeBuildPaths } = application;
@@ -213,6 +227,7 @@ ${comment}
               filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedReactFile(file),
               refresh: false,
             },
+            // @ts-ignore FIXME types
             translateReactFilesTransform(application.getWebappTranslation!),
           );
         }

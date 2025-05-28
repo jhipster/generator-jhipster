@@ -21,17 +21,22 @@ import { readdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 
-import BaseGenerator, { type Config as BaseConfig, type Features as BaseFeatures } from '../base/index.js';
+import BaseGenerator from '../base/index.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import { normalizePathEnd } from '../base/support/path.js';
-import type { TaskTypes } from '../../lib/types/base/tasks.js';
-import type { Entity } from '../../lib/types/application/entity.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { TaskTypes } from '../base/tasks.js';
+import type { Entity as DeprecatedEntity, PrimaryKey as DeprecatedPrimarykey } from '../../lib/types/application/entity.js';
+import type { ApplicationType, DeprecatedBaseApplicationSource } from '../../lib/types/application/application.js';
+import type { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
+import type { Field as DeprecatedField, Relationship as DeprecatedRelationship } from '../../lib/types/application/index.js';
+import type { BaseApplicationFeatures, BaseApplicationOptions } from '../base-application/api.js';
+import type { BaseApplicationEntity } from '../base-application/types.js';
+import type { WorkspaceConfiguration } from '../../lib/types/application/yo-rc.js';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-application/support/constants.js';
-import type { JHipsterGeneratorOptions } from '../base/api.js';
+import type { DeprecatedControl } from '../../lib/types/application/control.js';
+import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/constants.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
-import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/index.js';
 
 const {
   PROMPTING_WORKSPACES,
@@ -46,35 +51,51 @@ const {
   END,
 } = PRIORITY_NAMES;
 
-type WorkspacesTypes<E extends Entity = Entity, A extends ApplicationType<E> = ApplicationType<E>> = TaskTypes & {
-  LoadingTaskParam: TaskTypes['LoadingTaskParam'] & { applications: A[] };
-  PreparingTaskParam: TaskTypes['PreparingTaskParam'] & { applications: A[] };
-  PostPreparingTaskParam: TaskTypes['PostPreparingTaskParam'] & { applications: A[] };
-  DefaultTaskParam: TaskTypes['DefaultTaskParam'] & { applications: A[] };
-  WritingTaskParam: TaskTypes['WritingTaskParam'] & { applications: A[] };
-  PostWritingTaskParam: TaskTypes['PostWritingTaskParam'] & { applications: A[] };
-  InstallTaskParam: TaskTypes['InstallTaskParam'] & { applications: A[] };
-  PostInstallTaskParam: TaskTypes['PostInstallTaskParam'] & { applications: A[] };
-  EndTaskParam: TaskTypes['EndTaskParam'] & { applications: A[] };
+type WorkspacesTypes<
+  F extends DeprecatedField = DeprecatedField,
+  R extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  C extends DeprecatedControl = DeprecatedControl,
+  A extends ApplicationType = ApplicationType,
+  Sources extends DeprecatedBaseApplicationSource<F, R, A> = DeprecatedBaseApplicationSource<F, R, A>,
+> = TaskTypes<C, Sources> & {
+  LoadingTaskParam: TaskTypes<C, Sources>['LoadingTaskParam'] & { applications: A[] };
+  PreparingTaskParam: TaskTypes<C, Sources>['PreparingTaskParam'] & { applications: A[] };
+  PostPreparingTaskParam: TaskTypes<C, Sources>['PostPreparingTaskParam'] & { applications: A[] };
+  DefaultTaskParam: TaskTypes<C, Sources>['DefaultTaskParam'] & { applications: A[] };
+  WritingTaskParam: TaskTypes<C, Sources>['WritingTaskParam'] & { applications: A[] };
+  PostWritingTaskParam: TaskTypes<C, Sources>['PostWritingTaskParam'] & { applications: A[] };
+  InstallTaskParam: TaskTypes<C, Sources>['InstallTaskParam'] & { applications: A[] };
+  PostInstallTaskParam: TaskTypes<C, Sources>['PostInstallTaskParam'] & { applications: A[] };
+  EndTaskParam: TaskTypes<C, Sources>['EndTaskParam'] & { applications: A[] };
 };
 
 /**
  * This is the base class for a generator that generates entities.
  */
-export default abstract class BaseWorkspacesGenerator<Config = unknown> extends BaseGenerator<
-  Config &
-    BaseConfig & {
-      appsFolders: string[];
-      directoryPath: string;
-      deploymentType: string;
-      jwtSecretKey: string;
-      adminPassword: string;
-      serviceDiscoveryType: string;
-    },
-  JHipsterGeneratorOptions,
-  BaseFeatures,
-  WorkspacesTypes
-> {
+export default abstract class BaseWorkspacesGenerator<
+  // FIXME For the ones that are trying to fix the types, remove the equals and look at the consequences
+  Options extends BaseApplicationOptions = JHipsterGeneratorOptions,
+  Field extends DeprecatedField = DeprecatedField,
+  PK extends DeprecatedPrimarykey<Field> = DeprecatedPrimarykey<Field>,
+  Relationship extends DeprecatedRelationship<any> = DeprecatedRelationship<any>,
+  Entity extends BaseApplicationEntity<Field, PK, Relationship> = DeprecatedEntity<Field, PK, Relationship>,
+  Application extends ApplicationType = ApplicationType,
+  Sources extends DeprecatedBaseApplicationSource<Field, Relationship, Application> = DeprecatedBaseApplicationSource<
+    Field,
+    Relationship,
+    Application
+  >,
+  Control extends DeprecatedControl = DeprecatedControl,
+  TaskTypes extends WorkspacesTypes<Field, Relationship, Control, Application, Sources> = WorkspacesTypes<
+    Field,
+    Relationship,
+    Control,
+    Application,
+    Sources
+  >,
+  Configuration extends WorkspaceConfiguration = WorkspaceConfiguration,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+> extends BaseGenerator<Options, Entity, Application, Sources, Control, TaskTypes, Configuration, Features> {
   static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 
   static CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);
@@ -86,7 +107,7 @@ export default abstract class BaseWorkspacesGenerator<Config = unknown> extends 
   appsFolders?: string[];
   directoryPath!: string;
 
-  constructor(args, options, features) {
+  constructor(args, options: Options, features: Features) {
     super(args, options, features);
 
     if (this.options.help) {
