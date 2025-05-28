@@ -18,7 +18,6 @@
  */
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import { asPromptingTask } from '../base-application/support/task-type-inference.js';
-import { httpsGet } from '../base/support/index.js';
 
 type Choice = { value: string; name: string };
 
@@ -120,27 +119,10 @@ async function _retrieveBootswatchThemes({ clientFramework, useApi }): Promise<C
     ];
   }
 
-  return new Promise((resolve, reject) => {
-    httpsGet(
-      `https://bootswatch.com/api/${clientFramework === 'vue' ? '4' : '5'}.json`,
-
-      body => {
-        try {
-          const { themes } = JSON.parse(body);
-
-          const bootswatchChoices = themes.map(theme => ({
-            value: theme.name.toLowerCase(),
-            name: theme.name,
-          }));
-
-          resolve(bootswatchChoices);
-        } catch {
-          reject(errorMessage);
-        }
-      },
-      () => {
-        reject(errorMessage);
-      },
-    );
-  });
+  const response = await fetch(`https://bootswatch.com/api/${clientFramework === 'vue' ? '4' : '5'}.json`);
+  const { themes } = (await response.json()) as { themes: { name: string }[] };
+  return themes.map(theme => ({
+    value: theme.name.toLowerCase(),
+    name: theme.name,
+  }));
 }
