@@ -31,6 +31,7 @@ import type {
   Config as BaseEntityChangesConfig,
   Features as BaseEntityChangesFeatures,
   Options as BaseEntityChangesOptions,
+  Source as BaseEntityChangesSource,
 } from './types.js';
 import type { TaskParamWithChangelogsAndApplication } from './tasks.js';
 
@@ -51,7 +52,7 @@ const baseChangelog: () => Omit<BaseChangelog, 'changelogDate' | 'entityName' | 
   changelogData: {},
 });
 
-type BaseEntityChangesTaskTypes<E, A> = ApplicationTaskTypes<E, A> & {
+type BaseEntityChangesTaskTypes<E, A, S extends BaseEntityChangesSource> = ApplicationTaskTypes<E, A, S> & {
   DefaultTaskParam: { entityChanges?: BaseChangelog[] };
   WritingEntitiesTaskParam: { entityChanges?: BaseChangelog[] };
   PostWritingEntitiesTaskParam: { entityChanges?: BaseChangelog[] };
@@ -65,9 +66,10 @@ export default abstract class BaseEntityChangesGenerator<
   Application extends ApplicationType<Entity> = ApplicationType<Entity>,
   ConfigType extends BaseEntityChangesConfig = BaseEntityChangesConfig,
   Options extends BaseEntityChangesOptions = BaseEntityChangesOptions,
+  Source extends BaseEntityChangesSource = BaseEntityChangesSource,
   Features extends BaseEntityChangesFeatures = BaseEntityChangesFeatures,
-  TaskTypes extends BaseEntityChangesTaskTypes<Entity, Application> = BaseEntityChangesTaskTypes<Entity, Application>,
-> extends GeneratorBaseEntityChanges<Entity, Application, ConfigType, Options, Features, TaskTypes> {
+  TaskTypes extends BaseEntityChangesTaskTypes<Entity, Application, Source> = BaseEntityChangesTaskTypes<Entity, Application, Source>,
+> extends GeneratorBaseEntityChanges<Entity, Application, ConfigType, Options, Source, Features, TaskTypes> {
   recreateInitialChangelog!: boolean;
   private entityChanges!: any[];
 

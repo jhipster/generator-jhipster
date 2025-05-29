@@ -25,14 +25,18 @@ import BaseGenerator from '../base/index.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import { normalizePathEnd } from '../../lib/utils/index.js';
-import type { TaskTypes } from '../base/tasks.js';
-import type { Entity } from '../../lib/types/application/entity.js';
+import type { TaskParamWithSource, TaskTypes } from '../base/tasks.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/index.js';
-import type { Config as BaseWorkspacesConfig, Features as BaseWorkspacesFeatures, Options as BaseWorkspacesOptions } from './types.js';
+import type {
+  Config as BaseWorkspacesConfig,
+  Features as BaseWorkspacesFeatures,
+  Options as BaseWorkspacesOptions,
+  Source as BaseWorkspacesSource,
+} from './types.js';
 
 const {
   PROMPTING_WORKSPACES,
@@ -47,13 +51,13 @@ const {
   END,
 } = PRIORITY_NAMES;
 
-type WorkspacesTypes<E extends Entity = Entity, A extends ApplicationType<E> = ApplicationType<E>> = TaskTypes & {
+type WorkspacesTypes<A extends ApplicationType = ApplicationType, S extends BaseWorkspacesSource = BaseWorkspacesSource> = TaskTypes<S> & {
   LoadingTaskParam: TaskTypes['LoadingTaskParam'] & { applications: A[] };
-  PreparingTaskParam: TaskTypes['PreparingTaskParam'] & { applications: A[] };
-  PostPreparingTaskParam: TaskTypes['PostPreparingTaskParam'] & { applications: A[] };
+  PreparingTaskParam: TaskParamWithSource<S> & { applications: A[] };
+  PostPreparingTaskParam: TaskParamWithSource<S> & { applications: A[] };
   DefaultTaskParam: TaskTypes['DefaultTaskParam'] & { applications: A[] };
   WritingTaskParam: TaskTypes['WritingTaskParam'] & { applications: A[] };
-  PostWritingTaskParam: TaskTypes['PostWritingTaskParam'] & { applications: A[] };
+  PostWritingTaskParam: TaskParamWithSource<S> & { applications: A[] };
   InstallTaskParam: TaskTypes['InstallTaskParam'] & { applications: A[] };
   PostInstallTaskParam: TaskTypes['PostInstallTaskParam'] & { applications: A[] };
   EndTaskParam: TaskTypes['EndTaskParam'] & { applications: A[] };
@@ -65,8 +69,9 @@ type WorkspacesTypes<E extends Entity = Entity, A extends ApplicationType<E> = A
 export default abstract class BaseWorkspacesGenerator<
   Config extends BaseWorkspacesConfig = BaseWorkspacesConfig,
   Options extends BaseWorkspacesOptions = BaseWorkspacesOptions,
+  Source extends BaseWorkspacesSource = BaseWorkspacesSource,
   Features extends BaseWorkspacesFeatures = BaseWorkspacesFeatures,
-> extends BaseGenerator<Config, Options, Features, WorkspacesTypes> {
+> extends BaseGenerator<Config, Options, Source, Features, WorkspacesTypes<ApplicationType, Source>> {
   static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 
   static CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);

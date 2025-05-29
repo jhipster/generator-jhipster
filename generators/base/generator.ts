@@ -43,7 +43,14 @@ import {
   CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,
   LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
 } from './support/constants.js';
-import type { Config as BaseConfig, Features as BaseFeatures, Options as BaseOptions, CleanupArgumentType, Control } from './types.js';
+import type {
+  Config as BaseConfig,
+  Features as BaseFeatures,
+  Options as BaseOptions,
+  Source as BaseSource,
+  CleanupArgumentType,
+  Control,
+} from './types.js';
 
 const { WRITING } = PRIORITY_NAMES;
 
@@ -54,8 +61,9 @@ const { WRITING } = PRIORITY_NAMES;
 export default class BaseGenerator<
   ConfigType extends BaseConfig = BaseConfig,
   Options extends BaseOptions = BaseOptions,
+  Source extends BaseSource = BaseSource,
   Features extends BaseFeatures = BaseFeatures,
-  TaskTypes extends BaseTaskTypes = BaseTaskTypes,
+  TaskTypes extends BaseTaskTypes<Source> = BaseTaskTypes<Source>,
 > extends CoreGenerator<ConfigType, Options, Features> {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
@@ -848,6 +856,7 @@ export class CommandBaseGenerator<
 > extends BaseGenerator<
   BaseConfig & ExportStoragePropertiesFromCommand<Command>,
   BaseOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions,
+  BaseSource,
   BaseFeatures & AdditionalFeatures,
   BaseTaskTypes
 > {}

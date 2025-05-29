@@ -32,6 +32,7 @@ import type {
   Config as SimpleApplicationConfig,
   Features as SimpleApplicationFeatures,
   Options as SimpleApplicationOptions,
+  Source as SimpleApplicationSource,
 } from './types.js';
 import { BOOTSTRAP_APPLICATION, CUSTOM_PRIORITIES } from './priorities.js';
 
@@ -65,9 +66,10 @@ export default class BaseSimpleApplicationGenerator<
   Application extends SimpleApplication = SimpleApplication,
   ConfigType extends SimpleApplicationConfig = SimpleApplicationConfig,
   Options extends SimpleApplicationOptions = SimpleApplicationOptions,
+  Source extends SimpleApplicationSource = SimpleApplicationSource,
   Features extends SimpleApplicationFeatures = SimpleApplicationFeatures,
-  TaskTypes extends SimpleTaskTypes<Application> = SimpleTaskTypes<Application>,
-> extends BaseGenerator<ConfigType, Options, Features, TaskTypes> {
+  TaskTypes extends SimpleTaskTypes<Application, Source> = SimpleTaskTypes<Application, Source>,
+> extends BaseGenerator<ConfigType, Options, Source, Features, TaskTypes> {
   static BOOTSTRAP_APPLICATION = BaseSimpleApplicationGenerator.asPriority(BOOTSTRAP_APPLICATION);
 
   constructor(args: string | string[], options: Options, features: Features) {

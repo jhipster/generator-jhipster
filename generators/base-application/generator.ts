@@ -41,7 +41,7 @@ import type {
 import type { Entity as ApplicationEntity } from '../../lib/types/application/entity.js';
 import type { GenericTaskGroup } from '../base-core/types.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { ApplicationType, BaseApplicationSource as ClientServerSource } from '../../lib/types/application/application.js';
 import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
@@ -51,6 +51,7 @@ import type {
   Config as BaseApplicationConfig,
   Features as BaseApplicationFeatures,
   Options as BaseApplicationOptions,
+  Source as BaseApplicationSource,
   CommonClientServerApplication,
 } from './types.js';
 
@@ -133,9 +134,10 @@ export default class BaseApplicationGenerator<
   Application extends CommonClientServerApplication<Entity> = ApplicationType<Entity>,
   ConfigType extends BaseApplicationConfig = BaseApplicationConfig & ApplicationConfiguration,
   Options extends BaseApplicationOptions = BaseApplicationOptions & JHipsterGeneratorOptions,
+  Source extends BaseApplicationSource = ClientServerSource,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
-  TaskTypes extends DefaultTaskTypes<Entity, Application> = DefaultTaskTypes<Entity, Application>,
-> extends BaseGenerator<Application, ConfigType, Options, Features, TaskTypes> {
+  TaskTypes extends DefaultTaskTypes<Entity, Application, Source> = DefaultTaskTypes<Entity, Application, Source>,
+> extends BaseGenerator<Application, ConfigType, Options, Source, Features, TaskTypes> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
   static LOADING_ENTITIES = asPriority(LOADING_ENTITIES);

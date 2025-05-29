@@ -18,6 +18,8 @@
  */
 import type { Config as BaseConfig, Features as BaseFeatures, Options as BaseOptions } from '../base/index.js';
 
+export type { Source } from '../base/types.js';
+
 export type Config = BaseConfig & {
   appsFolders: string[];
   directoryPath: string;

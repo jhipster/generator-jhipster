@@ -1,13 +1,18 @@
-import type { Entity } from '../base-application/index.js';
+import type { Source as BaseApplicationSource, Entity } from '../base-entity-changes/index.js';
+import type { GradleSourceType } from '../gradle/types.js';
+import type { MavenSourceType } from '../maven/types.js';
+import type { SpringBootSource } from '../server/types.js';
 
 export type LiquibaseChangelog = { changelogName: string };
 export type LiquibaseChangelogSection = LiquibaseChangelog & { section?: 'base' | 'incremental' | 'constraints' };
 
-export type LiquibaseSourceType = {
+export type LiquibaseSourceType = BaseApplicationSource & {
   addLiquibaseChangelog?(changelog: LiquibaseChangelogSection): void;
   addLiquibaseIncrementalChangelog?(changelog: LiquibaseChangelog): void;
   addLiquibaseConstraintsChangelog?(changelog: LiquibaseChangelog): void;
 };
+
+export type Source = LiquibaseSourceType & SpringBootSource & GradleSourceType & MavenSourceType;
 
 export type LiquibaseEntity = Entity & {
   anyRelationshipIsOwnerSide: boolean;
