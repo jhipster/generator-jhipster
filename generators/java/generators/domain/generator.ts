@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../../../base-application/index.js';
-import { mutateData } from '../../../base/support/index.js';
+import { mutateData } from '../../../../lib/utils/index.js';
 import { javaBeanCase, javaTestPackageTemplatesBlock } from '../../../server/support/index.js';
 import { getEnumInfo } from '../../../base-application/support/index.js';
 import { isReservedJavaKeyword } from '../../support/reserved-keywords.js';

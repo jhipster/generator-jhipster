@@ -24,7 +24,7 @@ import chalk from 'chalk';
 import BaseGenerator from '../base/index.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
-import { normalizePathEnd } from '../base/support/path.js';
+import { normalizePathEnd } from '../../lib/utils/index.js';
 import type { TaskTypes } from '../base/tasks.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';

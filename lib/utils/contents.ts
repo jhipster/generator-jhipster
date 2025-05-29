@@ -39,13 +39,3 @@ export const hasCrlr = (str?: string): boolean => Boolean(str?.includes(CRLF));
 export function normalizeLineEndings(str: string, lineEnding: typeof LF | typeof CRLF): string {
   return str.replace(/\r\n|\r|\n/g, lineEnding);
 }
-
-/**
- * @private
- * @deprecated
- * Strip margin indicated by pipe `|` from a string literal
- *
- *  @param {string} content - the string to process
- */
-
-export const stripMargin = content => content.replace(/^[ ]*\|/gm, '');

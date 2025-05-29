@@ -21,7 +21,7 @@ import path from 'path';
 import { databaseTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 
 import { isReservedTableName } from '../../../lib/jhipster/reserved-keywords.js';
-import { mutateData, normalizePathEnd } from '../../base/support/index.js';
+import { mutateData, normalizePathEnd } from '../../../lib/utils/index.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 import type { ApplicationType } from '../../../lib/types/application/application.js';
 import { hibernateSnakeCase } from './string.js';

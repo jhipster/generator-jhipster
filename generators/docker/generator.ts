@@ -20,7 +20,8 @@
 import { intersection } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { createDockerComposeFile, createDockerExtendedServices } from '../docker/support/index.js';
-import { createFaker, stringHashCode } from '../base/support/index.js';
+import { createFaker } from '../base/support/index.js';
+import { stringHashCode } from '../../lib/utils/index.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
 import { dockerFiles } from './files.js';
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.js';

@@ -22,7 +22,7 @@ import pluralize from 'pluralize';
 
 import { checkAndReturnRelationshipOnValue, databaseTypes, entityOptions, validations } from '../../../lib/jhipster/index.js';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
-import { mutateData } from '../../../lib/utils/object.js';
+import { mutateData } from '../../../lib/utils/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { Relationship } from '../../../lib/types/application/relationship.js';
 import type { Entity } from '../../../lib/types/application/entity.js';

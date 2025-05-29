@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
-import { createBase64Secret, createSecret } from '../base/support/secret.js';
+import { createBase64Secret, createSecret } from '../../lib/utils/index.js';
 import { applicationTypes, authenticationTypes } from '../../lib/jhipster/index.js';
 
 const { OAUTH2, SESSION, JWT } = authenticationTypes;

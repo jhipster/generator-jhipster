@@ -22,7 +22,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import chalk from 'chalk';
 import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../../lib/jhipster/index.js';
-import { convertSecretToBase64 } from '../../base/support/index.js';
+import { convertSecretToBase64 } from '../../../lib/utils/index.js';
 import { loadConfigs } from './docker-base.js';
 
 const { MICROSERVICE, MONOLITH, GATEWAY } = applicationTypes;

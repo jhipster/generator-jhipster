@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { snakeCase, upperFirst } from 'lodash-es';
-import { mutateData } from '../../../lib/utils/object.js';
+import { mutateData } from '../../../lib/utils/index.js';
 import type { Field } from '../../../lib/types/application/field.js';
 import type { Relationship } from '../../../lib/types/application/relationship.js';
 

@@ -20,7 +20,7 @@ import type { ComposeOptions } from 'yeoman-generator';
 
 import type GeneratorsByNamespace from '../types.js';
 import BaseGenerator from '../base/index.js';
-import { mutateData } from '../../lib/utils/object.js';
+import { mutateData } from '../../lib/utils/index.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
 import type { SimpleTaskTypes } from '../../lib/types/application/tasks.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';

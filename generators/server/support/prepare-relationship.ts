@@ -1,5 +1,5 @@
 import type { Relationship } from '../../../lib/types/application/relationship.js';
-import { mutateData } from '../../../lib/utils/object.js';
+import { mutateData } from '../../../lib/utils/index.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 import type { Entity } from '../../../lib/types/application/index.js';
 

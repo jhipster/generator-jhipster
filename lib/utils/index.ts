@@ -16,28 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import https from 'https';
-
-/**
- * @private
- * Function to issue a https get request, and process the result
- *
- *  @param {string} url - the url to fetch
- *  @param {function} onSuccess - function, which gets called when the request succeeds, with the body of the response
- *  @param {function} onFail - callback when the get failed.
- */
-const httpsGet = (url, onSuccess, onFail) => {
-  https
-    .get(url, res => {
-      let body = '';
-      res.on('data', chunk => {
-        body += chunk;
-      });
-      res.on('end', () => {
-        onSuccess(body);
-      });
-    })
-    .on('error', onFail);
-};
-
-export default httpsGet;
+export * from './basename.js';
+export * from './contents.js';
+export * from './derived-property.js';
+export * from './logger.js';
+export * from './namespace.js';
+export * from './object.js';
+export * from './path.js';
+export * from './secret.js';
+export * from './string.js';

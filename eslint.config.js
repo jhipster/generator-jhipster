@@ -1,5 +1,6 @@
 import globals from 'globals';
 import js from '@eslint/js';
+import { defineConfig } from 'eslint/config';
 import ts from 'typescript-eslint';
 import prettier from 'eslint-plugin-prettier/recommended';
 import chai from 'eslint-plugin-chai-friendly';
@@ -7,7 +8,7 @@ import imports from 'eslint-plugin-import-x';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import jhipster from './lib/eslint/index.js';
 
-export default ts.config(
+export default defineConfig(
   {
     languageOptions: {
       ecmaVersion: 2022,

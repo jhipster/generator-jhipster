@@ -32,7 +32,7 @@ import {
   validations,
 } from '../../lib/jhipster/index.js';
 import { stringifyApplicationData } from '../base-application/support/index.js';
-import { mutateData } from '../base/support/index.js';
+import { mutateData } from '../../lib/utils/index.js';
 import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.js';
 import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
 import { hibernateSnakeCase } from './support/index.js';

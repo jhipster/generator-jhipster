@@ -80,6 +80,10 @@
     "./testing": {
       "types": "./dist/lib/testing/index.d.ts",
       "default": "./dist/lib/testing/index.js"
+    },
+    "./utils": {
+      "types": "./dist/lib/utils/index.d.ts",
+      "default": "./dist/lib/utils/index.js"
     }
   },
   "main": "./dist/generators/index.js",

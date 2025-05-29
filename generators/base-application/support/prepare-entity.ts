@@ -21,14 +21,8 @@ import pluralize from 'pluralize';
 
 import type BaseGenerator from '../../base-core/index.js';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.js';
-import {
-  createFaker,
-  getMicroserviceAppName,
-  mutateData,
-  parseChangelog,
-  stringHashCode,
-  upperFirstCamelCase,
-} from '../../base/support/index.js';
+import { createFaker, parseChangelog } from '../../base/support/index.js';
+import { getMicroserviceAppName, mutateData, stringHashCode, upperFirstCamelCase } from '../../../lib/utils/index.js';
 import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/support/index.js';
 import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';

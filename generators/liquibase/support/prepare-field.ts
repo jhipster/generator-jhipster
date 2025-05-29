@@ -18,7 +18,7 @@
  */
 
 import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.js';
-import { mutateData } from '../../base/support/index.js';
+import { mutateData } from '../../../lib/utils/index.js';
 import type { Field } from '../../../lib/types/application/field.js';
 import type { ApplicationType } from '../../../lib/types/application/application.js';
 

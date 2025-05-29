@@ -20,7 +20,7 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 
-import { convertSecretToBase64, createBase64Secret, removeFieldsWithNullishValues } from '../../base/support/index.js';
+import { convertSecretToBase64, createBase64Secret, removeFieldsWithNullishValues } from '../../../lib/utils/index.js';
 import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../../lib/jhipster/index.js';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 import { loadDeploymentConfig } from '../../base-workspaces/internal/index.js';

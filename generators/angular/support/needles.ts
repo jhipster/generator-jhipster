@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { createNeedleCallback } from '../../base/support/needles.js';
-import { upperFirstCamelCase } from '../../../lib/utils/string.js';
+import { upperFirstCamelCase } from '../../../lib/utils/index.js';
 import { joinCallbacks } from '../../base/support/write-files.js';
 import type { PostWritingEntitiesTaskParam } from '../../../lib/types/application/tasks.js';
 

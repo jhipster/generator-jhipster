@@ -19,7 +19,7 @@
 
 import chalk from 'chalk';
 
-import { CLI_LOGGER, createJHipsterLogger } from '../lib/utils/logger.js';
+import { CLI_LOGGER, createJHipsterLogger } from '../lib/utils/index.js';
 
 export const CLI_NAME = 'jhipster';
 export const GENERATOR_NAME = 'generator-jhipster';
