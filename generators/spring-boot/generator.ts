@@ -45,7 +45,7 @@ import {
   javaBeanCase,
 } from '../server/support/index.js';
 import { generateKeyStore } from '../java/support/index.js';
-import { createNeedleCallback, isWin32 } from '../base/support/index.js';
+import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
 import { mutateData } from '../../lib/utils/index.js';
 import {
   APPLICATION_TYPE_MICROSERVICE,

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createNeedleCallback } from '../../base/support/index.js';
+import { createNeedleCallback } from '../../base-core/support/index.ts';
 import type {
   GradleComment,
   GradleDependency,

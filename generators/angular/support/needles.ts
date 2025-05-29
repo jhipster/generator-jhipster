@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createNeedleCallback } from '../../base/support/needles.js';
+import { createNeedleCallback } from '../../base-core/support/needles.ts';
 import { upperFirstCamelCase } from '../../../lib/utils/index.js';
-import { joinCallbacks } from '../../base/support/write-files.js';
+import { joinCallbacks } from '../../base-core/support/write-files.ts';
 import type { PostWritingEntitiesTaskParam } from '../../../lib/types/application/tasks.js';
 
 export function addRoute({

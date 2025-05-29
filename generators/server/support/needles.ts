@@ -18,7 +18,7 @@
  */
 import assert from 'assert';
 import type CoreGenerator from '../../base-core/index.js';
-import { createBaseNeedle } from '../../base/support/needles.js';
+import { createBaseNeedle } from '../../base-core/support/needles.ts';
 
 export type ApplicationPropertiesNeedles = {
   property?: string;

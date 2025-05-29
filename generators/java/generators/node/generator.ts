@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import type { ExecaError } from 'execa';
 import BaseApplicationGenerator from '../../../base-application/index.js';
-import { isWin32 } from '../../../base/support/os.js';
+import { isWin32 } from '../../../base-core/support/os.ts';
 
 export default class NodeGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
