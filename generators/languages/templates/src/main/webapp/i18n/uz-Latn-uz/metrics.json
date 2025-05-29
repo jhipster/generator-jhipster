@@ -70,12 +70,21 @@
             }
         },
         "cache": {
-            "title": "Statistika",
+            "title": "Kesh statistika",
             "cachename": "Kesh nomi",
             "hits": "Mos keldi",
             "misses": "Mos kelmadi",
-            "evictions": "Tozalanganlar soni"
-        },
+            "gets": "Kesh olishlar",
+            "puts": "Kesh qo‘shishlar",
+            "removals": "Kesh o‘chirishlar",
+            "evictions": "Tozalanganlar soni",
+            "hitPercent": "Mos keldi %",
+            "missPercent": "Mos kelmadi %",
+            "averageGetTime": "O‘rtacha olish vaqti (µs)",
+            "averagePutTime": "O‘rtacha qo‘shish vaqti (µs)",
+            "averageRemoveTime": "O‘rtacha o‘chirish vaqti (µs)"
+        }
+    ,
         "datasource": {
             "usage": "Foydalanish",
             "title": "Malumotlar bazasi (1/1000 soniyada sodir bo'lgan voqealar)",
