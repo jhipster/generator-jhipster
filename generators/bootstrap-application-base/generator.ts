@@ -33,7 +33,7 @@ import {
   stringifyApplicationData,
 } from '../base-application/support/index.js';
 import { JAVA_DOCKER_DIR, LOGIN_REGEX, LOGIN_REGEX_JS, NODE_VERSION } from '../generator-constants.js';
-import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
+import { GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
 import { loadLanguagesConfig } from '../languages/support/index.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
@@ -59,9 +59,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
       throw new Error('Only sbs blueprint is supported');
     }
 
-    const projectNameGenerator = await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
-    projectNameGenerator.javaApplication = true;
-    await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
+    await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
   }
 
   get initializing() {
