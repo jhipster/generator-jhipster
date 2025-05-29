@@ -19,7 +19,7 @@
 import { basename } from 'node:path';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../../../base-application/index.js';
-import { JAVA_COMPATIBLE_VERSIONS } from '../../../generator-constants.js';
+import { JAVA_COMPATIBLE_VERSIONS, JHIPSTER_DEPENDENCIES_VERSION } from '../../../generator-constants.js';
 import {
   addJavaAnnotation,
   addJavaImport,
@@ -39,6 +39,8 @@ import prepareEntity from '../../../server/support/prepare-entity.js';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator {
   packageInfoFile!: boolean;
+  projectVersion?: string;
+  jhipsterDependenciesVersion?: string;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -95,6 +97,28 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
+      setupServerconsts({ applicationDefaults }) {
+        applicationDefaults({
+          __override__: false,
+          javaCompatibleVersions: JAVA_COMPATIBLE_VERSIONS,
+          projectVersion: application => {
+            if (this.projectVersion) {
+              this.log.info(`Using projectVersion: ${this.projectVersion}`);
+              return this.projectVersion;
+            }
+            return application.projectVersion ?? '0.0.1-SNAPSHOT';
+          },
+          jhipsterDependenciesVersion: application => {
+            if (this.useVersionPlaceholders) {
+              return 'JHIPSTER_DEPENDENCIES_VERSION';
+            } else if (this.jhipsterDependenciesVersion) {
+              this.log.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
+              return this.jhipsterDependenciesVersion;
+            }
+            return JHIPSTER_DEPENDENCIES_VERSION;
+          },
+        });
+      },
       loadEnvironmentVariables({ application }) {
         application.packageInfoJavadocs?.push(
           { packageName: `${application.packageName}.aop.logging`, documentation: 'Logging aspect.' },

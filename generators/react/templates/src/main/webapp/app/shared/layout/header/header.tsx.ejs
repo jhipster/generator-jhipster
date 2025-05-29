@@ -79,7 +79,7 @@ const Header = (props: IHeaderProps) => {
     <div id="app-header">
       {renderDevRibbon()}
       <LoadingBar className="loading-bar"/>
-      <Navbar data-cy="navbar" <% if (clientThemeNone || !clientThemeLight) { %>dark<% } else { %>light<% } %> expand="md" fixed="top" className="<%_ if (clientThemeNone) { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
+      <Navbar data-cy="navbar" <% if (clientThemeNone || !clientThemeVariantLight) { %>dark<% } else { %>light<% } %> expand="md" fixed="top" className="<%_ if (clientThemeNone) { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
         <NavbarToggler aria-label="Menu" onClick={toggleMenu} />
         <Brand />
         <Collapse isOpen={menuOpen} navbar>

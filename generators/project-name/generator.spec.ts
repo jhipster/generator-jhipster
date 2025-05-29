@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { describe, expect, it } from 'esmocha';
-import { basicTests, testBlueprintSupport } from '../../test/support/tests.js';
+import { testBlueprintSupport } from '../../test/support/tests.js';
 import { GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/helpers.js';
 
@@ -27,21 +27,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorPath = join(__dirname, 'index.js');
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', () => {
     expect(GENERATOR_PROJECT_NAME).toBe(generator);
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
-  basicTests({
-    requiredConfig: {},
-    defaultConfig: {},
-    customPrompts: {
-      baseName: 'BeautifulProject',
-    },
-    generatorPath,
-  });
   describe('run', () => {
     before(async () => {
       await helpers.runJHipster(generator);

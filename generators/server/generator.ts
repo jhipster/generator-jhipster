@@ -21,19 +21,6 @@ import { existsSync } from 'fs';
 
 import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 import BaseApplicationGenerator from '../base-application/index.js';
-import {
-  CLIENT_WEBPACK_DIR,
-  JAVA_COMPATIBLE_VERSIONS,
-  JAVA_VERSION,
-  JHIPSTER_DEPENDENCIES_VERSION,
-  LOGIN_REGEX,
-  MAIN_DIR,
-  SERVER_MAIN_RES_DIR,
-  SERVER_MAIN_SRC_DIR,
-  SERVER_TEST_RES_DIR,
-  SERVER_TEST_SRC_DIR,
-  TEST_DIR,
-} from '../generator-constants.js';
 
 import {
   applicationTypes,
@@ -96,52 +83,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
-  }
-
-  get loading() {
-    return this.asLoadingTaskGroup({
-      setupServerconsts({ applicationDefaults }) {
-        applicationDefaults(
-          {
-            MAIN_DIR,
-            TEST_DIR,
-            LOGIN_REGEX,
-            CLIENT_WEBPACK_DIR,
-            SERVER_MAIN_SRC_DIR,
-            SERVER_MAIN_RES_DIR,
-            SERVER_TEST_SRC_DIR,
-            SERVER_TEST_RES_DIR,
-            JAVA_VERSION: this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION,
-            JAVA_COMPATIBLE_VERSIONS,
-            javaCompatibleVersions: JAVA_COMPATIBLE_VERSIONS,
-          } as any,
-          {
-            __override__: false,
-            javaCompatibleVersions: JAVA_COMPATIBLE_VERSIONS,
-            projectVersion: application => {
-              if (this.projectVersion) {
-                this.log.info(`Using projectVersion: ${application.projectVersion}`);
-                return this.projectVersion;
-              }
-              return '0.0.1-SNAPSHOT';
-            },
-            jhipsterDependenciesVersion: application => {
-              if (this.useVersionPlaceholders) {
-                return 'JHIPSTER_DEPENDENCIES_VERSION';
-              } else if (this.jhipsterDependenciesVersion) {
-                this.log.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
-                return this.jhipsterDependenciesVersion;
-              }
-              return JHIPSTER_DEPENDENCIES_VERSION;
-            },
-          },
-        );
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get configuringEachEntity() {

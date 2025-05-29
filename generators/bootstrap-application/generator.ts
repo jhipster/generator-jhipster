@@ -59,6 +59,9 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
 
         applicationDefaults({
           gatewayServicesApiAvailable: undefined,
+          cypressTests: ({ testFrameworks }) => testFrameworks?.includes('cypress') ?? false,
+          cucumberTests: ({ testFrameworks }) => testFrameworks?.includes('cucumber') ?? false,
+          gatlingTests: ({ testFrameworks }) => testFrameworks?.includes('gatling') ?? false,
         });
 
         let prettierExtensions = 'md,json,yml,html';

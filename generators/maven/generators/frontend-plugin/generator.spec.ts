@@ -38,7 +38,7 @@ describe(`generator - ${generator}`, () => {
       await helpers
         .runJHipster(generator)
         .withJHipsterConfig()
-        .withMockedJHipsterGenerators({ except: ['jhipster:java:node'] })
+        .withMockedJHipsterGenerators({ except: ['jhipster:java:node', 'jhipster:maven', 'jhipster:java:bootstrap'] })
         .withMockedSource();
     });
 
@@ -55,7 +55,6 @@ describe(`generator - ${generator}`, () => {
 [
   "jhipster:bootstrap",
   "jhipster:java:build-tool",
-  "jhipster:maven",
   "jhipster:project-name",
 ]
 `);

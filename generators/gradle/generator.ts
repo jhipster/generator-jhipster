@@ -98,8 +98,13 @@ export default class GradleGenerator extends BaseApplicationGenerator {
       async verify({ application }) {
         assert.equal(application.buildTool, GRADLE);
       },
-      prepareConventionsPlugins({ application }) {
-        application.gradleBuildSrc = GRADLE_BUILD_SRC_DIR;
+      prepareConventionsPlugins({ applicationDefaults }) {
+        applicationDefaults({
+          __override__: false,
+          gradleBuildSrc: GRADLE_BUILD_SRC_DIR,
+          gradleDevelocityHost: ({ gradleDevelocityHost }) =>
+            !gradleDevelocityHost || gradleDevelocityHost.startsWith('https://') ? gradleDevelocityHost : `https://${gradleDevelocityHost}`,
+        });
       },
       addSourceNeddles({ application, source }) {
         const { gradleBuildSrc } = application;

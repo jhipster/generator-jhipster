@@ -21,20 +21,11 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import { CheckRepoActions } from 'simple-git';
 import BaseApplicationGenerator from '../base-application/index.js';
 
-import {
-  JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
-  JHIPSTER_DOCUMENTATION_URL,
-  MAIN_DIR,
-  SERVER_MAIN_RES_DIR,
-  TEST_DIR,
-} from '../generator-constants.js';
-import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
+import { JHIPSTER_DOCUMENTATION_URL, MAIN_DIR, TEST_DIR } from '../generator-constants.js';
 import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.js';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.js';
 import command from './command.js';
 import { writeFiles } from './files.js';
-
-const { REACT, ANGULAR } = clientFrameworkTypes;
 
 export default class CommonGenerator extends BaseApplicationGenerator {
   command = command;
@@ -154,15 +145,10 @@ export default class CommonGenerator extends BaseApplicationGenerator {
       setupConstants({ applicationDefaults }) {
         // Make constants available in templates
         applicationDefaults({
-          MAIN_DIR,
-          TEST_DIR,
-          SERVER_MAIN_RES_DIR,
-          ANGULAR,
-          REACT,
-          // Make documentation URL available in templates
-          DOCUMENTATION_URL: JHIPSTER_DOCUMENTATION_URL,
-          DOCUMENTATION_ARCHIVE_PATH: JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
-        } as any);
+          srcMain: MAIN_DIR,
+          srcTest: TEST_DIR,
+          documentationUrl: JHIPSTER_DOCUMENTATION_URL,
+        });
       },
     });
   }
@@ -223,7 +209,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
         this.packageJson.merge({
           devDependencies: {
             'generator-jhipster': application.jhipsterVersion,
-            ...Object.fromEntries((this.jhipsterConfig.blueprints ?? [])!.map(blueprint => [blueprint.name, blueprint.version])),
+            ...Object.fromEntries((this.jhipsterConfig.blueprints ?? []).map(blueprint => [blueprint.name, blueprint.version])),
           },
         });
       },

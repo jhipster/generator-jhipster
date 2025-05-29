@@ -19,13 +19,13 @@
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import {
+  CLIENT_MAIN_SRC_DIR,
+  CLIENT_TEST_SRC_DIR,
   JAVA_VERSION,
-  MAIN_DIR,
   SERVER_MAIN_RES_DIR,
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_RES_DIR,
   SERVER_TEST_SRC_DIR,
-  TEST_DIR,
   dockerContainers,
 } from '../generator-constants.js';
 import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } from '../base-application/support/index.js';
@@ -35,18 +35,16 @@ import {
   hibernateSnakeCase,
   loadDerivedServerConfig,
   loadRequiredConfigDerivedProperties,
-  loadServerConfig,
-  prepareEntity as prepareEntityServerForTemplates,
   prepareRelationship,
 } from '../server/support/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/index.js';
 import { getPomVersionProperties } from '../maven/support/index.js';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.js';
 import { getDockerfileContainers } from '../docker/utils.js';
-import { normalizePathEnd } from '../base/support/path.js';
 import { getMainClassName } from '../java/support/index.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import serverCommand from '../server/command.js';
+import { normalizePathEnd } from '../base/support/path.js';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -69,9 +67,25 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
           // this.cancelCancellableTasks();
         }
       },
+      properties({ applicationDefaults }) {
+        applicationDefaults({
+          __override__: true,
+          packageName: this.jhipsterConfigWithDefaults.packageName,
+
+          srcMainJava: SERVER_MAIN_SRC_DIR,
+          srcMainResources: SERVER_MAIN_RES_DIR,
+          srcMainWebapp: CLIENT_MAIN_SRC_DIR,
+          srcTestJava: SERVER_TEST_SRC_DIR,
+          srcTestResources: SERVER_TEST_RES_DIR,
+          srcTestJavascript: CLIENT_TEST_SRC_DIR,
+
+          packageFolder: ({ packageName }) => `${packageName!.replace(/\./g, '/')}/`,
+          javaPackageSrcDir: ({ srcMainJava, packageFolder }) => normalizePathEnd(`${srcMainJava}${packageFolder}`),
+          javaPackageTestDir: ({ srcTestJava, packageFolder }) => normalizePathEnd(`${srcTestJava}${packageFolder}`),
+        });
+      },
       async loadApplication({ application, applicationDefaults }) {
         loadConfig(serverCommand.configs, { config: this.jhipsterConfigWithDefaults, application });
-        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application });
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/pom.xml'))?.toString();
         const gradleLibsVersions = this.readTemplate(
@@ -124,19 +138,13 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         loadDerivedConfig(serverCommand.configs, { application });
         loadDerivedServerConfig({ application });
       },
-      prepareForTemplates({ application: app }) {
-        const application: any = app;
-        // Application name modified, using each technology's conventions
-        application.mainClass = getMainClassName({ baseName: application.baseName });
-        application.jhiTablePrefix = hibernateSnakeCase(application.jhiPrefix);
-        application.mainJavaDir = SERVER_MAIN_SRC_DIR;
-        application.mainJavaPackageDir = normalizePathEnd(`${SERVER_MAIN_SRC_DIR}${application.packageFolder}`);
-        application.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
-        application.testJavaDir = SERVER_TEST_SRC_DIR;
-        application.testJavaPackageDir = normalizePathEnd(`${SERVER_TEST_SRC_DIR}${application.packageFolder}`);
-        application.testResourceDir = SERVER_TEST_RES_DIR;
-        application.srcMainDir = MAIN_DIR;
-        application.srcTestDir = TEST_DIR;
+      prepareForTemplates({ applicationDefaults }) {
+        applicationDefaults({
+          mainClass: ({ baseName }) => getMainClassName({ baseName }),
+          jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
+          imperativeOrReactive: ({ reactive }) => (reactive ? 'reactive' : 'imperative'),
+          authenticationUsesCsrf: ({ authenticationType }) => ['oauth2', 'session'].includes(authenticationType!),
+        });
       },
     });
   }
@@ -164,8 +172,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ entity, application }) {
-        prepareEntityServerForTemplates(entity, application);
+      prepareEntity({ entity }) {
         loadRequiredConfigDerivedProperties(entity);
       },
       preparePrimaryKey({ entity, application }) {

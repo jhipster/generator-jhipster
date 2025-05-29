@@ -36,7 +36,7 @@ eg $input-color: red;
 @import 'bootswatch/dist/<%= clientTheme %>/bootswatch';
 /* Dirty fix on navbar active link with bootswatch theme */
 nav li.router-link-active .navbar-dropdown-menu {
-  color: $navbar-<%_ if (clientThemeLight) { _%>light<%_ } else { _%>dark<%_ } _%>-active-color;
+  color: $navbar-<%_ if (clientThemeVariantLight) { _%>light<%_ } else { _%>dark<%_ } _%>-active-color;
 }
 <%_ } _%>
 <%_ if (enableI18nRTL) { _%>

@@ -38,7 +38,7 @@ export default class MavenGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplicationServer();
+      await this.dependsOnJHipster('jhipster:java:bootstrap');
     }
   }
 

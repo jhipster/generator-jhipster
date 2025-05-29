@@ -16,17 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { camelCase, defaults, kebabCase, startCase, upperFirst } from 'lodash-es';
-
-import BaseApplicationGenerator from '../base-application/index.js';
-import { getHipster } from '../base/support/index.js';
+import { CommandBaseGenerator } from '../base/index.js';
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base-application/support/constants.js';
 import { getDefaultAppName } from './support/index.js';
 
 import { validateProjectName } from './support/name-resolver.js';
+import type command from './command.js';
 
-export default class ProjectNameGenerator extends BaseApplicationGenerator {
+export default class ProjectNameGenerator extends CommandBaseGenerator<typeof command> {
   javaApplication?: boolean;
   defaultBaseName: () => string = () =>
     getDefaultAppName({
@@ -63,44 +60,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.INITIALIZING]() {
+  get [CommandBaseGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
-  get loading() {
-    return this.asLoadingTaskGroup({
-      load({ application }) {
-        const { baseName, projectDescription } = this.jhipsterConfig;
-        application.baseName = baseName;
-        application.projectDescription = projectDescription!;
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      preparing({ application }) {
-        const { baseName, upperFirstCamelCaseBaseName } = application;
-        const humanizedBaseName = baseName.toLowerCase() === 'jhipster' ? 'JHipster' : startCase(baseName);
-        defaults(application, {
-          humanizedBaseName,
-          camelizedBaseName: camelCase(baseName),
-          hipster: getHipster(baseName),
-          capitalizedBaseName: upperFirst(baseName),
-          dasherizedBaseName: kebabCase(baseName),
-          lowercaseBaseName: baseName.toLowerCase(),
-          upperFirstCamelCaseBaseName,
-          projectDescription: `Description for ${humanizedBaseName}`,
-        });
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 }
