@@ -98,3 +98,10 @@ export type Features = YeomanFeatures & {
    */
   queueCommandTasks?: boolean;
 };
+
+export type ValidationResult = {
+  debug?: unknown;
+  info?: string | string[];
+  warning?: string | string[];
+  error?: string | string[];
+};

@@ -88,10 +88,3 @@ export type WriteFileOptions<DataType = ApplicationType<Entity>, Generator = Cor
       blocks: WriteFileBlock<DataType, Generator>[];
     }
 );
-
-export type ValidationResult = {
-  debug?: unknown;
-  info?: string | string[];
-  warning?: string | string[];
-  error?: string | string[];
-};

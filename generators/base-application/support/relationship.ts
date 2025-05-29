@@ -19,7 +19,7 @@
 
 import { lowerFirst, upperFirst } from 'lodash-es';
 
-import type { ValidationResult } from '../../base/api.js';
+import type { ValidationResult } from '../../base-core/index.js';
 import type { Entity } from '../../../lib/types/application/entity.js';
 import type { Relationship } from '../../../lib/types/application/relationship.js';
 import { findEntityInEntities } from './entity.js';
