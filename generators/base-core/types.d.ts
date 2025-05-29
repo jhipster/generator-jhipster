@@ -46,6 +46,23 @@ export type Options = YeomanOptions & {
   jdlDefinition?: JDLApplicationConfig;
   /** @experimental */
   commandsConfigs?: JHipsterConfigs;
+
+  /** boostrap options */
+  applyDefaults?: <const data = any>(data: data) => data;
+
+  /* generate-blueprint options */
+  localBlueprint?: boolean;
+
+  /* application options */
+  db?: string;
+
+  /* workspaces options */
+  generateApplications?: boolean;
+  generateWorkspaces?: boolean;
+  generateWith?: string;
+  monorepository?: boolean;
+  workspaces?: boolean;
+  workspacesFolders?: string[];
 };
 
 export type Features = YeomanFeatures & {
