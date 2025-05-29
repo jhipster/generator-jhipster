@@ -11,6 +11,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
       .withJHipsterConfig({
         clientFramework: 'vue',
         skipServer: true,
+        // @ts-ignore FIXME types
         enableTranslation: false,
       })
       .withTask(

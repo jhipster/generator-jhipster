@@ -70,5 +70,6 @@ export default function updateLanguagesTask(this: BaseGenerator, param: UpdateCl
   if (param.application.clientBundlerWebpack) {
     updateLanguagesInWebpackTask.call(this, param);
   }
+  // @ts-ignore FIXME types
   updateLanguagesInDayjsConfigurationTask.call(this, param, { configurationFile: `${param.application.clientSrcDir}app/config/dayjs.ts` });
 }

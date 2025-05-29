@@ -1,14 +1,17 @@
 import assert from 'assert';
 import { basename, extname, resolve } from 'path';
 import { transform } from '@yeoman/transform';
-import type { Config } from '../../generators/base-core/types.js';
+import type { BaseCoreConfig } from '../../generators/base-core/types.js';
 import BaseGenerator from '../../generators/base-core/index.js';
 import { packageJson } from '../../lib/index.js';
 import { promptSamplesFolder } from '../support.mjs';
 import { GENERATOR_APP, GENERATOR_INFO, GENERATOR_JDL } from '../../generators/generator-list.js';
 import { entitiesByType, generateSample } from './support/index.js';
+import { BaseConfig } from '../../generators/base/types.js';
+import BaseApplicationGenerator, { BaseApplicationConfig } from '../../generators/base-application/index.js';
+import { JHipsterGeneratorOptions } from '../../lib/types/application/options.js';
 
-export default class extends BaseGenerator<Config & { entities: string[] }> {
+export default class extends BaseApplicationGenerator<any, any, BaseApplicationConfig, JHipsterGeneratorOptions> {
   sampleName;
   global;
   projectFolder;

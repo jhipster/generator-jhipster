@@ -20,7 +20,8 @@
 import chalk from 'chalk';
 import type { QueuedAdapter } from '@yeoman/types';
 
-import BaseGenerator, { type Config as BaseConfig } from '../base/index.js';
+import BaseGenerator from '../base/index.js';
+import type { BaseConfig } from '../base/types.js';
 import { files } from './files.js';
 
 export default class GitGenerator extends BaseGenerator<{ baseName?: string; monorepository?: boolean } & BaseConfig> {

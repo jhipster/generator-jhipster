@@ -59,6 +59,7 @@ import {
 } from '../../lib/jhipster/index.js';
 import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.js';
 import type { FieldType } from '../../lib/application/field-types.js';
+import LanguagesGenerator from '../languages/index.js';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
 import cleanupTask from './cleanup.js';
 import { serverFiles } from './files.js';
@@ -73,7 +74,7 @@ const { ELASTICSEARCH } = searchEngineTypes;
 
 const { BYTES: TYPE_BYTES, BYTE_BUFFER: TYPE_BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 const { CUCUMBER, GATLING } = testFrameworkTypes;
-export default class SpringBootGenerator extends BaseApplicationGenerator {
+export default class SpringBootGenerator extends LanguagesGenerator {
   fakeKeytool;
 
   async beforeQueue() {

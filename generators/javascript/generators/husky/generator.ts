@@ -16,9 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-application/index.js';
+import BaseApplicationGenerator, { type Entity as ApplicationEntity } from '../../../base-application/index.js';
+import type { BaseApplicationFeatures, CommonClientServerApplication } from '../../../base-application/types.js';
+import type { ApplicationType } from '../../../../lib/types/application/application.js';
+import type { ApplicationConfiguration } from '../../../../lib/types/application/yo-rc.js';
+import type { InitOptions } from '../../../init/types.js';
+import type { TaskTypes as DefaultTaskTypes } from '../../../../lib/types/application/tasks.js';
 
-export default class HuskyGenerator extends BaseApplicationGenerator {
+export default class HuskyGenerator<
+  Entity extends ApplicationEntity = ApplicationEntity,
+  Application extends CommonClientServerApplication<Entity> = ApplicationType<Entity>,
+  Config extends ApplicationConfiguration = ApplicationConfiguration,
+  Options extends InitOptions = InitOptions,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+  Tasks extends DefaultTaskTypes<Entity, Application> = DefaultTaskTypes<Entity, Application>,
+> extends BaseApplicationGenerator<Entity, Application, Config, Options, Features, Tasks> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

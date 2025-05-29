@@ -33,7 +33,7 @@ const { STRING: TYPE_STRING, BOOLEAN: TYPE_BOOLEAN } = CommonDBTypes;
 
 const authorityEntityName = 'Authority';
 
-export function createUserEntity(this: BaseApplicationGenerator, customUserData = {}, application): Partial<UserEntity> {
+export function createUserEntity<G extends BaseApplicationGenerator>(this: G, customUserData = {}, application): Partial<UserEntity> {
   const userEntityDefinition = this.getEntityConfig('User')?.getAll() as Partial<UserEntity>;
   if (userEntityDefinition) {
     if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
@@ -157,8 +157,8 @@ export function createUserEntity(this: BaseApplicationGenerator, customUserData 
   return user;
 }
 
-export function createUserManagementEntity(
-  this: BaseApplicationGenerator,
+export function createUserManagementEntity<G extends BaseApplicationGenerator>(
+  this: G,
   customUserManagementData = {},
   application,
 ): Partial<ApplicationEntity> {

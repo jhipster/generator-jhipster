@@ -34,8 +34,10 @@ export default function loadConfig({ application, config, control = {} }: { appl
   if (application.enableTranslation) {
     application.languages = config.languages;
     application.languagesDefinition = application.languages
+      // @ts-ignore FIXME types
       .map(lang => findLanguageForTag(lang, supportedLanguages))
       .filter(lang => lang) as Language[];
+    // @ts-ignore FIXME types
     application.enableI18nRTL = (application.languagesDefinition ?? [application.nativeLanguageDefinition]).some(language => language.rtl);
   } else {
     application.enableI18nRTL = application.nativeLanguageDefinition.rtl;

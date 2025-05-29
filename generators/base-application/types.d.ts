@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
-import {
-  type Config as BaseConfig,
-  type Features as BaseFeatures,
-  type Options as BaseOptions,
-  Application as SimpleApplication,
-} from '../base-simple-application/index.js';
 import type { ClientApplication } from '../client/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import type { SpringBootApplication } from '../server/types.js';
+import { BaseSimpleApplication, BaseSimpleConfig, BaseSimpleFeatures } from '../base-simple-application/index.js';
+import { BaseOptions } from '../base/types.js';
 import type { OptionWithDerivedProperties } from './application-options.js';
 
-export type BaseApplication = SimpleApplication & {
+export type BaseApplication = BaseSimpleApplication & {
   jhiPrefix: string;
   jhiPrefixCapitalized: string;
   jhiPrefixDashed: string;
@@ -176,11 +172,12 @@ type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'e
 
 export type PlatformApplication = ServiceDiscoveryApplication & MonitoringApplication;
 
-export type Config = BaseConfig & {
-  baseName?: string;
+export type BaseApplicationConfig = BaseSimpleConfig & {
   entities?: string[];
+  backendType?: string;
+  projectDescription?: string;
 };
 
-export type Options = BaseOptions;
+export type BaseApplicationOptions = BaseOptions;
 
-export type Features = BaseFeatures;
+export type BaseApplicationFeatures = BaseSimpleFeatures;

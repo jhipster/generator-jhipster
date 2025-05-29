@@ -60,6 +60,7 @@ function updateLanguagesInConfigTask(this: BaseGenerator, { application, control
   // Add i18n config snippets for all languages
   let i18nConfig = 'const datetimeFormats: IntlDateTimeFormats = {\n';
   languages?.forEach((ln, i) => {
+    // @ts-ignore FIXME types
     i18nConfig += generateDateTimeFormat(ln, i, languages.length);
   });
   i18nConfig += '  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object\n';
@@ -90,6 +91,7 @@ export default function updateLanguagesTask(this: BaseGenerator, taskParam: Upda
   if (taskParam.application.clientBundlerWebpack) {
     updateLanguagesInWebpackTask.call(this, taskParam);
   }
+  // @ts-ignore FIXME types
   updateLanguagesInDayjsConfigurationTask.call(this, taskParam, {
     configurationFile: `${taskParam.application.clientSrcDir}app/shared/config/dayjs.ts`,
     commonjs: true,

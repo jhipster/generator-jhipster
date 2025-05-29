@@ -154,6 +154,7 @@ describe(`generator - ${clientFramework}`, () => {
         .runJHipster('react')
         .withJHipsterConfig({
           clientFramework: 'react',
+          // @ts-ignore FIXME types
           enableTranslation: false,
         })
         .withTask(

@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportGeneratorOptionsFromCommand } from '../../lib/command/types.js';
-import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/types.js';
-import type { ApplicationWithConfig } from './api.js';
+import { BaseCoreConfig, BaseCoreFeatures, BaseCoreOptions } from '../base-core/index.js';
 
 export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
 
-export type Control = {
+export type ApplicationWithConfig = {
+  config: Record<string, string | boolean | number | string[]>;
+  entities: Record<string, unknown>;
+};
+
+export type BaseControl = {
   readonly existingProject: boolean;
   readonly jhipsterOldVersion: string | null;
   readonly enviromentHasDockerCompose?: boolean;
@@ -27,14 +31,14 @@ export type Control = {
   cleanupFiles: (cleanup: CleanupArgumentType) => Promise<void> | ((oldVersion: string, cleanup: CleanupArgumentType) => Promise<void>);
 };
 
-export type Config = CoreConfig & {
+export type BaseConfig = BaseCoreConfig & {
   jhipsterVersion?: string;
   lastLiquibaseTimestamp?: number;
   creationTimestamp?: number;
   blueprints?: { name: string; version?: string }[];
 };
 
-export type Options = CoreOptions &
+export type BaseOptions = BaseCoreOptions &
   ExportGeneratorOptionsFromCommand<typeof import('./command.js').default> & {
     /* base options */
     applicationWithConfig?: ApplicationWithConfig;
@@ -49,7 +53,7 @@ export type Options = CoreOptions &
     composeWithLocalBlueprint?: boolean;
   };
 
-export type Features = CoreFeatures & {
+export type BaseFeatures = BaseCoreFeatures & {
   /**
    * Compose with bootstrap generator.
    *

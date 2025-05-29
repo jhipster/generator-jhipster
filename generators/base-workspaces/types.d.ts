@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Config as BaseConfig, Features as BaseFeatures, Options as BaseOptions } from '../base/index.js';
+import type { BaseConfig, BaseFeatures, BaseOptions } from '../base/types.js';
 
 export type Config = BaseConfig & {
   appsFolders: string[];

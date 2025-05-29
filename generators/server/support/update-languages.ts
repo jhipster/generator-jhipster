@@ -29,6 +29,7 @@ export const updateLanguagesInMailServiceITTask = asPostWritingTask(function upd
   const { ignoreNeedlesError: ignoreNonExisting } = control as any;
   let newContent = 'private static final String[] languages = {\n';
   languagesDefinition?.forEach((language, i) => {
+    // @ts-ignore FIXME types
     newContent += `        "${language.languageTag}"${i !== languagesDefinition.length - 1 ? ',' : ''}\n`;
   });
   newContent += '        // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n    };';

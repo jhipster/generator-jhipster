@@ -113,6 +113,7 @@ describe('generator - languages', () => {
           helpers
             .runJHipster(generator)
             .withArguments([language.languageTag])
+            // @ts-ignore FIXME types
             .withJHipsterConfig({ enableTranslation: true, nativeLanguage: language.languageTag })
             .withOptions({ ignoreNeedlesError: true }),
         );
@@ -125,6 +126,7 @@ describe('generator - languages', () => {
       before(() =>
         helpers
           .runJHipster(generator)
+          // @ts-ignore FIXME types
           .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'], baseName: 'jhipster' })
           .withOptions({ commandName: 'languages', ignoreNeedlesError: true }),
       );
@@ -134,6 +136,7 @@ describe('generator - languages', () => {
       before(() =>
         helpers
           .runJHipster(generator)
+          // @ts-ignore FIXME types
           .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
           .withOptions({ commandName: 'languages', ignoreNeedlesError: true }),
       );
@@ -217,6 +220,7 @@ describe('generator - languages', () => {
       before(() =>
         helpers
           .runJHipster(generator)
+          // @ts-ignore FIXME types
           .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
           .withOptions({ ignoreNeedlesError: true })
           .withOptions({ skipPrompts: true, regenerate: true, baseName: 'jhipster' }),
@@ -253,6 +257,7 @@ describe('generator - languages', () => {
       before(() =>
         helpers
           .runJHipster(generator)
+          // @ts-ignore FIXME types
           .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'en' })
           .withOptions({ ignoreNeedlesError: true })
           .withArguments(['fr', 'de'])
@@ -277,6 +282,7 @@ describe('generator - languages', () => {
       before(async () => {
         await createClientProject().withJHipsterConfig({
           clientFramework: 'vue',
+          // @ts-ignore FIXME types
           enableTranslation: true,
           nativeLanguage: 'en',
         });
@@ -314,6 +320,7 @@ describe('generator - languages', () => {
       before(async () => {
         await createClientProject().withJHipsterConfig({
           clientFramework: 'vue',
+          // @ts-ignore FIXME types
           enableTranslation: true,
           nativeLanguage: 'en',
         });

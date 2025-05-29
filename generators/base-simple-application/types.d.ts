@@ -1,8 +1,8 @@
 import type CoreGenerator from '../base-core/generator.ts';
-import { type Config as BaseConfig, type Features as BaseFeatures, type Options as BaseOptions } from '../base/index.js';
 import type packageJson from '../../package.json';
+import type { BaseConfig, BaseFeatures, BaseOptions } from '../base/types.js';
 
-export type Application = {
+export type BaseSimpleApplication = {
   jhipsterVersion: string;
   baseName: string;
   capitalizedBaseName: string;
@@ -39,10 +39,10 @@ export type Application = {
   ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
 };
 
-export type Config = BaseConfig & {
-  baseName?: string;
+export type BaseSimpleConfig = BaseConfig & {
+  baseName: string;
 };
 
-export type Options = BaseOptions;
+export type BaseSimpleOptions = BaseOptions;
 
-export type Features = BaseFeatures;
+export type BaseSimpleFeatures = BaseFeatures;

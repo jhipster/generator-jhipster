@@ -21,7 +21,7 @@ import type { Merge, OmitIndexSignature, Simplify } from 'type-fest';
 import type { Entity as BaseEntity } from '../base/entity.js';
 import type { GetFieldType, GetRelationshipType } from '../utils/entity-utils.ts';
 import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource } from '../../../generators/base/tasks.js';
-import type { Application as SimpleApplication } from '../../../generators/base-simple-application/index.js';
+import type { BaseSimpleApplication as SimpleApplication } from '../../../generators/base-simple-application/index.js';
 import type { Entity } from './entity.js';
 import type { ApplicationType, BaseApplicationSource } from './application.js';
 
@@ -105,7 +105,7 @@ type PreparingEachEntityRelationshipTaskParam<E = Entity, A = ApplicationType<E>
 type PostWritingEntitiesTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithEntities<E, A> &
   TaskParamWithSource<BaseApplicationSource>;
 
-export type SimpleTaskTypes<A = SimpleApplication> = Merge<
+export type SimpleTask<A = SimpleApplication> = Merge<
   BaseTaskTypes,
   {
     BootstrapApplicationTaskParam: TaskParamWithControl & ApplicationDefaultsTaskParam<A>;
@@ -122,7 +122,7 @@ export type SimpleTaskTypes<A = SimpleApplication> = Merge<
   }
 >;
 
-export type TaskTypes<E = Entity, A = ApplicationType<E>> = SimpleTaskTypes<A> & {
+export type TaskTypes<E = Entity, A = ApplicationType<E>> = SimpleTask<A> & {
   ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<E, A>;
   LoadingEntitiesTaskParam: LoadingEntitiesTaskParam<E, A>;
   PreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;

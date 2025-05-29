@@ -20,7 +20,7 @@
 import chalk from 'chalk';
 import { padEnd, startCase } from 'lodash-es';
 
-import BaseApplicationGenerator from '../base-application/index.js';
+import BaseApplicationGenerator, { type Entity as ApplicationEntity } from '../base-application/index.js';
 import { updateLanguagesTask as updateLanguagesInAngularTask } from '../angular/support/index.js';
 import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/index.js';
 import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/index.js';
@@ -29,6 +29,9 @@ import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants
 import { QUEUES } from '../base-application/priorities.js';
 import { PRIORITY_NAMES } from '../base/priorities.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { BaseApplicationFeatures } from '../base-application/types.js';
+import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/tasks.js';
 import type { Language } from './support/languages.js';
 import { findLanguageForTag, supportedLanguages } from './support/languages.js';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
@@ -36,13 +39,21 @@ import { writeEntityFiles } from './entity-files.js';
 import { clientI18nFiles } from './files.js';
 import { askForLanguages, askI18n } from './prompts.js';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.js';
+import type { LanguagesConfiguration, LanguagesOptions } from './types.js';
 
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 
 /**
  * This is the base class for a generator that generates entities.
  */
-export default class LanguagesGenerator extends BaseApplicationGenerator {
+export default class LanguagesGenerator<
+  Entity extends ApplicationEntity = ApplicationEntity,
+  Application extends ApplicationType<Entity> = ApplicationType<Entity>,
+  Config extends LanguagesConfiguration = LanguagesConfiguration,
+  Options extends LanguagesOptions = LanguagesOptions,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+  Tasks extends DefaultTaskTypes<Entity, Application> = DefaultTaskTypes<Entity, Application>,
+> extends BaseApplicationGenerator<Entity, Application, Config, Options, Features, Tasks> {
   askForMoreLanguages!: boolean;
   askForNativeLanguage!: boolean;
   translationData!: TranslationData;
@@ -82,6 +93,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       // We must write languages files for translation process for entities only generation.
       // Angular frontend uses translation files even if enableTranslation is enabled.
       // As side effect, with angular frontends, translation files will be written for nativeLanguage for entity only generation.
+      // @ts-ignore FIXME types
       this.setFeatures({ disableSkipPriorities: true });
     }
   }
@@ -161,10 +173,12 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         const { nativeLanguage, enableTranslation } = this.jhipsterConfigWithDefaults;
         const isLanguageConfigured = Boolean(this.jhipsterConfig.nativeLanguage);
         // Prompts detects current language. Save default native language for next execution.
+        // @ts-ignore FIXME types
         this.config.defaults({ nativeLanguage: nativeLanguage! });
         if (!enableTranslation) {
           return;
         }
+        // @ts-ignore FIXME types
         this.config.defaults({ languages: [] });
         if (!isLanguageConfigured && this.languagesToApply.length === 0) {
           // If languages is not configured, apply defaults.

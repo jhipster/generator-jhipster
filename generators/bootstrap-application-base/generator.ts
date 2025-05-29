@@ -23,6 +23,7 @@ import { passthrough } from '@yeoman/transform';
 
 import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../base-application/index.js';
+import type { Entity as ApplicationEntity } from '../../lib/types/application/entity.js';
 import {
   addFakerToEntity,
   loadEntitiesAnnotations,
@@ -42,13 +43,24 @@ import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesC
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { isWin32, removeFieldsWithNullishValues } from '../base/support/index.js';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../lib/application/field-types.js';
-import type { Entity } from '../../lib/types/application/entity.js';
 import { upperFirst } from '../../lib/jdl/core/utils/string-utils.js';
 import { baseNameProperties } from '../project-name/support/index.js';
-import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
+import type { BaseApplicationFeatures } from '../base-application/types.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/tasks.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
+import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
+import type { BootstrapApplicationBaseOptions } from './types.js';
 
-export default class BootstrapApplicationBase extends BaseApplicationGenerator {
+export default class BootstrapApplicationBase<
+  Entity extends ApplicationEntity = ApplicationEntity,
+  Application extends ApplicationType<Entity> = ApplicationType<Entity>,
+  Config extends ApplicationConfiguration = ApplicationConfiguration,
+  Options extends BootstrapApplicationBaseOptions = BootstrapApplicationBaseOptions,
+  Features extends BaseApplicationFeatures = BaseApplicationFeatures,
+  Tasks extends DefaultTaskTypes<Entity, Application> = DefaultTaskTypes<Entity, Application>,
+> extends BaseApplicationGenerator<Entity, Application, Config, Options, Features, Tasks> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -117,11 +129,11 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
             packageJsonScripts: {},
             clientPackageJsonScripts: {},
             testFrameworks: [],
-          },
+          } as any,
           {
             communicationSpringWebsocket: undefined,
             embeddableLaunchScript: undefined,
-          },
+          } as any,
         );
       },
     });
@@ -157,7 +169,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
             }
             return 'dist/';
           },
-        });
+        } as any);
 
         loadLanguagesConfig({ application, config: this.jhipsterConfigWithDefaults, control });
       },
@@ -225,7 +237,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
           jwtSecretKey: undefined,
           gatewayServerPort: undefined,
-        });
+        } as any);
       },
       userRelationship({ applicationDefaults }) {
         applicationDefaults({
@@ -233,7 +245,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           anyEntityHasRelationshipWithUser: this.getExistingEntities().some(entity =>
             (entity.definition.relationships ?? []).some(relationship => relationship.otherEntityName.toLowerCase() === 'user'),
           ),
-        });
+        } as any);
       },
       syncUserWithIdp({ application, applicationDefaults }) {
         if (!application.backendTypeSpringBoot) return;
@@ -243,7 +255,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
             __override__: false,
             syncUserWithIdp: data =>
               data.databaseType !== 'no' && (data.applicationType === 'gateway' || data.anyEntityHasRelationshipWithUser),
-          });
+          } as any);
         } else if (application.syncUserWithIdp && application.authenticationType !== 'oauth2') {
           throw new Error('syncUserWithIdp is only supported with oauth2 authenticationType');
         }
@@ -253,7 +265,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => generateUserManagement || syncUserWithIdp,
           generateBuiltInAuthorityEntity: ({ generateBuiltInUserEntity, databaseType }) =>
             generateBuiltInUserEntity! && databaseType !== 'cassandra',
-        });
+        } as any);
       },
     });
   }
@@ -342,8 +354,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
 
           const customUserData: any = customUser?.entityStorage.getAll() ?? {};
-          Object.assign(bootstrap, createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application));
-          application.user = bootstrap;
+          // FIXME types
+          Object.assign(bootstrap, createUserEntity.call(this as any, { ...customUserData, ...customUserData.annotations }, application));
+          application.user = bootstrap as Entity;
         }
       },
       loadUserManagement({ application, entitiesToLoad }) {
@@ -356,11 +369,19 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
 
           const customUserManagementData: any = customUserManagement?.entityStorage.getAll() ?? {};
+          // FIXME types
+
           Object.assign(
             bootstrap,
-            createUserManagementEntity.call(this, { ...customUserManagementData, ...customUserManagementData.annotations }, application),
+            createUserManagementEntity.call(
+              this as any,
+              { ...customUserManagementData, ...customUserManagementData.annotations },
+              application,
+            ),
           );
-          application.userManagement = bootstrap;
+          // FIXME types
+
+          application.userManagement = bootstrap as Entity;
         }
       },
       loadAuthority({ application, entitiesToLoad }) {
@@ -374,8 +395,13 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
 
           const customEntityData: any = customEntity?.entityStorage.getAll() ?? {};
-          Object.assign(bootstrap, createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application));
-          application.authority = bootstrap;
+          // FIXME types
+          Object.assign(
+            bootstrap,
+            createAuthorityEntity.call(this as any, { ...customEntityData, ...customEntityData.annotations }, application),
+          );
+          // FIXME types
+          application.authority = bootstrap as Entity;
         }
       },
       loadingEntities({ application, entitiesToLoad }) {
@@ -480,9 +506,12 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         const detectCyclicRequiredRelationship = (entity: Entity, relatedEntities: Set<Entity>) => {
           if (relatedEntities.has(entity)) return true;
           relatedEntities.add(entity);
-          return entity.relationships
-            ?.filter(rel => rel.relationshipRequired || rel.id)
-            .some(rel => detectCyclicRequiredRelationship(rel.otherEntity, new Set([...relatedEntities])));
+          return (
+            entity.relationships
+              ?.filter(rel => rel.relationshipRequired || rel.id)
+              // FIXME types
+              .some(rel => detectCyclicRequiredRelationship(rel.otherEntity as Entity, new Set([...relatedEntities])))
+          );
         };
         entity.hasCyclicRequiredRelationship = detectCyclicRequiredRelationship(entity, new Set());
       },

@@ -22,6 +22,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
 
 describe('needle API Webpack: JHipster client generator with blueprint', () => {
   function generateAppWithClientFramework(clientFramework) {
+    // @ts-ignore
     return helpers
       .runJHipster('client')
       .withOptions({
@@ -34,6 +35,7 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
         skipServer: true,
         baseName: 'jhipster',
         clientFramework,
+        // @ts-ignore FIXME types
         enableTranslation: true,
         nativeLanguage: 'en',
         languages: ['en', 'fr'],

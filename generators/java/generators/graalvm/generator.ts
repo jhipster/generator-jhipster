@@ -212,6 +212,7 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
             nativeBuildToolsVersion: javaDependencies!.nativeBuildTools!,
             databaseTypeSql,
             userLanguage: nativeLanguageDefinition.languageTag,
+            // @ts-ignore FIXME types
             languages: languagesDefinition?.map(def => def.languageTag) ?? [nativeLanguageDefinition.languageTag],
           }),
         );

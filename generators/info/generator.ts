@@ -22,20 +22,22 @@
 import chalk from 'chalk';
 
 import BaseCoreGenerator from '../base-core/index.js';
-import type { Config } from '../base/index.js';
+import type { BaseCoreConfig } from '../base-core/index.js';
 import JSONToJDLEntityConverter from '../../lib/jdl/converters/json-to-jdl-entity-converter.js';
 import JSONToJDLOptionConverter from '../../lib/jdl/converters/json-to-jdl-option-converter.js';
-import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
 import { JHIPSTER_CONFIG_DIR, YO_RC_FILE } from '../generator-constants.js';
 import { applicationsLookup } from '../workspaces/support/applications-lookup.js';
 import type { Entity } from '../../lib/types/base/entity.js';
 import { getEntitiesFromDir } from '../base-application/support/index.js';
+import type { BaseFeatures, BaseOptions } from '../base/types.js';
 import { replaceSensitiveConfig } from './support/utils.js';
 
 const isInfoCommand = commandName => commandName === 'info' || undefined;
 
-export default class InfoGenerator extends BaseCoreGenerator<Config & { appsFolders?: string[]; baseName?: string; packages?: string[] }> {
-  constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
+export default class InfoGenerator extends BaseCoreGenerator<
+  BaseCoreConfig & { appsFolders?: string[]; baseName?: string; packages?: string[] }
+> {
+  constructor(args: string | string[], options: BaseOptions, features: BaseFeatures) {
     super(args, options, {
       storeJHipsterVersion: false,
       customInstallTask: isInfoCommand(options.commandName),

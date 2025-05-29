@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { Simplify } from 'type-fest';
 import type { ExportGeneratorOptionsFromCommand } from '../../command/types.js';
+import { InitOptions } from '../../../generators/init/types.js';
+import { BootstrapApplicationBaseOptions } from '../../../generators/bootstrap-application-base/types.js';
+import { LanguagesOptions } from '../../../generators/languages/types.js';
 
 export type ApplicationOptions = Simplify<
   ExportGeneratorOptionsFromCommand<typeof import('../../../generators/app/command.js').default> &
@@ -12,9 +15,9 @@ export type ApplicationOptions = Simplify<
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/java/generators/build-tool/command.js').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/java/generators/graalvm/command.ts').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/javascript/generators/bootstrap/command.js').default> &
-    ExportGeneratorOptionsFromCommand<typeof import('../../../generators/javascript/generators/prettier/command.js').default> &
+    InitOptions &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/jdl/command.js').default> &
-    ExportGeneratorOptionsFromCommand<typeof import('../../../generators/languages/command.js').default> &
+    LanguagesOptions &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/liquibase/command.js').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/project-name/command.js').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/server/command.js').default> &
@@ -22,3 +25,20 @@ export type ApplicationOptions = Simplify<
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/spring-cloud/generators/gateway/command.js').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/spring-data-relational/command.js').default>
 >;
+
+export type JHipsterGeneratorOptions = BootstrapApplicationBaseOptions &
+  ApplicationOptions & {
+    /* generate-blueprint options */
+    localBlueprint?: boolean;
+
+    /* application options */
+    db?: string;
+
+    /* workspaces options */
+    generateApplications?: boolean;
+    generateWorkspaces?: boolean;
+    generateWith?: string;
+    monorepository?: boolean;
+    workspaces?: boolean;
+    workspacesFolders?: string[];
+  };

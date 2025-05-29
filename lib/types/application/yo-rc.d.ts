@@ -2,23 +2,16 @@
 import type { Simplify } from 'type-fest';
 import type { ExportStoragePropertiesFromCommand } from '../../command/types.js';
 import type { YO_RC_CONFIG_KEY } from '../../utils/yo-rc.ts';
-import type { Config } from '../../../generators/base/types.js';
-
-type BaseApplicationConfig = {
-  entities?: string[];
-  backendType?: string;
-  projectDescription?: string;
-};
+import { BaseApplicationConfig } from '../../../generators/base-application/index.js';
 
 export type ApplicationConfiguration = Simplify<
-  BaseApplicationConfig &
-    Config & {
-      baseName: string;
-      applicationIndex?: number;
-      creationTimestamp?: number;
-      testFrameworks?: string[];
-      microfrontends?: { baseName: string }[];
-    } & ExportStoragePropertiesFromCommand<typeof import('../../../generators/app/command.js').default> &
+  BaseApplicationConfig & {
+    baseName: string;
+    applicationIndex?: number;
+    creationTimestamp?: number;
+    testFrameworks?: string[];
+    microfrontends?: { baseName: string }[];
+  } & ExportStoragePropertiesFromCommand<typeof import('../../../generators/app/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/base/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/bootstrap-application-base/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/client/command.js').default> &
@@ -30,7 +23,6 @@ export type ApplicationConfiguration = Simplify<
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/javascript/generators/husky/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/javascript/generators/prettier/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/jdl/command.js').default> &
-    ExportStoragePropertiesFromCommand<typeof import('../../../generators/languages/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/liquibase/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/project-name/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/server/command.js').default> &

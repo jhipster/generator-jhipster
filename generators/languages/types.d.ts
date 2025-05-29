@@ -16,13 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { Simplify } from 'type-fest';
+import type {
+  ExportApplicationPropertiesFromCommand,
+  ExportGeneratorOptionsFromCommand,
+  ExportStoragePropertiesFromCommand,
+} from '../../lib/command/index.js';
+import type { BaseApplicationOptions } from '../base-application/index.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import type { Language } from './support/languages.js';
 
 export type LanguagesSource = {
   addEntityTranslationKey: (arg: { translationKey: string; translationValue: string; language: string }) => void;
 };
 
-export type I18nApplication = {
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+export type I18nApplication = ExportApplicationPropertiesFromCommand<typeof import('./command.ts').default> & {
+  translations: [];
   enableTranslation: boolean;
   enableI18nRTL: boolean;
   nativeLanguage: string;
@@ -30,3 +40,12 @@ export type I18nApplication = {
   languages: string[];
   languagesDefinition: readonly Language[];
 };
+
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+export type LanguagesOptions = ExportGeneratorOptionsFromCommand<typeof import('./command.js').default> & BaseApplicationOptions;
+
+// FIXME types should extends BaseApplicationConfiguration
+
+export type LanguagesConfiguration = ApplicationConfiguration &
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+  Simplify<ExportStoragePropertiesFromCommand<typeof import('./command.js').default>>;

@@ -1,7 +1,7 @@
 import type {
-  Config as BaseApplicationConfig,
-  Features as BaseApplicationFeatures,
-  Options as BaseApplicationOptions,
+  BaseApplicationConfig as BaseApplicationConfig,
+  BaseApplicationFeatures as BaseApplicationFeatures,
+  BaseApplicationOptions as BaseApplicationOptions,
 } from '../base-application/types.d.ts';
 
 export type BaseChangelog = {

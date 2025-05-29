@@ -1,36 +1,6 @@
-import type { BaseFeatures as YeomanFeatures } from 'yeoman-generator';
 import type CoreGenerator from '../base-core/index.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
-import type { ApplicationOptions } from '../../lib/types/application/options.js';
-import type { Features as BaseFeatures, Options as BaseOptions } from '../base/types.d.ts';
-
-export type ApplicationWithConfig = {
-  config: Record<string, string | boolean | number | string[]>;
-  entities: Record<string, unknown>;
-};
-
-export type JHipsterGeneratorOptions = BaseOptions &
-  ApplicationOptions & {
-    /** boostrap options */
-    applyDefaults?: <const data = any>(data: data) => data;
-
-    /* generate-blueprint options */
-    localBlueprint?: boolean;
-
-    /* application options */
-    db?: string;
-
-    /* workspaces options */
-    generateApplications?: boolean;
-    generateWorkspaces?: boolean;
-    generateWith?: string;
-    monorepository?: boolean;
-    workspaces?: boolean;
-    workspacesFolders?: string[];
-  };
-
-export type JHipsterGeneratorFeatures = YeomanFeatures & BaseFeatures;
 
 export type NeedleCallback = (content: string) => string;
 

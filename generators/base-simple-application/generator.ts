@@ -22,18 +22,13 @@ import type GeneratorsByNamespace from '../types.js';
 import BaseGenerator from '../base/index.js';
 import { mutateData } from '../../lib/utils/object.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
-import type { SimpleTaskTypes } from '../../lib/types/application/tasks.js';
+import type { SimpleTask } from '../../lib/types/application/tasks.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { PRIORITY_NAMES } from '../base/priorities.js';
 import type { GenericTaskGroup } from '../base-core/types.js';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.js';
-import type {
-  Application as SimpleApplication,
-  Config as SimpleApplicationConfig,
-  Features as SimpleApplicationFeatures,
-  Options as SimpleApplicationOptions,
-} from './types.js';
 import { BOOTSTRAP_APPLICATION, CUSTOM_PRIORITIES } from './priorities.js';
+import type { BaseSimpleApplication, BaseSimpleConfig, BaseSimpleFeatures, BaseSimpleOptions } from './types.js';
 
 const { LOADING, PREPARING, POST_PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
 
@@ -62,12 +57,12 @@ const getFirstArgForPriority = (priorityName: string) => ({
  * This is the base class for a generator that generates entities.
  */
 export default class BaseSimpleApplicationGenerator<
-  Application extends SimpleApplication = SimpleApplication,
-  ConfigType extends SimpleApplicationConfig = SimpleApplicationConfig,
-  Options extends SimpleApplicationOptions = SimpleApplicationOptions,
-  Features extends SimpleApplicationFeatures = SimpleApplicationFeatures,
-  TaskTypes extends SimpleTaskTypes<Application> = SimpleTaskTypes<Application>,
-> extends BaseGenerator<ConfigType, Options, Features, TaskTypes> {
+  Application extends BaseSimpleApplication = BaseSimpleApplication,
+  Config extends BaseSimpleConfig = BaseSimpleConfig,
+  Options extends BaseSimpleOptions = BaseSimpleOptions,
+  Features extends BaseSimpleFeatures = BaseSimpleFeatures,
+  Tasks extends SimpleTask<Application> = SimpleTask<Application>,
+> extends BaseGenerator<Config, Options, Features, Tasks> {
   static BOOTSTRAP_APPLICATION = BaseSimpleApplicationGenerator.asPriority(BOOTSTRAP_APPLICATION);
 
   constructor(args: string | string[], options: Options, features: Features) {
@@ -93,9 +88,9 @@ export default class BaseSimpleApplicationGenerator<
   /**
    * JHipster config with default values fallback
    */
-  override get jhipsterConfigWithDefaults(): Readonly<ConfigType> {
+  override get jhipsterConfigWithDefaults(): Readonly<Config> {
     const configWithDefaults = getConfigWithDefaults(super.jhipsterConfigWithDefaults);
-    return configWithDefaults as ConfigType;
+    return configWithDefaults as Config;
   }
 
   dependsOnBootstrapApplicationBase(
@@ -140,8 +135,8 @@ export default class BaseSimpleApplicationGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asBootstrapApplicationTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['BootstrapApplicationTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['BootstrapApplicationTaskParam']> {
+    taskGroup: GenericTaskGroup<this, Tasks['BootstrapApplicationTaskParam']>,
+  ): GenericTaskGroup<any, Tasks['BootstrapApplicationTaskParam']> {
     return taskGroup;
   }
 }

@@ -23,14 +23,6 @@ const { monorepository } = gitCommand.configs!;
 
 const command = {
   configs: {
-    fromInit: {
-      description: 'Generate prettier config using init defaults',
-      cli: {
-        type: Boolean,
-        hide: true,
-      },
-      scope: 'generator',
-    },
     prettierConfigFile: {
       description: 'Prettier configuration file',
       cli: {

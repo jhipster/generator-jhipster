@@ -53,6 +53,7 @@ function updateLanguagesInWebpackReactTask(this: BaseGenerator, { application, c
 export default function updateLanguagesTask(this: BaseGenerator, taskParam: UpdateClientLanguagesTaskParam) {
   updateLanguagesInPipeTask.call(this, taskParam);
   updateLanguagesInWebpackReactTask.call(this, taskParam);
+  // @ts-ignore FIXME types
   updateLanguagesInDayjsConfigurationTask.call(this, taskParam, {
     configurationFile: `${taskParam.application.clientSrcDir}app/config/dayjs.ts`,
     commonjs: true,

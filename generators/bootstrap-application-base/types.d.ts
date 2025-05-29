@@ -16,6 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { BaseApplicationOptions } from '../base-application/index.js';
 
-export { default, CommandBaseGenerator } from './generator.js';
-export { default as command } from './command.js';
+export type BootstrapApplicationBaseOptions = BaseApplicationOptions & {
+  /** boostrap options */
+  applyDefaults?: <const data = any>(data: data) => data;
+};

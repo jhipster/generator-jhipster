@@ -20,7 +20,16 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_PROJECT_NAME } from '../generator-list.js';
 
 const command = {
-  configs: {},
+  configs: {
+    fromInit: {
+      description: 'Generate lint config using init defaults',
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
+      scope: 'generator',
+    },
+  },
   import: ['jhipster:git', GENERATOR_PROJECT_NAME, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
 } as const satisfies JHipsterCommandDefinition;
 

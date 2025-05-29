@@ -45,6 +45,7 @@ describe(`generator - ${generator}`, () => {
           .withSkipWritingPriorities()
           .withJHipsterConfig({
             jhipsterVersion: '7.9.3',
+            // @ts-ignore FIXME types
             enableTranslation: true,
             nativeLanguage: 'in',
             languages: ['in'],

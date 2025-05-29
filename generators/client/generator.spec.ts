@@ -50,6 +50,7 @@ describe(`generator - ${generator}`, () => {
         await helpers
           .runJHipster(generator)
           .withSharedApplication({ getWebappTranslation: () => 'translations' })
+          // @ts-ignore FIXME types
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
           .withMockedGenerators(mockedComposedGenerators);
@@ -69,6 +70,7 @@ describe(`generator - ${generator}`, () => {
         await helpers
           .runJHipster(generator)
           .withSharedApplication({ getWebappTranslation: () => 'translations' })
+          // @ts-ignore FIXME types
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
           .withMockedGenerators(mockedComposedGenerators);

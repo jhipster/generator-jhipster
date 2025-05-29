@@ -1,3 +1,6 @@
+import type { ExportGeneratorOptionsFromCommand } from '../../../../lib/command/index.js';
+import type { InitOptions } from '../../../init/types.js';
+
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -16,6 +19,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export { default, CommandBaseGenerator } from './generator.js';
-export { default as command } from './command.js';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+export type JavascriptBootstrapOptions = ExportGeneratorOptionsFromCommand<typeof import('./command.js').default> & InitOptions;

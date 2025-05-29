@@ -63,7 +63,7 @@ package-lock.json
 ",
     "stateCleared": "modified",
   },
-  ".prettierrc.yml": {
+  ".prettierrc": {
     "contents": "printWidth: 140
 singleQuote: true
 tabWidth: 2
@@ -83,10 +83,6 @@ plugins:
   "devDependencies": {
     "prettier": "PRETTIER_VERSION",
     "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION"
-  },
-  "scripts": {
-    "prettier-check": "prettier --check \\"{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}\\"",
-    "prettier-format": "prettier --write \\"{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}\\""
   }
 }
 ",

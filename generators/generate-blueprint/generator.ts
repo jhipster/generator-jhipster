@@ -1,32 +1,13 @@
-/**
- * Copyright 2013-2025 the original author or authors from the JHipster project.
- *
- * This file is part of the JHipster project, see https://www.jhipster.tech/
- * for more information.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 import { rm } from 'node:fs/promises';
 import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 
-import type { Application, Config, Options } from '../base-simple-application/index.js';
-import BaseGenerator from '../base-simple-application/index.js';
+import BaseGenerator, { type BaseSimpleFeatures } from '../base-simple-application/index.js';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.js';
 
 import * as GENERATOR_LIST from '../generator-list.js';
 import { BLUEPRINT_API_VERSION } from '../generator-constants.js';
-import type { ExportGeneratorOptionsFromCommand } from '../../lib/command/types.js';
+import type { SimpleTask } from '../../lib/types/application/tasks.js';
 import { files, generatorFiles } from './files.js';
 import {
   DYNAMIC,
@@ -42,44 +23,19 @@ import {
   requiredConfig,
   subGeneratorPrompts,
 } from './constants.js';
-import type command from './command.js';
+import type { BlueprintApplication, BlueprintConfig, BlueprintOptions } from './types.js';
 
 const { GENERATOR_INIT } = GENERATOR_LIST;
 
 const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spec.?(c|m)js'];
 
-type BlueprintConfig = {
-  sampleWritten?: boolean;
-  githubRepository?: string;
-  cli?: boolean;
-  cliName?: string;
-  blueprintMjsExtension: string;
-  generators: Record<string, any>;
-  js: boolean;
-};
-
-type BlueprintApplication = BlueprintConfig & { commands: string[]; blueprintsPath?: string; js?: boolean };
-
-type BlueprintOptions = ExportGeneratorOptionsFromCommand<typeof command> & {
-  skipGit: boolean;
-  existed: boolean;
-  defaults: boolean;
-};
-
-export default class extends BaseGenerator<
-  Application & BlueprintApplication,
-  Config &
-    BlueprintConfig & {
-      cli?: boolean;
-      caret: boolean;
-      dynamic: boolean;
-      localBlueprint: boolean;
-      subGenerators: string[];
-      additionalSubGenerators: string;
-      generators: Record<string, any>;
-    },
-  Options & BlueprintOptions
-> {
+export default class<
+  Application extends BlueprintApplication = BlueprintApplication,
+  Config extends BlueprintConfig = BlueprintConfig,
+  Options extends BlueprintOptions = BlueprintOptions,
+  Features extends BaseSimpleFeatures = BaseSimpleFeatures,
+  Tasks extends SimpleTask<Application> = SimpleTask<Application>,
+> extends BaseGenerator<Application, Config, Options, Features, Tasks> {
   recreatePackageLock!: boolean;
   skipWorkflows!: boolean;
   ignoreExistingGenerators!: boolean;
@@ -104,9 +60,11 @@ export default class extends BaseGenerator<
     return this.asInitializingTaskGroup({
       async loadOptions() {
         if (this.allGenerators) {
-          this.config.set(allGeneratorsConfig());
+          // FIXME types
+          this.config.set(allGeneratorsConfig() as any);
         }
         if (this.options.defaults) {
+          // @ts-ignore FIXME types
           this.config.defaults(defaultConfig({ config: this.jhipsterConfig }));
         }
       },
@@ -169,7 +127,7 @@ export default class extends BaseGenerator<
           this.config.defaults({
             [DYNAMIC]: true,
             js: false,
-          });
+          } as Config);
         }
       },
     });
@@ -183,7 +141,8 @@ export default class extends BaseGenerator<
     return this.asComposingTaskGroup({
       async compose() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
-        const initGenerator = await this.composeWithJHipster(GENERATOR_INIT, { generatorOptions: { packageJsonType: 'module' } });
+        // FIXME types a cycle here
+        const initGenerator = await this.composeWithJHipster(GENERATOR_INIT, { generatorOptions: { packageJsonType: 'module' } as any });
         initGenerator.generateReadme = false;
       },
     });
@@ -196,7 +155,8 @@ export default class extends BaseGenerator<
   get loading() {
     return this.asLoadingTaskGroup({
       async loadDefaults({ applicationDefaults }) {
-        applicationDefaults(this.config.getAll(), defaultConfig(), { commands: [] });
+        // FIXME types
+        applicationDefaults(this.config.getAll() as any, defaultConfig() as any, { commands: [] } as any);
       },
     });
   }
