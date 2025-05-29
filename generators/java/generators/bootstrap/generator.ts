@@ -48,6 +48,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
+      const projectNameGenerator = await this.dependsOnJHipster('project-name');
+      projectNameGenerator.javaApplication = true;
       // TODO depends on application-server
       await this.dependsOnBootstrapApplication();
     }
