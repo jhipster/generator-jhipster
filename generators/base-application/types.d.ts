@@ -11,6 +11,8 @@ import type { I18nApplication } from '../languages/types.js';
 import type { SpringBootApplication } from '../server/types.js';
 import type { OptionWithDerivedProperties } from './application-options.js';
 
+export type { Source } from '../base-simple-application/types.js';
+
 export type BaseApplication = SimpleApplication & {
   jhiPrefix: string;
   jhiPrefixCapitalized: string;

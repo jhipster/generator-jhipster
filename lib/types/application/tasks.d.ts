@@ -21,6 +21,7 @@ import type { Merge, OmitIndexSignature, Simplify } from 'type-fest';
 import type { Entity as BaseEntity } from '../base/entity.js';
 import type { GetFieldType, GetRelationshipType } from '../utils/entity-utils.ts';
 import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource } from '../../../generators/base/tasks.js';
+import type { Source as BaseSource } from '../../../generators/base/types.js';
 import type { Application as SimpleApplication } from '../../../generators/base-simple-application/index.js';
 import type { Entity } from './entity.js';
 import type { ApplicationType, BaseApplicationSource } from './application.js';
@@ -102,19 +103,19 @@ type PreparingEachEntityRelationshipTaskParam<E = Entity, A = ApplicationType<E>
   relationshipName: string;
 };
 
-type PostWritingEntitiesTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithEntities<E, A> &
-  TaskParamWithSource<BaseApplicationSource>;
+type PostWritingEntitiesTaskParam<E = Entity, A = ApplicationType<E>, Source = BaseApplicationSource> = TaskParamWithEntities<E, A> &
+  TaskParamWithSource<Source>;
 
-export type SimpleTaskTypes<A = SimpleApplication> = Merge<
+export type SimpleTaskTypes<A = SimpleApplication, S extends BaseSource = BaseSource> = Merge<
   BaseTaskTypes,
   {
     BootstrapApplicationTaskParam: TaskParamWithControl & ApplicationDefaultsTaskParam<A>;
     LoadingTaskParam: TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
-    PreparingTaskParam: TaskParamWithSource<BaseApplicationSource> & TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
-    PostPreparingTaskParam: TaskParamWithSource<BaseApplicationSource> & TaskParamWithApplication<A>;
+    PreparingTaskParam: TaskParamWithSource<S> & TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
+    PostPreparingTaskParam: TaskParamWithSource<S> & TaskParamWithApplication<A>;
     DefaultTaskParam: TaskParamWithApplication<A>;
     WritingTaskParam: TaskParamWithApplication<A>;
-    PostWritingTaskParam: TaskParamWithSource<BaseApplicationSource> & TaskParamWithApplication<A>;
+    PostWritingTaskParam: TaskParamWithSource<S> & TaskParamWithApplication<A>;
     PreConflictsTaskParam: TaskParamWithApplication<A>;
     InstallTaskParam: TaskParamWithApplication<A>;
     PostInstallTaskParam: TaskParamWithApplication<A>;
@@ -122,7 +123,7 @@ export type SimpleTaskTypes<A = SimpleApplication> = Merge<
   }
 >;
 
-export type TaskTypes<E = Entity, A = ApplicationType<E>> = SimpleTaskTypes<A> & {
+export type TaskTypes<E = Entity, A = ApplicationType<E>, S extends BaseSource = BaseApplicationSource> = SimpleTaskTypes<A, S> & {
   ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<E, A>;
   LoadingEntitiesTaskParam: LoadingEntitiesTaskParam<E, A>;
   PreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;
@@ -131,5 +132,5 @@ export type TaskTypes<E = Entity, A = ApplicationType<E>> = SimpleTaskTypes<A> &
   PostPreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;
   DefaultTaskParam: TaskParamWithEntities<E, A>;
   WritingEntitiesTaskParam: TaskParamWithEntities<E, A>;
-  PostWritingEntitiesTaskParam: PostWritingEntitiesTaskParam<E, A>;
+  PostWritingEntitiesTaskParam: PostWritingEntitiesTaskParam<E, A, S>;
 };

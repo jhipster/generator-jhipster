@@ -50,7 +50,7 @@ import {
 } from './internal/needles.js';
 import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.js';
 import type command from './command.js';
-import type { LiquibaseEntity } from './types.js';
+import type { LiquibaseEntity, Source as LiquibaseSource } from './types.js';
 
 const {
   CommonDBTypes: { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER },
@@ -62,7 +62,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   LiquibaseEntity,
   ApplicationType<LiquibaseEntity>,
   BaseApplicationConfig & CommandType['Config'],
-  BaseApplicationOptions & CommandType['Options']
+  BaseApplicationOptions & CommandType['Options'],
+  LiquibaseSource
 > {
   recreateInitialChangelog: boolean;
   numberOfRows: number;

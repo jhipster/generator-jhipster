@@ -3,6 +3,11 @@ import type { ExportGeneratorOptionsFromCommand } from '../../lib/command/types.
 import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/types.js';
 import type { ApplicationWithConfig } from './api.js';
 
+export type Source = {
+  /* Dummy field to declare an empty type */
+  _jhipsterSource: never;
+};
+
 export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
 
 export type Control = {

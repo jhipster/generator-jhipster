@@ -4,6 +4,8 @@ import type {
   Options as BaseApplicationOptions,
 } from '../base-application/types.d.ts';
 
+export type { Source } from '../base-application/types.js';
+
 export type BaseChangelog = {
   newEntity: boolean;
   changedEntity: boolean;
