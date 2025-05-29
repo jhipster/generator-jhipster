@@ -57,7 +57,7 @@ export type Options = YeomanOptions & {
   db?: string;
 
   /* workspaces options */
-  generateApplications?: boolean;
+  generateApplications?: boolean | (() => Promise<void>);
   generateWorkspaces?: boolean;
   generateWith?: string;
   monorepository?: boolean;

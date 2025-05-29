@@ -218,11 +218,11 @@ export default class JdlGenerator extends BaseGenerator<AllConfig, AllOptions> {
           }
         } else if (this.applications.length > 1) {
           this.log.info(`Generating ${this.applications.length} applications`);
-          await this.composeWithJHipster(this.workspacesGenerator, {
+          await this.composeWithJHipster(this.workspacesGenerator as 'workspaces', {
             generatorOptions: {
-              workspacesFolders: this.applications.map(app => app.folder),
+              workspacesFolders: this.applications.map(app => app.folder!),
               generateApplications: async () => this.runNonInteractive(this.applications, generatorOptions),
-            } as any,
+            },
           });
         } else {
           this.log.info('Generating 1 application');
