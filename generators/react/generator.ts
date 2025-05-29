@@ -27,7 +27,8 @@ import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
 } from '../client/support/index.js';
-import { createNeedleCallback, upperFirstCamelCase } from '../base/support/index.js';
+import { createNeedleCallback } from '../base/support/index.js';
+import { upperFirstCamelCase } from '../../lib/utils/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.js';
 import cleanupOldFilesTask from './cleanup.js';

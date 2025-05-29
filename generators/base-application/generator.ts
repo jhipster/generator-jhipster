@@ -24,7 +24,7 @@ import BaseGenerator from '../base-simple-application/index.js';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-simple-application/support/index.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import type { JHipsterGeneratorOptions } from '../base/api.js';
-import { mutateData } from '../../lib/utils/object.js';
+import { mutateData } from '../../lib/utils/index.js';
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
   GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,

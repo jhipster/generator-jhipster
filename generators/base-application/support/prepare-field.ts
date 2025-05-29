@@ -20,7 +20,7 @@ import { defaults, kebabCase, snakeCase, startCase, upperFirst } from 'lodash-es
 import { fieldTypes, validations } from '../../../lib/jhipster/index.js';
 import { getTypescriptType, prepareField as prepareClientFieldForTemplates } from '../../client/support/index.js';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
-import { mutateData } from '../../../lib/utils/object.js';
+import { mutateData } from '../../../lib/utils/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { Field } from '../../../lib/types/application/field.js';
 import type { Entity } from '../../../lib/types/application/entity.js';

@@ -18,7 +18,7 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { mutateData } from '../base/support/index.js';
+import { mutateData } from '../../lib/utils/index.js';
 import writeElasticsearchFilesTask from './files.js';
 import cleanupElasticsearchFilesTask from './cleanup.js';
 import writeElasticsearchEntityFilesTask, { cleanupElasticsearchEntityFilesTask } from './entity-files.js';

@@ -35,16 +35,8 @@ import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
 
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
-import type { Logger } from '../base/support/index.js';
-import {
-  CRLF,
-  LF,
-  createJHipster7Context,
-  hasCrlr,
-  joinCallbacks,
-  normalizeLineEndings,
-  removeFieldsWithNullishValues,
-} from '../base/support/index.js';
+import { createJHipster7Context, joinCallbacks } from '../base/support/index.js';
+import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.js';
 
 import type { CascatedEditFileCallback, EditFileCallback, EditFileOptions, ValidationResult, WriteFileOptions } from '../base/api.js';
 import {

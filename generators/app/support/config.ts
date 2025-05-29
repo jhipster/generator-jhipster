@@ -1,6 +1,6 @@
 import { upperFirst } from 'lodash-es';
 import { applicationTypes, authenticationTypes, databaseTypes } from '../../../lib/jhipster/index.js';
-import { mutateData } from '../../base/support/index.js';
+import { mutateData } from '../../../lib/utils/index.js';
 import { loadDerivedConfig } from '../../../lib/internal/index.js';
 import serverCommand from '../../server/command.js';
 

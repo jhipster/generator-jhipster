@@ -24,7 +24,7 @@ import { isBinaryFile } from 'isbinaryfile';
 import { simpleGit } from 'simple-git';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import type { MemFsEditorFile } from 'mem-fs-editor';
-import { CRLF, normalizeLineEndings } from '../../base/support/index.js';
+import { CRLF, normalizeLineEndings } from '../../../lib/utils/index.js';
 
 /**
  * Detect the file first line endings

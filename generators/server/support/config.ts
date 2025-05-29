@@ -1,4 +1,4 @@
-import { mutateData, pickFields } from '../../base/support/index.js';
+import { mutateData, pickFields } from '../../../lib/utils/index.js';
 
 import {
   buildToolTypes,

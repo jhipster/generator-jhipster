@@ -88,7 +88,6 @@ async function retrieveLocalBootswatchThemes({ clientFramework }): Promise<Choic
 }
 
 async function _retrieveBootswatchThemes({ clientFramework, useApi }): Promise<Choice[]> {
-  const errorMessage = 'Could not fetch bootswatch themes from API. Using default ones.';
   if (!useApi) {
     return [
       { value: 'cerulean', name: 'Cerulean' },

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { getFKConstraintName } from '../../server/support/index.js';
-import { mutateData } from '../../base/support/index.js';
+import { mutateData } from '../../../lib/utils/index.js';
 import type { Relationship } from '../../../lib/types/application/relationship.js';
 
 function relationshipBaseDataEquals(relationshipA: any, relationshipB: any) {

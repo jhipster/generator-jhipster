@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { stringHashCode } from '../../../lib/utils/string.js';
+import { stringHashCode } from '../../../lib/utils/index.js';
 
 /**
  * get a hipster based on the applications name.

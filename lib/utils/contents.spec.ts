@@ -16,11 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './configuration-helpers/options.js';
-export * from './faker.js';
-export { default as getHipster } from './hipster.js';
-export * from './jhipster7-context.js';
-export * from './needles.js';
-export * from './os.js';
-export * from './timestamp.js';
-export * from './write-files.js';
+import { describe, expect, it } from 'esmocha';
+import { normalizeLineEndings } from './contents.js';
+
+describe('generator - base - support - contents', () => {
+  describe('::normalizeLineEndings', () => {
+    it('should convert \\r\\n to \\n', () => {
+      expect(normalizeLineEndings('a\r\ncrlf\r\nfile\r\nwith\nlf\nlines\r\n', '\r\n')).toBe('a\r\ncrlf\r\nfile\r\nwith\r\nlf\r\nlines\r\n');
+    });
+    it('should convert \\n to \\r\\n', () => {
+      expect(normalizeLineEndings('a\r\ncrlf\r\nfile\r\nwith\nlf\nlines\r\n', '\n')).toBe('a\ncrlf\nfile\nwith\nlf\nlines\n');
+    });
+  });
+});

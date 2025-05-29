@@ -16,11 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './configuration-helpers/options.js';
-export * from './faker.js';
-export { default as getHipster } from './hipster.js';
-export * from './jhipster7-context.js';
-export * from './needles.js';
-export * from './os.js';
-export * from './timestamp.js';
-export * from './write-files.js';
+export * from './basename.js';
+export * from './contents.js';
+export * from './derived-property.js';
+export * from './logger.js';
+export * from './namespace.js';
+export * from './object.js';
+export * from './path.js';
+export * from './secret.js';
+export * from './string.js';

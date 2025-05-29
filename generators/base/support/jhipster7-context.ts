@@ -13,7 +13,7 @@ import {
 import { getDBCExtraOption } from '../../spring-data-relational/support/database-data.js';
 import { getJdbcUrl, getR2dbcUrl } from '../../spring-data-relational/support/database-url.js';
 import { fieldTypes } from '../../../lib/jhipster/index.js';
-import { upperFirstCamelCase } from '../../../lib/utils/string.js';
+import { upperFirstCamelCase } from '../../../lib/utils/index.js';
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 

@@ -34,7 +34,7 @@ import {
   matchMainJavaFiles,
   packageInfoTransform,
 } from '../../support/index.js';
-import { normalizePathEnd } from '../../../base/support/path.js';
+import { normalizePathEnd } from '../../../../lib/utils/index.js';
 import prepareEntity from '../../../server/support/prepare-entity.js';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator {

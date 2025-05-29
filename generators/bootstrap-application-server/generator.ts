@@ -44,7 +44,7 @@ import { getDockerfileContainers } from '../docker/utils.js';
 import { getMainClassName } from '../java/support/index.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import serverCommand from '../server/command.js';
-import { normalizePathEnd } from '../base/support/path.js';
+import { normalizePathEnd } from '../../lib/utils/index.js';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator {
   async beforeQueue() {

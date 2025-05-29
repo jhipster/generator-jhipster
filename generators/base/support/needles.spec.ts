@@ -18,7 +18,7 @@
  */
 import test from 'node:test';
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
-import { createJHipsterLogger } from '../../../lib/utils/logger.js';
+import { createJHipsterLogger } from '../../../lib/utils/index.js';
 import {
   checkContentIn,
   convertToPrettierExpressions,
