@@ -19,7 +19,6 @@
 import path from 'path';
 
 import { camelCase } from 'lodash-es';
-import { isReproducible } from '../../base/support/index.js';
 
 const defaultName = 'jhipster';
 
@@ -46,16 +45,13 @@ export const validateNpmProjectName = (name: string) => {
 export const validateProjectName = (name: string, { javaApplication }: { javaApplication?: boolean } = {}) =>
   javaApplication ? validateJavaApplicationName(name) : validateNpmProjectName(name);
 
-const getDefaultName = (generator: { reproducible?: boolean; javaApplication?: boolean } | any) => {
-  if (generator?.options && isReproducible(generator)) {
+const getDefaultName = (options: { cwd?: string; reproducible?: boolean; javaApplication?: boolean } = {}) => {
+  if (options.reproducible) {
     return defaultName;
   }
-  let projectName = path.basename(process.cwd());
 
-  const { reproducible = false, javaApplication = false } = generator && !generator.options ? generator : {};
-  if (reproducible) {
-    return defaultName;
-  }
+  const { javaApplication = false, cwd = process.cwd() } = options;
+  let projectName = path.basename(cwd);
   if (javaApplication) {
     projectName = camelCase(projectName);
   } else {

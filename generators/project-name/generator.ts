@@ -27,6 +27,7 @@ export default class ProjectNameGenerator extends CommandBaseGenerator<typeof co
   javaApplication?: boolean;
   defaultBaseName: () => string = () =>
     getDefaultAppName({
+      cwd: this.destinationPath(),
       reproducible: this.options.reproducible,
       javaApplication: this.javaApplication,
     });

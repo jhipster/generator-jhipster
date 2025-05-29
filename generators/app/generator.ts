@@ -83,7 +83,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       defaults() {
         if (!this.options.reproducible) {
           this.config.defaults({
-            baseName: getDefaultAppName(this),
+            baseName: getDefaultAppName({ cwd: this.destinationPath() }),
             creationTimestamp: new Date().getTime(),
           });
         }
