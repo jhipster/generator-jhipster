@@ -17,51 +17,16 @@
  * limitations under the License.
  */
 import type { Storage } from 'yeoman-generator';
-import type { Merge, OmitIndexSignature, Simplify } from 'type-fest';
-import type { Entity as BaseEntity } from '../base/entity.js';
-import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource } from '../../../generators/base/tasks.js';
+import type { TaskParamWithSource } from '../../../generators/base/tasks.js';
 import type { Source as BaseSource } from '../../../generators/base/types.js';
-import type { Application as SimpleApplication } from '../../../generators/base-simple-application/index.js';
+import type { SimpleTaskTypes, TaskParamWithApplication } from '../../../generators/base-simple-application/tasks.js';
 import type { Entity } from './entity.js';
 import type { ApplicationType, BaseApplicationSource } from './application.js';
 
 type GetRelationshipType<E> = E extends { relationships: (infer R)[] } ? R : never;
 type GetFieldType<E> = E extends { fields: (infer F)[] } ? F : never;
 
-type ApplicationDefaultsTaskParam<A> = {
-  /**
-   * Parameter properties accepts:
-   * - functions: receives the application and the return value is set at the application property.
-   * - non functions: application property will receive the property in case current value is undefined.
-   *
-   * Applies each object in order.
-   *
-   * @example
-   * // application = { prop: 'foo-bar', prop2: 'foo2' }
-   * applicationDefaults(
-   *   application,
-   *   { prop: 'foo', prop2: ({ prop }) => prop + 2 },
-   *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
-   * );
-   */
-  applicationDefaults: (
-    ...defaults: Simplify<
-      OmitIndexSignature<{
-        [Key in keyof (Partial<A> & { __override__?: boolean })]?: Key extends '__override__'
-          ? boolean
-          : Key extends keyof A
-            ? A[Key] | ((ctx: A) => A[Key])
-            : never;
-      }>
-    >[]
-  ) => void;
-};
-
-type TaskParamWithApplication<A = ApplicationType<Entity>> = TaskParamWithControl & {
-  application: A;
-};
-
-type TaskParamWithEntities<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<A> & {
+type TaskParamWithEntities<E, A> = TaskParamWithApplication<A> & {
   entities: E[];
 };
 
@@ -70,24 +35,24 @@ type ConfiguringEachEntityTaskParam<E = Entity, A = ApplicationType<E>> = TaskPa
   /** Entity storage */
   entityStorage: Storage;
   /** Proxy object for the entitystorage */
-  entityConfig: BaseEntity & Record<string, any>;
+  entityConfig: Partial<E> & Record<string, any>;
 };
 
-type EntityToLoad = {
+type EntityToLoad<E> = {
   entityName: string;
   /** Entity storage */
   entityStorage: Storage;
   /** Proxy object for the entitystorage */
-  entityConfig: BaseEntity;
+  entityConfig: Partial<E>;
   /** Initial entity object */
-  entityBootstrap: Entity;
+  entityBootstrap: E;
 };
 
-type LoadingEntitiesTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplication<A> & {
-  entitiesToLoad: EntityToLoad[];
+type LoadingEntitiesTaskParam<E, A> = TaskParamWithApplication<A> & {
+  entitiesToLoad: EntityToLoad<E>[];
 };
 
-type EntityTaskParam<E = Entity> = {
+type EntityTaskParam<E> = {
   entity: E;
   entityName: string;
   description: string;
@@ -105,25 +70,11 @@ type PreparingEachEntityRelationshipTaskParam<E = Entity, A = ApplicationType<E>
   relationshipName: string;
 };
 
-type PostWritingEntitiesTaskParam<E = Entity, A = ApplicationType<E>, Source = BaseApplicationSource> = TaskParamWithEntities<E, A> &
-  TaskParamWithSource<Source>;
-
-export type SimpleTaskTypes<A = SimpleApplication, S extends BaseSource = BaseSource> = Merge<
-  BaseTaskTypes,
-  {
-    BootstrapApplicationTaskParam: TaskParamWithControl & ApplicationDefaultsTaskParam<A>;
-    LoadingTaskParam: TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
-    PreparingTaskParam: TaskParamWithSource<S> & TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
-    PostPreparingTaskParam: TaskParamWithSource<S> & TaskParamWithApplication<A>;
-    DefaultTaskParam: TaskParamWithApplication<A>;
-    WritingTaskParam: TaskParamWithApplication<A>;
-    PostWritingTaskParam: TaskParamWithSource<S> & TaskParamWithApplication<A>;
-    PreConflictsTaskParam: TaskParamWithApplication<A>;
-    InstallTaskParam: TaskParamWithApplication<A>;
-    PostInstallTaskParam: TaskParamWithApplication<A>;
-    EndTaskParam: TaskParamWithApplication<A>;
-  }
->;
+type PostWritingEntitiesTaskParam<
+  E = Entity,
+  A = ApplicationType<E>,
+  Source extends BaseSource = BaseApplicationSource,
+> = TaskParamWithEntities<E, A> & TaskParamWithSource<Source>;
 
 export type TaskTypes<E = Entity, A = ApplicationType<E>, S extends BaseSource = BaseApplicationSource> = SimpleTaskTypes<A, S> & {
   ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<E, A>;
