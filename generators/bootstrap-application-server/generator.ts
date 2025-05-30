@@ -33,7 +33,6 @@ import {
   addEntitiesOtherRelationships,
   getPrimaryKeyValue,
   hibernateSnakeCase,
-  loadDerivedServerConfig,
   loadRequiredConfigDerivedProperties,
   prepareRelationship,
 } from '../server/support/index.js';
@@ -82,6 +81,14 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
           packageFolder: ({ packageName }) => `${packageName!.replace(/\./g, '/')}/`,
           javaPackageSrcDir: ({ srcMainJava, packageFolder }) => normalizePathEnd(`${srcMainJava}${packageFolder}`),
           javaPackageTestDir: ({ srcTestJava, packageFolder }) => normalizePathEnd(`${srcTestJava}${packageFolder}`),
+
+          devDatabaseTypeH2Any: ({ devDatabaseType }) => devDatabaseType === 'h2' || devDatabaseType === 'h2Memory',
+          devJdbcUrl: undefined,
+          devDatabaseUsername: undefined,
+          devDatabasePassword: undefined,
+          prodJdbcUrl: undefined,
+          prodDatabaseUsername: undefined,
+          prodDatabasePassword: undefined,
         });
       },
       async loadApplication({ application, applicationDefaults }) {
@@ -136,7 +143,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
         loadDerivedConfig(serverCommand.configs, { application });
-        loadDerivedServerConfig({ application });
       },
       prepareForTemplates({ applicationDefaults }) {
         applicationDefaults({

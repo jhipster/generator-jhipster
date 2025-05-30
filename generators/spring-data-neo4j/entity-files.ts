@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { javaMainPackageTemplatesBlock } from '../server/support/index.js';
+import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
 import type Generator from './generator.js';
 
 const domainFiles = [

@@ -18,7 +18,7 @@
  */
 import type { WriteFileSection } from '../base/api.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
-import { moveToJavaPackageSrcDir } from '../server/support/index.js';
+import { moveToJavaPackageSrcDir } from '../java/support/index.js';
 
 export const liquibaseFiles: WriteFileSection = {
   liquibase: [

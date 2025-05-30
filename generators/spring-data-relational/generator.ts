@@ -25,7 +25,7 @@ import { databaseTypes } from '../../lib/jhipster/index.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
-import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.js';
+import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from './support/index.js';
 import {
   getDatabaseDriverForDatabase,
   getDatabaseTypeMavenDefinition,
@@ -61,6 +61,7 @@ export default class SqlGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       async preparing({ application }) {
+        prepareSqlApplicationProperties({ application });
         const anyApp = application as any;
         anyApp.devDatabaseExtraOptions = getDBCExtraOption(anyApp.devDatabaseType);
         anyApp.prodDatabaseExtraOptions = getDBCExtraOption(anyApp.prodDatabaseType);

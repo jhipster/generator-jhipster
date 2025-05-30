@@ -18,7 +18,7 @@
  */
 import { defaults } from 'lodash-es';
 import { applicationOptions, deploymentOptions } from '../../../lib/jhipster/index.js';
-import { loadDerivedPlatformConfig, loadDerivedServerAndPlatformProperties, loadPlatformConfig } from '../../server/support/index.js';
+import { loadDerivedPlatformConfig, loadDerivedServerAndPlatformProperties, loadPlatformConfig } from '../support/index.js';
 import type BaseWorkspacesGenerator from '../index.js';
 
 const { OptionNames } = applicationOptions;

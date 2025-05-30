@@ -17,32 +17,7 @@
  * limitations under the License.
  */
 export * from './build-specification-mapper.js';
-export * from './config.js';
-/**
- * @deprecated Use from java generator support
- */
-export * from '../../java/support/doc.js';
 export * from './database.js';
-/**
- * @deprecated Use from maven generator support
- */
-export * from '../../maven/support/dependabot-maven.js';
-/**
- * @deprecated Use from gradle generator support
- */
-export * from '../../gradle/support/dependabot-gradle.js';
-/**
- * @deprecated Use from java generator support
- */
-export * from '../../java/support/files.js';
-/**
- * @deprecated Use from java generator support
- */
-export * from '../../java/support/java-formatting.js';
-/**
- * @deprecated Use from java generator support
- */
-export * from '../../java/support/key-store.js';
 export * from './needles.js';
 export { default as prepareEntity } from './prepare-entity.js';
 export * from './prepare-entity.js';

@@ -37,7 +37,7 @@ import { messageBrokerTypes } from '../../lib/jhipster/index.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
 import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
 import { checkDocker } from '../docker/support/index.js';
-import { loadDerivedServerConfig } from '../server/support/index.js';
+import { loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/index.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { writeFiles } from './files.js';
@@ -118,7 +118,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
       loadSharedConfig() {
         for (const app of this.appConfigs) {
           loadDerivedAppConfig({ application: app });
-          loadDerivedServerConfig({ application: app });
+          loadDerivedServerAndPlatformProperties({ application: app });
         }
         loadDeploymentConfig.call(this);
         derivedKubernetesPlatformProperties(this);

@@ -42,9 +42,8 @@ import {
   getJavaValueGeneratorForType,
   getSpecificationBuildForType,
   insertContentIntoApplicationProperties,
-  javaBeanCase,
 } from '../server/support/index.js';
-import { generateKeyStore } from '../java/support/index.js';
+import { generateKeyStore, javaBeanCase } from '../java/support/index.js';
 import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
 import { mutateData } from '../../lib/utils/index.js';
 import {
@@ -229,6 +228,20 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.COMPOSING_COMPONENT]() {
     return this.delegateTasksToBlueprint(() => this.composingComponent);
+  }
+
+  get loading() {
+    return this.asLoadingTaskGroup({
+      loading({ applicationDefaults }) {
+        applicationDefaults({
+          communicationSpringWebsocket: ({ websocket }) => websocket === SPRING_WEBSOCKET,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
