@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
-import type { GetWebappTranslationCallback } from '../../../lib/types/base/translation.js';
+import type { GetWebappTranslationCallback } from '../../client/translation.js';
 import { createTranslationReplacer } from './translate-react.js';
 
 describe('generator - react - transform', () => {

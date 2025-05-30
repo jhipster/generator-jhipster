@@ -40,7 +40,7 @@ import { loadDerivedAppConfig } from '../app/support/index.js';
 import { lookupCommandsConfigs } from '../../lib/command/lookup-commands-configs.js';
 import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../lib/command/load.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
-import { isWin32 } from '../base/support/index.js';
+import { isWin32 } from '../base-core/support/index.ts';
 import { removeFieldsWithNullishValues } from '../../lib/utils/index.js';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../lib/application/field-types.js';
 import type { Entity } from '../../lib/types/application/entity.js';

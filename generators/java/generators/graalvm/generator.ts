@@ -20,7 +20,7 @@ import { extname } from 'path';
 import { isFileStateDeleted, isFileStateModified } from 'mem-fs-editor/state';
 import { passthrough } from '@yeoman/transform';
 import BaseApplicationGenerator from '../../../base-application/index.js';
-import { createNeedleCallback } from '../../../base/support/needles.js';
+import { createNeedleCallback } from '../../../base-core/support/needles.ts';
 import { addJavaAnnotation, addJavaImport } from '../../../java/support/add-java-annotation.js';
 import { javaMainPackageTemplatesBlock } from '../../../java/support/files.js';
 import { mavenDefinition } from './internal/maven-definition.js';

@@ -28,7 +28,7 @@ import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { convertSecretToBase64, createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
-import { createFaker } from '../base/support/index.js';
+import { createFaker } from '../base-application/support/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
 import { loadDerivedPlatformConfig, loadPlatformConfig } from '../server/support/index.js';

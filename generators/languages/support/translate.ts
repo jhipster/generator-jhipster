@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { GetWebappTranslationCallback } from '../../../lib/types/base/translation.js';
+import type { GetWebappTranslationCallback } from '../../client/translation.js';
 
 const TRANSLATE_FUNCTION_ARGS = /\(\s*'(?<key>[^']+)'(?:,\s*(?<interpolate>\{(?:(?!\}\))[\s\S])*\}))?\)/gs.source;
 

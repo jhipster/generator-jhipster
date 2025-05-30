@@ -1,6 +1,3 @@
-import type { TaskParamWithApplication } from '../../lib/types/application/tasks.js';
-import type { BaseChangelog } from './types.js';
-
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -19,6 +16,4 @@ import type { BaseChangelog } from './types.js';
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export type TaskParamWithChangelogsAndApplication = TaskParamWithApplication & {
-  entityChanges: BaseChangelog[];
-};
+export { default as getHipster } from './hipster.js';

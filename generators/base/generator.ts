@@ -34,8 +34,8 @@ import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromComm
 import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import type { GenericTaskGroup } from '../base-core/types.js';
 import { packageNameToNamespace } from '../../lib/utils/index.js';
+import { formatDateForChangelog } from '../base/support/index.js';
 import type { TaskTypes as BaseTaskTypes } from './tasks.js';
-import { formatDateForChangelog } from './support/index.js';
 import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
 import {

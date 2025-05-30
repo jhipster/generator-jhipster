@@ -25,7 +25,7 @@ import type CoreGenerator from '../../base-core/generator.js';
 import type { Field } from '../../../lib/types/application/field.js';
 import type { Entity } from '../../../lib/types/application/entity.js';
 import { fieldTypeValues, isFieldEnumType } from '../../../lib/application/field-types.js';
-import type { FakerWithRandexp } from '../../base/support/faker.js';
+import type { FakerWithRandexp } from './faker.js';
 import { prepareProperty } from './prepare-property.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;

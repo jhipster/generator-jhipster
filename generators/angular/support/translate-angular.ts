@@ -28,7 +28,7 @@ import {
   escapeHtmlTranslationValue,
   escapeTsTranslationValue,
 } from '../../languages/support/index.js';
-import type { GetWebappTranslationCallback } from '../../../lib/types/base/translation.js';
+import type { GetWebappTranslationCallback } from '../../client/translation.js';
 
 const PLACEHOLDER_REGEX = /(?:placeholder|title)=['|"](\{\{\s?['|"]([a-zA-Z0-9.\-_]+)['|"]\s?\|\s?translate\s?\}\})['|"]/.source;
 

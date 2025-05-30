@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { createFaker } from '../base/support/index.js';
+import { createFaker } from '../base-application/support/index.ts';
 import { stringHashCode } from '../../lib/utils/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';

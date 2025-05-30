@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../../../base-application/index.js';
-import { createNeedleCallback } from '../../../base/support/needles.js';
+import { createNeedleCallback } from '../../../base-core/support/needles.ts';
 
 export default class EslintGenerator extends BaseApplicationGenerator {
   async beforeQueue() {

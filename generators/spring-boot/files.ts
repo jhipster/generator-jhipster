@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import { addSectionsCondition, mergeSections } from '../base/support/index.js';
+import { addSectionsCondition, mergeSections } from '../base-core/support/index.ts';
 import {
   javaMainPackageTemplatesBlock,
   moveToJavaPackageSrcDir,

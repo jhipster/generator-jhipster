@@ -18,8 +18,8 @@
  */
 import assert from 'assert';
 import { escapeRegExp, kebabCase } from 'lodash-es';
-import type CoreGenerator from '../../base-core/index.js';
-import type { CascatedEditFileCallback, EditFileCallback, NeedleCallback } from '../api.js';
+import type CoreGenerator from '../index.ts';
+import type { CascatedEditFileCallback, EditFileCallback, NeedleCallback } from '../../base/api.js';
 import { joinCallbacks } from './write-files.js';
 
 type NeedleContentToAddCallback = {

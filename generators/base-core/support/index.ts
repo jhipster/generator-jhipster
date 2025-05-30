@@ -16,25 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { stringHashCode } from '../../../lib/utils/index.js';
-
-/**
- * get a hipster based on the applications name.
- * @param baseName of application
- */
-export default function getHipster(baseName: string): string {
-  const hash = stringHashCode(baseName);
-
-  switch (hash % 4) {
-    case 0:
-      return 'jhipster_family_member_0';
-    case 1:
-      return 'jhipster_family_member_1';
-    case 2:
-      return 'jhipster_family_member_2';
-    case 3:
-      return 'jhipster_family_member_3';
-    default:
-      return 'jhipster_family_member_0';
-  }
-}
+export * from './jhipster7-context.js';
+export * from './needles.js';
+export * from './os.js';
+export * from './write-files.js';

@@ -23,7 +23,7 @@ import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../gen
 import { defaultLanguage } from '../languages/support/index.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.js';
-import { createNeedleCallback } from '../base/support/index.js';
+import { createNeedleCallback } from '../base-core/support/index.js';
 import { mutateData } from '../../lib/utils/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.js';

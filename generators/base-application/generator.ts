@@ -490,7 +490,7 @@ export default class BaseApplicationGenerator<
    * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
-  #getEntitiesDataToLoad(): EntityToLoad[] {
+  #getEntitiesDataToLoad(): EntityToLoad<any>[] {
     const application = this.#application;
     const builtInEntities: string[] = [];
     if (application.generateBuiltInUserEntity) {
@@ -521,7 +521,7 @@ export default class BaseApplicationGenerator<
           return generator.getEntityConfig(entityName, true)!.createProxy();
         },
         entityBootstrap,
-      } as EntityToLoad;
+      } as EntityToLoad<any>;
     });
   }
 
