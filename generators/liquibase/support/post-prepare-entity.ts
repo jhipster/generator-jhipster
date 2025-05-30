@@ -23,7 +23,7 @@ import { asPostPreparingEachEntityTask } from '../../base-application/support/ta
 const { CommonDBTypes } = fieldTypes;
 const { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER } = CommonDBTypes;
 
-export default asPostPreparingEachEntityTask(function postPrepareEntity({ application, entity }) {
+export default asPostPreparingEachEntityTask<LiquibaseEntity>(function postPrepareEntity({ application, entity }) {
   const { relationships, builtIn, name, primaryKey } = entity;
   if (builtIn && name === 'User' && primaryKey) {
     const userIdType = primaryKey.type;
@@ -35,9 +35,9 @@ export default asPostPreparingEachEntityTask(function postPrepareEntity({ applic
           { [idFieldName]: ([TYPE_INTEGER, TYPE_LONG] as string[]).includes(userIdType) ? 2 : idField.generateFakeData!() },
         ]
       : [];
-    (entity as LiquibaseEntity).liquibaseFakeData = liquibaseFakeData;
-    (entity as LiquibaseEntity).fakeDataCount = liquibaseFakeData.length;
+    entity.liquibaseFakeData = liquibaseFakeData;
+    entity.fakeDataCount = liquibaseFakeData.length;
   }
 
-  (entity as LiquibaseEntity).anyRelationshipIsOwnerSide = relationships.some(relationship => relationship.ownerSide);
+  entity.anyRelationshipIsOwnerSide = relationships.some(relationship => relationship.ownerSide);
 });
