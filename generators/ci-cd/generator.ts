@@ -175,14 +175,14 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
     return this.asPostWritingTaskGroup({
       postWriting({ application }) {
         if (application.ciCdIntegrations?.includes('deploy')) {
-          if (application.buildTool === 'maven') {
+          if (application.buildToolMaven) {
             createPomStorage(this, { sortFile: false }).addDistributionManagement({
               releasesId: application.artifactoryReleasesId!,
               releasesUrl: application.artifactoryReleasesUrl!,
               snapshotsId: application.artifactorySnapshotsId!,
               snapshotsUrl: application.artifactorySnapshotsUrl!,
             });
-          } else if (application.buildTool === 'gradle') {
+          } else if (application.buildToolGradle) {
             // TODO: add support here
             // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
             this.log.warn('No support for Artifactory yet, when using Gradle.\n');
