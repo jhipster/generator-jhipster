@@ -9,7 +9,7 @@ export type BaseSource = {
 
 export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]])[]>;
 
-export type Control = {
+export type BaseControl = {
   readonly existingProject: boolean;
   readonly jhipsterOldVersion: string | null;
   readonly enviromentHasDockerCompose?: boolean;

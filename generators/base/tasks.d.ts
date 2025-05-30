@@ -1,7 +1,7 @@
-import type { BaseSource as BaseSource, Control } from './types.js';
+import type { BaseControl, BaseSource as BaseSource } from './types.js';
 
 export type TaskParamWithControl = {
-  control: Control;
+  control: BaseControl;
 };
 
 export type TaskParamWithSource<Source> = TaskParamWithControl & {

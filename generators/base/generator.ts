@@ -43,7 +43,7 @@ import {
   CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,
   LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
 } from './support/constants.js';
-import type { BaseConfig, BaseFeatures, BaseOptions, BaseSource, CleanupArgumentType, Control } from './types.js';
+import type { BaseConfig, BaseControl, BaseFeatures, BaseOptions, BaseSource, CleanupArgumentType } from './types.js';
 
 const { WRITING } = PRIORITY_NAMES;
 
@@ -150,9 +150,9 @@ export default class BaseGenerator<
     return this.delegateToBlueprint ? ({} as TaskGroupType) : tasksGetter();
   }
 
-  get #control(): Control {
+  get #control(): BaseControl {
     const generator = this;
-    return this.getContextData<Control>('jhipster:control', {
+    return this.getContextData<BaseControl>('jhipster:control', {
       factory: () => {
         let jhipsterOldVersion: string | null;
         let enviromentHasDockerCompose: undefined | boolean;
@@ -327,7 +327,7 @@ export default class BaseGenerator<
   /**
    * Check if the generator should ask for prompts.
    */
-  override shouldAskForPrompts({ control }: { control: Control }): boolean {
+  override shouldAskForPrompts({ control }: { control: BaseControl }): boolean {
     if (!control) throw new Error(`Control object not found in ${this.options.namespace}`);
     return !control.existingProject || this.options.askAnswered === true;
   }
