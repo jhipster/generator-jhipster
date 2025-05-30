@@ -18,7 +18,7 @@
  */
 import { inspect } from 'node:util';
 import { describe, expect, it } from 'esmocha';
-import type { GetWebappTranslationCallback } from '../../../lib/types/base/translation.js';
+import type { GetWebappTranslationCallback } from '../../client/translation.js';
 import { removeDeclarations, replaceTranslationTags, replaceTranslations } from './translate-vue.js';
 
 const FULL_BODY = `

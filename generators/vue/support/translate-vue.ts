@@ -19,7 +19,7 @@
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 import type CoreGenerator from '../../base-core/index.js';
-import type { GetWebappTranslationCallback } from '../../../lib/types/base/translation.js';
+import type { GetWebappTranslationCallback } from '../../client/translation.js';
 
 function replaceTranslationAttributes({
   content,

@@ -18,7 +18,7 @@
  */
 import { inspect } from 'node:util';
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
-import type { GetWebappTranslationCallback } from '../../../lib/types/base/translation.js';
+import type { GetWebappTranslationCallback } from '../../client/translation.js';
 import { createTranslationReplacer } from './translate-angular.js';
 
 describe('generator - angular - transform', () => {
