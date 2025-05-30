@@ -23,7 +23,6 @@ application {
     authenticationType oauth2
     baseName gateway
     buildTool maven
-    cacheProvider caffeine
     clientFramework angular
     creationTimestamp 1617901618886
     databaseType mongodb
