@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { BaseConfig as BaseConfig, BaseFeatures as BaseFeatures, BaseOptions as BaseOptions } from '../base/index.js';
+import type { BaseConfig, BaseFeatures, BaseOptions } from '../base/index.js';
 
 export type { BaseSource } from '../base/types.js';
 

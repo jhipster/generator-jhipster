@@ -181,7 +181,6 @@ type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'e
 export type PlatformApplication = ServiceDiscoveryApplication & MonitoringApplication;
 
 export type BaseApplicationConfig = BaseConfig & {
-  baseName?: string;
   entities?: string[];
 };
 
