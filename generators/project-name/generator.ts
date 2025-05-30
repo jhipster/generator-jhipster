@@ -36,12 +36,7 @@ export default class ProjectNameGenerator extends CommandBaseGenerator<typeof co
 
   async beforeQueue() {
     this.getContextData(CONTEXT_DATA_EXISTING_PROJECT, {
-      factory: () =>
-        Boolean(
-          this.options.defaults ||
-            this.options.applicationWithConfig ||
-            (this.jhipsterConfig.baseName !== undefined && this.config.existed),
-        ),
+      factory: () => Boolean(this.options.defaults || (this.jhipsterConfig.baseName !== undefined && this.config.existed)),
     });
 
     if (!this.fromBlueprint) {

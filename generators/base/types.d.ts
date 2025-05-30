@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportGeneratorOptionsFromCommand } from '../../lib/command/types.js';
 import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/types.js';
-import type { ApplicationWithConfig } from './api.js';
 
 export type Source = {
   /* Dummy field to declare an empty type */
@@ -41,8 +40,6 @@ export type Config = CoreConfig & {
 
 export type Options = CoreOptions &
   ExportGeneratorOptionsFromCommand<typeof import('./command.js').default> & {
-    /* base options */
-    applicationWithConfig?: ApplicationWithConfig;
     /**
      * @deprecated
      */

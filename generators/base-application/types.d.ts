@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
+import type { ApplicationOptions } from '../../lib/types/application/options.js';
 import {
   type Config as BaseConfig,
   type Features as BaseFeatures,
@@ -183,6 +184,6 @@ export type Config = BaseConfig & {
   entities?: string[];
 };
 
-export type Options = BaseOptions;
+export type Options = BaseOptions & ApplicationOptions;
 
 export type Features = BaseFeatures;

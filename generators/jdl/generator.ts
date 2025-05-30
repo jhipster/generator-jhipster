@@ -22,7 +22,8 @@ import { upperFirst } from 'lodash-es';
 import { type Store as MemFs, create as createMemFs } from 'mem-fs';
 import { type MemFsEditor, create as createMemFsEditor } from 'mem-fs-editor';
 
-import BaseGenerator, { type Config as BaseConfig } from '../base/index.js';
+import BaseGenerator from '../base/index.js';
+import type { AllConfig, AllOptions } from '../base-application/index.js';
 import { downloadJdlFile } from '../../cli/download.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { CLI_NAME } from '../../cli/utils.mjs';
@@ -34,7 +35,6 @@ import { mergeYoRcContent } from '../../lib/utils/yo-rc.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.js';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
-import type { JHipsterGeneratorOptions } from '../base/api.js';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
 
 /**
@@ -49,10 +49,7 @@ const toJdlFile = file => {
 
 type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: string; sharedFs?: MemFs };
 
-export default class JdlGenerator extends BaseGenerator<
-  { baseName: string; prodDatabaseType: string } & BaseConfig,
-  JHipsterGeneratorOptions
-> {
+export default class JdlGenerator extends BaseGenerator<AllConfig, AllOptions> {
   jdlFiles?: string[];
   inline?: string;
   jdlContents: string[] = [];
@@ -221,11 +218,11 @@ export default class JdlGenerator extends BaseGenerator<
           }
         } else if (this.applications.length > 1) {
           this.log.info(`Generating ${this.applications.length} applications`);
-          await this.composeWithJHipster(this.workspacesGenerator, {
+          await this.composeWithJHipster(this.workspacesGenerator as 'workspaces', {
             generatorOptions: {
-              workspacesFolders: this.applications.map(app => app.folder),
+              workspacesFolders: this.applications.map(app => app.folder!),
               generateApplications: async () => this.runNonInteractive(this.applications, generatorOptions),
-            } as any,
+            },
           });
         } else {
           this.log.info('Generating 1 application');

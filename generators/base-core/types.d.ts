@@ -46,6 +46,23 @@ export type Options = YeomanOptions & {
   jdlDefinition?: JDLApplicationConfig;
   /** @experimental */
   commandsConfigs?: JHipsterConfigs;
+
+  /** boostrap options */
+  applyDefaults?: <const data = any>(data: data) => data;
+
+  /* generate-blueprint options */
+  localBlueprint?: boolean;
+
+  /* application options */
+  db?: string;
+
+  /* workspaces options */
+  generateApplications?: boolean | (() => Promise<void>);
+  generateWorkspaces?: boolean;
+  generateWith?: string;
+  monorepository?: boolean;
+  workspaces?: boolean;
+  workspacesFolders?: string[];
 };
 
 export type Features = YeomanFeatures & {
@@ -80,4 +97,11 @@ export type Features = YeomanFeatures & {
    * Defaults to true for built-in generator-jhipster generators and false for blueprints.
    */
   queueCommandTasks?: boolean;
+};
+
+export type ValidationResult = {
+  debug?: unknown;
+  info?: string | string[];
+  warning?: string | string[];
+  error?: string | string[];
 };

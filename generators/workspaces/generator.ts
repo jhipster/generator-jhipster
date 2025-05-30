@@ -27,7 +27,7 @@ import type { Config as WorkspacesConfig, Options as WorkspacesOptions } from '.
 
 export default class WorkspacesGenerator extends BaseWorkspacesGenerator<WorkspacesConfig, WorkspacesOptions> {
   workspaces!: boolean;
-  generateApplications!: () => Promise<undefined>;
+  generateApplications!: () => Promise<void>;
   generateWith!: string;
   entrypointGenerator!: string;
   dockerCompose!: boolean;

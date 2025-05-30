@@ -16,7 +16,6 @@ import { GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
 import { createJHipsterLogger, normalizePathEnd } from '../../lib/utils/index.js';
 import { parseCreationTimestamp } from '../../generators/base/support/index.js';
 import BaseGenerator from '../../generators/base/index.js';
-import type { JHipsterGeneratorOptions } from '../../generators/base/api.js';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.js';
 import type CoreGenerator from '../../generators/base-core/generator.js';
 import type { ApplicationConfiguration } from '../types/application/yo-rc.js';
@@ -30,10 +29,11 @@ import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generato
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY } from '../../generators/base-application/support/constants.js';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../generators/base-simple-application/support/constants.js';
+import type { AllOptions } from '../../generators/base-application/types-all.js';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
-type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
-type GeneratorTestOptions = JHipsterGeneratorOptions;
+type GeneratorTestType = YeomanGenerator<AllOptions>;
+type GeneratorTestOptions = AllOptions;
 type WithJHipsterGenerators = {
   /**
    * Apply default mocks.
@@ -212,7 +212,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   private commonWorkspacesConfig!: Record<string, unknown>;
   private generateApplicationsSet = false;
 
-  withOptions(options: Partial<Omit<JHipsterGeneratorOptions, 'env' | 'resolved' | 'namespace'> & Record<string, any>>): this {
+  withOptions(options: Partial<Omit<AllOptions, 'env' | 'resolved' | 'namespace'> & Record<string, any>>): this {
     return super.withOptions(options as any);
   }
 
