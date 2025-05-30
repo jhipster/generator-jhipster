@@ -18,7 +18,7 @@
  */
 import type { Merge, OmitIndexSignature, Simplify } from 'type-fest';
 import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource } from '../base/tasks.js';
-import type { Application as SimpleApplication, Source as SimpleSource } from './types.d.ts';
+import type { BaseSimpleApplicationApplication, BaseSimpleApplicationSource } from './types.d.ts';
 
 export type ApplicationDefaultsTaskParam<A> = {
   /**
@@ -53,7 +53,10 @@ export type TaskParamWithApplication<A> = TaskParamWithControl & {
   application: A;
 };
 
-export type SimpleTaskTypes<A = SimpleApplication, S extends SimpleSource = SimpleSource> = Merge<
+export type SimpleTaskTypes<
+  A = BaseSimpleApplicationApplication,
+  S extends BaseSimpleApplicationSource = BaseSimpleApplicationSource,
+> = Merge<
   BaseTaskTypes,
   {
     BootstrapApplicationTaskParam: TaskParamWithControl & ApplicationDefaultsTaskParam<A>;

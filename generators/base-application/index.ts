@@ -23,5 +23,5 @@
 export { default } from './generator.js';
 export { default as comand } from './command.js';
 export type { Entity, Field, Relationship } from '../../lib/types/application/index.js';
-export type { Config, Options, Source } from './types.js';
+export type { BaseApplicationConfig, BaseApplicationOptions, BaseApplicationSource } from './types.js';
 export type { AllConfig, AllOptions } from './types-all.js';

@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 
-import CoreGenerator from '../base-core/index.js';
+import BaseCoreGenerator from '../base-core/index.js';
 
 import { convertToJDL } from '../../lib/jdl/converters/json-to-jdl-converter.js';
 import { CommandCoreGenerator } from '../base-core/generator.js';
@@ -28,7 +28,7 @@ export default class extends CommandCoreGenerator<typeof command> {
   jdlFile!: string;
   jdlContent?: string;
 
-  get [CoreGenerator.DEFAULT]() {
+  get [BaseCoreGenerator.DEFAULT]() {
     return this.asAnyTaskGroup({
       convertToJDL() {
         try {
@@ -43,7 +43,7 @@ export default class extends CommandCoreGenerator<typeof command> {
     });
   }
 
-  get [CoreGenerator.WRITING]() {
+  get [BaseCoreGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       writeJdl() {
         if (this.jdlContent) {
@@ -53,7 +53,7 @@ export default class extends CommandCoreGenerator<typeof command> {
     });
   }
 
-  get [CoreGenerator.END]() {
+  get [BaseCoreGenerator.END]() {
     return this.asAnyTaskGroup({
       end() {
         this.log.log(chalk.green.bold('\nThe JDL export is complete!\n'));

@@ -18,7 +18,7 @@
  */
 
 import type { WriteFileBlock } from '../../base/api.js';
-import type CoreGenerator from '../../base-core/generator.js';
+import type BaseCoreGenerator from '../../base-core/generator.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../../generator-constants.js';
 import type { ApplicationType } from '../../../lib/types/application/application.js';
 import type { Entity } from '../../../lib/types/application/entity.js';
@@ -118,7 +118,7 @@ function javaBlock({
   return {
     path: `${srcPath}${relativePath}`,
     ...block,
-    renameTo(this: CoreGenerator, data: any, filePath: string) {
+    renameTo(this: BaseCoreGenerator, data: any, filePath: string) {
       return `${data[destProperty]}${replaceEntityFilePathVariables(data, relativePath) ?? ''}${
         replaceEntityFilePathVariables(data, blockRenameTo?.call?.(this, data, filePath) ?? filePath) ?? ''
       }`;

@@ -1,5 +1,5 @@
 import type { WriteFileBlock } from '../../base/api.js';
-import type CoreGenerator from '../../base-core/index.js';
+import type BaseCoreGenerator from '../../base-core/index.js';
 import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../../generator-constants.js';
 
 export const replaceEntityFilePath = (data: any, filepath: string) =>
@@ -72,7 +72,7 @@ function clientBlock({
   return {
     path: `${srcPath}${relativeToSrc}${relativePath}`,
     ...block,
-    renameTo(this: CoreGenerator, data: any, filePath: string) {
+    renameTo(this: BaseCoreGenerator, data: any, filePath: string) {
       return `${data[destProperty]}${relativeToSrc}${replaceEntityFilePath(data, relativePath) ?? ''}${
         replaceEntityFilePath(data, blockRenameTo?.call?.(this, data, filePath) ?? filePath) ?? ''
       }`;

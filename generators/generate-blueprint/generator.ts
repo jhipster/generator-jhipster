@@ -20,7 +20,11 @@ import { rm } from 'node:fs/promises';
 import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 
-import type { Application, Config, Options } from '../base-simple-application/index.js';
+import type {
+  BaseSimpleApplicationApplication,
+  BaseSimpleApplicationConfig,
+  BaseSimpleApplicationOptions,
+} from '../base-simple-application/index.js';
 import BaseGenerator from '../base-simple-application/index.js';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.js';
 
@@ -67,8 +71,8 @@ type BlueprintOptions = ExportGeneratorOptionsFromCommand<typeof command> & {
 };
 
 export default class extends BaseGenerator<
-  Application & BlueprintApplication,
-  Config &
+  BaseSimpleApplicationApplication & BlueprintApplication,
+  BaseSimpleApplicationConfig &
     BlueprintConfig & {
       cli?: boolean;
       caret: boolean;
@@ -78,7 +82,7 @@ export default class extends BaseGenerator<
       additionalSubGenerators: string;
       generators: Record<string, any>;
     },
-  Options & BlueprintOptions
+  BaseSimpleApplicationOptions & BlueprintOptions
 > {
   recreatePackageLock!: boolean;
   skipWorkflows!: boolean;

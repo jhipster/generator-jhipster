@@ -1,20 +1,22 @@
-import type CoreGenerator from '../base-core/index.js';
+import type BaseCoreGenerator from '../base-core/index.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 
 export type NeedleCallback = (content: string) => string;
 
-export type EditFileCallback<Generator = CoreGenerator> = (this: Generator, content: string, filePath: string) => string;
+export type EditFileCallback<Generator = BaseCoreGenerator> = (this: Generator, content: string, filePath: string) => string;
 
 export type EditFileOptions = { create?: boolean; ignoreNonExisting?: boolean | string; assertModified?: boolean; autoCrlf?: boolean };
 
-export type CascatedEditFileCallback<Generator = CoreGenerator> = (
+export type CascatedEditFileCallback<Generator = BaseCoreGenerator> = (
   ...callbacks: EditFileCallback<Generator>[]
 ) => CascatedEditFileCallback<Generator>;
 
-type DataCallback<Type, DataType = ApplicationType<Entity>, Generator = CoreGenerator> = Type | ((this: Generator, data: DataType) => Type);
+type DataCallback<Type, DataType = ApplicationType<Entity>, Generator = BaseCoreGenerator> =
+  | Type
+  | ((this: Generator, data: DataType) => Type);
 
-export type WriteFileTemplate<DataType = ApplicationType<Entity>, Generator = CoreGenerator> =
+export type WriteFileTemplate<DataType = ApplicationType<Entity>, Generator = BaseCoreGenerator> =
   | string
   | ((this: Generator, data: DataType) => string)
   | {
@@ -36,7 +38,7 @@ export type WriteFileTemplate<DataType = ApplicationType<Entity>, Generator = Co
       override?: DataCallback<boolean, DataType, Generator>;
     };
 
-export type WriteFileBlock<DataType = ApplicationType<Entity>, Generator = CoreGenerator> = {
+export type WriteFileBlock<DataType = ApplicationType<Entity>, Generator = BaseCoreGenerator> = {
   /** relative path were sources are placed */
   from?: ((this: Generator, data: DataType) => string) | string;
   /** relative path were the files should be written, fallbacks to from/path */
@@ -51,12 +53,12 @@ export type WriteFileBlock<DataType = ApplicationType<Entity>, Generator = CoreG
   templates: WriteFileTemplate<DataType, Generator>[];
 };
 
-export type WriteFileSection<DataType = ApplicationType<Entity>, Generator = CoreGenerator> = Record<
+export type WriteFileSection<DataType = ApplicationType<Entity>, Generator = BaseCoreGenerator> = Record<
   string,
   WriteFileBlock<DataType, Generator>[]
 >;
 
-export type WriteFileOptions<DataType = ApplicationType<Entity>, Generator = CoreGenerator> = {
+export type WriteFileOptions<DataType = ApplicationType<Entity>, Generator = BaseCoreGenerator> = {
   /** transforms (files processing) to be applied */
   transform?: EditFileCallback<Generator>[];
   /** context to be used as template data */

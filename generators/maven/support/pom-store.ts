@@ -19,7 +19,7 @@
 
 import { get, set } from 'lodash-es';
 
-import type CoreGenerator from '../../base-core/index.js';
+import type BaseCoreGenerator from '../../base-core/index.js';
 import XmlStorage from '../internal/xml-store.js';
 import type {
   MavenAnnotationProcessor,
@@ -248,7 +248,7 @@ const emptyPomFile = `<?xml version="1.0" encoding="UTF-8"?>
 </project>
 `;
 
-export const createPomStorage = (generator: CoreGenerator, { sortFile }: { sortFile?: boolean } = {}) => {
+export const createPomStorage = (generator: BaseCoreGenerator, { sortFile }: { sortFile?: boolean } = {}) => {
   const loadFile = () => generator.readDestination('pom.xml', { defaults: emptyPomFile })?.toString() ?? '';
   const pomStorage = new PomStorage({
     loadFile,

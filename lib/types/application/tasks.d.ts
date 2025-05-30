@@ -18,7 +18,7 @@
  */
 import type { Storage } from 'yeoman-generator';
 import type { TaskParamWithSource } from '../../../generators/base/tasks.js';
-import type { Source as BaseSource } from '../../../generators/base/types.js';
+import type { BaseSource as BaseSource } from '../../../generators/base/types.js';
 import type { SimpleTaskTypes, TaskParamWithApplication } from '../../../generators/base-simple-application/tasks.js';
 import type { Entity } from './entity.js';
 import type { ApplicationType, BaseApplicationSource } from './application.js';

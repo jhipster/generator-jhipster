@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportGeneratorOptionsFromCommand } from '../../lib/command/types.js';
-import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/types.js';
+import type { BaseCoreConfig as CoreConfig, BaseCoreFeatures as CoreFeatures, BaseCoreOptions as CoreOptions } from '../base-core/types.js';
 
-export type Source = {
+export type BaseSource = {
   /* Dummy field to declare an empty type */
   _jhipsterSource: never;
 };
@@ -31,14 +31,14 @@ export type Control = {
   cleanupFiles: (cleanup: CleanupArgumentType) => Promise<void> | ((oldVersion: string, cleanup: CleanupArgumentType) => Promise<void>);
 };
 
-export type Config = CoreConfig & {
+export type BaseConfig = CoreConfig & {
   jhipsterVersion?: string;
   lastLiquibaseTimestamp?: number;
   creationTimestamp?: number;
   blueprints?: { name: string; version?: string }[];
 };
 
-export type Options = CoreOptions &
+export type BaseOptions = CoreOptions &
   ExportGeneratorOptionsFromCommand<typeof import('./command.js').default> & {
     /**
      * @deprecated
@@ -51,7 +51,7 @@ export type Options = CoreOptions &
     composeWithLocalBlueprint?: boolean;
   };
 
-export type Features = CoreFeatures & {
+export type BaseFeatures = CoreFeatures & {
   /**
    * Compose with bootstrap generator.
    *

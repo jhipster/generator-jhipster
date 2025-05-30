@@ -1,10 +1,11 @@
 import type {
-  Config as BaseApplicationConfig,
-  Features as BaseApplicationFeatures,
-  Options as BaseApplicationOptions,
+  BaseApplicationConfig,
+  BaseApplicationFeatures,
+  BaseApplicationOptions,
+  BaseApplicationSource,
 } from '../base-application/types.d.ts';
 
-export type { Source } from '../base-application/types.js';
+export type BaseEntityChangesSource = BaseApplicationSource;
 
 export type BaseChangelog = {
   newEntity: boolean;
@@ -27,8 +28,8 @@ export type BaseChangelog = {
   changelogData: any;
 };
 
-export type Config = BaseApplicationConfig;
+export type BaseEntityChangesConfig = BaseApplicationConfig;
 
-export type Options = BaseApplicationOptions;
+export type BaseEntityChangesOptions = BaseApplicationOptions;
 
-export type Features = BaseApplicationFeatures;
+export type BaseEntityChangesFeatures = BaseApplicationFeatures;

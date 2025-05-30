@@ -18,4 +18,4 @@
  */
 export { default, CommandBaseWorkspacesGenerator } from './generator.js';
 export { default as command } from './command.js';
-export { type Config, type Options, type Features } from './types.js';
+export { type BaseWorkspacesConfig, type BaseWorkspacesOptions, type BaseWorkspacesFeatures } from './types.js';

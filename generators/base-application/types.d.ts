@@ -2,19 +2,20 @@
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
 import type { ApplicationOptions } from '../../lib/types/application/options.js';
 import {
-  type Config as BaseConfig,
-  type Features as BaseFeatures,
-  type Options as BaseOptions,
-  Application as SimpleApplication,
+  type BaseSimpleApplicationConfig as BaseConfig,
+  type BaseSimpleApplicationFeatures as BaseFeatures,
+  type BaseSimpleApplicationOptions as BaseOptions,
+  BaseSimpleApplicationApplication as SimpleApplication,
 } from '../base-simple-application/index.js';
 import type { ClientApplication } from '../client/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import type { SpringBootApplication } from '../server/types.js';
+import type { BaseSimpleApplicationSource } from '../base-simple-application/types.js';
 import type { OptionWithDerivedProperties } from './application-options.js';
 
-export type { Source } from '../base-simple-application/types.js';
+export type BaseApplicationSource = BaseSimpleApplicationSource;
 
-export type BaseApplication = SimpleApplication & {
+export type BaseApplicationApplication = SimpleApplication & {
   jhiPrefix: string;
   jhiPrefixCapitalized: string;
   jhiPrefixDashed: string;
@@ -127,7 +128,7 @@ type QuirksApplication = {
   cypressBootstrapEntities?: boolean;
 };
 
-export type CommonClientServerApplication<Entity> = BaseApplication &
+export type CommonClientServerApplication<Entity> = BaseApplicationApplication &
   QuirksApplication &
   AuthenticationProperties<Entity> &
   SpringBootApplication &
@@ -179,11 +180,11 @@ type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'e
 
 export type PlatformApplication = ServiceDiscoveryApplication & MonitoringApplication;
 
-export type Config = BaseConfig & {
+export type BaseApplicationConfig = BaseConfig & {
   baseName?: string;
   entities?: string[];
 };
 
-export type Options = BaseOptions & ApplicationOptions;
+export type BaseApplicationOptions = BaseOptions & ApplicationOptions;
 
-export type Features = BaseFeatures;
+export type BaseApplicationFeatures = BaseFeatures;

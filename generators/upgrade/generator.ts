@@ -23,7 +23,7 @@ import gitignore from 'parse-gitignore';
 import semver from 'semver';
 import { ResetMode } from 'simple-git';
 
-import type { Config } from '../base/index.js';
+import type { BaseConfig } from '../base/index.js';
 import BaseGenerator from '../base/index.js';
 import { packageJson } from '../../lib/index.js';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
@@ -44,7 +44,7 @@ const DEFAULT_NON_INTERATIVE_OPTIONS = {
 };
 const DEFAULT_MERGE_OPTIONS = ['--strategy', 'ours'];
 
-export default class UpgradeGenerator extends BaseGenerator<Config & { baseName: string }> {
+export default class UpgradeGenerator extends BaseGenerator<BaseConfig & { baseName: string }> {
   requiredPackage = GENERATOR_JHIPSTER;
   createEnvBuilder;
   actualApplicationBranch;

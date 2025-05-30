@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Config as BaseConfig, Features as BaseFeatures, Options as BaseOptions } from '../base/index.js';
+import type { BaseConfig as BaseConfig, BaseFeatures as BaseFeatures, BaseOptions as BaseOptions } from '../base/index.js';
 
-export type { Source } from '../base/types.js';
+export type { BaseSource } from '../base/types.js';
 
-export type Config = BaseConfig & {
+export type BaseWorkspacesConfig = BaseConfig & {
   appsFolders: string[];
   directoryPath: string;
   deploymentType: string;
@@ -29,6 +29,6 @@ export type Config = BaseConfig & {
   serviceDiscoveryType: string;
 };
 
-export type Features = BaseFeatures;
+export type BaseWorkspacesFeatures = BaseFeatures;
 
-export type Options = BaseOptions;
+export type BaseWorkspacesOptions = BaseOptions;

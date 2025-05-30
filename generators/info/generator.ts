@@ -22,7 +22,7 @@
 import chalk from 'chalk';
 
 import BaseCoreGenerator from '../base-core/index.js';
-import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/index.js';
+import type { BaseCoreConfig as CoreConfig, BaseCoreFeatures as CoreFeatures, BaseCoreOptions as CoreOptions } from '../base-core/index.js';
 import JSONToJDLEntityConverter from '../../lib/jdl/converters/json-to-jdl-entity-converter.js';
 import JSONToJDLOptionConverter from '../../lib/jdl/converters/json-to-jdl-option-converter.js';
 import { JHIPSTER_CONFIG_DIR, YO_RC_FILE } from '../generator-constants.js';
