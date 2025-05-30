@@ -17,9 +17,12 @@ export const applyDerivedProperty = <const Prop extends string>(
   const flattenedChoices = flatChoices(possibleValues);
   let isAny = false;
   for (const value of flattenedChoices) {
-    const valueProterty = value.includes('-') ? upperFirstCamelCase(value) : upperFirst(value);
+    const valueProperty = value.includes('-') ? upperFirstCamelCase(value) : upperFirst(value);
     const isProperty = Array.isArray(actualValue) ? actualValue.includes(value) : actualValue === value;
-    data[`${camelCaseProp}${valueProterty}`] ??= isProperty;
+    data[`${camelCaseProp}${valueProperty}`] ??= isProperty;
+    if (data[`${camelCaseProp}${valueProperty}`] === false) {
+      data[`${camelCaseProp}${valueProperty}`] = isProperty;
+    }
     if (isProperty && value !== 'no') {
       isAny = true;
     }
