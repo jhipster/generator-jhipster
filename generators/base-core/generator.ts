@@ -58,8 +58,13 @@ import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type GeneratorsByNamespace from '../types.js';
 import type { GeneratorBaseCore } from '../index.js';
-import type { ValidationResult } from './types.js';
-import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions, GenericTaskGroup } from '../base-core/types.js';
+import type {
+  Config as CoreConfig,
+  Features as CoreFeatures,
+  Options as CoreOptions,
+  GenericTaskGroup,
+  ValidationResult,
+} from '../base-core/types.js';
 import { createJHipster7Context, joinCallbacks } from './support/index.js';
 import { convertWriteFileSectionsToBlocks } from './internal/index.js';
 
