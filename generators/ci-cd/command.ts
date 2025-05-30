@@ -19,20 +19,19 @@
 import chalk from 'chalk';
 import { intersection, kebabCase } from 'lodash-es';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
 
 const includesValue = (prop, values) => answers => answers[prop] && intersection(answers[prop], values).length > 0;
 
 const command = {
   configs: {
     ciCd: {
-      cli: {
+      argument: {
         type: Array,
       },
-      prompt: () => ({
+      prompt: {
         type: 'checkbox',
         message: 'What CI/CD pipeline do you want to generate?',
-      }),
+      },
       choices: [
         { name: 'GitHub Actions', value: 'github' },
         { name: 'Jenkins pipeline', value: 'jenkins' },
@@ -44,13 +43,10 @@ const command = {
       scope: 'storage',
     },
     ciCdIntegrations: {
-      cli: {
-        type: Array,
-      },
-      prompt: () => ({
+      prompt: {
         type: 'checkbox',
         message: 'What tasks/integrations do you want to include ?',
-      }),
+      },
       choices: [
         // ['jenkins', 'gitlab']
         { name: `Deploy your application to an ${chalk.yellow('*Artifactory*')}`, value: 'deploy' },
@@ -216,10 +212,6 @@ const command = {
       },
     },
   },
-<<<<<<< HEAD
-=======
-  import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE],
->>>>>>> fc63b07bc2 (rewamp types on generator-cicd)
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

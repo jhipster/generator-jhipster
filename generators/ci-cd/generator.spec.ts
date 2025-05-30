@@ -76,7 +76,9 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should match context snapshot', () => {
-        expect(runResult.generator.jhipsterConfig).toMatchInlineSnapshot({ jhipsterVersion: expect.any(String) }, `
+        expect(runResult.generator.jhipsterConfig).toMatchInlineSnapshot(
+          { jhipsterVersion: expect.any(String) },
+          `
 {
   "artifactoryReleasesId": "releases",
   "artifactoryReleasesUrl": "http://artifactory:8081/artifactory/libs-release",
@@ -98,13 +100,14 @@ describe(`generator - ${generator}`, () => {
   "entities": [],
   "herokuAppName": null,
   "insideDocker": false,
-  "jhipsterVersion": "8.8.0",
+  "jhipsterVersion": Any<String>,
   "sendBuildToGitlab": false,
   "sonarName": "sonar",
   "sonarOrga": null,
   "sonarUrl": "https://sonarcloud.io",
 }
-`);
+`,
+        );
       });
     });
 
