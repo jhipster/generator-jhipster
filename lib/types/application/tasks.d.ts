@@ -19,12 +19,14 @@
 import type { Storage } from 'yeoman-generator';
 import type { Merge, OmitIndexSignature, Simplify } from 'type-fest';
 import type { Entity as BaseEntity } from '../base/entity.js';
-import type { GetFieldType, GetRelationshipType } from '../utils/entity-utils.ts';
 import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource } from '../../../generators/base/tasks.js';
 import type { Source as BaseSource } from '../../../generators/base/types.js';
 import type { Application as SimpleApplication } from '../../../generators/base-simple-application/index.js';
 import type { Entity } from './entity.js';
 import type { ApplicationType, BaseApplicationSource } from './application.js';
+
+type GetRelationshipType<E> = E extends { relationships: (infer R)[] } ? R : never;
+type GetFieldType<E> = E extends { fields: (infer F)[] } ? F : never;
 
 type ApplicationDefaultsTaskParam<A> = {
   /**
