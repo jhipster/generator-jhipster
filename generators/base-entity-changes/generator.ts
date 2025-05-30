@@ -23,9 +23,10 @@ import { PRIORITY_NAMES } from '../base-application/priorities.js';
 import { loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.js';
 import { relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from '../liquibase/support/index.js';
 import { addEntitiesOtherRelationships } from '../server/support/index.js';
-import type { TaskTypes as ApplicationTaskTypes, TaskParamWithApplication } from '../../lib/types/application/tasks.js';
+import type { TaskTypes as ApplicationTaskTypes } from '../../lib/types/application/tasks.js';
 import type { Entity as ApplicationEntity } from '../../lib/types/application/entity.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { TaskParamWithApplication } from '../base-simple-application/tasks.js';
 import type {
   BaseChangelog,
   Config as BaseEntityChangesConfig,
@@ -33,7 +34,6 @@ import type {
   Options as BaseEntityChangesOptions,
   Source as BaseEntityChangesSource,
 } from './types.js';
-import type { TaskParamWithChangelogsAndApplication } from './tasks.js';
 
 const { DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES } = PRIORITY_NAMES;
 
@@ -77,7 +77,7 @@ export default abstract class BaseEntityChangesGenerator<
 
   protected getTaskFirstArgForPriority(
     priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES],
-  ): TaskParamWithChangelogsAndApplication | TaskParamWithApplication {
+  ): TaskParamWithApplication<Application> {
     const firstArg = super.getTaskFirstArgForPriority(priorityName);
     if (([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
       const { application, entities } = firstArg as TaskTypes['DefaultTaskParam'];
