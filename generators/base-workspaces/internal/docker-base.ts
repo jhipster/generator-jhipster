@@ -25,7 +25,7 @@ import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../.
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 import { loadDeploymentConfig } from '../../base-workspaces/internal/index.js';
 import { loadDerivedAppConfig } from '../../app/support/index.js';
-import { loadDerivedPlatformConfig, loadDerivedServerConfig } from '../../server/support/index.js';
+import { loadDerivedPlatformConfig } from '../../base-workspaces/support/index.js';
 import { loadCommandConfigsIntoApplication } from '../../../lib/command/load.js';
 import { lookupCommandsConfigs } from '../../../lib/command/lookup-commands-configs.js';
 
@@ -108,7 +108,6 @@ export async function loadConfigs() {
 
       loadDerivedAppConfig({ application: config });
       loadDerivedPlatformConfig({ application: config });
-      loadDerivedServerConfig({ application: config });
 
       if (config.applicationType === MONOLITH) {
         this.monolithicNb++;
