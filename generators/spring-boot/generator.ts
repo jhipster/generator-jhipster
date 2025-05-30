@@ -415,7 +415,7 @@ ${classProperties
       prepareEntity({ field }) {
         field.fieldJavaBuildSpecification = getSpecificationBuildForType(field.fieldType as FieldType);
 
-        field.filterableField = ![TYPE_BYTES, TYPE_BYTE_BUFFER].includes(field.fieldType) && !field.transient;
+        field.filterableField = !([TYPE_BYTES, TYPE_BYTE_BUFFER] as string[]).includes(field.fieldType) && !field.transient;
         if (field.filterableField) {
           const { fieldType, fieldName, fieldInJavaBeanMethod } = field;
           mutateData(field, {

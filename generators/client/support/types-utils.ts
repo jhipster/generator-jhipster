@@ -52,7 +52,9 @@ export const getEntryIfTypeOrTypeAttribute = (key: FieldType | PrimaryKey): Fiel
  * @returns {string} primary key type in Typescript
  */
 const getTypescriptKeyType = (primaryKey: FieldType | PrimaryKey) => {
-  if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(getEntryIfTypeOrTypeAttribute(primaryKey))) {
+  if (
+    ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL] as string[]).includes(getEntryIfTypeOrTypeAttribute(primaryKey))
+  ) {
     return 'number';
   }
   return 'string';
@@ -61,18 +63,15 @@ const getTypescriptKeyType = (primaryKey: FieldType | PrimaryKey) => {
 /**
  * @private
  * Find type for Typescript
- *
- * @param {string} fieldType - field type
- * @returns {string} field type in Typescript
  */
-export const getTypescriptType = fieldType => {
-  if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(fieldType)) {
+export const getTypescriptType = (fieldType: string): string => {
+  if (([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL] as string[]).includes(fieldType)) {
     return 'number';
   }
-  if ([TYPE_LOCAL_DATE, TYPE_ZONED_DATE_TIME, TYPE_INSTANT].includes(fieldType)) {
+  if (([TYPE_LOCAL_DATE, TYPE_ZONED_DATE_TIME, TYPE_INSTANT] as string[]).includes(fieldType)) {
     return 'dayjs.Dayjs';
   }
-  if ([TYPE_BOOLEAN].includes(fieldType)) {
+  if (([TYPE_BOOLEAN] as string[]).includes(fieldType)) {
     return 'boolean';
   }
   if (fieldIsEnum(fieldType)) {

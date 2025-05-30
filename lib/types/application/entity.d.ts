@@ -166,6 +166,7 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   generateFakeData?: (type?: any) => any;
   faker: FakerWithRandexp;
 
+  tsKeyType?: string;
   tsSampleWithPartialData?: string;
   tsSampleWithRequiredData?: string;
   tsSampleWithFullData?: string;

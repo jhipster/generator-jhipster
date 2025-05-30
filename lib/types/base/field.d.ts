@@ -36,7 +36,7 @@ export type Field = Partial<FieldEnum> &
     fieldType: FieldType | string;
     options?: Record<string, boolean | string | number>;
     fieldValidateRules?: string[];
-    fieldValidateRulesPattern?: string | RegExp;
+    fieldValidateRulesPattern?: string;
     fieldValidateRulesMaxlength?: number;
     fieldValidateRulesMax?: number;
     fieldValidateRulesMin?: number;

@@ -204,6 +204,18 @@ ${comment}
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      react({ field }) {
+        (field as any).fieldValidateRulesPatternReact ??= field.fieldValidateRulesPattern?.replace(/'/g, "\\'");
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
   get default() {
     return this.asDefaultTaskGroup({
       queueTranslateTransform({ application }) {

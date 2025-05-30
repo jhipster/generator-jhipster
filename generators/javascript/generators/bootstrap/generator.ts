@@ -18,6 +18,7 @@
  */
 import { packageJson } from '../../../../lib/index.js';
 import BaseApplicationGenerator from '../../../base-application/index.js';
+import { isReservedTypescriptKeyword } from '../../support/reserved-words.ts';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -63,6 +64,50 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      preparing({ entityName }) {
+        if (isReservedTypescriptKeyword(entityName)) {
+          throw new Error(`The entity name "${entityName}" is a reserved TypeScript keyword. It may cause issues in your application.`);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+  }
+
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      preparing({ entity, field }) {
+        if (isReservedTypescriptKeyword(field.fieldName)) {
+          throw new Error(`The field name "${field.fieldName}" in entity "${entity.name}" is a reserved TypeScript keyword.`);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      preparing({ entity, relationship }) {
+        if (isReservedTypescriptKeyword(relationship.relationshipName)) {
+          throw new Error(
+            `The relationship name "${relationship.relationshipName}" in entity "${entity.name}" is a reserved TypeScript keyword.`,
+          );
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
   }
 
   get writing() {
