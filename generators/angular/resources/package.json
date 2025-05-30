@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "19.2.13",
+    "@angular/common": "20.0.0",
     "@fortawesome/angular-fontawesome": "1.0.0",
     "@fortawesome/fontawesome-svg-core": "6.7.2",
     "@fortawesome/free-solid-svg-icons": "6.7.2",
@@ -11,7 +11,7 @@
     "@stomp/rx-stomp": "2.0.1",
     "bootstrap": "5.3.6",
     "bootswatch": "5.3.6",
-    "ngx-cookie-service": "19.1.2",
+    "ngx-cookie-service": "20.0.1",
     "ngx-infinite-scroll": "19.0.0",
     "rxjs": "7.8.2",
     "sockjs-client": "1.6.1",
@@ -24,7 +24,7 @@
     "@angular-builders/custom-esbuild": "19.1.0",
     "@angular-builders/custom-webpack": "19.0.1",
     "@angular-builders/jest": "19.0.1",
-    "@angular/cli": "19.2.13",
+    "@angular/cli": "20.0.0",
     "@eslint/js": "9.27.0",
     "@types/jest": "29.5.14",
     "@types/node": "20.11.25",
