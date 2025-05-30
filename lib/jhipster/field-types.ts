@@ -48,12 +48,12 @@ export const CommonDBTypes = {
   BYTES: 'byte[]', // Supported by mongodb at CI samples
   BYTE_BUFFER: 'ByteBuffer', // Supported by cassandra at CI samples
   LOCAL_TIME: 'LocalTime',
-};
+} as const;
 
 export const RelationalOnlyDBTypes = {
   BYTES: 'byte[]',
   BYTE_BUFFER: 'ByteBuffer',
-};
+} as const;
 
 export const BlobTypes = {
   IMAGE: 'image',

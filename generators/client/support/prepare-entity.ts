@@ -17,11 +17,10 @@
  * limitations under the License.
  */
 import type { Entity } from '../../../lib/types/application/entity.js';
+import { mutateData } from '../../../lib/utils/object.ts';
 import { isClientField } from './filter-entities.js';
 import { generateTestEntityId, generateTsTestEntityForFields, stringifyTsEntity } from './template-utils.js';
 import getTypescriptKeyType from './types-utils.js';
-
-export default function prepareEntity() {}
 
 const SEED = 'post-prepare-client';
 
@@ -57,7 +56,9 @@ export async function preparePostEntityClientDerivedProperties(entity: Entity) {
     );
 
     await entity.resetFakerSeed(`${SEED}-5`);
-    (entity as any).tsKeyType = getTypescriptKeyType(entity.primaryKey.type);
+    mutateData(entity, {
+      tsKeyType: getTypescriptKeyType(entity.primaryKey.type),
+    });
     entity.primaryKey.tsSampleValues = [generateTestEntityId(entity.primaryKey, 0), generateTestEntityId(entity.primaryKey, 1)];
     entity.tsPrimaryKeySamples = [
       stringifyTsEntity(generateTsTestEntityForFields(entity.primaryKey.fields)),

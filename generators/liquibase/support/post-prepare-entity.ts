@@ -31,8 +31,8 @@ export default asPostPreparingEachEntityTask(function postPrepareEntity({ applic
     const idFieldName = idField.fieldName ?? 'id';
     const liquibaseFakeData = application.generateUserManagement
       ? [
-          { [idFieldName]: [TYPE_INTEGER, TYPE_LONG].includes(userIdType) ? 1 : idField.generateFakeData!() },
-          { [idFieldName]: [TYPE_INTEGER, TYPE_LONG].includes(userIdType) ? 2 : idField.generateFakeData!() },
+          { [idFieldName]: ([TYPE_INTEGER, TYPE_LONG] as string[]).includes(userIdType) ? 1 : idField.generateFakeData!() },
+          { [idFieldName]: ([TYPE_INTEGER, TYPE_LONG] as string[]).includes(userIdType) ? 2 : idField.generateFakeData!() },
         ]
       : [];
     (entity as LiquibaseEntity).liquibaseFakeData = liquibaseFakeData;

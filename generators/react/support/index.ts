@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './needles.js';
 export * from './translate-react.js';
 export { default as translateReactFilesTransform } from './translate-react.js';
 export { default as updateLanguagesTask } from './update-languages.js';
