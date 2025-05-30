@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
-import { javaMainPackageTemplatesBlock } from '../server/support/index.js';
+import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
 
 export const entityFiles = {
   elasticSearchFiles: [

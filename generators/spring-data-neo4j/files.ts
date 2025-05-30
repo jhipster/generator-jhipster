@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/index.js';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/index.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import type Generator from './generator.js';
 

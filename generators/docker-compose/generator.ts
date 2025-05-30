@@ -31,7 +31,7 @@ import { convertSecretToBase64, createBase64Secret, stringHashCode } from '../..
 import { createFaker } from '../base-application/support/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
-import { loadDerivedPlatformConfig, loadPlatformConfig } from '../server/support/index.js';
+import { loadDerivedPlatformConfig, loadPlatformConfig } from '../base-workspaces/support/index.js';
 import { writeFiles } from './files.js';
 
 const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;

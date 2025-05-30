@@ -18,7 +18,7 @@
  */
 import { asWritingTask } from '../base-application/support/task-type-inference.js';
 import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/index.js';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/index.js';
 
 export const files = {
   serverResource: [

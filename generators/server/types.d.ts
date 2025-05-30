@@ -100,6 +100,14 @@ type DatabaseTypeSqlApplication = {
   devDatabaseType: string;
   prodDatabaseType: string;
   devDatabaseTypeMysql: boolean;
+  devDatabaseTypeH2Any?: boolean;
+
+  devJdbcUrl?: string;
+  devDatabaseUsername?: string;
+  devDatabasePassword?: string;
+  prodJdbcUrl?: string;
+  prodDatabaseUsername?: string;
+  prodDatabasePassword?: string;
 } & LiquibaseApplication;
 /*
 Deterministic option causes types to be too complex
@@ -127,6 +135,7 @@ type BuildToolApplication = DeterministicOptionWithDerivedProperties<
 */
 type BuildToolApplication = OptionWithDerivedProperties<'buildTool', ['maven', 'gradle']> & {
   enableGradleDevelocity: boolean;
+  buildToolUnknown?: boolean;
 };
 
 type SearchEngine = {

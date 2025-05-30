@@ -156,6 +156,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
             }
             return 'dist/';
           },
+          buildToolUnknown: ({ buildTool }) => !['gradle', 'maven'].includes(buildTool!),
         });
 
         loadLanguagesConfig({ application, config: this.jhipsterConfigWithDefaults, control });

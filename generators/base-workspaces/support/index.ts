@@ -17,3 +17,4 @@
  * limitations under the License.
  */
 export * from './constants.js';
+export * from './config.ts';

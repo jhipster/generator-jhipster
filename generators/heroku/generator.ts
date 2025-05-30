@@ -27,6 +27,7 @@ import BaseGenerator from '../base-application/index.js';
 import { JAVA_COMPATIBLE_VERSIONS, JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.js';
+import prepareSqlApplicationProperties from '../spring-data-relational/support/application-properties.ts';
 import { mavenProfileContent } from './templates.js';
 
 export default class HerokuGenerator extends BaseGenerator {
@@ -198,7 +199,7 @@ export default class HerokuGenerator extends BaseGenerator {
   }
 
   get loading() {
-    return this.asConfiguringTaskGroup({
+    return this.asLoadingTaskGroup({
       saveConfig() {
         this.herokuAppName = kebabCase(this.jhipsterConfig.herokuAppName);
         this.herokuJavaVersion = this.jhipsterConfig.herokuJavaVersion;
@@ -209,6 +210,20 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get [BaseGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      properties({ application }) {
+        if (application.databaseTypeSql) {
+          prepareSqlApplicationProperties({ application });
+        }
+      },
+    });
+  }
+
+  get [BaseGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get default() {

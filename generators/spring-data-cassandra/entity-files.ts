@@ -18,7 +18,7 @@
  */
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import { javaMainPackageTemplatesBlock } from '../server/support/index.js';
+import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
 
 const domainFiles = [
   {
