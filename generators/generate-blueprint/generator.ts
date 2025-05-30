@@ -20,17 +20,11 @@ import { rm } from 'node:fs/promises';
 import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 
-import type {
-  BaseSimpleApplicationApplication,
-  BaseSimpleApplicationConfig,
-  BaseSimpleApplicationOptions,
-} from '../base-simple-application/index.js';
 import BaseGenerator from '../base-simple-application/index.js';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.js';
 
 import * as GENERATOR_LIST from '../generator-list.js';
 import { BLUEPRINT_API_VERSION } from '../generator-constants.js';
-import type { ExportGeneratorOptionsFromCommand } from '../../lib/command/types.js';
 import { files, generatorFiles } from './files.js';
 import {
   DYNAMIC,
@@ -46,44 +40,13 @@ import {
   requiredConfig,
   subGeneratorPrompts,
 } from './constants.js';
-import type command from './command.js';
+import type { BlueprintApplication, BlueprintConfig, BlueprintOptions } from './types.js';
 
 const { GENERATOR_INIT } = GENERATOR_LIST;
 
 const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spec.?(c|m)js'];
 
-type BlueprintConfig = {
-  sampleWritten?: boolean;
-  githubRepository?: string;
-  cli?: boolean;
-  cliName?: string;
-  blueprintMjsExtension: string;
-  generators: Record<string, any>;
-  js: boolean;
-};
-
-type BlueprintApplication = BlueprintConfig & { commands: string[]; blueprintsPath?: string; js?: boolean };
-
-type BlueprintOptions = ExportGeneratorOptionsFromCommand<typeof command> & {
-  skipGit: boolean;
-  existed: boolean;
-  defaults: boolean;
-};
-
-export default class extends BaseGenerator<
-  BaseSimpleApplicationApplication & BlueprintApplication,
-  BaseSimpleApplicationConfig &
-    BlueprintConfig & {
-      cli?: boolean;
-      caret: boolean;
-      dynamic: boolean;
-      localBlueprint: boolean;
-      subGenerators: string[];
-      additionalSubGenerators: string;
-      generators: Record<string, any>;
-    },
-  BaseSimpleApplicationOptions & BlueprintOptions
-> {
+export default class extends BaseGenerator<BlueprintApplication, BlueprintConfig, BlueprintOptions> {
   recreatePackageLock!: boolean;
   skipWorkflows!: boolean;
   ignoreExistingGenerators!: boolean;
