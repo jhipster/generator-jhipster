@@ -2,10 +2,10 @@
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
 import type { ApplicationOptions } from '../../lib/types/application/options.js';
 import {
-  type BaseSimpleApplicationConfig as BaseConfig,
-  type BaseSimpleApplicationFeatures as BaseFeatures,
-  type BaseSimpleApplicationOptions as BaseOptions,
-  BaseSimpleApplicationApplication as SimpleApplication,
+  BaseSimpleApplicationApplication,
+  type BaseSimpleApplicationConfig,
+  type BaseSimpleApplicationFeatures,
+  type BaseSimpleApplicationOptions,
 } from '../base-simple-application/index.js';
 import type { ClientApplication } from '../client/types.js';
 import type { I18nApplication } from '../languages/types.js';
@@ -15,7 +15,7 @@ import type { OptionWithDerivedProperties } from './application-options.js';
 
 export type BaseApplicationSource = BaseSimpleApplicationSource;
 
-export type BaseApplicationApplication = SimpleApplication & {
+export type BaseApplicationApplication = BaseSimpleApplicationApplication & {
   jhiPrefix: string;
   jhiPrefixCapitalized: string;
   jhiPrefixDashed: string;
@@ -180,10 +180,10 @@ type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'e
 
 export type PlatformApplication = ServiceDiscoveryApplication & MonitoringApplication;
 
-export type BaseApplicationConfig = BaseConfig & {
+export type BaseApplicationConfig = BaseSimpleApplicationConfig & {
   entities?: string[];
 };
 
-export type BaseApplicationOptions = BaseOptions & ApplicationOptions;
+export type BaseApplicationOptions = BaseSimpleApplicationOptions & ApplicationOptions;
 
-export type BaseApplicationFeatures = BaseFeatures;
+export type BaseApplicationFeatures = BaseSimpleApplicationFeatures;
