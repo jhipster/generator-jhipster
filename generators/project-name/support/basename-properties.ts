@@ -1,6 +1,6 @@
 import { kebabCase, startCase } from 'lodash-es';
 import { camelCase, upperFirst } from '../../../lib/jdl/core/utils/string-utils.js';
-import getHipster from '../../base/support/hipster.js';
+import { getHipster } from '../internal/index.ts';
 import { upperFirstCamelCase } from '../../../lib/utils/index.js';
 
 export const baseNameProperties = {

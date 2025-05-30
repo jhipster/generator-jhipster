@@ -24,7 +24,7 @@ import { LOGIN_REGEX_JS } from '../generator-constants.js';
 import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS } from '../generator-list.js';
 
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.js';
-import { createNeedleCallback } from '../base/support/index.js';
+import { createNeedleCallback } from '../base-core/support/index.ts';
 import { addEnumerationFiles } from './entity-files.js';
 import { writeFiles as writeCommonFiles } from './files-common.js';
 import { askForClientTheme, askForClientThemeVariant } from './prompts.js';

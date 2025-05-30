@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { asWritingTask } from '../base-application/support/index.js';
-import { addSectionsCondition, mergeSections } from '../base/support/index.js';
+import { addSectionsCondition, mergeSections } from '../base-core/support/index.ts';
 import {
   javaMainPackageTemplatesBlock,
   javaMainResourceTemplatesBlock,

@@ -22,7 +22,7 @@ import { loadRequiredConfigIntoEntity } from '../base-application/support/index.
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
 import { getDatabaseTypeData } from '../server/support/database.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
-import { formatDateForChangelog } from '../base/support/timestamp.js';
+import { formatDateForChangelog } from '../base/support/timestamp.ts';
 import type { Entity as ApplicationEntity, UserEntity } from '../../lib/types/application/entity.js';
 
 const { CASSANDRA } = databaseTypes;

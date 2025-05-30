@@ -21,7 +21,7 @@ import pluralize from 'pluralize';
 
 import type BaseGenerator from '../../base-core/index.js';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.js';
-import { createFaker, parseChangelog } from '../../base/support/index.js';
+import { parseChangelog } from '../../base/support/timestamp.js';
 import { getMicroserviceAppName, mutateData, stringHashCode, upperFirstCamelCase } from '../../../lib/utils/index.js';
 import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/support/index.js';
 import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
@@ -32,6 +32,7 @@ import type CoreGenerator from '../../base-core/generator.js';
 import type { PrimaryKey } from '../../../lib/types/application/entity.js';
 import type { ApplicationConfiguration } from '../../../lib/types/application/yo-rc.js';
 import type { ApplicationType } from '../../../lib/types/application/application.js';
+import { createFaker } from './faker.js';
 import { fieldToReference } from './prepare-field.js';
 import { fieldIsEnum } from './field-utils.js';
 

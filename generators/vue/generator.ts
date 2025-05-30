@@ -28,7 +28,7 @@ import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
 } from '../client/support/index.js';
-import { createNeedleCallback } from '../base/support/index.js';
+import { createNeedleCallback } from '../base-core/support/index.ts';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
 import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.js';
 import cleanupOldFilesTask from './cleanup.js';

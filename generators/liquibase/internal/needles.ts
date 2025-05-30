@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { createNeedleCallback } from '../../base/support/needles.js';
+import { createNeedleCallback } from '../../base-core/support/needles.ts';
 import type { LiquibaseChangelog, LiquibaseChangelogSection } from '../types.js';
 
 const changelogType = {
