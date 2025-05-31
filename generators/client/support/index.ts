@@ -18,9 +18,7 @@
  */
 export { default as getTypescriptKeyType, getTypescriptType } from './types-utils.js';
 export { default as generateEntityClientFields } from './entity-definition.js';
-export { default as prepareEntity } from './prepare-entity.js';
 export * from './prepare-entity.js';
-export { default as prepareField } from './prepare-field.js';
 export * from './template-utils.js';
 export * from './update-languages.js';
 export * from './files.js';

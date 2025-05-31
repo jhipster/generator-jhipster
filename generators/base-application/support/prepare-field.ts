@@ -18,7 +18,7 @@
  */
 import { defaults, kebabCase, snakeCase, startCase, upperFirst } from 'lodash-es';
 import { fieldTypes, validations } from '../../../lib/jhipster/index.js';
-import { getTypescriptType, prepareField as prepareClientFieldForTemplates } from '../../client/support/index.js';
+import { getTypescriptType } from '../../client/support/index.js';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
@@ -158,12 +158,12 @@ function generateFakeDataForField(
       min: field.fieldValidateRulesMin ?? 0,
       multipleOf: 0.01,
     });
-  } else if ([INTEGER, LONG, DURATION].includes(field.fieldType)) {
+  } else if (([INTEGER, LONG, DURATION] as string[]).includes(field.fieldType)) {
     data = faker.number.int({
       max: field.fieldValidateRulesMax ?? 32767,
       min: field.fieldValidateRulesMin ?? 0,
     });
-  } else if ([INSTANT, ZONED_DATE_TIME, LOCAL_DATE, LOCAL_TIME].includes(field.fieldType)) {
+  } else if (([INSTANT, ZONED_DATE_TIME, LOCAL_DATE, LOCAL_TIME] as string[]).includes(field.fieldType)) {
     // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
     const date = faker.date.recent({ days: 1, refDate: changelogDate });
     originalData = date.toISOString();
@@ -288,7 +288,6 @@ export default function prepareField(entityWithConfig, field, generator) {
     prepareServerFieldForTemplates(entityWithConfig, field, generator);
   }
 
-  prepareClientFieldForTemplates(entityWithConfig, field);
   return field;
 }
 

@@ -21,18 +21,20 @@ const {
  */
 export const getSpecificationBuildForType = (fieldType: FieldType) => {
   if (
-    [
-      TYPE_INTEGER,
-      TYPE_LONG,
-      TYPE_FLOAT,
-      TYPE_DOUBLE,
-      TYPE_BIG_DECIMAL,
-      TYPE_LOCAL_DATE,
-      TYPE_ZONED_DATE_TIME,
-      TYPE_INSTANT,
-      TYPE_DURATION,
-      TYPE_LOCAL_TIME,
-    ].includes(fieldType)
+    (
+      [
+        TYPE_INTEGER,
+        TYPE_LONG,
+        TYPE_FLOAT,
+        TYPE_DOUBLE,
+        TYPE_BIG_DECIMAL,
+        TYPE_LOCAL_DATE,
+        TYPE_ZONED_DATE_TIME,
+        TYPE_INSTANT,
+        TYPE_DURATION,
+        TYPE_LOCAL_TIME,
+      ] as string[]
+    ).includes(fieldType)
   ) {
     return 'buildRangeSpecification';
   }
