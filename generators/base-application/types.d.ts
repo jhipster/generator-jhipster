@@ -2,19 +2,20 @@
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
 import type { ApplicationOptions } from '../../lib/types/application/options.js';
 import {
-  type Config as BaseConfig,
-  type Features as BaseFeatures,
-  type Options as BaseOptions,
-  Application as SimpleApplication,
+  BaseSimpleApplicationApplication,
+  type BaseSimpleApplicationConfig,
+  type BaseSimpleApplicationFeatures,
+  type BaseSimpleApplicationOptions,
 } from '../base-simple-application/index.js';
 import type { ClientApplication } from '../client/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import type { SpringBootApplication } from '../server/types.js';
+import type { BaseSimpleApplicationSource } from '../base-simple-application/types.js';
 import type { OptionWithDerivedProperties } from './application-options.js';
 
-export type { Source } from '../base-simple-application/types.js';
+export type BaseApplicationSource = BaseSimpleApplicationSource;
 
-export type BaseApplication = SimpleApplication & {
+export type BaseApplicationApplication = BaseSimpleApplicationApplication & {
   jhiPrefix: string;
   jhiPrefixCapitalized: string;
   jhiPrefixDashed: string;
@@ -127,7 +128,7 @@ type QuirksApplication = {
   cypressBootstrapEntities?: boolean;
 };
 
-export type CommonClientServerApplication<Entity> = BaseApplication &
+export type CommonClientServerApplication<Entity> = BaseApplicationApplication &
   QuirksApplication &
   AuthenticationProperties<Entity> &
   SpringBootApplication &
@@ -179,11 +180,10 @@ type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'e
 
 export type PlatformApplication = ServiceDiscoveryApplication & MonitoringApplication;
 
-export type Config = BaseConfig & {
-  baseName?: string;
+export type BaseApplicationConfig = BaseSimpleApplicationConfig & {
   entities?: string[];
 };
 
-export type Options = BaseOptions & ApplicationOptions;
+export type BaseApplicationOptions = BaseSimpleApplicationOptions & ApplicationOptions;
 
-export type Features = BaseFeatures;
+export type BaseApplicationFeatures = BaseSimpleApplicationFeatures;

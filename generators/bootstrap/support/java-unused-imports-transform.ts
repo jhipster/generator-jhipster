@@ -4,11 +4,11 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import type { VinylMemFsEditorFile } from 'mem-fs-editor';
 import { Piscina } from 'piscina';
 
-import type CoreGenerator from '../../base-core/index.js';
+import type BaseCoreGenerator from '../../base-core/index.js';
 import { addLineNumbers } from '../internal/transform-utils.js';
 
 export const createRemoveUnusedImportsTransform = function (
-  this: CoreGenerator,
+  this: BaseCoreGenerator,
   options: {
     ignoreErrors?: boolean;
   } = {},

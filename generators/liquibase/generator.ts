@@ -34,7 +34,10 @@ import type { MavenProperty } from '../maven/types.js';
 import type { Field } from '../../lib/types/application/index.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../base-entity-changes/types.js';
+import type {
+  BaseEntityChangesConfig as BaseApplicationConfig,
+  BaseEntityChangesOptions as BaseApplicationOptions,
+} from '../base-entity-changes/types.js';
 import { liquibaseFiles } from './files.js';
 import {
   liquibaseComment,

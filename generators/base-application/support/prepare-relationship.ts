@@ -23,7 +23,7 @@ import pluralize from 'pluralize';
 import { checkAndReturnRelationshipOnValue, databaseTypes, entityOptions, validations } from '../../../lib/jhipster/index.js';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/index.js';
-import type CoreGenerator from '../../base-core/generator.js';
+import type BaseCoreGenerator from '../../base-core/generator.js';
 import type { Relationship } from '../../../lib/types/application/relationship.js';
 import type { Entity } from '../../../lib/types/application/entity.js';
 import { prepareProperty } from './prepare-property.js';
@@ -37,7 +37,7 @@ const {
 
 const { MAPSTRUCT } = MapperTypes;
 
-function _defineOnUpdateAndOnDelete(relationship: Relationship, generator: CoreGenerator) {
+function _defineOnUpdateAndOnDelete(relationship: Relationship, generator: BaseCoreGenerator) {
   relationship.onDelete = checkAndReturnRelationshipOnValue(relationship.options?.onDelete, generator);
   relationship.onUpdate = checkAndReturnRelationshipOnValue(relationship.options?.onUpdate, generator);
 }
@@ -45,7 +45,7 @@ function _defineOnUpdateAndOnDelete(relationship: Relationship, generator: CoreG
 export default function prepareRelationship(
   entityWithConfig: Entity,
   relationship: Relationship<Omit<Entity, 'relationships'>>,
-  generator: CoreGenerator,
+  generator: BaseCoreGenerator,
   ignoreMissingRequiredRelationship = false,
 ) {
   const entityName = entityWithConfig.name;

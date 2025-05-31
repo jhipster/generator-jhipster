@@ -18,7 +18,7 @@
  */
 import assert from 'assert';
 import { escapeRegExp, kebabCase } from 'lodash-es';
-import type CoreGenerator from '../index.ts';
+import type BaseCoreGenerator from '../index.ts';
 import type { CascatedEditFileCallback, EditFileCallback, NeedleCallback } from '../../base/api.js';
 import { joinCallbacks } from './write-files.js';
 
@@ -188,7 +188,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
  *
  * @param options
  */
-export const createNeedleCallback = <Generator extends CoreGenerator = CoreGenerator>({
+export const createNeedleCallback = <Generator extends BaseCoreGenerator = BaseCoreGenerator>({
   needle,
   contentToAdd,
   contentToCheck,
@@ -243,12 +243,12 @@ export function createBaseNeedle(
   needles: Record<string, string>,
 ): NeedleCallback;
 export function createBaseNeedle(needles: Record<string, string>): NeedleCallback;
-export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator>(
+export function createBaseNeedle<Generator extends BaseCoreGenerator = BaseCoreGenerator>(
   this: Generator,
   options: Omit<NeedleFileInsertion, 'filePath' | 'needle' | 'contentToAdd'> & { filePath: string },
   needles: Record<string, string>,
 ): CascatedEditFileCallback<Generator>;
-export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator>(
+export function createBaseNeedle<Generator extends BaseCoreGenerator = BaseCoreGenerator>(
   this: Generator | void,
   options: Omit<NeedleFileInsertion, 'filePath' | 'needle' | 'contentToAdd'> | Record<string, string>,
   needles?: Record<string, string>,

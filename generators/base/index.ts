@@ -19,4 +19,4 @@
 
 export { default, CommandBaseGenerator } from './generator.js';
 export { default as command } from './command.js';
-export type { Config, Options, Features } from './types.js';
+export type { BaseConfig, BaseOptions, BaseFeatures } from './types.js';

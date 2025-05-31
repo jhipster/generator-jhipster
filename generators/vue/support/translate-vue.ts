@@ -18,7 +18,7 @@
  */
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
-import type CoreGenerator from '../../base-core/index.js';
+import type BaseCoreGenerator from '../../base-core/index.js';
 import type { GetWebappTranslationCallback } from '../../client/translation.js';
 
 function replaceTranslationAttributes({
@@ -46,7 +46,7 @@ export function removeDeclarations({ content }: { content: string }) {
 }
 
 export function replaceTranslationTags(
-  this: CoreGenerator | void,
+  this: BaseCoreGenerator | void,
   {
     body,
     enableTranslation,
@@ -154,7 +154,7 @@ const minimatch = new Minimatch('**/*.{vue,ts}');
 export const isTranslatedVueFile = file => minimatch.match(file.path);
 
 function translateVueFilesTransform(
-  this: CoreGenerator | void,
+  this: BaseCoreGenerator | void,
   {
     enableTranslation,
     getWebappTranslation,

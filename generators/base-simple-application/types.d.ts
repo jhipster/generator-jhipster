@@ -1,10 +1,11 @@
-import type CoreGenerator from '../base-core/generator.ts';
-import { type Config as BaseConfig, type Features as BaseFeatures, type Options as BaseOptions } from '../base/index.js';
+import type BaseCoreGenerator from '../base-core/generator.ts';
+import { type BaseConfig as BaseConfig, type BaseFeatures as BaseFeatures, type BaseOptions as BaseOptions } from '../base/index.js';
 import type packageJson from '../../package.json';
+import type { BaseSource } from '../base/types.js';
 
-export type { Source } from '../base/types.js';
+export type BaseSimpleApplicationSource = BaseSource;
 
-export type Application = {
+export type BaseSimpleApplicationApplication = {
   jhipsterVersion: string;
   baseName: string;
   capitalizedBaseName: string;
@@ -29,7 +30,7 @@ export type Application = {
 
   /** Customize templates sourceFile and destinationFile */
   customizeTemplatePaths: ((
-    this: CoreGenerator,
+    this: BaseCoreGenerator,
     file: {
       namespace: string;
       sourceFile: string;
@@ -41,10 +42,10 @@ export type Application = {
   ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
 };
 
-export type Config = BaseConfig & {
+export type BaseSimpleApplicationConfig = BaseConfig & {
   baseName?: string;
 };
 
-export type Options = BaseOptions;
+export type BaseSimpleApplicationOptions = BaseOptions;
 
-export type Features = BaseFeatures;
+export type BaseSimpleApplicationFeatures = BaseFeatures;

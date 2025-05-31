@@ -24,11 +24,11 @@ type GenericTask<Arg1Type, ThisType> = (this: ThisType, arg1: Arg1Type) => unkno
 
 export type GenericTaskGroup<ThisType, Arg1Type, N extends string = string> = Record<N, GenericTask<Arg1Type, ThisType>>;
 
-export type Config = {
+export type BaseCoreConfig = {
   autoCrlf?: boolean;
 };
 
-export type Options = YeomanOptions & {
+export type BaseCoreOptions = YeomanOptions & {
   /* yeoman options */
   skipYoResolve?: boolean;
   force?: boolean;
@@ -65,7 +65,7 @@ export type Options = YeomanOptions & {
   workspacesFolders?: string[];
 };
 
-export type Features = YeomanFeatures & {
+export type BaseCoreFeatures = YeomanFeatures & {
   /**
    * Wraps write context and shows removed fields and replacements if exists.
    */

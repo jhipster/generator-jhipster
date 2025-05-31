@@ -28,7 +28,7 @@ import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngin
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
 import type { Entity } from '../../../lib/types/application/index.js';
-import type CoreGenerator from '../../base-core/generator.js';
+import type BaseCoreGenerator from '../../base-core/generator.js';
 import type { PrimaryKey } from '../../../lib/types/application/entity.js';
 import type { ApplicationConfiguration } from '../../../lib/types/application/yo-rc.js';
 import type { ApplicationType } from '../../../lib/types/application/application.js';
@@ -276,7 +276,7 @@ export function derivedPrimaryKeyProperties(primaryKey: PrimaryKey) {
 }
 
 export function prepareEntityPrimaryKeyForTemplates(
-  this: CoreGenerator | void,
+  this: BaseCoreGenerator | void,
   { entity: entityWithConfig, enableCompositeId = true, application }: { entity: any; enableCompositeId?: boolean; application?: any },
 ) {
   const idFields = entityWithConfig.fields.filter(field => field.id);

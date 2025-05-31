@@ -32,10 +32,10 @@ import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromComm
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/index.js';
 import type {
-  Config as BaseWorkspacesConfig,
-  Features as BaseWorkspacesFeatures,
-  Options as BaseWorkspacesOptions,
-  Source as BaseWorkspacesSource,
+  BaseWorkspacesConfig as BaseWorkspacesConfig,
+  BaseWorkspacesFeatures as BaseWorkspacesFeatures,
+  BaseWorkspacesOptions as BaseWorkspacesOptions,
+  BaseSource as BaseWorkspacesSource,
 } from './types.js';
 
 const {

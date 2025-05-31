@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import type CoreGenerator from '../../base-core/index.js';
+import type BaseCoreGenerator from '../../base-core/index.js';
 import { createBaseNeedle } from '../../base-core/support/needles.ts';
 
 export type ApplicationPropertiesNeedles = {
@@ -58,12 +58,12 @@ export type ApplicationPropertiesNeedles = {
  */
 export function insertContentIntoApplicationProperties(needles: ApplicationPropertiesNeedles);
 export function insertContentIntoApplicationProperties(
-  this: CoreGenerator,
+  this: BaseCoreGenerator,
   application: { javaPackageSrcDir: string },
   needles: ApplicationPropertiesNeedles,
 );
 export function insertContentIntoApplicationProperties(
-  this: CoreGenerator | void,
+  this: BaseCoreGenerator | void,
   application: { javaPackageSrcDir: string } | ApplicationPropertiesNeedles,
   needles?: ApplicationPropertiesNeedles,
 ) {

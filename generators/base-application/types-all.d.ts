@@ -1,1 +1,1 @@
-export { Options as AllOptions, Config as AllConfig } from './types.js';
+export { BaseApplicationOptions as AllOptions, BaseApplicationConfig as AllConfig } from './types.js';

@@ -17,7 +17,7 @@ import { createJHipsterLogger, normalizePathEnd } from '../../lib/utils/index.js
 import { parseCreationTimestamp } from '../../generators/base/support/index.js';
 import BaseGenerator from '../../generators/base/index.js';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.js';
-import type CoreGenerator from '../../generators/base-core/generator.js';
+import type BaseCoreGenerator from '../../generators/base-core/generator.js';
 import type { ApplicationConfiguration } from '../types/application/yo-rc.js';
 import { getDefaultJDLApplicationConfig } from '../command/jdl.js';
 import type { Entity } from '../types/base/entity.js';
@@ -57,7 +57,7 @@ type RunJHipster = WithJHipsterGenerators & {
   useEnvironmentBuilder?: boolean;
 };
 
-type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = Omit<RunResult<GeneratorType>, 'env'> & {
+type JHipsterRunResult<GeneratorType extends BaseCoreGenerator = BaseCoreGenerator> = Omit<RunResult<GeneratorType>, 'env'> & {
   env: Environment;
 
   /**

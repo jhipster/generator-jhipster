@@ -22,7 +22,7 @@ import { Minimatch } from 'minimatch';
 import { Piscina } from 'piscina';
 import type { Options as PrettierOptions } from 'prettier';
 import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
-import type CoreGenerator from '../../base-core/index.js';
+import type BaseCoreGenerator from '../../base-core/index.js';
 
 const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
 export const isPrettierConfigFilePath = (filePath: string) => minimatch.match(filePath);
@@ -52,7 +52,7 @@ export class PrettierPool extends Piscina {
 }
 
 export const createPrettierTransform = async function (
-  this: CoreGenerator,
+  this: BaseCoreGenerator,
   options: PrettierWorkerOptions & { ignoreErrors?: boolean; extensions?: string; skipForks?: boolean } = {},
 ) {
   const { ignoreErrors = false, extensions = '*', skipForks, ...workerOptions } = options;

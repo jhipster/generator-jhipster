@@ -27,6 +27,7 @@ import files from './files.js';
 import { MAVEN } from './constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
 import { type PomStorage, createPomStorage, sortPomFile } from './support/index.js';
+import type { MavenArtifact, MavenDistributionManagement, MavenPlugin, MavenProfile, MavenRepository } from './types.js';
 
 export default class MavenGenerator extends BaseApplicationGenerator {
   pomStorage!: PomStorage;
@@ -86,14 +87,16 @@ export default class MavenGenerator extends BaseApplicationGenerator {
           };
         }
         source.mergeMavenPomContent = content => this.pomStorage.merge(content);
-        source.addMavenAnnotationProcessor = createForEach(artifact => this.pomStorage.addAnnotationProcessor(artifact));
-        source.addMavenDependency = createForEach(artifact => this.pomStorage.addDependency(artifact));
-        source.addMavenDependencyManagement = createForEach(artifact => this.pomStorage.addDependencyManagement(artifact));
-        source.addMavenDistributionManagement = createForEach(artifact => this.pomStorage.addDistributionManagement(artifact));
-        source.addMavenPlugin = createForEach(plugin => this.pomStorage.addPlugin(plugin));
-        source.addMavenPluginManagement = createForEach(plugin => this.pomStorage.addPluginManagement(plugin));
-        source.addMavenPluginRepository = createForEach(repository => this.pomStorage.addPluginRepository(repository));
-        source.addMavenProfile = createForEach(profile => this.pomStorage.addProfile(profile));
+        source.addMavenAnnotationProcessor = createForEach((artifact: MavenArtifact) => this.pomStorage.addAnnotationProcessor(artifact));
+        source.addMavenDependency = createForEach((artifact: MavenArtifact) => this.pomStorage.addDependency(artifact));
+        source.addMavenDependencyManagement = createForEach((artifact: MavenArtifact) => this.pomStorage.addDependencyManagement(artifact));
+        source.addMavenDistributionManagement = createForEach((artifact: MavenDistributionManagement) =>
+          this.pomStorage.addDistributionManagement(artifact),
+        );
+        source.addMavenPlugin = createForEach((plugin: MavenPlugin) => this.pomStorage.addPlugin(plugin));
+        source.addMavenPluginManagement = createForEach((plugin: MavenPlugin) => this.pomStorage.addPluginManagement(plugin));
+        source.addMavenPluginRepository = createForEach((repository: MavenRepository) => this.pomStorage.addPluginRepository(repository));
+        source.addMavenProfile = createForEach((profile: MavenProfile) => this.pomStorage.addProfile(profile));
         source.addMavenProperty = properties => {
           properties = Array.isArray(properties) ? properties : [properties];
           for (const property of properties) {
@@ -101,7 +104,7 @@ export default class MavenGenerator extends BaseApplicationGenerator {
             this.pomStorage.addProperty(property);
           }
         };
-        source.addMavenRepository = createForEach(repository => this.pomStorage.addRepository(repository));
+        source.addMavenRepository = createForEach((repository: MavenRepository) => this.pomStorage.addRepository(repository));
 
         source.addMavenDefinition = definition => {
           // profiles should be added first due to inProfile

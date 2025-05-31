@@ -27,7 +27,7 @@ import { union } from 'lodash-es';
 import { execaCommandSync } from 'execa';
 import type { PackageJson } from 'type-fest';
 import { packageJson } from '../../lib/index.js';
-import CoreGenerator from '../base-core/index.js';
+import BaseCoreGenerator from '../base-core/index.js';
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base-application/support/constants.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
@@ -43,14 +43,7 @@ import {
   CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,
   LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
 } from './support/constants.js';
-import type {
-  Config as BaseConfig,
-  Features as BaseFeatures,
-  Options as BaseOptions,
-  Source as BaseSource,
-  CleanupArgumentType,
-  Control,
-} from './types.js';
+import type { BaseConfig, BaseControl, BaseFeatures, BaseOptions, BaseSource, CleanupArgumentType } from './types.js';
 
 const { WRITING } = PRIORITY_NAMES;
 
@@ -59,12 +52,12 @@ const { WRITING } = PRIORITY_NAMES;
  * Provides built-in state support with control object.
  */
 export default class BaseGenerator<
-  ConfigType extends BaseConfig = BaseConfig,
+  Config extends BaseConfig = BaseConfig,
   Options extends BaseOptions = BaseOptions,
   Source extends BaseSource = BaseSource,
   Features extends BaseFeatures = BaseFeatures,
   TaskTypes extends BaseTaskTypes<Source> = BaseTaskTypes<Source>,
-> extends CoreGenerator<ConfigType, Options, Features> {
+> extends BaseCoreGenerator<Config, Options, Features> {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
   delegateToBlueprint = false;
@@ -157,9 +150,9 @@ export default class BaseGenerator<
     return this.delegateToBlueprint ? ({} as TaskGroupType) : tasksGetter();
   }
 
-  get #control(): Control {
+  get #control(): BaseControl {
     const generator = this;
-    return this.getContextData<Control>('jhipster:control', {
+    return this.getContextData<BaseControl>('jhipster:control', {
       factory: () => {
         let jhipsterOldVersion: string | null;
         let enviromentHasDockerCompose: undefined | boolean;
@@ -334,7 +327,7 @@ export default class BaseGenerator<
   /**
    * Check if the generator should ask for prompts.
    */
-  override shouldAskForPrompts({ control }: { control: Control }): boolean {
+  override shouldAskForPrompts({ control }: { control: BaseControl }): boolean {
     if (!control) throw new Error(`Control object not found in ${this.options.namespace}`);
     return !control.existingProject || this.options.askAnswered === true;
   }

@@ -19,4 +19,4 @@
 
 export { default } from './generator.js';
 export type { Entity, Relationship, Field } from '../base-application/index.js';
-export type { Config, Features, Options, Source } from './types.js';
+export type { BaseEntityChangesConfig, BaseEntityChangesFeatures, BaseEntityChangesOptions, BaseEntityChangesSource } from './types.js';

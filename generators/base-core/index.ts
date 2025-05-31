@@ -18,4 +18,4 @@
  */
 
 export { default, CommandCoreGenerator } from './generator.js';
-export type { Config, Options, Features, ValidationResult } from './types.js';
+export type { BaseCoreConfig, BaseCoreOptions, BaseCoreFeatures, ValidationResult } from './types.js';
