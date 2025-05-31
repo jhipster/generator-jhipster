@@ -76,4 +76,14 @@ export default asWritingTask(function cleanupOldFilesTask({ application, control
   if (control.isJhipsterVersionLessThan('7.9.3')) {
     this.removeFile(`${application.clientSrcDir}app/config/translation-middleware.ts`);
   }
+  if (control.isJhipsterVersionLessThan('8.6.1')) {
+    this.removeFile(`.eslintrc.json`);
+    this.removeFile(`.eslintignore`);
+  }
+  if (control.isJhipsterVersionLessThan('8.7.4')) {
+    if (application.microfrontend && application.applicationTypeGateway) {
+      this.removeFile(`${application.srcMainWebapp}microfrontends/entities-menu.tsx`);
+      this.removeFile(`${application.srcMainWebapp}microfrontends/entities-routes.tsx`);
+    }
+  }
 });

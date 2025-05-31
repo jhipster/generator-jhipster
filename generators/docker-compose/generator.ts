@@ -19,6 +19,7 @@
 import { existsSync } from 'fs';
 import pathjs from 'path';
 import chalk from 'chalk';
+
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import normalize from 'normalize-path';
 import { defaults } from 'lodash-es';
@@ -32,6 +33,7 @@ import { createFaker } from '../base-application/support/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
 import { loadDerivedPlatformConfig, loadPlatformConfig } from '../base-workspaces/support/index.js';
+import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files.js';
 
 const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;
@@ -339,7 +341,10 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get writing() {
-    return writeFiles();
+    return this.asWritingTaskGroup({
+      cleanupOldFilesTask,
+      writeFiles,
+    });
   }
 
   get [BaseWorkspacesGenerator.WRITING]() {

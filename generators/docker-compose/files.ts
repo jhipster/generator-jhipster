@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -18,43 +17,40 @@
  * limitations under the License.
  */
 import { applicationTypes, authenticationTypes, monitoringTypes } from '../../lib/jhipster/index.js';
+import { asWritingTask } from '../base-workspaces/support/task-type-inference.js';
+import { asWriteFilesSection } from '../base-application/support/index.js';
 
 const { PROMETHEUS } = monitoringTypes;
 const { MICROSERVICE } = applicationTypes;
 const { OAUTH2 } = authenticationTypes;
-
-export function writeFiles() {
-  return {
-    cleanup({ control }) {
-      if (control.isJhipsterVersionLessThan('7.10.0')) {
-        this.removeFile('realm-config/jhipster-users-0.json');
-      }
+export const files = asWriteFilesSection({
+  dockerCompose: [
+    {
+      templates: ['docker-compose.yml', 'README-DOCKER-COMPOSE.md'],
     },
-
-    writeDockerCompose({ deployment }) {
-      this.writeFile('docker-compose.yml.ejs', 'docker-compose.yml', deployment);
-      this.writeFile('README-DOCKER-COMPOSE.md.ejs', 'README-DOCKER-COMPOSE.md', deployment);
+  ],
+  registry: [
+    {
+      condition: deployment => deployment.serviceDiscoveryAny,
+      templates: ['central-server-config/application.yml'],
     },
-
-    writeRegistryFiles({ deployment }) {
-      if (deployment.serviceDiscoveryAny) {
-        this.writeFile('central-server-config/application.yml.ejs', 'central-server-config/application.yml', deployment);
-      }
+  ],
+  keycloak: [
+    {
+      condition: deployment => deployment.authenticationType === OAUTH2 && deployment.applicationType !== MICROSERVICE,
+      templates: ['realm-config/keycloak-health-check.sh', 'realm-config/jhipster-realm.json'],
     },
-
-    writeKeycloakFiles({ deployment }) {
-      if (deployment.authenticationType === OAUTH2 && deployment.applicationType !== MICROSERVICE) {
-        this.writeFile('realm-config/keycloak-health-check.sh', 'realm-config/keycloak-health-check.sh', deployment);
-        this.writeFile('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json', deployment);
-      }
+  ],
+  prometheus: [
+    {
+      condition: deployment => deployment.monitoring === PROMETHEUS,
+      templates: ['prometheus-conf/prometheus.yml', 'prometheus-conf/alert_rules.yml', 'alertmanager-conf/config.yml'],
     },
-
-    writePrometheusFiles({ deployment }) {
-      if (deployment.monitoring !== PROMETHEUS) return;
-
-      this.writeFile('prometheus-conf/prometheus.yml.ejs', 'prometheus-conf/prometheus.yml', deployment);
-      this.writeFile('prometheus-conf/alert_rules.yml.ejs', 'prometheus-conf/alert_rules.yml', deployment);
-      this.writeFile('alertmanager-conf/config.yml.ejs', 'alertmanager-conf/config.yml', deployment);
-    },
-  };
-}
+  ],
+});
+export const writeFiles = asWritingTask(async function writeFiles({ deployment }) {
+  await this.writeFiles({
+    sections: files,
+    context: deployment,
+  });
+});
