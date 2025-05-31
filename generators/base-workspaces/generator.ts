@@ -37,6 +37,7 @@ import type {
   Options as BaseWorkspacesOptions,
   Source as BaseWorkspacesSource,
 } from './types.js';
+import type { Tasks } from './tasks.js';
 
 const {
   PROMPTING_WORKSPACES,
@@ -56,7 +57,7 @@ type WorkspacesTypes<A extends ApplicationType = ApplicationType, S extends Base
   PreparingTaskParam: TaskParamWithSource<S> & { applications: A[] };
   PostPreparingTaskParam: TaskParamWithSource<S> & { applications: A[] };
   DefaultTaskParam: TaskTypes['DefaultTaskParam'] & { applications: A[] };
-  WritingTaskParam: TaskTypes['WritingTaskParam'] & { applications: A[] };
+  WritingTaskParam: Tasks['WritingTaskParam'];
   PostWritingTaskParam: TaskParamWithSource<S> & { applications: A[] };
   InstallTaskParam: TaskTypes['InstallTaskParam'] & { applications: A[] };
   PostInstallTaskParam: TaskTypes['PostInstallTaskParam'] & { applications: A[] };
