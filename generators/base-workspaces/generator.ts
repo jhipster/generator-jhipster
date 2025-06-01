@@ -71,7 +71,7 @@ export default abstract class BaseWorkspacesGenerator<
   appsFolders?: string[];
   directoryPath!: string;
 
-  constructor(args, options, features) {
+  constructor(args, options: Options, features: Features) {
     super(args, options, features);
 
     if (this.options.help) {
