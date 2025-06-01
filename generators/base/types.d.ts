@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportGeneratorOptionsFromCommand } from '../../lib/command/types.js';
 import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/types.js';
 
@@ -39,6 +38,7 @@ export type Config = CoreConfig & {
 };
 
 export type Options = CoreOptions &
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
   ExportGeneratorOptionsFromCommand<typeof import('./command.js').default> & {
     /**
      * @deprecated

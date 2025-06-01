@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 import type { Merge } from 'type-fest';
-import type { TaskParamWithControl } from '../base/tasks.js';
-import type { Application as SimpleApplication, Source as SimpleSource } from '../base-simple-application/types.d.ts';
-import type { SimpleTaskTypes } from '../base-simple-application/tasks.js';
+import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource, TaskTypes } from '../base/tasks.js';
+import type { Source as BaseWorkspacesSource, Application as SimpleApplication } from '../base-simple-application/types.d.ts';
 
 export type TaskParamWithApplications<A, W, D> = TaskParamWithControl & {
   applications: A;
@@ -27,9 +26,17 @@ export type TaskParamWithApplications<A, W, D> = TaskParamWithControl & {
   workspaces: W;
 };
 
-export type Tasks<S = SimpleSource, A = SimpleApplication[], W = any, D = any> = Merge<
-  SimpleTaskTypes<S>,
+export type Tasks<S = BaseWorkspacesSource, A = SimpleApplication, W = any, D = any> = Merge<
+  BaseTaskTypes,
   {
-    WritingTaskParam: TaskParamWithApplications<A, W, D>;
+    WritingTaskParam: TaskParamWithApplications<A[], W, D>;
+    LoadingTaskParam: TaskTypes['LoadingTaskParam'] & { applications: A[] };
+    PreparingTaskParam: TaskParamWithSource<S> & { applications: A[] };
+    PostPreparingTaskParam: TaskParamWithSource<S> & { applications: A[] };
+    DefaultTaskParam: TaskTypes['DefaultTaskParam'] & { applications: A[] };
+    PostWritingTaskParam: TaskParamWithSource<S> & { applications: A[] };
+    InstallTaskParam: TaskTypes['InstallTaskParam'] & { applications: A[] };
+    PostInstallTaskParam: TaskTypes['PostInstallTaskParam'] & { applications: A[] };
+    EndTaskParam: TaskTypes['EndTaskParam'] & { applications: A[] };
   }
 >;
