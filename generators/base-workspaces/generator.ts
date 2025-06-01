@@ -19,7 +19,6 @@
 
 import { readdir } from 'fs/promises';
 import { existsSync } from 'fs';
-import chalk from 'chalk';
 
 import BaseGenerator from '../base/index.js';
 import { YO_RC_FILE } from '../generator-constants.js';
@@ -80,10 +79,10 @@ export default abstract class BaseWorkspacesGenerator<
 
   static PREPARING_WORKSPACES = BaseGenerator.asPriority(PREPARING_WORKSPACES);
 
-  appsFolders?: string[];
+  appsFolders?: string[] = [];
   directoryPath!: string;
 
-  constructor(args, options, features) {
+  constructor(args, options: Options, features: Features) {
     super(args, options, features);
 
     if (this.options.help) {
@@ -127,46 +126,7 @@ export default abstract class BaseWorkspacesGenerator<
     this.jhipsterConfig.directoryPath = normalizePathEnd(this.jhipsterConfig.directoryPath ?? './');
   }
 
-  protected async askForWorkspacesConfig() {
-    let appsFolders;
-    await this.prompt(
-      [
-        {
-          type: 'input',
-          name: 'directoryPath',
-          message: 'Enter the root directory where your applications are located',
-          default: '../',
-          validate: async input => {
-            const path = this.destinationPath(input);
-            if (existsSync(path)) {
-              const applications = await this.findApplicationFolders(path);
-              return applications.length === 0 ? `No application found in ${path}` : true;
-            }
-            return `${path} is not a directory or doesn't exist`;
-          },
-        },
-        {
-          type: 'checkbox',
-          name: 'appsFolders',
-          when: async answers => {
-            const directoryPath = answers.directoryPath;
-            appsFolders = (await this.findApplicationFolders(directoryPath)).filter(
-              app => app !== 'jhipster-registry' && app !== 'registry',
-            );
-            this.log.log(chalk.green(`${appsFolders.length} applications found at ${this.destinationPath(directoryPath)}\n`));
-            return true;
-          },
-          message: 'Which applications do you want to include in your configuration?',
-          choices: () => appsFolders,
-          default: () => appsFolders,
-          validate: input => (input.length === 0 ? 'Please choose at least one application' : true),
-        },
-      ],
-      this.config,
-    );
-  }
-
-  protected async findApplicationFolders(directoryPath = this.directoryPath ?? '.') {
+  async findApplicationFolders(directoryPath = this.directoryPath ?? '.') {
     return (await readdir(this.destinationPath(directoryPath), { withFileTypes: true }))
       .filter(dirent => dirent.isDirectory())
       .map(dirent => dirent.name)

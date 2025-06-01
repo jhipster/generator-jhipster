@@ -30,20 +30,6 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
     }
   }
 
-  get prompting() {
-    return this.asPromptingTaskGroup({
-      async askForOptions() {
-        if (this.customWorkspacesConfig || (this.sharedWorkspaces.existingWorkspaces && !this.options.askAnswered)) return;
-
-        await this.askForWorkspacesConfig();
-      },
-    });
-  }
-
-  get [BaseWorkspacesGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
   get configuring() {
     return this.asConfiguringTaskGroup({
       configureWorkspaces() {

@@ -16,7 +16,6 @@ export default class TemplateFile {
   private _filename: any;
   private _extension: any;
   private _compiled: ejs.TemplateFunction;
-  // eslint-disable-next-line no-use-before-define
   private _fragments: TemplateFile[];
   private _fragmentName: string;
   private _debug: { enabled: boolean } & ((msg: string) => void);

@@ -16,14 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import assert from 'assert';
 import fs, { existsSync, readFileSync, statSync } from 'fs';
 import path, { join, relative } from 'path';
 import { rm } from 'fs/promises';
+import { union } from 'lodash-es';
 import chalk from 'chalk';
 import semver, { lt as semverLessThan } from 'semver';
 
-import { union } from 'lodash-es';
 import { execaCommandSync } from 'execa';
 import type { PackageJson } from 'type-fest';
 import { packageJson } from '../../lib/index.js';
@@ -51,9 +52,7 @@ import type {
   CleanupArgumentType,
   Control,
 } from './types.js';
-
 const { WRITING } = PRIORITY_NAMES;
-
 /**
  * Base class that contains blueprints support.
  * Provides built-in state support with control object.
