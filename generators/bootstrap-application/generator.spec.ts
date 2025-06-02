@@ -189,8 +189,7 @@ describe(`generator - ${generator}`, () => {
       it('should prepare User', () => {
         const entity = runResult.entities!.User;
         expect(entity).toMatchInlineSnapshot(
-          expectedEntity(entity),
-          `
+  expectedEntity(entity), `
 {
   "adminEntity": undefined,
   "adminUserDto": "AdminUserDTO",
@@ -330,9 +329,7 @@ describe(`generator - ${generator}`, () => {
       "fieldTypeZonedDateTime": false,
       "fieldValidate": false,
       "fieldValidateRulesMaxlength": undefined,
-      "fieldValidateRulesPatternAngular": undefined,
       "fieldValidateRulesPatternJava": undefined,
-      "fieldValidateRulesPatternReact": undefined,
       "fieldValidationMax": false,
       "fieldValidationMaxBytes": false,
       "fieldValidationMaxLength": false,
@@ -437,9 +434,7 @@ describe(`generator - ${generator}`, () => {
       ],
       "fieldValidateRulesMaxlength": 50,
       "fieldValidateRulesPattern": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
-      "fieldValidateRulesPatternAngular": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
       "fieldValidateRulesPatternJava": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
-      "fieldValidateRulesPatternReact": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
       "fieldValidationMax": false,
       "fieldValidationMaxBytes": false,
       "fieldValidationMaxLength": true,
@@ -535,9 +530,7 @@ describe(`generator - ${generator}`, () => {
         "maxlength",
       ],
       "fieldValidateRulesMaxlength": 50,
-      "fieldValidateRulesPatternAngular": undefined,
       "fieldValidateRulesPatternJava": undefined,
-      "fieldValidateRulesPatternReact": undefined,
       "fieldValidationMax": false,
       "fieldValidationMaxBytes": false,
       "fieldValidationMaxLength": true,
@@ -627,9 +620,7 @@ describe(`generator - ${generator}`, () => {
         "maxlength",
       ],
       "fieldValidateRulesMaxlength": 50,
-      "fieldValidateRulesPatternAngular": undefined,
       "fieldValidateRulesPatternJava": undefined,
-      "fieldValidateRulesPatternReact": undefined,
       "fieldValidationMax": false,
       "fieldValidationMaxBytes": false,
       "fieldValidationMaxLength": true,
@@ -723,9 +714,7 @@ describe(`generator - ${generator}`, () => {
       ],
       "fieldValidateRulesMaxlength": 191,
       "fieldValidateRulesMinlength": 5,
-      "fieldValidateRulesPatternAngular": undefined,
       "fieldValidateRulesPatternJava": undefined,
-      "fieldValidateRulesPatternReact": undefined,
       "fieldValidationMax": false,
       "fieldValidationMaxBytes": false,
       "fieldValidationMaxLength": true,
@@ -816,9 +805,7 @@ describe(`generator - ${generator}`, () => {
         "maxlength",
       ],
       "fieldValidateRulesMaxlength": 256,
-      "fieldValidateRulesPatternAngular": undefined,
       "fieldValidateRulesPatternJava": undefined,
-      "fieldValidateRulesPatternReact": undefined,
       "fieldValidationMax": false,
       "fieldValidationMaxBytes": false,
       "fieldValidationMaxLength": true,
@@ -905,9 +892,7 @@ describe(`generator - ${generator}`, () => {
       "fieldTypeUUID": false,
       "fieldTypeZonedDateTime": false,
       "fieldValidate": false,
-      "fieldValidateRulesPatternAngular": undefined,
       "fieldValidateRulesPatternJava": undefined,
-      "fieldValidateRulesPatternReact": undefined,
       "fieldValidationMax": false,
       "fieldValidationMaxBytes": false,
       "fieldValidationMaxLength": false,
@@ -993,9 +978,7 @@ describe(`generator - ${generator}`, () => {
         "maxlength",
       ],
       "fieldValidateRulesMaxlength": 10,
-      "fieldValidateRulesPatternAngular": undefined,
       "fieldValidateRulesPatternJava": undefined,
-      "fieldValidateRulesPatternReact": undefined,
       "fieldValidationMax": false,
       "fieldValidationMaxBytes": false,
       "fieldValidationMaxLength": true,
@@ -1171,14 +1154,12 @@ describe(`generator - ${generator}`, () => {
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
-`,
-        );
+`);
       });
       it('should prepare EntityA', () => {
         const entity = runResult.entities!.EntityA;
         expect(entity).toMatchInlineSnapshot(
-          expectedEntity(entity),
-          `
+  expectedEntity(entity), `
 {
   "adminEntity": undefined,
   "allReferences": Any<Array>,
@@ -1308,9 +1289,7 @@ describe(`generator - ${generator}`, () => {
       "fieldTypeUUID": true,
       "fieldTypeZonedDateTime": false,
       "fieldValidate": false,
-      "fieldValidateRulesPatternAngular": undefined,
       "fieldValidateRulesPatternJava": undefined,
-      "fieldValidateRulesPatternReact": undefined,
       "fieldValidationMax": false,
       "fieldValidationMaxBytes": false,
       "fieldValidationMaxLength": false,
@@ -1406,9 +1385,7 @@ describe(`generator - ${generator}`, () => {
       "fieldTypeUUID": false,
       "fieldTypeZonedDateTime": false,
       "fieldValidate": false,
-      "fieldValidateRulesPatternAngular": undefined,
       "fieldValidateRulesPatternJava": undefined,
-      "fieldValidateRulesPatternReact": undefined,
       "fieldValidationMax": false,
       "fieldValidationMaxBytes": false,
       "fieldValidationMaxLength": false,
@@ -1492,9 +1469,7 @@ describe(`generator - ${generator}`, () => {
       "fieldTypeUUID": false,
       "fieldTypeZonedDateTime": false,
       "fieldValidate": false,
-      "fieldValidateRulesPatternAngular": undefined,
       "fieldValidateRulesPatternJava": undefined,
-      "fieldValidateRulesPatternReact": undefined,
       "fieldValidationMax": false,
       "fieldValidationMaxBytes": false,
       "fieldValidationMaxLength": false,
@@ -1670,8 +1645,7 @@ describe(`generator - ${generator}`, () => {
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
-`,
-        );
+`);
       });
     });
 
@@ -1730,8 +1704,7 @@ describe(`generator - ${generator}`, () => {
       it('should prepare EntityA', () => {
         const entity = runResult.entities!.EntityA;
         expect(entity).toMatchInlineSnapshot(
-          expectedEntity(entity),
-          `
+  expectedEntity(entity), `
 {
   "adminEntity": undefined,
   "allReferences": Any<Array>,
@@ -1861,9 +1834,7 @@ describe(`generator - ${generator}`, () => {
       "fieldTypeUUID": true,
       "fieldTypeZonedDateTime": false,
       "fieldValidate": false,
-      "fieldValidateRulesPatternAngular": undefined,
       "fieldValidateRulesPatternJava": undefined,
-      "fieldValidateRulesPatternReact": undefined,
       "fieldValidationMax": false,
       "fieldValidationMaxBytes": false,
       "fieldValidationMaxLength": false,
@@ -2043,8 +2014,7 @@ describe(`generator - ${generator}`, () => {
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
-`,
-        );
+`);
       });
     });
   });
