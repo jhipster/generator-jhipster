@@ -1,4 +1,4 @@
-import type { WriteFileBlock } from '../../base/api.js';
+import type { WriteFileBlock } from '../../base-core/api.js';
 import type CoreGenerator from '../../base-core/index.js';
 import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../../generator-constants.js';
 

@@ -23,7 +23,7 @@ import BaseGenerator from '../base/index.js';
 import { mutateData } from '../../lib/utils/index.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
-import { PRIORITY_NAMES } from '../base/priorities.js';
+import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTaskGroup } from '../base-core/types.js';
 import type { SimpleTaskTypes } from './tasks.js';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.js';

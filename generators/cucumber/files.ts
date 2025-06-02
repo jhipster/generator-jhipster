@@ -18,7 +18,7 @@
  */
 import { moveToJavaPackageTestDir } from '../java/support/index.js';
 import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import type { WriteFileSection } from '../base/api.js';
+import type { WriteFileSection } from '../base-core/api.js';
 import type Generator from './generator.js';
 
 const cucumberFiles: WriteFileSection = {

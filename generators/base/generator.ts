@@ -35,9 +35,9 @@ import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import type { GenericTaskGroup } from '../base-core/types.js';
 import { packageNameToNamespace } from '../../lib/utils/index.js';
 import { formatDateForChangelog } from '../base/support/index.js';
+import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { TaskTypes as BaseTaskTypes } from './tasks.js';
 import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.js';
-import { PRIORITY_NAMES } from './priorities.js';
 import {
   CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE,
   CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,

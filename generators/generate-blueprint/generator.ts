@@ -22,7 +22,7 @@ import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 
 import type { Application, Config, Options } from '../base-simple-application/index.js';
 import BaseGenerator from '../base-simple-application/index.js';
-import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.js';
+import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
 
 import * as GENERATOR_LIST from '../generator-list.js';
 import { BLUEPRINT_API_VERSION } from '../generator-constants.js';

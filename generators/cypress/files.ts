@@ -18,7 +18,7 @@
  */
 import { CLIENT_TEST_SRC_DIR } from '../generator-constants.js';
 
-import type { WriteFileSection } from '../base/api.js';
+import type { WriteFileSection } from '../base-core/api.js';
 import { clientRootTemplatesBlock } from '../client/support/index.js';
 
 const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;

@@ -18,7 +18,7 @@
  */
 import { moveToJavaPackageSrcDir } from '../java/support/index.js';
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
-import type { WriteFileSection } from '../base/api.js';
+import type { WriteFileSection } from '../base-core/api.js';
 import type Generator from './generator.js';
 
 const files: WriteFileSection = {

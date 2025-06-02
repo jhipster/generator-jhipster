@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { GRADLE_BUILD_SRC_MAIN_DIR, TEST_DIR } from '../generator-constants.js';
-import type { WriteFileSection } from '../base/api.js';
+import type { WriteFileSection } from '../base-core/api.js';
 import type Generator from './generator.js';
 
 const gatlingFiles: WriteFileSection = {

@@ -34,10 +34,8 @@ import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-gener
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
 
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
 import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.js';
 
-import type { CascatedEditFileCallback, EditFileCallback, EditFileOptions, WriteFileOptions } from '../base/api.js';
 import {
   type ExportGeneratorOptionsFromCommand,
   type ExportStoragePropertiesFromCommand,
@@ -65,6 +63,8 @@ import type {
   GenericTaskGroup,
   ValidationResult,
 } from '../base-core/types.js';
+import type { CascatedEditFileCallback, EditFileCallback, EditFileOptions, WriteFileOptions } from './api.js';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
 import { createJHipster7Context, joinCallbacks } from './support/index.js';
 import { convertWriteFileSectionsToBlocks } from './internal/index.js';
 

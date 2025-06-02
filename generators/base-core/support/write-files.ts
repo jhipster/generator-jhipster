@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { EditFileCallback } from '../../base/api.js';
+import type { EditFileCallback } from '../api.js';
 
 /**
  * TODO move to utils when converted to typescripts

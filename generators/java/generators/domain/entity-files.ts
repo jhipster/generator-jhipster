@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { WriteFileSection } from '../../../base/api.js';
+import type { WriteFileSection } from '../../../base-core/api.js';
 import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from '../../support/index.js';
 
 export const entityServerFiles: WriteFileSection = {
