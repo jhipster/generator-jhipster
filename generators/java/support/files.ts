@@ -20,8 +20,8 @@
 import type { WriteFileBlock } from '../../base-core/api.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../../generator-constants.js';
-import type { ApplicationType } from '../../../lib/types/application/application.js';
 import type { Entity } from '../../../lib/types/application/entity.js';
+import type { ApplicationAll } from '../../base-application/types-all.js';
 
 export const replaceEntityFilePathVariables = (data: any, filePath: string) => {
   filePath = filePath
@@ -53,7 +53,7 @@ export const moveToSrcMainResourcesDir = (data: any, filePath: string) =>
 
 type RelativeWriteFileBlock = WriteFileBlock & { relativePath?: string };
 
-export function javaMainPackageTemplatesBlock<Data = ApplicationType<Entity>>(
+export function javaMainPackageTemplatesBlock<Data = ApplicationAll<Entity>>(
   blockOrRelativePath?: string,
 ): Pick<WriteFileBlock<Data>, 'path' | 'renameTo'>;
 export function javaMainPackageTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): WriteFileBlock;

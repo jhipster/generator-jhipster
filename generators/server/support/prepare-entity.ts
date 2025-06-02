@@ -23,14 +23,14 @@ import { databaseTypes, searchEngineTypes } from '../../../lib/jhipster/index.js
 import { isReservedTableName } from '../../../lib/jhipster/reserved-keywords.js';
 import { mutateData, normalizePathEnd } from '../../../lib/utils/index.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
-import type { ApplicationType } from '../../../lib/types/application/application.js';
+import type { ApplicationAll } from '../../base-application/types-all.js';
 import { hibernateSnakeCase } from './string.js';
 import { getDatabaseTypeData } from './database.js';
 
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { POSTGRESQL, MYSQL, MARIADB, COUCHBASE, SQL, NEO4J } = databaseTypes;
 
-export default function prepareEntity(entity: any, application: ApplicationType) {
+export default function prepareEntity(entity: any, application: ApplicationAll) {
   const { packageFolder } = application;
   const { entityPackage, packageName, persistClass } = entity;
   let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder, entityJavaPackageFolder } = entity;

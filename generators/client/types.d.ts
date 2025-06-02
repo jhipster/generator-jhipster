@@ -2,7 +2,7 @@ import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/index.js';
 import type { CypressApplication } from '../cypress/types.js';
 import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
-import type { PostWritingEntitiesTaskParam } from '../../lib/types/application/tasks.js';
+import type { PostWritingEntitiesTaskParam } from '../base-application/tasks.js';
 import type { Language } from '../languages/support/languages.ts';
 import type { Entity } from '../base-application/index.js';
 import type { GetWebappTranslationCallback } from './translation.js';

@@ -20,7 +20,7 @@
 import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.js';
 import { mutateData } from '../../../lib/utils/index.js';
 import type { Field } from '../../../lib/types/application/field.js';
-import type { ApplicationType } from '../../../lib/types/application/application.js';
+import type { ApplicationAll } from '../../base-application/types-all.js';
 
 const { MYSQL, MARIADB } = databaseTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
@@ -102,7 +102,7 @@ function parseLiquibaseColumnType(field: Field) {
   return undefined;
 }
 
-function parseLiquibaseLoadColumnType(application: ApplicationType, field: Field): string {
+function parseLiquibaseLoadColumnType(application: ApplicationAll, field: Field): string {
   const columnType = field.columnType!;
   // eslint-disable-next-line no-template-curly-in-string
   if (['integer', 'bigint', 'double', 'decimal(21,2)', '${floatType}'].includes(columnType)) {
@@ -151,7 +151,7 @@ function parseLiquibaseLoadColumnType(application: ApplicationType, field: Field
   return 'string';
 }
 
-export default function prepareField(application: ApplicationType, field: Field): Field {
+export default function prepareField(application: ApplicationAll, field: Field): Field {
   mutateData(field, {
     __override__: false,
     columnType: data => parseLiquibaseColumnType(data),

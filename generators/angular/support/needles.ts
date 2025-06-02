@@ -19,7 +19,7 @@
 import { createNeedleCallback } from '../../base-core/support/needles.ts';
 import { upperFirstCamelCase } from '../../../lib/utils/index.js';
 import { joinCallbacks } from '../../base-core/support/write-files.ts';
-import type { PostWritingEntitiesTaskParam } from '../../../lib/types/application/tasks.js';
+import type { PostWritingEntitiesTaskParam } from '../../base-application/tasks.js';
 
 export function addRoute({
   needle,
