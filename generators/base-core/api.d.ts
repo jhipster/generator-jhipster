@@ -1,5 +1,5 @@
-import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
+import type { ApplicationAll } from '../base-application/types-all.js';
 import type CoreGenerator from './index.ts';
 
 export type EditFileCallback<Generator = CoreGenerator> = (this: Generator, content: string, filePath: string) => string;
@@ -10,9 +10,9 @@ export type CascatedEditFileCallback<Generator = CoreGenerator> = (
   ...callbacks: EditFileCallback<Generator>[]
 ) => CascatedEditFileCallback<Generator>;
 
-type DataCallback<Type, DataType = ApplicationType<Entity>, Generator = CoreGenerator> = Type | ((this: Generator, data: DataType) => Type);
+type DataCallback<Type, DataType = ApplicationAll<Entity>, Generator = CoreGenerator> = Type | ((this: Generator, data: DataType) => Type);
 
-export type WriteFileTemplate<DataType = ApplicationType<Entity>, Generator = CoreGenerator> =
+export type WriteFileTemplate<DataType = ApplicationAll<Entity>, Generator = CoreGenerator> =
   | string
   | ((this: Generator, data: DataType) => string)
   | {
@@ -34,7 +34,7 @@ export type WriteFileTemplate<DataType = ApplicationType<Entity>, Generator = Co
       override?: DataCallback<boolean, DataType, Generator>;
     };
 
-export type WriteFileBlock<DataType = ApplicationType<Entity>, Generator = CoreGenerator> = {
+export type WriteFileBlock<DataType = ApplicationAll<Entity>, Generator = CoreGenerator> = {
   /** relative path were sources are placed */
   from?: ((this: Generator, data: DataType) => string) | string;
   /** relative path were the files should be written, fallbacks to from/path */
@@ -49,12 +49,12 @@ export type WriteFileBlock<DataType = ApplicationType<Entity>, Generator = CoreG
   templates: WriteFileTemplate<DataType, Generator>[];
 };
 
-export type WriteFileSection<DataType = ApplicationType<Entity>, Generator = CoreGenerator> = Record<
+export type WriteFileSection<DataType = ApplicationAll<Entity>, Generator = CoreGenerator> = Record<
   string,
   WriteFileBlock<DataType, Generator>[]
 >;
 
-export type WriteFileOptions<DataType = ApplicationType<Entity>, Generator = CoreGenerator> = {
+export type WriteFileOptions<DataType = ApplicationAll<Entity>, Generator = CoreGenerator> = {
   /** transforms (files processing) to be applied */
   transform?: EditFileCallback<Generator>[];
   /** context to be used as template data */

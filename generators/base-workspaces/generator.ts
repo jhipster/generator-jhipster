@@ -25,9 +25,9 @@ import BaseGenerator from '../base/index.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import { normalizePathEnd } from '../../lib/utils/index.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
+import type { ApplicationAll } from '../base-application/types-all.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/index.js';
 import type {
@@ -59,7 +59,7 @@ export default abstract class BaseWorkspacesGenerator<
   Options extends BaseWorkspacesOptions = BaseWorkspacesOptions,
   Source extends BaseWorkspacesSource = BaseWorkspacesSource,
   Features extends BaseWorkspacesFeatures = BaseWorkspacesFeatures,
-> extends BaseGenerator<Config, Options, Source, Features, Tasks<Source, ApplicationType>> {
+> extends BaseGenerator<Config, Options, Source, Features, Tasks<Source, ApplicationAll>> {
   static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 
   static CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);

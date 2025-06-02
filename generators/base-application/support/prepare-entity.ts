@@ -31,7 +31,7 @@ import type { Entity } from '../../../lib/types/application/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { PrimaryKey } from '../../../lib/types/application/entity.js';
 import type { ApplicationConfiguration } from '../../../lib/types/application/yo-rc.js';
-import type { ApplicationType } from '../../../lib/types/application/application.js';
+import type { ApplicationAll } from '../types-all.js';
 import { createFaker } from './faker.js';
 import { fieldToReference } from './prepare-field.js';
 import { fieldIsEnum } from './field-utils.js';
@@ -133,7 +133,7 @@ export const entityDefaultConfig = {
   },
 };
 
-export default function prepareEntity(entityWithConfig: Entity, generator, application: ApplicationType) {
+export default function prepareEntity(entityWithConfig: Entity, generator, application: ApplicationAll) {
   const { applicationTypeMicroservice, microfrontend, dtoSuffix = '' } = application;
 
   const entityName = upperFirst(entityWithConfig.name);

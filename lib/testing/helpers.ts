@@ -26,10 +26,9 @@ import type { CliCommand } from '../../cli/types.js';
 import type BaseApplicationGenerator from '../../generators/base-application/generator.js';
 import type { PRIORITY_NAMES as APPLICATION_PRIORITY_NAMES } from '../../generators/base-application/priorities.js';
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
 import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY } from '../../generators/base-application/support/constants.js';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../generators/base-simple-application/support/constants.js';
-import type { AllOptions } from '../../generators/base-application/types-all.js';
+import type { AllOptions, ApplicationAll } from '../../generators/base-application/types-all.js';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
 type GeneratorTestType = YeomanGenerator<AllOptions>;
@@ -73,7 +72,7 @@ type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = Om
   // eslint-disable-next-line no-use-before-define
   createJHipster: (ns: string, options?: WithJHipsterGenerators) => JHipsterRunContext;
 
-  application?: ApplicationType;
+  application?: ApplicationAll;
 
   entities?: Record<string, Entity>;
 };
@@ -365,7 +364,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   withMockedNodeDependencies() {
     return this.withSharedApplication({
       nodeDependencies: new Proxy({}, { get: (_target, prop) => `${snakeCase(prop.toString()).toUpperCase()}_VERSION` }),
-    } as unknown as ApplicationType);
+    } as unknown as ApplicationAll);
   }
 
   /**

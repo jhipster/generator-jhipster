@@ -23,10 +23,10 @@ import { PRIORITY_NAMES } from '../base-application/priorities.js';
 import { loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.js';
 import { relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from '../liquibase/support/index.js';
 import { addEntitiesOtherRelationships } from '../server/support/index.js';
-import type { TaskTypes as ApplicationTaskTypes } from '../../lib/types/application/tasks.js';
+import type { TaskTypes as ApplicationTaskTypes } from '../base-application/tasks.js';
 import type { Entity as ApplicationEntity } from '../../lib/types/application/entity.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { TaskParamWithApplication } from '../base-simple-application/tasks.js';
+import type { ApplicationAll } from '../base-application/types-all.js';
 import type {
   BaseChangelog,
   Config as BaseEntityChangesConfig,
@@ -63,7 +63,7 @@ type BaseEntityChangesTaskTypes<E, A, S extends BaseEntityChangesSource> = Appli
  */
 export default abstract class BaseEntityChangesGenerator<
   Entity extends ApplicationEntity = ApplicationEntity,
-  Application extends ApplicationType<Entity> = ApplicationType<Entity>,
+  Application extends ApplicationAll<Entity> = ApplicationAll<Entity>,
   ConfigType extends BaseEntityChangesConfig = BaseEntityChangesConfig,
   Options extends BaseEntityChangesOptions = BaseEntityChangesOptions,
   Source extends BaseEntityChangesSource = BaseEntityChangesSource,

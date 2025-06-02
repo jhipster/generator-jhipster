@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { CommonClientServerApplication } from '../../base-application/types.js';
+import type { ApplicationAll } from '../../base-application/types-all.js';
 import type BaseGenerator from '../../base-core/index.js';
 
 type UpdateLanguagesApplication = Pick<
-  CommonClientServerApplication<any>,
+  ApplicationAll<any>,
   'clientBundlerWebpack' | 'clientSrcDir' | 'clientRootDir' | 'enableTranslation' | 'languagesDefinition' | 'languages'
 >;
 

@@ -29,6 +29,12 @@ import {
   GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
   GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
 } from '../generator-list.js';
+import type { Entity as ApplicationEntity } from '../../lib/types/application/entity.js';
+import type { GenericTaskGroup } from '../base-core/types.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
+import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
+import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
 import type {
   ConfiguringEachEntityTaskParam,
   TaskTypes as DefaultTaskTypes,
@@ -36,22 +42,16 @@ import type {
   PreparingEachEntityFieldTaskParam,
   PreparingEachEntityRelationshipTaskParam,
   PreparingEachEntityTaskParam,
-} from '../../lib/types/application/tasks.js';
-import type { Entity as ApplicationEntity } from '../../lib/types/application/entity.js';
-import type { GenericTaskGroup } from '../base-core/types.js';
-import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
-import type { ApplicationType, BaseApplicationSource as ClientServerSource } from '../../lib/types/application/application.js';
-import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
-import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
-import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
+} from './tasks.js';
+import type { ApplicationAll, SourceAll } from './types-all.js';
 import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, getEntitiesFromDir } from './support/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 import type {
+  Application as BaseApplication,
   Config as BaseApplicationConfig,
   Features as BaseApplicationFeatures,
   Options as BaseApplicationOptions,
   Source as BaseApplicationSource,
-  CommonClientServerApplication,
 } from './types.js';
 
 const {
@@ -130,10 +130,10 @@ const getFirstArgForPriority = (priorityName: string) => ({
  */
 export default class BaseApplicationGenerator<
   Entity extends ApplicationEntity = ApplicationEntity,
-  Application extends CommonClientServerApplication<Entity> = ApplicationType<Entity>,
+  Application extends BaseApplication = ApplicationAll<Entity>,
   ConfigType extends BaseApplicationConfig = BaseApplicationConfig & ApplicationConfiguration,
   Options extends BaseApplicationOptions = BaseApplicationOptions,
-  Source extends BaseApplicationSource = ClientServerSource,
+  Source extends BaseApplicationSource = SourceAll,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
   TaskTypes extends DefaultTaskTypes<Entity, Application, Source> = DefaultTaskTypes<Entity, Application, Source>,
 > extends BaseGenerator<Application, ConfigType, Options, Source, Features, TaskTypes> {
@@ -193,9 +193,9 @@ export default class BaseApplicationGenerator<
     }
   }
 
-  get #application(): ApplicationType {
+  get #application(): Application {
     return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
-      factory: () => ({}) as unknown as ApplicationType,
+      factory: () => ({}) as unknown as Application,
     });
   }
 
@@ -491,7 +491,7 @@ export default class BaseApplicationGenerator<
    * @returns {string[]}
    */
   #getEntitiesDataToLoad(): EntityToLoad<any>[] {
-    const application = this.#application;
+    const application = this.#application as ApplicationAll<Entity>;
     const builtInEntities: string[] = [];
     if (application.generateBuiltInUserEntity) {
       // Reorder User entity to be the first one to be loaded

@@ -32,9 +32,9 @@ import { prepareSqlApplicationProperties } from '../spring-data-relational/suppo
 import { fieldTypes } from '../../lib/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
 import type { Field } from '../../lib/types/application/index.js';
-import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../base-entity-changes/types.js';
+import type { ApplicationAll } from '../base-application/types-all.js';
 import { liquibaseFiles } from './files.js';
 import {
   liquibaseComment,
@@ -60,7 +60,7 @@ type CommandType = HandleCommandTypes<typeof command>;
 
 export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   LiquibaseEntity,
-  ApplicationType<LiquibaseEntity>,
+  ApplicationAll<LiquibaseEntity>,
   BaseApplicationConfig & CommandType['Config'],
   BaseApplicationOptions & CommandType['Options'],
   LiquibaseSource

@@ -35,7 +35,6 @@ import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
 
 import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.js';
-
 import {
   type ExportGeneratorOptionsFromCommand,
   type ExportStoragePropertiesFromCommand,
@@ -47,26 +46,25 @@ import {
   convertConfigToOption,
 } from '../../lib/command/index.js';
 import { packageJson } from '../../lib/index.js';
-import type { BaseApplication } from '../base-application/types.js';
-import baseCommand from '../base/command.js';
-import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
-import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
+import baseCommand from '../base/command.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
+import { GENERATOR_JHIPSTER } from '../generator-constants.js';
+import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type GeneratorsByNamespace from '../types.js';
-import type { GeneratorBaseCore } from '../index.js';
+import type { CascatedEditFileCallback, EditFileCallback, EditFileOptions, WriteFileOptions } from './api.js';
+import { convertWriteFileSectionsToBlocks } from './internal/index.js';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
+import { createJHipster7Context, joinCallbacks } from './support/index.js';
 import type {
   Config as CoreConfig,
   Features as CoreFeatures,
   Options as CoreOptions,
   GenericTaskGroup,
   ValidationResult,
-} from '../base-core/types.js';
-import type { CascatedEditFileCallback, EditFileCallback, EditFileOptions, WriteFileOptions } from './api.js';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
-import { createJHipster7Context, joinCallbacks } from './support/index.js';
-import { convertWriteFileSectionsToBlocks } from './internal/index.js';
+  WriteContext,
+} from './types.js';
 
 const {
   INITIALIZING,
@@ -594,8 +592,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     gen: G,
     options?: ComposeOptions<GeneratorsByNamespace[G]>,
   ): Promise<GeneratorsByNamespace[G]>;
-  async composeWithJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore>;
-  async composeWithJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore> {
+  async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator>;
+  async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator> {
     assert(typeof gen === 'string', 'generator should to be a string');
     let generator: string = gen;
     if (!isAbsolute(generator)) {
@@ -625,8 +623,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     gen: G,
     options?: ComposeOptions<GeneratorsByNamespace[G]>,
   ): Promise<GeneratorsByNamespace[G]>;
-  async dependsOnJHipster(gen: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore>;
-  async dependsOnJHipster(generator: string, options?: ComposeOptions<GeneratorBaseCore>): Promise<GeneratorBaseCore> {
+  async dependsOnJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator>;
+  async dependsOnJHipster(generator: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator> {
     return this.composeWithJHipster(generator, {
       ...options,
       schedule: false,
@@ -712,7 +710,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     const { context = {} } = options;
     const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const startTime = new Date().getMilliseconds();
-    const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = context as BaseApplication;
+    const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = context as WriteContext;
 
     const { jhipster7Migration } = this.getFeatures();
     const templateData = jhipster7Migration

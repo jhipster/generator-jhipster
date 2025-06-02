@@ -2,7 +2,7 @@ import type {
   Config as BaseApplicationConfig,
   Features as BaseApplicationFeatures,
   Options as BaseApplicationOptions,
-} from '../base-application/types.d.ts';
+} from '../base-application/types.js';
 
 export type { Source } from '../base-application/types.js';
 
