@@ -1,6 +1,6 @@
-import type CoreGenerator from './index.ts';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
+import type CoreGenerator from './index.ts';
 
 export type EditFileCallback<Generator = CoreGenerator> = (this: Generator, content: string, filePath: string) => string;
 
