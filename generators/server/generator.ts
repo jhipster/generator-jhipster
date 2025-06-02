@@ -206,8 +206,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           // Field type check should be ignored for entities of others microservices.
           if (!field.fieldValues && (!entityConfig.microserviceName || entityConfig.microserviceName === application.baseName)) {
             if (
-              !Object.values(CommonDBTypes).includes(field.fieldType) &&
-              (application.databaseType !== SQL || !Object.values(RelationalOnlyDBTypes).includes(field.fieldType))
+              !(Object.values(CommonDBTypes) as string[]).includes(field.fieldType) &&
+              (application.databaseType !== SQL || !(Object.values(RelationalOnlyDBTypes) as string[]).includes(field.fieldType))
             ) {
               throw new Error(
                 `The type '${field.fieldType}' is an unknown field type for field '${field.fieldName}' of entity '${entityConfig.name}' using '${application.databaseType}' database.`,

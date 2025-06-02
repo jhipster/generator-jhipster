@@ -114,7 +114,7 @@ export const generateTestEntityId = (primaryKey: FieldType | PrimaryKey, index: 
   } else {
     value = index === 0 ? 123 : 456;
   }
-  if (wrapped && [TYPE_UUID, TYPE_STRING].includes(primaryKeyType)) {
+  if (wrapped && ([TYPE_UUID, TYPE_STRING] as string[]).includes(primaryKeyType)) {
     return `'${value}'`;
   }
   return value;
