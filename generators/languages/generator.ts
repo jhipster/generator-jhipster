@@ -27,7 +27,7 @@ import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/inde
 import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.js';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
 import { QUEUES } from '../base-application/priorities.js';
-import { PRIORITY_NAMES } from '../base/priorities.js';
+import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import type { Language } from './support/languages.js';
 import { findLanguageForTag, supportedLanguages } from './support/languages.js';
