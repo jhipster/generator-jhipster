@@ -19,19 +19,16 @@
  */
 
 import chalk from 'chalk';
-
+import { intersection } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/config-def.js';
 import command from './command.js';
-
+import type { CiCdApplication } from './types.js';
 const { REACT } = clientFrameworkTypes;
 
-export default class CiCdGenerator extends BaseApplicationGenerator {
-  insideDocker;
-  context = {};
-
+export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplication> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -48,6 +45,20 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
       sayHello() {
         this.log.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
       },
+      validateSupportedCICD() {
+        if (this.jhipsterConfig.ciCd?.length > 0) {
+          if (
+            intersection(
+              command.configs.ciCd.choices.map(entry => entry.value),
+              this.jhipsterConfig.ciCd,
+            ).length !== this.jhipsterConfig.ciCd.length
+          ) {
+            throw new Error(
+              `error: command-argument value '${this.jhipsterConfig.ciCd}' is invalid for argument 'ciCd'. Allowed choices are github, jenkins, gitlab, azure, travis, circle.`,
+            );
+          }
+        }
+      },
     });
   }
 
@@ -58,8 +69,8 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get loading() {
     return this.asLoadingTaskGroup({
-      loadSharedConfig() {
-        loadConfig.call(this, command.configs, { application: this.context });
+      loadSharedConfig({ application }) {
+        loadConfig(command.configs, { config: this.jhipsterConfigWithDefaults, application });
       },
     });
   }
@@ -70,19 +81,19 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      setTemplateConstants() {
-        loadDerivedConfig(command.configs, { application: this.context });
+      setTemplateConstants({ application }) {
+        loadDerivedConfig(command.configs, { application });
 
-        if (this.context.ciCdIntegrations === undefined) {
-          this.context.ciCdIntegrations = [];
+        if (application.ciCdIntegrations === undefined) {
+          application.ciCdIntegrations = [];
         }
-        this.context.gitLabIndent = this.context.sendBuildToGitlab ? '    ' : '';
-        this.context.indent = this.context.insideDocker ? '    ' : '';
-        this.context.indent += this.context.gitLabIndent;
-        if (this.context.clientFramework === REACT) {
-          this.context.frontTestCommand = 'test-ci';
+        application.gitLabIndent = application.sendBuildToGitlab ? '    ' : '';
+        application.indent = application.insideDocker ? '    ' : '';
+        application.indent += application.gitLabIndent;
+        if (application.clientFramework === REACT) {
+          application.frontTestCommand = 'test-ci';
         } else {
-          this.context.frontTestCommand = 'test';
+          application.frontTestCommand = 'test';
         }
       },
     });
@@ -90,18 +101,6 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
-  }
-
-  get default() {
-    return this.asDefaultTaskGroup({
-      loadContext({ application }) {
-        Object.assign(application, this.context);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   // Public API method used by the getter and also by Blueprints
