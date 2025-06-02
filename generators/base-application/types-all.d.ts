@@ -5,6 +5,7 @@ import type { ClientApplication, ClientSourceType } from '../client/types.js';
 import { DockerSourceType } from '../docker/types.js';
 import { LanguagesSource } from '../languages/types.js';
 import type { SpringBootApplication, SpringBootSourceType } from '../server/types.js';
+import type { I18nApplication } from '../languages/types.js';
 import type { OptionWithDerivedProperties } from './application-options.js';
 import type { Application as BaseApplication, Source as BaseApplicationSource } from './types.js';
 
@@ -96,6 +97,7 @@ type QuirksApplication = {
 
 export type ApplicationAll<E = Entity> = BaseApplication &
   QuirksApplication &
+  I18nApplication &
   AuthenticationProperties<E> &
   SpringBootApplication &
   ClientApplication &

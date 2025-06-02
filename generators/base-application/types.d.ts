@@ -5,7 +5,6 @@ import type {
   Options as BaseOptions,
   Application as SimpleApplication,
 } from '../base-simple-application/index.ts';
-import type { I18nApplication } from '../languages/types.js';
 
 export type Config = BaseConfig & {
   baseName?: string;
@@ -43,4 +42,4 @@ export type Application = SimpleApplication & {
    * True if the application has at least one non-builtin entity.
    */
   hasNonBuiltInEntity?: boolean;
-} & I18nApplication;
+};
