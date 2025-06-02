@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { clientApplicationTemplatesBlock } from '../client/support/files.js';
-import type { WriteFileSection } from '../base/api.js';
+import type { WriteFileSection } from '../base-core/api.js';
 import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/index.js';
 import { filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/filter-entities.js';
 

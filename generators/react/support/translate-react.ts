@@ -104,8 +104,6 @@ const replaceTranslationKeysWithText = (
 
 /**
  * Replace and cleanup translations.
- *
- * @return {import('../../base/api.js').EditFileCallback}
  */
 export const createTranslationReplacer = (getWebappTranslation: GetWebappTranslationCallback) =>
   function replaceReactTranslations(body: string, filePath: string) {

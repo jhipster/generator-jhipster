@@ -17,7 +17,7 @@
 import type { ApplicationType } from '../../../lib/types/application/application.js';
 import type { TaskTypes } from '../../../lib/types/application/tasks.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import type { WriteFileSection } from '../../base/api.js';
+import type { WriteFileSection } from '../../base-core/api.js';
 import type { Entity } from '../../../lib/types/application/entity.js';
 
 export function asWriteFilesSection<Data = ApplicationType<Entity>>(section: WriteFileSection<Data>) {

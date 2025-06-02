@@ -37,7 +37,7 @@ import latestVersion from 'latest-version';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
 import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.js';
 
-import type { CascatedEditFileCallback, EditFileCallback, EditFileOptions, WriteFileOptions } from '../base/api.js';
+import type { CascatedEditFileCallback, EditFileCallback, EditFileOptions, WriteFileOptions } from './api.js';
 import {
   type ExportGeneratorOptionsFromCommand,
   type ExportStoragePropertiesFromCommand,

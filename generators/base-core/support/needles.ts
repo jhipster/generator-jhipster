@@ -19,8 +19,10 @@
 import assert from 'assert';
 import { escapeRegExp, kebabCase } from 'lodash-es';
 import type CoreGenerator from '../index.ts';
-import type { CascatedEditFileCallback, EditFileCallback, NeedleCallback } from '../../base/api.js';
+import type { CascatedEditFileCallback, EditFileCallback } from '../api.js';
 import { joinCallbacks } from './write-files.js';
+
+export type NeedleCallback = (content: string) => string;
 
 type NeedleContentToAddCallback = {
   /**
