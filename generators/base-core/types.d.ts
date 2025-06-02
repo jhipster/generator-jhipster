@@ -19,6 +19,7 @@
 import type { BaseFeatures as YeomanFeatures, BaseOptions as YeomanOptions } from 'yeoman-generator';
 import type { JDLApplicationConfig } from '../../lib/jdl/core/types/parsing.js';
 import type { JHipsterConfigs } from '../../lib/command/types.js';
+import type CoreGenerator from './generator.ts';
 
 type GenericTask<Arg1Type, ThisType> = (this: ThisType, arg1: Arg1Type) => unknown;
 
@@ -104,4 +105,19 @@ export type ValidationResult = {
   info?: string | string[];
   warning?: string | string[];
   error?: string | string[];
+};
+
+export type WriteContext = {
+  /** Customize templates sourceFile and destinationFile */
+  customizeTemplatePaths: ((
+    this: CoreGenerator,
+    file: {
+      namespace: string;
+      sourceFile: string;
+      resolvedSourceFile: string;
+      destinationFile: string;
+      templatesRoots: string[];
+    },
+    context: any,
+  ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
 };
