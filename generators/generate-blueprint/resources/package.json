@@ -2,7 +2,7 @@
   "dependencies": {
     "eslint": "9.27.0",
     "globals": "16.2.0",
-    "vitest": "3.1.4"
+    "vitest": "3.2.0"
   },
   "packageManager": "npm@11"
 }
