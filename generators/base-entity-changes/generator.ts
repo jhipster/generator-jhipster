@@ -64,12 +64,12 @@ type BaseEntityChangesTaskTypes<E, A, S extends BaseEntityChangesSource> = Appli
 export default abstract class BaseEntityChangesGenerator<
   Entity extends ApplicationEntity = ApplicationEntity,
   Application extends ApplicationAll<Entity> = ApplicationAll<Entity>,
-  ConfigType extends BaseEntityChangesConfig = BaseEntityChangesConfig,
+  Config extends BaseEntityChangesConfig = BaseEntityChangesConfig,
   Options extends BaseEntityChangesOptions = BaseEntityChangesOptions,
   Source extends BaseEntityChangesSource = BaseEntityChangesSource,
   Features extends BaseEntityChangesFeatures = BaseEntityChangesFeatures,
-  TaskTypes extends BaseEntityChangesTaskTypes<Entity, Application, Source> = BaseEntityChangesTaskTypes<Entity, Application, Source>,
-> extends GeneratorBaseEntityChanges<Entity, Application, ConfigType, Options, Source, Features, TaskTypes> {
+  Tasks extends BaseEntityChangesTaskTypes<Entity, Application, Source> = BaseEntityChangesTaskTypes<Entity, Application, Source>,
+> extends GeneratorBaseEntityChanges<Entity, Application, Config, Options, Source, Features, Tasks> {
   recreateInitialChangelog!: boolean;
   private entityChanges!: any[];
 
@@ -80,7 +80,7 @@ export default abstract class BaseEntityChangesGenerator<
   ): TaskParamWithApplication<Application> {
     const firstArg = super.getTaskFirstArgForPriority(priorityName);
     if (([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
-      const { application, entities } = firstArg as TaskTypes['DefaultTaskParam'];
+      const { application, entities } = firstArg as Tasks['DefaultTaskParam'];
       this.entityChanges = this.generateIncrementalChanges({ application, entities });
     }
     if (([DEFAULT] as string[]).includes(priorityName)) {
@@ -100,7 +100,7 @@ export default abstract class BaseEntityChangesGenerator<
   protected generateIncrementalChanges({
     application,
     entities: paramEntities,
-  }: Pick<TaskTypes['DefaultTaskParam'], 'application' | 'entities'>): BaseChangelog[] {
+  }: Pick<Tasks['DefaultTaskParam'], 'application' | 'entities'>): BaseChangelog[] {
     const recreateInitialChangelog = this.recreateInitialChangelog;
     const { incrementalChangelog } = application;
     const entityNames = paramEntities.filter(e => !e.builtIn).map(e => e.name);

@@ -1,8 +1,8 @@
 import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
 import type {
+  CommandConfig,
   CommandConfigDefault,
   CommandConfigScope,
-  CommandConfigType,
   ConfigSpec,
   JHipsterArguments,
   JHipsterChoices,
@@ -46,7 +46,7 @@ export const convertConfigToOption = <const T extends ConfigSpec<any>>(
       name: string;
       description?: string;
       choices?: string[];
-      type?: CommandConfigType;
+      type?: CommandConfig;
       scope: CommandConfigScope;
       default?: CommandConfigDefault<any>;
     }

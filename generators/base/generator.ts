@@ -36,7 +36,7 @@ import type { GenericTaskGroup } from '../base-core/types.js';
 import { packageNameToNamespace } from '../../lib/utils/index.js';
 import { formatDateForChangelog } from '../base/support/index.js';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { TaskTypes as BaseTaskTypes } from './tasks.js';
+import type { TaskTypes as BaseTasks } from './tasks.js';
 import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.js';
 import {
   CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE,
@@ -59,12 +59,12 @@ const { WRITING } = PRIORITY_NAMES;
  * Provides built-in state support with control object.
  */
 export default class BaseGenerator<
-  ConfigType extends BaseConfig = BaseConfig,
+  Config extends BaseConfig = BaseConfig,
   Options extends BaseOptions = BaseOptions,
   Source extends BaseSource = BaseSource,
   Features extends BaseFeatures = BaseFeatures,
-  TaskTypes extends BaseTaskTypes<Source> = BaseTaskTypes<Source>,
-> extends CoreGenerator<ConfigType, Options, Features> {
+  Tasks extends BaseTasks<Source> = BaseTasks<Source>,
+> extends CoreGenerator<Config, Options, Features> {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
   delegateToBlueprint = false;
@@ -359,8 +359,8 @@ export default class BaseGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asInitializingTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['InitializingTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['InitializingTaskParam']> {
+    taskGroup: GenericTaskGroup<this, Tasks['InitializingTaskParam']>,
+  ): GenericTaskGroup<any, Tasks['InitializingTaskParam']> {
     return taskGroup;
   }
 
@@ -376,9 +376,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPromptingTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PromptingTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['PromptingTaskParam']> {
+  asPromptingTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['PromptingTaskParam']>): GenericTaskGroup<any, Tasks['PromptingTaskParam']> {
     return taskGroup;
   }
 
@@ -395,8 +393,8 @@ export default class BaseGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asConfiguringTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['ConfiguringTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['ConfiguringTaskParam']> {
+    taskGroup: GenericTaskGroup<this, Tasks['ConfiguringTaskParam']>,
+  ): GenericTaskGroup<any, Tasks['ConfiguringTaskParam']> {
     return taskGroup;
   }
 
@@ -412,9 +410,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asComposingTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['ComposingTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['ComposingTaskParam']> {
+  asComposingTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['ComposingTaskParam']>): GenericTaskGroup<any, Tasks['ComposingTaskParam']> {
     return taskGroup;
   }
 
@@ -431,8 +427,8 @@ export default class BaseGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asComposingComponentTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['ComposingTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['ComposingTaskParam']> {
+    taskGroup: GenericTaskGroup<this, Tasks['ComposingTaskParam']>,
+  ): GenericTaskGroup<any, Tasks['ComposingTaskParam']> {
     return taskGroup;
   }
 
@@ -449,9 +445,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asLoadingTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['LoadingTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['LoadingTaskParam']> {
+  asLoadingTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['LoadingTaskParam']>): GenericTaskGroup<any, Tasks['LoadingTaskParam']> {
     return taskGroup;
   }
 
@@ -467,9 +461,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PreparingTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['PreparingTaskParam']> {
+  asPreparingTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['PreparingTaskParam']>): GenericTaskGroup<any, Tasks['PreparingTaskParam']> {
     return taskGroup;
   }
 
@@ -486,8 +478,8 @@ export default class BaseGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asPostPreparingTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PostPreparingTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['PostPreparingTaskParam']> {
+    taskGroup: GenericTaskGroup<this, Tasks['PostPreparingTaskParam']>,
+  ): GenericTaskGroup<any, Tasks['PostPreparingTaskParam']> {
     return taskGroup;
   }
 
@@ -503,9 +495,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asDefaultTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['DefaultTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['DefaultTaskParam']> {
+  asDefaultTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['DefaultTaskParam']>): GenericTaskGroup<any, Tasks['DefaultTaskParam']> {
     return taskGroup;
   }
 
@@ -521,9 +511,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asWritingTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['WritingTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['WritingTaskParam']> {
+  asWritingTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['WritingTaskParam']>): GenericTaskGroup<any, Tasks['WritingTaskParam']> {
     return taskGroup;
   }
 
@@ -540,8 +528,8 @@ export default class BaseGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asPostWritingTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PostWritingTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['PostWritingTaskParam']> {
+    taskGroup: GenericTaskGroup<this, Tasks['PostWritingTaskParam']>,
+  ): GenericTaskGroup<any, Tasks['PostWritingTaskParam']> {
     return taskGroup;
   }
 
@@ -557,9 +545,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asInstallTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['InstallTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['InstallTaskParam']> {
+  asInstallTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['InstallTaskParam']>): GenericTaskGroup<any, Tasks['InstallTaskParam']> {
     return taskGroup;
   }
 
@@ -576,8 +562,8 @@ export default class BaseGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asPostInstallTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['PostInstallTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['PostInstallTaskParam']> {
+    taskGroup: GenericTaskGroup<this, Tasks['PostInstallTaskParam']>,
+  ): GenericTaskGroup<any, Tasks['PostInstallTaskParam']> {
     return taskGroup;
   }
 
@@ -593,7 +579,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asEndTaskGroup(taskGroup: GenericTaskGroup<this, TaskTypes['EndTaskParam']>): GenericTaskGroup<any, TaskTypes['EndTaskParam']> {
+  asEndTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['EndTaskParam']>): GenericTaskGroup<any, Tasks['EndTaskParam']> {
     return taskGroup;
   }
 
@@ -858,5 +844,5 @@ export class CommandBaseGenerator<
   BaseOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions,
   BaseSource,
   BaseFeatures & AdditionalFeatures,
-  BaseTaskTypes
+  BaseTasks
 > {}
