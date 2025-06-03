@@ -37,15 +37,22 @@ export function removeFieldsWithNullishValues<const T extends Record<string, any
  * @returns
  */
 
-function filterValue<const T extends Record<string, any>>(object: T, filterValue: (any) => boolean = filterNullishValues): T {
+function filterValue<const T extends Record<string, any>>(
+  object: T,
+  customFilterValue: (any) => boolean = filterNullishValues,
+  deep = 1,
+): T {
   const clone = {};
   for (const [key, value] of Object.entries(object)) {
-    if (filterValue(value)) {
+    if (customFilterValue(value)) {
       if (typeof value === 'object') {
         if (Array.isArray(value)) {
-          clone[key] = value.filter(filterValue);
+          clone[key] = value.filter(customFilterValue);
         } else {
-          clone[key] = removeFieldsWithNullishValues(value);
+          if (deep < 4) {
+            // Avoid recursion depth issues
+            clone[key] = filterValue(value, customFilterValue, deep + 1);
+          }
         }
       } else {
         clone[key] = value;
