@@ -81,7 +81,7 @@ export default abstract class BaseWorkspacesGenerator<
     this.registerPriorities(CUSTOM_PRIORITIES);
   }
 
-  get #deployment() {
+  get context() {
     return this.getContextData(CONTEXT_DATA_DEPLOYMENT_KEY, { factory: () => ({}) });
   }
 
@@ -206,7 +206,7 @@ export default abstract class BaseWorkspacesGenerator<
       {
         ...first,
         workspaces: this.sharedWorkspaces,
-        deployment: this.#deployment,
+        deployment: this.context,
         applications: this.#applications,
       },
       ...others,

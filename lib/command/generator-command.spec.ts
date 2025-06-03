@@ -20,7 +20,11 @@ const dummyMeta = {
 };
 
 class CommandGenerator extends BaseApplicationGenerator {
-  context = {};
+  _context: any = {};
+
+  get context() {
+    return this._context;
+  }
 
   constructor(args, opts, features) {
     super(args, opts, { ...features, jhipsterBootstrap: false });
