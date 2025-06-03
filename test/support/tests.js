@@ -59,7 +59,6 @@ export const basicTests = data => {
   describe('with default options', () => {
     before(async () => {
       await helpers.runJHipster(generatorPath).withOptions({
-        skipPrompts: true,
         configure: true,
         skipPriorities: skipWritingPriorities,
       });
@@ -111,12 +110,9 @@ export const basicTests = data => {
         expect(getTemplateData(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
       });
     });
-    describe('and skipPrompts option', () => {
+    describe('and skipPriorities option', () => {
       before(async () => {
-        await helpers
-          .runJHipster(generatorPath)
-          .withOptions({ skipPrompts: true, skipPriorities: skipWritingPriorities })
-          .withAnswers(customPrompts);
+        await helpers.runJHipster(generatorPath).withOptions({ skipPriorities: skipWritingPriorities }).withAnswers(customPrompts);
       });
       it('should not show prompts and write required config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });

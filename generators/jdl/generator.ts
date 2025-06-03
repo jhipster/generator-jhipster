@@ -258,8 +258,7 @@ export default class JdlGenerator extends BaseGenerator<AllConfig, AllOptions> {
             generatorOptions: {
               destinationRoot: this.destinationPath(deploymentType),
               force: true,
-              skipPrompts: true,
-            } as any,
+            },
           });
         }
       },

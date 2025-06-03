@@ -168,7 +168,7 @@ describe('generator - languages', () => {
           .runJHipster(generator)
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
           .withOptions({ ignoreNeedlesError: true })
-          .withOptions({ skipPrompts: true, regenerate: true, baseName: 'jhipster' }),
+          .withOptions({ regenerateLanguages: true, baseName: 'jhipster' }),
       );
       containsLanguageFiles('fr');
     });
@@ -219,7 +219,7 @@ describe('generator - languages', () => {
           .runJHipster(generator)
           .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
           .withOptions({ ignoreNeedlesError: true })
-          .withOptions({ skipPrompts: true, regenerate: true, baseName: 'jhipster' }),
+          .withOptions({ regenerateLanguages: true, baseName: 'jhipster' }),
       );
       it('creates expected configuration values', () => {
         runResult.assertJsonFileContent('.yo-rc.json', {
