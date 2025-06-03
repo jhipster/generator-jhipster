@@ -33,24 +33,28 @@ const command = {
         type: Boolean,
       },
       default: false,
+      scope: 'none',
     },
     tableName: {
       description: 'Specify table name that will be used by the entity',
       cli: {
         type: String,
       },
+      scope: 'none',
     },
     fluentMethods: {
       description: 'Generate fluent methods in entity beans to allow chained object construction',
       cli: {
         type: Boolean,
       },
+      scope: 'none',
     },
     angularSuffix: {
       description: 'Use a suffix to generate Angular routes and files, to avoid name clashes',
       cli: {
         type: String,
       },
+      scope: 'none',
     },
     clientRootFolder: {
       description:
@@ -58,24 +62,28 @@ const command = {
       cli: {
         type: String,
       },
+      scope: 'none',
     },
     skipUiGrouping: {
       description: 'Disables the UI grouping behaviour for entity client side code',
       cli: {
         type: Boolean,
       },
+      scope: 'none',
     },
     skipDbChangelog: {
       description: 'Skip the generation of database changelog (liquibase for sql databases)',
       cli: {
         type: Boolean,
       },
+      scope: 'none',
     },
     singleEntity: {
       description: 'Regenerate only a single entity, relationships can be not correctly generated',
       cli: {
         type: Boolean,
       },
+      scope: 'none',
     },
   },
 } as const satisfies JHipsterCommandDefinition;

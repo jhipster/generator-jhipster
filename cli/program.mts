@@ -141,12 +141,9 @@ const addCommandGeneratorOptions = async (
   generatorMeta,
   { root, blueprintOptionDescription, info }: { root?: boolean; blueprintOptionDescription?: string; info?: string } = {},
 ) => {
-  const generatorModule = await generatorMeta.importModule();
+  const generatorModule = (await generatorMeta.importModule()) as JHipsterModule;
   if (generatorModule.command) {
-    const { options, configs } = generatorModule.command;
-    if (options) {
-      command.addJHipsterOptions(options, blueprintOptionDescription);
-    }
+    const { configs } = generatorModule.command;
     if (configs) {
       command.addJHipsterConfigs(configs, blueprintOptionDescription);
     }

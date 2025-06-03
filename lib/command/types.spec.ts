@@ -8,12 +8,6 @@ import type {
 type AssertType<Expected extends true | false, _T2 extends Expected, _T3 extends Expected = Expected> = void;
 
 const _testCommand = {
-  options: {
-    arrayOptionsType: {
-      type: Array,
-      scope: 'storage',
-    },
-  },
   configs: {
     stringRootType: {
       cli: { type: String },
@@ -62,10 +56,6 @@ const _booleanCliType = {
 const _booleanCliTypeError = {
   // @ts-expect-error invalid value
   booleanCliType: 'false',
-} satisfies StorageProperties;
-
-const _arrayCliType = {
-  arrayOptionsType: ['false'],
 } satisfies StorageProperties;
 
 const _choiceType = {
@@ -117,7 +107,6 @@ const _applicationChoiceComplete = {
 type ApplicationOptions = ExportGeneratorOptionsFromCommand<TestCommand>;
 
 const _applicationOptions = {
-  arrayOptionsType: ['false'],
   stringRootType: 'foo',
   booleanCliType: false,
   choiceType: 'foo',

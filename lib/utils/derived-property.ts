@@ -2,8 +2,14 @@ import { camelCase, upperFirst } from 'lodash-es';
 import type { JHipsterChoices } from '../command/types.js';
 import { upperFirstCamelCase } from './string.js';
 
-const flatChoices = (choices: JHipsterChoices): string[] =>
+export const flatChoices = (choices: JHipsterChoices): string[] =>
   choices.map(choice => (typeof choice === 'string' ? choice : choice.value)).filter(Boolean);
+
+export const derivedPropertyName = (property: string, value: string): string => {
+  const valueProterty = value.includes('-') ? upperFirstCamelCase(value) : upperFirst(value);
+  const camelCaseProperty = camelCase(property);
+  return `${camelCaseProperty}${valueProterty}`;
+};
 
 export const applyDerivedProperty = <const Prop extends string>(
   data: any,
@@ -17,20 +23,19 @@ export const applyDerivedProperty = <const Prop extends string>(
   const flattenedChoices = flatChoices(possibleValues);
   let isAny = false;
   for (const value of flattenedChoices) {
-    const valueProterty = value.includes('-') ? upperFirstCamelCase(value) : upperFirst(value);
     const isProperty = Array.isArray(actualValue) ? actualValue.includes(value) : actualValue === value;
-    data[`${camelCaseProp}${valueProterty}`] ??= isProperty;
+    data[derivedPropertyName(property, value)] ??= isProperty;
     if (isProperty && value !== 'no') {
       isAny = true;
     }
   }
   if (addAny) {
-    data[`${camelCaseProp}Any`] ??= isAny;
+    data[derivedPropertyName(property, 'any')] ??= isAny;
   }
   if (addNo) {
     if (flattenedChoices.includes('no' as any)) {
       throw new Error('Possible values already include "no"');
     }
-    data[`${camelCaseProp}No`] ??= !isAny;
+    data[derivedPropertyName(property, 'no')] ??= !isAny;
   }
 };

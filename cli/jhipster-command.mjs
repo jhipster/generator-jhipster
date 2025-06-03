@@ -176,13 +176,12 @@ export default class JHipsterCommand extends Command {
     return this;
   }
 
-  addJHipsterOptions(options, blueprintOptionDescription) {
-    Object.entries(options).forEach(([key, value]) => {
-      this._addGeneratorOption(kebabCase(value.name ?? key), value, blueprintOptionDescription);
-    });
-    return this;
-  }
-
+  /**
+   *
+   * @param {import('../lib/command/types.js').JHipsterConfigs} configs
+   * @param {string} [blueprintOptionDescription]
+   * @returns
+   */
   addJHipsterConfigs(configs = {}, blueprintOptionDescription) {
     Object.assign(blueprintOptionDescription ? this.blueprintConfigs : this.configs, configs);
     Object.entries(configs)

@@ -113,7 +113,9 @@ const command = {
       scope: 'none',
     },
     jdlDefinition: {
-      internal: true,
+      internal: {
+        type: Object,
+      },
       scope: 'none',
     },
   },
