@@ -1,4 +1,4 @@
-import type { JavaApplication, JavaSourceType } from '../java/types.js';
+import type { JavaApplication, JavaBuildToolApplication, JavaSourceType } from '../java/types.js';
 import type { GradleSourceType } from '../gradle/types.js';
 import type { MavenSourceType } from '../maven/types.js';
 import type { LiquibaseSourceType } from '../liquibase/types.js';
@@ -133,10 +133,6 @@ type BuildToolApplication = DeterministicOptionWithDerivedProperties<
   ]
 >;
 */
-type BuildToolApplication = OptionWithDerivedProperties<'buildTool', ['maven', 'gradle']> & {
-  enableGradleDevelocity: boolean;
-  buildToolUnknown?: boolean;
-};
 
 type SearchEngine = {
   searchEngine: string;
@@ -150,13 +146,12 @@ type ApplicationNature = { reactive: boolean };
 
 export type SpringBootApplication = JavaApplication &
   ApplicationNature &
-  BuildToolApplication &
+  JavaBuildToolApplication &
   SearchEngine &
   DatabaseTypeApplication &
   GatewayApplication & {
     jhipsterDependenciesVersion: string;
     springBootDependencies: Record<string, string>;
-    dockerContainers: Record<string, string>;
 
     addSpringMilestoneRepository: boolean;
 

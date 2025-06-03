@@ -135,8 +135,6 @@ export type ApplicationAll<E = Entity> = BaseApplication &
     hipsterBugTrackerLink?: string;
     hipsterChatLink?: string;
 
-    dockerServicesDir?: string;
-    dockerServices?: string[];
     prettierFolders?: string;
     prettierExtensions?: string;
 

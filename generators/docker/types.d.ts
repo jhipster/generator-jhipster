@@ -7,6 +7,9 @@ export type DockerComposeService = {
 };
 
 export type DockerApplicationType = {
+  dockerContainers?: Record<string, string>;
+  dockerServicesDir?: string;
+  dockerServices?: string[];
   keycloakSecrets?: string[];
 };
 

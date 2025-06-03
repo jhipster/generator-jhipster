@@ -69,45 +69,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should match context snapshot', () => {
-        expect(runResult.generator.context).toMatchInlineSnapshot(`
-{
-  "artifactoryReleasesId": "releases",
-  "artifactoryReleasesUrl": "http://artifactory:8081/artifactory/libs-release",
-  "artifactorySnapshotsId": "snapshots",
-  "artifactorySnapshotsUrl": "http://artifactory:8081/artifactory/libs-snapshot",
-  "ciCd": [
-    "github",
-    "jenkins",
-    "gitlab",
-    "azure",
-  ],
-  "ciCdAny": true,
-  "ciCdAzure": true,
-  "ciCdCircle": false,
-  "ciCdGithub": true,
-  "ciCdGitlab": true,
-  "ciCdIntegrations": [],
-  "ciCdIntegrationsAny": false,
-  "ciCdIntegrationsCypressDashboard": false,
-  "ciCdIntegrationsDeploy": false,
-  "ciCdIntegrationsHeroku": false,
-  "ciCdIntegrationsPublishDocker": false,
-  "ciCdIntegrationsSnyk": false,
-  "ciCdIntegrationsSonar": false,
-  "ciCdJenkins": true,
-  "ciCdTravis": false,
-  "dockerImage": undefined,
-  "frontTestCommand": "test",
-  "gitLabIndent": "",
-  "herokuAppName": "jhipster",
-  "indent": "",
-  "insideDocker": false,
-  "sendBuildToGitlab": false,
-  "sonarName": "sonar",
-  "sonarOrga": undefined,
-  "sonarUrl": "https://sonarcloud.io",
-}
-`);
+        expect(runResult.generator.context).toMatchSnapshot();
       });
       it('should populate context', () => {
         expect(runResult.generator.context!.ciCd).toEqual(['github', 'jenkins', 'gitlab', 'azure']);
