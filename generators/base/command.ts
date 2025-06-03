@@ -76,13 +76,6 @@ const command = {
       },
       scope: 'none',
     },
-    skipPrompts: {
-      description: 'Skip prompts',
-      cli: {
-        type: Boolean,
-      },
-      scope: 'generator',
-    },
     ignoreNeedlesError: {
       description: 'Ignore needles failures',
       cli: {

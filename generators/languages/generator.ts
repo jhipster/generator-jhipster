@@ -135,7 +135,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     return this.asPromptingTaskGroup({
       checkPrompts({ control }) {
         const { enableTranslation, languages } = this.jhipsterConfig;
-        const showPrompts = this.options.askAnswered || this.languageCommand;
+        const showPrompts = this.options.askAnswered || (this.languageCommand && !this.regenerateLanguages);
         this.askForNativeLanguage = showPrompts || (!control.existingProject && !this.jhipsterConfig.nativeLanguage);
         this.askForMoreLanguages =
           enableTranslation !== false && (showPrompts || (!control.existingProject && (languages?.length ?? 0) < 1));
