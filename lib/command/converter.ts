@@ -1,5 +1,13 @@
 import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
-import type { ConfigSpec, JHipsterArguments, JHipsterChoices, JHipsterConfigs, JHipsterOption } from './types.js';
+import type {
+  CommandConfigDefault,
+  CommandConfigScope,
+  CommandConfigType,
+  ConfigSpec,
+  JHipsterArguments,
+  JHipsterChoices,
+  JHipsterConfigs,
+} from './types.js';
 
 type JHipsterArgumentsWithChoices = JHipsterArguments & { choices?: JHipsterChoices };
 
@@ -30,16 +38,31 @@ export const extractJdlDefinitionFromCommandConfig = (configs: JHipsterConfigs =
     }))
     .sort((a, b) => (b.name.startsWith(a.name) ? 1 : a.name.localeCompare(b.name)));
 
-export const convertConfigToOption = (name: string, config?: ConfigSpec<any>): JHipsterOption | undefined => {
-  if (!config?.cli?.type && config?.internal !== true) return undefined;
-  const choices = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value)) as any;
+export const convertConfigToOption = <const T extends ConfigSpec<any>>(
+  name: string,
+  config: T,
+):
+  | {
+      name: string;
+      description?: string;
+      choices?: string[];
+      type?: CommandConfigType;
+      scope: CommandConfigScope;
+      default?: CommandConfigDefault<any>;
+    }
+  | undefined => {
+  const { cli } = config;
+  const type = cli?.type ?? config.internal?.type;
+  if (!type && config?.internal) return undefined;
+
+  const choices = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value));
   return {
-    name,
-    default: config.default,
-    description: config.description,
+    ...cli,
+    name: cli?.name ?? name,
+    default: config.default ?? cli?.default,
+    description: config.description ?? cli?.description,
     choices,
-    scope: config.scope ?? 'storage',
-    type: val => val,
-    ...config.cli,
+    scope: config.scope,
+    type,
   };
 };

@@ -59,7 +59,7 @@ get [Generator.INITIALIZING]() {
     },
     async loadOptions() {
       this.parseJHipsterArguments(command.arguments);
-      this.parseJHipsterOptions(command.options);
+      this.parseJHipsterConfigs(command.configs);
     },
   }
 }

@@ -22,11 +22,15 @@ import { BASE_NAME_DESCRIPTION } from './constants.js';
 const command = {
   configs: {
     defaultBaseName: {
-      internal: true,
+      internal: {
+        type: Function,
+      },
       scope: 'generator',
     },
     validateBaseName: {
-      internal: true,
+      internal: {
+        type: Function,
+      },
       scope: 'generator',
     },
     baseName: {

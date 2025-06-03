@@ -6,20 +6,21 @@ import type { MergeUnion } from './support/merge-union.js';
 
 type CommandConfigScope = 'storage' | 'blueprint' | 'generator' | 'context' | 'none';
 
+export type CommandConfigType = typeof String | typeof Boolean | typeof Number | typeof Object | ((opt: string) => any);
+
+export type CommandConfigDefault<ConfigContext> =
+  | string
+  | boolean
+  | number
+  | readonly string[]
+  | ((this: ConfigContext | void, ctx: any) => string | boolean | number | readonly string[]);
+
 export type ConfigScope = CommandConfigScope;
 type CliSpecType = CliOptionSpec['type'] | typeof Object;
 
 export type JHipsterNamedChoice = { value: string; name: string };
 
 export type JHipsterChoices = readonly [...(string | JHipsterNamedChoice)[]];
-
-export type JHipsterOption = SetOptional<CliOptionSpec, 'name'> & {
-  readonly name?: string;
-  readonly scope?: ConfigScope;
-  readonly env?: string;
-  readonly choices?: JHipsterChoices;
-  readonly commandName?: string;
-};
 
 export type PromptSpec = {
   readonly type: 'input' | 'list' | 'confirm' | 'checkbox';
@@ -46,12 +47,12 @@ export type ConfigSpec<ConfigContext> = {
   readonly choices?: JHipsterChoices;
   readonly cli?: CliSpec;
   readonly argument?: JHipsterArgumentConfig;
-  readonly internal?: true | { type: typeof String | typeof Boolean | typeof Number | typeof Object | ((opt: string) => any) };
+  readonly internal?: { type: CommandConfigType };
   readonly prompt?:
     | PromptSpec
     | ((gen: ConfigContext & { jhipsterConfigWithDefaults: Record<string, any> }, config: ConfigSpec<ConfigContext>) => PromptSpec);
   readonly jdl?: Omit<JHipsterOptionDefinition, 'name' | 'knownChoices'>;
-  readonly scope?: CommandConfigScope;
+  readonly scope: CommandConfigScope;
   /**
    * The callback receives the generator as input for 'generator' scope.
    * The callback receives jhipsterConfigWithDefaults as input for 'storage' (default) scope.
@@ -60,12 +61,7 @@ export type ConfigSpec<ConfigContext> = {
    * Default value will not be applied to generator (using 'generator' scope) in initializing priority. Use cli.default instead.
    * Default value will be application to templates context object (application) in loading priority.
    */
-  readonly default?:
-    | string
-    | boolean
-    | number
-    | readonly string[]
-    | ((this: ConfigContext | void, ctx: any) => string | boolean | number | readonly string[]);
+  readonly default?: CommandConfigDefault<ConfigContext>;
   /**
    * Configure the generator according to the selected configuration.
    */
@@ -73,8 +69,6 @@ export type ConfigSpec<ConfigContext> = {
 };
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
-
-export type JHipsterOptions = Record<string, JHipsterOption>;
 
 export type JHipsterConfig<ConfigContext = any> = RequireAtLeastOne<
   ConfigSpec<ConfigContext>,
@@ -85,7 +79,6 @@ export type JHipsterConfigs<ConfigContext = any> = Record<string, JHipsterConfig
 
 export type JHipsterCommandDefinition<ConfigContext = any> = {
   readonly arguments?: JHipsterArguments;
-  readonly options?: JHipsterOptions;
   readonly configs?: JHipsterConfigs<ConfigContext>;
   /**
    * Import options from a generator.
@@ -148,8 +141,7 @@ type FilterCommandScope<D extends ParseableConfigs, S extends FilteredConfigScop
  * ```
  */
 type MergeConfigsOptions<D extends ParseableCommand, S extends FilteredConfigScope> = Simplify<
-  (D extends { configs: ParseableConfigs } ? { [K in keyof FilterCommandScope<D['configs'], S>]: D['configs'][K] } : object) &
-    (D extends { options: ParseableConfigs } ? { [K in keyof FilterCommandScope<D['options'], S>]: D['options'][K] } : object)
+  D extends { configs: ParseableConfigs } ? { [K in keyof FilterCommandScope<D['configs'], S>]: D['configs'][K] } : object
 >;
 
 type GetType<C extends ParseableConfig> =

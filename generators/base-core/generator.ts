@@ -35,23 +35,21 @@ import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
 
 import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.js';
-import {
-  type ExportGeneratorOptionsFromCommand,
-  type ExportStoragePropertiesFromCommand,
-  type JHipsterArguments,
-  type JHipsterCommandDefinition,
-  type JHipsterConfigs,
-  type JHipsterOptions,
-  type ParseableCommand,
-  convertConfigToOption,
+import type {
+  ExportGeneratorOptionsFromCommand,
+  ExportStoragePropertiesFromCommand,
+  JHipsterArguments,
+  JHipsterCommandDefinition,
+  JHipsterConfigs,
+  ParseableCommand,
 } from '../../lib/command/index.js';
 import { packageJson } from '../../lib/index.js';
-import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
+import { loadConfig, loadConfigDefaults, loadDerivedConfig } from '../../lib/internal/index.js';
 import baseCommand from '../base/command.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
-import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
+import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type GeneratorsByNamespace from '../types.js';
 import type { CascatedEditFileCallback, EditFileCallback, EditFileOptions, WriteFileOptions } from './api.js';
 import { convertWriteFileSectionsToBlocks } from './internal/index.js';
@@ -182,7 +180,7 @@ export default class CoreGenerator<
       this.jhipsterConfig = this.config.createProxy() as ConfigType;
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
-      this.#parseJHipsterOptions({}, baseCommand.configs);
+      this.#parseJHipsterConfigs(baseCommand.configs);
     }
 
     this.logger = this.log as any;
@@ -353,6 +351,24 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         }
       },
     });
+
+    this.queueTask({
+      queueName: QUEUES.PREPARING_QUEUE,
+      taskName: 'preparingCurrentCommand',
+      cancellable: true,
+      async method() {
+        try {
+          const command = await this.#getCurrentJHipsterCommand();
+          if (!command.configs) return;
+
+          const taskArgs = this.getArgsForPriority(PRIORITY_NAMES.PREPARING);
+          const [{ application }] = taskArgs as any;
+          loadConfigDefaults(command.configs, { context: application, scopes: ['blueprint', 'storage', 'context'] });
+        } catch {
+          // Ignore non existing command
+        }
+      },
+    });
   }
 
   /**
@@ -442,46 +458,43 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     } else if (commandDef.configs) {
       this._parseJHipsterArguments(extractArgumentsFromConfigs(commandDef.configs));
     }
-    if (commandDef.options || commandDef.configs) {
-      this.#parseJHipsterOptions(commandDef.options, commandDef.configs);
+    if (commandDef.configs) {
+      this.#parseJHipsterConfigs(commandDef.configs);
     }
   }
 
-  #parseJHipsterOptions(options: JHipsterOptions | undefined, configs: JHipsterConfigs | boolean = {}, common = false) {
-    if (typeof configs === 'boolean') {
-      common = configs;
-      configs = {};
-    }
+  #parseJHipsterConfigs(configs: JHipsterConfigs = {}, common = false) {
+    Object.entries(configs).forEach(([optionName, configDesc]) => {
+      const optionsDesc = convertConfigToOption(optionName, configDesc);
+      if (!optionsDesc || !optionsDesc.type || (common && configDesc.scope === 'generator')) return;
 
-    Object.entries(options ?? {})
-      .concat(Object.entries(configs).map(([name, def]) => [name, convertConfigToOption(name, def)]) as any)
-      .forEach(([optionName, optionDesc]) => {
-        if (!optionDesc?.type || !optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
-        let optionValue;
-        // Hidden options are test options, which doesn't rely on commander for options parsing.
-        // We must parse environment variables manually
-        if (this.options[optionDesc.name ?? optionName] === undefined && optionDesc.env && process.env[optionDesc.env]) {
-          optionValue = process.env[optionDesc.env];
-        } else {
-          optionValue = this.options[optionDesc.name ?? optionName];
+      let optionValue;
+      const { name, type } = optionsDesc;
+      const envName = configDesc.cli?.env;
+      // Hidden options are test options, which doesn't rely on commander for options parsing.
+      // We must parse environment variables manually
+      if (this.options[name] === undefined && envName && process.env[envName]) {
+        optionValue = process.env[envName];
+      } else {
+        optionValue = this.options[name];
+      }
+      if (optionValue !== undefined) {
+        optionValue = type !== Array && type !== Function ? type(optionValue) : optionValue;
+        if (optionsDesc.scope === 'storage') {
+          this.config.set(optionName as keyof ConfigType, optionValue);
+        } else if (optionsDesc.scope === 'blueprint') {
+          this.blueprintStorage!.set(optionName, optionValue);
+        } else if (optionsDesc.scope === 'generator') {
+          this[optionName] = optionValue;
+        } else if (optionsDesc.scope === 'context') {
+          this.context![optionName] = optionValue;
+        } else if (optionsDesc.scope !== 'none') {
+          throw new Error(`Scope ${optionsDesc.scope} not supported`);
         }
-        if (optionValue !== undefined) {
-          optionValue = optionDesc.type !== Array && optionDesc.type !== Function ? optionDesc.type(optionValue) : optionValue;
-          if (optionDesc.scope === 'storage') {
-            this.config.set(optionName as keyof ConfigType, optionValue);
-          } else if (optionDesc.scope === 'blueprint') {
-            this.blueprintStorage!.set(optionName, optionValue);
-          } else if (optionDesc.scope === 'generator') {
-            this[optionName] = optionValue;
-          } else if (optionDesc.scope === 'context') {
-            this.context![optionName] = optionValue;
-          } else if (optionDesc.scope !== 'none') {
-            throw new Error(`Scope ${optionDesc.scope} not supported`);
-          }
-        } else if (optionDesc.default !== undefined && optionDesc.scope === 'generator' && this[optionName] === undefined) {
-          this[optionName] = optionDesc.default;
-        }
-      });
+      } else if (optionsDesc.default !== undefined && optionsDesc.scope === 'generator' && this[optionName] === undefined) {
+        this[optionName] = optionsDesc.default;
+      }
+    });
   }
 
   _parseJHipsterArguments(jhipsterArguments: JHipsterArguments = {}) {
