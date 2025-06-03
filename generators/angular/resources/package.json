@@ -29,7 +29,7 @@
     "@types/jest": "29.5.14",
     "@types/node": "20.11.25",
     "@types/sockjs-client": "1.5.4",
-    "angular-eslint": "19.6.0",
+    "angular-eslint": "19.7.0",
     "browser-sync": "3.0.4",
     "browser-sync-webpack-plugin": "2.3.0",
     "buffer": "6.0.3",
