@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -20,17 +19,12 @@
 
 import chalk from 'chalk';
 
-import BaseApplicationGenerator from '../base-application/index.js';
-import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
+import BaseApplicationGenerator from '../base-simple-application/index.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
-import { loadConfig, loadDerivedConfig } from '../../lib/internal/config-def.js';
-import command from './command.js';
+import type { Application as CiCdApplication } from './types.js';
 
-const { REACT } = clientFrameworkTypes;
-
-export default class CiCdGenerator extends BaseApplicationGenerator {
+export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplication> {
   insideDocker;
-  context = {};
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -38,7 +32,15 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      if (this.options.commandName === 'ci-cd') {
+        const { backendType = 'Java' } = this.jhipsterConfig as any;
+        if (['Java', 'SpringBoot'].includes(backendType)) {
+          const javaBootstrap = await this.dependsOnJHipster('jhipster:java:bootstrap');
+          javaBootstrap.writeBootstrapFiles = false;
+        }
+      } else {
+        await this.dependsOnBootstrapApplicationBase();
+      }
     }
   }
 
@@ -58,50 +60,23 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get loading() {
     return this.asLoadingTaskGroup({
-      loadSharedConfig() {
-        loadConfig.call(this, command.configs, { application: this.context });
+      loading({ applicationDefaults }) {
+        applicationDefaults({
+          ciCdIntegrations: [] as any,
+          gitLabIndent: ({ sendBuildToGitlab }) => (sendBuildToGitlab ? '    ' : ''),
+          indent: ({ insideDocker, gitLabIndent }) => {
+            let indent = insideDocker ? '    ' : '';
+            indent += gitLabIndent;
+            return indent;
+          },
+          cypressTests: ({ testFrameworks }) => testFrameworks?.includes('cypress') ?? false,
+        });
       },
     });
   }
 
   get [BaseApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      setTemplateConstants() {
-        loadDerivedConfig(command.configs, { application: this.context });
-
-        if (this.context.ciCdIntegrations === undefined) {
-          this.context.ciCdIntegrations = [];
-        }
-        this.context.gitLabIndent = this.context.sendBuildToGitlab ? '    ' : '';
-        this.context.indent = this.context.insideDocker ? '    ' : '';
-        this.context.indent += this.context.gitLabIndent;
-        if (this.context.clientFramework === REACT) {
-          this.context.frontTestCommand = 'test-ci';
-        } else {
-          this.context.frontTestCommand = 'test';
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
-  }
-
-  get default() {
-    return this.asDefaultTaskGroup({
-      loadContext({ application }) {
-        Object.assign(application, this.context);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -167,14 +142,14 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
     return this.asPostWritingTaskGroup({
       postWriting({ application }) {
         if (application.ciCdIntegrations?.includes('deploy')) {
-          if (application.buildToolMaven) {
+          if (application.buildTool === 'maven') {
             createPomStorage(this, { sortFile: false }).addDistributionManagement({
-              releasesId: application.artifactoryReleasesId,
-              releasesUrl: application.artifactoryReleasesUrl,
-              snapshotsId: application.artifactorySnapshotsId,
-              snapshotsUrl: application.artifactorySnapshotsUrl,
+              releasesId: application.artifactoryReleasesId!,
+              releasesUrl: application.artifactoryReleasesUrl!,
+              snapshotsId: application.artifactorySnapshotsId!,
+              snapshotsUrl: application.artifactorySnapshotsUrl!,
             });
-          } else if (application.buildToolGradle) {
+          } else if (application.buildTool === 'gradle') {
             // TODO: add support here
             // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
             this.log.warn('No support for Artifactory yet, when using Gradle.\n');
