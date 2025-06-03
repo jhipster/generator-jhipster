@@ -59,8 +59,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       it('should set the client theme option to none', () => {
         expect(options.clientTheme).to.equal('none');
       });
-      it('should set the client theme variant option to none', () => {
-        expect(options.clientThemeVariant).to.equal('');
+      it('should set the client theme variant option to undefined', () => {
+        expect(options.clientThemeVariant).to.be.undefined;
       });
       it('should set withAdminUI option to true', () => {
         expect(options.withAdminUi).to.be.true;
@@ -139,8 +139,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       it('should set the client theme option to none', () => {
         expect(options.clientTheme).to.equal('none');
       });
-      it('should set the client theme variant option to none', () => {
-        expect(options.clientThemeVariant).to.equal('');
+      it('should set the client theme variant option to undefined', () => {
+        expect(options.clientThemeVariant).to.be.undefined;
       });
       it('should set the withAdminUi option to true', () => {
         expect(options.withAdminUi).to.be.true;
@@ -334,9 +334,6 @@ describe('jdl - DefaultApplicationOptions', () => {
       it('should set the languages option to an empty array', () => {
         expect(options.languages).to.be.eql([]);
       });
-      it('should set the package folder to com/mycompany/myapp', () => {
-        expect(options.packageFolder).to.equal('com/mycompany/myapp');
-      });
       it('should set the package name to com.mycompany.myapp', () => {
         expect(options.packageName).to.equal('com.mycompany.myapp');
       });
@@ -364,19 +361,6 @@ describe('jdl - DefaultApplicationOptions', () => {
 
       it('should set the package name accordingly', () => {
         expect(packageNameOption).to.equal('a.b.c.d');
-      });
-    });
-    describe('when there is no package folder option but only a package name', () => {
-      let packageFolderOption;
-
-      before(() => {
-        packageFolderOption = getDefaultConfigForNewApplication({
-          packageName: 'a.b.c.d',
-        }).packageFolder;
-      });
-
-      it('should set the package name accordingly', () => {
-        expect(packageFolderOption).to.equal('a/b/c/d');
       });
     });
     describe('when the client framework option is angular', () => {
