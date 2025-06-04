@@ -19,7 +19,7 @@ import type CoreGenerator from '../../base-core/generator.js';
 import type { Source } from '../types.js';
 
 export function asWritingTask<S extends Source = Source, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: Tasks<S>['WritingTaskParam']) => void,
+  task: (this: G, params: Tasks<any, any, S>['WritingTaskParam']) => void,
 ) {
   return task;
 }

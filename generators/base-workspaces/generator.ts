@@ -27,16 +27,20 @@ import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import { normalizePathEnd } from '../../lib/utils/index.js';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
-import type { ApplicationAll } from '../base-application/types-all.js';
+import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
+import type { GenericTaskGroup } from '../base-core/types.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/index.js';
 import type {
+  Deployment as BaseDeployment,
+  Workspaces as BaseWorkspaces,
   Config as BaseWorkspacesConfig,
   Features as BaseWorkspacesFeatures,
   Options as BaseWorkspacesOptions,
   Source as BaseWorkspacesSource,
+  WorkspacesApplication,
 } from './types.js';
-import type { Tasks } from './tasks.js';
+import type { Tasks as WorkspacesTasks } from './tasks.js';
 
 const {
   PROMPTING_WORKSPACES,
@@ -55,11 +59,15 @@ const {
  * This is the base class for a generator that generates entities.
  */
 export default abstract class BaseWorkspacesGenerator<
+  Deployment extends BaseDeployment = BaseDeployment,
+  Workspaces extends BaseWorkspaces = BaseWorkspaces,
+  Application extends SimpleApplication = WorkspacesApplication,
   Config extends BaseWorkspacesConfig = BaseWorkspacesConfig,
   Options extends BaseWorkspacesOptions = BaseWorkspacesOptions,
   Source extends BaseWorkspacesSource = BaseWorkspacesSource,
   Features extends BaseWorkspacesFeatures = BaseWorkspacesFeatures,
-> extends BaseGenerator<Config, Options, Source, Features, Tasks<Source, ApplicationAll>> {
+  Tasks extends WorkspacesTasks<Deployment, Workspaces, Source, Application> = WorkspacesTasks<Deployment, Workspaces, Source, Application>,
+> extends BaseGenerator<Config, Options, Source, Features, Tasks> {
   static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 
   static CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);
@@ -212,9 +220,48 @@ export default abstract class BaseWorkspacesGenerator<
       ...others,
     ];
   }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asPromptingWorkspacesTaskGroup(
+    taskGroup: GenericTaskGroup<this, Tasks['PromptingWorkspacesTaskParam']>,
+  ): GenericTaskGroup<any, Tasks['PromptingWorkspacesTaskParam']> {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asConfiguringWorkspacesTaskGroup(
+    taskGroup: GenericTaskGroup<this, Tasks['ConfiguringWorkspacesTaskParam']>,
+  ): GenericTaskGroup<any, Tasks['ConfiguringWorkspacesTaskParam']> {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asLoadingWorkspacesTaskGroup(
+    taskGroup: GenericTaskGroup<this, Tasks['LoadingWorkspacesTaskParam']>,
+  ): GenericTaskGroup<any, Tasks['LoadingWorkspacesTaskParam']> {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asPreparingWorkspacesTaskGroup(
+    taskGroup: GenericTaskGroup<this, Tasks['PreparingWorkspacesTaskParam']>,
+  ): GenericTaskGroup<any, Tasks['PreparingWorkspacesTaskParam']> {
+    return taskGroup;
+  }
 }
 
 export class CommandBaseWorkspacesGenerator<Command extends ParseableCommand, AdditionalOptions = unknown> extends BaseWorkspacesGenerator<
+  BaseDeployment,
+  BaseWorkspaces,
+  WorkspacesApplication,
   BaseWorkspacesConfig & ExportStoragePropertiesFromCommand<Command>,
   BaseWorkspacesOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions
 > {}

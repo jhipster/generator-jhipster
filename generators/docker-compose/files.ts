@@ -23,6 +23,7 @@ import { asWriteFilesSection } from '../base-application/support/index.js';
 const { PROMETHEUS } = monitoringTypes;
 const { MICROSERVICE } = applicationTypes;
 const { OAUTH2 } = authenticationTypes;
+
 export const files = asWriteFilesSection({
   dockerCompose: [
     {
@@ -48,6 +49,7 @@ export const files = asWriteFilesSection({
     },
   ],
 });
+
 export const writeFiles = asWritingTask(async function writeFiles({ deployment }) {
   await this.writeFiles({
     sections: files,

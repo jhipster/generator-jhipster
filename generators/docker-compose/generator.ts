@@ -25,6 +25,11 @@ import normalize from 'normalize-path';
 import { defaults } from 'lodash-es';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
+import type {
+  Deployment as BaseDeployment,
+  Workspaces as BaseWorkspaces,
+  WorkspacesApplication as BaseWorkspacesApplication,
+} from '../base-workspaces/index.js';
 
 import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
@@ -40,13 +45,8 @@ const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;
 const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { Options: DeploymentOptions } = deploymentOptions;
 
-/**
- * @class
- * @extends {import('../base/index.js')}
- */
-export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
+export default class DockerComposeGenerator extends BaseWorkspacesGenerator<BaseDeployment, BaseWorkspaces, BaseWorkspacesApplication> {
   existingDeployment;
-  jwtSecretKey!: string;
 
   async beforeQueue() {
     if (this.appsFolders && this.appsFolders.length > 0) {
@@ -95,7 +95,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get promptingWorkspaces() {
-    return this.asAnyTaskGroup({
+    return this.asPromptingWorkspacesTaskGroup({
       async askForMonitoring({ workspaces }) {
         if (workspaces.existingWorkspaces && !this.options.askAnswered) return;
 
@@ -119,11 +119,10 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get configuringWorkspaces() {
-    return this.asAnyTaskGroup({
+    return this.asConfiguringWorkspacesTaskGroup({
       configureBaseDeployment({ applications }) {
-        this.jhipsterConfig.jwtSecretKey =
-          this.jhipsterConfig.jwtSecretKey ?? this.jwtSecretKey ?? createBase64Secret(this.options.reproducibleTests);
-        if (applications.some(app => app.serviceDiscoveryEureka)) {
+        this.jhipsterConfig.jwtSecretKey ??= createBase64Secret(this.options.reproducibleTests);
+        if (applications.some(app => app.serviceDiscoveryTypeEureka)) {
           this.jhipsterConfig.adminPassword = this.jhipsterConfig.adminPassword ?? 'admin';
         }
       },
@@ -135,7 +134,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get loadingWorkspaces() {
-    return this.asAnyTaskGroup({
+    return this.asLoadingWorkspacesTaskGroup({
       async loadBaseDeployment({ deployment }) {
         deployment.jwtSecretKey = this.jhipsterConfig.jwtSecretKey;
 
@@ -152,7 +151,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get preparingWorkspaces() {
-    return this.asAnyTaskGroup({
+    return this.asPreparingWorkspacesTaskGroup({
       prepareDeployment({ deployment, applications }) {
         this.prepareDeploymentDerivedProperties({ deployment, applications });
       },
@@ -164,7 +163,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get default() {
-    return this.asAnyTaskGroup({
+    return this.asDefaultTaskGroup({
       async setAppsYaml({ workspaces, deployment, applications }) {
         const faker = await createFaker();
 
@@ -259,7 +258,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
             const relativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`));
             const databaseYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${database}.yml`)!);
             const databaseServiceName = `${lowercaseBaseName}-${database}`;
-            let databaseYamlConfig = databaseYaml.services[database];
+            let databaseYamlConfig = databaseYaml.services[database!];
             // Don't export database ports
             delete databaseYamlConfig.ports;
 
@@ -282,7 +281,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
               const clusterDbYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${database}-cluster.yml`)!);
               const dbNodeConfig = clusterDbYaml.services[`${database}-node`];
               dbNodeConfig.build.context = relativePath;
-              databaseYamlConfig = clusterDbYaml.services[database];
+              databaseYamlConfig = clusterDbYaml.services[database!];
               delete databaseYamlConfig.ports;
               if (appConfig.databaseTypeCouchbase) {
                 databaseYamlConfig.build.context = relativePath;
@@ -404,12 +403,12 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
     }
   }
 
-  get deploymentConfigWithDefaults() {
-    return defaults({}, this.jhipsterConfig, DeploymentOptions.defaults(this.jhipsterConfig.deploymentType));
+  override get jhipsterConfigWithDefaults() {
+    return defaults({}, this.config.getAll(), DeploymentOptions.defaults(this.jhipsterConfig.deploymentType));
   }
 
   loadDeploymentConfig({ deployment }) {
-    const config = this.deploymentConfigWithDefaults;
+    const config = this.jhipsterConfigWithDefaults;
     deployment.clusteredDbApps = config.clusteredDbApps;
     deployment.adminPassword = config.adminPassword;
     deployment.jwtSecretKey = config.jwtSecretKey;
