@@ -13,7 +13,7 @@ const command = {
         type: String,
         env: 'JHI_JWT_SECRET_KEY',
       },
-      scope: 'generator',
+      scope: 'storage',
     },
   },
 } as const satisfies JHipsterCommandDefinition;

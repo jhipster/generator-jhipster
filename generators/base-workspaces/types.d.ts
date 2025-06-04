@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { OptionWithDerivedProperties } from '../base-application/application-options.js';
+import type { ApplicationAll } from '../base-application/types-all.js';
 import type { Config as BaseConfig, Features as BaseFeatures, Options as BaseOptions } from '../base/index.js';
 
 export type { Source } from '../base/types.js';
@@ -38,4 +39,11 @@ type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscovery
 
 type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'elk', 'prometheus']>;
 
-export type WorkspacesApplication = ServiceDiscoveryApplication & MonitoringApplication;
+export type WorkspacesApplication = ServiceDiscoveryApplication & MonitoringApplication & ApplicationAll & { clusteredDb?: boolean };
+
+export type Workspaces = {
+  existingWorkspaces: boolean;
+  directoryPath: string;
+};
+
+export type Deployment = any;
