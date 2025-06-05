@@ -31,7 +31,7 @@
     "@types/sockjs-client": "1.5.4",
     "angular-eslint": "19.7.1",
     "browser-sync": "3.0.4",
-    "browser-sync-webpack-plugin": "2.3.0",
+    "browser-sync-webpack-plugin": "2.4.0",
     "buffer": "6.0.3",
     "copy-webpack-plugin": "13.0.0",
     "deepmerge": "4.3.1",
