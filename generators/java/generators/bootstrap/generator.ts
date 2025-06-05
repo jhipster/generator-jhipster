@@ -37,10 +37,11 @@ import {
 import { normalizePathEnd } from '../../../../lib/utils/index.js';
 import prepareEntity from '../../../server/support/prepare-entity.js';
 
-export default class BootstrapGenerator extends BaseApplicationGenerator {
+export default class JavaBootstrapGenerator extends BaseApplicationGenerator {
   packageInfoFile!: boolean;
   projectVersion?: string;
   jhipsterDependenciesVersion?: string;
+  writeBootstrapFiles = true;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -282,7 +283,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
-        if (!application.backendTypeJavaAny) return;
+        if (!this.writeBootstrapFiles || !application.backendTypeJavaAny) return;
 
         await this.writeFiles({
           blocks: [
@@ -304,6 +305,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addPrettierJava({ application, source }) {
+        if (!this.writeBootstrapFiles) return;
         if (source.mergePrettierConfig) {
           source.mergePrettierConfig({ plugins: ['prettier-plugin-java'], overrides: [{ files: '*.java', options: { tabWidth: 4 } }] });
           this.packageJson.merge({

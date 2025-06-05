@@ -224,7 +224,7 @@ type OnlyConfigsWithChoice<D extends ParseableConfigs, C extends boolean> = {
  * ```
  */
 export type ExportApplicationPropertiesFromCommand<C extends ParseableCommand> =
-  MergeConfigsOptions<C, 'storage'> extends infer Merged
+  MergeConfigsOptions<C, 'storage' | 'context'> extends infer Merged
     ? Merged extends ParseableConfigs
       ? // Add value inference to properties with choices
         // ? PrepareConfigsWithType<OnlyConfigsWithChoice<F, false>> & ValueOf<ExplodeCommandChoicesWithInference<OnlyConfigsWithChoice<F, true>>>

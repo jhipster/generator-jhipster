@@ -69,10 +69,17 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should match context snapshot', () => {
-        expect(runResult.generator.context).toMatchSnapshot();
+        expect(runResult.application).toMatchSnapshot({
+          user: expect.any(Object),
+          authority: expect.any(Object),
+          userManagement: expect.any(Object),
+          jhipsterPackageJson: expect.any(Object),
+          javaDependencies: expect.any(Object),
+          dockerContainers: expect.any(Object),
+        });
       });
       it('should populate context', () => {
-        expect(runResult.generator.context!.ciCd).toEqual(['github', 'jenkins', 'gitlab', 'azure']);
+        expect(runResult.application!.ciCd).toEqual(['github', 'jenkins', 'gitlab', 'azure']);
       });
     });
 

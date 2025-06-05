@@ -131,7 +131,6 @@ export default class CoreGenerator<
 
   static END = asPriority(END);
 
-  context?: Record<string, any>;
   useVersionPlaceholders?: boolean;
   skipChecks?: boolean;
   ignoreNeedlesError?: boolean;
@@ -201,6 +200,10 @@ export default class CoreGenerator<
         this._queueCurrentJHipsterCommandTasks();
       });
     }
+  }
+
+  get context(): any {
+    return undefined;
   }
 
   /**
@@ -342,10 +345,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           const command = await this.#getCurrentJHipsterCommand();
           if (!command.configs) return;
 
-          const taskArgs = this.getArgsForPriority(PRIORITY_NAMES.LOADING);
-          const [{ application }] = taskArgs as any;
-          loadConfig.call(this, command.configs, { application: application ?? this });
-          loadDerivedConfig(command.configs, { application });
+          const context = this.context;
+          loadConfig.call(this, command.configs, { application: context });
+          loadDerivedConfig(command.configs, { application: context });
         } catch {
           // Ignore non existing command
         }
@@ -361,9 +363,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           const command = await this.#getCurrentJHipsterCommand();
           if (!command.configs) return;
 
-          const taskArgs = this.getArgsForPriority(PRIORITY_NAMES.PREPARING);
-          const [{ application }] = taskArgs as any;
-          loadConfigDefaults(command.configs, { context: application, scopes: ['blueprint', 'storage', 'context'] });
+          const context = this.context;
+          loadConfigDefaults(command.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
         } catch {
           // Ignore non existing command
         }

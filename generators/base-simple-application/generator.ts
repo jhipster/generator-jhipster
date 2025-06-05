@@ -82,7 +82,7 @@ export default class BaseSimpleApplicationGenerator<
     this.registerPriorities(CUSTOM_PRIORITIES);
   }
 
-  get #application(): Application {
+  override get context(): Application {
     return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
       factory: () => ({ nodeDependencies: {}, customizeTemplatePaths: [], user: undefined }) as unknown as Application,
     });
@@ -123,13 +123,13 @@ export default class BaseSimpleApplicationGenerator<
 
     const args: Record<string, any> = {};
     if (application) {
-      args.application = this.#application;
+      args.application = this.context;
     }
     if (source) {
       args.source = this.#source;
     }
     if (applicationDefaults) {
-      args.applicationDefaults = (...args) => mutateData(this.#application, ...args.map(data => ({ __override__: false, ...data })));
+      args.applicationDefaults = (...args) => mutateData(this.context, ...args.map(data => ({ __override__: false, ...data })));
     }
     return args;
   }

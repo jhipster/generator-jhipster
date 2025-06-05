@@ -82,7 +82,7 @@ node {
 <%= indent %>           sh "npm install"
 <%= indent %>           sh "npm test"
         <%_ } else { _%>
-<%= indent %>            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'"
+<%= indent %>            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run test'"
         <%_ } _%>
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
@@ -142,7 +142,7 @@ node {
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
-<%= indent %>            sh "./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon"
+<%= indent %>            sh "./gradlew <%= clientPackageManager %>_run_test -PnodeInstall --no-daemon"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
