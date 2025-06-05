@@ -6,7 +6,7 @@ import type { MergeUnion } from './support/merge-union.js';
 
 type CommandConfigScope = 'storage' | 'blueprint' | 'generator' | 'context' | 'none';
 
-export type CommandConfig = typeof String | typeof Boolean | typeof Number | typeof Object | ((opt: string) => any);
+export type CommandConfigType = typeof String | typeof Boolean | typeof Number | typeof Object | ((opt: string) => any);
 
 export type CommandConfigDefault<ConfigContext> =
   | string
@@ -47,7 +47,7 @@ export type ConfigSpec<ConfigContext> = {
   readonly choices?: JHipsterChoices;
   readonly cli?: CliSpec;
   readonly argument?: JHipsterArgumentConfig;
-  readonly internal?: { type: CommandConfig };
+  readonly internal?: { type: CommandConfigType };
   readonly prompt?:
     | PromptSpec
     | ((gen: ConfigContext & { jhipsterConfigWithDefaults: Record<string, any> }, config: ConfigSpec<ConfigContext>) => PromptSpec);
