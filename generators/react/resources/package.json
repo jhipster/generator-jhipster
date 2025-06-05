@@ -43,7 +43,7 @@
     "@types/webpack-env": "1.18.8",
     "autoprefixer": "10.4.21",
     "browser-sync": "3.0.4",
-    "browser-sync-webpack-plugin": "2.3.0",
+    "browser-sync-webpack-plugin": "2.4.0",
     "copy-webpack-plugin": "13.0.0",
     "core-js": "3.42.0",
     "cross-env": "7.0.3",
