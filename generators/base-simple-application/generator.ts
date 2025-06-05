@@ -64,12 +64,12 @@ const getFirstArgForPriority = (priorityName: string) => ({
  */
 export default class BaseSimpleApplicationGenerator<
   Application extends SimpleApplication = SimpleApplication,
-  ConfigType extends SimpleApplicationConfig = SimpleApplicationConfig,
+  Config extends SimpleApplicationConfig = SimpleApplicationConfig,
   Options extends SimpleApplicationOptions = SimpleApplicationOptions,
   Source extends SimpleApplicationSource = SimpleApplicationSource,
   Features extends SimpleApplicationFeatures = SimpleApplicationFeatures,
-  TaskTypes extends SimpleTaskTypes<Application, Source> = SimpleTaskTypes<Application, Source>,
-> extends BaseGenerator<ConfigType, Options, Source, Features, TaskTypes> {
+  Tasks extends SimpleTaskTypes<Application, Source> = SimpleTaskTypes<Application, Source>,
+> extends BaseGenerator<Config, Options, Source, Features, Tasks> {
   static BOOTSTRAP_APPLICATION = BaseSimpleApplicationGenerator.asPriority(BOOTSTRAP_APPLICATION);
 
   constructor(args: string | string[], options: Options, features: Features) {
@@ -95,9 +95,9 @@ export default class BaseSimpleApplicationGenerator<
   /**
    * JHipster config with default values fallback
    */
-  override get jhipsterConfigWithDefaults(): Readonly<ConfigType> {
+  override get jhipsterConfigWithDefaults(): Readonly<Config> {
     const configWithDefaults = getConfigWithDefaults(super.jhipsterConfigWithDefaults);
-    return configWithDefaults as ConfigType;
+    return configWithDefaults as Config;
   }
 
   dependsOnBootstrapApplicationBase(
@@ -142,8 +142,8 @@ export default class BaseSimpleApplicationGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asBootstrapApplicationTaskGroup(
-    taskGroup: GenericTaskGroup<this, TaskTypes['BootstrapApplicationTaskParam']>,
-  ): GenericTaskGroup<any, TaskTypes['BootstrapApplicationTaskParam']> {
+    taskGroup: GenericTaskGroup<this, Tasks['BootstrapApplicationTaskParam']>,
+  ): GenericTaskGroup<any, Tasks['BootstrapApplicationTaskParam']> {
     return taskGroup;
   }
 }

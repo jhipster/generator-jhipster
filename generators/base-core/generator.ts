@@ -97,10 +97,10 @@ const deepMerge = (source1: any, source2: any) => mergeWith({}, source1, source2
  * This is the base class for a generator for every generator.
  */
 export default class CoreGenerator<
-  ConfigType extends CoreConfig = CoreConfig,
+  Config extends CoreConfig = CoreConfig,
   Options extends CoreOptions = CoreOptions,
   Features extends CoreFeatures = CoreFeatures,
-> extends YeomanGenerator<ConfigType, Options, Features> {
+> extends YeomanGenerator<Config, Options, Features> {
   static asPriority = asPriority;
 
   static INITIALIZING = asPriority(INITIALIZING);
@@ -140,7 +140,7 @@ export default class CoreGenerator<
   relative = posixRelative;
 
   readonly logger: Logger;
-  jhipsterConfig!: ConfigType;
+  jhipsterConfig!: Config;
   /**
    * @deprecated
    */
@@ -176,7 +176,7 @@ export default class CoreGenerator<
       this._config = this._getStorage('generator-jhipster');
 
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
-      this.jhipsterConfig = this.config.createProxy() as ConfigType;
+      this.jhipsterConfig = this.config.createProxy() as Config;
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.#parseJHipsterConfigs(baseCommand.configs);
@@ -216,8 +216,8 @@ export default class CoreGenerator<
   /**
    * JHipster config with default values fallback
    */
-  get jhipsterConfigWithDefaults(): Readonly<ConfigType> {
-    return removeFieldsWithNullishValues(this.config.getAll()) as ConfigType;
+  get jhipsterConfigWithDefaults(): Readonly<Config> {
+    return removeFieldsWithNullishValues(this.config.getAll()) as Config;
   }
 
   /**
@@ -482,7 +482,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       if (optionValue !== undefined) {
         optionValue = type !== Array && type !== Function ? type(optionValue) : optionValue;
         if (optionsDesc.scope === 'storage') {
-          this.config.set(optionName as keyof ConfigType, optionValue);
+          this.config.set(optionName as keyof Config, optionValue);
         } else if (optionsDesc.scope === 'blueprint') {
           this.blueprintStorage!.set(optionName, optionValue);
         } else if (optionsDesc.scope === 'generator') {
@@ -526,7 +526,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           } else if (argumentDef.scope === 'context') {
             this.context![argumentName] = convertedValue;
           } else if (argumentDef.scope === 'storage') {
-            this.config.set(argumentName as keyof ConfigType, convertedValue);
+            this.config.set(argumentName as keyof Config, convertedValue);
           } else if (argumentDef.scope === 'blueprint') {
             this.blueprintStorage!.set(argumentName, convertedValue);
           }
