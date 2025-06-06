@@ -187,7 +187,7 @@
     "@eslint/core": "0.14.0",
     "@node-loaders/esbuild": "2.0.0",
     "@types/chai": "5.2.2",
-    "@types/estree": "1.0.7",
+    "@types/estree": "1.0.8",
     "@types/node": "20.11.25",
     "@types/sinon-chai": "4.0.0",
     "chai": "5.2.0",
