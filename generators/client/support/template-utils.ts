@@ -21,7 +21,7 @@ import path from 'node:path';
 
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.js';
 import type { PrimaryKey } from '../../base-application/entity-all.js';
-import type { FieldType } from '../../../lib/application/field-types.js';
+import type { FieldType } from '../../base-application/internal/types/field-types.ts';
 import type { Field } from '../../base-application/field-all.js';
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
 

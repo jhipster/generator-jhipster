@@ -58,7 +58,7 @@ import {
   websocketTypes,
 } from '../../lib/jhipster/index.js';
 import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.js';
-import type { FieldType } from '../../lib/application/field-types.js';
+import type { FieldType } from '../base-application/internal/types/field-types.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
 import cleanupTask from './cleanup.js';
 import { serverFiles } from './files.js';

@@ -24,7 +24,7 @@ import { mutateData } from '../../../lib/utils/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { Field } from '../field-all.js';
 import type { Entity } from '../entity-all.js';
-import { fieldTypeValues, isFieldEnumType } from '../../../lib/application/field-types.js';
+import { fieldTypeValues, isFieldEnumType } from '../internal/types/field-types.ts';
 import type { FakerWithRandexp } from './faker.js';
 import { prepareProperty } from './prepare-property.js';
 

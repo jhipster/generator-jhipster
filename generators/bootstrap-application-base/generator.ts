@@ -42,7 +42,12 @@ import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesC
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { isWin32 } from '../base-core/support/index.ts';
 import { removeFieldsWithNullishValues } from '../../lib/utils/index.js';
-import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../lib/application/field-types.js';
+import {
+  convertFieldBlobType,
+  getBlobContentType,
+  isFieldBinaryType,
+  isFieldBlobType,
+} from '../base-application/internal/types/field-types.ts';
 import type { Entity } from '../base-application/entity-all.js';
 import { upperFirst } from '../../lib/jdl/core/utils/string-utils.js';
 import { baseNameProperties } from '../project-name/support/index.js';
