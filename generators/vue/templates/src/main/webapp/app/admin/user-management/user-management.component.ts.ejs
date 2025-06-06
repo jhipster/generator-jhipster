@@ -8,11 +8,7 @@ import { useAlertService } from '@/shared/alert/alert.service';
 import { useDateFormat } from '@/shared/composables'
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>UserManagementComponent',
-  mounted(): void {
-    this.loadAll();
-  },
   setup() {
     const alertService = inject('alertService', () => useAlertService(), true);
     const { formatDateShort: formatDate } = useDateFormat();
@@ -61,6 +57,9 @@ export default defineComponent({
       t$: useI18n().t,
 <%_ } _%>
     };
+  },
+  mounted(): void {
+    this.loadAll();
   },
   methods: {
     setActive(user, isActivated): void {

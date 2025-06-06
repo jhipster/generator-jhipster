@@ -1,16 +1,15 @@
 <template>
-  <div class="row justify-content-center">
+  <div class="d-flex justify-content-center">
     <div class="col-8">
       <div v-if="user">
         <h2 class="jh-entity-heading">
           <span v-text="t$('userManagement.detail.title')">User</span> [<strong>{{user.login}}</strong>]
         </h2>
-        <dl class="row jh-entity-details">
+        <dl class="row-md jh-entity-details">
           <dt><span v-text="t$('userManagement.login')">Login</span></dt>
           <dd>
             <span>{{ user.login }}</span>
-            <b-badge variant="success" v-if="user.activated" v-text="t$('userManagement.activated')">Activated</b-badge>
-            <b-badge variant="danger" v-if="!user.activated" v-text="t$('userManagement.deactivated')">Deactivated</b-badge>
+            <b-badge style="margin-left: 10px;" :variant="user.activated ? 'success' : 'danger'" v-text="t$(user.activated ? 'userManagement.activated' : 'userManagement.deactivated')"></b-badge>
           </dd>
           <dt><span v-text="t$('userManagement.firstName')">First Name</span></dt>
           <dd>{{user.firstName}}</dd>

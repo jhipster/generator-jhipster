@@ -4,7 +4,7 @@
       <span id="user-management-page-heading" v-text="t$('userManagement.home.title')" data-cy="userManagementPageHeading">Users</span>
 
       <div class="d-flex justify-content-end">
-        <button class="btn btn-info mr-2" @click="handleSyncList" :disabled="isLoading">
+        <button class="btn btn-info me-2" @click="handleSyncList" :disabled="isLoading">
           <font-awesome-icon icon="sync" :spin="isLoading"></font-awesome-icon> <span v-text="t$('userManagement.home.refreshListLabel')">Refresh List</span>
         </button>
         <router-link custom v-slot="{ navigate }" :to="{name: '<%= jhiPrefixCapitalized %>UserCreate'}">
@@ -49,7 +49,7 @@
             <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
             <td>
               <div v-for="authority of user.authorities" :key="authority">
-                  <span class="badge badge-info">{{ authority }}</span>
+                  <span class="badge bg-info">{{ authority }}</span>
               </div>
             </td>
 <%_ if (!databaseTypeCassandra) { _%>
@@ -57,7 +57,7 @@
             <td>{{user.lastModifiedBy}}</td>
             <td>{{formatDate(user.lastModifiedDate)}}</td>
 <%_ } _%>
-            <td class="text-right">
+            <td class="text-end">
               <div class="btn-group">
                 <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserView', params: {userId: user.login}}" custom v-slot="{ navigate }">
                   <button @click="navigate" class="btn btn-info btn-sm details">
@@ -84,7 +84,7 @@
           <div class="modal-body">
               <p id="<%= jhiPrefixDashed %>-delete-user-heading" v-text="t$('userManagement.delete.question', { 'login': removeId})">Are you sure you want to delete this user?</p>
           </div>
-          <template #modal-footer>
+          <template #footer>
             <div>
               <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" @click="closeDialog()">Cancel</button>
               <button type="button" class="btn btn-primary" id="confirm-delete-user" v-text="t$('entity.action.delete')" @click="deleteUser()">Delete</button>
@@ -94,10 +94,10 @@
     </div>
 <%_ if (!databaseTypeCassandra) { _%>
     <div v-show="users && users.length > 0">
-      <div class="row justify-content-center">
-        <jhi-item-count :page="page" :total="queryCount" :itemsPerPage="itemsPerPage"></jhi-item-count>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count :page="page" :total="queryCount" :items-per-page="itemsPerPage"></jhi-item-count>
       </div>
-      <div class="row justify-content-center">
+      <div class="d-flex justify-content-center">
         <b-pagination size="md" :total-rows="totalItems" v-model="page" :per-page="itemsPerPage" :change="loadPage(page)"></b-pagination>
       </div>
     </div>

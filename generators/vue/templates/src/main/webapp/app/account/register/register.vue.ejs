@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <div class="col-md-8 toastify-container">
         <h1 v-text="t$('register.title')" id="register-title" data-cy="registerTitle">Registration</h1>
 
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <div class="col-md-8">
         <form id="register-form" name="registerForm" @submit.prevent="register()" v-if="!success" no-validate>
           <div class="form-group">

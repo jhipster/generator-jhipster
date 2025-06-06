@@ -3,7 +3,7 @@
         <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
             <span v-text="t$('<%= i18nKeyPrefix %>.home.title')" id="<%= entityFileName %>-heading"><%= entityClassPluralHumanized %></span>
             <div class="d-flex justify-content-end">
-                <button class="btn btn-info mr-2" @click="handleSyncList" :disabled="isFetching">
+                <button class="btn btn-info me-2" @click="handleSyncList" :disabled="isFetching">
                     <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span v-text="t$('<%= i18nKeyPrefix %>.home.refreshListLabel')">Refresh List</span>
                 </button>
 <%_ if (!readOnly) { _%>
@@ -19,7 +19,7 @@
             </div>
         </h2>
 <%_ if (searchEngineAny) { _%>
-        <div class="row">
+        <div class="row-md">
             <div class="col-sm-12">
                 <form name="searchForm" class="form-inline" @submit.prevent="search(currentSearch)">
                     <div class="input-group w-100 mt-3">
@@ -46,17 +46,17 @@
             <table class="table table-striped" aria-describedby="<%= entityInstancePlural %>">
                 <thead>
                 <tr>
-                    <th scope="row"<% if (!paginationNo) { %> @click="changeOrder('<%= primaryKey.name %>')"<% } %>><span v-text="t$('global.field.id')"><%= primaryKey.nameCapitalized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
+                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%= primaryKey.name %>')"<% } %>><span v-text="t$('global.field.id')"><%= primaryKey.nameCapitalized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
 <%_ for (field of fields.filter(field => !field.id)) { _%>
-                    <th scope="row"<% if (!paginationNo) { %> @click="changeOrder('<%= field.fieldName%>')"<% } %>><span v-text="t$('<%=`${i18nKeyPrefix}.${field.fieldName}` %>')"><%= field.fieldNameHumanized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%= field.fieldName%>'"></jhi-sort-indicator><% } %></th>
+                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%= field.fieldName%>')"<% } %>><span v-text="t$('<%=`${i18nKeyPrefix}.${field.fieldName}` %>')"><%= field.fieldNameHumanized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%= field.fieldName%>'"></jhi-sort-indicator><% } %></th>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
   <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) {
     const fieldName = "." + relationship.otherEntityField; _%>
-                    <th scope="row"<% if (!paginationNo) { %> @click="changeOrder('<%=relationship.relationshipName + (fieldName)%>')"<% } %>><span v-text="t$('<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>')"><%= relationship.relationshipNameHumanized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%=relationship.relationshipName + (fieldName)%>'"></jhi-sort-indicator><% } %></th>
+                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%=relationship.relationshipName + (fieldName)%>')"<% } %>><span v-text="t$('<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>')"><%= relationship.relationshipNameHumanized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%=relationship.relationshipName + (fieldName)%>'"></jhi-sort-indicator><% } %></th>
   <%_ } _%>
 <%_ } _%>
-                    <th scope="row"></th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -120,7 +120,7 @@ _%>
                     </td>
   <%_ } _%>
 <%_ } _%>
-                    <td class="text-right">
+                    <td class="text-end">
                         <div class="btn-group">
   <%_ if (authenticationTypeSession) { _%>
                             <router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.<%= primaryKey.name %>}}" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
@@ -169,13 +169,13 @@ _%>
         </div>
 <%_ if (!readOnly) { _%>
         <b-modal ref="removeEntity" id="removeEntity" >
-            <template #modal-title>
+            <template #title>
                 <span id="<%= i18nKeyPrefix %>.delete.question" data-cy="<%= entityInstance %>DeleteDialogHeading" v-text="t$('entity.delete.title')">Confirm delete operation</span>
             </template>
             <div class="modal-body">
                 <p id="<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading" v-text="t$('<%= i18nKeyPrefix %>.delete.question', {'id': removeId})">Are you sure you want to delete this <%= entityClassHumanized %>?</p>
             </div>
-            <template #modal-footer>
+            <template #footer>
                 <div>
                     <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" @click="closeDialog()">Cancel</button>
                     <button type="button" class="btn btn-primary" id="<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>" data-cy="entityConfirmDeleteButton" v-text="t$('entity.action.delete')" @click="remove<%= entityAngularName %>()">Delete</button>
@@ -186,10 +186,10 @@ _%>
 <%_ if (!databaseTypeCassandra) { _%>
   <%_ if (paginationPagination) { _%>
         <div v-show="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length > 0">
-            <div class="row justify-content-center">
-                <jhi-item-count :page="page" :total="queryCount" :itemsPerPage="itemsPerPage"></jhi-item-count>
+            <div class="d-flex justify-content-center">
+                <jhi-item-count :page="page" :total="queryCount" :items-per-page="itemsPerPage"></jhi-item-count>
             </div>
-            <div class="row justify-content-center">
+            <div class="d-flex justify-content-center">
                 <b-pagination size="md" :total-rows="totalItems" v-model="page" :per-page="itemsPerPage"></b-pagination>
             </div>
         </div>

@@ -45,7 +45,7 @@ module.exports = async (env, options) => {
       resolve: {
         extensions: ['.ts', '.js', '.vue', '.json'],
         alias: {
-          vue$: '@vue/compat/dist/vue.esm-bundler.js',
+          vue$: 'vue/dist/vue.esm-bundler.js',
           '@': resolve('<%= this.relativeDir(clientRootDir, clientSrcDir) %>app'),
         },
       },

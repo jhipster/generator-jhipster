@@ -1,4 +1,4 @@
-import { vitest } from 'vitest';
+import { beforeEach, describe, expect, vitest } from 'vitest';
 import AlertService from './alert.service';
 
 describe('Alert Service test suite', () => {
@@ -17,8 +17,8 @@ describe('Alert Service test suite', () => {
 <%_ if (enableTranslation) { _%>
       i18n: { t: translationStub } as any,
 <%_ } _%>
-      bvToast: {
-        toast: toastStub,
+      toastController: {
+        show: toastStub,
       } as any,
     });
   });
@@ -31,12 +31,14 @@ describe('Alert Service test suite', () => {
 
     // THEN
     expect(toastStub).toBeCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith(message, {
-      toaster: 'b-toaster-top-center',
-      title: 'Error',
-      variant: 'danger',
-      solid: true,
-      autoHideDelay: 5000,
+    expect(toastStub).toHaveBeenCalledWith({
+      props: {
+        body: message,
+        pos: 'top-center',
+        title: 'Error',
+        variant: 'danger',
+        solid: true,
+      },
     });
   });
 
@@ -62,12 +64,14 @@ describe('Alert Service test suite', () => {
     expect(translationStub).toHaveBeenCalledWith(translationKey);
 <%_ } _%>
     expect(toastStub).toBeCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith(message, {
-      toaster: 'b-toaster-top-center',
-      title: 'Error',
-      variant: 'danger',
-      solid: true,
-      autoHideDelay: 5000,
+    expect(toastStub).toHaveBeenCalledWith({
+      props: {
+        pos: 'top-center',
+        body: expect.any(String),
+        title: 'Error',
+        variant: 'danger',
+        solid: true,
+      },
     });
   });
 
@@ -105,12 +109,14 @@ describe('Alert Service test suite', () => {
     expect(translationStub).toHaveBeenCalledWith(translationKey, { entityName: 'DummyEntity' });
     expect(translationStub).toHaveBeenCalledWith('global.menu.entities.dummyEntity');
 <%_ } _%>
-    expect(toastStub).toHaveBeenCalledWith(message, {
-      toaster: 'b-toaster-top-center',
-      title: 'Error',
-      variant: 'danger',
-      solid: true,
-      autoHideDelay: 5000,
+    expect(toastStub).toHaveBeenCalledWith({
+      props: {
+        body: expect.any(String),
+        pos: 'top-center',
+        title: 'Error',
+        variant: 'danger',
+        solid: true,
+      },
     });
   });
 
@@ -144,12 +150,14 @@ describe('Alert Service test suite', () => {
     expect(translationStub).toHaveBeenCalledWith(message);
 <%_ } _%>
     expect(toastStub).toBeCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith(message, {
-      toaster: 'b-toaster-top-center',
-      title: 'Error',
-      variant: 'danger',
-      solid: true,
-      autoHideDelay: 5000,
+    expect(toastStub).toHaveBeenCalledWith({
+      props: {
+        body: expect.any(String),
+        pos: 'top-center',
+        title: 'Error',
+        variant: 'danger',
+        solid: true,
+      },
     });
   });
 
@@ -176,12 +184,14 @@ describe('Alert Service test suite', () => {
     expect(translationStub).toHaveBeenCalledWith(translationKey);
 <%_ } _%>
     expect(toastStub).toBeCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith(message, {
-      toaster: 'b-toaster-top-center',
-      title: 'Error',
-      variant: 'danger',
-      solid: true,
-      autoHideDelay: 5000,
+    expect(toastStub).toHaveBeenCalledWith({
+      props: {
+        body: expect.any(String),
+        pos: 'top-center',
+        title: 'Error',
+        variant: 'danger',
+        solid: true,
+      },
     });
   });
 
@@ -208,12 +218,14 @@ describe('Alert Service test suite', () => {
     expect(translationStub).toHaveBeenCalledWith(message);
 <%_ } _%>
     expect(toastStub).toBeCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith(message, {
-      toaster: 'b-toaster-top-center',
-      title: 'Error',
-      variant: 'danger',
-      solid: true,
-      autoHideDelay: 5000,
+    expect(toastStub).toHaveBeenCalledWith({
+      props: {
+        body: expect.any(String),
+        pos: 'top-center',
+        title: 'Error',
+        variant: 'danger',
+        solid: true,
+      },
     });
   });
 });

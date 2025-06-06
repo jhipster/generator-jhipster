@@ -1,9 +1,9 @@
 <template>
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
         <div class="col-8">
             <div v-if="<%= entityInstance %>">
                 <h2 class="jh-entity-heading" data-cy="<%= entityInstance %>DetailsHeading"><span v-text="t$('<%= i18nKeyPrefix %>.detail.title')"><%= entityAngularName %></span> {{<%= entityInstance %>.<%= primaryKey.name %>}}</h2>
-                <dl class="row jh-entity-details">
+                <dl class="row-md jh-entity-details">
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;_%>

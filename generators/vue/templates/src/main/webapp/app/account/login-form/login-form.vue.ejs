@@ -1,19 +1,39 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 <template>
-  <div class="modal-body">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <b-alert show data-cy="loginError" variant="danger" v-if="authenticationError" v-html="t$('login.messages.error.authentication')">
-          <strong>Failed to sign in!</strong> Please check your credentials and try again.
-        </b-alert>
+  <div class="d-flex justify-content-center">
+    <div class="row-md">
+      <div class="col-md-12">
+        <b-alert
+          data-cy="loginError"
+          variant="danger"
+          :model-value="authenticationError"
+          v-html="t$('login.messages.error.authentication')"
+        ></b-alert>
       </div>
-      <div class="col-md-8">
+      <div class="col-md-12">
         <b-form @submit.prevent="doLogin()">
           <b-form-group :label="t$('global.form[\'username.label\']')" label-for="username">
             <b-form-input
               id="username"
               type="text"
               name="username"
-              autofocus
               :placeholder="t$('global.form[\'username.placeholder\']')"
               v-model="login"
               data-cy="username"
@@ -32,32 +52,31 @@
             </b-form-input>
           </b-form-group>
           <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked <% if (authenticationTypeSession && databaseTypeNo) { %> hidden<% } %>>
-            <span v-text="t$('login.form.rememberme')">Remember me</span>
+            <span v-text="t$('login.form.rememberme')"></span>
           </b-form-checkbox>
           <div>
-            <b-button data-cy="submit" type="submit" variant="primary" v-text="t$('login.form.button')">Sign in</b-button>
+            <b-button data-cy="submit" type="submit" variant="primary" v-text="t$('login.form.button')"></b-button>
           </div>
         </b-form>
         <p></p>
-        <%_ if (generateUserManagement) { _%>
+<%_ if (generateUserManagement) { _%>
         <div>
-          <b-alert show variant="warning">
+          <b-alert :model-value="true" variant="warning">
             <b-link
               :to="'/account/reset/request'"
               class="alert-link"
               v-text="t$('login.password.forgot')"
               data-cy="forgetYourPasswordSelector"
-              >Did you forget your password?</b-link
-            >
+            ></b-link>
           </b-alert>
         </div>
         <div>
-          <b-alert show variant="warning">
-            <span v-text="t$('global.messages.info.register.noaccount')">You don't have an account yet?</span>
-            <b-link :to="'/register'" class="alert-link" v-text="t$('global.messages.info.register.link')">Register a new account</b-link>
+          <b-alert :model-value="true" variant="warning">
+            <span v-text="t$('global.messages.info.register.noaccount')"></span>
+            <b-link :to="'/register'" class="alert-link" v-text="t$('global.messages.info.register.link')"></b-link>
           </b-alert>
         </div>
-        <%_ } _%>
+<%_ } _%>
       </div>
     </div>
   </div>

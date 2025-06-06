@@ -1,5 +1,5 @@
 <template>
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
         <div class="col-8">
             <form name="editForm" novalidate @submit.prevent="save()" >
                 <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%= entityClass %>CreateUpdateHeading" v-text="t$('<%= i18nKeyPrefix %>.home.createOrEditLabel')">Create or edit a <%= entityAngularName %></h2>
@@ -48,21 +48,21 @@ _%>
       <%_ } _%>
                             <div v-if="<%= entityInstance %>.<%= fieldName %>" class="form-text text-danger clearfix">
       <%_ if (field.blobContentTypeAny) { _%>
-                                <a class="pull-left" @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="t$('entity.action.open')">open</a><br>
-                                <span class="pull-left">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
+                                <a class="pull-start" @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="t$('entity.action.open')">open</a><br>
+                                <span class="pull-start">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
       <%_ } else { _%>
-                                <span class="pull-left">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
+                                <span class="pull-start">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
       <%_ } _%>
       <%_ if (field.blobContentTypeImage) { _%>
-                                <button type="button" @click="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'file_<%= fieldName %>')" class="btn btn-secondary btn-xs pull-right">
+                                <button type="button" @click="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'file_<%= fieldName %>')" class="btn btn-secondary btn-xs pull-end">
       <%_ } else { _%>
                                 <button type="button" @click="<%= entityInstance %>.<%= fieldName %>=null;<%= entityInstance %>.<%= fieldName %>ContentType=null;"
-                                        class="btn btn-secondary btn-xs pull-right">
+                                        class="btn btn-secondary btn-xs pull-end">
       <%_ } _%>
                                     <font-awesome-icon icon="times"></font-awesome-icon>
                                 </button>
                             </div>
-                            <label for="file_<%= fieldName %>" <% if (fieldTypeBlobContent === 'image') { %>v-text="t$('entity.action.addimage')"<% } else { %>v-text="t$('entity.action.addblob')"<% } %> class="btn btn-primary pull-right"></label>
+                            <label for="file_<%= fieldName %>" <% if (fieldTypeBlobContent === 'image') { %>v-text="t$('entity.action.addimage')"<% } else { %>v-text="t$('entity.action.addblob')"<% } %> class="btn btn-primary pull-end"></label>
                             <input type="file" ref="file_<%= fieldName %>" id="file_<%= fieldName %>" style="display: none;" data-cy="<%= fieldName %>" @change="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*"<% } else { %>false)"<% } %>/>
                         </div>
     <%_ } _%>

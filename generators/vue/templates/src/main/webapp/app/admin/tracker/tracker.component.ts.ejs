@@ -9,7 +9,6 @@ import type TrackerService from './tracker.service';
 import { useRoute } from 'vue-router';
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>TrackerComponent',
   setup() {
     const { formatDateShort: formatDate } = useDateFormat();

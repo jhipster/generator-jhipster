@@ -1,5 +1,5 @@
 <template>
-  <div class="row justify-content-center">
+  <div class="d-flex justify-content-center">
     <div class="col-8">
       <form name="editForm" novalidate @submit.prevent="save()" v-if="userAccount">
         <h2 id="myUserLabel" v-text="t$('userManagement.home.createOrEditLabel')">Create or edit a User</h2>

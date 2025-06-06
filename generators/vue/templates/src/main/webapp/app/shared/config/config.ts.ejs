@@ -1,3 +1,4 @@
+import type { App } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { createI18n, type IntlDateTimeFormats } from 'vue-i18n';
 <%_ } _%>
@@ -48,8 +49,8 @@ const datetimeFormats: IntlDateTimeFormats = {
 }
 <%_ } _%>
 
-export function initFortAwesome(vue) {
-  vue.component('font-awesome-icon', FontAwesomeIcon);
+export function initFortAwesome(vue: App) {
+  vue.component('FontAwesomeIcon', FontAwesomeIcon);
 
   library.add(
     faArrowLeft,
