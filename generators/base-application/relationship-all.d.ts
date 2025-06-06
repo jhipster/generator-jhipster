@@ -1,6 +1,6 @@
 import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
 import type { Relationship as BaseRelationship } from '../../lib/types/base/relationship.js';
-import type { DerivedPropertiesOnlyOf } from '../../lib/types/utils/derived-properties.js';
+import type { DerivedPropertiesOnlyOf } from '../../lib/command/types.js';
 import type { Entity } from './entity-all.js';
 import type { Property } from './property-all.js';
 
