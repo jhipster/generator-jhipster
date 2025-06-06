@@ -41,7 +41,7 @@ import { getPomVersionProperties } from '../maven/support/index.js';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.js';
 import { getDockerfileContainers } from '../docker/utils.js';
 import { getMainClassName } from '../java/support/index.js';
-import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
+import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
 import serverCommand from '../server/command.js';
 import { normalizePathEnd } from '../../lib/utils/index.js';
 
