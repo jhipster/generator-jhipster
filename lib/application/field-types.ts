@@ -1,5 +1,5 @@
 import type { SetFieldType, SetRequired } from 'type-fest';
-import type { Field } from '../types/application/field.js';
+import type { Field } from '../../generators/base-application/field-all.js';
 import type { Field as BaseField } from '../types/base/field.js';
 
 const blobFieldTypes = {

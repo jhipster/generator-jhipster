@@ -20,9 +20,9 @@ import assert from 'node:assert';
 import path from 'node:path';
 
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.js';
-import type { PrimaryKey } from '../../../lib/types/application/entity.js';
+import type { PrimaryKey } from '../../base-application/entity-all.js';
 import type { FieldType } from '../../../lib/application/field-types.js';
-import type { Field } from '../../../lib/types/application/field.js';
+import type { Field } from '../../base-application/field-all.js';
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;

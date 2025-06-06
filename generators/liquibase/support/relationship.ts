@@ -18,7 +18,7 @@
  */
 import { getFKConstraintName } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/index.js';
-import type { Relationship } from '../../../lib/types/application/relationship.js';
+import type { Relationship } from '../../base-application/relationship-all.js';
 
 function relationshipBaseDataEquals(relationshipA: any, relationshipB: any) {
   return (

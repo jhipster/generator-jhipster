@@ -1,4 +1,4 @@
-import type { ApplicationConfiguration, YoRcContent } from '../../../types/application/yo-rc.js';
+import type { ApplicationConfiguration, YoRcContent } from '../../../../generators/base-application/application-config-all.js';
 import type { Entity } from '../../../types/base/entity.js';
 import type { Field } from '../../../types/base/field.js';
 import type { Relationship } from '../../../types/base/relationship.js';

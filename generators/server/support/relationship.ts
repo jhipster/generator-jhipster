@@ -20,7 +20,7 @@
 import { addOtherRelationship } from '../../base-application/support/index.js';
 import type { ValidationResult } from '../../base-core/index.js';
 import { databaseTypes } from '../../../lib/jhipster/index.js';
-import type { Entity } from '../../../lib/types/application/entity.js';
+import type { Entity } from '../../base-application/entity-all.js';
 import type { Relationship } from '../../base-application/index.js';
 
 const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;

@@ -1,4 +1,4 @@
-import type { Entity } from '../../lib/types/application/entity.js';
+import type { Entity } from '../base-application/entity-all.js';
 import type { ApplicationAll } from '../base-application/types-all.js';
 import type CoreGenerator from './index.ts';
 

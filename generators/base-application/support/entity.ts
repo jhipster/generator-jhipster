@@ -18,7 +18,7 @@
  */
 
 import { upperFirst } from 'lodash-es';
-import type { Entity } from '../../../lib/types/application/entity.js';
+import type { Entity } from '../entity-all.js';
 
 export const findEntityInEntities = (entityName: string, entities: Entity[]): Entity | undefined =>
   entities.find(entity => upperFirst(entity.name) === upperFirst(entityName));

@@ -1,4 +1,4 @@
-import type { ApplicationOptions } from '../../lib/types/application/options.js';
+import type { ApplicationOptions } from './options-all.js';
 import type {
   Config as BaseConfig,
   Features as BaseFeatures,

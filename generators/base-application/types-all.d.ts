@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
-import { Entity } from '../../lib/types/application/entity.js';
+import { Entity } from './entity-all.js';
 import type { ClientApplication, ClientSourceType } from '../client/types.js';
 import { DockerSourceType } from '../docker/types.js';
 import { LanguagesSource } from '../languages/types.js';

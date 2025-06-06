@@ -27,10 +27,10 @@ import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/
 import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
-import type { Entity } from '../../../lib/types/application/entity.js';
+import type { Entity } from '../entity-all.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import type { PrimaryKey } from '../../../lib/types/application/entity.js';
-import type { ApplicationConfiguration } from '../../../lib/types/application/yo-rc.js';
+import type { PrimaryKey } from '../entity-all.js';
+import type { ApplicationConfiguration } from '../application-config-all.js';
 import type { ApplicationAll } from '../types-all.js';
 import { createFaker } from './faker.js';
 import { fieldToReference } from './prepare-field.js';

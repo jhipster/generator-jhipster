@@ -18,14 +18,14 @@
  */
 
 import type { IsNever } from 'type-fest';
-import type { Entity as BaseEntity } from '../base/entity.js';
-import type { ServerEntity } from '../../../generators/server/types.js';
-import type { Field as BaseField } from '../base/field.js';
-import type { Relationship as BaseRelationship } from '../base/relationship.js';
-import type { FieldType } from '../../application/field-types.ts';
-import type { FakerWithRandexp } from '../../../generators/base-application/support/faker.ts';
-import type { Field } from './field.js';
-import type { Relationship } from './relationship.js';
+import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
+import type { ServerEntity } from '../server/types.js';
+import type { Field as BaseField } from '../../lib/types/base/field.js';
+import type { Relationship as BaseRelationship } from '../../lib/types/base/relationship.js';
+import type { FieldType } from '../../lib/application/field-types.ts';
+import type { FakerWithRandexp } from './support/faker.ts';
+import type { Field } from './field-all.js';
+import type { Relationship } from './relationship-all.js';
 
 export type PrimaryKey<F extends BaseField = Field> = {
   name: string;

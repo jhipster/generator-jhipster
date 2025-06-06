@@ -18,7 +18,7 @@ import { parseCreationTimestamp } from '../../generators/base/support/index.js';
 import BaseGenerator from '../../generators/base/index.js';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.js';
 import type CoreGenerator from '../../generators/base-core/generator.js';
-import type { ApplicationConfiguration } from '../types/application/yo-rc.js';
+import type { ApplicationConfiguration } from '../../generators/base-application/application-config-all.js';
 import { getDefaultJDLApplicationConfig } from '../command/jdl.js';
 import type { Entity } from '../types/base/entity.js';
 import { buildJHipster, createProgram } from '../../cli/program.mjs';

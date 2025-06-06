@@ -18,7 +18,7 @@
  */
 import type { FieldType } from '../../../lib/application/field-types.js';
 import { fieldTypes } from '../../../lib/jhipster/index.js';
-import type { PrimaryKey } from '../../../lib/types/application/entity.js';
+import type { PrimaryKey } from '../../base-application/entity-all.js';
 import { fieldIsEnum } from '../../base-application/support/index.js';
 
 const {

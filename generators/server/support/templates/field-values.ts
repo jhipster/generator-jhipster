@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { databaseTypes, fieldTypes } from '../../../../lib/jhipster/index.js';
-import type { PrimaryKey } from '../../../../lib/types/application/entity.js';
+import type { PrimaryKey } from '../../../base-application/entity-all.js';
 
 const dbTypes = fieldTypes;
 const { STRING, UUID, LONG, INTEGER } = dbTypes.CommonDBTypes;
