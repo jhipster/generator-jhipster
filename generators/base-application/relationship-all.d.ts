@@ -1,5 +1,5 @@
-import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
-import type { Relationship as BaseRelationship } from '../../lib/types/base/relationship.js';
+import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
+import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.js';
 import type { DerivedPropertiesOnlyOf } from '../../lib/command/types.js';
 import type { Entity } from './entity-all.js';
 import type { Property } from './property-all.js';

@@ -29,7 +29,7 @@ import {
 
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.js';
 import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.js';
-import type { Field } from '../../lib/types/base/field.js';
+import type { Field } from '../../lib/jhipster/types/field.js';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },

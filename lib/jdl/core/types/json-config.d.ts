@@ -1,7 +1,7 @@
 import type { ApplicationConfiguration, YoRcContent } from '../../../../generators/base-application/application-config-all.js';
-import type { Entity } from '../../../types/base/entity.js';
-import type { Field } from '../../../types/base/field.js';
-import type { Relationship } from '../../../types/base/relationship.js';
+import type { Entity } from '../../../jhipster/types/entity.js';
+import type { Field } from '../../../jhipster/types/field.js';
+import type { Relationship } from '../../../jhipster/types/relationship.js';
 
 export type JSONField = Field & Record<string, any>;
 

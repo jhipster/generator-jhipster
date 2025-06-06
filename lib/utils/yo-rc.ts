@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { ApplicationConfiguration, YoRcContent } from '../../generators/base-application/application-config-all.js';
-import type { Entity } from '../types/base/entity.js';
+import type { Entity } from '../jhipster/types/entity.js';
 import { upperFirst } from '../jdl/core/utils/string-utils.js';
 
 export const YO_RC_CONFIG_KEY = 'generator-jhipster';

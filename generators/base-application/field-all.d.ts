@@ -1,4 +1,4 @@
-import type { Field as BaseField } from '../../lib/types/base/field.js';
+import type { Field as BaseField } from '../../lib/jhipster/types/field.js';
 import type { Property } from './property-all.js';
 
 export interface Field extends Property, BaseField {

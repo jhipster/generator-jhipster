@@ -20,7 +20,7 @@ import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.js';
 import type CoreGenerator from '../../generators/base-core/generator.js';
 import type { ApplicationConfiguration } from '../../generators/base-application/application-config-all.js';
 import { getDefaultJDLApplicationConfig } from '../command/jdl.js';
-import type { Entity } from '../types/base/entity.js';
+import type { Entity } from '../jhipster/types/entity.js';
 import { buildJHipster, createProgram } from '../../cli/program.mjs';
 import type { CliCommand } from '../../cli/types.js';
 import type BaseApplicationGenerator from '../../generators/base-application/generator.js';

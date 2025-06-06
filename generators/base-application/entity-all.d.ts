@@ -18,10 +18,10 @@
  */
 
 import type { IsNever } from 'type-fest';
-import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
+import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
 import type { ServerEntity } from '../server/types.js';
-import type { Field as BaseField } from '../../lib/types/base/field.js';
-import type { Relationship as BaseRelationship } from '../../lib/types/base/relationship.js';
+import type { Field as BaseField } from '../../lib/jhipster/types/field.js';
+import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.js';
 import type { FieldType } from './internal/types/field-types.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
 import type { Field } from './field-all.js';

@@ -30,7 +30,7 @@ import {
   GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
 } from '../generator-list.js';
 import type { GenericTaskGroup } from '../base-core/types.js';
-import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
+import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
 import type { ApplicationConfiguration } from './application-config-all.js';
