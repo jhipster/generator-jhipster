@@ -30,7 +30,7 @@ import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 import type { Entity, PrimaryKey } from '../entity-all.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { ApplicationConfiguration } from '../application-config-all.js';
-import type { ApplicationAll } from '../types-all.js';
+import type { ApplicationAll } from '../application-properties-all.js';
 import { createFaker } from './faker.js';
 import { fieldToReference } from './prepare-field.js';
 import { fieldIsEnum } from './field-utils.js';

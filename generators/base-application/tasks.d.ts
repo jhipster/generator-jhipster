@@ -21,7 +21,8 @@ import type { TaskParamWithSource } from '../base/tasks.js';
 import type { SimpleTaskTypes, TaskParamWithApplication } from '../base-simple-application/tasks.js';
 import type { Entity } from './entity-all.js';
 import type { Source as BaseSource } from './types.js';
-import type { ApplicationAll, SourceAll } from './types-all.js';
+import type { ApplicationAll } from './application-properties-all.js';
+import type { SourceAll } from './source-all.d.ts';
 
 type GetRelationshipType<E> = E extends { relationships: (infer R)[] } ? R : never;
 type GetFieldType<E> = E extends { fields: (infer F)[] } ? F : never;

@@ -20,7 +20,7 @@
 import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.js';
 import { mutateData } from '../../../lib/utils/index.js';
 import type { Field } from '../../base-application/field-all.js';
-import type { ApplicationAll } from '../../base-application/types-all.js';
+import type { ApplicationAll } from '../../base-application/application-properties-all.js';
 
 const { MYSQL, MARIADB } = databaseTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;

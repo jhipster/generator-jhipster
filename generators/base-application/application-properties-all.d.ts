@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
-import type { ClientApplication, ClientSourceType } from '../client/types.js';
-import { DockerSourceType } from '../docker/types.js';
-import { LanguagesSource } from '../languages/types.js';
-import type { SpringBootApplication, SpringBootSourceType } from '../server/types.js';
+import type { ClientApplication } from '../client/types.js';
+import type { SpringBootApplication } from '../server/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import { Entity } from './entity-all.js';
 import type { OptionWithDerivedProperties } from './internal/types/application-options.js';
-import type { Application as BaseApplication, Source as BaseApplicationSource } from './types.js';
+import type { Application as BaseApplication } from './types.js';
 
 /* ApplicationType Start */
 type MicroservicesArchitectureApplication = {
@@ -143,5 +141,3 @@ export type ApplicationAll<E = Entity> = BaseApplication &
   };
 
 export { Options as AllOptions, Config as AllConfig } from './types.js';
-
-export type SourceAll = BaseApplicationSource & SpringBootSourceType & ClientSourceType & LanguagesSource & DockerSourceType;

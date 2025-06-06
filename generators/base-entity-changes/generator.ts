@@ -26,7 +26,7 @@ import { addEntitiesOtherRelationships } from '../server/support/index.js';
 import type { TaskTypes as ApplicationTaskTypes } from '../base-application/tasks.js';
 import type { Entity as ApplicationEntity } from '../base-application/entity-all.js';
 import type { TaskParamWithApplication } from '../base-simple-application/tasks.js';
-import type { ApplicationAll } from '../base-application/types-all.js';
+import type { ApplicationAll } from '../base-application/application-properties-all.js';
 import type {
   BaseChangelog,
   Config as BaseEntityChangesConfig,

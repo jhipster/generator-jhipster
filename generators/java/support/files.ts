@@ -21,7 +21,7 @@ import type { WriteFileBlock } from '../../base-core/api.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../../generator-constants.js';
 import type { Entity } from '../../base-application/entity-all.js';
-import type { ApplicationAll } from '../../base-application/types-all.js';
+import type { ApplicationAll } from '../../base-application/application-properties-all.js';
 
 export const replaceEntityFilePathVariables = (data: any, filePath: string) => {
   filePath = filePath

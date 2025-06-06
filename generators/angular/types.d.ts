@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { Entity } from '../base-application/entity-all.js';
-import type { ApplicationAll } from '../base-application/types-all.js';
+import type { ApplicationAll } from '../base-application/application-properties-all.js';
 
 export type AngularEntity = Entity & {
   /**

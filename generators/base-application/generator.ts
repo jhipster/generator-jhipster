@@ -43,7 +43,8 @@ import type {
   PreparingEachEntityRelationshipTaskParam,
   PreparingEachEntityTaskParam,
 } from './tasks.js';
-import type { ApplicationAll, SourceAll } from './types-all.js';
+import type { ApplicationAll } from './application-properties-all.js';
+import type { SourceAll } from './source-all.js';
 import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, getEntitiesFromDir } from './support/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 import type {
