@@ -69,7 +69,6 @@ type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = Om
    */
   composedMockedGenerators: string[];
 
-  // eslint-disable-next-line no-use-before-define
   createJHipster: (ns: string, options?: WithJHipsterGenerators) => JHipsterRunContext;
 
   application?: ApplicationAll;
