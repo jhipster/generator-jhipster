@@ -27,7 +27,7 @@ import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/
 import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
-import type { Entity } from '../../../lib/types/application/index.js';
+import type { Entity } from '../../../lib/types/application/entity.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { PrimaryKey } from '../../../lib/types/application/entity.js';
 import type { ApplicationConfiguration } from '../../../lib/types/application/yo-rc.js';

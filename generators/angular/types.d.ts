@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Entity } from '../../lib/types/application/index.js';
+import type { Entity } from '../../lib/types/application/entity.js';
 import type { ApplicationAll } from '../base-application/types-all.js';
 
 export type AngularEntity = Entity & {
