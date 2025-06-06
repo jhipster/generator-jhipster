@@ -6,7 +6,7 @@ import { LanguagesSource } from '../languages/types.js';
 import type { SpringBootApplication, SpringBootSourceType } from '../server/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import { Entity } from './entity-all.js';
-import type { OptionWithDerivedProperties } from './application-options.js';
+import type { OptionWithDerivedProperties } from './internal/types/application-options.js';
 import type { Application as BaseApplication, Source as BaseApplicationSource } from './types.js';
 
 /* ApplicationType Start */

@@ -3,7 +3,7 @@ import type { GradleApplication, GradleNeedleOptions } from '../gradle/types.js'
 import type { EditFileCallback } from '../base-core/api.js';
 import type { MavenDefinition } from '../maven/types.js';
 import type { ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
-import type { OptionWithDerivedProperties } from '../base-application/application-options.js';
+import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
 import type { JavaAnnotation } from './support/add-java-annotation.ts';
 import type { default as BootstrapCommand } from './generators/bootstrap/command.js';
 

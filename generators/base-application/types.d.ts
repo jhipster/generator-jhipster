@@ -4,7 +4,7 @@ import type {
   Options as BaseOptions,
   Application as SimpleApplication,
 } from '../base-simple-application/index.ts';
-import type { ApplicationOptions } from './options-all.js';
+import type { ApplicationOptions } from './application-options-all.js';
 
 export type Config = BaseConfig & {
   baseName?: string;
