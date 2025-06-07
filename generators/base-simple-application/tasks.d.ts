@@ -18,7 +18,11 @@
  */
 import type { Merge, OmitIndexSignature, Simplify } from 'type-fest';
 import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource } from '../base/tasks.js';
-import type { Application as SimpleApplication, Source as SimpleSource } from './types.d.ts';
+import type {
+  Application as BaseSimpleApplicationApplication,
+  Control as BaseSimpleApplicationControl,
+  Source as BaseSimpleApplicationSource,
+} from './types.d.ts';
 
 export type ApplicationDefaultsTaskParam<A> = {
   /**
@@ -49,23 +53,30 @@ export type ApplicationDefaultsTaskParam<A> = {
   ) => void;
 };
 
-export type TaskParamWithApplication<A> = TaskParamWithControl & {
+export type TaskParamWithApplication<
+  C extends BaseSimpleApplicationControl = BaseSimpleApplicationControl,
+  A extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication,
+> = TaskParamWithControl<C> & {
   application: A;
 };
 
-export type SimpleTaskTypes<A = SimpleApplication, S extends SimpleSource = SimpleSource> = Merge<
-  BaseTaskTypes,
+export type SimpleTaskTypes<
+  C extends BaseSimpleApplicationControl = BaseSimpleApplicationControl,
+  A extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication,
+  S extends BaseSimpleApplicationSource = BaseSimpleApplicationSource,
+> = Merge<
+  BaseTaskTypes<C, S>,
   {
-    BootstrapApplicationTaskParam: TaskParamWithControl & ApplicationDefaultsTaskParam<A>;
-    LoadingTaskParam: TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
-    PreparingTaskParam: TaskParamWithSource<S> & TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
-    PostPreparingTaskParam: TaskParamWithSource<S> & TaskParamWithApplication<A>;
-    DefaultTaskParam: TaskParamWithApplication<A>;
-    WritingTaskParam: TaskParamWithApplication<A>;
-    PostWritingTaskParam: TaskParamWithSource<S> & TaskParamWithApplication<A>;
-    PreConflictsTaskParam: TaskParamWithApplication<A>;
-    InstallTaskParam: TaskParamWithApplication<A>;
-    PostInstallTaskParam: TaskParamWithApplication<A>;
-    EndTaskParam: TaskParamWithApplication<A>;
+    BootstrapApplicationTaskParam: TaskParamWithControl<C> & ApplicationDefaultsTaskParam<A>;
+    LoadingTaskParam: TaskParamWithApplication<C, A> & ApplicationDefaultsTaskParam<A>;
+    PreparingTaskParam: TaskParamWithSource<C, S> & TaskParamWithApplication<C, A> & ApplicationDefaultsTaskParam<A>;
+    PostPreparingTaskParam: TaskParamWithSource<C, S> & TaskParamWithApplication<C, A>;
+    DefaultTaskParam: TaskParamWithApplication<C, A>;
+    WritingTaskParam: TaskParamWithApplication<C, A>;
+    PostWritingTaskParam: TaskParamWithSource<C, S> & TaskParamWithApplication<C, A>;
+    PreConflictsTaskParam: TaskParamWithApplication<C, A>;
+    InstallTaskParam: TaskParamWithApplication<C, A>;
+    PostInstallTaskParam: TaskParamWithApplication<C, A>;
+    EndTaskParam: TaskParamWithApplication<C, A>;
   }
 >;

@@ -31,6 +31,7 @@ import { GENERATOR_UPGRADE } from '../generator-list.js';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.js';
 import type { TaskParamWithControl } from '../base/tasks.js';
 import type { GenericTaskGroup } from '../base-core/types.js';
+import type { Control as BootstrapControl } from './types.js';
 import {
   autoCrlfTransform,
   createESLintTransform,
@@ -91,7 +92,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     return this.multistepTransform;
   }
 
-  get preConflicts(): GenericTaskGroup<this, TaskParamWithControl> {
+  get preConflicts(): GenericTaskGroup<this, TaskParamWithControl<BootstrapControl>> {
     return {
       queueCommitPrettierConfig() {
         this.queueCommitPrettierConfig();

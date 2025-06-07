@@ -35,6 +35,7 @@ import type {
   Deployment as BaseDeployment,
   Workspaces as BaseWorkspaces,
   Config as BaseWorkspacesConfig,
+  Control as BaseWorkspacesControl,
   Features as BaseWorkspacesFeatures,
   Options as BaseWorkspacesOptions,
   Source as BaseWorkspacesSource,
@@ -66,7 +67,13 @@ export default abstract class BaseWorkspacesGenerator<
   Options extends BaseWorkspacesOptions = BaseWorkspacesOptions,
   Source extends BaseWorkspacesSource = BaseWorkspacesSource,
   Features extends BaseWorkspacesFeatures = BaseWorkspacesFeatures,
-  Tasks extends WorkspacesTasks<Deployment, Workspaces, Source, Application> = WorkspacesTasks<Deployment, Workspaces, Source, Application>,
+  Tasks extends WorkspacesTasks<BaseWorkspacesControl, Deployment, Workspaces, Source, Application> = WorkspacesTasks<
+    BaseWorkspacesControl,
+    Deployment,
+    Workspaces,
+    Source,
+    Application
+  >,
 > extends BaseGenerator<Config, Options, Source, Features, Tasks> {
   static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 

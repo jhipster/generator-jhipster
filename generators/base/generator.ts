@@ -45,11 +45,11 @@ import {
 } from './support/constants.js';
 import type {
   Config as BaseConfig,
+  Control as BaseControl,
   Features as BaseFeatures,
   Options as BaseOptions,
   Source as BaseSource,
   CleanupArgumentType,
-  Control,
 } from './types.js';
 
 const { WRITING } = PRIORITY_NAMES;
@@ -63,7 +63,7 @@ export default class BaseGenerator<
   Options extends BaseOptions = BaseOptions,
   Source extends BaseSource = BaseSource,
   Features extends BaseFeatures = BaseFeatures,
-  Tasks extends BaseTasks<Source> = BaseTasks<Source>,
+  Tasks extends BaseTasks<BaseControl, Source> = BaseTasks<BaseControl, Source>,
 > extends CoreGenerator<Config, Options, Features> {
   fromBlueprint!: boolean;
   sbsBlueprint?: boolean;
@@ -157,9 +157,9 @@ export default class BaseGenerator<
     return this.delegateToBlueprint ? ({} as TaskGroupType) : tasksGetter();
   }
 
-  get #control(): Control {
+  get #control(): BaseControl {
     const generator = this;
-    return this.getContextData<Control>('jhipster:control', {
+    return this.getContextData<BaseControl>('jhipster:control', {
       factory: () => {
         let jhipsterOldVersion: string | null;
         let enviromentHasDockerCompose: undefined | boolean;
@@ -334,7 +334,7 @@ export default class BaseGenerator<
   /**
    * Check if the generator should ask for prompts.
    */
-  override shouldAskForPrompts({ control }: { control: Control }): boolean {
+  override shouldAskForPrompts({ control }: { control: BaseControl }): boolean {
     if (!control) throw new Error(`Control object not found in ${this.options.namespace}`);
     return !control.existingProject || this.options.askAnswered === true;
   }
@@ -844,5 +844,5 @@ export class CommandBaseGenerator<
   BaseOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions,
   BaseSource,
   BaseFeatures & AdditionalFeatures,
-  BaseTasks
+  BaseTasks<BaseControl>
 > {}

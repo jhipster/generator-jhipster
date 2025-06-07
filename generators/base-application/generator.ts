@@ -50,6 +50,7 @@ import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 import type {
   Application as BaseApplication,
   Config as BaseApplicationConfig,
+  Control as BaseApplicationControl,
   Features as BaseApplicationFeatures,
   Options as BaseApplicationOptions,
   Source as BaseApplicationSource,
@@ -136,7 +137,12 @@ export default class BaseApplicationGenerator<
   Options extends BaseApplicationOptions = BaseApplicationOptions,
   Source extends BaseApplicationSource = SourceAll,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
-  Tasks extends DefaultTasks<Entity, Application, Source> = DefaultTasks<Entity, Application, Source>,
+  Tasks extends DefaultTasks<BaseApplicationControl, Entity, Application, Source> = DefaultTasks<
+    BaseApplicationControl,
+    Entity,
+    Application,
+    Source
+  >,
 > extends BaseGenerator<Application, Config, Options, Source, Features, Tasks> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 

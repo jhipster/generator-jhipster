@@ -1,4 +1,6 @@
-/*
+/**
+ * Copyright 2013-2025 the original author or authors from the JHipster project.
+ *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
@@ -14,12 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Tasks } from '../tasks.js';
-import type CoreGenerator from '../../base-core/generator.js';
-import type { Source } from '../types.js';
-
-export function asWritingTask<S extends Source = Source, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: Tasks<any, any, any, S>['WritingTaskParam']) => void,
-) {
-  return task;
-}
+export type { Control } from '../base-application/types.js';

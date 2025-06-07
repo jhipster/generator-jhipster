@@ -3,6 +3,8 @@ import type { GradleSourceType } from '../gradle/types.js';
 import type { MavenSourceType } from '../maven/types.js';
 import type { SpringBootSource } from '../server/types.js';
 
+export type { Control } from '../base-entity-changes/types.js';
+
 export type LiquibaseChangelog = { changelogName: string };
 export type LiquibaseChangelogSection = LiquibaseChangelog & { section?: 'base' | 'incremental' | 'constraints' };
 

@@ -20,18 +20,22 @@ import type { Storage } from 'yeoman-generator';
 import type { TaskParamWithSource } from '../base/tasks.js';
 import type { SimpleTaskTypes, TaskParamWithApplication } from '../base-simple-application/tasks.js';
 import type { Entity } from './entity-all.js';
-import type { Source as BaseSource } from './types.js';
+import type { Application as BaseApplication, Source as BaseSource, Control } from './types.js';
 import type { ApplicationAll } from './application-properties-all.js';
 import type { SourceAll } from './source-all.d.ts';
 
 type GetRelationshipType<E> = E extends { relationships: (infer R)[] } ? R : never;
 type GetFieldType<E> = E extends { fields: (infer F)[] } ? F : never;
 
-type TaskParamWithEntities<E, A> = TaskParamWithApplication<A> & {
+type TaskParamWithEntities<C extends Control, E extends Entity, A extends BaseApplication> = TaskParamWithApplication<C, A> & {
   entities: E[];
 };
 
-type ConfiguringEachEntityTaskParam<E = Entity, A = ApplicationAll<E>> = TaskParamWithApplication<A> & {
+type ConfiguringEachEntityTaskParam<
+  C extends Control = Control,
+  E extends Entity = Entity,
+  A extends BaseApplication = ApplicationAll<E>,
+> = TaskParamWithApplication<C, A> & {
   entityName: string;
   /** Entity storage */
   entityStorage: Storage;
@@ -49,7 +53,7 @@ type EntityToLoad<E> = {
   entityBootstrap: E;
 };
 
-type LoadingEntitiesTaskParam<E, A> = TaskParamWithApplication<A> & {
+type LoadingEntitiesTaskParam<C extends Control, E extends Entity, A extends BaseApplication> = TaskParamWithApplication<C, A> & {
   entitiesToLoad: EntityToLoad<E>[];
 };
 
@@ -59,29 +63,50 @@ type EntityTaskParam<E> = {
   description: string;
 };
 
-type PreparingEachEntityTaskParam<E = Entity, A = ApplicationAll<E>> = TaskParamWithApplication<A> & EntityTaskParam<E>;
+type PreparingEachEntityTaskParam<
+  C extends Control = Control,
+  E extends Entity = Entity,
+  A extends BaseApplication = ApplicationAll<E>,
+> = TaskParamWithApplication<C, A> & EntityTaskParam<E>;
 
-type PreparingEachEntityFieldTaskParam<E = Entity, A = ApplicationAll<E>> = PreparingEachEntityTaskParam<E, A> & {
+type PreparingEachEntityFieldTaskParam<
+  C extends Control = Control,
+  E extends Entity = Entity,
+  A extends BaseApplication = ApplicationAll<E>,
+> = PreparingEachEntityTaskParam<C, E, A> & {
   field: GetFieldType<E>;
   fieldName: string;
 };
 
-type PreparingEachEntityRelationshipTaskParam<E = Entity, A = ApplicationAll<E>> = PreparingEachEntityTaskParam<E, A> & {
+type PreparingEachEntityRelationshipTaskParam<
+  C extends Control = Control,
+  E extends Entity = Entity,
+  A extends BaseApplication = ApplicationAll<E>,
+> = PreparingEachEntityTaskParam<C, E, A> & {
   relationship: GetRelationshipType<E>;
   relationshipName: string;
 };
 
-type PostWritingEntitiesTaskParam<E = Entity, A = ApplicationAll<E>, Source extends BaseSource = SourceAll> = TaskParamWithEntities<E, A> &
-  TaskParamWithSource<Source>;
+type PostWritingEntitiesTaskParam<
+  C extends Control = Control,
+  E extends Entity = Entity,
+  A extends BaseApplication = ApplicationAll<E>,
+  S extends BaseSource = SourceAll,
+> = TaskParamWithEntities<C, E, A> & TaskParamWithSource<C, S>;
 
-export type TaskTypes<E = Entity, A = ApplicationAll<E>, S extends BaseSource = SourceAll> = SimpleTaskTypes<A, S> & {
-  ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<E, A>;
-  LoadingEntitiesTaskParam: LoadingEntitiesTaskParam<E, A>;
-  PreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;
-  PreparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<E, A>;
-  PreparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<E, A>;
-  PostPreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;
-  DefaultTaskParam: TaskParamWithEntities<E, A>;
-  WritingEntitiesTaskParam: TaskParamWithEntities<E, A>;
-  PostWritingEntitiesTaskParam: PostWritingEntitiesTaskParam<E, A, S>;
+export type TaskTypes<
+  C extends Control = Control,
+  E extends Entity = Entity,
+  A extends BaseApplication = ApplicationAll<E>,
+  S extends BaseSource = SourceAll,
+> = SimpleTaskTypes<C, A, S> & {
+  ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<C, E, A>;
+  LoadingEntitiesTaskParam: LoadingEntitiesTaskParam<C, E, A>;
+  PreparingEachEntityTaskParam: PreparingEachEntityTaskParam<C, E, A>;
+  PreparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<C, E, A>;
+  PreparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<C, E, A>;
+  PostPreparingEachEntityTaskParam: PreparingEachEntityTaskParam<C, E, A>;
+  DefaultTaskParam: TaskParamWithEntities<C, E, A>;
+  WritingEntitiesTaskParam: TaskParamWithEntities<C, E, A>;
+  PostWritingEntitiesTaskParam: PostWritingEntitiesTaskParam<C, E, A, S>;
 };
