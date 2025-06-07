@@ -18,8 +18,8 @@
  */
 import { snakeCase, upperFirst } from 'lodash-es';
 import { mutateData } from '../../../lib/utils/index.js';
-import type { Field } from '../../../lib/types/application/field.js';
-import type { Relationship } from '../../../lib/types/application/relationship.js';
+import type { Field } from '../field-all.js';
+import type { Relationship } from '../relationship-all.js';
 
 export const prepareProperty = (property: Field | Relationship) => {
   mutateData(property, {

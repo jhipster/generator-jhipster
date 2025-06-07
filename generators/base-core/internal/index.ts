@@ -16,4 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export * from './config-def.ts';
 export * from './write-files.js';

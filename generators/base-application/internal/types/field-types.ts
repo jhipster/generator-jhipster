@@ -1,6 +1,6 @@
 import type { SetFieldType, SetRequired } from 'type-fest';
-import type { Field } from '../types/application/field.js';
-import type { Field as BaseField } from '../types/base/field.js';
+import type { Field } from '../../field-all.js';
+import type { Field as BaseField } from '../../../../lib/jhipster/types/field.js';
 
 const blobFieldTypes = {
   BLOB: 'Blob',

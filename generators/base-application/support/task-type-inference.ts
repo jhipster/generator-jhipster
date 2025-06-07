@@ -17,8 +17,8 @@
 import type { TaskTypes } from '../tasks.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { WriteFileSection } from '../../base-core/api.js';
-import type { Entity } from '../../../lib/types/application/entity.js';
-import type { ApplicationAll } from '../types-all.js';
+import type { Entity } from '../entity-all.js';
+import type { ApplicationAll } from '../application-properties-all.js';
 
 export function asWriteFilesSection<Data = ApplicationAll<Entity>>(section: WriteFileSection<Data>) {
   return section;

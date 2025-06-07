@@ -44,7 +44,7 @@ import type {
   ParseableCommand,
 } from '../../lib/command/index.js';
 import { packageJson } from '../../lib/index.js';
-import { loadConfig, loadConfigDefaults, loadDerivedConfig } from '../../lib/internal/index.js';
+import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from '../base-core/internal/index.js';
 import baseCommand from '../base/command.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
@@ -52,7 +52,6 @@ import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gr
 import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type GeneratorsByNamespace from '../types.js';
 import type { CascatedEditFileCallback, EditFileCallback, EditFileOptions, WriteFileOptions } from './api.js';
-import { convertWriteFileSectionsToBlocks } from './internal/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
 import { createJHipster7Context, joinCallbacks } from './support/index.js';
 import type {

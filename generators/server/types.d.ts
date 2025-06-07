@@ -3,7 +3,7 @@ import type { GradleSourceType } from '../gradle/types.js';
 import type { MavenSourceType } from '../maven/types.js';
 import type { LiquibaseSourceType } from '../liquibase/types.js';
 import type { SpringCacheSourceType } from '../spring-cache/types.js';
-import type { OptionWithDerivedProperties } from '../base-application/application-options.js';
+import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
 import type { GatewayApplication } from '../spring-cloud/generators/gateway/types.js';
 import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
 import type { ApplicationPropertiesNeedles } from './support/needles.ts';

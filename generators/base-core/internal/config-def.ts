@@ -1,6 +1,6 @@
-import type { CommandConfigScope, JHipsterConfigs } from '../../lib/command/index.js';
-import type CoreGenerator from '../../generators/base-core/index.js';
-import { applyDerivedProperty } from '../utils/derived-property.js';
+import type { CommandConfigScope, JHipsterConfigs } from '../../../lib/command/index.ts';
+import type CoreGenerator from '../index.ts';
+import { applyDerivedProperty } from '../../../lib/utils/derived-property.ts';
 
 export function loadConfig(this: CoreGenerator, configsDef: JHipsterConfigs | undefined, data: { application: any });
 export function loadConfig(configsDef: JHipsterConfigs | undefined, data: { application: any; config?: any });

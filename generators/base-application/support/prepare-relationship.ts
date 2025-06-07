@@ -24,8 +24,8 @@ import { checkAndReturnRelationshipOnValue, databaseTypes, entityOptions, valida
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import type { Relationship } from '../../../lib/types/application/relationship.js';
-import type { Entity } from '../../../lib/types/application/entity.js';
+import type { Relationship } from '../relationship-all.js';
+import type { Entity } from '../entity-all.js';
 import { prepareProperty } from './prepare-property.js';
 import { stringifyApplicationData } from './debug.js';
 

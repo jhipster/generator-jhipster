@@ -23,7 +23,7 @@ import {
 } from '../client/support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import clientCommand from '../client/command.js';
-import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
+import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
 import { getFrontendAppName } from '../../lib/utils/index.js';
 import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../generator-constants.js';
 

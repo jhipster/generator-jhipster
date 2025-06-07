@@ -18,9 +18,9 @@ import { parseCreationTimestamp } from '../../generators/base/support/index.js';
 import BaseGenerator from '../../generators/base/index.js';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.js';
 import type CoreGenerator from '../../generators/base-core/generator.js';
-import type { ApplicationConfiguration } from '../types/application/yo-rc.js';
+import type { ApplicationConfiguration } from '../../generators/base-application/application-config-all.js';
 import { getDefaultJDLApplicationConfig } from '../command/jdl.js';
-import type { Entity } from '../types/base/entity.js';
+import type { Entity } from '../jhipster/types/entity.js';
 import { buildJHipster, createProgram } from '../../cli/program.mjs';
 import type { CliCommand } from '../../cli/types.js';
 import type BaseApplicationGenerator from '../../generators/base-application/generator.js';
@@ -28,7 +28,7 @@ import type { PRIORITY_NAMES as APPLICATION_PRIORITY_NAMES } from '../../generat
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
 import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY } from '../../generators/base-application/support/constants.js';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../generators/base-simple-application/support/constants.js';
-import type { AllOptions, ApplicationAll } from '../../generators/base-application/types-all.js';
+import type { AllOptions, ApplicationAll } from '../../generators/base-application/application-properties-all.js';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
 type GeneratorTestType = YeomanGenerator<AllOptions>;
@@ -69,7 +69,6 @@ type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = Om
    */
   composedMockedGenerators: string[];
 
-  // eslint-disable-next-line no-use-before-define
   createJHipster: (ns: string, options?: WithJHipsterGenerators) => JHipsterRunContext;
 
   application?: ApplicationAll;

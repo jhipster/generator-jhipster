@@ -1,5 +1,5 @@
 import { fieldTypes } from '../../jhipster/index.js';
-import type { Entity } from '../../types/base/entity.js';
+import type { Entity } from '../../jhipster/types/entity.js';
 
 const {
   CommonDBTypes: { UUID },

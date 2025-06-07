@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ApplicationAll } from '../../base-application/types-all.js';
+import type { ApplicationAll } from '../../base-application/application-properties-all.js';
 import type BaseGenerator from '../../base-core/index.js';
 
 type UpdateLanguagesApplication = Pick<

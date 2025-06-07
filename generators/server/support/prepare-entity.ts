@@ -23,7 +23,7 @@ import { databaseTypes, searchEngineTypes } from '../../../lib/jhipster/index.js
 import { isReservedTableName } from '../../../lib/jhipster/reserved-keywords.js';
 import { mutateData, normalizePathEnd } from '../../../lib/utils/index.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
-import type { ApplicationAll } from '../../base-application/types-all.js';
+import type { ApplicationAll } from '../../base-application/application-properties-all.js';
 import { hibernateSnakeCase } from './string.js';
 import { getDatabaseTypeData } from './database.js';
 

@@ -22,7 +22,7 @@ import { snakeCase, upperFirst } from 'lodash-es';
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../lib/jhipster/index.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 import { applyDerivedProperty, mutateData } from '../../../lib/utils/index.js';
-import type { Field } from '../../../lib/types/application/field.js';
+import type { Field } from '../../base-application/field-all.js';
 import { getUXConstraintName } from './database.js';
 import { getJavaValueGeneratorForType } from './templates/field-values.js';
 

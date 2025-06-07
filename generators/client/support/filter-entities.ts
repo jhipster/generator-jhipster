@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Field } from '../../../lib/types/application/field.js';
-import type { Relationship } from '../../../lib/types/application/relationship.js';
+import type { Field } from '../../base-application/field-all.js';
+import type { Relationship } from '../../base-application/relationship-all.js';
 import type { Entity } from '../../base-application/index.js';
 
 export const isClientField = (field: Field) => !field.skipClient;
