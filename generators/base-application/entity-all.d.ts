@@ -22,6 +22,7 @@ import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
 import type { ServerEntity } from '../server/types.js';
 import type { Field as BaseField } from '../../lib/jhipster/types/field.js';
 import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.js';
+import type { Entity as JavascriptEntity } from '../javascript/entity.d.ts';
 import type { FieldType } from './internal/types/field-types.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
 import type { Field } from './field-all.js';
@@ -43,12 +44,13 @@ export type PrimaryKey<F extends BaseField = Field> = {
 
 export interface Entity<F extends BaseField = Field, R extends BaseRelationship = never>
   extends Omit<Required<BaseEntity<F>>, 'relationships'>,
+    JavascriptEntity,
     ServerEntity {
   changelogDateForRecent: any;
   /** @experimental */
   auditableEntity?: boolean;
-  relationships: (IsNever<R> extends true ? Relationship : R)[];
-  otherRelationships: (IsNever<R> extends true ? Relationship : R)[];
+  relationships: (IsNever<R> extends true ? Relationship<Entity<F, never>> : R)[];
+  otherRelationships: (IsNever<R> extends true ? Relationship<Entity<F, never>> : R)[];
 
   primaryKey?: PrimaryKey<F>;
 
@@ -87,31 +89,14 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   entityClassHumanized: string;
   entityClassPluralHumanized: string;
 
-  entityFileName: string;
-  entityFolderName: string;
-  entityModelFileName: string;
-  entityParentPathAddition: string;
-  entityPluralFileName: string;
-  entityServiceFileName: string;
-
-  /** Generate only the model at client side for relationships. */
-  entityClientModelOnly?: boolean;
-  entityAngularName: string;
-  entityAngularNamePlural: string;
-  entityReactName: string;
-
   entityApiUrl: string;
-  entityStateName: string;
-  entityUrl: string;
+  entityApi: string;
 
   entityTranslationKey: string;
   entityTranslationKeyMenu: string;
 
   i18nKeyPrefix: string;
   i18nAlertHeaderPrefix: string;
-
-  entityApi: string;
-  entityPage: string;
 
   anyFieldIsBigDecimal: boolean;
   /**
@@ -149,10 +134,6 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   anyRelationshipIsRequired: boolean;
   hasRelationshipWithBuiltInUser: boolean;
 
-  paginationPagination: boolean;
-  paginationInfiniteScroll: boolean;
-  paginationNo: boolean;
-
   serviceClass: boolean;
   serviceImpl: boolean;
   serviceNo: boolean;
@@ -166,14 +147,6 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   generateFakeData?: (type?: any) => any;
   faker: FakerWithRandexp;
 
-  tsKeyType?: string;
-  tsSampleWithPartialData?: string;
-  tsSampleWithRequiredData?: string;
-  tsSampleWithFullData?: string;
-  tsSampleWithNewData?: string;
-  tsPrimaryKeySamples?: string[];
-
-  entityAngularJSSuffix?: string;
   saveUserSnapshot?: boolean;
 
   /** Properties from application required for entities published through gateways */
