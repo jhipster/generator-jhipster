@@ -31,7 +31,7 @@ export type Config = BaseConfig & {
   serviceDiscoveryType: string;
 };
 
-export type { Features } from '../base/types.js';
+export type { Features, Options } from '../base/types.js';
 
 export type { Options } from '../base/types.js';
 
