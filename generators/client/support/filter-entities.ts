@@ -19,10 +19,11 @@
 import type { Field } from '../../base-application/field-all.js';
 import type { Relationship } from '../../base-application/relationship-all.js';
 import type { Entity } from '../../base-application/index.js';
+import type { RelationshipWithEntity } from '../../base-application/types.js';
 
 export const isClientField = (field: Field) => !field.skipClient;
 
-export const isClientRelationship = (rel: Relationship) =>
+export const isClientRelationship = (rel: RelationshipWithEntity<Relationship, Entity>) =>
   !!(rel.skipClient ?? !(rel.persistableRelationship || rel.relationshipEagerLoad || (rel.otherEntity as any)?.jpaMetamodelFiltering));
 
 /**

@@ -96,18 +96,18 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get promptingWorkspaces() {
     return this.asPromptingWorkspacesTaskGroup({
-      async askForMonitoring({ workspaces }) {
-        if (workspaces.existingWorkspaces && !this.options.askAnswered) return;
+      async askForMonitoring({ control }) {
+        if (!this.shouldAskForPrompts({ control })) return;
 
         await this.askForMonitoring();
       },
-      async askForClustersMode({ workspaces, applications }) {
-        if (workspaces.existingWorkspaces && !this.options.askAnswered) return;
+      async askForClustersMode({ control, applications }) {
+        if (!this.shouldAskForPrompts({ control })) return;
 
         await this.askForClustersMode({ applications });
       },
-      async askForServiceDiscovery({ workspaces, applications }) {
-        if (workspaces.existingWorkspaces && !this.options.askAnswered) return;
+      async askForServiceDiscovery({ control, applications }) {
+        if (!this.shouldAskForPrompts({ control })) return;
 
         await this.askForServiceDiscovery({ applications });
       },

@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { CONTEXT_DATA_EXISTING_PROJECT } from '../base/support/constants.ts';
 import { CommandBaseWorkspacesGenerator as BaseWorkspacesGenerator } from '../base-workspaces/index.js';
 import type command from './command.js';
 
@@ -23,7 +24,9 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
   customWorkspacesConfig?: boolean;
 
   async beforeQueue() {
-    this.sharedWorkspaces.existingWorkspaces = this.sharedWorkspaces.existingWorkspaces ?? Boolean(this.jhipsterConfig.appsFolders);
+    this.getContextData(CONTEXT_DATA_EXISTING_PROJECT, {
+      factory: () => Boolean(this.jhipsterConfig.appsFolders),
+    });
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -32,8 +35,8 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
 
   get prompting() {
     return this.asPromptingTaskGroup({
-      async askForOptions() {
-        if (this.customWorkspacesConfig || (this.sharedWorkspaces.existingWorkspaces && !this.options.askAnswered)) return;
+      async askForOptions({ control }) {
+        if (this.customWorkspacesConfig || !this.shouldAskForPrompts({ control })) return;
 
         await this.askForWorkspacesConfig();
       },

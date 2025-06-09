@@ -28,21 +28,21 @@ import { execaCommandSync } from 'execa';
 import type { PackageJson } from 'type-fest';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
-import { CONTEXT_DATA_EXISTING_PROJECT } from '../base-application/support/constants.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import type { GenericTaskGroup } from '../base-core/types.js';
 import { packageNameToNamespace } from '../../lib/utils/index.js';
-import { formatDateForChangelog } from '../base/support/index.js';
+import {
+  CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE,
+  CONTEXT_DATA_EXISTING_PROJECT,
+  CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,
+  LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
+  formatDateForChangelog,
+} from '../base/support/index.js';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { TaskTypes as BaseTasks } from './tasks.js';
 import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.js';
-import {
-  CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE,
-  CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,
-  LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
-} from './support/constants.js';
 import type {
   Config as BaseConfig,
   Features as BaseFeatures,
