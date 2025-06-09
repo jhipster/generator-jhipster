@@ -20,20 +20,27 @@ import type { Storage } from 'yeoman-generator';
 import type { TaskParamWithSource } from '../base/tasks.js';
 import type { SimpleTaskTypes, TaskParamWithApplication } from '../base-simple-application/tasks.js';
 import type { Entity } from './entity-all.js';
-import type { Application as BaseApplication, Entity as BaseEntity, Source as BaseSource } from './types.js';
+import type {
+  Application as BaseApplicationApplication,
+  Entity as BaseApplicationEntity,
+  Source as BaseApplicationSource,
+} from './types.js';
 import type { ApplicationAll } from './application-properties-all.js';
 import type { SourceAll } from './source-all.d.ts';
 
 type GetRelationshipType<E> = E extends { relationships: (infer R)[] } ? R : never;
 type GetFieldType<E> = E extends { fields: (infer F)[] } ? F : never;
 
-type TaskParamWithEntities<E extends BaseEntity = Entity, A extends BaseApplication = ApplicationAll<E>> = TaskParamWithApplication<A> & {
+type TaskParamWithEntities<
+  E extends BaseApplicationEntity = Entity,
+  A extends BaseApplicationApplication = ApplicationAll<E>,
+> = TaskParamWithApplication<A> & {
   entities: E[];
 };
 
 type ConfiguringEachEntityTaskParam<
-  E extends BaseEntity = Entity,
-  A extends BaseApplication = ApplicationAll<E>,
+  E extends BaseApplicationEntity = Entity,
+  A extends BaseApplicationApplication = ApplicationAll<E>,
 > = TaskParamWithApplication<A> & {
   entityName: string;
   /** Entity storage */
@@ -53,8 +60,8 @@ type EntityToLoad<E> = {
 };
 
 type LoadingEntitiesTaskParam<
-  E extends BaseEntity = Entity,
-  A extends BaseApplication = ApplicationAll<E>,
+  E extends BaseApplicationEntity = Entity,
+  A extends BaseApplicationApplication = ApplicationAll<E>,
 > = TaskParamWithApplication<A> & {
   entitiesToLoad: EntityToLoad<E>[];
 };
@@ -66,36 +73,36 @@ type EntityTaskParam<E> = {
 };
 
 type PreparingEachEntityTaskParam<
-  E extends BaseEntity = Entity,
-  A extends BaseApplication = ApplicationAll<E>,
+  E extends BaseApplicationEntity = Entity,
+  A extends BaseApplicationApplication = ApplicationAll<E>,
 > = TaskParamWithApplication<A> & EntityTaskParam<E>;
 
 type PreparingEachEntityFieldTaskParam<
-  E extends BaseEntity = Entity,
-  A extends BaseApplication = ApplicationAll<E>,
+  E extends BaseApplicationEntity = Entity,
+  A extends BaseApplicationApplication = ApplicationAll<E>,
 > = PreparingEachEntityTaskParam<E, A> & {
   field: GetFieldType<E>;
   fieldName: string;
 };
 
 type PreparingEachEntityRelationshipTaskParam<
-  E extends BaseEntity = Entity,
-  A extends BaseApplication = ApplicationAll<E>,
+  E extends BaseApplicationEntity = Entity,
+  A extends BaseApplicationApplication = ApplicationAll<E>,
 > = PreparingEachEntityTaskParam<E, A> & {
   relationship: GetRelationshipType<E>;
   relationshipName: string;
 };
 
 type PostWritingEntitiesTaskParam<
-  E extends BaseEntity = Entity,
-  A extends BaseApplication = ApplicationAll<E>,
-  S extends BaseSource = SourceAll,
+  E extends BaseApplicationEntity = Entity,
+  A extends BaseApplicationApplication = ApplicationAll<E>,
+  S extends BaseApplicationSource = SourceAll,
 > = TaskParamWithEntities<E, A> & TaskParamWithSource<S>;
 
 export type TaskTypes<
-  E extends BaseEntity = Entity,
-  A extends BaseApplication = ApplicationAll<E>,
-  S extends BaseSource = SourceAll,
+  E extends BaseApplicationEntity = Entity,
+  A extends BaseApplicationApplication = ApplicationAll<E>,
+  S extends BaseApplicationSource = SourceAll,
 > = SimpleTaskTypes<A, S> & {
   ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<E, A>;
   LoadingEntitiesTaskParam: LoadingEntitiesTaskParam<E, A>;
