@@ -1,5 +1,5 @@
 import type { SetFieldType, SetRequired } from 'type-fest';
-import type { Field } from '../../field-all.js';
+import type { FieldAll } from '../../field-all.js';
 import type { Field as BaseField } from '../../../../lib/jhipster/types/field.js';
 
 const blobFieldTypes = {
@@ -54,14 +54,16 @@ export const getBlobContentType = (fieldType: FieldBlobType) => {
   return undefined;
 };
 
-export const isFieldBlobType = (field: Field): field is SetFieldType<Field, 'fieldType', FieldBlobType> => isBlobType(field.fieldType);
+export const isFieldBlobType = (field: FieldAll): field is SetFieldType<FieldAll, 'fieldType', FieldBlobType> =>
+  isBlobType(field.fieldType);
 
-export const isFieldBinaryType = (field: Field): field is SetFieldType<Field, 'fieldType', FieldBinaryType> =>
+export const isFieldBinaryType = (field: FieldAll): field is SetFieldType<FieldAll, 'fieldType', FieldBinaryType> =>
   isBlobType(field.fieldType) || field.fieldType === 'byte[]';
 
-export const isFieldEnumType = (field: Field): field is SetRequired<Field, 'enumFileName' | 'enumValues'> => Boolean(field.fieldValues);
+export const isFieldEnumType = (field: FieldAll): field is SetRequired<FieldAll, 'enumFileName' | 'enumValues'> =>
+  Boolean(field.fieldValues);
 
-export const isFieldNotEnumType = (field: Field): field is SetFieldType<Field, 'fieldType', FieldType> => !field.fieldValues;
+export const isFieldNotEnumType = (field: FieldAll): field is SetFieldType<FieldAll, 'fieldType', FieldType> => !field.fieldValues;
 
 export const convertFieldBlobType = <const F extends BaseField = BaseField>(field: F): F => {
   // Convert fieldTypes to correct fieldTypes

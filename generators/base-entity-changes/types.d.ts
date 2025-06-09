@@ -1,5 +1,5 @@
 import type { ApplicationAll as BaseApplicationApplication } from '../base-application/application-properties-all.js';
-import type { Entity as BaseApplicationEntity } from '../base-application/entity-all.js';
+import type { EntityAll as BaseApplicationEntity } from '../base-application/entity-all.js';
 
 export type { Source } from '../base-application/types.js';
 

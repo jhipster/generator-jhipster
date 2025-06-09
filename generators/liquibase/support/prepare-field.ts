@@ -19,7 +19,7 @@
 
 import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.js';
 import { mutateData } from '../../../lib/utils/index.js';
-import type { Field } from '../../base-application/field-all.js';
+import type { FieldAll } from '../../base-application/field-all.js';
 import type { ApplicationAll } from '../../base-application/application-properties-all.js';
 
 const { MYSQL, MARIADB } = databaseTypes;
@@ -30,7 +30,7 @@ const { STRING, INTEGER, LONG, BIG_DECIMAL, FLOAT, DOUBLE, UUID, BOOLEAN, LOCAL_
 const { BYTES } = RelationalOnlyDBTypes;
 const { TEXT } = BlobTypes;
 
-function parseLiquibaseColumnType(field: Field) {
+function parseLiquibaseColumnType(field: FieldAll) {
   const fieldType = field.fieldType;
   if (fieldType === STRING || field.fieldIsEnum) {
     return `varchar(${field.fieldValidateRulesMaxlength || 255})`;
@@ -102,7 +102,7 @@ function parseLiquibaseColumnType(field: Field) {
   return undefined;
 }
 
-function parseLiquibaseLoadColumnType(application: ApplicationAll, field: Field): string {
+function parseLiquibaseLoadColumnType(application: ApplicationAll, field: FieldAll): string {
   const columnType = field.columnType!;
   // eslint-disable-next-line no-template-curly-in-string
   if (['integer', 'bigint', 'double', 'decimal(21,2)', '${floatType}'].includes(columnType)) {
@@ -151,7 +151,7 @@ function parseLiquibaseLoadColumnType(application: ApplicationAll, field: Field)
   return 'string';
 }
 
-export default function prepareField(application: ApplicationAll, field: Field): Field {
+export default function prepareField(application: ApplicationAll, field: FieldAll): FieldAll {
   mutateData(field, {
     __override__: false,
     columnType: data => parseLiquibaseColumnType(data),

@@ -29,7 +29,7 @@ import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import { applicationTypes, reservedKeywords } from '../../lib/jhipster/index.js';
 import { GENERATOR_ENTITIES } from '../generator-list.js';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.js';
-import type { Entity } from '../base-application/entity-all.js';
+import type { EntityAll } from '../base-application/entity-all.js';
 import prompts from './prompts.js';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
@@ -39,7 +39,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
   name!: string;
   application: any = {};
   entityStorage!: Storage;
-  entityConfig!: Entity;
+  entityConfig!: EntityAll;
   entityData!: { name: string; filename: string; configExisted: any; entityExisted: boolean; configurationFileExists: boolean };
 
   constructor(args, options, features) {
@@ -62,7 +62,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
       parseOptions() {
         const name = upperFirst(this.name).replace('.json', '');
         this.entityStorage = this.getEntityConfig(name, true)!;
-        this.entityConfig = this.entityStorage.createProxy() as Entity;
+        this.entityConfig = this.entityStorage.createProxy() as EntityAll;
 
         const configExisted = this.entityStorage.existed;
         const filename = path.join(JHIPSTER_CONFIG_DIR, `${name}.json`);

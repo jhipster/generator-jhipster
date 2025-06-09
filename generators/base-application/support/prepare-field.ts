@@ -22,8 +22,8 @@ import { getTypescriptType } from '../../client/support/index.js';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import type { Field } from '../field-all.js';
-import type { Entity } from '../entity-all.js';
+import type { FieldAll } from '../field-all.js';
+import type { EntityAll } from '../entity-all.js';
 import { fieldTypeValues, isFieldEnumType } from '../internal/types/field-types.ts';
 import type { FakerWithRandexp } from './faker.js';
 import { prepareProperty } from './prepare-property.js';
@@ -106,7 +106,7 @@ const fakeStringTemplateForFieldName = columnName => {
  */
 function generateFakeDataForField(
   this: CoreGenerator,
-  field: Field,
+  field: FieldAll,
   faker: FakerWithRandexp,
   changelogDate,
   type: 'csv' | 'cypress' | 'json-serializable' | 'ts' = 'csv',
@@ -291,7 +291,7 @@ export default function prepareField(entityWithConfig, field, generator) {
   return field;
 }
 
-function prepareCommonFieldForTemplates(entityWithConfig: Entity, field: Field, generator) {
+function prepareCommonFieldForTemplates(entityWithConfig: EntityAll, field: FieldAll, generator) {
   mutateData(field, {
     __override__: false,
     path: [field.fieldName],

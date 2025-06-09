@@ -1,7 +1,7 @@
 import type { Field as BaseApplicationField } from './types.js';
 import type { Property } from './property-all.js';
 
-export type Field = Property &
+export type FieldAll = Property &
   BaseApplicationField & {
     documentation?: string;
 

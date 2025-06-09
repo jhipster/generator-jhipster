@@ -3,7 +3,7 @@ import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/t
 import type { ClientApplication } from '../client/types.js';
 import type { SpringBootApplication } from '../server/types.js';
 import type { I18nApplication } from '../languages/types.js';
-import { Entity } from './entity-all.js';
+import { EntityAll } from './entity-all.js';
 import type { OptionWithDerivedProperties } from './internal/types/application-options.js';
 import type { Application as BaseApplication } from './types.js';
 
@@ -93,7 +93,7 @@ type QuirksApplication = {
   cypressBootstrapEntities?: boolean;
 };
 
-export type ApplicationAll<E = Entity> = BaseApplication &
+export type ApplicationAll<E = EntityAll> = BaseApplication &
   QuirksApplication &
   I18nApplication &
   AuthenticationProperties<E> &

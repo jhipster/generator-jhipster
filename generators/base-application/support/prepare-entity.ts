@@ -27,7 +27,7 @@ import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/
 import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
-import type { Entity } from '../entity-all.js';
+import type { EntityAll } from '../entity-all.js';
 import type { PrimaryKey } from '../types.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { ApplicationConfiguration } from '../application-config-all.js';
@@ -98,7 +98,7 @@ const BASE_TEMPLATE_DATA = {
   },
 };
 
-function _derivedProperties(entityWithConfig: Entity) {
+function _derivedProperties(entityWithConfig: EntityAll) {
   const pagination = entityWithConfig.pagination;
   const dto = entityWithConfig.dto;
   const service = entityWithConfig.service;
@@ -133,7 +133,7 @@ export const entityDefaultConfig = {
   },
 };
 
-export default function prepareEntity(entityWithConfig: Entity, generator, application: ApplicationAll) {
+export default function prepareEntity(entityWithConfig: EntityAll, generator, application: ApplicationAll) {
   const { applicationTypeMicroservice, microfrontend, dtoSuffix = '' } = application;
 
   const entityName = upperFirst(entityWithConfig.name);
@@ -484,7 +484,7 @@ function fieldToId(field) {
  * @param {Object} config - config object.
  * @returns {Object} the entity parameter for chaining.
  */
-export function loadRequiredConfigIntoEntity<E extends Partial<Entity>>(
+export function loadRequiredConfigIntoEntity<E extends Partial<EntityAll>>(
   this: BaseGenerator | void,
   entity: E,
   config: ApplicationConfiguration,
@@ -523,7 +523,7 @@ export function loadRequiredConfigIntoEntity<E extends Partial<Entity>>(
   return entity;
 }
 
-export function preparePostEntityCommonDerivedProperties(entity: Entity) {
+export function preparePostEntityCommonDerivedProperties(entity: EntityAll) {
   const { fields } = entity;
   const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 

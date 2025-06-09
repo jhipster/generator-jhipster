@@ -18,10 +18,10 @@
  */
 import { snakeCase, upperFirst } from 'lodash-es';
 import { mutateData } from '../../../lib/utils/index.js';
-import type { Field } from '../field-all.js';
-import type { Relationship } from '../relationship-all.js';
+import type { FieldAll } from '../field-all.js';
+import type { RelationshipAll } from '../relationship-all.js';
 
-export const prepareProperty = (property: Field | Relationship) => {
+export const prepareProperty = (property: FieldAll | RelationshipAll) => {
   mutateData(property, {
     __override__: false,
     propertyNameCapitalized: ({ propertyName }) => upperFirst(propertyName),

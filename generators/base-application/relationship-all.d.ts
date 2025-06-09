@@ -1,7 +1,7 @@
 import type { Relationship as BaseApplicationRelationship } from './types.d.ts';
 import type { Property } from './property-all.js';
 
-export interface Relationship extends BaseApplicationRelationship, Property {
+export interface RelationshipAll extends BaseApplicationRelationship, Property {
   skipClient?: boolean;
   skipServer?: boolean;
   /**

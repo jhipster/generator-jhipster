@@ -20,14 +20,14 @@ import type { WriteFileSection } from '../../base-core/api.js';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../types.js';
 
 import type { ApplicationAll } from '../application-properties-all.js';
-import type { Entity } from '../entity-all.js';
+import type { EntityAll } from '../entity-all.js';
 
-export function asWriteFilesSection<Data = ApplicationAll<Entity>>(section: WriteFileSection<Data>) {
+export function asWriteFilesSection<Data = ApplicationAll<EntityAll>>(section: WriteFileSection<Data>) {
   return section;
 }
 
 export function asPromptingTask<
-  E extends BaseApplicationEntity = Entity,
+  E extends BaseApplicationEntity = EntityAll,
   A extends BaseApplicationApplication = ApplicationAll<E>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['PromptingTaskParam']) => void) {
@@ -35,7 +35,7 @@ export function asPromptingTask<
 }
 
 export function asPostPreparingEachEntityTask<
-  E extends BaseApplicationEntity = Entity,
+  E extends BaseApplicationEntity = EntityAll,
   A extends BaseApplicationApplication = ApplicationAll<E>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['PostPreparingEachEntityTaskParam']) => void) {
@@ -43,7 +43,7 @@ export function asPostPreparingEachEntityTask<
 }
 
 export function asWritingTask<
-  E extends BaseApplicationEntity = Entity,
+  E extends BaseApplicationEntity = EntityAll,
   A extends BaseApplicationApplication = ApplicationAll<E>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['WritingTaskParam']) => void) {
@@ -51,7 +51,7 @@ export function asWritingTask<
 }
 
 export function asWritingEntitiesTask<
-  E extends BaseApplicationEntity = Entity,
+  E extends BaseApplicationEntity = EntityAll,
   A extends BaseApplicationApplication = ApplicationAll<E>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['WritingEntitiesTaskParam']) => void) {
@@ -59,7 +59,7 @@ export function asWritingEntitiesTask<
 }
 
 export function asPostWritingTask<
-  E extends BaseApplicationEntity = Entity,
+  E extends BaseApplicationEntity = EntityAll,
   A extends BaseApplicationApplication = ApplicationAll<E>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['PostWritingTaskParam']) => void) {
@@ -67,7 +67,7 @@ export function asPostWritingTask<
 }
 
 export function asPostWritingEntitiesTask<
-  E extends BaseApplicationEntity = Entity,
+  E extends BaseApplicationEntity = EntityAll,
   A extends BaseApplicationApplication = ApplicationAll<E>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['PostWritingEntitiesTaskParam']) => void) {

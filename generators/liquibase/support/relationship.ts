@@ -18,7 +18,7 @@
  */
 import { getFKConstraintName } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/index.js';
-import type { Relationship } from '../../base-application/relationship-all.js';
+import type { RelationshipAll } from '../../base-application/relationship-all.js';
 
 function relationshipBaseDataEquals(relationshipA: any, relationshipB: any) {
   return (
@@ -37,7 +37,7 @@ function relationshipBaseDataEquals(relationshipA: any, relationshipB: any) {
  * @param relationshipB
  * @returns
  */
-export function relationshipEquals(relationshipA: Relationship, relationshipB: Relationship) {
+export function relationshipEquals(relationshipA: RelationshipAll, relationshipB: RelationshipAll) {
   return (
     relationshipBaseDataEquals(relationshipA, relationshipB) &&
     // relevant options the very same
@@ -52,7 +52,7 @@ export function relationshipEquals(relationshipA: Relationship, relationshipB: R
  * @param relationshipB
  * @returns
  */
-export function relationshipNeedsForeignKeyRecreationOnly(relationshipA: Relationship, relationshipB: Relationship) {
+export function relationshipNeedsForeignKeyRecreationOnly(relationshipA: RelationshipAll, relationshipB: RelationshipAll) {
   return (
     relationshipBaseDataEquals(relationshipA, relationshipB) &&
     (relationshipA.options?.onDelete !== relationshipB.options?.onDelete ||

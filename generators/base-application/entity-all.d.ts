@@ -24,10 +24,10 @@ import type {
   Field as BaseApplicationField,
   Relationship as BaseApplicationRelationship,
 } from './types.js';
-import type { Field } from './field-all.js';
-import type { Relationship } from './relationship-all.js';
+import type { FieldAll } from './field-all.js';
+import type { RelationshipAll } from './relationship-all.js';
 
-export interface Entity<F extends BaseApplicationField = Field, R extends BaseApplicationRelationship = Relationship>
+export interface EntityAll<F extends BaseApplicationField = FieldAll, R extends BaseApplicationRelationship = RelationshipAll>
   extends BaseApplicationEntity<F, R>,
     JavascriptEntity<F, R>,
     ServerEntity {
@@ -115,7 +115,7 @@ export interface Entity<F extends BaseApplicationField = Field, R extends BaseAp
   microfrontend?: boolean;
 }
 
-export interface UserEntity extends Entity {
+export interface UserEntity extends EntityAll {
   hasImageField?: boolean;
   adminUserDto?: string;
 }

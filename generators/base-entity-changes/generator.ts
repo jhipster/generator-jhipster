@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { existsSync, readFileSync } from 'fs';
-import type { Field } from '../base-application/field-all.js';
+import type { FieldAll } from '../base-application/field-all.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { PRIORITY_NAMES } from '../base-application/priorities.js';
 import { loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.js';
@@ -245,11 +245,11 @@ export default abstract class BaseEntityChangesGenerator<
     });
   }
 
-  private hasAnyDefaultValue(field: Field): boolean {
+  private hasAnyDefaultValue(field: FieldAll): boolean {
     return field.defaultValue !== undefined || field.defaultValueComputed !== undefined;
   }
 
-  private doDefaultValuesDiffer(field1: Field, field2: Field): boolean {
+  private doDefaultValuesDiffer(field1: FieldAll, field2: FieldAll): boolean {
     return field1.defaultValue !== field2.defaultValue || field1.defaultValueComputed !== field2.defaultValueComputed;
   }
 }
