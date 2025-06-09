@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { existsSync, readFileSync } from 'fs';
-import type { Field } from '../base-application/index.js';
+import type { Field } from '../base-application/field-all.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { PRIORITY_NAMES } from '../base-application/priorities.js';
 import { loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.js';

@@ -18,7 +18,7 @@
  */
 import type { Field } from '../../base-application/field-all.js';
 import type { Relationship } from '../../base-application/relationship-all.js';
-import type { Entity } from '../../base-application/index.js';
+import type { Entity } from '../../base-application/entity-all.js';
 import type { RelationshipWithEntity } from '../../base-application/types.js';
 
 export const isClientField = (field: Field) => !field.skipClient;
