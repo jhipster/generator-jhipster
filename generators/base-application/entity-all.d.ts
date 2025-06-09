@@ -17,18 +17,19 @@
  * limitations under the License.
  */
 
-import type { IsNever } from 'type-fest';
-import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
 import type { ServerEntity } from '../server/types.js';
-import type { Field as BaseField } from '../../lib/jhipster/types/field.js';
-import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.js';
 import type { Entity as JavascriptEntity } from '../javascript/entity.d.ts';
+import type {
+  Entity as BaseApplicationEntity,
+  Field as BaseApplicationField,
+  Relationship as BaseApplicationRelationship,
+} from './types.js';
 import type { FieldType } from './internal/types/field-types.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
 import type { Field } from './field-all.js';
 import type { Relationship } from './relationship-all.js';
 
-export type PrimaryKey<F extends BaseField = Field> = {
+export type PrimaryKey<F extends BaseApplicationField = Field> = {
   name: string;
   fields: F[];
   derivedFields: F[];
@@ -42,15 +43,13 @@ export type PrimaryKey<F extends BaseField = Field> = {
   javaSampleValues?: string[];
 };
 
-export interface Entity<F extends BaseField = Field, R extends BaseRelationship = never>
-  extends Omit<Required<BaseEntity<F>>, 'relationships'>,
+export interface Entity<F extends BaseApplicationField = Field, R extends BaseApplicationRelationship = Relationship>
+  extends BaseApplicationEntity<F, R>,
     JavascriptEntity,
     ServerEntity {
   changelogDateForRecent: any;
   /** @experimental */
   auditableEntity?: boolean;
-  relationships: (IsNever<R> extends true ? Relationship<Entity<F, never>> : R)[];
-  otherRelationships: (IsNever<R> extends true ? Relationship<Entity<F, never>> : R)[];
 
   primaryKey?: PrimaryKey<F>;
 

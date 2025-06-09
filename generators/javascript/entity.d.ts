@@ -28,4 +28,4 @@ export type Entity = {
   tsPrimaryKeySamples?: string[];
 
   entityAngularJSSuffix?: string;
-}
+};
