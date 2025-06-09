@@ -19,7 +19,6 @@
 import type { Storage } from 'yeoman-generator';
 import type { TaskParamWithSource } from '../base/tasks.js';
 import type { SimpleTaskTypes, TaskParamWithApplication } from '../base-simple-application/tasks.js';
-import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.d.ts';
 import type { Entity } from './entity-all.js';
 import type { Application as BaseApplication, Source as BaseSource } from './types.js';
 import type { ApplicationAll } from './application-properties-all.js';
