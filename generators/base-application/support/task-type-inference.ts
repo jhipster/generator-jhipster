@@ -17,8 +17,7 @@
 import type { TaskTypes } from '../tasks.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { WriteFileSection } from '../../base-core/api.js';
-import type { Entity as BaseEntity } from '../../../lib/jhipster/types/entity.d.ts';
-import type { Application as BaseApplication } from '../types.js';
+import type { Application as BaseApplication, Entity as BaseEntity } from '../types.js';
 
 import type { ApplicationAll } from '../application-properties-all.js';
 import type { Entity } from '../entity-all.js';
