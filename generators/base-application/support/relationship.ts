@@ -22,6 +22,7 @@ import { lowerFirst, upperFirst } from 'lodash-es';
 import type { ValidationResult } from '../../base-core/index.js';
 import type { Entity } from '../entity-all.js';
 import type { Relationship } from '../relationship-all.js';
+import type { RelationshipWithEntity } from '../types.js';
 import { findEntityInEntities } from './entity.js';
 import { stringifyApplicationData } from './debug.js';
 
@@ -86,7 +87,7 @@ export const loadEntitiesOtherSide = (entities: Entity[], { application }: { app
       relationship.otherEntity = otherEntity;
       const otherRelationship = findOtherRelationshipInRelationships(entity.name, relationship, otherEntity.relationships ?? []);
       if (otherRelationship) {
-        relationship.otherRelationship = otherRelationship;
+        relationship.otherRelationship = otherRelationship as any;
         otherRelationship.otherEntityRelationshipName = otherRelationship.otherEntityRelationshipName ?? relationship.relationshipName;
         relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? otherRelationship.relationshipName;
         if (
@@ -112,7 +113,11 @@ export const loadEntitiesOtherSide = (entities: Entity[], { application }: { app
   return result;
 };
 
-export const addOtherRelationship = (entity: Entity, otherEntity: Entity, relationship: Relationship): Relationship => {
+export const addOtherRelationship = (
+  entity: Entity,
+  otherEntity: Entity,
+  relationship: Relationship,
+): RelationshipWithEntity<Relationship, Entity> => {
   relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? lowerFirst(entity.name);
   const otherRelationship = {
     otherEntityName: lowerFirst(entity.name),

@@ -1,22 +1,7 @@
-import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
-import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.js';
-import type { DerivedPropertiesOnlyOf } from '../../lib/command/types.js';
-import type { Entity } from './entity-all.js';
+import type { Relationship as BaseApplicationRelationship } from './types.d.ts';
 import type { Property } from './property-all.js';
 
-type RelationshipProperties = DerivedPropertiesOnlyOf<
-  'relationship',
-  'LeftSide' | 'RightSide' | 'ManyToOne' | 'OneToMany' | 'OneToOne' | 'ManyToMany'
->;
-
-export interface Relationship<E extends BaseEntity = Entity> extends BaseRelationship, Property, RelationshipProperties {
-  propertyName: string;
-  relationshipNameCapitalized: string;
-
-  otherEntity: E;
-  otherRelationship: Relationship<Omit<Entity, 'relationships'>>;
-
-  collection: boolean;
+export interface Relationship extends BaseApplicationRelationship, Property {
   skipClient?: boolean;
   skipServer?: boolean;
   /**
