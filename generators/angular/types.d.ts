@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { EntityAll as EntityAll } from '../base-application/entity-all.js';
-import type { FieldAll as FieldAll } from '../base-application/field-all.js';
-import type { RelationshipAll as RelationshipAll } from '../base-application/relationship-all.js';
+import type { EntityAll } from '../base-application/entity-all.js';
+import type { FieldAll } from '../base-application/field-all.js';
+import type { RelationshipAll } from '../base-application/relationship-all.js';
 import type { ApplicationAll } from '../base-application/application-properties-all.js';
 import type { Field as BaseApplicationField, Relationship as BaseApplicationRelationship } from '../base-application/types.js';
 
