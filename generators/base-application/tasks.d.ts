@@ -19,6 +19,7 @@
 import type { Storage } from 'yeoman-generator';
 import type { TaskParamWithSource } from '../base/tasks.js';
 import type { SimpleTaskTypes, TaskParamWithApplication } from '../base-simple-application/tasks.js';
+import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.d.ts';
 import type { Entity } from './entity-all.js';
 import type { Application as BaseApplication, Source as BaseSource } from './types.js';
 import type { ApplicationAll } from './application-properties-all.js';
@@ -32,7 +33,7 @@ type TaskParamWithEntities<E extends BaseEntity = Entity, A extends BaseApplicat
 };
 
 type ConfiguringEachEntityTaskParam<
-  E extends Entity = Entity,
+  E extends BaseEntity = Entity,
   A extends BaseApplication = ApplicationAll<E>,
 > = TaskParamWithApplication<A> & {
   entityName: string;
@@ -52,7 +53,10 @@ type EntityToLoad<E> = {
   entityBootstrap: E;
 };
 
-type LoadingEntitiesTaskParam<E extends Entity = Entity, A extends BaseApplication = ApplicationAll<E>> = TaskParamWithApplication<A> & {
+type LoadingEntitiesTaskParam<
+  E extends BaseEntity = Entity,
+  A extends BaseApplication = ApplicationAll<E>,
+> = TaskParamWithApplication<A> & {
   entitiesToLoad: EntityToLoad<E>[];
 };
 
@@ -62,11 +66,13 @@ type EntityTaskParam<E> = {
   description: string;
 };
 
-type PreparingEachEntityTaskParam<E extends Entity = Entity, A extends BaseApplication = ApplicationAll<E>> = TaskParamWithApplication<A> &
-  EntityTaskParam<E>;
+type PreparingEachEntityTaskParam<
+  E extends BaseEntity = Entity,
+  A extends BaseApplication = ApplicationAll<E>,
+> = TaskParamWithApplication<A> & EntityTaskParam<E>;
 
 type PreparingEachEntityFieldTaskParam<
-  E extends Entity = Entity,
+  E extends BaseEntity = Entity,
   A extends BaseApplication = ApplicationAll<E>,
 > = PreparingEachEntityTaskParam<E, A> & {
   field: GetFieldType<E>;
@@ -74,7 +80,7 @@ type PreparingEachEntityFieldTaskParam<
 };
 
 type PreparingEachEntityRelationshipTaskParam<
-  E extends Entity = Entity,
+  E extends BaseEntity = Entity,
   A extends BaseApplication = ApplicationAll<E>,
 > = PreparingEachEntityTaskParam<E, A> & {
   relationship: GetRelationshipType<E>;
@@ -82,13 +88,13 @@ type PreparingEachEntityRelationshipTaskParam<
 };
 
 type PostWritingEntitiesTaskParam<
-  E extends Entity = Entity,
+  E extends BaseEntity = Entity,
   A extends BaseApplication = ApplicationAll<E>,
   S extends BaseSource = SourceAll,
 > = TaskParamWithEntities<E, A> & TaskParamWithSource<S>;
 
 export type TaskTypes<
-  E extends Entity = Entity,
+  E extends BaseEntity = Entity,
   A extends BaseApplication = ApplicationAll<E>,
   S extends BaseSource = SourceAll,
 > = SimpleTaskTypes<A, S> & {
