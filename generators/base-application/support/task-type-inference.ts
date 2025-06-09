@@ -26,7 +26,7 @@ export function asWriteFilesSection<Data = ApplicationAll<Entity>>(section: Writ
 
 export function asPromptingTask<
   E extends Entity = Entity,
-  A extends ApplicationAll<E> = ApplicationAll<E>,
+  A extends BaseApplication<E> = ApplicationAll<E>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['PromptingTaskParam']) => void) {
   return task;
