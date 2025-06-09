@@ -105,39 +105,6 @@ export type ApplicationAll<E = Entity> = BaseApplication &
   ExportApplicationPropertiesFromCommand<typeof import('../project-name/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../spring-boot/command.ts').default> &
   import('../docker/types.js').DockerApplicationType &
-  ApplicationProperties & {
-    clientRootDir: string;
-    clientSrcDir: string;
-    clientTestDir?: string;
-    clientDistDir?: string;
-    devServerPort: number;
-    pages: string[];
-
-    serverPort: number;
-    backendType?: string;
-    backendTypeJavaAny?: boolean;
-    backendTypeSpringBoot?: boolean;
-    temporaryDir?: string;
-
-    hipsterName?: string;
-    hipsterProductName?: string;
-    hipsterHomePageProductName?: string;
-    hipsterStackOverflowProductName?: string;
-    hipsterBugTrackerProductName?: string;
-    hipsterChatProductName?: string;
-    hipsterTwitterUsername?: string;
-    hipsterDocumentationLink?: string;
-    hipsterTwitterLink?: string;
-    hipsterProjectLink?: string;
-    hipsterStackoverflowLink?: string;
-    hipsterBugTrackerLink?: string;
-    hipsterChatLink?: string;
-
-    prettierFolders?: string;
-    prettierExtensions?: string;
-
-    loginRegex?: string;
-    jsLoginRegex?: string;
-  };
+  ApplicationProperties;
 
 export { Options as AllOptions, Config as AllConfig } from './types.js';

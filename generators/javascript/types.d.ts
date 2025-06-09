@@ -3,7 +3,6 @@ import type { Merge, PackageJson, Simplify } from 'type-fest';
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
 import type JavascriptBootstrapCommand from './generators/bootstrap/command.js';
 
-type JavascriptBootstrapProperties = ExportApplicationPropertiesFromCommand<typeof JavascriptBootstrapCommand>;
 type DependencyValue = string | undefined | null;
 
 export type JavaScriptSourceType = {
@@ -21,7 +20,7 @@ export type JavaScriptSourceType = {
   ): void;
 };
 
-export type JavaScriptApplication = JavascriptBootstrapProperties &
+export type JavaScriptApplication = ExportApplicationPropertiesFromCommand<typeof JavascriptBootstrapCommand> &
   ExportApplicationPropertiesFromCommand<typeof import('./generators/eslint/command.js').default> &
   ExportApplicationPropertiesFromCommand<typeof import('./generators/prettier/command.js').default> & {
     packageJsonNodeEngine?: boolean | string;

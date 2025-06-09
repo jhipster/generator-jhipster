@@ -35,11 +35,6 @@ export type Field = Property &
 
     // Temporary fields for Faker
     uniqueValue?: any[];
-    generateFakeDataFromPattern?: () => string | undefined;
-    /** @deprecated */
-    createRandexp: () => any;
-
-    generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts') => any;
 
     // Java specific
     propertyJavaBeanName?: string;

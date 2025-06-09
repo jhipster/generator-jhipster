@@ -39,7 +39,7 @@ import {
   isTranslatedAngularFile,
   translateAngularFilesTransform,
 } from './support/index.js';
-import type { AngularApplication, AngularEntity } from './types.js';
+import type { Application as AngularApplication, Entity as AngularEntity } from './types.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 

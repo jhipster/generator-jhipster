@@ -24,51 +24,17 @@ import type {
   Field as BaseApplicationField,
   Relationship as BaseApplicationRelationship,
 } from './types.js';
-import type { FieldType } from './internal/types/field-types.ts';
-import type { FakerWithRandexp } from './support/faker.ts';
 import type { Field } from './field-all.js';
 import type { Relationship } from './relationship-all.js';
 
-export type PrimaryKey<F extends BaseApplicationField = Field> = {
-  name: string;
-  fields: F[];
-  derivedFields: F[];
-  type: FieldType;
-  composite: boolean;
-  derived: boolean;
-  javaValueGenerator?: string;
-  javaBuildSpecification?: string;
-
-  tsSampleValues?: (string | number)[];
-  javaSampleValues?: string[];
-};
-
 export interface Entity<F extends BaseApplicationField = Field, R extends BaseApplicationRelationship = Relationship>
   extends BaseApplicationEntity<F, R>,
-    JavascriptEntity,
+    JavascriptEntity<F, R>,
     ServerEntity {
-  changelogDateForRecent: any;
-  /** @experimental */
-  auditableEntity?: boolean;
-
-  primaryKey?: PrimaryKey<F>;
-
-  builtIn?: boolean;
-  builtInUser?: boolean;
-  builtInUserManagement?: boolean;
-  builtInAuthority?: boolean;
-  adminEntity?: boolean;
-  entityAuthority?: string;
-  entityReadAuthority?: string;
-  hasCyclicRequiredRelationship?: boolean;
-
   entityJavadoc?: string;
 
-  entityNameCapitalized: string;
   entityClass: string;
-  entityInstance: string;
   entityTableName: string;
-  entityNamePlural: string;
   entityAbsoluteClass: string;
   entityAbsoluteFolder: string;
 
@@ -80,9 +46,7 @@ export interface Entity<F extends BaseApplicationField = Field, R extends BaseAp
   restClass: string;
   restInstance: string;
 
-  entityNamePluralizedAndSpinalCased: string;
   entityClassPlural: string;
-  entityInstancePlural: string;
 
   entityI18nVariant: string;
   entityClassHumanized: string;
@@ -141,10 +105,6 @@ export interface Entity<F extends BaseApplicationField = Field, R extends BaseAp
   dtoAny: boolean;
 
   propertyJavaFilteredType?: string;
-
-  resetFakerSeed(suffix?: string): void;
-  generateFakeData?: (type?: any) => any;
-  faker: FakerWithRandexp;
 
   saveUserSnapshot?: boolean;
 
