@@ -27,7 +27,7 @@ import type { SourceAll } from './source-all.d.ts';
 type GetRelationshipType<E> = E extends { relationships: (infer R)[] } ? R : never;
 type GetFieldType<E> = E extends { fields: (infer F)[] } ? F : never;
 
-type TaskParamWithEntities<E extends Entity = Entity, A extends BaseApplication = ApplicationAll<E>> = TaskParamWithApplication<A> & {
+type TaskParamWithEntities<E extends BaseEntity = Entity, A extends BaseApplication = ApplicationAll<E>> = TaskParamWithApplication<A> & {
   entities: E[];
 };
 
