@@ -33,7 +33,7 @@ export function asPromptingTask<
 }
 
 export function asPostPreparingEachEntityTask<
-  E extends Entity = Entity,
+  E extends BaseEntity = Entity,
   A extends BaseApplication<E> = ApplicationAll<E>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['PostPreparingEachEntityTaskParam']) => void) {
