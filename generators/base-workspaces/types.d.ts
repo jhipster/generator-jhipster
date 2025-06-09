@@ -33,7 +33,6 @@ export type Config = BaseConfig & {
 
 export type { Features, Options } from '../base/types.js';
 
-
 type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscoveryType', ['no', 'eureka', 'consul']>;
 
 type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'elk', 'prometheus']>;
