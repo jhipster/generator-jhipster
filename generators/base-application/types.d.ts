@@ -1,23 +1,21 @@
 import type {
-  Config as BaseConfig,
-  Features as BaseFeatures,
-  Options as BaseOptions,
-  Application as SimpleApplication,
+  Application as BaseSimpleApplicationApplication,
+  Config as BaseSimpleApplicationConfig,
+  Options as BaseSimpleApplicationOptions,
 } from '../base-simple-application/index.ts';
 import type { ApplicationOptions } from './application-options-all.js';
 
-export type Config = BaseConfig & {
+export type Config = BaseSimpleApplicationConfig & {
   baseName?: string;
   entities?: string[];
 };
 
-export type Options = BaseOptions & ApplicationOptions;
+export type Options = BaseSimpleApplicationOptions & ApplicationOptions;
 
-export type Features = BaseFeatures;
-
+export type { Features } from '../base-simple-application/types.js';
 export type { Source } from '../base-simple-application/types.js';
 
-export type Application = SimpleApplication & {
+export type Application = BaseSimpleApplicationApplication & {
   jhiPrefix: string;
   jhiPrefixCapitalized: string;
   jhiPrefixDashed: string;

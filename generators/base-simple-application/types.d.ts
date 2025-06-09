@@ -1,8 +1,11 @@
-import { type Config as BaseConfig, type Features as BaseFeatures, type Options as BaseOptions } from '../base/index.js';
+import { type Config as BaseConfig } from '../base/index.js';
 import type packageJson from '../../package.json';
 import type { WriteContext } from '../base-core/types.js';
 
 export type { Source } from '../base/types.js';
+export type { Options } from '../base/types.js';
+
+export type { Features } from '../base/types.js';
 
 export type Application = WriteContext & {
   jhipsterVersion: string;
@@ -31,7 +34,3 @@ export type Application = WriteContext & {
 export type Config = BaseConfig & {
   baseName?: string;
 };
-
-export type Options = BaseOptions;
-
-export type Features = BaseFeatures;

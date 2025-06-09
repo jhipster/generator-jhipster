@@ -28,11 +28,11 @@ import type { GenericTaskGroup } from '../base-core/types.js';
 import type { SimpleTaskTypes } from './tasks.js';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.js';
 import type {
-  Application as SimpleApplication,
-  Config as SimpleApplicationConfig,
-  Features as SimpleApplicationFeatures,
-  Options as SimpleApplicationOptions,
-  Source as SimpleApplicationSource,
+  Application as BaseSimpleApplicationApplication,
+  Config as BaseSimpleApplicationConfig,
+  Features as BaseSimpleApplicationFeatures,
+  Options as BaseSimpleApplicationOptions,
+  Source as BaseSimpleApplicationSource,
 } from './types.js';
 import { BOOTSTRAP_APPLICATION, CUSTOM_PRIORITIES } from './priorities.js';
 
@@ -63,11 +63,11 @@ const getFirstArgForPriority = (priorityName: string) => ({
  * This is the base class for a generator that generates entities.
  */
 export default class BaseSimpleApplicationGenerator<
-  Application extends SimpleApplication = SimpleApplication,
-  Config extends SimpleApplicationConfig = SimpleApplicationConfig,
-  Options extends SimpleApplicationOptions = SimpleApplicationOptions,
-  Source extends SimpleApplicationSource = SimpleApplicationSource,
-  Features extends SimpleApplicationFeatures = SimpleApplicationFeatures,
+  Application extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication,
+  Config extends BaseSimpleApplicationConfig = BaseSimpleApplicationConfig,
+  Options extends BaseSimpleApplicationOptions = BaseSimpleApplicationOptions,
+  Source extends BaseSimpleApplicationSource = BaseSimpleApplicationSource,
+  Features extends BaseSimpleApplicationFeatures = BaseSimpleApplicationFeatures,
   Tasks extends SimpleTaskTypes<Application, Source> = SimpleTaskTypes<Application, Source>,
 > extends BaseGenerator<Config, Options, Source, Features, Tasks> {
   static BOOTSTRAP_APPLICATION = BaseSimpleApplicationGenerator.asPriority(BOOTSTRAP_APPLICATION);

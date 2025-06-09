@@ -24,38 +24,50 @@ export function asWriteFilesSection<Data = ApplicationAll<Entity>>(section: Writ
   return section;
 }
 
-export function asPromptingTask<E = Entity, A = ApplicationAll<E>, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['PromptingTaskParam']) => void,
-) {
+export function asPromptingTask<
+  E extends Entity = Entity,
+  A extends ApplicationAll<E> = ApplicationAll<E>,
+  const G extends CoreGenerator = CoreGenerator,
+>(task: (this: G, params: TaskTypes<E, A>['PromptingTaskParam']) => void) {
   return task;
 }
 
-export function asPostPreparingEachEntityTask<E = Entity, A = ApplicationAll<E>, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['PostPreparingEachEntityTaskParam']) => void,
-) {
+export function asPostPreparingEachEntityTask<
+  E extends Entity = Entity,
+  A extends ApplicationAll<E> = ApplicationAll<E>,
+  const G extends CoreGenerator = CoreGenerator,
+>(task: (this: G, params: TaskTypes<E, A>['PostPreparingEachEntityTaskParam']) => void) {
   return task;
 }
 
-export function asWritingTask<E = Entity, A = ApplicationAll<E>, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['WritingTaskParam']) => void,
-) {
+export function asWritingTask<
+  E extends Entity = Entity,
+  A extends ApplicationAll<E> = ApplicationAll<E>,
+  const G extends CoreGenerator = CoreGenerator,
+>(task: (this: G, params: TaskTypes<E, A>['WritingTaskParam']) => void) {
   return task;
 }
 
-export function asWritingEntitiesTask<E = Entity, A = ApplicationAll<E>, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['WritingEntitiesTaskParam']) => void,
-) {
+export function asWritingEntitiesTask<
+  E extends Entity = Entity,
+  A extends ApplicationAll<E> = ApplicationAll<E>,
+  const G extends CoreGenerator = CoreGenerator,
+>(task: (this: G, params: TaskTypes<E, A>['WritingEntitiesTaskParam']) => void) {
   return task;
 }
 
-export function asPostWritingTask<E = Entity, A = ApplicationAll<E>, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['PostWritingTaskParam']) => void,
-) {
+export function asPostWritingTask<
+  E extends Entity = Entity,
+  A extends ApplicationAll<E> = ApplicationAll<E>,
+  const G extends CoreGenerator = CoreGenerator,
+>(task: (this: G, params: TaskTypes<E, A>['PostWritingTaskParam']) => void) {
   return task;
 }
 
-export function asPostWritingEntitiesTask<E = Entity, A = ApplicationAll<E>, const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: TaskTypes<E, A>['PostWritingEntitiesTaskParam']) => void,
-) {
+export function asPostWritingEntitiesTask<
+  E extends Entity = Entity,
+  A extends ApplicationAll<E> = ApplicationAll<E>,
+  const G extends CoreGenerator = CoreGenerator,
+>(task: (this: G, params: TaskTypes<E, A>['PostWritingEntitiesTaskParam']) => void) {
   return task;
 }
