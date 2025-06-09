@@ -3,22 +3,20 @@ import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
 import type { Field as BaseField } from '../../lib/jhipster/types/field.js';
 import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.js';
 import type {
-  Config as BaseConfig,
-  Features as BaseFeatures,
-  Options as BaseOptions,
-  Application as SimpleApplication,
+  Application as BaseSimpleApplicationApplication,
+  Config as BaseSimpleApplicationConfig,
+  Options as BaseSimpleApplicationOptions,
 } from '../base-simple-application/index.ts';
 import type { ApplicationOptions } from './application-options-all.js';
 
-export type Config = BaseConfig & {
+export type Config = BaseSimpleApplicationConfig & {
   baseName?: string;
   entities?: string[];
 };
 
-export type Options = BaseOptions & ApplicationOptions;
+export type Options = BaseSimpleApplicationOptions & ApplicationOptions;
 
-export type Features = BaseFeatures;
-
+export type { Features } from '../base-simple-application/types.js';
 export type { Source } from '../base-simple-application/types.js';
 
 type Property = {
@@ -62,7 +60,7 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   otherRelationships: R[];
 }
 
-export type Application = SimpleApplication & {
+export type Application = BaseSimpleApplicationApplication & {
   jhiPrefix: string;
   jhiPrefixCapitalized: string;
   jhiPrefixDashed: string;

@@ -18,18 +18,18 @@
  */
 import { existsSync, readFileSync } from 'fs';
 import type { Field } from '../base-application/index.js';
-import GeneratorBaseEntityChanges from '../base-application/index.js';
+import BaseApplicationGenerator from '../base-application/index.js';
 import { PRIORITY_NAMES } from '../base-application/priorities.js';
 import { loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.js';
 import { relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from '../liquibase/support/index.js';
 import { addEntitiesOtherRelationships } from '../server/support/index.js';
 import type { TaskTypes as ApplicationTaskTypes } from '../base-application/tasks.js';
-import type { Entity as ApplicationEntity } from '../base-application/entity-all.js';
 import type { TaskParamWithApplication } from '../base-simple-application/tasks.js';
-import type { ApplicationAll } from '../base-application/application-properties-all.js';
 import type {
   BaseChangelog,
+  Application as BaseEntityChangesApplication,
   Config as BaseEntityChangesConfig,
+  Entity as BaseEntityChangesEntity,
   Features as BaseEntityChangesFeatures,
   Options as BaseEntityChangesOptions,
   Source as BaseEntityChangesSource,
@@ -52,7 +52,11 @@ const baseChangelog: () => Omit<BaseChangelog, 'changelogDate' | 'entityName' | 
   changelogData: {},
 });
 
-type BaseEntityChangesTaskTypes<E, A, S extends BaseEntityChangesSource> = ApplicationTaskTypes<E, A, S> & {
+type BaseEntityChangesTaskTypes<
+  E extends BaseEntityChangesEntity,
+  A extends BaseEntityChangesApplication<E>,
+  S extends BaseEntityChangesSource,
+> = ApplicationTaskTypes<E, A, S> & {
   DefaultTaskParam: { entityChanges?: BaseChangelog[] };
   WritingEntitiesTaskParam: { entityChanges?: BaseChangelog[] };
   PostWritingEntitiesTaskParam: { entityChanges?: BaseChangelog[] };
@@ -62,14 +66,14 @@ type BaseEntityChangesTaskTypes<E, A, S extends BaseEntityChangesSource> = Appli
  * This is the base class for a generator for every generator.
  */
 export default abstract class BaseEntityChangesGenerator<
-  Entity extends ApplicationEntity = ApplicationEntity,
-  Application extends ApplicationAll<Entity> = ApplicationAll<Entity>,
+  Entity extends BaseEntityChangesEntity = BaseEntityChangesEntity,
+  Application extends BaseEntityChangesApplication<Entity> = BaseEntityChangesApplication<Entity>,
   Config extends BaseEntityChangesConfig = BaseEntityChangesConfig,
   Options extends BaseEntityChangesOptions = BaseEntityChangesOptions,
   Source extends BaseEntityChangesSource = BaseEntityChangesSource,
   Features extends BaseEntityChangesFeatures = BaseEntityChangesFeatures,
   Tasks extends BaseEntityChangesTaskTypes<Entity, Application, Source> = BaseEntityChangesTaskTypes<Entity, Application, Source>,
-> extends GeneratorBaseEntityChanges<Entity, Application, Config, Options, Source, Features, Tasks> {
+> extends BaseApplicationGenerator<Entity, Application, Config, Options, Source, Features, Tasks> {
   recreateInitialChangelog!: boolean;
   private entityChanges!: any[];
 

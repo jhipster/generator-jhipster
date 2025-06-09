@@ -18,7 +18,7 @@
  */
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
 import type { ApplicationAll } from '../base-application/application-properties-all.js';
-import type { Config as BaseConfig, Features as BaseFeatures, Options as BaseOptions } from '../base/index.js';
+import type { Config as BaseConfig } from '../base/index.js';
 
 export type { Source } from '../base/types.js';
 
@@ -31,9 +31,7 @@ export type Config = BaseConfig & {
   serviceDiscoveryType: string;
 };
 
-export type Features = BaseFeatures;
-
-export type Options = BaseOptions;
+export type { Features, Options } from '../base/types.js';
 
 type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscoveryType', ['no', 'eureka', 'consul']>;
 

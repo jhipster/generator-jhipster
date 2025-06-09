@@ -18,13 +18,14 @@
  */
 import type { Merge } from 'type-fest';
 import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource, TaskTypes } from '../base/tasks.js';
-import type { Source as BaseWorkspacesSource, Application as SimpleApplication } from '../base-simple-application/types.d.ts';
+import type { Application as BaseSimpleApplicationApplication } from '../base-simple-application/types.d.ts';
+import type { Source as BaseSource } from '../base/types.d.ts';
 import type { Workspaces } from './types.js';
 
 export type TaskParamWithApplications<
   D,
   W extends Workspaces = Workspaces,
-  A extends SimpleApplication = SimpleApplication,
+  A extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication,
 > = TaskParamWithControl & {
   applications: A[];
   deployment: D;
@@ -34,8 +35,8 @@ export type TaskParamWithApplications<
 export type Tasks<
   D = any,
   W extends Workspaces = Workspaces,
-  S extends BaseWorkspacesSource = BaseWorkspacesSource,
-  A extends SimpleApplication = SimpleApplication,
+  S extends BaseSource = BaseSource,
+  A extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication,
 > = Merge<
   BaseTaskTypes<S>,
   {
