@@ -42,7 +42,6 @@ type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'e
 export type WorkspacesApplication = ServiceDiscoveryApplication & MonitoringApplication & ApplicationAll & { clusteredDb?: boolean };
 
 export type Workspaces = {
-  existingWorkspaces: boolean;
   directoryPath: string;
 };
 

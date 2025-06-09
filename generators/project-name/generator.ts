@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { CommandBaseGenerator } from '../base/index.js';
-import { CONTEXT_DATA_EXISTING_PROJECT } from '../base-application/support/constants.js';
+import { CONTEXT_DATA_EXISTING_PROJECT } from '../base/support/constants.js';
 import { getDefaultAppName } from './support/index.js';
 
 import { validateProjectName } from './support/name-resolver.js';
