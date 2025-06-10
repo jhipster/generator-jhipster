@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { TaskTypes as BaseTasks } from '../../base/tasks.js';
 import type { TaskTypes } from '../tasks.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { WriteFileSection } from '../../base-core/api.js';
@@ -26,17 +27,15 @@ export function asWriteFilesSection<Data = ApplicationAll<EntityAll>>(section: W
   return section;
 }
 
-export function asPromptingTask<
-  E extends BaseApplicationEntity = EntityAll,
-  A extends BaseApplicationApplication = ApplicationAll<E>,
-  const G extends CoreGenerator = CoreGenerator,
->(task: (this: G, params: TaskTypes<E, A>['PromptingTaskParam']) => void) {
+export function asPromptingTask<const G extends CoreGenerator = CoreGenerator>(
+  task: (this: G, params: BaseTasks['PromptingTaskParam']) => void,
+) {
   return task;
 }
 
 export function asPostPreparingEachEntityTask<
   E extends BaseApplicationEntity = EntityAll,
-  A extends BaseApplicationApplication = ApplicationAll<E>,
+  A extends BaseApplicationApplication<E> = ApplicationAll<E & EntityAll>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['PostPreparingEachEntityTaskParam']) => void) {
   return task;
@@ -44,7 +43,7 @@ export function asPostPreparingEachEntityTask<
 
 export function asWritingTask<
   E extends BaseApplicationEntity = EntityAll,
-  A extends BaseApplicationApplication = ApplicationAll<E>,
+  A extends BaseApplicationApplication<E> = ApplicationAll<E & EntityAll>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['WritingTaskParam']) => void) {
   return task;
@@ -52,7 +51,7 @@ export function asWritingTask<
 
 export function asWritingEntitiesTask<
   E extends BaseApplicationEntity = EntityAll,
-  A extends BaseApplicationApplication = ApplicationAll<E>,
+  A extends BaseApplicationApplication<E> = ApplicationAll<E & EntityAll>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['WritingEntitiesTaskParam']) => void) {
   return task;
@@ -60,7 +59,7 @@ export function asWritingEntitiesTask<
 
 export function asPostWritingTask<
   E extends BaseApplicationEntity = EntityAll,
-  A extends BaseApplicationApplication = ApplicationAll<E>,
+  A extends BaseApplicationApplication<E> = ApplicationAll<E & EntityAll>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['PostWritingTaskParam']) => void) {
   return task;
@@ -68,7 +67,7 @@ export function asPostWritingTask<
 
 export function asPostWritingEntitiesTask<
   E extends BaseApplicationEntity = EntityAll,
-  A extends BaseApplicationApplication = ApplicationAll<E>,
+  A extends BaseApplicationApplication<E> = ApplicationAll<E & EntityAll>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['PostWritingEntitiesTaskParam']) => void) {
   return task;

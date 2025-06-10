@@ -132,7 +132,7 @@ const getFirstArgForPriority = (priorityName: string) => ({
  */
 export default class BaseApplicationGenerator<
   Entity extends BaseApplicationEntity = EntityAll,
-  Application extends BaseApplication = ApplicationAll<Entity>,
+  Application extends BaseApplication<Entity> = ApplicationAll<Entity & EntityAll>,
   Config extends BaseApplicationConfig = BaseApplicationConfig & ApplicationConfiguration,
   Options extends BaseApplicationOptions = BaseApplicationOptions,
   Source extends BaseApplicationSource = SourceAll,
@@ -479,10 +479,13 @@ export default class BaseApplicationGenerator<
    * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
-  #getEntitiesDataToConfigure(): ConfiguringEachEntityTaskParam[] {
+  #getEntitiesDataToConfigure(): ConfiguringEachEntityTaskParam<Entity, Application>[] {
     return this.getExistingEntityNames().map(entityName => {
       const entityStorage = this.getEntityConfig(entityName, true);
-      return { entityName, entityStorage, entityConfig: entityStorage!.createProxy() } as ConfiguringEachEntityTaskParam;
+      return { entityName, entityStorage, entityConfig: entityStorage!.createProxy() } as ConfiguringEachEntityTaskParam<
+        Entity,
+        Application
+      >;
     });
   }
 
@@ -493,7 +496,7 @@ export default class BaseApplicationGenerator<
    * @returns {string[]}
    */
   #getEntitiesDataToLoad(): EntityToLoad<any>[] {
-    const application = this.#application as ApplicationAll<Entity>;
+    const application = this.#application as ApplicationAll;
     const builtInEntities: string[] = [];
     if (application.generateBuiltInUserEntity) {
       // Reorder User entity to be the first one to be loaded
@@ -532,7 +535,7 @@ export default class BaseApplicationGenerator<
    * Get entities to prepare.
    * @returns {object[]}
    */
-  #getEntitiesDataToPrepare(): Pick<PreparingEachEntityTaskParam, 'entity' | 'entityName' | 'description'>[] {
+  #getEntitiesDataToPrepare(): Pick<PreparingEachEntityTaskParam<Entity, Application>, 'entity' | 'entityName' | 'description'>[] {
     return this.#entitiesForTasks;
   }
 
@@ -542,7 +545,7 @@ export default class BaseApplicationGenerator<
    * @returns {object[]}
    */
   #getEntitiesFieldsDataToPrepare(): Pick<
-    PreparingEachEntityFieldTaskParam,
+    PreparingEachEntityFieldTaskParam<Entity, Application>,
     'entity' | 'entityName' | 'field' | 'fieldName' | 'description'
   >[] {
     return this.#getEntitiesDataToPrepare()
@@ -558,7 +561,7 @@ export default class BaseApplicationGenerator<
           description: `${entityName}#${field.fieldName}`,
         }));
       })
-      .flat();
+      .flat() as any;
   }
 
   /**
@@ -567,7 +570,7 @@ export default class BaseApplicationGenerator<
    * @returns {object[]}
    */
   #getEntitiesRelationshipsDataToPrepare(): Pick<
-    PreparingEachEntityRelationshipTaskParam,
+    PreparingEachEntityRelationshipTaskParam<Entity, Application>,
     'entity' | 'entityName' | 'relationship' | 'relationshipName' | 'description'
   >[] {
     return this.#getEntitiesDataToPrepare()
@@ -583,7 +586,7 @@ export default class BaseApplicationGenerator<
           description: `${entityName}#${relationship.relationshipName}`,
         }));
       })
-      .flat();
+      .flat() as any;
   }
 
   /**

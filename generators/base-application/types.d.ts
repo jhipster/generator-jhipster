@@ -8,6 +8,7 @@ import type {
   Options as BaseSimpleApplicationOptions,
 } from '../base-simple-application/index.ts';
 import type { ApplicationOptions } from './application-options-all.js';
+import type { OptionWithDerivedProperties } from './internal/types/application-options.js';
 import type { FieldType } from './internal/types/field-types.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
 
@@ -133,65 +134,147 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   faker: FakerWithRandexp;
 }
 
-export type Application = BaseSimpleApplicationApplication & {
-  jhiPrefix: string;
-  jhiPrefixCapitalized: string;
-  jhiPrefixDashed: string;
-
-  javaNodeBuildPaths: string[];
-
-  clientRootDir: string;
-  clientSrcDir: string;
-  clientTestDir?: string;
-  clientDistDir?: string;
-
-  hipsterName?: string;
-  hipsterProductName?: string;
-  hipsterHomePageProductName?: string;
-  hipsterStackOverflowProductName?: string;
-  hipsterBugTrackerProductName?: string;
-  hipsterChatProductName?: string;
-  hipsterTwitterUsername?: string;
-  hipsterDocumentationLink?: string;
-  hipsterTwitterLink?: string;
-  hipsterProjectLink?: string;
-  hipsterStackoverflowLink?: string;
-  hipsterBugTrackerLink?: string;
-  hipsterChatLink?: string;
-
-  pages: string[];
-
-  devServerPort: number;
-  serverPort: number;
-  backendType?: string;
-  backendTypeJavaAny?: boolean;
-  backendTypeSpringBoot?: boolean;
-  temporaryDir?: string;
-
-  prettierFolders?: string;
-  prettierExtensions?: string;
-
-  loginRegex?: string;
-  jsLoginRegex?: string;
-
-  entitySuffix: string;
-  dtoSuffix: string;
-
-  skipCommitHook: boolean;
-  fakerSeed?: string;
-
-  /* @deprecated use nodePackageManager */
-  clientPackageManager: string;
-
-  skipClient?: boolean;
-  skipServer?: boolean;
-  monorepository?: boolean;
-
-  blueprints?: { name: string; version: string }[];
-  testFrameworks?: string[];
-
-  /**
-   * True if the application has at least one non-builtin entity.
-   */
-  hasNonBuiltInEntity?: boolean;
+/* ApplicationType Start */
+type MicroservicesArchitectureApplication = {
+  microfrontend: boolean;
+  gatewayServerPort: number;
 };
+
+type GatewayApplication = MicroservicesArchitectureApplication & {
+  microfrontends: string[];
+};
+
+/*
+Deterministic option causes types to be too complex
+type ApplicationType = DeterministicOptionWithDerivedProperties<
+  'applicationType',
+  ['monolith', 'gateway', 'microservice'],
+  [Record<string, never>, GatewayApplication, MicroservicesArchitectureApplication]
+>;
+*/
+type ApplicationProperties = OptionWithDerivedProperties<'applicationType', ['monolith', 'gateway', 'microservice']> &
+  GatewayApplication &
+  MicroservicesArchitectureApplication;
+
+/* ApplicationType End */
+
+/* AuthenticationType Start */
+/*
+Deterministic option causes types to be too complex
+type UserManagement =
+  | {
+      skipUserManagement: true;
+      generateUserManagement: false;
+      generateBuiltInUserEntity?: false;
+      generateBuiltInAuthorityEntity: false;
+    }
+  | {
+      skipUserManagement: false;
+      generateBuiltInUserEntity?: boolean;
+      generateUserManagement: true;
+      user: any;
+      userManagement: any;
+      generateBuiltInAuthorityEntity: boolean;
+      authority: any;
+    };
+    */
+type UserManagement<Entity> = {
+  skipUserManagement: boolean;
+  generateUserManagement: boolean;
+  generateBuiltInUserEntity?: boolean;
+  generateBuiltInAuthorityEntity: boolean;
+  user: Entity;
+  userManagement: Entity;
+  authority: Entity;
+};
+
+type JwtApplication = {
+  jwtSecretKey: string;
+};
+
+type Oauth2Application = {
+  syncUserWithIdp?: boolean;
+};
+
+type SessionApplication = {
+  rememberMeKey: string;
+};
+
+/*
+Deterministic option causes types to be too complex
+type AuthenticationType = DeterministicOptionWithDerivedProperties<
+  'authenticationType',
+  ['jwt', 'oauth2', 'session'],
+  [JwtApplication, Oauth2Application, SessionApplication]
+>;
+*/
+type AuthenticationProperties<Entity> = OptionWithDerivedProperties<'authenticationType', ['jwt', 'oauth2', 'session']> &
+  UserManagement<Entity> &
+  JwtApplication &
+  Oauth2Application &
+  SessionApplication;
+
+export type Application<E extends Entity> = BaseSimpleApplicationApplication &
+  ApplicationProperties &
+  AuthenticationProperties<E> & {
+    jhiPrefix: string;
+    jhiPrefixCapitalized: string;
+    jhiPrefixDashed: string;
+
+    javaNodeBuildPaths: string[];
+
+    clientRootDir: string;
+    clientSrcDir: string;
+    clientTestDir?: string;
+    clientDistDir?: string;
+
+    hipsterName?: string;
+    hipsterProductName?: string;
+    hipsterHomePageProductName?: string;
+    hipsterStackOverflowProductName?: string;
+    hipsterBugTrackerProductName?: string;
+    hipsterChatProductName?: string;
+    hipsterTwitterUsername?: string;
+    hipsterDocumentationLink?: string;
+    hipsterTwitterLink?: string;
+    hipsterProjectLink?: string;
+    hipsterStackoverflowLink?: string;
+    hipsterBugTrackerLink?: string;
+    hipsterChatLink?: string;
+
+    pages: string[];
+
+    devServerPort: number;
+    serverPort: number;
+    backendType?: string;
+    backendTypeJavaAny?: boolean;
+    backendTypeSpringBoot?: boolean;
+    temporaryDir?: string;
+
+    prettierFolders?: string;
+    prettierExtensions?: string;
+
+    loginRegex?: string;
+    jsLoginRegex?: string;
+
+    entitySuffix: string;
+    dtoSuffix: string;
+
+    skipCommitHook: boolean;
+    fakerSeed?: string;
+
+    /* @deprecated use nodePackageManager */
+    clientPackageManager: string;
+
+    skipClient?: boolean;
+    skipServer?: boolean;
+    monorepository?: boolean;
+
+    blueprints?: { name: string; version: string }[];
+    testFrameworks?: string[];
+
+    /**
+     * True if the application has at least one non-builtin entity.
+     */
+    hasNonBuiltInEntity?: boolean;
+  };

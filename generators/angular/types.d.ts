@@ -45,4 +45,4 @@ export type Application<E extends Entity> = {
   communicationSpringWebsocket?: boolean;
   generateUserManagement?: boolean;
   userManagement?: E;
-} & ClientApplication;
+} & ClientApplication<E>;

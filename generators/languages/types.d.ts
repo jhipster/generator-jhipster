@@ -28,7 +28,7 @@ export type LanguagesSource = {
   addEntityTranslationKey: (arg: { translationKey: string; translationValue: string; language: string }) => void;
 };
 
-export type I18nApplication = BaseApplicationApplication & {
+export type I18nApplication<E extends Entity<BaseApplicationField, BaseApplicationRelationship>> = BaseApplicationApplication<E> & {
   enableTranslation: boolean;
   enableI18nRTL: boolean;
   nativeLanguage: string;
@@ -39,7 +39,10 @@ export type I18nApplication = BaseApplicationApplication & {
 
 export { BaseApplicationField as Field, BaseApplicationRelationship as Relationship };
 
-export interface Entity<F extends BaseApplicationField, R extends BaseApplicationRelationship> extends BaseApplicationEntity<F, R> {
+export interface Entity<
+  F extends BaseApplicationField = BaseApplicationField,
+  R extends BaseApplicationRelationship = BaseApplicationRelationship,
+> extends BaseApplicationEntity<F, R> {
   entityTranslationKey: string;
   entityTranslationKeyMenu: string;
 

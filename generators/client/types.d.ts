@@ -1,14 +1,20 @@
 import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/needles.js';
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/index.js';
 import type { CypressApplication } from '../cypress/types.js';
-import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
-import type { Language } from '../languages/support/languages.ts';
 import type {
+  JavaScriptSourceType,
+  Application as JavascriptApplication,
   Entity as JavascriptEntity,
   Field as JavascriptField,
   Relationship as JavascriptRelationship,
-} from '../javascript/entity.d.ts';
-import type { Entity as LanguagesEntity, Field as LanguagesField, Relationship as LanguagesRelationship } from '../languages/index.js';
+} from '../javascript/types.js';
+import type { Language } from '../languages/support/languages.ts';
+import type {
+  Application as LanguageApplication,
+  Entity as LanguagesEntity,
+  Field as LanguagesField,
+  Relationship as LanguagesRelationship,
+} from '../languages/index.js';
 import type { GetWebappTranslationCallback } from './translation.js';
 import type Command from './command.ts';
 
@@ -22,8 +28,9 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
 type ApplicationClientProperties = ExportApplicationPropertiesFromCommand<typeof Command>;
 
-export type FrontendApplication = ApplicationClientProperties &
-  JavaScriptApplication &
+export type Application<E extends Entity> = ApplicationClientProperties &
+  LanguageApplication<E> &
+  JavascriptApplication<E> &
   CypressApplication & {
     webappLoginRegExp: string;
     clientWebappDir?: string;
@@ -37,11 +44,6 @@ export type FrontendApplication = ApplicationClientProperties &
     filterEntityPropertiesForClient?: <const E extends Entity>(entity: E) => E;
     getWebappTranslation?: GetWebappTranslationCallback;
   };
-
-/**
- * @deprecated in favor of frontend application.
- */
-export type ClientApplication = JavaScriptApplication & FrontendApplication;
 
 export type ClientResources = {
   /**
@@ -62,7 +64,7 @@ export type ClientSourceType = JavaScriptSourceType & {
   /**
    * Add entities to client.
    */
-  addEntitiesToClient: <const E extends Entity, const A extends FrontendApplication>(param: { application: A; entities: E[] }) => void;
+  addEntitiesToClient: <const E extends Entity, const A extends Application<E>>(param: { application: A; entities: E[] }) => void;
   /**
    * Add external resources to root file(index.html).
    */

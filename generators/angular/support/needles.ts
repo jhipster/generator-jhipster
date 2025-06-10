@@ -54,7 +54,7 @@ export function addRoute({
   });
 }
 
-export function addEntitiesRoute<const E extends ClientEntity, const A extends ClientApplication>({
+export function addEntitiesRoute<const E extends ClientEntity, const A extends ClientApplication<E>>({
   application,
   entities,
 }: {
@@ -132,7 +132,7 @@ export const addIconImport = ({ icon }: { icon: string }) => {
   });
 };
 
-export function addToEntitiesMenu<const E extends ClientEntity, const A extends ClientApplication>({
+export function addToEntitiesMenu<const E extends ClientEntity, const A extends ClientApplication<E>>({
   application,
   entities,
 }: {
