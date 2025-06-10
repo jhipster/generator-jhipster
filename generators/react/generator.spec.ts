@@ -164,7 +164,7 @@ describe(`generator - ${clientFramework}`, () => {
               entities: [
                 {
                   entityAngularName: 'entityName',
-                  entityPage: 'routerName',
+                  entityPage: 'entityPage',
                   entityInstance: 'entityInstance',
                   entityFolderName: 'entityFolderName',
                   entityFileName: 'entityFileName',
@@ -181,7 +181,7 @@ describe(`generator - ${clientFramework}`, () => {
       const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/entities/reducers.ts`;
 
       runResult.assertFileContent(indexModulePath, "import entityName from './entityFolderName';");
-      runResult.assertFileContent(indexModulePath, '<Route path="entityFileName/*" element={<entityName />} />');
+      runResult.assertFileContent(indexModulePath, '<Route path="/entityPage/*" element={<entityName />} />');
 
       runResult.assertFileContent(indexReducerPath, "import entityInstance from 'app/entities/entityFolderName/entityFileName.reducer';");
       runResult.assertFileContent(indexReducerPath, 'entityInstance,');
@@ -190,7 +190,7 @@ describe(`generator - ${clientFramework}`, () => {
     it('Assert entity is added to menu', () => {
       runResult.assertFileContent(
         `${CLIENT_MAIN_SRC_DIR}app/entities/menu.tsx`,
-        /<MenuItem icon="asterisk" to="\/routerName">\n( *)Router Name\n( *)<\/MenuItem>/,
+        /<MenuItem icon="asterisk" to="\/entityPage">\n( *)Router Name\n( *)<\/MenuItem>/,
       );
     });
   });
