@@ -41,8 +41,5 @@ export type Application<E extends Entity> = {
   angularLocaleId: string;
 
   // Common properties
-  authenticationTypeSession?: boolean;
   communicationSpringWebsocket?: boolean;
-  generateUserManagement?: boolean;
-  userManagement?: E;
 } & ClientApplication<E>;
