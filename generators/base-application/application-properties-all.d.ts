@@ -3,7 +3,7 @@ import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/t
 import type { ClientApplication } from '../client/types.js';
 import type { SpringBootApplication } from '../server/types.js';
 import type { I18nApplication } from '../languages/types.js';
-import { Entity } from './entity-all.js';
+import { EntityAll } from './entity-all.js';
 import type { OptionWithDerivedProperties } from './internal/types/application-options.js';
 import type { Application as BaseApplication } from './types.js';
 
@@ -93,7 +93,7 @@ type QuirksApplication = {
   cypressBootstrapEntities?: boolean;
 };
 
-export type ApplicationAll<E = Entity> = BaseApplication &
+export type ApplicationAll<E = EntityAll> = BaseApplication &
   QuirksApplication &
   I18nApplication &
   AuthenticationProperties<E> &
@@ -105,39 +105,6 @@ export type ApplicationAll<E = Entity> = BaseApplication &
   ExportApplicationPropertiesFromCommand<typeof import('../project-name/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../spring-boot/command.ts').default> &
   import('../docker/types.js').DockerApplicationType &
-  ApplicationProperties & {
-    clientRootDir: string;
-    clientSrcDir: string;
-    clientTestDir?: string;
-    clientDistDir?: string;
-    devServerPort: number;
-    pages: string[];
-
-    serverPort: number;
-    backendType?: string;
-    backendTypeJavaAny?: boolean;
-    backendTypeSpringBoot?: boolean;
-    temporaryDir?: string;
-
-    hipsterName?: string;
-    hipsterProductName?: string;
-    hipsterHomePageProductName?: string;
-    hipsterStackOverflowProductName?: string;
-    hipsterBugTrackerProductName?: string;
-    hipsterChatProductName?: string;
-    hipsterTwitterUsername?: string;
-    hipsterDocumentationLink?: string;
-    hipsterTwitterLink?: string;
-    hipsterProjectLink?: string;
-    hipsterStackoverflowLink?: string;
-    hipsterBugTrackerLink?: string;
-    hipsterChatLink?: string;
-
-    prettierFolders?: string;
-    prettierExtensions?: string;
-
-    loginRegex?: string;
-    jsLoginRegex?: string;
-  };
+  ApplicationProperties;
 
 export { Options as AllOptions, Config as AllConfig } from './types.js';

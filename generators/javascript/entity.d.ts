@@ -1,5 +1,15 @@
-// TODO extends base Entity
-export type Entity = {
+import type {
+  Entity as BaseApplicationEntity,
+  Field as BaseApplicationField,
+  Relationship as BaseApplicationRelationship,
+} from '../base-application/index.ts';
+
+export { BaseApplicationRelationship as Relationship, BaseApplicationField as Field };
+
+export interface Entity<
+  F extends BaseApplicationField = BaseApplicationField,
+  R extends BaseApplicationRelationship = BaseApplicationRelationship,
+> extends BaseApplicationEntity<F, R> {
   entityFileName: string;
   entityFolderName: string;
   entityModelFileName: string;
@@ -28,4 +38,4 @@ export type Entity = {
   tsPrimaryKeySamples?: string[];
 
   entityAngularJSSuffix?: string;
-};
+}

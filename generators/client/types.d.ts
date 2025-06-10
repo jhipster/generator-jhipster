@@ -4,7 +4,7 @@ import type { CypressApplication } from '../cypress/types.js';
 import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
 import type { PostWritingEntitiesTaskParam } from '../base-application/tasks.js';
 import type { Language } from '../languages/support/languages.ts';
-import type { Entity } from '../base-application/index.js';
+import type { EntityAll } from '../base-application/entity-all.js';
 import type { GetWebappTranslationCallback } from './translation.js';
 import type Command from './command.ts';
 
@@ -20,9 +20,9 @@ export type FrontendApplication = ApplicationClientProperties &
     webappEnumerationsDir?: string;
     clientFrameworkBuiltIn?: boolean;
     frontendAppName?: string;
-    filterEntitiesForClient?: (entity: Entity[]) => Entity[];
-    filterEntitiesAndPropertiesForClient?: (entity: Entity[]) => Entity[];
-    filterEntityPropertiesForClient?: (entity: Entity) => Entity;
+    filterEntitiesForClient?: (entity: EntityAll[]) => EntityAll[];
+    filterEntitiesAndPropertiesForClient?: (entity: EntityAll[]) => EntityAll[];
+    filterEntityPropertiesForClient?: (entity: EntityAll) => EntityAll;
     getWebappTranslation?: GetWebappTranslationCallback;
   };
 

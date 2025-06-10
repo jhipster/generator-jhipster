@@ -1,7 +1,7 @@
 import type { Field as BaseApplicationField } from './types.js';
 import type { Property } from './property-all.js';
 
-export type Field = Property &
+export type FieldAll = Property &
   BaseApplicationField & {
     documentation?: string;
 
@@ -35,11 +35,6 @@ export type Field = Property &
 
     // Temporary fields for Faker
     uniqueValue?: any[];
-    generateFakeDataFromPattern?: () => string | undefined;
-    /** @deprecated */
-    createRandexp: () => any;
-
-    generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts') => any;
 
     // Java specific
     propertyJavaBeanName?: string;

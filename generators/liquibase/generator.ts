@@ -31,7 +31,7 @@ import {
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
 import { fieldTypes } from '../../lib/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
-import type { Field } from '../base-application/field-all.js';
+import type { FieldAll } from '../base-application/field-all.js';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../base-entity-changes/types.js';
 import type { ApplicationAll } from '../base-application/application-properties-all.js';
@@ -693,7 +693,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
    * @param leadingWhitespace
    * @returns
    */
-  createDefaultValueLiquibaseAttribute(field: Field, leadingWhitespace = false) {
+  createDefaultValueLiquibaseAttribute(field: FieldAll, leadingWhitespace = false) {
     if (field.liquibaseDefaultValueAttributeValue === undefined) {
       return '';
     }

@@ -23,7 +23,7 @@ import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
 import { getDatabaseTypeData } from '../server/support/database.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import { formatDateForChangelog } from '../base/support/timestamp.ts';
-import type { Entity as ApplicationEntity, UserEntity } from '../base-application/entity-all.js';
+import type { EntityAll as ApplicationEntity, UserEntity } from '../base-application/entity-all.js';
 
 const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;

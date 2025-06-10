@@ -22,7 +22,7 @@ import { snakeCase, upperFirst } from 'lodash-es';
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../lib/jhipster/index.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 import { applyDerivedProperty, mutateData } from '../../../lib/utils/index.js';
-import type { Field } from '../../base-application/field-all.js';
+import type { FieldAll } from '../../base-application/field-all.js';
 import { getUXConstraintName } from './database.js';
 import { getJavaValueGeneratorForType } from './templates/field-values.js';
 
@@ -34,7 +34,7 @@ const { MapperTypes } = entityOptions;
 const { MAPSTRUCT } = MapperTypes;
 const { INTEGER, LONG, UUID } = CommonDBTypes;
 
-export default function prepareField(entityWithConfig, field: Field & any, generator) {
+export default function prepareField(entityWithConfig, field: FieldAll & any, generator) {
   if (field.mapstructExpression) {
     assert.equal(
       entityWithConfig.dto,

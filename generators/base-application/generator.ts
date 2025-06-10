@@ -34,7 +34,7 @@ import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
 import type { ApplicationConfiguration } from './application-config-all.js';
-import type { Entity as ApplicationEntity } from './entity-all.js';
+import type { EntityAll } from './entity-all.js';
 import type {
   ConfiguringEachEntityTaskParam,
   TaskTypes as DefaultTasks,
@@ -50,6 +50,7 @@ import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 import type {
   Application as BaseApplication,
   Config as BaseApplicationConfig,
+  Entity as BaseApplicationEntity,
   Features as BaseApplicationFeatures,
   Options as BaseApplicationOptions,
   Source as BaseApplicationSource,
@@ -130,7 +131,7 @@ const getFirstArgForPriority = (priorityName: string) => ({
  * This is the base class for a generator that generates entities.
  */
 export default class BaseApplicationGenerator<
-  Entity extends ApplicationEntity = ApplicationEntity,
+  Entity extends BaseApplicationEntity = EntityAll,
   Application extends BaseApplication = ApplicationAll<Entity>,
   Config extends BaseApplicationConfig = BaseApplicationConfig & ApplicationConfiguration,
   Options extends BaseApplicationOptions = BaseApplicationOptions,
@@ -279,16 +280,16 @@ export default class BaseApplicationGenerator<
   /**
    * get sorted list of entities according to changelog date (i.e. the order in which they were added)
    */
-  getExistingEntities(): { name: string; definition: ApplicationEntity }[] {
+  getExistingEntities(): { name: string; definition: Entity }[] {
     function isBefore(e1, e2) {
       return (e1.definition.annotations?.changelogDate ?? 0) - (e2.definition.annotations?.changelogDate ?? 0);
     }
 
     const configDir = this.getEntitiesConfigPath();
 
-    const entities: { name: string; definition: ApplicationEntity }[] = [];
+    const entities: { name: string; definition: Entity }[] = [];
     for (const entityName of [...new Set(((this.jhipsterConfig.entities as string[]) || []).concat(getEntitiesFromDir(configDir)))]) {
-      const definition: ApplicationEntity = this.getEntityConfig(entityName)?.getAll() as unknown as ApplicationEntity;
+      const definition: Entity = this.getEntityConfig(entityName)?.getAll() as unknown as Entity;
       if (definition) {
         entities.push({ name: entityName, definition });
       }

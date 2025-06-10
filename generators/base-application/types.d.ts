@@ -8,6 +8,8 @@ import type {
   Options as BaseSimpleApplicationOptions,
 } from '../base-simple-application/index.ts';
 import type { ApplicationOptions } from './application-options-all.js';
+import type { FieldType } from './internal/types/field-types.ts';
+import type { FakerWithRandexp } from './support/faker.ts';
 
 export type Config = BaseSimpleApplicationConfig & {
   baseName?: string;
@@ -27,7 +29,14 @@ type Property = {
   propertyApiDescription?: string;
 };
 
-export type Field = Property & BaseField;
+export type Field = Property &
+  BaseField & {
+    generateFakeDataFromPattern?: () => string | undefined;
+    /** @deprecated */
+    createRandexp: () => any;
+
+    generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts') => any;
+  };
 
 /**
  * Represents a relationship with an otherRelationship.
@@ -50,6 +59,20 @@ export type RelationshipWithEntity<R, E> = R & {
   otherEntity: E;
 };
 
+export type PrimaryKey<F extends Field = Field> = {
+  name: string;
+  fields: F[];
+  derivedFields: F[];
+  type: FieldType;
+  composite: boolean;
+  derived: boolean;
+  javaValueGenerator?: string;
+  javaBuildSpecification?: string;
+
+  tsSampleValues?: (string | number)[];
+  javaSampleValues?: string[];
+};
+
 /**
  * Represents an entity with its relationships, where the relationships are extended with the other entity.
  * Interface is used to allow `this` type in the relationships.
@@ -58,12 +81,72 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   extends Omit<Required<BaseEntity<F>>, 'relationships'> {
   relationships: RelationshipWithEntity<R, this>[];
   otherRelationships: R[];
+
+  primaryKey?: PrimaryKey<F>;
+
+  changelogDateForRecent: any;
+
+  entityAuthority?: string;
+  entityReadAuthority?: string;
+
+  /** @experimental */
+  auditableEntity?: boolean;
+  builtIn?: boolean;
+  builtInUser?: boolean;
+  builtInUserManagement?: boolean;
+  builtInAuthority?: boolean;
+  adminEntity?: boolean;
+  hasCyclicRequiredRelationship?: boolean;
+
+  entityNameCapitalized: string;
+  entityNamePlural: string;
+  entityNamePluralizedAndSpinalCased: string;
+  entityInstancePlural: string;
+  entityInstance: string;
+
+  resetFakerSeed(suffix?: string): void;
+  generateFakeData?: (type?: any) => any;
+  faker: FakerWithRandexp;
 }
 
 export type Application = BaseSimpleApplicationApplication & {
   jhiPrefix: string;
   jhiPrefixCapitalized: string;
   jhiPrefixDashed: string;
+
+  clientRootDir: string;
+  clientSrcDir: string;
+  clientTestDir?: string;
+  clientDistDir?: string;
+
+  hipsterName?: string;
+  hipsterProductName?: string;
+  hipsterHomePageProductName?: string;
+  hipsterStackOverflowProductName?: string;
+  hipsterBugTrackerProductName?: string;
+  hipsterChatProductName?: string;
+  hipsterTwitterUsername?: string;
+  hipsterDocumentationLink?: string;
+  hipsterTwitterLink?: string;
+  hipsterProjectLink?: string;
+  hipsterStackoverflowLink?: string;
+  hipsterBugTrackerLink?: string;
+  hipsterChatLink?: string;
+
+  pages: string[];
+
+  devServerPort: number;
+  serverPort: number;
+  backendType?: string;
+  backendTypeJavaAny?: boolean;
+  backendTypeSpringBoot?: boolean;
+  temporaryDir?: string;
+
+  prettierFolders?: string;
+  prettierExtensions?: string;
+
+  loginRegex?: string;
+  jsLoginRegex?: string;
 
   entitySuffix: string;
   dtoSuffix: string;

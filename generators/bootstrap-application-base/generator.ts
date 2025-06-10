@@ -48,7 +48,7 @@ import {
   isFieldBinaryType,
   isFieldBlobType,
 } from '../base-application/internal/types/field-types.ts';
-import type { Entity } from '../base-application/entity-all.js';
+import type { EntityAll } from '../base-application/entity-all.js';
 import { upperFirst } from '../../lib/jdl/core/utils/string-utils.js';
 import { baseNameProperties } from '../project-name/support/index.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
@@ -482,7 +482,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         entity.anyRelationshipIsRequired = entity.relationships.some(rel => rel.relationshipRequired || rel.id);
       },
       checkForCircularRelationships({ entity }) {
-        const detectCyclicRequiredRelationship = (entity: Entity, relatedEntities: Set<Entity>) => {
+        const detectCyclicRequiredRelationship = (entity: EntityAll, relatedEntities: Set<EntityAll>) => {
           if (relatedEntities.has(entity)) return true;
           relatedEntities.add(entity);
           return entity.relationships
