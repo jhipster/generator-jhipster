@@ -125,6 +125,7 @@ spring:
     hikari:
       poolName: Hikari
       auto-commit: false
+      validationTimeout: 300000
   <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypeMssql) { _%>
       data-source-properties:
         cachePrepStmts: true
