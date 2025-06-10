@@ -165,6 +165,7 @@ describe(`generator - ${clientFramework}`, () => {
                 {
                   entityAngularName: 'entityName',
                   entityPage: 'entityPage',
+                  entityUrl: 'entityUrl',
                   entityInstance: 'entityInstance',
                   entityFolderName: 'entityFolderName',
                   entityFileName: 'entityFileName',
@@ -181,7 +182,7 @@ describe(`generator - ${clientFramework}`, () => {
       const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/entities/reducers.ts`;
 
       runResult.assertFileContent(indexModulePath, "import entityName from './entityFolderName';");
-      runResult.assertFileContent(indexModulePath, '<Route path="/entityPage/*" element={<entityName />} />');
+      runResult.assertFileContent(indexModulePath, '<Route path="/entityUrl/*" element={<entityName />} />');
 
       runResult.assertFileContent(indexReducerPath, "import entityInstance from 'app/entities/entityFolderName/entityFileName.reducer';");
       runResult.assertFileContent(indexReducerPath, 'entityInstance,');
