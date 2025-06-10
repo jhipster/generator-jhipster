@@ -18,7 +18,7 @@
  */
 
 import type { ServerEntity } from '../server/types.js';
-import type { Entity as JavascriptEntity } from '../javascript/entity.d.ts';
+import type { Entity as AngularEntity } from '../angular/types.d.ts';
 import type {
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
@@ -29,7 +29,7 @@ import type { RelationshipAll } from './relationship-all.js';
 
 export interface EntityAll<F extends BaseApplicationField = FieldAll, R extends BaseApplicationRelationship = RelationshipAll>
   extends BaseApplicationEntity<F, R>,
-    JavascriptEntity<F, R>,
+    AngularEntity<F, R>,
     ServerEntity {
   entityJavadoc?: string;
 
@@ -48,18 +48,8 @@ export interface EntityAll<F extends BaseApplicationField = FieldAll, R extends 
 
   entityClassPlural: string;
 
-  entityI18nVariant: string;
-  entityClassHumanized: string;
-  entityClassPluralHumanized: string;
-
   entityApiUrl: string;
   entityApi: string;
-
-  entityTranslationKey: string;
-  entityTranslationKeyMenu: string;
-
-  i18nKeyPrefix: string;
-  i18nAlertHeaderPrefix: string;
 
   anyFieldIsBigDecimal: boolean;
   /**

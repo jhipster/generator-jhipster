@@ -20,6 +20,7 @@ import { clientApplicationTemplatesBlock } from '../client/support/files.js';
 import type { WriteFileSection } from '../base-core/api.js';
 import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/index.js';
 import { filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/filter-entities.js';
+import type { Application as AngularApplication, Entity as AngularEntity } from './types.js';
 
 const entityModelFiles = clientApplicationTemplatesBlock({
   templates: ['entities/_entityFolder_/_entityFile_.model.ts', 'entities/_entityFolder_/_entityFile_.test-samples.ts'],
@@ -94,7 +95,10 @@ export const userManagementFiles: WriteFileSection = {
   ],
 };
 
-export const writeEntitiesFiles = asWritingEntitiesTask(async function ({ application, entities }) {
+export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>>(async function ({
+  application,
+  entities,
+}) {
   for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesAndPropertiesForClient)(entities)) {
     if (entity.builtInUser) {
       await this.writeFiles({
@@ -128,15 +132,21 @@ export const writeEntitiesFiles = asWritingEntitiesTask(async function ({ applic
   }
 });
 
-export const postWriteEntitiesFiles = asPostWritingEntitiesTask(async function (this, taskParam) {
-  const { application, source } = taskParam;
-  const entities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(taskParam.entities).filter(
-    entity => !entity.builtInUser && !entity.embedded && !entity.entityClientModelOnly,
-  );
-  source.addEntitiesToClient({ ...taskParam, entities });
-});
+export const postWriteEntitiesFiles = asPostWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>>(
+  async function (this, taskParam) {
+    const { application, source } = taskParam;
+    const entities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(taskParam.entities).filter(
+      entity => !entity.builtInUser && !entity.embedded && !entity.entityClientModelOnly,
+    );
+    source.addEntitiesToClient({ ...taskParam, entities });
+  },
+);
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask(function ({ application, entities, control }) {
+export const cleanupEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>>(function ({
+  application,
+  entities,
+  control,
+}) {
   for (const entity of (application.filterEntitiesForClient ?? filterEntitiesForClient)(entities).filter(entity => !entity.builtIn)) {
     const { entityFolderName, entityFileName, name: entityName } = entity;
     if (control.isJhipsterVersionLessThan('5.0.0')) {

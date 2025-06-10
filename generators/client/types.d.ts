@@ -2,11 +2,23 @@ import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/index.js';
 import type { CypressApplication } from '../cypress/types.js';
 import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
-import type { PostWritingEntitiesTaskParam } from '../base-application/tasks.js';
 import type { Language } from '../languages/support/languages.ts';
-import type { EntityAll } from '../base-application/entity-all.js';
+import type {
+  Entity as JavascriptEntity,
+  Field as JavascriptField,
+  Relationship as JavascriptRelationship,
+} from '../javascript/entity.d.ts';
+import type { Entity as LanguagesEntity, Field as LanguagesField, Relationship as LanguagesRelationship } from '../languages/index.js';
 import type { GetWebappTranslationCallback } from './translation.js';
 import type Command from './command.ts';
+
+export interface Field extends JavascriptField, LanguagesField {}
+
+export interface Relationship extends JavascriptRelationship, LanguagesRelationship {}
+
+export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
+  extends JavascriptEntity<F, R>,
+    LanguagesEntity<F, R> {}
 
 type ApplicationClientProperties = ExportApplicationPropertiesFromCommand<typeof Command>;
 
@@ -20,9 +32,9 @@ export type FrontendApplication = ApplicationClientProperties &
     webappEnumerationsDir?: string;
     clientFrameworkBuiltIn?: boolean;
     frontendAppName?: string;
-    filterEntitiesForClient?: (entity: EntityAll[]) => EntityAll[];
-    filterEntitiesAndPropertiesForClient?: (entity: EntityAll[]) => EntityAll[];
-    filterEntityPropertiesForClient?: (entity: EntityAll) => EntityAll;
+    filterEntitiesForClient?: <const E extends Entity>(entity: E[]) => E[];
+    filterEntitiesAndPropertiesForClient?: <const E extends Entity>(entity: E[]) => E[];
+    filterEntityPropertiesForClient?: <const E extends Entity>(entity: E) => E;
     getWebappTranslation?: GetWebappTranslationCallback;
   };
 
@@ -50,7 +62,7 @@ export type ClientSourceType = JavaScriptSourceType & {
   /**
    * Add entities to client.
    */
-  addEntitiesToClient: (arg1: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) => void;
+  addEntitiesToClient: <const E extends Entity, const A extends FrontendApplication>(param: { application: A; entities: E[] }) => void;
   /**
    * Add external resources to root file(index.html).
    */

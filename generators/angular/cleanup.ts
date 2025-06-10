@@ -19,13 +19,14 @@
 
 import { asWritingTask } from '../base-application/support/task-type-inference.js';
 import { CLIENT_WEBPACK_DIR } from '../generator-constants.js';
+import type { Application as AngularApplication, Entity as AngularEntity } from './types.d.ts';
 
 /**
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
 
-export default asWritingTask(function cleanupOldFilesTask({ application, control }) {
+export default asWritingTask<AngularEntity, AngularApplication<AngularEntity>>(function cleanupOldFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('3.2.0')) {
     // removeFile and removeFolder methods should be called here for files and folders to cleanup
     this.removeFile(`${application.clientSrcDir}app/components/form/uib-pager.config.js`);

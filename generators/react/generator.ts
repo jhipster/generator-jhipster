@@ -168,7 +168,7 @@ ${comment}
               }),
               createNeedleCallback({
                 needle: 'add-route-path',
-                contentToAdd: `<Route path="${application.applicationTypeMicroservice ? '/' : ''}${entityFileName}/*" element={<${entityAngularName} />} />`,
+                contentToAdd: `<Route path="/${entityPage}/*" element={<${entityAngularName} />} />`,
               }),
             );
             this.editFile(

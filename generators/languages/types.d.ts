@@ -16,13 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type {
+  Application as BaseApplicationApplication,
+  Entity as BaseApplicationEntity,
+  Field as BaseApplicationField,
+  Relationship as BaseApplicationRelationship,
+} from '../base-application/index.js';
 import type { Language } from './support/languages.js';
 
 export type LanguagesSource = {
   addEntityTranslationKey: (arg: { translationKey: string; translationValue: string; language: string }) => void;
 };
 
-export type I18nApplication = {
+export type I18nApplication = BaseApplicationApplication & {
   enableTranslation: boolean;
   enableI18nRTL: boolean;
   nativeLanguage: string;
@@ -30,3 +36,14 @@ export type I18nApplication = {
   languages: string[];
   languagesDefinition: readonly Language[];
 };
+
+export { BaseApplicationField as Field, BaseApplicationRelationship as Relationship };
+
+export interface Entity<F extends BaseApplicationField, R extends BaseApplicationRelationship> extends BaseApplicationEntity<F, R> {
+  entityTranslationKey: string;
+  entityTranslationKeyMenu: string;
+
+  entityI18nVariant: string;
+  i18nKeyPrefix: string;
+  i18nAlertHeaderPrefix: string;
+}

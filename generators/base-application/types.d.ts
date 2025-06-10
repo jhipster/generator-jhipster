@@ -27,10 +27,19 @@ type Property = {
   propertyNameCapitalized?: string;
   propertyNameUpperSnakeCase?: string;
   propertyApiDescription?: string;
+
+  skipClient?: boolean;
+  skipServer?: boolean;
 };
 
 export type Field = Property &
   BaseField & {
+    documentation?: string;
+
+    enumFileName?: string;
+    enumValues?: { name: string; value: string }[];
+    fieldIsEnum?: boolean;
+
     generateFakeDataFromPattern?: () => string | undefined;
     /** @deprecated */
     createRandexp: () => any;
@@ -49,6 +58,16 @@ export interface Relationship
   relationshipNameCapitalized: string;
   otherRelationship: this;
   collection: boolean;
+
+  /**
+   * A persistable relationship means that the relationship will be updated in the database.
+   */
+  persistableRelationship: boolean;
+
+  id?: boolean;
+  ownerSide?: boolean;
+  relationshipEagerLoad?: boolean;
+  relationshipRequired?: boolean;
 }
 
 /**
@@ -104,6 +123,11 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   entityInstancePlural: string;
   entityInstance: string;
 
+  // TODO rename to entityNameHumanized
+  entityClassHumanized: string;
+  // TODO rename to entityNamePluralHumanized
+  entityClassPluralHumanized: string;
+
   resetFakerSeed(suffix?: string): void;
   generateFakeData?: (type?: any) => any;
   faker: FakerWithRandexp;
@@ -113,6 +137,8 @@ export type Application = BaseSimpleApplicationApplication & {
   jhiPrefix: string;
   jhiPrefixCapitalized: string;
   jhiPrefixDashed: string;
+
+  javaNodeBuildPaths: string[];
 
   clientRootDir: string;
   clientSrcDir: string;

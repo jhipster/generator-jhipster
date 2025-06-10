@@ -19,7 +19,7 @@
 import { createNeedleCallback } from '../../base-core/support/needles.ts';
 import { upperFirstCamelCase } from '../../../lib/utils/index.js';
 import { joinCallbacks } from '../../base-core/support/write-files.ts';
-import type { PostWritingEntitiesTaskParam } from '../../base-application/tasks.js';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../../client/index.ts';
 
 export function addRoute({
   needle,
@@ -54,13 +54,19 @@ export function addRoute({
   });
 }
 
-export function addEntitiesRoute({ application, entities }: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) {
+export function addEntitiesRoute<const E extends ClientEntity, const A extends ClientApplication>({
+  application,
+  entities,
+}: {
+  application: A;
+  entities: E[];
+}) {
   const { enableTranslation } = application;
   return joinCallbacks(
     ...entities.map(entity => {
-      const { i18nKeyPrefix, entityClassPlural, entityFolderName, entityFileName, entityUrl } = entity;
+      const { i18nKeyPrefix, entityNamePlural, entityFolderName, entityFileName, entityUrl } = entity;
 
-      const pageTitle = enableTranslation ? `${i18nKeyPrefix}.home.title` : entityClassPlural;
+      const pageTitle = enableTranslation ? `${i18nKeyPrefix}.home.title` : entityNamePlural;
       const modulePath = `./${entityFolderName}/${entityFileName}.routes`;
 
       return addRoute({
@@ -126,7 +132,13 @@ export const addIconImport = ({ icon }: { icon: string }) => {
   });
 };
 
-export function addToEntitiesMenu({ application, entities }: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) {
+export function addToEntitiesMenu<const E extends ClientEntity, const A extends ClientApplication>({
+  application,
+  entities,
+}: {
+  application: A;
+  entities: E[];
+}) {
   const { enableTranslation, jhiPrefix } = application;
   return joinCallbacks(
     ...entities.map(entity => {

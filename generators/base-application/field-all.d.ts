@@ -1,18 +1,9 @@
-import type { Field as BaseApplicationField } from './types.js';
-import type { Property } from './property-all.js';
+import type { Field as JavaField } from '../java/index.js';
+import type { Field as ClientField } from '../client/index.js';
 
-export type FieldAll = Property &
-  BaseApplicationField & {
-    documentation?: string;
-
-    enumFileName?: string;
-    enumValues?: { name: string; value: string }[];
-    fieldIsEnum?: boolean;
+export type FieldAll = JavaField &
+  ClientField & {
     columnName?: string;
-
-    // Annotations
-    skipClient?: boolean;
-    skipServer?: boolean;
 
     filterableField?: boolean;
     transient?: boolean;
@@ -35,20 +26,6 @@ export type FieldAll = Property &
 
     // Temporary fields for Faker
     uniqueValue?: any[];
-
-    // Java specific
-    propertyJavaBeanName?: string;
-    propertyDtoJavaType?: string;
-    propertyJavaFilterType?: string;
-    fieldInJavaBeanMethod?: string;
-    fieldJavaBuildSpecification?: string;
-    fieldJavadoc?: string;
-    fieldJavaValueGenerator?: string;
-    javaValueGenerator?: string;
-    propertyJavaFilteredType?: string;
-    liquibaseDefaultValueAttributeValue?: string;
-
-    propertyJavaCustomFilter?: { type: string; superType: string; fieldType: string };
 
     // Blob
     fieldWithContentType?: boolean;
@@ -74,11 +51,9 @@ export type FieldAll = Property &
     reference?: any;
     relationshipsPath?: string[];
 
-    liquibaseDefaultValueAttributeName?: string;
     shouldDropDefaultValue?: boolean;
     shouldCreateContentType?: boolean;
     loadColumnType?: string;
-    liquibaseGenerateFakeData?: boolean;
     columnType?: string;
     defaultValueComputed: any;
     defaultValue: any;

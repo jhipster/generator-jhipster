@@ -18,8 +18,11 @@
  */
 import { asWritingTask } from '../../../../base-application/support/index.js';
 import { clientRootTemplatesBlock } from '../../../../client/support/files.js';
+import type { Application as JavascriptApplication, Entity as JavascriptEntity } from '../../../entity.d.ts';
 
-export const writeEslintClientRootConfigFile = asWritingTask(async function writingEslintFile({ application }) {
+export const writeEslintClientRootConfigFile = asWritingTask<JavascriptEntity, JavascriptApplication>(async function writingEslintFile({
+  application,
+}) {
   await this.writeFiles({
     blocks: [
       clientRootTemplatesBlock({

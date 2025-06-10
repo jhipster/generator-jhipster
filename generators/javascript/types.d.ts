@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { Merge, PackageJson, Simplify } from 'type-fest';
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
+import type { Application as LanguagesApplication } from '../languages/index.js';
 import type JavascriptBootstrapCommand from './generators/bootstrap/command.js';
 
 type DependencyValue = string | undefined | null;
@@ -20,7 +21,8 @@ export type JavaScriptSourceType = {
   ): void;
 };
 
-export type JavaScriptApplication = ExportApplicationPropertiesFromCommand<typeof JavascriptBootstrapCommand> &
+export type JavaScriptApplication = LanguagesApplication &
+  ExportApplicationPropertiesFromCommand<typeof JavascriptBootstrapCommand> &
   ExportApplicationPropertiesFromCommand<typeof import('./generators/eslint/command.js').default> &
   ExportApplicationPropertiesFromCommand<typeof import('./generators/prettier/command.js').default> & {
     packageJsonNodeEngine?: boolean | string;
