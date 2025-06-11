@@ -43,7 +43,7 @@ import { getDockerfileContainers } from '../docker/utils.js';
 import { getMainClassName } from '../java/support/index.js';
 import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
 import serverCommand from '../server/command.js';
-import { normalizePathEnd } from '../../lib/utils/index.js';
+import { mutateData, normalizePathEnd } from '../../lib/utils/index.js';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -180,6 +180,10 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity }) {
         loadRequiredConfigDerivedProperties(entity);
+        mutateData(entity, {
+          entityPersistenceLayer: true,
+          entityRestLayer: true,
+        });
       },
       preparePrimaryKey({ entity, application }) {
         // If primaryKey doesn't exist, create it.
@@ -191,7 +195,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.preparingEachEntity;
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get preparingEachEntityField() {

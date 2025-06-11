@@ -1,7 +1,7 @@
 import type { Source as BaseApplicationSource, Entity } from '../base-entity-changes/index.js';
 import type { Source as GradleSource } from '../gradle/types.js';
 import type { Source as MavenSource } from '../maven/types.js';
-import type { SpringBootSource } from '../server/types.js';
+import type { SpringBootSource } from '../spring-boot/types.js';
 
 export type LiquibaseChangelog = { changelogName: string };
 export type LiquibaseChangelogSection = LiquibaseChangelog & { section?: 'base' | 'incremental' | 'constraints' };

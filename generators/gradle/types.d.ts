@@ -64,9 +64,8 @@ export type Source = {
 export { JavaEntity as Entity };
 
 export type Application<E extends JavaEntity> = JavaApplication<E> &
-ExportApplicationPropertiesFromCommand<typeof GradleCommand> &
- {
-  gradleVersion?: string;
-  gradleBuildSrc?: string;
-  enableGradleDevelocity?: boolean;
-};
+  ExportApplicationPropertiesFromCommand<typeof GradleCommand> & {
+    gradleVersion?: string;
+    gradleBuildSrc?: string;
+    enableGradleDevelocity?: boolean;
+  };

@@ -8,7 +8,6 @@ import type { Config as JavascriptConfig } from '../javascript/types.d.ts';
 
 type BaseApplicationConfig = {
   entities?: string[];
-  backendType?: string;
   projectDescription?: string;
 };
 

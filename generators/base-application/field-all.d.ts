@@ -19,11 +19,6 @@ export type FieldAll = JavaField &
      */
     fakerTemplate?: string;
 
-    // Validation
-    fieldValidate?: boolean;
-    unique?: boolean;
-    maxlength?: number;
-
     // Temporary fields for Faker
     uniqueValue?: any[];
 

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
 import type { Application as ClientApplication } from '../client/types.js';
-import type { Application as SpringBootApplication } from '../server/types.js';
+import type { Application as SpringBootApplication } from '../spring-boot/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import type { EntityAll } from './entity-all.js';
 import type { Application as BaseApplication } from './types.js';

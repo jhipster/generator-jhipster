@@ -32,10 +32,16 @@ import {
   validations,
 } from '../../lib/jhipster/index.js';
 import { stringifyApplicationData } from '../base-application/support/index.js';
-import { mutateData } from '../../lib/utils/index.js';
 import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.js';
 import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
 import { hibernateSnakeCase } from './support/index.js';
+import type {
+  Application as ServerApplication,
+  Config as ServerConfig,
+  Entity as ServerEntity,
+  Options as ServerOptions,
+  Source as ServerSource,
+} from './types.js';
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
@@ -54,7 +60,13 @@ const {
 const { NO: NO_PAGINATION } = PaginationTypes;
 const { NO: NO_SERVICE } = ServiceTypes;
 
-export default class JHipsterServerGenerator extends BaseApplicationGenerator {
+export default class JHipsterServerGenerator extends BaseApplicationGenerator<
+  ServerEntity,
+  ServerApplication<ServerEntity>,
+  ServerConfig,
+  ServerOptions,
+  ServerSource
+> {
   /** @type {string} */
   jhipsterDependenciesVersion;
   /** @type {string} */
@@ -266,21 +278,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.LOADING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.loadingEntities);
-  }
-
-  get preparingEachEntity() {
-    return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ entity }) {
-        mutateData(entity, {
-          entityPersistenceLayer: true,
-          entityRestLayer: true,
-        });
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get postPreparingEachEntity() {

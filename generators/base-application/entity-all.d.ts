@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { ServerEntity } from '../server/types.js';
+import type { Entity as SpringBootEntity } from '../spring-boot/types.js';
 import type { Entity as AngularEntity } from '../angular/types.d.ts';
 import type { Entity as JavaEntity } from '../java/types.d.ts';
 import type { Entity as BaseApplicationEntity } from './types.js';
@@ -28,11 +28,10 @@ export interface EntityAll<F extends FieldAll = FieldAll, R extends Relationship
   extends BaseApplicationEntity<F, R>,
     AngularEntity<F, R>,
     JavaEntity<F, R>,
-    ServerEntity {
+    SpringBootEntity<F, R> {
   entityJavadoc?: string;
 
   entityClass: string;
-  entityTableName: string;
   entityAbsoluteClass: string;
   entityAbsoluteFolder: string;
 
