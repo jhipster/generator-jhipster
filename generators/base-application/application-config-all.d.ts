@@ -3,6 +3,7 @@ import type { Simplify } from 'type-fest';
 import type { ExportStoragePropertiesFromCommand } from '../../lib/command/types.js';
 import type { YO_RC_CONFIG_KEY } from '../../lib/utils/yo-rc.ts';
 import type { Config as BaseConfig } from '../base/types.js';
+import type { Config as JavaConfig } from '../java/types.d.ts';
 import type { Config as JavascriptConfig } from '../javascript/types.d.ts';
 
 type BaseApplicationConfig = {
@@ -13,6 +14,7 @@ type BaseApplicationConfig = {
 
 export type ApplicationConfiguration = Simplify<
   BaseApplicationConfig &
+    JavaConfig &
     JavascriptConfig &
     BaseConfig & {
       baseName: string;
@@ -25,9 +27,6 @@ export type ApplicationConfiguration = Simplify<
     ExportStoragePropertiesFromCommand<typeof import('../bootstrap-application-base/command.ts').default> &
     ExportStoragePropertiesFromCommand<typeof import('../client/command.ts').default> &
     ExportStoragePropertiesFromCommand<typeof import('../git/command.ts').default> &
-    ExportStoragePropertiesFromCommand<typeof import('../java/generators/bootstrap/command.ts').default> &
-    ExportStoragePropertiesFromCommand<typeof import('../java/generators/build-tool/command.ts').default> &
-    ExportStoragePropertiesFromCommand<typeof import('../java/generators/graalvm/command.ts').default> &
     ExportStoragePropertiesFromCommand<typeof import('../jdl/command.ts').default> &
     ExportStoragePropertiesFromCommand<typeof import('../languages/command.ts').default> &
     ExportStoragePropertiesFromCommand<typeof import('../liquibase/command.ts').default> &

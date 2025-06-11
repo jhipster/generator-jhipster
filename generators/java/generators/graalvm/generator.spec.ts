@@ -33,7 +33,7 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  for (const buildTool of ['maven', 'gradle']) {
+  for (const buildTool of ['maven' as const, 'gradle' as const]) {
     describe('with default options', () => {
       before(async () => {
         await helpers

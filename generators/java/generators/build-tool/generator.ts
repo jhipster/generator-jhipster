@@ -17,15 +17,15 @@
  * limitations under the License.
  */
 import { buildToolTypes } from '../../../../lib/jhipster/index.js';
-import BaseApplicationGenerator from '../../../base-application/index.js';
 import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.js';
 import type { MavenDependency } from '../../../maven/types.js';
+import { TypedJavaGenerator } from '../../generator.ts';
 import { javaScopeToGradleScope } from '../../support/index.js';
 import type { ConditionalJavaDefinition, JavaDependency, JavaNeedleOptions } from '../../types.js';
 
 const { GRADLE, MAVEN } = buildToolTypes;
 
-export default class BuildToolGenerator extends BaseApplicationGenerator {
+export default class BuildToolGenerator extends TypedJavaGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -52,7 +52,7 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.COMPOSING]() {
+  get [TypedJavaGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -185,7 +185,7 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [TypedJavaGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 }

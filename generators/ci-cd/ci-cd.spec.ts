@@ -12,9 +12,9 @@ const expectedFiles = {
   dockerRegistry: ['src/main/docker/docker-registry.yml'],
 };
 
-const mavenSample = { baseName: 'sampleMysql', buildTool: 'maven', testFrameworks: ['cypress'] };
-const gradleSample = { baseName: 'sampleMysql', buildTool: 'gradle', testFrameworks: ['cypress'] };
-const skipServerSample = { buildTool: 'maven', skipServer: true };
+const mavenSample = { baseName: 'sampleMysql', buildTool: 'maven' as const, testFrameworks: ['cypress'] };
+const gradleSample = { baseName: 'sampleMysql', buildTool: 'gradle' as const, testFrameworks: ['cypress'] };
+const skipServerSample = { buildTool: 'maven' as const, skipServer: true };
 
 const pomFile = `<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"

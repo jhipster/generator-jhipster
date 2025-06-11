@@ -23,10 +23,6 @@ export const loadDerivedServerAndPlatformProperties = ({ application }: { applic
   application.serviceDiscoveryEureka = application.serviceDiscoveryType === EUREKA;
 };
 
-/**
- * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
- * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
- */
 export const loadDerivedPlatformConfig = ({ application }: { application: WorkspacesApplication }) => {
   application.monitoringElk = application.monitoring === ELK;
   application.monitoringPrometheus = application.monitoring === PROMETHEUS;

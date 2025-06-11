@@ -73,7 +73,7 @@ export type MavenDefinition = {
   repositories?: MavenRepository[];
 };
 
-export type MavenSourceType = {
+export type Source = {
   mergeMavenPomContent?(content: Record<string, any>): void;
   addMavenAnnotationProcessor?(artifact: MavenAnnotationProcessor | MavenAnnotationProcessor[]): void;
   addMavenDependency?(dependency: MavenDependency | MavenDependency[]): void;

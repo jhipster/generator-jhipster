@@ -35,7 +35,7 @@ export type GradleCatalogNeedleOptions = { gradleVersionCatalogFile?: string };
 
 export type GradleNeedleOptions = GradleFileNeedleOptions & GradleCatalogNeedleOptions;
 
-export type GradleSourceType = {
+export type Source = {
   _gradleDependencies?: GradleDependency[];
   applyFromGradle?(script: GradleScript): void;
   addGradleDependency?(dependency: GradleDependency, options?: GradleFileNeedleOptions): void;
