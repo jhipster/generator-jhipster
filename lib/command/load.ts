@@ -54,21 +54,6 @@ export function loadCommandConfigsIntoApplication<Context>(
   });
 }
 
-export function loadCommandConfigsIntoGenerator<Context>(
-  this: Context,
-  options: {
-    commandsConfigs: JHipsterConfigs;
-  },
-): void {
-  const { commandsConfigs } = options;
-  loadConfigIntoContext.call(this, {
-    source: (this as any).options,
-    templatesContext: this as any,
-    commandsConfigs,
-    scopes: ['storage', 'blueprint'],
-  });
-}
-
 export function loadCommandConfigsKeysIntoTemplatesContext<Context>(
   this: Context,
   options: {
