@@ -17,24 +17,10 @@
  * limitations under the License.
  */
 import { packageJson } from '../../../../lib/index.js';
-import BaseApplicationGenerator from '../../../base-application/index.js';
+import { JavascriptApplicationGenerator } from '../../generator.ts';
 import { isReservedTypescriptKeyword } from '../../support/reserved-words.ts';
 
-import type {
-  Application as JavascriptApplication,
-  Config as JavascriptConfig,
-  Entity as JavascriptEntity,
-  Options as JavascriptOptions,
-  Source as JavascriptSource,
-} from '../../types.js';
-
-export default class JavascriptBootstrapGenerator extends BaseApplicationGenerator<
-  JavascriptEntity,
-  JavascriptApplication<JavascriptEntity>,
-  JavascriptConfig,
-  JavascriptOptions,
-  JavascriptSource
-> {
+export default class JavascriptBootstrapGenerator extends JavascriptApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -62,7 +48,7 @@ export default class JavascriptBootstrapGenerator extends BaseApplicationGenerat
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
+  get [JavascriptApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -76,7 +62,7 @@ export default class JavascriptBootstrapGenerator extends BaseApplicationGenerat
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [JavascriptApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -90,7 +76,7 @@ export default class JavascriptBootstrapGenerator extends BaseApplicationGenerat
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+  get [JavascriptApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
@@ -104,7 +90,7 @@ export default class JavascriptBootstrapGenerator extends BaseApplicationGenerat
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+  get [JavascriptApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
@@ -120,7 +106,7 @@ export default class JavascriptBootstrapGenerator extends BaseApplicationGenerat
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+  get [JavascriptApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
   }
 
@@ -135,7 +121,7 @@ export default class JavascriptBootstrapGenerator extends BaseApplicationGenerat
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [JavascriptApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -179,7 +165,7 @@ export default class JavascriptBootstrapGenerator extends BaseApplicationGenerat
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [JavascriptApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

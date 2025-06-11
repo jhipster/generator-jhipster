@@ -16,21 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.js';
+import { JavascriptSimpleApplicationGenerator } from '../../generator.ts';
 import { createNeedleCallback } from '../../../base-core/support/needles.ts';
-import type {
-  Config as JavascriptConfig,
-  Options as JavascriptOptions,
-  JavascriptSimpleApplication,
-  Source as JavascriptSource,
-} from '../../types.js';
 
-export default class EslintGenerator extends BaseSimpleApplicationGenerator<
-  JavascriptSimpleApplication,
-  JavascriptConfig,
-  JavascriptOptions,
-  JavascriptSource
-> {
+export default class EslintGenerator extends JavascriptSimpleApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -52,7 +41,7 @@ export default class EslintGenerator extends BaseSimpleApplicationGenerator<
     });
   }
 
-  get [BaseSimpleApplicationGenerator.LOADING]() {
+  get [JavascriptSimpleApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -72,7 +61,7 @@ export default class EslintGenerator extends BaseSimpleApplicationGenerator<
     });
   }
 
-  get [BaseSimpleApplicationGenerator.PREPARING]() {
+  get [JavascriptSimpleApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -91,7 +80,7 @@ export default class EslintGenerator extends BaseSimpleApplicationGenerator<
     });
   }
 
-  get [BaseSimpleApplicationGenerator.WRITING]() {
+  get [JavascriptSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -108,7 +97,7 @@ export default class EslintGenerator extends BaseSimpleApplicationGenerator<
     });
   }
 
-  get [BaseSimpleApplicationGenerator.POST_WRITING]() {
+  get [JavascriptSimpleApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

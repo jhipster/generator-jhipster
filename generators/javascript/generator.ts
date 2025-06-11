@@ -18,35 +18,33 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
+import BaseSimpleApplicationGenerator from '../base-simple-application/index.js';
 import type {
-  Application as JavaApplication,
-  Config as JavaConfig,
-  Entity as JavaEntity,
-  Options as JavaOptions,
-  Source as JavaSource,
+  Application as JavascriptApplication,
+  Config as JavascriptConfig,
+  Entity as JavascriptEntity,
+  Options as JavascriptOptions,
+  JavascriptSimpleApplication,
+  Source as JavascriptSource,
 } from './types.js';
 
 /**
  * Utility class with types.
  */
-export class JavaApplicationGenerator extends BaseApplicationGenerator<
-  JavaEntity,
-  JavaApplication<JavaEntity>,
-  JavaConfig,
-  JavaOptions,
-  JavaSource
+export class JavascriptSimpleApplicationGenerator extends BaseSimpleApplicationGenerator<
+  JavascriptSimpleApplication,
+  JavascriptConfig,
+  JavascriptOptions,
+  JavascriptSource
 > {}
 
-export default class JavaGenerator extends JavaApplicationGenerator {
-  customLifecycle = true;
-
-  async beforeQueue() {
-    if (!this.fromBlueprint) {
-      await this.composeWithBlueprints();
-    }
-
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:domain');
-    }
-  }
-}
+/**
+ * Utility class with types.
+ */
+export class JavascriptApplicationGenerator extends BaseApplicationGenerator<
+  JavascriptEntity,
+  JavascriptApplication<JavascriptEntity>,
+  JavascriptConfig,
+  JavascriptOptions,
+  JavascriptSource
+> {}

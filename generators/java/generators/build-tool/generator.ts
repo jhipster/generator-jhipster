@@ -19,13 +19,13 @@
 import { buildToolTypes } from '../../../../lib/jhipster/index.js';
 import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.js';
 import type { MavenDependency } from '../../../maven/types.js';
-import { TypedJavaGenerator } from '../../generator.ts';
+import { JavaApplicationGenerator } from '../../generator.ts';
 import { javaScopeToGradleScope } from '../../support/index.js';
 import type { ConditionalJavaDefinition, JavaDependency, JavaNeedleOptions } from '../../types.js';
 
 const { GRADLE, MAVEN } = buildToolTypes;
 
-export default class BuildToolGenerator extends TypedJavaGenerator {
+export default class BuildToolGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -52,7 +52,7 @@ export default class BuildToolGenerator extends TypedJavaGenerator {
     });
   }
 
-  get [TypedJavaGenerator.COMPOSING]() {
+  get [JavaApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -185,7 +185,7 @@ export default class BuildToolGenerator extends TypedJavaGenerator {
     });
   }
 
-  get [TypedJavaGenerator.PREPARING]() {
+  get [JavaApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 }

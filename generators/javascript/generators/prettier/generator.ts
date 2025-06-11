@@ -17,22 +17,9 @@
  * limitations under the License.
  */
 import { packageJson } from '../../../../lib/index.js';
-import BaseApplicationGenerator from '../../../base-application/index.js';
-import type {
-  Application as JavascriptApplication,
-  Config as JavascriptConfig,
-  Entity as JavascriptEntity,
-  Options as JavascriptOptions,
-  Source as JavascriptSource,
-} from '../../types.js';
+import { JavascriptApplicationGenerator } from '../../generator.ts';
 
-export default class PrettierGenerator extends BaseApplicationGenerator<
-  JavascriptEntity,
-  JavascriptApplication<JavascriptEntity>,
-  JavascriptConfig,
-  JavascriptOptions,
-  JavascriptSource
-> {
+export default class PrettierGenerator extends JavascriptApplicationGenerator {
   fromInit?: boolean;
   prettierConfigFile!: string;
   monorepositoryRoot?: boolean;
@@ -76,7 +63,7 @@ export default class PrettierGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
+  get [JavascriptApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -91,7 +78,7 @@ export default class PrettierGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [JavascriptApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -109,7 +96,7 @@ export default class PrettierGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [JavascriptApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -153,7 +140,7 @@ export default class PrettierGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [JavascriptApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }
