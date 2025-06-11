@@ -23,6 +23,7 @@ import { getEnumInfo } from '../../../base-application/support/index.js';
 import { isReservedJavaKeyword } from '../../support/reserved-keywords.js';
 import { entityServerFiles, enumFiles } from './entity-files.js';
 
+// TODO adjust type
 export default class DomainGenerator extends BaseApplicationGenerator {
   generateEntities!: boolean;
   useJakartaValidation!: boolean;

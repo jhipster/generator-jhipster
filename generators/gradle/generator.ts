@@ -41,11 +41,11 @@ import {
   gradleNeedleOptionsWithDefaults,
   sortDependencies,
 } from './internal/needles.js';
-import type { GradleDependency } from './types.js';
+import type { Application as GradleApplication, GradleDependency, Entity as GradleEntity } from './types.js';
 
 const { PRE_CONFLICTS_QUEUE } = QUEUES;
 
-export default class GradleGenerator extends BaseApplicationGenerator {
+export default class GradleGenerator extends BaseApplicationGenerator<GradleEntity, GradleApplication<GradleEntity>> {
   gradleVersionFromWrapper;
 
   async beforeQueue() {

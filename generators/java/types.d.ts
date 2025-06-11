@@ -1,5 +1,5 @@
 import type { RequireOneOrNone } from 'type-fest';
-import type { GradleApplication, GradleNeedleOptions, Source as GradleSource } from '../gradle/types.js';
+import type { GradleNeedleOptions, Source as GradleSource } from '../gradle/types.js';
 import type { EditFileCallback } from '../base-core/api.js';
 import type { MavenDefinition, Source as MavenSource } from '../maven/types.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
@@ -18,27 +18,22 @@ import type JavaBootstrapCommand from './generators/bootstrap/command.js';
 import type BuildToolCommand from './generators/build-tool/command.js';
 import type GraalvmCommand from './generators/graalvm/command.js';
 
-export type { BaseApplicationEntity as Entity };
-
 type Property = {
   propertyJavaFilterName?: string;
   propertyJavaFilterJavaBeanName?: string;
   propertyJavaFilterType?: string;
   propertyJavaFilteredType?: string;
+  propertyJavaBeanName?: string;
+  propertyDtoJavaType?: string;
 };
 
 export type Field = BaseApplicationField &
   Property & {
-    // Java specific
-    propertyJavaBeanName?: string;
-    propertyDtoJavaType?: string;
-    propertyJavaFilterType?: string;
     fieldInJavaBeanMethod?: string;
     fieldJavaBuildSpecification?: string;
     fieldJavadoc?: string;
     fieldJavaValueGenerator?: string;
     javaValueGenerator?: string;
-    propertyJavaFilteredType?: string;
 
     propertyJavaCustomFilter?: { type: string; superType: string; fieldType: string };
 
@@ -48,6 +43,20 @@ export type Field = BaseApplicationField &
   };
 
 export interface Relationship extends BaseApplicationRelationship, Property {}
+
+export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends BaseApplicationEntity<F, R> {
+  dtoMapstruct: boolean;
+  dtoAny: boolean;
+
+  entityDomainLayer?: boolean;
+
+  propertyJavaFilteredType?: string;
+
+  dtoClass?: string;
+  dtoInstance?: string;
+
+  skipJunitTests?: string;
+}
 
 export type JavaDependencyVersion = {
   name: string;
@@ -132,13 +141,12 @@ type JavaBootstrap = ExportStoragePropertiesFromCommand<typeof JavaBootstrapComm
   packageInfoJavadocs: { packageName: string; documentation: string }[];
 };
 
-export type Application<E extends BaseApplicationEntity> = BaseApplicationApplication<E> &
+export type Application<E extends Entity<Field, Relationship>> = BaseApplicationApplication<E> &
   JavaBootstrap &
   CommonProperties &
   SpringApplication &
   DatabaseApplication &
-  OptionWithDerivedProperties<'buildTool', ['maven', 'gradle']> &
-  GradleApplication & {
+  OptionWithDerivedProperties<'buildTool', ['maven', 'gradle']> & {
     buildToolUnknown?: boolean;
     buildToolExecutable: string;
 

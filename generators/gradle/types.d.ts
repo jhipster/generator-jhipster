@@ -1,4 +1,7 @@
 import type { RequireOneOrNone } from 'type-fest';
+import type { Application as JavaApplication, Entity as JavaEntity } from '../java/index.js';
+import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
+import type GradleCommand from './command.js';
 
 export type GradleComment = { comment?: string };
 
@@ -58,7 +61,11 @@ export type Source = {
   addGradleBuildSrcDependencyCatalogLibraries?(catalogVersion: GradleLibrary[]): void;
 };
 
-export type GradleApplication = {
+export { JavaEntity as Entity };
+
+export type Application<E extends JavaEntity> = JavaApplication<E> &
+ExportApplicationPropertiesFromCommand<typeof GradleCommand> &
+ {
   gradleVersion?: string;
   gradleBuildSrc?: string;
   enableGradleDevelocity?: boolean;

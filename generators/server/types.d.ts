@@ -1,5 +1,5 @@
-import type { Application as JavaApplication, Entity as JavaEntity, Source as JavaSource } from '../java/types.js';
-import type { Source as GradleSource } from '../gradle/types.js';
+import type { Entity as JavaEntity, Source as JavaSource } from '../java/types.js';
+import type { Application as GradleApplication, Source as GradleSource } from '../gradle/types.js';
 import type { Source as MavenSource } from '../maven/types.js';
 import type { LiquibaseSourceType } from '../liquibase/types.js';
 import type { SpringCacheSourceType } from '../spring-cache/types.js';
@@ -10,15 +10,12 @@ import type { ApplicationPropertiesNeedles } from './support/needles.ts';
 
 export type SpringEntity = {
   entitySearchLayer?: boolean;
-  /* Generate entity's Entity */
-  entityDomainLayer?: boolean;
   /* Generate entity's Repository */
   entityPersistenceLayer?: boolean;
   /* Generate entity's Rest Api */
   entityRestLayer?: boolean;
   entitySpringPreAuthorize?: string;
   entitySpringReadPreAuthorize?: string;
-  skipJunitTests?: string;
   entityR2dbcRepository?: boolean;
 };
 
@@ -144,7 +141,7 @@ type ApplicationNature = (ImperativeApplication & CacheProviderApplication) | Re
 */
 type ApplicationNature = { reactive: boolean };
 
-export type Application<E extends JavaEntity> = JavaApplication<E> &
+export type Application<E extends JavaEntity> = GradleApplication<E> &
   ApplicationNature &
   SearchEngine &
   DatabaseTypeApplication &

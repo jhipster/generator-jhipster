@@ -3,7 +3,7 @@ import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/t
 import type { Application as ClientApplication } from '../client/types.js';
 import type { Application as SpringBootApplication } from '../server/types.js';
 import type { I18nApplication } from '../languages/types.js';
-import { EntityAll } from './entity-all.js';
+import type { EntityAll } from './entity-all.js';
 import type { Application as BaseApplication } from './types.js';
 
 /* AuthenticationType End */
@@ -19,7 +19,6 @@ export type ApplicationAll<E extends EntityAll = EntityAll> = BaseApplication<E>
   ClientApplication<E> &
   ExportApplicationPropertiesFromCommand<typeof import('../docker/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../git/command.ts').default> &
-  ExportApplicationPropertiesFromCommand<typeof import('../gradle/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../project-name/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../spring-boot/command.ts').default> &
   import('../docker/types.js').DockerApplicationType;

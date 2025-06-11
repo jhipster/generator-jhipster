@@ -19,17 +19,15 @@
 
 import type { ServerEntity } from '../server/types.js';
 import type { Entity as AngularEntity } from '../angular/types.d.ts';
-import type {
-  Entity as BaseApplicationEntity,
-  Field as BaseApplicationField,
-  Relationship as BaseApplicationRelationship,
-} from './types.js';
+import type { Entity as JavaEntity } from '../java/types.d.ts';
+import type { Entity as BaseApplicationEntity } from './types.js';
 import type { FieldAll } from './field-all.js';
 import type { RelationshipAll } from './relationship-all.js';
 
-export interface EntityAll<F extends BaseApplicationField = FieldAll, R extends BaseApplicationRelationship = RelationshipAll>
+export interface EntityAll<F extends FieldAll = FieldAll, R extends RelationshipAll = RelationshipAll>
   extends BaseApplicationEntity<F, R>,
     AngularEntity<F, R>,
+    JavaEntity<F, R>,
     ServerEntity {
   entityJavadoc?: string;
 
@@ -37,9 +35,6 @@ export interface EntityAll<F extends BaseApplicationField = FieldAll, R extends 
   entityTableName: string;
   entityAbsoluteClass: string;
   entityAbsoluteFolder: string;
-
-  dtoClass?: string;
-  dtoInstance?: string;
 
   persistClass: string;
   persistInstance: string;
@@ -90,11 +85,6 @@ export interface EntityAll<F extends BaseApplicationField = FieldAll, R extends 
   serviceClass: boolean;
   serviceImpl: boolean;
   serviceNo: boolean;
-
-  dtoMapstruct: boolean;
-  dtoAny: boolean;
-
-  propertyJavaFilteredType?: string;
 
   saveUserSnapshot?: boolean;
 

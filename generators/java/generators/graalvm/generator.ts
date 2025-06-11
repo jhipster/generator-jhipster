@@ -26,6 +26,7 @@ import { javaMainPackageTemplatesBlock } from '../../../java/support/files.js';
 import { mavenDefinition } from './internal/maven-definition.js';
 import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.js';
 
+// TODO adjust type
 export default class GraalvmGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {

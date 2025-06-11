@@ -17,12 +17,13 @@
  * limitations under the License.
  */
 import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import type { Application as GradleApplication, Entity as GradleEntity } from './types.js';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default asWritingTask(function cleanupOldServerFilesTask({ control }) {
+export default asWritingTask<GradleEntity, GradleApplication<GradleEntity>>(function cleanupOldServerFilesTask({ control }) {
   if (control.isJhipsterVersionLessThan('5.0.0')) {
     this.removeFile('gradle/mapstruct.gradle');
   }
