@@ -147,6 +147,7 @@ ${comment}
               entityFolderName,
               entityFileName,
               entityPage,
+              entityUrl,
               entityTranslationKeyMenu,
               entityClassHumanized,
             } = entity;
@@ -168,7 +169,7 @@ ${comment}
               }),
               createNeedleCallback({
                 needle: 'add-route-path',
-                contentToAdd: `<Route path="${application.applicationTypeMicroservice ? '/' : ''}${entityFileName}/*" element={<${entityAngularName} />} />`,
+                contentToAdd: `<Route path="/${entityUrl}/*" element={<${entityAngularName} />} />`,
               }),
             );
             this.editFile(

@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type BaseApplicationGenerator from '../base-application/generator.js';
+import type ClientGenerator from '../client/generator.js';
 import { asPromptingTask } from '../base-application/support/task-type-inference.js';
 
 type Choice = { value: string; name: string };
 
-export const askForClientTheme = asPromptingTask(async function askForClientTheme(this: BaseApplicationGenerator, { control }) {
+export const askForClientTheme = asPromptingTask(async function askForClientTheme(this: ClientGenerator, { control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
   const config = this.jhipsterConfigWithDefaults;
@@ -52,10 +52,7 @@ export const askForClientTheme = asPromptingTask(async function askForClientThem
   );
 });
 
-export const askForClientThemeVariant = asPromptingTask(async function askForClientThemeVariant(
-  this: BaseApplicationGenerator,
-  { control },
-) {
+export const askForClientThemeVariant = asPromptingTask(async function askForClientThemeVariant(this: ClientGenerator, { control }) {
   if (control.existingProject && !this.options.askAnswered) return;
   if ((this.jhipsterConfig.clientTheme ?? 'none') === 'none') {
     return;

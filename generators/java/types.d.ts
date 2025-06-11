@@ -4,8 +4,44 @@ import type { EditFileCallback } from '../base-core/api.js';
 import type { MavenDefinition } from '../maven/types.js';
 import type { ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
+import type {
+  Entity as BaseApplicationEntity,
+  Field as BaseApplicationField,
+  Relationship as BaseApplicationRelationship,
+} from '../base-application/index.ts';
 import type { JavaAnnotation } from './support/add-java-annotation.ts';
 import type { default as BootstrapCommand } from './generators/bootstrap/command.js';
+
+export type { BaseApplicationEntity as Entity };
+
+type Property = {
+  propertyJavaFilterName?: string;
+  propertyJavaFilterJavaBeanName?: string;
+  propertyJavaFilterType?: string;
+  propertyJavaFilteredType?: string;
+};
+
+export type Field = BaseApplicationField &
+  Property & {
+    // Java specific
+    propertyJavaBeanName?: string;
+    propertyDtoJavaType?: string;
+    propertyJavaFilterType?: string;
+    fieldInJavaBeanMethod?: string;
+    fieldJavaBuildSpecification?: string;
+    fieldJavadoc?: string;
+    fieldJavaValueGenerator?: string;
+    javaValueGenerator?: string;
+    propertyJavaFilteredType?: string;
+
+    propertyJavaCustomFilter?: { type: string; superType: string; fieldType: string };
+
+    liquibaseDefaultValueAttributeValue?: string;
+    liquibaseDefaultValueAttributeName?: string;
+    liquibaseGenerateFakeData?: boolean;
+  };
+
+export interface Relationship extends BaseApplicationRelationship, Property {}
 
 type JavaBootstrapStorageProperties = ExportStoragePropertiesFromCommand<typeof BootstrapCommand>;
 
@@ -96,7 +132,6 @@ export type JavaApplication = JavaBootstrap &
     addOpenapiGeneratorPlugin: boolean;
     useNpmWrapper: boolean;
     graalvmReachabilityMetadata: string;
-    javaNodeBuildPaths: string[];
 
     cucumberTests: boolean;
     gatlingTests: boolean;

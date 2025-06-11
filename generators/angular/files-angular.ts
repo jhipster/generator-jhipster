@@ -18,6 +18,7 @@
  */
 import { asWritingTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
+import type { Application as AngularApplication, Entity as AngularEntity } from './types.js';
 
 export const files = {
   jhipsterProject: [
@@ -472,7 +473,7 @@ export const files = {
   ],
 };
 
-export const writeFiles = asWritingTask(async function writeFiles({ application }) {
+export const writeFiles = asWritingTask<AngularEntity, AngularApplication<AngularEntity>>(async function writeFiles({ application }) {
   if (!application.clientFrameworkAngular) return;
 
   await this.writeFiles({

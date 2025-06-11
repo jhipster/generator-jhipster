@@ -18,6 +18,7 @@
  */
 import { asWritingTask } from '../base-application/support/task-type-inference.js';
 import { clientRootTemplatesBlock, clientSrcTemplatesBlock } from './support/files.js';
+import type { Application as ClientApplication, Entity as ClientEntity } from './types.js';
 
 export const files = {
   common: [
@@ -76,7 +77,7 @@ export const files = {
   ],
 };
 
-export const writeFiles = asWritingTask(async function writeFiles({ application }) {
+export const writeFiles = asWritingTask<ClientEntity, ClientApplication<ClientEntity>>(async function writeFiles({ application }) {
   if (!application.clientFrameworkBuiltIn) {
     return;
   }

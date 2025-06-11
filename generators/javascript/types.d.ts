@@ -1,7 +1,49 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { Merge, PackageJson, Simplify } from 'type-fest';
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
+import type {
+  Application as BaseApplicationApplication,
+  Entity as BaseApplicationEntity,
+  Field as BaseApplicationField,
+  Relationship as BaseApplicationRelationship,
+} from '../base-application/index.ts';
 import type JavascriptBootstrapCommand from './generators/bootstrap/command.js';
+
+export { BaseApplicationRelationship as Relationship, BaseApplicationField as Field };
+
+export interface Entity<
+  F extends BaseApplicationField = BaseApplicationField,
+  R extends BaseApplicationRelationship = BaseApplicationRelationship,
+> extends BaseApplicationEntity<F, R> {
+  entityFileName: string;
+  entityFolderName: string;
+  entityModelFileName: string;
+  entityParentPathAddition: string;
+  entityPluralFileName: string;
+  entityServiceFileName: string;
+
+  /** Generate only the model at client side for relationships. */
+  entityClientModelOnly?: boolean;
+  entityAngularName: string;
+  entityAngularNamePlural: string;
+  entityReactName: string;
+  entityStateName: string;
+  entityUrl: string;
+  entityPage: string;
+
+  paginationPagination: boolean;
+  paginationInfiniteScroll: boolean;
+  paginationNo: boolean;
+
+  tsKeyType?: string;
+  tsSampleWithPartialData?: string;
+  tsSampleWithRequiredData?: string;
+  tsSampleWithFullData?: string;
+  tsSampleWithNewData?: string;
+  tsPrimaryKeySamples?: string[];
+
+  entityAngularJSSuffix?: string;
+}
 
 type DependencyValue = string | undefined | null;
 
@@ -20,7 +62,8 @@ export type JavaScriptSourceType = {
   ): void;
 };
 
-export type JavaScriptApplication = ExportApplicationPropertiesFromCommand<typeof JavascriptBootstrapCommand> &
+export type Application<E extends Entity> = BaseApplicationApplication<E> &
+  ExportApplicationPropertiesFromCommand<typeof JavascriptBootstrapCommand> &
   ExportApplicationPropertiesFromCommand<typeof import('./generators/eslint/command.js').default> &
   ExportApplicationPropertiesFromCommand<typeof import('./generators/prettier/command.js').default> & {
     packageJsonNodeEngine?: boolean | string;

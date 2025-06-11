@@ -43,7 +43,7 @@ import type { Application as AngularApplication, Entity as AngularEntity } from 
 
 const { ANGULAR } = clientFrameworkTypes;
 
-export default class AngularGenerator extends BaseApplicationGenerator<AngularEntity, AngularApplication> {
+export default class AngularGenerator extends BaseApplicationGenerator<AngularEntity, AngularApplication<AngularEntity>> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -112,7 +112,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<AngularEn
         };
         source.addAdminRoute = (args: Omit<Parameters<typeof addRoute>[0], 'needle'>) =>
           this.editFile(
-            `${application.srcMainWebapp}app/admin/admin.routes.ts`,
+            `${application.clientSrcDir}app/admin/admin.routes.ts`,
             addRoute({
               needle: 'add-admin-route',
               ...args,
@@ -121,7 +121,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<AngularEn
 
         source.addItemToAdminMenu = (args: Omit<Parameters<typeof addItemToMenu>[0], 'needle' | 'enableTranslation' | 'jhiPrefix'>) => {
           this.editFile(
-            `${application.srcMainWebapp}app/layouts/navbar/navbar.component.html`,
+            `${application.clientSrcDir}app/layouts/navbar/navbar.component.html`,
             addItemToAdminMenu({
               enableTranslation: application.enableTranslation,
               jhiPrefix: application.jhiPrefix,
@@ -156,7 +156,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<AngularEn
         };
 
         source.addIconImport = args => {
-          const iconsPath = `${application.srcMainWebapp}app/config/font-awesome-icons.ts`;
+          const iconsPath = `${application.clientSrcDir}app/config/font-awesome-icons.ts`;
           const ignoreNonExisting = this.ignoreNeedlesError && 'Icon imports not updated with icon';
           this.editFile(iconsPath, { ignoreNonExisting }, addIconImport(args));
         };

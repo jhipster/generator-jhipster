@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { EntityAll } from '../base-application/entity-all.js';
-import type { FieldAll } from '../base-application/field-all.js';
-import type { RelationshipAll } from '../base-application/relationship-all.js';
-import type { ApplicationAll } from '../base-application/application-properties-all.js';
-import type { Field as BaseApplicationField, Relationship as BaseApplicationRelationship } from '../base-application/types.js';
+import type {
+  Application as ClientApplication,
+  Entity as ClientEntity,
+  Field as ClientField,
+  Relationship as ClientRelationship,
+} from '../client/index.js';
 
-export interface Entity<F extends BaseApplicationField = FieldAll, R extends BaseApplicationRelationship = RelationshipAll>
-  extends EntityAll<F, R> {
+export interface Entity<F extends ClientField = ClientField, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
   /**
    * @experimental to be replaced with a calculated property
    * Returns the typescript import section of enums referenced by all fields of the entity.
@@ -35,8 +35,11 @@ export interface Entity<F extends BaseApplicationField = FieldAll, R extends Bas
   entityAngularReadAuthorities?: string;
 }
 
-export type Application = {
+export type Application<E extends Entity> = {
   /** @experimental to be replaced with needles */
-  angularEntities?: Entity[];
+  angularEntities?: E[];
   angularLocaleId: string;
-} & ApplicationAll<Entity>;
+
+  // Common properties
+  communicationSpringWebsocket?: boolean;
+} & ClientApplication<E>;
