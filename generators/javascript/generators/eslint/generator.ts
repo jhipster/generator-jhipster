@@ -16,10 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-application/index.js';
+import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.js';
 import { createNeedleCallback } from '../../../base-core/support/needles.ts';
+import type {
+  Config as JavascriptConfig,
+  Options as JavascriptOptions,
+  JavascriptSimpleApplication,
+  Source as JavascriptSource,
+} from '../../types.js';
 
-export default class EslintGenerator extends BaseApplicationGenerator {
+export default class EslintGenerator extends BaseSimpleApplicationGenerator<
+  JavascriptSimpleApplication,
+  JavascriptConfig,
+  JavascriptOptions,
+  JavascriptSource
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -41,7 +52,7 @@ export default class EslintGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
+  get [BaseSimpleApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -61,7 +72,7 @@ export default class EslintGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [BaseSimpleApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -80,7 +91,7 @@ export default class EslintGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [BaseSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -97,7 +108,7 @@ export default class EslintGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [BaseSimpleApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

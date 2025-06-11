@@ -16,9 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-application/index.js';
+import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.js';
+import type {
+  Config as JavascriptConfig,
+  Options as JavascriptOptions,
+  JavascriptSimpleApplication,
+  Source as JavascriptSource,
+} from '../../types.js';
 
-export default class HuskyGenerator extends BaseApplicationGenerator {
+export default class HuskyGenerator extends BaseSimpleApplicationGenerator<
+  JavascriptSimpleApplication,
+  JavascriptConfig,
+  JavascriptOptions,
+  JavascriptSource
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -39,7 +50,7 @@ export default class HuskyGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.CONFIGURING]() {
+  get [BaseSimpleApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -54,7 +65,7 @@ export default class HuskyGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [BaseSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -74,7 +85,7 @@ export default class HuskyGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [BaseSimpleApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

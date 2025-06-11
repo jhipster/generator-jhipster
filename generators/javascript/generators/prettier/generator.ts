@@ -18,8 +18,21 @@
  */
 import { packageJson } from '../../../../lib/index.js';
 import BaseApplicationGenerator from '../../../base-application/index.js';
+import type {
+  Application as JavascriptApplication,
+  Config as JavascriptConfig,
+  Entity as JavascriptEntity,
+  Options as JavascriptOptions,
+  Source as JavascriptSource,
+} from '../../types.js';
 
-export default class PrettierGenerator extends BaseApplicationGenerator {
+export default class PrettierGenerator extends BaseApplicationGenerator<
+  JavascriptEntity,
+  JavascriptApplication<JavascriptEntity>,
+  JavascriptConfig,
+  JavascriptOptions,
+  JavascriptSource
+> {
   fromInit?: boolean;
   prettierConfigFile!: string;
   monorepositoryRoot?: boolean;

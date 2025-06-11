@@ -20,7 +20,21 @@ import { packageJson } from '../../../../lib/index.js';
 import BaseApplicationGenerator from '../../../base-application/index.js';
 import { isReservedTypescriptKeyword } from '../../support/reserved-words.ts';
 
-export default class BootstrapGenerator extends BaseApplicationGenerator {
+import type {
+  Application as JavascriptApplication,
+  Config as JavascriptConfig,
+  Entity as JavascriptEntity,
+  Options as JavascriptOptions,
+  Source as JavascriptSource,
+} from '../../types.js';
+
+export default class JavascriptBootstrapGenerator extends BaseApplicationGenerator<
+  JavascriptEntity,
+  JavascriptApplication<JavascriptEntity>,
+  JavascriptConfig,
+  JavascriptOptions,
+  JavascriptSource
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
