@@ -49,7 +49,7 @@ export type Options = YeomanOptions & {
   commandsConfigs?: JHipsterConfigs;
 
   /** boostrap options */
-  applyDefaults?: <const data = any>(data: data) => data;
+  applyDefaults?: <const T = any>(data: T) => T;
 
   /* generate-blueprint options */
   localBlueprint?: boolean;

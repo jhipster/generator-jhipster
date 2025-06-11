@@ -2,11 +2,11 @@ import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/index.js';
 import type { CypressApplication } from '../cypress/types.js';
 import type {
-  JavaScriptSourceType,
   Application as JavascriptApplication,
   Entity as JavascriptEntity,
   Field as JavascriptField,
   Relationship as JavascriptRelationship,
+  Source as JavascriptSource,
 } from '../javascript/types.js';
 import type { Language } from '../languages/support/languages.ts';
 import type {
@@ -56,7 +56,7 @@ export type ClientResources = {
   comment?: string;
 };
 
-export type ClientSourceType = JavaScriptSourceType & {
+export type ClientSourceType = JavascriptSource & {
   /**
    * Add style to css file.
    */

@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-application/index.js';
+import { JavascriptSimpleApplicationGenerator } from '../../generator.ts';
 
-export default class HuskyGenerator extends BaseApplicationGenerator {
+export default class HuskyGenerator extends JavascriptSimpleApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -39,7 +39,7 @@ export default class HuskyGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.CONFIGURING]() {
+  get [JavascriptSimpleApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -54,7 +54,7 @@ export default class HuskyGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [JavascriptSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -74,7 +74,7 @@ export default class HuskyGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [JavascriptSimpleApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

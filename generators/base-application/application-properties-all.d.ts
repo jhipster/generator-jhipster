@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
 import type { Application as ClientApplication } from '../client/types.js';
-import type { SpringBootApplication } from '../server/types.js';
+import type { Application as SpringBootApplication } from '../server/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import { EntityAll } from './entity-all.js';
 import type { Application as BaseApplication } from './types.js';
@@ -15,7 +15,7 @@ type QuirksApplication = {
 export type ApplicationAll<E extends EntityAll = EntityAll> = BaseApplication<E> &
   QuirksApplication &
   I18nApplication<E> &
-  SpringBootApplication &
+  SpringBootApplication<E> &
   ClientApplication<E> &
   ExportApplicationPropertiesFromCommand<typeof import('../docker/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../git/command.ts').default> &

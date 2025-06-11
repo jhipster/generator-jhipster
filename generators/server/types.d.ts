@@ -1,6 +1,6 @@
-import type { JavaApplication, JavaBuildToolApplication, JavaSourceType } from '../java/types.js';
-import type { GradleSourceType } from '../gradle/types.js';
-import type { MavenSourceType } from '../maven/types.js';
+import type { Application as JavaApplication, Entity as JavaEntity, Source as JavaSource } from '../java/types.js';
+import type { Source as GradleSource } from '../gradle/types.js';
+import type { Source as MavenSource } from '../maven/types.js';
 import type { LiquibaseSourceType } from '../liquibase/types.js';
 import type { SpringCacheSourceType } from '../spring-cache/types.js';
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
@@ -27,7 +27,7 @@ export type ServerEntity = SpringEntity & {
   entityAbsolutePackage?: string;
 };
 
-export type SpringBootSource = JavaSourceType & {
+export type SpringBootSource = JavaSource & {
   addTestSpringFactory?({ key, value }: { key: string; value: string }): void;
   addLogbackLogEntry?({ file, name, level }: { file: string; name: string; level: string }): void;
   addLogbackMainLog?({ name, level }: { name: string; level: string }): void;
@@ -66,7 +66,7 @@ export type SpringBootSource = JavaSourceType & {
   addApplicationYamlDocument?(document: string): void;
 };
 
-export type SpringBootSourceType = GradleSourceType & MavenSourceType & SpringCacheSourceType & LiquibaseSourceType & SpringBootSource;
+export type SpringBootSourceType = GradleSource & MavenSource & SpringCacheSourceType & LiquibaseSourceType & SpringBootSource;
 
 type ImperativeApplication = {
   reactive: false;
@@ -144,9 +144,8 @@ type ApplicationNature = (ImperativeApplication & CacheProviderApplication) | Re
 */
 type ApplicationNature = { reactive: boolean };
 
-export type SpringBootApplication = JavaApplication &
+export type Application<E extends JavaEntity> = JavaApplication<E> &
   ApplicationNature &
-  JavaBuildToolApplication &
   SearchEngine &
   DatabaseTypeApplication &
   GatewayApplication & {
@@ -163,14 +162,6 @@ export type SpringBootApplication = JavaApplication &
     srcTest: string;
     documentationUrl: string;
 
-    imperativeOrReactive: string;
-    optionalOrMono: string;
-    optionalOrMonoOfNullable: string;
-    listOrFlux: string;
-    optionalOrMonoClassPath: string;
-    wrapMono: (className: string) => string;
-    listOrFluxClassPath: string;
-
     generateAuthenticationApi?: boolean;
     generateInMemoryUserCredentials?: boolean;
 
@@ -180,8 +171,6 @@ export type SpringBootApplication = JavaApplication &
     communicationSpringWebsocket: boolean;
     anyEntityHasRelationshipWithUser: boolean;
     requiresDeleteAllUsers: boolean;
-    reactorBlock: string;
-    reactorBlockOptional: string;
 
     domains: string[];
   };

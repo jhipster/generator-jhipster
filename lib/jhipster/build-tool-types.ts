@@ -20,5 +20,5 @@
 const buildToolTypes = {
   MAVEN: 'maven',
   GRADLE: 'gradle',
-};
+} as const;
 export default buildToolTypes;

@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-application/index.js';
+import { JavaApplicationGenerator } from '../../generator.ts';
 
-export default class JibGenerator extends BaseApplicationGenerator {
+export default class JibGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -43,7 +43,7 @@ export default class JibGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.COMPOSING]() {
+  get [JavaApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -64,7 +64,7 @@ export default class JibGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [JavaApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 }

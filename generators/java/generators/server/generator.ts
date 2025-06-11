@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-application/index.js';
+import { JavaApplicationGenerator } from '../../generator.ts';
 
 const WAIT_TIMEOUT = 3 * 60000;
 
-export default class ServerGenerator extends BaseApplicationGenerator {
+export default class ServerGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -112,7 +112,7 @@ export default class ServerGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [JavaApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

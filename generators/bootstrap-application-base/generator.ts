@@ -134,7 +134,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   get loading() {
     return this.asLoadingTaskGroup({
       loadDefaults({ application, applicationDefaults }) {
-        applicationDefaults(getConfigWithDefaults(application as any) as any);
+        let { applyDefaults } = this.options;
+        applyDefaults ??= getConfigWithDefaults as any;
+        applicationDefaults(applyDefaults!(application));
       },
       loadApplication({ application, control, applicationDefaults }) {
         applicationDefaults({

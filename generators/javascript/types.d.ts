@@ -1,15 +1,39 @@
-/* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { Merge, PackageJson, Simplify } from 'type-fest';
-import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
+import type {
+  ExportApplicationPropertiesFromCommand,
+  ExportGeneratorOptionsFromCommand,
+  ExportStoragePropertiesFromCommand,
+} from '../../lib/command/types.js';
 import type {
   Application as BaseApplicationApplication,
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
   Relationship as BaseApplicationRelationship,
 } from '../base-application/index.ts';
+import type {
+  Application as BaseSimpleApplicationApplication,
+  Config as BaseSimpleApplicationConfig,
+  Options as BaseSimpleApplicationOptions,
+  Source as BaseSimpleApplicationSource,
+} from '../base-simple-application/index.ts';
+import type EslintCommand from './generators/eslint/command.js';
+import type HuskyCommand from './generators/husky/command.js';
 import type JavascriptBootstrapCommand from './generators/bootstrap/command.js';
+import type PrettierCommand from './generators/prettier/command.js';
 
 export { BaseApplicationRelationship as Relationship, BaseApplicationField as Field };
+
+export type Config = BaseSimpleApplicationConfig &
+  ExportStoragePropertiesFromCommand<typeof EslintCommand> &
+  ExportStoragePropertiesFromCommand<typeof HuskyCommand> &
+  ExportStoragePropertiesFromCommand<typeof JavascriptBootstrapCommand> &
+  ExportStoragePropertiesFromCommand<typeof PrettierCommand>;
+
+export type Options = BaseSimpleApplicationOptions &
+  ExportGeneratorOptionsFromCommand<typeof EslintCommand> &
+  ExportGeneratorOptionsFromCommand<typeof HuskyCommand> &
+  ExportGeneratorOptionsFromCommand<typeof JavascriptBootstrapCommand> &
+  ExportGeneratorOptionsFromCommand<typeof PrettierCommand>;
 
 export interface Entity<
   F extends BaseApplicationField = BaseApplicationField,
@@ -47,7 +71,7 @@ export interface Entity<
 
 type DependencyValue = string | undefined | null;
 
-export type JavaScriptSourceType = {
+export type Source = BaseSimpleApplicationSource & {
   mergePrettierConfig?: (config: Record<string, unknown>) => void;
   addPrettierIgnore?: (newContent: string) => void;
 
@@ -62,10 +86,10 @@ export type JavaScriptSourceType = {
   ): void;
 };
 
-export type Application<E extends Entity> = BaseApplicationApplication<E> &
-  ExportApplicationPropertiesFromCommand<typeof JavascriptBootstrapCommand> &
-  ExportApplicationPropertiesFromCommand<typeof import('./generators/eslint/command.js').default> &
-  ExportApplicationPropertiesFromCommand<typeof import('./generators/prettier/command.js').default> & {
+export type JavascriptSimpleApplication = BaseSimpleApplicationApplication &
+  ExportApplicationPropertiesFromCommand<typeof EslintCommand> &
+  ExportApplicationPropertiesFromCommand<typeof HuskyCommand> &
+  ExportApplicationPropertiesFromCommand<typeof JavascriptBootstrapCommand> & {
     packageJsonNodeEngine?: boolean | string;
     eslintConfigFile?: string;
     cjsExtension?: string;
@@ -77,3 +101,7 @@ export type Application<E extends Entity> = BaseApplicationApplication<E> &
 
     addPrettierExtensions?: (extensions: string[]) => void;
   };
+
+export type Application<E extends Entity> = BaseApplicationApplication<E> &
+  JavascriptSimpleApplication &
+  ExportApplicationPropertiesFromCommand<typeof PrettierCommand>;

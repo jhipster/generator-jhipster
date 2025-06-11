@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-application/index.js';
+import { JavaApplicationGenerator } from '../../generator.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
 import { javaMainResourceTemplatesBlock } from '../../support/files.js';
 
-export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator {
+export default class OpenapiGeneratorGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -55,7 +55,7 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [JavaApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -136,7 +136,7 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [JavaApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

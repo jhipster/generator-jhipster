@@ -25,4 +25,4 @@ export { default as comand } from './command.js';
 export type { EntityAll as Entity } from '../base-application/entity-all.js';
 export type { FieldAll as Field } from '../base-application/field-all.js';
 export type { RelationshipAll as Relationship } from '../base-application/relationship-all.js';
-export type { Application, Config, Features, Options } from './types.js';
+export type { Application, Config, Features, Options, Source } from './types.js';
