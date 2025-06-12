@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { fieldTypes } from '../../../lib/jhipster/index.js';
-import type { LiquibaseEntity } from '../types.js';
+import type { Entity as LiquibaseEntity } from '../types.js';
 import { asPostPreparingEachEntityTask } from '../../base-application/support/task-type-inference.js';
 
 const { CommonDBTypes } = fieldTypes;

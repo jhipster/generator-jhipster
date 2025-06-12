@@ -190,6 +190,8 @@ export type Source = BaseApplicationSource &
     addJavaDependencies?(dependency: JavaDependency[], options?: JavaNeedleOptions): void;
     hasJavaProperty?(propertyName: string): boolean;
     hasJavaManagedProperty?(propertyName: string): boolean;
+    addMainLog?({ name, level }: { name: string; level: string }): void;
+    addTestLog?({ name, level }: { name: string; level: string }): void;
 
     /**
      * Edit a Java file by adding static imports, imports and annotations.

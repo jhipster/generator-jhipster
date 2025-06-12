@@ -1,9 +1,6 @@
 import type { Entity as JavaEntity, Field as JavaField, Relationship as JavaRelationship, Source as JavaSource } from '../java/types.js';
 import type { Entity as ServerEntity, Field as ServerField, Relationship as ServerRelationship } from '../server/index.js';
-import type { Application as GradleApplication, Source as GradleSource } from '../gradle/types.js';
-import type { Source as MavenSource } from '../maven/types.js';
-import type { LiquibaseSourceType } from '../liquibase/types.js';
-import type { SpringCacheSourceType } from '../spring-cache/types.js';
+import type { Application as GradleApplication } from '../gradle/types.js';
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
 import type { GatewayApplication } from '../spring-cloud/generators/gateway/types.js';
 import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
@@ -30,11 +27,9 @@ export type Entity<F extends Field, R extends Relationship> = ServerEntity<F, R>
     entityAbsolutePackage?: string;
   };
 
-export type SpringBootSource = JavaSource & {
+export type Source = JavaSource & {
   addTestSpringFactory?({ key, value }: { key: string; value: string }): void;
   addLogbackLogEntry?({ file, name, level }: { file: string; name: string; level: string }): void;
-  addLogbackMainLog?({ name, level }: { name: string; level: string }): void;
-  addLogbackTestLog?({ name, level }: { name: string; level: string }): void;
   addIntegrationTestAnnotation?(annotation: JavaAnnotation): void;
   addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
   addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
@@ -68,8 +63,6 @@ export type SpringBootSource = JavaSource & {
    */
   addApplicationYamlDocument?(document: string): void;
 };
-
-export type SpringBootSourceType = GradleSource & MavenSource & SpringCacheSourceType & LiquibaseSourceType & SpringBootSource;
 
 type ImperativeApplication = {
   reactive: false;

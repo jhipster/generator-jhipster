@@ -16,7 +16,7 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       addlogStep({ source }) {
-        source.addLogbackMainLog?.({ name: 'org.test.logTest', level: 'OFF' });
+        source.addMainLog?.({ name: 'org.test.logTest', level: 'OFF' });
       },
     });
   }

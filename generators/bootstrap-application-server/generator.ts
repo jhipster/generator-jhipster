@@ -195,7 +195,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+    return this.preparingEachEntity;
   }
 
   get preparingEachEntityField() {

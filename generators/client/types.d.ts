@@ -56,7 +56,7 @@ export type ClientResources = {
   comment?: string;
 };
 
-export type ClientSourceType = JavascriptSource & {
+export type Source = JavascriptSource & {
   /**
    * Add style to css file.
    */

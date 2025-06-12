@@ -35,6 +35,7 @@ import type { FieldAll } from '../base-application/field-all.js';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../base-entity-changes/types.js';
 import type { ApplicationAll } from '../base-application/application-properties-all.js';
+import type { Source as SpringBootSource } from '../spring-boot/index.js';
 import { liquibaseFiles } from './files.js';
 import {
   liquibaseComment,
@@ -50,7 +51,7 @@ import {
 } from './internal/needles.js';
 import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.js';
 import type command from './command.js';
-import type { LiquibaseEntity, Source as LiquibaseSource } from './types.js';
+import type { Entity as LiquibaseEntity, Source as LiquibaseSource } from './types.js';
 
 const {
   CommonDBTypes: { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER },
@@ -310,14 +311,14 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     return this.asPostWritingTaskGroup({
       customizeSpringLogs({ source }) {
         if (!this.injectLogs) return;
-        source.addLogbackMainLog?.({ name: 'liquibase', level: 'WARN' });
-        source.addLogbackMainLog?.({ name: 'LiquibaseSchemaResolver', level: 'INFO' });
-        source.addLogbackTestLog?.({ name: 'liquibase', level: 'WARN' });
-        source.addLogbackTestLog?.({ name: 'LiquibaseSchemaResolver', level: 'INFO' });
+        source.addMainLog?.({ name: 'liquibase', level: 'WARN' });
+        source.addMainLog?.({ name: 'LiquibaseSchemaResolver', level: 'INFO' });
+        source.addTestLog?.({ name: 'liquibase', level: 'WARN' });
+        source.addTestLog?.({ name: 'LiquibaseSchemaResolver', level: 'INFO' });
       },
       customizeApplicationProperties({ source, application }) {
         if (application.databaseTypeSql && !application.reactive) {
-          source.addApplicationPropertiesClass?.({
+          (source as SpringBootSource).addApplicationPropertiesClass?.({
             propertyType: 'Liquibase',
             classStructure: { asyncStart: ['Boolean', 'true'] },
           });
@@ -513,7 +514,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
         // Latest liquibase version supported by Reachability Repository is 4.23.0
         // Hints may be dropped if newer version is supported
         // https://github.com/oracle/graalvm-reachability-metadata/blob/master/metadata/org.liquibase/liquibase-core/index.json
-        source.addNativeHint!({
+        (source as SpringBootSource).addNativeHint!({
           resources: ['config/liquibase/*'],
           declaredConstructors: [
             'liquibase.database.LiquibaseTableNamesFactory.class',

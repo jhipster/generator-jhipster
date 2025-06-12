@@ -138,7 +138,7 @@ export default class SqlGenerator extends BaseApplicationGenerator {
         });
       },
       addLog({ source }) {
-        source.addLogbackTestLog?.({
+        source.addTestLog?.({
           name: 'org.hibernate.orm.incubating',
           level: 'ERROR',
         });

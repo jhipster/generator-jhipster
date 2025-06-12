@@ -1,7 +1,7 @@
-import type { ClientSourceType } from '../client/types.js';
+import type { Source as ClientSource } from '../client/types.js';
 import type { DockerSourceType } from '../docker/types.js';
 import type { LanguagesSource } from '../languages/types.js';
-import type { SpringBootSourceType } from '../spring-boot/types.js';
-import type { Source as BaseApplicationSource } from './types.js';
+import type { Source as LiquibaseSource } from '../liquibase/index.js';
+import type { Source as SpringBootCache } from '../spring-cache/index.js';
 
-export type SourceAll = BaseApplicationSource & SpringBootSourceType & ClientSourceType & LanguagesSource & DockerSourceType;
+export type SourceAll = LiquibaseSource & SpringBootCache & ClientSource & LanguagesSource & DockerSourceType;
