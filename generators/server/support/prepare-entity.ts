@@ -16,46 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import path from 'path';
 
 import { databaseTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 
-import { isReservedTableName } from '../../../lib/jhipster/reserved-keywords.js';
-import { mutateData, normalizePathEnd } from '../../../lib/utils/index.js';
-import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
-import type { ApplicationAll } from '../../base-application/application-properties-all.js';
 import { hibernateSnakeCase } from './string.js';
 import { getDatabaseTypeData } from './database.js';
 
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { POSTGRESQL, MYSQL, MARIADB, COUCHBASE, SQL, NEO4J } = databaseTypes;
-
-export default function prepareEntity(entity: any, application: ApplicationAll) {
-  const { packageFolder } = application;
-  const { entityPackage, packageName, persistClass } = entity;
-  let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder, entityJavaPackageFolder } = entity;
-  if (entityPackage) {
-    entityJavaPackageFolder = `${entityPackage.replace(/\./g, '/')}/`;
-    entityAbsolutePackage = [packageName, entityPackage].join('.');
-    entityAbsoluteFolder = path.join(packageFolder, entityJavaPackageFolder);
-  }
-  entityAbsoluteFolder = normalizePathEnd(entityAbsoluteFolder);
-  entity.entityJavaPackageFolder = entityJavaPackageFolder ?? '';
-  entity.entityAbsolutePackage = entityAbsolutePackage;
-  entity.entityAbsoluteFolder = entityAbsoluteFolder;
-  entity.entityAbsoluteClass = `${entityAbsolutePackage}.domain.${persistClass}`;
-
-  mutateData(entity, {
-    entityJavadoc: ({ documentation }) => (documentation ? formatDocAsJavaDoc(documentation) : documentation),
-    entityApiDescription: ({ documentation }) => (documentation ? formatDocAsApiDescription(documentation) : documentation),
-  } as any);
-
-  if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType ?? entity.databaseType) && entity.jhiPrefix) {
-    entity.entityInstanceDbSafe = `${entity.jhiPrefix}${entity.entityClass}`;
-  } else {
-    entity.entityInstanceDbSafe = entity.entityInstance;
-  }
-}
 
 export function loadRequiredConfigDerivedProperties(entity) {
   entity.jhiTablePrefix = hibernateSnakeCase(entity.jhiPrefix);

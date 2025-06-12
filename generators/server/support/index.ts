@@ -19,7 +19,6 @@
 export * from './build-specification-mapper.js';
 export * from './database.js';
 export * from './needles.js';
-export { default as prepareEntity } from './prepare-entity.js';
 export * from './prepare-entity.js';
 export { default as prepareField } from './prepare-field.js';
 export * from './prepare-relationship.js';

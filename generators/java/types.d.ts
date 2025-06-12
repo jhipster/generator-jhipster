@@ -55,6 +55,24 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   dtoClass?: string;
   dtoInstance?: string;
 
+  entityJavadoc?: string;
+  entityApiDescription?: string;
+
+  entityClass: string;
+  entityClassPlural: string;
+  entityAbsoluteClass: string;
+  /** Entity folder relative to project root */
+  entityAbsoluteFolder: string;
+  /** Full entity package */
+  entityAbsolutePackage?: string;
+  /** Entity folder relative to src/main/java folder */
+  entityJavaPackageFolder?: string;
+
+  persistClass: string;
+  persistInstance: string;
+  restClass: string;
+  restInstance: string;
+
   skipJunitTests?: string;
 }
 

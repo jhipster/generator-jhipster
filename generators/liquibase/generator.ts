@@ -20,7 +20,8 @@ import fs from 'fs';
 import { escape, min } from 'lodash-es';
 
 import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
-import { getFKConstraintName, getUXConstraintName, prepareEntity as prepareEntityForServer } from '../server/support/index.js';
+import { getFKConstraintName, getUXConstraintName } from '../server/support/index.js';
+import { prepareEntity as prepareEntityForServer } from '../java/support/index.js';
 import {
   loadRequiredConfigIntoEntity,
   prepareEntity,

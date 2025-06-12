@@ -29,19 +29,6 @@ export interface EntityAll<F extends FieldAll = FieldAll, R extends Relationship
     AngularEntity<F, R>,
     JavaEntity<F, R>,
     SpringBootEntity<F, R> {
-  entityJavadoc?: string;
-
-  entityClass: string;
-  entityAbsoluteClass: string;
-  entityAbsoluteFolder: string;
-
-  persistClass: string;
-  persistInstance: string;
-  restClass: string;
-  restInstance: string;
-
-  entityClassPlural: string;
-
   entityApiUrl: string;
   entityApi: string;
 

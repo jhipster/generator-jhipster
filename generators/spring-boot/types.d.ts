@@ -24,7 +24,6 @@ export interface Relationship extends ServerRelationship, JavaRelationship {}
 export type Entity<F extends Field, R extends Relationship> = ServerEntity<F, R> &
   SpringEntity & {
     skipDbChangelog?: boolean;
-    entityAbsolutePackage?: string;
   };
 
 export type Source = JavaSource & {
