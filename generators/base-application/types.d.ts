@@ -13,7 +13,6 @@ import type { FieldType } from './internal/types/field-types.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
 
 export type Config = BaseSimpleApplicationConfig & {
-  baseName?: string;
   entities?: string[];
 };
 

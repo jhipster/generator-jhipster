@@ -20,19 +20,20 @@
 import k8sPrompts from '../kubernetes/prompts.js';
 import { kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
 import { generatorDefaultConfig } from '../kubernetes/kubernetes-constants.js';
+import type BaseWorkspacesGenerator from '../base-workspaces/index.js';
+import { asPromptingWorkspaceTask } from '../base-workspaces/support/task-type-inference.js';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;
 const { HELM, K8S } = GeneratorTypes;
 
 export default {
-  askForGeneratorType,
   ...k8sPrompts,
 };
 
-async function askForGeneratorType() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForGeneratorType = asPromptingWorkspaceTask(async function askForGeneratorType(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
 
-  const prompts = [
+  const props = await this.prompt(
     {
       type: 'list',
       name: 'generatorType',
@@ -49,8 +50,7 @@ async function askForGeneratorType() {
       ],
       default: this.generatorType ? this.generatorType : generatorDefaultConfig.generatorType,
     },
-  ];
-
-  const props = await this.prompt(prompts, this.config);
+    this.config,
+  );
   this.generatorType = props.generatorType;
-}
+});

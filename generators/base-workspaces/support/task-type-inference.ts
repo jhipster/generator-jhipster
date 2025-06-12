@@ -23,3 +23,8 @@ export function asWritingTask<S extends Source = Source, const G extends CoreGen
 ) {
   return task;
 }
+export function asPromptingWorkspaceTask<S extends Source = Source, const G extends CoreGenerator = CoreGenerator>(
+  task: (this: G, params: Tasks<any, any, S>['PromptingWorkspacesTaskParam']) => void,
+) {
+  return task;
+}

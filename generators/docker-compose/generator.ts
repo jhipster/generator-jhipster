@@ -25,11 +25,7 @@ import normalize from 'normalize-path';
 import { defaults } from 'lodash-es';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
-import type {
-  Deployment as BaseDeployment,
-  Workspaces as BaseWorkspaces,
-  WorkspacesApplication as BaseWorkspacesApplication,
-} from '../base-workspaces/index.js';
+import type { WorkspacesApplication as Application, Deployment as Deployment, Workspaces as Workspaces } from '../base-workspaces/index.js';
 
 import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
@@ -38,6 +34,7 @@ import { createFaker } from '../base-application/support/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
 import { loadDerivedPlatformConfig, loadPlatformConfig } from '../base-workspaces/support/index.js';
+import type { Control } from '../base/types.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files.js';
 
@@ -45,7 +42,7 @@ const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;
 const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { Options: DeploymentOptions } = deploymentOptions;
 
-export default class DockerComposeGenerator extends BaseWorkspacesGenerator<BaseDeployment, BaseWorkspaces, BaseWorkspacesApplication> {
+export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Deployment, Workspaces, Application> {
   existingDeployment;
 
   async beforeQueue() {
@@ -98,18 +95,17 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     return this.asPromptingWorkspacesTaskGroup({
       async askForMonitoring({ control }) {
         if (!this.shouldAskForPrompts({ control })) return;
-
-        await this.askForMonitoring();
+        await this.askForMonitoring(control);
       },
       async askForClustersMode({ control, applications }) {
         if (!this.shouldAskForPrompts({ control })) return;
 
-        await this.askForClustersMode({ applications });
+        await this.askForClustersMode(control, applications);
       },
       async askForServiceDiscovery({ control, applications }) {
         if (!this.shouldAskForPrompts({ control })) return;
 
-        await this.askForServiceDiscovery({ applications });
+        await this.askForServiceDiscovery(control, applications);
       },
     });
   }
@@ -432,7 +428,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     deployment.applications = applications;
   }
 
-  async askForMonitoring() {
+  async askForMonitoring(control: Control) {
     await this.prompt(
       [
         {
@@ -456,7 +452,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     );
   }
 
-  async askForClustersMode({ applications }) {
+  async askForClustersMode(control: Control, applications: Application[]) {
     const clusteredDbApps = applications.filter(app => app.databaseTypeMongodb || app.databaseTypeCouchbase).map(app => app.appFolder);
     if (clusteredDbApps.length === 0) return;
 
@@ -474,7 +470,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     );
   }
 
-  async askForServiceDiscovery({ applications }) {
+  async askForServiceDiscovery(control: Control, applications: Application[]) {
     const serviceDiscoveryEnabledApps = applications.filter(app => app.serviceDiscoveryAny);
     if (serviceDiscoveryEnabledApps.length === 0) {
       this.jhipsterConfig.serviceDiscoveryType = NO_SERVICE_DISCOVERY;

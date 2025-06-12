@@ -109,7 +109,7 @@ export default abstract class BaseWorkspacesGenerator<
     });
   }
 
-  get sharedWorkspaces(): any {
+  get #sharedWorkspaces(): any {
     return this.getContextData(CONTEXT_DATA_WORKSPACES_KEY, { factory: () => ({}) });
   }
 
@@ -213,7 +213,7 @@ export default abstract class BaseWorkspacesGenerator<
     return [
       {
         ...first,
-        workspaces: this.sharedWorkspaces,
+        workspaces: this.#sharedWorkspaces,
         deployment: this.context,
         applications: this.#applications,
       },

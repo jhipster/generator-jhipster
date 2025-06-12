@@ -39,8 +39,20 @@ import { checkDocker } from '../docker/support/index.js';
 import { loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/index.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
+import {
+  askForAdminPassword,
+  askForApplicationType,
+  askForApps,
+  askForClustersMode,
+  askForDockerPushCommand,
+  askForDockerRepositoryName,
+  askForMonitoring,
+  askForPath,
+  askForServiceDiscovery,
+} from '../base-workspaces/internal/docker-prompts.js';
+import { askForIngressDomain, askForKubernetesNamespace } from '../kubernetes/prompts.js';
 import { writeFiles } from './files.js';
-import prompts from './prompts.js';
+import { askForGeneratorType } from './prompts.js';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;
 const { MAVEN } = buildToolTypes;
@@ -66,8 +78,8 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
         this.log.log(chalk.white(`${chalk.bold('☸')} Welcome to the JHipster Kubernetes Knative Generator ${chalk.bold('☸')}`));
         this.log.log(chalk.white(`Files will be generated in the folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      existingDeployment() {
-        this.regenerate = this.regenerate || this.config.existed;
+      existingDeployment({ control }) {
+        this.regenerate = this.regenerate || control.existingProject;
       },
       loadDockerDependenciesTask,
       checkDocker,
@@ -101,22 +113,23 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
   }
 
   get prompting() {
-    return {
-      askForPath: prompts.askForPath,
-      askForApps: prompts.askForApps,
-      askForGeneratorType: prompts.askForGeneratorType,
-      askForMonitoring: prompts.askForMonitoring,
-      askForClustersMode: prompts.askForClustersMode,
-      askForServiceDiscovery: prompts.askForServiceDiscovery,
-      askForAdminPassword: prompts.askForAdminPassword,
-      askForKubernetesNamespace: prompts.askForKubernetesNamespace,
-      askForDockerRepositoryName: prompts.askForDockerRepositoryName,
-      askForDockerPushCommand: prompts.askForDockerPushCommand,
-      askForIngressDomain: prompts.askForIngressDomain,
-    };
+    return this.asPromptingWorkspacesTaskGroup({
+      askForApplicationType,
+      askForPath,
+      askForApps,
+      askForGeneratorType,
+      askForMonitoring,
+      askForClustersMode,
+      askForServiceDiscovery,
+      askForAdminPassword,
+      askForKubernetesNamespace,
+      askForDockerRepositoryName,
+      askForDockerPushCommand,
+      askForIngressDomain,
+    });
   }
 
-  get [BaseWorkspacesGenerator.PROMPTING]() {
+  get [BaseWorkspacesGenerator.PROMPTING_WORKSPACES]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
