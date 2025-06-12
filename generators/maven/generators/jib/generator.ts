@@ -18,6 +18,7 @@
  */
 import BaseApplicationGenerator from '../../../base-application/index.js';
 
+// TODO adjust type
 export default class JibGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {

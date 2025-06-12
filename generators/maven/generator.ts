@@ -21,14 +21,13 @@ import assert from 'node:assert/strict';
 import { passthrough } from '@yeoman/transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
-import BaseApplicationGenerator from '../base-application/index.js';
-
+import { JavaApplicationGenerator } from '../java/generator.ts';
 import files from './files.js';
 import { MAVEN } from './constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
 import { type PomStorage, createPomStorage, sortPomFile } from './support/index.js';
 
-export default class MavenGenerator extends BaseApplicationGenerator {
+export default class MavenGenerator extends JavaApplicationGenerator {
   pomStorage!: PomStorage;
   sortMavenPom!: boolean;
 
@@ -50,7 +49,7 @@ export default class MavenGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.INITIALIZING]() {
+  get [JavaApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
@@ -66,7 +65,7 @@ export default class MavenGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.CONFIGURING]() {
+  get [JavaApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -124,7 +123,7 @@ export default class MavenGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [JavaApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -147,7 +146,7 @@ export default class MavenGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.DEFAULT]() {
+  get [JavaApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -160,7 +159,7 @@ export default class MavenGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [JavaApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -172,7 +171,7 @@ export default class MavenGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [JavaApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

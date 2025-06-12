@@ -13,8 +13,8 @@ import type { FieldType } from './internal/types/field-types.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
 
 export type Config = BaseSimpleApplicationConfig & {
-  baseName?: string;
   entities?: string[];
+  backendType?: string;
 };
 
 export type Options = BaseSimpleApplicationOptions & ApplicationOptions;
@@ -40,6 +40,11 @@ export type Field = Property &
     enumFileName?: string;
     enumValues?: { name: string; value: string }[];
     fieldIsEnum?: boolean;
+
+    // Validation
+    fieldValidate?: boolean;
+    unique?: boolean;
+    maxlength?: number;
 
     generateFakeDataFromPattern?: () => string | undefined;
     /** @deprecated */

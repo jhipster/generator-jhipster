@@ -83,6 +83,13 @@ export default class SqlGenerator extends BaseApplicationGenerator {
             relationship.persistableRelationship = true;
           }
         });
+
+        const entityAny = entity as any;
+        if (isReservedTableName(entity.entityInstance, entityAny.prodDatabaseType ?? entity.databaseType) && entityAny.jhiPrefix) {
+          entityAny.entityInstanceDbSafe = `${entityAny.jhiPrefix}${entity.entityClass}`;
+        } else {
+          entityAny.entityInstanceDbSafe = entity.entityInstance;
+        }
       },
     });
   }
@@ -138,7 +145,7 @@ export default class SqlGenerator extends BaseApplicationGenerator {
         });
       },
       addLog({ source }) {
-        source.addLogbackTestLog?.({
+        source.addTestLog?.({
           name: 'org.hibernate.orm.incubating',
           level: 'ERROR',
         });

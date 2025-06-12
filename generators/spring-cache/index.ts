@@ -17,3 +17,4 @@
  * limitations under the License.
  */
 export { default } from './generator.js';
+export type { Source } from './types.js';

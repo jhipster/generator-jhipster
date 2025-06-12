@@ -33,9 +33,9 @@ import {
   javaMainPackageTemplatesBlock,
   matchMainJavaFiles,
   packageInfoTransform,
+  prepareEntity,
 } from '../../support/index.js';
 import { normalizePathEnd } from '../../../../lib/utils/index.js';
-import prepareEntity from '../../../server/support/prepare-entity.js';
 
 export default class JavaBootstrapGenerator extends BaseApplicationGenerator {
   packageInfoFile!: boolean;

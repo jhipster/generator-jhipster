@@ -49,7 +49,7 @@ export default class PulsarGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       customizeApplicationForPulsar({ source, application }) {
-        source.addLogbackMainLog?.({ name: 'org.apache.pulsar', level: 'INFO' });
+        source.addMainLog?.({ name: 'org.apache.pulsar', level: 'INFO' });
         source.addIntegrationTestAnnotation?.({ package: `${application.packageName}.config`, annotation: 'EmbeddedPulsar' });
 
         source.addTestSpringFactory?.({

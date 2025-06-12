@@ -32,7 +32,7 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnJHipster('jhipster:java:domain');
     }
   }
 

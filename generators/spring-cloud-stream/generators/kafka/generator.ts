@@ -51,9 +51,9 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       customizeApplicationForKafka({ source, application }) {
-        source.addLogbackMainLog?.({ name: 'org.apache.kafka', level: 'INFO' });
-        source.addLogbackTestLog?.({ name: 'kafka', level: 'WARN' });
-        source.addLogbackTestLog?.({ name: 'org.I0Itec', level: 'WARN' });
+        source.addMainLog?.({ name: 'org.apache.kafka', level: 'INFO' });
+        source.addTestLog?.({ name: 'kafka', level: 'WARN' });
+        source.addTestLog?.({ name: 'org.I0Itec', level: 'WARN' });
         source.addIntegrationTestAnnotation?.({ package: `${application.packageName}.config`, annotation: 'EmbeddedKafka' });
 
         source.addTestSpringFactory?.({
@@ -101,7 +101,7 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
         }
       },
       addLog({ source }) {
-        source.addLogbackMainLog!({ name: 'org.apache.kafka', level: 'WARN' });
+        source.addMainLog!({ name: 'org.apache.kafka', level: 'WARN' });
       },
     });
   }

@@ -1,7 +1,6 @@
 import type { Relationship as JavaRelationship } from '../java/index.ts';
 
 export interface RelationshipAll extends JavaRelationship {
-  propertyJavaBeanName?: string;
   propertyDtoJavaType?: string;
 
   onDelete?: boolean;

@@ -28,5 +28,6 @@ export * from './java-formatting.js';
 export * from './key-store.js';
 export { default as packageInfoTransform } from './package-info-transform.js';
 export * from './package-info-transform.js';
+export * from './prepare-entity.js';
 export * from './reserved-keywords.js';
 export * from './util.js';

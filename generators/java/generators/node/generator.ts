@@ -21,6 +21,7 @@ import type { ExecaError } from 'execa';
 import BaseApplicationGenerator from '../../../base-application/index.js';
 import { isWin32 } from '../../../base-core/support/os.ts';
 
+// TODO adjust type
 export default class NodeGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
