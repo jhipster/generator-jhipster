@@ -7,7 +7,6 @@ export interface RelationshipAll extends JavaRelationship {
   onUpdate?: boolean;
 
   /* TODO check motivation */
-  relationshipSqlSafeName?: string;
   relationshipJavadoc?: string;
   relationshipApiDescription?: string;
   columnDataType?: string;

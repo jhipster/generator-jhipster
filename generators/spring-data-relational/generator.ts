@@ -26,16 +26,15 @@ import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
 import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from './support/index.js';
-import {
-  getDatabaseDriverForDatabase,
-  getDatabaseTypeMavenDefinition,
-  getH2MavenDefinition,
-  javaSqlDatabaseArtifacts,
-} from './internal/dependencies.js';
+import { getDatabaseTypeMavenDefinition, getH2MavenDefinition, javaSqlDatabaseArtifacts } from './internal/dependencies.js';
+import type { Application as SpringDataRelationalApplication, Entity as SpringDataRelationalEntity } from './types.js';
 
 const { SQL } = databaseTypes;
 
-export default class SqlGenerator extends BaseApplicationGenerator {
+export default class SqlGenerator extends BaseApplicationGenerator<
+  SpringDataRelationalEntity,
+  SpringDataRelationalApplication<SpringDataRelationalEntity>
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -65,8 +64,6 @@ export default class SqlGenerator extends BaseApplicationGenerator {
         const anyApp = application as any;
         anyApp.devDatabaseExtraOptions = getDBCExtraOption(anyApp.devDatabaseType);
         anyApp.prodDatabaseExtraOptions = getDBCExtraOption(anyApp.prodDatabaseType);
-
-        anyApp.prodDatabaseDriver = getDatabaseDriverForDatabase(application.prodDatabaseType!);
       },
     });
   }
@@ -86,9 +83,9 @@ export default class SqlGenerator extends BaseApplicationGenerator {
 
         const entityAny = entity as any;
         if (isReservedTableName(entity.entityInstance, entityAny.prodDatabaseType ?? entity.databaseType) && entityAny.jhiPrefix) {
-          entityAny.entityInstanceDbSafe = `${entityAny.jhiPrefix}${entity.entityClass}`;
+          entity.entityJpqlInstance = `${entityAny.jhiPrefix}${entity.entityClass}`;
         } else {
-          entityAny.entityInstanceDbSafe = entity.entityInstance;
+          entity.entityJpqlInstance = entity.entityInstance;
         }
       },
     });

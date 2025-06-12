@@ -24,6 +24,7 @@ import {
   javaTestPackageTemplatesBlock,
   javaTestResourceTemplatesBlock,
 } from '../java/support/index.js';
+import type { Application, Entity } from './types.js';
 
 export const sqlFiles = {
   serverFiles: [
@@ -134,7 +135,7 @@ export const serverFiles = mergeSections(
   addSectionsCondition(postgresFiles, context => context.prodDatabaseTypePostgresql),
 );
 
-export default asWritingTask(async function writeSqlFiles({ application }) {
+export default asWritingTask<Entity, Application<Entity>>(async function writeSqlFiles({ application }) {
   await this.writeFiles({
     sections: serverFiles,
     context: application,
