@@ -160,7 +160,7 @@
     "lodash-es": "4.17.21",
     "mem-fs": "4.1.2",
     "mem-fs-editor": "11.1.4",
-    "minimatch": "9.0.5",
+    "minimatch": "10.0.2",
     "normalize-path": "3.0.0",
     "os-locale": "6.0.2",
     "p-transform": "5.0.1",
