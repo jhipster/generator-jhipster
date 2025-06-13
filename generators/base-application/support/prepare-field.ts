@@ -20,11 +20,12 @@ import { defaults, kebabCase, snakeCase, startCase, upperFirst } from 'lodash-es
 import { fieldTypes, validations } from '../../../lib/jhipster/index.js';
 import { getTypescriptType } from '../../client/support/index.js';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
-import { mutateData } from '../../../lib/utils/index.js';
+import { applyDerivedPropertyOnly, mutateData } from '../../../lib/utils/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { FieldAll } from '../field-all.js';
 import type { EntityAll } from '../entity-all.js';
-import { fieldTypeValues, isFieldEnumType } from '../internal/types/field-types.ts';
+import { isFieldEnumType } from '../internal/types/field-types.ts';
+import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import type { FakerWithRandexp } from './faker.js';
 import { prepareProperty } from './prepare-property.js';
 
@@ -240,26 +241,11 @@ function _derivedProperties(field) {
   const fieldType = field.fieldType;
   const fieldTypeBlobContent = field.fieldTypeBlobContent;
   const validationRules = field.fieldValidate ? field.fieldValidateRules : [];
+  applyDerivedPropertyOnly(field, 'fieldType', fieldType, Object.values(fieldTypesValues));
   defaults(field, {
     blobContentTypeText: fieldTypeBlobContent === TEXT,
     blobContentTypeImage: fieldTypeBlobContent === IMAGE,
     blobContentTypeAny: fieldTypeBlobContent === ANY,
-    fieldTypeBoolean: fieldType === BOOLEAN,
-    fieldTypeBigDecimal: fieldType === BIG_DECIMAL,
-    fieldTypeDouble: fieldType === DOUBLE,
-    fieldTypeDuration: fieldType === DURATION,
-    fieldTypeFloat: fieldType === FLOAT,
-    fieldTypeInstant: fieldType === INSTANT,
-    fieldTypeInteger: fieldType === INTEGER,
-    fieldTypeLocalDate: fieldType === LOCAL_DATE,
-    fieldTypeLong: fieldType === LONG,
-    fieldTypeString: fieldType === STRING,
-    fieldTypeUUID: fieldType === UUID,
-    fieldTypeZonedDateTime: fieldType === ZONED_DATE_TIME,
-    fieldTypeImageBlob: fieldType === IMAGE_BLOB,
-    fieldTypeAnyBlob: fieldType === ANY_BLOB,
-    fieldTypeTextBlob: fieldType === TEXT_BLOB,
-    fieldTypeBlob: fieldType === BLOB,
     fieldTypeBytes: fieldType === BYTES,
     fieldTypeByteBuffer: fieldType === BYTE_BUFFER,
     fieldTypeNumeric:
@@ -314,7 +300,7 @@ function prepareCommonFieldForTemplates(entityWithConfig: EntityAll, field: Fiel
   const fieldIsEnum = isFieldEnumType(field);
   field.fieldIsEnum = fieldIsEnum;
   if (fieldIsEnum) {
-    if (fieldTypeValues.includes(fieldType)) {
+    if ((Object.values(fieldTypesValues) as string[]).includes(fieldType)) {
       throw new Error(`Field type '${fieldType}' is a reserved keyword and can't be used as an enum name.`);
     }
     field.enumFileName = kebabCase(field.fieldType);

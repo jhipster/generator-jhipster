@@ -16,12 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type {
   Application as JavaApplication,
   Entity as JavaEntity,
   Field as JavaField,
   Relationship as JavaRelationship,
 } from '../java/index.ts';
+import type command from './command.ts';
+
+type CommandTypes = HandleCommandTypes<typeof command>;
 
 export { JavaField as Field };
 
@@ -29,11 +33,42 @@ export interface Relationship extends JavaRelationship {
   relationshipSqlSafeName?: string;
 }
 
-export interface Entity extends JavaEntity<JavaField, Relationship> {
+export interface Entity<F extends JavaField = JavaField, R extends Relationship = Relationship> extends JavaEntity<F, R> {
   entityJpqlInstance: string;
 }
 
-export type Application<E extends Entity> = JavaApplication<E> & {
-  devDatabaseExtraOptions: string;
-  prodDatabaseExtraOptions: string;
+type LiquibaseApplication = {
+  incrementalChangelog: boolean;
 };
+
+export type Application<E extends Entity> = JavaApplication<E> &
+  LiquibaseApplication &
+  CommandTypes['Application'] & {
+    //OptionWithDerivedProperties<'databaseType', ['sql', 'no', 'cassandra', 'couchbase', 'mongodb', 'neo4j']> &
+    devDatabaseExtraOptions: string;
+    prodDatabaseExtraOptions: string;
+
+    enableHibernateCache: boolean;
+    devDatabaseType: string;
+    prodDatabaseType: string;
+    devDatabaseTypeMysql: boolean;
+    devDatabaseTypeH2Any?: boolean;
+
+    devDatabaseName?: string;
+    devJdbcUrl?: string;
+    devJdbcDriver?: string;
+    devLiquibaseUrl?: string;
+    devHibernateDialect?: string;
+    devR2dbcUrl?: string;
+    devDatabaseUsername?: string;
+    devDatabasePassword?: string;
+
+    prodDatabaseName?: string;
+    prodJdbcUrl?: string;
+    prodJdbcDriver?: string;
+    prodHibernateDialect?: string;
+    prodLiquibaseUrl?: string;
+    prodR2dbcUrl?: string;
+    prodDatabaseUsername?: string;
+    prodDatabasePassword?: string;
+  };

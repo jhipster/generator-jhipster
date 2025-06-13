@@ -35,7 +35,6 @@ import type { MavenProperty } from '../maven/types.js';
 import type { FieldAll } from '../base-application/field-all.js';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../base-entity-changes/types.js';
-import type { ApplicationAll } from '../base-application/application-properties-all.js';
 import type { Source as SpringBootSource } from '../spring-boot/index.js';
 import { liquibaseFiles } from './files.js';
 import {
@@ -52,7 +51,7 @@ import {
 } from './internal/needles.js';
 import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.js';
 import type command from './command.js';
-import type { Entity as LiquibaseEntity, Source as LiquibaseSource } from './types.js';
+import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Source as LiquibaseSource } from './types.js';
 
 const {
   CommonDBTypes: { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER },
@@ -62,7 +61,7 @@ type CommandType = HandleCommandTypes<typeof command>;
 
 export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   LiquibaseEntity,
-  ApplicationAll<LiquibaseEntity>,
+  LiquibaseApplication<LiquibaseEntity>,
   BaseApplicationConfig & CommandType['Config'],
   BaseApplicationOptions & CommandType['Options'],
   LiquibaseSource
@@ -110,7 +109,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
 
         if (!application.databaseTypeSql) {
           // Add sql related derived properties
-          prepareSqlApplicationProperties({ application });
+          // TODO fix types
+          prepareSqlApplicationProperties({ application: application as any });
         }
       },
       addNeedles({ source, application }) {
@@ -184,8 +184,10 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             // Prepare them.
             const { previousEntity: entity } = databaseChangelog;
             loadRequiredConfigIntoEntity(entity, this.jhipsterConfigWithDefaults);
-            prepareEntity(entity, this, application);
-            prepareEntityForServer(entity, application);
+            // TODO fix types
+            prepareEntity(entity, this, application as any);
+            // TODO fix types
+            prepareEntityForServer(entity, application as any);
             if (!entity.embedded && !entity.primaryKey) {
               prepareEntityPrimaryKeyForTemplates.call(this, { entity, application });
             }

@@ -61,9 +61,8 @@ export default class SqlGenerator extends BaseApplicationGenerator<
     return this.asPreparingTaskGroup({
       async preparing({ application }) {
         prepareSqlApplicationProperties({ application });
-        const anyApp = application as any;
-        anyApp.devDatabaseExtraOptions = getDBCExtraOption(anyApp.devDatabaseType);
-        anyApp.prodDatabaseExtraOptions = getDBCExtraOption(anyApp.prodDatabaseType);
+        application.devDatabaseExtraOptions = getDBCExtraOption(application.devDatabaseType);
+        application.prodDatabaseExtraOptions = getDBCExtraOption(application.prodDatabaseType);
       },
     });
   }

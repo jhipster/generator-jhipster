@@ -1,6 +1,7 @@
 import type { DerivedPropertiesOnlyOf } from '../../lib/command/types.js';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
 import type { Field as BaseField } from '../../lib/jhipster/types/field.js';
+import type { FieldType } from '../../lib/jhipster/field-types.js';
 import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.js';
 import type {
   Application as BaseSimpleApplicationApplication,
@@ -9,7 +10,6 @@ import type {
 } from '../base-simple-application/index.ts';
 import type { ApplicationOptions } from './application-options-all.js';
 import type { OptionWithDerivedProperties } from './internal/types/application-options.js';
-import type { FieldType } from './internal/types/field-types.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
 
 export type Config = BaseSimpleApplicationConfig & {
@@ -34,7 +34,8 @@ type Property = {
 };
 
 export type Field = Property &
-  BaseField & {
+  BaseField &
+  DerivedPropertiesOnlyOf<'fieldType', 'Boolean'> & {
     documentation?: string;
 
     enumFileName?: string;

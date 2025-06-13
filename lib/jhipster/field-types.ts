@@ -139,3 +139,36 @@ export function getIsType(databaseType?: string, callback?: any): (type: any) =>
   }
   return isType;
 }
+
+export const blobFieldTypesValues = {
+  BLOB: 'Blob',
+  ANY_BLOB: 'AnyBlob',
+  IMAGE_BLOB: 'ImageBlob',
+  TEXT_BLOB: 'TextBlob',
+} as const;
+
+export const fieldTypesValues = {
+  STRING: 'String',
+  INTEGER: 'Integer',
+  LONG: 'Long',
+  BIG_DECIMAL: 'BigDecimal',
+  FLOAT: 'Float',
+  DOUBLE: 'Double',
+  UUID: 'UUID',
+  ENUM: 'Enum',
+  BOOLEAN: 'Boolean',
+  LOCAL_DATE: 'LocalDate',
+  ZONED_DATE_TIME: 'ZonedDateTime',
+  INSTANT: 'Instant',
+  DURATION: 'Duration',
+  TIME: 'LocalTime',
+  BYTES: 'byte[]', // Supported by mongodb at CI samples
+  BYTE_BUFFER: 'ByteBuffer',
+  ...blobFieldTypesValues,
+} as const;
+
+export type FieldType = (typeof fieldTypesValues)[keyof typeof fieldTypesValues];
+
+export type FieldBlobType = (typeof blobFieldTypesValues)[keyof typeof blobFieldTypesValues];
+
+export type FieldBinaryType = (typeof blobFieldTypesValues)[keyof typeof blobFieldTypesValues] | 'byte[]';

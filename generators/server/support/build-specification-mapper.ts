@@ -1,4 +1,4 @@
-import type { FieldType } from '../../base-application/internal/types/field-types.ts';
+import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { fieldTypes } from '../../../lib/jhipster/index.js';
 
 const {

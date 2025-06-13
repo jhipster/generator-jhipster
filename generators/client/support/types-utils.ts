@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { FieldType } from '../../base-application/internal/types/field-types.ts';
+import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { fieldTypes } from '../../../lib/jhipster/index.js';
 import type { PrimaryKey } from '../../base-application/types.js';
 import { fieldIsEnum } from '../../base-application/support/index.js';

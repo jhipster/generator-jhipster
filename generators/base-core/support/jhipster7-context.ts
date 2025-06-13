@@ -309,6 +309,11 @@ export const jhipster7deprecatedProperties = {
     replacement: 'none',
     get: () => ({}),
   },
+  // JHipster v8
+  devDatabaseTypePostgres: {
+    replacement: 'prodDatabaseTypePostgresql',
+    get: ({ data }) => data.prodDatabaseTypePostgresql,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];

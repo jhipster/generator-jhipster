@@ -38,7 +38,6 @@ import {
 } from '../server/support/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/index.js';
 import { getPomVersionProperties } from '../maven/support/index.js';
-import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.js';
 import { getDockerfileContainers } from '../docker/utils.js';
 import { getMainClassName } from '../java/support/index.js';
 import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
@@ -82,7 +81,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
           javaPackageSrcDir: ({ srcMainJava, packageFolder }) => normalizePathEnd(`${srcMainJava}${packageFolder}`),
           javaPackageTestDir: ({ srcTestJava, packageFolder }) => normalizePathEnd(`${srcTestJava}${packageFolder}`),
 
-          devDatabaseTypeH2Any: ({ devDatabaseType }) => devDatabaseType === 'h2' || devDatabaseType === 'h2Memory',
+          devDatabaseTypeH2Any: ({ devDatabaseType }) => devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory',
           devJdbcUrl: undefined,
           devDatabaseUsername: undefined,
           devDatabasePassword: undefined,
@@ -196,18 +195,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.preparingEachEntity;
-  }
-
-  get preparingEachEntityField() {
-    return this.asPreparingEachEntityFieldTaskGroup({
-      prepareDatabase({ application, field }) {
-        prepareFieldForLiquibaseTemplates(application, field);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.preparingEachEntityField;
   }
 
   get preparingEachEntityRelationship() {

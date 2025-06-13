@@ -17,13 +17,16 @@
  * limitations under the License.
  */
 import { fieldTypes } from '../../../lib/jhipster/index.js';
-import type { Entity as LiquibaseEntity } from '../types.js';
+import type { Application as LiquibaseApplication, Entity as LiquibaseEntity } from '../types.js';
 import { asPostPreparingEachEntityTask } from '../../base-application/support/task-type-inference.js';
 
 const { CommonDBTypes } = fieldTypes;
 const { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER } = CommonDBTypes;
 
-export default asPostPreparingEachEntityTask<LiquibaseEntity>(function postPrepareEntity({ application, entity }) {
+export default asPostPreparingEachEntityTask<LiquibaseEntity, LiquibaseApplication<LiquibaseEntity>>(function postPrepareEntity({
+  application,
+  entity,
+}) {
   const { relationships, builtIn, name, primaryKey } = entity;
   if (builtIn && name === 'User' && primaryKey) {
     const userIdType = primaryKey.type;

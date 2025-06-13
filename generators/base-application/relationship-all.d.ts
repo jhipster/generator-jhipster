@@ -1,6 +1,6 @@
-import type { Relationship as JavaRelationship } from '../java/index.ts';
+import type { Relationship as SpringDataRelationalRelationship } from '../spring-data-relational/index.ts';
 
-export interface RelationshipAll extends JavaRelationship {
+export interface RelationshipAll extends SpringDataRelationalRelationship {
   propertyDtoJavaType?: string;
 
   onDelete?: boolean;

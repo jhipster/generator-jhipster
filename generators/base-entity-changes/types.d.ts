@@ -1,16 +1,4 @@
-import type { ApplicationAll as BaseApplicationApplication } from '../base-application/application-properties-all.js';
-import type { EntityAll as BaseApplicationEntity } from '../base-application/entity-all.js';
-
-export type { Source } from '../base-application/types.js';
-
-export type Entity = BaseApplicationEntity;
-export type Application<E extends Entity> = BaseApplicationApplication<E>;
-
-export type { Config } from '../base-application/types.js';
-
-export type { Options } from '../base-application/types.js';
-
-export type { Features } from '../base-application/types.js';
+export type { Application, Config, Entity, Field, Options, Features, Relationship, Source } from '../base-application/types.js';
 
 export type BaseChangelog = {
   newEntity: boolean;

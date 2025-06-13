@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { FieldType } from '../../../generators/base-application/internal/types/field-types.ts';
+import type { FieldType } from '../field-types.ts';
 import type { Property } from './property.js';
 
 type FieldEnum = {

@@ -25,7 +25,7 @@ import type JDLObject from '../../core/models/jdl-object.js';
 import type { JSONField } from '../../core/types/json-config.js';
 import type { JDLEntity } from '../../core/models/index.js';
 import type JDLField from '../../core/models/jdl-field.js';
-import type { FieldType } from '../../../../generators/base-application/internal/types/field-types.ts';
+import type { FieldType } from '../../../jhipster/field-types.js';
 
 const {
   Validations: { UNIQUE, REQUIRED },

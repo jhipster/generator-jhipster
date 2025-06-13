@@ -18,12 +18,17 @@
  */
 
 import { databaseTypes } from '../../../lib/jhipster/index.js';
+import type { Application as SpringDataRelationalApplication, Entity as SpringDataRelationalEntity } from '../types.d.ts';
 import { getDatabaseData } from './database-data.js';
 import { getJdbcUrl, getR2dbcUrl } from './database-url.js';
 
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_MEMORY, H2_DISK } = databaseTypes;
 
-export default function prepareSqlApplicationProperties({ application }: { application: any }) {
+export default function prepareSqlApplicationProperties({
+  application,
+}: {
+  application: SpringDataRelationalApplication<SpringDataRelationalEntity>;
+}) {
   application.prodDatabaseTypeMariadb = application.prodDatabaseType === MARIADB;
   application.prodDatabaseTypeMssql = application.prodDatabaseType === MSSQL;
   application.prodDatabaseTypeMysql = application.prodDatabaseType === MYSQL;
@@ -39,7 +44,6 @@ export default function prepareSqlApplicationProperties({ application }: { appli
   application.devDatabaseTypeMysql = application.prodDatabaseTypeMysql && !application.devDatabaseTypeH2Any;
   application.devDatabaseTypeOracle = application.prodDatabaseTypeOracle && !application.devDatabaseTypeH2Any;
   application.devDatabaseTypePostgresql = application.prodDatabaseTypePostgresql && !application.devDatabaseTypeH2Any;
-  application.devDatabaseTypePostgres = application.devDatabaseTypePostgresql; // Deprecated
 
   if (!application.databaseTypeSql) {
     return;

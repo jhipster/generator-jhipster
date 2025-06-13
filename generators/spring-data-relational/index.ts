@@ -18,3 +18,4 @@
  */
 export { default } from './generator.js';
 export { default as command } from './command.js';
+export type { Application, Field, Entity, Relationship } from './types.js';
