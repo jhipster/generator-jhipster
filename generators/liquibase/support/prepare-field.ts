@@ -107,11 +107,12 @@ export default function prepareField(application: LiquibaseApplication<Liquibase
   mutateData(field, {
     __override__: false,
     columnType: data => parseLiquibaseColumnType(data),
+    loadColumnType: data => parseLiquibaseLoadColumnType(application, data),
     liquibaseDefaultValueAttributeValue: ({ defaultValue, defaultValueComputed }) => defaultValueComputed ?? defaultValue?.toString(),
-    liquibaseDefaultValueAttributeName: ({ defaultValueComputed, liquibaseDefaultValueAttributeValue }) => {
+    liquibaseDefaultValueAttributeName: ({ loadColumnType, defaultValueComputed, liquibaseDefaultValueAttributeValue }) => {
       if (liquibaseDefaultValueAttributeValue === undefined) return undefined;
       if (defaultValueComputed) return 'defaultValueComputed';
-      if (field.columnType) return 'defaultValueNumeric';
+      if (loadColumnType === 'numeric') return 'defaultValueNumeric';
       if (field.fieldTypeBoolean) return 'defaultValueBoolean';
       return 'defaultValue';
     },
@@ -120,7 +121,6 @@ export default function prepareField(application: LiquibaseApplication<Liquibase
     shouldCreateContentType: data => data.fieldType === BYTES && data.fieldTypeBlobContent !== TEXT,
     columnRequired: data => data.nullable === false || (data.fieldValidate === true && data.fieldValidateRules?.includes('required')),
     nullable: data => !data.columnRequired,
-    loadColumnType: data => parseLiquibaseLoadColumnType(application, data),
     liquibaseGenerateFakeData: true,
   });
 
