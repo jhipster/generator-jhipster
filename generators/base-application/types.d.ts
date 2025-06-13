@@ -35,7 +35,7 @@ type Property = {
 
 export type Field = Property &
   BaseField &
-  DerivedPropertiesOnlyOf<'fieldType', 'Boolean'> & {
+  DerivedPropertiesOnlyOf<'fieldType', FieldType> & {
     documentation?: string;
 
     enumFileName?: string;

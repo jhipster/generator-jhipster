@@ -48,10 +48,7 @@ const {
   STRING,
   UUID,
   ZONED_DATE_TIME,
-  IMAGE_BLOB,
-  ANY_BLOB,
   TEXT_BLOB,
-  BLOB,
   LOCAL_TIME,
 } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
@@ -237,24 +234,28 @@ function generateFakeDataForField(
   return { data, originalData };
 }
 
-function _derivedProperties(field) {
+function _derivedProperties(field: FieldAll) {
   const fieldType = field.fieldType;
   const fieldTypeBlobContent = field.fieldTypeBlobContent;
-  const validationRules = field.fieldValidate ? field.fieldValidateRules : [];
+  const validationRules = field.fieldValidate ? (field.fieldValidateRules ?? []) : [];
+
   applyDerivedPropertyOnly(field, 'fieldType', fieldType, Object.values(fieldTypesValues));
-  defaults(field, {
+
+  mutateData(field, {
+    __override__: false,
     blobContentTypeText: fieldTypeBlobContent === TEXT,
     blobContentTypeImage: fieldTypeBlobContent === IMAGE,
     blobContentTypeAny: fieldTypeBlobContent === ANY,
-    fieldTypeBytes: fieldType === BYTES,
     fieldTypeByteBuffer: fieldType === BYTE_BUFFER,
+    fieldTypeBytes: ({ fieldTypeByte }) => fieldTypeByte,
+
     fieldTypeNumeric:
       fieldType === INTEGER || fieldType === LONG || fieldType === FLOAT || fieldType === DOUBLE || fieldType === BIG_DECIMAL,
     fieldTypeBinary: fieldType === BYTES || fieldType === BYTE_BUFFER,
     fieldTypeTimed: fieldType === ZONED_DATE_TIME || fieldType === INSTANT,
     fieldTypeCharSequence: fieldType === STRING || fieldType === UUID || fieldType === TEXT_BLOB,
     fieldTypeTemporal: fieldType === ZONED_DATE_TIME || fieldType === INSTANT || fieldType === LOCAL_DATE,
-    fieldTypeLocalTime: fieldType === LOCAL_TIME,
+
     fieldValidationRequired: validationRules.includes(REQUIRED),
     fieldValidationMin: validationRules.includes(MIN),
     fieldValidationMinLength: validationRules.includes(MINLENGTH),

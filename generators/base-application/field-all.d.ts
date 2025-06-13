@@ -21,8 +21,12 @@ export type FieldAll = SpringDataRelationalField &
     // Blob
     fieldWithContentType?: boolean;
     contentTypeFieldName?: string;
-    blobContentTypeText?: string;
 
+    blobContentTypeText?: boolean;
+    blobContentTypeImage?: boolean;
+    blobContentTypeAny?: boolean;
+
+    fieldTypeBytes?: boolean;
     // Derived properties
     fieldTypeBinary?: boolean;
     fieldTypeDuration?: boolean;
@@ -39,4 +43,13 @@ export type FieldAll = SpringDataRelationalField &
     /** @deprecated */
     reference?: any;
     relationshipsPath?: string[];
+
+    fieldValidationMin?: boolean;
+    fieldValidationMinLength?: boolean;
+    fieldValidationMax?: boolean;
+    fieldValidationMaxLength?: boolean;
+    fieldValidationPattern?: boolean;
+    fieldValidationUnique?: boolean;
+    fieldValidationMinBytes?: boolean;
+    fieldValidationMaxBytes?: boolean;
   };
