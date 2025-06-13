@@ -49,7 +49,7 @@
     "merge-jsons-webpack-plugin": "2.0.1",
     "postcss-rtlcss": "5.7.1",
     "rimraf": "5.0.8",
-    "ts-jest": "29.3.4",
+    "ts-jest": "29.4.0",
     "typescript": "5.8.3",
     "typescript-eslint": "8.34.0",
     "webpack": "5.99.9",
