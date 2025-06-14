@@ -219,18 +219,6 @@ const command = {
         return kebabCase(this.jhipsterConfigWithDefaults.baseName);
       },
     },
-    gitLabIndent: {
-      internal: {
-        type: String,
-      },
-      scope: 'none',
-    },
-    indent: {
-      internal: {
-        type: String,
-      },
-      scope: 'none',
-    },
     buildTool: {
       ...buildTool,
       cli: {
