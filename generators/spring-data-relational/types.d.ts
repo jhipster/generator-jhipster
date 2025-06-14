@@ -44,7 +44,6 @@ type LiquibaseApplication = {
 export type Application<E extends Entity> = JavaApplication<E> &
   LiquibaseApplication &
   CommandTypes['Application'] & {
-    //OptionWithDerivedProperties<'databaseType', ['sql', 'no', 'cassandra', 'couchbase', 'mongodb', 'neo4j']> &
     devDatabaseExtraOptions: string;
     prodDatabaseExtraOptions: string;
 
