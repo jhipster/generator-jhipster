@@ -125,9 +125,12 @@ public class AuthenticateController {
      * or with status {@code 401 (Unauthorized)} if not authenticated.
      */
     @GetMapping("/authenticate")
-    public ResponseEntity<Void> isAuthenticated(Principal principal) {
+    public ResponseEntity<String> isAuthenticated(Principal principal) {
         LOG.debug("REST request to check if the current user is authenticated");
-        return ResponseEntity.status(principal == null ? HttpStatus.UNAUTHORIZED : HttpStatus.NO_CONTENT).build();
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok("authenticated");
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {

@@ -131,10 +131,12 @@ class AccountResourceIT {
         accountWebTestClient
             .get().uri("/api/authenticate")
             .exchange()
-            .expectStatus().isNoContent();
+            .expectStatus().isOk()
+            .expectBody(String.class).isEqualTo("authenticated");
 <%_ } else { _%>
         restAccountMockMvc.perform(get("/api/authenticate").with(request -> request))
-            .andExpect(status().isNoContent());
+            .andExpect(status().isOk())
+            .andExpect(content().string("authenticated"));
 <%_ } _%>
     }
 }
