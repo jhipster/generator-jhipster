@@ -17,9 +17,15 @@
 import type { Tasks } from '../tasks.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { Source } from '../types.js';
+import type BaseWorkspacesGenerator from '../generator.js';
 
 export function asWritingTask<S extends Source = Source, const G extends CoreGenerator = CoreGenerator>(
   task: (this: G, params: Tasks<any, any, S>['WritingTaskParam']) => void,
+) {
+  return task;
+}
+export function asPromptingWorkspacesTask<S extends Source = Source, const G extends BaseWorkspacesGenerator = BaseWorkspacesGenerator>(
+  task: (this: G, params: Tasks<any, any, S>['PromptingWorkspacesTaskParam']) => void,
 ) {
   return task;
 }

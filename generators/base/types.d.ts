@@ -1,4 +1,4 @@
-import type { ExportGeneratorOptionsFromCommand } from '../../lib/command/types.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/types.js';
 import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/types.js';
 
 export type Source = {
@@ -30,12 +30,14 @@ export type Control = {
   cleanupFiles: (cleanup: CleanupArgumentType) => Promise<void> | ((oldVersion: string, cleanup: CleanupArgumentType) => Promise<void>);
 };
 
-export type Config = CoreConfig & {
-  jhipsterVersion?: string;
-  lastLiquibaseTimestamp?: number;
-  creationTimestamp?: number;
-  blueprints?: { name: string; version?: string }[];
-};
+export type Config = CoreConfig &
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+  ExportStoragePropertiesFromCommand<typeof import('./command.ts').default> & {
+    jhipsterVersion?: string;
+    lastLiquibaseTimestamp?: number;
+    creationTimestamp?: number;
+    blueprints?: { name: string; version?: string }[];
+  };
 
 export type Options = CoreOptions &
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports

@@ -23,7 +23,25 @@ import chalk from 'chalk';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
-import prompts from '../kubernetes/prompts.js';
+import {
+  askForAdminPassword,
+  askForApplicationType,
+  askForApps,
+  askForClustersMode,
+  askForDockerPushCommand,
+  askForDockerRepositoryName,
+  askForMonitoring,
+  askForPath,
+  askForServiceDiscovery,
+} from '../base-workspaces/internal/docker-prompts.js';
+import {
+  askForIngressDomain,
+  askForIngressType,
+  askForIstioSupport,
+  askForKubernetesNamespace,
+  askForKubernetesServiceType,
+} from '../kubernetes/prompts.js';
+
 import { checkImages, configureImageNames, generateJwtSecret, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import {
   checkHelm,
@@ -81,20 +99,20 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
 
   get prompting() {
     return {
-      askForApplicationType: prompts.askForApplicationType,
-      askForPath: prompts.askForPath,
-      askForApps: prompts.askForApps,
-      askForMonitoring: prompts.askForMonitoring,
-      askForClustersMode: prompts.askForClustersMode,
-      askForServiceDiscovery: prompts.askForServiceDiscovery,
-      askForAdminPassword: prompts.askForAdminPassword,
-      askForKubernetesNamespace: prompts.askForKubernetesNamespace,
-      askForDockerRepositoryName: prompts.askForDockerRepositoryName,
-      askForDockerPushCommand: prompts.askForDockerPushCommand,
-      askForIstioSupport: prompts.askForIstioSupport,
-      askForKubernetesServiceType: prompts.askForKubernetesServiceType,
-      askForIngressType: prompts.askForIngressType,
-      askForIngressDomain: prompts.askForIngressDomain,
+      askForApplicationType,
+      askForPath,
+      askForApps,
+      askForMonitoring,
+      askForClustersMode,
+      askForServiceDiscovery,
+      askForAdminPassword,
+      askForKubernetesNamespace,
+      askForDockerRepositoryName,
+      askForDockerPushCommand,
+      askForIstioSupport,
+      askForKubernetesServiceType,
+      askForIngressType,
+      askForIngressDomain,
     };
   }
 

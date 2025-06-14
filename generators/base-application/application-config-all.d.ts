@@ -6,7 +6,7 @@ import type { Config as BaseConfig } from '../base/types.js';
 import type { Config as JavaConfig } from '../java/types.d.ts';
 import type { Config as JavascriptConfig } from '../javascript/types.d.ts';
 
-type BaseApplicationConfig = {
+type BaseApplicationConfig = BaseConfig & {
   entities?: string[];
   projectDescription?: string;
 };
@@ -22,7 +22,6 @@ export type ApplicationConfiguration = Simplify<
       testFrameworks?: string[];
       microfrontends?: { baseName: string }[];
     } & ExportStoragePropertiesFromCommand<typeof import('../app/command.ts').default> &
-    ExportStoragePropertiesFromCommand<typeof import('../base/command.ts').default> &
     ExportStoragePropertiesFromCommand<typeof import('../bootstrap-application-base/command.ts').default> &
     ExportStoragePropertiesFromCommand<typeof import('../client/command.ts').default> &
     ExportStoragePropertiesFromCommand<typeof import('../git/command.ts').default> &
