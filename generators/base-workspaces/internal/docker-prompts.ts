@@ -23,6 +23,8 @@ import { join } from 'node:path';
 import chalk from 'chalk';
 import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../../lib/jhipster/index.js';
 import { convertSecretToBase64 } from '../../../lib/utils/index.js';
+import { asPromptingTask } from '../../base-application/support/index.js';
+import type BaseWorkspacesGenerator from '../generator.js';
 import { loadConfigs } from './docker-base.js';
 
 const { MICROSERVICE, MONOLITH, GATEWAY } = applicationTypes;
@@ -33,24 +35,14 @@ const NO_MONITORING = monitoring.NO;
 const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 
 export default {
-  askForApplicationType,
-  askForGatewayType,
-  askForPath,
-  askForApps,
-  askForClustersMode,
-  askForMonitoring,
-  askForServiceDiscovery,
-  askForAdminPassword,
-  askForDockerRepositoryName,
-  askForDockerPushCommand,
   loadConfigs,
 };
 
 /**
  * Ask For Application Type
  */
-async function askForApplicationType() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForApplicationType = asPromptingTask(async function askForApplicationType(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
 
   const prompts = [
     {
@@ -73,13 +65,13 @@ async function askForApplicationType() {
 
   const props = await this.prompt(prompts, this.config);
   this.deploymentApplicationType = props.deploymentApplicationType;
-}
+});
 
 /**
  * Ask For Gateway Type
  */
-async function askForGatewayType() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForGatewayType = asPromptingTask(async function askForGatewayType(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
   if (this.deploymentApplicationType !== MICROSERVICE) return;
 
   const prompts = [
@@ -99,13 +91,13 @@ async function askForGatewayType() {
 
   const props = await this.prompt(prompts, this.config);
   this.gatewayType = props.gatewayType;
-}
+});
 
 /**
  * Ask For Path
  */
-async function askForPath() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForPath = asPromptingTask(async function askForPath(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
 
   const deploymentApplicationType = this.deploymentApplicationType;
   let messageAskForPath;
@@ -159,13 +151,13 @@ async function askForPath() {
   }
 
   this.log.log(chalk.green(`${this.appsFolders.length} applications found at ${this.destinationPath(this.directoryPath)}\n`));
-}
+});
 
 /**
  * Ask For Apps
  */
-async function askForApps() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForApps = asPromptingTask(async function askForApps(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
 
   const messageAskForApps = 'Which applications do you want to include in your configuration?';
 
@@ -183,13 +175,13 @@ async function askForApps() {
   const props = await this.prompt(prompts);
   this.appsFolders = this.jhipsterConfig.appsFolders = props.chosenApps;
   await loadConfigs.call(this);
-}
+});
 
 /**
  * Ask For Clusters Mode
  */
-async function askForClustersMode() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForClustersMode = asPromptingTask(async function askForClustersMode(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
 
   const clusteredDbApps = [];
   this.appConfigs.forEach((appConfig, index) => {
@@ -211,13 +203,13 @@ async function askForClustersMode() {
 
   const props = await this.prompt(prompts, this.config);
   this.clusteredDbApps = props.clusteredDbApps;
-}
+});
 
 /**
  * Ask For Monitoring
  */
-async function askForMonitoring() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForMonitoring = asPromptingTask(async function askForMonitoring(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
 
   const prompts = [
     {
@@ -240,13 +232,13 @@ async function askForMonitoring() {
 
   const props = await this.prompt(prompts, this.config);
   this.monitoring = props.monitoring;
-}
+});
 
 /**
  * Ask For Service Discovery
  */
-async function askForServiceDiscovery() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForServiceDiscovery = asPromptingTask(async function askForServiceDiscovery(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
 
   const serviceDiscoveryEnabledApps = [];
   this.appConfigs.forEach(appConfig => {
@@ -304,13 +296,13 @@ async function askForServiceDiscovery() {
     const props = await this.prompt(prompts, this.config);
     this.serviceDiscoveryType = props.serviceDiscoveryType;
   }
-}
+});
 
 /**
  * Ask For Admin Password
  */
-async function askForAdminPassword() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForAdminPassword = asPromptingTask(async function askForAdminPassword(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
   if (this.serviceDiscoveryType !== EUREKA) return;
 
   const prompts = [
@@ -326,13 +318,16 @@ async function askForAdminPassword() {
   const props = await this.prompt(prompts, this.config);
   this.adminPassword = props.adminPassword;
   this.adminPasswordBase64 = convertSecretToBase64(this.adminPassword);
-}
+});
 
 /**
  * Ask For Docker Repository Name
  */
-async function askForDockerRepositoryName() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForDockerRepositoryName = asPromptingTask(async function askForDockerRepositoryName(
+  this: BaseWorkspacesGenerator,
+  { control },
+) {
+  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
 
   const prompts = [
     {
@@ -345,13 +340,13 @@ async function askForDockerRepositoryName() {
 
   const props = await this.prompt(prompts, this.config);
   this.dockerRepositoryName = props.dockerRepositoryName;
-}
+});
 
 /**
  * Ask For Docker Push Command
  */
-async function askForDockerPushCommand() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForDockerPushCommand = asPromptingTask(async function askForDockerPushCommand(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
 
   const prompts = [
     {
@@ -364,7 +359,7 @@ async function askForDockerPushCommand() {
 
   const props = await this.prompt(prompts, this.config);
   this.dockerPushCommand = props.dockerPushCommand;
-}
+});
 
 /**
  * Get App Folders
