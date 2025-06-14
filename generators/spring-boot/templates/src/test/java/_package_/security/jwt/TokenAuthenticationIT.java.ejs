@@ -57,7 +57,9 @@ class TokenAuthenticationIT {
 <%_ if (reactive) { %>
 
     private void expectOk(String token) {
-        webTestClient.get().uri("/api/authenticate").headers(headers -> headers.setBearerAuth(token)).exchange().expectStatus().isNoContent();
+        webTestClient.get().uri("/api/authenticate").headers(headers -> headers.setBearerAuth(token)).exchange()
+            .expectStatus().isOk()
+            .expectBody(String.class).isEqualTo("authenticated");
     }
 
     private void expectUnauthorized(String token) {
@@ -72,7 +74,9 @@ class TokenAuthenticationIT {
 <%_ } else { _%>
 
     private void expectOk(String token) throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/authenticate").header(AUTHORIZATION, BEARER + token)).andExpect(status().isNoContent());
+        mvc.perform(MockMvcRequestBuilders.get("/api/authenticate").header(AUTHORIZATION, BEARER + token))
+            .andExpect(status().isOk())
+            .andExpect(content().string("authenticated"));
     }
 
     private void expectUnauthorized(String token) throws Exception {

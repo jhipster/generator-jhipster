@@ -186,17 +186,17 @@ class AccountResourceIT {
 
     @Test
     @WithMockUser(TEST_USER_LOGIN)
+    void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
 <%_ if (reactive) { _%>
-    void testAuthenticatedUser() {
         accountWebTestClient
             .get().uri("/api/authenticate")
             .exchange()
-            .expectStatus().isNoContent();
+            .expectStatus().isOk()
+            .expectBody(String.class).isEqualTo("authenticated");
 <%_ } else { _%>
-    void testAuthenticatedUser() throws Exception {
-        restAccountMockMvc
-            .perform(get("/api/authenticate").with(request -> request))
-            .andExpect(status().isNoContent());
+        restAccountMockMvc.perform(get("/api/authenticate").with(request -> request))
+            .andExpect(status().isOk())
+            .andExpect(content().string("authenticated"));
 <%_ } _%>
     }
 
