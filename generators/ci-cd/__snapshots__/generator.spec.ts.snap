@@ -129,6 +129,8 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "devDatabaseType": "postgresql",
   "devDatabaseTypeAny": true,
   "devDatabaseTypeH2Any": false,
+  "devDatabaseTypeH2Disk": false,
+  "devDatabaseTypeH2Memory": false,
   "devDatabaseTypeMariadb": false,
   "devDatabaseTypeMssql": false,
   "devDatabaseTypeMysql": false,
