@@ -25,7 +25,7 @@ const command = {
       cli: {
         type: String,
       },
-      choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql'],
+      choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql', 'h2Disk', 'h2Memory'],
       scope: 'storage',
     },
     prodDatabaseType: {

@@ -37,9 +37,9 @@ export type Field = BaseApplicationField &
 
     propertyJavaCustomFilter?: { type: string; superType: string; fieldType: string };
 
-    liquibaseDefaultValueAttributeValue?: string;
-    liquibaseDefaultValueAttributeName?: string;
-    liquibaseGenerateFakeData?: boolean;
+    columnName?: string;
+    transient?: boolean;
+    id?: boolean;
   };
 
 export interface Relationship extends BaseApplicationRelationship, Property {}

@@ -6,6 +6,7 @@ export const flatChoices = (choices: JHipsterChoices): string[] =>
   choices.map(choice => (typeof choice === 'string' ? choice : choice.value)).filter(Boolean);
 
 export const derivedPropertyName = (property: string, value: string): string => {
+  value = value.replaceAll(/[^a-z0-9]/gi, '');
   const valueProterty = value.includes('-') ? upperFirstCamelCase(value) : upperFirst(value);
   const camelCaseProperty = camelCase(property);
   return `${camelCaseProperty}${valueProterty}`;
@@ -37,5 +38,12 @@ export const applyDerivedProperty = <const Prop extends string>(
       throw new Error('Possible values already include "no"');
     }
     data[derivedPropertyName(property, 'no')] ??= !isAny;
+  }
+};
+
+export const applyDerivedPropertyOnly = (data: any, property: string, actualValue: any, possibleValues: string[]) => {
+  for (const value of possibleValues) {
+    const isProperty = Array.isArray(actualValue) ? actualValue.includes(value) : actualValue === value;
+    data[derivedPropertyName(property, value)] ??= isProperty;
   }
 };

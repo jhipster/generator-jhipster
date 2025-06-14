@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import type { Entity as SpringBootEntity } from '../spring-boot/types.js';
 import type { Entity as AngularEntity } from '../angular/types.d.ts';
-import type { Entity as JavaEntity } from '../java/types.d.ts';
+import type { Entity as LiquibaseEntity } from '../liquibase/index.js';
+import type { Entity as SpringDataRelationalEntity } from '../spring-data-relational/types.d.ts';
 import type { Entity as BaseApplicationEntity } from './types.js';
 import type { FieldAll } from './field-all.js';
 import type { RelationshipAll } from './relationship-all.js';
@@ -27,7 +27,8 @@ import type { RelationshipAll } from './relationship-all.js';
 export interface EntityAll<F extends FieldAll = FieldAll, R extends RelationshipAll = RelationshipAll>
   extends BaseApplicationEntity<F, R>,
     AngularEntity<F, R>,
-    JavaEntity<F, R>,
+    LiquibaseEntity<F, R>,
+    SpringDataRelationalEntity<F, R>,
     SpringBootEntity<F, R> {
   entityApiUrl: string;
   entityApi: string;

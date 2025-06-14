@@ -20,11 +20,12 @@ import { defaults, kebabCase, snakeCase, startCase, upperFirst } from 'lodash-es
 import { fieldTypes, validations } from '../../../lib/jhipster/index.js';
 import { getTypescriptType } from '../../client/support/index.js';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
-import { mutateData } from '../../../lib/utils/index.js';
+import { applyDerivedPropertyOnly, mutateData } from '../../../lib/utils/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { FieldAll } from '../field-all.js';
 import type { EntityAll } from '../entity-all.js';
-import { fieldTypeValues, isFieldEnumType } from '../internal/types/field-types.ts';
+import { isFieldEnumType } from '../internal/types/field-types.ts';
+import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import type { FakerWithRandexp } from './faker.js';
 import { prepareProperty } from './prepare-property.js';
 
@@ -47,10 +48,7 @@ const {
   STRING,
   UUID,
   ZONED_DATE_TIME,
-  IMAGE_BLOB,
-  ANY_BLOB,
   TEXT_BLOB,
-  BLOB,
   LOCAL_TIME,
 } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
@@ -236,39 +234,28 @@ function generateFakeDataForField(
   return { data, originalData };
 }
 
-function _derivedProperties(field) {
+function _derivedProperties(field: FieldAll) {
   const fieldType = field.fieldType;
   const fieldTypeBlobContent = field.fieldTypeBlobContent;
-  const validationRules = field.fieldValidate ? field.fieldValidateRules : [];
-  defaults(field, {
+  const validationRules = field.fieldValidate ? (field.fieldValidateRules ?? []) : [];
+
+  applyDerivedPropertyOnly(field, 'fieldType', fieldType, Object.values(fieldTypesValues));
+
+  mutateData(field, {
+    __override__: false,
     blobContentTypeText: fieldTypeBlobContent === TEXT,
     blobContentTypeImage: fieldTypeBlobContent === IMAGE,
     blobContentTypeAny: fieldTypeBlobContent === ANY,
-    fieldTypeBoolean: fieldType === BOOLEAN,
-    fieldTypeBigDecimal: fieldType === BIG_DECIMAL,
-    fieldTypeDouble: fieldType === DOUBLE,
-    fieldTypeDuration: fieldType === DURATION,
-    fieldTypeFloat: fieldType === FLOAT,
-    fieldTypeInstant: fieldType === INSTANT,
-    fieldTypeInteger: fieldType === INTEGER,
-    fieldTypeLocalDate: fieldType === LOCAL_DATE,
-    fieldTypeLong: fieldType === LONG,
-    fieldTypeString: fieldType === STRING,
-    fieldTypeUUID: fieldType === UUID,
-    fieldTypeZonedDateTime: fieldType === ZONED_DATE_TIME,
-    fieldTypeImageBlob: fieldType === IMAGE_BLOB,
-    fieldTypeAnyBlob: fieldType === ANY_BLOB,
-    fieldTypeTextBlob: fieldType === TEXT_BLOB,
-    fieldTypeBlob: fieldType === BLOB,
-    fieldTypeBytes: fieldType === BYTES,
     fieldTypeByteBuffer: fieldType === BYTE_BUFFER,
+    fieldTypeBytes: ({ fieldTypeByte }) => fieldTypeByte,
+
     fieldTypeNumeric:
       fieldType === INTEGER || fieldType === LONG || fieldType === FLOAT || fieldType === DOUBLE || fieldType === BIG_DECIMAL,
     fieldTypeBinary: fieldType === BYTES || fieldType === BYTE_BUFFER,
     fieldTypeTimed: fieldType === ZONED_DATE_TIME || fieldType === INSTANT,
     fieldTypeCharSequence: fieldType === STRING || fieldType === UUID || fieldType === TEXT_BLOB,
     fieldTypeTemporal: fieldType === ZONED_DATE_TIME || fieldType === INSTANT || fieldType === LOCAL_DATE,
-    fieldTypeLocalTime: fieldType === LOCAL_TIME,
+
     fieldValidationRequired: validationRules.includes(REQUIRED),
     fieldValidationMin: validationRules.includes(MIN),
     fieldValidationMinLength: validationRules.includes(MINLENGTH),
@@ -314,7 +301,7 @@ function prepareCommonFieldForTemplates(entityWithConfig: EntityAll, field: Fiel
   const fieldIsEnum = isFieldEnumType(field);
   field.fieldIsEnum = fieldIsEnum;
   if (fieldIsEnum) {
-    if (fieldTypeValues.includes(fieldType)) {
+    if ((Object.values(fieldTypesValues) as string[]).includes(fieldType)) {
       throw new Error(`Field type '${fieldType}' is a reserved keyword and can't be used as an enum name.`);
     }
     field.enumFileName = kebabCase(field.fieldType);

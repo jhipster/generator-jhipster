@@ -1,47 +1,10 @@
 import type { SetFieldType, SetRequired } from 'type-fest';
 import type { FieldAll } from '../../field-all.js';
 import type { Field as BaseField } from '../../../../lib/jhipster/types/field.js';
+import { type FieldBinaryType, type FieldBlobType, type FieldType, blobFieldTypesValues } from '../../../../lib/jhipster/field-types.ts';
 
-const blobFieldTypes = {
-  BLOB: 'Blob',
-  ANY_BLOB: 'AnyBlob',
-  IMAGE_BLOB: 'ImageBlob',
-  TEXT_BLOB: 'TextBlob',
-} as const;
-
-const blobFieldTypesValues: string[] = Object.values(blobFieldTypes);
-
-const fieldTypes = {
-  STRING: 'String',
-  INTEGER: 'Integer',
-  LONG: 'Long',
-  BIG_DECIMAL: 'BigDecimal',
-  FLOAT: 'Float',
-  DOUBLE: 'Double',
-  UUID: 'UUID',
-  ENUM: 'Enum',
-  BOOLEAN: 'Boolean',
-  LOCAL_DATE: 'LocalDate',
-  ZONED_DATE_TIME: 'ZonedDateTime',
-  INSTANT: 'Instant',
-  DURATION: 'Duration',
-  TIME: 'LocalTime',
-  BYTES: 'byte[]', // Supported by mongodb at CI samples
-  BYTE_BUFFER: 'ByteBuffer',
-  ...blobFieldTypes,
-} as const;
-
-export default fieldTypes;
-
-export const fieldTypeValues: string[] = Object.values(fieldTypes);
-
-export type FieldType = (typeof fieldTypes)[keyof typeof fieldTypes];
-
-type FieldBlobType = (typeof blobFieldTypes)[keyof typeof blobFieldTypes];
-
-type FieldBinaryType = (typeof blobFieldTypes)[keyof typeof blobFieldTypes] | 'byte[]';
-
-export const isBlobType = (fieldType: string): fieldType is FieldBlobType => blobFieldTypesValues.includes(fieldType);
+export const isBlobType = (fieldType: string): fieldType is FieldBlobType =>
+  (Object.values(blobFieldTypesValues) as string[]).includes(fieldType);
 
 export const getBlobContentType = (fieldType: FieldBlobType) => {
   if (fieldType === 'AnyBlob') {

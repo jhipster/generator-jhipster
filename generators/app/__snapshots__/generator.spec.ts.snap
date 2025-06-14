@@ -62,7 +62,7 @@ Options:
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --skip-db-changelog                      Skip the generation of database migrations
   --incremental-changelog                  Creates incremental database changelogs
-  --dev-database-type <value>              Development database (choices: "postgresql", "mysql", "mariadb", "oracle", "mssql")
+  --dev-database-type <value>              Development database (choices: "postgresql", "mysql", "mariadb", "oracle", "mssql", "h2Disk", "h2Memory")
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
   --microfrontends <value>                 Microfrontends to load
@@ -318,7 +318,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "devDatabaseTypeMssql": false,
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
-  "devDatabaseTypePostgres": true,
   "devDatabaseTypePostgresql": true,
   "devDatabaseUsername": "jhipster",
   "devHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
@@ -776,21 +775,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "prettierExtensions": "md,json,yml,js,cjs,mjs,ts,cts,mts,java,html,css,scss",
   "prettierFolders": ",**/",
   "prettierTabWidth": 2,
-  "prodDatabaseDriver": {
-    "jdbc": {
-      "artifactId": "postgresql",
-      "groupId": "org.postgresql",
-    },
-    "r2dbc": {
-      "artifactId": "r2dbc-postgresql",
-      "groupId": "org.postgresql",
-    },
-    "testContainer": {
-      "artifactId": "postgresql",
-      "groupId": "org.testcontainers",
-      "scope": "test",
-    },
-  },
   "prodDatabaseExtraOptions": "",
   "prodDatabaseName": "jhipster",
   "prodDatabasePassword": "",
@@ -985,7 +969,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "devDatabaseTypeMssql": false,
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
-  "devDatabaseTypePostgres": true,
   "devDatabaseTypePostgresql": true,
   "devDatabaseUsername": "jhipster",
   "devHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
@@ -1439,21 +1422,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "prettierExtensions": "md,json,yml,js,cjs,mjs,ts,cts,mts,java,html,css,scss",
   "prettierFolders": ",**/",
   "prettierTabWidth": 2,
-  "prodDatabaseDriver": {
-    "jdbc": {
-      "artifactId": "postgresql",
-      "groupId": "org.postgresql",
-    },
-    "r2dbc": {
-      "artifactId": "r2dbc-postgresql",
-      "groupId": "org.postgresql",
-    },
-    "testContainer": {
-      "artifactId": "postgresql",
-      "groupId": "org.testcontainers",
-      "scope": "test",
-    },
-  },
   "prodDatabaseExtraOptions": "",
   "prodDatabaseName": "jhipster",
   "prodDatabasePassword": "",
@@ -1642,7 +1610,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "devDatabaseTypeMssql": false,
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
-  "devDatabaseTypePostgres": true,
   "devDatabaseTypePostgresql": true,
   "devDatabaseUsername": "jhipster",
   "devHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
@@ -2026,21 +1993,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "prettierExtensions": "md,json,yml,js,cjs,mjs,ts,cts,mts,java",
   "prettierFolders": ",**/",
   "prettierTabWidth": 2,
-  "prodDatabaseDriver": {
-    "jdbc": {
-      "artifactId": "postgresql",
-      "groupId": "org.postgresql",
-    },
-    "r2dbc": {
-      "artifactId": "r2dbc-postgresql",
-      "groupId": "org.postgresql",
-    },
-    "testContainer": {
-      "artifactId": "postgresql",
-      "groupId": "org.testcontainers",
-      "scope": "test",
-    },
-  },
   "prodDatabaseExtraOptions": "",
   "prodDatabaseName": "jhipster",
   "prodDatabasePassword": "",

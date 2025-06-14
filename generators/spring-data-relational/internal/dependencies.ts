@@ -67,8 +67,6 @@ export const javaSqlDatabaseArtifacts = {
   },
 } as const satisfies Record<string, DatabaseArtifact>;
 
-export const getDatabaseDriverForDatabase = (databaseType: string) => javaSqlDatabaseArtifacts[databaseType];
-
 export const getH2MavenDefinition = ({
   prodDatabaseType,
   packageFolder,

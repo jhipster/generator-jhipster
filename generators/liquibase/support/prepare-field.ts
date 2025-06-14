@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -17,150 +18,101 @@
  * limitations under the License.
  */
 
+import type { ValueOf } from 'type-fest';
 import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.js';
+import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import { mutateData } from '../../../lib/utils/index.js';
-import type { FieldAll } from '../../base-application/field-all.js';
-import type { ApplicationAll } from '../../base-application/application-properties-all.js';
+import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Field as LiquibaseField } from '../types.d.ts';
 
 const { MYSQL, MARIADB } = databaseTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
 
-const { STRING, INTEGER, LONG, BIG_DECIMAL, FLOAT, DOUBLE, UUID, BOOLEAN, LOCAL_DATE, ZONED_DATE_TIME, INSTANT, DURATION, LOCAL_TIME } =
-  CommonDBTypes;
+const { ZONED_DATE_TIME, INSTANT } = CommonDBTypes;
 const { BYTES } = RelationalOnlyDBTypes;
 const { TEXT } = BlobTypes;
 
-function parseLiquibaseColumnType(field: FieldAll) {
-  const fieldType = field.fieldType;
-  if (fieldType === STRING || field.fieldIsEnum) {
-    return `varchar(${field.fieldValidateRulesMaxlength || 255})`;
+const liquibaseFieldTypeByFieldType = {
+  [fieldTypesValues.INTEGER]: 'integer',
+  [fieldTypesValues.LONG]: 'bigint',
+  [fieldTypesValues.FLOAT]: '${floatType}',
+  [fieldTypesValues.DOUBLE]: 'double',
+  [fieldTypesValues.BIG_DECIMAL]: 'decimal(21,2)',
+  [fieldTypesValues.LOCAL_DATE]: 'date',
+  [fieldTypesValues.ZONED_DATE_TIME]: '${datetimeType}',
+  [fieldTypesValues.INSTANT]: '${datetimeType}',
+  [fieldTypesValues.DURATION]: 'bigint',
+  [fieldTypesValues.TIME]: '${timeType}',
+  [fieldTypesValues.UUID]: '${uuidType}',
+  [fieldTypesValues.BYTES]: '${blobType}',
+  [fieldTypesValues.STRING]: 'varchar',
+  [fieldTypesValues.BOOLEAN]: 'boolean',
+  [fieldTypesValues.ENUM]: 'string',
+  [fieldTypesValues.BYTE_BUFFER]: '${blobType}',
+  [fieldTypesValues.BLOB]: '${blobType}',
+  [fieldTypesValues.ANY_BLOB]: '${blobType}',
+  [fieldTypesValues.IMAGE_BLOB]: '${blobType}',
+  [fieldTypesValues.TEXT_BLOB]: '${clobType}',
+} as const satisfies Record<ValueOf<typeof fieldTypesValues>, string>;
+
+export type LiquibaseColumnType = ValueOf<typeof liquibaseFieldTypeByFieldType>;
+
+function parseLiquibaseColumnType(field: LiquibaseField): LiquibaseColumnType {
+  const liquibaseColumnType = liquibaseFieldTypeByFieldType[field.fieldType];
+  if (liquibaseColumnType === 'varchar' || field.fieldIsEnum) {
+    return `varchar(${field.fieldValidateRulesMaxlength || 255})` as 'varchar';
   }
 
-  if (fieldType === INTEGER) {
-    return 'integer';
+  if (liquibaseColumnType === '${blobType}' && field.fieldTypeBlobContent === TEXT) {
+    return liquibaseFieldTypeByFieldType[fieldTypesValues.TEXT_BLOB];
   }
 
-  if (fieldType === LONG) {
-    return 'bigint';
-  }
-
-  if (fieldType === FLOAT) {
-    // eslint-disable-next-line no-template-curly-in-string
-    return '${floatType}';
-  }
-
-  if (fieldType === DOUBLE) {
-    return 'double';
-  }
-
-  if (fieldType === BIG_DECIMAL) {
-    return 'decimal(21,2)';
-  }
-
-  if (fieldType === LOCAL_DATE) {
-    return 'date';
-  }
-
-  if (fieldType === INSTANT) {
-    // eslint-disable-next-line no-template-curly-in-string
-    return '${datetimeType}';
-  }
-
-  if (fieldType === ZONED_DATE_TIME) {
-    // eslint-disable-next-line no-template-curly-in-string
-    return '${datetimeType}';
-  }
-
-  if (fieldType === DURATION) {
-    return 'bigint';
-  }
-
-  if (fieldType === LOCAL_TIME) {
-    // eslint-disable-next-line no-template-curly-in-string
-    return '${timeType}';
-  }
-
-  if (fieldType === UUID) {
-    // eslint-disable-next-line no-template-curly-in-string
-    return '${uuidType}';
-  }
-
-  if (fieldType === BYTES && field.fieldTypeBlobContent !== TEXT) {
-    // eslint-disable-next-line no-template-curly-in-string
-    return '${blobType}';
-  }
-
-  if (field.fieldTypeBlobContent === TEXT) {
-    // eslint-disable-next-line no-template-curly-in-string
-    return '${clobType}';
-  }
-
-  if (fieldType === BOOLEAN) {
-    return 'boolean';
-  }
-
-  return undefined;
+  return liquibaseColumnType;
 }
 
-function parseLiquibaseLoadColumnType(application: ApplicationAll, field: FieldAll): string {
+export const liquibaseLoadColumnTypeByFieldType = {
+  integer: 'numeric',
+  bigint: 'numeric',
+  double: 'numeric',
+  'decimal(21,2)': 'numeric',
+  '${floatType}': 'numeric',
+  date: 'date',
+  '${datetimeType}': 'date',
+  '${timeType}': 'time',
+  boolean: 'boolean',
+  '${blobType}': 'blob',
+  '${clobType}': 'clob',
+  varchar: 'string',
+  string: 'string',
+  '${uuidType}': '${uuidType}',
+} as const satisfies Record<LiquibaseColumnType, string>;
+
+export type LiquibaseLoadColumnType = ValueOf<typeof liquibaseLoadColumnTypeByFieldType>;
+
+function parseLiquibaseLoadColumnType(application: LiquibaseApplication<LiquibaseEntity>, field: LiquibaseField): LiquibaseLoadColumnType {
   const columnType = field.columnType!;
-  // eslint-disable-next-line no-template-curly-in-string
-  if (['integer', 'bigint', 'double', 'decimal(21,2)', '${floatType}'].includes(columnType)) {
-    return 'numeric';
-  }
 
   if (field.fieldIsEnum) {
-    return 'string';
-  }
-
-  // eslint-disable-next-line no-template-curly-in-string
-  if (['date', '${datetimeType}'].includes(columnType)) {
-    return 'date';
-  }
-
-  // eslint-disable-next-line no-template-curly-in-string
-  if (columnType === '${timeType}') {
-    return 'time';
-  }
-
-  if (columnType === 'boolean') {
-    return columnType;
-  }
-
-  // eslint-disable-next-line no-template-curly-in-string
-  if (columnType === '${blobType}') {
-    return 'blob';
-  }
-
-  // eslint-disable-next-line no-template-curly-in-string
-  if (columnType === '${clobType}') {
-    return 'clob';
+    return liquibaseLoadColumnTypeByFieldType.string;
   }
 
   const { prodDatabaseType } = application;
-  if (
-    // eslint-disable-next-line no-template-curly-in-string
-    columnType === '${uuidType}' &&
-    prodDatabaseType !== MYSQL &&
-    prodDatabaseType !== MARIADB
-  ) {
-    // eslint-disable-next-line no-template-curly-in-string
-    return '${uuidType}';
+  if (columnType === '${uuidType}' && (prodDatabaseType === MYSQL || prodDatabaseType === MARIADB)) {
+    return liquibaseLoadColumnTypeByFieldType.string;
   }
 
-  return 'string';
+  return liquibaseLoadColumnTypeByFieldType[columnType] ?? liquibaseLoadColumnTypeByFieldType.string;
 }
 
-export default function prepareField(application: ApplicationAll, field: FieldAll): FieldAll {
+export default function prepareField(application: LiquibaseApplication<LiquibaseEntity>, field: LiquibaseField): LiquibaseField {
   mutateData(field, {
     __override__: false,
     columnType: data => parseLiquibaseColumnType(data),
+    loadColumnType: data => parseLiquibaseLoadColumnType(application, data),
     liquibaseDefaultValueAttributeValue: ({ defaultValue, defaultValueComputed }) => defaultValueComputed ?? defaultValue?.toString(),
-    liquibaseDefaultValueAttributeName: ({ defaultValueComputed, liquibaseDefaultValueAttributeValue }) => {
+    liquibaseDefaultValueAttributeName: ({ loadColumnType, defaultValueComputed, liquibaseDefaultValueAttributeValue }) => {
       if (liquibaseDefaultValueAttributeValue === undefined) return undefined;
       if (defaultValueComputed) return 'defaultValueComputed';
-      if (field.fieldTypeNumeric) return 'defaultValueNumeric';
-      if (field.fieldTypeDateTime) return 'defaultValueDate';
+      if (loadColumnType === 'numeric') return 'defaultValueNumeric';
       if (field.fieldTypeBoolean) return 'defaultValueBoolean';
       return 'defaultValue';
     },
@@ -169,7 +121,6 @@ export default function prepareField(application: ApplicationAll, field: FieldAl
     shouldCreateContentType: data => data.fieldType === BYTES && data.fieldTypeBlobContent !== TEXT,
     columnRequired: data => data.nullable === false || (data.fieldValidate === true && data.fieldValidateRules?.includes('required')),
     nullable: data => !data.columnRequired,
-    loadColumnType: data => parseLiquibaseLoadColumnType(application, data),
     liquibaseGenerateFakeData: true,
   });
 

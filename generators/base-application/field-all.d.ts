@@ -1,17 +1,13 @@
-import type { Field as JavaField } from '../java/index.js';
+import type { Field as SpringDataRelationalField } from '../spring-data-relational/index.js';
+import type { Field as LiquibaseField } from '../liquibase/index.js';
 import type { Field as ClientField } from '../client/index.js';
 
-export type FieldAll = JavaField &
+export type FieldAll = SpringDataRelationalField &
+  LiquibaseField &
   ClientField & {
-    columnName?: string;
-
     filterableField?: boolean;
-    transient?: boolean;
-    columnRequired?: boolean;
-    id?: boolean;
 
     autoGenerate?: boolean;
-    nullable?: boolean;
 
     /**
      * Faker template passed to `faker.helpers.fake()`.
@@ -25,15 +21,17 @@ export type FieldAll = JavaField &
     // Blob
     fieldWithContentType?: boolean;
     contentTypeFieldName?: string;
-    blobContentTypeText?: string;
 
+    blobContentTypeText?: boolean;
+    blobContentTypeImage?: boolean;
+    blobContentTypeAny?: boolean;
+
+    fieldTypeBytes?: boolean;
     // Derived properties
     fieldTypeBinary?: boolean;
     fieldTypeDuration?: boolean;
-    fieldTypeBoolean: boolean;
     fieldTypeTimed?: boolean;
     fieldTypeLocalDate?: boolean;
-    fieldTypeDateTime?: boolean;
     fieldTypeLocalTime?: boolean;
     /** @deprecated */
     fieldTypeTemporal: boolean;
@@ -46,10 +44,12 @@ export type FieldAll = JavaField &
     reference?: any;
     relationshipsPath?: string[];
 
-    shouldDropDefaultValue?: boolean;
-    shouldCreateContentType?: boolean;
-    loadColumnType?: string;
-    columnType?: string;
-    defaultValueComputed: any;
-    defaultValue: any;
+    fieldValidationMin?: boolean;
+    fieldValidationMinLength?: boolean;
+    fieldValidationMax?: boolean;
+    fieldValidationMaxLength?: boolean;
+    fieldValidationPattern?: boolean;
+    fieldValidationUnique?: boolean;
+    fieldValidationMinBytes?: boolean;
+    fieldValidationMaxBytes?: boolean;
   };
