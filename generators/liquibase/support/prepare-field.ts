@@ -96,8 +96,8 @@ function parseLiquibaseLoadColumnType(application: LiquibaseApplication<Liquibas
   }
 
   const { prodDatabaseType } = application;
-  if (columnType === '${uuidType}' && prodDatabaseType !== MYSQL && prodDatabaseType !== MARIADB) {
-    return liquibaseLoadColumnTypeByFieldType['${uuidType}'];
+  if (columnType === '${uuidType}' && (prodDatabaseType === MYSQL || prodDatabaseType === MARIADB)) {
+    return liquibaseLoadColumnTypeByFieldType.string;
   }
 
   return liquibaseLoadColumnTypeByFieldType[columnType] ?? liquibaseLoadColumnTypeByFieldType.string;
