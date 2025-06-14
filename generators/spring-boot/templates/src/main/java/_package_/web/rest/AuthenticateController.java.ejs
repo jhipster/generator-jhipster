@@ -121,7 +121,7 @@ public class AuthenticateController {
     /**
      * {@code GET /authenticate} : check if the user is authenticated.
      *
-     * @return the {@link ResponseEntity} with status {@code 204 (No Content)},
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and body "authenticated" if authenticated,
      * or with status {@code 401 (Unauthorized)} if not authenticated.
      */
     @GetMapping("/authenticate")
