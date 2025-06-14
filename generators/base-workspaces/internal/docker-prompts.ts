@@ -24,6 +24,7 @@ import chalk from 'chalk';
 import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../../lib/jhipster/index.js';
 import { convertSecretToBase64 } from '../../../lib/utils/index.js';
 import { asPromptingTask } from '../../base-application/support/index.js';
+import { asPromptingWorkspacesTask } from '../support/task-type-inference.ts';
 import type BaseWorkspacesGenerator from '../generator.js';
 import { loadConfigs } from './docker-base.js';
 
@@ -42,7 +43,7 @@ export default {
  * Ask For Application Type
  */
 export const askForApplicationType = asPromptingTask(async function askForApplicationType(this: BaseWorkspacesGenerator, { control }) {
-  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
+  if (!this.shouldAskForPrompts({ control })) return;
 
   const prompts = [
     {
@@ -71,7 +72,7 @@ export const askForApplicationType = asPromptingTask(async function askForApplic
  * Ask For Gateway Type
  */
 export const askForGatewayType = asPromptingTask(async function askForGatewayType(this: BaseWorkspacesGenerator, { control }) {
-  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
+  if (!this.shouldAskForPrompts({ control })) return;
   if (this.deploymentApplicationType !== MICROSERVICE) return;
 
   const prompts = [
@@ -97,7 +98,7 @@ export const askForGatewayType = asPromptingTask(async function askForGatewayTyp
  * Ask For Path
  */
 export const askForPath = asPromptingTask(async function askForPath(this: BaseWorkspacesGenerator, { control }) {
-  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
+  if (!this.shouldAskForPrompts({ control })) return;
 
   const deploymentApplicationType = this.deploymentApplicationType;
   let messageAskForPath;
@@ -157,7 +158,7 @@ export const askForPath = asPromptingTask(async function askForPath(this: BaseWo
  * Ask For Apps
  */
 export const askForApps = asPromptingTask(async function askForApps(this: BaseWorkspacesGenerator, { control }) {
-  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
+  if (!this.shouldAskForPrompts({ control })) return;
 
   const messageAskForApps = 'Which applications do you want to include in your configuration?';
 
@@ -181,7 +182,7 @@ export const askForApps = asPromptingTask(async function askForApps(this: BaseWo
  * Ask For Clusters Mode
  */
 export const askForClustersMode = asPromptingTask(async function askForClustersMode(this: BaseWorkspacesGenerator, { control }) {
-  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
+  if (!this.shouldAskForPrompts({ control })) return;
 
   const clusteredDbApps = [];
   this.appConfigs.forEach((appConfig, index) => {
@@ -209,7 +210,7 @@ export const askForClustersMode = asPromptingTask(async function askForClustersM
  * Ask For Monitoring
  */
 export const askForMonitoring = asPromptingTask(async function askForMonitoring(this: BaseWorkspacesGenerator, { control }) {
-  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
+  if (!this.shouldAskForPrompts({ control })) return;
 
   const prompts = [
     {
@@ -238,7 +239,7 @@ export const askForMonitoring = asPromptingTask(async function askForMonitoring(
  * Ask For Service Discovery
  */
 export const askForServiceDiscovery = asPromptingTask(async function askForServiceDiscovery(this: BaseWorkspacesGenerator, { control }) {
-  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
+  if (!this.shouldAskForPrompts({ control })) return;
 
   const serviceDiscoveryEnabledApps = [];
   this.appConfigs.forEach(appConfig => {
@@ -297,12 +298,102 @@ export const askForServiceDiscovery = asPromptingTask(async function askForServi
     this.serviceDiscoveryType = props.serviceDiscoveryType;
   }
 });
+// TODO rationalize
+export const askForClustersModeWorkspace = asPromptingWorkspacesTask(async function askForClustersMode(
+  this: BaseWorkspacesGenerator,
+  { control, applications },
+) {
+  if (!this.shouldAskForPrompts({ control })) return;
+  const clusteredDbApps = applications.filter(app => app.databaseTypeMongodb || app.databaseTypeCouchbase).map(app => app.appFolder);
+  if (clusteredDbApps.length === 0) return;
+
+  await this.prompt(
+    [
+      {
+        type: 'checkbox',
+        name: 'clusteredDbApps',
+        message: 'Which applications do you want to use with clustered databases (only available with MongoDB and Couchbase)?',
+        choices: clusteredDbApps,
+        default: clusteredDbApps,
+      },
+    ],
+    this.config,
+  );
+});
+// TODO rationalize
+export const askForServiceDiscoveryWorkspace = asPromptingWorkspacesTask(async function askForServiceDiscovery(
+  this: BaseWorkspacesGenerator,
+  { control, applications },
+) {
+  if (!this.shouldAskForPrompts({ control })) return;
+  const serviceDiscoveryEnabledApps = applications.filter(app => app.serviceDiscoveryAny);
+  if (serviceDiscoveryEnabledApps.length === 0) {
+    this.jhipsterConfig.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
+    return;
+  }
+
+  if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryConsul)) {
+    this.jhipsterConfig.serviceDiscoveryType = CONSUL;
+    this.log.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
+  } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryEureka)) {
+    this.jhipsterConfig.serviceDiscoveryType = EUREKA;
+    this.log.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
+  } else {
+    this.log.warn(
+      chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.'),
+    );
+    this.log.verboseInfo('Your service discovery enabled apps:');
+    serviceDiscoveryEnabledApps.forEach(app => {
+      this.log.verboseInfo(` -${app.baseName} (${app.serviceDiscoveryType})`);
+    });
+
+    await this.prompt(
+      [
+        {
+          type: 'list',
+          name: 'serviceDiscoveryType',
+          message: 'Which Service Discovery registry and Configuration server would you like to use ?',
+          choices: [
+            {
+              value: CONSUL,
+              name: 'Consul',
+            },
+            {
+              value: EUREKA,
+              name: 'JHipster Registry',
+            },
+            {
+              value: NO_SERVICE_DISCOVERY,
+              name: 'No Service Discovery and Configuration',
+            },
+          ],
+          default: CONSUL,
+        },
+      ],
+      this.config,
+    );
+  }
+  if (this.jhipsterConfig.serviceDiscoveryType === EUREKA) {
+    await this.prompt(
+      [
+        {
+          type: 'input',
+          name: 'adminPassword',
+          message: 'Enter the admin password used to secure the JHipster Registry',
+          default: 'admin',
+          validate: input => (input.length < 5 ? 'The password must have at least 5 characters' : true),
+        },
+      ],
+      this.config,
+    );
+  }
+});
 
 /**
  * Ask For Admin Password
  */
 export const askForAdminPassword = asPromptingTask(async function askForAdminPassword(this: BaseWorkspacesGenerator, { control }) {
-  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
+  if (!this.shouldAskForPrompts({ control })) return;
   if (this.serviceDiscoveryType !== EUREKA) return;
 
   const prompts = [
@@ -327,7 +418,7 @@ export const askForDockerRepositoryName = asPromptingTask(async function askForD
   this: BaseWorkspacesGenerator,
   { control },
 ) {
-  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
+  if (!this.shouldAskForPrompts({ control })) return;
 
   const prompts = [
     {
@@ -346,7 +437,7 @@ export const askForDockerRepositoryName = asPromptingTask(async function askForD
  * Ask For Docker Push Command
  */
 export const askForDockerPushCommand = asPromptingTask(async function askForDockerPushCommand(this: BaseWorkspacesGenerator, { control }) {
-  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
+  if (!this.shouldAskForPrompts({ control })) return;
 
   const prompts = [
     {

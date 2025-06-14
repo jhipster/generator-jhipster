@@ -38,11 +38,16 @@ import { createFaker } from '../base-application/support/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
 import { loadDerivedPlatformConfig, loadPlatformConfig } from '../base-workspaces/support/index.js';
+import {
+  askForClustersModeWorkspace,
+  askForMonitoring,
+  askForServiceDiscoveryWorkspace,
+} from '../base-workspaces/internal/docker-prompts.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files.js';
 
-const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;
-const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
+const { PROMETHEUS } = monitoringTypes;
+const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { Options: DeploymentOptions } = deploymentOptions;
 
 export default class DockerComposeGenerator extends BaseWorkspacesGenerator<BaseDeployment, BaseWorkspaces, BaseWorkspacesApplication> {
@@ -96,21 +101,9 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get promptingWorkspaces() {
     return this.asPromptingWorkspacesTaskGroup({
-      async askForMonitoring({ control }) {
-        if (!this.shouldAskForPrompts({ control })) return;
-
-        await this.askForMonitoring();
-      },
-      async askForClustersMode({ control, applications }) {
-        if (!this.shouldAskForPrompts({ control })) return;
-
-        await this.askForClustersMode({ applications });
-      },
-      async askForServiceDiscovery({ control, applications }) {
-        if (!this.shouldAskForPrompts({ control })) return;
-
-        await this.askForServiceDiscovery({ applications });
-      },
+      askForMonitoring,
+      askForClustersModeWorkspace,
+      askForServiceDiscoveryWorkspace,
     });
   }
 
@@ -430,111 +423,5 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
     deployment.appConfigs = applications;
     deployment.applications = applications;
-  }
-
-  async askForMonitoring() {
-    await this.prompt(
-      [
-        {
-          type: 'list',
-          name: 'monitoring',
-          message: 'Do you want to setup monitoring for your applications ?',
-          choices: [
-            {
-              value: NO_MONITORING,
-              name: 'No',
-            },
-            {
-              value: PROMETHEUS,
-              name: 'Yes, for metrics only with Prometheus',
-            },
-          ],
-          default: NO_MONITORING,
-        },
-      ],
-      this.config,
-    );
-  }
-
-  async askForClustersMode({ applications }) {
-    const clusteredDbApps = applications.filter(app => app.databaseTypeMongodb || app.databaseTypeCouchbase).map(app => app.appFolder);
-    if (clusteredDbApps.length === 0) return;
-
-    await this.prompt(
-      [
-        {
-          type: 'checkbox',
-          name: 'clusteredDbApps',
-          message: 'Which applications do you want to use with clustered databases (only available with MongoDB and Couchbase)?',
-          choices: clusteredDbApps,
-          default: clusteredDbApps,
-        },
-      ],
-      this.config,
-    );
-  }
-
-  async askForServiceDiscovery({ applications }) {
-    const serviceDiscoveryEnabledApps = applications.filter(app => app.serviceDiscoveryAny);
-    if (serviceDiscoveryEnabledApps.length === 0) {
-      this.jhipsterConfig.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
-      return;
-    }
-
-    if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryConsul)) {
-      this.jhipsterConfig.serviceDiscoveryType = CONSUL;
-      this.log.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
-    } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryEureka)) {
-      this.jhipsterConfig.serviceDiscoveryType = EUREKA;
-      this.log.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
-    } else {
-      this.log.warn(
-        chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.'),
-      );
-      this.log.verboseInfo('Your service discovery enabled apps:');
-      serviceDiscoveryEnabledApps.forEach(app => {
-        this.log.verboseInfo(` -${app.baseName} (${app.serviceDiscoveryType})`);
-      });
-
-      await this.prompt(
-        [
-          {
-            type: 'list',
-            name: 'serviceDiscoveryType',
-            message: 'Which Service Discovery registry and Configuration server would you like to use ?',
-            choices: [
-              {
-                value: CONSUL,
-                name: 'Consul',
-              },
-              {
-                value: EUREKA,
-                name: 'JHipster Registry',
-              },
-              {
-                value: NO_SERVICE_DISCOVERY,
-                name: 'No Service Discovery and Configuration',
-              },
-            ],
-            default: CONSUL,
-          },
-        ],
-        this.config,
-      );
-    }
-    if (this.jhipsterConfig.serviceDiscoveryType === EUREKA) {
-      await this.prompt(
-        [
-          {
-            type: 'input',
-            name: 'adminPassword',
-            message: 'Enter the admin password used to secure the JHipster Registry',
-            default: 'admin',
-            validate: input => (input.length < 5 ? 'The password must have at least 5 characters' : true),
-          },
-        ],
-        this.config,
-      );
-    }
   }
 }
