@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ExportApplicationPropertiesFromCommand, ExportGeneratorOptionsFromCommand } from '../../lib/command/types.js';
+import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
 import type { Application as SimpleApplication } from '../base-simple-application/index.js';
-import type { DockerApplicationType } from '../docker/types.js';
+import type { Application as DockerApplication } from '../docker/index.js';
 import type command from './command.js';
 
-type CICDApplicationProperties = ExportApplicationPropertiesFromCommand<typeof command> &
-  ExportGeneratorOptionsFromCommand<typeof command> &
-  DockerApplicationType & {
-    testFrameworks?: string[];
-    cypressTests?: boolean;
-    javaVersion?: string;
-  };
+type CICDApplicationProperties = ExportApplicationPropertiesFromCommand<typeof command> & {
+  gitLabIndent?: string;
+  indent?: string;
+  testFrameworks?: string[];
+  cypressTests?: boolean;
+  javaVersion?: string;
+};
 
-export type Application = SimpleApplication & CICDApplicationProperties;
+export type Application = SimpleApplication & DockerApplication & CICDApplicationProperties;
