@@ -298,7 +298,7 @@ export const askForServiceDiscovery = asPromptingTask(async function askForServi
     this.serviceDiscoveryType = props.serviceDiscoveryType;
   }
 });
-// TODO rationalize
+
 export const askForClustersModeWorkspace = asPromptingWorkspacesTask(async function askForClustersMode(
   this: BaseWorkspacesGenerator,
   { control, applications },
@@ -320,7 +320,7 @@ export const askForClustersModeWorkspace = asPromptingWorkspacesTask(async funct
     this.config,
   );
 });
-// TODO rationalize
+
 export const askForServiceDiscoveryWorkspace = asPromptingWorkspacesTask(async function askForServiceDiscovery(
   this: BaseWorkspacesGenerator,
   { control, applications },
