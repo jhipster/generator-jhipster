@@ -19,6 +19,8 @@
  */
 import dockerPrompts from '../base-workspaces/internal/docker-prompts.js';
 import { applicationTypes, databaseTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
+import { asPromptingTask } from '../base-application/support/index.js';
+import type BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import { defaultKubernetesConfig, ingressDefaultConfig } from './kubernetes-constants.js';
 
 const { MONOLITH } = applicationTypes;
@@ -29,18 +31,14 @@ const { LOAD_BALANCER, INGRESS, NODE_PORT } = ServiceTypes;
 const { GKE, NGINX } = IngressTypes;
 
 export default {
-  askForKubernetesNamespace,
-  askForKubernetesServiceType,
-  askForIngressType,
-  askForIngressDomain,
-  askForIstioSupport,
-  askForPersistentStorage,
-  askForStorageClassName,
   ...dockerPrompts,
 };
 
-export async function askForKubernetesNamespace() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForKubernetesNamespace = asPromptingTask(async function askForKubernetesNamespace(
+  this: BaseWorkspacesGenerator,
+  { control },
+) {
+  if (!this.shouldAskForPrompts({ control })) return;
 
   const prompts = [
     {
@@ -53,10 +51,13 @@ export async function askForKubernetesNamespace() {
 
   const props = await this.prompt(prompts, this.config);
   this.kubernetesNamespace = props.kubernetesNamespace;
-}
+});
 
-export async function askForKubernetesServiceType() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForKubernetesServiceType = asPromptingTask(async function askForKubernetesServiceType(
+  this: BaseWorkspacesGenerator,
+  { control },
+) {
+  if (!this.shouldAskForPrompts({ control })) return;
 
   const istio = this.istio;
 
@@ -86,10 +87,10 @@ export async function askForKubernetesServiceType() {
 
   const props = await this.prompt(prompts, this.config);
   this.kubernetesServiceType = props.kubernetesServiceType;
-}
+});
 
-export async function askForIngressType() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForIngressType = asPromptingTask(async function askForIngressType(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.shouldAskForPrompts({ control })) return;
   const kubernetesServiceType = this.kubernetesServiceType;
 
   const prompts = [
@@ -114,10 +115,10 @@ export async function askForIngressType() {
 
   const props = await this.prompt(prompts, this.config);
   this.ingressType = props.ingressType;
-}
+});
 
-export async function askForIngressDomain() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForIngressDomain = asPromptingTask(async function askForIngressDomain(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.shouldAskForPrompts({ control })) return;
   const kubernetesServiceType = this.kubernetesServiceType;
   const istio = this.istio;
   this.ingressDomain = this.ingressDomain?.startsWith('.') ? this.ingressDomain.substring(1) : this.ingressDomain;
@@ -181,10 +182,10 @@ export async function askForIngressDomain() {
   } else {
     this.ingressDomain = props.ingressDomain ? props.ingressDomain : '';
   }
-}
+});
 
-export async function askForIstioSupport() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForIstioSupport = asPromptingTask(async function askForIstioSupport(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.shouldAskForPrompts({ control })) return;
   if (this.deploymentApplicationType === MONOLITH) {
     this.istio = false;
     return;
@@ -211,10 +212,10 @@ export async function askForIstioSupport() {
 
   const props = await this.prompt(prompts, this.config);
   this.istio = props.istio;
-}
+});
 
-export async function askForPersistentStorage() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForPersistentStorage = asPromptingTask(async function askForPersistentStorage(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.shouldAskForPrompts({ control })) return;
   let usingDataBase = false;
   this.appConfigs.forEach(appConfig => {
     if (appConfig.prodDatabaseType !== NO_DATABASE) {
@@ -244,10 +245,10 @@ export async function askForPersistentStorage() {
 
   const props = await this.prompt(prompts, this.config);
   this.kubernetesUseDynamicStorage = props.kubernetesUseDynamicStorage;
-}
+});
 
-export async function askForStorageClassName() {
-  if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
+export const askForStorageClassName = asPromptingTask(async function askForStorageClassName(this: BaseWorkspacesGenerator, { control }) {
+  if (!this.shouldAskForPrompts({ control })) return;
   const kubernetesUseDynamicStorage = this.kubernetesUseDynamicStorage;
 
   const prompts = [
@@ -265,4 +266,4 @@ export async function askForStorageClassName() {
   if (kubernetesUseDynamicStorage) {
     this.kubernetesStorageClassName = props.kubernetesStorageClassName.trim();
   }
-}
+});

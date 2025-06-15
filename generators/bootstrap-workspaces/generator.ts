@@ -18,11 +18,10 @@
  */
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base/support/constants.ts';
 import { CommandBaseWorkspacesGenerator as BaseWorkspacesGenerator } from '../base-workspaces/index.js';
+import { askForDirectoryPath } from '../base-workspaces/prompts.js';
 import type command from './command.js';
 
 export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerator<typeof command> {
-  customWorkspacesConfig?: boolean;
-
   async beforeQueue() {
     this.getContextData(CONTEXT_DATA_EXISTING_PROJECT, {
       factory: () => Boolean(this.jhipsterConfig.appsFolders),
@@ -34,13 +33,7 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
   }
 
   get prompting() {
-    return this.asPromptingTaskGroup({
-      async askForOptions({ control }) {
-        if (this.customWorkspacesConfig || !this.shouldAskForPrompts({ control })) return;
-
-        await this.askForWorkspacesConfig();
-      },
-    });
+    return this.asPromptingTaskGroup({ askForDirectoryPath });
   }
 
   get [BaseWorkspacesGenerator.PROMPTING]() {
