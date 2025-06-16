@@ -312,7 +312,7 @@ export class <%= componentName %> implements OnInit {
         if (data) {
           for (const d of data) {
   <%_ if (primaryKey) { _%>
-            if (<%= entityInstancePlural %>New.some(op => op.<%= primaryKey.name %> === d.<%= primaryKey.name %>)) {
+            if (!<%= entityInstancePlural %>New.some(op => op.<%= primaryKey.name %> === d.<%= primaryKey.name %>)) {
   <%_ } _%>
               <%= entityInstancePlural %>New.push(d);
   <%_ if (primaryKey) { _%>
