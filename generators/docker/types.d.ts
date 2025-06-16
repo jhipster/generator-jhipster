@@ -1,3 +1,18 @@
+import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type {
+  Application as BaseSimpleApplicationApplication,
+  Config as BaseSimpleApplicationConfig,
+  Options as BaseSimpleApplicationOptions,
+  Source as BaseSimpleApplicationSource,
+} from '../base-simple-application/index.js';
+import type command from './command.js';
+
+type Command = HandleCommandTypes<typeof command>;
+
+export type Config = BaseSimpleApplicationConfig & Command['Config'];
+
+export type Options = BaseSimpleApplicationOptions & Command['Options'];
+
 export type DockerComposeService = {
   serviceName: string;
   serviceFile?: string;
@@ -6,14 +21,15 @@ export type DockerComposeService = {
   extendedServiceName?: string;
 };
 
-export type DockerApplicationType = {
-  dockerContainers?: Record<string, string>;
-  dockerServicesDir?: string;
-  dockerServices?: string[];
-  keycloakSecrets?: string[];
-};
+export type Application = BaseSimpleApplicationApplication &
+  Command['Application'] & {
+    dockerContainers?: Record<string, string>;
+    dockerServicesDir?: string;
+    dockerServices?: string[];
+    keycloakSecrets?: string[];
+  };
 
-export type DockerSourceType = {
+export type Source = BaseSimpleApplicationSource & {
   addDockerExtendedServiceToApplicationAndServices?(...services: DockerComposeService[]): void;
   addDockerExtendedServiceToServices?(...services: DockerComposeService[]): void;
   addDockerExtendedServiceToApplication?(...services: DockerComposeService[]): void;

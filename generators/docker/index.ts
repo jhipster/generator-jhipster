@@ -18,3 +18,4 @@
  */
 export { default as command } from './command.js';
 export { default } from './generator.js';
+export type { Application, Config, Options, Source } from './types.js';
