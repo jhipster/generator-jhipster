@@ -16,11 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../base-application/index.js';
+import BaseSimpleApplicationGenerator from '../base-simple-application/index.js';
 import { GENERATOR_GIT } from '../generator-list.js';
 import { files, readme } from './files.js';
+import type { Application as InitApplication, Config as InitConfig, Options as InitOptions } from './types.js';
 
-export default class InitGenerator extends BaseApplicationGenerator {
+export default class InitGenerator extends BaseSimpleApplicationGenerator<InitApplication, InitConfig, InitOptions> {
   generateReadme = true;
 
   async beforeQueue() {
@@ -45,7 +46,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.COMPOSING]() {
+  get [BaseSimpleApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -67,7 +68,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [BaseSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 }

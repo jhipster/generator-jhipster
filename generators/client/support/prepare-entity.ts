@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { EntityAll } from '../../base-application/entity-all.js';
+import type { Entity as ClientEntity } from '../../client/index.js';
 import { mutateData } from '../../../lib/utils/object.ts';
 import { isClientField } from './filter-entities.js';
 import { generateTestEntityId, generateTsTestEntityForFields, stringifyTsEntity } from './template-utils.js';
@@ -24,7 +24,7 @@ import getTypescriptKeyType from './types-utils.js';
 
 const SEED = 'post-prepare-client';
 
-export async function preparePostEntityClientDerivedProperties(entity: EntityAll) {
+export async function preparePostEntityClientDerivedProperties(entity: ClientEntity) {
   let clientFields = entity.fields.filter(field => isClientField(field));
   if (entity.builtInUser) {
     clientFields = clientFields.filter(field => ['id', 'login'].includes(field.fieldName));

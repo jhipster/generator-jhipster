@@ -198,19 +198,6 @@ const command = {
       choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
       scope: 'storage',
     },
-    messageBroker: {
-      description: 'message broker',
-      cli: {
-        type: String,
-      },
-      jdl: {
-        type: 'string',
-        tokenType: 'NAME',
-        tokenValuePattern: ALPHANUMERIC_PATTERN,
-      },
-      choices: ['kafka', 'pulsar', 'no'],
-      scope: 'storage',
-    },
     databaseMigration: {
       description: 'Database migration',
       cli: {
@@ -236,7 +223,14 @@ const command = {
       scope: 'storage',
     },
   },
-  import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL, 'jhipster:spring-cloud:gateway'],
+  import: [
+    GENERATOR_JAVA,
+    GENERATOR_LIQUIBASE,
+    GENERATOR_SPRING_DATA_RELATIONAL,
+    'jhipster:spring-cloud:gateway',
+    'spring-cache',
+    'spring-cloud-stream',
+  ],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../base-application/index.js';
+import { JavaApplicationGenerator } from '../java/generator.ts';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 
-export default class SpringWebsocketGenerator extends BaseApplicationGenerator {
+export default class SpringWebsocketGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -38,7 +38,7 @@ export default class SpringWebsocketGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [JavaApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -53,7 +53,7 @@ export default class SpringWebsocketGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [JavaApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

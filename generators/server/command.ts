@@ -31,23 +31,8 @@ const command = {
       },
       scope: 'storage',
     },
-    cacheProvider: {
-      description: 'Cache provider',
-      cli: {
-        type: String,
-      },
-      choices: ['no', 'caffeine', 'ehcache', 'hazelcast', 'infinispan', 'memcached', 'redis'],
-      scope: 'storage',
-    },
     enableSwaggerCodegen: {
       description: 'API first development using OpenAPI-generator',
-      cli: {
-        type: Boolean,
-      },
-      scope: 'storage',
-    },
-    enableHibernateCache: {
-      description: 'Enable hibernate cache',
       cli: {
         type: Boolean,
       },

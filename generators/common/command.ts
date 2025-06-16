@@ -32,6 +32,20 @@ const command = {
       default: 'prod',
       scope: 'storage',
     },
+    skipClient: {
+      cli: {
+        description: 'Skip the client-side application generation',
+        type: Boolean,
+      },
+      scope: 'storage',
+    },
+    skipServer: {
+      cli: {
+        description: 'Skip the server-side application generation',
+        type: Boolean,
+      },
+      scope: 'storage',
+    },
   },
   import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
 } as const satisfies JHipsterCommandDefinition;

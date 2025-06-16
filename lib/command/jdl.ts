@@ -19,6 +19,7 @@
 import { snakeCase, upperCase } from 'lodash-es';
 import type { JDLApplicationConfig } from '../jdl/core/types/parsing.js';
 import springBootCommand from '../../generators/spring-boot/command.js';
+import springCloudStreamCommand from '../../generators/spring-cloud-stream/command.js';
 import liquibaseCommand from '../../generators/liquibase/command.js';
 import gatewayCommand from '../../generators/spring-cloud/generators/gateway/command.js';
 import { extractJdlDefinitionFromCommandConfig } from './converter.js';
@@ -62,6 +63,7 @@ let defaultJDLApplicationConfig: JDLApplicationConfig;
 export const getDefaultJDLApplicationConfig = () => {
   if (defaultJDLApplicationConfig === undefined) {
     defaultJDLApplicationConfig = buildJDLApplicationConfig({
+      ...springCloudStreamCommand.configs,
       ...springBootCommand.configs,
       ...liquibaseCommand.configs,
       ...gatewayCommand.configs,

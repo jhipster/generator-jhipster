@@ -1,3 +1,5 @@
+import type { Application as JavascriptApplication, Entity as JavascriptEntity } from '../javascript/types.js';
+
 export type CypressProperties = {
   cypressTests: boolean;
   cypressAudit: boolean;
@@ -7,4 +9,6 @@ export type CypressProperties = {
   cypressBootstrapEntities: boolean;
 };
 
-export type CypressApplication = CypressProperties;
+export type Entity = JavascriptEntity;
+
+export type Application<E extends Entity = Entity> = JavascriptApplication<E> & CypressProperties;

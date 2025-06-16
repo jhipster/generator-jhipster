@@ -8,7 +8,6 @@ import type {
   Config as BaseSimpleApplicationConfig,
   Options as BaseSimpleApplicationOptions,
 } from '../base-simple-application/index.ts';
-import type { ApplicationOptions } from './application-options-all.js';
 import type { OptionWithDerivedProperties } from './internal/types/application-options.js';
 import type { FakerWithRandexp } from './support/faker.ts';
 
@@ -17,7 +16,7 @@ export type Config = BaseSimpleApplicationConfig & {
   backendType?: string;
 };
 
-export type Options = BaseSimpleApplicationOptions & ApplicationOptions;
+export type Options = BaseSimpleApplicationOptions;
 
 export type { Features } from '../base-simple-application/types.js';
 export type { Source } from '../base-simple-application/types.js';
@@ -52,6 +51,15 @@ export type Field = Property &
     createRandexp: () => any;
 
     generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts') => any;
+
+    transient?: boolean;
+    id?: boolean;
+
+    // Blob
+    fieldWithContentType?: boolean;
+    contentTypeFieldName?: string;
+
+    fieldTypeTimed?: boolean;
   };
 
 /**

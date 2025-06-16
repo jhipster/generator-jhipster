@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../base-application/index.js';
+import { JavaApplicationGenerator } from '../java/generator.ts';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntityTask, { cleanupEntitiesTask } from './entity-files.js';
 
-export default class GatlingGenerator extends BaseApplicationGenerator {
+export default class GatlingGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -39,7 +39,7 @@ export default class GatlingGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [JavaApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -50,7 +50,7 @@ export default class GatlingGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+  get [JavaApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
@@ -102,7 +102,7 @@ export default class GatlingGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [JavaApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

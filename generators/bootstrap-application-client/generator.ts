@@ -21,13 +21,13 @@ import {
   filterEntityPropertiesForClient,
   preparePostEntityClientDerivedProperties,
 } from '../client/support/index.js';
-import BaseApplicationGenerator from '../base-application/index.js';
+import { ClientApplicationGenerator } from '../client/generator.ts';
 import clientCommand from '../client/command.js';
 import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
 import { getFrontendAppName } from '../../lib/utils/index.js';
 import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../generator-constants.js';
 
-export default class BootStrapApplicationClient extends BaseApplicationGenerator {
+export default class BootStrapApplicationClient extends ClientApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -53,7 +53,7 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
+  get [ClientApplicationGenerator.LOADING]() {
     return this.loading;
   }
 
@@ -84,7 +84,7 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [ClientApplicationGenerator.PREPARING]() {
     return this.preparing;
   }
 
@@ -107,7 +107,7 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
     });
   }
 
-  get [BaseApplicationGenerator.DEFAULT]() {
+  get [ClientApplicationGenerator.DEFAULT]() {
     return this.default;
   }
 }

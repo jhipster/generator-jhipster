@@ -23,6 +23,8 @@ import type {
   Relationship as ClientRelationship,
 } from '../client/index.js';
 
+export type { Config, Relationship, Options, Source } from '../client/index.js';
+
 export interface Entity<F extends ClientField = ClientField, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
   /**
    * @experimental to be replaced with a calculated property

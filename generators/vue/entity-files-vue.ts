@@ -18,7 +18,7 @@
  */
 import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.js';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
+import type { Application as ClientApplication, Entity as ClientEntity, Source as ClientSource } from '../client/types.js';
 
 export const entityFiles = {
   client: [
@@ -66,7 +66,7 @@ export const writeEntityFiles = asWritingEntitiesTask<ClientEntity, ClientApplic
   }
 });
 
-export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(
+export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>, ClientSource>(
   async function postWriteEntityFiles({ application, entities, source }) {
     source.addEntitiesToClient({
       application,

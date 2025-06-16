@@ -19,15 +19,16 @@
 import { extname } from 'path';
 import { isFileStateDeleted, isFileStateModified } from 'mem-fs-editor/state';
 import { passthrough } from '@yeoman/transform';
-import BaseApplicationGenerator from '../../../base-application/index.js';
-import { createNeedleCallback } from '../../../base-core/support/needles.ts';
-import { addJavaAnnotation, addJavaImport } from '../../../java/support/add-java-annotation.js';
+import { JavaApplicationGenerator } from '../../generator.ts';
+import { addJavaAnnotation } from '../../../java/support/add-java-annotation.js';
 import { javaMainPackageTemplatesBlock } from '../../../java/support/files.js';
+import type { Source as SpringBootSource } from '../../../spring-boot/index.ts';
+import type { Application as LanguagesApplication } from '../../../languages/index.ts';
+import type { Config as SpringCacheConfig } from '../../../spring-cache/index.ts';
 import { mavenDefinition } from './internal/maven-definition.js';
 import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.js';
 
-// TODO adjust type
-export default class GraalvmGenerator extends BaseApplicationGenerator {
+export default class GraalvmGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -42,12 +43,12 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
     return this.asInitializingTaskGroup({
       forceConfig() {
         // Cache is not supported for GraalVM native image
-        this.jhipsterConfig.cacheProvider ??= 'no';
+        (this.jhipsterConfig as SpringCacheConfig).cacheProvider ??= 'no';
       },
     });
   }
 
-  get [BaseApplicationGenerator.INITIALIZING]() {
+  get [JavaApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
@@ -61,7 +62,7 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
+  get [JavaApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -69,30 +70,6 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
     return this.asPreparingTaskGroup({
       load({ application }) {
         this.loadJavaDependenciesFromGradleCatalog(application.javaDependencies!);
-      },
-      addNativeHint({ source, application }) {
-        source.addNativeHint = ({ advanced = [], declaredConstructors = [], publicConstructors = [], resources = [] }) => {
-          this.editFile(
-            `${application.javaPackageSrcDir}config/NativeConfiguration.java`,
-            addJavaImport('org.springframework.aot.hint.MemberCategory'),
-            createNeedleCallback({
-              contentToAdd: [
-                ...advanced,
-                ...resources.map(resource => `hints.resources().registerPattern("${resource}");`),
-                ...publicConstructors.map(
-                  classPath =>
-                    `hints.reflection().registerType(${classPath}, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS));`,
-                ),
-                ...declaredConstructors.map(
-                  classPath =>
-                    `hints.reflection().registerType(${classPath}, (hint) -> hint.withMembers(MemberCategory.INVOKE_DECLARED_CONSTRUCTORS));`,
-                ),
-              ],
-              needle: 'add-native-hints',
-              ignoreWhitespaces: true,
-            }),
-          );
-        };
       },
       async packageJson({ application }) {
         const { buildToolGradle, packageJsonScripts } = application;
@@ -115,7 +92,7 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [JavaApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -146,7 +123,7 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.DEFAULT]() {
+  get [JavaApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -174,7 +151,7 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [JavaApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -195,16 +172,9 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
       },
 
       async customizeMaven({ application, source }) {
-        const {
-          buildToolMaven,
-          reactive,
-          databaseTypeSql,
-          javaDependencies,
-          nativeLanguageDefinition,
-          languagesDefinition,
-          graalvmReachabilityMetadata,
-        } = application;
+        const { buildToolMaven, reactive, databaseTypeSql, javaDependencies, graalvmReachabilityMetadata } = application;
         if (!buildToolMaven) return;
+        const { nativeLanguageDefinition, languagesDefinition } = application as unknown as LanguagesApplication;
 
         source.addMavenDefinition!(
           mavenDefinition({
@@ -271,7 +241,7 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
       nativeHints({ source, application }) {
         if (!application.backendTypeSpringBoot) return;
 
-        source.addNativeHint!({
+        (source as SpringBootSource).addNativeHint?.({
           advanced: [
             // Undertow
             'hints.reflection().registerType(sun.misc.Unsafe.class, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_METHODS));',
@@ -284,7 +254,7 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [JavaApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

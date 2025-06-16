@@ -30,7 +30,7 @@ import {
 } from '../../lib/jhipster/index.js';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.js';
 import { asPromptingTask } from '../base-application/support/task-type-inference.js';
-import type BaseApplicationGenerator from '../base-application/generator.js';
+import type SpringBootGenerator from './generator.js';
 
 const { OptionNames } = applicationOptions;
 const { GATEWAY, MONOLITH } = applicationTypes;
@@ -42,7 +42,7 @@ const NO_DATABASE = databaseTypes.NO;
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 const { GATLING, CUCUMBER } = testFrameworkTypes;
 
-export const askForServerSideOpts = asPromptingTask(async function (this: BaseApplicationGenerator, { control }) {
+export const askForServerSideOpts = asPromptingTask(async function (this: SpringBootGenerator, { control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
   const { applicationType, authenticationType, reactive } = this.jhipsterConfigWithDefaults;
@@ -171,7 +171,7 @@ export const askForServerSideOpts = asPromptingTask(async function (this: BaseAp
   );
 });
 
-export const askForOptionalItems = asPromptingTask(async function askForOptionalItems(this: BaseApplicationGenerator, { control }) {
+export const askForOptionalItems = asPromptingTask(async function askForOptionalItems(this: SpringBootGenerator, { control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
   const { applicationType, reactive, databaseType } = this.jhipsterConfigWithDefaults;
@@ -242,7 +242,7 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
   }
 });
 
-export const askForServerTestOpts = asPromptingTask(async function (this: BaseApplicationGenerator, { control }) {
+export const askForServerTestOpts = asPromptingTask(async function (this: SpringBootGenerator, { control }) {
   if (control.existingProject && this.options.askAnswered !== true) return;
 
   const testFrameworks = this.jhipsterConfigWithDefaults.testFrameworks ?? [];

@@ -21,8 +21,21 @@ import { createNeedleCallback } from '../base-core/support/needles.ts';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import { getCacheProviderMavenDefinition } from './internal/dependencies.js';
+import type {
+  Config as SpringCacheConfig,
+  Entity as SpringCacheEntity,
+  Options as SpringCacheOptions,
+  Source as SpringCacheSource,
+  Application as SpringCacneApplication,
+} from './types.js';
 
-export default class SpringCacheGenerator extends BaseApplicationGenerator {
+export default class SpringCacheGenerator extends BaseApplicationGenerator<
+  SpringCacheEntity,
+  SpringCacneApplication<SpringCacheEntity>,
+  SpringCacheConfig,
+  SpringCacheOptions,
+  SpringCacheSource
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

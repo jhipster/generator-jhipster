@@ -16,10 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-application/index.js';
+import { JavaApplicationGenerator } from '../../../java/generator.ts';
+import type { Application as DockerApplication } from '../../../docker/index.ts';
+import type { Application as SpringCacheApplication } from '../../../spring-cache/index.ts';
 
-// TODO adjust type
-export default class JibGenerator extends BaseApplicationGenerator {
+export default class JibGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -34,8 +35,9 @@ export default class JibGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addJibPlugin({ application, source }) {
-        const { baseName, serverPort, javaDependencies, dockerContainers, dockerServicesDir } = application;
-        const { cacheProviderHazelcast, cacheProviderInfinispan } = application as any;
+        const { baseName, serverPort, javaDependencies } = application;
+        const { dockerContainers, dockerServicesDir } = application as DockerApplication;
+        const { cacheProviderHazelcast, cacheProviderInfinispan } = application as SpringCacheApplication;
         source.addMavenDefinition?.({
           properties: [
             { property: 'jib-maven-plugin.version', value: javaDependencies!['jib-maven-plugin'] },
@@ -130,7 +132,7 @@ export default class JibGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [JavaApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

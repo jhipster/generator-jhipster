@@ -21,6 +21,7 @@ import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
+import type { AllConfig, AllOptions, ApplicationAll, EntityAll } from '../base-application/index.js';
 import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_SERVER } from '../generator-list.js';
 import { getDefaultAppName } from '../project-name/support/index.js';
 
@@ -30,7 +31,7 @@ import { checkNode } from './support/index.js';
 
 const { MICROSERVICE } = applicationTypes;
 
-export default class JHipsterAppGenerator extends BaseApplicationGenerator {
+export default class JHipsterAppGenerator extends BaseApplicationGenerator<EntityAll, ApplicationAll<EntityAll>, AllConfig, AllOptions> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
