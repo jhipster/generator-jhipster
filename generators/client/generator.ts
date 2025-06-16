@@ -34,7 +34,9 @@ import type { Application as ClientApplication, Entity as ClientEntity } from '.
 const { ANGULAR, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
 
-export default class ClientGenerator extends BaseApplicationGenerator<ClientEntity, ClientApplication<ClientEntity>> {
+export class ClientApplicationGenerator extends BaseApplicationGenerator<ClientEntity, ClientApplication<ClientEntity>> {}
+
+export default class ClientGenerator extends ClientApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

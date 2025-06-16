@@ -159,7 +159,7 @@ type JavaBootstrap = ExportStoragePropertiesFromCommand<typeof JavaBootstrapComm
   packageInfoJavadocs: { packageName: string; documentation: string }[];
 };
 
-export type Application<E extends Entity<Field, Relationship>> = BaseApplicationApplication<E> &
+export type Application<E extends Entity<Field, Relationship> = Entity<Field, Relationship>> = BaseApplicationApplication<E> &
   JavaBootstrap &
   CommonProperties &
   SpringApplication &

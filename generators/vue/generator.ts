@@ -20,7 +20,7 @@ import assert from 'node:assert';
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
-import BaseApplicationGenerator from '../base-application/index.js';
+import { ClientApplicationGenerator } from '../client/generator.ts';
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_VUE } from '../generator-list.js';
 import {
@@ -39,7 +39,7 @@ const { CommonDBTypes } = fieldTypes;
 const { VUE } = clientFrameworkTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 
-export default class VueGenerator extends BaseApplicationGenerator {
+export default class VueGenerator extends ClientApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -64,7 +64,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.CONFIGURING]() {
+  get [ClientApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -85,7 +85,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
+  get [ClientApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -225,7 +225,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [ClientApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -259,7 +259,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [BaseApplicationGenerator.DEFAULT]() {
+  get [ClientApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -284,7 +284,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [ClientApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -296,7 +296,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+  get [ClientApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
@@ -382,7 +382,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [ClientApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
@@ -392,7 +392,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+  get [ClientApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
@@ -409,7 +409,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [BaseApplicationGenerator.END]() {
+  get [ClientApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 

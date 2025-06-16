@@ -21,7 +21,7 @@ export type Field = ServerField & JavaField;
 
 export interface Relationship extends ServerRelationship, JavaRelationship {}
 
-export type Entity<F extends Field, R extends Relationship> = ServerEntity<F, R> &
+export type Entity<F extends Field = Field, R extends Relationship = Relationship> = ServerEntity<F, R> &
   SpringEntity & {
     skipDbChangelog?: boolean;
   };
@@ -97,7 +97,7 @@ type ApplicationNature = (ImperativeApplication & CacheProviderApplication) | Re
 */
 type ApplicationNature = { reactive: boolean };
 
-export type Application<E extends JavaEntity> = GradleApplication<E> &
+export type Application<E extends JavaEntity = JavaEntity> = GradleApplication<E> &
   ApplicationNature &
   SearchEngine &
   DatabaseTypeApplication &

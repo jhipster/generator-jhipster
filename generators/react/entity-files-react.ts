@@ -18,6 +18,7 @@
  */
 import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.js';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
 
 export const reactFiles = {
   client: [
@@ -51,7 +52,10 @@ export const reactFiles = {
   ],
 };
 
-export const writeEntitiesFiles = asWritingEntitiesTask(async function ({ application, entities }) {
+export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(async function ({
+  application,
+  entities,
+}) {
   for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesForClient)(entities).filter(
     entity => !entity.builtInUser && !entity.embedded,
   )) {
@@ -62,14 +66,22 @@ export const writeEntitiesFiles = asWritingEntitiesTask(async function ({ applic
   }
 });
 
-export const postWriteEntitiesFiles = asPostWritingEntitiesTask(async function ({ application, entities, source }) {
+export const postWriteEntitiesFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(async function ({
+  application,
+  entities,
+  source,
+}) {
   const clientEntities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(entities).filter(
     entity => !entity.builtInUser && !entity.embedded,
   );
   source.addEntitiesToClient({ application, entities: clientEntities });
 });
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ application, control, entities }) {
+export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(function cleanupEntitiesFiles({
+  application,
+  control,
+  entities,
+}) {
   for (const entity of (application.filterEntitiesForClient ?? filterEntitiesForClient)(entities).filter(
     entity => !entity.builtInUser && !entity.embedded,
   )) {

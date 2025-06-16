@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
-import type Generator from './generator.js';
+import type { Application as JavaApplication, Entity as JavaEntity } from '../java/index.js';
+import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
 
 const domainFiles = [
   {
@@ -42,11 +43,11 @@ export const entityFiles = {
 
 export function cleanupEntitiesTask() {}
 
-export default async function writeEntitiesTask(this: Generator, { application, entities }) {
+export default asWritingEntitiesTask<JavaEntity, JavaApplication<JavaEntity>>(async function writeEntitiesTask({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {
     await this.writeFiles({
       sections: entityFiles,
       context: { ...application, ...entity },
     });
   }
-}
+});

@@ -28,7 +28,7 @@ export type LanguagesSource = {
   addEntityTranslationKey: (arg: { translationKey: string; translationValue: string; language: string }) => void;
 };
 
-export type I18nApplication<E extends Entity<BaseApplicationField, BaseApplicationRelationship>> = BaseApplicationApplication<E> & {
+export type Application<E extends BaseApplicationEntity> = BaseApplicationApplication<E> & {
   enableTranslation: boolean;
   enableI18nRTL: boolean;
   nativeLanguage: string;

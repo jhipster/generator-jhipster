@@ -18,15 +18,16 @@
  */
 
 import { asPostWritingTask } from '../../base-application/support/task-type-inference.js';
+import type { Application as ServerApplication, Entity as ServerEntity } from '../types.js';
 
 /**
  * Update Languages In MailServiceIT
- *
- * @param application
  */
-export const updateLanguagesInMailServiceITTask = asPostWritingTask(function updateLanguagesInMailServiceITTask({ application, control }) {
+export default asPostWritingTask<ServerEntity, ServerApplication<ServerEntity>>(function updateLanguagesInMailServiceITTask({
+  application,
+}) {
   const { javaPackageTestDir, languagesDefinition } = application;
-  const { ignoreNeedlesError: ignoreNonExisting } = control as any;
+  const { ignoreNeedlesError: ignoreNonExisting } = this;
   let newContent = 'private static final String[] languages = {\n';
   languagesDefinition?.forEach((language, i) => {
     newContent += `        "${language.languageTag}"${i !== languagesDefinition.length - 1 ? ',' : ''}\n`;
@@ -36,8 +37,4 @@ export const updateLanguagesInMailServiceITTask = asPostWritingTask(function upd
   this.editFile(`${javaPackageTestDir}/service/MailServiceIT.java`, { ignoreNonExisting }, content =>
     content.replace(/private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g, newContent),
   );
-});
-
-export default asPostWritingTask(function updateLanguagesTask(this, taskParam) {
-  updateLanguagesInMailServiceITTask.call(this, taskParam);
 });

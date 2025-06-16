@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { I18nApplication, Entity as LanguagesEntity } from '../types.js';
+import type { Application as I18nApplication, Entity as LanguagesEntity } from '../types.js';
 import { type Language, supportedLanguages as baseSupportedLanguages, findLanguageForTag } from './languages.js';
 
 /**
@@ -25,7 +25,7 @@ import { type Language, supportedLanguages as baseSupportedLanguages, findLangua
 export default function loadConfig({
   application,
   config,
-  control = {},
+  control,
 }: {
   application: I18nApplication<LanguagesEntity>;
   config: any;

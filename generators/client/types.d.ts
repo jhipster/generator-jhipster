@@ -28,7 +28,7 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
 type ApplicationClientProperties = ExportApplicationPropertiesFromCommand<typeof Command>;
 
-export type Application<E extends Entity> = ApplicationClientProperties &
+export type Application<E extends Entity = Entity> = ApplicationClientProperties &
   LanguageApplication<E> &
   JavascriptApplication<E> &
   CypressApplication & {

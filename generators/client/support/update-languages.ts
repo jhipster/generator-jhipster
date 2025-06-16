@@ -18,6 +18,7 @@
  */
 import type { ApplicationAll } from '../../base-application/application-properties-all.js';
 import type BaseGenerator from '../../base-core/index.js';
+import type { Control } from '../../base/types.js';
 
 type UpdateLanguagesApplication = Pick<
   ApplicationAll<any>,
@@ -26,7 +27,7 @@ type UpdateLanguagesApplication = Pick<
 
 export type UpdateClientLanguagesTaskParam = {
   application: UpdateLanguagesApplication;
-  control?: any;
+  control?: Control;
 };
 
 /**
@@ -39,11 +40,11 @@ export type UpdateClientLanguagesTaskParam = {
 
 export function updateLanguagesInDayjsConfigurationTask(
   this: BaseGenerator,
-  { application, control = {} }: UpdateClientLanguagesTaskParam,
+  { application }: UpdateClientLanguagesTaskParam,
   { configurationFile, commonjs = false }: { configurationFile: string; commonjs?: boolean },
 ): void {
   const { languagesDefinition = [] } = application;
-  const { ignoreNeedlesError: ignoreNonExisting } = control;
+  const { ignoreNeedlesError: ignoreNonExisting } = this;
 
   const uniqueDayjsLocales = [...new Map(languagesDefinition.map(v => [v.dayjsLocale, v])).values()];
   const newContent = uniqueDayjsLocales.reduce(

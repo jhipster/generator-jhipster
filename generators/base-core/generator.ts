@@ -547,7 +547,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     return Object.entries(configs)
       .filter(([_name, def]) => def?.prompt)
       .map(([name, def]) => {
-        let promptSpec = typeof def.prompt === 'function' ? def.prompt(this as any, def) : { ...def.prompt };
+        let promptSpec = typeof def.prompt === 'function' ? def.prompt(this, def) : { ...def.prompt };
         let storage: any;
         if ((def.scope ?? 'storage') === 'storage') {
           storage = this.config;

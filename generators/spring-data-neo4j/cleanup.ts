@@ -17,12 +17,13 @@
  * limitations under the License.
  */
 import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import type { Application as JavaApplication, Entity as JavaEntity } from '../java/index.js';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default asWritingTask(function cleanupTask({ application, control }) {
+export default asWritingTask<JavaEntity, JavaApplication<JavaEntity>>(function cleanupTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('7.8.1')) {
     this.removeFile(`${application.javaPackageSrcDir}AbstractNeo4jIT.java`);
   }

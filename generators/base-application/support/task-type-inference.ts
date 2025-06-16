@@ -34,7 +34,7 @@ export function asPromptingTask<const G extends CoreGenerator = CoreGenerator>(
 }
 
 export function asPostPreparingEachEntityTask<
-  E extends BaseApplicationEntity = EntityAll,
+  E extends BaseApplicationEntity = BaseApplicationEntity,
   A extends BaseApplicationApplication<E> = ApplicationAll<E & EntityAll>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['PostPreparingEachEntityTaskParam']) => void) {
@@ -42,7 +42,7 @@ export function asPostPreparingEachEntityTask<
 }
 
 export function asWritingTask<
-  E extends BaseApplicationEntity = EntityAll,
+  E extends BaseApplicationEntity = BaseApplicationEntity,
   A extends BaseApplicationApplication<E> = ApplicationAll<E & EntityAll>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['WritingTaskParam']) => void) {
@@ -50,7 +50,7 @@ export function asWritingTask<
 }
 
 export function asWritingEntitiesTask<
-  E extends BaseApplicationEntity = EntityAll,
+  E extends BaseApplicationEntity = BaseApplicationEntity,
   A extends BaseApplicationApplication<E> = ApplicationAll<E & EntityAll>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['WritingEntitiesTaskParam']) => void) {
@@ -58,7 +58,7 @@ export function asWritingEntitiesTask<
 }
 
 export function asPostWritingTask<
-  E extends BaseApplicationEntity = EntityAll,
+  E extends BaseApplicationEntity = BaseApplicationEntity,
   A extends BaseApplicationApplication<E> = ApplicationAll<E & EntityAll>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['PostWritingTaskParam']) => void) {
@@ -66,7 +66,7 @@ export function asPostWritingTask<
 }
 
 export function asPostWritingEntitiesTask<
-  E extends BaseApplicationEntity = EntityAll,
+  E extends BaseApplicationEntity = BaseApplicationEntity,
   A extends BaseApplicationApplication<E> = ApplicationAll<E & EntityAll>,
   const G extends CoreGenerator = CoreGenerator,
 >(task: (this: G, params: TaskTypes<E, A>['PostWritingEntitiesTaskParam']) => void) {

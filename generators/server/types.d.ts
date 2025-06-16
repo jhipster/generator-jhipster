@@ -32,7 +32,7 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   entityTableName: string;
 }
 
-export type Application<E extends Entity> = ExportApplicationPropertiesFromCommand<typeof Command> &
+export type Application<E extends Entity = Entity> = ExportApplicationPropertiesFromCommand<typeof Command> &
   LanguageApplication<E> &
   JavaApplication<E>;
 

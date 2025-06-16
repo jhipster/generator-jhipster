@@ -5,11 +5,7 @@ import type { YO_RC_CONFIG_KEY } from '../../lib/utils/yo-rc.ts';
 import type { Config as BaseConfig } from '../base/types.js';
 import type { Config as JavaConfig } from '../java/types.d.ts';
 import type { Config as JavascriptConfig } from '../javascript/types.d.ts';
-
-type BaseApplicationConfig = BaseConfig & {
-  entities?: string[];
-  projectDescription?: string;
-};
+import type { Config as BaseApplicationConfig } from './types.js';
 
 export type ApplicationConfiguration = Simplify<
   BaseApplicationConfig &
