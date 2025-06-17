@@ -16,6 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.js';
-export { default as command } from './command.js';
-export type { Application, Config, Entity, Options, Source } from './types.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+
+const command = {
+  configs: {
+    cacheProvider: {
+      description: 'Cache provider',
+      cli: {
+        type: String,
+      },
+      choices: ['no', 'caffeine', 'ehcache', 'hazelcast', 'infinispan', 'memcached', 'redis'],
+      scope: 'storage',
+    },
+    enableHibernateCache: {
+      description: 'Enable hibernate cache',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'storage',
+    },
+  },
+} as const satisfies JHipsterCommandDefinition;
+
+export default command;

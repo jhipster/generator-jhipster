@@ -16,10 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import BaseApplicationGenerator from '../base-application/index.ts';
+import type {
+  Application as SpringCloudApplication,
+  Config as SpringCloudConfig,
+  Entity as SpringCloudEntity,
+  Options as SpringCloudOptions,
+} from './types.js';
 
-import BaseApplicationGenerator from '../base-application/index.js';
-
-export default class KafkaGenerator extends BaseApplicationGenerator {
+export default class KafkaGenerator extends BaseApplicationGenerator<
+  SpringCloudEntity,
+  SpringCloudApplication<SpringCloudEntity>,
+  SpringCloudConfig,
+  SpringCloudOptions
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

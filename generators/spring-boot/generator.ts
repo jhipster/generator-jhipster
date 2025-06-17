@@ -43,7 +43,7 @@ import {
   getSpecificationBuildForType,
   insertContentIntoApplicationProperties,
 } from '../server/support/index.js';
-import { generateKeyStore, javaBeanCase } from '../java/support/index.js';
+import { addJavaImport, generateKeyStore, javaBeanCase } from '../java/support/index.js';
 import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
 import { mutateData } from '../../lib/utils/index.js';
 import {
@@ -63,6 +63,13 @@ import { writeFiles as writeEntityFiles } from './entity-files.js';
 import cleanupTask from './cleanup.js';
 import { serverFiles } from './files.js';
 import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
+import type {
+  Application as SpringBootApplication,
+  Config as SpringBootConfig,
+  Entity as SpringBootEntity,
+  Options as SpringBootOptions,
+  Source as SpringBootSource,
+} from './types.js';
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
@@ -73,6 +80,15 @@ const { ELASTICSEARCH } = searchEngineTypes;
 
 const { BYTES: TYPE_BYTES, BYTE_BUFFER: TYPE_BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 const { CUCUMBER, GATLING } = testFrameworkTypes;
+
+export class SpringBootApplicationGenerator extends BaseApplicationGenerator<
+  SpringBootEntity,
+  SpringBootApplication<SpringBootEntity>,
+  SpringBootConfig,
+  SpringBootOptions,
+  SpringBootSource
+> {}
+
 export default class SpringBootGenerator extends BaseApplicationGenerator {
   fakeKeytool;
 
@@ -379,6 +395,30 @@ ${classProperties
             createNeedleCallback({
               needle: 'blockhound-integration',
               contentToAdd: `builder.allowBlockingCallsInside("${classPath}", "${method}");`,
+            }),
+          );
+        };
+      },
+      addNativeHint({ source, application }) {
+        source.addNativeHint = ({ advanced = [], declaredConstructors = [], publicConstructors = [], resources = [] }) => {
+          this.editFile(
+            `${application.javaPackageSrcDir}config/NativeConfiguration.java`,
+            addJavaImport('org.springframework.aot.hint.MemberCategory'),
+            createNeedleCallback({
+              contentToAdd: [
+                ...advanced,
+                ...resources.map(resource => `hints.resources().registerPattern("${resource}");`),
+                ...publicConstructors.map(
+                  classPath =>
+                    `hints.reflection().registerType(${classPath}, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS));`,
+                ),
+                ...declaredConstructors.map(
+                  classPath =>
+                    `hints.reflection().registerType(${classPath}, (hint) -> hint.withMembers(MemberCategory.INVOKE_DECLARED_CONSTRUCTORS));`,
+                ),
+              ],
+              needle: 'add-native-hints',
+              ignoreWhitespaces: true,
             }),
           );
         };

@@ -20,9 +20,9 @@ import type BaseGenerator from '../../base-core/index.js';
 import { type UpdateClientLanguagesTaskParam, updateLanguagesInDayjsConfigurationTask } from '../../client/support/index.js';
 import { generateLanguagesWebappOptions } from '../../languages/support/index.js';
 
-function updateLanguagesInPipeTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
+function updateLanguagesInPipeTask(this: BaseGenerator, { application }: UpdateClientLanguagesTaskParam) {
   const { clientSrcDir, languagesDefinition = [] } = application;
-  const { ignoreNeedlesError: ignoreNonExisting } = control;
+  const { ignoreNeedlesError: ignoreNonExisting } = this;
   const newContent = `{
         ${generateLanguagesWebappOptions(languagesDefinition).join(',\n        ')}
         // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
@@ -33,9 +33,9 @@ function updateLanguagesInPipeTask(this: BaseGenerator, { application, control =
   );
 }
 
-function updateLanguagesInWebpackReactTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
+function updateLanguagesInWebpackReactTask(this: BaseGenerator, { application }: UpdateClientLanguagesTaskParam) {
   const { clientRootDir, clientSrcDir, languages } = application;
-  const { ignoreNeedlesError: ignoreNonExisting } = control;
+  const { ignoreNeedlesError: ignoreNonExisting } = this;
   let newContent = 'groupBy: [\n';
   // prettier-ignore
   languages?.forEach((language) => {

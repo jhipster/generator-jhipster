@@ -42,9 +42,9 @@ function generateDateTimeFormat(language: string, index: number, length: number)
   return config;
 }
 
-function updateLanguagesInPipeTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
+function updateLanguagesInPipeTask(this: BaseGenerator, { application }: UpdateClientLanguagesTaskParam) {
   const { clientSrcDir, languagesDefinition = [] } = application;
-  const { ignoreNeedlesError: ignoreNonExisting } = control;
+  const { ignoreNeedlesError: ignoreNonExisting } = this;
   const newContent = `$1{
   ${generateLanguagesWebappOptions(languagesDefinition).join(',\n  ')},
   // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
@@ -54,9 +54,9 @@ function updateLanguagesInPipeTask(this: BaseGenerator, { application, control =
   );
 }
 
-function updateLanguagesInConfigTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
+function updateLanguagesInConfigTask(this: BaseGenerator, { application }: UpdateClientLanguagesTaskParam) {
   const { clientSrcDir, languages } = application;
-  const { ignoreNeedlesError: ignoreNonExisting } = control;
+  const { ignoreNeedlesError: ignoreNonExisting } = this;
   // Add i18n config snippets for all languages
   let i18nConfig = 'const datetimeFormats: IntlDateTimeFormats = {\n';
   languages?.forEach((ln, i) => {
@@ -70,9 +70,9 @@ function updateLanguagesInConfigTask(this: BaseGenerator, { application, control
   );
 }
 
-function updateLanguagesInWebpackTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
+function updateLanguagesInWebpackTask(this: BaseGenerator, { application }: UpdateClientLanguagesTaskParam) {
   const { clientSrcDir, languages } = application;
-  const { ignoreNeedlesError: ignoreNonExisting } = control;
+  const { ignoreNeedlesError: ignoreNonExisting } = this;
   let newContent = 'groupBy: [\n';
   languages?.forEach(language => {
     newContent += `          { pattern: './${clientSrcDir}i18n/${language}/*.json', fileName: './i18n/${language}.json' },\n`;

@@ -177,8 +177,6 @@ Options:
   --commit-msg <value>                     Commit changes (implies forceGit)
   --monorepository                         Use monorepository
   --defaults                               Execute jhipster with default config
-  --skip-client                            Skip the client-side application generation
-  --skip-server                            Skip the server-side application generation
   --jhi-prefix <value>                     Add prefix before services, controllers and states name
   --entity-suffix <value>                  Add suffix after entities name
   --dto-suffix <value>                     Add suffix after dtos name
@@ -196,11 +194,11 @@ Options:
   --base-name <value>                      Application base name
   --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json. (env: JHI_SKIP_JHIPSTER_DEPENDENCIES)
   --jdl-store <value>                      JDL store
+  --skip-client                            Skip the client-side application generation
+  --skip-server                            Skip the server-side application generation
   --prettier-tab-width <value>             Default tab width for prettier (default: 2)
   --skip-commit-hook                       Skip adding husky commit hooks
-  --cache-provider <value>                 Cache provider (choices: "no", "caffeine", "ehcache", "hazelcast", "infinispan", "memcached", "redis")
   --enable-swagger-codegen                 API first development using OpenAPI-generator
-  --enable-hibernate-cache                 Enable hibernate cache
   --search-engine <value>                  Provide search engine for the application when skipping server side generation (choices: "no", "elasticsearch", "couchbase")
   --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
   --skip-fake-data                         Skip generation of fake data for development
@@ -212,7 +210,6 @@ Options:
   --auth <value>                           Provide authentication type for the application when skipping server side generation (choices: "jwt", "oauth2", "session")
   --feign-client                           Generate a feign client (default: false)
   --sync-user-with-idp                     Allow relationships with User for oauth2 applications
-  --message-broker <value>                 message broker (choices: "kafka", "pulsar", "no")
   --database-migration <value>             Database migration (choices: "liquibase", "no")
   --graalvm-support                        Experimental GraalVM Native support
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
@@ -226,6 +223,9 @@ Options:
   --skip-db-changelog                      Skip the generation of database migrations
   --incremental-changelog                  Creates incremental database changelogs
   --dev-database-type <value>              Development database (choices: "postgresql", "mysql", "mariadb", "oracle", "mssql", "h2Disk", "h2Memory")
+  --cache-provider <value>                 Cache provider (choices: "no", "caffeine", "ehcache", "hazelcast", "infinispan", "memcached", "redis")
+  --enable-hibernate-cache                 Enable hibernate cache
+  --message-broker <value>                 message broker (choices: "kafka", "pulsar", "no")
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
   --microfrontends <value>                 Microfrontends to load

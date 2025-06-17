@@ -18,24 +18,35 @@
  */
 import type {
   Application as BaseApplicationApplication,
+  Config as BaseApplicationConfig,
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
+  Options as BaseApplicationOptions,
   Relationship as BaseApplicationRelationship,
 } from '../base-application/index.js';
+import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { Language } from './support/languages.js';
+import type command from './command.js';
+
+type Command = HandleCommandTypes<typeof command>;
+
+export type Config = BaseApplicationConfig & Command['Config'];
+
+export type Options = BaseApplicationOptions & Omit<Command['Options'], 'languages' | 'languagesDefinition'>;
 
 export type LanguagesSource = {
   addEntityTranslationKey: (arg: { translationKey: string; translationValue: string; language: string }) => void;
 };
 
-export type I18nApplication<E extends Entity<BaseApplicationField, BaseApplicationRelationship>> = BaseApplicationApplication<E> & {
-  enableTranslation: boolean;
-  enableI18nRTL: boolean;
-  nativeLanguage: string;
-  nativeLanguageDefinition: Language;
-  languages: string[];
-  languagesDefinition: readonly Language[];
-};
+export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = BaseApplicationApplication<E> &
+  Omit<Command['Application'], 'languages' | 'languagesDefinition'> & {
+    enableTranslation: boolean;
+    enableI18nRTL: boolean;
+    nativeLanguage: string;
+    nativeLanguageDefinition: Language;
+    languages: string[];
+    languagesDefinition: readonly Language[];
+  };
 
 export { BaseApplicationField as Field, BaseApplicationRelationship as Relationship };
 

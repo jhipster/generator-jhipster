@@ -18,10 +18,6 @@ export type FieldAll = SpringDataRelationalField &
     // Temporary fields for Faker
     uniqueValue?: any[];
 
-    // Blob
-    fieldWithContentType?: boolean;
-    contentTypeFieldName?: string;
-
     blobContentTypeText?: boolean;
     blobContentTypeImage?: boolean;
     blobContentTypeAny?: boolean;
@@ -30,7 +26,6 @@ export type FieldAll = SpringDataRelationalField &
     // Derived properties
     fieldTypeBinary?: boolean;
     fieldTypeDuration?: boolean;
-    fieldTypeTimed?: boolean;
     fieldTypeLocalDate?: boolean;
     fieldTypeLocalTime?: boolean;
     /** @deprecated */

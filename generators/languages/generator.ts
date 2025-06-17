@@ -29,6 +29,8 @@ import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants
 import { QUEUES } from '../base-application/priorities.js';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
+import type { Application as ClientApplication } from '../client/types.js';
+import type { Application as ServerApplication } from '../server/index.js';
 import type { Language } from './support/languages.js';
 import { findLanguageForTag, supportedLanguages } from './support/languages.js';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
@@ -36,13 +38,24 @@ import { writeEntityFiles } from './entity-files.js';
 import { clientI18nFiles } from './files.js';
 import { askForLanguages, askI18n } from './prompts.js';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.js';
+import type {
+  Application as LanguagesApplication,
+  Config as LanguagesConfig,
+  Entity as LanguagesEntity,
+  Options as LanguagesOptions,
+} from './types.js';
 
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 
 /**
  * This is the base class for a generator that generates entities.
  */
-export default class LanguagesGenerator extends BaseApplicationGenerator {
+export default class LanguagesGenerator extends BaseApplicationGenerator<
+  LanguagesEntity,
+  LanguagesApplication<LanguagesEntity>,
+  LanguagesConfig,
+  LanguagesOptions
+> {
   askForMoreLanguages!: boolean;
   askForNativeLanguage!: boolean;
   translationData!: TranslationData;
@@ -114,13 +127,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       },
       validate() {
         if (this.languagesToApply.length > 0) {
-          if (this.jhipsterConfig.skipClient) {
-            this.log.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for server`));
-          } else if (this.jhipsterConfig.skipServer) {
-            this.log.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')} for client`));
-          } else {
-            this.log.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
-          }
+          this.log.log(chalk.bold(`\nInstalling languages: ${this.languagesToApply.join(', ')}`));
         }
       },
     });
@@ -235,7 +242,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         };
         this.env.sharedFs.on('change', listener);
 
-        application.getWebappTranslation = (...args) => this.translationData.getClientTranslation(...args);
+        (application as ClientApplication).getWebappTranslation = (...args) => this.translationData.getClientTranslation(...args);
       },
     });
   }
@@ -346,7 +353,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           application.backendTypeJavaAny &&
           application.backendTypeSpringBoot
         ) {
-          updateLanguagesInJava.call(this, { application, control, source });
+          updateLanguagesInJava.call(this, { application: application as ServerApplication, control, source });
         }
       },
     });
@@ -366,7 +373,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
             source.addEntityTranslationKey?.({
               language,
               translationKey: entity.entityTranslationKeyMenu,
-              translationValue: entity.entityClassHumanized ?? startCase(entity.entityClass),
+              translationValue: entity.entityClassHumanized ?? startCase(entity.entityNameCapitalized),
             });
           }
         }

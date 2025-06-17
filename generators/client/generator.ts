@@ -29,12 +29,26 @@ import { addEnumerationFiles } from './entity-files.js';
 import { writeFiles as writeCommonFiles } from './files-common.js';
 import { askForClientTheme, askForClientThemeVariant } from './prompts.js';
 import { filterEntitiesAndPropertiesForClient } from './support/filter-entities.js';
-import type { Application as ClientApplication, Entity as ClientEntity } from './types.d.ts';
+import type {
+  Application as ClientApplication,
+  Config as ClientConfig,
+  Entity as ClientEntity,
+  Options as ClientOptions,
+  Source as ClientSource,
+} from './types.d.ts';
 
 const { ANGULAR, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
 
-export default class ClientGenerator extends BaseApplicationGenerator<ClientEntity, ClientApplication<ClientEntity>> {
+export class ClientApplicationGenerator extends BaseApplicationGenerator<
+  ClientEntity,
+  ClientApplication<ClientEntity>,
+  ClientConfig,
+  ClientOptions,
+  ClientSource
+> {}
+
+export default class ClientGenerator extends ClientApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

@@ -4,14 +4,8 @@ import type {
   Entity as BaseApplicationEntity,
   Options as BaseApplicationOptions,
 } from '../base-application/index.js';
-import type { Source as SpringBootSource } from '../spring-boot/index.ts';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type command from './command.ts';
-
-export type Source = SpringBootSource & {
-  addEntryToCache?(entry: { entry: string }): void;
-  addEntityToCache?(entry: { entityAbsoluteClass: string; relationships?: { propertyName: string; collection: boolean }[] }): void;
-};
 
 type Command = HandleCommandTypes<typeof command>;
 

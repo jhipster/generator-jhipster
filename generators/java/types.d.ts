@@ -38,8 +38,6 @@ export type Field = BaseApplicationField &
     propertyJavaCustomFilter?: { type: string; superType: string; fieldType: string };
 
     columnName?: string;
-    transient?: boolean;
-    id?: boolean;
   };
 
 export interface Relationship extends BaseApplicationRelationship, Property {}
@@ -159,34 +157,35 @@ type JavaBootstrap = ExportStoragePropertiesFromCommand<typeof JavaBootstrapComm
   packageInfoJavadocs: { packageName: string; documentation: string }[];
 };
 
-export type Application<E extends Entity<Field, Relationship>> = BaseApplicationApplication<E> &
-  JavaBootstrap &
-  CommonProperties &
-  SpringApplication &
-  DatabaseApplication &
-  OptionWithDerivedProperties<'buildTool', ['maven', 'gradle']> & {
-    buildToolUnknown?: boolean;
-    buildToolExecutable: string;
+export type Application<E extends BaseApplicationEntity<BaseApplicationField, BaseApplicationRelationship> = Entity<Field, Relationship>> =
+  BaseApplicationApplication<E> &
+    JavaBootstrap &
+    CommonProperties &
+    SpringApplication &
+    DatabaseApplication &
+    OptionWithDerivedProperties<'buildTool', ['maven', 'gradle']> & {
+      buildToolUnknown?: boolean;
+      buildToolExecutable: string;
 
-    prettierJava: boolean;
+      prettierJava: boolean;
 
-    addOpenapiGeneratorPlugin: boolean;
-    useNpmWrapper: boolean;
-    graalvmReachabilityMetadata: string;
+      addOpenapiGeneratorPlugin: boolean;
+      useNpmWrapper: boolean;
+      graalvmReachabilityMetadata: string;
 
-    cucumberTests: boolean;
-    gatlingTests: boolean;
+      cucumberTests: boolean;
+      gatlingTests: boolean;
 
-    imperativeOrReactive: string;
-    optionalOrMono: string;
-    optionalOrMonoOfNullable: string;
-    listOrFlux: string;
-    optionalOrMonoClassPath: string;
-    wrapMono: (className: string) => string;
-    listOrFluxClassPath: string;
-    reactorBlock: string;
-    reactorBlockOptional: string;
-  };
+      imperativeOrReactive: string;
+      optionalOrMono: string;
+      optionalOrMonoOfNullable: string;
+      listOrFlux: string;
+      optionalOrMonoClassPath: string;
+      wrapMono: (className: string) => string;
+      listOrFluxClassPath: string;
+      reactorBlock: string;
+      reactorBlockOptional: string;
+    };
 
 export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };
 

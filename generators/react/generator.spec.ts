@@ -10,6 +10,7 @@ import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import { GENERATOR_REACT } from '../generator-list.js';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/index.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -158,7 +159,7 @@ describe(`generator - ${clientFramework}`, () => {
         })
         .withTask(
           'postWriting',
-          asPostWritingTask(({ application, source }) => {
+          asPostWritingTask<ClientEntity, ClientApplication<ClientEntity>>(({ application, source }) => {
             source.addEntitiesToClient({
               application,
               entities: [
@@ -170,7 +171,7 @@ describe(`generator - ${clientFramework}`, () => {
                   entityFolderName: 'entityFolderName',
                   entityFileName: 'entityFileName',
                   entityClassHumanized: 'Router Name',
-                } as any,
+                } as ClientEntity,
               ],
             });
           }),

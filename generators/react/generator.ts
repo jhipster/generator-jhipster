@@ -19,7 +19,7 @@
 import { isFileStateModified } from 'mem-fs-editor/state';
 import chalk from 'chalk';
 
-import BaseApplicationGenerator from '../base-application/index.js';
+import { ClientApplicationGenerator } from '../client/generator.ts';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.js';
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.js';
 import {
@@ -40,7 +40,7 @@ const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 const { REACT } = clientFrameworkTypes;
 
-export default class ReactGenerator extends BaseApplicationGenerator {
+export default class ReactGenerator extends ClientApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -61,7 +61,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.COMPOSING]() {
+  get [ClientApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -82,7 +82,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
+  get [ClientApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -189,7 +189,7 @@ ${comment}
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [ClientApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -201,7 +201,7 @@ ${comment}
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+  get [ClientApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
@@ -213,7 +213,7 @@ ${comment}
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+  get [ClientApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
@@ -234,7 +234,7 @@ ${comment}
     });
   }
 
-  get [BaseApplicationGenerator.DEFAULT]() {
+  get [ClientApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -246,7 +246,7 @@ ${comment}
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [ClientApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -257,7 +257,7 @@ ${comment}
     };
   }
 
-  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+  get [ClientApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
@@ -311,11 +311,11 @@ ${comment}
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [ClientApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
-  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+  get [ClientApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
@@ -332,7 +332,7 @@ ${comment}
     });
   }
 
-  get [BaseApplicationGenerator.END]() {
+  get [ClientApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 

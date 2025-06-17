@@ -16,12 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import BaseApplicationGenerator from '../base-application/index.js';
+import { SpringBootApplicationGenerator } from '../spring-boot/generator.ts';
 import writeCouchbaseFilesTask, { cleanupCouchbaseFilesTask } from './files.js';
 import writeCouchbaseEntityFilesTask, { cleanupCouchbaseEntityFilesTask } from './entity-files.js';
 
-export default class CouchbaseGenerator extends BaseApplicationGenerator {
+export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -39,7 +38,7 @@ export default class CouchbaseGenerator extends BaseApplicationGenerator {
     };
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [SpringBootApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -50,14 +49,14 @@ export default class CouchbaseGenerator extends BaseApplicationGenerator {
     };
   }
 
-  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+  get [SpringBootApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addTestSpringFactory({ source, application }) {
-        source.addTestSpringFactory!({
+        source.addTestSpringFactory?.({
           key: 'org.springframework.test.context.ContextCustomizerFactory',
           value: `${application.packageName}.config.TestContainersSpringContextCustomizerFactory`,
         });
@@ -77,7 +76,7 @@ export default class CouchbaseGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [SpringBootApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

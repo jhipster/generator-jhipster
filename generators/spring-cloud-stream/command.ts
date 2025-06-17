@@ -16,6 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.js';
-export { default as command } from './command.js';
-export type { Application, Config, Entity, Options, Source } from './types.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+
+const ALPHANUMERIC_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
+
+const command = {
+  configs: {
+    messageBroker: {
+      description: 'message broker',
+      cli: {
+        type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      choices: ['kafka', 'pulsar', 'no'],
+      scope: 'storage',
+    },
+  },
+} as const satisfies JHipsterCommandDefinition;
+
+export default command;

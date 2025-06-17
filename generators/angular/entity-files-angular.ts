@@ -20,7 +20,7 @@ import { clientApplicationTemplatesBlock } from '../client/support/files.js';
 import type { WriteFileSection } from '../base-core/api.js';
 import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/index.js';
 import { filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/filter-entities.js';
-import type { Application as AngularApplication, Entity as AngularEntity } from './types.js';
+import type { Application as AngularApplication, Entity as AngularEntity, Source as AngularSource } from './types.js';
 
 const entityModelFiles = clientApplicationTemplatesBlock({
   templates: ['entities/_entityFolder_/_entityFile_.model.ts', 'entities/_entityFolder_/_entityFile_.test-samples.ts'],
@@ -132,7 +132,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
   }
 });
 
-export const postWriteEntitiesFiles = asPostWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>>(
+export const postWriteEntitiesFiles = asPostWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>, AngularSource>(
   async function (this, taskParam) {
     const { application, source } = taskParam;
     const entities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(taskParam.entities).filter(

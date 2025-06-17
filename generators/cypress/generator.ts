@@ -25,12 +25,13 @@ import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
 import { generateTestEntity as entityWithFakeValues } from '../client/support/index.js';
 import { cypressEntityFiles, cypressFiles } from './files.js';
+import type { Application as CypressApplication, Entity as CypressEntity } from './types.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
 const WAIT_TIMEOUT = 3 * 60000;
 
-export default class CypressGenerator extends BaseApplicationGenerator {
+export default class CypressGenerator extends BaseApplicationGenerator<CypressEntity, CypressApplication<CypressEntity>> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

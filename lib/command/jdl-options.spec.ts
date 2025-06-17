@@ -11,9 +11,9 @@ describe('jdl options', () => {
   it('jdl configs names should match snapshot', () => {
     expect(jdlConfigs.map(([name]) => name)).toMatchInlineSnapshot(`
 [
+  "messageBroker",
   "feignClient",
   "syncUserWithIdp",
-  "messageBroker",
   "databaseMigration",
   "graalvmSupport",
   "incrementalChangelog",

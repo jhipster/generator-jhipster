@@ -37,20 +37,6 @@ const command = {
       },
       scope: 'none',
     },
-    skipClient: {
-      cli: {
-        description: 'Skip the client-side application generation',
-        type: Boolean,
-      },
-      scope: 'storage',
-    },
-    skipServer: {
-      cli: {
-        description: 'Skip the server-side application generation',
-        type: Boolean,
-      },
-      scope: 'storage',
-    },
     jhiPrefix: {
       cli: {
         description: 'Add prefix before services, controllers and states name',

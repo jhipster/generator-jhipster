@@ -19,6 +19,7 @@
 import { asWritingEntitiesTask, getEnumInfo } from '../base-application/support/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import type LanguagesGenerator from './generator.js';
+import type { Application as LanguagesApplication, Entity as LanguagesEntity } from './types.js';
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -63,7 +64,10 @@ export const enumClientI18nFiles = {
 
 export function writeEntityFiles() {
   return {
-    writeEnumFiles: asWritingEntitiesTask(async function (this: LanguagesGenerator, { entities, application }) {
+    writeEnumFiles: asWritingEntitiesTask<LanguagesEntity, LanguagesApplication<LanguagesEntity>, LanguagesGenerator>(async function (
+      this: LanguagesGenerator,
+      { entities, application },
+    ) {
       if (application.skipClient) return;
       const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage, 'en'])];
       entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
@@ -93,7 +97,10 @@ export function writeEntityFiles() {
       );
     }),
 
-    writeClientFiles: asWritingEntitiesTask(async function (this: LanguagesGenerator, { application, entities }) {
+    writeClientFiles: asWritingEntitiesTask<LanguagesEntity, LanguagesApplication<LanguagesEntity>, LanguagesGenerator>(async function (
+      this: LanguagesGenerator,
+      { application, entities },
+    ) {
       if (application.skipClient) return;
       const entitiesToWriteTranslationFor = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
       if (application.userManagement?.skipClient) {

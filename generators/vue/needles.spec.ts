@@ -3,6 +3,7 @@ import { basicHelpers as helpers, result as runResult } from '../../lib/testing/
 
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/index.js';
 
 describe('needle API Vue: JHipster client generator with blueprint', () => {
   before(() =>
@@ -15,13 +16,12 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
       })
       .withTask(
         'postWriting',
-        asPostWritingTask(function ({ application, source }) {
+        asPostWritingTask<ClientEntity, ClientApplication<ClientEntity>>(function ({ application, source }) {
           source.addEntitiesToClient({
             application,
             entities: [
               {
                 entityInstance: 'entityInstance',
-                entityClass: 'entityClass',
                 entityAngularName: 'entityName',
                 entityFolderName: 'entityFolderName',
                 entityFileName: 'entityFileName',
@@ -29,7 +29,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
                 microserviceName: 'microserviceName',
                 entityPage: 'routerName',
                 entityClassHumanized: 'Router Name',
-              } as any,
+              } as ClientEntity,
             ],
           });
         }),

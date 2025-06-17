@@ -19,6 +19,7 @@
 
 import { asWritingEntitiesTask, asWritingTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
 
 export const vueFiles = {
   common: [
@@ -284,14 +285,17 @@ export const entitiesFiles = {
   ],
 };
 
-export const writeFiles = asWritingTask(async function writeFiles({ application }) {
+export const writeFiles = asWritingTask<ClientEntity, ClientApplication<ClientEntity>>(async function writeFiles({ application }) {
   await this.writeFiles({
     sections: vueFiles,
     context: application,
   });
 });
 
-export const writeEntitiesFiles = asWritingEntitiesTask(async function writeEntitiesFiles({ application, entities }) {
+export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(async function writeEntitiesFiles({
+  application,
+  entities,
+}) {
   entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
   await this.writeFiles({
     sections: entitiesFiles,

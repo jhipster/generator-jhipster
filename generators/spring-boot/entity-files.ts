@@ -24,6 +24,7 @@ import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import { databaseTypes, entityOptions } from '../../lib/jhipster/index.js';
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { cleanupOldFiles } from './entity-cleanup.js';
+import type { Application as SpringBootApplication, Entity as SpringBootEntity } from './types.js';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;
@@ -196,11 +197,18 @@ export const serverFiles = {
 
 export function writeFiles() {
   return {
-    cleanupOldServerFiles: asWritingEntitiesTask(function ({ application, control, entities }) {
+    cleanupOldServerFiles: asWritingEntitiesTask<SpringBootEntity, SpringBootApplication<SpringBootEntity>>(function ({
+      application,
+      control,
+      entities,
+    }) {
       cleanupOldFiles.call(this, { application, entities, control });
     }),
 
-    writeServerFiles: asWritingEntitiesTask(async function ({ application, entities }) {
+    writeServerFiles: asWritingEntitiesTask<SpringBootEntity, SpringBootApplication<SpringBootEntity>>(async function ({
+      application,
+      entities,
+    }) {
       const rootTemplatesPath = application.reactive
         ? ['reactive', '', '../../server/templates/', '../../java/generators/domain/templates/']
         : ['', '../../server/templates/', '../../java/generators/domain/templates/'];

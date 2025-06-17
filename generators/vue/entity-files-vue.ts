@@ -18,6 +18,7 @@
  */
 import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.js';
+import type { Application as ClientApplication, Entity as ClientEntity, Source as ClientSource } from '../client/types.js';
 
 export const entityFiles = {
   client: [
@@ -51,7 +52,10 @@ export const entityFiles = {
   ],
 };
 
-export const writeEntityFiles = asWritingEntitiesTask(async function writeEntityFiles({ application, entities }) {
+export const writeEntityFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(async function writeEntityFiles({
+  application,
+  entities,
+}) {
   for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesForClient)(entities).filter(
     entity => !entity.skipClient && !entity.builtInUser,
   )) {
@@ -62,16 +66,22 @@ export const writeEntityFiles = asWritingEntitiesTask(async function writeEntity
   }
 });
 
-export const postWriteEntityFiles = asPostWritingEntitiesTask(async function postWriteEntityFiles({ application, entities, source }) {
-  source.addEntitiesToClient({
-    application,
-    entities: (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(
-      entity => !entity.builtInUser && !entity.embedded,
-    ),
-  });
-});
+export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>, ClientSource>(
+  async function postWriteEntityFiles({ application, entities, source }) {
+    source.addEntitiesToClient({
+      application,
+      entities: (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(
+        entity => !entity.builtInUser && !entity.embedded,
+      ),
+    });
+  },
+);
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ application, control, entities }) {
+export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(function cleanupEntitiesFiles({
+  application,
+  control,
+  entities,
+}) {
   for (const entity of (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(
     entity => !entity.builtInUser && !entity.embedded,
   )) {

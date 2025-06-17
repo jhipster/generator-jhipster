@@ -1,18 +1,19 @@
 import { before, describe, it } from 'esmocha';
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-
 import { asPostWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import type { Application as AngularApplication, Entity as AngularEntity, Source as AngularSource } from './types.js';
 
-const postWritingTask = asPostWritingEntitiesTask(function ({ source, application }) {
+const postWritingTask = asPostWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>, AngularSource>(function ({
+  source,
+  application,
+}) {
   source.addEntitiesToClient({
     application,
     entities: [
       {
         name: 'entityName',
         entityInstance: 'entityInstance',
-        entityClass: 'entityClass',
         entityFolderName: 'entityFolderName',
         entityFileName: 'entityFileName',
         entityUrl: 'entityUrl',
@@ -20,7 +21,7 @@ const postWritingTask = asPostWritingEntitiesTask(function ({ source, applicatio
         entityPage: 'entityPage',
         entityTranslationKeyMenu: 'entityTranslationKeyMenu',
         entityClassHumanized: 'entityClassHumanized',
-      } as any,
+      } as AngularEntity,
     ],
   });
 });

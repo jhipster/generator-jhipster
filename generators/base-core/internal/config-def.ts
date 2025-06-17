@@ -1,5 +1,6 @@
 import type { CommandConfigScope, JHipsterConfigs } from '../../../lib/command/index.ts';
 import type CoreGenerator from '../index.ts';
+import type BaseGenerator from '../../base/index.js';
 import { applyDerivedProperty } from '../../../lib/utils/derived-property.ts';
 
 export function loadConfig(this: CoreGenerator, configsDef: JHipsterConfigs | undefined, data: { application: any });
@@ -18,7 +19,7 @@ export function loadConfig(
           if (def.scope === 'context') {
             source = (this as CoreGenerator).context!;
           } else if (def.scope === 'blueprint') {
-            source = (this as any).blueprintStorage.getAll();
+            source = (this as BaseGenerator).blueprintStorage!.getAll();
           } else if (def.scope === 'storage' || def.scope === undefined) {
             source = (this as CoreGenerator).jhipsterConfigWithDefaults;
           }

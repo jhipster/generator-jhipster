@@ -1,10 +1,25 @@
-import type { Entity as JavaEntity, Field as JavaField, Relationship as JavaRelationship, Source as JavaSource } from '../java/types.js';
+import type {
+  Config as JavaConfig,
+  Entity as JavaEntity,
+  Field as JavaField,
+  Options as JavaOptions,
+  Relationship as JavaRelationship,
+  Source as JavaSource,
+} from '../java/types.js';
 import type { Entity as ServerEntity, Field as ServerField, Relationship as ServerRelationship } from '../server/index.js';
 import type { Application as GradleApplication } from '../gradle/types.js';
 import type { GatewayApplication } from '../spring-cloud/generators/gateway/types.js';
 import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
 import type { ApplicationPropertiesNeedles } from '../server/support/needles.ts';
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
+import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type command from './command.js';
+
+type Command = HandleCommandTypes<typeof command>;
+
+export type Config = Command['Config'] & JavaConfig;
+
+export type Options = Command['Options'] & JavaOptions;
 
 export type SpringEntity = {
   entitySearchLayer?: boolean;
@@ -21,7 +36,7 @@ export type Field = ServerField & JavaField;
 
 export interface Relationship extends ServerRelationship, JavaRelationship {}
 
-export type Entity<F extends Field, R extends Relationship> = ServerEntity<F, R> &
+export type Entity<F extends Field = Field, R extends Relationship = Relationship> = ServerEntity<F, R> &
   SpringEntity & {
     skipDbChangelog?: boolean;
   };
@@ -97,7 +112,8 @@ type ApplicationNature = (ImperativeApplication & CacheProviderApplication) | Re
 */
 type ApplicationNature = { reactive: boolean };
 
-export type Application<E extends JavaEntity> = GradleApplication<E> &
+export type Application<E extends JavaEntity = JavaEntity> = Command['Application'] &
+  GradleApplication<E> &
   ApplicationNature &
   SearchEngine &
   DatabaseTypeApplication &
