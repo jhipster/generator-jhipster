@@ -17,12 +17,14 @@
  * limitations under the License.
  */
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
-import type { Config as BaseSimpleApplicationConfig, Application as SimpleApplication } from '../base-simple-application/index.js';
+import type { Config as BaseSimpleApplicationConfig } from '../base-simple-application/index.js';
+import type { Application as JavaApplication, Entity as JavaEntity } from '../java/index.js';
+
 import type { Application as DockerApplication } from '../docker/index.js';
 import type { ApplicationClientProperties } from '../client/types.js';
-import type command from './command.js';
 
-type Config = ExportApplicationPropertiesFromCommand<typeof command> &
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+export type Config = ExportApplicationPropertiesFromCommand<typeof import('./command.ts').default> &
   BaseSimpleApplicationConfig & {
     gitLabIndent?: string;
     indent?: string;
@@ -32,10 +34,9 @@ type Config = ExportApplicationPropertiesFromCommand<typeof command> &
     ciCd: string[];
   };
 
-export type Application = SimpleApplication &
+export type Application = JavaApplication<JavaEntity> &
   DockerApplication &
   Config &
   ApplicationClientProperties & {
     frontTestCommand: string;
-    ciCdIntegrations: string[];
   };

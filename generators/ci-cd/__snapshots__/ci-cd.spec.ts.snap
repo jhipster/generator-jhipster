@@ -5,25 +5,10 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "ciCd": [
-      "azure"
-    ],
-    "ciCdIntegrations": [],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -137,27 +122,10 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "ciCd": [
-      "azure"
-    ],
-    "ciCdIntegrations": [
-      "snyk"
-    ],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -283,27 +251,10 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "azure"
-    ],
-    "ciCdIntegrations": [
-      "cypressDashboard"
-    ],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -417,27 +368,10 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "azure"
-    ],
-    "ciCdIntegrations": [
-      "snyk"
-    ],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -563,25 +497,10 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: autoconfigure 
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "azure"
-    ],
-    "ciCdIntegrations": null,
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -755,25 +674,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "ciCd": [
-      "circle"
-    ],
-    "ciCdIntegrations": [],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -861,27 +765,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "ciCd": [
-      "circle"
-    ],
-    "ciCdIntegrations": [
-      "snyk"
-    ],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -958,27 +845,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "circle"
-    ],
-    "ciCdIntegrations": [
-      "cypressDashboard"
-    ],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -1066,27 +936,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "circle"
-    ],
-    "ciCdIntegrations": [
-      "snyk"
-    ],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -1158,25 +1011,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "ciCd": [
-      "github"
-    ],
-    "ciCdIntegrations": [],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -1288,30 +1126,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "ciCd": [
-      "github"
-    ],
-    "ciCdIntegrations": [
-      "sonar",
-      "publishDocker",
-      "heroku",
-      "snyk"
-    ],
     "creationTimestamp": 1577836800000,
-    "dockerImage": "jhipster-publish-docker",
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": "http://sonar.com:9000",
     "testFrameworks": [
       "cypress"
     ]
@@ -1420,25 +1238,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "github"
-    ],
-    "ciCdIntegrations": [],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -1544,32 +1347,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": "releases",
-    "artifactoryReleasesUrl": "http://artifactory:8081/artifactory/libs-release",
-    "artifactorySnapshotsId": "snapshots",
-    "artifactorySnapshotsUrl": "http://artifactory:8081/artifactory/libs-snapshot",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "github"
-    ],
-    "ciCdIntegrations": [
-      "deploy",
-      "sonar",
-      "publishDocker",
-      "heroku",
-      "snyk",
-      "cypressDashboard"
-    ],
     "creationTimestamp": 1577836800000,
-    "dockerImage": "jhipster-publish-docker",
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": "http://sonar.com:9000",
     "testFrameworks": [
       "cypress"
     ]
@@ -1697,25 +1478,10 @@ jobs:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "github"
-    ],
-    "ciCdIntegrations": null,
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -1826,25 +1592,10 @@ gradle-package:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "ciCd": [
-      "gitlab"
-    ],
-    "ciCdIntegrations": [],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": false,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -1979,30 +1730,10 @@ deploy-to-production:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": "releases",
-    "artifactoryReleasesUrl": "http://artifactory:8081/artifactory/libs-release",
-    "artifactorySnapshotsId": "snapshots",
-    "artifactorySnapshotsUrl": "http://artifactory:8081/artifactory/libs-snapshot",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "gitlab"
-    ],
-    "ciCdIntegrations": [
-      "deploy",
-      "sonar",
-      "heroku",
-      "snyk"
-    ],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": true,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": "http://localhost:9000",
     "testFrameworks": [
       "cypress"
     ]
@@ -2124,25 +1855,10 @@ maven-package:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "gitlab"
-    ],
-    "ciCdIntegrations": [],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": false,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -2269,30 +1985,10 @@ deploy-to-production:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": "releases",
-    "artifactoryReleasesUrl": "http://artifactory:8081/artifactory/libs-release",
-    "artifactorySnapshotsId": "snapshots",
-    "artifactorySnapshotsUrl": "http://artifactory:8081/artifactory/libs-snapshot",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "gitlab"
-    ],
-    "ciCdIntegrations": [
-      "deploy",
-      "sonar",
-      "heroku",
-      "snyk"
-    ],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": false,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": "http://localhost:9000",
     "testFrameworks": [
       "cypress"
     ]
@@ -2422,25 +2118,10 @@ maven-package:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "gitlab"
-    ],
-    "ciCdIntegrations": null,
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": true,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -2574,26 +2255,11 @@ webapp-prod:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "jhipster",
     "buildTool": "maven",
-    "ciCd": [
-      "gitlab"
-    ],
-    "ciCdIntegrations": [],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": true,
-    "sendBuildToGitlab": null,
-    "skipServer": true,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null
+    "skipServer": true
   }
 }
 ",
@@ -2607,25 +2273,10 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Gradle Angular NPM should matc
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "ciCd": [
-      "jenkins"
-    ],
-    "ciCdIntegrations": [],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": false,
-    "sendBuildToGitlab": false,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -2806,31 +2457,10 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM inside Docke
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": "releases",
-    "artifactoryReleasesUrl": "http://artifactory:8081/artifactory/libs-release",
-    "artifactorySnapshotsId": "snapshots",
-    "artifactorySnapshotsUrl": "http://artifactory:8081/artifactory/libs-snapshot",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "jenkins"
-    ],
-    "ciCdIntegrations": [
-      "deploy",
-      "sonar",
-      "publishDocker",
-      "heroku",
-      "snyk"
-    ],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": true,
-    "sendBuildToGitlab": false,
-    "sonarName": "sonarName",
-    "sonarOrga": null,
-    "sonarUrl": "https://sonarcloud.io",
     "testFrameworks": [
       "cypress"
     ]
@@ -3103,25 +2733,10 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM should match
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "jenkins"
-    ],
-    "ciCdIntegrations": [],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": false,
-    "sendBuildToGitlab": false,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -3305,31 +2920,10 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM with full op
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": "releases",
-    "artifactoryReleasesUrl": "http://artifactory:8081/artifactory/libs-release",
-    "artifactorySnapshotsId": "snapshots",
-    "artifactorySnapshotsUrl": "http://artifactory:8081/artifactory/libs-snapshot",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "jenkins"
-    ],
-    "ciCdIntegrations": [
-      "deploy",
-      "sonar",
-      "publishDocker",
-      "heroku",
-      "snyk"
-    ],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": false,
-    "sendBuildToGitlab": false,
-    "sonarName": "sonarName",
-    "sonarOrga": null,
-    "sonarUrl": "https://sonarcloud.io",
     "testFrameworks": [
       "cypress"
     ]
@@ -3654,25 +3248,10 @@ notifications:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "gradle",
-    "ciCd": [
-      "travis"
-    ],
-    "ciCdIntegrations": [],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -3745,25 +3324,10 @@ notifications:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": null,
-    "artifactoryReleasesUrl": null,
-    "artifactorySnapshotsId": null,
-    "artifactorySnapshotsUrl": null,
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "travis"
-    ],
-    "ciCdIntegrations": [],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": null,
     "testFrameworks": [
       "cypress"
     ]
@@ -3842,31 +3406,10 @@ notifications:
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "artifactoryReleasesId": "releases",
-    "artifactoryReleasesUrl": "http://artifactory:8081/artifactory/libs-release",
-    "artifactorySnapshotsId": "snapshots",
-    "artifactorySnapshotsUrl": "http://artifactory:8081/artifactory/libs-snapshot",
     "baseName": "sampleMysql",
     "buildTool": "maven",
-    "ciCd": [
-      "travis"
-    ],
-    "ciCdIntegrations": [
-      "deploy",
-      "sonar",
-      "heroku",
-      "snyk",
-      "cypressDashboard"
-    ],
     "creationTimestamp": 1577836800000,
-    "dockerImage": null,
     "entities": [],
-    "herokuAppName": null,
-    "insideDocker": null,
-    "sendBuildToGitlab": null,
-    "sonarName": null,
-    "sonarOrga": null,
-    "sonarUrl": "http://localhost:9000",
     "testFrameworks": [
       "cypress"
     ]

@@ -24,11 +24,12 @@ import BaseApplicationGenerator from '../base-simple-application/index.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
-import type { Application as CiCdApplication, Config as CiCdConfig } from './types.js';
+import JavaGenerator, { type Entity as JavaEntity } from '../java/index.js';
 import command from './command.js';
+import type { Application as CiCdApplication, Config as CiCdConfig } from './types.js';
 const { REACT } = clientFrameworkTypes;
 
-export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplication, CiCdConfig> {
+export default class CiCdGenerator extends JavaGenerator<JavaEntity, CiCdApplication, CiCdConfig> {
   insideDocker;
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -94,6 +95,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
         loadDerivedConfig(command.configs, { application });
 
         if (application.ciCdIntegrations === undefined) {
+          // @ts-ignore
           application.ciCdIntegrations = [];
         }
         application.gitLabIndent = application.sendBuildToGitlab ? '    ' : '';

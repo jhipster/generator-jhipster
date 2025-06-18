@@ -65,49 +65,21 @@ describe(`generator - ${generator}`, () => {
 
     describe('with multiples values', () => {
       before(async () => {
-        const deploymentConfig = {
-          ciCdIntegrations: ['deploy', 'sonar'],
-        };
-        await helpers
-          .runCli('ci-cd github jenkins gitlab azure')
-          // @ts-ignore
-          .withJHipsterConfig(deploymentConfig as any)
-          .withSkipWritingPriorities();
+        await helpers.runCli('ci-cd github jenkins gitlab azure').withJHipsterConfig().withSkipWritingPriorities();
       });
 
       it('should match context snapshot', () => {
-        expect(runResult.generator.jhipsterConfig).toMatchInlineSnapshot(
-          { jhipsterVersion: expect.any(String) },
-          `
-{
-  "artifactoryReleasesId": "releases",
-  "artifactoryReleasesUrl": "http://artifactory:8081/artifactory/libs-release",
-  "artifactorySnapshotsId": "snapshots",
-  "artifactorySnapshotsUrl": "http://artifactory:8081/artifactory/libs-snapshot",
-  "baseName": "jhipster",
-  "ciCd": [
-    "github",
-    "jenkins",
-    "gitlab",
-    "azure",
-  ],
-  "ciCdIntegrations": [
-    "deploy",
-    "sonar",
-  ],
-  "creationTimestamp": 1577836800000,
-  "dockerImage": null,
-  "entities": [],
-  "herokuAppName": null,
-  "insideDocker": false,
-  "jhipsterVersion": Any<String>,
-  "sendBuildToGitlab": false,
-  "sonarName": "sonar",
-  "sonarOrga": null,
-  "sonarUrl": "https://sonarcloud.io",
-}
-`,
-        );
+        expect(runResult.application).toMatchSnapshot({
+          user: expect.any(Object),
+          authority: expect.any(Object),
+          userManagement: expect.any(Object),
+          jhipsterPackageJson: expect.any(Object),
+          javaDependencies: expect.any(Object),
+          dockerContainers: expect.any(Object),
+        });
+      });
+      it('should populate context', () => {
+        expect(runResult.application!.ciCd).toEqual(['github', 'jenkins', 'gitlab', 'azure']);
       });
     });
 

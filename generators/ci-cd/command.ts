@@ -18,10 +18,8 @@
  */
 import chalk from 'chalk';
 import { intersection, kebabCase } from 'lodash-es';
-import buildToolCommand from '../java/generators/build-tool/command.js';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
-const { buildTool } = buildToolCommand.configs;
 const includesValue = (prop, values) => answers => answers[prop] && intersection(answers[prop], values).length > 0;
 
 const command = {
@@ -45,7 +43,7 @@ const command = {
       internal: {
         type: Array,
       },
-      scope: 'storage',
+      scope: 'context',
     },
     ciCdIntegrations: {
       prompt: {
@@ -80,7 +78,7 @@ const command = {
       internal: {
         type: Array,
       },
-      scope: 'storage',
+      scope: 'context',
     },
     insideDocker: {
       cli: {
@@ -92,10 +90,7 @@ const command = {
         message: 'Would you like to perform the build in a Docker container ?',
         default: false,
       }),
-      internal: {
-        type: Boolean,
-      },
-      scope: 'storage',
+      scope: 'context',
     },
     sendBuildToGitlab: {
       cli: {
@@ -107,10 +102,7 @@ const command = {
         message: 'Would you like to send build status to GitLab ?',
         default: false,
       }),
-      internal: {
-        type: Boolean,
-      },
-      scope: 'storage',
+      scope: 'context',
     },
     artifactorySnapshotsId: {
       cli: {
@@ -122,10 +114,7 @@ const command = {
         message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for snapshots ?`,
         default: 'snapshots',
       }),
-      internal: {
-        type: String,
-      },
-      scope: 'storage',
+      scope: 'context',
     },
     artifactorySnapshotsUrl: {
       cli: {
@@ -135,12 +124,9 @@ const command = {
         when: answers => answers.ciCdIntegrations?.includes('deploy'),
         type: 'input',
         message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for snapshots ?`,
+        default: 'http://artifactory:8081/artifactory/libs-snapshot',
       }),
-      default: 'http://artifactory:8081/artifactory/libs-snapshot',
-      internal: {
-        type: String,
-      },
-      scope: 'storage',
+      scope: 'context',
     },
     artifactoryReleasesId: {
       cli: {
@@ -152,10 +138,7 @@ const command = {
         message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for releases ?`,
         default: 'releases',
       }),
-      internal: {
-        type: String,
-      },
-      scope: 'storage',
+      scope: 'context',
     },
     artifactoryReleasesUrl: {
       cli: {
@@ -167,25 +150,19 @@ const command = {
         message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for releases ?`,
         default: 'http://artifactory:8081/artifactory/libs-release',
       }),
-      internal: {
-        type: String,
-      },
-      scope: 'storage',
+      scope: 'context',
     },
     sonarName: {
       cli: {
         type: String,
       },
-      prompt: gen => ({
+      prompt: () => ({
         when: answers => answers.ciCd?.includes('jenkins') && answers.ciCdIntegrations?.includes('sonar'),
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the name of the Sonar server ?`,
         default: 'sonar',
       }),
-      internal: {
-        type: String,
-      },
-      scope: 'storage',
+      scope: 'context',
     },
     sonarUrl: {
       cli: {
@@ -199,10 +176,7 @@ const command = {
         message: `${chalk.yellow('*Sonar*')}: what is the URL of the Sonar server ?`,
         default: 'https://sonarcloud.io',
       }),
-      internal: {
-        type: String,
-      },
-      scope: 'storage',
+      scope: 'context',
     },
     sonarOrga: {
       cli: {
@@ -215,10 +189,7 @@ const command = {
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the Organization of the Sonar server ?`,
       }),
-      internal: {
-        type: String,
-      },
-      scope: 'storage',
+      scope: 'context',
     },
     dockerImage: {
       cli: {
@@ -230,10 +201,7 @@ const command = {
         message: `${chalk.yellow('*Docker*')}: what is the name of the image ?`,
         default: () => `jhipster/${config?.dasherizedBaseName}`,
       }),
-      internal: {
-        type: String,
-      },
-      scope: 'storage',
+      scope: 'context',
     },
     herokuAppName: {
       cli: {
@@ -244,21 +212,10 @@ const command = {
         type: 'input',
         message: `${chalk.yellow('*Heroku*')}: name of your Heroku Application ?`,
       }),
-      internal: {
-        type: String,
-      },
-      scope: 'storage',
+      scope: 'context',
       default() {
         return kebabCase(this.jhipsterConfigWithDefaults.baseName);
       },
-    },
-    buildTool: {
-      ...buildTool,
-      cli: {
-        ...buildTool.cli,
-        hide: true,
-      },
-      prompt: undefined,
     },
   },
 } as const satisfies JHipsterCommandDefinition;
