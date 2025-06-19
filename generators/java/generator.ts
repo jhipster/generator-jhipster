@@ -29,15 +29,17 @@ import type {
 /**
  * Utility class with types.
  */
-export class JavaApplicationGenerator extends BaseApplicationGenerator<
-  JavaEntity,
-  JavaApplication<JavaEntity>,
-  JavaConfig,
-  JavaOptions,
-  JavaSource
-> {}
+export class JavaApplicationGenerator<
+  Entity extends JavaEntity = JavaEntity,
+  Application extends JavaApplication<Entity> = JavaApplication<Entity>,
+  Config extends JavaConfig = JavaConfig,
+> extends BaseApplicationGenerator<Entity, Application, Config, JavaOptions, JavaSource> {}
 
-export default class JavaGenerator extends JavaApplicationGenerator {
+export default class JavaGenerator<
+  Entity extends JavaEntity = JavaEntity,
+  Application extends JavaApplication<Entity> = JavaApplication<Entity>,
+  Config extends JavaConfig = JavaConfig,
+> extends JavaApplicationGenerator<Entity, Application, Config> {
   customLifecycle = true;
 
   async beforeQueue() {

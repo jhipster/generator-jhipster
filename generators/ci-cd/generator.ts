@@ -19,13 +19,18 @@
 
 import chalk from 'chalk';
 
+import { intersection } from 'lodash-es';
 import BaseApplicationGenerator from '../base-simple-application/index.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
-import type { Application as CiCdApplication } from './types.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
+import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
+import JavaGenerator, { type Entity as JavaEntity } from '../java/index.js';
+import command from './command.js';
+import type { Application as CiCdApplication, Config as CiCdConfig } from './types.js';
+const { REACT } = clientFrameworkTypes;
 
-export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplication> {
+export default class CiCdGenerator extends JavaGenerator<JavaEntity, CiCdApplication, CiCdConfig> {
   insideDocker;
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -50,6 +55,20 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
       sayHello() {
         this.log.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
       },
+      validateSupportedCICD() {
+        if (this.jhipsterConfig.ciCd?.length > 0) {
+          if (
+            intersection(
+              command.configs.ciCd.choices.map(entry => entry.value),
+              this.jhipsterConfig.ciCd,
+            ).length !== this.jhipsterConfig.ciCd.length
+          ) {
+            throw new Error(
+              `error: command-argument value '${this.jhipsterConfig.ciCd}' is invalid for argument 'ciCd'. Allowed choices are github, jenkins, gitlab, azure, travis, circle.`,
+            );
+          }
+        }
+      },
     });
   }
 
@@ -60,23 +79,39 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
   // Public API method used by the getter and also by Blueprints
   get loading() {
     return this.asLoadingTaskGroup({
-      loading({ applicationDefaults }) {
-        applicationDefaults({
-          ciCdIntegrations: [] as any,
-          gitLabIndent: ({ sendBuildToGitlab }) => (sendBuildToGitlab ? '    ' : ''),
-          indent: ({ insideDocker, gitLabIndent }) => {
-            let indent = insideDocker ? '    ' : '';
-            indent += gitLabIndent;
-            return indent;
-          },
-          cypressTests: ({ testFrameworks }) => testFrameworks?.includes('cypress') ?? false,
-        });
+      loadSharedConfig({ application }) {
+        loadConfig(command.configs, { config: this.jhipsterConfigWithDefaults, application });
       },
     });
   }
 
   get [BaseApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      setTemplateConstants({ application }) {
+        loadDerivedConfig(command.configs, { application });
+
+        if (application.ciCdIntegrations === undefined) {
+          // @ts-ignore
+          application.ciCdIntegrations = [];
+        }
+        application.gitLabIndent = application.sendBuildToGitlab ? '    ' : '';
+        application.indent = application.insideDocker ? '    ' : '';
+        application.indent += application.gitLabIndent;
+        if (application.clientFramework === REACT) {
+          application.frontTestCommand = 'test-ci';
+        } else {
+          application.frontTestCommand = 'test';
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -142,14 +177,14 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
     return this.asPostWritingTaskGroup({
       postWriting({ application }) {
         if (application.ciCdIntegrations?.includes('deploy')) {
-          if (application.buildTool === 'maven') {
+          if (application.buildToolMaven) {
             createPomStorage(this, { sortFile: false }).addDistributionManagement({
               releasesId: application.artifactoryReleasesId!,
               releasesUrl: application.artifactoryReleasesUrl!,
               snapshotsId: application.artifactorySnapshotsId!,
               snapshotsUrl: application.artifactorySnapshotsUrl!,
             });
-          } else if (application.buildTool === 'gradle') {
+          } else if (application.buildToolGradle) {
             // TODO: add support here
             // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
             this.log.warn('No support for Artifactory yet, when using Gradle.\n');
