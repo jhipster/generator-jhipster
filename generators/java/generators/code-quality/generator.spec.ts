@@ -49,10 +49,8 @@ describe(`generator - ${generator}`, () => {
     it('should compose with generators', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
-  "jhipster:bootstrap",
   "jhipster:java:build-tool",
   "jhipster:maven:code-quality",
-  "jhipster:project-name",
 ]
 `);
     });
@@ -79,10 +77,8 @@ describe(`generator - ${generator}`, () => {
     it('should compose with generators', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
-  "jhipster:bootstrap",
   "jhipster:gradle:code-quality",
   "jhipster:java:build-tool",
-  "jhipster:project-name",
 ]
 `);
     });

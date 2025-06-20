@@ -2,6 +2,9 @@
 
 exports[`generator - java:bootstrap with default config should match files snapshot 1`] = `
 {
+  ".editorconfig.jhi.java": {
+    "stateCleared": "modified",
+  },
   ".yo-rc.json": {
     "stateCleared": "modified",
   },

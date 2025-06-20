@@ -21,17 +21,29 @@ export default [
     },
   },
   // jhipster-needle-eslint-add-config - JHipster will add additional config here
-  prettier,
+  {
+    // Html templates require some work
+    ignores: ['**/*.html'],
+    extends: [prettier],
+  },
 ];
 ",
     "stateCleared": "modified",
   },
   "package.json": {
     "contents": "{
+  "private": true,
+  "dependencies": {},
   "devDependencies": {
     "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
     "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION"
-  }
+  },
+  "engines": {},
+  "scripts": {},
+  "name": "jhipster",
+  "version": "0.0.0",
+  "description": "Description for JHipster",
+  "license": "UNLICENSED"
 }
 ",
     "stateCleared": "modified",

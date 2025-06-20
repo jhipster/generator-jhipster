@@ -49,9 +49,7 @@ describe(`generator - ${generator}`, () => {
     it('should compose with generators', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
-  "jhipster:bootstrap",
   "jhipster:maven",
-  "jhipster:project-name",
 ]
 `);
     });

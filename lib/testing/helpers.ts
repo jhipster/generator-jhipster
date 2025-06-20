@@ -101,7 +101,8 @@ const allGenerators = [
 ]
   .map(gen => `jhipster:${gen}`)
   .sort();
-const filterBootstrapGenerators = (gen: string): boolean => !gen.startsWith('jhipster:bootstrap-');
+const filterBootstrapGenerators = (gen: string): boolean =>
+  !gen.startsWith('jhipster:bootstrap-') && !gen.endsWith(':bootstrap') && gen !== 'jhipster:project-name';
 const composedGeneratorsToCheck = allGenerators
   .filter(filterBootstrapGenerators)
   .filter(gen => !['jhipster:bootstrap', 'jhipster:project-name'].includes(gen));
