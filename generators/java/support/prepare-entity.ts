@@ -1,11 +1,10 @@
 import path from 'path';
 
 import { mutateData, normalizePathEnd } from '../../../lib/utils/index.ts';
-import type { ApplicationAll } from '../../base-application/application-properties-all.js';
-import type { Entity as JavaEntity } from '../types.js';
+import type { Application as JavaApplication, Entity as JavaEntity } from '../types.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.ts';
 
-export function prepareEntity(entity: JavaEntity, application: ApplicationAll) {
+export function prepareEntity(entity: JavaEntity, application: JavaApplication) {
   const { packageFolder, packageName } = application;
 
   mutateData(entity, {

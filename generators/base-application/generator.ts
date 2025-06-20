@@ -34,7 +34,6 @@ import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
 import type { ApplicationConfiguration } from './application-config-all.js';
-import type { EntityAll } from './entity-all.js';
 import type {
   ConfiguringEachEntityTaskParam,
   TaskTypes as DefaultTasks,
@@ -131,8 +130,8 @@ const getFirstArgForPriority = (priorityName: string) => ({
  * This is the base class for a generator that generates entities.
  */
 export default class BaseApplicationGenerator<
-  Entity extends BaseApplicationEntity = EntityAll,
-  Application extends BaseApplication<Entity> = ApplicationAll<Entity & EntityAll>,
+  Entity extends BaseApplicationEntity = BaseApplicationEntity,
+  Application extends BaseApplication<Entity> = BaseApplication<Entity>,
   Config extends BaseApplicationConfig = BaseApplicationConfig & ApplicationConfiguration,
   Options extends BaseApplicationOptions = BaseApplicationOptions,
   Source extends BaseApplicationSource = SourceAll,

@@ -8,6 +8,7 @@ import type { Application as LiqbuibaseApplication } from '../liquibase/index.js
 import type { Application as I18nApplication } from '../languages/types.js';
 import type { Application as SpringCacheApplication } from '../spring-cache/index.js';
 import type { Application as SpringCloudStreanApplication } from '../spring-cloud-stream/index.js';
+import type { Application as SpringCloudApplication } from '../spring-cloud/types.js';
 import type { EntityAll } from './entity-all.js';
 import type { Application as BaseApplication } from './types.js';
 
@@ -24,6 +25,7 @@ export type ApplicationAll<E extends EntityAll = EntityAll> = BaseApplication<E>
   SpringDataRelationalApplication<E> &
   SpringCacheApplication<E> &
   SpringCloudStreanApplication<E> &
+  SpringCloudApplication<E> &
   ClientApplication<E> &
   DockerApplication &
   LiqbuibaseApplication<E> &

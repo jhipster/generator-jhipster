@@ -18,7 +18,8 @@
  */
 import { basename } from 'node:path';
 import { isFileStateModified } from 'mem-fs-editor/state';
-import BaseApplicationGenerator from '../../../base-application/index.js';
+import { JavaApplicationGenerator } from '../../generator.ts';
+import type { Application as JavascriptApplication, Source as JavascriptSource } from '../../../javascript/types.js';
 import { JAVA_COMPATIBLE_VERSIONS, JHIPSTER_DEPENDENCIES_VERSION } from '../../../generator-constants.js';
 import {
   addJavaAnnotation,
@@ -37,7 +38,7 @@ import {
 } from '../../support/index.js';
 import { normalizePathEnd } from '../../../../lib/utils/index.js';
 
-export default class JavaBootstrapGenerator extends BaseApplicationGenerator {
+export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   packageInfoFile!: boolean;
   projectVersion?: string;
   jhipsterDependenciesVersion?: string;
@@ -66,7 +67,7 @@ export default class JavaBootstrapGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.INITIALIZING]() {
+  get [JavaApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
@@ -94,7 +95,7 @@ export default class JavaBootstrapGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.CONFIGURING]() {
+  get [JavaApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -142,14 +143,14 @@ export default class JavaBootstrapGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
+  get [JavaApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
     return this.asPreparingTaskGroup({
       applicationDefaults({ application }) {
-        application.addPrettierExtensions?.(['java']);
+        (application as unknown as JavascriptApplication).addPrettierExtensions?.(['java']);
       },
       prepareJavaApplication({ application, source }) {
         source.hasJavaProperty = (property: string) => application.javaProperties![property] !== undefined;
@@ -190,10 +191,7 @@ export default class JavaBootstrapGenerator extends BaseApplicationGenerator {
           optionalOrMono: ({ reactive }) => (reactive ? 'Mono' : 'Optional'),
           optionalOrMonoOfNullable: ({ reactive }) => (reactive ? 'Mono.justOrEmpty' : 'Optional.ofNullable'),
           optionalOrMonoClassPath: ({ reactive }) => (reactive ? 'reactor.core.publisher.Mono' : 'java.util.Optional'),
-          wrapMono:
-            ({ reactive }) =>
-            className =>
-              reactive ? `Mono<${className}>` : className,
+          wrapMono: ctx => (className: string) => (ctx.reactive ? `Mono<${className}>` : className),
           listOrFlux: ({ reactive }) => (reactive ? 'Flux' : 'List'),
           listOrFluxClassPath: ({ reactive }) => (reactive ? 'reactor.core.publisher.Flux' : 'java.util.List'),
         });
@@ -201,7 +199,7 @@ export default class JavaBootstrapGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [JavaApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -213,7 +211,7 @@ export default class JavaBootstrapGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+  get [JavaApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
@@ -276,7 +274,7 @@ export default class JavaBootstrapGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.DEFAULT]() {
+  get [JavaApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -298,7 +296,7 @@ export default class JavaBootstrapGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [JavaApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -306,8 +304,12 @@ export default class JavaBootstrapGenerator extends BaseApplicationGenerator {
     return this.asPostWritingTaskGroup({
       addPrettierJava({ application, source }) {
         if (!this.writeBootstrapFiles) return;
-        if (source.mergePrettierConfig) {
-          source.mergePrettierConfig({ plugins: ['prettier-plugin-java'], overrides: [{ files: '*.java', options: { tabWidth: 4 } }] });
+        const clientSource = source as JavascriptSource;
+        if (clientSource.mergePrettierConfig) {
+          clientSource.mergePrettierConfig({
+            plugins: ['prettier-plugin-java'],
+            overrides: [{ files: '*.java', options: { tabWidth: 4 } }],
+          });
           this.packageJson.merge({
             devDependencies: {
               'prettier-plugin-java': application.nodeDependencies['prettier-plugin-java'],
@@ -318,7 +320,7 @@ export default class JavaBootstrapGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [JavaApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 

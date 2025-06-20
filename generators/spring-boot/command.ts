@@ -38,7 +38,6 @@ const command = {
       },
       scope: 'generator',
     },
-
     reactive: {
       cli: {
         description: 'Generate a reactive backend',

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-application/index.js';
+import { JavaApplicationGenerator } from '../../generator.ts';
 import { mutateData } from '../../../../lib/utils/index.js';
 import { javaBeanCase, javaTestPackageTemplatesBlock } from '../../support/index.js';
 import { getEnumInfo } from '../../../base-application/support/index.js';
@@ -24,7 +24,7 @@ import { isReservedJavaKeyword } from '../../support/reserved-keywords.js';
 import { entityServerFiles, enumFiles } from './entity-files.js';
 
 // TODO adjust type
-export default class DomainGenerator extends BaseApplicationGenerator {
+export default class DomainGenerator extends JavaApplicationGenerator {
   generateEntities!: boolean;
   useJakartaValidation!: boolean;
   useJacksonIdentityInfo!: boolean;
@@ -55,7 +55,7 @@ export default class DomainGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+  get [JavaApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
@@ -69,13 +69,13 @@ export default class DomainGenerator extends BaseApplicationGenerator {
       prepareEntity({ entity, field }) {
         field.propertyJavaBeanName = javaBeanCase(field.propertyName);
         if (entity.dtoMapstruct || entity.builtIn) {
-          field.propertyDtoJavaType = field.blobContentTypeText ? 'String' : field.fieldType;
+          field.propertyDtoJavaType = field.fieldTypeBlobContent === 'text' ? 'String' : field.fieldType;
         }
       },
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+  get [JavaApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
@@ -97,7 +97,7 @@ export default class DomainGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+  get [JavaApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
   }
 
@@ -109,7 +109,7 @@ export default class DomainGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+  get [JavaApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
@@ -128,7 +128,7 @@ export default class DomainGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [JavaApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -170,7 +170,7 @@ export default class DomainGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+  get [JavaApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 }

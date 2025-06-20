@@ -18,12 +18,12 @@
  */
 
 import { asPostWritingTask } from '../../base-application/support/task-type-inference.js';
-import type { Application as ServerApplication, Entity as ServerEntity } from '../types.js';
+import type { Application as LanguagesApplication, Entity as LanguagesEntity } from '../../languages/types.js';
 
 /**
  * Update Languages In MailServiceIT
  */
-export default asPostWritingTask<ServerEntity, ServerApplication<ServerEntity>>(function updateLanguagesInMailServiceITTask({
+export default asPostWritingTask<LanguagesEntity, LanguagesApplication<LanguagesEntity>>(function updateLanguagesInMailServiceITTask({
   application,
 }) {
   const { javaPackageTestDir, languagesDefinition } = application;

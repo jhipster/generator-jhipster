@@ -1,14 +1,19 @@
 import type {
   Config as JavaConfig,
-  Entity as JavaEntity,
   Field as JavaField,
   Options as JavaOptions,
   Relationship as JavaRelationship,
   Source as JavaSource,
 } from '../java/types.js';
-import type { Entity as ServerEntity, Field as ServerField, Relationship as ServerRelationship } from '../server/index.js';
+import type { Entity as BaseApplicationEntity } from '../base-application/types.js';
+import type { Config as CommonConfig } from '../common/index.js';
+import type {
+  Application as ServerApplication,
+  Entity as ServerEntity,
+  Field as ServerField,
+  Relationship as ServerRelationship,
+} from '../server/index.js';
 import type { Application as GradleApplication } from '../gradle/types.js';
-import type { GatewayApplication } from '../spring-cloud/generators/gateway/types.js';
 import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
 import type { ApplicationPropertiesNeedles } from '../server/support/needles.ts';
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
@@ -17,7 +22,7 @@ import type command from './command.js';
 
 type Command = HandleCommandTypes<typeof command>;
 
-export type Config = Command['Config'] & JavaConfig;
+export type Config = Command['Config'] & JavaConfig & CommonConfig;
 
 export type Options = Command['Options'] & JavaOptions;
 
@@ -32,13 +37,18 @@ export type SpringEntity = {
   entityR2dbcRepository?: boolean;
 };
 
-export type Field = ServerField & JavaField;
+export type Field = ServerField &
+  JavaField & {
+    filterableField?: boolean;
+  };
 
 export interface Relationship extends ServerRelationship, JavaRelationship {}
 
 export type Entity<F extends Field = Field, R extends Relationship = Relationship> = ServerEntity<F, R> &
   SpringEntity & {
     skipDbChangelog?: boolean;
+    entityJavaFilterableProperties: any[];
+    entityJavaCustomFilters: any[];
   };
 
 export type Source = JavaSource & {
@@ -112,12 +122,12 @@ type ApplicationNature = (ImperativeApplication & CacheProviderApplication) | Re
 */
 type ApplicationNature = { reactive: boolean };
 
-export type Application<E extends JavaEntity = JavaEntity> = Command['Application'] &
+export type Application<E extends BaseApplicationEntity = Entity> = Command['Application'] &
+  ServerApplication<E> &
   GradleApplication<E> &
   ApplicationNature &
   SearchEngine &
-  DatabaseTypeApplication &
-  GatewayApplication & {
+  DatabaseTypeApplication & {
     jhipsterDependenciesVersion: string;
     springBootDependencies: Record<string, string>;
 
@@ -127,9 +137,6 @@ export type Application<E extends JavaEntity = JavaEntity> = Command['Applicatio
     embeddableLaunchScript: boolean;
     skipFakeData: boolean;
     skipCheckLengthOfIdentifier: boolean;
-    srcMain: string;
-    srcTest: string;
-    documentationUrl: string;
 
     generateAuthenticationApi?: boolean;
     generateInMemoryUserCredentials?: boolean;
@@ -138,8 +145,5 @@ export type Application<E extends JavaEntity = JavaEntity> = Command['Applicatio
     databaseMigrationLiquibase: boolean;
 
     communicationSpringWebsocket: boolean;
-    anyEntityHasRelationshipWithUser: boolean;
     requiresDeleteAllUsers: boolean;
-
-    domains: string[];
   };

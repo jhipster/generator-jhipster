@@ -26,8 +26,9 @@ import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.js';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.js';
 import command from './command.js';
 import { writeFiles } from './files.js';
+import type { Application as CommonApplication, Entity as CommonEntity } from './types.js';
 
-export default class CommonGenerator extends BaseApplicationGenerator {
+export default class CommonGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication<CommonEntity>> {
   command = command;
 
   async beforeQueue() {

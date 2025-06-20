@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
-import BaseApplicationGenerator from '../base-application/index.js';
+import { SpringBootApplicationGenerator } from '../spring-boot/generator.js';
 import { mutateData } from '../../lib/utils/index.js';
 import writeElasticsearchFilesTask from './files.js';
 import cleanupElasticsearchFilesTask from './cleanup.js';
 import writeElasticsearchEntityFilesTask, { cleanupElasticsearchEntityFilesTask } from './entity-files.js';
 
-export default class ElasticsearchGenerator extends BaseApplicationGenerator {
+export default class ElasticsearchGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -44,7 +44,7 @@ export default class ElasticsearchGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+  get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
@@ -55,7 +55,7 @@ export default class ElasticsearchGenerator extends BaseApplicationGenerator {
     };
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [SpringBootApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -66,7 +66,7 @@ export default class ElasticsearchGenerator extends BaseApplicationGenerator {
     };
   }
 
-  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+  get [SpringBootApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
@@ -90,7 +90,7 @@ export default class ElasticsearchGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [SpringBootApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }
