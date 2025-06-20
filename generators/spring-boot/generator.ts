@@ -89,7 +89,7 @@ export class SpringBootApplicationGenerator extends BaseApplicationGenerator<
   SpringBootSource
 > {}
 
-export default class SpringBootGenerator extends BaseApplicationGenerator {
+export default class SpringBootGenerator extends SpringBootApplicationGenerator {
   fakeKeytool;
 
   async beforeQueue() {

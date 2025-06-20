@@ -1,3 +1,5 @@
+import BaseApplicationGenerator from './base-application/index.ts';
+import type { ApplicationAll, EntityAll } from './base-application/index.ts';
 export {
   JHIPSTER_DOCUMENTATION_URL,
   JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
@@ -27,6 +29,8 @@ export * from './type-utils.js';
 
 export type { JHipsterCommandDefinition } from '../lib/command/index.js';
 
+class BaseApplicationGeneratorAll extends BaseApplicationGenerator<EntityAll, ApplicationAll<EntityAll>> {}
+
 export { default as GeneratorBase } from './base/index.js';
 export { default as GeneratorBaseCore } from './base-core/index.js';
-export { default as GeneratorBaseApplication } from './base-application/index.js';
+export { BaseApplicationGeneratorAll as GeneratorBaseApplication };

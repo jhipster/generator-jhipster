@@ -38,8 +38,6 @@ export interface EntityAll<F extends FieldAll = FieldAll, R extends Relationship
    * Any file is of type Bytes or ByteBuffer
    */
   anyFieldIsBlobDerived: boolean;
-  entityJavaFilterableProperties: any[];
-  entityJavaCustomFilters: any[];
   /**
    * Any field is of type ZonedDateTime, Instant or LocalDate
    */

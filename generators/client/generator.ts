@@ -68,7 +68,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PROMPTING]() {
+  get [ClientApplicationGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
@@ -105,7 +105,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.CONFIGURING]() {
+  get [ClientApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -123,7 +123,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.COMPOSING]() {
+  get [ClientApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -148,7 +148,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
+  get [ClientApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -188,7 +188,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [ClientApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -202,7 +202,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
     };
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+  get [ClientApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
@@ -221,7 +221,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [ClientApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -238,7 +238,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+  get [ClientApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
@@ -298,7 +298,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [ClientApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

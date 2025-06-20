@@ -18,6 +18,10 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
+import type { EntityAll } from '../base-application/index.js';
+import type { Application as ServerApplication, Entity as ServerEntity } from '../server/types.js';
+import type { Application as SpringCloudApplication } from '../spring-cloud/types.js';
+import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.js';
 import {
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
@@ -44,7 +48,9 @@ import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
 import serverCommand from '../server/command.js';
 import { mutateData, normalizePathEnd } from '../../lib/utils/index.js';
 
-export default class BoostrapApplicationServer extends BaseApplicationGenerator {
+type Entity = ServerEntity & EntityAll;
+
+export default class BoostrapApplicationServer extends BaseApplicationGenerator<Entity, ServerApplication<Entity>> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -65,7 +71,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
           // this.cancelCancellableTasks();
         }
       },
-      properties({ applicationDefaults }) {
+      properties({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           packageName: this.jhipsterConfigWithDefaults.packageName,
@@ -80,7 +86,9 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
           packageFolder: ({ packageName }) => `${packageName!.replace(/\./g, '/')}/`,
           javaPackageSrcDir: ({ srcMainJava, packageFolder }) => normalizePathEnd(`${srcMainJava}${packageFolder}`),
           javaPackageTestDir: ({ srcTestJava, packageFolder }) => normalizePathEnd(`${srcTestJava}${packageFolder}`),
+        });
 
+        mutateData(application as unknown as SpringDataRelationalApplication, {
           devDatabaseTypeH2Any: ({ devDatabaseType }) => devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory',
           devJdbcUrl: undefined,
           devDatabaseUsername: undefined,
@@ -128,7 +136,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
             ...applicationDockerContainers,
             ...currentDockerContainers,
           }),
-          gatewayRoutes: undefined,
         });
       },
     });
@@ -142,6 +149,10 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
         loadDerivedConfig(serverCommand.configs, { application });
+
+        mutateData(application as unknown as SpringCloudApplication, {
+          gatewayRoutes: undefined,
+        });
       },
       prepareForTemplates({ applicationDefaults }) {
         applicationDefaults({

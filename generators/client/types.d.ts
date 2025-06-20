@@ -20,12 +20,7 @@ import type {
   Source as CommonSource,
 } from '../common/types.js';
 import type { Language } from '../languages/support/languages.ts';
-import type {
-  Application as LanguageApplication,
-  Entity as LanguagesEntity,
-  Field as LanguagesField,
-  Relationship as LanguagesRelationship,
-} from '../languages/index.js';
+import type { Entity as LanguagesEntity, Field as LanguagesField, Relationship as LanguagesRelationship } from '../languages/index.js';
 import type { GetWebappTranslationCallback } from './translation.js';
 import type command from './command.ts';
 
@@ -46,7 +41,6 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
 export type Application<E extends Entity = Entity> = Command['Application'] &
   CommonApplication<E> &
-  LanguageApplication<E> &
   JavascriptApplication<E> &
   CypressApplication & {
     webappLoginRegExp: string;

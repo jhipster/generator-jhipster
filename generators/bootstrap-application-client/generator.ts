@@ -25,7 +25,7 @@ import { ClientApplicationGenerator } from '../client/generator.ts';
 import clientCommand from '../client/command.js';
 import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
 import { getFrontendAppName } from '../../lib/utils/index.js';
-import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../generator-constants.js';
+import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, LOGIN_REGEX_JS } from '../generator-constants.js';
 
 export default class BootStrapApplicationClient extends ClientApplicationGenerator {
   async beforeQueue() {
@@ -76,6 +76,8 @@ export default class BootStrapApplicationClient extends ClientApplicationGenerat
             }
             return false;
           },
+          clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
+          jsLoginRegex: LOGIN_REGEX_JS,
         });
       },
       prepareApplication({ application }) {

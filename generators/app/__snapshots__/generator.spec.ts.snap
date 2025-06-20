@@ -1551,7 +1551,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "clientFramework": "no",
   "clientFrameworkAngular": false,
   "clientFrameworkAny": false,
-  "clientFrameworkBuiltIn": false,
   "clientFrameworkNo": true,
   "clientFrameworkReact": false,
   "clientFrameworkVue": false,
@@ -1881,7 +1880,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
   "js": undefined,
-  "jsLoginRegex": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",

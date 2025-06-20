@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-application/index.js';
+import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { javaMainPackageTemplatesBlock } from '../../../java/support/files.js';
+import type { Application as SpringCloudApplication, Entity as SpringCloudEntity } from '../../types.js';
 
 const WAIT_TIMEOUT = 3 * 60000;
 
-export default class GatewayGenerator extends BaseApplicationGenerator {
+export default class GatewayGenerator extends BaseApplicationGenerator<SpringCloudEntity, SpringCloudApplication<SpringCloudEntity>> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

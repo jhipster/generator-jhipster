@@ -89,6 +89,7 @@ export type Source = BaseSimpleApplicationSource & {
 export type JavascriptSimpleApplication = BaseSimpleApplicationApplication &
   ExportApplicationPropertiesFromCommand<typeof EslintCommand> &
   ExportApplicationPropertiesFromCommand<typeof HuskyCommand> &
+  ExportApplicationPropertiesFromCommand<typeof PrettierCommand> &
   ExportApplicationPropertiesFromCommand<typeof JavascriptBootstrapCommand> & {
     packageJsonNodeEngine?: boolean | string;
     eslintConfigFile?: string;
@@ -102,6 +103,4 @@ export type JavascriptSimpleApplication = BaseSimpleApplicationApplication &
     addPrettierExtensions?: (extensions: string[]) => void;
   };
 
-export type Application<E extends Entity> = BaseApplicationApplication<E> &
-  JavascriptSimpleApplication &
-  ExportApplicationPropertiesFromCommand<typeof PrettierCommand>;
+export type Application<E extends BaseApplicationEntity = Entity> = BaseApplicationApplication<E> & JavascriptSimpleApplication;

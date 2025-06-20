@@ -19,3 +19,4 @@
 export { default } from './generator.js';
 export { default as command } from './command.js';
 export { commonFiles as files } from './files.js';
+export type { Application, Config, Entity, Field, Relationship, Source, Options } from './types.js';

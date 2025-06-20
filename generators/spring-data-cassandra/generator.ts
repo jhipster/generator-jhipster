@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import BaseApplicationGenerator from '../base-application/index.js';
+import { SpringBootApplicationGenerator } from '../spring-boot/generator.ts';
 import { PaginationTypes } from '../../lib/jhipster/entity-options.js';
 import writeCassandraFilesTask from './files.js';
 import cleanupCassandraFilesTask from './cleanup.js';
@@ -25,7 +24,7 @@ import writeCassandraEntityFilesTask, { cleanupCassandraEntityFilesTask } from '
 
 const { NO: NO_PAGINATION } = PaginationTypes;
 
-export default class CassandraGenerator extends BaseApplicationGenerator {
+export default class CassandraGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -52,7 +51,7 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
+  get [SpringBootApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
   }
 
@@ -63,7 +62,7 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [SpringBootApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -74,7 +73,7 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+  get [SpringBootApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
@@ -104,7 +103,7 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [SpringBootApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

@@ -54,6 +54,7 @@ export type Field = Property &
 
     transient?: boolean;
     id?: boolean;
+    autoGenerate?: boolean;
 
     // Blob
     fieldWithContentType?: boolean;

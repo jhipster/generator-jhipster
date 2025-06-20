@@ -5,10 +5,6 @@ import type { Field as ClientField } from '../client/index.js';
 export type FieldAll = SpringDataRelationalField &
   LiquibaseField &
   ClientField & {
-    filterableField?: boolean;
-
-    autoGenerate?: boolean;
-
     /**
      * Faker template passed to `faker.helpers.fake()`.
      * @see https://fakerjs.dev/api/helpers.html#fake

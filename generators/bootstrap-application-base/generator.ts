@@ -23,6 +23,10 @@ import { passthrough } from '@yeoman/transform';
 
 import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../base-application/index.js';
+import type { ApplicationAll, EntityAll } from '../base-application/index.js';
+import type { Application as CommonApplication, Entity as CommonEntity } from '../common/types.js';
+import type { Application as SpringBootApplication } from '../spring-boot/types.js';
+import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.js';
 import {
   addFakerToEntity,
   loadEntitiesAnnotations,
@@ -32,7 +36,7 @@ import {
   prepareRelationship,
   stringifyApplicationData,
 } from '../base-application/support/index.js';
-import { JAVA_DOCKER_DIR, LOGIN_REGEX, LOGIN_REGEX_JS, NODE_VERSION } from '../generator-constants.js';
+import { JAVA_DOCKER_DIR, LOGIN_REGEX, NODE_VERSION } from '../generator-constants.js';
 import { GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
 import { loadLanguagesConfig } from '../languages/support/index.js';
@@ -41,20 +45,21 @@ import { lookupCommandsConfigs } from '../../lib/command/lookup-commands-configs
 import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../lib/command/load.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { isWin32 } from '../base-core/support/index.ts';
-import { removeFieldsWithNullishValues } from '../../lib/utils/index.js';
+import { mutateData, removeFieldsWithNullishValues } from '../../lib/utils/index.js';
 import {
   convertFieldBlobType,
   getBlobContentType,
   isFieldBinaryType,
   isFieldBlobType,
 } from '../base-application/internal/types/field-types.ts';
-import type { EntityAll } from '../base-application/entity-all.js';
 import { upperFirst } from '../../lib/jdl/core/utils/string-utils.js';
 import { baseNameProperties } from '../project-name/support/index.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
 
-export default class BootstrapApplicationBase extends BaseApplicationGenerator {
+type Entity = CommonEntity & EntityAll;
+
+export default class BootstrapApplicationBase extends BaseApplicationGenerator<Entity, CommonApplication<Entity>> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -112,21 +117,14 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.BOOTSTRAP_APPLICATION]() {
     return this.asBootstrapApplicationTaskGroup({
       loadConfig({ applicationDefaults }) {
-        applicationDefaults(
-          removeFieldsWithNullishValues(this.config.getAll()) as any,
-          {
-            nodeDependencies: {},
-            customizeTemplatePaths: [],
-            user: undefined,
-            packageJsonScripts: {},
-            clientPackageJsonScripts: {},
-            testFrameworks: [],
-          },
-          {
-            communicationSpringWebsocket: undefined,
-            embeddableLaunchScript: undefined,
-          },
-        );
+        applicationDefaults(removeFieldsWithNullishValues(this.config.getAll()) as any, {
+          nodeDependencies: {},
+          customizeTemplatePaths: [],
+          user: undefined,
+          packageJsonScripts: {},
+          clientPackageJsonScripts: {},
+          testFrameworks: [],
+        });
       },
     });
   }
@@ -163,10 +161,20 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
             }
             return 'dist/';
           },
-          buildToolUnknown: ({ buildTool }) => !['gradle', 'maven'].includes(buildTool!),
         });
 
         loadLanguagesConfig({ application, config: this.jhipsterConfigWithDefaults, control });
+      },
+      loadApplicationKeysForEjs({ application }) {
+        mutateData(application as unknown as SpringBootApplication, {
+          communicationSpringWebsocket: undefined,
+          embeddableLaunchScript: undefined,
+          buildToolUnknown: ({ buildTool }) => !['gradle', 'maven'].includes(buildTool!),
+        });
+
+        mutateData(application as unknown as SpringDataRelationalApplication, {
+          devDatabaseTypeH2Any: undefined,
+        });
       },
       loadNodeDependencies({ application }) {
         this.loadNodeDependencies(application.nodeDependencies, {
@@ -225,10 +233,8 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
           backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
           backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
-          clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
 
           loginRegex: LOGIN_REGEX,
-          jsLoginRegex: LOGIN_REGEX_JS,
 
           jwtSecretKey: undefined,
           gatewayServerPort: undefined,
@@ -349,7 +355,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
 
           const customUserData: any = customUser?.entityStorage.getAll() ?? {};
-          Object.assign(bootstrap, createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application));
+          Object.assign(bootstrap, createUserEntity.call(this as any, { ...customUserData, ...customUserData.annotations }, application));
           application.user = bootstrap;
         }
       },
@@ -365,7 +371,11 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           const customUserManagementData: any = customUserManagement?.entityStorage.getAll() ?? {};
           Object.assign(
             bootstrap,
-            createUserManagementEntity.call(this, { ...customUserManagementData, ...customUserManagementData.annotations }, application),
+            createUserManagementEntity.call(
+              this as any,
+              { ...customUserManagementData, ...customUserManagementData.annotations },
+              application,
+            ),
           );
           application.userManagement = bootstrap;
         }
@@ -381,7 +391,10 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
 
           const customEntityData: any = customEntity?.entityStorage.getAll() ?? {};
-          Object.assign(bootstrap, createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application));
+          Object.assign(
+            bootstrap,
+            createAuthorityEntity.call(this as any, { ...customEntityData, ...customEntityData.annotations }, application),
+          );
           application.authority = bootstrap;
         }
       },
@@ -445,7 +458,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
     return this.asPreparingEachEntityTaskGroup({
       async preparingEachEntity({ application, entity }) {
         await addFakerToEntity(entity, application.nativeLanguage);
-        prepareEntityForTemplates(entity, this, application);
+        prepareEntityForTemplates(entity, this, application as ApplicationAll);
       },
     });
   }

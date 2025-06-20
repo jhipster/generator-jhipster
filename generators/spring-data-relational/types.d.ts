@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type { Entity as BaseApplicationEntity } from '../base-application/types.js';
 import type {
   Application as JavaApplication,
   Entity as JavaEntity,
@@ -41,7 +42,7 @@ type LiquibaseApplication = {
   incrementalChangelog: boolean;
 };
 
-export type Application<E extends Entity> = JavaApplication<E> &
+export type Application<E extends BaseApplicationEntity = Entity> = JavaApplication<E> &
   LiquibaseApplication &
   CommandTypes['Application'] & {
     devDatabaseExtraOptions: string;

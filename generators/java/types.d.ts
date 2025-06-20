@@ -164,6 +164,7 @@ export type Application<E extends BaseApplicationEntity<BaseApplicationField, Ba
     SpringApplication &
     DatabaseApplication &
     OptionWithDerivedProperties<'buildTool', ['maven', 'gradle']> & {
+      reactive?: boolean;
       buildToolUnknown?: boolean;
       buildToolExecutable: string;
 
@@ -185,6 +186,9 @@ export type Application<E extends BaseApplicationEntity<BaseApplicationField, Ba
       listOrFluxClassPath: string;
       reactorBlock: string;
       reactorBlockOptional: string;
+
+      domains: string[];
+      jhipsterDependenciesVersion?: string;
     };
 
 export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };

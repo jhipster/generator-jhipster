@@ -16,13 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import BaseApplicationGenerator from '../base-application/index.js';
+import { SpringBootApplicationGenerator } from '../spring-boot/generator.ts';
 import writeMongodbFilesTask from './files.js';
 import cleanupMongodbFilesTask from './cleanup.js';
 import writeMongodbEntityFilesTask, { cleanupMongodbEntityFilesTask } from './entity-files.js';
 
-export default class MongoDBGenerator extends BaseApplicationGenerator {
+export default class MongoDBGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -40,7 +39,7 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
     };
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [SpringBootApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -51,7 +50,7 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
     };
   }
 
-  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+  get [SpringBootApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
@@ -93,7 +92,7 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [SpringBootApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

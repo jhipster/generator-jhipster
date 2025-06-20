@@ -19,6 +19,7 @@
 import assert from 'assert';
 
 import BaseApplicationGenerator from '../base-application/index.js';
+import type { ApplicationAll, EntityAll } from '../base-application/index.js';
 import { validations } from '../../lib/jhipster/index.js';
 import {
   derivedPrimaryKeyProperties,
@@ -36,7 +37,7 @@ const {
   SUPPORTED_VALIDATION_RULES,
 } = validations;
 
-export default class BootstrapApplicationGenerator extends BaseApplicationGenerator {
+export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<EntityAll, ApplicationAll<EntityAll>> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
