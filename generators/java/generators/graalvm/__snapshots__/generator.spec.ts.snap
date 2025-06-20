@@ -273,13 +273,7 @@ exports[`generator - java:graalvm with default options should call source snapsh
 
 exports[`generator - java:graalvm with default options should match files snapshot 1`] = `
 {
-  ".editorconfig.jhi.java": {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "README.md.jhi.native": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -302,13 +296,7 @@ exports[`generator - java:graalvm with default options should match files snapsh
 
 exports[`generator - java:graalvm with default options should match files snapshot 2`] = `
 {
-  ".editorconfig.jhi.java": {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "README.md.jhi.native": {
     "stateCleared": "modified",
   },
   "gradle/native.gradle": {

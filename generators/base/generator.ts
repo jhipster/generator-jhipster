@@ -82,7 +82,9 @@ export default class BaseGenerator<
     const {
       sbsBlueprint = false,
       checkBlueprint,
-      jhipsterBootstrap = !this._namespace.split(':')[1]?.startsWith('bootstrap'),
+      jhipsterBootstrap = this._namespace !== 'jhipster:project-name' &&
+        !this._namespace.split(':')[1]?.startsWith('bootstrap') &&
+        !this._namespace.endsWith(':bootstrap'),
     } = this.getFeatures();
 
     this.sbsBlueprint = sbsBlueprint;

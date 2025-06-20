@@ -65,18 +65,13 @@ exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(fal
 
 exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should compose with generators 1`] = `
 [
-  "jhipster:bootstrap",
   "jhipster:java:build-tool",
-  "jhipster:project-name",
 ]
 `;
 
 exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "README.md.jhi.openapi-generator": {
     "stateCleared": "modified",
   },
   "src/main/resources/swagger/api.yml": {
@@ -165,18 +160,13 @@ exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(tru
 
 exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should compose with generators 1`] = `
 [
-  "jhipster:bootstrap",
   "jhipster:java:build-tool",
-  "jhipster:project-name",
 ]
 `;
 
 exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "README.md.jhi.openapi-generator": {
     "stateCleared": "modified",
   },
   "buildSrc/src/main/groovy/jhipster.openapi-generator-conventions.gradle": {
@@ -253,18 +243,13 @@ exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(fals
 
 exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(false) should compose with generators 1`] = `
 [
-  "jhipster:bootstrap",
   "jhipster:java:build-tool",
-  "jhipster:project-name",
 ]
 `;
 
 exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(false) should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "README.md.jhi.openapi-generator": {
     "stateCleared": "modified",
   },
   "src/main/resources/swagger/api.yml": {
@@ -338,18 +323,13 @@ exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true
 
 exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true) should compose with generators 1`] = `
 [
-  "jhipster:bootstrap",
   "jhipster:java:build-tool",
-  "jhipster:project-name",
 ]
 `;
 
 exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true) should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "README.md.jhi.openapi-generator": {
     "stateCleared": "modified",
   },
   "src/main/resources/swagger/api.yml": {

@@ -47,12 +47,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should compose with generators', () => {
-      expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
-[
-  "jhipster:bootstrap",
-  "jhipster:project-name",
-]
-`);
+      expect(result.getComposedGenerators()).toMatchInlineSnapshot(`[]`);
     });
   });
 });

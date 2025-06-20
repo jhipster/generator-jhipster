@@ -229,9 +229,6 @@ exports[`generator - maven:frontend-plugin with defaults options should call sou
 
 exports[`generator - maven:frontend-plugin with defaults options should match files snapshot 1`] = `
 {
-  ".editorconfig.jhi.java": {
-    "stateCleared": "modified",
-  },
   ".mvn/jvm.config": {
     "stateCleared": "modified",
   },
@@ -239,9 +236,6 @@ exports[`generator - maven:frontend-plugin with defaults options should match fi
     "stateCleared": "modified",
   },
   ".mvn/wrapper/maven-wrapper.properties": {
-    "stateCleared": "modified",
-  },
-  ".prettierignore.jhi.maven": {
     "stateCleared": "modified",
   },
   ".yo-rc.json": {

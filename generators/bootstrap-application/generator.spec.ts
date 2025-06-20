@@ -127,9 +127,7 @@ describe(`generator - ${generator}`, () => {
 {
   ".jhipster/EntityA.json": {
     "contents": "{
-  "annotations": {
-    "changelogDate": "20220129025419"
-  },
+  "name": "EntityA",
   "changelogDate": "20220129025419",
   "dto": "mapstruct",
   "fields": [
@@ -149,17 +147,17 @@ describe(`generator - ${generator}`, () => {
       }
     }
   ],
-  "name": "EntityA",
-  "relationships": []
+  "relationships": [],
+  "annotations": {
+    "changelogDate": "20220129025419"
+  }
 }
 ",
     "stateCleared": "modified",
   },
   ".jhipster/User.json": {
     "contents": "{
-  "annotations": {
-    "changelogDate": "20220129025420"
-  },
+  "name": "User",
   "changelogDate": "20220129025420",
   "fields": [
     {
@@ -167,8 +165,10 @@ describe(`generator - ${generator}`, () => {
       "fieldType": "UUID"
     }
   ],
-  "name": "User",
-  "relationships": []
+  "relationships": [],
+  "annotations": {
+    "changelogDate": "20220129025420"
+  }
 }
 ",
     "stateCleared": "modified",
@@ -1615,9 +1615,7 @@ describe(`generator - ${generator}`, () => {
 {
   ".jhipster/EntityA.json": {
     "contents": "{
-  "annotations": {
-    "changelogDate": "20220129025419"
-  },
+  "name": "EntityA",
   "changelogDate": "20220129025419",
   "fields": [
     {
@@ -1625,8 +1623,10 @@ describe(`generator - ${generator}`, () => {
       "fieldType": "UUID"
     }
   ],
-  "name": "EntityA",
-  "relationships": []
+  "relationships": [],
+  "annotations": {
+    "changelogDate": "20220129025419"
+  }
 }
 ",
     "stateCleared": "modified",
