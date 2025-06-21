@@ -54,7 +54,7 @@ export const getSession = (): AppThunk => <% if (enableTranslation) { %>async<% 
   await dispatch(getAccount());
 
   const { account } = getState().authentication;
-  if (account && account.langKey) {
+  if (account?.langKey) {
     const langKey = Storage.session.get('locale', account.langKey);
     await dispatch(setLocale(langKey));
   }
@@ -206,7 +206,7 @@ export const AuthenticationSlice = createSlice({
         errorMessage: action.error.message,
       }))
       .addCase(getAccount.fulfilled, (state, action) => {
-        const isAuthenticated = action.payload && action.payload.data && action.payload.data.activated;
+        const isAuthenticated = action.payload?.data?.activated;
         return {
           ...state,
           isAuthenticated,
