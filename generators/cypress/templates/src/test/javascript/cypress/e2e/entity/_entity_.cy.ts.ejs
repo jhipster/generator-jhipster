@@ -305,7 +305,7 @@ describe('<%= entityClass %> e2e test', () => {
 
   describe('new <%= entityClass %> page', () => {
     beforeEach(() => {
-      cy.visit(`${<%= entityInstance %>PageUrl}`);
+      cy.visit(<%= entityInstance %>PageUrl);
       cy.get(entityCreateButtonSelector).click();
       cy.getEntityCreateUpdateHeading('<%= entityClass %>');
     });
