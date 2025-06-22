@@ -109,7 +109,7 @@ const useDataUtils = () => ({
   },
 
   setFileData(event, entity, field, isImage) {
-    if (event && event.target.files && event.target.files[0]) {
+    if (event?.target.files?.[0]) {
       const file = event.target.files[0];
       if (isImage && !/^image\//.test(file.type)) {
         return;

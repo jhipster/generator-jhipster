@@ -128,7 +128,7 @@ export default defineComponent({
       return time_string;
     },
     isObjectExisting(metrics: any, key: string): boolean {
-      return metrics && metrics[key];
+      return metrics?.[key];
     },
     isObjectExistingAndNotEmpty(metrics: any, key: string): boolean {
       return this.isObjectExisting(metrics, key) && JSON.stringify(metrics[key]) !== '{}';

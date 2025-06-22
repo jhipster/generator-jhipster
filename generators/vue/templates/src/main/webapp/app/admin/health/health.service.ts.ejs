@@ -103,7 +103,7 @@ export default class HealthService {
     for (const key in healthObject) {
       if (Object.hasOwn(healthObject, key)) {
         const value = healthObject[key];
-        if (value && value.status) {
+        if (value?.status) {
           result = true;
         }
       }
