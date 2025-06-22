@@ -57,7 +57,7 @@ describe('UserManagementEdit Component', () => {
   describe('init', () => {
     it('Should load user', async () => {
       // GIVEN
-      axiosStub.get.withArgs('api/admin/users/' + <%- tsKeyId %>).resolves({});
+      axiosStub.get.withArgs('api/admin/users/<%- tsKeyId %>').resolves({});
 <%_ if (generateBuiltInAuthorityEntity) { _%>
       axiosStub.get.withArgs('api/authorities').resolves({ data: [] });
 <%_ } _%>
@@ -76,7 +76,7 @@ describe('UserManagementEdit Component', () => {
 <%_ if (generateBuiltInAuthorityEntity) { _%>
       expect(axiosStub.get.calledWith('api/authorities')).toBeTruthy();
 <%_ } _%>
-      expect(axiosStub.get.calledWith('api/admin/users/' + <%- tsKeyId %>)).toBeTruthy();
+      expect(axiosStub.get.calledWith('api/admin/users/<%- tsKeyId %>')).toBeTruthy();
     });
     it('Should open create user', async () => {
       // GIVEN
@@ -112,7 +112,7 @@ describe('UserManagementEdit Component', () => {
           'x-<%= frontendAppName.toLowerCase() %>-params': '',
         },
       });
-      axiosStub.get.withArgs('api/admin/users/' + <%- tsKeyId %>).resolves({
+      axiosStub.get.withArgs('api/admin/users/<%- tsKeyId %>').resolves({
         data: { id: <%- tsKeyId %>, authorities: [] },
       });
 <%_ if (generateBuiltInAuthorityEntity) { _%>
