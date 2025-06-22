@@ -63,7 +63,7 @@ export const getSession = (): AppThunk => <% if (enableTranslation) { %>async<% 
 <%_ } _%>
 };
 
-export const getAccount = createAsyncThunk('authentication/get_account', async () => axios.get<any>('api/account'), {
+export const getAccount = createAsyncThunk('authentication/get_account', async () => axios.get('api/account'), {
   serializeError: serializeAxiosError,
 });
 

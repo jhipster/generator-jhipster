@@ -29,7 +29,7 @@ const initialState = {
 
 export type ApplicationProfileState = Readonly<typeof initialState>;
 
-export const getProfile = createAsyncThunk('applicationProfile/get_profile', async () => axios.get<any>('management/info'), {
+export const getProfile = createAsyncThunk('applicationProfile/get_profile', async () => axios.get('management/info'), {
   serializeError: serializeAxiosError,
 });
 
