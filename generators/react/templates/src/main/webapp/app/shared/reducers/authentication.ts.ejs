@@ -68,7 +68,7 @@ export const getAccount = createAsyncThunk('authentication/get_account', async (
 });
 
 <%_ if (authenticationTypeSession) { _%>
-export const authenticate = createAsyncThunk('authentication/login', async (data: string) => axios.post<any>('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }), {
+export const authenticate = createAsyncThunk('authentication/login', async (data: string) => axios.post('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }), {
   serializeError: serializeAxiosError,
 });
 
@@ -88,7 +88,7 @@ interface IAuthParams {
 
 export const authenticate = createAsyncThunk(
   'authentication/login',
-  async (auth: IAuthParams) => axios.post<any>('api/authenticate', auth),
+  async (auth: IAuthParams) => axios.post('api/authenticate', auth),
   {
     serializeError: serializeAxiosError,
   },
@@ -127,7 +127,7 @@ export const logout: () => AppThunk = () => dispatch => {
   dispatch(logoutSession());
 };
 <%_ } else { _%>
-export const logoutServer = createAsyncThunk('authentication/logout', async () => axios.post<any>('api/logout', {}), {
+export const logoutServer = createAsyncThunk('authentication/logout', async () => axios.post('api/logout', {}), {
   serializeError: serializeAxiosError,
 });
 
