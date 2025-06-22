@@ -24,7 +24,7 @@ describe('Metrics Component', () => {
   });
 
   describe('init', () => {
-    it('should count the numbers of each thread type', async () => {
+    it('should count the numbers of each thread type', () => {
       expect(metricsModal.threadDumpData.threadDumpRunnable).toBe(1);
       expect(metricsModal.threadDumpData.threadDumpWaiting).toBe(1);
       expect(metricsModal.threadDumpData.threadDumpTimedWaiting).toBe(1);

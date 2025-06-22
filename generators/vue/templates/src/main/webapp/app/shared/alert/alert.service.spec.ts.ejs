@@ -23,7 +23,7 @@ describe('Alert Service test suite', () => {
     });
   });
 
-  it('should show error toast with translation/message', async () => {
+  it('should show error toast with translation/message', () => {
     const message = 'translatedMessage';
 
     // WHEN
@@ -40,7 +40,7 @@ describe('Alert Service test suite', () => {
     });
   });
 
-  it('should show not reachable toast when http status = 0', async () => {
+  it('should show not reachable toast when http status = 0', () => {
 <%_ if (enableTranslation) { _%>
     const translationKey = 'error.server.not.reachable';
 <%_ } _%>
@@ -71,7 +71,7 @@ describe('Alert Service test suite', () => {
     });
   });
 
-  it('should show parameterized error toast when http status = 400 and entity headers', async () => {
+  it('should show parameterized error toast when http status = 400 and entity headers', () => {
 <%_ if (enableTranslation) { _%>
     const translationKey = 'error.update';
 <%_ } _%>
@@ -114,7 +114,7 @@ describe('Alert Service test suite', () => {
     });
   });
 
-  it('should show error toast with data.message when http status = 400 and entity headers', async () => {
+  it('should show error toast with data.message when http status = 400 and entity headers', () => {
     const message = 'Validation error';
     const httpErrorResponse = {
       status: 400,
@@ -153,7 +153,7 @@ describe('Alert Service test suite', () => {
     });
   });
 
-  it('should show error toast when http status = 404', async () => {
+  it('should show error toast when http status = 404', () => {
     <%_ if (enableTranslation) { _%>
     const translationKey = 'error.http.404';
     <%_ } _%>
@@ -185,7 +185,7 @@ describe('Alert Service test suite', () => {
     });
   });
 
-  it('should show error toast when http status != 400,404', async () => {
+  it('should show error toast when http status != 400,404', () => {
     const message = 'Error 500';
     const httpErrorResponse = {
       status: 500,
