@@ -47,7 +47,7 @@ export default class <%= entityAngularName %>Service {
 
   create(entity: I<%= entityAngularName %>) : Promise<I<%= entityAngularName %>> {
     return new Promise<I<%= entityAngularName %>>((resolve, reject) => {
-      axios.post(`${baseApiUrl}`, entity).then(res => {
+      axios.post(baseApiUrl, entity).then(res => {
         resolve(res.data);
       }).catch(err => { reject(err); });
     });
