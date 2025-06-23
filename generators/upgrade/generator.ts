@@ -92,7 +92,7 @@ export default class UpgradeGenerator extends BaseGenerator<Config & { baseName:
         }
       },
 
-      async checkoutDependency() {
+      checkoutDependency() {
         if (this.applyConfig) return;
 
         const jhipsterVersion = this.getPackageJsonVersion();
