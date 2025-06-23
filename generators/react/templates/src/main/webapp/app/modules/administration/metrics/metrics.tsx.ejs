@@ -97,7 +97,7 @@ export const MetricsPage = () => {
       ) : (
         ''
       )}
-      {metrics && metrics['http.server.requests'] ? (
+      {metrics?.['http.server.requests'] ? (
         <HttpRequestMetrics
           requestMetrics={metrics['http.server.requests']}
           twoDigitAfterPointFormat={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT}
