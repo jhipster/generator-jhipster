@@ -51,8 +51,6 @@ const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { Options: DeploymentOptions } = deploymentOptions;
 
 export default class DockerComposeGenerator extends BaseWorkspacesGenerator<BaseDeployment, BaseWorkspaces, BaseWorkspacesApplication> {
-  existingDeployment;
-
   async beforeQueue() {
     if (this.appsFolders && this.appsFolders.length > 0) {
       this.jhipsterConfig.appsFolders = this.appsFolders;

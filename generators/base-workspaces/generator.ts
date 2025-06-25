@@ -109,6 +109,18 @@ export default abstract class BaseWorkspacesGenerator<
     return this.getContextData(CONTEXT_DATA_WORKSPACES_KEY, { factory: () => ({}) });
   }
 
+  get promptingWorkspaces() {
+    return {};
+  }
+
+  get configuringWorkspaces() {
+    return {};
+  }
+
+  get preparingWorkspaces() {
+    return {};
+  }
+
   protected loadWorkspacesConfig(opts?) {
     const { context = this } = opts ?? {};
     context.appsFolders = this.jhipsterConfig.appsFolders;

@@ -76,9 +76,6 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      existingDeployment() {
-        this.regenerate = this.regenerate || this.config.existed;
-      },
       loadDockerDependenciesTask,
       checkDocker,
       checkKubernetes,
