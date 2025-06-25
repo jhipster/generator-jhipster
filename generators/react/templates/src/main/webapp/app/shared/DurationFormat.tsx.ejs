@@ -21,7 +21,7 @@ export const DurationFormat = ({ value, blankOnInvalid, locale }: IDurationForma
     <span title={value}>
       {dayjs
         .duration(value)
-        .locale(locale || '<% if (enableTranslation) { %><%= nativeLanguage %><% } else { %>en<% } %>')
+        .locale(locale ?? '<% if (enableTranslation) { %><%= nativeLanguage %><% } else { %>en<% } %>')
         .humanize()}
     </span>
   );
