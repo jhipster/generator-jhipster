@@ -119,7 +119,7 @@ export function saveConfig() {
   );
 }
 
-export function setupKubernetesConstants() {
+export function setupKubernetesConstants(this) {
   // Make constants available in templates
   this.KUBERNETES_CORE_API_VERSION = KUBERNETES_CORE_API_VERSION;
   this.KUBERNETES_BATCH_API_VERSION = KUBERNETES_BATCH_API_VERSION;

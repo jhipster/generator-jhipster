@@ -142,14 +142,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
   get loadingWorkspaces() {
     return this.asLoadingTaskGroup({
       loadFromYoRc,
-      loadSharedConfig() {
-        for (const app of this.appConfigs) {
-          loadDerivedAppConfig({ application: app });
-          loadDerivedServerAndPlatformProperties({ application: app });
-        }
-      },
       loadDeploymentConfig,
-      derivedKubernetesPlatformProperties,
     });
   }
 
@@ -160,17 +153,14 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
       configureImageNames,
-
-      setPostPromptProp() {
-        this.appConfigs.forEach(element => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
-          if (element.messageBroker === KAFKA) {
-            this.useKafka = true;
-          }
-        });
-        this.useKeycloak = false;
+      loadSharedConfig() {
+        for (const app of this.appConfigs) {
+          loadDerivedAppConfig({ application: app });
+          loadDerivedServerAndPlatformProperties({ application: app });
+        }
       },
+
+      derivedKubernetesPlatformProperties,
     });
   }
 
