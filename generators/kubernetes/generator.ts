@@ -71,7 +71,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   }
 
   get initializing() {
-    return {
+    return this.asInitializingTaskGroup({
       sayHello() {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
@@ -81,7 +81,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
       checkKubernetes,
       loadConfig,
       setupKubernetesConstants,
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
@@ -114,9 +114,9 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   }
 
   get configuring() {
-    return {
+    return this.asConfiguringTaskGroup({
       generateJwtSecret,
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.CONFIGURING]() {
@@ -124,17 +124,17 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   }
 
   get loading() {
-    return {
+    return this.asLoadingTaskGroup({
       loadFromYoRc,
       loadSharedConfig() {
         for (const app of this.appConfigs) {
           loadDerivedAppConfig({ application: app });
           loadDerivedServerAndPlatformProperties({ application: app });
         }
-        loadDeploymentConfig.call(this);
-        derivedKubernetesPlatformProperties(this);
       },
-    };
+      loadDeploymentConfig,
+      derivedKubernetesPlatformProperties,
+    });
   }
 
   get [BaseWorkspacesGenerator.LOADING]() {
@@ -142,7 +142,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   }
 
   get preparing() {
-    return {
+    return this.asPreparingTaskGroup({
       configureImageNames,
 
       setPostPromptProp() {
@@ -157,7 +157,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
         this.usesIngress = this.kubernetesServiceType === 'Ingress';
         this.useKeycloak = this.usesOauth2 && this.usesIngress;
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.PREPARING]() {
@@ -165,7 +165,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   }
 
   get writing() {
-    return writeFiles();
+    return this.asWritingTaskGroup({ writeFiles });
   }
 
   get [BaseWorkspacesGenerator.WRITING]() {
@@ -173,7 +173,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   }
 
   get end() {
-    return {
+    return this.asEndTaskGroup({
       checkImages,
       deploy() {
         if (this.hasWarning) {
@@ -235,7 +235,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
           this.log.warn("Failed to make 'kubectl-apply.sh' executable, you may need to run 'chmod +x kubectl-apply.sh'");
         }
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.END]() {

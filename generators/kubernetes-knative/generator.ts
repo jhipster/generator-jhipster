@@ -130,9 +130,9 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
   }
 
   get configuring() {
-    return {
+    return this.asConfiguringTaskGroup({
       generateJwtSecret,
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.CONFIGURING]() {
@@ -140,17 +140,17 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
   }
 
   get loading() {
-    return {
+    return this.asLoadingTaskGroup({
       loadFromYoRc,
       loadSharedConfig() {
         for (const app of this.appConfigs) {
           loadDerivedAppConfig({ application: app });
           loadDerivedServerAndPlatformProperties({ application: app });
         }
-        loadDeploymentConfig.call(this);
-        derivedKubernetesPlatformProperties(this);
       },
-    };
+      loadDeploymentConfig,
+      derivedKubernetesPlatformProperties,
+    });
   }
 
   get [BaseWorkspacesGenerator.LOADING]() {
@@ -158,7 +158,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
   }
 
   get preparing() {
-    return {
+    return this.asPreparingTaskGroup({
       configureImageNames,
 
       setPostPromptProp() {
@@ -171,7 +171,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
         });
         this.useKeycloak = false;
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.PREPARING]() {
@@ -179,7 +179,9 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
   }
 
   get writing() {
-    return writeFiles();
+    return this.asWritingTaskGroup({
+      writeFiles,
+    });
   }
 
   get [BaseWorkspacesGenerator.WRITING]() {
@@ -187,7 +189,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
   }
 
   get end() {
-    return {
+    return this.asEndTaskGroup({
       checkImages,
       deploy() {
         if (this.hasWarning) {
@@ -249,7 +251,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
           }
         }
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.END]() {

@@ -75,7 +75,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
   }
 
   get initializing() {
-    return {
+    return this.asInitializingTaskGroup({
       sayHello() {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
@@ -87,7 +87,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
       loadConfig,
       setupKubernetesConstants,
       setupHelmConstants,
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
@@ -95,7 +95,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
   }
 
   get prompting() {
-    return {
+    return this.asPromptingTaskGroup({
       askForApplicationType,
       askForPath,
       askForApps,
@@ -110,7 +110,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
       askForKubernetesServiceType,
       askForIngressType,
       askForIngressDomain,
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.PROMPTING]() {
@@ -128,17 +128,17 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
   }
 
   get loading() {
-    return {
+    return this.asLoadingTaskGroup({
       loadFromYoRc,
       loadSharedConfig() {
         for (const app of this.appConfigs) {
           loadDerivedAppConfig({ application: app });
           loadDerivedServerAndPlatformProperties({ application: app });
         }
-        loadDeploymentConfig.call(this);
-        derivedKubernetesPlatformProperties(this);
       },
-    };
+      loadDeploymentConfig,
+      derivedKubernetesPlatformProperties,
+    });
   }
 
   get [BaseWorkspacesGenerator.LOADING]() {
@@ -146,7 +146,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
   }
 
   get preparing() {
-    return {
+    return this.asPreparingTaskGroup({
       configureImageNames,
 
       setPostPromptProp() {
@@ -159,7 +159,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
         });
         this.useKeycloak = false;
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.PREPARING]() {
@@ -167,7 +167,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
   }
 
   get writing() {
-    return writeFiles();
+    return this.asWritingTaskGroup({ writeFiles });
   }
 
   get [BaseWorkspacesGenerator.WRITING]() {
