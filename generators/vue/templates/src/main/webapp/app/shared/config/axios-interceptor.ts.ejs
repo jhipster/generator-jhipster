@@ -21,7 +21,7 @@ import axios from 'axios';
 const TIMEOUT = 1000000;
 const onRequestSuccess = config => {
 <%_ if (authenticationTypeJwt) { _%>
-  const token = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
+  const token = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') ?? sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
   if (token) {
     if (!config.headers) {
       config.headers = {};
