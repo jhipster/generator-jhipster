@@ -47,7 +47,7 @@ export default class AccountService {
       return this.store.logon;
     }
 <%_ if (authenticationTypeJwt) { _%>
-    const token = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
+    const token = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') ?? sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
     if (this.authenticated && this.userAuthorities && token) {
 <%_ } else { _%>
     if (this.authenticated && this.userAuthorities) {
