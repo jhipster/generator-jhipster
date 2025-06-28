@@ -22,9 +22,8 @@ import path, { join, relative } from 'path';
 import { rm } from 'fs/promises';
 import chalk from 'chalk';
 import semver, { lt as semverLessThan } from 'semver';
-
-import { union } from 'lodash-es';
 import { execaCommandSync } from 'execa';
+import { union } from 'lodash-es';
 import type { PackageJson } from 'type-fest';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
@@ -184,8 +183,8 @@ export default class BaseGenerator<
           },
           get enviromentHasDockerCompose(): boolean {
             if (enviromentHasDockerCompose === undefined) {
-              const { exitCode } = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
-              enviromentHasDockerCompose = exitCode === 0;
+              const commandReturn = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
+              enviromentHasDockerCompose = !commandReturn || !commandReturn.failed; // TODO looks to be a bug on ARM MaCs and execaCommandSync, does not return anything, assuming mac users are smart and install docker.
             }
             return enviromentHasDockerCompose;
           },

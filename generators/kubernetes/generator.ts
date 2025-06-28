@@ -113,18 +113,18 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
-  get configuring() {
-    return this.asConfiguringTaskGroup({
+  get configuringWorkspaces() {
+    return this.asConfiguringWorkspacesTaskGroup({
       generateJwtSecret,
     });
   }
 
-  get [BaseWorkspacesGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+  get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
+  get loadingWorkspaces() {
+    return this.asLoadingWorkspacesTaskGroup({
       loadFromYoRc,
       loadSharedConfig() {
         for (const app of this.appConfigs) {
@@ -137,12 +137,12 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
     });
   }
 
-  get [BaseWorkspacesGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
   }
 
-  get preparing() {
-    return this.asPreparingTaskGroup({
+  get preparingWorkspaces() {
+    return this.asPreparingWorkspacesTaskGroup({
       configureImageNames,
 
       setPostPromptProp() {
@@ -160,8 +160,8 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
     });
   }
 
-  get [BaseWorkspacesGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+  get [BaseWorkspacesGenerator.PREPARING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.preparingWorkspaces);
   }
 
   get writing() {
