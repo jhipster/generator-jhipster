@@ -17,11 +17,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { authenticationTypes, kubernetesPlatformTypes, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
+import { kubernetesPlatformTypes, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
 import type { WriteFileSection } from '../base-core/api.js';
 
-const { JWT } = authenticationTypes;
 const { PROMETHEUS } = monitoringTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { ServiceTypes } = kubernetesPlatformTypes;
@@ -39,7 +38,7 @@ const applicationFiles: WriteFileSection = asWriteFilesSection((suffix: string) 
       templates: ['service.yml'],
     },
   ],
-  elasticsearch: [
+  searchEngine: [
     {
       condition: data => data.app.searchEngineElasticsearch,
       renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/${data.app.baseName.toLowerCase()}-elasticsearch.yml`,
@@ -54,9 +53,35 @@ const applicationFiles: WriteFileSection = asWriteFilesSection((suffix: string) 
     },
     {
       condition: data =>
-        (data.app.applicationTypeGateway || data.app.applicationTypeMonolith) && !data.istio && data.kubernetesServiceType === INGRESS,
+        (data.app.applicationTypeGateway || data.app.applicationTypeMonolith) && !data.istio && data.kubernetesServiceTypeIngress,
       renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/${data.app.baseName.toLowerCase()}-ingress.yml`,
       templates: ['ingress.yml'],
+    },
+  ],
+  authenticationType: [
+    {
+      condition: data => !data.app.serviceDiscoveryAny && data.app.authenticationTypeJwt,
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/jwt-secret.yml`,
+      templates: ['secret/jwt-secret.yml'],
+    },
+  ],
+  databaseType: [
+    {
+      condition: data => data.app.databaseTypeCouchbase,
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/couchbase-secret.yml`,
+      templates: ['secret/couchbase-secret.yml'],
+    },
+  ],
+  istio: [
+    {
+      condition: data => data.istio,
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/${data.app.baseName.toLowerCase()}-destination-rule.yml`,
+      templates: ['istio/destination-rule.yml'],
+    },
+    {
+      condition: data => data.istio,
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/${data.app.baseName.toLowerCase()}-virtual-service.yml`,
+      templates: ['istio/virtual-service.yml'],
     },
   ],
 }));
@@ -80,11 +105,36 @@ const helmApplicationFiles: WriteFileSection = asWriteFilesSection((suffix: stri
     },
   ],
 }));
-const writeDeploymentFiles = (suffix = '') => ({
+
+const writeKubernetesDeploymenFiles = (suffix = '') => ({
   namespace: [
     {
       condition: data => data.kubernetesNamespace !== 'default',
       templates: ['namespace.yml'],
+    },
+  ],
+});
+const writeDeploymentFiles = (suffix = '') => ({
+  values: [
+    {
+      condition: data => data.useKafka || data.monitoringPrometheus || data.serviceDiscoveryTypeEureka || data.serviceDiscoveryTypeConsul,
+      renameTo: () => `csvc-${suffix}/values.yaml`,
+      templates: ['csvc/values.yml'],
+    },
+    {
+      condition: data => data.useKafka || data.monitoringPrometheus || data.serviceDiscoveryTypeEureka || data.serviceDiscoveryTypeConsul,
+      renameTo: () => `csvc-${suffix}/Chart.yaml`,
+      templates: ['csvc/Chart.yml'],
+    },
+    {
+      condition: data => data.useKafka || data.monitoringPrometheus || data.serviceDiscoveryTypeEureka || data.serviceDiscoveryTypeConsul,
+      renameTo: () => `csvc-${suffix}/requirements.yaml`,
+      templates: ['csvc/requirements.yml'],
+    },
+    {
+      condition: data => data.useKafka || data.monitoringPrometheus || data.serviceDiscoveryTypeEureka || data.serviceDiscoveryTypeConsul,
+      renameTo: () => `csvc-${suffix}/templates/_helpers.tpl`,
+      templates: ['csvc/helpers.tpl'],
     },
   ],
 });
@@ -93,15 +143,11 @@ export const writeFiles = asWritingTask(async function writeFiles() {
   const suffix = 'helm';
 
   await this.writeFiles({
-    sections: writeDeploymentFiles(suffix),
+    sections: writeKubernetesDeploymenFiles(suffix),
     context: this,
     rootTemplatesPath: this.fetchFromInstalledJHipster('kubernetes/templates'),
   });
-
-  const kubernetesSubgenPath = this.fetchFromInstalledJHipster('kubernetes/templates');
   for (let i = 0; i < this.appConfigs.length; i++) {
-    const appName = this.appConfigs[i].baseName.toLowerCase();
-    const appOut = appName.concat('-', suffix);
     this.app = this.appConfigs[i];
     await this.writeFiles({
       sections: applicationFiles(suffix),
@@ -112,26 +158,15 @@ export const writeFiles = asWritingTask(async function writeFiles() {
       sections: helmApplicationFiles(suffix),
       context: this,
     });
-    if (!this.app.serviceDiscoveryAny && this.app.authenticationType === JWT) {
-      await this.writeFile(`${kubernetesSubgenPath}/secret/jwt-secret.yml.ejs`, `${appOut}/templates/jwt-secret.yml`);
-    }
-    if (this.app.databaseTypeCouchbase) {
-      await this.writeFile(`${kubernetesSubgenPath}/secret/couchbase-secret.yml.ejs`, `${appOut}/templates/couchbase-secret.yml`);
-    }
-    if (this.istio) {
-      await this.writeFile(`${kubernetesSubgenPath}/istio/destination-rule.yml.ejs`, `${appOut}/templates/${appName}-destination-rule.yml`);
-      await this.writeFile(`${kubernetesSubgenPath}/istio/virtual-service.yml.ejs`, `${appOut}/templates/${appName}-virtual-service.yml`);
-    }
   }
+  await this.writeFiles({
+    sections: writeDeploymentFiles(suffix),
+    context: this,
+  });
+
   // common services
   const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
   const csOut = 'csvc'.concat('-', suffix);
-  if (this.useKafka || this.monitoring === PROMETHEUS || this.serviceDiscoveryType === EUREKA || this.serviceDiscoveryType === CONSUL) {
-    await this.writeFile('csvc/values.yml.ejs', `${csOut}/values.yaml`);
-    await this.writeFile('csvc/Chart.yml.ejs', `${csOut}/Chart.yaml`);
-    await this.writeFile('csvc/requirements.yml.ejs', `${csOut}/requirements.yaml`);
-    await this.writeFile('csvc/helpers.tpl.ejs', `${csOut}/templates/_helpers.tpl`);
-  }
   if (this.monitoring === PROMETHEUS) {
     if (this.istio && this.kubernetesServiceType === INGRESS) {
       await this.writeFile(`${k8s}/istio/gateway/jhipster-grafana-gateway.yml.ejs`, `${csOut}/templates/jhipster-grafana-gateway.yml`);

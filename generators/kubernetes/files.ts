@@ -18,12 +18,8 @@
  * limitations under the License.
  */
 
-import { applicationTypes, authenticationTypes } from '../../lib/jhipster/index.js';
 import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
 import type { WriteFileSection } from '../base-core/api.js';
-
-const { GATEWAY, MONOLITH } = applicationTypes;
-const { JWT } = authenticationTypes;
 
 const applicationFiles: WriteFileSection = asWriteFilesSection((suffix: string) => ({
   common: [
@@ -59,22 +55,22 @@ const applicationFiles: WriteFileSection = asWriteFilesSection((suffix: string) 
   ],
   gateway: [
     {
-      condition: data => (data.app.applicationType === GATEWAY || data.app.applicationType === MONOLITH) && data.istio,
+      condition: data => (data.app.applicationTypeGateway || data.app.applicationTypeMonolith) && data.istio,
       renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/${data.app.baseName.toLowerCase()}-gateway.yml`,
       templates: ['istio/gateway.yml'],
     },
     {
       condition: data =>
-        (data.app.applicationType === GATEWAY || data.app.applicationType === MONOLITH) &&
+        (data.app.applicationTypeGateway || data.app.applicationTypeMonolith) &&
         !data.istio &&
-        data.kubernetesServiceType === 'Ingress',
+        data.kubernetesServiceTypeIngress,
       renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/${data.app.baseName.toLowerCase()}-ingress.yml`,
       templates: ['ingress.yml'],
     },
   ],
   serviceDiscovery: [
     {
-      condition: data => !data.app.serviceDiscoveryAny && data.app.authenticationType === JWT,
+      condition: data => !data.app.serviceDiscoveryAny && data.app.authenticationTypeJwt,
       renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/${data.app.baseName.toLowerCase()}-jwt-secret.yml`,
       templates: ['secret/jwt-secret.yml'],
     },
