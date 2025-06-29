@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingTask } from '../base-application/support/index.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
 import type { Application as AngularApplication, Entity as AngularEntity } from './types.js';
 
-export const files = {
+export const files = asWriteFilesSection({
   jhipsterProject: [
     {
       templates: ['README.md.jhi.client.angular'],
@@ -471,7 +471,7 @@ export const files = {
       templates: ['account/sessions/sessions.component.spec.ts'],
     },
   ],
-};
+});
 
 export const writeFiles = asWritingTask<AngularEntity, AngularApplication<AngularEntity>>(async function writeFiles({ application }) {
   if (!application.clientFrameworkAngular) return;

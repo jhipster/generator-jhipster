@@ -51,7 +51,6 @@ import {
   setupHelmConstants,
   setupKubernetesConstants,
 } from '../kubernetes/kubernetes-base.js';
-import { messageBrokerTypes } from '../../lib/jhipster/index.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
 import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
 import { checkDocker } from '../docker/support/index.js';
@@ -59,8 +58,6 @@ import { loadDerivedServerAndPlatformProperties } from '../base-workspaces/suppo
 import { loadDerivedAppConfig } from '../app/support/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { writeFiles } from './files.js';
-
-const { KAFKA } = messageBrokerTypes;
 
 /**
  * @class
@@ -130,14 +127,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
       loadFromYoRc,
-      loadSharedConfig() {
-        for (const app of this.appConfigs) {
-          loadDerivedAppConfig({ application: app });
-          loadDerivedServerAndPlatformProperties({ application: app });
-        }
-      },
       loadDeploymentConfig,
-      derivedKubernetesPlatformProperties,
     });
   }
 
@@ -148,17 +138,13 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
       configureImageNames,
-
-      setPostPromptProp() {
-        this.appConfigs.forEach(element => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
-          if (element.messageBroker === KAFKA) {
-            this.useKafka = true;
-          }
-        });
-        this.useKeycloak = false;
+      loadSharedConfig() {
+        for (const app of this.appConfigs) {
+          loadDerivedAppConfig({ application: app });
+          loadDerivedServerAndPlatformProperties({ application: app });
+        }
       },
+      derivedKubernetesPlatformProperties,
     });
   }
 

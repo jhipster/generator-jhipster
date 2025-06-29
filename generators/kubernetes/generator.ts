@@ -23,7 +23,7 @@ import chalk from 'chalk';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
-import { buildToolTypes, messageBrokerTypes } from '../../lib/jhipster/index.js';
+import { buildToolTypes } from '../../lib/jhipster/index.js';
 
 import { checkImages, configureImageNames, generateJwtSecret, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
@@ -55,7 +55,6 @@ import {
   askForStorageClassName,
 } from './prompts.js';
 
-const { KAFKA } = messageBrokerTypes;
 const { MAVEN } = buildToolTypes;
 
 /**
@@ -133,7 +132,6 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
         }
       },
       loadDeploymentConfig,
-      derivedKubernetesPlatformProperties,
     });
   }
 
@@ -144,19 +142,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
       configureImageNames,
-
-      setPostPromptProp() {
-        this.appConfigs.forEach(element => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
-          if (element.messageBroker === KAFKA) {
-            this.useKafka = true;
-          }
-        });
-        this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
-        this.usesIngress = this.kubernetesServiceType === 'Ingress';
-        this.useKeycloak = this.usesOauth2 && this.usesIngress;
-      },
+      derivedKubernetesPlatformProperties,
     });
   }
 
