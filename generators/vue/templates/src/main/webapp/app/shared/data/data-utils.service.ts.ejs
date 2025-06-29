@@ -111,7 +111,7 @@ const useDataUtils = () => ({
   setFileData(event, entity, field, isImage) {
     if (event?.target.files?.[0]) {
       const file = event.target.files[0];
-      if (isImage && !/^image\//.test(file.type)) {
+      if (isImage && !file.type.startsWith("image/")) {
         return;
       }
       this.toBase64(file, base64Data => {
