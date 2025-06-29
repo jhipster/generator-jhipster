@@ -65,7 +65,9 @@ const applicationFiles: WriteFileSection = asWriteFilesSection({
     },
     {
       condition: data =>
-        (data.app.applicationType === GATEWAY || data.app.applicationType === MONOLITH) && data.kubernetesServiceType === 'Ingress',
+        (data.app.applicationType === GATEWAY || data.app.applicationType === MONOLITH) &&
+        !data.istio &&
+        data.kubernetesServiceType === 'Ingress',
       renameTo: data => `${data.app.baseName.toLowerCase()}-k8s/${data.app.baseName.toLowerCase()}-ingress.yml`,
       templates: ['ingress.yml'],
     },
