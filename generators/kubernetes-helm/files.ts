@@ -17,17 +17,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { kubernetesPlatformTypes, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
 import type { WriteFileSection } from '../base-core/api.js';
 
-const { PROMETHEUS } = monitoringTypes;
-const { CONSUL, EUREKA } = serviceDiscoveryTypes;
-const { ServiceTypes } = kubernetesPlatformTypes;
-
-const { INGRESS } = ServiceTypes;
-
-const applicationFiles: WriteFileSection = asWriteFilesSection((suffix: string) => ({
+const applicationKubernetesFiles: WriteFileSection = asWriteFilesSection((suffix: string) => ({
   common: [
     {
       renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/${data.app.baseName.toLowerCase()}-deployment.yml`,
@@ -85,7 +78,7 @@ const applicationFiles: WriteFileSection = asWriteFilesSection((suffix: string) 
     },
   ],
 }));
-const helmApplicationFiles: WriteFileSection = asWriteFilesSection((suffix: string) => ({
+const applicationHelmFiles: WriteFileSection = asWriteFilesSection((suffix: string) => ({
   common: [
     {
       renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/values.yaml`,
@@ -106,15 +99,72 @@ const helmApplicationFiles: WriteFileSection = asWriteFilesSection((suffix: stri
   ],
 }));
 
-const writeKubernetesDeploymenFiles = (suffix = '') => ({
+const deploymentKubernetesFiles = (suffix = '') => ({
   namespace: [
     {
       condition: data => data.kubernetesNamespace !== 'default',
       templates: ['namespace.yml'],
     },
   ],
+  monitoring: [
+    {
+      condition: data => data.monitoringPrometheus && data.istio && data.kubernetesServiceTypeIngress,
+      renameTo: () => `csvc-${suffix}/templates/jhipster-grafana-gateway.yml`,
+      templates: ['istio/gateway/jhipster-grafana-gateway.yml'],
+    },
+  ],
+  serviceDiscovery: [
+    {
+      condition: data => data.serviceDiscoveryTypeEureka,
+      renameTo: () => `csvc-${suffix}/templates/jhipster-registry.yml`,
+      templates: ['registry/jhipster-registry.yml'],
+    },
+    {
+      condition: data => data.serviceDiscoveryTypeEureka,
+      renameTo: () => `csvc-${suffix}/templates/application-configmap.yml`,
+      templates: ['registry/application-configmap.yml'],
+    },
+    {
+      condition: data => data.serviceDiscoveryTypeConsul,
+      renameTo: () => `csvc-${suffix}/templates/consul.yml`,
+      templates: ['registry/consul.yml'],
+    },
+    {
+      condition: data => data.serviceDiscoveryTypeConsul,
+      renameTo: () => `csvc-${suffix}/templates/consul-config-loader.yml`,
+      templates: ['registry/consul-config-loader.yml'],
+    },
+    {
+      condition: data => data.serviceDiscoveryTypeConsul,
+      renameTo: () => `csvc-${suffix}/templates/application-configmap.yml`,
+      templates: ['registry/application-configmap.yml'],
+    },
+  ],
+  istio: [
+    {
+      condition: data => data.istio,
+      renameTo: () => `csvc-${suffix}/templates/grafana-gateway.yml`,
+      templates: ['istio/gateway/grafana-gateway.yml'],
+    },
+    {
+      condition: data => data.istio,
+      renameTo: () => `csvc-${suffix}/templates/zipkin-gateway.yml`,
+      templates: ['istio/gateway/zipkin-gateway.yml'],
+    },
+    {
+      condition: data => data.istio,
+      renameTo: () => `csvc-${suffix}/templates/kiali-gateway.yml`,
+      templates: ['istio/gateway/kiali-gateway.yml'],
+    },
+  ],
 });
-const writeDeploymentFiles = (suffix = '') => ({
+
+const deploymentHelmFiles = (suffix = '') => ({
+  common: [
+    {
+      templates: [{ sourceFile: 'README-KUBERNETES-HELM.md.ejs', destinationFile: 'HELM-README.md' }, 'helm-apply.sh', 'helm-upgrade.sh'],
+    },
+  ],
   values: [
     {
       condition: data => data.useKafka || data.monitoringPrometheus || data.serviceDiscoveryTypeEureka || data.serviceDiscoveryTypeConsul,
@@ -143,52 +193,24 @@ export const writeFiles = asWritingTask(async function writeFiles() {
   const suffix = 'helm';
 
   await this.writeFiles({
-    sections: writeKubernetesDeploymenFiles(suffix),
+    sections: deploymentKubernetesFiles(suffix),
     context: this,
     rootTemplatesPath: this.fetchFromInstalledJHipster('kubernetes/templates'),
   });
   for (let i = 0; i < this.appConfigs.length; i++) {
     this.app = this.appConfigs[i];
     await this.writeFiles({
-      sections: applicationFiles(suffix),
+      sections: applicationKubernetesFiles(suffix),
       context: this,
       rootTemplatesPath: this.fetchFromInstalledJHipster('kubernetes/templates'),
     });
     await this.writeFiles({
-      sections: helmApplicationFiles(suffix),
+      sections: applicationHelmFiles(suffix),
       context: this,
     });
   }
   await this.writeFiles({
-    sections: writeDeploymentFiles(suffix),
+    sections: deploymentHelmFiles(suffix),
     context: this,
   });
-
-  // common services
-  const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
-  const csOut = 'csvc'.concat('-', suffix);
-  if (this.monitoring === PROMETHEUS) {
-    if (this.istio && this.kubernetesServiceType === INGRESS) {
-      await this.writeFile(`${k8s}/istio/gateway/jhipster-grafana-gateway.yml.ejs`, `${csOut}/templates/jhipster-grafana-gateway.yml`);
-    }
-  }
-  if (this.serviceDiscoveryType === EUREKA) {
-    await this.writeFile(`${k8s}/registry/jhipster-registry.yml.ejs`, `${csOut}/templates/jhipster-registry.yml`);
-    await this.writeFile(`${k8s}/registry/application-configmap.yml.ejs`, `${csOut}/templates/application-configmap.yml`);
-  }
-  if (this.serviceDiscoveryType === CONSUL) {
-    await this.writeFile(`${k8s}/registry/consul.yml.ejs`, `${csOut}/templates/consul.yml`);
-    await this.writeFile(`${k8s}/registry/consul-config-loader.yml.ejs`, `${csOut}/templates/consul-config-loader.yml`);
-    await this.writeFile(`${k8s}/registry/application-configmap.yml.ejs`, `${csOut}/templates/application-configmap.yml`);
-  }
-  if (this.istio) {
-    await this.writeFile(`${k8s}/istio/gateway/grafana-gateway.yml.ejs`, `${csOut}/templates/grafana-gateway.yml`);
-    await this.writeFile(`${k8s}/istio/gateway/zipkin-gateway.yml.ejs`, `${csOut}/templates/zipkin-gateway.yml`);
-    await this.writeFile(`${k8s}/istio/gateway/kiali-gateway.yml.ejs`, `${csOut}/templates/kiali-gateway.yml`);
-  }
-  // Readme
-  await this.writeFile('README-KUBERNETES-HELM.md.ejs', 'HELM-README.md');
-  // run files
-  await this.writeFile('helm-apply.sh.ejs', 'helm-apply.sh');
-  await this.writeFile('helm-upgrade.sh.ejs', 'helm-upgrade.sh');
 });

@@ -26,11 +26,11 @@ test/**/*.png
 jdl/**/*.png
 test-integration/**/*.png
 /dist
-
+.run
 # allow customizations without having a dirty tree
 .devcontainer
 
-# NetBeans 
+# NetBeans
 nbproject/
 build/
 nbbuild/
