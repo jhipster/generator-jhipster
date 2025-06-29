@@ -17,18 +17,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {
-  applicationTypes,
-  authenticationTypes,
-  kubernetesPlatformTypes,
-  monitoringTypes,
-  searchEngineTypes,
-  serviceDiscoveryTypes,
-} from '../../lib/jhipster/index.js';
-import { asWritingTask } from '../base-application/support/index.js';
+import { authenticationTypes, kubernetesPlatformTypes, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
+import type { WriteFileSection } from '../base-core/api.js';
 
-const { ELASTICSEARCH } = searchEngineTypes;
-const { GATEWAY, MONOLITH } = applicationTypes;
 const { JWT } = authenticationTypes;
 const { PROMETHEUS } = monitoringTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
@@ -36,35 +28,90 @@ const { ServiceTypes } = kubernetesPlatformTypes;
 
 const { INGRESS } = ServiceTypes;
 
+const applicationFiles: WriteFileSection = asWriteFilesSection((suffix: string) => ({
+  common: [
+    {
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/${data.app.baseName.toLowerCase()}-deployment.yml`,
+      templates: ['deployment.yml'],
+    },
+    {
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/${data.app.baseName.toLowerCase()}-service.yml`,
+      templates: ['service.yml'],
+    },
+  ],
+  elasticsearch: [
+    {
+      condition: data => data.app.searchEngineElasticsearch,
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/${data.app.baseName.toLowerCase()}-elasticsearch.yml`,
+      templates: ['db/elasticsearch.yml'],
+    },
+  ],
+  gateway: [
+    {
+      condition: data => (data.app.applicationTypeGateway || data.app.applicationTypeMonolith) && data.istio,
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/${data.app.baseName.toLowerCase()}-gateway.yml`,
+      templates: ['istio/gateway.yml'],
+    },
+    {
+      condition: data =>
+        (data.app.applicationTypeGateway || data.app.applicationTypeMonolith) && !data.istio && data.kubernetesServiceType === INGRESS,
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/${data.app.baseName.toLowerCase()}-ingress.yml`,
+      templates: ['ingress.yml'],
+    },
+  ],
+}));
+const helmApplicationFiles: WriteFileSection = asWriteFilesSection((suffix: string) => ({
+  common: [
+    {
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/values.yaml`,
+      templates: ['app/values.yml'],
+    },
+    {
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/Chart.yaml`,
+      templates: ['app/Chart.yml'],
+    },
+    {
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/requirements.yaml`,
+      templates: ['app/requirements.yml'],
+    },
+    {
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/_helpers.tpl`,
+      templates: ['app/helpers.tpl'],
+    },
+  ],
+}));
+const writeDeploymentFiles = (suffix = '') => ({
+  namespace: [
+    {
+      condition: data => data.kubernetesNamespace !== 'default',
+      templates: ['namespace.yml'],
+    },
+  ],
+});
+
 export const writeFiles = asWritingTask(async function writeFiles() {
   const suffix = 'helm';
-  // app charts
+
+  await this.writeFiles({
+    sections: writeDeploymentFiles(suffix),
+    context: this,
+    rootTemplatesPath: this.fetchFromInstalledJHipster('kubernetes/templates'),
+  });
+
   const kubernetesSubgenPath = this.fetchFromInstalledJHipster('kubernetes/templates');
-  if (this.kubernetesNamespace !== 'default') {
-    await this.writeFile(`${kubernetesSubgenPath}/namespace.yml.ejs`, 'namespace.yml');
-  }
   for (let i = 0; i < this.appConfigs.length; i++) {
     const appName = this.appConfigs[i].baseName.toLowerCase();
     const appOut = appName.concat('-', suffix);
     this.app = this.appConfigs[i];
-
-    await this.writeFile(`${kubernetesSubgenPath}/deployment.yml.ejs`, `${appOut}/templates/${appName}-deployment.yml`);
-    await this.writeFile(`${kubernetesSubgenPath}/service.yml.ejs`, `${appOut}/templates/${appName}-service.yml`);
-    await this.writeFile('app/values.yml.ejs', `${appOut}/values.yaml`);
-    await this.writeFile('app/Chart.yml.ejs', `${appOut}/Chart.yaml`);
-    await this.writeFile('app/requirements.yml.ejs', `${appOut}/requirements.yaml`);
-    await this.writeFile('app/helpers.tpl.ejs', `${appOut}/templates/_helpers.tpl`);
-
-    if (this.app.searchEngine === ELASTICSEARCH) {
-      await this.writeFile(`${kubernetesSubgenPath}/db/elasticsearch.yml.ejs`, `${appOut}/templates/${appName}-elasticsearch.yml`);
-    }
-    if (this.app.applicationType === GATEWAY || this.app.applicationType === MONOLITH) {
-      if (this.istio) {
-        await this.writeFile(`${kubernetesSubgenPath}/istio/gateway.yml.ejs`, `${appOut}/templates/${appName}-gateway.yml`);
-      } else if (this.kubernetesServiceType === INGRESS) {
-        await this.writeFile(`${kubernetesSubgenPath}/ingress.yml.ejs`, `${appOut}/templates/${appName}-ingress.yml`);
-      }
-    }
+    await this.writeFiles({
+      sections: applicationFiles(suffix),
+      context: this,
+      rootTemplatesPath: this.fetchFromInstalledJHipster('kubernetes/templates'),
+    });
+    await this.writeFiles({
+      sections: helmApplicationFiles(suffix),
+      context: this,
+    });
     if (!this.app.serviceDiscoveryAny && this.app.authenticationType === JWT) {
       await this.writeFile(`${kubernetesSubgenPath}/secret/jwt-secret.yml.ejs`, `${appOut}/templates/jwt-secret.yml`);
     }
