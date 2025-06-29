@@ -59,7 +59,6 @@ import { loadDerivedAppConfig } from '../app/support/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { writeFiles } from './files.js';
 
-
 /**
  * @class
  * @extends {BaseWorkspacesGenerator}
