@@ -19,9 +19,10 @@
 import { moveToJavaPackageTestDir } from '../java/support/index.js';
 import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import type { WriteFileSection } from '../base-core/api.js';
+import { asWriteFilesSection } from '../base-application/support/index.js';
 import type Generator from './generator.js';
 
-const cucumberFiles: WriteFileSection = {
+const cucumberFiles: WriteFileSection = asWriteFilesSection({
   cucumberFiles: [
     {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
@@ -56,7 +57,7 @@ const cucumberFiles: WriteFileSection = {
       templates: ['jhipster.cucumber-conventions.gradle'],
     },
   ],
-};
+});
 
 export default async function writeTask(this: Generator, { application }) {
   await this.writeFiles({
