@@ -38,8 +38,10 @@ import {
   KUBERNETES_RBAC_API_VERSION,
   KUBERNETES_STATEFULSET_API_VERSION,
 } from '../generator-constants.js';
-import { applicationTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
+import { applicationTypes, kubernetesPlatformTypes, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { defaultKubernetesConfig } from './kubernetes-constants.js';
+const { CONSUL, EUREKA } = serviceDiscoveryTypes;
+const { PROMETHEUS } = monitoringTypes;
 
 const { MICROSERVICE } = applicationTypes;
 const { GeneratorTypes, IngressTypes, ServiceTypes } = kubernetesPlatformTypes;
@@ -128,14 +130,17 @@ export function setupKubernetesConstants() {
   this.KUBERNETES_RBAC_API_VERSION = KUBERNETES_RBAC_API_VERSION;
 }
 
-export function derivedKubernetesPlatformProperties(dest = this) {
-  dest.deploymentApplicationTypeMicroservice = dest.deploymentApplicationType === MICROSERVICE;
-  dest.ingressTypeNginx = dest.ingressType === NGINX;
-  dest.ingressTypeGke = dest.ingressType === GKE;
-  dest.kubernetesServiceTypeIngress = dest.kubernetesServiceType === INGRESS;
-  dest.kubernetesNamespaceDefault = dest.kubernetesNamespace === 'default';
-  dest.generatorTypeK8s = dest.generatorType === K8S;
-  dest.generatorTypeHelm = dest.generatorType === HELM;
+export function derivedKubernetesPlatformProperties() {
+  this.deploymentApplicationTypeMicroservice = this.deploymentApplicationType === MICROSERVICE;
+  this.ingressTypeNginx = this.ingressType === NGINX;
+  this.ingressTypeGke = this.ingressType === GKE;
+  this.kubernetesServiceTypeIngress = this.kubernetesServiceType === INGRESS;
+  this.kubernetesNamespaceDefault = this.kubernetesNamespace === 'default';
+  this.generatorTypeK8s = this.generatorType === K8S;
+  this.generatorTypeHelm = this.generatorType === HELM;
+  this.monitoringPrometheus = this.monitoring === PROMETHEUS;
+  this.serviceDiscoveryTypeEureka = this.serviceDiscoveryType === EUREKA;
+  this.serviceDiscoveryTypeConsul = this.serviceDiscoveryType === CONSUL;
 }
 
 export function setupHelmConstants() {

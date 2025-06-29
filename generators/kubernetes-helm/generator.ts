@@ -75,13 +75,10 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
   }
 
   get initializing() {
-    return {
+    return this.asInitializingTaskGroup({
       sayHello() {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
-      },
-      existingDeployment() {
-        this.regenerate = this.regenerate || this.config.existed;
       },
       loadDockerDependenciesTask,
       checkDocker,
@@ -90,7 +87,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
       loadConfig,
       setupKubernetesConstants,
       setupHelmConstants,
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
@@ -98,7 +95,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
   }
 
   get prompting() {
-    return {
+    return this.asPromptingTaskGroup({
       askForApplicationType,
       askForPath,
       askForApps,
@@ -113,43 +110,43 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
       askForKubernetesServiceType,
       askForIngressType,
       askForIngressDomain,
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
-  get configuring() {
-    return {
+  get configuringWorkspaces() {
+    return this.asConfiguringWorkspacesTaskGroup({
       generateJwtSecret,
-    };
+    });
   }
 
-  get [BaseWorkspacesGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+  get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
   }
 
-  get loading() {
-    return {
+  get loadingWorkspaces() {
+    return this.asLoadingWorkspacesTaskGroup({
       loadFromYoRc,
       loadSharedConfig() {
         for (const app of this.appConfigs) {
           loadDerivedAppConfig({ application: app });
           loadDerivedServerAndPlatformProperties({ application: app });
         }
-        loadDeploymentConfig.call(this);
-        derivedKubernetesPlatformProperties(this);
       },
-    };
+      loadDeploymentConfig,
+      derivedKubernetesPlatformProperties,
+    });
   }
 
-  get [BaseWorkspacesGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
   }
 
-  get preparing() {
-    return {
+  get preparingWorkspaces() {
+    return this.asPreparingWorkspacesTaskGroup({
       configureImageNames,
 
       setPostPromptProp() {
@@ -162,15 +159,15 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
         });
         this.useKeycloak = false;
       },
-    };
+    });
   }
 
-  get [BaseWorkspacesGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+  get [BaseWorkspacesGenerator.PREPARING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.preparingWorkspaces);
   }
 
   get writing() {
-    return writeFiles();
+    return this.asWritingTaskGroup({ writeFiles });
   }
 
   get [BaseWorkspacesGenerator.WRITING]() {

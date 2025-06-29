@@ -76,8 +76,16 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
     return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
+  get [BaseWorkspacesGenerator.PROMPTING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.promptingWorkspaces);
+  }
+
+  get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
+  }
+
   get loadingWorkspaces() {
-    return this.asAnyTaskGroup({
+    return this.asLoadingWorkspacesTaskGroup({
       loadWorkspacesConfig({ workspaces }) {
         this.loadWorkspacesConfig({ context: workspaces });
       },
@@ -86,5 +94,9 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
 
   get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
     return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
+  }
+
+  get [BaseWorkspacesGenerator.PREPARING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.preparingWorkspaces);
   }
 }

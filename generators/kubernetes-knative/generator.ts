@@ -78,9 +78,6 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
         this.log.log(chalk.white(`${chalk.bold('☸')} Welcome to the JHipster Kubernetes Knative Generator ${chalk.bold('☸')}`));
         this.log.log(chalk.white(`Files will be generated in the folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      existingDeployment() {
-        this.regenerate = this.regenerate || this.config.existed;
-      },
       loadDockerDependenciesTask,
       checkDocker,
       checkKubernetes,
@@ -132,36 +129,36 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
-  get configuring() {
-    return {
+  get configuringWorkspaces() {
+    return this.asConfiguringWorkspacesTaskGroup({
       generateJwtSecret,
-    };
+    });
   }
 
-  get [BaseWorkspacesGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+  get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
   }
 
-  get loading() {
-    return {
+  get loadingWorkspaces() {
+    return this.asLoadingTaskGroup({
       loadFromYoRc,
       loadSharedConfig() {
         for (const app of this.appConfigs) {
           loadDerivedAppConfig({ application: app });
           loadDerivedServerAndPlatformProperties({ application: app });
         }
-        loadDeploymentConfig.call(this);
-        derivedKubernetesPlatformProperties(this);
       },
-    };
+      loadDeploymentConfig,
+      derivedKubernetesPlatformProperties,
+    });
   }
 
-  get [BaseWorkspacesGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
   }
 
-  get preparing() {
-    return {
+  get preparingWorkspaces() {
+    return this.asPreparingWorkspacesTaskGroup({
       configureImageNames,
 
       setPostPromptProp() {
@@ -174,15 +171,17 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
         });
         this.useKeycloak = false;
       },
-    };
+    });
   }
 
-  get [BaseWorkspacesGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+  get [BaseWorkspacesGenerator.PREPARING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.preparingWorkspaces);
   }
 
   get writing() {
-    return writeFiles();
+    return this.asWritingTaskGroup({
+      writeFiles,
+    });
   }
 
   get [BaseWorkspacesGenerator.WRITING]() {
@@ -190,7 +189,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
   }
 
   get end() {
-    return {
+    return this.asEndTaskGroup({
       checkImages,
       deploy() {
         if (this.hasWarning) {
@@ -252,7 +251,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
           }
         }
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.END]() {

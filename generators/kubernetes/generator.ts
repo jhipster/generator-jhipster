@@ -71,20 +71,17 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   }
 
   get initializing() {
-    return {
+    return this.asInitializingTaskGroup({
       sayHello() {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
-      },
-      existingDeployment() {
-        this.regenerate = this.regenerate || this.config.existed;
       },
       loadDockerDependenciesTask,
       checkDocker,
       checkKubernetes,
       loadConfig,
       setupKubernetesConstants,
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
@@ -116,36 +113,36 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
-  get configuring() {
-    return {
+  get configuringWorkspaces() {
+    return this.asConfiguringWorkspacesTaskGroup({
       generateJwtSecret,
-    };
+    });
   }
 
-  get [BaseWorkspacesGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+  get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
   }
 
-  get loading() {
-    return {
+  get loadingWorkspaces() {
+    return this.asLoadingWorkspacesTaskGroup({
       loadFromYoRc,
       loadSharedConfig() {
         for (const app of this.appConfigs) {
           loadDerivedAppConfig({ application: app });
           loadDerivedServerAndPlatformProperties({ application: app });
         }
-        loadDeploymentConfig.call(this);
-        derivedKubernetesPlatformProperties(this);
       },
-    };
+      loadDeploymentConfig,
+      derivedKubernetesPlatformProperties,
+    });
   }
 
-  get [BaseWorkspacesGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
   }
 
-  get preparing() {
-    return {
+  get preparingWorkspaces() {
+    return this.asPreparingWorkspacesTaskGroup({
       configureImageNames,
 
       setPostPromptProp() {
@@ -160,15 +157,15 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
         this.usesIngress = this.kubernetesServiceType === 'Ingress';
         this.useKeycloak = this.usesOauth2 && this.usesIngress;
       },
-    };
+    });
   }
 
-  get [BaseWorkspacesGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+  get [BaseWorkspacesGenerator.PREPARING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.preparingWorkspaces);
   }
 
   get writing() {
-    return writeFiles();
+    return this.asWritingTaskGroup({ writeFiles });
   }
 
   get [BaseWorkspacesGenerator.WRITING]() {
@@ -176,7 +173,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   }
 
   get end() {
-    return {
+    return this.asEndTaskGroup({
       checkImages,
       deploy() {
         if (this.hasWarning) {
@@ -238,7 +235,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
           this.log.warn("Failed to make 'kubectl-apply.sh' executable, you may need to run 'chmod +x kubectl-apply.sh'");
         }
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.END]() {
