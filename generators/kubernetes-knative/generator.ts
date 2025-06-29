@@ -32,7 +32,7 @@ import {
   setupHelmConstants,
   setupKubernetesConstants,
 } from '../kubernetes/kubernetes-base.js';
-import { buildToolTypes, kubernetesPlatformTypes, messageBrokerTypes } from '../../lib/jhipster/index.js';
+import { buildToolTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
 import { getJdbcUrl } from '../spring-data-relational/support/index.js';
 import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
 import { checkDocker } from '../docker/support/index.js';
@@ -56,7 +56,6 @@ import { writeFiles } from './files.js';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;
 const { MAVEN } = buildToolTypes;
-const { KAFKA } = messageBrokerTypes;
 
 const { K8S } = GeneratorTypes;
 

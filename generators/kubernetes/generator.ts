@@ -23,7 +23,7 @@ import chalk from 'chalk';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
-import { buildToolTypes, messageBrokerTypes } from '../../lib/jhipster/index.js';
+import { buildToolTypes } from '../../lib/jhipster/index.js';
 
 import { checkImages, configureImageNames, generateJwtSecret, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
@@ -55,7 +55,6 @@ import {
   askForStorageClassName,
 } from './prompts.js';
 
-const { KAFKA } = messageBrokerTypes;
 const { MAVEN } = buildToolTypes;
 
 /**

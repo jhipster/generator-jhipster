@@ -18,13 +18,12 @@
  * limitations under the License.
  */
 
-import { applicationTypes, authenticationTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
+import { applicationTypes, authenticationTypes } from '../../lib/jhipster/index.js';
 import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
 import type { WriteFileSection } from '../base-core/api.js';
 
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { JWT } = authenticationTypes;
-const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 
 const applicationFiles: WriteFileSection = asWriteFilesSection({
   common: [
