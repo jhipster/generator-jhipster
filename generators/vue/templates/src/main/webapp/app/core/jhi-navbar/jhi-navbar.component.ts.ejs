@@ -67,7 +67,7 @@ export default defineComponent({
     const subIsActive = (input: string | string[]) => {
       const paths = Array.isArray(input) ? input : [input];
       return paths.some(path => {
-        return router.currentRoute.value.path.indexOf(path) === 0; // current path starts with this path string
+        return router.currentRoute.value.path.startsWith(path); // current path starts with this path string
       });
     };
 
