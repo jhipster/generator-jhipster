@@ -107,7 +107,7 @@ const writeDeploymentFiles = asWriteFilesSection((suffix = '') => ({
   ],
   namespace: [
     {
-      condition: data => data.kubernetesNamespace !== 'default',
+      condition: data => !data.kubernetesNamespaceDefault,
       templates: ['namespace.yml'],
     },
   ],

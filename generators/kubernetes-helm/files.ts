@@ -102,7 +102,7 @@ const applicationHelmFiles: WriteFileSection = asWriteFilesSection((suffix: stri
 const deploymentKubernetesFiles = (suffix = '') => ({
   namespace: [
     {
-      condition: data => data.kubernetesNamespace !== 'default',
+      condition: data => !data.kubernetesNamespaceDefault,
       templates: ['namespace.yml'],
     },
   ],

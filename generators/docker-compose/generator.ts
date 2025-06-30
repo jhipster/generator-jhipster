@@ -30,19 +30,20 @@ import type {
   Workspaces as BaseWorkspaces,
   WorkspacesApplication as BaseWorkspacesApplication,
 } from '../base-workspaces/index.js';
-
 import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
-import { convertSecretToBase64, createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
+import { createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
 import { createFaker } from '../base-application/support/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
-import { loadDerivedPlatformConfig, loadPlatformConfig } from '../base-workspaces/support/index.js';
 import {
   askForClustersModeWorkspace,
   askForMonitoring,
   askForServiceDiscoveryWorkspace,
 } from '../base-workspaces/internal/docker-prompts.js';
+import { derivedPlatformProperties } from '../base-workspaces/support/preparing.js';
+import { loadDerivedPlatformConfig } from '../base-workspaces/support/index.js';
+import { loadDeploymentConfig, loadWorkspacesConfig } from '../base-workspaces/support/loading.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files.js';
 
@@ -87,8 +88,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadWorkspacesConfig() {
-        this.loadWorkspacesConfig();
+      async loadWorkspacesConfig() {
+        loadWorkspacesConfig({ context: this, workspaces: this });
       },
     });
   }
@@ -131,9 +132,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
         await loadDockerDependenciesTask.call(this, { context: deployment });
       },
-      loadPlatformConfig({ deployment }) {
-        this.loadDeploymentConfig({ deployment });
-      },
+      loadDeploymentConfig,
     });
   }
 
@@ -143,9 +142,10 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
-      prepareDeployment({ deployment, applications }) {
-        this.prepareDeploymentDerivedProperties({ deployment, applications });
+      async loadBaseDeployment({ deployment }) {
+        loadDerivedPlatformConfig({ application: deployment });
       },
+      derivedPlatformProperties,
     });
   }
 
@@ -396,30 +396,5 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   override get jhipsterConfigWithDefaults() {
     return defaults({}, this.config.getAll(), DeploymentOptions.defaults(this.jhipsterConfig.deploymentType));
-  }
-
-  loadDeploymentConfig({ deployment }) {
-    const config = this.jhipsterConfigWithDefaults;
-    deployment.clusteredDbApps = config.clusteredDbApps;
-    deployment.adminPassword = config.adminPassword;
-    deployment.jwtSecretKey = config.jwtSecretKey;
-    loadPlatformConfig({ config, application: deployment });
-    loadDerivedPlatformConfig({ application: deployment });
-  }
-
-  prepareDeploymentDerivedProperties({ deployment, applications }) {
-    if (deployment.adminPassword) {
-      deployment.adminPasswordBase64 = convertSecretToBase64(deployment.adminPassword);
-    }
-    deployment.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
-    deployment.useKafka = applications.some(appConfig => appConfig.messageBrokerKafka);
-    deployment.usePulsar = applications.some(appConfig => appConfig.messageBrokerPulsar);
-    deployment.useMemcached = applications.some(appConfig => appConfig.cacheProviderMemcached);
-    deployment.useRedis = applications.some(appConfig => appConfig.cacheProviderRedis);
-    deployment.includesApplicationTypeGateway = applications.some(appConfig => appConfig.applicationTypeGateway);
-    deployment.entryPort = 8080;
-
-    deployment.appConfigs = applications;
-    deployment.applications = applications;
   }
 }
