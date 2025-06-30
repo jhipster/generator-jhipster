@@ -30,19 +30,20 @@ import type {
   Workspaces as BaseWorkspaces,
   WorkspacesApplication as BaseWorkspacesApplication,
 } from '../base-workspaces/index.js';
-
 import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
-import { convertSecretToBase64, createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
+import { createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
 import { createFaker } from '../base-application/support/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
-import { loadDerivedPlatformConfig, loadPlatformConfig } from '../base-workspaces/support/index.js';
 import {
   askForClustersModeWorkspace,
   askForMonitoring,
   askForServiceDiscoveryWorkspace,
 } from '../base-workspaces/internal/docker-prompts.js';
+import { derivedPlatformProperties } from '../base-workspaces/support/preparing.js';
+import { loadDerivedPlatformConfig } from '../base-workspaces/support/index.js';
+import { loadDeploymentConfig, loadWorkspacesConfig } from '../base-workspaces/support/loading.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files.js';
 
@@ -87,8 +88,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadWorkspacesConfig() {
-        this.loadWorkspacesConfig();
+      async loadWorkspacesConfig() {
+        loadWorkspacesConfig({ context: this, workspaces: this });
       },
     });
   }
@@ -131,9 +132,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
         await loadDockerDependenciesTask.call(this, { context: deployment });
       },
-      loadPlatformConfig({ deployment }) {
-        this.loadDeploymentConfig({ deployment });
-      },
+      loadDeploymentConfig,
     });
   }
 
@@ -143,9 +142,10 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
-      prepareDeployment({ deployment, applications }) {
-        this.prepareDeploymentDerivedProperties({ deployment, applications });
+      async loadBaseDeployment({ deployment }) {
+        loadDerivedPlatformConfig({ application: deployment });
       },
+      derivedPlatformProperties,
     });
   }
 
@@ -308,118 +308,4 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
             delete redisConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
           }
-          // Expose authenticationType
-          deployment.authenticationType = appConfig.authenticationType;
-
-          // Dump the file
-          let yamlString = stringifyYaml(parentConfiguration, { indent: 2, lineWidth: 0 });
-
-          // Add extra indentation for each lines
-          const yamlArray = yamlString.split('\n');
-          for (let j = 0; j < yamlArray.length; j++) {
-            yamlArray[j] = `  ${yamlArray[j]}`;
-          }
-          yamlString = yamlArray.join('\n');
-          return yamlString;
-        });
-      },
-    });
-  }
-
-  get [BaseWorkspacesGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
-  }
-
-  get writing() {
-    return this.asWritingTaskGroup({
-      cleanupOldFilesTask,
-      writeFiles,
-    });
-  }
-
-  get [BaseWorkspacesGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  get end() {
-    return this.asAnyTaskGroup({
-      end({ workspaces, applications }) {
-        this.checkApplicationsDockerImages({ workspaces, applications });
-
-        this.log.verboseInfo(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
-        const uiApplications = applications.filter(
-          app => (app.applicationTypeGateway || app.applicationTypeMonolith) && app.clientFrameworkAny,
-        );
-        if (uiApplications.length > 0) {
-          this.log.log('\nYour applications will be accessible on these URLs:');
-          for (const application of uiApplications) {
-            this.log.verboseInfo(`\t- ${application.baseName}: http://localhost:${application.composePort}`);
-          }
-          this.log.log('\n');
-        }
-      },
-    });
-  }
-
-  get [BaseWorkspacesGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
-  }
-
-  checkApplicationsDockerImages({ workspaces, applications }: { workspaces: any; applications: any[] }) {
-    this.log.log('\nChecking Docker images in applications directories...');
-
-    let imagePath = '';
-    let runCommand = '';
-    let hasWarning = false;
-    let warningMessage = 'To generate the missing Docker image(s), please run:\n';
-    applications.forEach(application => {
-      if (application.buildToolGradle) {
-        imagePath = this.destinationPath(workspaces.directoryPath, application.appFolder, 'build/jib-cache');
-        runCommand = `./gradlew bootJar -Pprod jibDockerBuild${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''}`;
-      } else if (application.buildToolMaven) {
-        imagePath = this.destinationPath(workspaces.directoryPath, application.appFolder, '/target/jib-cache');
-        runCommand = `./mvnw -ntp -Pprod verify jib:dockerBuild${process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''}`;
-      }
-      if (!existsSync(imagePath)) {
-        hasWarning = true;
-        warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(workspaces.directoryPath, application.appFolder)}\n`;
-      }
-    });
-    if (hasWarning) {
-      this.log.warn('Docker Compose configuration generated, but no Jib cache found');
-      this.log.warn('If you forgot to generate the Docker image for this application, please run:');
-      this.log.log(chalk.red(warningMessage));
-    } else {
-      this.log.verboseInfo(`${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
-    }
-  }
-
-  override get jhipsterConfigWithDefaults() {
-    return defaults({}, this.config.getAll(), DeploymentOptions.defaults(this.jhipsterConfig.deploymentType));
-  }
-
-  loadDeploymentConfig({ deployment }: { deployment: BaseDeployment }) {
-    const config = this.jhipsterConfigWithDefaults;
-    deployment.clusteredDbApps = config.clusteredDbApps;
-    deployment.adminPassword = config.adminPassword;
-    deployment.jwtSecretKey = config.jwtSecretKey;
-    loadPlatformConfig({ config, application: deployment });
-    loadDerivedPlatformConfig({ application: deployment });
-  }
-
-  prepareDeploymentDerivedProperties({ deployment, applications }: { deployment: BaseDeployment; applications: any[] }) {
-    if (deployment.adminPassword) {
-      deployment.adminPasswordBase64 = convertSecretToBase64(deployment.adminPassword);
-    }
-    deployment.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
-    deployment.useKafka = applications.some(appConfig => appConfig.messageBrokerKafka);
-    deployment.usePulsar = applications.some(appConfig => appConfig.messageBrokerPulsar);
-    deployment.useMemcached = applications.some(appConfig => appConfig.cacheProviderMemcached);
-    deployment.useRedis = applications.some(appConfig => appConfig.cacheProviderRedis);
-    deployment.includesApplicationTypeGateway = applications.some(appConfig => appConfig.applicationTypeGateway);
-    deployment.entryPort = 8080;
-
-    deployment.appConfigs = applications;
-    deployment.applications = applications;
-  }
 }

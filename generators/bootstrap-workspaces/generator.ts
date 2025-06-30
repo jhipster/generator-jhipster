@@ -19,6 +19,9 @@
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base/support/constants.ts';
 import { CommandBaseWorkspacesGenerator as BaseWorkspacesGenerator } from '../base-workspaces/index.js';
 import { askForDirectoryPath } from '../base-workspaces/prompts.js';
+import { loadWorkspacesConfig } from '../base-workspaces/support/loading.js';
+import { normalizePathEnd } from '../../lib/utils/index.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import type command from './command.js';
 
 export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerator<typeof command> {
@@ -43,7 +46,7 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
   get configuring() {
     return this.asConfiguringTaskGroup({
       configureWorkspaces() {
-        this.configureWorkspacesConfig();
+        this.jhipsterConfig.directoryPath = normalizePathEnd(this.jhipsterConfig.directoryPath ?? './');
       },
     });
   }
@@ -54,8 +57,8 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadWorkspacesConfig() {
-        this.loadWorkspacesConfig();
+      async loadWorkspacesConfig() {
+        loadWorkspacesConfig({ context: this, workspaces: this });
       },
     });
   }
@@ -67,7 +70,12 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
   get postPreparing() {
     return this.asPostPreparingTaskGroup({
       async bootstrapApplications() {
-        await this.bootstrapApplications();
+        const resolvedApplicationFolders = this.resolveApplicationFolders();
+        for (const [_appFolder, resolvedFolder] of Object.entries(resolvedApplicationFolders)) {
+          await this.composeWithJHipster(GENERATOR_BOOTSTRAP_APPLICATION, {
+            generatorOptions: { destinationRoot: resolvedFolder, reproducible: true },
+          });
+        }
       },
     });
   }
@@ -86,8 +94,8 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
 
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
-      loadWorkspacesConfig({ workspaces }) {
-        this.loadWorkspacesConfig({ context: workspaces });
+      async loadWorkspacesConfig({ workspaces }) {
+        loadWorkspacesConfig({ context: this, workspaces });
       },
     });
   }

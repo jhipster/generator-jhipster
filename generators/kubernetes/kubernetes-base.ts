@@ -18,7 +18,6 @@
  */
 import crypto from 'crypto';
 import { defaults } from 'lodash-es';
-import chalk from 'chalk';
 import {
   HELM_COUCHBASE_OPERATOR,
   HELM_ELASTICSEARCH,
@@ -37,20 +36,11 @@ import {
   KUBERNETES_RBAC_API_VERSION,
   KUBERNETES_STATEFULSET_API_VERSION,
 } from '../generator-constants.js';
-import {
-  applicationTypes,
-  kubernetesPlatformTypes,
-  messageBrokerTypes,
-  monitoringTypes,
-  serviceDiscoveryTypes,
-} from '../../lib/jhipster/index.js';
+import { applicationTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
+import { derivedPlatformProperties } from '../base-workspaces/support/preparing.js';
 import { defaultKubernetesConfig } from './kubernetes-constants.js';
-import type { BaseKubernetesGenerator } from './generator.ts';
-const { CONSUL, EUREKA } = serviceDiscoveryTypes;
-const { PROMETHEUS } = monitoringTypes;
-const { KAFKA } = messageBrokerTypes;
 
-const { MICROSERVICE, GATEWAY, MONOLITH } = applicationTypes;
+const { GATEWAY, MONOLITH } = applicationTypes;
 const { GeneratorTypes, IngressTypes, ServiceTypes } = kubernetesPlatformTypes;
 
 const { INGRESS } = ServiceTypes;
@@ -119,48 +109,19 @@ export function derivedKubernetesPlatformProperties(this: BaseKubernetesGenerato
   this.kubernetesNamespaceDefault = this.kubernetesNamespace === 'default';
   this.generatorTypeK8s = this.generatorType === K8S;
   this.generatorTypeHelm = this.generatorType === HELM;
-  this.monitoringPrometheus = this.monitoring === PROMETHEUS;
-  this.serviceDiscoveryTypeEureka = this.serviceDiscoveryType === EUREKA;
-  this.serviceDiscoveryTypeConsul = this.serviceDiscoveryType === CONSUL;
-  this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
   this.usesIngress = this.kubernetesServiceType === 'Ingress';
-  this.useKeycloak = this.usesOauth2 && this.usesIngress;
-  this.appConfigs.forEach(element => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
-    if (element.messageBroker === KAFKA) {
-      this.useKafka = true;
-    }
-  });
-  this.keycloakRedirectUris = '';
-  this.entryPort = '8080';
+  this.keycloakRedirectUris = this.keycloakRedirectUris ?? '';
 
   this.appConfigs.forEach(appConfig => {
     // Add application configuration
     if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-      this.entryPort = appConfig.composePort;
       if (this.ingressDomain) {
         this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*",
             "https://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*", `;
-      } else {
-        this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*",
-            "https://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", `;
       }
-
-      this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*",
-            "https://localhost:${appConfig.composePort}/*",`;
-
-      if (appConfig.devServerPort !== undefined) {
-        this.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
-      }
-      if (appConfig.devServerPortProxy !== undefined) {
-        this.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPortProxy}/*", `;
-      }
-
-      this.debug(chalk.red.bold(`${appConfig.baseName} has redirect URIs ${this.keycloakRedirectUris}`));
-      this.debug(chalk.red.bold(`AppConfig is ${JSON.stringify(appConfig)}`));
     }
   });
+  derivedPlatformProperties({ generator: this, deployment: this, applications: this.appConfigs });
 }
 
 export function setupHelmConstants(this: BaseKubernetesGenerator) {
