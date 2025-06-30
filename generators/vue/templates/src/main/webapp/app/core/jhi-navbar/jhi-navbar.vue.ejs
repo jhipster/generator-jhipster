@@ -42,7 +42,7 @@
             <span v-text="t$('global.menu.home')"></span>
           </span>
         </b-nav-item>
-        <b-nav-item-dropdown end id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
+        <b-nav-item-dropdown no-size="true" end id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
           <template #button-content>
             <span class="navbar-dropdown-menu">
               <font-awesome-icon icon="th-list" />
