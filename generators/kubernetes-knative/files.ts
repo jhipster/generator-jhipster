@@ -19,140 +19,270 @@
  */
 import { asWritingTask } from '../base-application/support/index.js';
 
-export const kubernetesFiles = {
+const applicationKubernetesFiles = (suffix = '') => ({
+  database: [
+    {
+      // If we choose microservice with no DB, it is trying to move _no.yml as prodDatabaseType is getting tagged as 'string' type
+      condition: data => !data.app.databaseTypeNo && data.generatorTypeK8s,
+      renameTo: data =>
+        `${data.app.baseName.toLowerCase()}-${suffix}/${data.app.baseName.toLowerCase()}-${data.app.prodDatabaseType ?? data.app.databaseType}.yml`,
+      templates: [{ sourceFile: data => `db/${data.app.prodDatabaseType ?? data.app.databaseType}.yml` }],
+    },
+    {
+      // If we choose microservice with no DB, it is trying to move _no.yml as prodDatabaseType is getting tagged as 'string' type
+      condition: data => data.app.databaseTypeCouchbase && !data.generatorTypeK8s,
+      renameTo: data =>
+        `${data.app.baseName.toLowerCase()}-${suffix}/templates/${data.app.baseName.toLowerCase()}-${data.app.prodDatabaseType ?? data.app.databaseType}.yml`,
+      templates: [{ sourceFile: data => `db/${data.app.prodDatabaseType ?? data.app.databaseType}.yml` }],
+    },
+  ],
+  searchEngine: [
+    {
+      condition: data => data.app.searchEngineElasticsearch,
+      renameTo: data =>
+        `${data.app.baseName.toLowerCase()}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}${data.app.baseName.toLowerCase()}-elasticsearch.yml`,
+      templates: ['db/elasticsearch.yml'],
+    },
+  ],
+  authentication: [
+    {
+      condition: data => !data.app.serviceDiscoveryType && data.app.authenticationTypeJwt,
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}jwt-secret.yml`,
+      templates: ['secret/jwt-secret.yml'],
+    },
+  ],
+  monitoring: [
+    {
+      condition: data => data.monitoringPrometheus && data.generatorTypeK8s,
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/${data.app.baseName.toLowerCase()}-prometheus-sm.yml`,
+      templates: ['monitoring/jhipster-prometheus-sm.yml'],
+    },
+  ],
+});
+const applicationHelmFiles = (suffix = '') => ({
+  chart: [
+    {
+      condition: data => !data.generatorTypeK8s,
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/values.yml`,
+      templates: ['app/values.yml'],
+    },
+    {
+      condition: data => !data.generatorTypeK8s,
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/Chart.yaml`,
+      templates: ['app/Chart.yml'],
+    },
+    {
+      condition: data => !data.generatorTypeK8s,
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/requirements.yml`,
+      templates: ['app/requirements.yml'],
+    },
+    {
+      condition: data => !data.generatorTypeK8s,
+      renameTo: data => `${data.app.baseName.toLowerCase()}-${suffix}/templates/_helpers.tpl`,
+      templates: ['app/helpers.tpl.ejs'],
+    },
+  ],
+});
+const applicationKnativeFiles = (suffix = '') => ({
+  deployment: [
+    {
+      renameTo: data =>
+        `${data.app.baseName.toLowerCase()}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}${data.app.baseName.toLowerCase()}-service.yml`,
+      templates: ['service.yml'],
+    },
+  ],
+  gateway: [
+    {
+      condition: data => data.app.applicationTypeGateway || data.app.applicationTypeMonolith,
+      renameTo: data =>
+        `${data.app.baseName.toLowerCase()}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}${data.app.baseName.toLowerCase()}-gateway.yml`,
+      templates: ['istio/gateway.yml'],
+    },
+  ],
+  istio: [
+    {
+      renameTo: data =>
+        `${data.app.baseName.toLowerCase()}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}${data.app.baseName.toLowerCase()}-virtual-service.yml`,
+      templates: ['istio/virtual-service.yml'],
+    },
+    {
+      renameTo: data =>
+        `${data.app.baseName.toLowerCase()}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}${data.app.baseName.toLowerCase()}-destination-rule.yml`,
+      templates: ['istio/destination-rule.yml'],
+    },
+  ],
+});
+
+const deploymentKubernetesFiles = (suffix = '') => ({
   namespace: [
     {
       condition: generator => generator.kubernetesNamespace !== 'default',
       templates: [{ sourceFile: 'namespace.yml.ejs', destinationFile: 'namespace.yml' }],
     },
   ],
-};
-export const knativeFiles = {
-  readme: [{ templates: [{ sourceFile: 'README-KUBERNETES-KNATIVE.md.ejs', destinationFile: 'KNATIVE-README.md' }] }],
-};
+  messageBroker: [
+    {
+      condition: generator => generator.useKafka && generator.generatorTypeK8s,
+      templates: [{ sourceFile: 'messagebroker/kafka.yml.ejs', destinationFile: `messagebroker-${suffix}/kafka.yml` }],
+    },
+  ],
+  monitoring: [
+    {
+      condition: generator => generator.monitoringPrometheus && generator.generatorTypeK8s,
+      templates: [
+        { sourceFile: 'monitoring/jhipster-prometheus-crd.yml.ejs', destinationFile: `monitoring-${suffix}/jhipster-prometheus-crd.yml` },
+        { sourceFile: 'monitoring/jhipster-prometheus-cr.yml.ejs', destinationFile: `monitoring-${suffix}/jhipster-prometheus-cr.yml` },
+        { sourceFile: 'monitoring/jhipster-grafana.yml.ejs', destinationFile: `monitoring-${suffix}/jhipster-grafana.yml` },
+        {
+          sourceFile: 'monitoring/jhipster-grafana-dashboard.yml.ejs',
+          destinationFile: `monitoring-${suffix}/jhipster-grafana-dashboard.yml`,
+        },
+        {
+          sourceFile: 'istio/gateway/jhipster-grafana-gateway.yml.ejs',
+          destinationFile: `monitoring-${suffix}/jhipster-grafana-gateway.yml`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.monitoringPrometheus && !generator.generatorTypeK8s,
+      templates: [
+        {
+          sourceFile: 'istio/gateway/jhipster-grafana-gateway.yml.ejs',
+          destinationFile: `csvc-${suffix}/templates/jhipster-grafana-gateway.yml`,
+        },
+      ],
+    },
+  ],
+  serviceDiscovery: [
+    {
+      condition: generator => generator.serviceDiscoveryTypeEureka,
+      renameTo: data =>
+        `${data.generatorTypeK8s ? 'registry' : 'csvc'}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}jhipster-registry.yml`,
+      templates: ['registry/jhipster-registry.yml'],
+    },
+    {
+      condition: generator => generator.serviceDiscoveryTypeEureka,
+      renameTo: data =>
+        `${data.generatorTypeK8s ? 'registry' : 'csvc'}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}application-configmap.yml`,
+      templates: ['registry/application-configmap.yml'],
+    },
+
+    {
+      condition: generator => generator.serviceDiscoveryTypeConsul,
+      renameTo: data => `${data.generatorTypeK8s ? 'registry' : 'csvc'}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}consul.yml`,
+      templates: ['registry/consul.yml'],
+    },
+    {
+      condition: generator => generator.serviceDiscoveryTypeConsul,
+      renameTo: data =>
+        `${data.generatorTypeK8s ? 'registry' : 'csvc'}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}consul-config-loader.yml`,
+      templates: ['registry/consul-config-loader.yml'],
+    },
+    {
+      condition: generator => generator.serviceDiscoveryTypeConsul,
+      renameTo: data =>
+        `${data.generatorTypeK8s ? 'registry' : 'csvc'}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}application-configmap.yml`,
+      templates: ['registry/application-configmap.yml'],
+    },
+  ],
+  istio: [
+    {
+      condition: generator => generator.istio,
+      renameTo: data =>
+        `${data.generatorTypeK8s ? 'istio' : 'csvc'}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}grafana-gateway.yml`,
+      templates: ['istio/gateway/grafana-gateway.yml'],
+    },
+    {
+      condition: generator => generator.istio,
+      renameTo: data =>
+        `${data.generatorTypeK8s ? 'istio' : 'csvc'}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}zipkin-gateway.yml`,
+      templates: ['istio/gateway/zipkin-gateway.yml'],
+    },
+    {
+      condition: generator => generator.istio,
+      renameTo: data =>
+        `${data.generatorTypeK8s ? 'istio' : 'csvc'}-${suffix}/${data.generatorTypeK8s ? '' : 'templates/'}kiali-gateway.yml`,
+      templates: ['istio/gateway/kiali-gateway.yml'],
+    },
+  ],
+});
+const deploymentHelmFiles = (suffix = '') => ({
+  chart: [
+    {
+      condition: data => data.useKafka || data.monitoringPrometheus || data.serviceDiscoveryTypeEureka || data.serviceDiscoveryTypeConsul,
+      templates: [{ sourceFile: 'csvc/values.yml', destinationFile: `csvc-${suffix}/values.yml` }],
+    },
+    {
+      condition: data => data.useKafka || data.monitoringPrometheus || data.serviceDiscoveryTypeEureka || data.serviceDiscoveryTypeConsul,
+      templates: [{ sourceFile: 'csvc/Chart.yml', destinationFile: `csvc-${suffix}/Chart.yaml` }],
+    },
+    {
+      condition: data => data.useKafka || data.monitoringPrometheus || data.serviceDiscoveryTypeEureka || data.serviceDiscoveryTypeConsul,
+      templates: [{ sourceFile: 'csvc/requirements.yml', destinationFile: `csvc-${suffix}/requirements.yml` }],
+    },
+    {
+      condition: data => data.useKafka || data.monitoringPrometheus || data.serviceDiscoveryTypeEureka || data.serviceDiscoveryTypeConsul,
+      templates: [{ sourceFile: 'csvc/helpers.tpl.ejs', destinationFile: `csvc-${suffix}/templates/_helpers.tpl` }],
+    },
+  ],
+});
+const deploymentKnativeFiles = (suffix = '') => ({
+  common: [
+    {
+      templates: [{ sourceFile: 'README-KUBERNETES-KNATIVE.md.ejs', destinationFile: 'KNATIVE-README.md' }],
+    },
+    {
+      condition: generator => generator.generatorTypeK8s,
+      templates: [{ sourceFile: 'kubectl-apply.sh.ejs', destinationFile: 'kubectl-knative-apply.sh' }],
+    },
+    {
+      condition: generator => !generator.generatorTypeK8s,
+      templates: [
+        { sourceFile: 'helm-apply.sh.ejs', destinationFile: 'helm-knative-apply.sh' },
+        { sourceFile: 'helm-upgrade.sh.ejs', destinationFile: 'helm-knative-upgrade.sh' },
+      ],
+    },
+  ],
+});
 
 export const writeFiles = asWritingTask(async function writeFiles() {
   const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
+  const suffix = 'knative';
   await this.writeFiles({
-    sections: kubernetesFiles,
+    sections: deploymentKubernetesFiles(suffix),
     rootTemplatesPath: k8s,
     context: this,
   });
   await this.writeFiles({
-    sections: knativeFiles,
+    sections: deploymentKnativeFiles(suffix),
     context: this,
   });
-  const helm = this.fetchFromInstalledJHipster('kubernetes-helm/templates');
-
-  const suffix = 'knative';
-  if (this.generatorTypeK8s) {
+  for (let i = 0; i < this.appConfigs.length; i++) {
+    this.app = this.appConfigs[i];
+    await this.writeFiles({
+      sections: applicationKnativeFiles(suffix),
+      context: this,
+    });
+    await this.writeFiles({
+      sections: applicationKubernetesFiles(suffix),
+      rootTemplatesPath: k8s,
+      context: this,
+    });
+  }
+  if (!this.generatorTypeK8s) {
+    const helm = this.fetchFromInstalledJHipster('kubernetes-helm/templates');
     for (let i = 0; i < this.appConfigs.length; i++) {
       this.app = this.appConfigs[i];
-      const appName = this.app.baseName.toLowerCase();
-      const appOut = appName.concat('-', suffix);
-
-      await this.writeFile('service.yml.ejs', `${appOut}/${appName}-service.yml`);
-      // If we choose microservice with no DB, it is trying to move _no.yml as prodDatabaseType is getting tagged as 'string' type
-      if (!this.app.databaseTypeNo) {
-        const databaseType = this.app.prodDatabaseType ?? this.app.databaseType;
-        await this.writeFile(`${k8s}/db/${databaseType}.yml.ejs`, `${appOut}/${appName}-${databaseType}.yml`);
-      }
-      if (this.app.searchEngineElasticsearch) {
-        await this.writeFile(`${k8s}/db/elasticsearch.yml.ejs`, `${appOut}/${appName}-elasticsearch.yml`);
-      }
-      if (this.app.applicationTypeGateway || this.app.applicationTypeMonolith) {
-        await this.writeFile('istio/gateway.yml.ejs', `${appOut}/${appName}-gateway.yml`);
-      }
-      if (!this.app.serviceDiscoveryType && this.app.authenticationTypeJwt) {
-        await this.writeFile(`${k8s}/secret/jwt-secret.yml.ejs`, `${appOut}/jwt-secret.yml`);
-      }
-      if (this.monitoringPrometheus) {
-        await this.writeFile(`${k8s}/monitoring/jhipster-prometheus-sm.yml.ejs`, `${appOut}/${appName}-prometheus-sm.yml`);
-      }
-      await this.writeFile('istio/destination-rule.yml.ejs', `${appOut}/${appName}-destination-rule.yml`);
-      await this.writeFile('istio/virtual-service.yml.ejs', `${appOut}/${appName}-virtual-service.yml`);
+      await this.writeFiles({
+        sections: applicationHelmFiles(suffix),
+        rootTemplatesPath: helm,
+        context: this,
+      });
     }
-
-    if (this.useKafka) {
-      await this.writeFile(`${k8s}/messagebroker/kafka.yml.ejs`, `messagebroker-${suffix}/kafka.yml`);
-    }
-
-    if (this.monitoringPrometheus) {
-      const monitOut = 'monitoring'.concat('-', suffix);
-      await this.writeFile(`${k8s}/monitoring/jhipster-prometheus-crd.yml.ejs`, `${monitOut}/jhipster-prometheus-crd.yml`);
-      await this.writeFile(`${k8s}/monitoring/jhipster-prometheus-cr.yml.ejs`, `${monitOut}/jhipster-prometheus-cr.yml`);
-      await this.writeFile(`${k8s}/monitoring/jhipster-grafana.yml.ejs`, `${monitOut}/jhipster-grafana.yml`);
-      await this.writeFile(`${k8s}/monitoring/jhipster-grafana-dashboard.yml.ejs`, `${monitOut}/jhipster-grafana-dashboard.yml`);
-      await this.writeFile(`${k8s}/istio/gateway/jhipster-grafana-gateway.yml.ejs`, `${monitOut}/jhipster-grafana-gateway.yml`);
-    }
-
-    const registryOut = 'registry'.concat('-', suffix);
-    if (this.serviceDiscoveryTypeEureka) {
-      await this.writeFile(`${k8s}/registry/jhipster-registry.yml.ejs`, `${registryOut}/jhipster-registry.yml`);
-      await this.writeFile(`${k8s}/registry/application-configmap.yml.ejs`, `${registryOut}/application-configmap.yml`);
-    } else if (this.serviceDiscoveryTypeConsul) {
-      await this.writeFile(`${k8s}/registry/consul.yml.ejs`, `${registryOut}/consul.yml`);
-      await this.writeFile(`${k8s}/registry/consul-config-loader.yml.ejs`, `${registryOut}/consul-config-loader.yml`);
-      await this.writeFile(`${k8s}/registry/application-configmap.yml.ejs`, `${registryOut}/application-configmap.yml`);
-    }
-
-    const istioOut = 'istio'.concat('-', suffix);
-    await this.writeFile(`${k8s}/istio/gateway/grafana-gateway.yml.ejs`, `${istioOut}/grafana-gateway.yml`);
-    await this.writeFile(`${k8s}/istio/gateway/zipkin-gateway.yml.ejs`, `${istioOut}/zipkin-gateway.yml`);
-    await this.writeFile(`${k8s}/istio/gateway/kiali-gateway.yml.ejs`, `${istioOut}/kiali-gateway.yml`);
-    await this.writeFile('kubectl-apply.sh.ejs', 'kubectl-knative-apply.sh');
-  } else {
-    for (let i = 0; i < this.appConfigs.length; i++) {
-      this.app = this.appConfigs[i];
-      const appName = this.app.baseName.toLowerCase();
-      const appOut = appName.concat('-', suffix);
-
-      await this.writeFile('service.yml.ejs', `${appOut}/templates/${appName}-service.yml`);
-      await this.writeFile(`${helm}/app/values.yml.ejs`, `${appOut}/values.yml`);
-      await this.writeFile(`${helm}/app/Chart.yml.ejs`, `${appOut}/Chart.yaml`);
-      await this.writeFile(`${helm}/app/requirements.yml.ejs`, `${appOut}/requirements.yml`);
-      await this.writeFile(`${helm}/app/helpers.tpl.ejs`, `${appOut}/templates/_helpers.tpl`);
-
-      if (this.app.databaseTypeCouchbase) {
-        await this.writeFile(`${k8s}/db/${this.app.databaseType}.yml.ejs`, `${appOut}/templates/${appName}-${this.app.databaseType}.yml`);
-      }
-
-      if (this.app.searchEngineElasticsearch) {
-        await this.writeFile(`${k8s}/db/elasticsearch.yml.ejs`, `${appOut}/templates/${appName}-elasticsearch.yml`);
-      }
-      if (this.app.applicationTypeGateway || this.app.applicationTypeMonolith) {
-        await this.writeFile('istio/gateway.yml.ejs', `${appOut}/templates/${appName}-gateway.yml`);
-      }
-      if (!this.app.serviceDiscoveryType && this.app.authenticationTypeJwt) {
-        await this.writeFile(`${k8s}/secret/jwt-secret.yml.ejs`, `${appOut}/templates/jwt-secret.yml`);
-      }
-      await this.writeFile('istio/destination-rule.yml.ejs', `${appOut}/templates/${appName}-destination-rule.yml`);
-      await this.writeFile('istio/virtual-service.yml.ejs', `${appOut}/templates/${appName}-virtual-service.yml`);
-    }
-
-    const csOut = 'csvc'.concat('-', suffix);
-    if (this.useKafka || this.monitoringPrometheus || this.serviceDiscoveryTypeEureka || this.serviceDiscoveryTypeConsul) {
-      await this.writeFile(`${helm}/csvc/values.yml.ejs`, `${csOut}/values.yml`);
-      await this.writeFile(`${helm}/csvc/Chart.yml.ejs`, `${csOut}/Chart.yaml`);
-      await this.writeFile(`${helm}/csvc/requirements.yml.ejs`, `${csOut}/requirements.yml`);
-      await this.writeFile(`${helm}/csvc/helpers.tpl.ejs`, `${csOut}/templates/_helpers.tpl`);
-    }
-    if (this.monitoringPrometheus) {
-      await this.writeFile(`${k8s}/istio/gateway/jhipster-grafana-gateway.yml.ejs`, `${csOut}/templates/jhipster-grafana-gateway.yml`);
-    }
-    if (this.serviceDiscoveryTypeEureka) {
-      await this.writeFile(`${k8s}/registry/jhipster-registry.yml.ejs`, `${csOut}/templates/jhipster-registry.yml`);
-      await this.writeFile(`${k8s}/registry/application-configmap.yml.ejs`, `${csOut}/templates/application-configmap.yml`);
-    }
-    if (this.serviceDiscoveryTypeConsul) {
-      await this.writeFile(`${k8s}/registry/consul.yml.ejs`, `${csOut}/templates/consul.yml`);
-      await this.writeFile(`${k8s}/registry/consul-config-loader.yml.ejs`, `${csOut}/templates/consul-config-loader.yml`);
-      await this.writeFile(`${k8s}/registry/application-configmap.yml.ejs`, `${csOut}/templates/application-configmap.yml`);
-    }
-    await this.writeFile(`${k8s}/istio/gateway/grafana-gateway.yml.ejs`, `${csOut}/templates/grafana-gateway.yml`);
-    await this.writeFile(`${k8s}/istio/gateway/zipkin-gateway.yml.ejs`, `${csOut}/templates/zipkin-gateway.yml`);
-    await this.writeFile(`${k8s}/istio/gateway/kiali-gateway.yml.ejs`, `${csOut}/templates/kiali-gateway.yml`);
-    await this.writeFile('helm-apply.sh.ejs', 'helm-knative-apply.sh');
-    await this.writeFile('helm-upgrade.sh.ejs', 'helm-knative-upgrade.sh');
+    await this.writeFiles({
+      sections: deploymentHelmFiles(suffix),
+      rootTemplatesPath: helm,
+      context: this,
+    });
   }
 });
