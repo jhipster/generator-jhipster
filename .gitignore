@@ -1,7 +1,8 @@
 node_modules
 node_modules_container
 coverage
-.idea
+/.idea/*
+!/.idea/runConfigurations
 *.iml
 *.ipr
 *.iws
@@ -26,7 +27,6 @@ test/**/*.png
 jdl/**/*.png
 test-integration/**/*.png
 /dist
-.run
 # allow customizations without having a dirty tree
 .devcontainer
 
