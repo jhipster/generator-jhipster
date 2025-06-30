@@ -34,7 +34,7 @@ updates:
     ignore:
       # Should match supported node major version.
       - dependency-name: '@types/node'
-        versions: ['>=19']
+        versions: ['>=21']
     groups:
       eslint:
         patterns:
@@ -69,7 +69,7 @@ updates:
     ignore:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
-        versions: ['>=19']
+        versions: ['>=21']
     groups:
       angular:
         patterns:
@@ -147,7 +147,7 @@ updates:
     ignore:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
-        versions: ['>=19']
+        versions: ['>=21']
       # https://github.com/jhipster/generator-jhipster/issues/27464#issuecomment-2400505558, https://github.com/twbs/bootstrap/issues/40849
       - dependency-name: 'sass'
         versions: ['*']
@@ -188,7 +188,7 @@ updates:
         versions: ['*']
       # Should match generated project node major version.
       - dependency-name: '@types/node'
-        versions: ['>=19']
+        versions: ['>=21']
     groups:
       eslint:
         patterns:
