@@ -128,7 +128,7 @@ management:
         readiness:
           include: readinessState<% if (databaseTypeSql && !reactive) { %>,db<% } %>
     jhimetrics:
-      access: read-only
+      enabled: true
   info:
     git:
       mode: full
@@ -210,44 +210,43 @@ spring:
     <%_ if (reactive) { _%>
       default-filters:
         - <% if (authenticationTypeJwt) { %>JWTRelay<% } else { %>TokenRelay<% } %>
-      discovery:
-        locator:
-          predicates:
-            - name: Path
-              args:
-                pattern: "'/services/'+serviceId.toLowerCase()+'/**'"
-          filters:
-            - StripPrefix=2
       server:
         webflux:
           discovery:
             locator:
               enabled: true
               lower-case-service-id: true
+              predicates:
+                - name: Path
+                  args:
+                    pattern: "'/services/'+serviceId.toLowerCase()+'/**'"
+              filters:
+                - StripPrefix=2
           httpclient:
             pool:
               max-connections: 1000
     <%_ } else { _%>
-      mvc:
-        routes:
-          - id: <%= lowercaseBaseName %>_route
-            uri: lb://<%= lowercaseBaseName %>
-            predicates:
-              - Path=/services/<%= lowercaseBaseName %>/**
-            filters:
-              - StripPrefix=2
+      server:
+        webmvc:
+          routes:
+            - id: <%= lowercaseBaseName %>_route
+              uri: lb://<%= lowercaseBaseName %>
+              predicates:
+                - Path=/services/<%= lowercaseBaseName %>/**
+              filters:
+                - StripPrefix=2
       <%_ for (const ms of gatewayRoutes ?? []) { _%>
-          - id: <%= ms.route %>_route
-            uri: lb://<%= ms.route %>
-            predicates:
-              - Path=/services/<%= ms.route %>/**
-            filters:
+            - id: <%= ms.route %>_route
+              uri: lb://<%= ms.route %>
+              predicates:
+                - Path=/services/<%= ms.route %>/**
+              filters:
         <%_ if (authenticationTypeOauth2) { _%>
-              - TokenRelay
+                - TokenRelay
         <%_ } _%>
-              - StripPrefix=2
-              # X-Forwarded-Prefix not working when using MVC https://github.com/spring-cloud/spring-cloud-gateway/issues/3354, add manually
-              - AddRequestHeader=X-Forwarded-Prefix,/services/<%= ms.route %>
+                - StripPrefix=2
+                # X-Forwarded-Prefix not working when using MVC https://github.com/spring-cloud/spring-cloud-gateway/issues/3354, add manually
+                - AddRequestHeader=X-Forwarded-Prefix,/services/<%= ms.route %>
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
