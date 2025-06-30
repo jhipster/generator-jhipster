@@ -82,8 +82,6 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
       checkKubernetes,
       checkHelm,
       loadConfig,
-      setupKubernetesConstants,
-      setupHelmConstants,
     });
   }
 
@@ -137,6 +135,8 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
 
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
+      setupKubernetesConstants,
+      setupHelmConstants,
       configureImageNames,
       loadSharedConfig() {
         for (const app of this.appConfigs) {
