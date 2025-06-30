@@ -5,7 +5,7 @@ exports[`generator - spring-cloud:gateway with defaults options should call sour
   "addJavaDependencies": [
     [
       {
-        "artifactId": "spring-cloud-starter-gateway-webflux",
+        "artifactId": "spring-cloud-starter-gateway-server-webflux",
         "groupId": "org.springframework.cloud",
       },
     ],
@@ -113,7 +113,7 @@ exports[`generator - spring-cloud:gateway with serviceDiscovery option should ca
   "addJavaDependencies": [
     [
       {
-        "artifactId": "spring-cloud-starter-gateway-webflux",
+        "artifactId": "spring-cloud-starter-gateway-server-webflux",
         "groupId": "org.springframework.cloud",
       },
     ],
