@@ -23,7 +23,10 @@ export type Options = JavaOptions & ExportGeneratorOptionsFromCommand<typeof Com
 
 export interface Field extends JavaField, CommonField {}
 
-export interface Relationship extends JavaRelationship, LanguagesRelationship {}
+export interface Relationship extends JavaRelationship, LanguagesRelationship {
+  relationshipApiDescription?: string;
+  columnDataType?: string;
+}
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends JavaEntity<F, R> {
   entityTableName: string;

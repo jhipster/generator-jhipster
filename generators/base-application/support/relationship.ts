@@ -20,9 +20,7 @@
 import { lowerFirst, upperFirst } from 'lodash-es';
 
 import type { ValidationResult } from '../../base-core/index.js';
-import type { EntityAll } from '../entity-all.js';
-import type { RelationshipAll } from '../relationship-all.js';
-import type { RelationshipWithEntity } from '../types.js';
+import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../types.js';
 import { findEntityInEntities } from './entity.js';
 import { stringifyApplicationData } from './debug.js';
 
@@ -30,8 +28,8 @@ export const otherRelationshipType = relationshipType => relationshipType.split(
 
 export const findOtherRelationshipInRelationships = (
   entityName: string,
-  relationship: RelationshipAll,
-  inRelationships: RelationshipAll[],
+  relationship: BaseApplicationRelationship,
+  inRelationships: BaseApplicationRelationship[],
 ) => {
   return inRelationships.find(otherRelationship => {
     if (upperFirst(otherRelationship.otherEntityName) !== entityName) {
@@ -49,7 +47,7 @@ export const findOtherRelationshipInRelationships = (
   });
 };
 
-export const loadEntitiesAnnotations = (entities: EntityAll[]) => {
+export const loadEntitiesAnnotations = (entities: BaseApplicationEntity[]) => {
   for (const entity of entities) {
     // Load field annotations
     for (const field of entity.fields ?? []) {
@@ -67,7 +65,7 @@ export const loadEntitiesAnnotations = (entities: EntityAll[]) => {
   }
 };
 
-export const loadEntitiesOtherSide = (entities: EntityAll[], { application }: { application?: any } = {}): ValidationResult => {
+export const loadEntitiesOtherSide = (entities: BaseApplicationEntity[], { application }: { application?: any } = {}): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
   for (const entity of entities) {
     for (const relationship of entity.relationships ?? []) {
@@ -117,11 +115,11 @@ export const loadEntitiesOtherSide = (entities: EntityAll[], { application }: { 
   return result;
 };
 
-export const addOtherRelationship = (
-  entity: EntityAll,
-  otherEntity: EntityAll,
-  relationship: RelationshipAll,
-): RelationshipWithEntity<RelationshipAll, EntityAll> => {
+export const addOtherRelationship = <const R extends BaseApplicationRelationship>(
+  entity: BaseApplicationEntity,
+  otherEntity: BaseApplicationEntity,
+  relationship: R,
+): RelationshipWithEntity<R, BaseApplicationEntity> => {
   relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? lowerFirst(entity.name);
   const otherRelationship = {
     otherEntityName: lowerFirst(entity.name),

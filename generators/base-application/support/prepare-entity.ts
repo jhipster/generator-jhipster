@@ -32,6 +32,7 @@ import type { PrimaryKey } from '../types.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { ApplicationConfiguration } from '../application-config-all.js';
 import type { ApplicationAll } from '../application-properties-all.js';
+import type { Entity as ServerEntity } from '../../server/types.ts';
 import { createFaker } from './faker.js';
 import { fieldToReference } from './prepare-field.js';
 import { fieldIsEnum } from './field-utils.js';
@@ -484,7 +485,7 @@ function fieldToId(field) {
  * @param {Object} config - config object.
  * @returns {Object} the entity parameter for chaining.
  */
-export function loadRequiredConfigIntoEntity<E extends Partial<EntityAll>>(
+export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntity>>(
   this: BaseGenerator | void,
   entity: E,
   config: ApplicationConfiguration,

@@ -18,7 +18,6 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import type { EntityAll } from '../base-application/index.js';
 import type { Application as ServerApplication, Entity as ServerEntity } from '../server/types.js';
 import type { Application as SpringCloudApplication } from '../spring-cloud/types.js';
 import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.js';
@@ -48,9 +47,7 @@ import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
 import serverCommand from '../server/command.js';
 import { mutateData, normalizePathEnd } from '../../lib/utils/index.js';
 
-type Entity = ServerEntity & EntityAll;
-
-export default class BoostrapApplicationServer extends BaseApplicationGenerator<Entity, ServerApplication<Entity>> {
+export default class BoostrapApplicationServer extends BaseApplicationGenerator<ServerEntity, ServerApplication<ServerEntity>> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -190,10 +187,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity }) {
         loadRequiredConfigDerivedProperties(entity);
-        mutateData(entity, {
-          entityPersistenceLayer: true,
-          entityRestLayer: true,
-        });
       },
       preparePrimaryKey({ entity, application }) {
         // If primaryKey doesn't exist, create it.

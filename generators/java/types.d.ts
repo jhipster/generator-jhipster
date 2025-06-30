@@ -40,7 +40,10 @@ export type Field = BaseApplicationField &
     columnName?: string;
   };
 
-export interface Relationship extends BaseApplicationRelationship, Property {}
+export interface Relationship extends BaseApplicationRelationship, Property {
+  relationshipJavadoc?: string;
+  propertyDtoJavaType?: string;
+}
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends BaseApplicationEntity<F, R> {
   dtoMapstruct: boolean;

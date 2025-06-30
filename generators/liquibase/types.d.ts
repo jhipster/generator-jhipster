@@ -18,7 +18,10 @@ export type LiquibaseSourceType = BaseEntityChangesSource & {
 
 export type Source = LiquibaseSourceType & JavaSource;
 
-export { BaseEntityChangesRelationship as Relationship };
+export interface Relationship extends BaseEntityChangesRelationship {
+  onDelete?: boolean;
+  onUpdate?: boolean;
+}
 
 export type Field = BaseEntityChangesField &
   JavaField & {
