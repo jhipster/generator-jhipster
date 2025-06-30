@@ -24,6 +24,7 @@
     "@angular-builders/custom-esbuild": "20.0.0",
     "@angular-builders/custom-webpack": "20.0.0",
     "@angular-builders/jest": "20.0.0",
+    "@angular/build": "20.0.3",
     "@angular/cli": "20.0.3",
     "@eslint/js": "9.30.0",
     "@types/jest": "29.5.14",
