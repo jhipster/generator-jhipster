@@ -41,8 +41,7 @@ import {
   askForMonitoring,
   askForServiceDiscoveryWorkspace,
 } from '../base-workspaces/internal/docker-prompts.js';
-import { derivedPlatformProperties } from '../base-workspaces/support/preparing.js';
-import { loadDerivedPlatformConfig } from '../base-workspaces/support/index.js';
+import { derivedPlatformProperties, loadDerivedPlatformConfig } from '../base-workspaces/support/preparing.js';
 import { loadDeploymentConfig, loadWorkspacesConfig } from '../base-workspaces/support/loading.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files.js';

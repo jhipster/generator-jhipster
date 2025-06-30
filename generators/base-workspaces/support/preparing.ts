@@ -19,10 +19,26 @@
 import chalk from 'chalk';
 import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../../lib/jhipster/index.js';
 import { convertSecretToBase64 } from '../../../lib/utils/index.js';
-const { CONSUL, EUREKA } = serviceDiscoveryTypes;
-const { PROMETHEUS } = monitoringTypes;
+import type { WorkspacesApplication } from '../types.js';
+const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
+const { PROMETHEUS, ELK } = monitoringTypes;
 
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
+export const loadDerivedServerAndPlatformProperties = ({ application }: { application: any }) => {
+  if (!application.serviceDiscoveryType) {
+    application.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
+  }
+  application.serviceDiscoveryAny = application.serviceDiscoveryType !== NO_SERVICE_DISCOVERY;
+  application.serviceDiscoveryConsul = application.serviceDiscoveryType === CONSUL;
+  application.serviceDiscoveryEureka = application.serviceDiscoveryType === EUREKA;
+};
+
+export const loadDerivedPlatformConfig = ({ application }: { application: WorkspacesApplication }) => {
+  application.monitoringElk = application.monitoring === ELK;
+  application.monitoringPrometheus = application.monitoring === PROMETHEUS;
+  loadDerivedServerAndPlatformProperties({ application });
+};
+
 export function derivedPlatformProperties(this, { generator = this, deployment, applications }) {
   if (deployment.adminPassword) {
     deployment.adminPasswordBase64 = convertSecretToBase64(deployment.adminPassword);
