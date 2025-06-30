@@ -172,9 +172,7 @@ dependencies {
 <%_ } _%>
     implementation "jakarta.annotation:jakarta.annotation-api"
     implementation "org.apache.commons:commons-lang3"
-<%_ if (reactive) { _%>
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-<%_ } _%>
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
