@@ -40,7 +40,7 @@ export const RECOMMENDED_NODE_VERSION = readFileSync(
 ).trim();
 
 // The version should be coherent with the one from spring-data-elasticsearch project
-export const ELASTICSEARCH_TAG = '8.13.4';
+export const ELASTICSEARCH_TAG = '8.17.8';
 export const ELASTICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 /**
