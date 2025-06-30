@@ -18,7 +18,7 @@
  */
 import { defaults } from 'lodash-es';
 import { applicationOptions, deploymentOptions } from '../../../lib/jhipster/index.js';
-import { loadDerivedPlatformConfig, loadPlatformConfig } from '../support/index.js';
+import { loadPlatformConfig } from '../support/loading.js';
 import type BaseWorkspacesGenerator from '../index.js';
 import type { Deployment } from '../types.d.ts';
 
@@ -42,6 +42,5 @@ export function loadDeploymentConfig(
   deployment.dockerPushCommand = config.dockerPushCommand;
   deployment.adminPassword = config.adminPassword;
   deployment.jwtSecretKey = config[JWT_SECRET_KEY];
-  loadPlatformConfig({ config, application: deployment! });
-  loadDerivedPlatformConfig({ application: deployment! });
+  loadPlatformConfig({ config, application: deployment });
 }

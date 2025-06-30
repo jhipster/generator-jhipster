@@ -29,7 +29,7 @@ import { checkImages, configureImageNames, generateJwtSecret, loadFromYoRc } fro
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
 import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
 import { checkDocker } from '../docker/support/index.js';
-import { loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/index.js';
+import { loadDerivedPlatformConfig, loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/preparing.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import {
@@ -197,15 +197,6 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
       loadFromYoRc,
-      async loadDockerDependenciesTask({ deployment }) {
-        await loadDockerDependenciesTask.call(this, { context: deployment });
-      },
-      loadSharedConfig() {
-        for (const app of this.appConfigs) {
-          loadDerivedAppConfig({ application: app });
-          loadDerivedServerAndPlatformProperties({ application: app });
-        }
-      },
       loadDeploymentConfig,
     });
   }
@@ -217,6 +208,15 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
       configureImageNames,
+      loadSharedConfig() {
+        for (const app of this.appConfigs) {
+          loadDerivedAppConfig({ application: app });
+          loadDerivedServerAndPlatformProperties({ application: app });
+        }
+      },
+      async loadBaseDeployment({ deployment }) {
+        loadDerivedPlatformConfig({ application: this });
+      },
       derivedKubernetesPlatformProperties,
     });
   }

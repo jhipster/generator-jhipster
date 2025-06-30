@@ -36,7 +36,7 @@ import { buildToolTypes, kubernetesPlatformTypes } from '../../lib/jhipster/inde
 import { getJdbcUrl } from '../spring-data-relational/support/index.js';
 import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
 import { checkDocker } from '../docker/support/index.js';
-import { loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/index.js';
+import { loadDerivedPlatformConfig, loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/preparing.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import {
@@ -167,7 +167,9 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
           loadDerivedServerAndPlatformProperties({ application: app });
         }
       },
-
+      async loadBaseDeployment({ deployment }) {
+        loadDerivedPlatformConfig({ application: this });
+      },
       derivedKubernetesPlatformProperties,
     });
   }

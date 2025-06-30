@@ -1,4 +1,5 @@
-import { loadPlatformConfig } from '../../base-workspaces/support/index.js';
+import { mutateData, pickFields } from '../../../lib/utils/index.ts';
+import type { WorkspacesApplication } from '../types.js';
 
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
@@ -18,6 +19,14 @@ import { loadPlatformConfig } from '../../base-workspaces/support/index.js';
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * @param {Object} config - config to load config from
+ * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
+ */
+export const loadPlatformConfig = ({ config, application }: { config: any; application: WorkspacesApplication }) => {
+  mutateData(application, pickFields(config, ['serviceDiscoveryType', 'monitoring']));
+};
+
 export function loadDeploymentConfig(this, { generator = this, deployment }) {
   const config = generator.jhipsterConfigWithDefaults;
   deployment.clusteredDbApps = config.clusteredDbApps;
