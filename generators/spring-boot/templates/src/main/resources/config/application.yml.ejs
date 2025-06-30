@@ -128,7 +128,7 @@ management:
         readiness:
           include: readinessState<% if (databaseTypeSql && !reactive) { %>,db<% } %>
     jhimetrics:
-      enabled: true
+      access: read-only
   info:
     git:
       mode: full
@@ -212,17 +212,21 @@ spring:
         - <% if (authenticationTypeJwt) { %>JWTRelay<% } else { %>TokenRelay<% } %>
       discovery:
         locator:
-          enabled: true
-          lower-case-service-id: true
           predicates:
             - name: Path
               args:
                 pattern: "'/services/'+serviceId.toLowerCase()+'/**'"
           filters:
             - StripPrefix=2
-      httpclient:
-        pool:
-          max-connections: 1000
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+          httpclient:
+            pool:
+              max-connections: 1000
     <%_ } else { _%>
       mvc:
         routes:
