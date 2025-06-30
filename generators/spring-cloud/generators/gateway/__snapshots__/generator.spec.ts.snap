@@ -56,7 +56,7 @@ exports[`generator - spring-cloud:gateway with imperative option should call sou
   "addJavaDependencies": [
     [
       {
-        "artifactId": "spring-cloud-starter-gateway-mvc",
+        "artifactId": "spring-cloud-starter-gateway-server-webmvc",
         "groupId": "org.springframework.cloud",
       },
     ],
