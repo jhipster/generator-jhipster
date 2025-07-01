@@ -28,7 +28,8 @@ import type { PRIORITY_NAMES as APPLICATION_PRIORITY_NAMES } from '../../generat
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
 import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY } from '../../generators/base-application/support/constants.js';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../generators/base-simple-application/support/constants.js';
-import type { AllOptions, ApplicationAll } from '../../generators/base-application/index.js';
+import type { ApplicationAll } from '../../generators/base-application/application-properties-all.d.ts';
+import type { ApplicationOptions as AllOptions } from '../../generators/base-application/application-options-all.d.ts';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
 type GeneratorTestType = YeomanGenerator<AllOptions>;

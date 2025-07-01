@@ -1,5 +1,6 @@
 import BaseApplicationGenerator from './base-application/index.ts';
-import type { ApplicationAll, EntityAll } from './base-application/index.ts';
+import type { ApplicationAll } from './base-application/application-properties-all.d.ts';
+import type { EntityAll } from './base-application/entity-all.d.ts';
 export {
   JHIPSTER_DOCUMENTATION_URL,
   JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,

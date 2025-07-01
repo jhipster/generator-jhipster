@@ -110,9 +110,9 @@ function makeJDLImporter(content, configuration: JDLApplicationConfiguration, ru
      *          - exportedApplications: the exported applications, or an empty list
      *          - exportedEntities: the exported entities, or an empty list
      */
-    import: (logger = console) => {
+    import: () => {
       const jdlObject = getJDLObject(content, configuration, runtime);
-      checkForErrors(jdlObject, configuration, logger);
+      checkForErrors(jdlObject, configuration);
       if (jdlObject.getApplicationQuantity() === 0 && jdlObject.getEntityQuantity() > 0) {
         importState.exportedEntities = importOnlyEntities(jdlObject, configuration);
       } else if (jdlObject.getApplicationQuantity() === 1) {
@@ -133,8 +133,8 @@ function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration: JD
   let applicationType = configuration.applicationType;
 
   if (configuration.application) {
-    baseName = configuration.application[GENERATOR_JHIPSTER].baseName;
-    applicationType = configuration.application[GENERATOR_JHIPSTER].applicationType;
+    baseName ??= configuration.application[GENERATOR_JHIPSTER].baseName;
+    applicationType ??= configuration.application[GENERATOR_JHIPSTER].applicationType;
   }
 
   return ParsedJDLToJDLObjectConverter.parseFromConfigurationObject(
@@ -147,20 +147,12 @@ function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration: JD
   );
 }
 
-function checkForErrors(jdlObject: JDLObject, configuration: JDLApplicationConfiguration, logger = console) {
+function checkForErrors(jdlObject: JDLObject, configuration: JDLApplicationConfiguration) {
   let validator;
   if (jdlObject.getApplicationQuantity() === 0) {
-    let application = configuration.application;
-    if (!application) {
-      application = readCurrentPathYoRcFile();
-    }
-    let applicationType = configuration.applicationType;
-    if (application?.[GENERATOR_JHIPSTER]) {
-      applicationType ??= application[GENERATOR_JHIPSTER].applicationType;
-    }
     validator = createWithoutApplicationValidator(jdlObject);
   } else {
-    validator = createWithApplicationValidator(jdlObject, logger);
+    validator = createWithApplicationValidator(jdlObject);
   }
   validator.checkForErrors();
 }
