@@ -82,11 +82,7 @@ entity A
           parsedContent: parseFromContent(jdl),
           applicationType: MONOLITH,
         });
-        result = convertWithoutApplication({
-          applicationName,
-          databaseType: 'sql',
-          jdlObject,
-        });
+        result = convertWithoutApplication(jdlObject, applicationName);
         convertedJdl = jdlObject.toString();
       });
 
@@ -138,14 +134,13 @@ relationship ManyToOne {
 `;
 
       beforeEach(() => {
-        result = convertWithoutApplication({
-          applicationName,
-          databaseType: 'sql',
-          jdlObject: parseFromConfigurationObject({
+        result = convertWithoutApplication(
+          parseFromConfigurationObject({
             parsedContent: parseFromContent(jdl),
             applicationType: MONOLITH,
           }),
-        });
+          applicationName,
+        );
       });
 
       it('should add relationship at both sides', () => {
@@ -227,11 +222,7 @@ relationship ManyToOne {
           parsedContent: parseFromContent(jdl),
           applicationType: MONOLITH,
         });
-        result = convertWithoutApplication({
-          applicationName,
-          databaseType: 'sql',
-          jdlObject,
-        });
+        result = convertWithoutApplication(jdlObject, applicationName);
         convertedJdl = jdlObject.toString();
       });
 
@@ -307,14 +298,13 @@ relationship ManyToOne {
 `;
 
       beforeEach(() => {
-        result = convertWithoutApplication({
-          applicationName,
-          databaseType: 'sql',
-          jdlObject: parseFromConfigurationObject({
+        result = convertWithoutApplication(
+          parseFromConfigurationObject({
             parsedContent: parseFromContent(jdl),
             applicationType: MONOLITH,
           }),
-        });
+          applicationName,
+        );
       });
 
       it('should add relationship at both sides', () => {
