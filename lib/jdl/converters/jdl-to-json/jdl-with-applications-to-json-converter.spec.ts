@@ -28,7 +28,6 @@ import { relationshipTypes } from '../../core/basic-types/index.js';
 import {
   applicationTypes,
   binaryOptions,
-  databaseTypes,
   fieldTypes,
   relationshipOptions,
   unaryOptions,
@@ -51,7 +50,6 @@ const {
 } = validations;
 const { MONOLITH } = applicationTypes;
 const { CommonDBTypes } = fieldTypes;
-const { SQL } = databaseTypes;
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
 

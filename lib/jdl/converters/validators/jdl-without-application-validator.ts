@@ -17,12 +17,11 @@
  * limitations under the License.
  */
 
-import { binaryOptions, relationshipOptions } from '../../core/built-in-options/index.js';
-import { databaseTypes, fieldTypes } from '../../../jhipster/index.js';
+import { relationshipOptions } from '../../core/built-in-options/index.js';
+import { fieldTypes } from '../../../jhipster/index.js';
 import type JDLObject from '../../core/models/jdl-object.js';
 import type JDLRelationship from '../../core/models/jdl-relationship.js';
 import type JDLField from '../../core/models/jdl-field.js';
-import type AbstractJDLOption from '../../core/models/abstract-jdl-option.js';
 import EntityValidator from './entity-validator.js';
 import FieldValidator from './field-validator.js';
 import ValidationValidator from './validation-validator.js';
@@ -125,11 +124,5 @@ function checkForAbsentEntities({
           jdlRelationship.to
         }' is a built-in entity declare like '${jdlRelationship.from} to ${jdlRelationship.to} with builtInEntity'.`,
     );
-  }
-}
-
-function checkForPaginationInAppWithCassandra(jdlOption: AbstractJDLOption, applicationSettings): void {
-  if (applicationSettings.databaseType === databaseTypes.CASSANDRA && jdlOption.name === binaryOptions.Options.PAGINATION) {
-    throw new Error("Pagination isn't allowed when the application uses Cassandra.");
   }
 }

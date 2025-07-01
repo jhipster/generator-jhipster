@@ -36,13 +36,11 @@ import BinaryOptionValidator from './binary-option-validator.js';
 const { OptionNames } = applicationOptions;
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
-const { BLUEPRINTS, BASE_NAME } = OptionNames;
+const { BASE_NAME } = OptionNames;
 /**
  * Constructor taking the jdl object to check against application settings.
- * @param {JDLObject} jdlObject -  the jdl object to check.
- * @param {Object} logger - the logger to use, default to the console.
  */
-export default function createValidator(jdlObject: JDLObject, logger: any = console) {
+export default function createValidator(jdlObject: JDLObject) {
   if (!jdlObject) {
     throw new Error('A JDL object must be passed to check for business errors.');
   }

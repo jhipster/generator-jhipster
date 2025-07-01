@@ -49,28 +49,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
     });
   });
   describe('checkForErrors', () => {
-    describe('when having an entity with a reserved name', () => {
-      let validator;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        const application = createJDLApplication(
-          {
-            applicationType: MONOLITH,
-            databaseType: databaseTypes.SQL,
-          },
-          undefined,
-          runtime,
-        );
-        const entity = new JDLEntity({
-          name: 'Continue',
-        });
-        application.addEntityName(entity.name);
-        jdlObject.addApplication(application);
-        jdlObject.addEntity(entity);
-        validator = createValidator(jdlObject);
-      });
-    });
     describe('when passing gateway as application type', () => {
       describe('with incompatible database type and field type', () => {
         let validator;

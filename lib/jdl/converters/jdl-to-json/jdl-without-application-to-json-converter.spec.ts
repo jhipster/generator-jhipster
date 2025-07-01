@@ -26,15 +26,7 @@ chaiUse(sinonChai);
 
 import { relationshipTypes } from '../../core/basic-types/index.js';
 
-import {
-  applicationTypes,
-  binaryOptions,
-  databaseTypes,
-  fieldTypes,
-  relationshipOptions,
-  unaryOptions,
-  validations,
-} from '../../core/built-in-options/index.js';
+import { binaryOptions, fieldTypes, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.js';
 
 import JDLObject from '../../core/models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../../core/models/index.js';
@@ -49,9 +41,7 @@ import { convert } from './jdl-without-application-to-json-converter.js';
 const {
   Validations: { REQUIRED, UNIQUE, MIN, MAX, MINLENGTH, MAXLENGTH, PATTERN, MINBYTES, MAXBYTES },
 } = validations;
-const { MONOLITH } = applicationTypes;
 const { CommonDBTypes } = fieldTypes;
-const { SQL } = databaseTypes;
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
 const { BUILT_IN_ENTITY } = relationshipOptions;
