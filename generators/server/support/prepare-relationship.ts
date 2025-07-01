@@ -1,9 +1,8 @@
-import type { RelationshipAll } from '../../base-application/relationship-all.js';
 import { mutateData } from '../../../lib/utils/index.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
-import type { EntityAll } from '../../base-application/entity-all.js';
+import type { Entity as ServerEntity, Relationship as ServerRelationship } from '../types.ts';
 
-export function prepareRelationship({ relationship }: { relationship: RelationshipAll; entity: EntityAll }) {
+export function prepareRelationship({ relationship }: { relationship: ServerRelationship; entity: ServerEntity }) {
   if (relationship.documentation) {
     mutateData(relationship, {
       __override__: false,

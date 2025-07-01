@@ -20,11 +20,11 @@
 import { addOtherRelationship } from '../../base-application/support/index.js';
 import type { ValidationResult } from '../../base-core/index.js';
 import { databaseTypes } from '../../../lib/jhipster/index.js';
-import type { EntityAll } from '../../base-application/entity-all.js';
+import type { Entity as ServerEntity } from '../../server/types.js';
 
 const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;
 
-export const addEntitiesOtherRelationships = (entities: EntityAll[]): ValidationResult => {
+export const addEntitiesOtherRelationships = (entities: ServerEntity[]): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
   for (const entity of entities.filter(entity => !entity.builtIn)) {
     for (const relationship of entity.relationships ?? []) {
@@ -42,7 +42,7 @@ export const addEntitiesOtherRelationships = (entities: EntityAll[]): Validation
             `Ignoring '${entity.name}' definitions as it is using a built-in Entity '${relationship.otherEntityName}': 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found`,
           );
         } else {
-          relationship.otherRelationship = addOtherRelationship(entity, relationship.otherEntity as EntityAll, relationship);
+          relationship.otherRelationship = addOtherRelationship(entity, relationship.otherEntity, relationship);
         }
       }
     }
