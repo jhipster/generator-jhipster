@@ -30,11 +30,14 @@ export interface DatabaseEntity<
   entityTableName: string;
 }
 
-type Property = {
+export type DatabaseProperty = {
   columnRequired?: boolean;
-  liquibaseGenerateFakeData?: boolean;
   nullable?: boolean;
 };
+
+type Property = {
+  liquibaseGenerateFakeData?: boolean;
+} & DatabaseProperty;
 
 export interface Relationship extends BaseEntityChangesRelationship, Property {
   columnName?: string;

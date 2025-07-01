@@ -27,12 +27,12 @@ import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/
 import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
-import type { EntityAll } from '../entity-all.js';
 import type { PrimaryKey } from '../types.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { ApplicationConfiguration } from '../application-config-all.js';
 import type { Application as CommonApplication, Entity as CommonEntity } from '../../common/types.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
+import type { DatabaseProperty } from '../../liquibase/types.js';
 import { createFaker } from './faker.js';
 import { fieldToReference } from './prepare-field.js';
 import { fieldIsEnum } from './field-utils.js';
@@ -99,19 +99,12 @@ const BASE_TEMPLATE_DATA = {
   },
 };
 
-function _derivedProperties(entityWithConfig: EntityAll) {
+function _derivedProperties(entityWithConfig: CommonEntity) {
   const pagination = entityWithConfig.pagination;
-  const dto = entityWithConfig.dto;
-  const service = entityWithConfig.service;
   mutateData(entityWithConfig, {
     paginationPagination: pagination === 'pagination',
     paginationInfiniteScroll: pagination === 'infinite-scroll',
     paginationNo: pagination === 'no',
-    dtoMapstruct: dto === 'mapstruct' || dto === 'any',
-    dtoAny: dto && dto !== 'no',
-    serviceClass: service === 'serviceClass',
-    serviceImpl: service === 'serviceImpl',
-    serviceNo: service === 'no',
   });
 }
 
@@ -134,7 +127,29 @@ export const entityDefaultConfig = {
   },
 };
 
-export default function prepareEntity(entityWithConfig: EntityAll, generator, application: CommonApplication) {
+export function prepareServerEntity(entity: ServerEntity, application: CommonApplication) {
+  const { dtoSuffix = '' } = application;
+  const entitySuffix = entity.entitySuffix ?? application.entitySuffix;
+  mutateData(entity, {
+    __override__: false,
+    entityClass: ({ entityNameCapitalized }) => upperFirst(entityNameCapitalized),
+    entityClassPlural: ({ entityNamePlural }) => upperFirst(entityNamePlural),
+    entityTableName: ({ entityNameCapitalized }) => hibernateSnakeCase(entityNameCapitalized),
+
+    persistClass: ({ entityClass }) => `${entityClass}${entitySuffix ?? ''}`,
+    persistInstance: ({ entityInstance }) => `${entityInstance}${entitySuffix ?? ''}`,
+    // Even if dto is not used, we need to generate the dtoClass and dtoInstance is added to avoid errors in rendered relationships templates. The resulting class will not exist then.
+    dtoClass: ({ entityClass }) => `${entityClass}${dtoSuffix}`,
+    dtoInstance: ({ entityInstance }) => `${entityInstance}${dtoSuffix}`,
+
+    dtoMapstruct: ({ dto }) => dto === 'mapstruct' || dto === 'any',
+    dtoAny: ({ dto }) => dto && dto !== 'no',
+    restClass: ({ dtoAny, dtoClass, persistClass }) => (dtoAny ? dtoClass! : persistClass!),
+    restInstance: ({ dtoAny, dtoInstance, persistInstance }) => (dtoAny ? dtoInstance! : persistInstance!),
+  });
+}
+
+export default function prepareEntity(entityWithConfig: CommonEntity, generator, application: CommonApplication) {
   const { applicationTypeMicroservice, microfrontend, dtoSuffix = '' } = application;
 
   const entityName = upperFirst(entityWithConfig.name);
@@ -167,24 +182,9 @@ export default function prepareEntity(entityWithConfig: EntityAll, generator, ap
     entityNameCapitalized: entityName,
     entityNamePlural: pluralize(entityName),
     entityNamePluralizedAndSpinalCased: ({ entityNamePlural }) => kebabCase(entityNamePlural),
-    entityClass: upperFirst(entityName),
-    entityClassPlural: ({ entityNamePlural }) => upperFirst(entityNamePlural),
     entityInstance: lowerFirst(entityName),
     entityInstancePlural: ({ entityNamePlural }) => lowerFirst(entityNamePlural),
-    entityTableName: hibernateSnakeCase(entityName),
     entityAuthority: entityWithConfig.adminEntity ? 'ROLE_ADMIN' : undefined,
-  });
-
-  const entitySuffix = entityWithConfig.entitySuffix ?? application.entitySuffix;
-  const dto = entityWithConfig.dto && entityWithConfig.dto !== NO_DTO;
-  mutateData(entityWithConfig, {
-    persistClass: `${entityWithConfig.entityClass}${entitySuffix ?? ''}`,
-    persistInstance: `${entityWithConfig.entityInstance}${entitySuffix ?? ''}`,
-    // Even if dto is not used, we need to generate the dtoClass and dtoInstance is added to avoid errors in rendered relationships templates. The resulting class will not exist then.
-    dtoClass: `${entityWithConfig.entityClass}${dtoSuffix}`,
-    dtoInstance: `${entityWithConfig.entityInstance}${dtoSuffix}`,
-    restClass: dto ? ({ dtoClass }) => dtoClass! : ({ persistClass }) => persistClass!,
-    restInstance: dto ? ({ dtoInstance }) => dtoInstance! : ({ persistInstance }) => persistInstance!,
   });
 
   mutateData(entityWithConfig, {
@@ -197,7 +197,8 @@ export default function prepareEntity(entityWithConfig: EntityAll, generator, ap
   mutateData(entityWithConfig, {
     __override__: false,
     entityFileName: data => kebabCase(data.entityNameCapitalized + upperFirst(data.entityAngularJSSuffix)),
-    entityAngularName: data => data.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix!),
+    entityAngularName: data => upperFirst(data.entityNameCapitalized) + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix!),
+    entityReactName: data => upperFirst(data.entityNameCapitalized) + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix!),
     entityAngularNamePlural: data => pluralize(data.entityAngularName),
     entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
   });
@@ -209,8 +210,6 @@ export default function prepareEntity(entityWithConfig: EntityAll, generator, ap
   entityWithConfig.entityParentPathAddition = getEntityParentPathAddition(entityWithConfig.clientRootFolder);
   entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
   entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
-
-  entityWithConfig.entityReactName = entityWithConfig.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
 
   entityWithConfig.entityStateName = kebabCase(entityWithConfig.entityAngularName);
   entityWithConfig.entityUrl = entityWithConfig.entityStateName;
@@ -232,8 +231,6 @@ export default function prepareEntity(entityWithConfig: EntityAll, generator, ap
         ? `${data.microserviceAppName}.${data.entityTranslationKey}`
         : data.i18nKeyPrefix,
     hasRelationshipWithBuiltInUser: ({ relationships }) => relationships.some(relationship => relationship.otherEntity.builtInUser),
-    saveUserSnapshot: ({ hasRelationshipWithBuiltInUser, dto }) =>
-      applicationTypeMicroservice && application.authenticationTypeOauth2 && hasRelationshipWithBuiltInUser && dto === NO_MAPPER,
     entityApi: ({ microserviceName }) => (microserviceName ? `services/${microserviceName.toLowerCase()}/` : ''),
     entityPage: ({ microserviceName, entityFileName }) =>
       microserviceName && microfrontend && applicationTypeMicroservice
@@ -247,7 +244,7 @@ export default function prepareEntity(entityWithConfig: EntityAll, generator, ap
     const fieldEntries: [string, any][] = fieldsToGenerate
       .map(field => {
         const fieldData = field.generateFakeData!(type);
-        if (!field.nullable && fieldData === null) return undefined;
+        if (!(field as DatabaseProperty).nullable && fieldData === null) return undefined;
         return [field.fieldName, fieldData];
       })
       .filter(Boolean) as any;
@@ -259,6 +256,8 @@ export default function prepareEntity(entityWithConfig: EntityAll, generator, ap
     return Object.fromEntries(fieldEntries);
   };
   _derivedProperties(entityWithConfig);
+
+  prepareServerEntity(entityWithConfig as ServerEntity, application);
 
   return entityWithConfig;
 }

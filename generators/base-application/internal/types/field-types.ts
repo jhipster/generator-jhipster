@@ -1,6 +1,5 @@
 import type { SetFieldType, SetRequired } from 'type-fest';
-import type { FieldAll } from '../../field-all.js';
-import type { Field as BaseField } from '../../../../lib/jhipster/types/field.js';
+import type { Field as BaseApplicationField } from '../../types.js';
 import { type FieldBinaryType, type FieldBlobType, type FieldType, blobFieldTypesValues } from '../../../../lib/jhipster/field-types.ts';
 
 export const isBlobType = (fieldType: string): fieldType is FieldBlobType =>
@@ -17,18 +16,19 @@ export const getBlobContentType = (fieldType: FieldBlobType) => {
   return undefined;
 };
 
-export const isFieldBlobType = (field: FieldAll): field is SetFieldType<FieldAll, 'fieldType', FieldBlobType> =>
+export const isFieldBlobType = (field: BaseApplicationField): field is SetFieldType<BaseApplicationField, 'fieldType', FieldBlobType> =>
   isBlobType(field.fieldType);
 
-export const isFieldBinaryType = (field: FieldAll): field is SetFieldType<FieldAll, 'fieldType', FieldBinaryType> =>
+export const isFieldBinaryType = (field: BaseApplicationField): field is SetFieldType<BaseApplicationField, 'fieldType', FieldBinaryType> =>
   isBlobType(field.fieldType) || field.fieldType === 'byte[]';
 
-export const isFieldEnumType = (field: FieldAll): field is SetRequired<FieldAll, 'enumFileName' | 'enumValues'> =>
+export const isFieldEnumType = (field: BaseApplicationField): field is SetRequired<BaseApplicationField, 'enumFileName' | 'enumValues'> =>
   Boolean(field.fieldValues);
 
-export const isFieldNotEnumType = (field: FieldAll): field is SetFieldType<FieldAll, 'fieldType', FieldType> => !field.fieldValues;
+export const isFieldNotEnumType = (field: BaseApplicationField): field is SetFieldType<BaseApplicationField, 'fieldType', FieldType> =>
+  !field.fieldValues;
 
-export const convertFieldBlobType = <const F extends BaseField = BaseField>(field: F): F => {
+export const convertFieldBlobType = <const F extends BaseApplicationField = BaseApplicationField>(field: F): F => {
   // Convert fieldTypes to correct fieldTypes
   if (field.fieldTypeBlobContent === 'image') {
     field.fieldType = 'ImageBlob';
