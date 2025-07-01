@@ -32,7 +32,6 @@ import EnumValidator from './enum-validator.js';
 import DeploymentValidator from './deployment-validator.js';
 import UnaryOptionValidator from './unary-option-validator.js';
 import BinaryOptionValidator from './binary-option-validator.js';
-import type { ValidatorOptions } from './validator.js';
 
 const { OptionNames } = applicationOptions;
 
@@ -51,16 +50,10 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
   return {
     checkForErrors: (): void => {
       jdlObject.forEachApplication(jdlApplication => {
-        const blueprints = jdlApplication.getConfigurationOptionValue(BLUEPRINTS);
-        const checkReservedKeywords = (blueprints?.length ?? 0) === 0;
         checkForNamespaceConfigErrors(jdlApplication);
         checkForRelationshipErrors();
-        checkForEntityErrors(jdlApplication, { checkReservedKeywords });
-        checkForEnumErrors({ checkReservedKeywords });
-        if (!checkReservedKeywords) {
-          logger.warn('Blueprints are being used, the JDL validation phase is skipped.');
-          return;
-        }
+        checkForEntityErrors(jdlApplication);
+        checkForEnumErrors();
         checkDeploymentsErrors();
         checkForOptionErrors();
       });
@@ -77,7 +70,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkForEntityErrors(jdlApplication: JDLApplication, options: ValidatorOptions): void {
+  function checkForEntityErrors(jdlApplication: JDLApplication): void {
     if (jdlObject.getEntityQuantity() === 0) {
       return;
     }
@@ -86,7 +79,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
       if (!jdlApplication.hasEntityName(jdlEntity.name)) {
         return;
       }
-      validator.validate(jdlEntity, options);
+      validator.validate(jdlEntity);
       checkForFieldErrors(jdlEntity.name, jdlEntity.fields, jdlApplication);
     });
   }
@@ -126,13 +119,13 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkForEnumErrors(options: ValidatorOptions): void {
+  function checkForEnumErrors(): void {
     if (jdlObject.getEnumQuantity() === 0) {
       return;
     }
     const validator = new EnumValidator();
     jdlObject.forEachEnum(jdlEnum => {
-      validator.validate(jdlEnum, options);
+      validator.validate(jdlEnum);
     });
   }
 

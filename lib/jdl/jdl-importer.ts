@@ -46,14 +46,10 @@ const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the gen
 type JDLApplicationConfiguration = {
   applicationName?: string;
   applicationType?: string;
-  databaseType?: string;
-  blueprints?: string[];
   application?: {
     [GENERATOR_JHIPSTER]: {
       baseName?: string;
       applicationType?: string;
-      databaseType?: string;
-      blueprints?: string[];
     };
   };
 };
@@ -135,12 +131,10 @@ function makeJDLImporter(content, configuration: JDLApplicationConfiguration, ru
 function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration: JDLApplicationConfiguration, runtime: JDLRuntime) {
   let baseName = configuration.applicationName;
   let applicationType = configuration.applicationType;
-  let databaseType = configuration.databaseType;
 
   if (configuration.application) {
     baseName = configuration.application[GENERATOR_JHIPSTER].baseName;
     applicationType = configuration.application[GENERATOR_JHIPSTER].applicationType;
-    databaseType = configuration.application[GENERATOR_JHIPSTER].databaseType;
   }
 
   return ParsedJDLToJDLObjectConverter.parseFromConfigurationObject(
@@ -148,7 +142,6 @@ function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration: JD
       parsedContent: parsedJDLContent,
       applicationType,
       applicationName: baseName,
-      databaseType,
     },
     runtime,
   );
@@ -162,28 +155,10 @@ function checkForErrors(jdlObject: JDLObject, configuration: JDLApplicationConfi
       application = readCurrentPathYoRcFile();
     }
     let applicationType = configuration.applicationType;
-    let databaseType = configuration.databaseType;
-    let blueprints = configuration.blueprints;
     if (application?.[GENERATOR_JHIPSTER]) {
-      if (applicationType === undefined) {
-        applicationType = application[GENERATOR_JHIPSTER].applicationType;
-      }
-      if (databaseType === undefined) {
-        databaseType = application[GENERATOR_JHIPSTER].databaseType;
-      }
-      if (blueprints === undefined) {
-        blueprints = application[GENERATOR_JHIPSTER].blueprints;
-      }
+      applicationType ??= application[GENERATOR_JHIPSTER].applicationType;
     }
-    validator = createWithoutApplicationValidator(
-      jdlObject,
-      {
-        applicationType,
-        databaseType,
-        blueprints,
-      },
-      logger,
-    );
+    validator = createWithoutApplicationValidator(jdlObject);
   } else {
     validator = createWithApplicationValidator(jdlObject, logger);
   }
@@ -191,7 +166,7 @@ function checkForErrors(jdlObject: JDLObject, configuration: JDLApplicationConfi
 }
 
 function importOnlyEntities(jdlObject: JDLObject, configuration: JDLApplicationConfiguration) {
-  let { applicationName, applicationType, databaseType } = configuration;
+  let { applicationName, applicationType } = configuration;
 
   let application = configuration.application;
   if (!application) {
@@ -200,7 +175,6 @@ function importOnlyEntities(jdlObject: JDLObject, configuration: JDLApplicationC
   if (application?.[GENERATOR_JHIPSTER]) {
     applicationType ??= application[GENERATOR_JHIPSTER].applicationType;
     applicationName ??= application[GENERATOR_JHIPSTER].baseName;
-    databaseType ??= application[GENERATOR_JHIPSTER].databaseType;
   }
 
   const entitiesPerApplicationMap = JDLWithoutApplicationToJSONConverter.convert(jdlObject, applicationName!);

@@ -18,7 +18,7 @@
  */
 
 import { binaryOptions, relationshipOptions } from '../../core/built-in-options/index.js';
-import { applicationTypes, databaseTypes, fieldTypes, reservedKeywords } from '../../../jhipster/index.js';
+import { databaseTypes, fieldTypes } from '../../../jhipster/index.js';
 import type JDLObject from '../../core/models/jdl-object.js';
 import type JDLRelationship from '../../core/models/jdl-relationship.js';
 import type JDLField from '../../core/models/jdl-field.js';
@@ -28,87 +28,43 @@ import FieldValidator from './field-validator.js';
 import ValidationValidator from './validation-validator.js';
 import RelationshipValidator from './relationship-validator.js';
 import EnumValidator from './enum-validator.js';
-import DeploymentValidator from './deployment-validator.js';
-import UnaryOptionValidator from './unary-option-validator.js';
-import BinaryOptionValidator from './binary-option-validator.js';
 
-import type { ValidatorOptions } from './validator.js';
-
-const { isReservedFieldName, isReservedPaginationWords, isReservedTableName } = reservedKeywords;
 const { BUILT_IN_ENTITY } = relationshipOptions;
-const { SQL } = databaseTypes;
 
 /**
  * Constructor taking the jdl object to check against application settings.
- * @param {JDLObject} jdlObject -  the jdl object to check.
- * @param {Object} [applicationSettings] - the settings object.
- * @param {String} applicationSettings.baseName - the application's name.
- * @param {String} applicationSettings.applicationType - the application type.
- * @param {String} applicationSettings.databaseType - the DB type.
- * @param {Array} applicationSettings.blueprints - the blueprints used.
- * @param {Object} [logger] - the logger to use, default to the console.
  */
-export default function createValidator(jdlObject: JDLObject, applicationSettings: any = {}, logger: any = console) {
+export default function createValidator(jdlObject: JDLObject) {
   if (!jdlObject) {
     throw new Error('A JDL object must be passed to check for business errors.');
   }
-  const { blueprints, databaseType } = applicationSettings;
-  const checkReservedKeywords = Boolean((databaseType ?? 'no') !== 'no') && (blueprints?.length ?? 0) === 0;
 
   return {
     checkForErrors: () => {
-      checkForEntityErrors({ checkReservedKeywords });
+      checkForEntityErrors();
       checkForRelationshipErrors();
-      checkForEnumErrors({ checkReservedKeywords });
-      if (checkReservedKeywords) {
-        checkDeploymentsErrors();
-        checkForOptionErrors();
-      } else {
-        logger.warn('Blueprints are being used, the JDL validation phase is skipped.');
-      }
+      checkForEnumErrors();
     },
   };
 
-  function checkForEntityErrors(options: ValidatorOptions): void {
+  function checkForEntityErrors(): void {
     if (jdlObject.getEntityQuantity() === 0) {
       return;
     }
     const validator = new EntityValidator();
     jdlObject.forEachEntity(jdlEntity => {
-      validator.validate(jdlEntity, options);
-      if (options.checkReservedKeywords) {
-        if (isReservedTableName(jdlEntity.tableName, applicationSettings.databaseType)) {
-          logger.warn(
-            `The table name '${jdlEntity.tableName}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`,
-          );
-        }
-      }
-      checkForFieldErrors(jdlEntity.name, jdlEntity.fields, options);
+      validator.validate(jdlEntity);
+      checkForFieldErrors(jdlEntity.fields);
     });
   }
 
-  function checkForFieldErrors(entityName: string, jdlFields: Record<string, JDLField>, options: ValidatorOptions) {
+  function checkForFieldErrors(jdlFields: Record<string, JDLField>) {
     const validator = new FieldValidator();
-    const filtering = applicationSettings.databaseType === SQL;
 
     Object.keys(jdlFields).forEach(fieldName => {
       const jdlField = jdlFields[fieldName];
       validator.validate(jdlField);
-      if (options.checkReservedKeywords) {
-        if (isReservedFieldName(jdlField.name)) {
-          logger.warn(`The name '${jdlField.name}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`);
-        }
-        if (filtering && isReservedPaginationWords(jdlField.name)) {
-          throw new Error(
-            `Field name '${fieldName}' found in ${entityName} is a reserved keyword, as it is used by Spring for pagination in the URL.`,
-          );
-        }
-      }
-      const typeCheckingFunction = getTypeCheckingFunction(entityName, applicationSettings);
       const isAnEnum = jdlObject.hasEnum(jdlField.type);
-      if (!isAnEnum && !typeCheckingFunction(jdlField.type)) {
-        throw new Error(`The type '${jdlField.type}' is an unknown field type for field '${fieldName}' of entity '${entityName}'.`);
-      }
       checkForValidationErrors(jdlField, isAnEnum);
     });
   }
@@ -137,48 +93,15 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
     });
   }
 
-  function checkForEnumErrors(options: ValidatorOptions): void {
+  function checkForEnumErrors(): void {
     if (jdlObject.getEnumQuantity() === 0) {
       return;
     }
     const validator = new EnumValidator();
     jdlObject.forEachEnum(jdlEnum => {
-      validator.validate(jdlEnum, options);
+      validator.validate(jdlEnum);
     });
   }
-
-  function checkDeploymentsErrors(): void {
-    if (jdlObject.getDeploymentQuantity() === 0) {
-      return;
-    }
-    const validator = new DeploymentValidator();
-    jdlObject.forEachDeployment(deployment => {
-      validator.validate(deployment);
-    });
-  }
-
-  function checkForOptionErrors(): void {
-    if (jdlObject.getOptionQuantity() === 0) {
-      return;
-    }
-    const unaryOptionValidator = new UnaryOptionValidator();
-    const binaryOptionValidator = new BinaryOptionValidator();
-    jdlObject.getOptions().forEach(option => {
-      if (option.getType() === 'UNARY') {
-        unaryOptionValidator.validate(option);
-      } else {
-        binaryOptionValidator.validate(option);
-      }
-      checkForPaginationInAppWithCassandra(option, applicationSettings);
-    });
-  }
-}
-
-function getTypeCheckingFunction(entityName: string, applicationSettings) {
-  if (applicationSettings.applicationType === applicationTypes.GATEWAY) {
-    return () => true;
-  }
-  return fieldTypes.getIsType(applicationSettings.databaseType);
 }
 
 function checkForAbsentEntities({

@@ -54,13 +54,6 @@ describe('jdl - EnumValidator', () => {
           expect(() => validator.validate({})).to.throw(/^The enum attribute name was not found\.$/);
         });
       });
-      describe('passing checkReservedKeywords with a reserved class name as name', () => {
-        it('should fail', () => {
-          expect(() => {
-            validator.validate(new JDLEnum({ name: 'Catch' }), { checkReservedKeywords: true });
-          }).to.throw(/^The enum name 'Catch' is reserved keyword and can not be used as enum class name\.$/);
-        });
-      });
     });
   });
 });

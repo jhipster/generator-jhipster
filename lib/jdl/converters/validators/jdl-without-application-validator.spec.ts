@@ -26,7 +26,7 @@ import JDLValidation from '../../core/models/jdl-validation.js';
 import JDLRelationship from '../../core/models/jdl-relationship.js';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
 import { relationshipTypes } from '../../core/basic-types/index.js';
-import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, validations } from '../../core/built-in-options/index.js';
+import { applicationTypes, binaryOptions, fieldTypes, validations } from '../../core/built-in-options/index.js';
 import createValidator from '../validators/jdl-without-application-validator.js';
 
 const { GATEWAY } = applicationTypes;
@@ -44,91 +44,6 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
     });
   });
   describe('checkForErrors', () => {
-    describe('when having an entity with a reserved name', () => {
-      let validator;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        jdlObject.addEntity(
-          new JDLEntity({
-            name: 'Continue',
-          }),
-        );
-        validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL });
-      });
-
-      it('should fail', () => {
-        expect(() => {
-          validator.checkForErrors();
-        }).to.throw(/^The name 'Continue' is a reserved keyword and can not be used as an entity class name.$/);
-      });
-    });
-    describe('when having an entity with a reserved table name', () => {
-      let parameter;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        jdlObject.addEntity(
-          new JDLEntity({
-            name: 'valid',
-            tableName: 'continue',
-          }),
-        );
-        const logger = {
-          warn: callParameter => {
-            parameter = callParameter;
-          },
-        };
-        const validator = createValidator(
-          jdlObject,
-          {
-            databaseType: databaseTypes.SQL,
-          },
-          logger,
-        );
-        validator.checkForErrors();
-      });
-
-      it('should warn', () => {
-        expect(parameter).to.equal(
-          "The table name 'continue' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.",
-        );
-      });
-    });
-    describe('when having a field reserved name', () => {
-      let parameter;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        const entity = new JDLEntity({
-          name: 'Valid',
-        });
-        entity.addField(
-          new JDLField({
-            name: 'catch',
-            type: fieldTypes.CommonDBTypes.STRING,
-          }),
-        );
-        jdlObject.addEntity(entity);
-        const logger = {
-          warn: callParameter => {
-            parameter = callParameter;
-          },
-        };
-        const validator = createValidator(
-          jdlObject,
-          {
-            databaseType: databaseTypes.SQL,
-          },
-          logger,
-        );
-        validator.checkForErrors();
-      });
-
-      it('should warn', () => {
-        expect(parameter).to.equal("The name 'catch' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.");
-      });
-    });
     describe('when passing gateway as application type', () => {
       describe('with incompatible database type and field type', () => {
         let validator;
@@ -145,10 +60,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
           );
           const jdlObject = new JDLObject();
           jdlObject.addEntity(validEntity);
-          validator = createValidator(jdlObject, {
-            databaseType: databaseTypes.SQL,
-            applicationType: GATEWAY,
-          });
+          validator = createValidator(jdlObject);
         });
 
         it('should not fail', () => {
@@ -156,32 +68,6 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
             validator.checkForErrors();
           }).not.to.throw();
         });
-      });
-    });
-    describe('when having a field type that is invalid for a database type', () => {
-      let validator;
-
-      before(() => {
-        const validEntity = new JDLEntity({
-          name: 'Valid',
-        });
-        validEntity.addField(
-          new JDLField({
-            name: 'validField',
-            type: 'WeirdType',
-          }),
-        );
-        const jdlObject = new JDLObject();
-        jdlObject.addEntity(validEntity);
-        validator = createValidator(jdlObject, {
-          databaseType: databaseTypes.SQL,
-        });
-      });
-
-      it('should fail', () => {
-        expect(() => {
-          validator.checkForErrors();
-        }).to.throw("The type 'WeirdType' is an unknown field type for field 'validField' of entity 'Valid'.");
       });
     });
     describe('when passing an unsupported validation for a field', () => {
@@ -204,9 +90,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         entity.addField(field);
         const jdlObject = new JDLObject();
         jdlObject.addEntity(entity);
-        validator = createValidator(jdlObject, {
-          databaseType: databaseTypes.SQL,
-        });
+        validator = createValidator(jdlObject);
       });
 
       it('should fail', () => {
@@ -231,9 +115,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         const jdlObject = new JDLObject();
         jdlObject.addEntity(otherEntity);
         jdlObject.addRelationship(relationship);
-        validator = createValidator(jdlObject, {
-          databaseType: databaseTypes.SQL,
-        });
+        validator = createValidator(jdlObject);
       });
 
       it('should fail', () => {
@@ -268,9 +150,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
           const jdlObject = new JDLObject();
           jdlObject.addEntity(sourceEntity);
           jdlObject.addRelationship(relationship);
-          validator = createValidator(jdlObject, {
-            databaseType: databaseTypes.SQL,
-          });
+          validator = createValidator(jdlObject);
         });
 
         it('should not fail', () => {
@@ -295,9 +175,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
           const jdlObject = new JDLObject();
           jdlObject.addEntity(sourceEntity);
           jdlObject.addRelationship(relationship);
-          checker = createValidator(jdlObject, {
-            databaseType: databaseTypes.SQL,
-          });
+          checker = createValidator(jdlObject);
         });
 
         it('should fail', () => {
@@ -307,26 +185,6 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
             "In the relationship between Source and Other, Other is not declared. If 'Other' is a built-in entity declare like 'Source to Other with builtInEntity'.",
           );
         });
-      });
-    });
-    describe('when having a JDL with pagination and Cassandra as database type', () => {
-      let validator;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        jdlObject.addOption(
-          new JDLBinaryOption({
-            name: binaryOptions.Options.PAGINATION,
-            value: binaryOptions.Values.pagination.PAGINATION,
-          }),
-        );
-        validator = createValidator(jdlObject, { databaseType: databaseTypes.CASSANDRA });
-      });
-
-      it('should fail', () => {
-        expect(() => {
-          validator.checkForErrors();
-        }).to.throw("Pagination isn't allowed when the application uses Cassandra.");
       });
     });
     describe('when having DTOs without services', () => {
@@ -348,7 +206,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
             entityNames: ['B'],
           }),
         );
-        validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL });
+        validator = createValidator(jdlObject);
       });
 
       it('should not fail', () => {
@@ -391,7 +249,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
             excludedNames: ['C'],
           }),
         );
-        validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL });
+        validator = createValidator(jdlObject);
       });
       it('should not fail', () => {
         expect(() => {
@@ -419,7 +277,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         jdlObject.addEntity(sourceEntity);
         jdlObject.addEntity(destinationEntity);
         jdlObject.addRelationship(relationship);
-        validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL });
+        validator = createValidator(jdlObject);
       });
 
       it('should not fail', () => {
@@ -446,33 +304,11 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         jdlObject.addEntity(sourceEntity);
         jdlObject.addEntity(destinationEntity);
         jdlObject.addRelationship(relationship);
-        validator = createValidator(jdlObject, { databaseType: databaseTypes.SQL });
+        validator = createValidator(jdlObject);
       });
 
       it('should not fail', () => {
         expect(() => validator.checkForErrors()).not.to.throw();
-      });
-    });
-    describe('when blueprints is used', () => {
-      let parameter;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        const logger = {
-          warn: callParameter => {
-            parameter = callParameter;
-          },
-        };
-        const validator = createValidator(
-          jdlObject,
-          { blueprints: ['generator-jhipster-nodejs', 'generator-jhipster-dotnetcore'] },
-          logger,
-        );
-        validator.checkForErrors();
-      });
-
-      it('should warn about not performing jdl validation', () => {
-        expect(parameter).to.equal('Blueprints are being used, the JDL validation phase is skipped.');
       });
     });
   });

@@ -120,5 +120,4 @@ export type ParsedJDLRoot = {
   entities?: ParsedJDLEntity[];
   applicationType?: string;
   applicationName?: string;
-  databaseType?: string;
 };

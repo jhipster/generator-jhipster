@@ -20,12 +20,10 @@
 import { snakeCase } from 'lodash-es';
 import JDLEnum from '../jdl/core/models/jdl-enum.js';
 import validations from '../jdl/core/built-in-options/validations.js';
-import databaseTypes from './database-types.js';
 
 const {
   Validations: { REQUIRED, UNIQUE, MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN },
 } = validations;
-const { MONGODB, MARIADB, COUCHBASE, NEO4J, CASSANDRA, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = databaseTypes;
 
 export const CommonDBTypes = {
   STRING: 'String',
@@ -87,7 +85,6 @@ export default {
   RelationalOnlyDBTypes,
   isCommonDBType,
   hasValidation,
-  getIsType,
   BlobTypes,
 };
 
@@ -107,37 +104,6 @@ export function hasValidation(type: any, validation, isAnEnum?: boolean): boolea
     type = 'Enum';
   }
   return isCommonDBType(type) && CommonDBValidations[type].has(validation);
-}
-
-export function getIsType(databaseType?: string, callback?: any): (type: any) => boolean {
-  if (!databaseType) {
-    throw new Error('The passed type must not be nil.');
-  }
-  let isType;
-  switch (databaseType) {
-    case SQL:
-    case MYSQL:
-    case MARIADB:
-    case POSTGRESQL:
-    case ORACLE:
-    case MSSQL:
-    case MONGODB:
-    case COUCHBASE:
-    case CASSANDRA:
-    case NEO4J:
-      isType = isCommonDBType;
-      break;
-    case NO:
-      isType = () => true;
-      break;
-    default:
-      callback?.();
-      throw new Error(
-        "The passed database type must either be 'sql', 'mysql', 'mariadb', 'postgresql'," +
-          " 'oracle', 'mssql', 'mongodb', 'couchbase', 'neo4j' or 'cassandra'",
-      );
-  }
-  return isType;
 }
 
 export const blobFieldTypesValues = {

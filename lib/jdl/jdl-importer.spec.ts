@@ -465,24 +465,14 @@ ${entities}`,
     });
     describe('when importing a JDL application with blueprints', () => {
       let importState;
-      let parameter;
 
       before(() => {
         const importer = createImporterFromFiles([getTestFile('application_with_blueprints.jdl')]);
-        const logger = {
-          warn: callParameter => {
-            parameter = callParameter;
-          },
-        };
-        importState = importer.import(logger as Console);
+        importState = importer.import();
       });
 
       it('should return the blueprints attributes in the application', () => {
         jestExpect(importState.exportedApplications).toMatchSnapshot();
-      });
-
-      it('should warn about not performing jdl validation', () => {
-        expect(parameter).to.equal('Blueprints are being used, the JDL validation phase is skipped.');
       });
     });
     describe('when choosing neo4j as database type', () => {
