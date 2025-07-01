@@ -31,7 +31,7 @@ import type { EntityAll } from '../entity-all.js';
 import type { PrimaryKey } from '../types.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { ApplicationConfiguration } from '../application-config-all.js';
-import type { ApplicationAll } from '../application-properties-all.js';
+import type { Application as CommonApplication } from '../../common/types.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import { createFaker } from './faker.js';
 import { fieldToReference } from './prepare-field.js';
@@ -134,7 +134,7 @@ export const entityDefaultConfig = {
   },
 };
 
-export default function prepareEntity(entityWithConfig: EntityAll, generator, application: ApplicationAll) {
+export default function prepareEntity(entityWithConfig: EntityAll, generator, application: CommonApplication) {
   const { applicationTypeMicroservice, microfrontend, dtoSuffix = '' } = application;
 
   const entityName = upperFirst(entityWithConfig.name);

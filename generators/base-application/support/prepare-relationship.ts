@@ -20,12 +20,11 @@
 import { lowerFirst, startCase, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
-import { checkAndReturnRelationshipOnValue, databaseTypes, entityOptions, validations } from '../../../lib/jhipster/index.js';
+import { databaseTypes, entityOptions, validations } from '../../../lib/jhipster/index.js';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import type { RelationshipAll } from '../relationship-all.js';
-import type { EntityAll } from '../entity-all.js';
+import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRelationship } from '../types.js';
 import { prepareProperty } from './prepare-property.js';
 import { stringifyApplicationData } from './debug.js';
 
@@ -37,14 +36,9 @@ const {
 
 const { MAPSTRUCT } = MapperTypes;
 
-function _defineOnUpdateAndOnDelete(relationship: RelationshipAll, generator: CoreGenerator) {
-  relationship.onDelete = checkAndReturnRelationshipOnValue(relationship.options?.onDelete, generator);
-  relationship.onUpdate = checkAndReturnRelationshipOnValue(relationship.options?.onUpdate, generator);
-}
-
 export default function prepareRelationship(
-  entityWithConfig: EntityAll,
-  relationship: RelationshipAll<Omit<EntityAll, 'relationships'>>,
+  entityWithConfig: BaseApplicationEntity,
+  relationship: BaseApplicationRelationship<Omit<BaseApplicationEntity, 'relationships'>>,
   generator: CoreGenerator,
   ignoreMissingRequiredRelationship = false,
 ) {
@@ -247,8 +241,6 @@ export default function prepareRelationship(
   relationship.nullable = !(relationship.relationshipValidate === true && relationship.relationshipRequired);
 
   relationship.reference = relationshipToReference(entityWithConfig, relationship);
-
-  _defineOnUpdateAndOnDelete(relationship, generator);
 
   return relationship;
 }

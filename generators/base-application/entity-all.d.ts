@@ -29,56 +29,7 @@ export interface EntityAll<F extends FieldAll = FieldAll, R extends Relationship
     AngularEntity<F, R>,
     LiquibaseEntity<F, R>,
     SpringDataRelationalEntity<F, R>,
-    SpringBootEntity<F, R> {
-  entityApiUrl: string;
-  entityApi: string;
-
-  anyFieldIsBigDecimal: boolean;
-  /**
-   * Any file is of type Bytes or ByteBuffer
-   */
-  anyFieldIsBlobDerived: boolean;
-  /**
-   * Any field is of type ZonedDateTime, Instant or LocalDate
-   */
-  anyFieldIsDateDerived: boolean;
-  anyFieldIsDuration: boolean;
-  anyFieldIsInstant: boolean;
-  anyFieldIsLocalDate: boolean;
-  anyFieldIsLocalTime: boolean;
-  /**
-   * Any field is of type ZonedDateTime or Instant
-   */
-  anyFieldIsTimeDerived: boolean;
-  anyFieldIsUUID: boolean;
-  anyFieldIsZonedDateTime: boolean;
-
-  anyFieldHasDocumentation: boolean;
-  anyFieldHasImageContentType: boolean;
-  anyFieldHasTextContentType: boolean;
-  /**
-   * Any field has image or any contentType
-   */
-  anyFieldHasFileBasedContentType: boolean;
-
-  /**
-   * Any relationship is required or id
-   */
-  anyRelationshipIsRequired: boolean;
-  hasRelationshipWithBuiltInUser: boolean;
-
-  serviceClass: boolean;
-  serviceImpl: boolean;
-  serviceNo: boolean;
-
-  saveUserSnapshot?: boolean;
-
-  /** Properties from application required for entities published through gateways */
-  useMicroserviceJson?: boolean;
-  microserviceAppName?: string;
-  applicationType?: string;
-  microfrontend?: boolean;
-}
+    SpringBootEntity<F, R> {}
 
 export interface UserEntity extends EntityAll {
   hasImageField?: boolean;

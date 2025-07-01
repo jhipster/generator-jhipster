@@ -30,7 +30,7 @@ import {
   prepareRelationship,
 } from '../base-application/support/index.js';
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
-import { fieldTypes } from '../../lib/jhipster/index.js';
+import { checkAndReturnRelationshipOnValue, fieldTypes } from '../../lib/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
 import type { FieldAll } from '../base-application/field-all.js';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
@@ -153,6 +153,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareEntityRelationship({ entity, relationship }) {
         prepareRelationshipForLiquibase(entity, relationship);
+        relationship.onDelete = checkAndReturnRelationshipOnValue(relationship.options?.onDelete, this);
+        relationship.onUpdate = checkAndReturnRelationshipOnValue(relationship.options?.onUpdate, this);
       },
     });
   }
