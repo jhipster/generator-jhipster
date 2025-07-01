@@ -128,7 +128,7 @@ management:
         readiness:
           include: readinessState<% if (databaseTypeSql && !reactive) { %>,db<% } %>
     jhimetrics:
-      enabled: true
+      access: read-only
   info:
     git:
       mode: full
