@@ -463,7 +463,7 @@ if (field.fieldTypeString || field.blobContentTypeText) {
     private static Random random = new Random();
   <%_ } _%>
   <%_ if (primaryKey.hasLong && !readOnly && updatableEntity) { _%>
-    private static AtomicLong longCount = new AtomicLong(random.nextInt() + ( 2 * Integer.MAX_VALUE ));
+    private static AtomicLong longCount = new AtomicLong(random.nextInt() + ( 2L * Integer.MAX_VALUE ));
   <%_ } else if (primaryKey.hasInteger) { _%>
     private static AtomicInteger intCount = new AtomicInteger(random.nextInt() + ( 2 * Short.MAX_VALUE ));
   <%_ } _%>
