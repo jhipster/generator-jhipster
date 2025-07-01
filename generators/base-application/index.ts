@@ -27,6 +27,4 @@ export type { ApplicationConfiguration as AllConfig } from './application-config
 export type { ApplicationAll } from './application-properties-all.js';
 export type { ApplicationOptions as AllOptions } from './application-options-all.d.ts';
 export type { EntityAll } from './entity-all.js';
-export type { FieldAll } from './field-all.js';
-export type { RelationshipAll } from './relationship-all.js';
 export type { SourceAll } from './source-all.js';

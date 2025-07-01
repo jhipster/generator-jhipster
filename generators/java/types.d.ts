@@ -29,6 +29,7 @@ type Property = {
 
 export type Field = BaseApplicationField &
   Property & {
+    javaFieldType?: string;
     fieldInJavaBeanMethod?: string;
     fieldJavaBuildSpecification?: string;
     fieldJavadoc?: string;
@@ -37,7 +38,9 @@ export type Field = BaseApplicationField &
 
     propertyJavaCustomFilter?: { type: string; superType: string; fieldType: string };
 
-    columnName?: string;
+    javaValueSample1?: string;
+    javaValueSample2?: string;
+    fieldValidateRulesPatternJava?: string;
   };
 
 export interface Relationship extends BaseApplicationRelationship, Property {

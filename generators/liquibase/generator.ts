@@ -32,7 +32,6 @@ import {
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
 import { checkAndReturnRelationshipOnValue, fieldTypes } from '../../lib/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
-import type { FieldAll } from '../base-application/field-all.js';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../base-entity-changes/types.js';
 import type { Source as SpringBootSource } from '../spring-boot/index.js';
@@ -51,7 +50,12 @@ import {
 } from './internal/needles.js';
 import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.js';
 import type command from './command.js';
-import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Source as LiquibaseSource } from './types.js';
+import type {
+  Application as LiquibaseApplication,
+  Entity as LiquibaseEntity,
+  Field as LiquibaseField,
+  Source as LiquibaseSource,
+} from './types.js';
 
 const {
   CommonDBTypes: { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER },
@@ -699,7 +703,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
    * @param leadingWhitespace
    * @returns
    */
-  createDefaultValueLiquibaseAttribute(field: FieldAll, leadingWhitespace = false) {
+  createDefaultValueLiquibaseAttribute(field: LiquibaseField, leadingWhitespace = false) {
     if (field.liquibaseDefaultValueAttributeValue === undefined) {
       return '';
     }

@@ -28,7 +28,12 @@ import type command from './command.ts';
 
 type CommandTypes = HandleCommandTypes<typeof command>;
 
-export { JavaField as Field };
+export type Field = JavaField & {
+  jpaGeneratedValue?: boolean | 'identity' | 'sequence';
+  jpaGeneratedValueSequence?: boolean;
+  jpaGeneratedValueIdentity?: boolean;
+  jpaSequenceGeneratorName?: string;
+};
 
 export interface Relationship extends JavaRelationship {
   relationshipSqlSafeName?: string;

@@ -22,10 +22,11 @@ import { getTypescriptType } from '../../client/support/index.js';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
 import { applyDerivedPropertyOnly, mutateData } from '../../../lib/utils/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import type { FieldAll } from '../field-all.js';
-import type { EntityAll } from '../entity-all.js';
+import type { Entity as CommonEntity, Field as CommonField } from '../../common/types.d.ts';
+import type { Entity as ServerEntity } from '../../server/types.d.ts';
 import { isFieldEnumType } from '../internal/types/field-types.ts';
 import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
+import type { DatabaseProperty } from '../../liquibase/types.js';
 import type { FakerWithRandexp } from './faker.js';
 import { prepareProperty } from './prepare-property.js';
 
@@ -104,7 +105,7 @@ const fakeStringTemplateForFieldName = columnName => {
  */
 function generateFakeDataForField(
   this: CoreGenerator,
-  field: FieldAll,
+  field: CommonField,
   faker: FakerWithRandexp,
   changelogDate,
   type: 'csv' | 'cypress' | 'json-serializable' | 'ts' = 'csv',
@@ -189,7 +190,7 @@ function generateFakeDataForField(
   } else if (field.fieldTypeBinary && field.fieldTypeBlobContent === TEXT) {
     data = '../fake-data/blob/hipster.txt';
   } else if (field.fieldType === STRING) {
-    data = field.id ? faker.string.uuid() : faker.helpers.fake(fakeStringTemplateForFieldName(field.columnName!));
+    data = field.id ? faker.string.uuid() : faker.helpers.fake(fakeStringTemplateForFieldName((field as DatabaseProperty).columnName!));
   } else if (field.fieldType === UUID) {
     data = faker.string.uuid();
   } else if (field.fieldType === BOOLEAN) {
@@ -234,7 +235,7 @@ function generateFakeDataForField(
   return { data, originalData };
 }
 
-function _derivedProperties(field: FieldAll) {
+function _derivedProperties(field: CommonField) {
   const fieldType = field.fieldType;
   const fieldTypeBlobContent = field.fieldTypeBlobContent;
   const validationRules = field.fieldValidate ? (field.fieldValidateRules ?? []) : [];
@@ -268,17 +269,17 @@ function _derivedProperties(field: FieldAll) {
   });
 }
 
-export default function prepareField(entityWithConfig, field, generator) {
+export default function prepareField(entityWithConfig: CommonEntity, field: CommonField, generator: CoreGenerator): CommonField {
   prepareCommonFieldForTemplates(entityWithConfig, field, generator);
 
-  if (entityWithConfig.prodDatabaseType || entityWithConfig.databaseType) {
-    prepareServerFieldForTemplates(entityWithConfig, field, generator);
+  if ((entityWithConfig as any).prodDatabaseType || entityWithConfig.databaseType) {
+    prepareServerFieldForTemplates(entityWithConfig as ServerEntity, field, generator);
   }
 
   return field;
 }
 
-function prepareCommonFieldForTemplates(entityWithConfig: EntityAll, field: FieldAll, generator) {
+function prepareCommonFieldForTemplates(entityWithConfig: CommonEntity, field: CommonField, generator: CoreGenerator): CommonField {
   mutateData(field, {
     __override__: false,
     path: [field.fieldName],
@@ -289,7 +290,7 @@ function prepareCommonFieldForTemplates(entityWithConfig: EntityAll, field: Fiel
     fieldNameHumanized: ({ fieldName }) => startCase(fieldName),
     fieldTranslationKey: ({ fieldName }) => `${entityWithConfig.i18nKeyPrefix}.${fieldName}`,
     tsType: ({ fieldType }) => getTypescriptType(fieldType),
-  } as any);
+  });
 
   prepareProperty(field);
 
@@ -406,7 +407,7 @@ export function getEnumValuesWithCustomValues(enumValues: string): { name: strin
   });
 }
 
-export function fieldToReference(entity, field, pathPrefix = []) {
+export function fieldToReference(entity: CommonEntity, field: CommonField, pathPrefix = []) {
   return {
     id: field.id,
     entity,
@@ -415,7 +416,7 @@ export function fieldToReference(entity, field, pathPrefix = []) {
     owned: true,
     doc: field.documentation,
     get propertyJavadoc() {
-      return field.fieldJavadoc;
+      return (field as any).fieldJavadoc;
     },
     get propertyApiDescription() {
       return field.fieldApiDescription;

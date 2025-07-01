@@ -27,10 +27,12 @@ export interface DatabaseEntity<
   F extends BaseApplicationField = BaseApplicationField,
   R extends BaseApplicationRelationship = BaseApplicationRelationship,
 > extends BaseApplicationEntity<F, R> {
+  jhiTablePrefix: string;
   entityTableName: string;
 }
 
 export type DatabaseProperty = {
+  columnName?: string;
   columnRequired?: boolean;
   nullable?: boolean;
 };
@@ -40,7 +42,6 @@ type Property = {
 } & DatabaseProperty;
 
 export interface Relationship extends BaseEntityChangesRelationship, Property {
-  columnName?: string;
   columnDataType?: string;
 
   onDelete?: boolean;
@@ -62,14 +63,17 @@ export type Field = BaseEntityChangesField &
     columnType?: LiquibaseColumnType;
     loadColumnType?: LiquibaseLoadColumnType;
 
-    defaultValue: any;
-    defaultValueComputed: any;
-
     shouldDropDefaultValue?: boolean;
     shouldCreateContentType?: boolean;
 
+    liquibaseAutoIncrement?: boolean;
+    liquibaseSequenceGeneratorName?: string;
+    liquibaseCustomSequenceGenerator?: boolean;
+
     liquibaseDefaultValueAttributeValue?: string;
     liquibaseDefaultValueAttributeName?: string;
+
+    uniqueConstraintName?: string;
   };
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship>

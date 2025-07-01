@@ -24,7 +24,7 @@ import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/in
 import { parseChangelog } from '../../base/support/timestamp.js';
 import { getMicroserviceAppName, mutateData, stringHashCode, upperFirstCamelCase } from '../../../lib/utils/index.js';
 import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/support/index.js';
-import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
+import { applicationTypes, databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
 import type { PrimaryKey } from '../types.js';
@@ -38,13 +38,10 @@ import { fieldToReference } from './prepare-field.js';
 import { fieldIsEnum } from './field-utils.js';
 
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
-const { MapperTypes } = entityOptions;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { CommonDBTypes } = fieldTypes;
 
 const { BOOLEAN, LONG, STRING, UUID, INTEGER } = CommonDBTypes;
-const { NO: NO_DTO } = MapperTypes;
-const NO_MAPPER = MapperTypes.NO;
 
 const { CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = databaseTypes;
 
@@ -150,7 +147,7 @@ export function prepareServerEntity(entity: ServerEntity, application: CommonApp
 }
 
 export default function prepareEntity(entityWithConfig: CommonEntity, generator, application: CommonApplication) {
-  const { applicationTypeMicroservice, microfrontend, dtoSuffix = '' } = application;
+  const { applicationTypeMicroservice, microfrontend } = application;
 
   const entityName = upperFirst(entityWithConfig.name);
   mutateData(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);

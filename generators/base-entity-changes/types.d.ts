@@ -1,4 +1,10 @@
-export type { Application, Config, Entity, Field, Options, Features, Relationship, Source } from '../base-application/types.js';
+import type { Field as BaseApplicationField } from '../base-application/types.js';
+export type { Application, Config, Entity, Options, Features, Relationship, Source } from '../base-application/types.js';
+
+export type Field = BaseApplicationField & {
+  defaultValue?: any;
+  defaultValueComputed?: any;
+};
 
 export type BaseChangelog = {
   newEntity: boolean;

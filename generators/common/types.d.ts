@@ -21,6 +21,7 @@ export type Field = JavascriptField & {
   fieldTypeTemporal?: boolean;
   fieldTypeCharSequence?: boolean;
   fieldTypeNumeric?: boolean;
+  fieldSupportsSortBy?: boolean;
 };
 
 export type Config = BaseApplicationConfig &
