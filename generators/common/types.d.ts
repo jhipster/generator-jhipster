@@ -46,6 +46,8 @@ export type Application<E extends BaseApplicationEntity = Entity> = JavascriptAp
     srcTest: string;
     documentationUrl: string;
     anyEntityHasRelationshipWithUser: boolean;
+
+    gatewayServicesApiAvailable?: boolean;
   };
 
 export type { JavascriptRelationship as Relationship, BaseApplicationSource as Source };

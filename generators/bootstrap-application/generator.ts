@@ -19,7 +19,6 @@
 import assert from 'assert';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import type { ApplicationAll, EntityAll } from '../base-application/index.js';
 import { validations } from '../../lib/jhipster/index.js';
 import {
   derivedPrimaryKeyProperties,
@@ -30,14 +29,14 @@ import {
 
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.js';
 import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.js';
-import type { Field } from '../../lib/jhipster/types/field.js';
+import type { Application as CommonApplication, Entity as CommonEntity, Field as CommonField } from '../common/types.js';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
   SUPPORTED_VALIDATION_RULES,
 } = validations;
 
-export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<EntityAll, ApplicationAll<EntityAll>> {
+export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication<CommonEntity>> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -58,12 +57,16 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           application.skipUserManagement = true;
         }
 
-        applicationDefaults({
-          gatewayServicesApiAvailable: undefined,
-          cypressTests: ({ testFrameworks }) => testFrameworks?.includes('cypress') ?? false,
-          cucumberTests: ({ testFrameworks }) => testFrameworks?.includes('cucumber') ?? false,
-          gatlingTests: ({ testFrameworks }) => testFrameworks?.includes('gatling') ?? false,
-        });
+        applicationDefaults(
+          {
+            gatewayServicesApiAvailable: undefined,
+          },
+          {
+            cypressTests: ({ testFrameworks }) => testFrameworks?.includes('cypress') ?? false,
+            cucumberTests: ({ testFrameworks }) => testFrameworks?.includes('cucumber') ?? false,
+            gatlingTests: ({ testFrameworks }) => testFrameworks?.includes('gatling') ?? false,
+          } as any,
+        );
 
         let prettierExtensions = 'md,json,yml,html';
         if (application.clientFrameworkAny) {
@@ -79,7 +82,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
         applicationDefaults({
           // TODO remove prettierExtensions, moved to prettier generator
           prettierExtensions,
-          useNpmWrapper: application => Boolean(application.clientFrameworkAny && application.backendTypeJavaAny),
           documentationArchiveUrl: ({ jhipsterVersion }) =>
             `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`,
         });
@@ -98,7 +100,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           entityConfig.name = entityName;
         }
 
-        entityConfig.fields!.forEach((field: Field) => {
+        entityConfig.fields!.forEach((field: CommonField) => {
           const { fieldName, fieldType, fieldValidateRules } = field;
 
           assert(fieldName, `fieldName is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);

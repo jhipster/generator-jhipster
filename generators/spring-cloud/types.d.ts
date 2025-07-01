@@ -5,7 +5,6 @@ export type { Config, Entity, Field, Options, Relationship } from '../spring-boo
 
 export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = BaseApplicationApplication<E> &
   SpringBootApplication<E> & {
-    gatewayServicesApiAvailable?: boolean;
     gatewayRoutes?: { route: string; host: string; serverPort: string }[];
     routes?: string[];
   };

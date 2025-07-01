@@ -31,7 +31,7 @@ import type { EntityAll } from '../entity-all.js';
 import type { PrimaryKey } from '../types.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { ApplicationConfiguration } from '../application-config-all.js';
-import type { Application as CommonApplication } from '../../common/types.ts';
+import type { Application as CommonApplication, Entity as CommonEntity } from '../../common/types.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import { createFaker } from './faker.js';
 import { fieldToReference } from './prepare-field.js';
@@ -524,7 +524,7 @@ export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntit
   return entity;
 }
 
-export function preparePostEntityCommonDerivedProperties(entity: EntityAll) {
+export function preparePostEntityCommonDerivedProperties(entity: CommonEntity) {
   const { fields } = entity;
   const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 

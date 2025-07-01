@@ -28,13 +28,13 @@
 _&>
 <%_
 let clientPackageMngrName = 'Npm';
-let clientPackageMngrWrapper = useNpmWrapper ? './npmw' : clientPackageManager;
+let clientPackageMngrWrapper = locals.useNpmWrapper ? './npmw' : clientPackageManager;
 let clientPackageMngrAddGlobal = 'install -g';
 let clientPackageMngrAdd = 'install --save --save-exact';
 let clientPackageMngrAddDev = 'install --save-dev --save-exact';
 -%>
 <&_ if (fragment.developmentSection) { -&>
-<%_ if (useNpmWrapper) { _%>
+<%_ if (locals.useNpmWrapper) { _%>
 The build system will install automatically the recommended version of Node and <%= clientPackageManager %>.
 
 We provide a wrapper to launch <%= clientPackageManager %>.
