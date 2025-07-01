@@ -35,6 +35,12 @@ export type SpringEntity = {
   entitySpringPreAuthorize?: string;
   entitySpringReadPreAuthorize?: string;
   entityR2dbcRepository?: boolean;
+
+  serviceClass: boolean;
+  serviceImpl: boolean;
+  serviceNo: boolean;
+
+  saveUserSnapshot?: boolean;
 };
 
 export type Field = ServerField &

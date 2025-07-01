@@ -33,7 +33,10 @@ export type Options = BaseApplicationOptions & Command['Options'];
 
 export interface Entity<F extends Field = Field, R extends JavascriptRelationship = JavascriptRelationship>
   extends LanguagesEntity<F, R>,
-    JavascriptEntity<F, R> {}
+    JavascriptEntity<F, R> {
+  entityApiUrl: string;
+  entityApi: string;
+}
 
 export type Application<E extends BaseApplicationEntity = Entity> = JavascriptApplication<E> &
   DockerApplication &

@@ -46,6 +46,15 @@ export type Field = Property &
     unique?: boolean;
     maxlength?: number;
 
+    /**
+     * Faker template passed to `faker.helpers.fake()`.
+     * @see https://fakerjs.dev/api/helpers.html#fake
+     */
+    fakerTemplate?: string;
+
+    // Temporary fields for Faker
+    uniqueValue?: any[];
+
     generateFakeDataFromPattern?: () => string | undefined;
     /** @deprecated */
     createRandexp: () => any;
@@ -61,6 +70,36 @@ export type Field = Property &
     contentTypeFieldName?: string;
 
     fieldTypeTimed?: boolean;
+
+    blobContentTypeText?: boolean;
+    blobContentTypeImage?: boolean;
+    blobContentTypeAny?: boolean;
+
+    fieldTypeBytes?: boolean;
+    // Derived properties
+    fieldTypeBinary?: boolean;
+    fieldTypeDuration?: boolean;
+    fieldTypeLocalDate?: boolean;
+    fieldTypeLocalTime?: boolean;
+    /** @deprecated */
+    fieldTypeTemporal: boolean;
+    /** @deprecated */
+    fieldTypeCharSequence: boolean;
+    /** @deprecated */
+    fieldTypeNumeric: boolean;
+
+    /** @deprecated */
+    reference?: any;
+    relationshipsPath?: string[];
+
+    fieldValidationMin?: boolean;
+    fieldValidationMinLength?: boolean;
+    fieldValidationMax?: boolean;
+    fieldValidationMaxLength?: boolean;
+    fieldValidationPattern?: boolean;
+    fieldValidationUnique?: boolean;
+    fieldValidationMinBytes?: boolean;
+    fieldValidationMaxBytes?: boolean;
   };
 
 /**
@@ -147,6 +186,46 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   resetFakerSeed(suffix?: string): void;
   generateFakeData?: (type?: any) => any;
   faker: FakerWithRandexp;
+
+  anyFieldIsBigDecimal: boolean;
+  /**
+   * Any file is of type Bytes or ByteBuffer
+   */
+  anyFieldIsBlobDerived: boolean;
+  /**
+   * Any field is of type ZonedDateTime, Instant or LocalDate
+   */
+  anyFieldIsDateDerived: boolean;
+  anyFieldIsDuration: boolean;
+  anyFieldIsInstant: boolean;
+  anyFieldIsLocalDate: boolean;
+  anyFieldIsLocalTime: boolean;
+  /**
+   * Any field is of type ZonedDateTime or Instant
+   */
+  anyFieldIsTimeDerived: boolean;
+  anyFieldIsUUID: boolean;
+  anyFieldIsZonedDateTime: boolean;
+
+  anyFieldHasDocumentation: boolean;
+  anyFieldHasImageContentType: boolean;
+  anyFieldHasTextContentType: boolean;
+  /**
+   * Any field has image or any contentType
+   */
+  anyFieldHasFileBasedContentType: boolean;
+
+  /**
+   * Any relationship is required or id
+   */
+  anyRelationshipIsRequired: boolean;
+  hasRelationshipWithBuiltInUser: boolean;
+
+  /** Properties from application required for entities published through gateways */
+  useMicroserviceJson?: boolean;
+  microserviceAppName?: string;
+  applicationType?: string;
+  microfrontend?: boolean;
 }
 
 /* ApplicationType Start */

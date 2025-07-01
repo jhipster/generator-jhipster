@@ -1,4 +1,9 @@
 import type {
+  Entity as BaseApplicationEntity,
+  Field as BaseApplicationField,
+  Relationship as BaseApplicationRelationship,
+} from '../base-application/index.ts';
+import type {
   Entity as BaseEntityChangesEntity,
   Field as BaseEntityChangesField,
   Relationship as BaseEntityChangesRelationship,
@@ -18,14 +23,39 @@ export type LiquibaseSourceType = BaseEntityChangesSource & {
 
 export type Source = LiquibaseSourceType & JavaSource;
 
-export interface Relationship extends BaseEntityChangesRelationship {
+export interface DatabaseEntity<
+  F extends BaseApplicationField = BaseApplicationField,
+  R extends BaseApplicationRelationship = BaseApplicationRelationship,
+> extends BaseApplicationEntity<F, R> {
+  entityTableName: string;
+}
+
+type Property = {
+  columnRequired?: boolean;
+  liquibaseGenerateFakeData?: boolean;
+  nullable?: boolean;
+};
+
+export interface Relationship extends BaseEntityChangesRelationship, Property {
+  columnName?: string;
+  columnDataType?: string;
+
   onDelete?: boolean;
   onUpdate?: boolean;
+
+  shouldWriteRelationship?: boolean;
+  shouldWriteJoinTable?: boolean;
+
+  joinTable?: {
+    name: string;
+    constraintName?: string;
+    otherConstraintName?: string;
+  };
 }
 
 export type Field = BaseEntityChangesField &
+  Property &
   JavaField & {
-    columnRequired?: boolean;
     columnType?: LiquibaseColumnType;
     loadColumnType?: LiquibaseLoadColumnType;
 
@@ -37,14 +67,12 @@ export type Field = BaseEntityChangesField &
 
     liquibaseDefaultValueAttributeValue?: string;
     liquibaseDefaultValueAttributeName?: string;
-    liquibaseGenerateFakeData?: boolean;
-
-    nullable?: boolean;
   };
 
-export interface Entity<F extends Field = Field, R extends BaseEntityChangesRelationship = BaseEntityChangesRelationship>
+export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
   extends BaseEntityChangesEntity<F, R>,
-    JavaEntity<F, R> {
+    JavaEntity<F, R>,
+    DatabaseEntity<F, R> {
   anyRelationshipIsOwnerSide: boolean;
   liquibaseFakeData: Record<string, any>[];
   fakeDataCount: number;
