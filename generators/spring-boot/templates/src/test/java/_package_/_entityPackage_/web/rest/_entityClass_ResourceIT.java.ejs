@@ -24,10 +24,12 @@ import static <%= packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
 var filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
 let mapsIdEntity;
+let mapsIdProperty;
 let mapsIdEntityInstance;
 let mapsIdRepoInstance;
 if (isUsingMapsId) {
   mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
+  mapsIdProperty = mapsIdAssoc.propertyNameCapitalized;
   mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
   mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
 }
@@ -834,8 +836,8 @@ _%>
         em.detach(updated<%= persistClass %>);
     <%_ } _%>
 
-        // Update the <%= mapsIdEntity %> with new association value
-        updated<%= persistClass %>.set<%= mapsIdEntity %>(<%= alreadyGeneratedEntities.pop() %>);
+        // Update the updated<%= persistClass %> with new association value
+        updated<%= persistClass %>.set<%= mapsIdProperty %>(<%= alreadyGeneratedEntities.pop() %>);
     <%_ if (dtoMapstruct) { _%>
         <%= dtoClass %> updated<%= dtoClass %> = <%= entityInstance %>Mapper.toDto(updated<%= persistClass %>);
         assertThat(updated<%= dtoClass %>).isNotNull();
@@ -865,7 +867,7 @@ _%>
          * Validate the id for MapsId, the ids must be same
          * Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
          * Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
-         * assertThat(test<%= entityClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(test<%= entityClass %>.get<%= mapsIdEntity %>().get<%= primaryKey.nameCapitalized %>());
+         * assertThat(updated<%= persistClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(updated<%= persistClass %>.get<%= mapsIdProperty %>().get<%= primaryKey.nameCapitalized %>());
          */
     <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
