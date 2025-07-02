@@ -18,7 +18,7 @@ import { parseCreationTimestamp } from '../../generators/base/support/index.js';
 import BaseGenerator from '../../generators/base/index.js';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.js';
 import type CoreGenerator from '../../generators/base-core/generator.js';
-import type { ApplicationConfiguration } from '../types/application-config-all.js';
+import type { ConfigAll as ApplicationConfiguration } from '../types/application-config-all.js';
 import { getDefaultJDLApplicationConfig } from '../command/jdl.js';
 import type { Entity } from '../jhipster/types/entity.js';
 import { buildJHipster, createProgram } from '../../cli/program.mjs';
@@ -29,7 +29,7 @@ import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generato
 import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY } from '../../generators/base-application/support/constants.js';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../generators/base-simple-application/support/constants.js';
 import type { ApplicationAll } from '../types/application-properties-all.d.ts';
-import type { ApplicationOptions as AllOptions } from '../types/application-options-all.d.ts';
+import type { OptionsAll as AllOptions } from '../types/application-options-all.d.ts';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
 type GeneratorTestType = YeomanGenerator<AllOptions>;

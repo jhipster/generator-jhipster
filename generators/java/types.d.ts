@@ -1,5 +1,5 @@
 import type { RequireOneOrNone } from 'type-fest';
-import type { GradleNeedleOptions, Source as GradleSource } from '../gradle/types.js';
+import type { Application as GradleApplication, GradleNeedleOptions, Source as GradleSource } from '../gradle/types.js';
 import type { EditFileCallback } from '../base-core/api.js';
 import type { MavenDefinition, Source as MavenSource } from '../maven/types.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
@@ -14,7 +14,11 @@ import type {
   Source as BaseApplicationSource,
 } from '../base-application/index.ts';
 import type { JavaAnnotation } from './support/add-java-annotation.ts';
-import type JavaBootstrapCommand from './generators/bootstrap/command.js';
+import type {
+  Application as JavaBootstrapApplication,
+  Config as JavaBootstrapConfig,
+  Options as JavaBootstrapOptions,
+} from './generators/bootstrap/types.js';
 import type BuildToolCommand from './generators/build-tool/command.js';
 import type GraalvmCommand from './generators/graalvm/command.js';
 
@@ -112,12 +116,12 @@ export type JavaDefinition = {
 export type JavaNeedleOptions = GradleNeedleOptions;
 
 export type Config = BaseApplicationConfig &
-  ExportStoragePropertiesFromCommand<typeof JavaBootstrapCommand> &
+  JavaBootstrapConfig &
   ExportStoragePropertiesFromCommand<typeof BuildToolCommand> &
   ExportStoragePropertiesFromCommand<typeof GraalvmCommand>;
 
 export type Options = BaseApplicationOptions &
-  ExportGeneratorOptionsFromCommand<typeof JavaBootstrapCommand> &
+  JavaBootstrapOptions &
   ExportGeneratorOptionsFromCommand<typeof BuildToolCommand> &
   ExportGeneratorOptionsFromCommand<typeof GraalvmCommand>;
 
@@ -133,39 +137,10 @@ type SpringApplication = {
   generateSpringAuditor: boolean;
 };
 
-type JavaBootstrap = ExportStoragePropertiesFromCommand<typeof JavaBootstrapCommand> & {
-  javaVersion: string;
-  javaCompatibleVersions: string[];
-  mainClass: string;
-
-  packageFolder: string;
-  entityPackages: string[];
-
-  srcMainJava: string;
-  srcMainResources: string;
-  srcMainWebapp: string;
-  srcTestJava: string;
-  srcTestResources: string;
-  srcTestJavascript: string;
-
-  javaPackageSrcDir: string;
-  javaPackageTestDir: string;
-
-  temporaryDir: string;
-
-  /** Java dependency versions */
-  javaDependencies: Record<string, string>;
-  /** Known properties that can be used */
-  javaProperties: Record<string, string | null>;
-  /** Known managed properties that can be used */
-  javaManagedProperties: Record<string, string | null>;
-  /** Pre-defined package JavaDocs */
-  packageInfoJavadocs: { packageName: string; documentation: string }[];
-};
-
 export type Application<E extends BaseApplicationEntity<BaseApplicationField, BaseApplicationRelationship> = Entity<Field, Relationship>> =
   BaseApplicationApplication<E> &
-    JavaBootstrap &
+    JavaBootstrapApplication &
+    GradleApplication &
     CommonProperties &
     SpringApplication &
     DatabaseApplication &

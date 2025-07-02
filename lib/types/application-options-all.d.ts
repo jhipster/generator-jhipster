@@ -6,7 +6,7 @@ import type { Options as JavascriptOptions } from '../../generators/javascript/t
 import type { Options as SpringCacheOptions } from '../../generators/spring-cache/index.js';
 import type { Options as SpringCloudStreanOptions } from '../../generators/spring-cloud-stream/index.js';
 
-export type ApplicationOptions = Simplify<
+export type OptionsAll = Simplify<
   JavascriptOptions &
     ClientOptions &
     SpringCacheOptions &

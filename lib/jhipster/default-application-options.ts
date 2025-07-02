@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { ApplicationConfiguration } from '../types/application-config-all.js';
+import type { ConfigAll } from '../types/application-config-all.js';
 import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';
@@ -75,7 +75,7 @@ const {
   GRADLE_DEVELOCITY_HOST,
 } = OptionNames;
 
-type ApplicationDefaults = Partial<ApplicationConfiguration>;
+type ApplicationDefaults = Partial<ConfigAll>;
 
 const commonDefaultOptions: ApplicationDefaults = {
   [AUTHENTICATION_TYPE]: JWT,

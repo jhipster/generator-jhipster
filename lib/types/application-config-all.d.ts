@@ -10,7 +10,7 @@ import type { Config as SpringCacheConfig } from '../../generators/spring-cache/
 import type { Config as SpringCloudStreanConfig } from '../../generators/spring-cloud-stream/index.js';
 import type { Config as BaseApplicationConfig } from '../../generators/base-application/types.js';
 
-export type ApplicationConfiguration = Simplify<
+export type ConfigAll = Simplify<
   BaseApplicationConfig &
     ClientConfig &
     JavaConfig &
@@ -33,4 +33,4 @@ export type ApplicationConfiguration = Simplify<
     ExportStoragePropertiesFromCommand<typeof import('../../generators/spring-data-relational/command.ts').default>
 >;
 
-export type YoRcContent<Content = ApplicationConfiguration> = Record<typeof YO_RC_CONFIG_KEY, Content>;
+export type YoRcContent<Content = ConfigAll> = Record<typeof YO_RC_CONFIG_KEY, Content>;

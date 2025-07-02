@@ -33,7 +33,7 @@ import type { GenericTaskGroup } from '../base-core/types.js';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
-import type { ApplicationConfiguration } from '../../lib/types/application-config-all.js';
+import type { ConfigAll } from '../../lib/types/application-config-all.js';
 import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
 import type { SourceAll } from '../../lib/types/source-all.js';
 import type {
@@ -132,7 +132,7 @@ const getFirstArgForPriority = (priorityName: string) => ({
 export default class BaseApplicationGenerator<
   Entity extends BaseApplicationEntity = BaseApplicationEntity,
   Application extends BaseApplication<Entity> = BaseApplication<Entity>,
-  Config extends BaseApplicationConfig = BaseApplicationConfig & ApplicationConfiguration,
+  Config extends BaseApplicationConfig = BaseApplicationConfig & ConfigAll,
   Options extends BaseApplicationOptions = BaseApplicationOptions,
   Source extends BaseApplicationSource = SourceAll,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
@@ -219,8 +219,8 @@ export default class BaseApplicationGenerator<
   /**
    * JHipster config with default values fallback
    */
-  override get jhipsterConfigWithDefaults(): Readonly<Config & ApplicationConfiguration> {
-    return getConfigWithDefaults(super.jhipsterConfigWithDefaults) as Config & ApplicationConfiguration;
+  override get jhipsterConfigWithDefaults(): Readonly<Config & ConfigAll> {
+    return getConfigWithDefaults(super.jhipsterConfigWithDefaults) as Config & ConfigAll;
   }
 
   dependsOnBootstrapApplication(

@@ -1,7 +1,12 @@
 import type { RequireOneOrNone } from 'type-fest';
-import type { Entity as BaseApplicationEntity } from '../base-application/types.js';
-import type { Application as JavaApplication, Entity as JavaEntity } from '../java/index.js';
-import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
+import type {
+  Application as JavaBootstrapApplication,
+  Config as JavaBootstrapConfig,
+  Entity as JavaBootstrapEntity,
+  Options as JavaBootstrapOptions,
+  Source as JavaBootstrapSource,
+} from '../java/generators/bootstrap/types.d.ts';
+import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type GradleCommand from './command.js';
 
 export type GradleComment = { comment?: string };
@@ -39,7 +44,7 @@ export type GradleCatalogNeedleOptions = { gradleVersionCatalogFile?: string };
 
 export type GradleNeedleOptions = GradleFileNeedleOptions & GradleCatalogNeedleOptions;
 
-export type Source = {
+export type Source = JavaBootstrapSource & {
   _gradleDependencies?: GradleDependency[];
   applyFromGradle?(script: GradleScript): void;
   addGradleDependency?(dependency: GradleDependency, options?: GradleFileNeedleOptions): void;
@@ -62,10 +67,17 @@ export type Source = {
   addGradleBuildSrcDependencyCatalogLibraries?(catalogVersion: GradleLibrary[]): void;
 };
 
-export { JavaEntity as Entity };
+type Command = HandleCommandTypes<typeof GradleCommand>;
 
-export type Application<E extends BaseApplicationEntity = JavaEntity> = JavaApplication<E> &
-  ExportApplicationPropertiesFromCommand<typeof GradleCommand> & {
+export { JavaBootstrapEntity as Entity };
+
+export type Config = Command['Config'] & JavaBootstrapConfig;
+
+export type Options = Command['Options'] & JavaBootstrapOptions;
+
+// TODO switch to Command['Application']
+export type Application<E extends JavaBootstrapEntity = JavaBootstrapEntity> = Command['Config'] &
+  JavaBootstrapApplication<E> & {
     gradleVersion?: string;
     gradleBuildSrc?: string;
     enableGradleDevelocity?: boolean;

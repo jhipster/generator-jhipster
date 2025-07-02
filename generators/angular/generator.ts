@@ -39,11 +39,23 @@ import {
   isTranslatedAngularFile,
   translateAngularFilesTransform,
 } from './support/index.js';
-import type { Application as AngularApplication, Entity as AngularEntity } from './types.js';
+import type {
+  Application as AngularApplication,
+  Config as AngularConfig,
+  Entity as AngularEntity,
+  Options as AngularOptions,
+  Source as AngularSource,
+} from './types.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
-export default class AngularGenerator extends BaseApplicationGenerator<AngularEntity, AngularApplication<AngularEntity>> {
+export default class AngularGenerator extends BaseApplicationGenerator<
+  AngularEntity,
+  AngularApplication<AngularEntity>,
+  AngularConfig,
+  AngularOptions,
+  AngularSource
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
