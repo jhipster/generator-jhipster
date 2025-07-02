@@ -24,7 +24,7 @@ import type {
   Entity as BaseApplicationEntity,
   Source as BaseApplicationSource,
 } from './types.js';
-import type { SourceAll } from './source-all.d.ts';
+import type { SourceAll } from '../../lib/types/source-all.d.ts';
 
 type GetRelationshipType<E> = E extends { relationships: (infer R)[] } ? R : never;
 type GetFieldType<E> = E extends { fields: (infer F)[] } ? F : never;

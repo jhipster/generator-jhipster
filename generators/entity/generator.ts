@@ -29,7 +29,7 @@ import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import { applicationTypes, reservedKeywords } from '../../lib/jhipster/index.js';
 import { GENERATOR_ENTITIES } from '../generator-list.js';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.js';
-import type { EntityAll } from '../base-application/entity-all.js';
+import type { EntityAll } from '../../lib/types/entity-all.js';
 import prompts from './prompts.js';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;

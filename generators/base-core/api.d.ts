@@ -1,5 +1,5 @@
-import type { EntityAll } from '../base-application/entity-all.js';
-import type { ApplicationAll } from '../base-application/application-properties-all.js';
+import type { EntityAll } from '../../lib/types/entity-all.js';
+import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
 import type CoreGenerator from './index.ts';
 
 export type EditFileCallback<Generator = CoreGenerator> = (this: Generator, content: string, filePath: string) => string;

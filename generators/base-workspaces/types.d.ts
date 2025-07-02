@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
-import type { ApplicationAll } from '../base-application/application-properties-all.js';
+import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
 import type { Config as BaseConfig } from '../base/index.js';
 
 export type { Source } from '../base/types.js';

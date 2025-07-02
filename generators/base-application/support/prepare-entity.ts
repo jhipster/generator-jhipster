@@ -29,7 +29,7 @@ import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
 import type { PrimaryKey } from '../types.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import type { ApplicationConfiguration } from '../application-config-all.js';
+import type { ApplicationConfiguration } from '../../../lib/types/application-config-all.js';
 import type { Application as CommonApplication, Entity as CommonEntity } from '../../common/types.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.js';
