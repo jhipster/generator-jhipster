@@ -432,7 +432,7 @@ ${classProperties
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ entity }) {
+      prepareEntity({ entity, application }) {
         const hasAnyAuthority = authorities =>
           authorities.length > 0 ? `hasAnyAuthority(${authorities.map(auth => `'${auth}'`).join(',')})` : undefined;
         mutateData(entity, {
@@ -443,6 +443,14 @@ ${classProperties
             ...(entity.entityAuthority?.split(',') ?? []),
             ...(entity.entityReadAuthority?.split(',') ?? []),
           ]),
+          serviceClass: ({ service }) => service === 'serviceClass',
+          serviceImpl: ({ service }) => service === 'serviceImpl',
+          serviceNo: ({ service }) => service === 'no',
+          saveUserSnapshot: ({ hasRelationshipWithBuiltInUser, dto }) =>
+            application.applicationTypeMicroservice &&
+            application.authenticationTypeOauth2 &&
+            hasRelationshipWithBuiltInUser &&
+            dto === 'no',
         });
       },
     });

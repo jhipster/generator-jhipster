@@ -46,6 +46,12 @@ export type SpringEntity = {
 export type Field = ServerField &
   JavaField & {
     filterableField?: boolean;
+    autoGenerateByService?: boolean;
+    autoGenerateByRepository?: boolean;
+    mapstructExpression?: boolean;
+
+    requiresPersistableImplementation?: boolean;
+    fieldNameAsDatabaseColumn?: string;
   };
 
 export interface Relationship extends ServerRelationship, JavaRelationship {}

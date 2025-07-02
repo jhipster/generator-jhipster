@@ -25,7 +25,7 @@ import { getDatabaseTypeData } from './database.js';
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { POSTGRESQL, MYSQL, MARIADB, COUCHBASE, SQL, NEO4J } = databaseTypes;
 
-export function loadRequiredConfigDerivedProperties(entity) {
+export function loadRequiredConfigDerivedProperties(entity: any) {
   entity.jhiTablePrefix = hibernateSnakeCase(entity.jhiPrefix);
   entity.searchEngineCouchbase = entity.searchEngine === COUCHBASE;
   entity.searchEngineElasticsearch = entity.searchEngine === ELASTICSEARCH;
@@ -33,7 +33,7 @@ export function loadRequiredConfigDerivedProperties(entity) {
   entity.searchEngineNo = !entity.searchEngineAny;
 }
 
-export function preparePostEntityServerDerivedProperties(entity) {
+export function preparePostEntityServerDerivedProperties(entity: any) {
   const { databaseType, reactive } = entity;
   entity.officialDatabaseType = getDatabaseTypeData(databaseType).name;
   let springDataDatabase;

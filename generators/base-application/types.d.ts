@@ -35,7 +35,14 @@ type Property = {
 export type Field = Property &
   BaseField &
   DerivedPropertiesOnlyOf<'fieldType', FieldType> & {
-    documentation?: string;
+    path?: string[];
+
+    fieldNameCapitalized?: string;
+    fieldNameHumanized?: string;
+    fieldNameUnderscored?: string;
+    fieldTranslationKey?: string;
+
+    fieldApiDescription?: string;
 
     enumFileName?: string;
     enumValues?: { name: string; value: string }[];
@@ -64,6 +71,8 @@ export type Field = Property &
     transient?: boolean;
     id?: boolean;
     autoGenerate?: boolean;
+    readonly?: boolean;
+    sequenceGeneratorName?: string;
 
     // Blob
     fieldWithContentType?: boolean;

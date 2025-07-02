@@ -58,21 +58,13 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   describe('for entities only jdl', () => {
-    it('without databaseType should reject', async () => {
-      await expect(
-        helpers.runJHipster(GENERATOR_JDL).withOptions({
-          inline: 'entity Foo {}',
-          baseName: 'jhipster',
-        }),
-      ).rejects.toThrow("The JDL object, the application's name, and its the database type are mandatory.");
-    });
     it('without baseName should reject', async () => {
       await expect(
         helpers.runJHipster(GENERATOR_JDL).withOptions({
           inline: 'entity Foo {}',
           db: 'postgresql',
         }),
-      ).rejects.toThrow("The JDL object, the application's name, and its the database type are mandatory.");
+      ).rejects.toThrow("The JDL object and its application's name are mandatory.");
     });
 
     describe('with valid parameters', () => {

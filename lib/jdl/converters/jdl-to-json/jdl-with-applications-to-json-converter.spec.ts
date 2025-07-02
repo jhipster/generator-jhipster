@@ -28,7 +28,6 @@ import { relationshipTypes } from '../../core/basic-types/index.js';
 import {
   applicationTypes,
   binaryOptions,
-  databaseTypes,
   fieldTypes,
   relationshipOptions,
   unaryOptions,
@@ -51,7 +50,6 @@ const {
 } = validations;
 const { MONOLITH } = applicationTypes;
 const { CommonDBTypes } = fieldTypes;
-const { SQL } = databaseTypes;
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
 
@@ -83,9 +81,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
         application2.addEntityName('EntityA');
         jdlObject.addEntity(entity);
         jdlObject.addApplication(application2);
-        result = convert({
-          jdlObject,
-        });
+        result = convert(jdlObject);
       });
 
       it('should return a map with two applications', () => {
@@ -101,9 +97,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
         jdlObject.addApplication(application);
-        result = convert({
-          jdlObject,
-        });
+        result = convert(jdlObject);
       });
 
       it('should return a map with no entiy', () => {
@@ -138,9 +132,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
           application.addEntityName('User');
           application.addEntityName('Authority');
           jdlObject.addApplication(application);
-          const returnedMap: any = convert({
-            jdlObject,
-          });
+          const returnedMap: any = convert(jdlObject);
           customEntitiesAreConverted = returnedMap.get('toto').some(entity => entity.name === 'A');
           builtInEntitiesAreConverted = returnedMap.get('toto').some(entity => entity.name === 'User' || entity.name === 'Authority');
         });
@@ -166,9 +158,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
           application.addEntityName('A');
           jdlObject.addApplication(application);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert({
-            jdlObject,
-          });
+          const returnedMap: any = convert(jdlObject);
           convertedEntity = returnedMap.get('toto')[0];
         });
 
@@ -271,12 +261,7 @@ JSONEntity {
           jdlObject.addEntity(entityA);
           jdlObject.addApplication(application);
           options.forEach(option => jdlObject.addOption(option));
-          const returnedMap: any = convert({
-            jdlObject,
-            applicationName: 'toto',
-            applicationType: MONOLITH,
-            databaseType: SQL,
-          });
+          const returnedMap: any = convert(jdlObject);
           convertedEntity = returnedMap.get('toto')[0];
         });
 
@@ -332,9 +317,7 @@ JSONEntity {
               entityNames: new Set(['A']),
             }),
           );
-          const returnedMap: any = convert({
-            jdlObject,
-          });
+          const returnedMap: any = convert(jdlObject);
           convertedEntity = returnedMap.get('toto')[0];
         });
 
@@ -393,12 +376,7 @@ JSONEntity {
               entityNames: new Set(['A']),
             }),
           );
-          const returnedMap: any = convert({
-            jdlObject,
-            applicationName: 'toto',
-            applicationType: MONOLITH,
-            databaseType: SQL,
-          });
+          const returnedMap: any = convert(jdlObject);
           convertedEntity = returnedMap.get('toto')[0];
         });
 
@@ -457,12 +435,7 @@ JSONEntity {
               excludedNames: new Set(['A']),
             }),
           );
-          const returnedMap: any = convert({
-            jdlObject,
-            applicationName: 'toto',
-            applicationType: MONOLITH,
-            databaseType: SQL,
-          });
+          const returnedMap: any = convert(jdlObject);
           convertedEntity = returnedMap.get('toto')[0];
         });
 
@@ -515,12 +488,7 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             application.addEntityName('A');
             jdlObject.addApplication(application);
-            const returnedMap: any = convert({
-              jdlObject,
-              applicationName: 'toto',
-              applicationType: MONOLITH,
-              databaseType: SQL,
-            });
+            const returnedMap: any = convert(jdlObject);
             convertedEntity = returnedMap.get('toto')[0];
           });
 
@@ -590,12 +558,7 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             application.addEntityName('A');
             jdlObject.addApplication(application);
-            const returnedMap: any = convert({
-              jdlObject,
-              applicationName: 'toto',
-              applicationType: MONOLITH,
-              databaseType: SQL,
-            });
+            const returnedMap: any = convert(jdlObject);
             convertedEntity = returnedMap.get('toto')[0];
           });
 
@@ -659,12 +622,7 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             application.addEntityName('A');
             jdlObject.addApplication(application);
-            const returnedMap: any = convert({
-              jdlObject,
-              applicationName: 'toto',
-              applicationType: MONOLITH,
-              databaseType: SQL,
-            });
+            const returnedMap: any = convert(jdlObject);
             convertedEntity = returnedMap.get('toto')[0];
           });
 
@@ -717,12 +675,7 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             application.addEntityName('A');
             jdlObject.addApplication(application);
-            const returnedMap: any = convert({
-              jdlObject,
-              applicationName: 'toto',
-              applicationType: MONOLITH,
-              databaseType: SQL,
-            });
+            const returnedMap: any = convert(jdlObject);
             convertedEntity = returnedMap.get('toto')[0];
           });
 
@@ -830,12 +783,7 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             application.addEntityName('A');
             jdlObject.addApplication(application);
-            const returnedMap: any = convert({
-              jdlObject,
-              applicationName: 'toto',
-              applicationType: MONOLITH,
-              databaseType: SQL,
-            });
+            const returnedMap: any = convert(jdlObject);
             convertedEntity = returnedMap.get('toto')[0];
           });
 
@@ -920,12 +868,7 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             application.addEntityName('A');
             jdlObject.addApplication(application);
-            const returnedMap: any = convert({
-              jdlObject,
-              applicationName: 'toto',
-              applicationType: MONOLITH,
-              databaseType: SQL,
-            });
+            const returnedMap: any = convert(jdlObject);
             convertedEntity = returnedMap.get('toto')[0];
           });
 
@@ -1009,12 +952,7 @@ JSONEntity {
             jdlObject.addRelationship(manyToManyRelationship);
             jdlObject.addRelationship(oneToManyRelationship);
             jdlObject.addRelationship(manyToOneRelationship);
-            const returned: any = convert({
-              jdlObject,
-              applicationName: 'toto',
-              applicationType: MONOLITH,
-              databaseType: SQL,
-            });
+            const returned: any = convert(jdlObject);
             relationshipsForA = returned.get('toto').find(entity => entity.name === 'A').relationships;
             relationshipsForB = returned.get('toto').find(entity => entity.name === 'B').relationships;
           });
@@ -1115,12 +1053,7 @@ JSONEntity {
               application.addEntityName('B');
               jdlObject.addApplication(application);
               jdlObject.addRelationship(oneToOneRelationship);
-              const returned: any = convert({
-                jdlObject,
-                applicationName: 'toto',
-                applicationType: MONOLITH,
-                databaseType: SQL,
-              });
+              const returned: any = convert(jdlObject);
               convertedRelationship = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
             });
 
@@ -1167,12 +1100,7 @@ JSONEntity {
               application.addEntityName('B');
               jdlObject.addApplication(application);
               jdlObject.addRelationship(oneToOneRelationship);
-              const returned: any = convert({
-                jdlObject,
-                applicationName: 'toto',
-                applicationType: MONOLITH,
-                databaseType: SQL,
-              });
+              const returned: any = convert(jdlObject);
               convertedRelationship = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
             });
 
@@ -1214,12 +1142,7 @@ JSONEntity {
             application.addEntityName('B');
             jdlObject.addApplication(application);
             jdlObject.addRelationship(oneToOneRelationship);
-            const returned: any = convert({
-              jdlObject,
-              applicationName: 'toto',
-              applicationType: MONOLITH,
-              databaseType: SQL,
-            });
+            const returned: any = convert(jdlObject);
             relationshipsForA = returned.get('toto').find(entity => entity.name === 'A').relationships;
             relationshipsForB = returned.get('toto').find(entity => entity.name === 'B').relationships;
           });
@@ -1275,12 +1198,7 @@ JSONEntity {
             application.addEntityName('B');
             jdlObject.addApplication(application);
             jdlObject.addRelationship(oneToOneRelationship);
-            const returned: any = convert({
-              jdlObject,
-              applicationName: 'toto',
-              applicationType: MONOLITH,
-              databaseType: SQL,
-            });
+            const returned: any = convert(jdlObject);
             relationshipsForA = returned.get('toto').find(entity => entity.name === 'A').relationships;
             relationshipsForB = returned.get('toto').find(entity => entity.name === 'B').relationships;
           });
@@ -1334,12 +1252,7 @@ JSONEntity {
               application.addEntityName('B');
               jdlObject.addApplication(application);
               jdlObject.addRelationship(oneToOneRelationship);
-              const returned: any = convert({
-                jdlObject,
-                applicationName: 'toto',
-                applicationType: MONOLITH,
-                databaseType: SQL,
-              });
+              const returned: any = convert(jdlObject);
               relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
               relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
             });
@@ -1379,12 +1292,7 @@ JSONEntity {
               application.addEntityName('B');
               jdlObject.addApplication(application);
               jdlObject.addRelationship(oneToManyRelationship);
-              const returned: any = convert({
-                jdlObject,
-                applicationName: 'toto',
-                applicationType: MONOLITH,
-                databaseType: SQL,
-              });
+              const returned: any = convert(jdlObject);
               relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
               relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
             });
@@ -1424,12 +1332,7 @@ JSONEntity {
               application.addEntityName('B');
               jdlObject.addApplication(application);
               jdlObject.addRelationship(manyToOneRelationship);
-              const returned: any = convert({
-                jdlObject,
-                applicationName: 'toto',
-                applicationType: MONOLITH,
-                databaseType: SQL,
-              });
+              const returned: any = convert(jdlObject);
               relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
               relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
             });
@@ -1469,12 +1372,7 @@ JSONEntity {
               application.addEntityName('B');
               jdlObject.addApplication(application);
               jdlObject.addRelationship(manyToManyRelationship);
-              const returned: any = convert({
-                jdlObject,
-                applicationName: 'toto',
-                applicationType: MONOLITH,
-                databaseType: SQL,
-              });
+              const returned: any = convert(jdlObject);
               relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
               relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
             });
@@ -1517,12 +1415,7 @@ JSONEntity {
               application.addEntityName('B');
               jdlObject.addApplication(application);
               jdlObject.addRelationship(oneToOneRelationship);
-              const returned: any = convert({
-                jdlObject,
-                applicationName: 'toto',
-                applicationType: MONOLITH,
-                databaseType: SQL,
-              });
+              const returned: any = convert(jdlObject);
               relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
               relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
             });
@@ -1574,12 +1467,7 @@ JSONEntity {
               application.addEntityName('B');
               jdlObject.addApplication(application);
               jdlObject.addRelationship(oneToManyRelationship);
-              const returned: any = convert({
-                jdlObject,
-                applicationName: 'toto',
-                applicationType: MONOLITH,
-                databaseType: SQL,
-              });
+              const returned: any = convert(jdlObject);
               relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
               relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
             });
@@ -1631,12 +1519,7 @@ JSONEntity {
               application.addEntityName('B');
               jdlObject.addApplication(application);
               jdlObject.addRelationship(manyToOneRelationship);
-              const returned: any = convert({
-                jdlObject,
-                applicationName: 'toto',
-                applicationType: MONOLITH,
-                databaseType: SQL,
-              });
+              const returned: any = convert(jdlObject);
               relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
               relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
             });
@@ -1688,12 +1571,7 @@ JSONEntity {
               application.addEntityName('B');
               jdlObject.addApplication(application);
               jdlObject.addRelationship(manyToManyRelationship);
-              const returned: any = convert({
-                jdlObject,
-                applicationName: 'toto',
-                applicationType: MONOLITH,
-                databaseType: SQL,
-              });
+              const returned: any = convert(jdlObject);
               relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
               relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
             });
@@ -1795,9 +1673,7 @@ JSONEntity {
           jdlObject.addEntity(entityF);
           jdlObject.addApplication(tataApplication);
           jdlObject.addApplication(tutuApplication);
-          const returnedMap: any = convert({
-            jdlObject,
-          });
+          const returnedMap: any = convert(jdlObject);
           convertedEntitiesForTataApplication = returnedMap.get('tata');
           convertedEntitiesForTutuApplication = returnedMap.get('tutu');
         });

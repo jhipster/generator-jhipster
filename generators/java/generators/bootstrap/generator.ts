@@ -149,8 +149,11 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      applicationDefaults({ application }) {
+      applicationDefaults({ application, applicationDefaults }) {
         (application as unknown as JavascriptApplication).addPrettierExtensions?.(['java']);
+        applicationDefaults({
+          useNpmWrapper: application => Boolean(application.clientFrameworkAny && application.backendTypeJavaAny),
+        });
       },
       prepareJavaApplication({ application, source }) {
         source.hasJavaProperty = (property: string) => application.javaProperties![property] !== undefined;

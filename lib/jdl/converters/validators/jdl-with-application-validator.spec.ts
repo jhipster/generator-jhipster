@@ -49,34 +49,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
     });
   });
   describe('checkForErrors', () => {
-    describe('when having an entity with a reserved name', () => {
-      let validator;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        const application = createJDLApplication(
-          {
-            applicationType: MONOLITH,
-            databaseType: databaseTypes.SQL,
-          },
-          undefined,
-          runtime,
-        );
-        const entity = new JDLEntity({
-          name: 'Continue',
-        });
-        application.addEntityName(entity.name);
-        jdlObject.addApplication(application);
-        jdlObject.addEntity(entity);
-        validator = createValidator(jdlObject);
-      });
-
-      it('should fail', () => {
-        expect(() => {
-          validator.checkForErrors();
-        }).to.throw(/^The name 'Continue' is a reserved keyword and can not be used as an entity class name.$/);
-      });
-    });
     describe('when passing gateway as application type', () => {
       describe('with incompatible database type and field type', () => {
         let validator;
@@ -519,34 +491,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
 
       it('should not fail', () => {
         expect(() => validator.checkForErrors()).not.to.throw();
-      });
-    });
-    describe('when blueprints is used', () => {
-      let parameter;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        const application = createJDLApplication(
-          {
-            applicationType: MONOLITH,
-            databaseType: databaseTypes.SQL,
-            blueprints: ['generator-jhipster-nodejs', 'generator-jhipster-dotnetcore'],
-          },
-          undefined,
-          runtime,
-        );
-        jdlObject.addApplication(application);
-        const logger = {
-          warn: callParameter => {
-            parameter = callParameter;
-          },
-        };
-        const validator = createValidator(jdlObject, logger);
-        validator.checkForErrors();
-      });
-
-      it('should warn about not performing jdl validation', () => {
-        expect(parameter).to.equal('Blueprints are being used, the JDL validation phase is skipped.');
       });
     });
   });

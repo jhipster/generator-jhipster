@@ -21,7 +21,11 @@ import type HuskyCommand from './generators/husky/command.js';
 import type JavascriptBootstrapCommand from './generators/bootstrap/command.js';
 import type PrettierCommand from './generators/prettier/command.js';
 
-export { BaseApplicationRelationship as Relationship, BaseApplicationField as Field };
+export type Field = BaseApplicationField & {
+  tsType?: string;
+};
+
+export { BaseApplicationRelationship as Relationship };
 
 export type Config = BaseSimpleApplicationConfig &
   ExportStoragePropertiesFromCommand<typeof EslintCommand> &
@@ -35,10 +39,8 @@ export type Options = BaseSimpleApplicationOptions &
   ExportGeneratorOptionsFromCommand<typeof JavascriptBootstrapCommand> &
   ExportGeneratorOptionsFromCommand<typeof PrettierCommand>;
 
-export interface Entity<
-  F extends BaseApplicationField = BaseApplicationField,
-  R extends BaseApplicationRelationship = BaseApplicationRelationship,
-> extends BaseApplicationEntity<F, R> {
+export interface Entity<F extends Field = Field, R extends BaseApplicationRelationship = BaseApplicationRelationship>
+  extends BaseApplicationEntity<F, R> {
   entityFileName: string;
   entityFolderName: string;
   entityModelFileName: string;

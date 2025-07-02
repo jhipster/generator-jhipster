@@ -20,7 +20,6 @@
 import type JDLObject from '../../core/models/jdl-object.js';
 import type JDLApplication from '../../core/models/jdl-application.js';
 import type JSONEntity from '../../core/basic-types/json-entity.js';
-import type { JdlObjectWrapper } from '../../core/models/jdl-object-wrapper.js';
 import BasicEntityConverter from './jdl-to-json-basic-entity-converter.js';
 import FieldConverter from './jdl-to-json-field-converter.js';
 import RelationshipConverter from './jdl-to-json-relationship-converter.js';
@@ -34,15 +33,12 @@ export default { convert };
 
 /**
  * Converts a JDLObject to ready-to-be exported JSON entities.
- * @param {Object} args - the configuration object, keys:
- * @param {JDLObject} args.jdlObject - the JDLObject to convert to JSON
- * @returns {Map} entities that can be exported to JSON
  */
-export function convert(args: JdlObjectWrapper) {
-  if (!args?.jdlObject) {
+export function convert(jdlObjectArg: JDLObject) {
+  if (!jdlObjectArg) {
     throw new Error('The JDL object is mandatory.');
   }
-  init(args);
+  init(jdlObjectArg);
   setEntitiesPerApplication();
   if (entitiesPerApplication.size === 0 && jdlObject) {
     const applicationNames = jdlObject.getApplications().map(jdlApplication => jdlApplication.getConfigurationOptionValue('baseName'));
@@ -59,11 +55,11 @@ export function convert(args: JdlObjectWrapper) {
   return entitiesForEachApplication;
 }
 
-function init(args: JdlObjectWrapper): void {
+function init(jdlObjectArg: JDLObject): void {
   if (jdlObject) {
     resetState();
   }
-  jdlObject = args.jdlObject;
+  jdlObject = jdlObjectArg;
   entities = {};
   entitiesPerApplication = new Map();
 }

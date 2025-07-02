@@ -52,13 +52,6 @@ let applicationsPerEntityName: Map<string, ParsedJDLApplication>;
 
 /**
  * Converts the intermediate parsedContent to a JDLObject from a configuration object.
- * @param {Object} configurationObject - The configuration object.
- * @param {Object} configurationObject.document - Deprecated set parsedContent instead, the parsed JDL content
- * @param {Object} configurationObject.parsedContent - The parsed JDL content
- * @param {String} configurationObject.applicationType - The application's type
- * @param {String} configurationObject.applicationName - The application's name
- * @param {String} configurationObject.databaseType - The application's database type
- * @return the built JDL object.
  */
 export function parseFromConfigurationObject(configurationObject: ParsedJDLRoot, runtime: JDLRuntime): JDLObject {
   parsedContent = configurationObject.parsedContent || configurationObject.document;

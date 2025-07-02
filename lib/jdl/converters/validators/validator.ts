@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-export type ValidatorOptions = { checkReservedKeywords?: boolean };
-
 export default class Validator {
   objectType: any;
   fieldsToCheck: any;
@@ -28,7 +26,7 @@ export default class Validator {
     this.fieldsToCheck = fieldsToCheck;
   }
 
-  validate(object, _options?: ValidatorOptions) {
+  validate(object) {
     if (!object) {
       throw new Error(`No ${this.objectType}.`);
     }

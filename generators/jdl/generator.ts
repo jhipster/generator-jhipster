@@ -23,7 +23,6 @@ import { type Store as MemFs, create as createMemFs } from 'mem-fs';
 import { type MemFsEditor, create as createMemFsEditor } from 'mem-fs-editor';
 
 import BaseGenerator from '../base/index.js';
-import type { AllConfig, AllOptions } from '../base-application/index.js';
 import { downloadJdlFile } from '../../cli/download.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { CLI_NAME } from '../../cli/utils.mjs';
@@ -34,8 +33,8 @@ import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.
 import { mergeYoRcContent } from '../../lib/utils/yo-rc.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.js';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
-import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
+import type { Config as JdlConfig, Options as JdlOptions } from './types.js';
 
 /**
  * Add jdl extension to the file
@@ -49,7 +48,7 @@ const toJdlFile = file => {
 
 type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: string; sharedFs?: MemFs };
 
-export default class JdlGenerator extends BaseGenerator<AllConfig, AllOptions> {
+export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
   jdlFiles?: string[];
   inline?: string;
   jdlContents: string[] = [];
@@ -129,17 +128,14 @@ export default class JdlGenerator extends BaseGenerator<AllConfig, AllOptions> {
         }
       },
       async parseJDL() {
-        const configuration = {
-          applicationName: this.options.baseName ?? (this.existingProject ? this.jhipsterConfig.baseName : undefined),
-          databaseType: this.options.db,
-          applicationType: this.options.applicationType,
-          skipUserManagement: this.options.skipUserManagement,
-        };
-        if (this.existingProject) {
-          configuration.databaseType ??= getConfigWithDefaults(this.config.getAll() as any).prodDatabaseType;
-        }
-
-        const importer = createImporterFromContent(this.jdlContents.join('\n'), configuration, this.options.jdlDefinition);
+        const importer = createImporterFromContent(
+          this.jdlContents.join('\n'),
+          {
+            applicationName: this.options.baseName ?? (this.existingProject ? this.jhipsterConfig.baseName : undefined),
+            applicationType: this.options.applicationType ?? (this.existingProject ? this.jhipsterConfig.applicationType : undefined),
+          },
+          this.options.jdlDefinition,
+        );
 
         const importState = importer.import();
 

@@ -23,7 +23,7 @@ import { passthrough } from '@yeoman/transform';
 
 import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../base-application/index.js';
-import type { Entity as BaseApplicationEntity, EntityAll, FieldAll } from '../base-application/index.js';
+import type { Entity as BaseApplicationEntity } from '../base-application/index.js';
 import type { Application as CommonApplication, Entity as CommonEntity } from '../common/types.js';
 import type { Application as SpringBootApplication } from '../spring-boot/types.js';
 import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.js';
@@ -422,7 +422,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<C
             }
           }
 
-          for (const field of entity.fields as FieldAll[]) {
+          for (const field of entity.fields) {
             if (isFieldBinaryType(field)) {
               if (isFieldBlobType(field)) {
                 field.fieldTypeBlobContent ??= getBlobContentType(field.fieldType);
@@ -456,7 +456,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<C
     return this.asPreparingEachEntityTaskGroup({
       async preparingEachEntity({ application, entity }) {
         await addFakerToEntity(entity, application.nativeLanguage);
-        prepareEntityForTemplates(entity as EntityAll, this, application);
+        prepareEntityForTemplates(entity, this, application);
       },
     });
   }

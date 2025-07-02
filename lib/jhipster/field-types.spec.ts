@@ -20,7 +20,7 @@
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import { databaseTypes, fieldTypes, validations } from '../jhipster/index.js';
+import { fieldTypes, validations } from '../jhipster/index.js';
 import { JDLEnum } from '../jdl/core/models/index.js';
 
 const {
@@ -68,37 +68,6 @@ describe('jdl - FieldTypes', () => {
             // do nothing
           });
         }).to.throw(/^The passed type must not be nil\.$/);
-      });
-    });
-    describe('when passing a valid argument without callback', () => {
-      it('should return isType', () => {
-        expect(fieldTypes.getIsType('mysql')).to.equal(fieldTypes.isCommonDBType);
-      });
-    });
-    describe('when passing a valid argument and callback', () => {
-      it('should return true', () => {
-        expect(
-          fieldTypes.getIsType('sql', () => {
-            // do nothing
-          }),
-        ).to.equal(fieldTypes.isCommonDBType);
-      });
-    });
-    describe('when passing an invalid argument', () => {
-      it('should fail', () => {
-        expect(() => {
-          fieldTypes.getIsType('thing', () => {});
-        }).to.throw(
-          "The passed database type must either be 'sql', 'mysql', 'mariadb', 'postgresql'," +
-            " 'oracle', 'mssql', 'mongodb', 'couchbase', 'neo4j' or 'cassandra'",
-        );
-      });
-    });
-    describe("when passing 'no' as argument", () => {
-      it('should not fail', () => {
-        expect(() => {
-          fieldTypes.getIsType(databaseTypes.NO, () => {});
-        }).not.to.throw();
       });
     });
   });

@@ -21,6 +21,7 @@ export type Field = JavascriptField & {
   fieldTypeTemporal?: boolean;
   fieldTypeCharSequence?: boolean;
   fieldTypeNumeric?: boolean;
+  fieldSupportsSortBy?: boolean;
 };
 
 export type Config = BaseApplicationConfig &
@@ -46,6 +47,8 @@ export type Application<E extends BaseApplicationEntity = Entity> = JavascriptAp
     srcTest: string;
     documentationUrl: string;
     anyEntityHasRelationshipWithUser: boolean;
+
+    gatewayServicesApiAvailable?: boolean;
   };
 
 export type { JavascriptRelationship as Relationship, BaseApplicationSource as Source };
