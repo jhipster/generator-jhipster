@@ -35,7 +35,7 @@ import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
 import { createFaker } from '../base-application/support/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
-import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
+import { loadDockerDependenciesTask } from '../base-workspaces/internal/docker-dependencies.js';
 import {
   askForClustersModeWorkspace,
   askForMonitoring,
@@ -128,7 +128,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     return this.asLoadingWorkspacesTaskGroup({
       async loadBaseDeployment({ deployment }) {
         deployment.jwtSecretKey = this.jhipsterConfig.jwtSecretKey;
-
         await loadDockerDependenciesTask.call(this, { context: deployment });
       },
       loadDeploymentConfig,

@@ -27,7 +27,8 @@ import { buildToolTypes } from '../../lib/jhipster/index.js';
 
 import { checkImages, configureImageNames, generateJwtSecret, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
-import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
+import { loadDeploymentConfig } from '../base-workspaces/internal/deployments.ts';
+import { loadDockerDependenciesTask } from '../base-workspaces/internal/docker-dependencies.js';
 import { checkDocker } from '../docker/support/index.js';
 import { loadDerivedPlatformConfig, loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/preparing.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';

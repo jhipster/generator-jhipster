@@ -49,8 +49,12 @@ export function derivedPlatformProperties(this, { generator = this, deployment, 
   deployment.useRedis = applications.some(appConfig => appConfig.cacheProviderRedis);
   deployment.entryPort = 8080;
 
-  deployment.appConfigs = applications;
-  deployment.applications = applications;
+  if (deployment.appConfigs !== applications) {
+    deployment.appConfigs = applications;
+  }
+  if (deployment.applications !== applications) {
+    deployment.applications = applications;
+  }
 
   deployment.includesApplicationTypeGateway = applications.some(appConfig => appConfig.applicationTypeGateway);
   deployment.deploymentApplicationTypeMicroservice = deployment.deploymentApplicationType === MICROSERVICE;
@@ -58,7 +62,7 @@ export function derivedPlatformProperties(this, { generator = this, deployment, 
   deployment.serviceDiscoveryTypeEureka = deployment.serviceDiscoveryType === EUREKA;
   deployment.serviceDiscoveryTypeConsul = deployment.serviceDiscoveryType === CONSUL;
   deployment.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
-  deployment.useKeycloak = deployment.usesOauth2 && deployment.usesIngress;
+
   applications.forEach(element => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);

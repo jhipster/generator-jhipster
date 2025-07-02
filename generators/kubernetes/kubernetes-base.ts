@@ -37,7 +37,7 @@ import {
   KUBERNETES_STATEFULSET_API_VERSION,
 } from '../generator-constants.js';
 import { applicationTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
-import { derivedPlatformProperties } from '../base-workspaces/support/preparing.js';
+import { derivedPlatformProperties } from './support/preparing.js';
 import { defaultKubernetesConfig } from './kubernetes-constants.js';
 
 const { GATEWAY, MONOLITH } = applicationTypes;
@@ -140,7 +140,4 @@ export default {
   checkKubernetes,
   checkHelm,
   loadConfig,
-  setupKubernetesConstants,
-  setupHelmConstants,
-  derivedKubernetesPlatformProperties,
 };
