@@ -34,6 +34,8 @@ import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
 import type { ApplicationConfiguration } from '../../lib/types/application-config-all.js';
+import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
+import type { SourceAll } from '../../lib/types/source-all.js';
 import type {
   ConfiguringEachEntityTaskParam,
   TaskTypes as DefaultTasks,
@@ -42,8 +44,6 @@ import type {
   PreparingEachEntityRelationshipTaskParam,
   PreparingEachEntityTaskParam,
 } from './tasks.js';
-import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
-import type { SourceAll } from '../../lib/types/source-all.js';
 import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, getEntitiesFromDir } from './support/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 import type {

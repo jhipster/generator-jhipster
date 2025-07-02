@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { WriteFileSection } from '../base-core/api.js';
+import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
 import { moveToJavaPackageSrcDir } from '../java/support/index.js';
 
-export const liquibaseFiles: WriteFileSection = {
+export const liquibaseFiles = asWriteFilesSection({
   liquibase: [
     {
       condition: ctx => ctx.backendTypeSpringBoot,
@@ -69,4 +69,4 @@ export const liquibaseFiles: WriteFileSection = {
       templates: ['META-INF/native-image/liquibase/reflect-config.json'],
     },
   ],
-};
+});

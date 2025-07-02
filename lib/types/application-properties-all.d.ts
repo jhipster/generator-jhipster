@@ -9,8 +9,8 @@ import type { Application as I18nApplication } from '../../generators/languages/
 import type { Application as SpringCacheApplication } from '../../generators/spring-cache/index.js';
 import type { Application as SpringCloudStreanApplication } from '../../generators/spring-cloud-stream/index.js';
 import type { Application as SpringCloudApplication } from '../../generators/spring-cloud/types.js';
-import type { EntityAll } from './entity-all.js';
 import type { Application as BaseApplication } from '../../generators/base-application/types.js';
+import type { EntityAll } from './entity-all.js';
 
 /* AuthenticationType End */
 

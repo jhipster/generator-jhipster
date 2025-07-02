@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { WriteFileSection } from '../../../base-core/api.js';
+import { asWriteEntityFilesSection } from '../../../base-application/support/task-type-inference.ts';
 import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from '../../support/index.js';
 
-export const entityServerFiles: WriteFileSection = {
+export const entityServerFiles = asWriteEntityFilesSection({
   model: [
     javaMainPackageTemplatesBlock({
       condition: ctx => ctx.entityDomainLayer,
@@ -46,13 +46,13 @@ export const entityServerFiles: WriteFileSection = {
       templates: ['_entityPackage_/domain/_persistClass_.java.jhi.jackson_identity_info'],
     }),
   ],
-};
+});
 
-export const enumFiles: WriteFileSection = {
+export const enumFiles = asWriteEntityFilesSection({
   enumFiles: [
     javaMainPackageTemplatesBlock({
       renameTo: (data, filepath) => filepath.replace('_enumName_', (data as any).enumName),
       templates: ['_entityPackage_/domain/enumeration/_enumName_.java'],
     }),
   ],
-};
+});

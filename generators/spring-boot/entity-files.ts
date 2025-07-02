@@ -19,7 +19,12 @@
 import fs from 'fs';
 import * as _ from 'lodash-es';
 import chalk from 'chalk';
-import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock, moveToJavaPackageSrcDir } from '../java/support/index.js';
+import {
+  javaMainPackageTemplatesBlock,
+  javaTestPackageTemplatesBlock,
+  javaWriteFileSection,
+  moveToJavaPackageSrcDir,
+} from '../java/support/index.js';
 import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import { databaseTypes, entityOptions } from '../../lib/jhipster/index.js';
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
@@ -33,7 +38,7 @@ const { MAPSTRUCT } = MapperTypes;
 const { ServiceTypes } = entityOptions;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 
-export const restFiles = {
+export const restFiles = javaWriteFileSection({
   restFiles: [
     {
       condition: generator => !generator.embedded && generator.entityRestLayer,
@@ -61,9 +66,9 @@ export const restFiles = {
       ],
     },
   ],
-};
+});
 
-export const filteringFiles = {
+export const filteringFiles = javaWriteFileSection({
   filteringFiles: [
     javaMainPackageTemplatesBlock({
       condition: generator => generator.jpaMetamodelFiltering && !generator.reactive,
@@ -76,9 +81,9 @@ export const filteringFiles = {
       templates: ['criteria/_entityClass_CriteriaTest.java'],
     }),
   ],
-};
+});
 
-const filteringReactiveFiles = {
+const filteringReactiveFiles = javaWriteFileSection({
   filteringReactiveFiles: [
     {
       condition: generator => generator.jpaMetamodelFiltering && generator.reactive,
@@ -87,9 +92,9 @@ const filteringReactiveFiles = {
       templates: ['service/criteria/_entityClass_Criteria.java'],
     },
   ],
-};
+});
 
-export const serviceFiles = {
+export const serviceFiles = javaWriteFileSection({
   serviceFiles: [
     {
       condition: generator => generator.service === SERVICE_IMPL && !generator.embedded,
@@ -103,9 +108,9 @@ export const serviceFiles = {
       templates: ['service/impl/_entityClass_ServiceImpl.java'],
     }),
   ],
-};
+});
 
-export const dtoFiles = {
+export const dtoFiles = javaWriteFileSection({
   baseDtoFiles: [
     {
       condition: generator => generator.dto === MAPSTRUCT,
@@ -132,9 +137,9 @@ export const dtoFiles = {
       templates: ['service/mapper/_entityClass_MapperTest.java'],
     },
   ],
-};
+});
 
-const userDtoFiles = {
+const userDtoFiles = javaWriteFileSection({
   domain: [
     {
       ...javaMainPackageTemplatesBlock(),
@@ -164,9 +169,9 @@ const userDtoFiles = {
       templates: ['service/mapper/UserMapperTest.java'],
     },
   ],
-};
+});
 
-const userFiles = {
+const userFiles = javaWriteFileSection({
   ...userDtoFiles,
   userFiles: [
     {
@@ -185,15 +190,15 @@ const userFiles = {
       templates: ['service/UserServiceIT.java', 'web/rest/UserResourceIT.java', 'web/rest/PublicUserResourceIT.java'],
     },
   ],
-};
+});
 
-export const serverFiles = {
+export const serverFiles = javaWriteFileSection({
   ...restFiles,
   ...filteringFiles,
   ...filteringReactiveFiles,
   ...serviceFiles,
   ...dtoFiles,
-};
+});
 
 export function writeFiles() {
   return {

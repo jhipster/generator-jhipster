@@ -19,12 +19,12 @@
 import type { Storage } from 'yeoman-generator';
 import type { TaskParamWithSource } from '../base/tasks.js';
 import type { SimpleTaskTypes, TaskParamWithApplication } from '../base-simple-application/tasks.js';
+import type { SourceAll } from '../../lib/types/source-all.d.ts';
 import type {
   Application as BaseApplicationApplication,
   Entity as BaseApplicationEntity,
   Source as BaseApplicationSource,
 } from './types.js';
-import type { SourceAll } from '../../lib/types/source-all.d.ts';
 
 type GetRelationshipType<E> = E extends { relationships: (infer R)[] } ? R : never;
 type GetFieldType<E> = E extends { fields: (infer F)[] } ? F : never;

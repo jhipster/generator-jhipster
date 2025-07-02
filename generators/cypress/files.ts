@@ -18,12 +18,12 @@
  */
 import { CLIENT_TEST_SRC_DIR } from '../generator-constants.js';
 
-import type { WriteFileSection } from '../base-core/api.js';
 import { clientRootTemplatesBlock } from '../client/support/index.js';
+import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 
 const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;
 
-export const cypressFiles: WriteFileSection = {
+export const cypressFiles = asWriteFilesSection({
   common: [
     {
       templates: ['README.md.jhi.cypress'],
@@ -103,9 +103,9 @@ export const cypressFiles: WriteFileSection = {
       templates: ['plugins/global.d.ts'],
     },
   ],
-};
+});
 
-export const cypressEntityFiles: WriteFileSection = {
+export const cypressEntityFiles = asWriteFilesSection({
   testsCypress: [
     {
       path: CYPRESS_TEMPLATE_SOURCE_DIR,
@@ -113,4 +113,4 @@ export const cypressEntityFiles: WriteFileSection = {
       templates: ['e2e/entity/_entity_.cy.ts'],
     },
   ],
-};
+});

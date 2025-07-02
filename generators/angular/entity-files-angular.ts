@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { clientApplicationTemplatesBlock } from '../client/support/files.js';
-import type { WriteFileSection } from '../base-core/api.js';
-import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/index.js';
+import { asPostWritingEntitiesTask, asWriteEntityFilesSection, asWritingEntitiesTask } from '../base-application/support/index.js';
 import { filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/filter-entities.js';
 import type { Application as AngularApplication, Entity as AngularEntity, Source as AngularSource } from './types.js';
 
@@ -31,10 +30,10 @@ const entityServiceFiles = clientApplicationTemplatesBlock({
   templates: ['entities/_entityFolder_/service/_entityFile_.service.ts', 'entities/_entityFolder_/service/_entityFile_.service.spec.ts'],
 });
 
-export const builtInFiles: WriteFileSection = {
+export const builtInFiles = asWriteEntityFilesSection({
   model: [entityModelFiles],
   service: [entityServiceFiles],
-};
+});
 
 export const angularFiles = {
   model: [entityModelFiles],
@@ -70,7 +69,7 @@ export const angularFiles = {
   ],
 };
 
-export const userManagementFiles: WriteFileSection = {
+export const userManagementFiles = asWriteEntityFilesSection({
   userManagement: [
     clientApplicationTemplatesBlock({
       templates: [
@@ -93,7 +92,7 @@ export const userManagementFiles: WriteFileSection = {
       ],
     }),
   ],
-};
+});
 
 export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>>(async function ({
   application,

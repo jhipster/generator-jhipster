@@ -18,10 +18,10 @@
  */
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/index.js';
 import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import type { WriteFileSection } from '../base-core/api.js';
+import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import type Generator from './generator.js';
 
-const files: WriteFileSection = {
+const files = asWriteFilesSection({
   cacheFiles: [
     {
       condition: data => data.buildToolGradle,
@@ -43,7 +43,7 @@ const files: WriteFileSection = {
       ],
     },
   ],
-};
+});
 
 export default async function writeTask(this: Generator, { application }) {
   await this.writeFiles({
