@@ -6,7 +6,7 @@
     "@cypress/code-coverage": "3.14.5",
     "babel-loader": "10.0.0",
     "babel-plugin-istanbul": "7.0.0",
-    "cypress": "14.5.0",
+    "cypress": "14.5.1",
     "cypress-audit": "1.1.0",
     "eslint-plugin-cypress": "5.1.0",
     "lighthouse": "12.7.0",
