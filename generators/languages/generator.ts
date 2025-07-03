@@ -29,7 +29,8 @@ import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants
 import { QUEUES } from '../base-application/priorities.js';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
-import type { Application as ClientApplication } from '../client/types.js';
+import type { Application as ClientApplication, Source as ClientSource } from '../client/types.js';
+import type { SourceAll } from '../../lib/types/source-all.js';
 import type { Language } from './support/languages.js';
 import { findLanguageForTag, supportedLanguages } from './support/languages.js';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
@@ -42,6 +43,7 @@ import type {
   Config as LanguagesConfig,
   Entity as LanguagesEntity,
   Options as LanguagesOptions,
+  Source as LanguagesSource,
 } from './types.js';
 
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
@@ -53,7 +55,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   LanguagesEntity,
   LanguagesApplication<LanguagesEntity>,
   LanguagesConfig,
-  LanguagesOptions
+  LanguagesOptions,
+  LanguagesSource
 > {
   askForMoreLanguages!: boolean;
   askForNativeLanguage!: boolean;
@@ -331,7 +334,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
 
         const { enableTranslation, skipClient, languagesDefinition } = application;
         if (languagesDefinition && languagesDefinition.length > 0) {
-          source.addLanguagesInFrontend?.({ languagesDefinition });
+          (source as unknown as ClientSource).addLanguagesInFrontend?.({ languagesDefinition });
         }
 
         if (enableTranslation && !skipClient) {
@@ -352,7 +355,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
           application.backendTypeJavaAny &&
           application.backendTypeSpringBoot
         ) {
-          updateLanguagesInJava.call(this, { application, control, source });
+          updateLanguagesInJava.call(this, { application, control, source: source as SourceAll });
         }
       },
     });

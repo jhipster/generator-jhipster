@@ -35,7 +35,6 @@ import { getConfigWithDefaults } from '../../lib/jhipster/default-application-op
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
 import type { ConfigAll } from '../../lib/types/application-config-all.js';
 import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
-import type { SourceAll } from '../../lib/types/source-all.js';
 import type {
   ConfiguringEachEntityTaskParam,
   TaskTypes as DefaultTasks,
@@ -134,7 +133,7 @@ export default class BaseApplicationGenerator<
   Application extends BaseApplication<Entity> = BaseApplication<Entity>,
   Config extends BaseApplicationConfig = BaseApplicationConfig,
   Options extends BaseApplicationOptions = BaseApplicationOptions,
-  Source extends BaseApplicationSource = SourceAll,
+  Source extends BaseApplicationSource = BaseApplicationSource,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
   Tasks extends DefaultTasks<Entity, Application, Source> = DefaultTasks<Entity, Application, Source>,
 > extends BaseGenerator<Application, Config, Options, Source, Features, Tasks> {

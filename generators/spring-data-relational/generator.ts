@@ -27,13 +27,22 @@ import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
 import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from './support/index.js';
 import { getDatabaseTypeMavenDefinition, getH2MavenDefinition, javaSqlDatabaseArtifacts } from './internal/dependencies.js';
-import type { Application as SpringDataRelationalApplication, Entity as SpringDataRelationalEntity } from './types.js';
+import type {
+  Application as SpringDataRelationalApplication,
+  Config as SpringDataRelationalConfig,
+  Entity as SpringDataRelationalEntity,
+  Options as SpringDataRelationalOptions,
+  Source as SpringDataRelationalSource,
+} from './types.js';
 
 const { SQL } = databaseTypes;
 
 export default class SqlGenerator extends BaseApplicationGenerator<
   SpringDataRelationalEntity,
-  SpringDataRelationalApplication<SpringDataRelationalEntity>
+  SpringDataRelationalApplication<SpringDataRelationalEntity>,
+  SpringDataRelationalConfig,
+  SpringDataRelationalOptions,
+  SpringDataRelationalSource
 > {
   async beforeQueue() {
     if (!this.fromBlueprint) {

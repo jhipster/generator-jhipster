@@ -2,30 +2,14 @@ import { before, describe, it } from 'esmocha';
 import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import LanguagesGenerator from './index.js';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
 
 const generator = 'languages';
 
-const mockBlueprintSubGen: any = class extends LanguagesGenerator {
-  constructor(args, opts, features) {
-    super(args, opts, features);
-
-    if (!this.jhipsterContext) {
-      throw new Error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
-    }
-
-    this.sbsBlueprint = true;
-  }
-
-  get [LanguagesGenerator.POST_WRITING]() {
-    return this.asPostWritingTaskGroup({
-      addEntityTranslationKey({ source }) {
-        source.addEntityTranslationKey?.({ translationKey: 'my_entity_key', translationValue: 'My Entity Value', language: 'en' });
-        source.addEntityTranslationKey?.({ translationKey: 'ma_cle_entite', translationValue: 'Ma Valeur Entite', language: 'fr' });
-      },
-    });
-  }
-};
+const addNeedlesTask = asPostWritingTask(function ({ source }) {
+  source.addEntityTranslationKey?.({ translationKey: 'my_entity_key', translationValue: 'My Entity Value', language: 'en' });
+  source.addEntityTranslationKey?.({ translationKey: 'ma_cle_entite', translationValue: 'Ma Valeur Entite', language: 'fr' });
+});
 
 describe('needle API i18n: JHipster language generator with blueprint', () => {
   before(async () => {
@@ -37,11 +21,10 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',
-        blueprint: ['myblueprint'],
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
       })
-      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:languages' }]]);
+      .withTask('postWriting', addNeedlesTask);
   });
 
   it('Assert english entity global.json contain the new key', () => {

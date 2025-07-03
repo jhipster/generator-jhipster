@@ -1,134 +1,119 @@
 import { before, describe, expect, it } from 'esmocha';
 import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
-import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_MAVEN } from '../generator-list.js';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
 
-class mockBlueprintSubGen extends BaseApplicationGenerator {
-  constructor(args, opts, features) {
-    super(args, opts, features);
-
-    this.sbsBlueprint = true;
+const addNeedlesTask = asPostWritingTask(function ({ source }) {
+  const inProfile = (this.options as any).profile;
+  function asItemOrArray<T>(item: T): T | T[] {
+    return inProfile ? [item] : item;
   }
-
-  get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.asPostWritingTaskGroup({
-      mavenStep({ source }) {
-        const inProfile = (this.options as any).profile;
-        function asItemOrArray<T>(item: T): T | T[] {
-          return inProfile ? [item] : item;
-        }
-        source.addMavenDependencyManagement?.(
-          asItemOrArray({
-            inProfile,
-            groupId: 'dependencyManagementGroupId',
-            artifactId: 'dependencyManagementArtifactId',
-            version: 'version',
-            type: 'jar',
-            scope: 'test',
-            additionalContent: `
+  source.addMavenDependencyManagement?.(
+    asItemOrArray({
+      inProfile,
+      groupId: 'dependencyManagementGroupId',
+      artifactId: 'dependencyManagementArtifactId',
+      version: 'version',
+      type: 'jar',
+      scope: 'test',
+      additionalContent: `
                 <exclusions>
                     <exclusion>
                         <groupId>exclusionGroupId</groupId>
                         <artifactId>exclusionArtifactId</artifactId>
                     </exclusion>
                 </exclusions>`,
-          }),
-        );
+    }),
+  );
 
-        source.addMavenDistributionManagement?.(
-          asItemOrArray({
-            inProfile,
-            snapshotsId: 'snapshotsId',
-            snapshotsUrl: 'snapshotsUrl',
-            releasesId: 'releasesId',
-            releasesUrl: 'releasesUrl',
-          }),
-        );
-        source.addMavenProperty?.(asItemOrArray({ inProfile, property: 'propertyName.dotted', value: 'propertyValue' }));
-        source.addMavenDependency?.(
-          asItemOrArray({
-            inProfile,
-            groupId: 'dependencyGroupId',
-            artifactId: 'dependencyArtifactId',
-            version: 'version',
-            additionalContent: `
+  source.addMavenDistributionManagement?.(
+    asItemOrArray({
+      inProfile,
+      snapshotsId: 'snapshotsId',
+      snapshotsUrl: 'snapshotsUrl',
+      releasesId: 'releasesId',
+      releasesUrl: 'releasesUrl',
+    }),
+  );
+  source.addMavenProperty?.(asItemOrArray({ inProfile, property: 'propertyName.dotted', value: 'propertyValue' }));
+  source.addMavenDependency?.(
+    asItemOrArray({
+      inProfile,
+      groupId: 'dependencyGroupId',
+      artifactId: 'dependencyArtifactId',
+      version: 'version',
+      additionalContent: `
             <exclusions>
                 <exclusion>
                     <groupId>exclusionGroupId</groupId>
                     <artifactId>exclusionArtifactId</artifactId>
                 </exclusion>
             </exclusions>`,
-          }),
-        );
-        source.addMavenPlugin?.(
-          asItemOrArray({
-            inProfile,
-            groupId: 'mavenPluginGroupId',
-            artifactId: 'mavenPluginArtifactId',
-            version: 'version',
-            additionalContent: `
+    }),
+  );
+  source.addMavenPlugin?.(
+    asItemOrArray({
+      inProfile,
+      groupId: 'mavenPluginGroupId',
+      artifactId: 'mavenPluginArtifactId',
+      version: 'version',
+      additionalContent: `
                 <exclusions>
                     <exclusion>
                         <groupId>exclusionGroupId</groupId>
                         <artifactId>exclusionArtifactId</artifactId>
                     </exclusion>
                 </exclusions>`,
-          }),
-        );
-        source.addMavenPluginManagement?.(
-          asItemOrArray({
-            inProfile,
-            groupId: 'mavenPluginManagementGroupId',
-            artifactId: 'mavenPluginManagementArtifactId',
-            version: 'version',
-            additionalContent: `                    <exclusions>
+    }),
+  );
+  source.addMavenPluginManagement?.(
+    asItemOrArray({
+      inProfile,
+      groupId: 'mavenPluginManagementGroupId',
+      artifactId: 'mavenPluginManagementArtifactId',
+      version: 'version',
+      additionalContent: `                    <exclusions>
                         <exclusion>
                             <groupId>exclusionGroupId</groupId>
                             <artifactId>exclusionArtifactId</artifactId>
                         </exclusion>
                     </exclusions>`,
-          }),
-        );
-        source.addMavenAnnotationProcessor?.(
-          asItemOrArray({
-            inProfile,
-            groupId: 'annotationProcessorGroupId',
-            artifactId: 'annotationProcessorArtifactId',
-            version: 'annotationProcessorVersion',
-          }),
-        );
-        source.addMavenProfile?.(asItemOrArray({ id: 'profileId', content: '            <other>other</other>' }));
-        source.addMavenRepository?.(
-          asItemOrArray({
-            id: 'repositoryId',
-            url: 'repositoryUrl',
-            releasesEnabled: true,
-            snapshotsEnabled: false,
-          }),
-        );
-        source.addMavenPluginRepository?.(
-          asItemOrArray({
-            id: 'repositoryId',
-            url: 'repositoryUrl',
-          }),
-        );
-      },
-    });
-  }
-}
+    }),
+  );
+  source.addMavenAnnotationProcessor?.(
+    asItemOrArray({
+      inProfile,
+      groupId: 'annotationProcessorGroupId',
+      artifactId: 'annotationProcessorArtifactId',
+      version: 'annotationProcessorVersion',
+    }),
+  );
+  source.addMavenProfile?.(asItemOrArray({ id: 'profileId', content: '            <other>other</other>' }));
+  source.addMavenRepository?.(
+    asItemOrArray({
+      id: 'repositoryId',
+      url: 'repositoryUrl',
+      releasesEnabled: true,
+      snapshotsEnabled: false,
+    }),
+  );
+  source.addMavenPluginRepository?.(
+    asItemOrArray({
+      id: 'repositoryId',
+      url: 'repositoryUrl',
+    }),
+  );
+});
 
 describe('generator - maven - needles', () => {
   describe('no profile', () => {
     before(async () => {
       await helpers
         .runJHipster(GENERATOR_MAVEN)
-        .withOptions({
-          blueprint: ['myblueprint'],
-        })
         .withJHipsterConfig({
           clientFramework: 'no',
         })
-        .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:maven' }]]);
+        .withTask('postWriting', addNeedlesTask);
     });
 
     it('Assert pom.xml has the dependency management added', () => {
@@ -252,10 +237,9 @@ describe('generator - maven - needles', () => {
           clientFramework: 'no',
         })
         .withOptions({
-          blueprint: ['myblueprint'],
           profile: 'prod',
         })
-        .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:maven' }]]);
+        .withTask('postWriting', addNeedlesTask);
     });
 
     it('Assert pom.xml has the dependency management added', () => {
