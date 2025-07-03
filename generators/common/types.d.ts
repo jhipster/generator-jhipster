@@ -13,7 +13,12 @@ import type {
   Relationship as JavascriptRelationship,
 } from '../javascript/types.js';
 import type { Application as GitApplication, Config as GitConfig, Options as GitOptions } from '../git/types.js';
-import type { Application as LanguagesApplication, Entity as LanguagesEntity } from '../languages/types.js';
+import type {
+  Application as LanguagesApplication,
+  Config as LanguagesConfig,
+  Entity as LanguagesEntity,
+  Options as LanguagesOptions,
+} from '../languages/types.js';
 import type huskyCommand from '../javascript/generators/husky/command.js';
 import type prettierCommand from '../javascript/generators/prettier/command.js';
 import type appCommand from '../app/command.ts';
@@ -36,6 +41,7 @@ export type Config = BaseApplicationConfig &
   AppCommand['Config'] &
   HuskyCommand['Config'] &
   PrettierCommand['Config'] &
+  LanguagesConfig &
   GitConfig & {
     applicationIndex?: number;
     testFrameworks?: string[];
@@ -46,6 +52,7 @@ export type Options = BaseApplicationOptions &
   AppCommand['Options'] &
   HuskyCommand['Options'] &
   PrettierCommand['Options'] &
+  LanguagesOptions &
   GitOptions;
 
 export interface Entity<F extends Field = Field, R extends JavascriptRelationship = JavascriptRelationship>

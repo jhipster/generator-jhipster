@@ -71,8 +71,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
       properties({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
-          packageName: this.jhipsterConfigWithDefaults.packageName,
-
           srcMainJava: SERVER_MAIN_SRC_DIR,
           srcMainResources: SERVER_MAIN_RES_DIR,
           srcMainWebapp: CLIENT_MAIN_SRC_DIR,

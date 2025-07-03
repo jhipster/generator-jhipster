@@ -31,7 +31,10 @@ import type command from './command.ts';
 
 type CommandTypes = HandleCommandTypes<typeof command>;
 
-export { SpringBootConfig as Config, SpringBootOptions as Options, SpringBootSource as Source };
+export type Config = SpringBootConfig & CommandTypes['Config'];
+export type Options = SpringBootOptions & CommandTypes['Options'];
+
+export { SpringBootSource as Source };
 
 export type Field = SpringBootField & {
   jpaGeneratedValue?: boolean | 'identity' | 'sequence';

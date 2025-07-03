@@ -30,6 +30,8 @@ import {
 } from '../../lib/jhipster/index.js';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.js';
 import { asPromptingTask } from '../base-application/support/task-type-inference.js';
+import type { Config as SpringDataRelationalConfig } from '../spring-data-relational/types.js';
+import type { Config as SpringCacheConfig } from '../spring-cache/types.js';
 import type SpringBootGenerator from './generator.js';
 
 const { OptionNames } = applicationOptions;
@@ -98,7 +100,7 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
         name: 'prodDatabaseType',
         message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
         choices: reactive ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS,
-        default: this.jhipsterConfigWithDefaults.prodDatabaseType,
+        default: (this.jhipsterConfigWithDefaults as SpringDataRelationalConfig).prodDatabaseType,
       },
       {
         when: response => response.databaseType === SQL,
@@ -117,7 +119,7 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
             { value: H2_MEMORY, name: `H2 with in-memory persistence` },
           ]);
         },
-        default: this.jhipsterConfigWithDefaults.devDatabaseType,
+        default: (this.jhipsterConfigWithDefaults as SpringDataRelationalConfig).devDatabaseType,
       },
       {
         when: !reactive,
@@ -154,7 +156,7 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
             name: 'No cache - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
           },
         ],
-        default: this.jhipsterConfigWithDefaults.cacheProvider,
+        default: (this.jhipsterConfigWithDefaults as SpringCacheConfig).cacheProvider,
       },
       {
         when: answers =>
@@ -164,7 +166,7 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
         type: 'confirm',
         name: 'enableHibernateCache',
         message: 'Do you want to use Hibernate 2nd level cache?',
-        default: this.jhipsterConfigWithDefaults.enableHibernateCache,
+        default: (this.jhipsterConfigWithDefaults as SpringCacheConfig).enableHibernateCache,
       },
     ],
     this.config,

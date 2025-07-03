@@ -9,10 +9,13 @@ import type { Entity as BaseApplicationEntity } from '../base-application/types.
 import type { Config as CommonConfig } from '../common/index.js';
 import type {
   Application as ServerApplication,
+  Config as ServerConfig,
   Entity as ServerEntity,
   Field as ServerField,
+  Options as ServerOptions,
   Relationship as ServerRelationship,
-} from '../server/index.js';
+  Source as ServerSource,
+} from '../server/types.d.ts';
 import type { Application as GradleApplication } from '../gradle/types.js';
 import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
 import type { ApplicationPropertiesNeedles } from '../server/support/needles.ts';
@@ -22,9 +25,9 @@ import type command from './command.js';
 
 type Command = HandleCommandTypes<typeof command>;
 
-export type Config = Command['Config'] & JavaConfig & CommonConfig;
+export type Config = Command['Config'] & JavaConfig & ServerConfig & CommonConfig;
 
-export type Options = Command['Options'] & JavaOptions;
+export type Options = Command['Options'] & JavaOptions & ServerOptions;
 
 export type SpringEntity = {
   entitySearchLayer?: boolean;
@@ -63,42 +66,43 @@ export type Entity<F extends Field = Field, R extends Relationship = Relationshi
     entityJavaCustomFilters: any[];
   };
 
-export type Source = JavaSource & {
-  addTestSpringFactory?({ key, value }: { key: string; value: string }): void;
-  addLogbackLogEntry?({ file, name, level }: { file: string; name: string; level: string }): void;
-  addIntegrationTestAnnotation?(annotation: JavaAnnotation): void;
-  addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
-  addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
-  addApplicationPropertiesProperty?({ propertyName, propertyType }: { propertyName: string; propertyType: string }): void;
-  /**
-   * @example
-   * addApplicationPropertiesClass({
-   *   propertyType: 'Liquibase',
-   *   classStructure: { enabled: ['PropertyType', '"default value"'], asyncStart: 'PropertyTypeOnly' },
-   * });
-   */
-  addApplicationPropertiesClass?(opts: {
-    propertyName?: string;
-    propertyType: string;
-    classStructure: Record<string, string | string[]>;
-  }): void;
-  addNativeHint?(hints: {
-    advanced?: string[];
-    declaredConstructors?: string[];
-    resources?: string[];
-    publicConstructors?: string[];
-  }): void;
-  /**
-   * Injects a document into the application.yml file using '---' document separator.
-   *
-   * @example
-   * addApplicationYamlDocument(`
-   * spring:
-   *  key: value
-   * `);
-   */
-  addApplicationYamlDocument?(document: string): void;
-};
+export type Source = JavaSource &
+  ServerSource & {
+    addTestSpringFactory?({ key, value }: { key: string; value: string }): void;
+    addLogbackLogEntry?({ file, name, level }: { file: string; name: string; level: string }): void;
+    addIntegrationTestAnnotation?(annotation: JavaAnnotation): void;
+    addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
+    addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
+    addApplicationPropertiesProperty?({ propertyName, propertyType }: { propertyName: string; propertyType: string }): void;
+    /**
+     * @example
+     * addApplicationPropertiesClass({
+     *   propertyType: 'Liquibase',
+     *   classStructure: { enabled: ['PropertyType', '"default value"'], asyncStart: 'PropertyTypeOnly' },
+     * });
+     */
+    addApplicationPropertiesClass?(opts: {
+      propertyName?: string;
+      propertyType: string;
+      classStructure: Record<string, string | string[]>;
+    }): void;
+    addNativeHint?(hints: {
+      advanced?: string[];
+      declaredConstructors?: string[];
+      resources?: string[];
+      publicConstructors?: string[];
+    }): void;
+    /**
+     * Injects a document into the application.yml file using '---' document separator.
+     *
+     * @example
+     * addApplicationYamlDocument(`
+     * spring:
+     *  key: value
+     * `);
+     */
+    addApplicationYamlDocument?(document: string): void;
+  };
 
 type ImperativeApplication = {
   reactive: false;
