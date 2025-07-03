@@ -1,0 +1,51 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (post(); as postRef) {
+      <div>
+        <h2 data-cy="postDetailsHeading"><span jhiTranslate="blogApp.blogPost.detail.title">Post</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ postRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="blogApp.blogPost.title">Title</span></dt>
+          <dd>
+            <span>{{ postRef.title }}</span>
+          </dd>
+          <dt><span jhiTranslate="blogApp.blogPost.blog">Blog</span></dt>
+          <dd>
+            @if (post()!.blog) {
+              <div>
+                <a [routerLink]="['/blog/blog', post()!.blog?.id, 'view']">{{ postRef.blog?.name }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="blogApp.blogPost.tag">Tag</span></dt>
+          <dd>
+            @for (tag of postRef.tags; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/blog/tag', tag.id, 'view']">{{ tag?.name }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/blog/post', postRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

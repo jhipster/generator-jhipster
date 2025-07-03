@@ -1,0 +1,25 @@
+{
+  "blogApp": {
+    "blogBlog": {
+      "home": {
+        "title": "Blogs",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Blog",
+        "createOrEditLabel": "Create or edit a Blog",
+        "notFound": "No Blogs found"
+      },
+      "created": "A new Blog is created with identifier {{ param }}",
+      "updated": "A Blog is updated with identifier {{ param }}",
+      "deleted": "A Blog is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Blog {{ id }}?"
+      },
+      "detail": {
+        "title": "Blog"
+      },
+      "id": "ID",
+      "name": "Name",
+      "handle": "Handle"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "blogApp": {
+    "blogTag": {
+      "home": {
+        "title": "Tags",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Tag",
+        "createOrEditLabel": "Create or edit a Tag",
+        "notFound": "No Tags found"
+      },
+      "created": "A new Tag is created with identifier {{ param }}",
+      "updated": "A Tag is updated with identifier {{ param }}",
+      "deleted": "A Tag is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Tag {{ id }}?"
+      },
+      "detail": {
+        "title": "Tag"
+      },
+      "id": "ID",
+      "name": "Name",
+      "post": "Post"
+    }
+  }
+}
