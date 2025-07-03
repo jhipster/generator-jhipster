@@ -132,7 +132,7 @@ const getFirstArgForPriority = (priorityName: string) => ({
 export default class BaseApplicationGenerator<
   Entity extends BaseApplicationEntity = BaseApplicationEntity,
   Application extends BaseApplication<Entity> = BaseApplication<Entity>,
-  Config extends BaseApplicationConfig = BaseApplicationConfig & ConfigAll,
+  Config extends BaseApplicationConfig = BaseApplicationConfig,
   Options extends BaseApplicationOptions = BaseApplicationOptions,
   Source extends BaseApplicationSource = SourceAll,
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,

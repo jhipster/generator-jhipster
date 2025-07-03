@@ -18,11 +18,21 @@
  */
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { javaMainPackageTemplatesBlock } from '../../../java/support/files.js';
-import type { Application as SpringCloudApplication, Entity as SpringCloudEntity } from '../../types.js';
+import type {
+  Application as SpringCloudApplication,
+  Config as SpringCloudConfig,
+  Entity as SpringCloudEntity,
+  Options as SpringCloudOptions,
+} from '../../types.js';
 
 const WAIT_TIMEOUT = 3 * 60000;
 
-export default class GatewayGenerator extends BaseApplicationGenerator<SpringCloudEntity, SpringCloudApplication<SpringCloudEntity>> {
+export default class GatewayGenerator extends BaseApplicationGenerator<
+  SpringCloudEntity,
+  SpringCloudApplication<SpringCloudEntity>,
+  SpringCloudConfig,
+  SpringCloudOptions
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
