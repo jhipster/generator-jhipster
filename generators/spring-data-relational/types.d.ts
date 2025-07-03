@@ -19,27 +19,32 @@
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { Entity as BaseApplicationEntity } from '../base-application/types.js';
 import type {
-  Application as JavaApplication,
-  Entity as JavaEntity,
-  Field as JavaField,
-  Relationship as JavaRelationship,
-} from '../java/index.ts';
+  Application as SpringBootApplication,
+  Config as SpringBootConfig,
+  Entity as SpringBootEntity,
+  Field as SpringBootField,
+  Options as SpringBootOptions,
+  Relationship as SpringBootRelationship,
+  Source as SpringBootSource,
+} from '../spring-boot/types.ts';
 import type command from './command.ts';
 
 type CommandTypes = HandleCommandTypes<typeof command>;
 
-export type Field = JavaField & {
+export { SpringBootConfig as Config, SpringBootOptions as Options, SpringBootSource as Source };
+
+export type Field = SpringBootField & {
   jpaGeneratedValue?: boolean | 'identity' | 'sequence';
   jpaGeneratedValueSequence?: boolean;
   jpaGeneratedValueIdentity?: boolean;
   jpaSequenceGeneratorName?: string;
 };
 
-export interface Relationship extends JavaRelationship {
+export interface Relationship extends SpringBootRelationship {
   relationshipSqlSafeName?: string;
 }
 
-export interface Entity<F extends JavaField = JavaField, R extends Relationship = Relationship> extends JavaEntity<F, R> {
+export interface Entity<F extends SpringBootField = SpringBootField, R extends Relationship = Relationship> extends SpringBootEntity<F, R> {
   entityJpqlInstance: string;
 }
 
@@ -47,7 +52,7 @@ type LiquibaseApplication = {
   incrementalChangelog: boolean;
 };
 
-export type Application<E extends BaseApplicationEntity = Entity> = JavaApplication<E> &
+export type Application<E extends BaseApplicationEntity = Entity> = SpringBootApplication<E> &
   LiquibaseApplication &
   CommandTypes['Application'] & {
     devDatabaseExtraOptions: string;

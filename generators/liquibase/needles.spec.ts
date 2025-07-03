@@ -1,29 +1,15 @@
 import { before, describe, it } from 'esmocha';
 import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
-import BaseApplicationGenerator from '../base-application/index.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { GENERATOR_LIQUIBASE } from '../generator-list.js';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
 
-class mockBlueprintSubGen extends BaseApplicationGenerator {
-  constructor(args, opts, features) {
-    super(args, opts, features);
-
-    this.sbsBlueprint = true;
-  }
-
-  get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.asPostWritingTaskGroup({
-      addChangelogStep({ source }) {
-        source.addLiquibaseChangelog?.({ changelogName: 'aNewChangeLog' });
-        source.addLiquibaseConstraintsChangelog?.({ changelogName: 'aNewConstraintsChangeLog' });
-      },
-      addIncrementalChangelog({ source }) {
-        source.addLiquibaseIncrementalChangelog?.({ changelogName: 'incrementalChangeLogWithNeedle' });
-        source.addLiquibaseIncrementalChangelog?.({ changelogName: 'incrementalChangeLogWithNeedle2' });
-      },
-    });
-  }
-}
+const addNeedlesTask = asPostWritingTask(function ({ source }) {
+  source.addLiquibaseChangelog?.({ changelogName: 'aNewChangeLog' });
+  source.addLiquibaseConstraintsChangelog?.({ changelogName: 'aNewConstraintsChangeLog' });
+  source.addLiquibaseIncrementalChangelog?.({ changelogName: 'incrementalChangeLogWithNeedle' });
+  source.addLiquibaseIncrementalChangelog?.({ changelogName: 'incrementalChangeLogWithNeedle2' });
+});
 
 describe('generator - liquibase - needles', () => {
   before(async () => {
@@ -42,10 +28,9 @@ describe('generator - liquibase - needles', () => {
         clientFramework: 'no',
       })
       .withOptions({
-        blueprint: ['myblueprint'],
         skipPriorities: ['writing'],
       })
-      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:liquibase' }]]);
+      .withTask('postWriting', addNeedlesTask);
   });
 
   it('Assert changelog is added to master.xml', () => {

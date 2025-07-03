@@ -23,6 +23,7 @@ import type {
   Config as SpringCloudConfig,
   Entity as SpringCloudEntity,
   Options as SpringCloudOptions,
+  Source as SpringCloudSource,
 } from '../../types.js';
 
 const WAIT_TIMEOUT = 3 * 60000;
@@ -31,7 +32,8 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
   SpringCloudEntity,
   SpringCloudApplication<SpringCloudEntity>,
   SpringCloudConfig,
-  SpringCloudOptions
+  SpringCloudOptions,
+  SpringCloudSource
 > {
   async beforeQueue() {
     if (!this.fromBlueprint) {

@@ -23,6 +23,7 @@ import type {
   Field as BaseApplicationField,
   Options as BaseApplicationOptions,
   Relationship as BaseApplicationRelationship,
+  Source as BaseApplicationSource,
 } from '../base-application/index.js';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { Language } from './support/languages.js';
@@ -34,7 +35,7 @@ export type Config = BaseApplicationConfig & Command['Config'];
 
 export type Options = BaseApplicationOptions & Omit<Command['Options'], 'languages' | 'languagesDefinition'>;
 
-export type LanguagesSource = {
+export type Source = BaseApplicationSource & {
   addEntityTranslationKey: (arg: { translationKey: string; translationValue: string; language: string }) => void;
 };
 

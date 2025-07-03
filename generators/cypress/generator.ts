@@ -24,6 +24,7 @@ import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
 import { generateTestEntity as entityWithFakeValues } from '../client/support/index.js';
+import type { Source as ClientSource } from '../client/types.js';
 import { cypressEntityFiles, cypressFiles } from './files.js';
 import type { Application as CypressApplication, Entity as CypressEntity } from './types.js';
 
@@ -271,7 +272,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             `projects.${dasherizedBaseName}.architect.build.configurations.instrumenter`,
             {},
           );
-          source.addWebpackConfig?.({
+          (source as ClientSource).addWebpackConfig?.({
             config: `targetOptions.configuration === 'instrumenter'
       ? {
           module: {

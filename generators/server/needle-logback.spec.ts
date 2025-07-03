@@ -1,26 +1,14 @@
 import { before, describe, it } from 'esmocha';
 import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
-import BaseApplicationGenerator from '../base-application/index.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { GENERATOR_SERVER } from '../generator-list.js';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
 
 const filePath = `${SERVER_MAIN_RES_DIR}logback-spring.xml`;
 
-class mockBlueprintSubGen extends BaseApplicationGenerator {
-  constructor(args, opts, features) {
-    super(args, opts, features);
-
-    this.sbsBlueprint = true;
-  }
-
-  get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.asPostWritingTaskGroup({
-      addlogStep({ source }) {
-        source.addMainLog?.({ name: 'org.test.logTest', level: 'OFF' });
-      },
-    });
-  }
-}
+const addNeedlesTask = asPostWritingTask(function ({ source }) {
+  source.addMainLog?.({ name: 'org.test.logTest', level: 'OFF' });
+});
 
 describe('generators - server - needle - logback', () => {
   before(async () => {
@@ -32,7 +20,7 @@ describe('generators - server - needle - logback', () => {
       .withJHipsterConfig({
         clientFramework: 'no',
       })
-      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:server' }]]);
+      .withTask('postWriting', addNeedlesTask);
   });
 
   it('Assert log is added to logback-spring.xml', () => {
