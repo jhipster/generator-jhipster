@@ -71,6 +71,22 @@ export default class GradleGenerator extends BaseApplicationGenerator<
     }
   }
 
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      configure() {
+        if (this.jhipsterConfigWithDefaults.buildTool !== GRADLE) {
+          this.config.defaults({
+            buildTool: GRADLE,
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
   get loading() {
     return this.asLoadingTaskGroup({
       loadGradleVersion({ application }) {
