@@ -26,7 +26,10 @@
         <%- mapsIdAssoc.otherEntity.primaryKey.type %> <%- mapsIdAssoc.otherEntityName %>Id = <%- persistInstance %>.get<%- mapsIdAssoc.relationshipNameCapitalized %>().get<%- mapsIdAssoc.otherEntity.primaryKey.nameCapitalized %>();
         <%- mapsIdAssoc.otherEntity.entityInstance %>Repository.findById(<%- mapsIdAssoc.otherEntityName %>Id).ifPresent(<%- persistInstance %>::<%_ if (!fluentMethods) { _%>set<%- mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%- mapsIdAssoc.relationshipName %><%_ } _%>);
 <%_ } _%>
-        <%- returnDirectly && !searchEngineElasticsearch && !dtoMapstruct ? 'return' : `${persistInstance} =` %> <%- entityInstance %>Repository.save(<%- persistInstance %>);
+        <%- returnDirectly && !hasAnyReadonlyField && !searchEngineElasticsearch && !dtoMapstruct ? 'return' : `${persistInstance} =` %> <%- entityInstance %>Repository.save<% if (hasAnyReadonlyField && databaseType === 'sql') { %>AndFlush<% } %>(<%- persistInstance %>);
+<%_ if (hasAnyReadonlyField) { _%>
+        <%- returnDirectly && !searchEngineElasticsearch && !dtoMapstruct ? 'return' : `${persistInstance} =` %> <%- entityInstance %>Repository.find<% if (implementsEagerLoadApis) { %>OneWithEagerRelationships<% } else { %>ById<% } %>(<%- persistInstance %>.get<%= primaryKey.nameCapitalized %>()).orElseThrow();
+<%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
         <%- entityInstance %>SearchRepository.index(<%- persistInstance %>);
 <%_ } _%>

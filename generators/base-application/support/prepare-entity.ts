@@ -591,6 +591,8 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
     entity.fields.some(field => !field.id && !field.transient) ||
     entity.relationships.some(relationship => !relationship.id && relationship.persistableRelationship);
 
+  entity.hasAnyReadonlyField = entity.fields.some(field => field.readonly && !(field.id && field.autoGenerate));
+
   entity.allReferences
     .filter(reference => reference.relationship?.relatedField)
     .forEach(reference => {

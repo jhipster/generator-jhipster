@@ -51,7 +51,10 @@ _%>
     return existing<%= entityClass %>;
     })
   <%_ } %>
-  .<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)
+  .<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save<% if (hasAnyReadonlyField && databaseType === 'sql') { %>AndFlush<% } %>)
+  <%_ if (hasAnyReadonlyField) { _%>
+  .<%= mapOrFlatMap %>((persistedInstance) -> <%= entityInstance %>Repository.find<% if (implementsEagerLoadApis) { %>OneWithEagerRelationships<% } else { %>ById<% } %>(persistedInstance.get<%= primaryKey.nameCapitalized %>()).orElseThrow())
+  <%_ } _%>
   <%_ if (searchEngineElasticsearch) { _%>
     .<%= mapOrFlatMap %>(saved<%= entityClass %> -> {
     <%_ if(reactive) { %>
