@@ -1,5 +1,5 @@
 import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
-import type { EmptyObject, IsNever, Replace, RequireAtLeastOne, SetOptional, Simplify, TupleToUnion, ValueOf } from 'type-fest';
+import type { IsNever, Replace, RequireAtLeastOne, SetOptional, Simplify, TupleToUnion, ValueOf } from 'type-fest';
 import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
 import type { MergeUnion } from './support/merge-union.js';
 
@@ -288,8 +288,8 @@ type ExportScopedPropertiesFromCommand<C extends ParseableCommand, S extends Fil
   MergeConfigsOptions<C, S> extends infer Merged
     ? Merged extends ParseableConfigs
       ? PrepareConfigsWithType<Merged>
-      : EmptyObject
-    : EmptyObject;
+      : Record<string, never>
+    : Record<string, never>;
 
 export type ExportStoragePropertiesFromCommand<C extends ParseableCommand> = ExportScopedPropertiesFromCommand<C, 'storage'>;
 

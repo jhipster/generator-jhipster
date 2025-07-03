@@ -34,8 +34,7 @@ export type Options = Command['Options'] & BaseApplicationOptions;
 
 export { BaseApplicationEntity as Entity, BaseApplicationSource as Source };
 
-// TODO switch to Command['Application']
-export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = Command['Config'] &
+export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = Command['Application'] &
   BaseApplicationApplication<E> & {
     javaVersion: string;
     javaCompatibleVersions: string[];

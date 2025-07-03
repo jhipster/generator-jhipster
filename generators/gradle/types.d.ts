@@ -75,8 +75,7 @@ export type Config = Command['Config'] & JavaBootstrapConfig;
 
 export type Options = Command['Options'] & JavaBootstrapOptions;
 
-// TODO switch to Command['Application']
-export type Application<E extends JavaBootstrapEntity = JavaBootstrapEntity> = Command['Config'] &
+export type Application<E extends JavaBootstrapEntity = JavaBootstrapEntity> = Command['Application'] &
   JavaBootstrapApplication<E> & {
     gradleVersion?: string;
     gradleBuildSrc?: string;
