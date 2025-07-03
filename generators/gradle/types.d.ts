@@ -6,6 +6,12 @@ import type {
   Options as JavaBootstrapOptions,
   Source as JavaBootstrapSource,
 } from '../java/generators/bootstrap/types.d.ts';
+import type {
+  Application as BuildToolApplication,
+  Config as BuildToolConfig,
+  Options as BuildToolOptions,
+  Source as BuildToolSource,
+} from '../java/generators/build-tool/types.d.ts';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type GradleCommand from './command.js';
 
@@ -44,7 +50,7 @@ export type GradleCatalogNeedleOptions = { gradleVersionCatalogFile?: string };
 
 export type GradleNeedleOptions = GradleFileNeedleOptions & GradleCatalogNeedleOptions;
 
-export type Source = JavaBootstrapSource & {
+export type Source = JavaBootstrapSource & BuildToolSource &{
   _gradleDependencies?: GradleDependency[];
   applyFromGradle?(script: GradleScript): void;
   addGradleDependency?(dependency: GradleDependency, options?: GradleFileNeedleOptions): void;
@@ -71,12 +77,13 @@ type Command = HandleCommandTypes<typeof GradleCommand>;
 
 export { JavaBootstrapEntity as Entity };
 
-export type Config = Command['Config'] & JavaBootstrapConfig;
+export type Config = Command['Config'] & JavaBootstrapConfig & BuildToolConfig;
 
-export type Options = Command['Options'] & JavaBootstrapOptions;
+export type Options = Command['Options'] & JavaBootstrapOptions & BuildToolOptions;
 
 export type Application<E extends JavaBootstrapEntity = JavaBootstrapEntity> = Command['Application'] &
-  JavaBootstrapApplication<E> & {
+  JavaBootstrapApplication<E> &
+  BuildToolApplication<E> & {
     gradleVersion?: string;
     gradleBuildSrc?: string;
     enableGradleDevelocity?: boolean;

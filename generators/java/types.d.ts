@@ -19,7 +19,11 @@ import type {
   Config as JavaBootstrapConfig,
   Options as JavaBootstrapOptions,
 } from './generators/bootstrap/types.js';
-import type BuildToolCommand from './generators/build-tool/command.js';
+import type {
+  Application as BuildToolApplication,
+  Config as BuildToolConfig,
+  Options as BuildToolOptions,
+} from './generators/build-tool/types.js';
 import type GraalvmCommand from './generators/graalvm/command.js';
 
 type Property = {
@@ -117,12 +121,12 @@ export type JavaNeedleOptions = GradleNeedleOptions;
 
 export type Config = BaseApplicationConfig &
   JavaBootstrapConfig &
-  ExportStoragePropertiesFromCommand<typeof BuildToolCommand> &
+  BuildToolConfig &
   ExportStoragePropertiesFromCommand<typeof GraalvmCommand>;
 
 export type Options = BaseApplicationOptions &
   JavaBootstrapOptions &
-  ExportGeneratorOptionsFromCommand<typeof BuildToolCommand> &
+  BuildToolOptions &
   ExportGeneratorOptionsFromCommand<typeof GraalvmCommand>;
 
 type DatabaseApplication = {
@@ -140,11 +144,11 @@ type SpringApplication = {
 export type Application<E extends BaseApplicationEntity<BaseApplicationField, BaseApplicationRelationship> = Entity<Field, Relationship>> =
   BaseApplicationApplication<E> &
     JavaBootstrapApplication &
+    BuildToolApplication &
     GradleApplication &
     CommonProperties &
     SpringApplication &
-    DatabaseApplication &
-    OptionWithDerivedProperties<'buildTool', ['maven', 'gradle']> & {
+    DatabaseApplication & {
       reactive?: boolean;
       buildToolUnknown?: boolean;
       buildToolExecutable: string;
