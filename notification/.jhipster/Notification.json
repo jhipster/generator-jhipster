@@ -1,0 +1,22 @@
+{
+  "annotations": {
+    "adminEntity": true,
+    "changelogDate": 20210408164814
+  },
+  "applications": ["notification"],
+  "clientRootFolder": "notification",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "microserviceName": "notification",
+  "name": "Notification",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

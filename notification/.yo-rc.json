@@ -1,0 +1,28 @@
+{
+  "generator-jhipster": {
+    "applicationIndex": 3,
+    "applicationType": "microservice",
+    "authenticationType": "jwt",
+    "baseName": "notification",
+    "buildTool": "gradle",
+    "clientFramework": "angular",
+    "creationTimestamp": 1617901618889,
+    "devServerPort": 4203,
+    "dtoSuffix": "Rest",
+    "entities": ["Notification"],
+    "entitySuffix": "Entity",
+    "jhipsterVersion": "8.11.0",
+    "jwtSecretKey": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+    "languages": ["en"],
+    "monorepository": true,
+    "nativeLanguage": "en",
+    "packageName": "com.okta.developer.notification",
+    "prodDatabaseType": "postgresql",
+    "reactive": true,
+    "serverPort": "8083",
+    "serviceDiscoveryType": "eureka",
+    "skipCommitHook": true,
+    "skipUserManagement": true,
+    "testFrameworks": ["cypress"]
+  }
+}

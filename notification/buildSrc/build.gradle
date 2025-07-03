@@ -1,0 +1,18 @@
+plugins {
+    id 'groovy-gradle-plugin'
+}
+
+repositories {
+    gradlePluginPortal()
+}
+
+dependencies {
+    implementation libs.jib.plugin
+    implementation libs.modernizer.plugin
+    implementation libs.nohttp.plugin
+    implementation libs.sonarqube.plugin
+    implementation libs.spotless.plugin
+    implementation libs.node.gradle
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies for convention plugins here
+    // jhipster-needle-gradle-build-src-dependency - Deprecated: JHipster will add additional dependencies for convention plugins here
+}
