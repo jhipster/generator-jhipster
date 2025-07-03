@@ -18,23 +18,23 @@
  */
 
 import { asPostWritingTask } from '../../base-application/support/task-type-inference.js';
-import type { Application as LanguagesApplication, Entity as LanguagesEntity } from '../../languages/types.js';
+import type { Application as LanguagesApplication, Entity as LanguagesEntity, Source as LanguagesSource } from '../../languages/types.js';
 
 /**
  * Update Languages In MailServiceIT
  */
-export default asPostWritingTask<LanguagesEntity, LanguagesApplication<LanguagesEntity>>(function updateLanguagesInMailServiceITTask({
-  application,
-}) {
-  const { javaPackageTestDir, languagesDefinition } = application;
-  const { ignoreNeedlesError: ignoreNonExisting } = this;
-  let newContent = 'private static final String[] languages = {\n';
-  languagesDefinition?.forEach((language, i) => {
-    newContent += `        "${language.languageTag}"${i !== languagesDefinition.length - 1 ? ',' : ''}\n`;
-  });
-  newContent += '        // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n    };';
+export default asPostWritingTask<LanguagesEntity, LanguagesApplication<LanguagesEntity>, LanguagesSource>(
+  function updateLanguagesInMailServiceITTask({ application }) {
+    const { javaPackageTestDir, languagesDefinition } = application;
+    const { ignoreNeedlesError: ignoreNonExisting } = this;
+    let newContent = 'private static final String[] languages = {\n';
+    languagesDefinition?.forEach((language, i) => {
+      newContent += `        "${language.languageTag}"${i !== languagesDefinition.length - 1 ? ',' : ''}\n`;
+    });
+    newContent += '        // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n    };';
 
-  this.editFile(`${javaPackageTestDir}/service/MailServiceIT.java`, { ignoreNonExisting }, content =>
-    content.replace(/private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g, newContent),
-  );
-});
+    this.editFile(`${javaPackageTestDir}/service/MailServiceIT.java`, { ignoreNonExisting }, content =>
+      content.replace(/private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g, newContent),
+    );
+  },
+);

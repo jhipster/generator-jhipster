@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import chalk from 'chalk';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/jhipster/index.js';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
 
@@ -44,6 +46,38 @@ const command = {
         description: 'Skip the server-side application generation',
         type: Boolean,
       },
+      scope: 'storage',
+    },
+    skipUserManagement: {
+      description: 'Skip the user management module during app generation',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'storage',
+    },
+    applicationType: {
+      description: 'Application type to generate',
+      cli: {
+        type: String,
+      },
+      prompt: {
+        type: 'list',
+        message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
+      },
+      choices: [
+        {
+          value: APPLICATION_TYPE_MONOLITH,
+          name: 'Monolithic application (recommended for simple projects)',
+        },
+        {
+          value: APPLICATION_TYPE_GATEWAY,
+          name: 'Gateway application',
+        },
+        {
+          value: APPLICATION_TYPE_MICROSERVICE,
+          name: 'Microservice application',
+        },
+      ],
       scope: 'storage',
     },
   },

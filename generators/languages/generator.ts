@@ -30,7 +30,6 @@ import { QUEUES } from '../base-application/priorities.js';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import type { Application as ClientApplication, Source as ClientSource } from '../client/types.js';
-import type { SourceAll } from '../../lib/types/source-all.js';
 import type { Language } from './support/languages.js';
 import { findLanguageForTag, supportedLanguages } from './support/languages.js';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
@@ -355,7 +354,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
           application.backendTypeJavaAny &&
           application.backendTypeSpringBoot
         ) {
-          updateLanguagesInJava.call(this, { application, control, source: source as SourceAll });
+          updateLanguagesInJava.call(this, { application, control, source });
         }
       },
     });
