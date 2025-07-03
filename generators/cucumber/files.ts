@@ -18,11 +18,10 @@
  */
 import { moveToJavaPackageTestDir } from '../java/support/index.js';
 import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import type { WriteFileSection } from '../base-core/api.js';
 import { asWriteFilesSection } from '../base-application/support/index.js';
 import type Generator from './generator.js';
 
-const cucumberFiles: WriteFileSection = asWriteFilesSection({
+const cucumberFiles = asWriteFilesSection({
   cucumberFiles: [
     {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,

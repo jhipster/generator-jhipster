@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { WriteFileSection } from '../../../base-core/api.js';
+import { asWriteFilesSection } from '../../../base-application/support/task-type-inference.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.js';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../../../java/support/index.js';
 
-export const kafkaFiles: WriteFileSection = {
+export const kafkaFiles = asWriteFilesSection({
   config: [
     {
       condition: data => data.buildToolGradle,
@@ -66,4 +66,4 @@ export const kafkaFiles: WriteFileSection = {
       ],
     },
   ],
-};
+});

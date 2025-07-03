@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 import { GRADLE_BUILD_SRC_MAIN_DIR, TEST_DIR } from '../generator-constants.js';
-import type { WriteFileSection } from '../base-core/api.js';
+import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import type Generator from './generator.js';
 
-const gatlingFiles: WriteFileSection = {
+const gatlingFiles = asWriteFilesSection({
   gatlingFiles: [
     {
       templates: ['README.md.jhi.gatling'],
@@ -39,7 +39,7 @@ const gatlingFiles: WriteFileSection = {
       ],
     },
   ],
-};
+});
 
 export default async function writeTask(this: Generator, { application }) {
   await this.writeFiles({

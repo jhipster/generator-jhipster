@@ -24,7 +24,6 @@ import type {
   Entity as BaseApplicationEntity,
   Source as BaseApplicationSource,
 } from './types.js';
-import type { SourceAll } from './source-all.d.ts';
 
 type GetRelationshipType<E> = E extends { relationships: (infer R)[] } ? R : never;
 type GetFieldType<E> = E extends { fields: (infer F)[] } ? F : never;
@@ -92,7 +91,7 @@ type PostWritingEntitiesTaskParam<
 export type TaskTypes<
   E extends BaseApplicationEntity,
   A extends BaseApplicationApplication<E>,
-  S extends BaseApplicationSource = SourceAll,
+  S extends BaseApplicationSource = BaseApplicationSource,
 > = SimpleTaskTypes<A, S> & {
   ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<E, A>;
   LoadingEntitiesTaskParam: LoadingEntitiesTaskParam<E, A>;

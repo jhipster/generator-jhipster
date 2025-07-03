@@ -26,12 +26,19 @@ import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_SERVER } from '../generat
 import { getDefaultAppName } from '../project-name/support/index.js';
 
 import { applicationTypes } from '../../lib/jhipster/index.js';
+import type { ConfigAll } from '../../lib/types/application-config-all.js';
+import type { OptionsAll } from '../../lib/types/application-options-all.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { checkNode } from './support/index.js';
 
 const { MICROSERVICE } = applicationTypes;
 
-export default class JHipsterAppGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication<CommonEntity>> {
+export default class JHipsterAppGenerator extends BaseApplicationGenerator<
+  CommonEntity,
+  CommonApplication<CommonEntity>,
+  ConfigAll,
+  OptionsAll
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

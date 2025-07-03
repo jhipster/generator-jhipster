@@ -1,4 +1,4 @@
-import type { ApplicationConfiguration, YoRcContent } from '../../../../generators/base-application/application-config-all.js';
+import type { ConfigAll, YoRcContent } from '../../../types/application-config-all.js';
 import type { Entity } from '../../../jhipster/types/entity.js';
 import type { Field } from '../../../jhipster/types/field.js';
 import type { Relationship } from '../../../jhipster/types/relationship.js';
@@ -19,7 +19,7 @@ type JSONGeneratorJhipsterContentDeployment = {
   clusteredDbApps?: string[];
 };
 
-type AbstractJSONGeneratorJhipsterContent = ApplicationConfiguration & JSONGeneratorJhipsterContentDeployment & Record<string, any>;
+type AbstractJSONGeneratorJhipsterContent = ConfigAll & JSONGeneratorJhipsterContentDeployment & Record<string, any>;
 
 type JSONGeneratorJhipsterContent = {
   promptValues?: Partial<JSONGeneratorJhipsterContent>;

@@ -1,9 +1,8 @@
 import type { RequireOneOrNone } from 'type-fest';
-import type { GradleNeedleOptions, Source as GradleSource } from '../gradle/types.js';
+import type { Application as GradleApplication, GradleNeedleOptions, Source as GradleSource } from '../gradle/types.js';
 import type { EditFileCallback } from '../base-core/api.js';
 import type { MavenDefinition, Source as MavenSource } from '../maven/types.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
-import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,
@@ -14,8 +13,16 @@ import type {
   Source as BaseApplicationSource,
 } from '../base-application/index.ts';
 import type { JavaAnnotation } from './support/add-java-annotation.ts';
-import type JavaBootstrapCommand from './generators/bootstrap/command.js';
-import type BuildToolCommand from './generators/build-tool/command.js';
+import type {
+  Application as JavaBootstrapApplication,
+  Config as JavaBootstrapConfig,
+  Options as JavaBootstrapOptions,
+} from './generators/bootstrap/types.js';
+import type {
+  Application as BuildToolApplication,
+  Config as BuildToolConfig,
+  Options as BuildToolOptions,
+} from './generators/build-tool/types.js';
 import type GraalvmCommand from './generators/graalvm/command.js';
 
 type Property = {
@@ -112,13 +119,13 @@ export type JavaDefinition = {
 export type JavaNeedleOptions = GradleNeedleOptions;
 
 export type Config = BaseApplicationConfig &
-  ExportStoragePropertiesFromCommand<typeof JavaBootstrapCommand> &
-  ExportStoragePropertiesFromCommand<typeof BuildToolCommand> &
+  JavaBootstrapConfig &
+  BuildToolConfig &
   ExportStoragePropertiesFromCommand<typeof GraalvmCommand>;
 
 export type Options = BaseApplicationOptions &
-  ExportGeneratorOptionsFromCommand<typeof JavaBootstrapCommand> &
-  ExportGeneratorOptionsFromCommand<typeof BuildToolCommand> &
+  JavaBootstrapOptions &
+  BuildToolOptions &
   ExportGeneratorOptionsFromCommand<typeof GraalvmCommand>;
 
 type DatabaseApplication = {
@@ -133,43 +140,14 @@ type SpringApplication = {
   generateSpringAuditor: boolean;
 };
 
-type JavaBootstrap = ExportStoragePropertiesFromCommand<typeof JavaBootstrapCommand> & {
-  javaVersion: string;
-  javaCompatibleVersions: string[];
-  mainClass: string;
-
-  packageFolder: string;
-  entityPackages: string[];
-
-  srcMainJava: string;
-  srcMainResources: string;
-  srcMainWebapp: string;
-  srcTestJava: string;
-  srcTestResources: string;
-  srcTestJavascript: string;
-
-  javaPackageSrcDir: string;
-  javaPackageTestDir: string;
-
-  temporaryDir: string;
-
-  /** Java dependency versions */
-  javaDependencies: Record<string, string>;
-  /** Known properties that can be used */
-  javaProperties: Record<string, string | null>;
-  /** Known managed properties that can be used */
-  javaManagedProperties: Record<string, string | null>;
-  /** Pre-defined package JavaDocs */
-  packageInfoJavadocs: { packageName: string; documentation: string }[];
-};
-
 export type Application<E extends BaseApplicationEntity<BaseApplicationField, BaseApplicationRelationship> = Entity<Field, Relationship>> =
   BaseApplicationApplication<E> &
-    JavaBootstrap &
+    JavaBootstrapApplication &
+    BuildToolApplication &
+    GradleApplication &
     CommonProperties &
     SpringApplication &
-    DatabaseApplication &
-    OptionWithDerivedProperties<'buildTool', ['maven', 'gradle']> & {
+    DatabaseApplication & {
       reactive?: boolean;
       buildToolUnknown?: boolean;
       buildToolExecutable: string;

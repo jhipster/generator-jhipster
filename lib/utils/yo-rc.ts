@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import type { ApplicationConfiguration, YoRcContent } from '../../generators/base-application/application-config-all.js';
+import type { ConfigAll, YoRcContent } from '../types/application-config-all.js';
 import type { Entity } from '../jhipster/types/entity.js';
 import { upperFirst } from '../jdl/core/utils/string-utils.js';
 
@@ -8,7 +8,7 @@ export const YO_RC_CONFIG_KEY = 'generator-jhipster';
 
 export const YO_RC_FILE = '.yo-rc.json';
 
-export const mergeYoRcContent = <const Content = ApplicationConfiguration>(
+export const mergeYoRcContent = <const Content = ConfigAll>(
   oldConfig: YoRcContent<Content>,
   newConfig: YoRcContent<Content>,
 ): YoRcContent<Content> => {
@@ -31,7 +31,7 @@ export const readEntityFile = <Content = Entity>(applicationPath: string, entity
   }
 };
 
-export const readYoRcFile = <Content = ApplicationConfiguration>(yoRcPath = '.'): YoRcContent<Content> => {
+export const readYoRcFile = <Content = ConfigAll>(yoRcPath = '.'): YoRcContent<Content> => {
   const yoRcFile = yoRcPath.endsWith(YO_RC_FILE) ? yoRcPath : join(yoRcPath, YO_RC_FILE);
   try {
     return JSON.parse(readFileSync(yoRcFile, 'utf-8'));
@@ -40,7 +40,7 @@ export const readYoRcFile = <Content = ApplicationConfiguration>(yoRcPath = '.')
   }
 };
 
-export const readCurrentPathYoRcFile = <Content = ApplicationConfiguration>(): YoRcContent<Content> | undefined => {
+export const readCurrentPathYoRcFile = <Content = ConfigAll>(): YoRcContent<Content> | undefined => {
   try {
     return readYoRcFile(process.cwd());
   } catch {

@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import BaseApplicationGenerator from '../base-application/index.js';
+import { JavaApplicationGenerator } from '../java/generator.ts';
 import { feignFiles } from './files.js';
 import cleanupTask from './cleanup.js';
 
-export default class FeignClientGenerator extends BaseApplicationGenerator {
+export default class FeignClientGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -44,7 +44,7 @@ export default class FeignClientGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [JavaApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -65,7 +65,7 @@ export default class FeignClientGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [JavaApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

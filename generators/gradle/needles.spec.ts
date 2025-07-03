@@ -1,16 +1,16 @@
 import { before, describe, it } from 'esmocha';
 import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
-import BaseApplicationGenerator from '../base-application/index.js';
+import { GeneratorBaseApplication } from '../index.js';
 import { GENERATOR_SERVER } from '../generator-list.js';
 
-class mockBlueprintSubGen extends BaseApplicationGenerator {
+class mockBlueprintSubGen extends GeneratorBaseApplication {
   constructor(args, opts, features) {
     super(args, opts, features);
 
     this.sbsBlueprint = true;
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [GeneratorBaseApplication.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       gradleStep({ source }) {
         source.addGradleProperty?.({ property: 'name', value: 'value' });

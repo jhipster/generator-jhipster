@@ -1,6 +1,9 @@
+import type { ApplicationAll } from '../lib/types/application-properties-all.d.ts';
+import type { ConfigAll } from '../lib/types/application-config-all.d.ts';
+import type { OptionsAll } from '../lib/types/application-options-all.d.ts';
+import type { SourceAll } from '../lib/types/source-all.d.ts';
+import type { EntityAll } from '../lib/types/entity-all.d.ts';
 import BaseApplicationGenerator from './base-application/index.ts';
-import type { ApplicationAll } from './base-application/application-properties-all.d.ts';
-import type { EntityAll } from './base-application/entity-all.d.ts';
 export {
   JHIPSTER_DOCUMENTATION_URL,
   JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
@@ -30,7 +33,13 @@ export * from './type-utils.js';
 
 export type { JHipsterCommandDefinition } from '../lib/command/index.js';
 
-class BaseApplicationGeneratorAll extends BaseApplicationGenerator<EntityAll, ApplicationAll<EntityAll>> {}
+class BaseApplicationGeneratorAll extends BaseApplicationGenerator<
+  EntityAll,
+  ApplicationAll<EntityAll>,
+  ConfigAll,
+  OptionsAll,
+  SourceAll
+> {}
 
 export { default as GeneratorBase } from './base/index.js';
 export { default as GeneratorBaseCore } from './base-core/index.js';

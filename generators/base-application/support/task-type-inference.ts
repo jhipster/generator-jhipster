@@ -24,11 +24,17 @@ import type {
   Source as BaseApplicationSource,
 } from '../types.js';
 
-import type { ApplicationAll } from '../application-properties-all.js';
-import type { EntityAll } from '../entity-all.js';
-import type { SourceAll } from '../source-all.js';
+import type { ApplicationAll } from '../../../lib/types/application-properties-all.js';
+import type { EntityAll } from '../../../lib/types/entity-all.js';
+import type { SourceAll } from '../../../lib/types/source-all.js';
 
-export function asWriteFilesSection<Data = ApplicationAll<EntityAll>>(section: WriteFileSection<Data>) {
+export function asWriteFilesSection<Data = ApplicationAll<EntityAll>>(section: WriteFileSection<Data>): WriteFileSection<Data> {
+  return section;
+}
+
+export function asWriteEntityFilesSection<Data = EntityAll & ApplicationAll<EntityAll>>(
+  section: WriteFileSection<Data>,
+): WriteFileSection<Data> {
   return section;
 }
 

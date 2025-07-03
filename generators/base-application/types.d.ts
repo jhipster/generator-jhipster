@@ -286,7 +286,7 @@ type UserManagement<Entity> = {
   generateUserManagement: boolean;
   generateBuiltInUserEntity?: boolean;
   generateBuiltInAuthorityEntity: boolean;
-  user: Entity;
+  user: Entity & { adminUserDto?: string };
   userManagement: Entity;
   authority: Entity;
 };

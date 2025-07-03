@@ -18,11 +18,10 @@
  */
 import { moveToJavaPackageSrcDir } from '../java/support/index.js';
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
-import type { WriteFileSection } from '../base-core/api.js';
-import { asWritingTask } from '../base-application/support/task-type-inference.ts';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.ts';
 import type Generator from './generator.js';
 
-const files: WriteFileSection = {
+const files = asWriteFilesSection({
   websocketFiles: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
@@ -35,7 +34,7 @@ const files: WriteFileSection = {
       ],
     },
   ],
-};
+});
 
 export default asWritingTask(async function writeTask(this: Generator, { application }) {
   await this.writeFiles({

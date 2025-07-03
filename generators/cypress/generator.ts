@@ -50,7 +50,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
         await this.prompt(
           [
             {
-              when: this.jhipsterConfig?.clientFramework === ANGULAR,
+              when: (this.jhipsterConfig as any).clientFramework === ANGULAR,
               type: 'confirm',
               name: 'cypressCoverage',
               message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',

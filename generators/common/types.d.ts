@@ -12,10 +12,15 @@ import type {
   Field as JavascriptField,
   Relationship as JavascriptRelationship,
 } from '../javascript/types.js';
+import type { Application as GitApplication, Config as GitConfig, Options as GitOptions } from '../git/types.js';
 import type { Application as LanguagesApplication, Entity as LanguagesEntity } from '../languages/types.js';
+import type huskyCommand from '../javascript/generators/husky/command.js';
+import type prettierCommand from '../javascript/generators/prettier/command.js';
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
+type HuskyCommand = HandleCommandTypes<typeof huskyCommand>;
+type PrettierCommand = HandleCommandTypes<typeof prettierCommand>;
 
 export type Field = JavascriptField & {
   fieldTypeTemporal?: boolean;
@@ -25,12 +30,15 @@ export type Field = JavascriptField & {
 };
 
 export type Config = BaseApplicationConfig &
-  Command['Config'] & {
+  Command['Config'] &
+  HuskyCommand['Config'] &
+  PrettierCommand['Config'] &
+  GitConfig & {
     applicationIndex?: number;
     testFrameworks?: string[];
   };
 
-export type Options = BaseApplicationOptions & Command['Options'];
+export type Options = BaseApplicationOptions & Command['Options'] & HuskyCommand['Options'] & PrettierCommand['Options'] & GitOptions;
 
 export interface Entity<F extends Field = Field, R extends JavascriptRelationship = JavascriptRelationship>
   extends LanguagesEntity<F, R>,
@@ -40,9 +48,12 @@ export interface Entity<F extends Field = Field, R extends JavascriptRelationshi
 }
 
 export type Application<E extends BaseApplicationEntity = Entity> = JavascriptApplication<E> &
+  Command['Application'] &
+  HuskyCommand['Application'] &
+  PrettierCommand['Application'] &
+  GitApplication<E> &
   DockerApplication &
-  LanguagesApplication<E> &
-  Command['Application'] & {
+  LanguagesApplication<E> & {
     srcMain: string;
     srcTest: string;
     documentationUrl: string;

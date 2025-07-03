@@ -24,7 +24,6 @@ import { passthrough } from '@yeoman/transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../base-application/index.js';
 import type { Entity as BaseApplicationEntity } from '../base-application/index.js';
-import type { Application as CommonApplication, Entity as CommonEntity } from '../common/types.js';
 import type { Application as SpringBootApplication } from '../spring-boot/types.js';
 import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.js';
 import {
@@ -56,8 +55,19 @@ import { upperFirst } from '../../lib/jdl/core/utils/string-utils.js';
 import { baseNameProperties } from '../project-name/support/index.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
+import type {
+  Application as BootstrapApplicationBaseApplication,
+  Config as BootstrapApplicationBaseConfig,
+  Entity as BootstrapApplicationBaseEntity,
+  Options as BootstrapApplicationBaseOptions,
+} from './types.js';
 
-export default class BootstrapApplicationBase extends BaseApplicationGenerator<CommonEntity, CommonApplication<CommonEntity>> {
+export default class BootstrapApplicationBase extends BaseApplicationGenerator<
+  BootstrapApplicationBaseEntity,
+  BootstrapApplicationBaseApplication<BootstrapApplicationBaseEntity>,
+  BootstrapApplicationBaseConfig,
+  BootstrapApplicationBaseOptions
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
