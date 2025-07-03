@@ -50,28 +50,29 @@ export type GradleCatalogNeedleOptions = { gradleVersionCatalogFile?: string };
 
 export type GradleNeedleOptions = GradleFileNeedleOptions & GradleCatalogNeedleOptions;
 
-export type Source = JavaBootstrapSource & BuildToolSource &{
-  _gradleDependencies?: GradleDependency[];
-  applyFromGradle?(script: GradleScript): void;
-  addGradleDependency?(dependency: GradleDependency, options?: GradleFileNeedleOptions): void;
-  addGradleDependencies?(dependency: GradleDependency[], options?: GradleFileNeedleOptions): void;
-  addGradlePlugin?(plugin: GradlePlugin): void;
-  addGradlePluginManagement?(pluginManagement: GradlePlugin): void;
-  addGradleProperty?(property: GradleProperty & GradleComment): void;
-  addGradleMavenRepository?(repository: GradleRepository): void;
-  addGradleBuildSrcDependency?(dependency: GradleDependency): void;
+export type Source = JavaBootstrapSource &
+  BuildToolSource & {
+    _gradleDependencies?: GradleDependency[];
+    applyFromGradle?(script: GradleScript): void;
+    addGradleDependency?(dependency: GradleDependency, options?: GradleFileNeedleOptions): void;
+    addGradleDependencies?(dependency: GradleDependency[], options?: GradleFileNeedleOptions): void;
+    addGradlePlugin?(plugin: GradlePlugin): void;
+    addGradlePluginManagement?(pluginManagement: GradlePlugin): void;
+    addGradleProperty?(property: GradleProperty & GradleComment): void;
+    addGradleMavenRepository?(repository: GradleRepository): void;
+    addGradleBuildSrcDependency?(dependency: GradleDependency): void;
 
-  addGradleDependencyCatalogVersion?(catalogVersion: GradleTomlVersion, options?: GradleCatalogNeedleOptions): void;
-  addGradleDependencyCatalogVersions?(catalogVersion: GradleTomlVersion[], options?: GradleCatalogNeedleOptions): void;
-  addGradleDependencyCatalogLibrary?(catalogVersion: GradleLibrary, options?: GradleNeedleOptions): void;
-  addGradleDependencyCatalogLibraries?(catalogVersion: GradleLibrary[], options?: GradleNeedleOptions): void;
-  addGradleDependencyCatalogPlugin?(catalogVersion: GradleTomlPlugin): void;
-  addGradleDependencyCatalogPlugins?(catalogVersion: GradleTomlPlugin[]): void;
+    addGradleDependencyCatalogVersion?(catalogVersion: GradleTomlVersion, options?: GradleCatalogNeedleOptions): void;
+    addGradleDependencyCatalogVersions?(catalogVersion: GradleTomlVersion[], options?: GradleCatalogNeedleOptions): void;
+    addGradleDependencyCatalogLibrary?(catalogVersion: GradleLibrary, options?: GradleNeedleOptions): void;
+    addGradleDependencyCatalogLibraries?(catalogVersion: GradleLibrary[], options?: GradleNeedleOptions): void;
+    addGradleDependencyCatalogPlugin?(catalogVersion: GradleTomlPlugin): void;
+    addGradleDependencyCatalogPlugins?(catalogVersion: GradleTomlPlugin[]): void;
 
-  addGradleBuildSrcDependencyCatalogVersion?(catalogVersion: GradleTomlVersion): void;
-  addGradleBuildSrcDependencyCatalogVersions?(catalogVersion: GradleTomlVersion[]): void;
-  addGradleBuildSrcDependencyCatalogLibraries?(catalogVersion: GradleLibrary[]): void;
-};
+    addGradleBuildSrcDependencyCatalogVersion?(catalogVersion: GradleTomlVersion): void;
+    addGradleBuildSrcDependencyCatalogVersions?(catalogVersion: GradleTomlVersion[]): void;
+    addGradleBuildSrcDependencyCatalogLibraries?(catalogVersion: GradleLibrary[]): void;
+  };
 
 type Command = HandleCommandTypes<typeof GradleCommand>;
 

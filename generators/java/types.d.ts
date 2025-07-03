@@ -3,7 +3,6 @@ import type { Application as GradleApplication, GradleNeedleOptions, Source as G
 import type { EditFileCallback } from '../base-core/api.js';
 import type { MavenDefinition, Source as MavenSource } from '../maven/types.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
-import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,

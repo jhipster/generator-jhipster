@@ -34,5 +34,4 @@ export type Options = Command['Options'] & BaseApplicationOptions;
 
 export { BaseApplicationEntity as Entity, BaseApplicationSource as Source };
 
-export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = Command['Application'] &
-  BaseApplicationApplication<E>;
+export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = Command['Application'] & BaseApplicationApplication<E>;
