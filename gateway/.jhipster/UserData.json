@@ -1,0 +1,16 @@
+{
+  "annotations": {
+    "changelogDate": 20210408164809
+  },
+  "applications": ["gateway"],
+  "databaseType": "sql",
+  "fields": [
+    {
+      "fieldName": "address",
+      "fieldType": "String"
+    }
+  ],
+  "name": "UserData",
+  "relationships": [],
+  "searchEngine": "no"
+}

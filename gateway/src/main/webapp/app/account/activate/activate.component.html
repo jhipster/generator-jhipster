@@ -1,0 +1,18 @@
+<div>
+  <div class="d-flex justify-content-center">
+    <div class="col-md-8">
+      <h1 jhiTranslate="activate.title">Activation</h1>
+      @if (success()) {
+        <div class="alert alert-success">
+          <span jhiTranslate="activate.messages.success"><strong>Your user account has been activated.</strong> Please </span>
+          <a class="alert-link" routerLink="/login" jhiTranslate="global.messages.info.authenticated.link">sign in</a>.
+        </div>
+      }
+      @if (error()) {
+        <div class="alert alert-danger" jhiTranslate="activate.messages.error">
+          <strong>Your user could not be activated.</strong> Please use the registration form to sign up.
+        </div>
+      }
+    </div>
+  </div>
+</div>

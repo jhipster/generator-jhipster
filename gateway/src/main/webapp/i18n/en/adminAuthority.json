@@ -1,0 +1,23 @@
+{
+  "gatewayApp": {
+    "adminAuthority": {
+      "home": {
+        "title": "Authorities",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Authority",
+        "createOrEditLabel": "Create or edit a Authority",
+        "notFound": "No Authorities found"
+      },
+      "created": "A new Authority is created with identifier {{ param }}",
+      "updated": "A Authority is updated with identifier {{ param }}",
+      "deleted": "A Authority is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Authority {{ id }}?"
+      },
+      "detail": {
+        "title": "Authority"
+      },
+      "name": "Name"
+    }
+  }
+}

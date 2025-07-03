@@ -1,0 +1,63 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (user(); as userRef) {
+      <div>
+        <h2>
+          <span jhiTranslate="userManagement.detail.title">User</span> [<strong>{{ userRef.login }}</strong
+          >]
+        </h2>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="userManagement.login">Login</span></dt>
+          <dd>
+            <span>{{ userRef.login }}</span>
+            @if (userRef.activated) {
+              <span class="badge bg-success" jhiTranslate="userManagement.activated">Activated</span>
+            } @else {
+              <span class="badge bg-danger" jhiTranslate="userManagement.deactivated">Deactivated</span>
+            }
+          </dd>
+
+          <dt><span jhiTranslate="userManagement.firstName">First name</span></dt>
+          <dd>{{ userRef.firstName }}</dd>
+
+          <dt><span jhiTranslate="userManagement.lastName">Last name</span></dt>
+          <dd>{{ userRef.lastName }}</dd>
+
+          <dt><span jhiTranslate="userManagement.email">Email</span></dt>
+          <dd>{{ userRef.email }}</dd>
+
+          <dt><span jhiTranslate="userManagement.langKey">Language</span></dt>
+          <dd>{{ userRef.langKey }}</dd>
+
+          <dt><span jhiTranslate="userManagement.createdBy">Created by</span></dt>
+          <dd>{{ userRef.createdBy }}</dd>
+
+          <dt><span jhiTranslate="userManagement.createdDate">Created date</span></dt>
+          <dd>{{ userRef.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
+
+          <dt><span jhiTranslate="userManagement.lastModifiedBy">Modified by</span></dt>
+          <dd>{{ userRef.lastModifiedBy }}</dd>
+
+          <dt><span jhiTranslate="userManagement.lastModifiedDate">Modified date</span></dt>
+          <dd>{{ userRef.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
+
+          <dt><span jhiTranslate="userManagement.profiles">Profiles</span></dt>
+          <dd>
+            <ul class="list-unstyled">
+              @for (authority of userRef.authorities; track $index) {
+                <li>
+                  <span class="badge bg-info">{{ authority }}</span>
+                </li>
+              }
+            </ul>
+          </dd>
+        </dl>
+
+        <button type="submit" routerLink="../../" class="btn btn-info">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

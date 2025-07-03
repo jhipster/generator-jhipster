@@ -1,0 +1,102 @@
+<h3 id="garbageCollectorMetrics" jhiTranslate="metrics.jvm.gc.title">Garbage collections</h3>
+
+<div class="row">
+  <div class="col-md-4">
+    @if (garbageCollectorMetrics(); as garbageCollectorMetricsRef) {
+      <div>
+        <span>
+          GC Live Data Size/GC Max Data Size ({{ garbageCollectorMetricsRef['jvm.gc.live.data.size'] / 1048576 | number: '1.0-0' }}M /
+          {{ garbageCollectorMetricsRef['jvm.gc.max.data.size'] / 1048576 | number: '1.0-0' }}M)
+        </span>
+
+        <ngb-progressbar
+          [max]="garbageCollectorMetricsRef['jvm.gc.max.data.size']"
+          [value]="garbageCollectorMetricsRef['jvm.gc.live.data.size']"
+          [striped]="true"
+          [animated]="false"
+          type="success"
+        >
+          <span>
+            {{
+              (100 * garbageCollectorMetricsRef['jvm.gc.live.data.size']) / garbageCollectorMetricsRef['jvm.gc.max.data.size']
+                | number: '1.0-2'
+            }}%
+          </span>
+        </ngb-progressbar>
+      </div>
+    }
+  </div>
+
+  <div class="col-md-4">
+    @if (garbageCollectorMetrics(); as garbageCollectorMetricsRef) {
+      <div>
+        <span>
+          GC Memory Promoted/GC Memory Allocated ({{ garbageCollectorMetricsRef['jvm.gc.memory.promoted'] / 1048576 | number: '1.0-0' }}M /
+          {{ garbageCollectorMetricsRef['jvm.gc.memory.allocated'] / 1048576 | number: '1.0-0' }}M)
+        </span>
+
+        <ngb-progressbar
+          [max]="garbageCollectorMetricsRef['jvm.gc.memory.allocated']"
+          [value]="garbageCollectorMetricsRef['jvm.gc.memory.promoted']"
+          [striped]="true"
+          [animated]="false"
+          type="success"
+        >
+          <span>
+            {{
+              (100 * garbageCollectorMetricsRef['jvm.gc.memory.promoted']) / garbageCollectorMetricsRef['jvm.gc.memory.allocated']
+                | number: '1.0-2'
+            }}%
+          </span>
+        </ngb-progressbar>
+      </div>
+    }
+  </div>
+
+  <div class="col-md-4">
+    @if (garbageCollectorMetrics(); as garbageCollectorMetricsRef) {
+      <div class="row">
+        <div class="col-md-9">Classes loaded</div>
+        <div class="col-md-3 text-end">{{ garbageCollectorMetricsRef.classesLoaded }}</div>
+      </div>
+      <div class="row">
+        <div class="col-md-9">Classes unloaded</div>
+        <div class="col-md-3 text-end">{{ garbageCollectorMetricsRef.classesUnloaded }}</div>
+      </div>
+    }
+  </div>
+
+  @if (!updating() && garbageCollectorMetrics()) {
+    <div class="table-responsive">
+      <table class="table table-striped" aria-describedby="garbageCollectorMetrics">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col" class="text-end" jhiTranslate="metrics.servicesstats.table.count">Count</th>
+            <th scope="col" class="text-end" jhiTranslate="metrics.servicesstats.table.mean">Mean</th>
+            <th scope="col" class="text-end" jhiTranslate="metrics.servicesstats.table.min">Min</th>
+            <th scope="col" class="text-end" jhiTranslate="metrics.servicesstats.table.p50">p50</th>
+            <th scope="col" class="text-end" jhiTranslate="metrics.servicesstats.table.p75">p75</th>
+            <th scope="col" class="text-end" jhiTranslate="metrics.servicesstats.table.p95">p95</th>
+            <th scope="col" class="text-end" jhiTranslate="metrics.servicesstats.table.p99">p99</th>
+            <th scope="col" class="text-end" jhiTranslate="metrics.servicesstats.table.max">Max</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>jvm.gc.pause</td>
+            @let pause = garbageCollectorMetrics()!['jvm.gc.pause'];
+            <td class="text-end">{{ pause.count }}</td>
+            <td class="text-end">{{ pause.mean | number: '1.0-3' }}</td>
+            <td class="text-end">{{ pause['0.0'] | number: '1.0-3' }}</td>
+            <td class="text-end">{{ pause['0.5'] | number: '1.0-3' }}</td>
+            <td class="text-end">{{ pause['0.75'] | number: '1.0-3' }}</td>
+            <td class="text-end">{{ pause['0.95'] | number: '1.0-3' }}</td>
+            <td class="text-end">{{ pause['0.99'] | number: '1.0-3' }}</td>
+            <td class="text-end">{{ pause.max | number: '1.0-3' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
