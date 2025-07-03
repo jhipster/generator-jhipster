@@ -116,7 +116,7 @@ const applicationKnativeFiles = (suffix = '') => ({
 const deploymentKubernetesFiles = (suffix = '') => ({
   namespace: [
     {
-      condition: generator => generator.kubernetesNamespace !== 'default',
+      condition: generator => !generator.kubernetesNamespaceDefault,
       templates: [{ sourceFile: 'namespace.yml.ejs', destinationFile: 'namespace.yml' }],
     },
   ],
@@ -226,7 +226,7 @@ const deploymentHelmFiles = (suffix = '') => ({
     },
   ],
 });
-const deploymentKnativeFiles = (suffix = '') => ({
+const deploymentKnativeFiles = {
   common: [
     {
       templates: [{ sourceFile: 'README-KUBERNETES-KNATIVE.md.ejs', destinationFile: 'KNATIVE-README.md' }],
@@ -243,7 +243,7 @@ const deploymentKnativeFiles = (suffix = '') => ({
       ],
     },
   ],
-});
+};
 
 export const writeFiles = asWritingTask(async function writeFiles() {
   const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
@@ -254,7 +254,7 @@ export const writeFiles = asWritingTask(async function writeFiles() {
     context: this,
   });
   await this.writeFiles({
-    sections: deploymentKnativeFiles(suffix),
+    sections: deploymentKnativeFiles,
     context: this,
   });
   for (let i = 0; i < this.appConfigs.length; i++) {
@@ -269,7 +269,7 @@ export const writeFiles = asWritingTask(async function writeFiles() {
       context: this,
     });
   }
-  if (!this.generatorTypeK8s) {
+  if (this.generatorTypeHelm) {
     const helm = this.fetchFromInstalledJHipster('kubernetes-helm/templates');
     for (let i = 0; i < this.appConfigs.length; i++) {
       this.app = this.appConfigs[i];

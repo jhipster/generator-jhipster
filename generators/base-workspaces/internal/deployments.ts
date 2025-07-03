@@ -18,7 +18,7 @@
  */
 import { defaults } from 'lodash-es';
 import { applicationOptions, deploymentOptions } from '../../../lib/jhipster/index.js';
-import { loadDerivedPlatformConfig, loadPlatformConfig } from '../support/index.js';
+import { loadPlatformConfig } from '../support/loading.js';
 import type BaseWorkspacesGenerator from '../index.js';
 
 const { OptionNames } = applicationOptions;
@@ -41,5 +41,4 @@ export function loadDeploymentConfig(
   deployment.adminPassword = config.adminPassword;
   deployment.jwtSecretKey = config[JWT_SECRET_KEY];
   loadPlatformConfig({ config, application: deployment });
-  loadDerivedPlatformConfig({ application: deployment });
 }
