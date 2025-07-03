@@ -119,7 +119,7 @@ gradle-integration-test:
 frontend-test:
     stage: test
     script:
-        - ./gradlew <%= clientPackageManager %>_run_test -PnodeInstall --no-daemon
+        - ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
     artifacts:
         reports:
             junit: build/test-results/TESTS-results-jest.xml

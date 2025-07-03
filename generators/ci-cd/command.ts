@@ -18,10 +18,8 @@
  */
 import chalk from 'chalk';
 import { intersection, kebabCase } from 'lodash-es';
-import buildToolCommand from '../java/generators/build-tool/command.js';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
-const { buildTool } = buildToolCommand.configs;
 const includesValue = (prop, values) => answers => answers[prop] && intersection(answers[prop], values).length > 0;
 
 const command = {
@@ -83,149 +81,141 @@ const command = {
       scope: 'context',
     },
     insideDocker: {
-      prompt: {
-        when: includesValue('ciCd', ['jenkins', 'gitlab']),
+      cli: {
+        type: Boolean,
+      },
+      prompt: () => ({
+        when: answers => answers.ciCd?.includes('jenkins') || answers.ciCd?.includes('gitlab'),
         type: 'confirm',
         message: 'Would you like to perform the build in a Docker container ?',
         default: false,
-      },
-      internal: {
-        type: Boolean,
-      },
+      }),
       scope: 'context',
     },
     sendBuildToGitlab: {
-      prompt: {
-        when: includesValue('ciCd', ['jenkins']),
+      cli: {
+        type: Boolean,
+      },
+      prompt: () => ({
+        when: answers => answers.ciCd?.includes('jenkins'),
         type: 'confirm',
         message: 'Would you like to send build status to GitLab ?',
         default: false,
-      },
-      internal: {
-        type: Boolean,
-      },
+      }),
       scope: 'context',
     },
     artifactorySnapshotsId: {
-      prompt: {
-        when: includesValue('ciCdIntegrations', ['deploy']),
-        type: 'input',
-        message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for snapshots ?`,
-      },
-      default: 'snapshots',
-      internal: {
+      cli: {
         type: String,
       },
+      prompt: () => ({
+        when: answers => answers.ciCdIntegrations?.includes('deploy'),
+        type: 'input',
+        message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for snapshots ?`,
+        default: 'snapshots',
+      }),
       scope: 'context',
     },
     artifactorySnapshotsUrl: {
-      prompt: {
-        when: includesValue('ciCdIntegrations', ['deploy']),
-        type: 'input',
-        message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for snapshots ?`,
-      },
-      default: 'http://artifactory:8081/artifactory/libs-snapshot',
-      internal: {
+      cli: {
         type: String,
       },
+      prompt: () => ({
+        when: answers => answers.ciCdIntegrations?.includes('deploy'),
+        type: 'input',
+        message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for snapshots ?`,
+        default: 'http://artifactory:8081/artifactory/libs-snapshot',
+      }),
       scope: 'context',
     },
     artifactoryReleasesId: {
-      prompt: {
-        when: includesValue('ciCdIntegrations', ['deploy']),
-        type: 'input',
-        message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for releases ?`,
-      },
-      default: 'releases',
-      internal: {
+      cli: {
         type: String,
       },
+      prompt: () => ({
+        when: answers => answers.ciCdIntegrations?.includes('deploy'),
+        type: 'input',
+        message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for releases ?`,
+        default: 'releases',
+      }),
       scope: 'context',
     },
     artifactoryReleasesUrl: {
-      prompt: {
-        when: includesValue('ciCdIntegrations', ['deploy']),
-        type: 'input',
-        message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for releases ?`,
-      },
-      default: 'http://artifactory:8081/artifactory/libs-release',
-      internal: {
+      cli: {
         type: String,
       },
+      prompt: () => ({
+        when: answers => answers.ciCdIntegrations?.includes('deploy'),
+        type: 'input',
+        message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for releases ?`,
+        default: 'http://artifactory:8081/artifactory/libs-release',
+      }),
       scope: 'context',
     },
     sonarName: {
-      prompt: {
-        when: answers => includesValue('ciCd', ['jenkins'])(answers) && includesValue('ciCdIntegrations', ['sonar'])(answers),
-        type: 'input',
-        message: `${chalk.yellow('*Sonar*')}: what is the name of the Sonar server ?`,
-      },
-      default: 'sonar',
-      internal: {
+      cli: {
         type: String,
       },
+      prompt: () => ({
+        when: answers => answers.ciCd?.includes('jenkins') && answers.ciCdIntegrations?.includes('sonar'),
+        type: 'input',
+        message: `${chalk.yellow('*Sonar*')}: what is the name of the Sonar server ?`,
+        default: 'sonar',
+      }),
       scope: 'context',
     },
     sonarUrl: {
-      prompt: {
+      cli: {
+        type: String,
+      },
+      prompt: () => ({
         when: answers =>
           includesValue('ciCd', ['jenkins', 'github', 'gitlab', 'travis'])(answers) &&
           includesValue('ciCdIntegrations', ['sonar'])(answers),
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the URL of the Sonar server ?`,
-      },
-      default: 'https://sonarcloud.io',
-      internal: {
-        type: String,
-      },
+        default: 'https://sonarcloud.io',
+      }),
       scope: 'context',
     },
     sonarOrga: {
-      prompt: {
+      cli: {
+        type: String,
+      },
+      prompt: () => ({
         when: answers =>
           includesValue('ciCd', ['jenkins', 'github', 'gitlab', 'travis'])(answers) &&
           includesValue('ciCdIntegrations', ['sonar'])(answers),
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the Organization of the Sonar server ?`,
-      },
-      internal: {
-        type: String,
-      },
+      }),
       scope: 'context',
     },
     dockerImage: {
+      cli: {
+        type: String,
+      },
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         when: answers => includesValue('ciCd', ['github'])(answers) && includesValue('ciCdIntegrations', ['publishDocker'])(answers),
         type: 'input',
         message: `${chalk.yellow('*Docker*')}: what is the name of the image ?`,
-        default: () => `jhipster/${config.dasherizedBaseName}`,
+        default: () => `jhipster/${config?.dasherizedBaseName}`,
       }),
-      internal: {
-        type: String,
-      },
       scope: 'context',
     },
     herokuAppName: {
-      prompt: {
+      cli: {
+        type: String,
+      },
+      prompt: () => ({
         when: includesValue('ciCdIntegrations', ['heroku']),
         type: 'input',
         message: `${chalk.yellow('*Heroku*')}: name of your Heroku Application ?`,
-      },
-      internal: {
-        type: String,
-      },
+      }),
       scope: 'context',
       default() {
         return kebabCase(this.jhipsterConfigWithDefaults.baseName);
       },
-    },
-    buildTool: {
-      ...buildTool,
-      cli: {
-        ...buildTool.cli,
-        hide: true,
-      },
-      prompt: undefined,
     },
   },
 } as const satisfies JHipsterCommandDefinition;
