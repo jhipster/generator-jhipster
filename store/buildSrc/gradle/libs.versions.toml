@@ -1,0 +1,15 @@
+[versions]
+# jhipster-needle-gradle-dependency-catalog-version - JHipster will add additional versions for convention plugins heref
+# jhipster-needle-gradle-build-src-dependency-catalog-version - Deprecated: JHipster will add additional versions for convention plugins here
+
+[libraries]
+jib-plugin = { module = "com.google.cloud.tools:jib-gradle-plugin", version = "3.4.5" }
+modernizer-plugin = { module = "com.github.andygoossens:gradle-modernizer-plugin", version = "1.11.0" }
+nohttp-plugin = { module = "io.spring.nohttp:nohttp-gradle", version = "0.0.11" }
+sonarqube-plugin = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "6.2.0.5505" }
+spotless-plugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version = "7.0.4" }
+node-gradle = { module = "com.github.node-gradle:gradle-node-plugin", version = "7.1.0" }
+# jhipster-needle-gradle-dependency-catalog-libraries - JHipster will add additional libraries versions
+
+[plugins]
+# jhipster-needle-gradle-dependency-catalog-plugins - JHipster will add additional plugins versions
