@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -22,6 +21,7 @@ import fs from 'fs';
 import chalk from 'chalk';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
+import { BaseKubernetesGenerator } from '../kubernetes/generator.ts';
 
 import {
   askForAdminPassword,
@@ -57,13 +57,9 @@ import { checkDocker } from '../docker/support/index.js';
 import { loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/index.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
-import { writeFiles } from './files.js';
+import { applicationHelmFiles, applicationKubernetesFiles, deploymentHelmFiles, deploymentKubernetesFiles } from './files.ts';
 
-/**
- * @class
- * @extends {BaseWorkspacesGenerator}
- */
-export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
+export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
@@ -77,7 +73,6 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      loadDockerDependenciesTask,
       checkDocker,
       checkKubernetes,
       checkHelm,
@@ -125,6 +120,9 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
       loadFromYoRc,
+      async loadDockerDependenciesTask({ deployment }) {
+        await loadDockerDependenciesTask.call(this, { context: deployment });
+      },
       loadDeploymentConfig,
     });
   }
@@ -153,7 +151,33 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
   }
 
   get writing() {
-    return this.asWritingTaskGroup({ writeFiles });
+    return this.asWritingTaskGroup({
+      async writeFiles({ deployment }) {
+        const suffix = 'helm';
+
+        await this.writeFiles({
+          sections: deploymentKubernetesFiles(suffix),
+          context: { ...this, ...deployment },
+          rootTemplatesPath: this.fetchFromInstalledJHipster('kubernetes/templates'),
+        });
+        for (let i = 0; i < this.appConfigs.length; i++) {
+          this.app = this.appConfigs[i];
+          await this.writeFiles({
+            sections: applicationKubernetesFiles(suffix),
+            context: { ...this, ...deployment },
+            rootTemplatesPath: this.fetchFromInstalledJHipster('kubernetes/templates'),
+          });
+          await this.writeFiles({
+            sections: applicationHelmFiles(suffix),
+            context: { ...this, ...deployment },
+          });
+        }
+        await this.writeFiles({
+          sections: deploymentHelmFiles(suffix),
+          context: { ...this, ...deployment },
+        });
+      },
+    });
   }
 
   get [BaseWorkspacesGenerator.WRITING]() {
@@ -161,7 +185,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
   }
 
   get end() {
-    return {
+    return this.asEndTaskGroup({
       checkImages,
       deploy() {
         if (this.hasWarning) {
@@ -196,7 +220,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
           );
         }
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.END]() {

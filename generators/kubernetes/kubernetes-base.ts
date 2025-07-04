@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -46,6 +45,7 @@ import {
   serviceDiscoveryTypes,
 } from '../../lib/jhipster/index.js';
 import { defaultKubernetesConfig } from './kubernetes-constants.js';
+import type { BaseKubernetesGenerator } from './generator.ts';
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { PROMETHEUS } = monitoringTypes;
 const { KAFKA } = messageBrokerTypes;
@@ -57,7 +57,7 @@ const { INGRESS } = ServiceTypes;
 const { GKE, NGINX } = IngressTypes;
 const { K8S, HELM } = GeneratorTypes;
 
-export const checkKubernetes = async function () {
+export const checkKubernetes = async function (this: BaseKubernetesGenerator) {
   if (this.skipChecks) return;
 
   try {
@@ -70,7 +70,7 @@ export const checkKubernetes = async function () {
   }
 };
 
-export const checkHelm = async function () {
+export const checkHelm = async function (this: BaseKubernetesGenerator) {
   if (this.skipChecks) return;
 
   try {
@@ -83,7 +83,7 @@ export const checkHelm = async function () {
   }
 };
 
-export function loadConfig() {
+export function loadConfig(this: BaseKubernetesGenerator) {
   if (!this.jhipsterConfig.dbRandomPassword) {
     this.jhipsterConfig.dbRandomPassword = this.options.reproducibleTests ? 'SECRET-PASSWORD' : crypto.randomBytes(30).toString('hex');
   }
@@ -100,33 +100,7 @@ export function loadConfig() {
   this.generatorType = kubernetesWithDefaults.generatorType;
 }
 
-export function saveConfig() {
-  this.config.set(
-    defaults(
-      {
-        appsFolders: this.appsFolders,
-        directoryPath: this.directoryPath,
-        clusteredDbApps: this.clusteredDbApps,
-        serviceDiscoveryType: this.serviceDiscoveryType,
-        jwtSecretKey: this.jwtSecretKey,
-        dockerRepositoryName: this.dockerRepositoryName,
-        dockerPushCommand: this.dockerPushCommand,
-        kubernetesNamespace: this.kubernetesNamespace,
-        kubernetesServiceType: this.kubernetesServiceType,
-        kubernetesUseDynamicStorage: this.kubernetesUseDynamicStorage,
-        kubernetesStorageClassName: this.kubernetesStorageClassName,
-        generatorType: this.generatorType,
-        ingressType: this.ingressType,
-        ingressDomain: this.ingressDomain,
-        monitoring: this.monitoring,
-        istio: this.istio,
-      },
-      defaultKubernetesConfig,
-    ),
-  );
-}
-
-export function setupKubernetesConstants() {
+export function setupKubernetesConstants(this: BaseKubernetesGenerator) {
   // Make constants available in templates
   this.KUBERNETES_CORE_API_VERSION = KUBERNETES_CORE_API_VERSION;
   this.KUBERNETES_BATCH_API_VERSION = KUBERNETES_BATCH_API_VERSION;
@@ -137,7 +111,7 @@ export function setupKubernetesConstants() {
   this.KUBERNETES_RBAC_API_VERSION = KUBERNETES_RBAC_API_VERSION;
 }
 
-export function derivedKubernetesPlatformProperties() {
+export function derivedKubernetesPlatformProperties(this: BaseKubernetesGenerator) {
   this.deploymentApplicationTypeMicroservice = this.deploymentApplicationType === MICROSERVICE;
   this.ingressTypeNginx = this.ingressType === NGINX;
   this.ingressTypeGke = this.ingressType === GKE;
@@ -189,7 +163,7 @@ export function derivedKubernetesPlatformProperties() {
   });
 }
 
-export function setupHelmConstants() {
+export function setupHelmConstants(this: BaseKubernetesGenerator) {
   this.HELM_KAFKA = HELM_KAFKA;
   this.HELM_ELASTICSEARCH = HELM_ELASTICSEARCH;
   this.HELM_PROMETHEUS = HELM_PROMETHEUS;
@@ -205,7 +179,6 @@ export default {
   checkKubernetes,
   checkHelm,
   loadConfig,
-  saveConfig,
   setupKubernetesConstants,
   setupHelmConstants,
   derivedKubernetesPlatformProperties,
