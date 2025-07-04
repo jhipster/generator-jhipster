@@ -42,27 +42,18 @@ import {
   askForKubernetesServiceType,
 } from '../kubernetes/prompts.js';
 
-import { checkImages, configureImageNames, generateJwtSecret, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
-import {
-  checkHelm,
-  checkKubernetes,
-  derivedKubernetesPlatformProperties,
-  loadConfig,
-  setupHelmConstants,
-  setupKubernetesConstants,
-} from '../kubernetes/kubernetes-base.js';
+import { checkImages, configureImageNames, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
+import { checkHelm, derivedKubernetesPlatformProperties, loadConfig } from '../kubernetes/kubernetes-base.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
-import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
-import { checkDocker } from '../docker/support/index.js';
+import { loadDeploymentConfig } from '../base-workspaces/internal/index.js';
 import { loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/index.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
-import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { applicationHelmFiles, applicationKubernetesFiles, deploymentHelmFiles, deploymentKubernetesFiles } from './files.ts';
 
 export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
+      await this.dependsOnJHipster('jhipster:kubernetes:bootstrap');
       await this.composeWithBlueprints();
     }
   }
@@ -73,10 +64,7 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      checkDocker,
-      checkKubernetes,
       checkHelm,
-      loadConfig,
     });
   }
 
@@ -84,7 +72,7 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
-  get prompting() {
+  get promptingWorkspaces() {
     return this.asPromptingTaskGroup({
       askForApplicationType,
       askForPath,
@@ -103,26 +91,14 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
     });
   }
 
-  get [BaseWorkspacesGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
-  get configuringWorkspaces() {
-    return this.asConfiguringWorkspacesTaskGroup({
-      generateJwtSecret,
-    });
-  }
-
-  get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
+  get [BaseWorkspacesGenerator.PROMPTING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.promptingWorkspaces);
   }
 
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
+      loadConfig,
       loadFromYoRc,
-      async loadDockerDependenciesTask({ deployment }) {
-        await loadDockerDependenciesTask.call(this, { context: deployment });
-      },
       loadDeploymentConfig,
     });
   }
@@ -133,8 +109,6 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
 
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
-      setupKubernetesConstants,
-      setupHelmConstants,
       configureImageNames,
       loadSharedConfig() {
         for (const app of this.appConfigs) {

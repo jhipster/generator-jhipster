@@ -20,18 +20,17 @@
 import fs from 'fs';
 import chalk from 'chalk';
 
+import { defaults } from 'lodash-es';
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import type { Deployment } from '../base-workspaces/types.d.ts';
 
 import { buildToolTypes } from '../../lib/jhipster/index.js';
 
-import { checkImages, configureImageNames, generateJwtSecret, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
+import { checkImages, configureImageNames, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
-import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
-import { checkDocker } from '../docker/support/index.js';
+import { loadDeploymentConfig } from '../base-workspaces/internal/index.js';
 import { loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/index.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
-import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import {
   askForAdminPassword,
   askForApplicationType,
@@ -43,7 +42,7 @@ import {
   askForPath,
   askForServiceDiscovery,
 } from '../base-workspaces/internal/docker-prompts.js';
-import { checkKubernetes, derivedKubernetesPlatformProperties, loadConfig, setupKubernetesConstants } from './kubernetes-base.js';
+import { derivedKubernetesPlatformProperties, loadConfig } from './kubernetes-base.js';
 import {
   askForIngressDomain,
   askForIngressType,
@@ -54,6 +53,7 @@ import {
   askForStorageClassName,
 } from './prompts.js';
 import { applicationFiles, writeDeploymentFiles } from './files.ts';
+import { defaultKubernetesConfig } from './kubernetes-constants.ts';
 
 const { MAVEN } = buildToolTypes;
 
@@ -115,29 +115,18 @@ export class BaseKubernetesGenerator extends BaseWorkspacesGenerator<Deployment>
   declare jwtSecretKey: string;
   declare portsToBind: number;
 
-  declare KUBERNETES_CORE_API_VERSION: string;
-  declare KUBERNETES_BATCH_API_VERSION: string;
-  declare KUBERNETES_DEPLOYMENT_API_VERSION: string;
-  declare KUBERNETES_STATEFULSET_API_VERSION: string;
-  declare KUBERNETES_INGRESS_API_VERSION: string;
-  declare KUBERNETES_ISTIO_NETWORKING_API_VERSION: string;
-  declare KUBERNETES_RBAC_API_VERSION: string;
-
-  declare HELM_KAFKA: string;
-  declare HELM_ELASTICSEARCH: string;
-  declare HELM_PROMETHEUS: string;
-  declare HELM_GRAFANA: string;
-  declare HELM_MARIADB: string;
-  declare HELM_MYSQL: string;
-  declare HELM_POSTGRESQL: string;
-  declare HELM_MONGODB_REPLICASET: string;
-  declare HELM_COUCHBASE_OPERATOR: string;
+  /**
+   * JHipster config with default values fallback
+   */
+  override get jhipsterConfigWithDefaults() {
+    return defaults({}, super.jhipsterConfigWithDefaults, defaultKubernetesConfig);
+  }
 }
 
 export default class KubernetesGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
+      await this.dependsOnJHipster('jhipster:kubernetes:bootstrap');
       await this.composeWithBlueprints();
     }
   }
@@ -148,10 +137,6 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      checkDocker,
-      checkKubernetes,
-      loadConfig,
-      setupKubernetesConstants,
     });
   }
 
@@ -159,7 +144,7 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
-  get prompting() {
+  get promptingWorkspaces() {
     return this.asPromptingTaskGroup({
       askForApplicationType,
       askForPath,
@@ -180,26 +165,14 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
     });
   }
 
-  get [BaseWorkspacesGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
-  get configuringWorkspaces() {
-    return this.asConfiguringWorkspacesTaskGroup({
-      generateJwtSecret,
-    });
-  }
-
-  get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
+  get [BaseWorkspacesGenerator.PROMPTING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.promptingWorkspaces);
   }
 
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
+      loadConfig,
       loadFromYoRc,
-      async loadDockerDependenciesTask({ deployment }) {
-        await loadDockerDependenciesTask.call(this, { context: deployment });
-      },
       loadSharedConfig() {
         for (const app of this.appConfigs) {
           loadDerivedAppConfig({ application: app });

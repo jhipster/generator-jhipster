@@ -19,6 +19,7 @@
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
 import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
 import type { Config as BaseConfig } from '../base/index.js';
+import type { helmConstants, kubernetesConstants } from '../kubernetes/support/constants.ts';
 
 export type { Source } from '../base/types.js';
 
@@ -56,29 +57,32 @@ export type Workspaces = {
   directoryPath: string;
 };
 
-export type Deployment = DeploymentConfig & {
-  appConfigs?: any[];
-  applications?: any[];
-  appsYaml?: string[];
-  clusteredDbApps?: string[];
+type KubernetesDeployment = typeof kubernetesConstants & typeof helmConstants & {};
 
-  keycloakRedirectUris?: string;
-  keycloakSecrets?: string[];
-  authenticationType?: string;
-  adminPasswordBase64?: string;
+export type Deployment = DeploymentConfig &
+  KubernetesDeployment & {
+    appConfigs?: any[];
+    applications?: any[];
+    appsYaml?: string[];
+    clusteredDbApps?: string[];
 
-  usesOauth2?: boolean;
-  useKafka?: boolean;
-  usePulsar?: boolean;
-  useMemcached?: boolean;
-  useRedis?: boolean;
-  includesApplicationTypeGateway?: boolean;
+    keycloakRedirectUris?: string;
+    keycloakSecrets?: string[];
+    authenticationType?: string;
+    adminPasswordBase64?: string;
 
-  entryPort?: number;
-  dockerRepositoryName?: string;
-  dockerPushCommand?: string;
+    usesOauth2?: boolean;
+    useKafka?: boolean;
+    usePulsar?: boolean;
+    useMemcached?: boolean;
+    useRedis?: boolean;
+    includesApplicationTypeGateway?: boolean;
 
-  monitoring?: string;
-  monitoringElk?: boolean;
-  monitoringPrometheus?: boolean;
-};
+    entryPort?: number;
+    dockerRepositoryName?: string;
+    dockerPushCommand?: string;
+
+    monitoring?: string;
+    monitoringElk?: boolean;
+    monitoringPrometheus?: boolean;
+  };

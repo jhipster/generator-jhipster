@@ -23,22 +23,13 @@ import chalk from 'chalk';
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import { BaseKubernetesGenerator } from '../kubernetes/generator.ts';
 
-import { checkImages, configureImageNames, generateJwtSecret, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
-import {
-  checkHelm,
-  checkKubernetes,
-  derivedKubernetesPlatformProperties,
-  loadConfig,
-  setupHelmConstants,
-  setupKubernetesConstants,
-} from '../kubernetes/kubernetes-base.js';
+import { checkImages, configureImageNames, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
+import { checkHelm, derivedKubernetesPlatformProperties, loadConfig } from '../kubernetes/kubernetes-base.js';
 import { buildToolTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
 import { getJdbcUrl } from '../spring-data-relational/support/index.js';
-import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
-import { checkDocker } from '../docker/support/index.js';
+import { loadDeploymentConfig } from '../base-workspaces/internal/index.js';
 import { loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/index.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
-import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import {
   askForAdminPassword,
   askForApps,
@@ -73,7 +64,7 @@ const { K8S } = GeneratorTypes;
 export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
+      await this.dependsOnJHipster('jhipster:kubernetes:bootstrap');
       await this.composeWithBlueprints();
     }
   }
@@ -84,8 +75,6 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
         this.log.log(chalk.white(`${chalk.bold('☸')} Welcome to the JHipster Kubernetes Knative Generator ${chalk.bold('☸')}`));
         this.log.log(chalk.white(`Files will be generated in the folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      checkDocker,
-      checkKubernetes,
       checkHelm,
       async checkKnative() {
         if (this.skipChecks) return;
@@ -100,13 +89,6 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
           );
         }
       },
-      loadConfig,
-      localInit() {
-        this.deploymentApplicationType = 'microservice';
-        this.istio = true;
-      },
-      setupKubernetesConstants,
-      setupHelmConstants,
     });
   }
 
@@ -114,7 +96,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
-  get prompting() {
+  get promptingWorkspaces() {
     return this.asPromptingTaskGroup({
       askForPath,
       askForApps,
@@ -130,26 +112,18 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
     });
   }
 
-  get [BaseWorkspacesGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
-  get configuringWorkspaces() {
-    return this.asConfiguringWorkspacesTaskGroup({
-      generateJwtSecret,
-    });
-  }
-
-  get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
+  get [BaseWorkspacesGenerator.PROMPTING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.promptingWorkspaces);
   }
 
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
-      loadFromYoRc,
-      async loadDockerDependenciesTask({ deployment }) {
-        await loadDockerDependenciesTask.call(this, { context: deployment });
+      loadConfig,
+      localInit() {
+        this.deploymentApplicationType = 'microservice';
+        this.istio = true;
       },
+      loadFromYoRc,
       loadDeploymentConfig,
     });
   }
