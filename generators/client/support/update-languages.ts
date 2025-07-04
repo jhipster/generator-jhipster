@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ApplicationAll } from '../../../lib/types/application-properties-all.js';
+import type { Application as ClientApplication } from '../types.d.ts';
+import type { Application as LanguagesApplication } from '../../languages/types.d.ts';
 import type BaseGenerator from '../../base-core/index.js';
 import type { Control } from '../../base/types.js';
 
 type UpdateLanguagesApplication = Pick<
-  ApplicationAll<any>,
+  ClientApplication<any> & LanguagesApplication<any>,
   'clientBundlerWebpack' | 'clientSrcDir' | 'clientRootDir' | 'enableTranslation' | 'languagesDefinition' | 'languages'
 >;
 

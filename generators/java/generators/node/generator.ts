@@ -18,11 +18,11 @@
  */
 import chalk from 'chalk';
 import type { ExecaError } from 'execa';
-import BaseApplicationGenerator from '../../../base-application/index.js';
+import { JavaApplicationGenerator } from '../../generator.ts';
 import { isWin32 } from '../../../base-core/support/os.ts';
 
 // TODO adjust type
-export default class NodeGenerator extends BaseApplicationGenerator {
+export default class NodeGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -47,7 +47,7 @@ export default class NodeGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.COMPOSING]() {
+  get [JavaApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -65,7 +65,7 @@ export default class NodeGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [JavaApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -86,7 +86,7 @@ export default class NodeGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_PREPARING]() {
+  get [JavaApplicationGenerator.POST_PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
@@ -106,7 +106,7 @@ export default class NodeGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [JavaApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 

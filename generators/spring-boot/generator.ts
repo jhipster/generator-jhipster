@@ -59,6 +59,9 @@ import {
 } from '../../lib/jhipster/index.js';
 import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.js';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
+import type { Config as ClientConfig } from '../client/types.js';
+import type { Config as SpringCacheConfig } from '../spring-cache/types.js';
+import type { Config as SpringCloudStreamConfig } from '../spring-cloud-stream/types.js';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
 import cleanupTask from './cleanup.js';
 import { serverFiles } from './files.js';
@@ -159,14 +162,14 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           applicationType,
           databaseType,
           graalvmSupport,
-          messageBroker,
           searchEngine,
           websocket,
-          cacheProvider,
           testFrameworks,
           feignClient,
           enableSwaggerCodegen,
         } = this.jhipsterConfigWithDefaults;
+        const { cacheProvider } = this.jhipsterConfigWithDefaults as SpringCacheConfig;
+        const { messageBroker } = this.jhipsterConfigWithDefaults as SpringCloudStreamConfig;
 
         await this.composeWithJHipster(GENERATOR_DOCKER);
         await this.composeWithJHipster('jhipster:java:jib');
@@ -228,7 +231,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
   get composingComponent() {
     return this.asComposingComponentTaskGroup({
       async composing() {
-        const { clientFramework, skipClient } = this.jhipsterConfigWithDefaults;
+        const { clientFramework, skipClient } = this.jhipsterConfigWithDefaults as ClientConfig;
         if (!skipClient && clientFramework !== 'no') {
           // When using prompts, clientFramework will only be known after composing priority.
           await this.composeWithJHipster('jhipster:java:node');

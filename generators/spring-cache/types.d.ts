@@ -1,10 +1,11 @@
-import type { Application as JavaApplication, Entity as JavaEntity } from '../java/index.ts';
 import type {
-  Config as BaseApplicationConfig,
-  Entity as BaseApplicationEntity,
-  Options as BaseApplicationOptions,
-} from '../base-application/index.js';
-import type { Source as SpringBootSource } from '../spring-boot/index.ts';
+  Application as SpringBootApplication,
+  Config as SpringBootConfig,
+  Entity as SpringBootEntity,
+  Options as SpringBootOptions,
+  Source as SpringBootSource,
+} from '../spring-boot/index.ts';
+import type { Entity as BaseApplicationEntity } from '../base-application/index.js';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type command from './command.ts';
 
@@ -15,10 +16,10 @@ export type Source = SpringBootSource & {
 
 type Command = HandleCommandTypes<typeof command>;
 
-export { JavaEntity as Entity };
+export { SpringBootEntity as Entity };
 
-export type Config = BaseApplicationConfig & Command['Config'];
+export type Config = SpringBootConfig & Command['Config'];
 
-export type Application<E extends BaseApplicationEntity = JavaEntity> = JavaApplication<E> & Command['Application'];
+export type Application<E extends BaseApplicationEntity = SpringBootEntity> = SpringBootApplication<E> & Command['Application'];
 
-export type Options = BaseApplicationOptions & Command['Options'];
+export type Options = SpringBootOptions & Command['Options'];

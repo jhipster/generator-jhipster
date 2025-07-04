@@ -29,7 +29,9 @@ import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
 import type { PrimaryKey } from '../types.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import type { ConfigAll } from '../../../lib/types/application-config-all.js';
+import type { Config as ClientConfig } from '../../client/types.ts';
+import type { Config as SpringBootConfig } from '../../spring-boot/types.ts';
+import type { Config as SpringDataRelationalConfig } from '../../spring-data-relational/types.ts';
 import type { Application as CommonApplication, Entity as CommonEntity } from '../../common/types.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.js';
@@ -484,7 +486,7 @@ function fieldToId(field) {
 export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntity>>(
   this: BaseGenerator | void,
   entity: E,
-  config: ConfigAll,
+  config: SpringBootConfig,
 ): E {
   mutateData(entity, {
     __override__: false,
@@ -492,12 +494,12 @@ export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntit
     baseName: config.baseName,
     authenticationType: config.authenticationType,
     reactive: config.reactive,
-    microfrontend: config.microfrontend,
+    microfrontend: (config as ClientConfig).microfrontend,
     // Workaround different paths
-    clientFramework: config.clientFramework,
+    clientFramework: (config as ClientConfig).clientFramework,
 
     databaseType: config.databaseType,
-    prodDatabaseType: config.prodDatabaseType,
+    prodDatabaseType: (config as SpringDataRelationalConfig).prodDatabaseType,
 
     searchEngine: config.searchEngine,
 

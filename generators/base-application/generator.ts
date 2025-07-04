@@ -33,8 +33,6 @@ import type { GenericTaskGroup } from '../base-core/types.js';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
-import type { ConfigAll } from '../../lib/types/application-config-all.js';
-import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
 import type {
   ConfiguringEachEntityTaskParam,
   TaskTypes as DefaultTasks,
@@ -218,8 +216,8 @@ export default class BaseApplicationGenerator<
   /**
    * JHipster config with default values fallback
    */
-  override get jhipsterConfigWithDefaults(): Readonly<Config & ConfigAll> {
-    return getConfigWithDefaults(super.jhipsterConfigWithDefaults) as Config & ConfigAll;
+  override get jhipsterConfigWithDefaults(): Readonly<Config> {
+    return getConfigWithDefaults(super.jhipsterConfigWithDefaults) as Config;
   }
 
   dependsOnBootstrapApplication(
@@ -494,7 +492,7 @@ export default class BaseApplicationGenerator<
    * @returns {string[]}
    */
   #getEntitiesDataToLoad(): EntityToLoad<any>[] {
-    const application = this.#application as ApplicationAll;
+    const application = this.#application;
     const builtInEntities: string[] = [];
     if (application.generateBuiltInUserEntity) {
       // Reorder User entity to be the first one to be loaded

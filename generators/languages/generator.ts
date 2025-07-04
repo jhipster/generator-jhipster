@@ -29,8 +29,7 @@ import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants
 import { QUEUES } from '../base-application/priorities.js';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
-import type { Application as ClientApplication, Source as ClientSource } from '../client/types.js';
-import type { SourceAll } from '../../lib/types/source-all.js';
+import type { Application as ClientApplication, Config as ClientConfig, Source as ClientSource } from '../client/types.js';
 import type { Language } from './support/languages.js';
 import { findLanguageForTag, supportedLanguages } from './support/languages.js';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
@@ -89,11 +88,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
       await this.dependsOnBootstrapApplication();
     }
 
-    if (
-      !this.jhipsterConfigWithDefaults.skipClient &&
-      this.jhipsterConfigWithDefaults.clientFramework !== NO_CLIENT_FRAMEWORK &&
-      (!this.jhipsterConfig.enableTranslation || this.jhipsterConfigWithDefaults.clientFramework === ANGULAR)
-    ) {
+    const { skipClient, clientFramework } = this.jhipsterConfigWithDefaults as ClientConfig;
+    if (!skipClient && clientFramework !== NO_CLIENT_FRAMEWORK && (!this.jhipsterConfig.enableTranslation || clientFramework === ANGULAR)) {
       // We must write languages files for translation process for entities only generation.
       // Angular frontend uses translation files even if enableTranslation is enabled.
       // As side effect, with angular frontends, translation files will be written for nativeLanguage for entity only generation.
@@ -355,7 +351,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
           application.backendTypeJavaAny &&
           application.backendTypeSpringBoot
         ) {
-          updateLanguagesInJava.call(this, { application, control, source: source as SourceAll });
+          updateLanguagesInJava.call(this, { application, control, source });
         }
       },
     });

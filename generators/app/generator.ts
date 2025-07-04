@@ -21,23 +21,26 @@ import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import type { Application as CommonApplication, Entity as CommonEntity } from '../common/types.js';
+import type {
+  Application as CommonApplication,
+  Config as CommonConfig,
+  Entity as CommonEntity,
+  Options as CommonOptions,
+} from '../common/types.js';
 import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_SERVER } from '../generator-list.js';
 import { getDefaultAppName } from '../project-name/support/index.js';
 
 import { applicationTypes } from '../../lib/jhipster/index.js';
-import type { ConfigAll } from '../../lib/types/application-config-all.js';
-import type { OptionsAll } from '../../lib/types/application-options-all.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { checkNode } from './support/index.js';
 
 const { MICROSERVICE } = applicationTypes;
 
-export default class JHipsterAppGenerator extends BaseApplicationGenerator<
+export default class AppGenerator extends BaseApplicationGenerator<
   CommonEntity,
   CommonApplication<CommonEntity>,
-  ConfigAll,
-  OptionsAll
+  CommonConfig,
+  CommonOptions
 > {
   async beforeQueue() {
     if (!this.fromBlueprint) {

@@ -31,17 +31,17 @@ Options:
   --jdl-store <value>                      JDL store
   --skip-client                            Skip the client-side application generation
   --skip-server                            Skip the server-side application generation
+  --skip-user-management                   Skip the user management module during app generation
+  --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
   --prettier-tab-width <value>             Default tab width for prettier (default: 2)
   --monorepository                         Use monorepository
   --skip-commit-hook                       Skip adding husky commit hooks
-  --skip-user-management                   Skip the user management module during app generation
   --enable-swagger-codegen                 API first development using OpenAPI-generator
   --search-engine <value>                  Provide search engine for the application when skipping server side generation (choices: "no", "elasticsearch", "couchbase")
   --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
   --skip-fake-data                         Skip generation of fake data for development
   --websocket <value>                      Provide websocket option for the application when skipping server side generation
   --db <value>                             Provide DB name for the application when skipping server side generation
-  --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
   --reactive                               Generate a reactive backend
   --service-discovery-type <value>         Service discovery type (choices: "consul", "eureka", "no")
   --auth <value>                           Provide authentication type for the application when skipping server side generation (choices: "jwt", "oauth2", "session")

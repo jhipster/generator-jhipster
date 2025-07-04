@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-import { JavaApplicationGenerator } from '../java/generator.ts';
+import { SpringBootApplicationGenerator } from '../spring-boot/generator.ts';
 import { GENERATOR_LIQUIBASE } from '../generator-list.js';
 import type { Source as SpringBootSource } from '../spring-boot/index.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
 
-export default class Neo4jGenerator extends JavaApplicationGenerator {
+export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -46,7 +46,7 @@ export default class Neo4jGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.COMPOSING]() {
+  get [SpringBootApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -63,7 +63,7 @@ export default class Neo4jGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.PREPARING]() {
+  get [SpringBootApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -79,7 +79,7 @@ export default class Neo4jGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
+  get [SpringBootApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
   }
 
@@ -95,7 +95,7 @@ export default class Neo4jGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.PREPARING_EACH_ENTITY]() {
+  get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
@@ -113,7 +113,7 @@ export default class Neo4jGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.DEFAULT]() {
+  get [SpringBootApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -124,7 +124,7 @@ export default class Neo4jGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.WRITING]() {
+  get [SpringBootApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -135,7 +135,7 @@ export default class Neo4jGenerator extends JavaApplicationGenerator {
     };
   }
 
-  get [JavaApplicationGenerator.WRITING_ENTITIES]() {
+  get [SpringBootApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
@@ -172,7 +172,7 @@ export default class Neo4jGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.POST_WRITING]() {
+  get [SpringBootApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }
