@@ -153,22 +153,19 @@ jhipster:
     depends_on:
       mscouchbase-couchbase:
         condition: service_healthy
-  mscouchbase-couchbase-node:
-    build:
-      context: 10-couchbase/src/main/docker
-      dockerfile: couchbase/Couchbase.Dockerfile
-    environment:
-      - TYPE=WORKER
-      - BUCKET=mscouchbase
-      - COUCHBASE_MASTER=mscouchbase-couchbase
-      - AUTO_REBALANCE=false
   mscouchbase-couchbase:
     build:
       context: 10-couchbase/src/main/docker
       dockerfile: couchbase/Couchbase.Dockerfile
     environment:
-      - TYPE=MASTER
       - BUCKET=mscouchbase
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - curl -f "http://localhost:8091/ui/index.html" && sleep 20
+      interval: 5s
+      timeout: 25s
+      retries: 10
   
   consul:
     image: consul-placeholder
@@ -1476,18 +1473,20 @@ jhipster:
     depends_on:
       msmongodb-mongodb:
         condition: service_healthy
-  msmongodb-mongodb-node:
-    build:
-      context: 04-mongo/src/main/docker
-      dockerfile: mongodb/MongoDB.Dockerfile
-    command: mongod --shardsvr --replSet rs1
-  msmongodb-mongodb-config:
-    image: mongodb-placeholder
-    container_name: msmongodb-mongodb-config
-    command: mongod --configsvr --dbpath /data/db --replSet csvr
   msmongodb-mongodb:
     image: mongodb-placeholder
-    command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
+    healthcheck:
+      test:
+        - CMD
+        - echo
+        - "'db.runCommand(\\"ping\\").ok'"
+        - "|"
+        - mongo
+        - localhost:27017/test
+        - --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 10
   
   consul:
     image: consul-placeholder

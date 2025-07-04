@@ -107,6 +107,8 @@ export class BaseKubernetesGenerator extends BaseWorkspacesGenerator<Deployment>
   declare entryPort: number;
   declare jwtSecretKey: string;
 
+  declare gatewayType: string;
+
   /**
    * JHipster config with default values fallback
    */

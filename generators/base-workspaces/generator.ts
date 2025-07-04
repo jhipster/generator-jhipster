@@ -101,7 +101,7 @@ export default abstract class BaseWorkspacesGenerator<
           application.appFolder = appFolder;
           application.composePort = 8080 + index;
 
-          application.clusteredDb = application.databaseTypeMongodb || application.databaseTypeCouchbase;
+          application.clusteredDb = false; // application.databaseTypeMongodb || application.databaseTypeCouchbase;
           application.dbPeerCount = application.clusteredDb ? 3 : 1;
 
           return application;
