@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import k8sPrompts from '../kubernetes/prompts.js';
 import { kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
 import { generatorDefaultConfig } from '../kubernetes/kubernetes-constants.js';
 import { asPromptingTask } from '../base-application/support/index.js';
@@ -24,10 +23,6 @@ import type { BaseKubernetesGenerator } from '../kubernetes/generator.ts';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;
 const { HELM, K8S } = GeneratorTypes;
-
-export default {
-  ...k8sPrompts,
-};
 
 export const askForGeneratorType = asPromptingTask(async function askForGeneratorType(this: BaseKubernetesGenerator, { control }) {
   if (!this.options.askAnswered && control.existingProject) return;

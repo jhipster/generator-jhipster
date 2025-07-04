@@ -19,6 +19,7 @@
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
 import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
 import type { Config as BaseConfig } from '../base/index.js';
+import type { helmConstants, kubernetesConstants } from '../kubernetes/support/constants.ts';
 
 export type { Source } from '../base/types.js';
 
@@ -50,36 +51,44 @@ type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'e
 
 export type WorkspacesApplication = ServiceDiscoveryApplication &
   MonitoringApplication &
-  ApplicationAll & { composePort?: number; clusteredDb?: boolean; appFolder: string };
+  ApplicationAll & {
+    composePort?: number;
+    targetImageName?: string;
+    appFolder?: string;
+    dbPeerCount?: number;
+  };
 
-export type Deployment = DeploymentConfig & {
-  appConfigs?: WorkspacesApplication[];
-  applications?: any[];
-  appsYaml?: string[];
-  clusteredDbApps?: string[];
+type KubernetesDeployment = typeof kubernetesConstants & typeof helmConstants & {};
 
-  keycloakRedirectUris?: string;
-  keycloakSecrets?: string[];
-  authenticationType?: string;
-  adminPasswordBase64?: string;
+export type Deployment = DeploymentConfig &
+  KubernetesDeployment & {
+    appConfigs?: WorkspacesApplication[];
+    applications?: any[];
+    appsYaml?: string[];
+    clusteredDbApps?: string[];
 
-  usesOauth2?: boolean;
-  useKafka?: boolean;
-  usePulsar?: boolean;
-  useMemcached?: boolean;
-  useRedis?: boolean;
-  includesApplicationTypeGateway?: boolean;
+    keycloakRedirectUris?: string;
+    keycloakSecrets?: string[];
+    authenticationType?: string;
+    adminPasswordBase64?: string;
 
-  entryPort?: number;
-  dockerRepositoryName?: string;
-  dockerPushCommand?: string;
+    usesOauth2?: boolean;
+    useKafka?: boolean;
+    usePulsar?: boolean;
+    useMemcached?: boolean;
+    useRedis?: boolean;
+    includesApplicationTypeGateway?: boolean;
 
-  monitoring?: string;
-  monitoringElk?: boolean;
-  monitoringPrometheus?: boolean;
+    entryPort?: number;
+    dockerRepositoryName?: string;
+    dockerPushCommand?: string;
 
-  monolithicNb?: number;
-  gatewayNb?: number;
-  microserviceNb?: number;
-  portsToBind?: number;
-};
+    monitoring?: string;
+    monitoringElk?: boolean;
+    monitoringPrometheus?: boolean;
+
+    monolithicNb?: number;
+    gatewayNb?: number;
+    microserviceNb?: number;
+    portsToBind?: number;
+  };

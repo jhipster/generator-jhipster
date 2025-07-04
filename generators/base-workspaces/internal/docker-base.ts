@@ -19,7 +19,7 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 
-import { convertSecretToBase64, createBase64Secret, removeFieldsWithNullishValues } from '../../../lib/utils/index.js';
+import { convertSecretToBase64, removeFieldsWithNullishValues } from '../../../lib/utils/index.js';
 import { applicationTypes, buildToolTypes, getConfigWithDefaults } from '../../../lib/jhipster/index.js';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 import { loadDeploymentConfig } from '../../base-workspaces/internal/index.js';
@@ -59,13 +59,6 @@ export function checkImages(this: BaseKubernetesGenerator) {
       this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath + appsFolder)}\n`;
     }
   });
-}
-
-/**
- * Generate Jwt Secret
- */
-export function generateJwtSecret(this: BaseKubernetesGenerator) {
-  this.jwtSecretKey = this.jhipsterConfig.jwtSecretKey = this.jwtSecretKey ?? createBase64Secret(this.options.reproducibleTests);
 }
 
 /**

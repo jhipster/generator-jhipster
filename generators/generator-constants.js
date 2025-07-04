@@ -48,26 +48,6 @@ export const dockerContainers = {
 };
 Object.freeze(dockerContainers);
 
-// Kubernetes versions
-export const KUBERNETES_CORE_API_VERSION = 'v1';
-export const KUBERNETES_BATCH_API_VERSION = 'batch/v1';
-export const KUBERNETES_DEPLOYMENT_API_VERSION = 'apps/v1';
-export const KUBERNETES_STATEFULSET_API_VERSION = 'apps/v1';
-export const KUBERNETES_INGRESS_API_VERSION = 'networking.k8s.io/v1';
-export const KUBERNETES_ISTIO_NETWORKING_API_VERSION = 'networking.istio.io/v1beta1';
-export const KUBERNETES_RBAC_API_VERSION = 'rbac.authorization.k8s.io/v1';
-
-// Helm versions
-export const HELM_KAFKA = '^0.20.1';
-export const HELM_ELASTICSEARCH = '^1.32.0';
-export const HELM_PROMETHEUS = '^9.2.0';
-export const HELM_GRAFANA = '^4.0.0';
-export const HELM_MYSQL = '^1.4.0';
-export const HELM_MARIADB = '^6.12.2';
-export const HELM_POSTGRESQL = '^6.5.3';
-export const HELM_MONGODB_REPLICASET = '^3.10.1';
-export const HELM_COUCHBASE_OPERATOR = '^2.2.1';
-
 // all constants used throughout all generators
 
 export const LOGIN_REGEX = '^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$';

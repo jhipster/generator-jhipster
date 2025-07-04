@@ -16,30 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { kubernetesPlatformTypes, monitoringTypes } from '../../lib/jhipster/index.js';
+import type { JHipsterCommandDefinition } from '../../../../lib/command/types.js';
 
-const { NO } = monitoringTypes;
-const { ServiceTypes, IngressTypes, GeneratorTypes } = kubernetesPlatformTypes;
+const command = {
+  configs: {
+    jwtSecretKey: {
+      cli: {
+        type: String,
+        env: 'JHI_JWT_SECRET_KEY',
+      },
+      scope: 'storage',
+    },
+  },
+  import: [],
+} as const satisfies JHipsterCommandDefinition;
 
-const { LOAD_BALANCER } = ServiceTypes;
-const { NGINX } = IngressTypes;
-const { K8S } = GeneratorTypes;
-
-export const kubernetesDefaultConfig = {
-  kubernetesNamespace: 'default',
-  kubernetesServiceType: LOAD_BALANCER,
-  monitoring: NO,
-  istio: false,
-};
-
-export const ingressDefaultConfig = {
-  ingressType: NGINX,
-};
-
-export const generatorDefaultConfig = {
-  generatorType: K8S,
-};
-
-export const defaultKubernetesConfig = {
-  ...kubernetesDefaultConfig,
-};
+export default command;
