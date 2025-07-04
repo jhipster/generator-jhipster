@@ -79,6 +79,14 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
       async loadDockerDependenciesTask({ deployment }) {
         await loadDockerDependenciesTask.call(this, { context: deployment });
       },
+      appsConfigs({ deployment, applications }) {
+        deployment.appConfigs = applications;
+        deployment.gatewayNb = applications.filter(app => app.applicationTypeGateway).length;
+        deployment.monolithicNb = applications.filter(app => app.applicationTypeMonolith).length;
+        deployment.microserviceNb = applications.filter(app => app.applicationTypeMicroservice).length;
+
+        deployment.portsToBind = deployment.monolithicNb + deployment.gatewayNb;
+      },
     });
   }
 

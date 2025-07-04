@@ -51,7 +51,13 @@ type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'e
 
 export type WorkspacesApplication = ServiceDiscoveryApplication &
   MonitoringApplication &
-  ApplicationAll & { composePort?: number; clusteredDb?: boolean; appFolder: string };
+  ApplicationAll & {
+    composePort?: number;
+    clusteredDb?: boolean;
+    targetImageName?: string;
+    appFolder?: string;
+    dbPeerCount?: number;
+  };
 
 export type Workspaces = {
   directoryPath: string;
@@ -61,7 +67,7 @@ type KubernetesDeployment = typeof kubernetesConstants & typeof helmConstants & 
 
 export type Deployment = DeploymentConfig &
   KubernetesDeployment & {
-    appConfigs?: any[];
+    appConfigs?: WorkspacesApplication[];
     applications?: any[];
     appsYaml?: string[];
     clusteredDbApps?: string[];
@@ -85,4 +91,9 @@ export type Deployment = DeploymentConfig &
     monitoring?: string;
     monitoringElk?: boolean;
     monitoringPrometheus?: boolean;
+
+    monolithicNb?: number;
+    gatewayNb?: number;
+    microserviceNb?: number;
+    portsToBind?: number;
   };

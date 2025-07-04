@@ -26,7 +26,6 @@ import { convertSecretToBase64 } from '../../../lib/utils/index.js';
 import { asPromptingTask } from '../../base-application/support/index.js';
 import { asPromptingWorkspacesTask } from '../support/task-type-inference.ts';
 import type BaseWorkspacesGenerator from '../generator.js';
-import { loadConfigs } from './docker-base.js';
 
 const { MICROSERVICE, MONOLITH, GATEWAY } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;
@@ -34,10 +33,6 @@ const monitoring = monitoringTypes;
 
 const NO_MONITORING = monitoring.NO;
 const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
-
-export default {
-  loadConfigs,
-};
 
 /**
  * Ask For Application Type
@@ -175,21 +170,18 @@ export const askForApps = asPromptingTask(async function askForApps(this: BaseWo
 
   const props = await this.prompt(prompts);
   this.appsFolders = this.jhipsterConfig.appsFolders = props.chosenApps;
-  await loadConfigs.call(this);
 });
 
 /**
  * Ask For Clusters Mode
  */
-export const askForClustersMode = asPromptingTask(async function askForClustersMode(this: BaseWorkspacesGenerator, { control }) {
+export const askForClustersMode = asPromptingTask(async function askForClustersMode(
+  this: BaseWorkspacesGenerator,
+  { control, applications },
+) {
   if (!this.shouldAskForPrompts({ control })) return;
 
-  const clusteredDbApps = [];
-  this.appConfigs.forEach((appConfig, index) => {
-    if (appConfig.databaseTypeMongodb || appConfig.databaseTypeCouchbase) {
-      clusteredDbApps.push(this.appsFolders[index]);
-    }
-  });
+  const clusteredDbApps = applications.filter(app => app.clusteredDb).map(app => app.appFolder);
   if (clusteredDbApps.length === 0) return;
 
   const prompts = [
@@ -238,18 +230,15 @@ export const askForMonitoring = asPromptingTask(async function askForMonitoring(
 /**
  * Ask For Service Discovery
  */
-export const askForServiceDiscovery = asPromptingTask(async function askForServiceDiscovery(this: BaseWorkspacesGenerator, { control }) {
-  if (!this.shouldAskForPrompts({ control })) return;
+export const askForServiceDiscovery = asPromptingTask(async function askForServiceDiscovery(this: BaseWorkspacesGenerator, params) {
+  if (!this.shouldAskForPrompts({ control: params.control })) return;
 
-  const serviceDiscoveryEnabledApps = [];
-  this.appConfigs.forEach(appConfig => {
-    if (appConfig.serviceDiscoveryAny) {
-      serviceDiscoveryEnabledApps.push({
-        baseName: appConfig.baseName,
-        serviceDiscoveryType: appConfig.serviceDiscoveryType,
-      });
-    }
-  });
+  const serviceDiscoveryEnabledApps = params.applications
+    .filter(app => app.serviceDiscoveryAny)
+    .map(app => ({
+      baseName: app.baseName,
+      serviceDiscoveryType: app.serviceDiscoveryType,
+    }));
 
   if (serviceDiscoveryEnabledApps.length === 0) {
     this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = NO_SERVICE_DISCOVERY;

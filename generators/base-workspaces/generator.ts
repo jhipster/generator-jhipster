@@ -93,13 +93,17 @@ export default abstract class BaseWorkspacesGenerator<
     return this.getContextData(CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, {
       factory: () =>
         Object.entries(this.resolveApplicationFolders()).map(([appFolder, resolvedFolder], index) => {
-          const contextMap = this.env.getContextMap(resolvedFolder);
+          const contextMap = this.env.getContextMap(resolvedFolder) as Map<string, WorkspacesApplication>;
           const application = contextMap.get(CONTEXT_DATA_APPLICATION_KEY);
           if (!application) {
             throw new Error(`No application found in ${resolvedFolder}`);
           }
           application.appFolder = appFolder;
           application.composePort = 8080 + index;
+
+          application.clusteredDb = application.databaseTypeMongodb || application.databaseTypeCouchbase;
+          application.dbPeerCount = application.clusteredDb ? 3 : 1;
+
           return application;
         }),
     });

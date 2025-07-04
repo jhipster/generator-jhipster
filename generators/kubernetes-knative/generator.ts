@@ -28,8 +28,6 @@ import { checkHelm, derivedKubernetesPlatformProperties, loadConfig } from '../k
 import { buildToolTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
 import { getJdbcUrl } from '../spring-data-relational/support/index.js';
 import { loadDeploymentConfig } from '../base-workspaces/internal/index.js';
-import { loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/index.js';
-import { loadDerivedAppConfig } from '../app/support/index.js';
 import {
   askForAdminPassword,
   askForApps,
@@ -96,10 +94,19 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
-  get promptingWorkspaces() {
+  get prompting() {
     return this.asPromptingTaskGroup({
       askForPath,
       askForApps,
+    });
+  }
+
+  get [BaseWorkspacesGenerator.PROMPTING]() {
+    return this.delegateTasksToBlueprint(() => this.prompting);
+  }
+
+  get promptingWorkspaces() {
+    return this.asPromptingTaskGroup({
       askForGeneratorType,
       askForMonitoring,
       askForClustersMode,
@@ -135,13 +142,6 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
       configureImageNames,
-      loadSharedConfig() {
-        for (const app of this.appConfigs) {
-          loadDerivedAppConfig({ application: app });
-          loadDerivedServerAndPlatformProperties({ application: app });
-        }
-      },
-
       derivedKubernetesPlatformProperties,
     });
   }
@@ -152,7 +152,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
 
   get writing() {
     return this.asWritingTaskGroup({
-      async writeFiles({ deployment }) {
+      async writeFiles({ deployment, applications }) {
         const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
         const suffix = 'knative';
         await this.writeFiles({
@@ -164,26 +164,24 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
           sections: deploymentKnativeFiles(suffix),
           context: { ...this, ...deployment },
         });
-        for (let i = 0; i < this.appConfigs.length; i++) {
-          this.app = this.appConfigs[i];
+        for (const app of applications) {
           await this.writeFiles({
             sections: applicationKnativeFiles(suffix),
-            context: { ...this, ...deployment },
+            context: { ...this, ...deployment, app },
           });
           await this.writeFiles({
             sections: applicationKubernetesFiles(suffix),
             rootTemplatesPath: k8s,
-            context: { ...this, ...deployment },
+            context: { ...this, ...deployment, app },
           });
         }
         if (!this.generatorTypeK8s) {
           const helm = this.fetchFromInstalledJHipster('kubernetes-helm/templates');
-          for (let i = 0; i < this.appConfigs.length; i++) {
-            this.app = this.appConfigs[i];
+          for (const app of applications) {
             await this.writeFiles({
               sections: applicationHelmFiles(suffix),
               rootTemplatesPath: helm,
-              context: { ...this, ...deployment },
+              context: { ...this, ...deployment, app },
             });
           }
           await this.writeFiles({
@@ -203,7 +201,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
   get end() {
     return this.asEndTaskGroup({
       checkImages,
-      deploy() {
+      deploy({ applications }) {
         if (this.hasWarning) {
           this.log.warn('Kubernetes Knative configuration generated, but no Jib cache found');
           this.log.warn('If you forgot to generate the Docker image for this application, please run:');
@@ -214,9 +212,9 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
         this.log.warn(
           '\nYou will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:',
         );
-        for (let i = 0; i < this.appsFolders.length; i++) {
-          const originalImageName = this.appConfigs[i].baseName.toLowerCase();
-          const targetImageName = this.appConfigs[i].targetImageName;
+        for (const app of applications) {
+          const originalImageName = app.baseName.toLowerCase();
+          const targetImageName = app.targetImageName;
           if (originalImageName !== targetImageName) {
             this.log.verboseInfo(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
           }
@@ -224,20 +222,19 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
         }
         if (this.dockerRepositoryName) {
           this.log.log('\nAlternatively, you can use Jib to build and push image directly to a remote registry:');
-          this.appsFolders.forEach((appsFolder, index) => {
-            const appConfig = this.appConfigs[index];
+          for (const app of applications) {
             let runCommand = '';
-            if (appConfig.buildTool === MAVEN) {
+            if (app.buildTool === MAVEN) {
               runCommand = `./mvnw -ntp -Pprod verify jib:build${
                 process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''
-              } -Djib.to.image=${appConfig.targetImageName}`;
+              } -Djib.to.image=${app.targetImageName}`;
             } else {
               runCommand = `./gradlew bootJar -Pprod jibBuild${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''} -Djib.to.image=${
-                appConfig.targetImageName
+                app.targetImageName
               }`;
             }
-            this.log.log(`${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + appsFolder)}`);
-          });
+            this.log.log(`${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + app.appFolder)}`);
+          }
         }
         this.log.log('\nYou can deploy all your apps by running the following script:');
         if (this.generatorType === K8S) {

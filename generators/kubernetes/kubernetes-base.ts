@@ -24,6 +24,7 @@ import {
   monitoringTypes,
   serviceDiscoveryTypes,
 } from '../../lib/jhipster/index.js';
+import type { WorkspacesApplication } from '../base-workspaces/types.js';
 import type { BaseKubernetesGenerator } from './generator.ts';
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const { PROMETHEUS } = monitoringTypes;
@@ -62,7 +63,10 @@ export function loadConfig(this: BaseKubernetesGenerator) {
   this.generatorType = kubernetesWithDefaults.generatorType;
 }
 
-export function derivedKubernetesPlatformProperties(this: BaseKubernetesGenerator) {
+export function derivedKubernetesPlatformProperties(
+  this: BaseKubernetesGenerator,
+  { applications }: { applications: WorkspacesApplication[] },
+) {
   this.deploymentApplicationTypeMicroservice = this.deploymentApplicationType === MICROSERVICE;
   this.ingressTypeNginx = this.ingressType === NGINX;
   this.ingressTypeGke = this.ingressType === GKE;
@@ -73,23 +77,17 @@ export function derivedKubernetesPlatformProperties(this: BaseKubernetesGenerato
   this.monitoringPrometheus = this.monitoring === PROMETHEUS;
   this.serviceDiscoveryTypeEureka = this.serviceDiscoveryType === EUREKA;
   this.serviceDiscoveryTypeConsul = this.serviceDiscoveryType === CONSUL;
-  this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
+  this.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
+  this.useKafka = applications.some(appConfig => appConfig.messageBroker === KAFKA);
   this.usesIngress = this.kubernetesServiceType === 'Ingress';
   this.useKeycloak = this.usesOauth2 && this.usesIngress;
-  this.appConfigs.forEach(element => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
-    if (element.messageBroker === KAFKA) {
-      this.useKafka = true;
-    }
-  });
   this.keycloakRedirectUris = '';
-  this.entryPort = '8080';
+  this.entryPort = 8080;
 
-  this.appConfigs.forEach(appConfig => {
+  applications.forEach(appConfig => {
     // Add application configuration
     if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
-      this.entryPort = appConfig.composePort;
+      this.entryPort = appConfig.composePort!;
       if (this.ingressDomain) {
         this.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*",
             "https://${appConfig.baseName.toLowerCase()}.${this.kubernetesNamespace}.${this.ingressDomain}/*", `;
