@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -22,6 +21,7 @@ import fs from 'fs';
 import chalk from 'chalk';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
+import type { Deployment } from '../base-workspaces/types.d.ts';
 
 import { buildToolTypes } from '../../lib/jhipster/index.js';
 
@@ -44,7 +44,6 @@ import {
   askForServiceDiscovery,
 } from '../base-workspaces/internal/docker-prompts.js';
 import { checkKubernetes, derivedKubernetesPlatformProperties, loadConfig, setupKubernetesConstants } from './kubernetes-base.js';
-import { writeFiles } from './files.js';
 import {
   askForIngressDomain,
   askForIngressType,
@@ -54,14 +53,88 @@ import {
   askForPersistentStorage,
   askForStorageClassName,
 } from './prompts.js';
+import { applicationFiles, writeDeploymentFiles } from './files.ts';
 
 const { MAVEN } = buildToolTypes;
 
 /**
- * @class
- * @extends {BaseWorkspacesGenerator}
+ * Temporary base class for Kubernetes generators.
  */
-export default class KubernetesGenerator extends BaseWorkspacesGenerator {
+export class BaseKubernetesGenerator extends BaseWorkspacesGenerator<Deployment> {
+  declare appsFolders: any[];
+  declare appConfigs: any[];
+  declare app: any;
+  declare clusteredDbApps: any[];
+
+  declare hasWarning: boolean;
+  declare warningMessage: string;
+
+  declare deploymentApplicationType: string;
+  declare dockerPushCommand: string;
+  declare kubernetesNamespace: string;
+  declare kubernetesServiceType: string;
+  declare kubernetesStorageClassName: string;
+  declare kubernetesUseDynamicStorage: boolean;
+
+  declare monolithicNb: number;
+  declare gatewayNb: number;
+  declare microserviceNb: number;
+
+  declare dockerRepositoryName: string;
+  declare generatorTypeK8s: boolean;
+  declare istio: boolean;
+  declare generatorType: string;
+  declare ingressDomain: string;
+  declare ingressType: string;
+
+  declare dbRandomPassword: string;
+  declare adminPassword: string;
+  declare adminPasswordBase64: string;
+
+  declare deploymentApplicationTypeMicroservice: boolean;
+  declare ingressTypeNginx: boolean;
+  declare ingressTypeGke: boolean;
+  declare kubernetesServiceTypeIngress: boolean;
+  declare kubernetesNamespaceDefault: boolean;
+  declare generatorTypeHelm: boolean;
+  declare monitoringPrometheus: boolean;
+  declare monitoring: string;
+  declare serviceDiscoveryTypeEureka: boolean;
+  declare serviceDiscoveryType: string;
+  declare serviceDiscoveryTypeConsul: boolean;
+  declare usesOauth2: boolean;
+  declare usesIngress: boolean;
+  declare useKeycloak: boolean;
+  declare useKafka: boolean;
+  declare usePulsar: boolean;
+  declare useMemcached: boolean;
+  declare useRedis: boolean;
+
+  declare keycloakRedirectUris: string;
+  declare entryPort: string;
+  declare jwtSecretKey: string;
+  declare portsToBind: number;
+
+  declare KUBERNETES_CORE_API_VERSION: string;
+  declare KUBERNETES_BATCH_API_VERSION: string;
+  declare KUBERNETES_DEPLOYMENT_API_VERSION: string;
+  declare KUBERNETES_STATEFULSET_API_VERSION: string;
+  declare KUBERNETES_INGRESS_API_VERSION: string;
+  declare KUBERNETES_ISTIO_NETWORKING_API_VERSION: string;
+  declare KUBERNETES_RBAC_API_VERSION: string;
+
+  declare HELM_KAFKA: string;
+  declare HELM_ELASTICSEARCH: string;
+  declare HELM_PROMETHEUS: string;
+  declare HELM_GRAFANA: string;
+  declare HELM_MARIADB: string;
+  declare HELM_MYSQL: string;
+  declare HELM_POSTGRESQL: string;
+  declare HELM_MONGODB_REPLICASET: string;
+  declare HELM_COUCHBASE_OPERATOR: string;
+}
+
+export default class KubernetesGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
@@ -75,7 +148,6 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      loadDockerDependenciesTask,
       checkDocker,
       checkKubernetes,
       loadConfig,
@@ -125,6 +197,9 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
       loadFromYoRc,
+      async loadDockerDependenciesTask({ deployment }) {
+        await loadDockerDependenciesTask.call(this, { context: deployment });
+      },
       loadSharedConfig() {
         for (const app of this.appConfigs) {
           loadDerivedAppConfig({ application: app });
@@ -151,7 +226,21 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   }
 
   get writing() {
-    return this.asWritingTaskGroup({ writeFiles });
+    return this.asWritingTaskGroup({
+      async writeFiles({ deployment }) {
+        for (let i = 0; i < this.appConfigs.length; i++) {
+          this.app = this.appConfigs[i];
+          await this.writeFiles({
+            sections: applicationFiles('k8s'),
+            context: { ...this, ...deployment },
+          });
+        }
+        await this.writeFiles({
+          sections: writeDeploymentFiles('k8s'),
+          context: { ...this, ...deployment },
+        });
+      },
+    });
   }
 
   get [BaseWorkspacesGenerator.WRITING]() {

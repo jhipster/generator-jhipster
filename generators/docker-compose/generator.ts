@@ -365,7 +365,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     return this.delegateTasksToBlueprint(() => this.end);
   }
 
-  checkApplicationsDockerImages({ workspaces, applications }) {
+  checkApplicationsDockerImages({ workspaces, applications }: { workspaces: any; applications: any[] }) {
     this.log.log('\nChecking Docker images in applications directories...');
 
     let imagePath = '';
@@ -398,7 +398,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     return defaults({}, this.config.getAll(), DeploymentOptions.defaults(this.jhipsterConfig.deploymentType));
   }
 
-  loadDeploymentConfig({ deployment }) {
+  loadDeploymentConfig({ deployment }: { deployment: BaseDeployment }) {
     const config = this.jhipsterConfigWithDefaults;
     deployment.clusteredDbApps = config.clusteredDbApps;
     deployment.adminPassword = config.adminPassword;
@@ -407,7 +407,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     loadDerivedPlatformConfig({ application: deployment });
   }
 
-  prepareDeploymentDerivedProperties({ deployment, applications }) {
+  prepareDeploymentDerivedProperties({ deployment, applications }: { deployment: BaseDeployment; applications: any[] }) {
     if (deployment.adminPassword) {
       deployment.adminPasswordBase64 = convertSecretToBase64(deployment.adminPassword);
     }

@@ -20,6 +20,7 @@ import { defaults } from 'lodash-es';
 import { applicationOptions, deploymentOptions } from '../../../lib/jhipster/index.js';
 import { loadDerivedPlatformConfig, loadPlatformConfig } from '../support/index.js';
 import type BaseWorkspacesGenerator from '../index.js';
+import type { Deployment } from '../types.d.ts';
 
 const { OptionNames } = applicationOptions;
 const { Options: DeploymentOptions } = deploymentOptions;
@@ -30,9 +31,10 @@ export function loadDeploymentConfig(
   this: BaseWorkspacesGenerator,
   {
     config = defaults({}, this.jhipsterConfig, DeploymentOptions.defaults(this.jhipsterConfig.deploymentType)),
-    deployment = this,
-  }: { config?: any; deployment?: any } = {},
+    deployment,
+  }: { config?: any; deployment?: Deployment } = {},
 ) {
+  deployment ??= this as unknown as Deployment;
   deployment.appsFolders = config.appsFolders;
   deployment.directoryPath = config.directoryPath;
   deployment.clusteredDbApps = config.clusteredDbApps;
@@ -40,6 +42,6 @@ export function loadDeploymentConfig(
   deployment.dockerPushCommand = config.dockerPushCommand;
   deployment.adminPassword = config.adminPassword;
   deployment.jwtSecretKey = config[JWT_SECRET_KEY];
-  loadPlatformConfig({ config, application: deployment });
-  loadDerivedPlatformConfig({ application: deployment });
+  loadPlatformConfig({ config, application: deployment! });
+  loadDerivedPlatformConfig({ application: deployment! });
 }

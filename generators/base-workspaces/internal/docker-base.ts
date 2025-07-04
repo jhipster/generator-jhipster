@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -28,6 +27,8 @@ import { loadDerivedAppConfig } from '../../app/support/index.js';
 import { loadDerivedPlatformConfig } from '../../base-workspaces/support/index.js';
 import { loadCommandConfigsIntoApplication } from '../../../lib/command/load.js';
 import { lookupCommandsConfigs } from '../../../lib/command/lookup-commands-configs.js';
+import type { BaseKubernetesGenerator } from '../../kubernetes/generator.ts';
+import type { WorkspacesApplication } from '../types.js';
 
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
@@ -37,7 +38,7 @@ export { checkDocker } from '../../docker/support/index.js';
 /**
  * Check Images
  */
-export function checkImages() {
+export function checkImages(this: BaseKubernetesGenerator) {
   this.log.log('\nChecking Docker images in applications directories...');
 
   let imagePath = '';
@@ -63,14 +64,14 @@ export function checkImages() {
 /**
  * Generate Jwt Secret
  */
-export function generateJwtSecret() {
+export function generateJwtSecret(this: BaseKubernetesGenerator) {
   this.jwtSecretKey = this.jhipsterConfig.jwtSecretKey = this.jwtSecretKey ?? createBase64Secret(this.options.reproducibleTests);
 }
 
 /**
  * Configure Image Names
  */
-export function configureImageNames() {
+export function configureImageNames(this: BaseKubernetesGenerator) {
   for (let i = 0; i < this.appsFolders.length; i++) {
     const originalImageName = this.appConfigs[i].baseName.toLowerCase();
     const targetImageName = this.dockerRepositoryName ? `${this.dockerRepositoryName}/${originalImageName}` : originalImageName;
@@ -81,7 +82,7 @@ export function configureImageNames() {
 /**
  * Load config from this.appFolders
  */
-export async function loadConfigs() {
+export async function loadConfigs(this: BaseKubernetesGenerator) {
   this.appConfigs = [];
   this.gatewayNb = 0;
   this.monolithicNb = 0;
@@ -96,7 +97,9 @@ export async function loadConfigs() {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     this.log.debug(chalk.red.bold(`App folder ${path}`));
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
-      const config = getConfigWithDefaults(removeFieldsWithNullishValues(getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
+      const config = getConfigWithDefaults(
+        removeFieldsWithNullishValues(getJhipsterConfig(`${path}/.yo-rc.json`).getAll()),
+      ) as unknown as WorkspacesApplication;
       config.composePort = serverPort + index;
       this.log.debug(chalk.red.bold(`${config.baseName} has compose port ${config.composePort} and appIndex ${config.applicationIndex}`));
 
@@ -107,7 +110,7 @@ export async function loadConfigs() {
       });
 
       loadDerivedAppConfig({ application: config });
-      loadDerivedPlatformConfig({ application: config });
+      loadDerivedPlatformConfig({ application: config as any });
 
       if (config.applicationType === MONOLITH) {
         this.monolithicNb++;
@@ -126,7 +129,7 @@ export async function loadConfigs() {
   }
 }
 
-export function setClusteredApps() {
+export function setClusteredApps(this: BaseKubernetesGenerator) {
   for (let i = 0; i < this.appsFolders.length; i++) {
     for (let j = 0; j < this.clusteredDbApps.length; j++) {
       this.appConfigs[i].clusteredDb = this.appsFolders[i] === this.clusteredDbApps[j];
@@ -134,7 +137,7 @@ export function setClusteredApps() {
   }
 }
 
-export async function loadFromYoRc() {
+export async function loadFromYoRc(this: BaseKubernetesGenerator) {
   loadDeploymentConfig.call(this);
 
   this.useKafka = false;

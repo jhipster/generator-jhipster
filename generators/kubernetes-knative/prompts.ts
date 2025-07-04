@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -21,7 +20,7 @@ import k8sPrompts from '../kubernetes/prompts.js';
 import { kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
 import { generatorDefaultConfig } from '../kubernetes/kubernetes-constants.js';
 import { asPromptingTask } from '../base-application/support/index.js';
-import type BaseWorkspacesGenerator from '../base-workspaces/index.js';
+import type { BaseKubernetesGenerator } from '../kubernetes/generator.ts';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;
 const { HELM, K8S } = GeneratorTypes;
@@ -30,28 +29,29 @@ export default {
   ...k8sPrompts,
 };
 
-export const askForGeneratorType = asPromptingTask(async function askForGeneratorType(this: BaseWorkspacesGenerator, { control }) {
-  if (!this.options.askAnswered && (this.regenerate || control.existingProject)) return;
+export const askForGeneratorType = asPromptingTask(async function askForGeneratorType(this: BaseKubernetesGenerator, { control }) {
+  if (!this.options.askAnswered && control.existingProject) return;
 
-  const prompts = [
-    {
-      type: 'list',
-      name: 'generatorType',
-      message: 'Which *type* of generator would you like to base this on?',
-      choices: [
-        {
-          value: K8S,
-          name: 'Kubernetes generator',
-        },
-        {
-          value: HELM,
-          name: 'Helm Kubernetes generator',
-        },
-      ],
-      default: this.generatorType ? this.generatorType : generatorDefaultConfig.generatorType,
-    },
-  ];
-
-  const props = await this.prompt(prompts, this.config);
+  const props = await this.prompt(
+    [
+      {
+        type: 'list',
+        name: 'generatorType',
+        message: 'Which *type* of generator would you like to base this on?',
+        choices: [
+          {
+            value: K8S,
+            name: 'Kubernetes generator',
+          },
+          {
+            value: HELM,
+            name: 'Helm Kubernetes generator',
+          },
+        ],
+        default: this.generatorType ? this.generatorType : generatorDefaultConfig.generatorType,
+      },
+    ],
+    this.config,
+  );
   this.generatorType = props.generatorType;
 });

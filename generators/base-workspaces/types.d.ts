@@ -22,14 +22,25 @@ import type { Config as BaseConfig } from '../base/index.js';
 
 export type { Source } from '../base/types.js';
 
-export type Config = BaseConfig & {
-  appsFolders: string[];
+type DeploymentConfig = {
   directoryPath: string;
-  deploymentType: string;
+  appsFolders: string[];
+
   jwtSecretKey: string;
   adminPassword: string;
+  dbRandomPassword: string;
+
+  deploymentType: string;
   serviceDiscoveryType: string;
+  ingressType: string;
+  ingressDomain: string;
+
+  kubernetesUseDynamicStorage: boolean;
+  kubernetesStorageClassName: string;
+  generatorType: string;
 };
+
+export type Config = BaseConfig & DeploymentConfig;
 
 export type { Features, Options } from '../base/types.js';
 
@@ -37,10 +48,37 @@ type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscovery
 
 type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'elk', 'prometheus']>;
 
-export type WorkspacesApplication = ServiceDiscoveryApplication & MonitoringApplication & ApplicationAll & { clusteredDb?: boolean };
+export type WorkspacesApplication = ServiceDiscoveryApplication &
+  MonitoringApplication &
+  ApplicationAll & { composePort?: number; clusteredDb?: boolean; appFolder: string };
 
 export type Workspaces = {
   directoryPath: string;
 };
 
-export type Deployment = any;
+export type Deployment = DeploymentConfig & {
+  appConfigs?: any[];
+  applications?: any[];
+  appsYaml?: string[];
+  clusteredDbApps?: string[];
+
+  keycloakRedirectUris?: string;
+  keycloakSecrets?: string[];
+  authenticationType?: string;
+  adminPasswordBase64?: string;
+
+  usesOauth2?: boolean;
+  useKafka?: boolean;
+  usePulsar?: boolean;
+  useMemcached?: boolean;
+  useRedis?: boolean;
+  includesApplicationTypeGateway?: boolean;
+
+  entryPort?: number;
+  dockerRepositoryName?: string;
+  dockerPushCommand?: string;
+
+  monitoring?: string;
+  monitoringElk?: boolean;
+  monitoringPrometheus?: boolean;
+};

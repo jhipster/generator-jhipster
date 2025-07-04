@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -22,6 +21,7 @@ import fs from 'fs';
 import chalk from 'chalk';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
+import { BaseKubernetesGenerator } from '../kubernetes/generator.ts';
 
 import { checkImages, configureImageNames, generateJwtSecret, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import {
@@ -52,7 +52,14 @@ import {
 import { askForIngressDomain, askForKubernetesNamespace } from '../kubernetes/prompts.js';
 import { askForGeneratorType } from './prompts.js';
 
-import { writeFiles } from './files.js';
+import {
+  applicationHelmFiles,
+  applicationKnativeFiles,
+  applicationKubernetesFiles,
+  deploymentHelmFiles,
+  deploymentKnativeFiles,
+  deploymentKubernetesFiles,
+} from './files.js';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;
 const { MAVEN } = buildToolTypes;
@@ -63,7 +70,7 @@ const { K8S } = GeneratorTypes;
  * @class
  * @extends {BaseWorkspacesGenerator}
  */
-export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator {
+export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
@@ -77,7 +84,6 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
         this.log.log(chalk.white(`${chalk.bold('☸')} Welcome to the JHipster Kubernetes Knative Generator ${chalk.bold('☸')}`));
         this.log.log(chalk.white(`Files will be generated in the folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      loadDockerDependenciesTask,
       checkDocker,
       checkKubernetes,
       checkHelm,
@@ -139,8 +145,11 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
   }
 
   get loadingWorkspaces() {
-    return this.asLoadingTaskGroup({
+    return this.asLoadingWorkspacesTaskGroup({
       loadFromYoRc,
+      async loadDockerDependenciesTask({ deployment }) {
+        await loadDockerDependenciesTask.call(this, { context: deployment });
+      },
       loadDeploymentConfig,
     });
   }
@@ -169,7 +178,47 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
 
   get writing() {
     return this.asWritingTaskGroup({
-      writeFiles,
+      async writeFiles({ deployment }) {
+        const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
+        const suffix = 'knative';
+        await this.writeFiles({
+          sections: deploymentKubernetesFiles(suffix),
+          rootTemplatesPath: k8s,
+          context: { ...this, ...deployment },
+        });
+        await this.writeFiles({
+          sections: deploymentKnativeFiles(suffix),
+          context: { ...this, ...deployment },
+        });
+        for (let i = 0; i < this.appConfigs.length; i++) {
+          this.app = this.appConfigs[i];
+          await this.writeFiles({
+            sections: applicationKnativeFiles(suffix),
+            context: { ...this, ...deployment },
+          });
+          await this.writeFiles({
+            sections: applicationKubernetesFiles(suffix),
+            rootTemplatesPath: k8s,
+            context: { ...this, ...deployment },
+          });
+        }
+        if (!this.generatorTypeK8s) {
+          const helm = this.fetchFromInstalledJHipster('kubernetes-helm/templates');
+          for (let i = 0; i < this.appConfigs.length; i++) {
+            this.app = this.appConfigs[i];
+            await this.writeFiles({
+              sections: applicationHelmFiles(suffix),
+              rootTemplatesPath: helm,
+              context: { ...this, ...deployment },
+            });
+          }
+          await this.writeFiles({
+            sections: deploymentHelmFiles(suffix),
+            rootTemplatesPath: helm,
+            context: { ...this, ...deployment },
+          });
+        }
+      },
     });
   }
 
