@@ -5122,7 +5122,7 @@ spec:
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmongodb
             - name: SPRING_DATA_MONGODB_URI
-              value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
+              value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017,msmongodb-mongodb-1.msmongodb-mongodb.default:27017,msmongodb-mongodb-2.msmongodb-mongodb.default:27017/msmongodb"
             - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: "x-request-id,x-ot-span-context"
             - name: JAVA_OPTS
@@ -15020,7 +15020,7 @@ metadata:
   namespace: default
 spec:
   serviceName: msmongodb-mongodb
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: msmongodb-mongodb
@@ -15223,7 +15223,7 @@ spec:
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmongodb
             - name: SPRING_DATA_MONGODB_URI
-              value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
+              value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017,msmongodb-mongodb-1.msmongodb-mongodb.default:27017,msmongodb-mongodb-2.msmongodb-mongodb.default:27017/msmongodb"
             - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: "x-request-id,x-ot-span-context"
             - name: JAVA_OPTS

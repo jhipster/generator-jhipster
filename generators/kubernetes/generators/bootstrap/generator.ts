@@ -60,6 +60,12 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
 
   get configuringWorkspaces() {
     return this.asConfiguringWorkspacesTaskGroup({
+      prepareApplication({ applications }) {
+        for (const application of applications) {
+          application.clusteredDb = application.databaseTypeMongodb || application.databaseTypeCouchbase;
+          application.dbPeerCount = application.clusteredDb ? 3 : 1;
+        }
+      },
       generateSecrets() {
         this.jwtSecretKey = this.jhipsterConfig.jwtSecretKey = this.jwtSecretKey ?? createBase64Secret(this.options.reproducibleTests);
         this.jhipsterConfig.dbRandomPassword ??= this.options.reproducibleTests ? 'SECRET-PASSWORD' : randomBytes(30).toString('hex');
