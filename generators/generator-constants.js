@@ -34,7 +34,7 @@ export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 export const NODE_VERSION = readFileSync(join(fileURLToPath(import.meta.url), '../init/resources/.node-version'), 'utf-8').trim();
 
 // The version should be coherent with the one from spring-data-elasticsearch project
-export const ELASTICSEARCH_TAG = '8.13.4';
+export const ELASTICSEARCH_TAG = '8.17.8';
 export const ELASTICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 /**
