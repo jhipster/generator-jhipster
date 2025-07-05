@@ -42,10 +42,10 @@ export function checkImages(this: BaseKubernetesGenerator, { applications }: { a
   this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
   for (const app of applications) {
     if (app.buildTool === MAVEN) {
-      imagePath = this.destinationPath(`${this.directoryPath + app.appsFolder}/target/jib-cache`);
+      imagePath = this.destinationPath(`${this.directoryPath + app.appFolder}/target/jib-cache`);
       runCommand = `./mvnw -ntp -Pprod verify jib:dockerBuild${process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''}`;
     } else {
-      imagePath = this.destinationPath(`${this.directoryPath + app.appsFolder}/build/jib-cache`);
+      imagePath = this.destinationPath(`${this.directoryPath + app.appFolder}/build/jib-cache`);
       runCommand = `./gradlew bootJar -Pprod jibDockerBuild${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''}`;
     }
     if (!existsSync(imagePath)) {
