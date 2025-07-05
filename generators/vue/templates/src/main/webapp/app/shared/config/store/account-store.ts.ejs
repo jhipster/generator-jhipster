@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 export interface AccountStateStorable {
-  logon: boolean;
+  logon: boolean | null;
   userIdentity: null | any;
   authenticated: boolean;
   profilesLoaded: boolean;

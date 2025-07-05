@@ -1,19 +1,19 @@
 <template>
   <div class="modal-body">
-    <span class="badge badge-primary" @click="threadDumpFilter = ''"
-      >All&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpAll }}</span></span
+    <span class="badge bg-primary" @click="threadDumpFilter = ''"
+      >All&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpData.threadDumpAll }}</span></span
     >&nbsp;
-    <span class="badge badge-success" @click="threadDumpFilter = 'RUNNABLE'"
-      >Runnable&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpRunnable }}</span></span
+    <span class="badge bg-success" @click="threadDumpFilter = 'RUNNABLE'"
+      >Runnable&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpData.threadDumpRunnable }}</span></span
     >&nbsp;
-    <span class="badge badge-info" @click="threadDumpFilter = 'WAITING'"
-      >Waiting&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpWaiting }}</span></span
+    <span class="badge bg-info" @click="threadDumpFilter = 'WAITING'"
+      >Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpData.threadDumpWaiting }}</span></span
     >&nbsp;
-    <span class="badge badge-warning" @click="threadDumpFilter = 'TIMED_WAITING'"
-      >Timed Waiting&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpTimedWaiting }}</span></span
+    <span class="badge bg-warning" @click="threadDumpFilter = 'TIMED_WAITING'"
+      >Timed Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpData.threadDumpTimedWaiting }}</span></span
     >&nbsp;
-    <span class="badge badge-danger" @click="threadDumpFilter = 'BLOCKED'"
-      >Blocked&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpBlocked }}</span></span
+    <span class="badge bg-danger" @click="threadDumpFilter = 'BLOCKED'"
+      >Blocked&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpData.threadDumpBlocked }}</span></span
     >&nbsp;
     <div class="mt-2">&nbsp;</div>
     Filter

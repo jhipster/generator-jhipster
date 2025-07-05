@@ -17,7 +17,6 @@ import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
   name: '<%= entityAngularName %>',
   setup() {
 <%_ if (enableTranslation) { _%>

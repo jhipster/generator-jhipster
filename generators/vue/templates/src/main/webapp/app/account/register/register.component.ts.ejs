@@ -29,7 +29,6 @@ import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
 const loginPattern = helpers.regex(/<%- webappLoginRegExp %>/);
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
   name: 'Register',
   validations() {
     return {

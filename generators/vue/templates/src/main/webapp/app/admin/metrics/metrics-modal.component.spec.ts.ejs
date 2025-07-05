@@ -34,20 +34,20 @@ describe('Metrics Component', () => {
   });
 
   describe('getBadgeClass', () => {
-    it('should return badge-success for RUNNABLE', () => {
-      expect(metricsModal.getBadgeClass('RUNNABLE')).toBe('badge-success');
+    it('should return bg-success for RUNNABLE', () => {
+      expect(metricsModal.getBadgeClass('RUNNABLE')).toBe('bg-success');
     });
 
-    it('should return badge-info for WAITING', () => {
-      expect(metricsModal.getBadgeClass('WAITING')).toBe('badge-info');
+    it('should return bg-info for WAITING', () => {
+      expect(metricsModal.getBadgeClass('WAITING')).toBe('bg-info');
     });
 
-    it('should return badge-warning for TIMED_WAITING', () => {
-      expect(metricsModal.getBadgeClass('TIMED_WAITING')).toBe('badge-warning');
+    it('should return bg-warning for TIMED_WAITING', () => {
+      expect(metricsModal.getBadgeClass('TIMED_WAITING')).toBe('bg-warning');
     });
 
-    it('should return badge-danger for BLOCKED', () => {
-      expect(metricsModal.getBadgeClass('BLOCKED')).toBe('badge-danger');
+    it('should return bg-danger for BLOCKED', () => {
+      expect(metricsModal.getBadgeClass('BLOCKED')).toBe('bg-danger');
     });
 
     it('should return undefined for anything else', () => {
