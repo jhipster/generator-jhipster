@@ -86,7 +86,7 @@ default() {
 <%_ } _%>
 <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
     kubectl apply -f registry-${suffix}/
-    <%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
+    <%_ } _%> <%_ appConfigs.forEach((appConfig) =>  { _%>
     kubectl apply -f <%- appConfig.baseName.toLowerCase() %>-${suffix}/
 <%_ }) _%>
 <%_ if (useKafka) { _%>

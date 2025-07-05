@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import dockerPrompts from '../base-workspaces/internal/docker-prompts.js';
 import { applicationTypes, databaseTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
 import { asPromptingTask } from '../base-application/support/index.js';
 import type { BaseKubernetesGenerator } from './generator.ts';
@@ -28,10 +27,6 @@ const { IngressTypes, ServiceTypes } = kubernetesPlatformTypes;
 const NO_DATABASE = databaseTypes.NO;
 const { LOAD_BALANCER, INGRESS, NODE_PORT } = ServiceTypes;
 const { GKE, NGINX } = IngressTypes;
-
-export default {
-  ...dockerPrompts,
-};
 
 export const askForKubernetesNamespace = asPromptingTask(async function askForKubernetesNamespace(
   this: BaseKubernetesGenerator,
@@ -218,15 +213,9 @@ export const askForIstioSupport = asPromptingTask(async function askForIstioSupp
   this.istio = props.istio;
 });
 
-export const askForPersistentStorage = asPromptingTask(async function askForPersistentStorage(this: BaseKubernetesGenerator, { control }) {
-  if (!this.shouldAskForPrompts({ control })) return;
-  let usingDataBase = false;
-  this.appConfigs.forEach(appConfig => {
-    if (appConfig.prodDatabaseType !== NO_DATABASE) {
-      usingDataBase = true;
-    }
-  });
-
+export const askForPersistentStorage = asPromptingTask(async function askForPersistentStorage(this: BaseKubernetesGenerator, params) {
+  if (!this.shouldAskForPrompts({ control: params.control })) return;
+  const usingDataBase = (params as any).applications.map(appConfig => appConfig.prodDatabaseType !== NO_DATABASE);
   const props = await this.prompt(
     [
       {

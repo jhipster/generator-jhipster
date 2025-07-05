@@ -489,7 +489,7 @@ exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gatew
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
@@ -1479,7 +1479,7 @@ exports[`generator - Kubernetes gateway and ingress should match files snapshot 
     "dockerRepositoryName": "jhipster",
     "ingressDomain": "example.com",
     "ingressType": "nginx",
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "Ingress",
@@ -2193,7 +2193,7 @@ exports[`generator - Kubernetes gateway and ingressType gke should match files s
     "dockerRepositoryName": "jhipster",
     "ingressDomain": "example.com",
     "ingressType": "gke",
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "Ingress",
@@ -5723,7 +5723,7 @@ exports[`generator - Kubernetes gateway and ingressType nginx should match files
     "dockerRepositoryName": "jhipster",
     "ingressDomain": "example.com",
     "ingressType": "nginx",
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "Ingress",
@@ -9167,7 +9167,7 @@ exports[`generator - Kubernetes gateway and mysql microservice should match file
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
@@ -10565,7 +10565,7 @@ metadata:
 spec:
   selector:
     app: jhgate
-  type: 
+  type: LoadBalancer
   ports:
   - name: http
     port: 8080
@@ -11072,7 +11072,6 @@ exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql mi
       "11-mssql"
     ],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
@@ -11080,7 +11079,7 @@ exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql mi
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
@@ -11808,7 +11807,7 @@ spec:
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATA_MONGODB_URI
-          value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
+          value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017,msmongodb-mongodb-1.msmongodb-mongodb.default:27017,msmongodb-mongodb-2.msmongodb-mongodb.default:27017/msmongodb"
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -12000,7 +11999,7 @@ metadata:
   namespace: default
 spec:
   serviceName: msmongodb-mongodb
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: msmongodb-mongodb
@@ -13658,7 +13657,7 @@ exports[`generator - Kubernetes mysql microservice with custom namespace and jhi
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
@@ -17024,7 +17023,7 @@ exports[`generator - Kubernetes mysql microservice with custom namespace should 
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
@@ -17714,7 +17713,6 @@ exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservic
       "11-mssql"
     ],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
@@ -17722,7 +17720,7 @@ exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservic
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
@@ -18450,7 +18448,7 @@ spec:
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATA_MONGODB_URI
-          value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
+          value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017,msmongodb-mongodb-1.msmongodb-mongodb.default:27017,msmongodb-mongodb-2.msmongodb-mongodb.default:27017/msmongodb"
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -18642,7 +18640,7 @@ metadata:
   namespace: default
 spec:
   serviceName: msmongodb-mongodb
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: msmongodb-mongodb
@@ -19819,7 +19817,7 @@ exports[`generator - Kubernetes only gateway should match files snapshot 1`] = `
     "dockerRepositoryName": "jhipsterrepository",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "jhipsternamespace",
     "kubernetesServiceType": "LoadBalancer",

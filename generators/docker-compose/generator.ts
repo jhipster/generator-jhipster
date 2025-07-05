@@ -161,9 +161,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
         deployment.keycloakRedirectUris = '';
         deployment.appsYaml = applications.map(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
-          appConfig.clusteredDb = deployment.clusteredDbApps?.includes(appConfig.appFolder);
           const parentConfiguration = {};
-          const path = this.destinationPath(workspaces.directoryPath, appConfig.appFolder);
+          const path = this.destinationPath(workspaces.directoryPath, appConfig.appFolder!);
           // Add application configuration
           const yaml = parseYaml(this.fs.read(`${path}/src/main/docker/app.yml`)!);
           const yamlConfig = yaml.services.app;

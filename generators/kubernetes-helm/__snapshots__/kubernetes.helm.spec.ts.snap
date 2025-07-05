@@ -407,7 +407,7 @@ exports[`generator - Kubernetes Helm MySQL and PostgreSQL microservices without 
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
@@ -1991,7 +1991,7 @@ exports[`generator - Kubernetes Helm gateway and mysql microservice should match
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
@@ -3665,7 +3665,7 @@ metadata:
 spec:
   selector:
     app: jhgate
-  type: 
+  type: LoadBalancer
   ports:
   - name: http
     port: 8080
@@ -3722,7 +3722,6 @@ exports[`generator - Kubernetes Helm gateway, mysql, psql, mongodb, mariadb micr
       "07-mariadb"
     ],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "directoryPath": "./",
@@ -4754,7 +4753,7 @@ spec:
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATA_MONGODB_URI
-          value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
+          value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017,msmongodb-mongodb-1.msmongodb-mongodb.default:27017,msmongodb-mongodb-2.msmongodb-mongodb.default:27017/msmongodb"
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -5638,7 +5637,7 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace an
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
@@ -8636,7 +8635,7 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace sh
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
@@ -9287,7 +9286,7 @@ exports[`generator - Kubernetes Helm only gateway should match files snapshot 1`
     "dockerRepositoryName": "jhipsterrepository",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": false,
+    "istio": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "jhipsternamespace",
     "kubernetesServiceType": "LoadBalancer",

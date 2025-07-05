@@ -15,7 +15,7 @@ exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL micr
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
-    "ingressDomain": "",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
@@ -1112,7 +1112,7 @@ exports[`generator - Knative Using Helm generator type gateway and ingress shoul
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
-    "ingressDomain": "example.com",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
@@ -1508,13 +1508,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - grafana.istio-system.example.com
+    - grafana.istio-system.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - grafana.istio-system.example.com
+    - grafana.istio-system.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -1523,7 +1523,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - grafana.istio-system.example.com
+  - grafana.istio-system.
   gateways:
   - grafana-observability-gateway
   http:
@@ -1554,13 +1554,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - kiali.istio-system.example.com
+    - kiali.istio-system.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - kiali.istio-system.example.com
+    - kiali.istio-system.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -1569,7 +1569,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - kiali.istio-system.example.com
+  - kiali.istio-system.
   gateways:
   - kiali-observability-gateway
   http:
@@ -1599,13 +1599,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - zipkin.istio-system.example.com
+    - zipkin.istio-system.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - zipkin.istio-system.example.com
+    - zipkin.istio-system.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -1614,7 +1614,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - zipkin.istio-system.example.com
+  - zipkin.istio-system.
   gateways:
   - zipkin-observability-gateway
   http:
@@ -1783,13 +1783,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - jhgate.default.example.com
+    - jhgate.default.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - jhgate.default.example.com
+    - jhgate.default.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -1800,7 +1800,7 @@ metadata:
     service: jhgate-gw-virtualservice
 spec:
   hosts:
-  - jhgate.default.example.com
+  - jhgate.default.
   gateways:
   - jhgate-gateway
   http:
@@ -1950,7 +1950,7 @@ exports[`generator - Knative Using Helm generator type gateway and mysql microse
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
-    "ingressDomain": "",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
@@ -3015,7 +3015,7 @@ exports[`generator - Knative Using Helm generator type gateway with istio routin
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
-    "ingressDomain": "example.com",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
@@ -3411,13 +3411,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - grafana.istio-system.example.com
+    - grafana.istio-system.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - grafana.istio-system.example.com
+    - grafana.istio-system.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -3426,7 +3426,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - grafana.istio-system.example.com
+  - grafana.istio-system.
   gateways:
   - grafana-observability-gateway
   http:
@@ -3457,13 +3457,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - kiali.istio-system.example.com
+    - kiali.istio-system.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - kiali.istio-system.example.com
+    - kiali.istio-system.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -3472,7 +3472,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - kiali.istio-system.example.com
+  - kiali.istio-system.
   gateways:
   - kiali-observability-gateway
   http:
@@ -3502,13 +3502,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - zipkin.istio-system.example.com
+    - zipkin.istio-system.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - zipkin.istio-system.example.com
+    - zipkin.istio-system.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -3517,7 +3517,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - zipkin.istio-system.example.com
+  - zipkin.istio-system.
   gateways:
   - zipkin-observability-gateway
   http:
@@ -3686,13 +3686,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - jhgate.default.example.com
+    - jhgate.default.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - jhgate.default.example.com
+    - jhgate.default.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -3703,7 +3703,7 @@ metadata:
     service: jhgate-gw-virtualservice
 spec:
   hosts:
-  - jhgate.default.example.com
+  - jhgate.default.
   gateways:
   - jhgate-gateway
   http:
@@ -3851,13 +3851,12 @@ exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mon
       "07-mariadb"
     ],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
-    "ingressDomain": "",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
@@ -5123,7 +5122,7 @@ spec:
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmongodb
             - name: SPRING_DATA_MONGODB_URI
-              value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
+              value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017,msmongodb-mongodb-1.msmongodb-mongodb.default:27017,msmongodb-mongodb-2.msmongodb-mongodb.default:27017/msmongodb"
             - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: "x-request-id,x-ot-span-context"
             - name: JAVA_OPTS
@@ -5693,7 +5692,7 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
-    "ingressDomain": "",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "monitoring": "prometheus",
@@ -8885,7 +8884,7 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "helm",
-    "ingressDomain": "",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "monitoring": "no",
@@ -9680,7 +9679,7 @@ exports[`generator - Knative Using Helm generator type only gateway should match
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipsterrepository",
     "generatorType": "helm",
-    "ingressDomain": "",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "jhipsternamespace",
     "monitoring": "no",
@@ -10528,7 +10527,7 @@ exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL micro
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
-    "ingressDomain": "",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
@@ -11547,7 +11546,7 @@ exports[`generator - Knative Using K8s generator type gateway and ingress should
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
-    "ingressDomain": "example.com",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
@@ -11616,13 +11615,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - grafana.istio-system.example.com
+    - grafana.istio-system.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - grafana.istio-system.example.com
+    - grafana.istio-system.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -11631,7 +11630,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - grafana.istio-system.example.com
+  - grafana.istio-system.
   gateways:
   - grafana-observability-gateway
   http:
@@ -11662,13 +11661,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - kiali.istio-system.example.com
+    - kiali.istio-system.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - kiali.istio-system.example.com
+    - kiali.istio-system.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -11677,7 +11676,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - kiali.istio-system.example.com
+  - kiali.istio-system.
   gateways:
   - kiali-observability-gateway
   http:
@@ -11707,13 +11706,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - zipkin.istio-system.example.com
+    - zipkin.istio-system.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - zipkin.istio-system.example.com
+    - zipkin.istio-system.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -11722,7 +11721,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - zipkin.istio-system.example.com
+  - zipkin.istio-system.
   gateways:
   - zipkin-observability-gateway
   http:
@@ -11787,13 +11786,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - jhgate.default.example.com
+    - jhgate.default.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - jhgate.default.example.com
+    - jhgate.default.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -11804,7 +11803,7 @@ metadata:
     service: jhgate-gw-virtualservice
 spec:
   hosts:
-  - jhgate.default.example.com
+  - jhgate.default.
   gateways:
   - jhgate-gateway
   http:
@@ -11992,10 +11991,10 @@ logSummary(){
     echo ""
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
-        echo "Gateway - http://jhgate.default.example.com"
-        echo "Jaeger - http://jaeger.istio-system.example.com"
-        echo "Grafana - http://grafana.istio-system.example.com"
-        echo "Kiali - http://kiali.istio-system.example.com"
+        echo "Gateway - http://jhgate.default."
+        echo "Jaeger - http://jaeger.istio-system."
+        echo "Grafana - http://grafana.istio-system."
+        echo "Kiali - http://kiali.istio-system."
         echo "#####################################################"
 }
 
@@ -12314,7 +12313,7 @@ exports[`generator - Knative Using K8s generator type gateway and mysql microser
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
-    "ingressDomain": "",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
@@ -13293,7 +13292,7 @@ exports[`generator - Knative Using K8s generator type gateway with istio routing
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
-    "ingressDomain": "example.com",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
@@ -13362,13 +13361,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - grafana.istio-system.example.com
+    - grafana.istio-system.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - grafana.istio-system.example.com
+    - grafana.istio-system.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -13377,7 +13376,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - grafana.istio-system.example.com
+  - grafana.istio-system.
   gateways:
   - grafana-observability-gateway
   http:
@@ -13408,13 +13407,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - kiali.istio-system.example.com
+    - kiali.istio-system.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - kiali.istio-system.example.com
+    - kiali.istio-system.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -13423,7 +13422,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - kiali.istio-system.example.com
+  - kiali.istio-system.
   gateways:
   - kiali-observability-gateway
   http:
@@ -13453,13 +13452,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - zipkin.istio-system.example.com
+    - zipkin.istio-system.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - zipkin.istio-system.example.com
+    - zipkin.istio-system.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -13468,7 +13467,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - zipkin.istio-system.example.com
+  - zipkin.istio-system.
   gateways:
   - zipkin-observability-gateway
   http:
@@ -13533,13 +13532,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - jhgate.default.example.com
+    - jhgate.default.
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - jhgate.default.example.com
+    - jhgate.default.
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -13550,7 +13549,7 @@ metadata:
     service: jhgate-gw-virtualservice
 spec:
   hosts:
-  - jhgate.default.example.com
+  - jhgate.default.
   gateways:
   - jhgate-gateway
   http:
@@ -13738,10 +13737,10 @@ logSummary(){
     echo ""
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
-        echo "Gateway - http://jhgate.default.example.com"
-        echo "Jaeger - http://jaeger.istio-system.example.com"
-        echo "Grafana - http://grafana.istio-system.example.com"
-        echo "Kiali - http://kiali.istio-system.example.com"
+        echo "Gateway - http://jhgate.default."
+        echo "Jaeger - http://jaeger.istio-system."
+        echo "Grafana - http://grafana.istio-system."
+        echo "Kiali - http://kiali.istio-system."
         echo "#####################################################"
 }
 
@@ -14059,13 +14058,12 @@ exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mong
       "11-mssql"
     ],
     "baseName": "workspaces",
-    "clusteredDbApps": [],
     "dbRandomPassword": "SECRET-PASSWORD",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
-    "ingressDomain": "",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "monitoring": "no",
@@ -15022,7 +15020,7 @@ metadata:
   namespace: default
 spec:
   serviceName: msmongodb-mongodb
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: msmongodb-mongodb
@@ -15225,7 +15223,7 @@ spec:
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmongodb
             - name: SPRING_DATA_MONGODB_URI
-              value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
+              value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017,msmongodb-mongodb-1.msmongodb-mongodb.default:27017,msmongodb-mongodb-2.msmongodb-mongodb.default:27017/msmongodb"
             - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
               value: "x-request-id,x-ot-span-context"
             - name: JAVA_OPTS
@@ -16286,7 +16284,7 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
-    "ingressDomain": "",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "monitoring": "prometheus",
@@ -19701,7 +19699,7 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "generatorType": "k8s",
-    "ingressDomain": "",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "monitoring": "no",
@@ -20424,7 +20422,7 @@ exports[`generator - Knative Using K8s generator type only gateway should match 
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipsterrepository",
     "generatorType": "k8s",
-    "ingressDomain": "",
+    "ingressDomain": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "jhipsternamespace",
     "monitoring": "no",
