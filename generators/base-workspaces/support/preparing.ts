@@ -21,10 +21,10 @@ import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../
 import { convertSecretToBase64 } from '../../../lib/utils/index.js';
 const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { PROMETHEUS, ELK } = monitoringTypes;
-import type { Deployment as BaseDeployment } from '../types.js';
+import type { Deployment as BaseDeployment, WorkspacesApplication } from '../types.js';
 
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
-export const loadDerivedServerAndPlatformProperties = ({ application }: { application: BaseDeployment }) => {
+export const loadDerivedServerAndPlatformProperties = ({ application }: { application: BaseDeployment | WorkspacesApplication }) => {
   if (!application.serviceDiscoveryType) {
     application.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
   }

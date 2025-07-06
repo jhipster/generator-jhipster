@@ -30,7 +30,10 @@ import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index
 import { loadDeploymentConfig } from '../base-workspaces/internal/deployments.ts';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/docker-dependencies.js';
 import { checkDocker } from '../docker/support/index.js';
-import { loadDerivedPlatformConfig, loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/preparing.js';
+import {
+  loadDerivedPlatformConfig,
+  loadDerivedServerAndPlatformProperties
+} from '../base-workspaces/support/preparing.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import {

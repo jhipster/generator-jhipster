@@ -18,7 +18,7 @@
  */
 import { derivedPlatformProperties as baseDerivedPlatformProperties } from '../../base-workspaces/support/preparing.js';
 
-export function derivedPlatformProperties(this, { generator = this, deployment, applications }) {
+export function derivedPlatformProperties(this, { generator, deployment, applications }) {
   baseDerivedPlatformProperties({ generator, deployment, applications });
   deployment.useKeycloak = deployment.usesOauth2 && deployment.usesIngress;
 }
