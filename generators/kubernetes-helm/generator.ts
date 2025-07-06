@@ -143,7 +143,7 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
         }
       },
       async loadBaseDeployment({ deployment }) {
-        loadDerivedPlatformConfig({ application: this });
+        loadDerivedPlatformConfig({ application: deployment });
       },
       derivedKubernetesPlatformProperties,
     });

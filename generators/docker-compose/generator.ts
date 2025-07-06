@@ -30,7 +30,7 @@ import type {
   Workspaces as BaseWorkspaces,
   WorkspacesApplication as BaseWorkspacesApplication,
 } from '../base-workspaces/index.js';
-import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
+import { deploymentOptions, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
 import { createFaker } from '../base-application/support/index.ts';
@@ -46,8 +46,7 @@ import { loadDeploymentConfig, loadWorkspacesConfig } from '../base-workspaces/s
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files.js';
 
-const { PROMETHEUS } = monitoringTypes;
-const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
+const { NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { Options: DeploymentOptions } = deploymentOptions;
 
 export default class DockerComposeGenerator extends BaseWorkspacesGenerator<BaseDeployment, BaseWorkspaces, BaseWorkspacesApplication> {
@@ -229,7 +228,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
             yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true');
           }
 
-          if (deployment.serviceDiscoveryTypeEureka) {
+          if (deployment.serviceDiscoveryEureka) {
             // Set the JHipster Registry password
             yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${deployment.adminPassword}`);
           }
@@ -306,4 +305,93 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
             delete redisConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
           }
+          // Expose authenticationType
+          deployment.authenticationType = appConfig.authenticationType;
+
+          // Dump the file
+          let yamlString = stringifyYaml(parentConfiguration, { indent: 2, lineWidth: 0 });
+
+          // Add extra indentation for each lines
+          const yamlArray = yamlString.split('\n');
+          for (let j = 0; j < yamlArray.length; j++) {
+            yamlArray[j] = `  ${yamlArray[j]}`;
+          }
+          yamlString = yamlArray.join('\n');
+          return yamlString;
+        });
+      },
+    });
+  }
+
+  get [BaseWorkspacesGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
+  }
+
+  get writing() {
+    return this.asWritingTaskGroup({
+      cleanupOldFilesTask,
+      writeFiles,
+    });
+  }
+
+  get [BaseWorkspacesGenerator.WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get end() {
+    return this.asAnyTaskGroup({
+      end({ workspaces, applications }) {
+        this.checkApplicationsDockerImages({ workspaces, applications });
+
+        this.log.verboseInfo(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
+        const uiApplications = applications.filter(
+          app => (app.applicationTypeGateway || app.applicationTypeMonolith) && app.clientFrameworkAny,
+        );
+        if (uiApplications.length > 0) {
+          this.log.log('\nYour applications will be accessible on these URLs:');
+          for (const application of uiApplications) {
+            this.log.verboseInfo(`\t- ${application.baseName}: http://localhost:${application.composePort}`);
+          }
+          this.log.log('\n');
+        }
+      },
+    });
+  }
+
+  get [BaseWorkspacesGenerator.END]() {
+    return this.delegateTasksToBlueprint(() => this.end);
+  }
+
+  checkApplicationsDockerImages({ workspaces, applications }) {
+    this.log.log('\nChecking Docker images in applications directories...');
+
+    let imagePath = '';
+    let runCommand = '';
+    let hasWarning = false;
+    let warningMessage = 'To generate the missing Docker image(s), please run:\n';
+    applications.forEach(application => {
+      if (application.buildToolGradle) {
+        imagePath = this.destinationPath(workspaces.directoryPath, application.appFolder, 'build/jib-cache');
+        runCommand = `./gradlew bootJar -Pprod jibDockerBuild${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''}`;
+      } else if (application.buildToolMaven) {
+        imagePath = this.destinationPath(workspaces.directoryPath, application.appFolder, '/target/jib-cache');
+        runCommand = `./mvnw -ntp -Pprod verify jib:dockerBuild${process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''}`;
+      }
+      if (!existsSync(imagePath)) {
+        hasWarning = true;
+        warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(workspaces.directoryPath, application.appFolder)}\n`;
+      }
+    });
+    if (hasWarning) {
+      this.log.warn('Docker Compose configuration generated, but no Jib cache found');
+      this.log.warn('If you forgot to generate the Docker image for this application, please run:');
+      this.log.log(chalk.red(warningMessage));
+    } else {
+      this.log.verboseInfo(`${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
+    }
+  }
+
+  override get jhipsterConfigWithDefaults() {
+    return defaults({}, this.config.getAll(), DeploymentOptions.defaults(this.jhipsterConfig.deploymentType));
+  }
 }

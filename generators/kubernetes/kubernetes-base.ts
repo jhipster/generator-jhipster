@@ -39,8 +39,9 @@ import {
 import { applicationTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
 import { derivedPlatformProperties } from './support/preparing.js';
 import { defaultKubernetesConfig } from './kubernetes-constants.js';
+import type { BaseKubernetesGenerator } from './generator.js';
 
-const { GATEWAY, MONOLITH } = applicationTypes;
+const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
 const { GeneratorTypes, IngressTypes, ServiceTypes } = kubernetesPlatformTypes;
 
 const { INGRESS } = ServiceTypes;

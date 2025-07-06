@@ -1,6 +1,5 @@
 import { mutateData, pickFields } from '../../../lib/utils/index.ts';
-import type { WorkspacesApplication } from '../types.js';
-
+import type { Deployment } from '../types.d.ts';
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -23,7 +22,7 @@ import type { WorkspacesApplication } from '../types.js';
  * @param {Object} config - config to load config from
  * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
  */
-export const loadPlatformConfig = ({ config, application }: { config: any; application: WorkspacesApplication }) => {
+export const loadPlatformConfig = ({ config, application }: { config: any; application: Deployment }) => {
   mutateData(application, pickFields(config, ['serviceDiscoveryType', 'monitoring']));
 };
 

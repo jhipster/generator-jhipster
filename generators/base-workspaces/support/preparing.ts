@@ -19,12 +19,12 @@
 import chalk from 'chalk';
 import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../../lib/jhipster/index.js';
 import { convertSecretToBase64 } from '../../../lib/utils/index.js';
-import type { WorkspacesApplication } from '../types.js';
 const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { PROMETHEUS, ELK } = monitoringTypes;
+import type { Deployment as BaseDeployment } from '../types.js';
 
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
-export const loadDerivedServerAndPlatformProperties = ({ application }: { application: any }) => {
+export const loadDerivedServerAndPlatformProperties = ({ application }: { application: BaseDeployment }) => {
   if (!application.serviceDiscoveryType) {
     application.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
   }
@@ -33,7 +33,7 @@ export const loadDerivedServerAndPlatformProperties = ({ application }: { applic
   application.serviceDiscoveryEureka = application.serviceDiscoveryType === EUREKA;
 };
 
-export const loadDerivedPlatformConfig = ({ application }: { application: WorkspacesApplication }) => {
+export const loadDerivedPlatformConfig = ({ application }: { application: BaseDeployment }) => {
   application.monitoringElk = application.monitoring === ELK;
   application.monitoringPrometheus = application.monitoring === PROMETHEUS;
   loadDerivedServerAndPlatformProperties({ application });

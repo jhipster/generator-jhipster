@@ -54,7 +54,7 @@ import {
   askForPersistentStorage,
   askForStorageClassName,
 } from './prompts.js';
-import { applicationFiles, writeDeploymentFiles } from './files.ts';
+import { applicationFiles, writeDeploymentFiles } from './files.js';
 
 const { MAVEN } = buildToolTypes;
 
@@ -198,6 +198,9 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
       loadFromYoRc,
+      async loadDockerDependenciesTask({ deployment }) {
+        await loadDockerDependenciesTask.call(this, { context: deployment });
+      },
       loadDeploymentConfig,
     });
   }
@@ -216,7 +219,7 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
         }
       },
       async loadBaseDeployment({ deployment }) {
-        loadDerivedPlatformConfig({ application: this });
+        loadDerivedPlatformConfig({ application: deployment });
       },
       derivedKubernetesPlatformProperties,
     });
