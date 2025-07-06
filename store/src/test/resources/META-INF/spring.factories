@@ -1,3 +1,0 @@
-org.springframework.test.context.ContextCustomizerFactory = \
-    com.okta.developer.store.config.\
-    SqlTestContainersSpringContextCustomizerFactory

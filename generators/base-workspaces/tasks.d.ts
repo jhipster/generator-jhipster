@@ -40,12 +40,12 @@ export type Tasks<
 > = Merge<
   BaseTaskTypes<S>,
   {
-    WritingTaskParam: TaskParamWithControl & TaskParamWithApplications<D, W, A>;
     PromptingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, W, A>;
     ConfiguringWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, W, A>;
     LoadingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, W, A>;
     PreparingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, W, A>;
     DefaultTaskParam: TaskTypes['DefaultTaskParam'] & TaskParamWithApplications<D, W, A>;
+    WritingTaskParam: TaskParamWithControl & TaskParamWithApplications<D, W, A>;
     PostWritingTaskParam: TaskParamWithSource<S> & TaskParamWithApplications<D, W, A>;
     InstallTaskParam: TaskTypes['InstallTaskParam'] & TaskParamWithApplications<D, W, A>;
     PostInstallTaskParam: TaskTypes['PostInstallTaskParam'] & TaskParamWithApplications<D, W, A>;

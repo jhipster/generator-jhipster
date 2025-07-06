@@ -140,7 +140,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
-      async loadBaseDeployment({ deployment }) {
+      async prepareBaseDeployment({ deployment }) {
         loadDerivedPlatformConfig({ application: deployment });
       },
       derivedPlatformProperties,
@@ -224,12 +224,12 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
             });
           }
 
-          if (appConfig.applicationTypeMonolith && deployment.monitoring === PROMETHEUS) {
+          if (appConfig.applicationTypeMonolith && deployment.monitoringPrometheus) {
             yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=false');
             yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true');
           }
 
-          if (deployment.serviceDiscoveryType === EUREKA) {
+          if (deployment.serviceDiscoveryTypeEureka) {
             // Set the JHipster Registry password
             yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${deployment.adminPassword}`);
           }
