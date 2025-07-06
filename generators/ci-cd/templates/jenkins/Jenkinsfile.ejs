@@ -82,7 +82,7 @@ node {
 <%= indent %>           sh "npm install"
 <%= indent %>           sh "npm test"
         <%_ } else { _%>
-<%= indent %>            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run test'"
+<%= indent %>            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'"
         <%_ } _%>
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
