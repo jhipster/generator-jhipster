@@ -77,7 +77,6 @@ export const applicationKubernetesFiles = (suffix: string) =>
       },
     ],
   });
-
 export const applicationHelmFiles = (suffix: string) =>
   asWriteFilesSection<any>({
     common: [
@@ -100,11 +99,11 @@ export const applicationHelmFiles = (suffix: string) =>
     ],
   });
 
-export const deploymentKubernetesFiles = (suffix = '') =>
+export const deploymentKubernetesFiles = (suffix: string) =>
   asWriteFilesSection<any>({
     namespace: [
       {
-        condition: data => data.kubernetesNamespace !== 'default',
+        condition: data => !data.kubernetesNamespaceDefault,
         templates: ['namespace.yml'],
       },
     ],
@@ -161,7 +160,7 @@ export const deploymentKubernetesFiles = (suffix = '') =>
     ],
   });
 
-export const deploymentHelmFiles = (suffix = '') =>
+export const deploymentHelmFiles = (suffix: string) =>
   asWriteFilesSection<any>({
     common: [
       {

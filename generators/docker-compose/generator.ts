@@ -30,24 +30,23 @@ import type {
   Workspaces as BaseWorkspaces,
   WorkspacesApplication as BaseWorkspacesApplication,
 } from '../base-workspaces/index.js';
-
-import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
+import { deploymentOptions, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
-import { convertSecretToBase64, createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
+import { createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
 import { createFaker } from '../base-application/support/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
-import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
-import { loadDerivedPlatformConfig, loadPlatformConfig } from '../base-workspaces/support/index.js';
+import { loadDockerDependenciesTask } from '../base-workspaces/internal/docker-dependencies.js';
 import {
   askForClustersModeWorkspace,
   askForMonitoring,
   askForServiceDiscoveryWorkspace,
 } from '../base-workspaces/internal/docker-prompts.js';
+import { derivedPlatformProperties, loadDerivedPlatformConfig } from '../base-workspaces/support/preparing.js';
+import { loadDeploymentConfig, loadWorkspacesConfig } from '../base-workspaces/support/loading.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files.js';
 
-const { PROMETHEUS } = monitoringTypes;
-const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
+const { NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { Options: DeploymentOptions } = deploymentOptions;
 
 export default class DockerComposeGenerator extends BaseWorkspacesGenerator<BaseDeployment, BaseWorkspaces, BaseWorkspacesApplication> {
@@ -87,8 +86,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadWorkspacesConfig() {
-        this.loadWorkspacesConfig();
+      async loadWorkspacesConfig() {
+        loadWorkspacesConfig({ context: this, workspaces: this });
       },
     });
   }
@@ -128,12 +127,9 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     return this.asLoadingWorkspacesTaskGroup({
       async loadBaseDeployment({ deployment }) {
         deployment.jwtSecretKey = this.jhipsterConfig.jwtSecretKey;
-
         await loadDockerDependenciesTask.call(this, { context: deployment });
       },
-      loadPlatformConfig({ deployment }) {
-        this.loadDeploymentConfig({ deployment });
-      },
+      loadDeploymentConfig,
     });
   }
 
@@ -143,9 +139,10 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
-      prepareDeployment({ deployment, applications }) {
-        this.prepareDeploymentDerivedProperties({ deployment, applications });
+      async prepareBaseDeployment({ deployment }) {
+        loadDerivedPlatformConfig({ application: deployment });
       },
+      derivedPlatformProperties,
     });
   }
 
@@ -226,12 +223,12 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
             });
           }
 
-          if (appConfig.applicationTypeMonolith && deployment.monitoring === PROMETHEUS) {
+          if (appConfig.applicationTypeMonolith && deployment.monitoringPrometheus) {
             yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=false');
             yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true');
           }
 
-          if (deployment.serviceDiscoveryType === EUREKA) {
+          if (deployment.serviceDiscoveryEureka) {
             // Set the JHipster Registry password
             yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${deployment.adminPassword}`);
           }
@@ -365,7 +362,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     return this.delegateTasksToBlueprint(() => this.end);
   }
 
-  checkApplicationsDockerImages({ workspaces, applications }: { workspaces: any; applications: any[] }) {
+  checkApplicationsDockerImages({ workspaces, applications }) {
     this.log.log('\nChecking Docker images in applications directories...');
 
     let imagePath = '';
@@ -396,30 +393,5 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   override get jhipsterConfigWithDefaults() {
     return defaults({}, this.config.getAll(), DeploymentOptions.defaults(this.jhipsterConfig.deploymentType));
-  }
-
-  loadDeploymentConfig({ deployment }: { deployment: BaseDeployment }) {
-    const config = this.jhipsterConfigWithDefaults;
-    deployment.clusteredDbApps = config.clusteredDbApps;
-    deployment.adminPassword = config.adminPassword;
-    deployment.jwtSecretKey = config.jwtSecretKey;
-    loadPlatformConfig({ config, application: deployment });
-    loadDerivedPlatformConfig({ application: deployment });
-  }
-
-  prepareDeploymentDerivedProperties({ deployment, applications }: { deployment: BaseDeployment; applications: any[] }) {
-    if (deployment.adminPassword) {
-      deployment.adminPasswordBase64 = convertSecretToBase64(deployment.adminPassword);
-    }
-    deployment.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
-    deployment.useKafka = applications.some(appConfig => appConfig.messageBrokerKafka);
-    deployment.usePulsar = applications.some(appConfig => appConfig.messageBrokerPulsar);
-    deployment.useMemcached = applications.some(appConfig => appConfig.cacheProviderMemcached);
-    deployment.useRedis = applications.some(appConfig => appConfig.cacheProviderRedis);
-    deployment.includesApplicationTypeGateway = applications.some(appConfig => appConfig.applicationTypeGateway);
-    deployment.entryPort = 8080;
-
-    deployment.appConfigs = applications;
-    deployment.applications = applications;
   }
 }

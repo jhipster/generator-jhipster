@@ -18,8 +18,6 @@
  */
 
 import BaseGenerator from '../base/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
-import { normalizePathEnd } from '../../lib/utils/index.js';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
 import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
@@ -89,6 +87,13 @@ export default abstract class BaseWorkspacesGenerator<
     return this.getContextData(CONTEXT_DATA_DEPLOYMENT_KEY, { factory: () => ({}) });
   }
 
+  protected resolveApplicationFolders({
+    directoryPath = this.directoryPath,
+    appsFolders = this.appsFolders ?? [],
+  }: { directoryPath?: string; appsFolders?: string[] } = {}) {
+    return Object.fromEntries(appsFolders.map(appFolder => [appFolder, this.destinationPath(directoryPath ?? '.', appFolder)]));
+  }
+
   get #applications() {
     return this.getContextData(CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, {
       factory: () =>
@@ -119,32 +124,6 @@ export default abstract class BaseWorkspacesGenerator<
 
   get preparingWorkspaces() {
     return {};
-  }
-
-  protected loadWorkspacesConfig(opts?) {
-    const { context = this } = opts ?? {};
-    context.appsFolders = this.jhipsterConfig.appsFolders;
-    context.directoryPath = this.jhipsterConfig.directoryPath ?? './';
-  }
-
-  protected configureWorkspacesConfig() {
-    this.jhipsterConfig.directoryPath = normalizePathEnd(this.jhipsterConfig.directoryPath ?? './');
-  }
-
-  private resolveApplicationFolders({
-    directoryPath = this.directoryPath,
-    appsFolders = this.appsFolders ?? [],
-  }: { directoryPath?: string; appsFolders?: string[] } = {}) {
-    return Object.fromEntries(appsFolders.map(appFolder => [appFolder, this.destinationPath(directoryPath ?? '.', appFolder)]));
-  }
-
-  async bootstrapApplications() {
-    const resolvedApplicationFolders = this.resolveApplicationFolders();
-    for (const [_appFolder, resolvedFolder] of Object.entries(resolvedApplicationFolders)) {
-      await this.composeWithJHipster(GENERATOR_BOOTSTRAP_APPLICATION, {
-        generatorOptions: { destinationRoot: resolvedFolder, reproducible: true },
-      });
-    }
   }
 
   getArgsForPriority(priorityName: string): any {

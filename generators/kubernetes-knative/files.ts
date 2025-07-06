@@ -59,7 +59,6 @@ export const applicationKubernetesFiles = (suffix = '') =>
       },
     ],
   });
-
 export const applicationHelmFiles = (suffix = '') =>
   asWriteFilesSection<any>({
     chart: [
@@ -85,7 +84,6 @@ export const applicationHelmFiles = (suffix = '') =>
       },
     ],
   });
-
 export const applicationKnativeFiles = (suffix = '') =>
   asWriteFilesSection<any>({
     deployment: [
@@ -121,7 +119,7 @@ export const deploymentKubernetesFiles = (suffix = '') =>
   asWriteFilesSection<any>({
     namespace: [
       {
-        condition: generator => generator.kubernetesNamespace !== 'default',
+        condition: generator => !generator.kubernetesNamespaceDefault,
         templates: [{ sourceFile: 'namespace.yml.ejs', destinationFile: 'namespace.yml' }],
       },
     ],
@@ -211,7 +209,6 @@ export const deploymentKubernetesFiles = (suffix = '') =>
       },
     ],
   });
-
 export const deploymentHelmFiles = (suffix = '') =>
   asWriteFilesSection<any>({
     chart: [
@@ -233,7 +230,6 @@ export const deploymentHelmFiles = (suffix = '') =>
       },
     ],
   });
-
 export const deploymentKnativeFiles = (suffix = '') =>
   asWriteFilesSection<any>({
     common: [

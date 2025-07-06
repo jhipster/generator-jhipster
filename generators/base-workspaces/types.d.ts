@@ -81,4 +81,8 @@ export type Deployment = DeploymentConfig & {
   monitoring?: string;
   monitoringElk?: boolean;
   monitoringPrometheus?: boolean;
+
+  serviceDiscoveryEureka: boolean;
+  serviceDiscoveryAny: boolean;
+  serviceDiscoveryConsul: boolean;
 };

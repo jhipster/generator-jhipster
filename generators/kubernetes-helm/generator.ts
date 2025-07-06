@@ -54,7 +54,7 @@ import {
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
 import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
 import { checkDocker } from '../docker/support/index.js';
-import { loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/index.js';
+import { loadDerivedPlatformConfig, loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/preparing.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { applicationHelmFiles, applicationKubernetesFiles, deploymentHelmFiles, deploymentKubernetesFiles } from './files.ts';
@@ -141,6 +141,9 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
           loadDerivedAppConfig({ application: app });
           loadDerivedServerAndPlatformProperties({ application: app });
         }
+      },
+      async loadBaseDeployment({ deployment }) {
+        loadDerivedPlatformConfig({ application: deployment });
       },
       derivedKubernetesPlatformProperties,
     });

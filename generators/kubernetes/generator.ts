@@ -27,9 +27,13 @@ import { buildToolTypes } from '../../lib/jhipster/index.js';
 
 import { checkImages, configureImageNames, generateJwtSecret, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
-import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
+import { loadDeploymentConfig } from '../base-workspaces/internal/deployments.ts';
+import { loadDockerDependenciesTask } from '../base-workspaces/internal/docker-dependencies.js';
 import { checkDocker } from '../docker/support/index.js';
-import { loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/index.js';
+import {
+  loadDerivedPlatformConfig,
+  loadDerivedServerAndPlatformProperties
+} from '../base-workspaces/support/preparing.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import {
@@ -53,7 +57,7 @@ import {
   askForPersistentStorage,
   askForStorageClassName,
 } from './prompts.js';
-import { applicationFiles, writeDeploymentFiles } from './files.ts';
+import { applicationFiles, writeDeploymentFiles } from './files.js';
 
 const { MAVEN } = buildToolTypes;
 
@@ -200,12 +204,6 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
       async loadDockerDependenciesTask({ deployment }) {
         await loadDockerDependenciesTask.call(this, { context: deployment });
       },
-      loadSharedConfig() {
-        for (const app of this.appConfigs) {
-          loadDerivedAppConfig({ application: app });
-          loadDerivedServerAndPlatformProperties({ application: app });
-        }
-      },
       loadDeploymentConfig,
     });
   }
@@ -217,6 +215,15 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
       configureImageNames,
+      loadSharedConfig() {
+        for (const app of this.appConfigs) {
+          loadDerivedAppConfig({ application: app });
+          loadDerivedServerAndPlatformProperties({ application: app });
+        }
+      },
+      async loadBaseDeployment({ deployment }) {
+        loadDerivedPlatformConfig({ application: deployment });
+      },
       derivedKubernetesPlatformProperties,
     });
   }

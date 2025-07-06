@@ -16,4 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './constants.js';
+import { derivedPlatformProperties as baseDerivedPlatformProperties } from '../../base-workspaces/support/preparing.js';
+
+export function derivedPlatformProperties(this, { generator, deployment, applications }) {
+  baseDerivedPlatformProperties({ generator, deployment, applications });
+  deployment.useKeycloak = deployment.usesOauth2 && deployment.usesIngress;
+}
