@@ -41,7 +41,7 @@ const { GATLING, CUCUMBER } = testFrameworkTypes;
 export const askForServerSideOpts = asPromptingTask(async function (this: SpringBootGenerator, { control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
-  const { applicationType, authenticationType, reactive } = this.jhipsterConfigWithDefaults;
+  const { applicationType, authenticationType, reactive, syncUserWithIdp } = this.jhipsterConfigWithDefaults;
 
   await this.prompt(
     [
@@ -80,10 +80,12 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
             value: NEO4J,
             name: '[BETA] Neo4j',
           });
-          opts.push({
-            value: NO_DATABASE,
-            name: 'No database',
-          });
+          if (!syncUserWithIdp) {
+            opts.push({
+              value: NO_DATABASE,
+              name: 'No database',
+            });
+          }
           return opts;
         },
         default: this.jhipsterConfigWithDefaults.databaseType,
