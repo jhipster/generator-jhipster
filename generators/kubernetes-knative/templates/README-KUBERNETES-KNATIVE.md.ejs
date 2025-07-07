@@ -8,11 +8,11 @@ in the cluster. Follow [this link](https://knative.dev/docs/install/) for instru
 * You will need to push your image(s) to a registry. If you have not done so, use the following commands to tag and push the images:
 
 ```
-<%_ for (let i = 0; i < appsFolders.length; i++) { _%>
-  <%_ if (appConfigs[i].baseName.toLowerCase() !== appConfigs[i].targetImageName) { _%>
-    $ docker image tag <%= appConfigs[i].baseName.toLowerCase() %> <%= appConfigs[i].targetImageName %>
+<%_ for (const app of appConfigs) { _%>
+  <%_ if (app.baseName.toLowerCase() !== app.targetImageName) { _%>
+    $ docker image tag <%= app.baseName.toLowerCase() %> <%= app.targetImageName %>
   <%_ } _%>
-$ <%= dockerPushCommand %> <%= appConfigs[i].targetImageName %>
+$ <%= dockerPushCommand %> <%= app.targetImageName %>
 <%_ } _%>
 ```
 * This generator uses k8s generator for most of the part, except the core microservices apps that are (k)native.
