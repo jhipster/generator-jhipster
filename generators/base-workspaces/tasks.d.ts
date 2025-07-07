@@ -20,35 +20,31 @@ import type { Merge } from 'type-fest';
 import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource, TaskTypes } from '../base/tasks.js';
 import type { Application as BaseSimpleApplicationApplication } from '../base-simple-application/types.d.ts';
 import type { Source as BaseSource } from '../base/types.d.ts';
-import type { Workspaces } from './types.js';
 
 export type TaskParamWithApplications<
   D,
-  W extends Workspaces = Workspaces,
   A extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication,
 > = TaskParamWithControl & {
   applications: A[];
   deployment: D;
-  workspaces: W;
 };
 
 export type Tasks<
   D = any,
-  W extends Workspaces = Workspaces,
   S extends BaseSource = BaseSource,
   A extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication,
 > = Merge<
   BaseTaskTypes<S>,
   {
-    WritingTaskParam: TaskParamWithControl & TaskParamWithApplications<D, W, A>;
-    PromptingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, W, A>;
-    ConfiguringWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, W, A>;
-    LoadingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, W, A>;
-    PreparingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, W, A>;
-    DefaultTaskParam: TaskTypes['DefaultTaskParam'] & TaskParamWithApplications<D, W, A>;
-    PostWritingTaskParam: TaskParamWithSource<S> & TaskParamWithApplications<D, W, A>;
-    InstallTaskParam: TaskTypes['InstallTaskParam'] & TaskParamWithApplications<D, W, A>;
-    PostInstallTaskParam: TaskTypes['PostInstallTaskParam'] & TaskParamWithApplications<D, W, A>;
-    EndTaskParam: TaskTypes['EndTaskParam'] & TaskParamWithApplications<D, W, A>;
+    PromptingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, A>;
+    ConfiguringWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, A>;
+    LoadingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, A>;
+    PreparingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, A>;
+    DefaultTaskParam: TaskTypes['DefaultTaskParam'] & TaskParamWithApplications<D, A>;
+    WritingTaskParam: TaskParamWithControl & TaskParamWithApplications<D, A>;
+    PostWritingTaskParam: TaskParamWithSource<S> & TaskParamWithApplications<D, A>;
+    InstallTaskParam: TaskTypes['InstallTaskParam'] & TaskParamWithApplications<D, A>;
+    PostInstallTaskParam: TaskTypes['PostInstallTaskParam'] & TaskParamWithApplications<D, A>;
+    EndTaskParam: TaskTypes['EndTaskParam'] & TaskParamWithApplications<D, A>;
   }
 >;

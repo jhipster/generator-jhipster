@@ -28,7 +28,6 @@ import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/index.js';
 import type {
   Deployment as BaseDeployment,
-  Workspaces as BaseWorkspaces,
   Config as BaseWorkspacesConfig,
   Features as BaseWorkspacesFeatures,
   Options as BaseWorkspacesOptions,
@@ -55,13 +54,12 @@ const {
  */
 export default abstract class BaseWorkspacesGenerator<
   Deployment extends BaseDeployment = BaseDeployment,
-  Workspaces extends BaseWorkspaces = BaseWorkspaces,
   Application extends SimpleApplication = WorkspacesApplication,
   Config extends BaseWorkspacesConfig = BaseWorkspacesConfig,
   Options extends BaseWorkspacesOptions = BaseWorkspacesOptions,
   Source extends BaseWorkspacesSource = BaseWorkspacesSource,
   Features extends BaseWorkspacesFeatures = BaseWorkspacesFeatures,
-  Tasks extends WorkspacesTasks<Deployment, Workspaces, Source, Application> = WorkspacesTasks<Deployment, Workspaces, Source, Application>,
+  Tasks extends WorkspacesTasks<Deployment, Source, Application> = WorkspacesTasks<Deployment, Source, Application>,
 > extends BaseGenerator<Config, Options, Source, Features, Tasks> {
   static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 
@@ -114,6 +112,10 @@ export default abstract class BaseWorkspacesGenerator<
   }
 
   get configuringWorkspaces() {
+    return {};
+  }
+
+  get loadingWorkspaces() {
     return {};
   }
 
@@ -218,7 +220,6 @@ export default abstract class BaseWorkspacesGenerator<
 
 export class CommandBaseWorkspacesGenerator<Command extends ParseableCommand, AdditionalOptions = unknown> extends BaseWorkspacesGenerator<
   BaseDeployment,
-  BaseWorkspaces,
   WorkspacesApplication,
   BaseWorkspacesConfig & ExportStoragePropertiesFromCommand<Command>,
   BaseWorkspacesOptions & ExportGeneratorOptionsFromCommand<Command> & AdditionalOptions
