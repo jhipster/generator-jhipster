@@ -2,29 +2,6 @@
 
 exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "02-mysql",
-      "03-psql"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "helm",
-    "ingressDomain": "",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "02-mysql/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -55,7 +32,29 @@ exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL micr
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "02-mysql",
+      "03-psql"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "helm",
+    "ingressDomain": "",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -92,7 +91,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/Chart.yaml": {
+  "kubernetes-knative/csvc-knative/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -114,18 +113,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/requirements.yml": {
+  "kubernetes-knative/csvc-knative/requirements.yml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/application-configmap.yml": {
+  "kubernetes-knative/csvc-knative/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -146,7 +145,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul-config-loader.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -183,7 +182,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -411,7 +410,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/grafana-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -457,7 +456,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/kiali-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -502,7 +501,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/zipkin-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -548,11 +547,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/values.yml": {
+  "kubernetes-knative/csvc-knative/values.yml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "helm-knative-apply.sh": {
+  "kubernetes-knative/helm-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -598,7 +597,7 @@ helm install --name mspsql  ./mspsql-\${suffix} --replace --namespace default
 ",
     "stateCleared": "modified",
   },
-  "helm-knative-upgrade.sh": {
+  "kubernetes-knative/helm-knative-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -615,7 +614,7 @@ helm upgrade --install mspsql ./mspsql-\${suffix} --namespace default
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/Chart.yaml": {
+  "kubernetes-knative/msmysql-knative/Chart.yaml": {
     "contents": "name: msmysql
 version: 1.0.0
 appVersion: 1.0.0
@@ -641,7 +640,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/requirements.yml": {
+  "kubernetes-knative/msmysql-knative/requirements.yml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -650,7 +649,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/msmysql-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -665,7 +664,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-destination-rule.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -696,7 +695,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-service.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -772,7 +771,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-virtual-service.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -800,7 +799,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/values.yml": {
+  "kubernetes-knative/msmysql-knative/values.yml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: msmysql
@@ -813,7 +812,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/Chart.yaml": {
+  "kubernetes-knative/mspsql-knative/Chart.yaml": {
     "contents": "name: mspsql
 version: 1.0.0
 appVersion: 1.0.0
@@ -839,7 +838,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/requirements.yml": {
+  "kubernetes-knative/mspsql-knative/requirements.yml": {
     "contents": "dependencies:
   - name: postgresql
     version: ^6.5.3
@@ -848,7 +847,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/mspsql-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 postgresql customisation
@@ -863,7 +862,7 @@ postgresql customisation
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/templates/mspsql-destination-rule.yml": {
+  "kubernetes-knative/mspsql-knative/templates/mspsql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -894,7 +893,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/templates/mspsql-elasticsearch.yml": {
+  "kubernetes-knative/mspsql-knative/templates/mspsql-elasticsearch.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -968,7 +967,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/templates/mspsql-service.yml": {
+  "kubernetes-knative/mspsql-knative/templates/mspsql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -1053,7 +1052,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/templates/mspsql-virtual-service.yml": {
+  "kubernetes-knative/mspsql-knative/templates/mspsql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -1081,7 +1080,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/values.yml": {
+  "kubernetes-knative/mspsql-knative/values.yml": {
     "contents": "postgresql:
   enabled: true
   postgresqlUsername: mspsql
@@ -1100,28 +1099,6 @@ spec:
 
 exports[`generator - Knative Using Helm generator type gateway and ingress should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "01-gateway"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "helm",
-    "ingressDomain": "example.com",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "01-gateway/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -1136,7 +1113,28 @@ exports[`generator - Knative Using Helm generator type gateway and ingress shoul
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "01-gateway"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "helm",
+    "ingressDomain": "example.com",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -1171,7 +1169,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/Chart.yaml": {
+  "kubernetes-knative/csvc-knative/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -1193,18 +1191,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/requirements.yml": {
+  "kubernetes-knative/csvc-knative/requirements.yml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/application-configmap.yml": {
+  "kubernetes-knative/csvc-knative/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -1225,7 +1223,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul-config-loader.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1262,7 +1260,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -1490,7 +1488,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/grafana-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -1536,7 +1534,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/kiali-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -1581,7 +1579,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/zipkin-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -1627,11 +1625,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/values.yml": {
+  "kubernetes-knative/csvc-knative/values.yml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "helm-knative-apply.sh": {
+  "kubernetes-knative/helm-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -1666,7 +1664,7 @@ helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace default
 ",
     "stateCleared": "modified",
   },
-  "helm-knative-upgrade.sh": {
+  "kubernetes-knative/helm-knative-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -1681,7 +1679,7 @@ helm upgrade --install jhgate ./jhgate-\${suffix} --namespace default
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/Chart.yaml": {
+  "kubernetes-knative/jhgate-knative/Chart.yaml": {
     "contents": "name: jhgate
 version: 1.0.0
 appVersion: 1.0.0
@@ -1707,7 +1705,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/requirements.yml": {
+  "kubernetes-knative/jhgate-knative/requirements.yml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -1716,7 +1714,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/jhgate-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -1731,7 +1729,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-destination-rule.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -1762,7 +1760,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-gateway.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
 # using certificates and prefer that for production use
@@ -1815,7 +1813,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-service.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -1891,7 +1889,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-virtual-service.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -1919,7 +1917,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/values.yml": {
+  "kubernetes-knative/jhgate-knative/values.yml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: jhgate
@@ -1937,29 +1935,6 @@ spec:
 
 exports[`generator - Knative Using Helm generator type gateway and mysql microservice should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "01-gateway",
-      "02-mysql"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "helm",
-    "ingressDomain": "",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "01-gateway/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -1989,7 +1964,29 @@ exports[`generator - Knative Using Helm generator type gateway and mysql microse
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "01-gateway",
+      "02-mysql"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "helm",
+    "ingressDomain": "",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -2026,7 +2023,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/Chart.yaml": {
+  "kubernetes-knative/csvc-knative/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -2048,18 +2045,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/requirements.yml": {
+  "kubernetes-knative/csvc-knative/requirements.yml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/application-configmap.yml": {
+  "kubernetes-knative/csvc-knative/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -2080,7 +2077,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul-config-loader.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -2117,7 +2114,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -2345,7 +2342,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/grafana-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -2391,7 +2388,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/kiali-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -2436,7 +2433,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/zipkin-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -2482,11 +2479,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/values.yml": {
+  "kubernetes-knative/csvc-knative/values.yml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "helm-knative-apply.sh": {
+  "kubernetes-knative/helm-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -2532,7 +2529,7 @@ helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace default
 ",
     "stateCleared": "modified",
   },
-  "helm-knative-upgrade.sh": {
+  "kubernetes-knative/helm-knative-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -2549,7 +2546,7 @@ helm upgrade --install msmysql ./msmysql-\${suffix} --namespace default
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/Chart.yaml": {
+  "kubernetes-knative/jhgate-knative/Chart.yaml": {
     "contents": "name: jhgate
 version: 1.0.0
 appVersion: 1.0.0
@@ -2575,7 +2572,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/requirements.yml": {
+  "kubernetes-knative/jhgate-knative/requirements.yml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -2584,7 +2581,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/jhgate-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -2599,7 +2596,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-destination-rule.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -2630,7 +2627,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-gateway.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
 # using certificates and prefer that for production use
@@ -2683,7 +2680,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-service.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -2759,7 +2756,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-virtual-service.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -2787,7 +2784,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/values.yml": {
+  "kubernetes-knative/jhgate-knative/values.yml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: jhgate
@@ -2800,7 +2797,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/Chart.yaml": {
+  "kubernetes-knative/msmysql-knative/Chart.yaml": {
     "contents": "name: msmysql
 version: 1.0.0
 appVersion: 1.0.0
@@ -2826,7 +2823,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/requirements.yml": {
+  "kubernetes-knative/msmysql-knative/requirements.yml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -2835,7 +2832,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/msmysql-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -2850,7 +2847,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-destination-rule.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -2881,7 +2878,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-service.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -2957,7 +2954,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-virtual-service.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -2985,7 +2982,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/values.yml": {
+  "kubernetes-knative/msmysql-knative/values.yml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: msmysql
@@ -3003,28 +3000,6 @@ spec:
 
 exports[`generator - Knative Using Helm generator type gateway with istio routing files should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "01-gateway"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "helm",
-    "ingressDomain": "example.com",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "01-gateway/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -3039,7 +3014,28 @@ exports[`generator - Knative Using Helm generator type gateway with istio routin
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "01-gateway"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "helm",
+    "ingressDomain": "example.com",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -3074,7 +3070,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/Chart.yaml": {
+  "kubernetes-knative/csvc-knative/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -3096,18 +3092,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/requirements.yml": {
+  "kubernetes-knative/csvc-knative/requirements.yml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/application-configmap.yml": {
+  "kubernetes-knative/csvc-knative/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -3128,7 +3124,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul-config-loader.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -3165,7 +3161,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -3393,7 +3389,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/grafana-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -3439,7 +3435,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/kiali-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -3484,7 +3480,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/zipkin-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -3530,11 +3526,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/values.yml": {
+  "kubernetes-knative/csvc-knative/values.yml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "helm-knative-apply.sh": {
+  "kubernetes-knative/helm-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -3569,7 +3565,7 @@ helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace default
 ",
     "stateCleared": "modified",
   },
-  "helm-knative-upgrade.sh": {
+  "kubernetes-knative/helm-knative-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -3584,7 +3580,7 @@ helm upgrade --install jhgate ./jhgate-\${suffix} --namespace default
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/Chart.yaml": {
+  "kubernetes-knative/jhgate-knative/Chart.yaml": {
     "contents": "name: jhgate
 version: 1.0.0
 appVersion: 1.0.0
@@ -3610,7 +3606,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/requirements.yml": {
+  "kubernetes-knative/jhgate-knative/requirements.yml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -3619,7 +3615,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/jhgate-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -3634,7 +3630,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-destination-rule.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -3665,7 +3661,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-gateway.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
 # using certificates and prefer that for production use
@@ -3718,7 +3714,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-service.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -3794,7 +3790,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-virtual-service.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -3822,7 +3818,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/values.yml": {
+  "kubernetes-knative/jhgate-knative/values.yml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: jhgate
@@ -3840,33 +3836,6 @@ spec:
 
 exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mongodb, mariadb microservices should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "01-gateway",
-      "02-mysql",
-      "03-psql",
-      "04-mongo",
-      "07-mariadb"
-    ],
-    "baseName": "workspaces",
-    "clusteredDbApps": [],
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "helm",
-    "ingressDomain": "",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "01-gateway/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -3939,7 +3908,33 @@ exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mon
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "01-gateway",
+      "02-mysql",
+      "03-psql",
+      "04-mongo",
+      "07-mariadb"
+    ],
+    "clusteredDbApps": [],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "helm",
+    "ingressDomain": "",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -3982,7 +3977,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/Chart.yaml": {
+  "kubernetes-knative/csvc-knative/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -4004,18 +3999,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/requirements.yml": {
+  "kubernetes-knative/csvc-knative/requirements.yml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/application-configmap.yml": {
+  "kubernetes-knative/csvc-knative/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -4036,7 +4031,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul-config-loader.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -4073,7 +4068,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -4301,7 +4296,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/grafana-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -4347,7 +4342,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/kiali-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -4392,7 +4387,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/zipkin-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -4438,11 +4433,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/values.yml": {
+  "kubernetes-knative/csvc-knative/values.yml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "helm-knative-apply.sh": {
+  "kubernetes-knative/helm-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -4521,7 +4516,7 @@ helm install --name msmariadb  ./msmariadb-\${suffix} --replace --namespace defa
 ",
     "stateCleared": "modified",
   },
-  "helm-knative-upgrade.sh": {
+  "kubernetes-knative/helm-knative-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -4544,7 +4539,7 @@ helm upgrade --install msmariadb ./msmariadb-\${suffix} --namespace default
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/Chart.yaml": {
+  "kubernetes-knative/jhgate-knative/Chart.yaml": {
     "contents": "name: jhgate
 version: 1.0.0
 appVersion: 1.0.0
@@ -4570,7 +4565,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/requirements.yml": {
+  "kubernetes-knative/jhgate-knative/requirements.yml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -4579,7 +4574,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/jhgate-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -4594,7 +4589,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-destination-rule.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -4625,7 +4620,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-gateway.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
 # using certificates and prefer that for production use
@@ -4678,7 +4673,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-service.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -4754,7 +4749,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-virtual-service.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -4782,7 +4777,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/values.yml": {
+  "kubernetes-knative/jhgate-knative/values.yml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: jhgate
@@ -4795,7 +4790,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/Chart.yaml": {
+  "kubernetes-knative/msmariadb-knative/Chart.yaml": {
     "contents": "name: msmariadb
 version: 1.0.0
 appVersion: 1.0.0
@@ -4821,7 +4816,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/requirements.yml": {
+  "kubernetes-knative/msmariadb-knative/requirements.yml": {
     "contents": "dependencies:
   - name: mariadb
     version: ^6.12.2
@@ -4830,7 +4825,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/msmariadb-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mariadb customisation
@@ -4845,7 +4840,7 @@ mariadb customisation
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/templates/msmariadb-destination-rule.yml": {
+  "kubernetes-knative/msmariadb-knative/templates/msmariadb-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -4876,7 +4871,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/templates/msmariadb-service.yml": {
+  "kubernetes-knative/msmariadb-knative/templates/msmariadb-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -4957,7 +4952,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/templates/msmariadb-virtual-service.yml": {
+  "kubernetes-knative/msmariadb-knative/templates/msmariadb-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -4985,7 +4980,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/values.yml": {
+  "kubernetes-knative/msmariadb-knative/values.yml": {
     "contents": "mariadb:
   enabled: true
   replication:
@@ -5001,7 +4996,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-knative/Chart.yaml": {
+  "kubernetes-knative/msmongodb-knative/Chart.yaml": {
     "contents": "name: msmongodb
 version: 1.0.0
 appVersion: 1.0.0
@@ -5027,7 +5022,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-knative/requirements.yml": {
+  "kubernetes-knative/msmongodb-knative/requirements.yml": {
     "contents": "dependencies:
   - name: mongodb-replicaset
     version: ^3.10.1
@@ -5036,7 +5031,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/msmongodb-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mongodb customisation
@@ -5051,7 +5046,7 @@ mongodb customisation
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-knative/templates/msmongodb-destination-rule.yml": {
+  "kubernetes-knative/msmongodb-knative/templates/msmongodb-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -5082,7 +5077,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-knative/templates/msmongodb-service.yml": {
+  "kubernetes-knative/msmongodb-knative/templates/msmongodb-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -5158,7 +5153,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-knative/templates/msmongodb-virtual-service.yml": {
+  "kubernetes-knative/msmongodb-knative/templates/msmongodb-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -5186,7 +5181,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-knative/values.yml": {
+  "kubernetes-knative/msmongodb-knative/values.yml": {
     "contents": "mongodb:
   enabled: true
 mongodb-replicaset:
@@ -5196,7 +5191,7 @@ mongodb-replicaset:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/Chart.yaml": {
+  "kubernetes-knative/msmysql-knative/Chart.yaml": {
     "contents": "name: msmysql
 version: 1.0.0
 appVersion: 1.0.0
@@ -5222,7 +5217,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/requirements.yml": {
+  "kubernetes-knative/msmysql-knative/requirements.yml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -5231,7 +5226,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/msmysql-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -5246,7 +5241,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-destination-rule.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -5277,7 +5272,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-service.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -5353,7 +5348,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-virtual-service.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -5381,7 +5376,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/values.yml": {
+  "kubernetes-knative/msmysql-knative/values.yml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: msmysql
@@ -5394,7 +5389,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/Chart.yaml": {
+  "kubernetes-knative/mspsql-knative/Chart.yaml": {
     "contents": "name: mspsql
 version: 1.0.0
 appVersion: 1.0.0
@@ -5420,7 +5415,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/requirements.yml": {
+  "kubernetes-knative/mspsql-knative/requirements.yml": {
     "contents": "dependencies:
   - name: postgresql
     version: ^6.5.3
@@ -5429,7 +5424,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/mspsql-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 postgresql customisation
@@ -5444,7 +5439,7 @@ postgresql customisation
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/templates/mspsql-destination-rule.yml": {
+  "kubernetes-knative/mspsql-knative/templates/mspsql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -5475,7 +5470,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/templates/mspsql-elasticsearch.yml": {
+  "kubernetes-knative/mspsql-knative/templates/mspsql-elasticsearch.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5549,7 +5544,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/templates/mspsql-service.yml": {
+  "kubernetes-knative/mspsql-knative/templates/mspsql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -5634,7 +5629,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/templates/mspsql-virtual-service.yml": {
+  "kubernetes-knative/mspsql-knative/templates/mspsql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -5662,7 +5657,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/values.yml": {
+  "kubernetes-knative/mspsql-knative/values.yml": {
     "contents": "postgresql:
   enabled: true
   postgresqlUsername: mspsql
@@ -5681,28 +5676,6 @@ spec:
 
 exports[`generator - Knative Using Helm generator type mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "02-mysql"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "helm",
-    "ingressDomain": "",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "mynamespace",
-    "monitoring": "prometheus",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "02-mysql/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -5718,7 +5691,28 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "02-mysql"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "helm",
+    "ingressDomain": "",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "mynamespace",
+    "monitoring": "prometheus",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -5753,7 +5747,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/Chart.yaml": {
+  "kubernetes-knative/csvc-knative/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -5783,7 +5777,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/requirements.yml": {
+  "kubernetes-knative/csvc-knative/requirements.yml": {
     "contents": "dependencies:
   - name: prometheus
     version: ^9.2.0
@@ -5796,7 +5790,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 prometheus/grafana customisation
@@ -5836,7 +5830,7 @@ prometheus/grafana customisation
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/application-configmap.yml": {
+  "kubernetes-knative/csvc-knative/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -5857,7 +5851,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul-config-loader.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5894,7 +5888,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -6122,7 +6116,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/grafana-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -6168,7 +6162,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/jhipster-grafana-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/jhipster-grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -6214,7 +6208,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/kiali-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -6259,7 +6253,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/zipkin-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -6305,7 +6299,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/values.yml": {
+  "kubernetes-knative/csvc-knative/values.yml": {
     "contents": "prometheus:
   enabled: true
   server:
@@ -8608,7 +8602,7 @@ grafana:
 ",
     "stateCleared": "modified",
   },
-  "helm-knative-apply.sh": {
+  "kubernetes-knative/helm-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -8644,7 +8638,7 @@ helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace mynamesp
 ",
     "stateCleared": "modified",
   },
-  "helm-knative-upgrade.sh": {
+  "kubernetes-knative/helm-knative-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -8659,7 +8653,7 @@ helm upgrade --install msmysql ./msmysql-\${suffix} --namespace mynamespace
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/Chart.yaml": {
+  "kubernetes-knative/msmysql-knative/Chart.yaml": {
     "contents": "name: msmysql
 version: 1.0.0
 appVersion: 1.0.0
@@ -8685,7 +8679,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/requirements.yml": {
+  "kubernetes-knative/msmysql-knative/requirements.yml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -8694,7 +8688,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/msmysql-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -8709,7 +8703,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-destination-rule.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -8740,7 +8734,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-service.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -8818,7 +8812,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-virtual-service.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -8846,7 +8840,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/values.yml": {
+  "kubernetes-knative/msmysql-knative/values.yml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: msmysql
@@ -8859,7 +8853,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "namespace.yml": {
+  "kubernetes-knative/namespace.yml": {
     "contents": "apiVersion: v1
 kind: Namespace
 metadata:
@@ -8873,28 +8867,6 @@ metadata:
 
 exports[`generator - Knative Using Helm generator type mysql microservice with custom namespace should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "02-mysql"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "helm",
-    "ingressDomain": "",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "mynamespace",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "02-mysql/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -8910,7 +8882,28 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "02-mysql"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "helm",
+    "ingressDomain": "",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "mynamespace",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -8945,7 +8938,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/Chart.yaml": {
+  "kubernetes-knative/csvc-knative/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -8967,18 +8960,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/requirements.yml": {
+  "kubernetes-knative/csvc-knative/requirements.yml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/application-configmap.yml": {
+  "kubernetes-knative/csvc-knative/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8999,7 +8992,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul-config-loader.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9036,7 +9029,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -9264,7 +9257,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/grafana-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -9310,7 +9303,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/kiali-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -9355,7 +9348,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/zipkin-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -9401,11 +9394,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/values.yml": {
+  "kubernetes-knative/csvc-knative/values.yml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "helm-knative-apply.sh": {
+  "kubernetes-knative/helm-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -9441,7 +9434,7 @@ helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace mynamesp
 ",
     "stateCleared": "modified",
   },
-  "helm-knative-upgrade.sh": {
+  "kubernetes-knative/helm-knative-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -9456,7 +9449,7 @@ helm upgrade --install msmysql ./msmysql-\${suffix} --namespace mynamespace
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/Chart.yaml": {
+  "kubernetes-knative/msmysql-knative/Chart.yaml": {
     "contents": "name: msmysql
 version: 1.0.0
 appVersion: 1.0.0
@@ -9482,7 +9475,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/requirements.yml": {
+  "kubernetes-knative/msmysql-knative/requirements.yml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -9491,7 +9484,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/msmysql-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -9506,7 +9499,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-destination-rule.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -9537,7 +9530,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-service.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -9613,7 +9606,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/templates/msmysql-virtual-service.yml": {
+  "kubernetes-knative/msmysql-knative/templates/msmysql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -9641,7 +9634,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/values.yml": {
+  "kubernetes-knative/msmysql-knative/values.yml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: msmysql
@@ -9654,7 +9647,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "namespace.yml": {
+  "kubernetes-knative/namespace.yml": {
     "contents": "apiVersion: v1
 kind: Namespace
 metadata:
@@ -9668,28 +9661,6 @@ metadata:
 
 exports[`generator - Knative Using Helm generator type only gateway should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "01-gateway"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipsterrepository",
-    "generatorType": "helm",
-    "ingressDomain": "",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "jhipsternamespace",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "01-gateway/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -9704,7 +9675,28 @@ exports[`generator - Knative Using Helm generator type only gateway should match
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "01-gateway"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipsterrepository",
+    "generatorType": "helm",
+    "ingressDomain": "",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "jhipsternamespace",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -9739,7 +9731,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/Chart.yaml": {
+  "kubernetes-knative/csvc-knative/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -9761,18 +9753,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/requirements.yml": {
+  "kubernetes-knative/csvc-knative/requirements.yml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/application-configmap.yml": {
+  "kubernetes-knative/csvc-knative/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9793,7 +9785,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul-config-loader.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9830,7 +9822,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/consul.yml": {
+  "kubernetes-knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -10058,7 +10050,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/grafana-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -10104,7 +10096,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/kiali-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -10149,7 +10141,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/templates/zipkin-gateway.yml": {
+  "kubernetes-knative/csvc-knative/templates/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -10195,11 +10187,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "csvc-knative/values.yml": {
+  "kubernetes-knative/csvc-knative/values.yml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "helm-knative-apply.sh": {
+  "kubernetes-knative/helm-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -10235,7 +10227,7 @@ helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace jhipsterna
 ",
     "stateCleared": "modified",
   },
-  "helm-knative-upgrade.sh": {
+  "kubernetes-knative/helm-knative-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -10250,7 +10242,7 @@ helm upgrade --install jhgate ./jhgate-\${suffix} --namespace jhipsternamespace
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/Chart.yaml": {
+  "kubernetes-knative/jhgate-knative/Chart.yaml": {
     "contents": "name: jhgate
 version: 1.0.0
 appVersion: 1.0.0
@@ -10276,7 +10268,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/requirements.yml": {
+  "kubernetes-knative/jhgate-knative/requirements.yml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -10285,7 +10277,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/_helpers.tpl": {
+  "kubernetes-knative/jhgate-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -10300,7 +10292,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-destination-rule.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -10331,7 +10323,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-gateway.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
 # using certificates and prefer that for production use
@@ -10384,7 +10376,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-service.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -10460,7 +10452,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/templates/jhgate-virtual-service.yml": {
+  "kubernetes-knative/jhgate-knative/templates/jhgate-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -10488,7 +10480,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/values.yml": {
+  "kubernetes-knative/jhgate-knative/values.yml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: jhgate
@@ -10501,7 +10493,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "namespace.yml": {
+  "kubernetes-knative/namespace.yml": {
     "contents": "apiVersion: v1
 kind: Namespace
 metadata:
@@ -10515,29 +10507,6 @@ metadata:
 
 exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "02-mysql",
-      "03-psql"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "k8s",
-    "ingressDomain": "",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "02-mysql/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -10568,7 +10537,29 @@ exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL micro
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "02-mysql",
+      "03-psql"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "k8s",
+    "ingressDomain": "",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -10597,7 +10588,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/grafana-gateway.yml": {
+  "kubernetes-knative/istio-knative/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -10643,7 +10634,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/kiali-gateway.yml": {
+  "kubernetes-knative/istio-knative/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -10688,7 +10679,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/zipkin-gateway.yml": {
+  "kubernetes-knative/istio-knative/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -10734,7 +10725,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-knative-apply.sh": {
+  "kubernetes-knative/kubectl-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
@@ -10761,7 +10752,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-destination-rule.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -10792,7 +10783,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-mysql.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-mysql.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -10852,7 +10843,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-service.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -10928,7 +10919,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-virtual-service.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -10956,7 +10947,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/mspsql-destination-rule.yml": {
+  "kubernetes-knative/mspsql-knative/mspsql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -10987,7 +10978,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/mspsql-elasticsearch.yml": {
+  "kubernetes-knative/mspsql-knative/mspsql-elasticsearch.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11061,7 +11052,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/mspsql-postgresql.yml": {
+  "kubernetes-knative/mspsql-knative/mspsql-postgresql.yml": {
     "contents": "apiVersion: v1
 kind: Secret
 metadata:
@@ -11131,7 +11122,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/mspsql-service.yml": {
+  "kubernetes-knative/mspsql-knative/mspsql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -11216,7 +11207,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/mspsql-virtual-service.yml": {
+  "kubernetes-knative/mspsql-knative/mspsql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -11244,7 +11235,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/application-configmap.yml": {
+  "kubernetes-knative/registry-knative/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -11265,7 +11256,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul-config-loader.yml": {
+  "kubernetes-knative/registry-knative/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11302,7 +11293,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul.yml": {
+  "kubernetes-knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -11535,28 +11526,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type gateway and ingress should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "01-gateway"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "k8s",
-    "ingressDomain": "example.com",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "01-gateway/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -11571,7 +11540,28 @@ exports[`generator - Knative Using K8s generator type gateway and ingress should
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "01-gateway"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "k8s",
+    "ingressDomain": "example.com",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -11598,7 +11588,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/grafana-gateway.yml": {
+  "kubernetes-knative/istio-knative/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -11644,7 +11634,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/kiali-gateway.yml": {
+  "kubernetes-knative/istio-knative/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -11689,7 +11679,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/zipkin-gateway.yml": {
+  "kubernetes-knative/istio-knative/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -11735,7 +11725,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-destination-rule.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -11766,7 +11756,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-gateway.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
 # using certificates and prefer that for production use
@@ -11819,7 +11809,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-mysql.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-mysql.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11879,7 +11869,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-service.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -11955,7 +11945,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-virtual-service.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -11983,7 +11973,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-knative-apply.sh": {
+  "kubernetes-knative/kubectl-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
@@ -12010,7 +12000,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/application-configmap.yml": {
+  "kubernetes-knative/registry-knative/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12031,7 +12021,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul-config-loader.yml": {
+  "kubernetes-knative/registry-knative/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12068,7 +12058,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul.yml": {
+  "kubernetes-knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -12301,29 +12291,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type gateway and mysql microservice should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "01-gateway",
-      "02-mysql"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "k8s",
-    "ingressDomain": "",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "01-gateway/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -12353,7 +12320,29 @@ exports[`generator - Knative Using K8s generator type gateway and mysql microser
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "01-gateway",
+      "02-mysql"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "k8s",
+    "ingressDomain": "",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -12382,7 +12371,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/grafana-gateway.yml": {
+  "kubernetes-knative/istio-knative/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -12428,7 +12417,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/kiali-gateway.yml": {
+  "kubernetes-knative/istio-knative/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -12473,7 +12462,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/zipkin-gateway.yml": {
+  "kubernetes-knative/istio-knative/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -12519,7 +12508,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-destination-rule.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -12550,7 +12539,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-gateway.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
 # using certificates and prefer that for production use
@@ -12603,7 +12592,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-mysql.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-mysql.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12663,7 +12652,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-service.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -12739,7 +12728,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-virtual-service.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -12767,7 +12756,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-knative-apply.sh": {
+  "kubernetes-knative/kubectl-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
@@ -12795,7 +12784,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-destination-rule.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -12826,7 +12815,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-mysql.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-mysql.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12886,7 +12875,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-service.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -12962,7 +12951,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-virtual-service.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -12990,7 +12979,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/application-configmap.yml": {
+  "kubernetes-knative/registry-knative/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -13011,7 +13000,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul-config-loader.yml": {
+  "kubernetes-knative/registry-knative/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13048,7 +13037,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul.yml": {
+  "kubernetes-knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -13281,28 +13270,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type gateway with istio routing files should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "01-gateway"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "k8s",
-    "ingressDomain": "example.com",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "01-gateway/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -13317,7 +13284,28 @@ exports[`generator - Knative Using K8s generator type gateway with istio routing
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "01-gateway"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "k8s",
+    "ingressDomain": "example.com",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -13344,7 +13332,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/grafana-gateway.yml": {
+  "kubernetes-knative/istio-knative/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -13390,7 +13378,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/kiali-gateway.yml": {
+  "kubernetes-knative/istio-knative/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -13435,7 +13423,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/zipkin-gateway.yml": {
+  "kubernetes-knative/istio-knative/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -13481,7 +13469,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-destination-rule.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -13512,7 +13500,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-gateway.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
 # using certificates and prefer that for production use
@@ -13565,7 +13553,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-mysql.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-mysql.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13625,7 +13613,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-service.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -13701,7 +13689,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-virtual-service.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -13729,7 +13717,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-knative-apply.sh": {
+  "kubernetes-knative/kubectl-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
@@ -13756,7 +13744,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/application-configmap.yml": {
+  "kubernetes-knative/registry-knative/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -13777,7 +13765,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul-config-loader.yml": {
+  "kubernetes-knative/registry-knative/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13814,7 +13802,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul.yml": {
+  "kubernetes-knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -14047,34 +14035,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mongodb, mariadb, mssql microservices should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "01-gateway",
-      "02-mysql",
-      "03-psql",
-      "04-mongo",
-      "07-mariadb",
-      "11-mssql"
-    ],
-    "baseName": "workspaces",
-    "clusteredDbApps": [],
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "k8s",
-    "ingressDomain": "",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "01-gateway/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -14162,7 +14122,34 @@ exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mong
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "01-gateway",
+      "02-mysql",
+      "03-psql",
+      "04-mongo",
+      "07-mariadb",
+      "11-mssql"
+    ],
+    "clusteredDbApps": [],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "k8s",
+    "ingressDomain": "",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -14199,7 +14186,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/grafana-gateway.yml": {
+  "kubernetes-knative/istio-knative/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -14245,7 +14232,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/kiali-gateway.yml": {
+  "kubernetes-knative/istio-knative/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -14290,7 +14277,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/zipkin-gateway.yml": {
+  "kubernetes-knative/istio-knative/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -14336,7 +14323,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-destination-rule.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -14367,7 +14354,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-gateway.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
 # using certificates and prefer that for production use
@@ -14420,7 +14407,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-mysql.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-mysql.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14480,7 +14467,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-service.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -14556,7 +14543,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-virtual-service.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -14584,7 +14571,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-knative-apply.sh": {
+  "kubernetes-knative/kubectl-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
@@ -14616,7 +14603,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/msmariadb-destination-rule.yml": {
+  "kubernetes-knative/msmariadb-knative/msmariadb-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -14647,7 +14634,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/msmariadb-mariadb.yml": {
+  "kubernetes-knative/msmariadb-knative/msmariadb-mariadb.yml": {
     "contents": "apiVersion: v1
 kind: Secret
 metadata:
@@ -14722,7 +14709,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/msmariadb-service.yml": {
+  "kubernetes-knative/msmariadb-knative/msmariadb-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -14803,7 +14790,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-knative/msmariadb-virtual-service.yml": {
+  "kubernetes-knative/msmariadb-knative/msmariadb-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -14831,7 +14818,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-knative/msmongodb-destination-rule.yml": {
+  "kubernetes-knative/msmongodb-knative/msmongodb-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -14862,7 +14849,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-knative/msmongodb-mongodb.yml": {
+  "kubernetes-knative/msmongodb-knative/msmongodb-mongodb.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -15184,7 +15171,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-knative/msmongodb-service.yml": {
+  "kubernetes-knative/msmongodb-knative/msmongodb-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -15260,7 +15247,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-knative/msmongodb-virtual-service.yml": {
+  "kubernetes-knative/msmongodb-knative/msmongodb-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -15288,7 +15275,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmssqldb-knative/msmssqldb-destination-rule.yml": {
+  "kubernetes-knative/msmssqldb-knative/msmssqldb-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -15319,7 +15306,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmssqldb-knative/msmssqldb-mssql.yml": {
+  "kubernetes-knative/msmssqldb-knative/msmssqldb-mssql.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15398,7 +15385,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmssqldb-knative/msmssqldb-service.yml": {
+  "kubernetes-knative/msmssqldb-knative/msmssqldb-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -15472,7 +15459,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmssqldb-knative/msmssqldb-virtual-service.yml": {
+  "kubernetes-knative/msmssqldb-knative/msmssqldb-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -15500,7 +15487,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-destination-rule.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -15531,7 +15518,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-mysql.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-mysql.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15591,7 +15578,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-service.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -15667,7 +15654,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-virtual-service.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -15695,7 +15682,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/mspsql-destination-rule.yml": {
+  "kubernetes-knative/mspsql-knative/mspsql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -15726,7 +15713,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/mspsql-elasticsearch.yml": {
+  "kubernetes-knative/mspsql-knative/mspsql-elasticsearch.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15800,7 +15787,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/mspsql-postgresql.yml": {
+  "kubernetes-knative/mspsql-knative/mspsql-postgresql.yml": {
     "contents": "apiVersion: v1
 kind: Secret
 metadata:
@@ -15870,7 +15857,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/mspsql-service.yml": {
+  "kubernetes-knative/mspsql-knative/mspsql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -15955,7 +15942,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-knative/mspsql-virtual-service.yml": {
+  "kubernetes-knative/mspsql-knative/mspsql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -15983,7 +15970,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/application-configmap.yml": {
+  "kubernetes-knative/registry-knative/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16004,7 +15991,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul-config-loader.yml": {
+  "kubernetes-knative/registry-knative/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16041,7 +16028,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul.yml": {
+  "kubernetes-knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -16274,28 +16261,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "02-mysql"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "k8s",
-    "ingressDomain": "",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "mynamespace",
-    "monitoring": "prometheus",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "02-mysql/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -16311,7 +16276,28 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "02-mysql"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "k8s",
+    "ingressDomain": "",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "mynamespace",
+    "monitoring": "prometheus",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -16338,7 +16324,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/grafana-gateway.yml": {
+  "kubernetes-knative/istio-knative/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -16384,7 +16370,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/kiali-gateway.yml": {
+  "kubernetes-knative/istio-knative/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -16429,7 +16415,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/zipkin-gateway.yml": {
+  "kubernetes-knative/istio-knative/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -16475,7 +16461,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-knative-apply.sh": {
+  "kubernetes-knative/kubectl-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
@@ -16511,7 +16497,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "monitoring-knative/jhipster-grafana-dashboard.yml": {
+  "kubernetes-knative/monitoring-knative/jhipster-grafana-dashboard.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -18863,7 +18849,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "monitoring-knative/jhipster-grafana-gateway.yml": {
+  "kubernetes-knative/monitoring-knative/jhipster-grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -18909,7 +18895,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "monitoring-knative/jhipster-grafana.yml": {
+  "kubernetes-knative/monitoring-knative/jhipster-grafana.yml": {
     "contents": "apiVersion: v1
 kind: Secret
 metadata:
@@ -18990,7 +18976,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "monitoring-knative/jhipster-prometheus-cr.yml": {
+  "kubernetes-knative/monitoring-knative/jhipster-prometheus-cr.yml": {
     "contents": "apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -19060,7 +19046,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "monitoring-knative/jhipster-prometheus-crd.yml": {
+  "kubernetes-knative/monitoring-knative/jhipster-prometheus-crd.yml": {
     "contents": "apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
@@ -19174,7 +19160,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-destination-rule.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -19205,7 +19191,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-mysql.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-mysql.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19265,7 +19251,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-prometheus-sm.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-prometheus-sm.yml": {
     "contents": "apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -19283,7 +19269,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-service.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -19361,7 +19347,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-virtual-service.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -19389,7 +19375,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "namespace.yml": {
+  "kubernetes-knative/namespace.yml": {
     "contents": "apiVersion: v1
 kind: Namespace
 metadata:
@@ -19398,7 +19384,7 @@ metadata:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/application-configmap.yml": {
+  "kubernetes-knative/registry-knative/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -19419,7 +19405,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul-config-loader.yml": {
+  "kubernetes-knative/registry-knative/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19456,7 +19442,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul.yml": {
+  "kubernetes-knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -19689,28 +19675,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type mysql microservice with custom namespace should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "02-mysql"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "generatorType": "k8s",
-    "ingressDomain": "",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "mynamespace",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "02-mysql/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -19726,7 +19690,28 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "02-mysql"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "generatorType": "k8s",
+    "ingressDomain": "",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "mynamespace",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -19753,7 +19738,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/grafana-gateway.yml": {
+  "kubernetes-knative/istio-knative/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -19799,7 +19784,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/kiali-gateway.yml": {
+  "kubernetes-knative/istio-knative/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -19844,7 +19829,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/zipkin-gateway.yml": {
+  "kubernetes-knative/istio-knative/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -19890,7 +19875,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-knative-apply.sh": {
+  "kubernetes-knative/kubectl-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
@@ -19917,7 +19902,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-destination-rule.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -19948,7 +19933,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-mysql.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-mysql.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20008,7 +19993,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-service.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -20084,7 +20069,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-knative/msmysql-virtual-service.yml": {
+  "kubernetes-knative/msmysql-knative/msmysql-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -20112,7 +20097,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "namespace.yml": {
+  "kubernetes-knative/namespace.yml": {
     "contents": "apiVersion: v1
 kind: Namespace
 metadata:
@@ -20121,7 +20106,7 @@ metadata:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/application-configmap.yml": {
+  "kubernetes-knative/registry-knative/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -20142,7 +20127,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul-config-loader.yml": {
+  "kubernetes-knative/registry-knative/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20179,7 +20164,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul.yml": {
+  "kubernetes-knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -20412,28 +20397,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type only gateway should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "01-gateway"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipsterrepository",
-    "generatorType": "k8s",
-    "ingressDomain": "",
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "jhipsternamespace",
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "01-gateway/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -20448,7 +20411,28 @@ exports[`generator - Knative Using K8s generator type only gateway should match 
 ",
     "stateCleared": "modified",
   },
-  "KNATIVE-README.md": {
+  "kubernetes-knative/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "01-gateway"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipsterrepository",
+    "generatorType": "k8s",
+    "ingressDomain": "",
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "jhipsternamespace",
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes-knative/KNATIVE-README.md": {
     "contents": "# JHipster-generated Kubernetes Knative configuration
 
 ## Preparation
@@ -20475,7 +20459,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/grafana-gateway.yml": {
+  "kubernetes-knative/istio-knative/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -20521,7 +20505,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/kiali-gateway.yml": {
+  "kubernetes-knative/istio-knative/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -20566,7 +20550,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-knative/zipkin-gateway.yml": {
+  "kubernetes-knative/istio-knative/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -20612,7 +20596,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-destination-rule.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -20643,7 +20627,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-gateway.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
 # using certificates and prefer that for production use
@@ -20696,7 +20680,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-mysql.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-mysql.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20756,7 +20740,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-service.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-service.yml": {
     "contents": "apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
@@ -20832,7 +20816,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-knative/jhgate-virtual-service.yml": {
+  "kubernetes-knative/jhgate-knative/jhgate-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -20860,7 +20844,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-knative-apply.sh": {
+  "kubernetes-knative/kubectl-knative-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
@@ -20888,7 +20872,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "namespace.yml": {
+  "kubernetes-knative/namespace.yml": {
     "contents": "apiVersion: v1
 kind: Namespace
 metadata:
@@ -20897,7 +20881,7 @@ metadata:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/application-configmap.yml": {
+  "kubernetes-knative/registry-knative/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -20918,7 +20902,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul-config-loader.yml": {
+  "kubernetes-knative/registry-knative/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20955,7 +20939,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-knative/consul.yml": {
+  "kubernetes-knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul

@@ -594,6 +594,16 @@ class JHipsterTest extends YeomanTest {
     });
   }
 
+  runJHipsterDeployment(
+    jhipsterGenerator: string,
+    settings?: RunContextSettings | undefined,
+    envOptions?: BaseEnvironmentOptions | undefined,
+  ): JHipsterRunContext {
+    return this.runJHipsterInApplication(jhipsterGenerator, settings, envOptions).withOptions({
+      destinationRoot: join(runResult.cwd, jhipsterGenerator.split(':').pop()!),
+    });
+  }
+
   /**
    * Run a generator in current application context.
    */

@@ -3,96 +3,111 @@ import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js
 import { GENERATOR_KUBERNETES_KNATIVE } from '../generator-list.js';
 
 const expectedFiles = {
-  eurekaregistry: ['./registry-knative/jhipster-registry.yml', './registry-knative/application-configmap.yml'],
+  eurekaregistry: [
+    './kubernetes-knative/registry-knative/jhipster-registry.yml',
+    './kubernetes-knative/registry-knative/application-configmap.yml',
+  ],
   consulregistry: [
-    './registry-knative/consul.yml',
-    './registry-knative/consul-config-loader.yml',
-    './registry-knative/application-configmap.yml',
+    './kubernetes-knative/registry-knative/consul.yml',
+    './kubernetes-knative/registry-knative/consul-config-loader.yml',
+    './kubernetes-knative/registry-knative/application-configmap.yml',
   ],
-  jhgate: ['./jhgate-knative/jhgate-mysql.yml', './jhgate-knative/jhgate-service.yml'],
-  jhgateingress: ['./jhgate-knative/jhgate-ingress.yml'],
-  customnamespace: ['./namespace.yml'],
-  msmysql: ['./msmysql-knative/msmysql-service.yml', './msmysql-knative/msmysql-mysql.yml'],
+  jhgate: ['./kubernetes-knative/jhgate-knative/jhgate-mysql.yml', './kubernetes-knative/jhgate-knative/jhgate-service.yml'],
+  jhgateingress: ['./kubernetes-knative/jhgate-knative/jhgate-ingress.yml'],
+  customnamespace: ['./kubernetes-knative/namespace.yml'],
+  msmysql: ['./kubernetes-knative/msmysql-knative/msmysql-service.yml', './kubernetes-knative/msmysql-knative/msmysql-mysql.yml'],
   mspsql: [
-    './mspsql-knative/mspsql-service.yml',
-    './mspsql-knative/mspsql-postgresql.yml',
-    './mspsql-knative/mspsql-service.yml',
-    './mspsql-knative/mspsql-elasticsearch.yml',
+    './kubernetes-knative/mspsql-knative/mspsql-service.yml',
+    './kubernetes-knative/mspsql-knative/mspsql-postgresql.yml',
+    './kubernetes-knative/mspsql-knative/mspsql-service.yml',
+    './kubernetes-knative/mspsql-knative/mspsql-elasticsearch.yml',
   ],
-  msmongodb: ['./msmongodb-knative/msmongodb-service.yml', './msmongodb-knative/msmongodb-mongodb.yml'],
-  msmariadb: ['./msmariadb-knative/msmariadb-service.yml', './msmariadb-knative/msmariadb-mariadb.yml'],
-  msmssqldb: ['./msmssqldb-knative/msmssqldb-service.yml', './msmssqldb-knative/msmssqldb-mssql.yml'],
+  msmongodb: [
+    './kubernetes-knative/msmongodb-knative/msmongodb-service.yml',
+    './kubernetes-knative/msmongodb-knative/msmongodb-mongodb.yml',
+  ],
+  msmariadb: [
+    './kubernetes-knative/msmariadb-knative/msmariadb-service.yml',
+    './kubernetes-knative/msmariadb-knative/msmariadb-mariadb.yml',
+  ],
+  msmssqldb: ['./kubernetes-knative/msmssqldb-knative/msmssqldb-service.yml', './kubernetes-knative/msmssqldb-knative/msmssqldb-mssql.yml'],
   prometheusmonit: [
-    './monitoring-knative/jhipster-prometheus-crd.yml',
-    './monitoring-knative/jhipster-prometheus-cr.yml',
-    './monitoring-knative/jhipster-grafana.yml',
-    './monitoring-knative/jhipster-grafana-dashboard.yml',
+    './kubernetes-knative/monitoring-knative/jhipster-prometheus-crd.yml',
+    './kubernetes-knative/monitoring-knative/jhipster-prometheus-cr.yml',
+    './kubernetes-knative/monitoring-knative/jhipster-grafana.yml',
+    './kubernetes-knative/monitoring-knative/jhipster-grafana-dashboard.yml',
   ],
   jhgategateway: [
-    './jhgate-knative/jhgate-gateway.yml',
-    './jhgate-knative/jhgate-destination-rule.yml',
-    './jhgate-knative/jhgate-virtual-service.yml',
+    './kubernetes-knative/jhgate-knative/jhgate-gateway.yml',
+    './kubernetes-knative/jhgate-knative/jhgate-destination-rule.yml',
+    './kubernetes-knative/jhgate-knative/jhgate-virtual-service.yml',
   ],
-  applyScript: ['./kubectl-knative-apply.sh'],
+  applyScript: ['./kubernetes-knative/kubectl-knative-apply.sh'],
 };
 
 const helmExpectedFiles = {
   csvcfiles: [
-    './csvc-knative/Chart.yaml',
-    './csvc-knative/requirements.yml',
-    './csvc-knative/values.yml',
-    './csvc-knative/templates/_helpers.tpl',
+    './kubernetes-knative/csvc-knative/Chart.yaml',
+    './kubernetes-knative/csvc-knative/requirements.yml',
+    './kubernetes-knative/csvc-knative/values.yml',
+    './kubernetes-knative/csvc-knative/templates/_helpers.tpl',
   ],
-  eurekaregistry: ['./csvc-knative/templates/jhipster-registry.yml', './csvc-knative/templates/application-configmap.yml'],
+  eurekaregistry: [
+    './kubernetes-knative/csvc-knative/templates/jhipster-registry.yml',
+    './kubernetes-knative/csvc-knative/templates/application-configmap.yml',
+  ],
   consulregistry: [
-    './csvc-knative/templates/consul.yml',
-    './csvc-knative/templates/consul-config-loader.yml',
-    './csvc-knative/templates/application-configmap.yml',
+    './kubernetes-knative/csvc-knative/templates/consul.yml',
+    './kubernetes-knative/csvc-knative/templates/consul-config-loader.yml',
+    './kubernetes-knative/csvc-knative/templates/application-configmap.yml',
   ],
   jhgate: [
-    './jhgate-knative/templates/jhgate-service.yml',
-    './jhgate-knative/Chart.yaml',
-    './jhgate-knative/requirements.yml',
-    './jhgate-knative/values.yml',
-    './jhgate-knative/templates/_helpers.tpl',
+    './kubernetes-knative/jhgate-knative/templates/jhgate-service.yml',
+    './kubernetes-knative/jhgate-knative/Chart.yaml',
+    './kubernetes-knative/jhgate-knative/requirements.yml',
+    './kubernetes-knative/jhgate-knative/values.yml',
+    './kubernetes-knative/jhgate-knative/templates/_helpers.tpl',
   ],
-  customnamespace: ['./namespace.yml'],
+  customnamespace: ['./kubernetes-knative/namespace.yml'],
   msmysql: [
-    './msmysql-knative/Chart.yaml',
-    './msmysql-knative/requirements.yml',
-    './msmysql-knative/values.yml',
-    './msmysql-knative/templates/_helpers.tpl',
-    './msmysql-knative/templates/msmysql-service.yml',
+    './kubernetes-knative/msmysql-knative/Chart.yaml',
+    './kubernetes-knative/msmysql-knative/requirements.yml',
+    './kubernetes-knative/msmysql-knative/values.yml',
+    './kubernetes-knative/msmysql-knative/templates/_helpers.tpl',
+    './kubernetes-knative/msmysql-knative/templates/msmysql-service.yml',
   ],
   mspsql: [
-    './mspsql-knative/Chart.yaml',
-    './mspsql-knative/requirements.yml',
-    './mspsql-knative/values.yml',
-    './mspsql-knative/templates/_helpers.tpl',
-    './mspsql-knative/templates/mspsql-service.yml',
+    './kubernetes-knative/mspsql-knative/Chart.yaml',
+    './kubernetes-knative/mspsql-knative/requirements.yml',
+    './kubernetes-knative/mspsql-knative/values.yml',
+    './kubernetes-knative/mspsql-knative/templates/_helpers.tpl',
+    './kubernetes-knative/mspsql-knative/templates/mspsql-service.yml',
   ],
   msmongodb: [
-    './msmongodb-knative/Chart.yaml',
-    './msmongodb-knative/requirements.yml',
-    './msmongodb-knative/values.yml',
-    './msmongodb-knative/templates/_helpers.tpl',
-    './msmongodb-knative/templates/msmongodb-service.yml',
+    './kubernetes-knative/msmongodb-knative/Chart.yaml',
+    './kubernetes-knative/msmongodb-knative/requirements.yml',
+    './kubernetes-knative/msmongodb-knative/values.yml',
+    './kubernetes-knative/msmongodb-knative/templates/_helpers.tpl',
+    './kubernetes-knative/msmongodb-knative/templates/msmongodb-service.yml',
   ],
   msmariadb: [
-    './msmariadb-knative/Chart.yaml',
-    './msmariadb-knative/requirements.yml',
-    './msmariadb-knative/values.yml',
-    './msmariadb-knative/templates/_helpers.tpl',
-    './msmariadb-knative/templates/msmariadb-service.yml',
-    './msmariadb-knative/templates/msmariadb-service.yml',
+    './kubernetes-knative/msmariadb-knative/Chart.yaml',
+    './kubernetes-knative/msmariadb-knative/requirements.yml',
+    './kubernetes-knative/msmariadb-knative/values.yml',
+    './kubernetes-knative/msmariadb-knative/templates/_helpers.tpl',
+    './kubernetes-knative/msmariadb-knative/templates/msmariadb-service.yml',
+    './kubernetes-knative/msmariadb-knative/templates/msmariadb-service.yml',
   ],
-  kafka: ['./samplekafka-knative/templates/samplekafka-service.yml', './samplekafka-knative/templates/samplekafka-service.yml'],
+  kafka: [
+    './kubernetes-knative/samplekafka-knative/templates/samplekafka-service.yml',
+    './kubernetes-knative/samplekafka-knative/templates/samplekafka-service.yml',
+  ],
   jhgategateway: [
-    './jhgate-knative/templates/jhgate-gateway.yml',
-    './jhgate-knative/templates/jhgate-destination-rule.yml',
-    './jhgate-knative/templates/jhgate-virtual-service.yml',
+    './kubernetes-knative/jhgate-knative/templates/jhgate-gateway.yml',
+    './kubernetes-knative/jhgate-knative/templates/jhgate-destination-rule.yml',
+    './kubernetes-knative/jhgate-knative/templates/jhgate-virtual-service.yml',
   ],
-  applyScript: ['./helm-knative-apply.sh', './helm-knative-upgrade.sh'],
+  applyScript: ['./kubernetes-knative/helm-knative-apply.sh', './kubernetes-knative/helm-knative-upgrade.sh'],
 };
 
 describe('generator - Knative', () => {
@@ -107,13 +122,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             adminPassword: 'meetup',
             dockerRepositoryName: 'jhipsterrepository',
@@ -130,11 +145,11 @@ describe('generator - Knative', () => {
       });
       it('creates expected registry files and content', () => {
         runResult.assertFile(expectedFiles.consulregistry);
-        runResult.assertFileContent('./registry-knative/consul.yml', /a 24 chars base64 encoded string/);
+        runResult.assertFileContent('./kubernetes-knative/registry-knative/consul.yml', /a 24 chars base64 encoded string/);
       });
       it('creates expected gateway files and content', () => {
         runResult.assertFile(expectedFiles.jhgate);
-        // runResult.assertFileContent('./jhgate-knative/jhgate-service.yml', /image: jhipsterrepository\/jhgate/);
+        // runResult.assertFileContent('./kubernetes-knative/jhgate-knative/jhgate-service.yml', /image: jhipsterrepository\/jhgate/);
       });
       it('create the apply script', () => {
         runResult.assertFile(expectedFiles.applyScript);
@@ -151,13 +166,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
@@ -195,13 +210,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
@@ -239,13 +254,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
@@ -281,13 +296,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
@@ -328,13 +343,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
@@ -384,13 +399,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
@@ -430,13 +445,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
@@ -476,13 +491,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             adminPassword: 'meetup',
             dockerRepositoryName: 'jhipsterrepository',
@@ -503,7 +518,7 @@ describe('generator - Knative', () => {
       });
       it('creates expected gateway files and content', () => {
         runResult.assertFile(helmExpectedFiles.jhgate);
-        runResult.assertFileContent('./jhgate-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./kubernetes-knative/jhgate-knative/requirements.yml', /name: mysql/);
       });
       it('create the apply script', () => {
         runResult.assertFile(helmExpectedFiles.applyScript);
@@ -520,13 +535,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
@@ -549,7 +564,7 @@ describe('generator - Knative', () => {
       });
       it('creates expected mysql files', () => {
         runResult.assertFile(helmExpectedFiles.msmysql);
-        runResult.assertFileContent('./msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./kubernetes-knative/msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('create the apply script', () => {
         runResult.assertFile(helmExpectedFiles.applyScript);
@@ -566,13 +581,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
@@ -592,7 +607,7 @@ describe('generator - Knative', () => {
       });
       it('creates expected mysql files', () => {
         runResult.assertFile(helmExpectedFiles.msmysql);
-        runResult.assertFileContent('./msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./kubernetes-knative/msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('creates expected namespace file', () => {
         runResult.assertFile(helmExpectedFiles.customnamespace);
@@ -612,13 +627,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
@@ -644,7 +659,7 @@ describe('generator - Knative', () => {
       it('creates expected ingress files', () => {
         runResult.assertFile(helmExpectedFiles.jhgate);
         runResult.assertFile(helmExpectedFiles.csvcfiles);
-        runResult.assertFileContent('./jhgate-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./kubernetes-knative/jhgate-knative/requirements.yml', /name: mysql/);
       });
       it('create the apply script', () => {
         runResult.assertFile(helmExpectedFiles.applyScript);
@@ -661,13 +676,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
@@ -691,11 +706,11 @@ describe('generator - Knative', () => {
       });
       it('creates expected mysql files', () => {
         runResult.assertFile(helmExpectedFiles.msmysql);
-        runResult.assertFileContent('./msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./kubernetes-knative/msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('creates expected psql files', () => {
         runResult.assertFile(helmExpectedFiles.mspsql);
-        runResult.assertFileContent('./mspsql-knative/requirements.yml', /name: postgresql/);
+        runResult.assertFileContent('./kubernetes-knative/mspsql-knative/requirements.yml', /name: postgresql/);
       });
       it('create the apply script', () => {
         runResult.assertFile(helmExpectedFiles.applyScript);
@@ -712,13 +727,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
@@ -743,19 +758,19 @@ describe('generator - Knative', () => {
       });
       it('creates expected mysql files', () => {
         runResult.assertFile(helmExpectedFiles.msmysql);
-        runResult.assertFileContent('./msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./kubernetes-knative/msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('creates expected psql files', () => {
         runResult.assertFile(helmExpectedFiles.mspsql);
-        runResult.assertFileContent('./mspsql-knative/requirements.yml', /name: postgresql/);
+        runResult.assertFileContent('./kubernetes-knative/mspsql-knative/requirements.yml', /name: postgresql/);
       });
       it('creates expected mongodb files', () => {
         runResult.assertFile(helmExpectedFiles.msmongodb);
-        runResult.assertFileContent('./msmongodb-knative/requirements.yml', /name: mongodb-replicaset/);
+        runResult.assertFileContent('./kubernetes-knative/msmongodb-knative/requirements.yml', /name: mongodb-replicaset/);
       });
       it('creates expected mariadb files', () => {
         runResult.assertFile(helmExpectedFiles.msmariadb);
-        runResult.assertFileContent('./msmariadb-knative/requirements.yml', /name: mariadb/);
+        runResult.assertFileContent('./kubernetes-knative/msmariadb-knative/requirements.yml', /name: mariadb/);
       });
       it('create the apply script', () => {
         runResult.assertFile(helmExpectedFiles.applyScript);
@@ -772,13 +787,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
@@ -796,12 +811,12 @@ describe('generator - Knative', () => {
       });
       it('creates expected mysql files', () => {
         runResult.assertFile(helmExpectedFiles.msmysql);
-        runResult.assertFileContent('./msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./kubernetes-knative/msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('creates expected prometheus files', () => {
         runResult.assertFile(helmExpectedFiles.csvcfiles);
-        runResult.assertFileContent('./csvc-knative/requirements.yml', /name: prometheus/);
-        runResult.assertFileContent('./csvc-knative/requirements.yml', /name: grafana/);
+        runResult.assertFileContent('./kubernetes-knative/csvc-knative/requirements.yml', /name: prometheus/);
+        runResult.assertFileContent('./kubernetes-knative/csvc-knative/requirements.yml', /name: grafana/);
       });
       it('creates expected namespace file', () => {
         runResult.assertFile(helmExpectedFiles.customnamespace);
@@ -821,13 +836,13 @@ describe('generator - Knative', () => {
           .withGenerateWorkspaceApplications();
 
         await helpers
-          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
           .withAnswers({
             deploymentApplicationType: 'microservice',
-            directoryPath: './',
+            directoryPath: '../',
             chosenApps,
             dockerRepositoryName: 'jhipster',
             dockerPushCommand: 'docker push',
