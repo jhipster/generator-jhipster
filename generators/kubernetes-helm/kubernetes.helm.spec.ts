@@ -3,71 +3,82 @@ import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js
 import { GENERATOR_KUBERNETES_HELM } from '../generator-list.js';
 
 const expectedFiles = {
-  csvcfiles: ['./csvc-helm/Chart.yaml', './csvc-helm/requirements.yaml', './csvc-helm/values.yaml', './csvc-helm/templates/_helpers.tpl'],
-  eurekaregistry: ['./csvc-helm/templates/jhipster-registry.yml', './csvc-helm/templates/application-configmap.yml'],
+  csvcfiles: [
+    './kubernetes-helm/csvc-helm/Chart.yaml',
+    './kubernetes-helm/csvc-helm/requirements.yaml',
+    './kubernetes-helm/csvc-helm/values.yaml',
+    './kubernetes-helm/csvc-helm/templates/_helpers.tpl',
+  ],
+  eurekaregistry: [
+    './kubernetes-helm/csvc-helm/templates/jhipster-registry.yml',
+    './kubernetes-helm/csvc-helm/templates/application-configmap.yml',
+  ],
   consulregistry: [
-    './csvc-helm/templates/consul.yml',
-    './csvc-helm/templates/consul-config-loader.yml',
-    './csvc-helm/templates/application-configmap.yml',
+    './kubernetes-helm/csvc-helm/templates/consul.yml',
+    './kubernetes-helm/csvc-helm/templates/consul-config-loader.yml',
+    './kubernetes-helm/csvc-helm/templates/application-configmap.yml',
   ],
   jhgate: [
-    './jhgate-helm/templates/jhgate-deployment.yml',
-    './jhgate-helm/templates/jhgate-service.yml',
-    './jhgate-helm/Chart.yaml',
-    './jhgate-helm/requirements.yaml',
-    './jhgate-helm/values.yaml',
-    './jhgate-helm/templates/_helpers.tpl',
+    './kubernetes-helm/jhgate-helm/templates/jhgate-deployment.yml',
+    './kubernetes-helm/jhgate-helm/templates/jhgate-service.yml',
+    './kubernetes-helm/jhgate-helm/Chart.yaml',
+    './kubernetes-helm/jhgate-helm/requirements.yaml',
+    './kubernetes-helm/jhgate-helm/values.yaml',
+    './kubernetes-helm/jhgate-helm/templates/_helpers.tpl',
   ],
-  jhgateingress: ['./jhgate-helm/templates/jhgate-ingress.yml'],
-  customnamespace: ['./namespace.yml'],
+  jhgateingress: ['./kubernetes-helm/jhgate-helm/templates/jhgate-ingress.yml'],
+  customnamespace: ['./kubernetes-helm/namespace.yml'],
   msmysql: [
-    './msmysql-helm/Chart.yaml',
-    './msmysql-helm/requirements.yaml',
-    './msmysql-helm/values.yaml',
-    './msmysql-helm/templates/_helpers.tpl',
-    './msmysql-helm/templates/msmysql-deployment.yml',
-    './msmysql-helm/templates/msmysql-service.yml',
+    './kubernetes-helm/msmysql-helm/Chart.yaml',
+    './kubernetes-helm/msmysql-helm/requirements.yaml',
+    './kubernetes-helm/msmysql-helm/values.yaml',
+    './kubernetes-helm/msmysql-helm/templates/_helpers.tpl',
+    './kubernetes-helm/msmysql-helm/templates/msmysql-deployment.yml',
+    './kubernetes-helm/msmysql-helm/templates/msmysql-service.yml',
   ],
   mspsql: [
-    './mspsql-helm/Chart.yaml',
-    './mspsql-helm/requirements.yaml',
-    './mspsql-helm/values.yaml',
-    './mspsql-helm/templates/_helpers.tpl',
-    './mspsql-helm/templates/mspsql-deployment.yml',
-    './mspsql-helm/templates/mspsql-service.yml',
+    './kubernetes-helm/mspsql-helm/Chart.yaml',
+    './kubernetes-helm/mspsql-helm/requirements.yaml',
+    './kubernetes-helm/mspsql-helm/values.yaml',
+    './kubernetes-helm/mspsql-helm/templates/_helpers.tpl',
+    './kubernetes-helm/mspsql-helm/templates/mspsql-deployment.yml',
+    './kubernetes-helm/mspsql-helm/templates/mspsql-service.yml',
   ],
   msmongodb: [
-    './msmongodb-helm/Chart.yaml',
-    './msmongodb-helm/requirements.yaml',
-    './msmongodb-helm/values.yaml',
-    './msmongodb-helm/templates/_helpers.tpl',
-    './msmongodb-helm/templates/msmongodb-deployment.yml',
-    './msmongodb-helm/templates/msmongodb-service.yml',
+    './kubernetes-helm/msmongodb-helm/Chart.yaml',
+    './kubernetes-helm/msmongodb-helm/requirements.yaml',
+    './kubernetes-helm/msmongodb-helm/values.yaml',
+    './kubernetes-helm/msmongodb-helm/templates/_helpers.tpl',
+    './kubernetes-helm/msmongodb-helm/templates/msmongodb-deployment.yml',
+    './kubernetes-helm/msmongodb-helm/templates/msmongodb-service.yml',
   ],
   msmariadb: [
-    './msmariadb-helm/Chart.yaml',
-    './msmariadb-helm/requirements.yaml',
-    './msmariadb-helm/values.yaml',
-    './msmariadb-helm/templates/_helpers.tpl',
-    './msmariadb-helm/templates/msmariadb-deployment.yml',
-    './msmariadb-helm/templates/msmariadb-service.yml',
+    './kubernetes-helm/msmariadb-helm/Chart.yaml',
+    './kubernetes-helm/msmariadb-helm/requirements.yaml',
+    './kubernetes-helm/msmariadb-helm/values.yaml',
+    './kubernetes-helm/msmariadb-helm/templates/_helpers.tpl',
+    './kubernetes-helm/msmariadb-helm/templates/msmariadb-deployment.yml',
+    './kubernetes-helm/msmariadb-helm/templates/msmariadb-service.yml',
   ],
   monolith: [
-    './samplemysql-helm/Chart.yaml',
-    './samplemysql-helm/requirements.yaml',
-    './samplemysql-helm/values.yaml',
-    './samplemysql-helm/templates/_helpers.tpl',
-    './samplemysql-helm/templates/samplemysql-deployment.yml',
-    './samplemysql-helm/templates/samplemysql-service.yml',
-    './samplemysql-helm/templates/samplemysql-elasticsearch.yml',
+    './kubernetes-helm/samplemysql-helm/Chart.yaml',
+    './kubernetes-helm/samplemysql-helm/requirements.yaml',
+    './kubernetes-helm/samplemysql-helm/values.yaml',
+    './kubernetes-helm/samplemysql-helm/templates/_helpers.tpl',
+    './kubernetes-helm/samplemysql-helm/templates/samplemysql-deployment.yml',
+    './kubernetes-helm/samplemysql-helm/templates/samplemysql-service.yml',
+    './kubernetes-helm/samplemysql-helm/templates/samplemysql-elasticsearch.yml',
   ],
-  kafka: ['./samplekafka-helm/templates/samplekafka-deployment.yml', './samplekafka-helm/templates/samplekafka-service.yml'],
+  kafka: [
+    './kubernetes-helm/samplekafka-helm/templates/samplekafka-deployment.yml',
+    './kubernetes-helm/samplekafka-helm/templates/samplekafka-service.yml',
+  ],
   jhgategateway: [
-    './jhgate-helm/templates/jhgate-gateway.yml',
-    './jhgate-helm/templates/jhgate-destination-rule.yml',
-    './jhgate-helm/templates/jhgate-virtual-service.yml',
+    './kubernetes-helm/jhgate-helm/templates/jhgate-gateway.yml',
+    './kubernetes-helm/jhgate-helm/templates/jhgate-destination-rule.yml',
+    './kubernetes-helm/jhgate-helm/templates/jhgate-virtual-service.yml',
   ],
-  applyScript: ['./helm-apply.sh', './helm-upgrade.sh'],
+  applyScript: ['./kubernetes-helm/helm-apply.sh', './kubernetes-helm/helm-upgrade.sh'],
 };
 
 describe('generator - Kubernetes Helm', () => {
@@ -81,13 +92,13 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           adminPassword: 'meetup',
           dockerRepositoryName: 'jhipsterrepository',
@@ -107,7 +118,7 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected gateway files and content', () => {
       runResult.assertFile(expectedFiles.jhgate);
-      runResult.assertFileContent('./jhgate-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./kubernetes-helm/jhgate-helm/requirements.yaml', /name: mysql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -124,13 +135,13 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -152,7 +163,7 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./kubernetes-helm/msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -169,13 +180,13 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -194,7 +205,7 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./kubernetes-helm/msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('creates expected namespace file', () => {
       runResult.assertFile(expectedFiles.customnamespace);
@@ -214,13 +225,13 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -247,7 +258,7 @@ describe('generator - Kubernetes Helm', () => {
       runResult.assertFile(expectedFiles.jhgate);
       runResult.assertFile(expectedFiles.csvcfiles);
       runResult.assertFile(expectedFiles.jhgateingress);
-      runResult.assertFileContent('./jhgate-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./kubernetes-helm/jhgate-helm/requirements.yaml', /name: mysql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -264,13 +275,13 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -293,11 +304,11 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./kubernetes-helm/msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('creates expected psql files', () => {
       runResult.assertFile(expectedFiles.mspsql);
-      runResult.assertFileContent('./mspsql-helm/requirements.yaml', /name: postgresql/);
+      runResult.assertFileContent('./kubernetes-helm/mspsql-helm/requirements.yaml', /name: postgresql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -314,13 +325,13 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -344,19 +355,19 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./kubernetes-helm/msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('creates expected psql files', () => {
       runResult.assertFile(expectedFiles.mspsql);
-      runResult.assertFileContent('./mspsql-helm/requirements.yaml', /name: postgresql/);
+      runResult.assertFileContent('./kubernetes-helm/mspsql-helm/requirements.yaml', /name: postgresql/);
     });
     it('creates expected mongodb files', () => {
       runResult.assertFile(expectedFiles.msmongodb);
-      runResult.assertFileContent('./msmongodb-helm/requirements.yaml', /name: mongodb-replicaset/);
+      runResult.assertFileContent('./kubernetes-helm/msmongodb-helm/requirements.yaml', /name: mongodb-replicaset/);
     });
     it('creates expected mariadb files', () => {
       runResult.assertFile(expectedFiles.msmariadb);
-      runResult.assertFileContent('./msmariadb-helm/requirements.yaml', /name: mariadb/);
+      runResult.assertFileContent('./kubernetes-helm/msmariadb-helm/requirements.yaml', /name: mariadb/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -373,13 +384,13 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'monolith',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -397,7 +408,7 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.monolith);
-      runResult.assertFileContent('./samplemysql-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./kubernetes-helm/samplemysql-helm/requirements.yaml', /name: mysql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -414,13 +425,13 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'monolith',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -436,8 +447,8 @@ describe('generator - Kubernetes Helm', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.csvcfiles);
       runResult.assertFile(expectedFiles.kafka);
-      runResult.assertFileContent('./csvc-helm/requirements.yaml', /name: kafka/);
-      runResult.assertFileContent('./samplekafka-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./kubernetes-helm/csvc-helm/requirements.yaml', /name: kafka/);
+      runResult.assertFileContent('./kubernetes-helm/samplekafka-helm/requirements.yaml', /name: mysql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -454,13 +465,13 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -477,12 +488,12 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./kubernetes-helm/msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('creates expected prometheus files', () => {
       runResult.assertFile(expectedFiles.csvcfiles);
-      runResult.assertFileContent('./csvc-helm/requirements.yaml', /name: prometheus/);
-      runResult.assertFileContent('./csvc-helm/requirements.yaml', /name: grafana/);
+      runResult.assertFileContent('./kubernetes-helm/csvc-helm/requirements.yaml', /name: prometheus/);
+      runResult.assertFileContent('./kubernetes-helm/csvc-helm/requirements.yaml', /name: grafana/);
     });
     it('creates expected namespace file', () => {
       runResult.assertFile(expectedFiles.customnamespace);
@@ -502,13 +513,13 @@ describe('generator - Kubernetes Helm', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',

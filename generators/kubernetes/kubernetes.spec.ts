@@ -3,43 +3,75 @@ import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js
 import { GENERATOR_KUBERNETES } from '../generator-list.js';
 
 const expectedFiles = {
-  eurekaregistry: ['./registry-k8s/jhipster-registry.yml', './registry-k8s/application-configmap.yml'],
-  consulregistry: ['./registry-k8s/consul.yml', './registry-k8s/consul-config-loader.yml', './registry-k8s/application-configmap.yml'],
-  jhgate: ['./jhgate-k8s/jhgate-deployment.yml', './jhgate-k8s/jhgate-mysql.yml', './jhgate-k8s/jhgate-service.yml'],
-  jhgateingress: ['./jhgate-k8s/jhgate-ingress.yml'],
-  customnamespace: ['./namespace.yml'],
-  msmysql: ['./msmysql-k8s/msmysql-deployment.yml', './msmysql-k8s/msmysql-mysql.yml', './msmysql-k8s/msmysql-service.yml'],
-  mspsql: [
-    './mspsql-k8s/mspsql-deployment.yml',
-    './mspsql-k8s/mspsql-postgresql.yml',
-    './mspsql-k8s/mspsql-service.yml',
-    './mspsql-k8s/mspsql-elasticsearch.yml',
+  eurekaregistry: ['./kubernetes/registry-k8s/jhipster-registry.yml', './kubernetes/registry-k8s/application-configmap.yml'],
+  consulregistry: [
+    './kubernetes/registry-k8s/consul.yml',
+    './kubernetes/registry-k8s/consul-config-loader.yml',
+    './kubernetes/registry-k8s/application-configmap.yml',
   ],
-  msmongodb: ['./msmongodb-k8s/msmongodb-deployment.yml', './msmongodb-k8s/msmongodb-mongodb.yml', './msmongodb-k8s/msmongodb-service.yml'],
-  msmariadb: ['./msmariadb-k8s/msmariadb-deployment.yml', './msmariadb-k8s/msmariadb-mariadb.yml', './msmariadb-k8s/msmariadb-service.yml'],
-  msmssqldb: ['./msmssqldb-k8s/msmssqldb-deployment.yml', './msmssqldb-k8s/msmssqldb-mssql.yml', './msmssqldb-k8s/msmssqldb-service.yml'],
+  jhgate: [
+    './kubernetes/jhgate-k8s/jhgate-deployment.yml',
+    './kubernetes/jhgate-k8s/jhgate-mysql.yml',
+    './kubernetes/jhgate-k8s/jhgate-service.yml',
+  ],
+  jhgateingress: ['./kubernetes/jhgate-k8s/jhgate-ingress.yml'],
+  customnamespace: ['./kubernetes/namespace.yml'],
+  msmysql: [
+    './kubernetes/msmysql-k8s/msmysql-deployment.yml',
+    './kubernetes/msmysql-k8s/msmysql-mysql.yml',
+    './kubernetes/msmysql-k8s/msmysql-service.yml',
+  ],
+  mspsql: [
+    './kubernetes/mspsql-k8s/mspsql-deployment.yml',
+    './kubernetes/mspsql-k8s/mspsql-postgresql.yml',
+    './kubernetes/mspsql-k8s/mspsql-service.yml',
+    './kubernetes/mspsql-k8s/mspsql-elasticsearch.yml',
+  ],
+  msmongodb: [
+    './kubernetes/msmongodb-k8s/msmongodb-deployment.yml',
+    './kubernetes/msmongodb-k8s/msmongodb-mongodb.yml',
+    './kubernetes/msmongodb-k8s/msmongodb-service.yml',
+  ],
+  msmariadb: [
+    './kubernetes/msmariadb-k8s/msmariadb-deployment.yml',
+    './kubernetes/msmariadb-k8s/msmariadb-mariadb.yml',
+    './kubernetes/msmariadb-k8s/msmariadb-service.yml',
+  ],
+  msmssqldb: [
+    './kubernetes/msmssqldb-k8s/msmssqldb-deployment.yml',
+    './kubernetes/msmssqldb-k8s/msmssqldb-mssql.yml',
+    './kubernetes/msmssqldb-k8s/msmssqldb-service.yml',
+  ],
   monolith: [
-    './samplemysql-k8s/samplemysql-deployment.yml',
-    './samplemysql-k8s/samplemysql-mysql.yml',
-    './samplemysql-k8s/samplemysql-service.yml',
-    './samplemysql-k8s/samplemysql-elasticsearch.yml',
+    './kubernetes/samplemysql-k8s/samplemysql-deployment.yml',
+    './kubernetes/samplemysql-k8s/samplemysql-mysql.yml',
+    './kubernetes/samplemysql-k8s/samplemysql-service.yml',
+    './kubernetes/samplemysql-k8s/samplemysql-elasticsearch.yml',
   ],
   kafka: [
-    './samplekafka-k8s/samplekafka-deployment.yml',
-    './samplekafka-k8s/samplekafka-mysql.yml',
-    './samplekafka-k8s/samplekafka-service.yml',
-    './messagebroker-k8s/kafka.yml',
+    './kubernetes/samplekafka-k8s/samplekafka-deployment.yml',
+    './kubernetes/samplekafka-k8s/samplekafka-mysql.yml',
+    './kubernetes/samplekafka-k8s/samplekafka-service.yml',
+    './kubernetes/messagebroker-k8s/kafka.yml',
   ],
   prometheusmonit: [
-    './monitoring-k8s/jhipster-prometheus-crd.yml',
-    './monitoring-k8s/jhipster-prometheus-cr.yml',
-    './monitoring-k8s/jhipster-grafana.yml',
-    './monitoring-k8s/jhipster-grafana-dashboard.yml',
+    './kubernetes/monitoring-k8s/jhipster-prometheus-crd.yml',
+    './kubernetes/monitoring-k8s/jhipster-prometheus-cr.yml',
+    './kubernetes/monitoring-k8s/jhipster-grafana.yml',
+    './kubernetes/monitoring-k8s/jhipster-grafana-dashboard.yml',
   ],
-  jhgategateway: ['./jhgate-k8s/jhgate-gateway.yml', './jhgate-k8s/jhgate-destination-rule.yml', './jhgate-k8s/jhgate-virtual-service.yml'],
-  applyScript: ['./kubectl-apply.sh'],
-  keycloak: ['./keycloak-k8s/keycloak.yml', './keycloak-k8s/keycloak-configmap.yml', './keycloak-k8s/keycloak-postgresql.yml'],
-  certmanager: ['./cert-manager/letsencrypt-staging-ca-secret.yml', './cert-manager/letsencrypt-staging-issuer.yml'],
+  jhgategateway: [
+    './kubernetes/jhgate-k8s/jhgate-gateway.yml',
+    './kubernetes/jhgate-k8s/jhgate-destination-rule.yml',
+    './kubernetes/jhgate-k8s/jhgate-virtual-service.yml',
+  ],
+  applyScript: ['./kubernetes/kubectl-apply.sh'],
+  keycloak: [
+    './kubernetes/keycloak-k8s/keycloak.yml',
+    './kubernetes/keycloak-k8s/keycloak-configmap.yml',
+    './kubernetes/keycloak-k8s/keycloak-postgresql.yml',
+  ],
+  certmanager: ['./kubernetes/cert-manager/letsencrypt-staging-ca-secret.yml', './kubernetes/cert-manager/letsencrypt-staging-issuer.yml'],
 };
 
 describe('generator - Kubernetes', () => {
@@ -53,14 +85,14 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'gateway',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           adminPassword: 'meetup',
           dockerRepositoryName: 'jhipsterrepository',
@@ -81,12 +113,12 @@ describe('generator - Kubernetes', () => {
     });
     it('creates expected registry files and content', () => {
       runResult.assertFile(expectedFiles.consulregistry);
-      runResult.assertFileContent('./registry-k8s/consul.yml', /a 24 chars base64 encoded string/);
+      runResult.assertFileContent('./kubernetes/registry-k8s/consul.yml', /a 24 chars base64 encoded string/);
     });
     it('creates expected gateway files and content', () => {
       runResult.assertFile(expectedFiles.jhgate);
-      runResult.assertFileContent('./jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
-      runResult.assertFileContent('./jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
+      runResult.assertFileContent('./kubernetes/jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
+      runResult.assertFileContent('./kubernetes/jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -103,13 +135,13 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           adminPassword: 'meetup',
           dockerRepositoryName: 'jhipsterrepository',
@@ -130,12 +162,12 @@ describe('generator - Kubernetes', () => {
     });
     it('creates expected registry files and content', () => {
       runResult.assertFile(expectedFiles.eurekaregistry);
-      runResult.assertFileContent('./registry-k8s/jhipster-registry.yml', /# base64 encoded "meetup"/);
+      runResult.assertFileContent('./kubernetes/registry-k8s/jhipster-registry.yml', /# base64 encoded "meetup"/);
     });
     it('creates expected gateway files and content', () => {
       runResult.assertFile(expectedFiles.jhgate);
-      runResult.assertFileContent('./jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
-      runResult.assertFileContent('./jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
+      runResult.assertFileContent('./kubernetes/jhgate-k8s/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
+      runResult.assertFileContent('./kubernetes/jhgate-k8s/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -152,14 +184,14 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -201,14 +233,14 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -250,14 +282,14 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -299,14 +331,14 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -355,14 +387,14 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -410,14 +442,14 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -462,14 +494,14 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -523,14 +555,14 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'monolith',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -570,14 +602,14 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'monolith',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -617,14 +649,14 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -668,14 +700,14 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',
@@ -717,14 +749,14 @@ describe('generator - Kubernetes', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers
-        .runJHipsterInApplication(GENERATOR_KUBERNETES)
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',
-          directoryPath: './',
+          directoryPath: '../',
           chosenApps,
           dockerRepositoryName: 'jhipster',
           dockerPushCommand: 'docker push',

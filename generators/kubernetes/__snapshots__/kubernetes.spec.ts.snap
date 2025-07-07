@@ -2,16 +2,30 @@
 
 exports[`generator - Kubernetes Kafka application should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
+  "09-kafka/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleKafka",
+    "entities": [],
+    "messageBroker": "kafka",
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
       "09-kafka"
     ],
-    "baseName": "workspaces",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "monolith",
-    "directoryPath": "./",
+    "directoryPath": "../",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
@@ -28,22 +42,7 @@ exports[`generator - Kubernetes Kafka application should match files snapshot 1`
 ",
     "stateCleared": "modified",
   },
-  "09-kafka/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "monolith",
-    "authenticationType": "session",
-    "baseName": "sampleKafka",
-    "entities": [],
-    "messageBroker": "kafka",
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "K8S-README.md": {
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -123,7 +122,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -180,7 +179,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -198,7 +197,7 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "messagebroker-k8s/kafka.yml": {
+  "kubernetes/messagebroker-k8s/kafka.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -259,7 +258,7 @@ spec:
   ",
     "stateCleared": "modified",
   },
-  "samplekafka-k8s/samplekafka-deployment.yml": {
+  "kubernetes/samplekafka-k8s/samplekafka-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -361,7 +360,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "samplekafka-k8s/samplekafka-mysql.yml": {
+  "kubernetes/samplekafka-k8s/samplekafka-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -432,7 +431,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "samplekafka-k8s/samplekafka-service.yml": {
+  "kubernetes/samplekafka-k8s/samplekafka-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -451,13 +450,13 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipster/samplekafka
-    context: ./09-kafka
+    context: ../09-kafka
     jib: {}
   tagPolicy:
     envTemplate:
@@ -474,34 +473,6 @@ exports[`generator - Kubernetes Kafka application should match spawn calls snaps
 
 exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "02-mysql",
-      "03-psql"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "deploymentApplicationType": "microservice",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "ingressDomain": null,
-    "ingressType": null,
-    "istio": false,
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
-    "kubernetesStorageClassName": "",
-    "kubernetesUseDynamicStorage": true,
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "02-mysql/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -532,7 +503,34 @@ exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gatew
 ",
     "stateCleared": "modified",
   },
-  "K8S-README.md": {
+  "kubernetes/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "02-mysql",
+      "03-psql"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "microservice",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "ingressDomain": null,
+    "ingressType": null,
+    "istio": false,
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "kubernetesServiceType": "LoadBalancer",
+    "kubernetesStorageClassName": "",
+    "kubernetesUseDynamicStorage": true,
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -610,7 +608,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -668,7 +666,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -691,7 +689,7 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-deployment.yml": {
+  "kubernetes/msmysql-k8s/msmysql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -783,7 +781,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-mysql.yml": {
+  "kubernetes/msmysql-k8s/msmysql-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -854,7 +852,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-service.yml": {
+  "kubernetes/msmysql-k8s/msmysql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -871,7 +869,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-k8s/mspsql-deployment.yml": {
+  "kubernetes/mspsql-k8s/mspsql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -972,7 +970,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-k8s/mspsql-elasticsearch.yml": {
+  "kubernetes/mspsql-k8s/mspsql-elasticsearch.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -1057,7 +1055,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-k8s/mspsql-postgresql.yml": {
+  "kubernetes/mspsql-k8s/mspsql-postgresql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -1138,7 +1136,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-k8s/mspsql-service.yml": {
+  "kubernetes/mspsql-k8s/mspsql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -1155,7 +1153,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/application-configmap.yml": {
+  "kubernetes/registry-k8s/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -1176,7 +1174,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul-config-loader.yml": {
+  "kubernetes/registry-k8s/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1213,7 +1211,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul.yml": {
+  "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -1439,16 +1437,16 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipster/msmysql
-    context: ./02-mysql
+    context: ../02-mysql
     jib: {}
   - image: jhipster/mspsql
-    context: ./03-psql
+    context: ../03-psql
     jib: {}
   tagPolicy:
     envTemplate:
@@ -1465,16 +1463,29 @@ exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gatew
 
 exports[`generator - Kubernetes gateway and ingress should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
       "01-gateway"
     ],
-    "baseName": "workspaces",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
-    "directoryPath": "./",
+    "directoryPath": "../",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "ingressDomain": "example.com",
@@ -1492,21 +1503,7 @@ exports[`generator - Kubernetes gateway and ingress should match files snapshot 
 ",
     "stateCleared": "modified",
   },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "K8S-README.md": {
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -1586,7 +1583,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-deployment.yml": {
+  "kubernetes/jhgate-k8s/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1680,7 +1677,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-ingress.yml": {
+  "kubernetes/jhgate-k8s/jhgate-ingress.yml": {
     "contents": "apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -1702,7 +1699,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-mysql.yml": {
+  "kubernetes/jhgate-k8s/jhgate-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -1773,7 +1770,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-service.yml": {
+  "kubernetes/jhgate-k8s/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -1791,7 +1788,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -1852,7 +1849,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -1872,7 +1869,7 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/application-configmap.yml": {
+  "kubernetes/registry-k8s/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -1893,7 +1890,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul-config-loader.yml": {
+  "kubernetes/registry-k8s/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1930,7 +1927,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul.yml": {
+  "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -2156,13 +2153,13 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipster/jhgate
-    context: ./01-gateway
+    context: ../01-gateway
     jib: {}
   tagPolicy:
     envTemplate:
@@ -2179,16 +2176,29 @@ exports[`generator - Kubernetes gateway and ingress should match spawn calls sna
 
 exports[`generator - Kubernetes gateway and ingressType gke should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "authenticationType": "oauth2",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
       "01-gateway"
     ],
-    "baseName": "workspaces",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
-    "directoryPath": "./",
+    "directoryPath": "../",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "ingressDomain": "example.com",
@@ -2206,21 +2216,7 @@ exports[`generator - Kubernetes gateway and ingressType gke should match files s
 ",
     "stateCleared": "modified",
   },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "authenticationType": "oauth2",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "K8S-README.md": {
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -2353,7 +2349,7 @@ kubectl describe certificate keycloak-ssl
 ",
     "stateCleared": "modified",
   },
-  "cert-manager/letsencrypt-staging-ca-secret.yml": {
+  "kubernetes/cert-manager/letsencrypt-staging-ca-secret.yml": {
     "contents": "# The truststore contains  "(STAGING) Artificial Apricot R3" and "(STAGING) Pretend Pear X1" certificates
 # https://letsencrypt.org/docs/staging-environment/
 # Truststore password is 123456
@@ -2368,7 +2364,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "cert-manager/letsencrypt-staging-issuer.yml": {
+  "kubernetes/cert-manager/letsencrypt-staging-issuer.yml": {
     "contents": "apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
@@ -2388,7 +2384,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-deployment.yml": {
+  "kubernetes/jhgate-k8s/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -2501,7 +2497,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-ingress.yml": {
+  "kubernetes/jhgate-k8s/jhgate-ingress.yml": {
     "contents": "apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -2542,7 +2538,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-mysql.yml": {
+  "kubernetes/jhgate-k8s/jhgate-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -2613,7 +2609,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-service.yml": {
+  "kubernetes/jhgate-k8s/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -2631,7 +2627,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "keycloak-k8s/keycloak-configmap.yml": {
+  "kubernetes/keycloak-k8s/keycloak-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -5141,7 +5137,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "keycloak-k8s/keycloak-postgresql.yml": {
+  "kubernetes/keycloak-k8s/keycloak-postgresql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -5222,7 +5218,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "keycloak-k8s/keycloak.yml": {
+  "kubernetes/keycloak-k8s/keycloak.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -5311,7 +5307,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -5375,7 +5371,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -5402,7 +5398,7 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/application-configmap.yml": {
+  "kubernetes/registry-k8s/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -5423,7 +5419,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul-config-loader.yml": {
+  "kubernetes/registry-k8s/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5460,7 +5456,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul.yml": {
+  "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -5686,13 +5682,13 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipster/jhgate
-    context: ./01-gateway
+    context: ../01-gateway
     jib: {}
   tagPolicy:
     envTemplate:
@@ -5709,16 +5705,29 @@ exports[`generator - Kubernetes gateway and ingressType gke should match spawn c
 
 exports[`generator - Kubernetes gateway and ingressType nginx should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "authenticationType": "oauth2",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
       "01-gateway"
     ],
-    "baseName": "workspaces",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
-    "directoryPath": "./",
+    "directoryPath": "../",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "ingressDomain": "example.com",
@@ -5736,21 +5745,7 @@ exports[`generator - Kubernetes gateway and ingressType nginx should match files
 ",
     "stateCleared": "modified",
   },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "authenticationType": "oauth2",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "K8S-README.md": {
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -5857,7 +5852,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-deployment.yml": {
+  "kubernetes/jhgate-k8s/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5957,7 +5952,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-ingress.yml": {
+  "kubernetes/jhgate-k8s/jhgate-ingress.yml": {
     "contents": "apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -5989,7 +5984,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-mysql.yml": {
+  "kubernetes/jhgate-k8s/jhgate-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -6060,7 +6055,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-service.yml": {
+  "kubernetes/jhgate-k8s/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -6078,7 +6073,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "keycloak-k8s/keycloak-configmap.yml": {
+  "kubernetes/keycloak-k8s/keycloak-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8588,7 +8583,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "keycloak-k8s/keycloak-postgresql.yml": {
+  "kubernetes/keycloak-k8s/keycloak-postgresql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -8669,7 +8664,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "keycloak-k8s/keycloak.yml": {
+  "kubernetes/keycloak-k8s/keycloak.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -8758,7 +8753,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -8821,7 +8816,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -8845,7 +8840,7 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/application-configmap.yml": {
+  "kubernetes/registry-k8s/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8866,7 +8861,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul-config-loader.yml": {
+  "kubernetes/registry-k8s/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8903,7 +8898,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul.yml": {
+  "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -9129,13 +9124,13 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipster/jhgate
-    context: ./01-gateway
+    context: ../01-gateway
     jib: {}
   tagPolicy:
     envTemplate:
@@ -9152,34 +9147,6 @@ exports[`generator - Kubernetes gateway and ingressType nginx should match spawn
 
 exports[`generator - Kubernetes gateway and mysql microservice should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "01-gateway",
-      "02-mysql"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "deploymentApplicationType": "microservice",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "ingressDomain": null,
-    "ingressType": null,
-    "istio": false,
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
-    "kubernetesStorageClassName": "",
-    "kubernetesUseDynamicStorage": true,
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "01-gateway/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -9209,7 +9176,34 @@ exports[`generator - Kubernetes gateway and mysql microservice should match file
 ",
     "stateCleared": "modified",
   },
-  "K8S-README.md": {
+  "kubernetes/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "01-gateway",
+      "02-mysql"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "microservice",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "ingressDomain": null,
+    "ingressType": null,
+    "istio": false,
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "kubernetesServiceType": "LoadBalancer",
+    "kubernetesStorageClassName": "",
+    "kubernetesUseDynamicStorage": true,
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -9291,7 +9285,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-deployment.yml": {
+  "kubernetes/jhgate-k8s/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9385,7 +9379,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-mysql.yml": {
+  "kubernetes/jhgate-k8s/jhgate-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -9456,7 +9450,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-service.yml": {
+  "kubernetes/jhgate-k8s/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -9474,7 +9468,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -9532,7 +9526,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -9554,7 +9548,7 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-deployment.yml": {
+  "kubernetes/msmysql-k8s/msmysql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9646,7 +9640,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-mysql.yml": {
+  "kubernetes/msmysql-k8s/msmysql-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -9717,7 +9711,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-service.yml": {
+  "kubernetes/msmysql-k8s/msmysql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -9734,7 +9728,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/application-configmap.yml": {
+  "kubernetes/registry-k8s/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9755,7 +9749,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul-config-loader.yml": {
+  "kubernetes/registry-k8s/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9792,7 +9786,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul.yml": {
+  "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -10018,16 +10012,16 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipster/jhgate
-    context: ./01-gateway
+    context: ../01-gateway
     jib: {}
   - image: jhipster/msmysql
-    context: ./02-mysql
+    context: ../02-mysql
     jib: {}
   tagPolicy:
     envTemplate:
@@ -10044,16 +10038,29 @@ exports[`generator - Kubernetes gateway and mysql microservice should match spaw
 
 exports[`generator - Kubernetes gateway with istio routing should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
       "01-gateway"
     ],
-    "baseName": "workspaces",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
-    "directoryPath": "./",
+    "directoryPath": "../",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "ingressDomain": "example.com",
@@ -10071,21 +10078,7 @@ exports[`generator - Kubernetes gateway with istio routing should match files sn
 ",
     "stateCleared": "modified",
   },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "K8S-README.md": {
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -10165,7 +10158,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 ",
     "stateCleared": "modified",
   },
-  "istio-k8s/grafana-gateway.yml": {
+  "kubernetes/istio-k8s/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -10211,7 +10204,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-k8s/kiali-gateway.yml": {
+  "kubernetes/istio-k8s/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -10256,7 +10249,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "istio-k8s/zipkin-gateway.yml": {
+  "kubernetes/istio-k8s/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -10302,7 +10295,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-deployment.yml": {
+  "kubernetes/jhgate-k8s/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -10402,7 +10395,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-destination-rule.yml": {
+  "kubernetes/jhgate-k8s/jhgate-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -10433,7 +10426,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-gateway.yml": {
+  "kubernetes/jhgate-k8s/jhgate-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
 # using certificates and prefer that for production use
@@ -10481,7 +10474,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-mysql.yml": {
+  "kubernetes/jhgate-k8s/jhgate-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -10554,7 +10547,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-service.yml": {
+  "kubernetes/jhgate-k8s/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -10572,7 +10565,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-virtual-service.yml": {
+  "kubernetes/jhgate-k8s/jhgate-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -10593,7 +10586,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -10654,7 +10647,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -10727,21 +10720,21 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "patch-k8s/istio-label.yml": {
+  "kubernetes/patch-k8s/istio-label.yml": {
     "contents": "- op: add
   path: "/metadata/labels/istio-injection"
   value: "enabled"
 ",
     "stateCleared": "modified",
   },
-  "patch-k8s/istio-namespace.yml": {
+  "kubernetes/patch-k8s/istio-namespace.yml": {
     "contents": "- op: replace
   path: "/metadata/namespace"
   value: "istio-system"
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/application-configmap.yml": {
+  "kubernetes/registry-k8s/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -10762,7 +10755,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul-config-loader.yml": {
+  "kubernetes/registry-k8s/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -10799,7 +10792,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul.yml": {
+  "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -11027,13 +11020,13 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipster/jhgate
-    context: ./01-gateway
+    context: ../01-gateway
     jib: {}
   tagPolicy:
     envTemplate:
@@ -11060,39 +11053,6 @@ exports[`generator - Kubernetes gateway with istio routing should match spawn ca
 
 exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql microservices should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "01-gateway",
-      "02-mysql",
-      "03-psql",
-      "04-mongo",
-      "07-mariadb",
-      "11-mssql"
-    ],
-    "baseName": "workspaces",
-    "clusteredDbApps": [],
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "deploymentApplicationType": "microservice",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "ingressDomain": null,
-    "ingressType": null,
-    "istio": false,
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
-    "kubernetesStorageClassName": "",
-    "kubernetesUseDynamicStorage": true,
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "01-gateway/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -11180,7 +11140,39 @@ exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql mi
 ",
     "stateCleared": "modified",
   },
-  "K8S-README.md": {
+  "kubernetes/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "01-gateway",
+      "02-mysql",
+      "03-psql",
+      "04-mongo",
+      "07-mariadb",
+      "11-mssql"
+    ],
+    "clusteredDbApps": [],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "microservice",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "ingressDomain": null,
+    "ingressType": null,
+    "istio": false,
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "kubernetesServiceType": "LoadBalancer",
+    "kubernetesStorageClassName": "",
+    "kubernetesUseDynamicStorage": true,
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -11270,7 +11262,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-deployment.yml": {
+  "kubernetes/jhgate-k8s/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11364,7 +11356,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-mysql.yml": {
+  "kubernetes/jhgate-k8s/jhgate-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -11435,7 +11427,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-service.yml": {
+  "kubernetes/jhgate-k8s/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -11453,7 +11445,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -11515,7 +11507,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -11550,7 +11542,7 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-k8s/msmariadb-deployment.yml": {
+  "kubernetes/msmariadb-k8s/msmariadb-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11647,7 +11639,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-k8s/msmariadb-mariadb.yml": {
+  "kubernetes/msmariadb-k8s/msmariadb-mariadb.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -11733,7 +11725,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-k8s/msmariadb-service.yml": {
+  "kubernetes/msmariadb-k8s/msmariadb-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -11750,7 +11742,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-k8s/msmongodb-deployment.yml": {
+  "kubernetes/msmongodb-k8s/msmongodb-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11840,7 +11832,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-k8s/msmongodb-mongodb.yml": {
+  "kubernetes/msmongodb-k8s/msmongodb-mongodb.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12166,7 +12158,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-k8s/msmongodb-service.yml": {
+  "kubernetes/msmongodb-k8s/msmongodb-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -12183,7 +12175,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmssqldb-k8s/msmssqldb-deployment.yml": {
+  "kubernetes/msmssqldb-k8s/msmssqldb-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12270,7 +12262,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmssqldb-k8s/msmssqldb-mssql.yml": {
+  "kubernetes/msmssqldb-k8s/msmssqldb-mssql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -12360,7 +12352,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmssqldb-k8s/msmssqldb-service.yml": {
+  "kubernetes/msmssqldb-k8s/msmssqldb-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -12377,7 +12369,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-deployment.yml": {
+  "kubernetes/msmysql-k8s/msmysql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12469,7 +12461,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-mysql.yml": {
+  "kubernetes/msmysql-k8s/msmysql-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -12540,7 +12532,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-service.yml": {
+  "kubernetes/msmysql-k8s/msmysql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -12557,7 +12549,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-k8s/mspsql-deployment.yml": {
+  "kubernetes/mspsql-k8s/mspsql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12658,7 +12650,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-k8s/mspsql-elasticsearch.yml": {
+  "kubernetes/mspsql-k8s/mspsql-elasticsearch.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -12743,7 +12735,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-k8s/mspsql-postgresql.yml": {
+  "kubernetes/mspsql-k8s/mspsql-postgresql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -12824,7 +12816,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-k8s/mspsql-service.yml": {
+  "kubernetes/mspsql-k8s/mspsql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -12841,7 +12833,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/application-configmap.yml": {
+  "kubernetes/registry-k8s/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12862,7 +12854,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul-config-loader.yml": {
+  "kubernetes/registry-k8s/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12899,7 +12891,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul.yml": {
+  "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -13125,28 +13117,28 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipster/jhgate
-    context: ./01-gateway
+    context: ../01-gateway
     jib: {}
   - image: jhipster/msmysql
-    context: ./02-mysql
+    context: ../02-mysql
     jib: {}
   - image: jhipster/mspsql
-    context: ./03-psql
+    context: ../03-psql
     jib: {}
   - image: jhipster/msmongodb
-    context: ./04-mongo
+    context: ../04-mongo
     jib: {}
   - image: jhipster/msmariadb
-    context: ./07-mariadb
+    context: ../07-mariadb
     jib: {}
   - image: jhipster/msmssqldb
-    context: ./11-mssql
+    context: ../11-mssql
     jib: {}
   tagPolicy:
     envTemplate:
@@ -13163,32 +13155,6 @@ exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql mi
 
 exports[`generator - Kubernetes monolith application should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "08-monolith"
-    ],
-    "baseName": "workspaces",
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "deploymentApplicationType": "monolith",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "ingressDomain": null,
-    "ingressType": null,
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
-    "kubernetesStorageClassName": "",
-    "kubernetesUseDynamicStorage": true,
-    "monitoring": "no",
-    "serviceDiscoveryType": "no"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "08-monolith/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -13205,7 +13171,32 @@ exports[`generator - Kubernetes monolith application should match files snapshot
 ",
     "stateCleared": "modified",
   },
-  "K8S-README.md": {
+  "kubernetes/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "08-monolith"
+    ],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "monolith",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "ingressDomain": null,
+    "ingressType": null,
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "kubernetesServiceType": "LoadBalancer",
+    "kubernetesStorageClassName": "",
+    "kubernetesUseDynamicStorage": true,
+    "monitoring": "no",
+    "serviceDiscoveryType": "no"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -13285,7 +13276,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -13341,7 +13332,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -13358,7 +13349,7 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "samplemysql-k8s/samplemysql-deployment.yml": {
+  "kubernetes/samplemysql-k8s/samplemysql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13446,7 +13437,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "samplemysql-k8s/samplemysql-elasticsearch.yml": {
+  "kubernetes/samplemysql-k8s/samplemysql-elasticsearch.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -13531,7 +13522,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "samplemysql-k8s/samplemysql-mysql.yml": {
+  "kubernetes/samplemysql-k8s/samplemysql-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -13602,7 +13593,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "samplemysql-k8s/samplemysql-service.yml": {
+  "kubernetes/samplemysql-k8s/samplemysql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -13621,13 +13612,13 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipster/samplemysql
-    context: ./08-monolith
+    context: ../08-monolith
     jib: {}
   tagPolicy:
     envTemplate:
@@ -13644,16 +13635,30 @@ exports[`generator - Kubernetes monolith application should match spawn calls sn
 
 exports[`generator - Kubernetes mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
       "02-mysql"
     ],
-    "baseName": "workspaces",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
-    "directoryPath": "./",
+    "directoryPath": "../",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
@@ -13671,22 +13676,7 @@ exports[`generator - Kubernetes mysql microservice with custom namespace and jhi
 ",
     "stateCleared": "modified",
   },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "K8S-README.md": {
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -13786,7 +13776,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -13856,7 +13846,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -13883,7 +13873,7 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "monitoring-k8s/jhipster-grafana-dashboard.yml": {
+  "kubernetes/monitoring-k8s/jhipster-grafana-dashboard.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16233,7 +16223,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "monitoring-k8s/jhipster-grafana.yml": {
+  "kubernetes/monitoring-k8s/jhipster-grafana.yml": {
     "contents": "apiVersion: v1
 kind: Secret
 metadata:
@@ -16312,7 +16302,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "monitoring-k8s/jhipster-prometheus-cr.yml": {
+  "kubernetes/monitoring-k8s/jhipster-prometheus-cr.yml": {
     "contents": "apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -16382,7 +16372,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "monitoring-k8s/jhipster-prometheus-crd.yml": {
+  "kubernetes/monitoring-k8s/jhipster-prometheus-crd.yml": {
     "contents": "apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
@@ -16494,7 +16484,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-deployment.yml": {
+  "kubernetes/msmysql-k8s/msmysql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16588,7 +16578,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-mysql.yml": {
+  "kubernetes/msmysql-k8s/msmysql-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -16659,7 +16649,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-prometheus-sm.yml": {
+  "kubernetes/msmysql-k8s/msmysql-prometheus-sm.yml": {
     "contents": "apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -16677,7 +16667,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-service.yml": {
+  "kubernetes/msmysql-k8s/msmysql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -16694,7 +16684,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "namespace.yml": {
+  "kubernetes/namespace.yml": {
     "contents": "apiVersion: v1
 kind: Namespace
 metadata:
@@ -16703,7 +16693,7 @@ metadata:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/application-configmap.yml": {
+  "kubernetes/registry-k8s/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16724,7 +16714,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul-config-loader.yml": {
+  "kubernetes/registry-k8s/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16761,7 +16751,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul.yml": {
+  "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -16987,13 +16977,13 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipster/msmysql
-    context: ./02-mysql
+    context: ../02-mysql
     jib: {}
   tagPolicy:
     envTemplate:
@@ -17010,16 +17000,29 @@ exports[`generator - Kubernetes mysql microservice with custom namespace and jhi
 
 exports[`generator - Kubernetes mysql microservice with custom namespace should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
       "02-mysql"
     ],
-    "baseName": "workspaces",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
-    "directoryPath": "./",
+    "directoryPath": "../",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
@@ -17037,21 +17040,7 @@ exports[`generator - Kubernetes mysql microservice with custom namespace should 
 ",
     "stateCleared": "modified",
   },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "K8S-README.md": {
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -17127,7 +17116,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -17185,7 +17174,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -17206,7 +17195,7 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-deployment.yml": {
+  "kubernetes/msmysql-k8s/msmysql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17298,7 +17287,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-mysql.yml": {
+  "kubernetes/msmysql-k8s/msmysql-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -17369,7 +17358,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-service.yml": {
+  "kubernetes/msmysql-k8s/msmysql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -17386,7 +17375,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "namespace.yml": {
+  "kubernetes/namespace.yml": {
     "contents": "apiVersion: v1
 kind: Namespace
 metadata:
@@ -17395,7 +17384,7 @@ metadata:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/application-configmap.yml": {
+  "kubernetes/registry-k8s/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -17416,7 +17405,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul-config-loader.yml": {
+  "kubernetes/registry-k8s/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17453,7 +17442,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul.yml": {
+  "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -17679,13 +17668,13 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipster/msmysql
-    context: ./02-mysql
+    context: ../02-mysql
     jib: {}
   tagPolicy:
     envTemplate:
@@ -17702,39 +17691,6 @@ exports[`generator - Kubernetes mysql microservice with custom namespace should 
 
 exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservices with dynamic storage provisioning should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "appsFolders": [
-      "01-gateway",
-      "02-mysql",
-      "03-psql",
-      "04-mongo",
-      "07-mariadb",
-      "11-mssql"
-    ],
-    "baseName": "workspaces",
-    "clusteredDbApps": [],
-    "dbRandomPassword": "SECRET-PASSWORD",
-    "deploymentApplicationType": "microservice",
-    "directoryPath": "./",
-    "dockerPushCommand": "docker push",
-    "dockerRepositoryName": "jhipster",
-    "ingressDomain": null,
-    "ingressType": null,
-    "istio": false,
-    "jwtSecretKey": "SECRET--50",
-    "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
-    "kubernetesStorageClassName": "",
-    "kubernetesUseDynamicStorage": true,
-    "monitoring": "no",
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "01-gateway/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -17822,7 +17778,39 @@ exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservic
 ",
     "stateCleared": "modified",
   },
-  "K8S-README.md": {
+  "kubernetes/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "appsFolders": [
+      "01-gateway",
+      "02-mysql",
+      "03-psql",
+      "04-mongo",
+      "07-mariadb",
+      "11-mssql"
+    ],
+    "clusteredDbApps": [],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "microservice",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "jhipster",
+    "ingressDomain": null,
+    "ingressType": null,
+    "istio": false,
+    "jwtSecretKey": "SECRET--50",
+    "kubernetesNamespace": "default",
+    "kubernetesServiceType": "LoadBalancer",
+    "kubernetesStorageClassName": "",
+    "kubernetesUseDynamicStorage": true,
+    "monitoring": "no",
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -17912,7 +17900,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-deployment.yml": {
+  "kubernetes/jhgate-k8s/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18006,7 +17994,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-mysql.yml": {
+  "kubernetes/jhgate-k8s/jhgate-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -18077,7 +18065,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-service.yml": {
+  "kubernetes/jhgate-k8s/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -18095,7 +18083,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -18157,7 +18145,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -18192,7 +18180,7 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-k8s/msmariadb-deployment.yml": {
+  "kubernetes/msmariadb-k8s/msmariadb-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18289,7 +18277,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-k8s/msmariadb-mariadb.yml": {
+  "kubernetes/msmariadb-k8s/msmariadb-mariadb.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -18375,7 +18363,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmariadb-k8s/msmariadb-service.yml": {
+  "kubernetes/msmariadb-k8s/msmariadb-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -18392,7 +18380,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-k8s/msmongodb-deployment.yml": {
+  "kubernetes/msmongodb-k8s/msmongodb-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18482,7 +18470,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-k8s/msmongodb-mongodb.yml": {
+  "kubernetes/msmongodb-k8s/msmongodb-mongodb.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -18808,7 +18796,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmongodb-k8s/msmongodb-service.yml": {
+  "kubernetes/msmongodb-k8s/msmongodb-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -18825,7 +18813,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmssqldb-k8s/msmssqldb-deployment.yml": {
+  "kubernetes/msmssqldb-k8s/msmssqldb-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18912,7 +18900,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmssqldb-k8s/msmssqldb-mssql.yml": {
+  "kubernetes/msmssqldb-k8s/msmssqldb-mssql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -19002,7 +18990,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmssqldb-k8s/msmssqldb-service.yml": {
+  "kubernetes/msmssqldb-k8s/msmssqldb-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -19019,7 +19007,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-deployment.yml": {
+  "kubernetes/msmysql-k8s/msmysql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19111,7 +19099,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-mysql.yml": {
+  "kubernetes/msmysql-k8s/msmysql-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -19182,7 +19170,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "msmysql-k8s/msmysql-service.yml": {
+  "kubernetes/msmysql-k8s/msmysql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -19199,7 +19187,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-k8s/mspsql-deployment.yml": {
+  "kubernetes/mspsql-k8s/mspsql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19300,7 +19288,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-k8s/mspsql-elasticsearch.yml": {
+  "kubernetes/mspsql-k8s/mspsql-elasticsearch.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -19385,7 +19373,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-k8s/mspsql-postgresql.yml": {
+  "kubernetes/mspsql-k8s/mspsql-postgresql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -19466,7 +19454,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "mspsql-k8s/mspsql-service.yml": {
+  "kubernetes/mspsql-k8s/mspsql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -19483,7 +19471,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/application-configmap.yml": {
+  "kubernetes/registry-k8s/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -19504,7 +19492,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul-config-loader.yml": {
+  "kubernetes/registry-k8s/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19541,7 +19529,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul.yml": {
+  "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -19767,28 +19755,28 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipster/jhgate
-    context: ./01-gateway
+    context: ../01-gateway
     jib: {}
   - image: jhipster/msmysql
-    context: ./02-mysql
+    context: ../02-mysql
     jib: {}
   - image: jhipster/mspsql
-    context: ./03-psql
+    context: ../03-psql
     jib: {}
   - image: jhipster/msmongodb
-    context: ./04-mongo
+    context: ../04-mongo
     jib: {}
   - image: jhipster/msmariadb
-    context: ./07-mariadb
+    context: ../07-mariadb
     jib: {}
   - image: jhipster/msmssqldb
-    context: ./11-mssql
+    context: ../11-mssql
     jib: {}
   tagPolicy:
     envTemplate:
@@ -19805,16 +19793,28 @@ exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservic
 
 exports[`generator - Kubernetes only gateway should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
       "01-gateway"
     ],
-    "baseName": "workspaces",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "gateway",
-    "directoryPath": "./",
+    "directoryPath": "../",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipsterrepository",
     "ingressDomain": null,
@@ -19832,20 +19832,7 @@ exports[`generator - Kubernetes only gateway should match files snapshot 1`] = `
 ",
     "stateCleared": "modified",
   },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "K8S-README.md": {
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -19925,7 +19912,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-deployment.yml": {
+  "kubernetes/jhgate-k8s/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20019,7 +20006,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-mysql.yml": {
+  "kubernetes/jhgate-k8s/jhgate-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -20090,7 +20077,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-service.yml": {
+  "kubernetes/jhgate-k8s/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -20108,7 +20095,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -20166,7 +20153,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -20187,7 +20174,7 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "namespace.yml": {
+  "kubernetes/namespace.yml": {
     "contents": "apiVersion: v1
 kind: Namespace
 metadata:
@@ -20196,7 +20183,7 @@ metadata:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/application-configmap.yml": {
+  "kubernetes/registry-k8s/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -20217,7 +20204,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul-config-loader.yml": {
+  "kubernetes/registry-k8s/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20254,7 +20241,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/consul.yml": {
+  "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -20480,13 +20467,13 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipsterrepository/jhgate
-    context: ./01-gateway
+    context: ../01-gateway
     jib: {}
   tagPolicy:
     envTemplate:
@@ -20503,17 +20490,30 @@ exports[`generator - Kubernetes only gateway should match spawn calls snapshot 1
 
 exports[`generator - Kubernetes only gateway with eureka should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "eureka"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "kubernetes/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "adminPassword": "meetup",
     "appsFolders": [
       "01-gateway"
     ],
-    "baseName": "workspaces",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "monolith",
-    "directoryPath": "./",
+    "directoryPath": "../",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipsterrepository",
     "ingressDomain": null,
@@ -20530,21 +20530,7 @@ exports[`generator - Kubernetes only gateway with eureka should match files snap
 ",
     "stateCleared": "modified",
   },
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "eureka"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "K8S-README.md": {
+  "kubernetes/K8S-README.md": {
     "contents": "# JHipster-generated Kubernetes configuration
 
 ## Preparation
@@ -20643,7 +20629,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-deployment.yml": {
+  "kubernetes/jhgate-k8s/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20742,7 +20728,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-mysql.yml": {
+  "kubernetes/jhgate-k8s/jhgate-mysql.yml": {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -20813,7 +20799,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "jhgate-k8s/jhgate-service.yml": {
+  "kubernetes/jhgate-k8s/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -20831,7 +20817,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubectl-apply.sh": {
+  "kubernetes/kubectl-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
@@ -20889,7 +20875,7 @@ logSummary
 ",
     "stateCleared": "modified",
   },
-  "kustomization.yml": {
+  "kubernetes/kustomization.yml": {
     "contents": "commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
@@ -20909,7 +20895,7 @@ patchesJson6902:
 ",
     "stateCleared": "modified",
   },
-  "namespace.yml": {
+  "kubernetes/namespace.yml": {
     "contents": "apiVersion: v1
 kind: Namespace
 metadata:
@@ -20918,7 +20904,7 @@ metadata:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/application-configmap.yml": {
+  "kubernetes/registry-k8s/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -20955,7 +20941,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "registry-k8s/jhipster-registry.yml": {
+  "kubernetes/registry-k8s/jhipster-registry.yml": {
     "contents": "# JHipster Registry HA cluster
 #
 # Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
@@ -21067,13 +21053,13 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "skaffold.yml": {
+  "kubernetes/skaffold.yml": {
     "contents": "apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
   - image: jhipsterrepository/jhgate
-    context: ./01-gateway
+    context: ../01-gateway
     jib: {}
   tagPolicy:
     envTemplate:
