@@ -5,6 +5,7 @@ const command = {
     appsFolders: {
       type: Array,
       description: 'Application folders',
+      scope: 'storage',
     },
   },
   configs: {

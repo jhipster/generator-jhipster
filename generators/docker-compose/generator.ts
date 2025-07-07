@@ -22,12 +22,11 @@ import chalk from 'chalk';
 
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import normalize from 'normalize-path';
-import { defaults } from 'lodash-es';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import type { Deployment as BaseDeployment, WorkspacesApplication as BaseWorkspacesApplication } from '../base-workspaces/index.js';
 
-import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
+import { monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { convertSecretToBase64, createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
 import { createFaker } from '../base-application/support/index.ts';
@@ -44,7 +43,6 @@ import { writeFiles } from './files.js';
 
 const { PROMETHEUS } = monitoringTypes;
 const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
-const { Options: DeploymentOptions } = deploymentOptions;
 
 export default class DockerComposeGenerator extends BaseWorkspacesGenerator<BaseDeployment, BaseWorkspacesApplication> {
   async beforeQueue() {
@@ -79,18 +77,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
-  get loading() {
-    return this.asLoadingTaskGroup({
-      loadWorkspacesConfig() {
-        this.loadWorkspacesConfig();
-      },
-    });
-  }
-
-  get [BaseWorkspacesGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get promptingWorkspaces() {
@@ -157,9 +143,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
         deployment.keycloakRedirectUris = '';
         deployment.appsYaml = applications.map(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
-          appConfig.clusteredDb = deployment.clusteredDbApps?.includes(appConfig.appFolder);
           const parentConfiguration = {};
-          const path = this.destinationPath(this.directoryPath, appConfig.appFolder);
+          const path = this.destinationPath(this.directoryPath, appConfig.appFolder!);
           // Add application configuration
           const yaml = parseYaml(this.fs.read(`${path}/src/main/docker/app.yml`)!);
           const yamlConfig = yaml.services.app;
@@ -264,7 +249,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
               databaseYamlConfig.build.context = relativePath;
             }
 
-            if (appConfig.clusteredDb) {
+            if (deployment.clusteredDbApps?.includes(appConfig.appFolder!)) {
               const clusterDbYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${database}-cluster.yml`)!);
               const dbNodeConfig = clusterDbYaml.services[`${database}-node`];
               dbNodeConfig.build.context = relativePath;
@@ -388,10 +373,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     } else {
       this.log.verboseInfo(`${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
     }
-  }
-
-  override get jhipsterConfigWithDefaults() {
-    return defaults({}, this.config.getAll(), DeploymentOptions.defaults(this.jhipsterConfig.deploymentType));
   }
 
   loadDeploymentConfig({ deployment }: { deployment: BaseDeployment }) {

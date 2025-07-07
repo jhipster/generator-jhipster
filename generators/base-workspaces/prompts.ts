@@ -62,7 +62,7 @@ export const askForDirectoryPath = asPromptingTask(async function askForDirector
   );
 });
 
-async function findApplicationFolders(generator: BaseWorkspacesGenerator, directoryPath = generator.directoryPath ?? '.') {
+async function findApplicationFolders(generator: BaseWorkspacesGenerator, directoryPath: string): Promise<string[]> {
   return (await readdir(generator.destinationPath(directoryPath), { withFileTypes: true }))
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name)
