@@ -25,7 +25,7 @@ import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import { packageJson } from '../../lib/index.js';
 import type { Config as WorkspacesConfig, Options as WorkspacesOptions } from './types.js';
 
-export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, any, any, WorkspacesConfig, WorkspacesOptions> {
+export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, any, WorkspacesConfig, WorkspacesOptions> {
   workspaces!: boolean;
   generateApplications!: () => Promise<void>;
   generateWith!: string;

@@ -52,12 +52,8 @@ export type WorkspacesApplication = ServiceDiscoveryApplication &
   MonitoringApplication &
   ApplicationAll & { composePort?: number; clusteredDb?: boolean; appFolder: string };
 
-export type Workspaces = {
-  directoryPath: string;
-};
-
 export type Deployment = DeploymentConfig & {
-  appConfigs?: any[];
+  appConfigs?: WorkspacesApplication[];
   applications?: any[];
   appsYaml?: string[];
   clusteredDbApps?: string[];
@@ -81,4 +77,9 @@ export type Deployment = DeploymentConfig & {
   monitoring?: string;
   monitoringElk?: boolean;
   monitoringPrometheus?: boolean;
+
+  monolithicNb?: number;
+  gatewayNb?: number;
+  microserviceNb?: number;
+  portsToBind?: number;
 };

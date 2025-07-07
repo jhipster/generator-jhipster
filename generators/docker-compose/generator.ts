@@ -25,11 +25,7 @@ import normalize from 'normalize-path';
 import { defaults } from 'lodash-es';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
-import type {
-  Deployment as BaseDeployment,
-  Workspaces as BaseWorkspaces,
-  WorkspacesApplication as BaseWorkspacesApplication,
-} from '../base-workspaces/index.js';
+import type { Deployment as BaseDeployment, WorkspacesApplication as BaseWorkspacesApplication } from '../base-workspaces/index.js';
 
 import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
@@ -50,7 +46,7 @@ const { PROMETHEUS } = monitoringTypes;
 const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { Options: DeploymentOptions } = deploymentOptions;
 
-export default class DockerComposeGenerator extends BaseWorkspacesGenerator<BaseDeployment, BaseWorkspaces, BaseWorkspacesApplication> {
+export default class DockerComposeGenerator extends BaseWorkspacesGenerator<BaseDeployment, BaseWorkspacesApplication> {
   async beforeQueue() {
     if (this.appsFolders && this.appsFolders.length > 0) {
       this.jhipsterConfig.appsFolders = this.appsFolders;
@@ -155,7 +151,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get default() {
     return this.asDefaultTaskGroup({
-      async setAppsYaml({ workspaces, deployment, applications }) {
+      async setAppsYaml({ deployment, applications }) {
         const faker = await createFaker();
 
         deployment.keycloakRedirectUris = '';
@@ -163,7 +159,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
           appConfig.clusteredDb = deployment.clusteredDbApps?.includes(appConfig.appFolder);
           const parentConfiguration = {};
-          const path = this.destinationPath(workspaces.directoryPath, appConfig.appFolder);
+          const path = this.destinationPath(this.directoryPath, appConfig.appFolder);
           // Add application configuration
           const yaml = parseYaml(this.fs.read(`${path}/src/main/docker/app.yml`)!);
           const yamlConfig = yaml.services.app;
@@ -343,8 +339,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get end() {
     return this.asAnyTaskGroup({
-      end({ workspaces, applications }) {
-        this.checkApplicationsDockerImages({ workspaces, applications });
+      end({ applications }) {
+        this.checkApplicationsDockerImages({ applications });
 
         this.log.verboseInfo(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
         const uiApplications = applications.filter(
@@ -365,7 +361,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     return this.delegateTasksToBlueprint(() => this.end);
   }
 
-  checkApplicationsDockerImages({ workspaces, applications }: { workspaces: any; applications: any[] }) {
+  checkApplicationsDockerImages({ applications }: { applications: any[] }) {
     this.log.log('\nChecking Docker images in applications directories...');
 
     let imagePath = '';
@@ -374,15 +370,15 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     let warningMessage = 'To generate the missing Docker image(s), please run:\n';
     applications.forEach(application => {
       if (application.buildToolGradle) {
-        imagePath = this.destinationPath(workspaces.directoryPath, application.appFolder, 'build/jib-cache');
+        imagePath = this.destinationPath(this.directoryPath, application.appFolder, 'build/jib-cache');
         runCommand = `./gradlew bootJar -Pprod jibDockerBuild${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''}`;
       } else if (application.buildToolMaven) {
-        imagePath = this.destinationPath(workspaces.directoryPath, application.appFolder, '/target/jib-cache');
+        imagePath = this.destinationPath(this.directoryPath, application.appFolder, '/target/jib-cache');
         runCommand = `./mvnw -ntp -Pprod verify jib:dockerBuild${process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''}`;
       }
       if (!existsSync(imagePath)) {
         hasWarning = true;
-        warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(workspaces.directoryPath, application.appFolder)}\n`;
+        warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath, application.appFolder)}\n`;
       }
     });
     if (hasWarning) {

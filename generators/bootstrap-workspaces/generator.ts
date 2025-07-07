@@ -84,14 +84,6 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
     return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
   }
 
-  get loadingWorkspaces() {
-    return this.asLoadingWorkspacesTaskGroup({
-      loadWorkspacesConfig({ workspaces }) {
-        this.loadWorkspacesConfig({ context: workspaces });
-      },
-    });
-  }
-
   get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
     return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
   }
