@@ -80,14 +80,14 @@ script:
   - <%= clientPackageManager %> run java:jar:prod
 <%_ if (buildToolMaven) { _%>
   <%_ if (ciCdIntegrationsSonar) { _%>
-  - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN; fi
+  - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.token=$SONAR_TOKEN; fi
   <%_ } _%>
   <%_ if (ciCdIntegrationsHeroku) { _%>
   - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
   <%_ } _%>
 <%_ } else if (buildToolGradle) { _%>
   <%_ if (ciCdIntegrationsSonar) { _%>
-  - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN; fi
+  - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.token=$SONAR_TOKEN; fi
   <%_ } _%>
   <%_ if (ciCdIntegrationsHeroku) { _%>
   - ./gradlew deployHeroku

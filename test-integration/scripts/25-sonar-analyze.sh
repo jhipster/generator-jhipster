@@ -13,7 +13,7 @@ if [[ "$JHI_APP" = "ngx-default" && "$GITHUB_REPOSITORY" = "jhipster/generator-j
         -Dsonar.host.url=https://sonarcloud.io \
         -Dsonar.projectKey=jhipster-sample-application \
         -Dsonar.organization=jhipster \
-        -Dsonar.login=$SONAR_TOKEN
+        -Dsonar.token=$SONAR_TOKEN
 
 elif [[ $JHI_SONAR = 1 ]]; then
     echo "*** Sonar analyze locally"
