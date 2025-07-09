@@ -25,6 +25,7 @@ import <%= packageName %>.domain.Authority;<% } %>
 import <%= user.entityAbsoluteClass %>;
 <%_ } _%>
 
+import java.io.Serial;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 <%_ if (generateSpringAuditor) { _%>
@@ -42,6 +43,7 @@ import java.util.stream.Collectors;
  * A DTO representing a user, with his authorities.
  */
 public class <%= user.adminUserDto %> implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private <%= user.primaryKey.type %> id;

@@ -21,6 +21,7 @@ package <%= packageName %>.web.rest;
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 
+import java.io.Serial;
 import java.security.Principal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,7 @@ public class AccountResource {
 
     private static class AccountResourceException extends RuntimeException {
 
+        @Serial
         private static final long serialVersionUID = 1L;
 
         private AccountResourceException(String message) {
