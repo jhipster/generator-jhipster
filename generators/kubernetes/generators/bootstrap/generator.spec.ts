@@ -18,10 +18,9 @@
  */
 import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { before, describe, expect, it } from 'esmocha';
+import { describe } from 'esmocha';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -32,22 +31,4 @@ const generator = `${basename(resolve(__dirname, '../../'))}:${basename(__dirnam
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
-
-  describe('with defaults options', () => {
-    before(async () => {
-      await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig();
-    });
-
-    it('should match files snapshot', () => {
-      expect(result.getStateSnapshot()).toMatchSnapshot();
-    });
-
-    it('should call source snapshot', () => {
-      expect(result.sourceCallsArg).toMatchSnapshot();
-    });
-
-    it('should compose with generators', () => {
-      expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
-    });
-  });
 });

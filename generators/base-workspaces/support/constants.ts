@@ -17,5 +17,5 @@
  * limitations under the License.
  */
 export const CONTEXT_DATA_DEPLOYMENT_KEY = 'jhipster:deployment';
-export const CONTEXT_DATA_WORKSPACES_KEY = 'jhipster:workspaces';
+export const CONTEXT_DATA_WORKSPACES_ROOT_KEY = 'jhipster:workspaces:root';
 export const CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY = 'jhipster:workspaces:applications';

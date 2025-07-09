@@ -20,4 +20,4 @@ import type { Config as BaseWorkspacesConfig, Options as BaseWorkspacesOptions }
 export type { WorkspacesApplication } from '../base-workspaces/types.js';
 
 export type Config = BaseWorkspacesConfig & { baseName: string; monorepository: boolean };
-export type Options = BaseWorkspacesOptions & { customWorkspacesConfig?: boolean; monorepository: boolean };
+export type Options = BaseWorkspacesOptions & { monorepository: boolean };

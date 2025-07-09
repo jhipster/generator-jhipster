@@ -96,6 +96,9 @@ const Options = {
   ...kubernetesRelatedOptions,
 
   defaults(deploymentType?: ValueOf<typeof DeploymentTypes>) {
+    if (!deploymentType) {
+      throw new Error('Deployment type is required');
+    }
     if (deploymentType === this.deploymentType.kubernetes) {
       return {
         appsFolders: [],
@@ -127,14 +130,7 @@ const Options = {
 
     return {
       appsFolders: [],
-      directoryPath: this.directoryPath,
-      clusteredDbApps: [],
-      serviceDiscoveryType: this.serviceDiscoveryType.no,
-      monitoring: this.monitoring.no,
-      dockerRepositoryName: this.dockerRepositoryName,
-      dockerPushCommand: this.dockerPushCommand,
-      // storageType: this.storageType.ephemeral,
-      // registryReplicas: this.registryReplicas.two,
+      directoryPath: './',
     };
   },
 } as const;

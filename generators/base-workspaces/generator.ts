@@ -28,7 +28,11 @@ import type { Application as SimpleApplication } from '../base-simple-applicatio
 import type { GenericTaskGroup } from '../base-core/types.js';
 import { removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
-import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/index.js';
+import {
+  CONTEXT_DATA_DEPLOYMENT_KEY,
+  CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY,
+  CONTEXT_DATA_WORKSPACES_ROOT_KEY,
+} from './support/index.js';
 import type {
   Deployment as BaseDeployment,
   Config as BaseWorkspacesConfig,
@@ -73,8 +77,6 @@ export default abstract class BaseWorkspacesGenerator<
   static LOADING_WORKSPACES = BaseGenerator.asPriority(LOADING_WORKSPACES);
 
   static PREPARING_WORKSPACES = BaseGenerator.asPriority(PREPARING_WORKSPACES);
-
-  customWorkspacesConfig?: boolean;
 
   constructor(args, options: Options, features: Features) {
     super(args, options, features);
@@ -122,8 +124,8 @@ export default abstract class BaseWorkspacesGenerator<
     });
   }
 
-  get #sharedWorkspaces(): any {
-    return this.getContextData(CONTEXT_DATA_WORKSPACES_KEY, { factory: () => ({}) });
+  get workspacesRoot(): string {
+    return this.getContextData(CONTEXT_DATA_WORKSPACES_ROOT_KEY);
   }
 
   get promptingWorkspaces() {
@@ -143,11 +145,18 @@ export default abstract class BaseWorkspacesGenerator<
   }
 
   workspacePath(...dest: string[]): string {
-    return join(this.options.workspacesRoot ?? this.destinationPath(this.directoryPath), ...dest);
+    return join(this.workspacesRoot, ...dest);
   }
 
   private resolveApplicationFolders({ appsFolders = this.appsFolders }: { directoryPath?: string; appsFolders?: string[] } = {}) {
     return Object.fromEntries(appsFolders.map(appFolder => [appFolder, this.workspacePath(appFolder)]));
+  }
+
+  setWorkspacesRoot(root: string) {
+    const oldValue = this.getContextData(CONTEXT_DATA_WORKSPACES_ROOT_KEY, { replacement: root });
+    if (oldValue) {
+      throw new Error(`Workspaces root is already set to ${oldValue}. Cannot change it to ${root}.`);
+    }
   }
 
   async bootstrapApplications() {
@@ -183,7 +192,6 @@ export default abstract class BaseWorkspacesGenerator<
     return [
       {
         ...first,
-        workspaces: this.#sharedWorkspaces,
         deployment: this.context,
         applications: this.#applications,
       },

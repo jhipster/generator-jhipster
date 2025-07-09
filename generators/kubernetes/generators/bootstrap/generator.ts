@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import assert from 'node:assert';
 import { randomBytes } from 'crypto';
 import { defaults } from 'lodash-es';
 import BaseWorkspacesGenerator from '../../../base-workspaces/index.js';
@@ -28,13 +29,14 @@ import { createBase64Secret } from '../../../../lib/utils/secret.ts';
 export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
+      this.jhipsterConfig.deploymentType ??= 'kubernetes';
+      assert.equal(this.jhipsterConfig.deploymentType, 'kubernetes', 'Deployment type must be kubernetes');
+
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:bootstrap-workspaces', {
-        generatorOptions: { customWorkspacesConfig: true, workspacesRoot: this.workspacePath() },
-      });
+      await this.composeWithJHipster('jhipster:bootstrap-workspaces');
     }
   }
 
@@ -60,16 +62,16 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
-  get configuring() {
-    return this.asConfiguringTaskGroup({
-      defaults() {
-        this.jhipsterConfig.deploymentType = 'kubernetes';
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      setWorkspacesRoot() {
+        this.setWorkspacesRoot(this.destinationPath(this.jhipsterConfig.directoryPath));
       },
     });
   }
 
-  get [BaseWorkspacesGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+  get [BaseWorkspacesGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get configuringWorkspaces() {

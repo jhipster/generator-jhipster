@@ -141,11 +141,12 @@ export const askForPath = asPromptingTask(async function askForPath(this: BaseKu
 export const askForApps = asPromptingTask(async function askForApps(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
 
+  const workspacesRoot = this.destinationPath(this.jhipsterConfig.directoryPath);
   const appsFolders = getAppFolders
-    .call(this, this.workspacePath(), this.deploymentApplicationType)
+    .call(this, workspacesRoot, this.deploymentApplicationType)
     .filter(appFolder => appFolder !== 'jhipster-registry' && appFolder !== 'registry');
 
-  this.log.log(chalk.green(`${appsFolders.length} applications found at ${this.workspacePath()}\n`));
+  this.log.log(chalk.green(`${appsFolders.length} applications found at ${workspacesRoot}\n`));
 
   const messageAskForApps = 'Which applications do you want to include in your configuration?';
 

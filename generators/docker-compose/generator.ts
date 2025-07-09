@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import assert from 'node:assert';
 import { existsSync } from 'fs';
 import pathjs from 'path';
 import chalk from 'chalk';
@@ -27,7 +28,6 @@ import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import type { Deployment as BaseDeployment, WorkspacesApplication as BaseWorkspacesApplication } from '../base-workspaces/index.js';
 
 import { monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
-import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { convertSecretToBase64, createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
 import { createFaker } from '../base-application/support/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
@@ -38,6 +38,7 @@ import {
   askForMonitoring,
   askForServiceDiscoveryWorkspace,
 } from '../base-workspaces/internal/docker-prompts.js';
+import { askForDirectoryPath } from '../base-workspaces/prompts.ts';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files.js';
 
@@ -46,13 +47,15 @@ const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 
 export default class DockerComposeGenerator extends BaseWorkspacesGenerator<BaseDeployment, BaseWorkspacesApplication> {
   async beforeQueue() {
-    if (this.appsFolders && this.appsFolders.length > 0) {
-      this.jhipsterConfig.appsFolders = this.appsFolders;
+    if (!this.fromBlueprint) {
+      this.jhipsterConfig.deploymentType ??= 'docker-compose';
+      assert.equal(this.jhipsterConfig.deploymentType, 'docker-compose', 'Deployment type must be docker-compose');
+
+      await this.composeWithBlueprints();
     }
 
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES, { generatorOptions: { workspacesRoot: this.workspacePath() } });
-    if (!this.fromBlueprint) {
-      await this.composeWithBlueprints();
+    if (!this.delegateToBlueprint) {
+      await this.composeWithJHipster('jhipster:bootstrap-workspaces');
     }
   }
 
@@ -77,6 +80,28 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
+  }
+
+  get prompting() {
+    return this.asPromptingTaskGroup({
+      askForDirectoryPath,
+    });
+  }
+
+  get [BaseWorkspacesGenerator.PROMPTING]() {
+    return this.delegateTasksToBlueprint(() => this.prompting);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      setWorkspacesRoot() {
+        this.setWorkspacesRoot(this.destinationPath(this.jhipsterConfig.directoryPath));
+      },
+    });
+  }
+
+  get [BaseWorkspacesGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get promptingWorkspaces() {

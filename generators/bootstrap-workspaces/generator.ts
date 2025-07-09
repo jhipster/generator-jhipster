@@ -18,7 +18,6 @@
  */
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base/support/constants.ts';
 import { CommandBaseWorkspacesGenerator as BaseWorkspacesGenerator } from '../base-workspaces/index.js';
-import { askForDirectoryPath } from '../base-workspaces/prompts.js';
 import { normalizePathEnd } from '../../lib/utils/path.ts';
 import type command from './command.js';
 
@@ -33,18 +32,12 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
     }
   }
 
-  get prompting() {
-    return this.asPromptingTaskGroup({ askForDirectoryPath });
-  }
-
-  get [BaseWorkspacesGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
   get configuring() {
     return this.asConfiguringTaskGroup({
       configureWorkspaces() {
-        this.jhipsterConfig.directoryPath = normalizePathEnd(this.jhipsterConfigWithDefaults.directoryPath);
+        if (this.jhipsterConfig.directoryPath) {
+          this.jhipsterConfig.directoryPath = normalizePathEnd(this.jhipsterConfigWithDefaults.directoryPath);
+        }
       },
     });
   }

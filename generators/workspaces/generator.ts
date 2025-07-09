@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import assert from 'node:assert';
 import { existsSync } from 'fs';
 
 import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENERATOR_REACT } from '../generator-list.js';
@@ -37,13 +37,14 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, an
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
+      this.jhipsterConfig.deploymentType ??= 'none';
+      assert.equal(this.jhipsterConfig.deploymentType, 'none', 'Deployment type must be none');
+
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES, {
-        generatorOptions: { customWorkspacesConfig: true, workspacesRoot: this.workspacePath() },
-      });
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
     }
   }
 
@@ -69,8 +70,8 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, an
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      async configure() {
-        this.jhipsterConfig.baseName = this.jhipsterConfig.baseName || 'workspaces';
+      defaults() {
+        this.jhipsterConfig.baseName = this.jhipsterConfig.baseName ?? 'workspaces';
       },
       async configureUsingFiles() {
         if (!this.generateWorkspaces) return;
@@ -130,6 +131,18 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, an
 
   get [BaseWorkspacesGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      setWorkspacesRoot() {
+        this.setWorkspacesRoot(this.destinationPath());
+      },
+    });
+  }
+
+  get [BaseWorkspacesGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get loadingWorkspaces() {
