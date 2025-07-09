@@ -1,5 +1,6 @@
 package <%- entityAbsolutePackage %>.<%_ if(jpaMetamodelFiltering && reactive) { _%>domain<%_ } else { _%>service<%_ } _%>.criteria;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Optional;
 import java.util.Objects;
@@ -50,6 +51,7 @@ public class <%- entityClass %>Criteria implements Serializable, Criteria {
     }
 <%_ } _%>
 
+    @Serial
     private static final long serialVersionUID = 1L;
 <%_ for (const filterableProperty of entityJavaFilterableProperties) { _%>
 

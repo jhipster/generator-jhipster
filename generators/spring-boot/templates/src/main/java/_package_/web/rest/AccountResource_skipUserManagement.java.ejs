@@ -24,6 +24,9 @@ import <%= packageName %>.domain.Authority;
 
 <%_ } _%>
 
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+import java.io.Serial;
+<%_ } _%>
 import java.security.Principal;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
@@ -68,6 +71,7 @@ public class AccountResource {
 
     private static class AccountResourceException extends RuntimeException {
 <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+        @Serial
         private static final long serialVersionUID = 1L;
 
         private AccountResourceException(String message) {

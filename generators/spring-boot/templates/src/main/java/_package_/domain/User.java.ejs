@@ -83,6 +83,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import java.io.Serializable;
 <%_ if (!authenticationTypeOauth2) { _%>
 import java.time.Instant;
@@ -135,6 +136,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ } _%>
 public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends AbstractAuditingEntity<<%= user.primaryKey.type %>><% } %> implements Serializable<% if (databaseTypeSql && reactive && requiresPersistableImplementation) { %>, Persistable<<% if (user.primaryKey.hasUUID) { %>UUID<% } else { %>String<% } %>><% } %> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
 <%_ if (databaseTypeCouchbase) { _%>

@@ -58,6 +58,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 <%_ } _%>
 
+import java.io.Serial;
 import java.io.Serializable;
 <%_ if (anyFieldIsBigDecimal) { _%>
 import java.math.BigDecimal;
@@ -104,6 +105,7 @@ import <%= otherEntity.entityAbsoluteClass %>;
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class <%= persistClass %> <&- fragments.extendsSection() -&>implements Serializable<&- fragments.additionalInterfacesSection() -&> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
 <%_ if (!embedded && primaryKey.composite) { _%>

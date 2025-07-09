@@ -43,6 +43,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.Serial;
 import java.io.Serializable;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 import java.time.LocalDate;
@@ -275,6 +276,7 @@ public class PersistentTokenRememberMeServices extends AbstractRememberMeService
 
     private static class UpgradedRememberMeToken implements Serializable {
 
+        @Serial
         private static final long serialVersionUID = 1L;
 
         private final String[] upgradedToken;

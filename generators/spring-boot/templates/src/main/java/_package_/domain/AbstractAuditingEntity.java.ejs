@@ -40,6 +40,7 @@ import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 <%_ } _%>
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 <%_ if (databaseTypeSql) { _%>
@@ -61,6 +62,7 @@ import jakarta.persistence.MappedSuperclass;
 @JsonIgnoreProperties(value = { "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" }, allowGetters = true)
 public abstract class AbstractAuditingEntity<T> implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public abstract T getId();
