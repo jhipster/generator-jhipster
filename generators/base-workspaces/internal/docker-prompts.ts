@@ -39,7 +39,7 @@ const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 export const askForApplicationType = asPromptingTask(async function askForApplicationType(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
 
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
         type: 'list',
@@ -60,7 +60,6 @@ export const askForApplicationType = asPromptingTask(async function askForApplic
     ],
     this.config,
   );
-  this.deploymentApplicationType = props.deploymentApplicationType;
 });
 
 /**
@@ -68,9 +67,9 @@ export const askForApplicationType = asPromptingTask(async function askForApplic
  */
 export const askForGatewayType = asPromptingTask(async function askForGatewayType(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
-  if (this.deploymentApplicationType !== MICROSERVICE) return;
+  if (this.jhipsterConfigWithDefaults.deploymentApplicationType !== MICROSERVICE) return;
 
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
         type: 'list',
@@ -87,7 +86,6 @@ export const askForGatewayType = asPromptingTask(async function askForGatewayTyp
     ],
     this.config,
   );
-  this.gatewayType = props.gatewayType;
 });
 
 /**
@@ -96,7 +94,7 @@ export const askForGatewayType = asPromptingTask(async function askForGatewayTyp
 export const askForPath = asPromptingTask(async function askForPath(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
 
-  const deploymentApplicationType = this.deploymentApplicationType;
+  const deploymentApplicationType = this.jhipsterConfigWithDefaults.deploymentApplicationType;
   let messageAskForPath;
   if (deploymentApplicationType === MONOLITH) {
     messageAskForPath = 'Enter the root directory where your applications are located';
@@ -104,7 +102,7 @@ export const askForPath = asPromptingTask(async function askForPath(this: BaseKu
     messageAskForPath = 'Enter the root directory where your gateway(s) and microservices are located';
   }
 
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
         type: 'input',
@@ -143,14 +141,14 @@ export const askForApps = asPromptingTask(async function askForApps(this: BaseKu
 
   const workspacesRoot = this.destinationPath(this.jhipsterConfig.directoryPath);
   const appsFolders = getAppFolders
-    .call(this, workspacesRoot, this.deploymentApplicationType)
+    .call(this, workspacesRoot, this.jhipsterConfigWithDefaults.deploymentApplicationType)
     .filter(appFolder => appFolder !== 'jhipster-registry' && appFolder !== 'registry');
 
   this.log.log(chalk.green(`${appsFolders.length} applications found at ${workspacesRoot}\n`));
 
   const messageAskForApps = 'Which applications do you want to include in your configuration?';
 
-  const props = await this.prompt([
+  const answers = await this.prompt([
     {
       type: 'checkbox',
       name: 'chosenApps',
@@ -160,7 +158,7 @@ export const askForApps = asPromptingTask(async function askForApps(this: BaseKu
       validate: input => (input.length === 0 ? 'Please choose at least one application' : true),
     },
   ]);
-  this.jhipsterConfig.appsFolders = props.chosenApps;
+  this.jhipsterConfig.appsFolders = answers.chosenApps;
 });
 
 /**
@@ -172,7 +170,7 @@ export const askForClustersMode: any = asPromptingWorkspacesTask(async function 
   const clusteredDbApps = applications.filter(app => app.databaseTypeMongodb || app.databaseTypeCouchbase).map(app => app.appFolder!);
   if (clusteredDbApps.length === 0) return;
 
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
         type: 'checkbox',
@@ -183,7 +181,6 @@ export const askForClustersMode: any = asPromptingWorkspacesTask(async function 
     ],
     this.config,
   );
-  (this as BaseKubernetesGenerator).clusteredDbApps = props.clusteredDbApps;
 });
 
 /**
@@ -192,7 +189,7 @@ export const askForClustersMode: any = asPromptingWorkspacesTask(async function 
 export const askForMonitoring = asPromptingTask(async function askForMonitoring({ control }) {
   if (!this.shouldAskForPrompts({ control })) return;
 
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
         type: 'list',
@@ -213,7 +210,6 @@ export const askForMonitoring = asPromptingTask(async function askForMonitoring(
     ],
     this.config,
   );
-  (this as BaseKubernetesGenerator).monitoring = props.monitoring;
 });
 
 /**
@@ -230,15 +226,15 @@ export const askForServiceDiscovery: any = asPromptingWorkspacesTask(async funct
     }));
 
   if (serviceDiscoveryEnabledApps.length === 0) {
-    (this as BaseKubernetesGenerator).serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
+    this.jhipsterConfig.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
     return;
   }
 
   if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === CONSUL)) {
-    (this as BaseKubernetesGenerator).serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = CONSUL;
+    this.jhipsterConfig.serviceDiscoveryType = CONSUL;
     this.log.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
   } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === EUREKA)) {
-    (this as BaseKubernetesGenerator).serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = EUREKA;
+    this.jhipsterConfig.serviceDiscoveryType = EUREKA;
     this.log.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
   } else {
     this.log.warn(
@@ -249,7 +245,7 @@ export const askForServiceDiscovery: any = asPromptingWorkspacesTask(async funct
       this.log.verboseInfo(` -${app.baseName} (${app.serviceDiscoveryType})`);
     });
 
-    const props = await this.prompt(
+    await this.prompt(
       [
         {
           type: 'list',
@@ -274,7 +270,6 @@ export const askForServiceDiscovery: any = asPromptingWorkspacesTask(async funct
       ],
       this.config,
     );
-    (this as BaseKubernetesGenerator).serviceDiscoveryType = props.serviceDiscoveryType;
   }
 });
 
@@ -367,22 +362,18 @@ export const askForServiceDiscoveryWorkspace = asPromptingWorkspacesTask(async f
  */
 export const askForAdminPassword = asPromptingTask(async function askForAdminPassword(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
-  if (this.serviceDiscoveryType !== EUREKA) return;
+  if (this.jhipsterConfigWithDefaults.serviceDiscoveryType !== (EUREKA as string)) return;
 
-  const props = await this.prompt(
-    [
-      {
-        type: 'input',
-        name: 'adminPassword',
-        message: 'Enter the admin password used to secure the JHipster Registry',
-        default: 'admin',
-        validate: input => (input.length < 5 ? 'The password must have at least 5 characters' : true),
-      },
-    ],
-    this.config,
-  );
-  this.adminPassword = props.adminPassword;
-  this.adminPasswordBase64 = convertSecretToBase64(this.adminPassword);
+  const answers = await this.prompt([
+    {
+      type: 'input',
+      name: 'adminPassword',
+      message: 'Enter the admin password used to secure the JHipster Registry',
+      default: 'admin',
+      validate: input => (input.length < 5 ? 'The password must have at least 5 characters' : true),
+    },
+  ]);
+  this.jhipsterConfig.adminPasswordBase64 = convertSecretToBase64(answers.adminPassword);
 });
 
 /**
@@ -394,18 +385,17 @@ export const askForDockerRepositoryName = asPromptingTask(async function askForD
 ) {
   if (!this.shouldAskForPrompts({ control })) return;
 
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
         type: 'input',
         name: 'dockerRepositoryName',
         message: 'What should we use for the base Docker repository name?',
-        default: this.dockerRepositoryName,
+        default: this.jhipsterConfigWithDefaults.dockerRepositoryName,
       },
     ],
     this.config,
   );
-  this.dockerRepositoryName = props.dockerRepositoryName;
 });
 
 /**
@@ -414,18 +404,17 @@ export const askForDockerRepositoryName = asPromptingTask(async function askForD
 export const askForDockerPushCommand = asPromptingTask(async function askForDockerPushCommand(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
 
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
         type: 'input',
         name: 'dockerPushCommand',
         message: 'What command should we use for push Docker image to repository?',
-        default: this.dockerPushCommand ? this.dockerPushCommand : 'docker push',
+        default: this.jhipsterConfigWithDefaults.dockerPushCommand,
       },
     ],
     this.config,
   );
-  this.dockerPushCommand = props.dockerPushCommand;
 });
 
 /**

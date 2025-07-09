@@ -162,7 +162,7 @@ describe('generator - Kubernetes', () => {
     });
     it('creates expected registry files and content', () => {
       runResult.assertFile(expectedFiles.eurekaregistry);
-      runResult.assertFileContent('./kubernetes/registry-k8s/jhipster-registry.yml', /# base64 encoded "meetup"/);
+      runResult.assertFileContent('./kubernetes/registry-k8s/jhipster-registry.yml', /bWVldHVw/);
     });
     it('creates expected gateway files and content', () => {
       runResult.assertFile(expectedFiles.jhgate);

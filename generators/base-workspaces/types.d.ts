@@ -18,7 +18,7 @@
  */
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
 import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
-import type { Config as BaseConfig } from '../base/index.js';
+import type { Config as BaseConfig, Options as BaseOptions } from '../base/index.js';
 import type { helmConstants, kubernetesConstants } from '../kubernetes/support/constants.ts';
 
 export type { Source } from '../base/types.js';
@@ -29,6 +29,7 @@ type DeploymentConfig = {
 
   jwtSecretKey: string;
   adminPassword: string;
+  adminPasswordBase64: string;
   dbRandomPassword: string;
 
   deploymentType: string;
@@ -38,16 +39,24 @@ type DeploymentConfig = {
 
   kubernetesUseDynamicStorage: boolean;
   kubernetesStorageClassName: string;
-  generatorType: string;
+  // knative property
+  generatorType: 'k8s' | 'helm';
+  istio: boolean;
+
+  deploymentApplicationType: 'microservice' | 'monolith';
 };
 
 export type Config = BaseConfig & DeploymentConfig;
 
-export type { Features, Options } from '../base/types.js';
+export type { Features } from '../base/types.js';
+
+export type Options = BaseOptions & DeploymentConfig;
 
 type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscoveryType', ['no', 'eureka', 'consul']>;
 
 type MonitoringApplication = OptionWithDerivedProperties<'monitoring', ['no', 'elk', 'prometheus']>;
+
+type KNativeGeneratorType = OptionWithDerivedProperties<'generatorType', ['k8s', 'helm']>;
 
 export type WorkspacesApplication = ServiceDiscoveryApplication &
   MonitoringApplication &
@@ -61,6 +70,7 @@ export type WorkspacesApplication = ServiceDiscoveryApplication &
 type KubernetesDeployment = typeof kubernetesConstants & typeof helmConstants & {};
 
 export type Deployment = DeploymentConfig &
+  KNativeGeneratorType &
   KubernetesDeployment & {
     appConfigs?: WorkspacesApplication[];
     applications?: any[];
@@ -78,6 +88,15 @@ export type Deployment = DeploymentConfig &
     useMemcached?: boolean;
     useRedis?: boolean;
     includesApplicationTypeGateway?: boolean;
+    useKeycloak?: boolean;
+    usesIngress?: boolean;
+    serviceDiscoveryTypeConsul?: boolean;
+    serviceDiscoveryTypeEureka?: boolean;
+    kubernetesNamespaceDefault?: boolean;
+    kubernetesServiceTypeIngress?: boolean;
+    ingressTypeGke?: boolean;
+    ingressTypeNginx?: boolean;
+    deploymentApplicationTypeMicroservice?: boolean;
 
     entryPort?: number;
     dockerRepositoryName?: string;
@@ -87,8 +106,15 @@ export type Deployment = DeploymentConfig &
     monitoringElk?: boolean;
     monitoringPrometheus?: boolean;
 
+    serviceDiscoveryAny?: boolean;
+    serviceDiscoveryConsul?: boolean;
+    serviceDiscoveryEureka?: boolean;
+
     monolithicNb?: number;
     gatewayNb?: number;
     microserviceNb?: number;
     portsToBind?: number;
+
+    deploymentApplicationType?: 'microservice' | 'monolith';
+    kubernetesNamespace?: string;
   };

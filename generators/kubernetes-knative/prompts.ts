@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import { kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
-import { generatorDefaultConfig } from '../kubernetes/kubernetes-constants.js';
 import { asPromptingTask } from '../base-application/support/index.js';
 import type { BaseKubernetesGenerator } from '../kubernetes/generator.ts';
 
@@ -27,7 +26,7 @@ const { HELM, K8S } = GeneratorTypes;
 export const askForGeneratorType = asPromptingTask(async function askForGeneratorType(this: BaseKubernetesGenerator, { control }) {
   if (!this.options.askAnswered && control.existingProject) return;
 
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
         type: 'list',
@@ -43,10 +42,9 @@ export const askForGeneratorType = asPromptingTask(async function askForGenerato
             name: 'Helm Kubernetes generator',
           },
         ],
-        default: this.generatorType ? this.generatorType : generatorDefaultConfig.generatorType,
+        default: K8S,
       },
     ],
     this.config,
   );
-  this.generatorType = props.generatorType;
 });

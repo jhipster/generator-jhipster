@@ -519,7 +519,7 @@ exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gatew
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": null,
+    "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
@@ -1493,7 +1493,7 @@ exports[`generator - Kubernetes gateway and ingress should match files snapshot 
     "dockerRepositoryName": "jhipster",
     "ingressDomain": "example.com",
     "ingressType": "nginx",
-    "istio": null,
+    "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "Ingress",
@@ -2207,7 +2207,7 @@ exports[`generator - Kubernetes gateway and ingressType gke should match files s
     "dockerRepositoryName": "jhipster",
     "ingressDomain": "example.com",
     "ingressType": "gke",
-    "istio": null,
+    "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "Ingress",
@@ -5737,7 +5737,7 @@ exports[`generator - Kubernetes gateway and ingressType nginx should match files
     "dockerRepositoryName": "jhipster",
     "ingressDomain": "example.com",
     "ingressType": "nginx",
-    "istio": null,
+    "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "Ingress",
@@ -9196,7 +9196,7 @@ exports[`generator - Kubernetes gateway and mysql microservice should match file
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": null,
+    "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
@@ -11167,7 +11167,7 @@ exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql mi
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": null,
+    "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
@@ -13673,7 +13673,7 @@ exports[`generator - Kubernetes mysql microservice with custom namespace and jhi
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": null,
+    "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
@@ -17038,7 +17038,7 @@ exports[`generator - Kubernetes mysql microservice with custom namespace should 
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": null,
+    "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
@@ -17809,7 +17809,7 @@ exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservic
     "dockerRepositoryName": "jhipster",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": null,
+    "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
@@ -19832,7 +19832,7 @@ exports[`generator - Kubernetes only gateway should match files snapshot 1`] = `
     "dockerRepositoryName": "jhipsterrepository",
     "ingressDomain": null,
     "ingressType": null,
-    "istio": null,
+    "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "jhipsternamespace",
     "kubernetesServiceType": "LoadBalancer",
@@ -19988,8 +19988,6 @@ spec:
           value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-          value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
         - name: SERVER_SHUTDOWN
@@ -20520,7 +20518,7 @@ exports[`generator - Kubernetes only gateway with eureka should match files snap
   "kubernetes/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "adminPassword": "meetup",
+    "adminPasswordBase64": "bWVldHVw",
     "appsFolders": [
       "01-gateway"
     ],
@@ -20711,8 +20709,6 @@ spec:
           value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-          value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
         - name: SERVER_SHUTDOWN
@@ -20977,7 +20973,7 @@ metadata:
   namespace: jhipsternamespace
 type: Opaque
 data:
-  registry-admin-password: bWVldHVw # base64 encoded "meetup"
+  registry-admin-password: bWVldHVw
 ---
 apiVersion: v1
 kind: Service

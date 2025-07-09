@@ -20,7 +20,6 @@ import { applicationTypes, databaseTypes, kubernetesPlatformTypes } from '../../
 import { asPromptingTask } from '../base-application/support/index.js';
 import { asPromptingWorkspacesTask } from '../base-workspaces/support/task-type-inference.ts';
 import type { BaseKubernetesGenerator } from './generator.ts';
-import { defaultKubernetesConfig, ingressDefaultConfig } from './kubernetes-constants.js';
 
 const { MONOLITH } = applicationTypes;
 const { IngressTypes, ServiceTypes } = kubernetesPlatformTypes;
@@ -35,18 +34,17 @@ export const askForKubernetesNamespace = asPromptingTask(async function askForKu
 ) {
   if (!this.shouldAskForPrompts({ control })) return;
 
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
         type: 'input',
         name: 'kubernetesNamespace',
         message: 'What should we use for the Kubernetes namespace?',
-        default: this.kubernetesNamespace ? this.kubernetesNamespace : defaultKubernetesConfig.kubernetesNamespace,
+        default: this.jhipsterConfigWithDefaults.kubernetesNamespace,
       },
     ],
     this.config,
   );
-  this.kubernetesNamespace = props.kubernetesNamespace;
 });
 
 export const askForKubernetesServiceType = asPromptingTask(async function askForKubernetesServiceType(
@@ -55,12 +53,10 @@ export const askForKubernetesServiceType = asPromptingTask(async function askFor
 ) {
   if (!this.shouldAskForPrompts({ control })) return;
 
-  const istio = this.istio;
-
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
-        when: () => !istio,
+        when: () => !this.jhipsterConfigWithDefaults.istio,
         type: 'list',
         name: 'kubernetesServiceType',
         message: 'Choose the Kubernetes service type for your edge services',
@@ -83,17 +79,14 @@ export const askForKubernetesServiceType = asPromptingTask(async function askFor
     ],
     this.config,
   );
-  this.kubernetesServiceType = props.kubernetesServiceType;
 });
 
 export const askForIngressType = asPromptingTask(async function askForIngressType(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
-  const kubernetesServiceType = this.kubernetesServiceType;
-
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
-        when: () => kubernetesServiceType === INGRESS,
+        when: () => this.jhipsterConfigWithDefaults.kubernetesServiceType === INGRESS,
         type: 'list',
         name: 'ingressType',
         message: 'Choose the Kubernetes Ingress type',
@@ -107,58 +100,56 @@ export const askForIngressType = asPromptingTask(async function askForIngressTyp
             name: 'Google Kubernetes Engine Ingress - choose this if you are running on GKE',
           },
         ],
-        default: this.ingressType ? this.ingressType : ingressDefaultConfig.ingressType,
+        default: this.jhipsterConfigWithDefaults.ingressType,
       },
     ],
     this.config,
   );
-  this.ingressType = props.ingressType;
 });
 
 export const askForIngressDomain = asPromptingTask(async function askForIngressDomain(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
-  const kubernetesServiceType = this.kubernetesServiceType;
-  const istio = this.istio;
-  this.ingressDomain = this.ingressDomain?.startsWith('.') ? this.ingressDomain.substring(1) : this.ingressDomain;
-
-  const istioIpCommand = "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'";
-  let istioMessage = '';
-
-  let defaultValue = '';
-  if (this.ingressDomain) {
-    defaultValue = this.ingressDomain;
-  } else if (istio) {
-    // If it's Istio, and no previous domain is configured, try to determine the default value
-    try {
-      const { stdout: istioIngressIp } = this.spawnCommandSync(istioIpCommand, { stdio: 'pipe' });
-      defaultValue = `${istioIngressIp}.nip.io`;
-    } catch {
-      istioMessage = `Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line:\n    ${istioIpCommand}`;
-    }
-  } else if (this.ingressType === NGINX) {
-    defaultValue = '192.168.99.100.nip.io';
-  } else {
-    defaultValue = 'none';
-  }
 
   const examples = ['example.com', '192.168.99.100.nip.io'];
-  if (this.ingressType !== NGINX && !istio) {
+  if (this.jhipsterConfigWithDefaults.ingressType !== NGINX && !this.jhipsterConfigWithDefaults.istio) {
     examples.push('none');
   }
+  let defaultValue = '';
+  let istioMessage = '';
 
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
-        when: () => kubernetesServiceType === INGRESS || istio === true,
+        when: () => {
+          const when = this.jhipsterConfigWithDefaults.kubernetesServiceType === INGRESS || this.jhipsterConfigWithDefaults.istio;
+          if (when) {
+            if (this.jhipsterConfigWithDefaults.istio) {
+              const istioIpCommand =
+                "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'";
+              // If it's Istio, and no previous domain is configured, try to determine the default value
+              try {
+                const { stdout: istioIngressIp } = this.spawnCommandSync(istioIpCommand, { stdio: 'pipe' });
+                defaultValue = `${istioIngressIp}.nip.io`;
+              } catch {
+                istioMessage = `Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line:\n    ${istioIpCommand}`;
+              }
+            } else if (this.jhipsterConfigWithDefaults.ingressType === NGINX) {
+              defaultValue = '192.168.99.100.nip.io';
+            } else {
+              defaultValue = this.jhipsterConfigWithDefaults.ingressDomain;
+            }
+          }
+          return when;
+        },
         type: 'input',
         name: 'ingressDomain',
         message: `${istioMessage}${istioMessage ? '\n' : ''}What is the root FQDN for your ingress services (e.g. ${examples.join(', ')})?`,
         // if Ingress Type is nginx, then default to minikube ip
         // else, default to empty string, because it's mostly not needed.
-        default: defaultValue,
+        default: () => defaultValue,
         validate: input => {
           if (input.length === 0) {
-            if (this.ingressType === NGINX || istio) {
+            if (this.jhipsterConfigWithDefaults.ingressType === NGINX || this.jhipsterConfigWithDefaults.istio) {
               return 'domain name cannot be empty';
             }
             return true;
@@ -176,21 +167,16 @@ export const askForIngressDomain = asPromptingTask(async function askForIngressD
     ],
     this.config,
   );
-  if (props.ingressDomain === 'none') {
-    this.ingressDomain = '';
-  } else {
-    this.ingressDomain = props.ingressDomain ? props.ingressDomain : '';
-  }
 });
 
 export const askForIstioSupport = asPromptingTask(async function askForIstioSupport(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
-  if (this.deploymentApplicationType === MONOLITH) {
-    this.istio = false;
+  if (this.jhipsterConfigWithDefaults.deploymentApplicationType === MONOLITH) {
+    this.jhipsterConfigWithDefaults.istio = false;
     return;
   }
 
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
         type: 'list',
@@ -206,12 +192,11 @@ export const askForIstioSupport = asPromptingTask(async function askForIstioSupp
             name: 'Yes',
           },
         ],
-        default: this.istio,
+        default: this.jhipsterConfigWithDefaults.istio,
       },
     ],
     this.config,
   );
-  this.istio = props.istio;
 });
 
 export const askForPersistentStorage = asPromptingWorkspacesTask(async function askForPersistentStorage(
@@ -220,7 +205,7 @@ export const askForPersistentStorage = asPromptingWorkspacesTask(async function 
 ) {
   if (!this.shouldAskForPrompts({ control })) return;
   const usingDataBase = applications.some(appConfig => appConfig.prodDatabaseType !== NO_DATABASE);
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
         when: () => usingDataBase,
@@ -237,32 +222,25 @@ export const askForPersistentStorage = asPromptingWorkspacesTask(async function 
             name: 'Yes',
           },
         ],
-        default: this.kubernetesUseDynamicStorage,
+        default: this.jhipsterConfigWithDefaults.kubernetesUseDynamicStorage,
       },
     ],
     this.config,
   );
-  this.kubernetesUseDynamicStorage = props.kubernetesUseDynamicStorage;
 });
 
 export const askForStorageClassName = asPromptingTask(async function askForStorageClassName(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
-  const kubernetesUseDynamicStorage = this.kubernetesUseDynamicStorage;
-
-  const props = await this.prompt(
+  await this.prompt(
     [
       {
-        when: () => kubernetesUseDynamicStorage,
+        when: () => this.jhipsterConfigWithDefaults.kubernetesUseDynamicStorage,
         type: 'input',
         name: 'kubernetesStorageClassName',
         message: 'Do you want to use a specific storage class? (leave empty for using the clusters default storage class)',
-        default: this.kubernetesStorageClassName ? this.kubernetesStorageClassName : '',
+        default: this.jhipsterConfigWithDefaults.kubernetesStorageClassName,
       },
     ],
     this.config,
   );
-  // Add the StorageClass value only if dynamic storage is enabled
-  if (kubernetesUseDynamicStorage) {
-    this.kubernetesStorageClassName = props.kubernetesStorageClassName.trim();
-  }
 });
