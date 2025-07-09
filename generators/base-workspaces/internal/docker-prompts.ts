@@ -142,10 +142,10 @@ export const askForApps = asPromptingTask(async function askForApps(this: BaseKu
   if (!this.shouldAskForPrompts({ control })) return;
 
   const appsFolders = getAppFolders
-    .call(this, this.destinationPath(this.directoryPath), this.deploymentApplicationType)
+    .call(this, this.workspacePath(), this.deploymentApplicationType)
     .filter(appFolder => appFolder !== 'jhipster-registry' && appFolder !== 'registry');
 
-  this.log.log(chalk.green(`${appsFolders.length} applications found at ${this.destinationPath(this.directoryPath)}\n`));
+  this.log.log(chalk.green(`${appsFolders.length} applications found at ${this.workspacePath()}\n`));
 
   const messageAskForApps = 'Which applications do you want to include in your configuration?';
 
@@ -433,7 +433,7 @@ export const askForDockerPushCommand = asPromptingTask(async function askForDock
  * @param deploymentApplicationType type of application being composed
  * @returns {Array} array of string representing app folders
  */
-export function getAppFolders(this: BaseKubernetesGenerator, directory, deploymentApplicationType) {
+export function getAppFolders(this: BaseKubernetesGenerator, directory: string, deploymentApplicationType) {
   const files = readdirSync(directory);
   const appsFolders: string[] = [];
 

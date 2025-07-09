@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { join } from 'node:path';
 import { defaults } from 'lodash-es';
 import BaseGenerator from '../base/index.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
@@ -97,11 +98,11 @@ export default abstract class BaseWorkspacesGenerator<
     return this.getContextData(CONTEXT_DATA_DEPLOYMENT_KEY, { factory: () => ({}) });
   }
 
-  get appsFolders() {
+  get appsFolders(): string[] {
     return this.jhipsterConfigWithDefaults.appsFolders;
   }
 
-  get directoryPath() {
+  get directoryPath(): string {
     return this.jhipsterConfigWithDefaults.directoryPath;
   }
 
@@ -141,11 +142,12 @@ export default abstract class BaseWorkspacesGenerator<
     return {};
   }
 
-  private resolveApplicationFolders({
-    directoryPath = this.directoryPath,
-    appsFolders = this.appsFolders,
-  }: { directoryPath?: string; appsFolders?: string[] } = {}) {
-    return Object.fromEntries(appsFolders.map(appFolder => [appFolder, this.destinationPath(directoryPath, appFolder)]));
+  workspacePath(...dest: string[]): string {
+    return join(this.options.workspacesRoot ?? this.destinationPath(this.directoryPath), ...dest);
+  }
+
+  private resolveApplicationFolders({ appsFolders = this.appsFolders }: { directoryPath?: string; appsFolders?: string[] } = {}) {
+    return Object.fromEntries(appsFolders.map(appFolder => [appFolder, this.workspacePath(appFolder)]));
   }
 
   async bootstrapApplications() {

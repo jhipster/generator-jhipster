@@ -41,8 +41,14 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, an
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES, { generatorOptions: { customWorkspacesConfig: true } });
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES, {
+        generatorOptions: { customWorkspacesConfig: true, workspacesRoot: this.workspacePath() },
+      });
     }
+  }
+
+  override get directoryPath(): string {
+    return './';
   }
 
   get initializing() {

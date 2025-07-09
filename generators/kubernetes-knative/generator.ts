@@ -233,7 +233,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
                 app.targetImageName
               }`;
             }
-            this.log.log(`${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + app.appFolder)}`);
+            this.log.log(`${chalk.cyan(`${runCommand}`)} in ${this.workspacePath(app.appFolder!)}`);
           }
         }
         this.log.log('\nYou can deploy all your apps by running the following script:');

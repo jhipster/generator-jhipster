@@ -18,7 +18,7 @@
  */
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
 import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
-import type { Config as BaseConfig } from '../base/index.js';
+import type { Config as BaseConfig, Options as BaseOptions } from '../base/index.js';
 import type { helmConstants, kubernetesConstants } from '../kubernetes/support/constants.ts';
 
 export type { Source } from '../base/types.js';
@@ -43,7 +43,11 @@ type DeploymentConfig = {
 
 export type Config = BaseConfig & DeploymentConfig;
 
-export type { Features, Options } from '../base/types.js';
+export type { Features } from '../base/types.js';
+
+export type Options = BaseOptions & {
+  workspacesRoot?: string;
+};
 
 type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscoveryType', ['no', 'eureka', 'consul']>;
 

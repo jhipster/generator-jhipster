@@ -129,7 +129,7 @@ const Options = {
       appsFolders: [],
       directoryPath: this.directoryPath,
       clusteredDbApps: [],
-      serviceDiscoveryType: this.serviceDiscoveryType.consul,
+      serviceDiscoveryType: this.serviceDiscoveryType.no,
       monitoring: this.monitoring.no,
       dockerRepositoryName: this.dockerRepositoryName,
       dockerPushCommand: this.dockerPushCommand,

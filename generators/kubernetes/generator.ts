@@ -149,7 +149,7 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
   }
 
   get promptingWorkspaces() {
-    return this.asPromptingTaskGroup({
+    return this.asPromptingWorkspacesTaskGroup({
       askForMonitoring,
       askForClustersMode,
       askForServiceDiscovery,
@@ -251,7 +251,7 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
                 app.targetImageName
               }`;
             }
-            this.log.verboseInfo(`  ${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + app.appFolder)}`);
+            this.log.verboseInfo(`  ${chalk.cyan(`${runCommand}`)} in ${this.workspacePath(app.appFolder!)}`);
           }
         }
         this.log.log('\nYou can deploy all your apps by running the following kubectl command:');

@@ -50,7 +50,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
       this.jhipsterConfig.appsFolders = this.appsFolders;
     }
 
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES, { generatorOptions: { workspacesRoot: this.workspacePath() } });
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
@@ -144,7 +144,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
         deployment.appsYaml = applications.map(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
           const parentConfiguration = {};
-          const path = this.destinationPath(this.directoryPath, appConfig.appFolder!);
+          const path = this.workspacePath(appConfig.appFolder!);
           // Add application configuration
           const yaml = parseYaml(this.fs.read(`${path}/src/main/docker/app.yml`)!);
           const yamlConfig = yaml.services.app;
@@ -355,15 +355,15 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     let warningMessage = 'To generate the missing Docker image(s), please run:\n';
     applications.forEach(application => {
       if (application.buildToolGradle) {
-        imagePath = this.destinationPath(this.directoryPath, application.appFolder, 'build/jib-cache');
+        imagePath = this.workspacePath(application.appFolder, 'build/jib-cache');
         runCommand = `./gradlew bootJar -Pprod jibDockerBuild${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''}`;
       } else if (application.buildToolMaven) {
-        imagePath = this.destinationPath(this.directoryPath, application.appFolder, '/target/jib-cache');
+        imagePath = this.workspacePath(application.appFolder, '/target/jib-cache');
         runCommand = `./mvnw -ntp -Pprod verify jib:dockerBuild${process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''}`;
       }
       if (!existsSync(imagePath)) {
         hasWarning = true;
-        warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath, application.appFolder)}\n`;
+        warningMessage += `  ${chalk.cyan(runCommand)} in ${this.workspacePath(application.appFolder)}\n`;
       }
     });
     if (hasWarning) {
