@@ -204,7 +204,7 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.projectKey=jhipster-sample-application \
             -Dsonar.organization=jhipster \
-            -Dsonar.login=$SONAR_TOKEN
+            -Dsonar.token=$SONAR_TOKEN
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
