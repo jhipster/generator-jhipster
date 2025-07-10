@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-import fs from 'fs';
 import chalk from 'chalk';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
@@ -207,12 +206,6 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
             }
           }
           this.log.log();
-        }
-        // Make the apply script executable
-        try {
-          fs.chmodSync('kubectl-apply.sh', '755');
-        } catch {
-          this.log.warn("Failed to make 'kubectl-apply.sh' executable, you may need to run 'chmod +x kubectl-apply.sh'");
         }
       },
     });

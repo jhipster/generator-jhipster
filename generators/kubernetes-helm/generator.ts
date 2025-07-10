@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-import fs from 'fs';
 import chalk from 'chalk';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
@@ -170,15 +169,6 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
         this.log.verboseInfo(`  ${chalk.cyan('bash helm-apply.sh')}`);
         this.log.log('\nYou can upgrade (after any changes) all your apps by running the following script:');
         this.log.verboseInfo(`  ${chalk.cyan('bash helm-upgrade.sh')}`);
-        // Make the apply script executable
-        try {
-          fs.chmodSync('helm-apply.sh', '755');
-          fs.chmodSync('helm-upgrade.sh', '755');
-        } catch {
-          this.log.warn(
-            "Failed to make 'helm-apply.sh', 'helm-upgrade.sh' executable, you may need to run 'chmod +x helm-apply.sh helm-upgrade.sh",
-          );
-        }
       },
     });
   }

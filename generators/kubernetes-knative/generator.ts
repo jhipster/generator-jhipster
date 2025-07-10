@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-import fs from 'fs';
 import chalk from 'chalk';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
@@ -225,25 +224,10 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
         this.log.log('\nYou can deploy all your apps by running the following script:');
         if (deployment.generatorType === K8S) {
           this.log.verboseInfo(`  ${chalk.cyan('bash kubectl-knative-apply.sh')}`);
-          // Make the apply script executable
-          try {
-            fs.chmodSync('kubectl-knative-apply.sh', '755');
-          } catch {
-            this.log.warn("Failed to make 'kubectl-knative-apply.sh' executable, you may need to run 'chmod +x kubectl-knative-apply.sh'");
-          }
         } else {
           this.log.verboseInfo(`  ${chalk.cyan('bash helm-knative-apply.sh or ./helm-knative-apply.sh')}`);
           this.log.log('\nYou can upgrade (after any changes) all your apps by running the following script:');
           this.log.verboseInfo(`  ${chalk.cyan('bash helm-knative-upgrade.sh or ./helm-knative-upgrade.sh')}`);
-          // Make the apply script executable
-          try {
-            fs.chmodSync('helm-knative-apply.sh', '755');
-            fs.chmodSync('helm-knative-upgrade.sh', '755');
-          } catch {
-            this.log.warn(
-              "Failed to make 'helm-knative-apply.sh', 'helm-knative-upgrade.sh' executable, you may need to run 'chmod +x helm-knative-apply.sh helm-knative-upgrade.sh",
-            );
-          }
         }
       },
     });
