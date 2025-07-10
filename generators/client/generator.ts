@@ -90,8 +90,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
         }
       },
       upgradeAngular() {
-        // @ts-ignore deprecated value
-        if (this.jhipsterConfig.clientFramework === 'angularX') {
+        if ((this.jhipsterConfig.clientFramework as string) === 'angularX') {
           this.jhipsterConfig.clientFramework = ANGULAR;
         }
       },

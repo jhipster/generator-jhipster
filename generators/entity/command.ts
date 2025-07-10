@@ -17,6 +17,12 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+import serverCommand from '../server/command.js';
+import commonCommand from '../common/command.js';
+
+const { skipCheckLengthOfIdentifier } = serverCommand.configs;
+
+const { skipClient, skipServer } = commonCommand.configs;
 
 const command = {
   arguments: {
@@ -85,6 +91,9 @@ const command = {
       },
       scope: 'none',
     },
+    skipCheckLengthOfIdentifier,
+    skipClient,
+    skipServer,
   },
 } as const satisfies JHipsterCommandDefinition;
 

@@ -36,7 +36,9 @@ export interface Relationship extends JavaRelationship, LanguagesRelationship, C
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
   extends JavaEntity<F, R>,
     CommonEntity<F, R>,
-    DatabaseEntity<F, R> {}
+    DatabaseEntity<F, R> {
+  skipCheckLengthOfIdentifier?: boolean;
+}
 
 export type Application<E extends BaseApplicationEntity = Entity> = ExportApplicationPropertiesFromCommand<typeof Command> &
   CommonApplication<E> &

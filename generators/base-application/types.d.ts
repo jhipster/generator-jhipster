@@ -109,6 +109,8 @@ export type Field = Property &
     fieldValidationUnique?: boolean;
     fieldValidationMinBytes?: boolean;
     fieldValidationMaxBytes?: boolean;
+
+    relatedByOtherEntity?: boolean;
   };
 
 /**
@@ -129,17 +131,26 @@ export interface Relationship
   persistableRelationship: boolean;
 
   id?: boolean;
+  /** @deprecated */
   ownerSide?: boolean;
   relationshipEagerLoad?: boolean;
   relationshipRequired?: boolean;
+
+  relationshipFieldName?: string;
+  relationshipFieldNamePlural?: string;
+  relationshipNamePlural?: string;
+  relationshipNameHumanized?: string;
+
+  relationshipValidate?: boolean;
 }
 
 /**
  * Represents a relationship with an otherEntity, where the relationship is extended with the other entity.
  * Utility type to workaround https://github.com/Microsoft/TypeScript/issues/24364.
  */
-export type RelationshipWithEntity<R, E> = R & {
+export type RelationshipWithEntity<R, E extends BaseEntity> = R & {
   otherEntity: E;
+  relatedField: Exclude<E['fields'], undefined>[number];
 };
 
 export type PrimaryKey<F extends Field = Field> = {
@@ -235,6 +246,7 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   microserviceAppName?: string;
   applicationType?: string;
   microfrontend?: boolean;
+  skipUiGrouping?: boolean;
 }
 
 /* ApplicationType Start */

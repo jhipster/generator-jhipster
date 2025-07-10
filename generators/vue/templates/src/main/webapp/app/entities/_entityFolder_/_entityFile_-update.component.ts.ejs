@@ -24,7 +24,7 @@ _%>
 import UserService from '@/entities/user/user.service';
   <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
 import <%= relationship.otherEntity.entityAngularName %>Service from '@/entities/<%= relationship.otherEntity.entityClientRootFolder %><%= relationship.otherEntity.entityFolderName %>/<%= relationship.otherEntity.entityFileName %>.service';
-import { type I<%= relationship.otherEntity.entityAngularName %> } from '@/shared/model/<%= relationship.otherEntityModelName %>.model';
+import { type I<%= relationship.otherEntity.entityAngularName %> } from '@/shared/model/<%= relationship.otherEntity.entityFileName %>.model';
   <%_ } _%>
 <%_ } _%>
 import { type I<%= entityAngularName %>, <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
