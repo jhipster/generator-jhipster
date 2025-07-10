@@ -188,7 +188,7 @@
     "@node-loaders/esbuild": "2.0.0",
     "@types/chai": "5.2.2",
     "@types/estree": "1.0.8",
-    "@types/node": "20.19.6",
+    "@types/node": "20.19.7",
     "@types/sinon-chai": "4.0.0",
     "chai": "5.2.1",
     "cpy-cli": "5.0.0",
