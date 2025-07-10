@@ -127,6 +127,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
   "dockerPushCommand": "docker push",
   "dockerRepositoryName": "test",
   "ingressDomain": "",
+  "ingressType": "nginx",
   "istio": false,
   "kubernetesNamespace": "default",
   "kubernetesServiceType": "LoadBalancer",
