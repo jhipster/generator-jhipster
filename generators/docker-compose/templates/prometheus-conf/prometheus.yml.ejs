@@ -50,6 +50,6 @@ scrape_configs:
     metrics_path: /management/prometheus
     static_configs:
     - targets:
-<%_ for (const application of applications) { _%>
+<%_ for (const application of appConfigs) { _%>
       - <%- application.baseName %>:<%- application.composePort %>
 <%_ } _%>

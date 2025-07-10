@@ -21,8 +21,6 @@ import fs from 'fs';
 import chalk from 'chalk';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
-import type { Deployment } from '../base-workspaces/types.d.ts';
-
 import { buildToolTypes } from '../../lib/jhipster/index.js';
 
 import { checkImages, configureImageNames } from '../base-workspaces/internal/docker-base.js';
@@ -48,13 +46,26 @@ import {
   askForStorageClassName,
 } from './prompts.js';
 import { applicationFiles, writeDeploymentFiles } from './files.ts';
+import type {
+  Config as KubernetesConfig,
+  Deployment as KubernetesDeployment,
+  Options as KubernetesOptions,
+  Source as KubernetesSource,
+  WorkspacesApplication as KubernetesWorkspacesApplication,
+} from './types.js';
 
 const { MAVEN } = buildToolTypes;
 
 /**
  * Temporary base class for Kubernetes generators.
  */
-export class BaseKubernetesGenerator extends BaseWorkspacesGenerator<Deployment> {}
+export class BaseKubernetesGenerator extends BaseWorkspacesGenerator<
+  KubernetesDeployment,
+  KubernetesWorkspacesApplication,
+  KubernetesConfig,
+  KubernetesOptions,
+  KubernetesSource
+> {}
 
 export default class KubernetesGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {

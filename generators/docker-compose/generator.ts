@@ -413,6 +413,5 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     deployment.entryPort = 8080;
 
     deployment.appConfigs = applications;
-    deployment.applications = applications;
   }
 }
