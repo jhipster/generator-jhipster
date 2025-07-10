@@ -16,9 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { defaults } from 'lodash-es';
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base/support/constants.ts';
 import { CommandBaseWorkspacesGenerator as BaseWorkspacesGenerator } from '../base-workspaces/index.js';
 import { normalizePathEnd } from '../../lib/utils/path.ts';
+import { removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import type command from './command.js';
 
 export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerator<typeof command> {
@@ -70,8 +72,36 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
     return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
   }
 
+  get loadingWorkspaces() {
+    return this.asLoadingWorkspacesTaskGroup({
+      async loadDefaults({ deployment }) {
+        defaults(deployment, removeFieldsWithNullishValues(this.jhipsterConfig));
+      },
+    });
+  }
+
   get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
     return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
+  }
+
+  get preparingWorkspaces() {
+    return this.asLoadingWorkspacesTaskGroup({
+      async loadDefaults({ deployment }) {
+        defaults(deployment, this.jhipsterConfigWithDefaults);
+      },
+      derivedProperties({ deployment }) {
+        deployment.monitoringElk = deployment.monitoring === 'elk';
+        deployment.monitoringPrometheus = deployment.monitoring === 'prometheus';
+
+        deployment.serviceDiscoveryAny = deployment.serviceDiscoveryType !== 'no';
+        deployment.serviceDiscoveryConsul = deployment.serviceDiscoveryType === 'consul';
+        deployment.serviceDiscoveryEureka = deployment.serviceDiscoveryType === 'eureka';
+
+        deployment.serviceDiscoveryTypeAny = (deployment.serviceDiscoveryType ?? 'no') !== 'eureka';
+        deployment.serviceDiscoveryTypeEureka = deployment.serviceDiscoveryType === 'eureka';
+        deployment.serviceDiscoveryTypeConsul = deployment.serviceDiscoveryType === 'consul';
+      },
+    });
   }
 
   get [BaseWorkspacesGenerator.PREPARING_WORKSPACES]() {

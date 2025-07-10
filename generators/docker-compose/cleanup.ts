@@ -1,5 +1,3 @@
-import { asWritingTask } from '../base-workspaces/support/task-type-inference.js';
-
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -18,7 +16,9 @@ import { asWritingTask } from '../base-workspaces/support/task-type-inference.js
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default asWritingTask(function cleanupOldFilesTask({ control }) {
+import { asWritingWorkspacesTask } from '../base-workspaces/support/task-type-inference.js';
+
+export default asWritingWorkspacesTask(function cleanupOldFilesTask({ control }) {
   if (control.isJhipsterVersionLessThan('7.10.0')) {
     this.removeFile('realm-config/jhipster-users-0.json');
   }

@@ -25,14 +25,17 @@ import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import normalize from 'normalize-path';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
-import type { Deployment as BaseDeployment, WorkspacesApplication as BaseWorkspacesApplication } from '../base-workspaces/index.js';
+import type {
+  Deployment as BaseDeployment,
+  WorkspacesApplication as BaseWorkspacesApplication,
+  WorkspacesApplication,
+} from '../base-workspaces/index.js';
 
 import { monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
-import { convertSecretToBase64, createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
+import { createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
 import { createFaker } from '../base-application/support/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
-import { loadDerivedPlatformConfig, loadPlatformConfig } from '../base-workspaces/support/index.js';
 import {
   askForClustersModeWorkspace,
   askForMonitoring,
@@ -137,9 +140,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
         deployment.jwtSecretKey = this.jhipsterConfig.jwtSecretKey;
 
         await loadDockerDependenciesTask.call(this, { context: deployment });
-      },
-      loadPlatformConfig({ deployment }) {
-        this.loadDeploymentConfig({ deployment });
       },
     });
   }
@@ -371,7 +371,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     return this.delegateTasksToBlueprint(() => this.end);
   }
 
-  checkApplicationsDockerImages({ applications }: { applications: any[] }) {
+  checkApplicationsDockerImages({ applications }: { applications: WorkspacesApplication[] }) {
     this.log.log('\nChecking Docker images in applications directories...');
 
     let imagePath = '';
@@ -380,15 +380,15 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     let warningMessage = 'To generate the missing Docker image(s), please run:\n';
     applications.forEach(application => {
       if (application.buildToolGradle) {
-        imagePath = this.workspacePath(application.appFolder, 'build/jib-cache');
+        imagePath = this.workspacePath(application.appFolder!, 'build/jib-cache');
         runCommand = `./gradlew bootJar -Pprod jibDockerBuild${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''}`;
       } else if (application.buildToolMaven) {
-        imagePath = this.workspacePath(application.appFolder, '/target/jib-cache');
+        imagePath = this.workspacePath(application.appFolder!, '/target/jib-cache');
         runCommand = `./mvnw -ntp -Pprod verify jib:dockerBuild${process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''}`;
       }
       if (!existsSync(imagePath)) {
         hasWarning = true;
-        warningMessage += `  ${chalk.cyan(runCommand)} in ${this.workspacePath(application.appFolder)}\n`;
+        warningMessage += `  ${chalk.cyan(runCommand)} in ${this.workspacePath(application.appFolder!)}\n`;
       }
     });
     if (hasWarning) {
@@ -400,19 +400,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     }
   }
 
-  loadDeploymentConfig({ deployment }: { deployment: BaseDeployment }) {
-    const config = this.jhipsterConfigWithDefaults;
-    deployment.clusteredDbApps = config.clusteredDbApps;
-    deployment.adminPassword = config.adminPassword;
-    deployment.jwtSecretKey = config.jwtSecretKey;
-    loadPlatformConfig({ config, application: deployment });
-    loadDerivedPlatformConfig({ application: deployment });
-  }
-
   prepareDeploymentDerivedProperties({ deployment, applications }: { deployment: BaseDeployment; applications: any[] }) {
-    if (deployment.adminPassword) {
-      deployment.adminPasswordBase64 = convertSecretToBase64(deployment.adminPassword);
-    }
     deployment.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
     deployment.useKafka = applications.some(appConfig => appConfig.messageBrokerKafka);
     deployment.usePulsar = applications.some(appConfig => appConfig.messageBrokerPulsar);
@@ -422,6 +410,5 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     deployment.entryPort = 8080;
 
     deployment.appConfigs = applications;
-    deployment.applications = applications;
   }
 }

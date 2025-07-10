@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-import fs from 'fs';
 import chalk from 'chalk';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
@@ -42,10 +41,9 @@ import {
   askForKubernetesServiceType,
 } from '../kubernetes/prompts.js';
 
-import { checkImages, configureImageNames, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
-import { checkHelm, derivedKubernetesPlatformProperties, loadConfig } from '../kubernetes/kubernetes-base.js';
+import { checkImages, configureImageNames } from '../base-workspaces/internal/docker-base.js';
+import { checkHelm } from '../kubernetes/kubernetes-base.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
-import { loadDeploymentConfig } from '../base-workspaces/internal/index.js';
 import { applicationHelmFiles, applicationKubernetesFiles, deploymentHelmFiles, deploymentKubernetesFiles } from './files.ts';
 
 export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
@@ -102,22 +100,9 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
     return this.delegateTasksToBlueprint(() => this.promptingWorkspaces);
   }
 
-  get loadingWorkspaces() {
-    return this.asLoadingWorkspacesTaskGroup({
-      loadConfig,
-      loadFromYoRc,
-      loadDeploymentConfig,
-    });
-  }
-
-  get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
-  }
-
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
       configureImageNames,
-      derivedKubernetesPlatformProperties,
     });
   }
 
@@ -132,23 +117,23 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
 
         await this.writeFiles({
           sections: deploymentKubernetesFiles(suffix),
-          context: { ...this, ...deployment },
+          context: deployment,
           rootTemplatesPath: this.fetchFromInstalledJHipster('kubernetes/templates'),
         });
         for (const app of applications) {
           await this.writeFiles({
             sections: applicationKubernetesFiles(suffix),
-            context: { ...this, ...deployment, app },
+            context: { ...deployment, app },
             rootTemplatesPath: this.fetchFromInstalledJHipster('kubernetes/templates'),
           });
           await this.writeFiles({
             sections: applicationHelmFiles(suffix),
-            context: { ...this, ...deployment, app },
+            context: { ...deployment, app },
           });
         }
         await this.writeFiles({
           sections: deploymentHelmFiles(suffix),
-          context: { ...this, ...deployment },
+          context: deployment,
         });
       },
     });
@@ -160,12 +145,12 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
 
   get end() {
     return this.asEndTaskGroup({
-      checkImages,
-      deploy({ applications }) {
-        if (this.hasWarning) {
+      deploy({ applications, deployment }) {
+        const check = checkImages.call(this, { applications });
+        if (check.hasWarning) {
           this.log.warn('Helm configuration generated, but no Jib cache found');
           this.log.warn('If you forgot to generate the Docker image for this application, please run:');
-          this.log.warn(this.warningMessage);
+          this.log.warn(check.warningMessage);
         } else {
           this.log.verboseInfo(`\n${chalk.bold.green('Helm configuration successfully generated!')}`);
         }
@@ -178,21 +163,12 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
           if (originalImageName !== targetImageName) {
             this.log.verboseInfo(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
           }
-          this.log.verboseInfo(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
+          this.log.verboseInfo(`  ${chalk.cyan(`${deployment.dockerPushCommand} ${targetImageName}`)}`);
         }
         this.log.log('\nYou can deploy all your apps by running the following script:');
         this.log.verboseInfo(`  ${chalk.cyan('bash helm-apply.sh')}`);
         this.log.log('\nYou can upgrade (after any changes) all your apps by running the following script:');
         this.log.verboseInfo(`  ${chalk.cyan('bash helm-upgrade.sh')}`);
-        // Make the apply script executable
-        try {
-          fs.chmodSync('helm-apply.sh', '755');
-          fs.chmodSync('helm-upgrade.sh', '755');
-        } catch {
-          this.log.warn(
-            "Failed to make 'helm-apply.sh', 'helm-upgrade.sh' executable, you may need to run 'chmod +x helm-apply.sh helm-upgrade.sh",
-          );
-        }
       },
     });
   }

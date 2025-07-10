@@ -18,8 +18,7 @@
  */
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
 import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
-import type { Config as BaseConfig } from '../base/index.js';
-import type { helmConstants, kubernetesConstants } from '../kubernetes/support/constants.ts';
+import type { Config as BaseConfig, Options as BaseOptions } from '../base/index.js';
 
 export type { Source } from '../base/types.js';
 
@@ -29,6 +28,7 @@ type DeploymentConfig = {
 
   jwtSecretKey: string;
   adminPassword: string;
+  adminPasswordBase64: string;
   dbRandomPassword: string;
 
   deploymentType: string;
@@ -38,12 +38,18 @@ type DeploymentConfig = {
 
   kubernetesUseDynamicStorage: boolean;
   kubernetesStorageClassName: string;
-  generatorType: string;
+  // knative property
+  generatorType: 'k8s' | 'helm';
+  istio: boolean;
+
+  deploymentApplicationType: 'microservice' | 'monolith';
 };
 
 export type Config = BaseConfig & DeploymentConfig;
 
-export type { Features, Options } from '../base/types.js';
+export type { Features } from '../base/types.js';
+
+export type Options = BaseOptions & DeploymentConfig;
 
 type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscoveryType', ['no', 'eureka', 'consul']>;
 
@@ -58,37 +64,33 @@ export type WorkspacesApplication = ServiceDiscoveryApplication &
     dbPeerCount?: number;
   };
 
-type KubernetesDeployment = typeof kubernetesConstants & typeof helmConstants & {};
+export type Deployment = DeploymentConfig & {
+  appConfigs?: WorkspacesApplication[];
+  appsYaml?: string[];
+  clusteredDbApps?: string[];
 
-export type Deployment = DeploymentConfig &
-  KubernetesDeployment & {
-    appConfigs?: WorkspacesApplication[];
-    applications?: any[];
-    appsYaml?: string[];
-    clusteredDbApps?: string[];
+  keycloakRedirectUris?: string;
+  keycloakSecrets?: string[];
+  usesOauth2?: boolean;
+  useKafka?: boolean;
+  usePulsar?: boolean;
+  useMemcached?: boolean;
+  useRedis?: boolean;
+  includesApplicationTypeGateway?: boolean;
 
-    keycloakRedirectUris?: string;
-    keycloakSecrets?: string[];
-    authenticationType?: string;
-    adminPasswordBase64?: string;
+  authenticationType?: string;
 
-    usesOauth2?: boolean;
-    useKafka?: boolean;
-    usePulsar?: boolean;
-    useMemcached?: boolean;
-    useRedis?: boolean;
-    includesApplicationTypeGateway?: boolean;
+  serviceDiscoveryTypeAny?: boolean;
+  serviceDiscoveryTypeConsul?: boolean;
+  serviceDiscoveryTypeEureka?: boolean;
 
-    entryPort?: number;
-    dockerRepositoryName?: string;
-    dockerPushCommand?: string;
+  entryPort?: number;
 
-    monitoring?: string;
-    monitoringElk?: boolean;
-    monitoringPrometheus?: boolean;
+  monitoring?: string;
+  monitoringElk?: boolean;
+  monitoringPrometheus?: boolean;
 
-    monolithicNb?: number;
-    gatewayNb?: number;
-    microserviceNb?: number;
-    portsToBind?: number;
-  };
+  serviceDiscoveryAny?: boolean;
+  serviceDiscoveryConsul?: boolean;
+  serviceDiscoveryEureka?: boolean;
+};

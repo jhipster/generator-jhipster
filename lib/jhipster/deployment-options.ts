@@ -114,6 +114,7 @@ const Options = {
         ingressDomain: this.ingressDomain,
         monitoring: this.monitoring.no,
         istio: this.istio.false,
+        ingressType: NGINX,
       };
     }
 

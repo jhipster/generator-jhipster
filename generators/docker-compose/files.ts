@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { applicationTypes, authenticationTypes, monitoringTypes } from '../../lib/jhipster/index.js';
-import { asWritingTask } from '../base-workspaces/support/task-type-inference.js';
+import { asWritingWorkspacesTask } from '../base-workspaces/support/task-type-inference.js';
 import { asWriteFilesSection } from '../base-application/support/index.js';
 
 const { PROMETHEUS } = monitoringTypes;
@@ -50,7 +50,7 @@ export const files = asWriteFilesSection({
   ],
 });
 
-export const writeFiles = asWritingTask(async function writeFiles({ deployment }) {
+export const writeFiles = asWritingWorkspacesTask(async function writeFiles({ deployment }) {
   await this.writeFiles({
     sections: files,
     context: deployment,

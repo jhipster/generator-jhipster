@@ -19,12 +19,13 @@
 import assert from 'node:assert';
 import { randomBytes } from 'crypto';
 import { defaults } from 'lodash-es';
+import chalk from 'chalk';
 import BaseWorkspacesGenerator from '../../../base-workspaces/index.js';
 import { BaseKubernetesGenerator } from '../../generator.ts';
 import { helmConstants, kubernetesConstants } from '../../support/constants.ts';
 import { loadDockerDependenciesTask } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import { checkDocker } from '../../../docker/support/index.ts';
-import { createBase64Secret } from '../../../../lib/utils/secret.ts';
+import { convertSecretToBase64, createBase64Secret } from '../../../../lib/utils/secret.ts';
 
 export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
@@ -105,6 +106,9 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         deployment.gatewayNb = applications.filter(app => app.applicationTypeGateway).length;
         deployment.monolithicNb = applications.filter(app => app.applicationTypeMonolith).length;
         deployment.microserviceNb = applications.filter(app => app.applicationTypeMicroservice).length;
+        if (!deployment.deploymentApplicationType && deployment.gatewayNb + deployment.microserviceNb > 0) {
+          deployment.deploymentApplicationType = 'microservice';
+        }
 
         deployment.portsToBind = deployment.monolithicNb + deployment.gatewayNb;
       },
@@ -113,5 +117,57 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
 
   get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
     return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
+  }
+
+  get preparingWorkspaces() {
+    return this.asPreparingWorkspacesTaskGroup({
+      derivedProperties({ deployment, applications }) {
+        deployment.deploymentApplicationTypeMicroservice = deployment.deploymentApplicationType === 'microservice';
+        deployment.ingressTypeNginx = deployment.ingressType === 'nginx';
+        deployment.ingressTypeGke = deployment.ingressType === 'gke';
+        deployment.kubernetesServiceTypeIngress = deployment.kubernetesServiceType === 'Ingress';
+        deployment.kubernetesNamespaceDefault = deployment.kubernetesNamespace === 'default';
+        deployment.generatorTypeK8s = deployment.generatorType === 'k8s';
+        deployment.generatorTypeHelm = deployment.generatorType === 'helm';
+        deployment.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
+        deployment.useKafka = applications.some(appConfig => appConfig.messageBroker === 'kafka');
+        deployment.usesIngress = deployment.kubernetesServiceType === 'Ingress';
+        deployment.useKeycloak = deployment.usesOauth2 && deployment.usesIngress;
+        deployment.keycloakRedirectUris = '';
+        deployment.entryPort = 8080;
+        deployment.adminPassword ??= 'admin';
+        deployment.adminPasswordBase64 ??= convertSecretToBase64(deployment.adminPassword);
+
+        applications.forEach(appConfig => {
+          // Add application configuration
+          if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
+            deployment.entryPort = appConfig.composePort!;
+            if (deployment.ingressDomain) {
+              deployment.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}.${deployment.kubernetesNamespace}.${deployment.ingressDomain}/*",
+            "https://${appConfig.baseName.toLowerCase()}.${deployment.kubernetesNamespace}.${deployment.ingressDomain}/*", `;
+            } else {
+              deployment.keycloakRedirectUris += `"http://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*",
+            "https://${appConfig.baseName.toLowerCase()}:${appConfig.composePort}/*", `;
+            }
+
+            deployment.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*",
+            "https://localhost:${appConfig.composePort}/*",`;
+
+            if (appConfig.devServerPort !== undefined) {
+              deployment.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
+            }
+            if (appConfig.devServerPortProxy !== undefined) {
+              deployment.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPortProxy}/*", `;
+            }
+
+            this.debug(chalk.red.bold(`${appConfig.baseName} has redirect URIs ${deployment.keycloakRedirectUris}`));
+          }
+        });
+      },
+    });
+  }
+
+  get [BaseWorkspacesGenerator.PREPARING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.preparingWorkspaces);
   }
 }

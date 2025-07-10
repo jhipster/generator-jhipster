@@ -642,6 +642,7 @@ exports[`jdl - JDLImporter import when parsing deployment config should export t
       "dockerPushCommand": "docker push",
       "dockerRepositoryName": "test",
       "ingressDomain": "",
+      "ingressType": "nginx",
       "istio": false,
       "kubernetesNamespace": "default",
       "kubernetesServiceType": "LoadBalancer",
