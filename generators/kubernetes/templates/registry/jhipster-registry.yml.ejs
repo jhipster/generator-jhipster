@@ -37,7 +37,7 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 type: Opaque
 data:
-  registry-admin-password: <%= adminPasswordBase64 %>
+  registry-admin-password: <%= adminPasswordBase64 %> # base64 encoded "<%= adminPassword %>"
 ---
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service

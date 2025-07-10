@@ -32,7 +32,7 @@ import type {
 } from '../base-workspaces/index.js';
 
 import { monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
-import { convertSecretToBase64, createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
+import { createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
 import { createFaker } from '../base-application/support/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
@@ -401,9 +401,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
   }
 
   prepareDeploymentDerivedProperties({ deployment, applications }: { deployment: BaseDeployment; applications: any[] }) {
-    if (deployment.adminPassword) {
-      deployment.adminPasswordBase64 = convertSecretToBase64(deployment.adminPassword);
-    }
     deployment.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
     deployment.useKafka = applications.some(appConfig => appConfig.messageBrokerKafka);
     deployment.usePulsar = applications.some(appConfig => appConfig.messageBrokerPulsar);

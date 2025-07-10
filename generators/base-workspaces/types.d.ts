@@ -79,8 +79,8 @@ export type Deployment = DeploymentConfig & {
   includesApplicationTypeGateway?: boolean;
 
   authenticationType?: string;
-  adminPasswordBase64?: string;
 
+  serviceDiscoveryTypeAny?: boolean;
   serviceDiscoveryTypeConsul?: boolean;
   serviceDiscoveryTypeEureka?: boolean;
 

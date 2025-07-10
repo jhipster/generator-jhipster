@@ -19988,6 +19988,8 @@ spec:
           value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
         - name: SERVER_SHUTDOWN
@@ -20518,7 +20520,7 @@ exports[`generator - Kubernetes only gateway with eureka should match files snap
   "kubernetes/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "adminPasswordBase64": "bWVldHVw",
+    "adminPassword": "meetup",
     "appsFolders": [
       "01-gateway"
     ],
@@ -20709,6 +20711,8 @@ spec:
           value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
         - name: SERVER_SHUTDOWN
@@ -20973,7 +20977,7 @@ metadata:
   namespace: jhipsternamespace
 type: Opaque
 data:
-  registry-admin-password: bWVldHVw
+  registry-admin-password: bWVldHVw # base64 encoded "meetup"
 ---
 apiVersion: v1
 kind: Service

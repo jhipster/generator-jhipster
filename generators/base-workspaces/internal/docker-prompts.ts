@@ -21,7 +21,6 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import chalk from 'chalk';
 import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../../lib/jhipster/index.js';
-import { convertSecretToBase64 } from '../../../lib/utils/index.js';
 import { asPromptingTask } from '../../base-application/support/index.js';
 import { asPromptingWorkspacesTask } from '../support/task-type-inference.ts';
 import type { BaseKubernetesGenerator } from '../../kubernetes/generator.ts';
@@ -303,7 +302,7 @@ export const askForServiceDiscoveryWorkspace = asPromptingWorkspacesTask(async f
   if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryConsul)) {
     this.jhipsterConfig.serviceDiscoveryType = CONSUL;
     this.log.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
-  } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryEureka)) {
+  } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryTypeEureka)) {
     this.jhipsterConfig.serviceDiscoveryType = EUREKA;
     this.log.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
   } else {
@@ -364,16 +363,18 @@ export const askForAdminPassword = asPromptingTask(async function askForAdminPas
   if (!this.shouldAskForPrompts({ control })) return;
   if (this.jhipsterConfigWithDefaults.serviceDiscoveryType !== (EUREKA as string)) return;
 
-  const answers = await this.prompt([
-    {
-      type: 'input',
-      name: 'adminPassword',
-      message: 'Enter the admin password used to secure the JHipster Registry',
-      default: 'admin',
-      validate: input => (input.length < 5 ? 'The password must have at least 5 characters' : true),
-    },
-  ]);
-  this.jhipsterConfig.adminPasswordBase64 = convertSecretToBase64(answers.adminPassword);
+  await this.prompt(
+    [
+      {
+        type: 'input',
+        name: 'adminPassword',
+        message: 'Enter the admin password used to secure the JHipster Registry',
+        default: 'admin',
+        validate: input => (input.length < 5 ? 'The password must have at least 5 characters' : true),
+      },
+    ],
+    this.config,
+  );
 });
 
 /**

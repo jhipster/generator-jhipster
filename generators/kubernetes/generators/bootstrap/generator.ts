@@ -106,6 +106,9 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         deployment.gatewayNb = applications.filter(app => app.applicationTypeGateway).length;
         deployment.monolithicNb = applications.filter(app => app.applicationTypeMonolith).length;
         deployment.microserviceNb = applications.filter(app => app.applicationTypeMicroservice).length;
+        if (!deployment.deploymentApplicationType && deployment.gatewayNb + deployment.microserviceNb > 0) {
+          deployment.deploymentApplicationType = 'microservice';
+        }
 
         deployment.portsToBind = deployment.monolithicNb + deployment.gatewayNb;
       },
@@ -126,15 +129,14 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         deployment.kubernetesNamespaceDefault = deployment.kubernetesNamespace === 'default';
         deployment.generatorTypeK8s = deployment.generatorType === 'k8s';
         deployment.generatorTypeHelm = deployment.generatorType === 'helm';
-        deployment.serviceDiscoveryTypeEureka = deployment.serviceDiscoveryType === 'eureka';
-        deployment.serviceDiscoveryTypeConsul = deployment.serviceDiscoveryType === 'consul';
         deployment.usesOauth2 = applications.some(appConfig => appConfig.authenticationTypeOauth2);
         deployment.useKafka = applications.some(appConfig => appConfig.messageBroker === 'kafka');
         deployment.usesIngress = deployment.kubernetesServiceType === 'Ingress';
         deployment.useKeycloak = deployment.usesOauth2 && deployment.usesIngress;
         deployment.keycloakRedirectUris = '';
         deployment.entryPort = 8080;
-        deployment.adminPasswordBase64 ??= convertSecretToBase64(deployment.adminPassword ?? 'admin');
+        deployment.adminPassword ??= 'admin';
+        deployment.adminPasswordBase64 ??= convertSecretToBase64(deployment.adminPassword);
 
         applications.forEach(appConfig => {
           // Add application configuration

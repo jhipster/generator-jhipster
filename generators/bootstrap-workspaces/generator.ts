@@ -96,6 +96,10 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
         deployment.serviceDiscoveryAny = deployment.serviceDiscoveryType !== 'no';
         deployment.serviceDiscoveryConsul = deployment.serviceDiscoveryType === 'consul';
         deployment.serviceDiscoveryEureka = deployment.serviceDiscoveryType === 'eureka';
+
+        deployment.serviceDiscoveryTypeAny = (deployment.serviceDiscoveryType ?? 'no') !== 'eureka';
+        deployment.serviceDiscoveryTypeEureka = deployment.serviceDiscoveryType === 'eureka';
+        deployment.serviceDiscoveryTypeConsul = deployment.serviceDiscoveryType === 'consul';
       },
     });
   }
