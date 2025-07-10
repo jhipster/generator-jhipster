@@ -109,6 +109,16 @@ export const checkContentIn = (contentToCheck: string | RegExp, content: string,
   return re.test(content);
 };
 
+const addNeedlePrefix = (needle: string): string => {
+  return needle.includes('jhipster-needle-') ? needle : `jhipster-needle-${needle}`;
+};
+
+const hasNeedleStart = (content: string, needle: string): boolean => {
+  const regexpStart = new RegExp(`(?://|<!--|\\{?/\\*|#) ${addNeedlePrefix(needle)}-start(?:.*)\n`, 'g');
+  const startMatch = regexpStart.exec(content);
+  return Boolean(startMatch);
+};
+
 /**
  * Write content before needle applying indentation
  *
@@ -120,10 +130,10 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
   assert(content, 'content is required');
   assert(contentToAdd, 'contentToAdd is required');
 
-  needle = needle.includes('jhipster-needle-') ? needle : `jhipster-needle-${needle}`;
+  needle = addNeedlePrefix(needle);
 
   const regexp = new RegExp(`(?://|<!--|\\{?/\\*|#) ${needle}(?:$|\n| )`, 'g');
-  const firstMatch = regexp.exec(content);
+  let firstMatch = regexp.exec(content);
   if (!firstMatch) {
     return null;
   }
@@ -131,6 +141,18 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
   // Replacements using functions allows to replace multiples needles
   if (typeof contentToAdd !== 'function' && regexp.exec(content)) {
     throw new Error(`Multiple needles found for ${needle}`);
+  }
+
+  const regexpStart = new RegExp(`(?://|<!--|\\{?/\\*|#) ${needle}-start(?:.*)\n`, 'g');
+  const startMatch = regexpStart.exec(content);
+  if (startMatch) {
+    const needleLineIndex = content.lastIndexOf('\n', firstMatch.index) + 1;
+    content = content.substring(0, startMatch.index + startMatch[0].length) + content.substring(needleLineIndex);
+    regexp.lastIndex = 0;
+    firstMatch = regexp.exec(content);
+    if (!firstMatch) {
+      throw new Error(`Needle start found for ${needle} but no end found`);
+    }
   }
 
   const needleIndex = firstMatch.index;
@@ -209,9 +231,10 @@ export const createNeedleCallback = <Generator extends CoreGenerator = CoreGener
       if (typeof contentToAdd === 'string' && contentToAdd.startsWith('\n')) {
         contentToAdd = contentToAdd.slice(1);
       }
-      contentToAdd = (Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd]).filter(
-        eachContent => !checkContentIn(eachContent, content, ignoreWhitespaces),
-      );
+      contentToAdd = Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd];
+      if (!hasNeedleStart(content, needle)) {
+        contentToAdd = contentToAdd.filter(eachContent => !checkContentIn(eachContent, content, ignoreWhitespaces));
+      }
       if (contentToAdd.length === 0) {
         return content;
       }

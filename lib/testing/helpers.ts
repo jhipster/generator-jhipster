@@ -533,7 +533,12 @@ class JHipsterTest extends YeomanTest {
     const generatorSpec =
       !isAbsolute(jhipsterGenerator) && !jhipsterGenerator.startsWith('@') ? toJHipsterNamespace(jhipsterGenerator) : jhipsterGenerator;
     const isRunJHipster = (opt: any): opt is RunJHipster | undefined =>
-      opt === undefined || 'actualGeneratorsList' in opt || 'useMock' in opt || 'useDefaultMocks' in opt || 'useEnvironmentBuilder' in opt;
+      envOptions === undefined &&
+      (opt === undefined ||
+        'actualGeneratorsList' in opt ||
+        'useMock' in opt ||
+        'useDefaultMocks' in opt ||
+        'useEnvironmentBuilder' in opt);
     let context: JHipsterRunContext;
     if (isRunJHipster(settings)) {
       const { useEnvironmentBuilder, ...otherOptions } = settings ?? {};
