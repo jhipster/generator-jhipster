@@ -19,15 +19,7 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/types.js';
 
 const command = {
-  configs: {
-    jwtSecretKey: {
-      cli: {
-        type: String,
-        env: 'JHI_JWT_SECRET_KEY',
-      },
-      scope: 'generator',
-    },
-  },
+  configs: {},
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

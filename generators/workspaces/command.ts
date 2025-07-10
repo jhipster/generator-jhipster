@@ -10,7 +10,7 @@ const command = {
         default: [],
       },
       description: 'Folders to use as monorepository workspace',
-      scope: 'generator',
+      scope: 'storage',
     },
     entrypointGenerator: {
       description: 'Entrypoint generator to be used',

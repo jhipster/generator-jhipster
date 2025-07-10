@@ -16,8 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Config as BaseWorkspacesConfig, Options as BaseWorkspacesOptions } from '../base-workspaces/index.js';
-export type { WorkspacesApplication } from '../base-workspaces/types.js';
+import { basename, dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { describe } from 'esmocha';
 
-export type Config = BaseWorkspacesConfig & { baseName: string; monorepository: boolean };
-export type Options = BaseWorkspacesOptions & { monorepository: boolean };
+import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
+import Generator from './index.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const generator = `${basename(resolve(__dirname, '../../'))}:${basename(__dirname)}`;
+
+describe(`generator - ${generator}`, () => {
+  shouldSupportFeatures(Generator);
+  describe('blueprint support', () => testBlueprintSupport(generator));
+});

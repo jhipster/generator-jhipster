@@ -16,19 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import assert from 'node:assert';
 import { existsSync } from 'fs';
 import pathjs from 'path';
 import chalk from 'chalk';
 
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import normalize from 'normalize-path';
-import { defaults } from 'lodash-es';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import type { Deployment as BaseDeployment, WorkspacesApplication as BaseWorkspacesApplication } from '../base-workspaces/index.js';
 
-import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
-import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
+import { monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { convertSecretToBase64, createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
 import { createFaker } from '../base-application/support/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
@@ -39,22 +38,24 @@ import {
   askForMonitoring,
   askForServiceDiscoveryWorkspace,
 } from '../base-workspaces/internal/docker-prompts.js';
+import { askForDirectoryPath } from '../base-workspaces/prompts.ts';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files.js';
 
 const { PROMETHEUS } = monitoringTypes;
 const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
-const { Options: DeploymentOptions } = deploymentOptions;
 
 export default class DockerComposeGenerator extends BaseWorkspacesGenerator<BaseDeployment, BaseWorkspacesApplication> {
   async beforeQueue() {
-    if (this.appsFolders && this.appsFolders.length > 0) {
-      this.jhipsterConfig.appsFolders = this.appsFolders;
+    if (!this.fromBlueprint) {
+      this.jhipsterConfig.deploymentType ??= 'docker-compose';
+      assert.equal(this.jhipsterConfig.deploymentType, 'docker-compose', 'Deployment type must be docker-compose');
+
+      await this.composeWithBlueprints();
     }
 
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
-    if (!this.fromBlueprint) {
-      await this.composeWithBlueprints();
+    if (!this.delegateToBlueprint) {
+      await this.composeWithJHipster('jhipster:bootstrap-workspaces');
     }
   }
 
@@ -81,16 +82,26 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      loadWorkspacesConfig() {
-        this.loadWorkspacesConfig();
+  get prompting() {
+    return this.asPromptingTaskGroup({
+      askForDirectoryPath,
+    });
+  }
+
+  get [BaseWorkspacesGenerator.PROMPTING]() {
+    return this.delegateTasksToBlueprint(() => this.prompting);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      setWorkspacesRoot() {
+        this.setWorkspacesRoot(this.destinationPath(this.jhipsterConfig.directoryPath));
       },
     });
   }
 
-  get [BaseWorkspacesGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [BaseWorkspacesGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get promptingWorkspaces() {
@@ -157,9 +168,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
         deployment.keycloakRedirectUris = '';
         deployment.appsYaml = applications.map(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
-          appConfig.clusteredDb = deployment.clusteredDbApps?.includes(appConfig.appFolder);
           const parentConfiguration = {};
-          const path = this.destinationPath(this.directoryPath, appConfig.appFolder);
+          const path = this.workspacePath(appConfig.appFolder!);
           // Add application configuration
           const yaml = parseYaml(this.fs.read(`${path}/src/main/docker/app.yml`)!);
           const yamlConfig = yaml.services.app;
@@ -264,7 +274,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
               databaseYamlConfig.build.context = relativePath;
             }
 
-            if (appConfig.clusteredDb) {
+            if (deployment.clusteredDbApps?.includes(appConfig.appFolder!)) {
               const clusterDbYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${database}-cluster.yml`)!);
               const dbNodeConfig = clusterDbYaml.services[`${database}-node`];
               dbNodeConfig.build.context = relativePath;
@@ -370,15 +380,15 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     let warningMessage = 'To generate the missing Docker image(s), please run:\n';
     applications.forEach(application => {
       if (application.buildToolGradle) {
-        imagePath = this.destinationPath(this.directoryPath, application.appFolder, 'build/jib-cache');
+        imagePath = this.workspacePath(application.appFolder, 'build/jib-cache');
         runCommand = `./gradlew bootJar -Pprod jibDockerBuild${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''}`;
       } else if (application.buildToolMaven) {
-        imagePath = this.destinationPath(this.directoryPath, application.appFolder, '/target/jib-cache');
+        imagePath = this.workspacePath(application.appFolder, '/target/jib-cache');
         runCommand = `./mvnw -ntp -Pprod verify jib:dockerBuild${process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''}`;
       }
       if (!existsSync(imagePath)) {
         hasWarning = true;
-        warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath, application.appFolder)}\n`;
+        warningMessage += `  ${chalk.cyan(runCommand)} in ${this.workspacePath(application.appFolder)}\n`;
       }
     });
     if (hasWarning) {
@@ -388,10 +398,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
     } else {
       this.log.verboseInfo(`${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
     }
-  }
-
-  override get jhipsterConfigWithDefaults() {
-    return defaults({}, this.config.getAll(), DeploymentOptions.defaults(this.jhipsterConfig.deploymentType));
   }
 
   loadDeploymentConfig({ deployment }: { deployment: BaseDeployment }) {

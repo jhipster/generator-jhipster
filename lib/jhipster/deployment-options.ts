@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { ValueOf } from 'type-fest';
 import kubernetesPlatformTypes from './kubernetes-platform-types.js';
 import monitoringTypes from './monitoring-types.js';
 import serviceDiscoveryTypes from './service-discovery-types.js';
@@ -33,16 +34,18 @@ export const DeploymentTypes = {
   DOCKERCOMPOSE: 'docker-compose',
   KUBERNETES: 'kubernetes',
   exists: (deploymentType?: any) => !!deploymentType && !!DeploymentTypes[deploymentType.toUpperCase().replace('-', '')],
-};
+} as const;
+
+const kubernetesServiceType = {
+  loadBalancer: LOAD_BALANCER,
+  nodePort: NODE_PORT,
+  ingress: INGRESS,
+} as const;
 
 const kubernetesRelatedOptions = {
   kubernetesNamespace: 'default',
-  kubernetesServiceType: {
-    loadBalancer: LOAD_BALANCER,
-    nodePort: NODE_PORT,
-    ingress: INGRESS,
-  },
   kubernetesStorageClassName: '',
+  kubernetesServiceType,
   kubernetesUseDynamicStorage: {
     false: false,
     true: true,
@@ -56,13 +59,13 @@ const kubernetesRelatedOptions = {
     false: false,
     true: true,
   },
-};
+} as const;
 
 const dockerComposeRelatedOptions = {
   gatewayType: {
     springCloudGateway: 'SpringCloudGateway',
   },
-};
+} as const;
 
 const baseOptions = {
   appsFolders: [],
@@ -77,62 +80,60 @@ const baseOptions = {
     consul: CONSUL,
     no: NO_SERVICE_DISCOVERY,
   },
-};
+} as const;
 
-const Options: any = {
+const deploymentType = {
+  dockerCompose: DeploymentTypes.DOCKERCOMPOSE,
+  kubernetes: DeploymentTypes.KUBERNETES,
+} as const;
+
+const Options = {
   ...baseOptions,
-  deploymentType: {
-    dockerCompose: DeploymentTypes.DOCKERCOMPOSE,
-    kubernetes: DeploymentTypes.KUBERNETES,
-  },
   dockerPushCommand: 'docker push',
   dockerRepositoryName: '',
+  deploymentType,
   ...dockerComposeRelatedOptions,
   ...kubernetesRelatedOptions,
-};
 
-Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
-  if (deploymentType === Options.deploymentType.kubernetes) {
+  defaults(deploymentType?: ValueOf<typeof DeploymentTypes>) {
+    if (!deploymentType) {
+      throw new Error('Deployment type is required');
+    }
+    if (deploymentType === this.deploymentType.kubernetes) {
+      return {
+        appsFolders: [],
+        directoryPath: this.directoryPath,
+        clusteredDbApps: [],
+        serviceDiscoveryType: this.serviceDiscoveryType.consul,
+        dockerRepositoryName: this.dockerRepositoryName,
+        dockerPushCommand: this.dockerPushCommand,
+        kubernetesNamespace: this.kubernetesNamespace,
+        kubernetesServiceType: this.kubernetesServiceType.loadBalancer,
+        kubernetesUseDynamicStorage: this.kubernetesUseDynamicStorage.false,
+        kubernetesStorageClassName: this.kubernetesStorageClassName,
+        ingressDomain: this.ingressDomain,
+        monitoring: this.monitoring.no,
+        istio: this.istio.false,
+      };
+    }
+
+    if (deploymentType === this.deploymentType.dockerCompose) {
+      return {
+        appsFolders: [],
+        directoryPath: this.directoryPath,
+        gatewayType: this.gatewayType.springCloudGateway,
+        clusteredDbApps: [],
+        monitoring: this.monitoring.no,
+        serviceDiscoveryType: this.serviceDiscoveryType.consul,
+      };
+    }
+
     return {
       appsFolders: [],
-      directoryPath: Options.directoryPath,
-      clusteredDbApps: [],
-      serviceDiscoveryType: Options.serviceDiscoveryType.consul,
-      dockerRepositoryName: Options.dockerRepositoryName,
-      dockerPushCommand: Options.dockerPushCommand,
-      kubernetesNamespace: Options.kubernetesNamespace,
-      kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
-      kubernetesUseDynamicStorage: Options.kubernetesUseDynamicStorage.false,
-      kubernetesStorageClassName: Options.kubernetesStorageClassName,
-      ingressDomain: Options.ingressDomain,
-      monitoring: Options.monitoring.no,
-      istio: Options.istio.false,
+      directoryPath: './',
     };
-  }
-
-  if (deploymentType === Options.deploymentType.dockerCompose) {
-    return {
-      appsFolders: [],
-      directoryPath: Options.directoryPath,
-      gatewayType: Options.gatewayType.springCloudGateway,
-      clusteredDbApps: [],
-      monitoring: Options.monitoring.no,
-      serviceDiscoveryType: Options.serviceDiscoveryType.consul,
-    };
-  }
-
-  return {
-    appsFolders: [],
-    directoryPath: Options.directoryPath,
-    clusteredDbApps: [],
-    serviceDiscoveryType: Options.serviceDiscoveryType.consul,
-    monitoring: Options.monitoring.no,
-    dockerRepositoryName: Options.dockerRepositoryName,
-    dockerPushCommand: Options.dockerPushCommand,
-    storageType: Options.storageType.ephemeral,
-    registryReplicas: Options.registryReplicas.two,
-  };
-};
+  },
+} as const;
 
 export { Options };
 

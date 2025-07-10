@@ -42,27 +42,16 @@ import {
   askForKubernetesServiceType,
 } from '../kubernetes/prompts.js';
 
-import { checkImages, configureImageNames, generateJwtSecret, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
-import {
-  checkHelm,
-  checkKubernetes,
-  derivedKubernetesPlatformProperties,
-  loadConfig,
-  setupHelmConstants,
-  setupKubernetesConstants,
-} from '../kubernetes/kubernetes-base.js';
+import { checkImages, configureImageNames, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
+import { checkHelm, derivedKubernetesPlatformProperties, loadConfig } from '../kubernetes/kubernetes-base.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
-import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
-import { checkDocker } from '../docker/support/index.js';
-import { loadDerivedServerAndPlatformProperties } from '../base-workspaces/support/index.js';
-import { loadDerivedAppConfig } from '../app/support/index.js';
-import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
+import { loadDeploymentConfig } from '../base-workspaces/internal/index.js';
 import { applicationHelmFiles, applicationKubernetesFiles, deploymentHelmFiles, deploymentKubernetesFiles } from './files.ts';
 
 export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
+      await this.dependsOnJHipster('jhipster:kubernetes:bootstrap');
       await this.composeWithBlueprints();
     }
   }
@@ -73,10 +62,7 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      checkDocker,
-      checkKubernetes,
       checkHelm,
-      loadConfig,
     });
   }
 
@@ -89,6 +75,15 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
       askForApplicationType,
       askForPath,
       askForApps,
+    });
+  }
+
+  get [BaseWorkspacesGenerator.PROMPTING]() {
+    return this.delegateTasksToBlueprint(() => this.prompting);
+  }
+
+  get promptingWorkspaces() {
+    return this.asPromptingTaskGroup({
       askForMonitoring,
       askForClustersMode,
       askForServiceDiscovery,
@@ -103,26 +98,14 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
     });
   }
 
-  get [BaseWorkspacesGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
-  get configuringWorkspaces() {
-    return this.asConfiguringWorkspacesTaskGroup({
-      generateJwtSecret,
-    });
-  }
-
-  get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
+  get [BaseWorkspacesGenerator.PROMPTING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.promptingWorkspaces);
   }
 
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
+      loadConfig,
       loadFromYoRc,
-      async loadDockerDependenciesTask({ deployment }) {
-        await loadDockerDependenciesTask.call(this, { context: deployment });
-      },
       loadDeploymentConfig,
     });
   }
@@ -133,15 +116,7 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
 
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
-      setupKubernetesConstants,
-      setupHelmConstants,
       configureImageNames,
-      loadSharedConfig() {
-        for (const app of this.appConfigs) {
-          loadDerivedAppConfig({ application: app });
-          loadDerivedServerAndPlatformProperties({ application: app });
-        }
-      },
       derivedKubernetesPlatformProperties,
     });
   }
@@ -152,7 +127,7 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      async writeFiles({ deployment }) {
+      async writeFiles({ deployment, applications }) {
         const suffix = 'helm';
 
         await this.writeFiles({
@@ -160,16 +135,15 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
           context: { ...this, ...deployment },
           rootTemplatesPath: this.fetchFromInstalledJHipster('kubernetes/templates'),
         });
-        for (let i = 0; i < this.appConfigs.length; i++) {
-          this.app = this.appConfigs[i];
+        for (const app of applications) {
           await this.writeFiles({
             sections: applicationKubernetesFiles(suffix),
-            context: { ...this, ...deployment },
+            context: { ...this, ...deployment, app },
             rootTemplatesPath: this.fetchFromInstalledJHipster('kubernetes/templates'),
           });
           await this.writeFiles({
             sections: applicationHelmFiles(suffix),
-            context: { ...this, ...deployment },
+            context: { ...this, ...deployment, app },
           });
         }
         await this.writeFiles({
@@ -187,7 +161,7 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
   get end() {
     return this.asEndTaskGroup({
       checkImages,
-      deploy() {
+      deploy({ applications }) {
         if (this.hasWarning) {
           this.log.warn('Helm configuration generated, but no Jib cache found');
           this.log.warn('If you forgot to generate the Docker image for this application, please run:');
@@ -198,9 +172,9 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
         this.log.warn(
           'You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:',
         );
-        for (let i = 0; i < this.appsFolders.length; i++) {
-          const originalImageName = this.appConfigs[i].baseName.toLowerCase();
-          const targetImageName = this.appConfigs[i].targetImageName;
+        for (const app of applications) {
+          const originalImageName = app.baseName.toLowerCase();
+          const targetImageName = app.targetImageName;
           if (originalImageName !== targetImageName) {
             this.log.verboseInfo(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
           }

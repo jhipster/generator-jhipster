@@ -23,7 +23,7 @@ import type BaseWorkspacesGenerator from './generator.js';
  * limitations under the License.
  */
 export const askForDirectoryPath = asPromptingTask(async function askForDirectoryPath(this: BaseWorkspacesGenerator, { control }) {
-  if (this.customWorkspacesConfig || !this.shouldAskForPrompts({ control })) return;
+  if (!this.shouldAskForPrompts({ control })) return;
   let appsFolders;
   await this.prompt(
     [
@@ -62,7 +62,7 @@ export const askForDirectoryPath = asPromptingTask(async function askForDirector
   );
 });
 
-async function findApplicationFolders(generator: BaseWorkspacesGenerator, directoryPath = generator.directoryPath ?? '.') {
+async function findApplicationFolders(generator: BaseWorkspacesGenerator, directoryPath: string): Promise<string[]> {
   return (await readdir(generator.destinationPath(directoryPath), { withFileTypes: true }))
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name)

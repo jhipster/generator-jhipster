@@ -43,9 +43,3 @@ export const generatorDefaultConfig = {
 export const defaultKubernetesConfig = {
   ...kubernetesDefaultConfig,
 };
-
-export default {
-  defaultKubernetesConfig,
-  ingressDefaultConfig,
-  generatorDefaultConfig,
-};

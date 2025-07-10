@@ -16,27 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { defaults } from 'lodash-es';
-import { applicationOptions, deploymentOptions } from '../../../lib/jhipster/index.js';
+import { applicationOptions } from '../../../lib/jhipster/index.js';
 import { loadDerivedPlatformConfig, loadPlatformConfig } from '../support/index.js';
 import type BaseWorkspacesGenerator from '../index.js';
 import type { Deployment } from '../types.d.ts';
 
 const { OptionNames } = applicationOptions;
-const { Options: DeploymentOptions } = deploymentOptions;
 
 const { JWT_SECRET_KEY } = OptionNames;
 
 export function loadDeploymentConfig(
   this: BaseWorkspacesGenerator,
-  {
-    config = defaults({}, this.jhipsterConfig, DeploymentOptions.defaults(this.jhipsterConfig.deploymentType)),
-    deployment,
-  }: { config?: any; deployment?: Deployment } = {},
+  { config = this.jhipsterConfigWithDefaults, deployment }: { config?: any; deployment?: Deployment } = {},
 ) {
+  if (deployment) {
+    deployment.appsFolders = config.appsFolders;
+    deployment.directoryPath = config.directoryPath;
+  }
   deployment ??= this as unknown as Deployment;
-  deployment.appsFolders = config.appsFolders;
-  deployment.directoryPath = config.directoryPath;
   deployment.clusteredDbApps = config.clusteredDbApps;
   deployment.dockerRepositoryName = config.dockerRepositoryName;
   deployment.dockerPushCommand = config.dockerPushCommand;

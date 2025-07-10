@@ -16,8 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Config as BaseWorkspacesConfig, Options as BaseWorkspacesOptions } from '../base-workspaces/index.js';
-export type { WorkspacesApplication } from '../base-workspaces/types.js';
+import type { JHipsterCommandDefinition } from '../../../../lib/command/types.js';
 
-export type Config = BaseWorkspacesConfig & { baseName: string; monorepository: boolean };
-export type Options = BaseWorkspacesOptions & { monorepository: boolean };
+const command = {
+  configs: {
+    jwtSecretKey: {
+      cli: {
+        type: String,
+        env: 'JHI_JWT_SECRET_KEY',
+      },
+      scope: 'storage',
+    },
+  },
+  import: [],
+} as const satisfies JHipsterCommandDefinition;
+
+export default command;

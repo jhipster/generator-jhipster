@@ -10,6 +10,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "applicationTypeGateway": false,
   "applicationTypeMicroservice": false,
   "applicationTypeMonolith": true,
+  "appsFolders": undefined,
   "artifactoryReleasesId": "releases",
   "artifactoryReleasesUrl": "http://artifactory:8081/artifactory/libs-release",
   "artifactorySnapshotsId": "snapshots",

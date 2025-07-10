@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import dockerPrompts from '../base-workspaces/internal/docker-prompts.js';
 import { applicationTypes, databaseTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
 import { asPromptingTask } from '../base-application/support/index.js';
+import { asPromptingWorkspacesTask } from '../base-workspaces/support/task-type-inference.ts';
 import type { BaseKubernetesGenerator } from './generator.ts';
 import { defaultKubernetesConfig, ingressDefaultConfig } from './kubernetes-constants.js';
 
@@ -28,10 +28,6 @@ const { IngressTypes, ServiceTypes } = kubernetesPlatformTypes;
 const NO_DATABASE = databaseTypes.NO;
 const { LOAD_BALANCER, INGRESS, NODE_PORT } = ServiceTypes;
 const { GKE, NGINX } = IngressTypes;
-
-export default {
-  ...dockerPrompts,
-};
 
 export const askForKubernetesNamespace = asPromptingTask(async function askForKubernetesNamespace(
   this: BaseKubernetesGenerator,
@@ -82,7 +78,7 @@ export const askForKubernetesServiceType = asPromptingTask(async function askFor
             name: 'Ingress - create ingresses for your services. Requires a running ingress controller',
           },
         ],
-        default: this.kubernetesServiceType ? this.kubernetesServiceType : defaultKubernetesConfig.kubernetesServiceType,
+        default: this.jhipsterConfigWithDefaults.kubernetesServiceType,
       },
     ],
     this.config,
@@ -218,15 +214,12 @@ export const askForIstioSupport = asPromptingTask(async function askForIstioSupp
   this.istio = props.istio;
 });
 
-export const askForPersistentStorage = asPromptingTask(async function askForPersistentStorage(this: BaseKubernetesGenerator, { control }) {
+export const askForPersistentStorage = asPromptingWorkspacesTask(async function askForPersistentStorage(
+  this: BaseKubernetesGenerator,
+  { control, applications },
+) {
   if (!this.shouldAskForPrompts({ control })) return;
-  let usingDataBase = false;
-  this.appConfigs.forEach(appConfig => {
-    if (appConfig.prodDatabaseType !== NO_DATABASE) {
-      usingDataBase = true;
-    }
-  });
-
+  const usingDataBase = applications.some(appConfig => appConfig.prodDatabaseType !== NO_DATABASE);
   const props = await this.prompt(
     [
       {

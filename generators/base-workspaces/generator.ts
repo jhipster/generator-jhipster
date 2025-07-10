@@ -17,15 +17,22 @@
  * limitations under the License.
  */
 
+import { join } from 'node:path';
+import { defaults } from 'lodash-es';
 import BaseGenerator from '../base/index.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
-import { normalizePathEnd } from '../../lib/utils/index.js';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.js';
+import { deploymentOptions } from '../../lib/jhipster/index.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
 import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
 import type { GenericTaskGroup } from '../base-core/types.js';
+import { removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
-import { CONTEXT_DATA_DEPLOYMENT_KEY, CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, CONTEXT_DATA_WORKSPACES_KEY } from './support/index.js';
+import {
+  CONTEXT_DATA_DEPLOYMENT_KEY,
+  CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY,
+  CONTEXT_DATA_WORKSPACES_ROOT_KEY,
+} from './support/index.js';
 import type {
   Deployment as BaseDeployment,
   Config as BaseWorkspacesConfig,
@@ -35,6 +42,8 @@ import type {
   WorkspacesApplication,
 } from './types.js';
 import type { Tasks as WorkspacesTasks } from './tasks.js';
+
+const { Options: DeploymentOptions } = deploymentOptions;
 
 const {
   PROMPTING_WORKSPACES,
@@ -69,10 +78,6 @@ export default abstract class BaseWorkspacesGenerator<
 
   static PREPARING_WORKSPACES = BaseGenerator.asPriority(PREPARING_WORKSPACES);
 
-  customWorkspacesConfig?: boolean;
-  appsFolders?: string[];
-  directoryPath!: string;
-
   constructor(args, options: Options, features: Features) {
     super(args, options, features);
 
@@ -83,15 +88,31 @@ export default abstract class BaseWorkspacesGenerator<
     this.registerPriorities(CUSTOM_PRIORITIES);
   }
 
+  override get jhipsterConfigWithDefaults() {
+    return defaults(
+      {},
+      removeFieldsWithNullishValues(this.config.getAll()),
+      DeploymentOptions.defaults(this.jhipsterConfig.deploymentType as any),
+    );
+  }
+
   get context() {
     return this.getContextData(CONTEXT_DATA_DEPLOYMENT_KEY, { factory: () => ({}) });
+  }
+
+  get appsFolders(): string[] {
+    return this.jhipsterConfigWithDefaults.appsFolders;
+  }
+
+  get directoryPath(): string {
+    return this.jhipsterConfigWithDefaults.directoryPath;
   }
 
   get #applications() {
     return this.getContextData(CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, {
       factory: () =>
         Object.entries(this.resolveApplicationFolders()).map(([appFolder, resolvedFolder], index) => {
-          const contextMap = this.env.getContextMap(resolvedFolder);
+          const contextMap = this.env.getContextMap(resolvedFolder) as Map<string, WorkspacesApplication>;
           const application = contextMap.get(CONTEXT_DATA_APPLICATION_KEY);
           if (!application) {
             throw new Error(`No application found in ${resolvedFolder}`);
@@ -103,8 +124,8 @@ export default abstract class BaseWorkspacesGenerator<
     });
   }
 
-  get #sharedWorkspaces(): any {
-    return this.getContextData(CONTEXT_DATA_WORKSPACES_KEY, { factory: () => ({}) });
+  get workspacesRoot(): string {
+    return this.getContextData(CONTEXT_DATA_WORKSPACES_ROOT_KEY);
   }
 
   get promptingWorkspaces() {
@@ -123,21 +144,19 @@ export default abstract class BaseWorkspacesGenerator<
     return {};
   }
 
-  protected loadWorkspacesConfig(opts?) {
-    const { context = this } = opts ?? {};
-    context.appsFolders = this.jhipsterConfig.appsFolders;
-    context.directoryPath = this.jhipsterConfig.directoryPath ?? './';
+  workspacePath(...dest: string[]): string {
+    return join(this.workspacesRoot, ...dest);
   }
 
-  protected configureWorkspacesConfig() {
-    this.jhipsterConfig.directoryPath = normalizePathEnd(this.jhipsterConfig.directoryPath ?? './');
+  private resolveApplicationFolders({ appsFolders = this.appsFolders }: { directoryPath?: string; appsFolders?: string[] } = {}) {
+    return Object.fromEntries(appsFolders.map(appFolder => [appFolder, this.workspacePath(appFolder)]));
   }
 
-  private resolveApplicationFolders({
-    directoryPath = this.directoryPath,
-    appsFolders = this.appsFolders ?? [],
-  }: { directoryPath?: string; appsFolders?: string[] } = {}) {
-    return Object.fromEntries(appsFolders.map(appFolder => [appFolder, this.destinationPath(directoryPath ?? '.', appFolder)]));
+  setWorkspacesRoot(root: string) {
+    const oldValue = this.getContextData(CONTEXT_DATA_WORKSPACES_ROOT_KEY, { replacement: root });
+    if (oldValue) {
+      throw new Error(`Workspaces root is already set to ${oldValue}. Cannot change it to ${root}.`);
+    }
   }
 
   async bootstrapApplications() {
@@ -173,7 +192,6 @@ export default abstract class BaseWorkspacesGenerator<
     return [
       {
         ...first,
-        workspaces: this.#sharedWorkspaces,
         deployment: this.context,
         applications: this.#applications,
       },

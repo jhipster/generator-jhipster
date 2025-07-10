@@ -145,6 +145,7 @@ type GeneratorsByNamespace = {
   'jhipster:javascript:eslint': import('./javascript/generators/eslint/generator.ts').default;
   'jhipster:javascript:husky': import('./javascript/generators/husky/generator.ts').default;
   'jhipster:javascript:prettier': import('./javascript/generators/prettier/generator.ts').default;
+  'jhipster:kubernetes:bootstrap': import('./kubernetes/generators/bootstrap/generator.ts').default;
   'jhipster:maven:code-quality': import('./maven/generators/code-quality/generator.ts').default;
   'jhipster:maven:frontend-plugin': import('./maven/generators/frontend-plugin/generator.ts').default;
   'jhipster:maven:jib': import('./maven/generators/jib/generator.ts').default;
