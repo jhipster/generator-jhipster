@@ -43,8 +43,8 @@ import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
     const uniqueRel = relationshipsByEntityNeedingOptions[0];
     if (uniqueRel.otherEntityAngularName !== entityAngularName) {
 _%>
-import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.model';
-import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/service/<%= uniqueRel.otherEntityFileName %>.service';
+import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/entities/<%= uniqueRel.entityFolderName %>/<%= uniqueRel.otherEntityFileName %>.model';
+import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%= uniqueRel.entityFolderName %>/service/<%= uniqueRel.otherEntityFileName %>.service';
 <%_
     }
   }

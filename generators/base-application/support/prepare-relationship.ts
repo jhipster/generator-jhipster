@@ -214,11 +214,6 @@ export default function prepareRelationship(
   } else {
     (relationship as any).otherEntityClientRootFolder = `${otherEntityClientRootFolder}/`;
   }
-  if (otherEntityClientRootFolder) {
-    (relationship as any).otherEntityPath = `${otherEntityClientRootFolder}/${relationship.otherEntity.entityFolderName}`;
-  } else {
-    (relationship as any).otherEntityPath = relationship.otherEntity.entityFolderName;
-  }
 
   if (relationship.relationshipValidateRules?.includes(REQUIRED)) {
     if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
