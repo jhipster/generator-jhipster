@@ -109,7 +109,7 @@ class <%= entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%=
 
     private final static Table entityTable = Table.aliased("<%= entityTableName %>", EntityManager.ENTITY_ALIAS);
 <%_ reactiveEagerRelations.forEach(rel => { _%>
-    private final static Table <%= rel.relationshipName %>Table = Table.aliased("<%= rel.otherEntityTableName %>", "<%= rel.relationshipSqlSafeName %>");
+    private final static Table <%= rel.relationshipName %>Table = Table.aliased("<%= rel.otherEntity.entityTableName %>", "<%= rel.relationshipSqlSafeName %>");
 <%_ }); _%>
 
 <%_ relationships.forEach(rel => {

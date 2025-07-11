@@ -14,20 +14,26 @@ describe('generator - client - support - template-utils', () => {
     describe('with relationships to entities', () => {
       const relationships = [
         {
-          otherEntityAngularName: 'EntityA',
+          otherEntity: {
+            entityAngularName: 'EntityA',
+          },
           persistableRelationship: true,
         },
         {
-          otherEntityAngularName: 'EntityB',
+          otherEntity: {
+            entityAngularName: 'EntityB',
+          },
           relationshipEagerLoad: true,
         },
         {
-          otherEntityAngularName: 'EntityC',
+          otherEntity: {
+            entityAngularName: 'EntityC',
+          },
         },
       ];
 
       it('return only imports for relevant relationships for fields', () => {
-        const imports = generateEntityClientImports(relationships, NO_DTO);
+        const imports = generateEntityClientImports(relationships as any, NO_DTO);
         expect(imports).to.have.all.keys('IEntityA', 'IEntityB');
         expect(imports.size).to.eql(2);
       });
@@ -36,17 +42,21 @@ describe('generator - client - support - template-utils', () => {
     describe('with relationships from or to the User', () => {
       const relationships = [
         {
-          otherEntityAngularName: 'User',
+          otherEntity: {
+            entityAngularName: 'User',
+          },
           persistableRelationship: true,
         },
         {
-          otherEntityAngularName: 'AnEntity',
+          otherEntity: {
+            entityAngularName: 'AnEntity',
+          },
           persistableRelationship: true,
         },
       ];
       describe('when called with 2 distinct relationships without dto option', () => {
         it('return a Map with 2 imports', () => {
-          const imports = generateEntityClientImports(relationships, NO_DTO);
+          const imports = generateEntityClientImports(relationships as any, NO_DTO);
           expect(imports).to.have.all.keys('IUser', 'IAnEntity');
           expect(imports.size).to.eql(relationships.length);
         });
@@ -54,16 +64,20 @@ describe('generator - client - support - template-utils', () => {
       describe('when called with 2 identical relationships without dto option', () => {
         const relationships = [
           {
-            otherEntityAngularName: 'User',
+            otherEntity: {
+              entityAngularName: 'User',
+            },
             persistableRelationship: true,
           },
           {
-            otherEntityAngularName: 'User',
+            otherEntity: {
+              entityAngularName: 'User',
+            },
             persistableRelationship: true,
           },
         ];
         it('return a Map with 1 import', () => {
-          const imports = generateEntityClientImports(relationships, NO_DTO);
+          const imports = generateEntityClientImports(relationships as any, NO_DTO);
           expect(imports).to.have.key('IUser');
           expect(imports.size).to.eql(1);
         });

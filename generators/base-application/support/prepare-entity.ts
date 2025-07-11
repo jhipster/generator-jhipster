@@ -22,7 +22,7 @@ import pluralize from 'pluralize';
 import type BaseGenerator from '../../base-core/index.js';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.js';
 import { parseChangelog } from '../../base/support/timestamp.js';
-import { getMicroserviceAppName, mutateData, stringHashCode, upperFirstCamelCase } from '../../../lib/utils/index.js';
+import { getMicroserviceAppName, mutateData, normalizePathEnd, stringHashCode, upperFirstCamelCase } from '../../../lib/utils/index.js';
 import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/support/index.js';
 import { applicationTypes, databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
@@ -202,9 +202,7 @@ export default function prepareEntity(entityWithConfig: CommonEntity, generator,
     entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
   });
 
-  entityWithConfig.entityFolderName = entityWithConfig.clientRootFolder
-    ? `${entityWithConfig.clientRootFolder}/${entityWithConfig.entityFileName}`
-    : entityWithConfig.entityFileName;
+  entityWithConfig.entityFolderName = `${normalizePathEnd(entityWithConfig.clientRootFolder)}${entityWithConfig.entityFileName}`;
   entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
   entityWithConfig.entityParentPathAddition = getEntityParentPathAddition(entityWithConfig.clientRootFolder);
   entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;

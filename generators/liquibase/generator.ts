@@ -210,7 +210,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             // Prepare them.
             const { previousEntity: entity } = databaseChangelog;
             for (const relationship of entity.relationships ?? []) {
-              prepareRelationship(entity, relationship, this, true);
+              prepareRelationship.call(this, entity, relationship, true);
               prepareRelationshipForLiquibase(entity, relationship);
             }
             postPrepareEntity.call(this, { application, entity } as any);

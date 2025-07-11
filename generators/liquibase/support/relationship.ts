@@ -61,6 +61,11 @@ export function relationshipNeedsForeignKeyRecreationOnly(relationshipA: Liquiba
 }
 
 export function prepareRelationshipForLiquibase(entity: LiquibaseEntity, relationship: LiquibaseRelationship) {
+  mutateData(relationship, {
+    unique: ({ id, ownerSide, relationshipOneToOne }) => id || (ownerSide && relationshipOneToOne),
+    nullable: ({ relationshipValidate, relationshipRequired }) => !(relationshipValidate === true && relationshipRequired),
+  });
+
   relationship.shouldWriteRelationship =
     relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true);
 

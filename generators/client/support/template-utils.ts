@@ -21,8 +21,8 @@ import path from 'node:path';
 
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.js';
 import type { FieldType } from '../../../lib/jhipster/field-types.js';
-import type { PrimaryKey } from '../../base-application/types.js';
-import type { Field as ClientField } from '../../client/types.js';
+import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/types.js';
+import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../../client/types.js';
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;
@@ -34,7 +34,9 @@ const { ANGULAR, VUE } = clientFrameworkTypes;
  * @param {Array|Object} relationships - array of relationships
  * @returns {Array|Object} filtered relationships
  */
-export const filterRelevantRelationships = relationships =>
+export const filterRelevantRelationships = (
+  relationships: RelationshipWithEntity<ClientRelationship, ClientEntity>[],
+): RelationshipWithEntity<ClientRelationship, ClientEntity>[] =>
   relationships.filter(rel => rel.persistableRelationship || rel.relationshipEagerLoad);
 
 /**
@@ -46,22 +48,25 @@ export const filterRelevantRelationships = relationships =>
  * @param {string} clientFramework the client framework, 'angular', 'vue' or 'react'.
  * @returns typeImports: Map
  */
-export const generateEntityClientImports = (relationships, dto?, clientFramework?) => {
+export const generateEntityClientImports = (
+  relationships: RelationshipWithEntity<ClientRelationship, ClientEntity>[],
+  dto?,
+  clientFramework?,
+) => {
   const typeImports = new Map();
 
   const relevantRelationships = filterRelevantRelationships(relationships);
 
   relevantRelationships.forEach(relationship => {
-    const otherEntityAngularName = relationship.otherEntityAngularName;
-    const importType = `I${otherEntityAngularName}`;
+    const importType = `I${relationship.otherEntity.entityAngularName}`;
     let importPath;
     if (relationship.otherEntity?.builtInUser) {
       importPath = clientFramework === ANGULAR ? 'app/entities/user/user.model' : 'app/shared/model/user.model';
     } else {
       importPath =
         clientFramework === ANGULAR
-          ? `app/entities/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFolderName}/${relationship.otherEntityFileName}.model`
-          : `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
+          ? `app/entities/${relationship.otherEntity.entityFolderName}/${relationship.otherEntity.entityFileName}.model`
+          : `app/shared/model/${relationship.otherEntity.entityFolderName}${relationship.otherEntity.entityFileName}.model`;
     }
     typeImports.set(importType, importPath);
   });

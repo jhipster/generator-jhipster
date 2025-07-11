@@ -87,7 +87,7 @@ export function preparePostEntityServerDerivedProperties(entity: any) {
     entity.mapsIdAssoc = null;
   }
   entity.reactiveOtherEntities = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity));
-  entity.reactiveUniqueEntityTypes = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntityNameCapitalized));
+  entity.reactiveUniqueEntityTypes = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity.entityNameCapitalized));
   entity.reactiveUniqueEntityTypes.add(entity.entityClass);
   if (entity.databaseType === 'sql') {
     for (const relationship of entity.relationships) {
