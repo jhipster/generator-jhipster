@@ -18,4 +18,4 @@
  */
 
 export const normalizePathEnd = (directory: string): string =>
-  directory.length === 0 || directory.endsWith('/') ? directory : `${directory}/`;
+  !directory || directory.endsWith('/') ? directory : `${directory}/`;
