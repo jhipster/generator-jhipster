@@ -27,9 +27,7 @@
       beans.push({class: `${entityClass}QueryService`, instance: `${entityInstance}QueryService`});
     }
     if (isUsingMapsId && !isController) {
-      const mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
-      const mapsIdEntityInstance = mapsIdEntity.charAt(0).toLowerCase() + mapsIdAssoc.otherEntity.entityNameCapitalized.slice(1);
-      const mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
+      const mapsIdRepoInstance = `${mapsIdAssoc.otherEntity.entityInstance}Repository`;
       beans.push({class: `${mapsIdAssoc.otherEntity.entityNameCapitalized}Repository`, instance: mapsIdRepoInstance});
     }
   } else {
@@ -41,8 +39,7 @@
       beans.push({class: `${entityClass}SearchRepository`, instance: `${entityInstance}SearchRepository`});
     }
     if (isUsingMapsId) {
-      const mapsIdEntityInstance = mapsIdAssoc.otherEntity.entityNameCapitalized.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
-      const mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
+      const mapsIdRepoInstance = `${mapsIdAssoc.otherEntity.entityInstance}Repository`;
       beans.push({class: `${mapsIdAssoc.otherEntity.entityNameCapitalized}Repository`, instance: mapsIdRepoInstance});
     }
   }

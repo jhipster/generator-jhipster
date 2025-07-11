@@ -202,15 +202,13 @@ _%>
         this.<%= otherEntity.entityInstancePlural %>SharedCollection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(
             this.<%= otherEntity.entityInstancePlural %>SharedCollection,
       <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
-        <%_ const reference = relationship.reference _%>
-            <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= propertyName %><%= relationship.collection ? ' ?? [])' : '' %>,
+            <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= relationship.propertyName %><%= relationship.collection ? ' ?? [])' : '' %>,
       <%_ } _%>
         );
     <%_ } _%>
     <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
       <%_ const otherEntity = relationship.otherEntity _%>
-      <%_ const reference = relationship.reference _%>
-        this.<%= relationship.relationshipFieldNamePlural %>Collection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(this.<%= relationship.relationshipFieldNamePlural %>Collection, <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= propertyName %><%= relationship.collection ? ' ?? [])' : '' %>);
+        this.<%= relationship.relationshipFieldNamePlural %>Collection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(this.<%= relationship.relationshipFieldNamePlural %>Collection, <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= relationship.propertyName %><%= relationship.collection ? ' ?? [])' : '' %>);
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
