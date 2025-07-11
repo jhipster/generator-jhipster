@@ -467,7 +467,7 @@ if (field.fieldTypeString || field.blobContentTypeText) {
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
 <%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized !== 'User') { _%>
     @Autowired
-    private <%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %>Repository <%= mapsIdAssoc?.otherEntity?.entityNameInstance %>Repository;
+    private <%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %>Repository <%= mapsIdAssoc?.otherEntity?.entityInstance %>Repository;
 <%_ } _%>
 <%_ if (hasUserRepository) { _%>
 
