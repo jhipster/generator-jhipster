@@ -14,18 +14,21 @@ describe('generator - client - support - template-utils', () => {
       const relationships = [
         {
           otherEntity: {
+            clientRootFolder: '',
             entityAngularName: 'EntityA',
           },
           persistableRelationship: true,
         },
         {
           otherEntity: {
+            clientRootFolder: '',
             entityAngularName: 'EntityB',
           },
           relationshipEagerLoad: true,
         },
         {
           otherEntity: {
+            clientRootFolder: '',
             entityAngularName: 'EntityC',
           },
         },
@@ -42,12 +45,14 @@ describe('generator - client - support - template-utils', () => {
       const relationships = [
         {
           otherEntity: {
+            clientRootFolder: '',
             entityAngularName: 'User',
           },
           persistableRelationship: true,
         },
         {
           otherEntity: {
+            clientRootFolder: '',
             entityAngularName: 'AnEntity',
           },
           persistableRelationship: true,
@@ -64,12 +69,14 @@ describe('generator - client - support - template-utils', () => {
         const relationships = [
           {
             otherEntity: {
+              clientRootFolder: '',
               entityAngularName: 'User',
             },
             persistableRelationship: true,
           },
           {
             otherEntity: {
+              clientRootFolder: '',
               entityAngularName: 'User',
             },
             persistableRelationship: true,
