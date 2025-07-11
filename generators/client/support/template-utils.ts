@@ -24,6 +24,7 @@ import type { FieldType } from '../../../lib/jhipster/field-types.js';
 import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/types.js';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../../client/types.js';
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
+import { normalizePathEnd } from '../../../lib/utils/path.ts';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;
 const { ANGULAR, VUE } = clientFrameworkTypes;
@@ -65,8 +66,8 @@ export const generateEntityClientImports = (
     } else {
       importPath =
         clientFramework === ANGULAR
-          ? `app/entities/${relationship.otherEntity.clientRootFolder}${relationship.otherEntity.entityFileName}.model`
-          : `app/shared/model/${relationship.otherEntity.clientRootFolder}${relationship.otherEntity.entityFileName}.model`;
+          ? `app/entities/${normalizePathEnd(relationship.otherEntity.clientRootFolder)}${relationship.otherEntity.entityFileName}.model`
+          : `app/shared/model/${normalizePathEnd(relationship.otherEntity.clientRootFolder)}${relationship.otherEntity.entityFileName}.model`;
     }
     typeImports.set(importType, importPath);
   });
@@ -232,27 +233,4 @@ export const generateTestEntityPrimaryKey = (primaryKey, index: 0 | 1 | 'random'
       index,
     ),
   );
-};
-
-/**
- * @private
- * Get a parent folder path addition for entity
- * @param {string} clientRootFolder
- */
-export const getEntityParentPathAddition = (clientRootFolder: string) => {
-  if (!clientRootFolder) {
-    return '';
-  }
-  const relative = path.relative(`/app/entities/${clientRootFolder}/`, '/app/entities/');
-  if (relative.includes('app')) {
-    // Relative path outside angular base dir.
-    throw new Error(`
-    "clientRootFolder outside app base dir '${clientRootFolder}'"
-`);
-  }
-  const entityFolderPathAddition = relative.replace(/[/|\\]?..[/|\\]entities/, '').replace('entities', '..');
-  if (!entityFolderPathAddition) {
-    return '';
-  }
-  return `${entityFolderPathAddition}/`;
 };

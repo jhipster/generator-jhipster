@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { describe, it } from 'esmocha';
 import { entityOptions } from '../../../lib/jhipster/index.js';
 
-import { generateEntityClientImports, generateTestEntityId, getEntityParentPathAddition } from './template-utils.js';
+import { generateEntityClientImports, generateTestEntityId } from './template-utils.js';
 
 const { MapperTypes } = entityOptions;
 
@@ -99,60 +99,6 @@ describe('generator - client - support - template-utils', () => {
     describe('when called with UUID', () => {
       it("return '9fec3727-3421-4967-b213-ba36557ca194'", () => {
         expect(generateTestEntityId('UUID')).to.equal("'9fec3727-3421-4967-b213-ba36557ca194'");
-      });
-    });
-  });
-
-  describe('getEntityParentPathAddition', () => {
-    describe('when passing /', () => {
-      it('returns an empty string', () => {
-        expect(getEntityParentPathAddition('/')).to.equal('');
-      });
-    });
-    describe('when passing /foo/', () => {
-      it('returns ../', () => {
-        expect(getEntityParentPathAddition('/foo/')).to.equal('../');
-      });
-    });
-    describe('when passing undefined', () => {
-      it('returns an empty string', () => {
-        // @ts-expect-error testing invalid argument
-        expect(getEntityParentPathAddition()).to.equal('');
-      });
-    });
-    describe('when passing empty', () => {
-      it('returns an empty string', () => {
-        expect(getEntityParentPathAddition('')).to.equal('');
-      });
-    });
-    describe('when passing foo', () => {
-      it('returns ../', () => {
-        expect(getEntityParentPathAddition('foo')).to.equal('../');
-      });
-    });
-    describe('when passing foo/bar', () => {
-      it('returns ../../', () => {
-        expect(getEntityParentPathAddition('foo/bar')).to.equal(`..${path.sep}../`);
-      });
-    });
-    describe('when passing ../foo', () => {
-      it('returns an empty string', () => {
-        expect(getEntityParentPathAddition('../foo')).to.equal('');
-      });
-    });
-    describe('when passing ../foo/bar', () => {
-      it('returns ../', () => {
-        expect(getEntityParentPathAddition('../foo/bar')).to.equal('../');
-      });
-    });
-    describe('when passing ../foo/bar/foo2', () => {
-      it('returns ../../', () => {
-        expect(getEntityParentPathAddition('../foo/bar/foo2')).to.equal(`..${path.sep}../`);
-      });
-    });
-    describe('when passing ../../foo', () => {
-      it('throw an error', () => {
-        expect(() => getEntityParentPathAddition('../../foo')).to.throw();
       });
     });
   });
