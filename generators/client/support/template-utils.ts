@@ -65,8 +65,8 @@ export const generateEntityClientImports = (
     } else {
       importPath =
         clientFramework === ANGULAR
-          ? `app/entities/${relationship.otherEntity.entityFolderName}/${relationship.otherEntity.entityFileName}.model`
-          : `app/shared/model/${relationship.otherEntity.entityFolderName}${relationship.otherEntity.entityFileName}.model`;
+          ? `app/entities/${relationship.otherEntity.clientRootFolder}${relationship.otherEntity.entityFileName}.model`
+          : `app/shared/model/${relationship.otherEntity.clientRootFolder}${relationship.otherEntity.entityFileName}.model`;
     }
     typeImports.set(importType, importPath);
   });

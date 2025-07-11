@@ -178,6 +178,11 @@ export default function prepareEntity(entityWithConfig: CommonEntity, generator,
   }
 
   mutateData(entityWithConfig, {
+    __override__: true,
+    clientRootFolder: ({ clientRootFolder }) => normalizePathEnd(clientRootFolder),
+  });
+
+  mutateData(entityWithConfig, {
     entityNameCapitalized: entityName,
     entityNamePlural: pluralize(entityName),
     entityNamePluralizedAndSpinalCased: ({ entityNamePlural }) => kebabCase(entityNamePlural),

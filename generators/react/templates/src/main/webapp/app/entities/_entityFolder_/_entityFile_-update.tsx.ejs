@@ -325,7 +325,7 @@ _%>
           >
               <option value="" key="0" />
               {
-                <%= rel.otherEntity.entityNamePlural %> ? <%= rel.otherEntity.entityNamePlural %>.map(otherEntity =>
+                <%= rel.otherEntity.entityInstancePlural %> ? <%= rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
                   <option
                     value={otherEntity.<%= otherEntityPkName %>}
                     key={otherEntity.<%= otherEntityPkName %>}>
@@ -352,7 +352,7 @@ _%>
             >
               <option value="" key="0" />
               {
-                (<%= rel.otherEntity.entityNamePlural %>) ? <%= rel.otherEntity.entityNamePlural %>.map(otherEntity =>
+                (<%= rel.otherEntity.entityInstancePlural %>) ? <%= rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
                 <option
                     value={otherEntity.<%= otherEntityPkName %>}
                     key={otherEntity.<%= otherEntityPkName %>}>
