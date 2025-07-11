@@ -118,7 +118,7 @@ import java.util.stream.Collectors;
 <%_ for (const relationship of relationships) { _%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection) { -&>
   <%_ if (relationship.collection) { _%>
-    public void set<%= relationship.relationshipNameCapitalizedPlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntity.entityNameInstancePlural %>) {
+    public void set<%= relationship.relationshipNameCapitalizedPlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntity.entityInstancePlural %>) {
     <%_ if (relationship.otherRelationship && !relationship.ownerSide) { _%>
         if (this.<%= relationship.relationshipFieldNamePlural %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
@@ -127,17 +127,17 @@ import java.util.stream.Collectors;
             this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null));
       <%_ } _%>
         }
-        if (<%= relationship.otherEntity.entityNameInstancePlural %> != null) {
+        if (<%= relationship.otherEntity.entityInstancePlural %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
-            <%= relationship.otherEntity.entityNameInstancePlural %>.forEach(i -> i.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
+            <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
-            <%= relationship.otherEntity.entityNameInstancePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
+            <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } _%>
         }
     <%_ } _%>
-        this.<%= relationship.relationshipFieldNamePlural %> = <%= relationship.otherEntity.entityNameInstancePlural %>;
+        this.<%= relationship.relationshipFieldNamePlural %> = <%= relationship.otherEntity.entityInstancePlural %>;
     <%_ if (!relationship.otherEntity.embedded) { _%>
-        this.<%= relationship.relationshipFieldName %>Ids = <%= relationship.otherEntity.entityNameInstancePlural %>.stream()
+        this.<%= relationship.relationshipFieldName %>Ids = <%= relationship.otherEntity.entityInstancePlural %>.stream()
             .map(<%= relationship.otherEntity.persistClass %>::getId)
             .collect(Collectors.toSet());
     <%_ } _%>
