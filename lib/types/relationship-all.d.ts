@@ -2,4 +2,7 @@ import type { Relationship as SpringDataRelationalRelationship } from '../../gen
 import type { Relationship as ServerRelationship } from '../../generators/server/index.ts';
 import type { Relationship as LiquibaseRelationship } from '../../generators/liquibase/index.ts';
 
-export interface RelationshipAll extends SpringDataRelationalRelationship, ServerRelationship, LiquibaseRelationship {}
+export interface RelationshipAll extends SpringDataRelationalRelationship, ServerRelationship, LiquibaseRelationship {
+  relationshipIgnoreBackReference?: boolean;
+  relationshipValidateRules?: string[];
+}

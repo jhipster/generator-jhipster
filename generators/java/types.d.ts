@@ -53,6 +53,8 @@ export type Field = BaseApplicationField &
 export interface Relationship extends BaseApplicationRelationship, Property {
   relationshipJavadoc?: string;
   propertyDtoJavaType?: string;
+  relationshipUpdateBackReference?: boolean;
+  relationshipNameCapitalizedPlural?: string;
 }
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends BaseApplicationEntity<F, R> {

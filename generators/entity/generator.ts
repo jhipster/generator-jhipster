@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -29,18 +28,65 @@ import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import { applicationTypes, reservedKeywords } from '../../lib/jhipster/index.js';
 import { GENERATOR_ENTITIES } from '../generator-list.js';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.js';
-import type { EntityAll } from '../../lib/types/entity-all.js';
-import prompts from './prompts.js';
+import {
+  askForDTO,
+  askForFields,
+  askForFieldsToRemove,
+  askForFiltering,
+  askForMicroserviceJson,
+  askForPagination,
+  askForReadOnly,
+  askForRelationsToRemove,
+  askForRelationships,
+  askForService,
+  askForUpdate,
+} from './prompts.js';
+import type {
+  Application as EntityApplication,
+  Config as EntityConfig,
+  Entity as EntityEntity,
+  Options as EntityOptions,
+} from './types.js';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { isReservedClassName } = reservedKeywords;
 
-export default class EntityGenerator extends BaseApplicationGenerator {
+export default class EntityGenerator extends BaseApplicationGenerator<
+  EntityEntity,
+  EntityApplication<EntityEntity>,
+  EntityConfig,
+  EntityOptions
+> {
   name!: string;
   application: any = {};
+  microserviceConfig?: any;
   entityStorage!: Storage;
-  entityConfig!: EntityAll;
-  entityData!: { name: string; filename: string; configExisted: any; entityExisted: boolean; configurationFileExists: boolean };
+  entityConfig!: EntityEntity;
+  entityData!: {
+    name: string;
+    filename: string;
+    configExisted: boolean;
+    entityExisted: boolean;
+    configurationFileExists: boolean;
+
+    useMicroserviceJson?: boolean;
+    skipUiGrouping?: boolean;
+    useConfigurationFile?: boolean;
+    microserviceName?: string;
+    microserviceFileName?: string;
+    microservicePath?: string;
+    clientRootFolder?: string;
+    databaseType?: string;
+    skipClient?: boolean;
+    skipServer?: boolean;
+    skipDbChangelog?: boolean;
+    updateEntity?: 'add' | 'remove' | 'none' | 'regenerate';
+    regenerate?: boolean;
+    clientFramework?: string;
+    reactive?: boolean;
+    enums?: string[];
+    existingEnum?: boolean;
+  };
 
   constructor(args, options, features) {
     super(args, options, { unique: 'argument', ...features });
@@ -62,7 +108,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
       parseOptions() {
         const name = upperFirst(this.name).replace('.json', '');
         this.entityStorage = this.getEntityConfig(name, true)!;
-        this.entityConfig = this.entityStorage.createProxy() as EntityAll;
+        this.entityConfig = this.entityStorage.createProxy() as EntityEntity;
 
         const configExisted = this.entityStorage.existed;
         const filename = path.join(JHIPSTER_CONFIG_DIR, `${name}.json`);
@@ -77,7 +123,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
           configurationFileExists: this.fs.exists(this.destinationPath(filename)),
         };
 
-        this._setupEntityOptions(this, this, this.entityData);
+        this._setupEntityOptions();
       },
 
       loadOptions() {
@@ -85,7 +131,6 @@ export default class EntityGenerator extends BaseApplicationGenerator {
           this.entityConfig.databaseType = getDBTypeFromDBValue(this.options.db);
           if (this.entityConfig.databaseType === 'sql') {
             this.entityConfig.prodDatabaseType = this.options.db;
-            this.entityConfig.devDatabaseType = this.options.db;
           }
         }
 
@@ -109,7 +154,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
   get prompting() {
     return this.asPromptingTaskGroup({
       /* Use need microservice path to load the entity file */
-      askForMicroserviceJson: prompts.askForMicroserviceJson,
+      askForMicroserviceJson,
     });
   }
 
@@ -117,10 +162,13 @@ export default class EntityGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      isBuiltInEntity() {
-        if (this.isBuiltInUser(this.entityData.name) || this.isBuiltInAuthority(this.entityData.name)) {
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      isBuiltInEntity({ application }) {
+        if (
+          (application.generateBuiltInUserEntity && this.entityData.name.toLowerCase() === 'user)') ||
+          (application.generateBuiltInAuthorityEntity && this.entityData.name.toLowerCase() === 'authority')
+        ) {
           throw new Error(`Is not possible to override built in ${this.entityData.name}`);
         }
       },
@@ -129,7 +177,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
         const context = this.entityData;
 
         if (application.applicationType === MICROSERVICE) {
-          context.microserviceName = this.entityConfig.microserviceName = this.jhipsterConfig.baseName;
+          context.microserviceName = this.entityConfig.microserviceName = this.jhipsterConfig.baseName!;
           if (!this.entityConfig.clientRootFolder) {
             context.clientRootFolder = this.entityConfig.clientRootFolder = this.entityConfig.microserviceName;
           }
@@ -137,7 +185,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
           // If microservicePath is set we are loading the entity from the microservice side.
           context.useMicroserviceJson = !!this.entityConfig.microservicePath;
           if (context.useMicroserviceJson) {
-            context.microserviceFileName = this.destinationPath(this.entityConfig.microservicePath, context.filename);
+            context.microserviceFileName = this.destinationPath(this.entityConfig.microservicePath!, context.filename);
             context.useConfigurationFile = true;
 
             this.log.verboseInfo(`
@@ -180,7 +228,7 @@ The entity ${context.name} is being updated.
         const entityName = context.name;
         if ([MICROSERVICE, GATEWAY].includes(application.applicationType)) {
           if (this.entityConfig.databaseType === undefined) {
-            this.entityConfig.databaseType = context.databaseType;
+            this.entityConfig.databaseType = context.databaseType!;
           }
         }
         context.useConfigurationFile = context.configurationFileExists || context.useConfigurationFile;
@@ -201,34 +249,21 @@ The entity ${entityName} is being created.
 `);
         }
       },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get postPreparing() {
-    return this.asPostPreparingTaskGroup({
       /* ask question to user if s/he wants to update entity */
-      askForUpdate: prompts.askForUpdate,
-      askForFields: prompts.askForFields,
-      askForFieldsToRemove: prompts.askForFieldsToRemove,
-      askForRelationships: prompts.askForRelationships,
-      askForRelationsToRemove: prompts.askForRelationsToRemove,
-      askForService: prompts.askForService,
-      askForDTO: prompts.askForDTO,
-      askForFiltering: prompts.askForFiltering,
-      askForReadOnly: prompts.askForReadOnly,
-      askForPagination: prompts.askForPagination,
+      askForUpdate,
+      askForFields,
+      askForFieldsToRemove,
+      askForRelationships,
+      askForRelationsToRemove,
+      askForService,
+      askForDTO,
+      askForFiltering,
+      askForReadOnly,
+      askForPagination,
       async composeEntities() {
         // We need to compose with others entities to update relationships.
         await this.composeWithJHipster(GENERATOR_ENTITIES, {
           generatorArgs: this.options.singleEntity ? [this.entityData.name] : [],
-          generatorOptions: {
-            skipDbChangelog: this.options.skipDbChangelog,
-            skipInstall: this.options.skipInstall,
-          },
         });
       },
     });
@@ -242,7 +277,7 @@ The entity ${entityName} is being created.
   get end() {
     return this.asEndTaskGroup({
       end() {
-        this.log.log(chalk.bold.green(`Entity ${this.entityData.entityNameCapitalized} generated successfully.`));
+        this.log.log(chalk.bold.green(`Entity ${this.entityData.name} generated successfully.`));
       },
     });
   }
@@ -261,34 +296,34 @@ The entity ${entityName} is being created.
    * @param {any} context - context to use default is generator instance
    * @param {any} dest - destination context to use default is context
    */
-  _setupEntityOptions(generator, context = generator, dest = context) {
-    dest.regenerate = context.options.regenerate;
+  _setupEntityOptions() {
+    this.entityData.regenerate = this.options.regenerate;
 
-    if (context.options.skipCheckLengthOfIdentifier !== undefined) {
-      this.entityConfig.skipCheckLengthOfIdentifier = context.options.skipCheckLengthOfIdentifier;
+    if (this.options.skipCheckLengthOfIdentifier !== undefined) {
+      this.entityConfig.skipCheckLengthOfIdentifier = this.options.skipCheckLengthOfIdentifier;
     }
-    if (context.options.angularSuffix !== undefined) {
-      this.entityConfig.angularJSSuffix = context.options.angularSuffix;
+    if (this.options.angularSuffix !== undefined) {
+      this.entityConfig.angularJSSuffix = this.options.angularSuffix;
     }
-    if (context.options.skipUiGrouping !== undefined) {
-      this.entityConfig.skipUiGrouping = context.options.skipUiGrouping;
+    if (this.options.skipUiGrouping !== undefined) {
+      this.entityConfig.skipUiGrouping = this.options.skipUiGrouping;
     }
-    if (context.options.clientRootFolder !== undefined) {
+    if (this.options.clientRootFolder !== undefined) {
       if (this.entityConfig.skipUiGrouping) {
-        this.warn('Ignoring client-root-folder due to skip-ui-grouping configuration');
+        this.log.warn('Ignoring client-root-folder due to skip-ui-grouping configuration');
       } else {
-        this.entityConfig.clientRootFolder = context.options.clientRootFolder;
+        this.entityConfig.clientRootFolder = this.options.clientRootFolder;
       }
     }
-    if (context.options.skipClient !== undefined) {
-      this.entityConfig.skipClient = context.options.skipClient;
+    if (this.options.skipClient !== undefined) {
+      this.entityConfig.skipClient = this.options.skipClient;
     }
-    if (context.options.skipServer !== undefined) {
-      this.entityConfig.skipServer = context.options.skipServer;
+    if (this.options.skipServer !== undefined) {
+      this.entityConfig.skipServer = this.options.skipServer;
     }
 
-    if (context.options.tableName) {
-      this.entityConfig.entityTableName = hibernateSnakeCase(context.options.tableName);
+    if (this.options.tableName) {
+      this.entityConfig.entityTableName = hibernateSnakeCase(this.options.tableName);
     }
   }
 
@@ -314,45 +349,5 @@ The entity ${entityName} is being created.
       return 'The entity name cannot contain a Java or JHipster reserved keyword';
     }
     return true;
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a built-in User.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is User and is built-in.
-   */
-  isBuiltInUser(entityName) {
-    return this.generateBuiltInUserEntity && this.isUserEntity(entityName);
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a User entity.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is User.
-   */
-  isUserEntity(entityName) {
-    return upperFirst(entityName) === 'User';
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a Authority entity.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is Authority.
-   */
-  isAuthorityEntity(entityName) {
-    return upperFirst(entityName) === 'Authority';
-  }
-
-  /**
-   * @private
-   * Verify if the entity is a built-in Authority.
-   * @param {String} entityName - Entity name to verify.
-   * @return {boolean} true if the entity is Authority and is built-in.
-   */
-  isBuiltInAuthority(entityName) {
-    return this.generateBuiltInAuthorityEntity && this.isAuthorityEntity(entityName);
   }
 }

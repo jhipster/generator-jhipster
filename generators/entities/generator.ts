@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -55,13 +54,13 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
   }
 
   get composing() {
-    return {
+    return this.asComposingTaskGroup({
       async composeApp() {
         await this.composeWithJHipster(GENERATOR_APP, {
           generatorOptions: { skipPriorities: ['writing', 'postWriting'], entities: this.entities },
         });
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {

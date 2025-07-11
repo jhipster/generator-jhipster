@@ -319,9 +319,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
 
           if (!relationship.relationshipSide) {
             // Try to create relationshipSide based on best bet.
-            // @ts-ignore deprecated property
             if (relationship.ownerSide !== undefined) {
-              // @ts-ignore deprecated property
               relationship.relationshipSide = relationship.ownerSide ? 'left' : 'right';
             } else {
               // Missing ownerSide (one-to-many/many-to-one relationships) depends on the otherSide existence.
@@ -490,7 +488,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationshipsForTemplates({ entity, relationship }) {
-        prepareRelationship(entity, relationship, this);
+        prepareRelationship(entity as any, relationship as any, this);
       },
     });
   }

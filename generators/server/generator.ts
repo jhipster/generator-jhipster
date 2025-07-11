@@ -118,9 +118,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
             entityConfig.databaseType = application.databaseType;
           }
           if (entityConfig.clientRootFolder === undefined) {
-            entityConfig.clientRootFolder = entityConfig.clientRootFolder = entityConfig.skipUiGrouping
-              ? ''
-              : entityConfig.microserviceName;
+            entityConfig.clientRootFolder = entityConfig.skipUiGrouping ? '' : entityConfig.microserviceName;
           }
         }
       },
@@ -244,8 +242,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
               )}, using ${relationship.otherEntityName} as fallback`,
             );
           }
-          // @ts-ignore deprecated property
-          if (relationship.useJPADerivedIdentifier) {
+          if ((relationship as any).useJPADerivedIdentifier) {
             this.log.verboseInfo('Option useJPADerivedIdentifier is deprecated, use id instead');
             relationship.options ??= {};
             relationship.options.id = true;

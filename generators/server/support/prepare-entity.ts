@@ -93,7 +93,8 @@ export function preparePostEntityServerDerivedProperties(entity: any) {
     for (const relationship of entity.relationships) {
       if (!relationship.otherEntity.embedded) {
         relationship.joinColumnNames = relationship.otherEntity.primaryKey.fields.map(
-          otherField => `${relationship.columnNamePrefix}${otherField.columnName}`,
+          otherField =>
+            `${relationship.id && relationship.relationshipOneToOne ? '' : `${hibernateSnakeCase(relationship.relationshipName)}_`}${otherField.columnName}`,
         );
       }
     }

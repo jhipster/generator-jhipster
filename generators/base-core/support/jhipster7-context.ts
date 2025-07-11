@@ -234,8 +234,7 @@ export const jhipster7deprecatedProperties = {
     replacement: 'joinTable property',
     get:
       () =>
-      (...args) =>
-        // @ts-expect-error
+      (...args: Parameters<typeof getJoinTableName>) =>
         getJoinTableName(...args).value,
   },
   getJavaValueGeneratorForType: {

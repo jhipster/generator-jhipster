@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *
@@ -24,7 +23,9 @@ import { databaseTypes, entityOptions, validations } from '../../../lib/jhipster
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRelationship } from '../types.js';
+import type { RelationshipWithEntity } from '../types.js';
+import type { RelationshipAll } from '../../../lib/types/relationship-all.js';
+import type { EntityAll } from '../../../lib/types/entity-all.js';
 import { prepareProperty } from './prepare-property.js';
 import { stringifyApplicationData } from './debug.js';
 
@@ -37,8 +38,8 @@ const {
 const { MAPSTRUCT } = MapperTypes;
 
 export default function prepareRelationship(
-  entityWithConfig: BaseApplicationEntity,
-  relationship: BaseApplicationRelationship<Omit<BaseApplicationEntity, 'relationships'>>,
+  entityWithConfig: EntityAll,
+  relationship: RelationshipWithEntity<RelationshipAll, EntityAll>,
   generator: CoreGenerator,
   ignoreMissingRequiredRelationship = false,
 ) {
@@ -80,7 +81,7 @@ export default function prepareRelationship(
     relationshipNameHumanized: startCase(relationshipName),
 
     propertyName: ({ relationshipFieldName, relationshipFieldNamePlural }) =>
-      collection ? relationshipFieldNamePlural : relationshipFieldName,
+      collection ? relationshipFieldNamePlural! : relationshipFieldName!,
   });
 
   prepareProperty(relationship);
@@ -90,7 +91,11 @@ export default function prepareRelationship(
     // Other entity properties
     otherEntityNamePlural: pluralize(otherEntityName),
     otherEntityNameCapitalized: upperFirst(otherEntityName),
+    otherEntityIsEmbedded: otherEntityData.embedded,
+  } as any);
 
+  mutateData(relationship, {
+    __override__: false,
     // let ownerSide true when type is 'many-to-one' for convenience.
     // means that this side should control the reference.
     ownerSide: relationship.otherEntity.embedded || relationshipManyToOne || (relationshipLeftSide && !relationshipOneToMany),
@@ -100,27 +105,21 @@ export default function prepareRelationship(
 
     // DB properties
     columnName: hibernateSnakeCase(relationshipName),
-    columnNamePrefix: relationship.id && relationshipOneToOne ? '' : `${hibernateSnakeCase(relationshipName)}_`,
     shouldWriteJoinTable: ({ ownerSide }) => entityWithConfig.databaseType === 'sql' && relationshipManyToMany && ownerSide,
     joinTable: ({ shouldWriteJoinTable }) =>
       shouldWriteJoinTable
         ? {
             name: getJoinTableName(entityWithConfig.entityTableName, relationshipName, {
-              prodDatabaseType: entityWithConfig.prodDatabaseType,
+              prodDatabaseType: (entityWithConfig as any).prodDatabaseType,
             }).value,
           }
         : undefined,
   });
 
-  relationship.otherSideReferenceExists = false;
-
-  relationship.otherEntityIsEmbedded = otherEntityData.embedded;
-
   // Look for fields at the other other side of the relationship
   const otherRelationship = relationship.otherRelationship;
-  if (otherRelationship) {
-    relationship.otherSideReferenceExists = true;
-  } else if (
+  if (
+    !otherRelationship &&
     !ignoreMissingRequiredRelationship &&
     !relationship.otherEntity.embedded &&
     !relationship.relationshipIgnoreBackReference &&
@@ -139,7 +138,7 @@ export default function prepareRelationship(
   }
 
   if (relationship.otherEntityField) {
-    relationship.relatedField = otherEntityData.fields.find(field => field.fieldName === relationship.otherEntityField);
+    relationship.relatedField = otherEntityData.fields.find(field => field.fieldName === relationship.otherEntityField)!;
 
     if (relationship.relatedField) {
       relationship.relatedField.relatedByOtherEntity = true;
@@ -178,7 +177,7 @@ export default function prepareRelationship(
       otherEntityRelationshipNameCapitalized: ({ otherEntityRelationshipName }) => upperFirst(otherEntityRelationshipName),
       otherEntityRelationshipNameCapitalizedPlural: ({ otherEntityRelationshipNameCapitalized }) =>
         pluralize(otherEntityRelationshipNameCapitalized),
-    });
+    } as any);
   }
 
   mutateData(relationship, {
@@ -186,8 +185,15 @@ export default function prepareRelationship(
       relationship.relationshipName.length > 1
         ? pluralize(relationship.relationshipNameCapitalized)
         : upperFirst(pluralize(relationship.relationshipName)),
-    otherEntityNameCapitalizedPlural: pluralize(relationship.otherEntityNameCapitalized),
   });
+  mutateData(relationship, {
+    otherEntityNameCapitalizedPlural: pluralize((relationship as any).otherEntityNameCapitalized),
+    otherEntityTableName: otherEntityData.entityTableName,
+    otherEntityAngularName: otherEntityData.entityAngularName,
+    otherEntityStateName: otherEntityData.entityStateName,
+    otherEntityFileName: otherEntityData.entityFileName,
+    otherEntityFolderName: otherEntityData.entityFileName,
+  } as any);
 
   if (entityWithConfig.dto === MAPSTRUCT) {
     if (otherEntityData.dto !== MAPSTRUCT && !otherEntityData.builtInUser) {
@@ -198,37 +204,15 @@ export default function prepareRelationship(
   }
 
   mutateData(relationship, {
-    otherEntityTableName: otherEntityData.entityTableName,
-    otherEntityAngularName: otherEntityData.entityAngularName,
-    otherEntityStateName: otherEntityData.entityStateName,
-    otherEntityFileName: otherEntityData.entityFileName,
-    otherEntityFolderName: otherEntityData.entityFileName,
     jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
     unique: relationship.id || (relationship.ownerSide && relationshipOneToOne),
-  });
+  } as any);
 
   const otherEntityClientRootFolder = otherEntityData.clientRootFolder || otherEntityData.microserviceName || '';
   if (entityWithConfig.skipUiGrouping || !otherEntityClientRootFolder) {
-    relationship.otherEntityClientRootFolder = '';
+    (relationship as any).otherEntityClientRootFolder = '';
   } else {
-    relationship.otherEntityClientRootFolder = `${otherEntityClientRootFolder}/`;
-  }
-  if (otherEntityClientRootFolder) {
-    if (entityWithConfig.clientRootFolder === otherEntityClientRootFolder) {
-      relationship.otherEntityModulePath = relationship.otherEntityFolderName;
-    } else {
-      relationship.otherEntityModulePath = `${
-        entityWithConfig.entityParentPathAddition ? `${entityWithConfig.entityParentPathAddition}/` : ''
-      }${otherEntityClientRootFolder}/${relationship.otherEntityFolderName}`;
-    }
-    relationship.otherEntityModelName = `${otherEntityClientRootFolder}/${relationship.otherEntityFileName}`;
-    relationship.otherEntityPath = `${otherEntityClientRootFolder}/${relationship.otherEntityFolderName}`;
-  } else {
-    relationship.otherEntityModulePath = `${
-      entityWithConfig.entityParentPathAddition ? `${entityWithConfig.entityParentPathAddition}/` : ''
-    }${relationship.otherEntityFolderName}`;
-    relationship.otherEntityModelName = relationship.otherEntityFileName;
-    relationship.otherEntityPath = relationship.otherEntityFolderName;
+    (relationship as any).otherEntityClientRootFolder = `${otherEntityClientRootFolder}/`;
   }
 
   if (relationship.relationshipValidateRules?.includes(REQUIRED)) {
@@ -240,7 +224,7 @@ export default function prepareRelationship(
   }
   relationship.nullable = !(relationship.relationshipValidate === true && relationship.relationshipRequired);
 
-  relationship.reference = relationshipToReference(entityWithConfig, relationship);
+  (relationship as any).reference = relationshipToReference(entityWithConfig, relationship);
 
   return relationship;
 }
