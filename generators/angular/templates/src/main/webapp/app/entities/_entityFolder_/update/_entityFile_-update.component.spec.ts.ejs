@@ -95,11 +95,11 @@ describe('<%= entityAngularName %> Management Update Component', () => {
     <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
       <%_ const reference = relationship.reference _%>
       <%_ if (relationship.collection) { _%>
-                const <%= reference.name %> : I<%= otherEntity.entityAngularName %>[] = [<%- otherEntity.tsPrimaryKeySamples[0] %>];
+                const <%= propertyName %> : I<%= otherEntity.entityAngularName %>[] = [<%- otherEntity.tsPrimaryKeySamples[0] %>];
       <%_ } else { _%>
-                const <%= reference.name %> : I<%= otherEntity.entityAngularName %> = <%- otherEntity.tsPrimaryKeySamples[0] %>;
+                const <%= propertyName %> : I<%= otherEntity.entityAngularName %> = <%- otherEntity.tsPrimaryKeySamples[0] %>;
       <%_ } _%>
-                <%= entityInstance %>.<%= reference.name %> = <%= reference.name %>;
+                <%= entityInstance %>.<%= propertyName %> = <%= propertyName %>;
     <%_ } _%>
 
                 const <%= otherEntity.entityInstance %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- otherEntity.tsPrimaryKeySamples[0] %>];
@@ -107,7 +107,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
                 const additional<%= otherEntity.entityAngularNamePlural %> = [
     <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
       <%_ const reference = relationship.reference _%>
-                    <% if (relationship.collection) { %>...<% } %><%= reference.name %>,
+                    <% if (relationship.collection) { %>...<% } %><%= propertyName %>,
     <%_ } _%>
                 ];
                 const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [...additional<%= otherEntity.entityAngularNamePlural %>, ...<%= otherEntity.entityInstance %>Collection];
@@ -128,21 +128,21 @@ describe('<%= entityAngularName %> Management Update Component', () => {
   <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { %>
     <%_ const otherEntity = relationship.otherEntity _%>
     <%_ const reference = relationship.reference _%>
-        it('should call <%= reference.name %> query and add missing value', () => {
+        it('should call <%= propertyName %> query and add missing value', () => {
                 const <%= entityInstance %> : I<%= entityAngularName %> = <%- testEntityPrimaryKey1 %>;
-                const <%= reference.name %> : I<%= otherEntity.entityAngularName %> = <%- otherEntity.tsPrimaryKeySamples[0] %>;
-                <%= entityInstance %>.<%= reference.name %> = <%= reference.name %>;
+                const <%= propertyName %> : I<%= otherEntity.entityAngularName %> = <%- otherEntity.tsPrimaryKeySamples[0] %>;
+                <%= entityInstance %>.<%= propertyName %> = <%= propertyName %>;
 
-                const <%= reference.name %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- otherEntity.tsPrimaryKeySamples[0] %>];
-                jest.spyOn(<%= otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%= reference.name %>Collection })));
-                const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [<%= reference.name %>, ...<%= reference.name %>Collection];
+                const <%= propertyName %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- otherEntity.tsPrimaryKeySamples[0] %>];
+                jest.spyOn(<%= otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%= propertyName %>Collection })));
+                const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [<%= propertyName %>, ...<%= propertyName %>Collection];
                 jest.spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
 
                 activatedRoute.data = of({ <%= entityInstance %> });
                 comp.ngOnInit();
 
                 expect(<%= otherEntity.entityInstance %>Service.query).toHaveBeenCalled();
-                expect(<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing).toHaveBeenCalledWith(<%= reference.name %>Collection, <%= reference.name %>);
+                expect(<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing).toHaveBeenCalledWith(<%= propertyName %>Collection, <%= propertyName %>);
                 expect(comp.<%= relationship.relationshipFieldNamePlural %>Collection).toEqual(expectedCollection);
         });
 
@@ -154,7 +154,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
   <%_ for (const relationship of relationshipsByEntityNeedingOptions) { _%>
     <%_ const otherEntity = relationship.otherEntity _%>
             const <%= relationship.relationshipName %>: I<%= otherEntity.entityAngularName %> = <%- otherEntity.tsPrimaryKeySamples[0] %>;
-            <%= entityInstance %>.<%= relationship.reference.name %> = <%= relationship.collection ? `[${relationship.relationshipName}]` : relationship.relationshipName %>;
+            <%= entityInstance %>.<%= relationship.propertyName %> = <%= relationship.collection ? `[${relationship.relationshipName}]` : relationship.relationshipName %>;
   <%_ } _%>
 <%_ } _%>
 
