@@ -5,6 +5,31 @@ import type { Application as ServerApplication, Entity as ServerEntity, Relation
 import { getJoinTableName } from './database.ts';
 import { hibernateSnakeCase } from './string.ts';
 
+export function prepareRelationshipForDatabase({
+  application,
+  entity,
+  relationship,
+}: {
+  application: ServerApplication<DatabaseEntity>;
+  entity: DatabaseEntity;
+  relationship: DatabaseRelationship;
+}) {
+  // Database properties are used by liquibase and spring-boot there is no inheritance between them.
+  mutateData(relationship as DatabaseRelationship, {
+    // DB properties
+    columnName: ({ relationshipName }) => hibernateSnakeCase(relationshipName),
+    shouldWriteJoinTable: ({ ownerSide, relationshipManyToMany }) => application.databaseTypeSql && relationshipManyToMany && ownerSide,
+    joinTable: ({ shouldWriteJoinTable, relationshipName }) =>
+      shouldWriteJoinTable
+        ? {
+            name: getJoinTableName(entity.entityTableName, relationshipName, {
+              prodDatabaseType: application.prodDatabaseType,
+            }).value,
+          }
+        : undefined,
+  });
+}
+
 export function prepareRelationship({
   application,
   entity,
@@ -23,18 +48,5 @@ export function prepareRelationship({
     });
   }
 
-  // Database properties are used by liquibase and spring-boot there is no inheritance between them.
-  mutateData(relationship as DatabaseRelationship, {
-    // DB properties
-    columnName: ({ relationshipName }) => hibernateSnakeCase(relationshipName),
-    shouldWriteJoinTable: ({ ownerSide, relationshipManyToMany }) => application.databaseTypeSql && relationshipManyToMany && ownerSide,
-    joinTable: ({ shouldWriteJoinTable, relationshipName }) =>
-      shouldWriteJoinTable
-        ? {
-            name: getJoinTableName((entity as DatabaseEntity).entityTableName, relationshipName, {
-              prodDatabaseType: application.prodDatabaseType,
-            }).value,
-          }
-        : undefined,
-  });
+  prepareRelationshipForDatabase({ application, entity, relationship });
 }

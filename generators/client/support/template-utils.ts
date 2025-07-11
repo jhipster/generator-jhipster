@@ -17,14 +17,13 @@
  * limitations under the License.
  */
 import assert from 'node:assert';
-import path from 'node:path';
 
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.js';
 import type { FieldType } from '../../../lib/jhipster/field-types.js';
 import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/types.js';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../../client/types.js';
-import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
 import { normalizePathEnd } from '../../../lib/utils/path.ts';
+import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;
 const { ANGULAR, VUE } = clientFrameworkTypes;

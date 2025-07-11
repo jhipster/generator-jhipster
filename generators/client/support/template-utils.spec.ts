@@ -1,4 +1,3 @@
-import path from 'path';
 import { expect } from 'chai';
 import { describe, it } from 'esmocha';
 import { entityOptions } from '../../../lib/jhipster/index.js';
