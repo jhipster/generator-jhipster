@@ -35,7 +35,6 @@ import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
   name: '<%= entityAngularName %>Update',
   setup() {
     const <%= entityInstance %>Service = inject('<%= entityInstance %>Service', () => new <%= entityAngularName %>Service());

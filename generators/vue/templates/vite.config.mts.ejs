@@ -70,7 +70,7 @@ let config = defineConfig({
   },
   resolve: {
     alias: {
-      vue: '@vue/compat/dist/vue.esm-bundler.js',
+      vue: 'vue/dist/vue.esm-bundler.js',
       '@': fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/', import.meta.url)),
       '@content': fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>content/', import.meta.url)),
     },
@@ -146,7 +146,7 @@ config = mergeConfig(config, {
         axios: {},
         // 'bootstrap-vue': {},
         vue: {
-          packagePath: '@vue/compat/dist/vue.esm-bundler.js',
+          packagePath: 'vue/dist/vue.esm-bundler.js',
         },
         'vue-i18n': {},
         'vue-router': {},
