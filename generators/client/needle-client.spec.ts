@@ -16,7 +16,6 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
 
   get [ClientGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
-      // @ts-ignore
       async additionalResource({ source }) {
         source.addExternalResourceToRoot!({
           resource: '<link rel="stylesheet" href="content/css/my.css">',
