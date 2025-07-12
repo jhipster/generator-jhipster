@@ -32,7 +32,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should match files snapshot', () => {
-      expect(result.getSnapshot('**/pom.xml')).toMatchSnapshot();
+      expect(result.getSnapshot('**/pom.xml,src/test/resources/junit-platform.properties')).toMatchSnapshot();
     });
   });
 

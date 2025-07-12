@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { JavaApplicationGenerator } from '../java/generator.ts';
+import { createNeedleCallback } from '../base-core/support/index.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 
@@ -27,8 +28,37 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
+      await this.dependsOnBootstrapApplication();
       await this.dependsOnJHipster('jhipster:java:build-tool');
     }
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      preparing({ application, applicationDefaults }) {
+        applicationDefaults({ cucumberTests: ({ testFrameworks }) => testFrameworks?.includes('cucumber') ?? false } as any);
+      },
+      addNeedles({ source, application }) {
+        if (application.cucumberTests) {
+          source.addJunitPlatformPropertyEntry = args => {
+            const junitPlatformPath = `${application.srcTestResources}/junit-platform.properties`;
+            const ignoreNonExisting = this.ignoreNeedlesError && 'Junit platform properties file not found';
+            this.editFile(
+              junitPlatformPath,
+              { ignoreNonExisting },
+              createNeedleCallback({
+                needle: 'jhipster-needle-add-junit-platform-properties',
+                contentToAdd: `${args.config},`,
+              }),
+            );
+          };
+        }
+      },
+    });
+  }
+
+  get [JavaApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
@@ -111,6 +141,16 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
 
         if (application.buildToolGradle) {
           source.addGradlePlugin?.({ id: 'jhipster.cucumber-conventions' });
+        }
+      },
+      junitPlatformProperties({ application, source }) {
+        if (application.cucumberTests) {
+          source.addJunitPlatformPropertyEntry!({
+            config: `cucumber.publish.enabled=true`,
+          });
+          source.addJunitPlatformPropertyEntry!({
+            config: `cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html`,
+          });
         }
       },
     });
