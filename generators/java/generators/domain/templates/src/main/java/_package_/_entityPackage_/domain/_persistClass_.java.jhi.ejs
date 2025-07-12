@@ -242,7 +242,7 @@ _%>
 <&- fragments.relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection() -&>
 <&_ if (!fragments.relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection()) { -&>
   <%_ if (relationship.collection) { _%>
-    public void set<%= relationship.relationshipNameCapitalizedPlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
+    public void set<%= relationship.relationshipNameCapitalizedPlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntity.entityInstancePlural %>) {
     <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference) { _%>
         if (this.<%= relationship.relationshipFieldNamePlural %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
@@ -251,15 +251,15 @@ _%>
             this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null));
       <%_ } _%>
         }
-        if (<%= relationship.otherEntityNamePlural %> != null) {
+        if (<%= relationship.otherEntity.entityInstancePlural %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
-            <%= relationship.otherEntityNamePlural %>.forEach(i -> i.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
+            <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
-            <%= relationship.otherEntityNamePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
+            <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } _%>
         }
     <%_ } _%>
-        this.<%= relationship.relationshipFieldNamePlural %> = <%= relationship.otherEntityNamePlural %>;
+        this.<%= relationship.relationshipFieldNamePlural %> = <%= relationship.otherEntity.entityInstancePlural %>;
     }
   <%_ } else { _%>
     public void set<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
@@ -286,8 +286,8 @@ _%>
     <%_ if (fluentMethods) { _%>
       <%_ if (relationship.collection) { _%>
 
-    public <%= persistClass %> <%= relationship.relationshipFieldNamePlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
-        this.set<%= relationship.relationshipNameCapitalizedPlural %>(<%= relationship.otherEntityNamePlural %>);
+    public <%= persistClass %> <%= relationship.relationshipFieldNamePlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntity.entityInstancePlural %>) {
+        this.set<%= relationship.relationshipNameCapitalizedPlural %>(<%= relationship.otherEntity.entityInstancePlural %>);
         return this;
     }
 

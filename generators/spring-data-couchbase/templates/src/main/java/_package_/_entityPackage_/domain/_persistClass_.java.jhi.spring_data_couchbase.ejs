@@ -118,42 +118,42 @@ import java.util.stream.Collectors;
 <%_ for (const relationship of relationships) { _%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection) { -&>
   <%_ if (relationship.collection) { _%>
-    public void set<%= relationship.relationshipNameCapitalizedPlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
-    <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
+    public void set<%= relationship.relationshipNameCapitalizedPlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntity.entityInstancePlural %>) {
+    <%_ if (relationship.otherRelationship && !relationship.ownerSide) { _%>
         if (this.<%= relationship.relationshipFieldNamePlural %> != null) {
-      <%_ if (relationship.otherRelationship.reference.collection) { _%>
+      <%_ if (relationship.otherRelationship.collection) { _%>
             this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.remove<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
             this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null));
       <%_ } _%>
         }
-        if (<%= relationship.otherEntityNamePlural %> != null) {
-      <%_ if (relationship.otherRelationship.reference.collection) { _%>
-            <%= relationship.otherEntityNamePlural %>.forEach(i -> i.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
+        if (<%= relationship.otherEntity.entityInstancePlural %> != null) {
+      <%_ if (relationship.otherRelationship.collection) { _%>
+            <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
-            <%= relationship.otherEntityNamePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
+            <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } _%>
         }
     <%_ } _%>
-        this.<%= relationship.relationshipFieldNamePlural %> = <%= relationship.otherEntityNamePlural %>;
+        this.<%= relationship.relationshipFieldNamePlural %> = <%= relationship.otherEntity.entityInstancePlural %>;
     <%_ if (!relationship.otherEntity.embedded) { _%>
-        this.<%= relationship.relationshipFieldName %>Ids = <%= relationship.otherEntityNamePlural %>.stream()
+        this.<%= relationship.relationshipFieldName %>Ids = <%= relationship.otherEntity.entityInstancePlural %>.stream()
             .map(<%= relationship.otherEntity.persistClass %>::getId)
             .collect(Collectors.toSet());
     <%_ } _%>
     }
   <%_ } else if (!relationship.otherEntity.embedded) { _%>
     public void set<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
-    <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
+    <%_ if (relationship.otherRelationship && !relationship.ownerSide) { _%>
         if (this.<%= relationship.relationshipFieldName %> != null) {
-      <%_ if (relationship.otherRelationship.reference.collection) { _%>
+      <%_ if (relationship.otherRelationship.collection) { _%>
             this.<%= relationship.relationshipFieldName %>.remove<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
       <%_ } else { _%>
             this.<%= relationship.relationshipFieldName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null);
       <%_ } _%>
         }
         if (<%= relationship.otherEntityName %> != null) {
-      <%_ if (relationship.otherRelationship.reference.collection) { _%>
+      <%_ if (relationship.otherRelationship.collection) { _%>
             <%= relationship.otherEntityName %>.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
       <%_ } else { _%>
             <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);

@@ -488,7 +488,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationshipsForTemplates({ entity, relationship }) {
-        prepareRelationship(entity as any, relationship as any, this);
+        prepareRelationship.call(this, entity, relationship);
       },
     });
   }

@@ -66,7 +66,7 @@ _%>
         </dd>
 <%_ } _%>
 <%_
-for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) {
+for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
     const { persistableRelationship } = relationship;
     const relationshipName = relationship.relationshipName;
     const relationshipFieldName = relationship.relationshipFieldName;

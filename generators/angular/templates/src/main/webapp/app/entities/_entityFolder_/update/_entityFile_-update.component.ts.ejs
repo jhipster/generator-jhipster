@@ -41,10 +41,10 @@ import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 <%_ } _%>
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) {
     const uniqueRel = relationshipsByEntityNeedingOptions[0];
-    if (uniqueRel.otherEntityAngularName !== entityAngularName) {
+    if (uniqueRel.otherEntity.entityAngularName !== entityAngularName) {
 _%>
-import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/entities/<%= uniqueRel.otherEntity.entityFolderName %>/<%= uniqueRel.otherEntityFileName %>.model';
-import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%= uniqueRel.otherEntity.entityFolderName %>/service/<%= uniqueRel.otherEntityFileName %>.service';
+import { I<%= uniqueRel.otherEntity.entityAngularName %> } from 'app/entities/<%= uniqueRel.otherEntity.entityFolderName %>/<%= uniqueRel.otherEntity.entityFileName %>.model';
+import { <%= uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entities/<%= uniqueRel.otherEntity.entityFolderName %>/service/<%= uniqueRel.otherEntity.entityFileName %>.service';
 <%_
     }
   }
@@ -85,9 +85,9 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     protected <%= entityInstance %>FormService = inject(<%= entityAngularName %>FormService);
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) {
     const uniqueRel = relationshipsByEntityNeedingOptions[0];
-    if (uniqueRel.otherEntityAngularName !== entityAngularName) {
+    if (uniqueRel.otherEntity.entityAngularName !== entityAngularName) {
 _%>
-    protected <%= uniqueRel.otherEntity.entityInstance %>Service = inject(<%= uniqueRel.otherEntityAngularName %>Service);
+    protected <%= uniqueRel.otherEntity.entityInstance %>Service = inject(<%= uniqueRel.otherEntity.entityAngularName %>Service);
 <%_
     }
   }
@@ -202,21 +202,19 @@ _%>
         this.<%= otherEntity.entityInstancePlural %>SharedCollection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(
             this.<%= otherEntity.entityInstancePlural %>SharedCollection,
       <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
-        <%_ const reference = relationship.reference _%>
-            <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= reference.name %><%= relationship.collection ? ' ?? [])' : '' %>,
+            <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= relationship.propertyName %><%= relationship.collection ? ' ?? [])' : '' %>,
       <%_ } _%>
         );
     <%_ } _%>
     <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
       <%_ const otherEntity = relationship.otherEntity _%>
-      <%_ const reference = relationship.reference _%>
-        this.<%= relationship.relationshipFieldNamePlural %>Collection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(this.<%= relationship.relationshipFieldNamePlural %>Collection, <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= reference.name %><%= relationship.collection ? ' ?? [])' : '' %>);
+        this.<%= relationship.relationshipFieldNamePlural %>Collection = this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(this.<%= relationship.relationshipFieldNamePlural %>Collection, <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= relationship.propertyName %><%= relationship.collection ? ' ?? [])' : '' %>);
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
     }
 
-<%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntityIsEmbedded).length > 0) { _%>
+<%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded).length > 0) { _%>
     protected loadRelationshipsOptions(): void {
   <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
     <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); %>
@@ -239,11 +237,11 @@ _%>
             .subscribe((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => (this.<%= otherEntity.entityInstancePlural %>SharedCollection = <%= otherEntity.entityInstancePlural %>));
     <%_ } _%>
     <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { %>
-      <%_ const filter = relationship.jpaMetamodelFiltering ? `'${relationship.otherEntityRelationshipName}Id.specified': 'false'` : `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`; _%>
+      <%_ const filter = relationship.otherEntity.jpaMetamodelFiltering ? `'${relationship.otherEntityRelationshipName}Id.specified': 'false'` : `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`; _%>
 
         this.<%= relationship.otherEntityName %>Service
             .query({<%- filter %>})
-            .pipe(map((res: HttpResponse<I<%= relationship.otherEntityAngularName %>[]>) => res.body ?? []))
+            .pipe(map((res: HttpResponse<I<%= relationship.otherEntity.entityAngularName %>[]>) => res.body ?? []))
             .pipe(map((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(<%= otherEntity.entityInstancePlural %>, this.<%= entityInstance %>?.<%= relationship.propertyName %>)))
             .subscribe((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => (this.<%= relationship.relationshipFieldNamePlural %>Collection = <%= otherEntity.entityInstancePlural %>));
       <%_ } _%>

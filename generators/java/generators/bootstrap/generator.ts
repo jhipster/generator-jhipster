@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 import { basename } from 'node:path';
+import pluralize from 'pluralize';
 import { isFileStateModified } from 'mem-fs-editor/state';
+import { upperFirst } from 'lodash-es';
 import { JavaApplicationGenerator } from '../../generator.ts';
 import type { Application as JavascriptApplication, Source as JavascriptSource } from '../../../javascript/types.js';
 import { JAVA_COMPATIBLE_VERSIONS, JHIPSTER_DEPENDENCIES_VERSION } from '../../../generator-constants.js';
@@ -36,7 +38,7 @@ import {
   packageInfoTransform,
   prepareEntity,
 } from '../../support/index.js';
-import { normalizePathEnd } from '../../../../lib/utils/index.js';
+import { mutateData, normalizePathEnd } from '../../../../lib/utils/index.js';
 
 export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   packageInfoFile!: boolean;
@@ -216,6 +218,23 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
 
   get [JavaApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+  }
+
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareRelationship({ application, relationship }) {
+        mutateData(relationship, {
+          relationshipNameCapitalizedPlural: ({ relationshipNameCapitalized, relationshipName }) =>
+            relationshipName.length > 1 ? pluralize(relationshipNameCapitalized) : upperFirst(pluralize(relationshipName)),
+          relationshipUpdateBackReference: ({ ownerSide, relationshipRightSide, otherEntity }) =>
+            !otherEntity.embedded && (application.databaseTypeNeo4j ? relationshipRightSide : !ownerSide),
+        });
+      },
+    });
+  }
+
+  get [JavaApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
   }
 
   get default() {

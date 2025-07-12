@@ -37,17 +37,7 @@ export type DatabaseProperty = {
   nullable?: boolean;
 };
 
-type Property = {
-  liquibaseGenerateFakeData?: boolean;
-} & DatabaseProperty;
-
-export interface Relationship extends BaseEntityChangesRelationship, Property {
-  columnDataType?: string;
-
-  onDelete?: boolean;
-  onUpdate?: boolean;
-
-  shouldWriteRelationship?: boolean;
+export interface DatabaseRelationship extends BaseApplicationRelationship, DatabaseProperty {
   shouldWriteJoinTable?: boolean;
 
   joinTable?: {
@@ -55,6 +45,21 @@ export interface Relationship extends BaseEntityChangesRelationship, Property {
     constraintName?: string;
     otherConstraintName?: string;
   };
+}
+
+type Property = {
+  liquibaseGenerateFakeData?: boolean;
+} & DatabaseProperty;
+
+export interface Relationship extends BaseEntityChangesRelationship, DatabaseRelationship, Property {
+  columnDataType?: string;
+
+  onDelete?: boolean;
+  onUpdate?: boolean;
+
+  shouldWriteRelationship?: boolean;
+
+  unique?: boolean;
 }
 
 export type Field = BaseEntityChangesField &

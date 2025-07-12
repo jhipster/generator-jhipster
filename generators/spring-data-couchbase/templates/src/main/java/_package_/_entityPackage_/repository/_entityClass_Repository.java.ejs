@@ -59,7 +59,7 @@ _%>
 @Repository
 public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %><% if (searchEngineAny) { %>, CouchbaseSearchRepository<<%= persistClass %>, <%= primaryKey.type %>><% } %> {
   <%_
-  var notEmbeddedRelationships = relationships.filter(relationship => !relationship.otherEntityIsEmbedded)
+  var notEmbeddedRelationships = relationships.filter(relationship => !relationship.otherEntity.embedded)
   if (notEmbeddedRelationships.length !== 0) { %>
     String SELECT = "SELECT meta(b).id as __id, meta(b).cas as __cas, b.*" + <%
       for (const relationship of notEmbeddedRelationships) {

@@ -301,7 +301,6 @@ _%>
 <%_ } _%>
 <%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) {
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
-    const otherEntityNamePlural = rel.otherEntityNamePlural;
     const relationshipName = rel.relationshipName;
     const relationshipNameHumanized = rel.relationshipNameHumanized;
     const relationshipFieldName = rel.relationshipFieldName;
@@ -326,7 +325,7 @@ _%>
           >
               <option value="" key="0" />
               {
-                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
+                <%= rel.otherEntity.entityInstancePlural %> ? <%= rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
                   <option
                     value={otherEntity.<%= otherEntityPkName %>}
                     key={otherEntity.<%= otherEntityPkName %>}>
@@ -353,7 +352,7 @@ _%>
             >
               <option value="" key="0" />
               {
-                (<%= otherEntityNamePlural %>) ? <%= otherEntityNamePlural %>.map(otherEntity =>
+                (<%= rel.otherEntity.entityInstancePlural %>) ? <%= rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
                 <option
                     value={otherEntity.<%= otherEntityPkName %>}
                     key={otherEntity.<%= otherEntityPkName %>}>

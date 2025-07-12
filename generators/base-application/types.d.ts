@@ -141,7 +141,10 @@ export interface Relationship
   relationshipNamePlural?: string;
   relationshipNameHumanized?: string;
 
+  relationshipIgnoreBackReference?: boolean;
+
   relationshipValidate?: boolean;
+  relationshipValidateRules?: string[];
 }
 
 /**

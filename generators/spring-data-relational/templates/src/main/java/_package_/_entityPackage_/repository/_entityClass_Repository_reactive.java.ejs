@@ -69,11 +69,9 @@ public interface <%= entityClass %>Repository extends ReactiveCrudRepository<<%=
 
     @Query("SELECT entity.* FROM <%= entityTableName %> entity JOIN <%= relationship.joinTable.name %> joinTable ON entity.<%= primaryKey.fields[0].columnName %> = joinTable.<%= relationship.joinColumnNames[0] %> WHERE joinTable.<%= relationship.joinColumnNames[0] %> = :id")
     Flux<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
-  <%_ } else if (relationship.relationshipOneToOne && !ownerSide) {
-        let otherEntityTableName = relationship.otherEntityTableName;
-    _%>
+  <%_ } else if (relationship.relationshipOneToOne && !ownerSide) { _%>
 
-    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= primaryKey.fields[0].columnName  %> not in (select <%= relationship.joinColumnNames[0]%> from <%= otherEntityTableName %>)")
+    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= primaryKey.fields[0].columnName  %> not in (select <%= relationship.joinColumnNames[0]%> from <%= relationship.otherEntity.entityTableName %>)")
     Flux<<%= persistClass %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
   <%_ } _%>
 <%_ } _%>
