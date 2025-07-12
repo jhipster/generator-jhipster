@@ -17,18 +17,86 @@
  * limitations under the License.
  */
 import { JavaApplicationGenerator } from '../java/generator.ts';
+import { createNeedleCallback } from '../base-core/support/index.js';
+import BaseApplicationGenerator from '../base-application/index.js';
+import type { Config as JavaConfig, Entity as JavaEntity, Options as JavaOptions } from '../java/index.js';
+import type { Source as SpringBootSource } from '../spring-boot/types.js';
+import type { Application as CucumberApplication } from '../java/types.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 
-export default class CucumberGenerator extends JavaApplicationGenerator {
+export class CucumberApplicationGenerator extends BaseApplicationGenerator<
+  JavaEntity,
+  CucumberApplication<JavaEntity>,
+  JavaConfig,
+  JavaOptions,
+  SpringBootSource
+> {}
+
+export default class CucumberGenerator extends CucumberApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
+      await this.dependsOnBootstrapApplication();
       await this.dependsOnJHipster('jhipster:java:build-tool');
     }
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      preparing({ application, applicationDefaults }) {
+        applicationDefaults({ cucumberTests: ({ testFrameworks }) => testFrameworks?.includes('cucumber') ?? false } as any);
+      },
+      addNeedles({ source, application }) {
+        if (application.cucumberTests) {
+          source.addJunitPlatformPropertyEntry = args => {
+            const junitPlatformPath = `${application.srcTestResources}/junit-platform.properties`;
+            const ignoreNonExisting = this.ignoreNeedlesError && 'Junit platform properties file not found';
+            this.editFile(
+              junitPlatformPath,
+              { ignoreNonExisting },
+              createNeedleCallback({
+                needle: 'jhipster-needle-add-junit-platform-properties',
+                contentToAdd: `${args.config},`,
+              }),
+            );
+          };
+          if (application.cucumberTests && application.buildToolGradle) {
+            source.addIntegrationTestPluginAdditionalConfiguration = args => {
+              const gradleDevProfilePath = `gradle/profile_dev.gradle`;
+              const ignoreNonExisting = this.ignoreNeedlesError && 'gradle dev profile file not found';
+              this.editFile(
+                gradleDevProfilePath,
+                { ignoreNonExisting },
+                createNeedleCallback({
+                  needle: 'jhipster-needle-gradle-integration-test',
+                  contentToAdd: `${args.config},`,
+                }),
+              );
+            };
+            source.addIntegrationTestPluginAdditionalConfiguration = args => {
+              const gradleProdProfilePath = `gradle/profile_prod.gradle`;
+              const ignoreNonExisting = this.ignoreNeedlesError && 'gradle prod profile file not found';
+              this.editFile(
+                gradleProdProfilePath,
+                { ignoreNonExisting },
+                createNeedleCallback({
+                  needle: 'jhipster-needle-gradle-integration-test',
+                  contentToAdd: `${args.config},`,
+                }),
+              );
+            };
+          }
+        }
+      },
+    });
+  }
+
+  get [JavaApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
@@ -111,6 +179,21 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
 
         if (application.buildToolGradle) {
           source.addGradlePlugin?.({ id: 'jhipster.cucumber-conventions' });
+        }
+      },
+      junitPlatformProperties({ application, source }) {
+        if (application.cucumberTests) {
+          source.addJunitPlatformPropertyEntry!({
+            config: `cucumber.publish.enabled=true`,
+          });
+          source.addJunitPlatformPropertyEntry!({
+            config: `cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html`,
+          });
+          if (application.buildToolGradle) {
+            source.addIntegrationTestPluginAdditionalConfiguration!({
+              config: `exclude "**/*CucumberIT*"`,
+            });
+          }
         }
       },
     });
