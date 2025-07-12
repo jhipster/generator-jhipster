@@ -217,22 +217,6 @@ describe('jdl - JDLEntity', () => {
         expect(entity.toString()).to.equal(`entity ${args.name} (${args.tableName})`);
       });
     });
-    describe('with a table equal to the name (snakecase)', () => {
-      let entity;
-      let args;
-
-      before(() => {
-        args = {
-          name: 'MySuperEntity',
-          tableName: 'my_super_entity',
-        };
-        entity = new JDLEntity(args);
-      });
-
-      it('should not export it', () => {
-        expect(entity.toString()).to.equal(`entity ${args.name}`);
-      });
-    });
     describe('with a table name not equal to the name (snakecase)', () => {
       let entity;
       let args;

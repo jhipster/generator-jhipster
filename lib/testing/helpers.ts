@@ -285,11 +285,6 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
     });
   }
 
-  /** @deprecated use withJHipsterGenerators */
-  withJHipsterLookup(): this {
-    return this.withJHipsterGenerators();
-  }
-
   withBlueprintConfig(config: Record<string, any>): this {
     const { blueprint } = helpersDefaults;
     assert(blueprint, 'Blueprint must be configured');
@@ -473,12 +468,6 @@ plugins {
 
     runResult.composedMockedGenerators = composedGeneratorsToCheck.filter(gen => runResult.mockedGenerators[gen]?.mock.callCount() > 0);
 
-    runResult.createJHipster = (ns: string, options?: WithJHipsterGenerators) => {
-      ns = toJHipsterNamespace(ns);
-      const context = runResult.create(ns) as JHipsterRunContext;
-      return context.withJHipsterGenerators(options);
-    };
-
     runResult.application = runResult.generator.getContextData(CONTEXT_DATA_APPLICATION_KEY, { factory: () => undefined });
     const entitiesMap: Map<string, Entity> | undefined = runResult.generator.getContextData(CONTEXT_DATA_APPLICATION_ENTITIES_KEY, {
       factory: (): any => undefined,
@@ -659,15 +648,6 @@ class JHipsterTest extends YeomanTest {
     envOptions?: BaseEnvironmentOptions | undefined,
   ): JHipsterRunContext {
     return super.create<GeneratorType>(GeneratorOrNamespace, settings, envOptions) as any;
-  }
-
-  /** @deprecated */
-  createJHipster(
-    jhipsterGenerator: string,
-    settings?: RunContextSettings | undefined,
-    envOptions?: BaseEnvironmentOptions | undefined,
-  ): JHipsterRunContext {
-    return this.create(getGenerator(jhipsterGenerator), settings, envOptions);
   }
 
   generateDeploymentWorkspaces(commonConfig?: Record<string, unknown>) {

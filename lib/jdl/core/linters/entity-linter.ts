@@ -16,8 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { shouldWriteEntityTableName } from '../utils/entity-table-name-creator.js';
 import EntityIssue from './issues/entity-issue.js';
 import { rulesNames } from './rules.js';
 
@@ -45,7 +43,6 @@ export function checkEntities(entityDeclarations: EntityDeclaration[]): EntityIs
   checkForDuplicatedEntities(entityDeclarations);
   entityDeclarations.forEach(entityDeclaration => {
     checkForUselessEntityBraces(entityDeclaration);
-    checkForUselessTableName(entityDeclaration);
   });
   return issues;
 }
@@ -85,21 +82,5 @@ function checkForUselessEntityBraces(entityDeclaration: EntityDeclaration) {
         entityName: entityDeclaration.children.NAME[0].image,
       }),
     );
-  }
-}
-
-function checkForUselessTableName(entityDeclaration: EntityDeclaration) {
-  const entityName = entityDeclaration.children.NAME[0].image;
-  const entityTableNameDeclaration = entityDeclaration.children.entityTableNameDeclaration;
-  if (entityTableNameDeclaration) {
-    const tableName = entityTableNameDeclaration[0].children.NAME[0].image;
-    if (!shouldWriteEntityTableName(entityName, tableName)) {
-      issues.push(
-        new EntityIssue({
-          ruleName: rulesNames.ENT_OPTIONAL_TABLE_NAME,
-          entityName,
-        }),
-      );
-    }
   }
 }

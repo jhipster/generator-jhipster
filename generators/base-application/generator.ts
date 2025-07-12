@@ -170,25 +170,6 @@ export default class BaseApplicationGenerator<
       const seed = `${context.entityClass}-${sourceBasename}${context.fakerSeed ?? ''}`;
       this.resetEntitiesFakeData(seed);
     });
-
-    if (this.options.applicationWithEntities) {
-      this.log.warn('applicationWithEntities option is deprecated');
-      // Write new definitions to memfs
-      this.config.set({
-        ...this.config.getAll(),
-        ...this.options.applicationWithEntities.config,
-      });
-      if (this.options.applicationWithEntities.entities) {
-        const entities = this.options.applicationWithEntities.entities.map(entity => {
-          const entityName = upperFirst(entity.name);
-          const file = this.getEntityConfigPath(entityName);
-          this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
-          return entityName;
-        });
-        this.jhipsterConfig.entities = [...new Set((this.jhipsterConfig.entities || []).concat(entities))];
-      }
-      delete this.options.applicationWithEntities;
-    }
   }
 
   get #application(): Application {

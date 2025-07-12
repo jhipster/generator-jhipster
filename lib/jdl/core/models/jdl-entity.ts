@@ -19,7 +19,6 @@
 
 import { upperFirst } from 'lodash-es';
 import { merge } from '../utils/object-utils.js';
-import { shouldWriteEntityTableName } from '../utils/entity-table-name-creator.js';
 import type JDLField from './jdl-field.js';
 
 export default class JDLEntity {
@@ -82,7 +81,7 @@ export default class JDLEntity {
       }
     });
     stringifiedEntity += `entity ${this.name}`;
-    if (this.tableName && shouldWriteEntityTableName(this.name, this.tableName)) {
+    if (this.tableName) {
       stringifiedEntity += ` (${this.tableName})`;
     }
     if (Object.keys(this.fields).length !== 0) {

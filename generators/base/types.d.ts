@@ -42,10 +42,6 @@ export type Config = CoreConfig &
 export type Options = CoreOptions &
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports
   ExportGeneratorOptionsFromCommand<typeof import('./command.js').default> & {
-    /**
-     * @deprecated
-     */
-    applicationWithEntities?: any;
     reproducibleTests?: boolean;
     entities?: string[];
 

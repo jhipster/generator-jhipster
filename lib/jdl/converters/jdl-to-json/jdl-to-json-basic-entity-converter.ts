@@ -19,7 +19,6 @@
 
 import JSONEntity from '../../core/basic-types/json-entity.js';
 import { formatComment } from '../../core/utils/format-utils.js';
-import { getTableNameFromEntityNameFallback } from '../../core/utils/entity-table-name-creator.js';
 import type { JDLEntity } from '../../core/models/index.js';
 
 export default {
@@ -47,7 +46,7 @@ function createJSONEntities(jdlEntities: JDLEntity[]): Map<string, JSONEntity> {
       entityName,
       new JSONEntity({
         entityName,
-        entityTableName: jdlEntity.tableName ?? getTableNameFromEntityNameFallback(entityName),
+        entityTableName: jdlEntity.tableName,
         documentation: formatComment(jdlEntity.comment),
         annotations: jdlEntity.annotations,
       }),

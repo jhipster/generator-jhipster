@@ -123,103 +123,103 @@ describe('jdl - JSONToJDLConverter', () => {
 
         it('should export apps & entities', () => {
           jestExpect(jdlFileContent).toMatchInlineSnapshot(`
-            "application {
-              config {
-                applicationType microservice
-                authenticationType jwt
-                baseName truc
-                buildTool maven
-                cacheProvider hazelcast
-                clientPackageManager npm
-                databaseType sql
-                devDatabaseType h2Disk
-                dtoSuffix DTO
-                enableHibernateCache true
-                enableSwaggerCodegen false
-                enableTranslation false
-                jhiPrefix jhi
-                jhipsterVersion "6.0.1"
-                jwtSecretKey "HIDDEN"
-                messageBroker no
-                nativeLanguage en
-                packageName com.mycompany.myapp
-                prodDatabaseType mysql
-                searchEngine no
-                serverPort 8081
-                serviceDiscoveryType eureka
-                skipClient true
-                skipUserManagement true
-                testFrameworks []
-                websocket no
-              }
+"application {
+  config {
+    applicationType microservice
+    authenticationType jwt
+    baseName truc
+    buildTool maven
+    cacheProvider hazelcast
+    clientPackageManager npm
+    databaseType sql
+    devDatabaseType h2Disk
+    dtoSuffix DTO
+    enableHibernateCache true
+    enableSwaggerCodegen false
+    enableTranslation false
+    jhiPrefix jhi
+    jhipsterVersion "6.0.1"
+    jwtSecretKey "HIDDEN"
+    messageBroker no
+    nativeLanguage en
+    packageName com.mycompany.myapp
+    prodDatabaseType mysql
+    searchEngine no
+    serverPort 8081
+    serviceDiscoveryType eureka
+    skipClient true
+    skipUserManagement true
+    testFrameworks []
+    websocket no
+  }
 
-              entities Country, Department, Employee, Job, JobHistory, Location, Region, Task
-            }
+  entities Country, Department, Employee, Job, JobHistory, Location, Region, Task
+}
 
-            entity Country {
-              countryName String
-            }
-            entity Department {
-              departmentName String
-            }
-            entity Employee {
-              firstName String
-              lastName String
-              email String
-              phoneNumber String
-              hireDate ZonedDateTime
-              salary Long
-              commissionPct Long
-            }
-            entity Job {
-              jobTitle String
-              minSalary Long
-              maxSalary Long
-            }
-            entity JobHistory {
-              startDate ZonedDateTime
-              endDate ZonedDateTime
-            }
-            entity Location {
-              streetAddress String
-              postalCode String
-              city String
-              stateProvince String
-            }
-            entity Region {
-              regionName String
-            }
-            entity Task {
-              title String
-              description String
-            }
+entity Country (country) {
+  countryName String
+}
+entity Department (department) {
+  departmentName String
+}
+entity Employee (employee) {
+  firstName String
+  lastName String
+  email String
+  phoneNumber String
+  hireDate ZonedDateTime
+  salary Long
+  commissionPct Long
+}
+entity Job (job) {
+  jobTitle String
+  minSalary Long
+  maxSalary Long
+}
+entity JobHistory (job_history) {
+  startDate ZonedDateTime
+  endDate ZonedDateTime
+}
+entity Location (location) {
+  streetAddress String
+  postalCode String
+  city String
+  stateProvince String
+}
+entity Region (region) {
+  regionName String
+}
+entity Task (task) {
+  title String
+  description String
+}
 
-            relationship OneToOne {
-              Country{region required} to Region
-              Department{location required} to Location
-              JobHistory{department required} to Department
-              JobHistory{job required} to Job
-              JobHistory{employee required} to Employee
-              Location{country required} to Country
-            }
-            relationship OneToMany {
-              Department{employee} to Employee
-              Employee{job} to Job
-            }
-            relationship ManyToOne {
-              Employee{department} to Department{employee}
-              Employee{manager} to Employee
-              Job{employee} to Employee{job}
-            }
-            relationship ManyToMany {
-              Job{task} to Task{job}
-              Task{job} to Job{task}
-            }
+relationship OneToOne {
+  Country{region required} to Region
+  Department{location required} to Location
+  JobHistory{department required} to Department
+  JobHistory{job required} to Job
+  JobHistory{employee required} to Employee
+  Location{country required} to Country
+}
+relationship OneToMany {
+  Department{employee} to Employee
+  Employee{job} to Job
+}
+relationship ManyToOne {
+  Employee{department} to Department{employee}
+  Employee{manager} to Employee
+  Job{employee} to Employee{job}
+}
+relationship ManyToMany {
+  Job{task} to Task{job}
+  Task{job} to Job{task}
+}
 
-            noFluentMethod Country, Department, Employee, Job, JobHistory, Location, Region, Task
-            paginate Country with pager
-            "
-          `);
+noFluentMethod Country, Department, Employee, Job, JobHistory, Location, Region, Task
+paginate Country with pager
+"
+`);
         });
       });
     });
@@ -243,121 +243,121 @@ describe('jdl - JSONToJDLConverter', () => {
 
         it('should export each app', () => {
           jestExpect(jdlFileContent).toMatchInlineSnapshot(`
-            "application {
-              config {
-                applicationType microservice
-                authenticationType jwt
-                baseName app1
-                buildTool maven
-                cacheProvider hazelcast
-                clientPackageManager npm
-                databaseType sql
-                devDatabaseType h2Disk
-                dtoSuffix DTO
-                enableHibernateCache true
-                enableSwaggerCodegen false
-                enableTranslation false
-                jhiPrefix jhi
-                jhipsterVersion "6.0.1"
-                jwtSecretKey "HIDDEN"
-                messageBroker no
-                nativeLanguage en
-                packageName com.mycompany.app1
-                prodDatabaseType mysql
-                searchEngine no
-                serverPort 8081
-                serviceDiscoveryType eureka
-                skipClient true
-                skipUserManagement true
-                testFrameworks []
-                websocket no
-              }
+"application {
+  config {
+    applicationType microservice
+    authenticationType jwt
+    baseName app1
+    buildTool maven
+    cacheProvider hazelcast
+    clientPackageManager npm
+    databaseType sql
+    devDatabaseType h2Disk
+    dtoSuffix DTO
+    enableHibernateCache true
+    enableSwaggerCodegen false
+    enableTranslation false
+    jhiPrefix jhi
+    jhipsterVersion "6.0.1"
+    jwtSecretKey "HIDDEN"
+    messageBroker no
+    nativeLanguage en
+    packageName com.mycompany.app1
+    prodDatabaseType mysql
+    searchEngine no
+    serverPort 8081
+    serviceDiscoveryType eureka
+    skipClient true
+    skipUserManagement true
+    testFrameworks []
+    websocket no
+  }
 
-              entities Region
-            }
-            application {
-              config {
-                applicationType microservice
-                authenticationType jwt
-                baseName app2
-                buildTool maven
-                cacheProvider hazelcast
-                clientPackageManager npm
-                databaseType sql
-                devDatabaseType h2Disk
-                dtoSuffix DTO
-                enableHibernateCache true
-                enableSwaggerCodegen false
-                enableTranslation false
-                jhiPrefix jhi
-                jhipsterVersion "6.0.1"
-                jwtSecretKey "HIDDEN"
-                messageBroker no
-                nativeLanguage en
-                packageName com.mycompany.app2
-                prodDatabaseType mysql
-                searchEngine no
-                serverPort 8081
-                serviceDiscoveryType eureka
-                skipClient true
-                skipUserManagement true
-                testFrameworks []
-                websocket no
-              }
+  entities Region
+}
+application {
+  config {
+    applicationType microservice
+    authenticationType jwt
+    baseName app2
+    buildTool maven
+    cacheProvider hazelcast
+    clientPackageManager npm
+    databaseType sql
+    devDatabaseType h2Disk
+    dtoSuffix DTO
+    enableHibernateCache true
+    enableSwaggerCodegen false
+    enableTranslation false
+    jhiPrefix jhi
+    jhipsterVersion "6.0.1"
+    jwtSecretKey "HIDDEN"
+    messageBroker no
+    nativeLanguage en
+    packageName com.mycompany.app2
+    prodDatabaseType mysql
+    searchEngine no
+    serverPort 8081
+    serviceDiscoveryType eureka
+    skipClient true
+    skipUserManagement true
+    testFrameworks []
+    websocket no
+  }
 
-              entities Country, Location
-            }
-            application {
-              config {
-                applicationType microservice
-                authenticationType jwt
-                baseName app3
-                buildTool maven
-                cacheProvider hazelcast
-                clientPackageManager npm
-                databaseType sql
-                devDatabaseType h2Disk
-                dtoSuffix DTO
-                enableHibernateCache true
-                enableSwaggerCodegen false
-                enableTranslation false
-                jhiPrefix jhi
-                jhipsterVersion "6.0.1"
-                jwtSecretKey "HIDDEN"
-                messageBroker no
-                nativeLanguage en
-                packageName com.mycompany.app3
-                prodDatabaseType mysql
-                searchEngine no
-                serverPort 8081
-                serviceDiscoveryType eureka
-                skipClient true
-                skipUserManagement true
-                testFrameworks []
-                websocket no
-              }
-            }
+  entities Country, Location
+}
+application {
+  config {
+    applicationType microservice
+    authenticationType jwt
+    baseName app3
+    buildTool maven
+    cacheProvider hazelcast
+    clientPackageManager npm
+    databaseType sql
+    devDatabaseType h2Disk
+    dtoSuffix DTO
+    enableHibernateCache true
+    enableSwaggerCodegen false
+    enableTranslation false
+    jhiPrefix jhi
+    jhipsterVersion "6.0.1"
+    jwtSecretKey "HIDDEN"
+    messageBroker no
+    nativeLanguage en
+    packageName com.mycompany.app3
+    prodDatabaseType mysql
+    searchEngine no
+    serverPort 8081
+    serviceDiscoveryType eureka
+    skipClient true
+    skipUserManagement true
+    testFrameworks []
+    websocket no
+  }
+}
 
-            entity Region {
-              regionName String
-            }
-            entity Country {
-              countryName String
-            }
-            entity Location {
-              streetAddress String
-              postalCode String
-              city String
-              stateProvince String
-            }
+entity Region (region) {
+  regionName String
+}
+entity Country (country) {
+  countryName String
+}
+entity Location (location) {
+  streetAddress String
+  postalCode String
+  city String
+  stateProvince String
+}
 
-            relationship OneToOne {
-              Location{country required} to Country
-            }
+relationship OneToOne {
+  Location{country required} to Country
+}
 
-            noFluentMethod Region, Country, Location
-            "
-          `);
+noFluentMethod Region, Country, Location
+"
+`);
         });
       });
     });
