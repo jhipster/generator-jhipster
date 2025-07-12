@@ -146,7 +146,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
           context: deployment,
         });
         await this.writeFiles({
-          sections: deploymentKnativeFiles(suffix),
+          sections: deploymentKnativeFiles(),
           context: deployment,
         });
         for (const app of applications) {
