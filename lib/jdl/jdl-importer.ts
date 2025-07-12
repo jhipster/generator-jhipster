@@ -112,7 +112,7 @@ function makeJDLImporter(content, configuration: JDLApplicationConfiguration, ru
      */
     import: () => {
       const jdlObject = getJDLObject(content, configuration, runtime);
-      checkForErrors(jdlObject, configuration);
+      checkForErrors(jdlObject);
       if (jdlObject.getApplicationQuantity() === 0 && jdlObject.getEntityQuantity() > 0) {
         importState.exportedEntities = importOnlyEntities(jdlObject, configuration);
       } else if (jdlObject.getApplicationQuantity() === 1) {
@@ -147,7 +147,7 @@ function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration: JD
   );
 }
 
-function checkForErrors(jdlObject: JDLObject, configuration: JDLApplicationConfiguration) {
+function checkForErrors(jdlObject: JDLObject) {
   let validator;
   if (jdlObject.getApplicationQuantity() === 0) {
     validator = createWithoutApplicationValidator(jdlObject);
