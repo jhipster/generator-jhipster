@@ -339,21 +339,6 @@ function prepareCommonFieldForTemplates(entityWithConfig: CommonEntity, field: C
     return re?.gen();
   };
 
-  field.createRandexp = () => {
-    // check if regex is valid. If not, issue warning and we skip fake data generation.
-    try {
-      new RegExp(field.fieldValidateRulesPattern!);
-    } catch {
-      generator.log.warn(`${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `);
-      return undefined;
-    }
-    const re = faker.createRandexp(field.fieldValidateRulesPattern!);
-    if (!re) {
-      generator.log.warn(`Error creating generator for pattern ${field.fieldValidateRulesPattern}`);
-    }
-    return re;
-  };
-
   field.uniqueValue = [];
 
   field.generateFakeData = (type = 'csv') => {
