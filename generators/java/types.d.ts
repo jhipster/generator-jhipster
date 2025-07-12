@@ -160,7 +160,6 @@ export type Application<E extends BaseApplicationEntity<BaseApplicationField, Ba
       useNpmWrapper: boolean;
       graalvmReachabilityMetadata: string;
 
-      cucumberTests: boolean;
       gatlingTests: boolean;
 
       imperativeOrReactive: string;

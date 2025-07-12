@@ -101,9 +101,6 @@ task integrationTest(type: Test) {
     description = "Execute integration tests."
     group = "verification"
     include "**/*IT*", "**/*IntTest*"
-<%_ if (cucumberTests) { _%>
-    exclude "**/*CucumberIT*"
-<%_ } _%>
     testLogging {
         events 'FAILED', 'SKIPPED'
         exceptionFormat "full"
@@ -121,6 +118,7 @@ task integrationTest(type: Test) {
         ]
     }
 <%_ } _%>
+    // jhipster-needle-gradle-integration-test
 }
 integrationTest.dependsOn test
 
