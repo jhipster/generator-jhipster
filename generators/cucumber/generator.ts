@@ -18,10 +18,22 @@
  */
 import { JavaApplicationGenerator } from '../java/generator.ts';
 import { createNeedleCallback } from '../base-core/support/index.js';
+import BaseApplicationGenerator from '../base-application/index.js';
+import type { Config as JavaConfig, Entity as JavaEntity, Options as JavaOptions } from '../java/index.js';
+import type { Source as SpringBootSource } from '../spring-boot/types.js';
+import type { Application as CucumberApplication } from '../java/types.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 
-export default class CucumberGenerator extends JavaApplicationGenerator {
+export class CucumberApplicationGenerator extends BaseApplicationGenerator<
+  JavaEntity,
+  CucumberApplication<JavaEntity>,
+  JavaConfig,
+  JavaOptions,
+  SpringBootSource
+> {}
+
+export default class CucumberGenerator extends CucumberApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -52,6 +64,32 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
               }),
             );
           };
+          if (application.cucumberTests && application.buildToolGradle) {
+            source.addIntegrationTestPluginAdditionalConfiguration = args => {
+              const gradleDevProfilePath = `gradle/profile_dev.gradle`;
+              const ignoreNonExisting = this.ignoreNeedlesError && 'gradle dev profile file not found';
+              this.editFile(
+                gradleDevProfilePath,
+                { ignoreNonExisting },
+                createNeedleCallback({
+                  needle: 'jhipster-needle-gradle-integration-test',
+                  contentToAdd: `${args.config},`,
+                }),
+              );
+            };
+            source.addIntegrationTestPluginAdditionalConfiguration = args => {
+              const gradleProdProfilePath = `gradle/profile_prod.gradle`;
+              const ignoreNonExisting = this.ignoreNeedlesError && 'gradle prod profile file not found';
+              this.editFile(
+                gradleProdProfilePath,
+                { ignoreNonExisting },
+                createNeedleCallback({
+                  needle: 'jhipster-needle-gradle-integration-test',
+                  contentToAdd: `${args.config},`,
+                }),
+              );
+            };
+          }
         }
       },
     });
@@ -151,6 +189,11 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
           source.addJunitPlatformPropertyEntry!({
             config: `cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html`,
           });
+          if (application.buildToolGradle) {
+            source.addIntegrationTestPluginAdditionalConfiguration!({
+              config: `exclude "**/*CucumberIT*"`,
+            });
+          }
         }
       },
     });
