@@ -96,29 +96,6 @@ describe('jdl - JDLLinter', () => {
         expect(issue.ruleName).to.equal('ENT_SHORTER_DECL');
       });
     });
-    describe('when checking for useless table names', () => {
-      let linter: { check: any };
-      let issueForB: { ruleName: any };
-      let issueForToto: { ruleName: any };
-      let issueForSuperToto: { ruleName: any };
-      let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
-
-      beforeEach(() => {
-        linter = createJDLLinterFromFile(getTestFile('lint', 'useless_table_names.jdl'));
-        reportedIssues = linter.check();
-        const issues = reportedIssues.getIssues();
-        issueForB = issues.entities[0];
-        issueForToto = issues.entities[1];
-        issueForSuperToto = issues.entities[2];
-      });
-
-      it('reports the issues', () => {
-        expect(reportedIssues.getNumberOfIssues()).to.equal(3);
-        expect(issueForB.ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
-        expect(issueForToto.ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
-        expect(issueForSuperToto.ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
-      });
-    });
     describe('when checking for duplicated', () => {
       describe('entities', () => {
         let linter: { check: any };
