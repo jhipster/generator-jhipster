@@ -6,7 +6,6 @@ import { snakeCase } from 'lodash-es';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import { defaultHelpers as helpers, result } from '../../lib/testing/index.js';
 
-import { GENERATOR_CUCUMBER } from '../generator-list.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -24,22 +23,23 @@ describe(`generator - ${generator}`, () => {
   describe('with default config', () => {
     before(async () => {
       await helpers
-        .runJHipster(GENERATOR_CUCUMBER)
+        .runJHipster(generator)
         .onEnvironment(async env => {
           await env.composeWith('jhipster:maven');
+          await env.composeWith('jhipster:spring-boot');
         })
-        .withJHipsterConfig({ testFrameworks: ['cucumber'] });
+        .withJHipsterConfig({ testFrameworks: ['cucumber'], skipClient: true });
     });
 
     it('should match files snapshot', () => {
-      expect(result.getSnapshot('**/pom.xml,src/test/resources/junit-platform.properties')).toMatchSnapshot();
+      expect(result.getSnapshot('**/{pom.xml,junit-platform.properties}')).toMatchSnapshot();
     });
   });
 
   describe('with gradle build tool', () => {
     before(async () => {
       await helpers
-        .runJHipster(GENERATOR_CUCUMBER)
+        .runJHipster(generator)
         .withFiles({
           'build.gradle': `
 dependencies {
@@ -52,12 +52,17 @@ plugins {
         })
         .onEnvironment(async env => {
           await env.composeWith('jhipster:gradle');
+          await env.composeWith('jhipster:spring-boot');
         })
-        .withJHipsterConfig({ buildTool: 'gradle', testFrameworks: ['cucumber'] });
+        .withJHipsterConfig({ buildTool: 'gradle', testFrameworks: ['cucumber'], skipClient: true });
     });
 
     it('should match files snapshot', () => {
-      expect(result.getSnapshot('**/{gradle/libs.versions.toml,build.gradle,buildSrc/**}')).toMatchSnapshot();
+      expect(
+        result.getSnapshot(
+          '**/{gradle/libs.versions.toml,build.gradle,buildSrc/**,junit-platform.properties,gradle/profile_dev.gradle,gradle/profile_prod.gradle}',
+        ),
+      ).toMatchSnapshot();
     });
   });
 });

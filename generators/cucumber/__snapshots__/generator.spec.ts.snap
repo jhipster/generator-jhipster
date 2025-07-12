@@ -4,11 +4,79 @@ exports[`generator - cucumber with default config should match files snapshot 1`
 {
   "pom.xml": {
     "contents": "<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.mycompany.myapp</groupId>
+    <artifactId>jhipster</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>JHipster</name>
+    <description>Description for JHipster</description>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.5</version>
+        <relativePath/>
+        <!-- lookup parent from repository -->
+    </parent>
+
     <properties>
+        <!--
+            Build properties
+            The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/\${jhipster-dependencies.version}
+        -->
+        <maven.version>3.2.5</maven.version>
+        <java.version>JAVA_VERSION</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        <maven.compiler.source>\${java.version}</maven.compiler.source>
+        <maven.compiler.target>\${java.version}</maven.compiler.target>
+        <start-class>com.mycompany.myapp.JhipsterApp</start-class>
+        <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx1G</argLine>
+        <m2e.apt.activation>jdt_apt</m2e.apt.activation>
+        <run.addResources>false</run.addResources>
+        <spring-boot.version>\${project.parent.version}</spring-boot.version>
+        <archunit-junit5.version>&apos;ARCHUNIT-JUNIT-5-VERSION&apos;</archunit-junit5.version>
+        <checkstyle.version>&apos;CHECKSTYLE-VERSION&apos;</checkstyle.version>
         <cucumber-bom.version>&apos;CUCUMBER-BOM-VERSION&apos;</cucumber-bom.version>
+        <git-commit-id-maven-plugin.version>&apos;GIT-COMMIT-ID-MAVEN-PLUGIN-VERSION&apos;</git-commit-id-maven-plugin.version>
+        <jacoco-maven-plugin.version>&apos;JACOCO-MAVEN-PLUGIN-VERSION&apos;</jacoco-maven-plugin.version>
+        <jhipster-framework.version>JHIPSTER_DEPENDENCIES_VERSION</jhipster-framework.version>
+        <jib-maven-plugin.architecture>amd64</jib-maven-plugin.architecture>
+        <jib-maven-plugin.image>java-jre-placeholder</jib-maven-plugin.image>
+        <jib-maven-plugin.version>&apos;JIB-MAVEN-PLUGIN-VERSION&apos;</jib-maven-plugin.version>
+        <lifecycle-mapping.version>&apos;LIFECYCLE-MAPPING-VERSION&apos;</lifecycle-mapping.version>
+        <liquibase-plugin.password/>
+        <liquibase-plugin.url/>
+        <liquibase-plugin.username/>
+        <mapstruct.version>&apos;MAPSTRUCT-VERSION&apos;</mapstruct.version>
+        <maven-checkstyle-plugin.version>&apos;MAVEN-CHECKSTYLE-PLUGIN-VERSION&apos;</maven-checkstyle-plugin.version>
+        <maven-clean-plugin.version>&apos;MAVEN-CLEAN-PLUGIN-VERSION&apos;</maven-clean-plugin.version>
+        <maven-compiler-plugin.version>&apos;MAVEN-COMPILER-PLUGIN-VERSION&apos;</maven-compiler-plugin.version>
+        <maven-enforcer-plugin.version>&apos;MAVEN-ENFORCER-PLUGIN-VERSION&apos;</maven-enforcer-plugin.version>
+        <maven-failsafe-plugin.version>&apos;MAVEN-FAILSAFE-PLUGIN-VERSION&apos;</maven-failsafe-plugin.version>
+        <maven-jar-plugin.version>&apos;MAVEN-JAR-PLUGIN-VERSION&apos;</maven-jar-plugin.version>
+        <maven-javadoc-plugin.version>&apos;MAVEN-JAVADOC-PLUGIN-VERSION&apos;</maven-javadoc-plugin.version>
+        <maven-resources-plugin.version>&apos;MAVEN-RESOURCES-PLUGIN-VERSION&apos;</maven-resources-plugin.version>
+        <maven-site-plugin.version>&apos;MAVEN-SITE-PLUGIN-VERSION&apos;</maven-site-plugin.version>
+        <maven-surefire-plugin.version>&apos;MAVEN-SUREFIRE-PLUGIN-VERSION&apos;</maven-surefire-plugin.version>
+        <maven-war-plugin.version>&apos;MAVEN-WAR-PLUGIN-VERSION&apos;</maven-war-plugin.version>
+        <modernizer-maven-plugin.version>&apos;MODERNIZER-MAVEN-PLUGIN-VERSION&apos;</modernizer-maven-plugin.version>
+        <nohttp-checkstyle.version>&apos;NOHTTP-CHECKSTYLE-VERSION&apos;</nohttp-checkstyle.version>
+        <profile.api-docs/>
+        <profile.e2e/>
+        <profile.no-liquibase/>
+        <profile.test/>
+        <profile.tls/>
+        <properties-maven-plugin.version>&apos;PROPERTIES-MAVEN-PLUGIN-VERSION&apos;</properties-maven-plugin.version>
+        <resource.delimiter>@</resource.delimiter>
+        <sonar-maven-plugin.version>&apos;SONAR-MAVEN-PLUGIN-VERSION&apos;</sonar-maven-plugin.version>
+        <spotless-maven-plugin.version>&apos;SPOTLESS-MAVEN-PLUGIN-VERSION&apos;</spotless-maven-plugin.version>
+        <spring.profiles.active>dev</spring.profiles.active>
+        <springdoc-openapi-starter-webmvc-api.version>&apos;SPRINGDOC-VERSION&apos;</springdoc-openapi-starter-webmvc-api.version>
         <testng.version>&apos;TESTNG-VERSION&apos;</testng.version>
     </properties>
 
@@ -26,6 +94,132 @@ exports[`generator - cucumber with default config should match files snapshot 1`
 
     <dependencies>
         <dependency>
+            <groupId>tech.jhipster</groupId>
+            <artifactId>jhipster-framework</artifactId>
+            <version>\${jhipster-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-loader-tools</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-data</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+            <version>\${springdoc-openapi-starter-webmvc-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate6</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hppc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-api</artifactId>
+            <version>\${archunit-junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Adding the engine dependency to the surefire-plugin unfortunately does not work in the current version. -->
+            <!-- https://www.archunit.org/userguide/html/000_Index.html#_junit_5 -->
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-engine</artifactId>
+            <version>\${archunit-junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
             <scope>test</scope>
@@ -41,8 +235,91 @@ exports[`generator - cucumber with default config should match files snapshot 1`
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus-simpleclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <classifier>jakarta</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-console</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>\${liquibase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>\${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>\${mapstruct.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>jdbc</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -54,6 +331,84 @@ exports[`generator - cucumber with default config should match files snapshot 1`
     </dependencies>
 
     <build>
+        <defaultGoal>spring-boot:run</defaultGoal>
+        <resources>
+            <resource>
+                <directory>\${basedir}/src/main/resources/</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>config/**/*.yml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>\${basedir}/src/main/resources/</directory>
+                <excludes>
+                    <exclude>config/**/*.yml</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.gaul</groupId>
+                <artifactId>modernizer-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -82,16 +437,608 @@ exports[`generator - cucumber with default config should match files snapshot 1`
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>\${maven-checkstyle-plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>\${checkstyle.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>io.spring.nohttp</groupId>
+                            <artifactId>nohttp-checkstyle</artifactId>
+                            <version>\${nohttp-checkstyle.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <configLocation>checkstyle.xml</configLocation>
+                        <includes>pom.xml,README.md</includes>
+                        <excludes>.git/**/*,target/**/*,node_modules/**/*</excludes>
+                        <sourceDirectories>./</sourceDirectories>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>\${maven-clean-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>\${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <source>\${java.version}</source>
+                        <target>\${java.version}</target>
+                        <parameters>true</parameters>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.springframework.boot</groupId>
+                                <artifactId>spring-boot-configuration-processor</artifactId>
+                            </path>
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>\${mapstruct.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.hibernate.orm</groupId>
+                                <artifactId>hibernate-jpamodelgen</artifactId>
+                            </path>
+                            <path>
+                                <groupId>org.glassfish.jaxb</groupId>
+                                <artifactId>jaxb-runtime</artifactId>
+                            </path>
+                        </annotationProcessorPaths>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>\${maven-enforcer-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>enforce-versions</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>enforce-dependencyConvergence</id>
+                            <configuration>
+                                <rules>
+                                    <DependencyConvergence/>
+                                </rules>
+                                <fail>false</fail>
+                            </configuration>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <rules>
+                            <requireMavenVersion>
+                                <message>You are running an older version of Maven. JHipster requires at least Maven \${maven.version}</message>
+                                <version>[\${maven.version},)</version>
+                            </requireMavenVersion>
+                            <requireJavaVersion>
+                                <message>You are running an incompatible version of Java. JHipster supports JDK 17 to 24.</message>
+                                <version>[17,18),[21,22),[24,25)</version>
+                            </requireJavaVersion>
+                        </rules>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>\${maven-failsafe-plugin.version}</version>
+                    <configuration>
+                        <!-- Due to spring-boot repackage, without adding this property test classes are not found
+                             See https://github.com/spring-projects/spring-boot/issues/6254 -->
+                        <!-- Force alphabetical order to have a reproducible build -->
+                        <classesDirectory>\${project.build.outputDirectory}</classesDirectory>
+                        <runOrder>alphabetical</runOrder>
+                        <includes>
+                            <include>**/*IT*</include>
+                            <include>**/*IntTest*</include>
+                        </includes>
+                        <argLine>@{argLine} -Dspring.profiles.active=\${profile.test}</argLine>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>integration-test</id>
+                            <goals>
+                                <goal>integration-test</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>verify</id>
+                            <goals>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>\${maven-jar-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>\${maven-javadoc-plugin.version}</version>
+                    <configuration>
+                        <source>\${maven.compiler.source}</source>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>\${maven-site-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>\${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <!-- Force alphabetical order to have a reproducible build -->
+                        <runOrder>alphabetical</runOrder>
+                        <excludes>
+                            <exclude>**/*IT*</exclude>
+                            <exclude>**/*IntTest*</exclude>
+                        </excludes>
+                        <systemPropertyVariables>
+                            <java.util.logging.config.file>src/test/resources/logback.xml</java.util.logging.config.file>
+                        </systemPropertyVariables>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>\${maven-war-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>default-war</id>
+                            <goals>
+                                <goal>war</goal>
+                            </goals>
+                            <phase>package</phase>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>build-info</id>
+                            <goals>
+                                <goal>build-info</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>repackage</id>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <mainClass>\${start-class}</mainClass>
+                        <!--
+                        Enable the line below to have remote debugging of your application on port 5005
+                        <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
+                        -->
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.diffplug.spotless</groupId>
+                    <artifactId>spotless-maven-plugin</artifactId>
+                    <version>\${spotless-maven-plugin.version}</version>
+                    <configuration>
+                        <java>
+                            <!-- <removeUnusedImports/> -->
+                        </java>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>spotless</id>
+                            <phase>process-sources</phase>
+                            <goals>
+                                <goal>apply</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>\${jib-maven-plugin.version}</version>
+                    <configuration>
+                        <from>
+                            <image>\${jib-maven-plugin.image}</image>
+                            <platforms>
+                                <platform>
+                                    <architecture>\${jib-maven-plugin.architecture}</architecture>
+                                    <os>linux</os>
+                                </platform>
+                            </platforms>
+                        </from>
+                        <to>
+                            <image>jhipster:latest</image>
+                        </to>
+                        <container>
+                            <entrypoint>
+                                <shell>bash</shell>
+                                <option>-c</option>
+                                <arg>/entrypoint.sh</arg>
+                            </entrypoint>
+                            <ports>
+                                <port>8080</port>
+                            </ports>
+                            <environment>
+                                <SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
+                                <JHIPSTER_SLEEP>0</JHIPSTER_SLEEP>
+                            </environment>
+                            <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                            <user>1000</user>
+                        </container>
+                        <extraDirectories>
+                            <paths>src/main/docker/jib</paths>
+                            <permissions>
+                                <permission>
+                                    <file>/entrypoint.sh</file>
+                                    <mode>755</mode>
+                                </permission>
+                            </permissions>
+                        </extraDirectories>
+                        <pluginExtensions>
+                            <pluginExtension>
+                                <implementation>com.google.cloud.tools.jib.maven.extension.springboot.JibSpringBootExtension</implementation>
+                            </pluginExtension>
+                        </pluginExtensions>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.google.cloud.tools</groupId>
+                            <artifactId>jib-spring-boot-extension-maven</artifactId>
+                            <version>&apos;JIB-SPRING-BOOT-EXTENSION-MAVEN-VERSION&apos;</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>io.github.git-commit-id</groupId>
+                    <artifactId>git-commit-id-maven-plugin</artifactId>
+                    <version>\${git-commit-id-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>revision</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                        <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
+                        <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                        <includeOnlyProperties>
+                            <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
+                            <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
+                            <includeOnlyProperty>^git.branch$</includeOnlyProperty>
+                        </includeOnlyProperties>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>properties-maven-plugin</artifactId>
+                    <version>\${properties-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>initialize</phase>
+                            <goals>
+                                <goal>read-project-properties</goal>
+                            </goals>
+                            <configuration>
+                                <files>
+                                    <file>sonar-project.properties</file>
+                                </files>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.gaul</groupId>
+                    <artifactId>modernizer-maven-plugin</artifactId>
+                    <version>\${modernizer-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>modernizer</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>modernizer</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <javaVersion>\${java.version}</javaVersion>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>\${jacoco-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>pre-unit-tests</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
+                            <id>post-unit-test</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>pre-integration-tests</id>
+                            <goals>
+                                <goal>prepare-agent-integration</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <!-- Ensures that the code coverage report for integration tests is created after integration tests have been run -->
+                            <id>post-integration-tests</id>
+                            <phase>post-integration-test</phase>
+                            <goals>
+                                <goal>report-integration</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.liquibase</groupId>
+                    <artifactId>liquibase-maven-plugin</artifactId>
+                    <version>\${liquibase.version}</version>
+                    <configuration>
+                        <changeLogFile>config/liquibase/master.xml</changeLogFile>
+                        <diffChangeLogFile>\${project.basedir}/src/main/resources/config/liquibase/changelog/\${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
+                        <driver>org.postgresql.Driver</driver>
+                        <url>\${liquibase-plugin.url}</url>
+                        <defaultSchemaName/>
+                        <username>\${liquibase-plugin.username}</username>
+                        <password>\${liquibase-plugin.password}</password>
+                        <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                        <verbose>true</verbose>
+                        <logging>debug</logging>
+                        <contexts>!test</contexts>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.liquibase</groupId>
+                            <artifactId>liquibase-core</artifactId>
+                            <version>\${liquibase.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.liquibase.ext</groupId>
+                            <artifactId>liquibase-hibernate6</artifactId>
+                            <version>\${liquibase.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>jakarta.validation</groupId>
+                            <artifactId>jakarta.validation-api</artifactId>
+                            <version>\${jakarta-validation.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-starter-data-jpa</artifactId>
+                            <version>\${spring-boot.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>\${sonar-maven-plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-            </plugin>
-        </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>api-docs</id>
+            <properties>
+                <profile.api-docs>,api-docs</profile.api-docs>
+            </properties>
+        </profile>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- default Spring profiles -->
+                <liquibase-plugin.password/>
+                <liquibase-plugin.url>jdbc:postgresql://localhost:5432/jhipster</liquibase-plugin.url>
+                <liquibase-plugin.username>jhipster</liquibase-plugin.username>
+                <profile.test>test,testdev</profile.test>
+                <spring.profiles.active>dev\${profile.tls}\${profile.no-liquibase}</spring.profiles.active>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-devtools</artifactId>
+                    <optional>true</optional>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>docker-compose</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-docker-compose</artifactId>
+                    <optional>true</optional>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <!-- This is automatically activated when working in Eclipse -->
+            <id>eclipse</id>
+            <activation>
+                <property>
+                    <name>m2e.version</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <!-- The following dependency is added due to issue #9175-->
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-undertow</artifactId>
+                </dependency>
+            </dependencies>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <!--
+                            This plugin's configuration is used to store Eclipse m2e settings only.
+                            It has no influence on the Maven build itself.
+                            Remove when the m2e plugin can correctly bind to Maven lifecycle
+                        -->
+                        <plugin>
+                            <groupId>org.eclipse.m2e</groupId>
+                            <artifactId>lifecycle-mapping</artifactId>
+                            <version>\${lifecycle-mapping.version}</version>
+                            <configuration>
+                                <lifecycleMappingMetadata>
+                                    <pluginExecutions>
+                                        <pluginExecution>
+                                            <pluginExecutionFilter>
+                                                <groupId>org.jacoco</groupId>
+                                                <artifactId>jacoco-maven-plugin</artifactId>
+                                                <versionRange>\${jacoco-maven-plugin.version}</versionRange>
+                                                <goals>
+                                                    <goal>prepare-agent</goal>
+                                                </goals>
+                                            </pluginExecutionFilter>
+                                            <action>
+                                                <ignore/>
+                                            </action>
+                                        </pluginExecution>
+                                    </pluginExecutions>
+                                </lifecycleMappingMetadata>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <!--
+                Profile for applying IDE-specific configuration.
+                At the moment it configures MapStruct and Hibernate JPA Metamodel Generator, which you need when working
+                with DTOs and entity filtering.
+            -->
+            <id>IDE</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.hibernate.orm</groupId>
+                    <artifactId>hibernate-jpamodelgen</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.mapstruct</groupId>
+                    <artifactId>mapstruct-processor</artifactId>
+                    <version>\${mapstruct.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>no-liquibase</id>
+            <properties>
+                <profile.no-liquibase>,no-liquibase</profile.no-liquibase>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <!-- default Spring profiles -->
+                <liquibase-plugin.password/>
+                <liquibase-plugin.url>jdbc:postgresql://localhost:5432/jhipster</liquibase-plugin.url>
+                <liquibase-plugin.username>jhipster</liquibase-plugin.username>
+                <profile.test>test,testprod</profile.test>
+                <spring.profiles.active>prod\${profile.api-docs}\${profile.tls}\${profile.e2e}\${profile.no-liquibase}</spring.profiles.active>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>target/classes/static/</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>io.github.git-commit-id</groupId>
+                        <artifactId>git-commit-id-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>tls</id>
+            <properties>
+                <profile.tls>,tls</profile.tls>
+            </properties>
+        </profile>
+        <profile>
+            <id>war</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
+",
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "contents": "junit.jupiter.execution.timeout.default = 15 s
+junit.jupiter.execution.timeout.testable.method.default = 15 s
+junit.jupiter.execution.timeout.beforeall.method.default = 60 s
+junit.jupiter.testclass.order.default=com.mycompany.myapp.config.SpringBootTestClassOrderer
+cucumber.publish.enabled=true,
+cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html,
+# jhipster-needle-add-junit-platform-properties
 ",
     "stateCleared": "modified",
   },
@@ -101,14 +1048,185 @@ exports[`generator - cucumber with default config should match files snapshot 1`
 exports[`generator - cucumber with gradle build tool should match files snapshot 1`] = `
 {
   "build.gradle": {
-    "contents": "
-dependencies {
-    // jhipster-needle-gradle-dependency
-}
-plugins {
+    "contents": "plugins {
+    id "java"
+    id "maven-publish"
+    id "idea"
+    id "eclipse"
+    id "com.gorylenko.gradle-git-properties"
     id "jhipster.cucumber-conventions"
-    // jhipster-needle-gradle-plugins
+    alias(libs.plugins.spring.boot)
+    id "jhipster.spring-cache-conventions"
+    id "jhipster.docker-conventions"
+    id "jhipster.code-quality-conventions"
+    id "org.liquibase.gradle"
+    // jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
+
+group = "com.mycompany.myapp"
+version = "0.0.1-SNAPSHOT"
+
+description = ""
+
+sourceCompatibility=JAVA_VERSION
+targetCompatibility=JAVA_VERSION
+assert System.properties["java.specification.version"] == "17" || "21" || "24"
+
+ext {
+    springProfiles = ""
+    if (project.hasProperty("tls")) {
+        springProfiles += ",tls"
+    }
+    if (project.hasProperty("e2e")) {
+        springProfiles += ",e2e"
+    }
+}
+
+repositories {
+    // Local maven repository is required for libraries built locally with maven like development jhipster-bom.
+    // mavenLocal()
+    mavenCentral()
+    // jhipster-needle-gradle-repositories - JHipster will add additional repositories
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+apply from: "gradle/liquibase.gradle"
+// jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
+
+if (project.hasProperty("prod")) {
+    apply from: "gradle/profile_prod.gradle"
+} else {
+    apply from: "gradle/profile_dev.gradle"
+}
+
+if (project.hasProperty("war")) {
+    apply from: "gradle/war.gradle"
+}
+
+
+idea {
+    module {
+        excludeDirs += files("node_modules")
+    }
+}
+
+eclipse {
+    sourceSets {
+        main {
+            java {
+                srcDirs += ["build/generated/sources/annotationProcessor/java/main"]
+            }
+        }
+    }
+}
+
+defaultTasks "bootRun"
+
+springBoot {
+    mainClass = "com.mycompany.myapp.JhipsterApp"
+}
+
+test {
+    useJUnitPlatform()
+    exclude "**/*IT*", "**/*IntTest*"
+    testLogging {
+        events 'FAILED', 'SKIPPED'
+    }
+    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx512m'
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
+    reports.html.required = false
+    testLogging.exceptionFormat "full"
+}
+
+check.dependsOn integrationTest
+task testReport(type: TestReport) {
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(test)
+}
+
+task integrationTestReport(type: TestReport) {
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(integrationTest)
+}
+
+gitProperties {
+    failOnNoGitDirectory = false
+    keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
+}
+
+tasks.withType(com.gorylenko.GenerateGitPropertiesTask).configureEach {
+  outputs.doNotCacheIf("Task is always executed") { true }
+}
+
+configurations {
+    providedRuntime
+    implementation.exclude module: "spring-boot-starter-tomcat"
+}
+
+dependencies {
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+    testImplementation("com.tngtech.archunit:archunit-junit5-api:\${archunitJunit5Version}") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
+    testRuntimeOnly("com.tngtech.archunit:archunit-junit5-engine:\${archunitJunit5Version}") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
+    implementation "io.micrometer:micrometer-registry-prometheus-simpleclient"
+    implementation "jakarta.annotation:jakarta.annotation-api"
+    implementation "org.apache.commons:commons-lang3"
+    annotationProcessor "org.mapstruct:mapstruct-processor:\${mapstructVersion}"
+    implementation "org.mapstruct:mapstruct:\${mapstructVersion}"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    implementation "org.springframework.boot:spring-boot-loader-tools"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-aop"
+    implementation "org.springframework.boot:spring-boot-starter-logging"
+    implementation "org.springframework.boot:spring-boot-starter-mail"
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+    implementation "org.springframework.boot:spring-boot-starter-undertow"
+    modules {
+        module("org.springframework.boot:spring-boot-starter-tomcat") {
+            replacedBy("org.springframework.boot:spring-boot-starter-undertow", "Use Undertow instead of Tomcat")
+        }
+    }
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    testImplementation "org.springframework.boot:spring-boot-test"
+    testImplementation "org.springframework.security:spring-security-test"
+    implementation libs.jhipster.framework
+    implementation libs.springdoc.openapi.starter.webmvc.api
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.security:spring-security-data"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate6"
+    implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
+    implementation "com.zaxxer:HikariCP"
+    implementation "org.hibernate.orm:hibernate-core"
+    implementation "org.hibernate.validator:hibernate-validator"
+    implementation "org.postgresql:postgresql"
+    testImplementation "org.testcontainers:jdbc"
+    testImplementation "org.testcontainers:junit-jupiter"
+    testImplementation "org.testcontainers:postgresql"
+    testImplementation "org.testcontainers:testcontainers"
+    annotationProcessor "org.glassfish.jaxb:jaxb-runtime"
+    annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen"
+    developmentOnly "org.springframework.boot:spring-boot-docker-compose"
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+}
+
+task cleanResources(type: Delete) {
+    delete "build/resources"
+}
+
+
+compileJava.dependsOn processResources
+processResources.dependsOn bootBuildInfo
 ",
     "stateCleared": "modified",
   },
@@ -122,6 +1240,11 @@ repositories {
 }
 
 dependencies {
+    implementation libs.jib.plugin
+    implementation libs.modernizer.plugin
+    implementation libs.nohttp.plugin
+    implementation libs.sonarqube.plugin
+    implementation libs.spotless.plugin
     // jhipster-needle-gradle-dependency - JHipster will add additional dependencies for convention plugins here
     // jhipster-needle-gradle-build-src-dependency - Deprecated: JHipster will add additional dependencies for convention plugins here
 }
@@ -134,11 +1257,82 @@ dependencies {
 # jhipster-needle-gradle-build-src-dependency-catalog-version - Deprecated: JHipster will add additional versions for convention plugins here
 
 [libraries]
+jib-plugin = { module = "com.google.cloud.tools:jib-gradle-plugin", version = "'JIB-MAVEN-PLUGIN-VERSION'" }
+modernizer-plugin = { module = "com.github.andygoossens:gradle-modernizer-plugin", version = "'GRADLE-MODERNIZER-PLUGIN-VERSION'" }
+nohttp-plugin = { module = "io.spring.nohttp:nohttp-gradle", version = "'NOHTTP-CHECKSTYLE-VERSION'" }
+sonarqube-plugin = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "'GRADLE-SONARQUBE-VERSION'" }
+spotless-plugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version = "'SPOTLESS-GRADLE-PLUGIN-VERSION'" }
 # jhipster-needle-gradle-dependency-catalog-libraries - JHipster will add additional libraries versions
 
 [plugins]
 # jhipster-needle-gradle-dependency-catalog-plugins - JHipster will add additional plugins versions
 ",
+    "stateCleared": "modified",
+  },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
+    "contents": "plugins {
+    id "jacoco"
+    id "org.sonarqube"
+    id "com.diffplug.spotless"
+    id "com.github.andygoossens.gradle-modernizer-plugin"
+    id "io.spring.nohttp"
+}
+
+jacoco {
+    toolVersion = "\${libs.versions.jacoco.get()}"
+}
+
+jacocoTestReport {
+    executionData tasks.withType(Test)
+    classDirectories.from = files(sourceSets.main.output.classesDirs)
+    sourceDirectories.from = files(sourceSets.main.java.srcDirs)
+
+    reports {
+        xml.required = true
+    }
+}
+
+file("sonar-project.properties").withReader {
+    Properties sonarProperties = new Properties()
+    sonarProperties.load(it)
+
+    sonarProperties.each { key, value ->
+        sonarqube {
+            properties {
+                property key, value
+            }
+        }
+    }
+}
+
+spotless {
+    java {
+        target 'src/*/java/**/*.java'
+        // removeUnusedImports()
+    }
+}
+
+modernizer {
+    failOnViolations = true
+    includeTestClasses = true
+}
+
+checkstyle {
+    toolVersion "\${libs.versions.checkstyle.get()}"
+    configFile file("checkstyle.xml")
+    checkstyleTest.enabled = false
+}
+
+nohttp {
+    source.include "build.gradle", "README.md"
+}
+
+// workaround for https://github.com/checkstyle/checkstyle/issues/14123
+configurations.checkstyle {
+    resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
+      select("com.google.guava:guava:0")
+    }
+}",
     "stateCleared": "modified",
   },
   "buildSrc/src/main/groovy/jhipster.cucumber-conventions.gradle": {
@@ -184,17 +1378,196 @@ check.dependsOn cucumberTest
 ",
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
+    "contents": "plugins {
+    id "com.google.cloud.tools.jib"
+}
+
+jib {
+    configurationName = "productionRuntimeClasspath"
+    from {
+        image = "java-jre-placeholder"
+        platforms {
+            platform {
+                architecture = "\${findProperty('jibArchitecture') ?: 'amd64'}"
+                os = "linux"
+            }
+        }
+    }
+    to {
+        image = "jhipster:latest"
+    }
+    container {
+        entrypoint = ["bash", "-c", "/entrypoint.sh"]
+        ports = ["8080"]
+        environment = [
+            SPRING_OUTPUT_ANSI_ENABLED: "ALWAYS",
+            JHIPSTER_SLEEP: "0"
+        ]
+        creationTime = "USE_CURRENT_TIMESTAMP"
+        user = 1000
+    }
+    extraDirectories {
+      paths = file("src/main/docker/jib")
+      permissions = ["/entrypoint.sh": "755"]
+    }
+}",
+    "stateCleared": "modified",
+  },
+  "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
+    "contents": "dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-cache"
+    implementation "javax.cache:cache-api"
+    implementation group: "org.ehcache", name: "ehcache", classifier: "jakarta"
+    implementation "org.hibernate.orm:hibernate-jcache"
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+}
+",
+    "stateCleared": "modified",
+  },
   "gradle/libs.versions.toml": {
     "contents": "[versions]
+jacoco = "'JACOCO-MAVEN-PLUGIN-VERSION'"
+checkstyle = "'CHECKSTYLE-VERSION'"
 # jhipster-needle-gradle-dependency-catalog-version - JHipster will add additional versions for convention plugins heref
 
 [libraries]
 cucumber-bom = { module = "io.cucumber:cucumber-bom", version = "'CUCUMBER-BOM-VERSION'" }
 testng = { module = "org.testng:testng", version = "'TESTNG-VERSION'" }
+jhipster-framework = { module = "tech.jhipster:jhipster-framework", version = "JHIPSTER_DEPENDENCIES_VERSION" }
+springdoc-openapi-starter-webmvc-api = { module = "org.springdoc:springdoc-openapi-starter-webmvc-api", version = "'SPRINGDOC-VERSION'" }
 # jhipster-needle-gradle-dependency-catalog-libraries - JHipster will add additional libraries versions
 
 [plugins]
+spring-boot = { id = "org.springframework.boot", version = "3.4.5" }
 # jhipster-needle-gradle-dependency-catalog-plugins - JHipster will add additional plugins versions
+",
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": {
+    "contents": "dependencies {
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+}
+
+ext {
+    springProfiles = "dev" + springProfiles
+}
+
+springBoot {
+    buildInfo {
+        excludes = ['time']
+    }
+}
+
+bootRun {
+    args = ["--spring.profiles.active=\${springProfiles}"]
+}
+
+
+processResources {
+    inputs.property('version', version)
+    inputs.property('springProfiles', springProfiles)
+    filesMatching("**/application.yml") {
+        filter {
+            it.replace("@project.version@", version)
+        }
+        filter {
+            it.replace("@spring.profiles.active@", springProfiles)
+        }
+    }
+}
+
+task integrationTest(type: Test) {
+    maxHeapSize = "1G"
+    useJUnitPlatform()
+    description = "Execute integration tests."
+    group = "verification"
+    include "**/*IT*", "**/*IntTest*"
+    testLogging {
+        events 'FAILED', 'SKIPPED'
+        exceptionFormat "full"
+    }
+    systemProperty('spring.profiles.active', 'test,testdev')
+    systemProperty('java.security.egd', 'file:/dev/./urandom')
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
+    reports.html.required = false
+    // jhipster-needle-gradle-integration-test
+}
+integrationTest.dependsOn test
+
+",
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": {
+    "contents": "dependencies {
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+}
+
+ext {
+    springProfiles = "prod" + springProfiles
+
+    if (project.hasProperty("api-docs")) {
+        springProfiles += ",api-docs"
+    }
+}
+
+springBoot {
+    buildInfo()
+}
+
+bootRun {
+    args = ["--spring.profiles.active=\${springProfiles}"]
+}
+
+
+processResources {
+    inputs.property('version', version)
+    inputs.property('springProfiles', springProfiles)
+    filesMatching("**/application.yml") {
+        filter {
+            it.replace("@project.version@", version)
+        }
+        filter {
+            it.replace("@spring.profiles.active@", springProfiles)
+        }
+    }
+}
+
+task integrationTest(type: Test) {
+    maxHeapSize = "1G"
+    useJUnitPlatform()
+    description = "Execute integration tests."
+    group = "verification"
+    include "**/*IT*", "**/*IntTest*"
+    testLogging {
+        events 'FAILED', 'SKIPPED'
+        exceptionFormat "full"
+    }
+    systemProperty('spring.profiles.active', 'test,testprod')
+    systemProperty('java.security.egd', 'file:/dev/./urandom')
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
+    reports.html.required = false
+    exclude "**/*CucumberIT*",
+    // jhipster-needle-gradle-integration-test
+}
+integrationTest.dependsOn test
+
+",
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "contents": "junit.jupiter.execution.timeout.default = 15 s
+junit.jupiter.execution.timeout.testable.method.default = 15 s
+junit.jupiter.execution.timeout.beforeall.method.default = 60 s
+junit.jupiter.testclass.order.default=com.mycompany.myapp.config.SpringBootTestClassOrderer
+cucumber.publish.enabled=true,
+cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html,
+# jhipster-needle-add-junit-platform-properties
 ",
     "stateCleared": "modified",
   },
