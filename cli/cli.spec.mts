@@ -12,6 +12,7 @@ import { coerce } from 'semver';
 import { defaultHelpers as helpers, createBlueprintFiles } from '../lib/testing/index.js';
 import { getCommand as actualGetCommonand } from './utils.mjs';
 import { createProgram } from './program.mjs';
+import { CliCommand } from './types.js';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {
@@ -263,9 +264,10 @@ describe('cli', () => {
   describe('with mocked cliOnly commands', () => {
     const commands = {
       mocked: {},
-    } as { mocked: any };
+    } as { mocked: CliCommand };
     beforeEach(() => {
       commands.mocked = {
+        desc: 'Mocked command',
         options: [
           {
             option: '--foo',
