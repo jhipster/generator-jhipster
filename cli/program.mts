@@ -23,7 +23,7 @@ import { fileURLToPath } from 'url';
 import didYouMean from 'didyoumean';
 import chalk from 'chalk';
 import type Environment from 'yeoman-environment';
-import type { BaseEnvironmentOptions, GeneratorMeta } from '@yeoman/types';
+import type { BaseEnvironmentOptions, GeneratorMeta, LookupOptions } from '@yeoman/types';
 
 import { packageJson } from '../lib/index.js';
 import { packageNameToNamespace } from '../lib/utils/index.js';
@@ -64,7 +64,7 @@ type BuildJHipsterOptions = Partial<BuildCommands> & {
   executableName?: string;
   executableVersion?: string;
   blueprints?: Record<string, string>;
-  lookups?: any[];
+  lookups?: LookupOptions[];
   devBlueprintPath?: string;
 };
 
