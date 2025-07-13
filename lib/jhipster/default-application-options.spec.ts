@@ -80,7 +80,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when the authentication type is oauth2', () => {
-      let skipUserManagementOption: any;
+      let skipUserManagementOption: boolean | undefined;
 
       before(() => {
         skipUserManagementOption = getConfigForMonolithApplication({
