@@ -19,7 +19,7 @@
 
 import { clientFrameworkTypes, fieldTypes, validations } from '../../../lib/jhipster/index.js';
 import getTypescriptKeyType from './types-utils.js';
-import { filterRelevantRelationships, generateTestEntityId } from './template-utils.js';
+import { filterRelevantRelationships } from './template-utils.js';
 
 const dbTypes = fieldTypes;
 const {
@@ -120,30 +120,6 @@ const generateEntityClientFields = (
     variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
   });
   return variablesWithTypes;
-};
-
-/**
- * @private
- * Generate a test entity, according to the type
- */
-export const generateTestEntity = (references, index: 0 | 1 | 'random' = 'random') => {
-  const entries = references
-    .map(reference => {
-      if (index === 'random') {
-        const field = reference.field;
-        const fakeData = field.generateFakeData('json-serializable');
-        if (reference.field.fieldWithContentType) {
-          return [
-            [reference.name, fakeData],
-            [field.contentTypeFieldName, 'unknown'],
-          ];
-        }
-        return [[reference.name, fakeData]];
-      }
-      return [[reference.name, generateTestEntityId(reference.type, index, false)]];
-    })
-    .flat();
-  return Object.fromEntries(entries);
 };
 
 export default generateEntityClientFields;

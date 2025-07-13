@@ -1,4 +1,5 @@
 import type { Application as JavascriptApplication, Entity as JavascriptEntity } from '../javascript/types.js';
+export type { Field, Relationship } from '../javascript/types.js';
 
 export type CypressProperties = {
   cypressTests: boolean;

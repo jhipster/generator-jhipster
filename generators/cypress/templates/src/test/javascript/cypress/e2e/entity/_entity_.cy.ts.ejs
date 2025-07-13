@@ -53,7 +53,7 @@ describe('<%= entityClass %> e2e test', () => {
   const username = Cypress.env('E2E_USERNAME') ?? '<%- adminEntity ? 'admin' : 'user' %>';
   const password = Cypress.env('E2E_PASSWORD') ?? '<%- adminEntity ? 'admin' : 'user' %>';
 <%_ if (!readOnly) { _%>
-  <% if (skipCreateTest) { %>// <% } %>const <%= entityInstance %>Sample = <%- JSON.stringify(this.generateTestEntity(sampleFields.map(field => field.reference))) %>;
+  <% if (skipCreateTest) { %>// <% } %>const <%= entityInstance %>Sample = <%- JSON.stringify(this.generateTestEntity(sampleFields)) %>;
 <%_ } _%>
 
   let <%= entityInstance %>;
@@ -75,7 +75,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/<%= baseApi + otherEntity.entityApiUrl %>',
-      body: <%- JSON.stringify(this.generateTestEntity(otherEntity.fields.filter(f => !f.autoGenerate).map(field => field.reference))) %>,
+      body: <%- JSON.stringify(this.generateTestEntity(otherEntity.fields.filter(f => !f.autoGenerate))) %>,
     }).then(({ body }) => {
       <%= otherEntity.entityInstance %> = body;
     });

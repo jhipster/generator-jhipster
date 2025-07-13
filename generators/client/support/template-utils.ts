@@ -158,78 +158,23 @@ export const stringifyTsEntity = (data: Record<string, any>, options: { sep?: st
  * @private
  * @deprecated
  * Generate a test entity, according to the type
- *
- * @param references
- * @param {number} [index] - index of the primary key sample, pass undefined for a random key.
  */
-export const generateTestEntity = (references, index: 0 | 1 | 'random' = 'random') => {
-  const entries = references
-    .map(reference => {
+export const generateTestEntity = (fields: ClientField[], index: 0 | 1 | 'random' = 'random') => {
+  const entries = fields
+    .map(field => {
       if (index === 'random') {
-        const field = reference.field;
         const { fieldWithContentType, contentTypeFieldName } = field;
-        const fakeData = field.generateFakeData('json-serializable');
+        const fakeData = field.generateFakeData!('json-serializable');
         if (fieldWithContentType) {
           return [
-            [reference.name, fakeData],
+            [field.propertyName, fakeData],
             [contentTypeFieldName, 'unknown'],
           ];
         }
-        return [[reference.name, fakeData]];
+        return [[field.propertyName, fakeData]];
       }
-      return [[reference.name, generateTestEntityId(reference.type, index, false)]];
+      return [[field.propertyName, generateTestEntityId(field.fieldType as FieldType, index, false)]];
     })
     .flat();
   return Object.fromEntries(entries);
-};
-
-/**
- * @deprecated
- * Generate a test entity, according to the references
- *
- * @param references
- * @param additionalFields
- * @return {String} test sample
- */
-export const generateTypescriptTestEntity = (references, additionalFields = {}) => {
-  const entries = references
-    .map(reference => {
-      if (reference.field) {
-        const field = reference.field;
-        const { fieldIsEnum, fieldTypeTimed, fieldTypeLocalDate, fieldWithContentType, fieldName, contentTypeFieldName } = field;
-
-        const fakeData = field.generateFakeData('ts');
-        if (fieldWithContentType) {
-          return [
-            [fieldName, fakeData],
-            [contentTypeFieldName, "'unknown'"],
-          ];
-        }
-        if (fieldIsEnum) {
-          return [[fieldName, fakeData]];
-        }
-        if (fieldTypeTimed || fieldTypeLocalDate) {
-          return [[fieldName, `dayjs(${fakeData})`]];
-        }
-        return [[fieldName, fakeData]];
-      }
-      return [[reference.name, generateTestEntityId(reference.type, 'random', false)]];
-    })
-    .flat();
-  return `{
-  ${[...entries, ...Object.entries(additionalFields)].map(([key, value]) => `${key}: ${value}`).join(',\n  ')}
-}`;
-};
-
-/**
- * @deprecated
- * Generate a test entity for the PK references (when the PK is a composite key)
- */
-export const generateTestEntityPrimaryKey = (primaryKey, index: 0 | 1 | 'random') => {
-  return JSON.stringify(
-    generateTestEntity(
-      primaryKey.fields.map(f => f.reference),
-      index,
-    ),
-  );
 };

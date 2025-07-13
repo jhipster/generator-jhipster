@@ -254,7 +254,6 @@ describe('generator - base-application - support - prepareEntity', () => {
             relationshipsPath: [entity4.relationships[0]],
             autoGenerate: true,
             derivedEntity: entity1,
-            reference: field.reference,
           });
         });
 
@@ -282,7 +281,6 @@ describe('generator - base-application - support - prepareEntity', () => {
             path: ['otherEntity3', 'entity2', 'uuid'],
             relationshipsPath: [entity4.relationships[1], entity3.relationships[0]],
             derivedEntity: entity3,
-            reference: field.reference,
           });
         });
 

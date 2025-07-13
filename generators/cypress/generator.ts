@@ -23,10 +23,10 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
-import { generateTestEntity as entityWithFakeValues } from '../client/support/index.js';
+import { generateTestEntity } from '../client/support/index.js';
 import type { Source as ClientSource } from '../client/types.js';
 import { cypressEntityFiles, cypressFiles } from './files.js';
-import type { Application as CypressApplication, Entity as CypressEntity } from './types.js';
+import type { Application as CypressApplication, Entity as CypressEntity, Field as CypressField } from './types.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
@@ -305,7 +305,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
-  generateTestEntity(references) {
-    return entityWithFakeValues(references);
+  generateTestEntity(fields: CypressField[]) {
+    return generateTestEntity(fields);
   }
 }

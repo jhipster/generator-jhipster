@@ -36,7 +36,6 @@ import type { Application as CommonApplication, Entity as CommonEntity } from '.
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.js';
 import { createFaker } from './faker.js';
-import { fieldToReference } from './prepare-field.js';
 import { fieldIsEnum } from './field-utils.js';
 
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
@@ -339,9 +338,6 @@ export function prepareEntityPrimaryKeyForTemplates(
             get columnName() {
               return idCount === 1 ? field.columnName : `${hibernateSnakeCase(relationship.relationshipName)}_${field.columnName}`;
             },
-            get reference() {
-              return fieldToReference(entityWithConfig, this);
-            },
             get relationshipsPath() {
               return [relationship, ...field.relationshipsPath];
             },
@@ -576,11 +572,6 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
 
   entity.anyPropertyHasValidation = entity.anyPropertyHasValidation || fields.some(({ fieldValidate }) => fieldValidate);
 
-  entity.allReferences = [
-    ...entity.fields.map(field => field.reference),
-    ...entity.relationships.map(relationship => relationship.reference),
-  ];
-
   entity.otherEntities = uniq(entity.relationships.map(rel => rel.otherEntity));
 
   entity.persistableRelationships = relationships.filter(({ persistableRelationship }) => persistableRelationship);
@@ -589,12 +580,6 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.updatableEntity =
     entity.fields.some(field => !field.id && !field.transient) ||
     entity.relationships.some(relationship => !relationship.id && relationship.persistableRelationship);
-
-  entity.allReferences
-    .filter(reference => reference.relationship?.relatedField)
-    .forEach(reference => {
-      reference.relatedReference = reference.relationship.relatedField.reference;
-    });
 
   entity.relationships.forEach(relationship => {
     relationship.relationshipCollection = ['one-to-many', 'many-to-many'].includes(relationship.relationshipType);
@@ -650,26 +635,17 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.reactiveRegularEagerRelations = entity.reactiveEagerRelations.filter(rel => rel.id !== true);
 }
 
-export function preparePostEntitiesCommonDerivedProperties(entities: any[]) {
-  for (const entity of entities.filter(entity => !entity.dtoReferences)) {
-    entity.dtoReferences = [
-      ...entity.fields.map(field => field.reference),
-      ...entity.relationships
-        .map(relationship => relationship.reference)
-        .filter(reference => reference.owned || reference.relationship.otherEntity.embedded),
-    ];
-    entity.restProperties = [
-      ...entity.fields,
-      ...entity.relationships.filter(
-        relationship => relationship.persistableRelationship || relationship.relationshipEagerLoad || relationship.otherEntity.embedded,
-      ),
-    ];
-    entity.otherReferences = entity.otherRelationships.map(relationship => relationship.reference);
-  }
-
-  for (const entity of entities.filter(entity => !entity.otherDtoReferences)) {
-    // Get all required back references for dto.
-    entity.otherDtoReferences = entity.otherReferences.filter(reference => reference.entity.dtoReferences.includes(reference));
+export function preparePostEntitiesCommonDerivedProperties(entities: CommonEntity[]) {
+  for (const entity of entities) {
+    mutateData(entity, {
+      __override__: false,
+      restProperties: () => [
+        ...entity.fields,
+        ...entity.relationships.filter(
+          relationship => relationship.persistableRelationship || relationship.relationshipEagerLoad || relationship.otherEntity.embedded,
+        ),
+      ],
+    });
   }
 }
 
