@@ -234,7 +234,7 @@ export const deploymentHelmFiles = (suffix = '') =>
     ],
   });
 
-export const deploymentKnativeFiles = (suffix = '') =>
+export const deploymentKnativeFiles = () =>
   asWriteFilesSection<any>({
     common: [
       {
