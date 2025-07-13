@@ -17,5 +17,4 @@
  * limitations under the License.
  */
 
-export const normalizePathEnd = (directory: string): string =>
-  directory.length === 0 || directory.endsWith('/') ? directory : `${directory}/`;
+export const normalizePathEnd = (directory: string): string => (!directory || directory.endsWith('/') ? directory : `${directory}/`);

@@ -16,17 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { getFKConstraintName } from '../../server/support/index.js';
+import { getFKConstraintName, prepareRelationshipForDatabase } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/index.js';
-import type { Entity as LiquibaseEntity, Relationship as LiquibaseRelationship } from '../types.js';
+import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Relationship as LiquibaseRelationship } from '../types.js';
 
-function relationshipBaseDataEquals(relationshipA: any, relationshipB: any) {
+function relationshipBaseDataEquals(relationshipA: LiquibaseRelationship, relationshipB: LiquibaseRelationship) {
   return (
     // name is the same
     relationshipA.relationshipName === relationshipB.relationshipName &&
     relationshipA.relationshipType === relationshipB.relationshipType &&
-    // related entities same
-    relationshipA.entityName === relationshipB.entityName &&
     relationshipA.otherEntityName === relationshipB.otherEntityName
   );
 }
@@ -60,7 +58,21 @@ export function relationshipNeedsForeignKeyRecreationOnly(relationshipA: Liquiba
   );
 }
 
-export function prepareRelationshipForLiquibase(entity: LiquibaseEntity, relationship: LiquibaseRelationship) {
+export function prepareRelationshipForLiquibase({
+  application,
+  entity,
+  relationship,
+}: {
+  application: LiquibaseApplication<LiquibaseEntity>;
+  entity: LiquibaseEntity;
+  relationship: LiquibaseRelationship;
+}) {
+  prepareRelationshipForDatabase({ application: application as any, entity, relationship });
+  mutateData(relationship, {
+    unique: ({ id, ownerSide, relationshipOneToOne }) => id || (ownerSide && relationshipOneToOne),
+    nullable: ({ relationshipValidate, relationshipRequired }) => !(relationshipValidate === true && relationshipRequired),
+  });
+
   relationship.shouldWriteRelationship =
     relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true);
 

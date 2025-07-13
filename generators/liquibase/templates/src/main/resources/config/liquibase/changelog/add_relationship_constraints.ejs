@@ -20,7 +20,6 @@
 const relationshipType = relationship.relationshipType,
 relationshipName = relationship.relationshipName,
 ownerSide = relationship.ownerSide,
-otherEntityTableName = relationship.otherEntityTableName,
 onDelete = relationship.onDelete, 
 onUpdate = relationship.onUpdate;
 if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) {
@@ -39,7 +38,7 @@ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && 
                                  baseTableName="<%= entity.entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="<%= referencedColumnNames %>"
-                                 referencedTableName="<%= otherEntityTableName %>"
+                                 referencedTableName="<%= relationship.otherEntity.entityTableName %>"
         <%_ if (onDelete) { _%>
                                  onDelete="<%= onDelete %>"
         <%_ } _%>

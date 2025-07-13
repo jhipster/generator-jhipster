@@ -23,18 +23,10 @@ import static <%= packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
 <%_
 var filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
-let mapsIdEntity;
-let mapsIdEntityInstance;
-let mapsIdRepoInstance;
-if (isUsingMapsId) {
-  mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
-  mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
-  mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
-}
 const hasUserRepository =
   (requiresDeleteAllUsers && hasRelationshipWithBuiltInUser) ||
   filterTestableRelationships.some(rel => rel.otherEntity.builtInUser) ||
-  (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdEntity === 'User');
+  (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized === 'User');
 
 let callBlock = '';
 let callListBlock = '';
@@ -73,20 +65,19 @@ import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 var imported = [];
 for (relationship of relationships) { // import entities in required relationships
   const relationshipValidate = relationship.relationshipValidate;
-  const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
   const isUsingMapsIdL1 = relationship.id;
-  if (imported.indexOf(otherEntityNameCapitalized) === -1) {
+  if (imported.indexOf(relationship.otherEntity.entityNameCapitalized) === -1) {
     if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
 import <%= entityAbsolutePackage %>.domain.<%= relationship.otherEntity.persistClass %>;
 <%_
-          imported.push(otherEntityNameCapitalized);
+          imported.push(relationship.otherEntity.entityNameCapitalized);
     }
   }
 } _%>
 <%_
 if(jpaMetamodelFiltering && reactive) {
   filterTestableRelationships.forEach(relationship => { _%>
-import <%= entityAbsolutePackage %>.repository.<%= relationship.otherEntityNameCapitalized %>Repository;
+import <%= entityAbsolutePackage %>.repository.<%= relationship.otherEntity.entityNameCapitalized %>Repository;
 <%_ });
  } _%>
 <%_ if (hasUserRepository) { _%>
@@ -97,7 +88,7 @@ import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
 import <%= packageName %>.repository.EntityManager;
 <%_ } _%>
 <%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo)) { _%>
-import <%= entityAbsolutePackage %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+import <%= entityAbsolutePackage %>.repository.<%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 import <%= entityAbsolutePackage %>.repository.search.<%= entityClass %>SearchRepository;
@@ -474,9 +465,9 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 
     @Autowired
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
-<%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdEntity !== 'User') { _%>
+<%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized !== 'User') { _%>
     @Autowired
-    private <%= mapsIdEntity %>Repository <%= mapsIdRepoInstance %>;
+    private <%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %>Repository <%= mapsIdAssoc?.otherEntity?.entityInstance %>Repository;
 <%_ } _%>
 <%_ if (hasUserRepository) { _%>
 
@@ -574,7 +565,6 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     const otherEntity = relationship.otherEntity;
     const relationshipValidate = relationship.relationshipValidate;
     const otherEntityName = relationship.otherEntityName;
-    const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
     const relationshipNameCapitalizedPlural = relationship.relationshipNameCapitalizedPlural;
     const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
     const mapsIdUse = relationship.id;
@@ -582,7 +572,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
         // Add required entity
       <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
         <%_ if (relationship.otherEntityUser) { /* TODO or other entity has no unique fields */ _%>
-        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%= createEntityPostfix %>;
+        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %> = <%= createEntityPrefix %><%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%= createEntityPostfix %>;
           <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%= otherEntityName %>);
         em.flush();
@@ -596,7 +586,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
             <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
         if (TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).isEmpty()) {
             <%_ } _%>
-            <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%= createEntityPostfix %>;
+            <%= otherEntityName %> = <%= createEntityPrefix %><%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%= createEntityPostfix %>;
             em.persist(<%= otherEntityName %>);
             em.flush();
             <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
@@ -605,7 +595,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
         }
             <%_ } _%>
           <%_ } else { _%>
-        <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql' && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%= createEntityPostfix %>;
+        <%= otherEntityName %> = <%= createEntityPrefix %><%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql' && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%= createEntityPostfix %>;
           <%_ } _%>
           <%_ if (databaseTypeMongodb) { _%>
         <%= otherEntityName %>.set<%= primaryKey.nameCapitalized %>("fixed-id-for-tests");
@@ -640,7 +630,7 @@ _%>
         }
   <%_ relationships.forEach(function(rel) {
     if ((rel.relationshipValidate || rel.id) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
-        <%= rel.otherEntityNameCapitalized %>ResourceIT.deleteEntities(em);
+        <%= rel.otherEntity.entityNameCapitalized %>ResourceIT.deleteEntities(em);
     <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName);
     }
   }); _%>
@@ -811,12 +801,11 @@ _%>
     <%_ for (relationship of relationships) {
       const otherEntity = relationship.otherEntity;
       const otherEntityName = relationship.otherEntityName;
-      const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
       const mapsIdUse = relationship.id;
       if (mapsIdUse) { _%>
         // Add a new parent entity
         <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
-        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (!relationship.otherEntityUser) { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
+        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %> = <%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (!relationship.otherEntityUser) { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
           <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%= otherEntityName %>);
         em.flush();
@@ -834,8 +823,8 @@ _%>
         em.detach(updated<%= persistClass %>);
     <%_ } _%>
 
-        // Update the <%= mapsIdEntity %> with new association value
-        updated<%= persistClass %>.set<%= mapsIdEntity %>(<%= alreadyGeneratedEntities.pop() %>);
+        // Update the <%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %> with new association value
+        updated<%= persistClass %>.set<%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %>(<%= alreadyGeneratedEntities.pop() %>);
     <%_ if (dtoMapstruct) { _%>
         <%= dtoClass %> updated<%= dtoClass %> = <%= entityInstance %>Mapper.toDto(updated<%= persistClass %>);
         assertThat(updated<%= dtoClass %>).isNotNull();
@@ -865,7 +854,7 @@ _%>
          * Validate the id for MapsId, the ids must be same
          * Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
          * Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
-         * assertThat(test<%= entityClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(test<%= entityClass %>.get<%= mapsIdEntity %>().get<%= primaryKey.nameCapitalized %>());
+         * assertThat(test<%= entityClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(test<%= entityClass %>.get<%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %>().get<%= primaryKey.nameCapitalized %>());
          */
     <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
@@ -1260,12 +1249,12 @@ _%>
         <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %>;
         if (TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).isEmpty()) {
             <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
-            <%= relationship.relationshipFieldName %> = <%= createEntityPrefix %><%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
+            <%= relationship.relationshipFieldName %> = <%= createEntityPrefix %><%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
         } else {
             <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).get(0);
         }
       <%_ } else { _%>
-        <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
+        <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
       <%_ } _%>
       <%_ if(reactive) { _%>
         <%= relationship.otherEntity.persistInstance %>Repository.<%= saveMethod %>(<%= relationship.relationshipFieldName %>)<%= callBlock %>;

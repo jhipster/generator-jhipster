@@ -22,8 +22,8 @@ import pluralize from 'pluralize';
 import type BaseGenerator from '../../base-core/index.js';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.js';
 import { parseChangelog } from '../../base/support/timestamp.js';
-import { getMicroserviceAppName, mutateData, stringHashCode, upperFirstCamelCase } from '../../../lib/utils/index.js';
-import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/support/index.js';
+import { getMicroserviceAppName, mutateData, normalizePathEnd, stringHashCode, upperFirstCamelCase } from '../../../lib/utils/index.js';
+import { getTypescriptKeyType } from '../../client/support/index.js';
 import { applicationTypes, databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
@@ -202,11 +202,8 @@ export default function prepareEntity(entityWithConfig: CommonEntity, generator,
     entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
   });
 
-  entityWithConfig.entityFolderName = entityWithConfig.clientRootFolder
-    ? `${entityWithConfig.clientRootFolder}/${entityWithConfig.entityFileName}`
-    : entityWithConfig.entityFileName;
+  entityWithConfig.entityFolderName = `${normalizePathEnd(entityWithConfig.clientRootFolder)}${entityWithConfig.entityFileName}`;
   entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
-  entityWithConfig.entityParentPathAddition = getEntityParentPathAddition(entityWithConfig.clientRootFolder);
   entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
   entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
 
@@ -653,7 +650,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.reactiveRegularEagerRelations = entity.reactiveEagerRelations.filter(rel => rel.id !== true);
 }
 
-export function preparePostEntitiesCommonDerivedProperties(entities) {
+export function preparePostEntitiesCommonDerivedProperties(entities: any[]) {
   for (const entity of entities.filter(entity => !entity.dtoReferences)) {
     entity.dtoReferences = [
       ...entity.fields.map(field => field.reference),
@@ -676,7 +673,7 @@ export function preparePostEntitiesCommonDerivedProperties(entities) {
   }
 }
 
-export async function addFakerToEntity(entityWithConfig: any, nativeLanguage = 'en') {
+export async function addFakerToEntity(entityWithConfig: CommonEntity, nativeLanguage = 'en') {
   entityWithConfig.faker = entityWithConfig.faker || (await createFaker(nativeLanguage));
   entityWithConfig.resetFakerSeed = (suffix = '') =>
     entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));

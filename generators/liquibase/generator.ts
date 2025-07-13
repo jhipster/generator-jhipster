@@ -155,8 +155,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
 
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
-      prepareEntityRelationship({ entity, relationship }) {
-        prepareRelationshipForLiquibase(entity, relationship);
+      prepareEntityRelationship({ application, entity, relationship }) {
+        prepareRelationshipForLiquibase({ application, entity, relationship });
         relationship.onDelete = checkAndReturnRelationshipOnValue(relationship.options?.onDelete, this);
         relationship.onUpdate = checkAndReturnRelationshipOnValue(relationship.options?.onUpdate, this);
       },
@@ -210,8 +210,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             // Prepare them.
             const { previousEntity: entity } = databaseChangelog;
             for (const relationship of entity.relationships ?? []) {
-              prepareRelationship(entity, relationship, this, true);
-              prepareRelationshipForLiquibase(entity, relationship);
+              prepareRelationship.call(this, entity, relationship, true);
+              prepareRelationshipForLiquibase({ application, entity, relationship });
             }
             postPrepareEntity.call(this, { application, entity } as any);
           }

@@ -44,7 +44,6 @@ export interface Entity<F extends Field = Field, R extends BaseApplicationRelati
   entityFileName: string;
   entityFolderName: string;
   entityModelFileName: string;
-  entityParentPathAddition: string;
   entityPluralFileName: string;
   entityServiceFileName: string;
 

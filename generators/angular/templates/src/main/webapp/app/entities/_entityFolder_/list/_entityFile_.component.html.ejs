@@ -87,7 +87,7 @@ _%>
                         </div>
                     </th>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) {
     const fieldName = "." + relationship.otherEntityField;
     const { fieldSupportsSortBy: relatedFieldSupportsSortBy } = relationship.relatedField;
@@ -143,7 +143,7 @@ _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
     <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) {
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
     const relationshipFieldName = relationship.relationshipFieldName;
     const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
     const otherEntityField = relationship.otherEntityField;
@@ -178,7 +178,7 @@ _%>
 <%_ } _%>
                     <td class="text-end">
                         <div class="btn-group">
-<%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
     <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && relationship.collection && !relationship.persistableRelationship) {
         const otherEntityTranslationKey = i18nKeyPrefix + '.' + relationship.relationshipName;
     _%>

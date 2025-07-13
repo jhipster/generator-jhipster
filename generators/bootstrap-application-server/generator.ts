@@ -201,8 +201,8 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
 
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
-      prepareRelationship({ entity, relationship }) {
-        prepareRelationship({ entity, relationship });
+      prepareRelationship({ application, entity, relationship }) {
+        prepareRelationship({ application, entity, relationship });
       },
     });
   }
