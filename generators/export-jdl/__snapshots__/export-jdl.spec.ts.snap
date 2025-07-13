@@ -32,14 +32,14 @@ exports[`generator - export-jdl exports entities to a JDL file with file argumen
   entities Country, Department, Employee, Job, JobHistory, Region, Task
 }
 
-entity Country {
+entity Country (country) {
   /**
    * The country Id
    */
   countryId Long
   countryName String
 }
-entity Department {
+entity Department (department) {
   departmentId Long
   departmentName String required
 }
@@ -60,22 +60,22 @@ entity Employee (emp) {
   salary Long min(10000) max(1000000)
   commissionPct Long
 }
-entity Job {
+entity Job (job) {
   jobId Long
   jobTitle String
   minSalary Long
   maxSalary Long
 }
-entity JobHistory {
+entity JobHistory (job_history) {
   startDate ZonedDateTime
   endDate ZonedDateTime
   language Language
 }
-entity Region {
+entity Region (region) {
   regionId Long
   regionName String
 }
-entity Task {
+entity Task (task) {
   taskId Long
   title String
   description String
@@ -150,14 +150,14 @@ exports[`generator - export-jdl exports entities to a JDL file without argument 
   entities Country, Department, Employee, Job, JobHistory, Region, Task
 }
 
-entity Country {
+entity Country (country) {
   /**
    * The country Id
    */
   countryId Long
   countryName String
 }
-entity Department {
+entity Department (department) {
   departmentId Long
   departmentName String required
 }
@@ -178,22 +178,22 @@ entity Employee (emp) {
   salary Long min(10000) max(1000000)
   commissionPct Long
 }
-entity Job {
+entity Job (job) {
   jobId Long
   jobTitle String
   minSalary Long
   maxSalary Long
 }
-entity JobHistory {
+entity JobHistory (job_history) {
   startDate ZonedDateTime
   endDate ZonedDateTime
   language Language
 }
-entity Region {
+entity Region (region) {
   regionId Long
   regionName String
 }
-entity Task {
+entity Task (task) {
   taskId Long
   title String
   description String

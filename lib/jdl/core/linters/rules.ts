@@ -22,7 +22,6 @@ import { ERROR, INFO, WARNING } from './rule-levels.js';
 
 export const rulesNames = {
   ENT_SHORTER_DECL: 'ENT_SHORTER_DECL',
-  ENT_OPTIONAL_TABLE_NAME: 'ENT_OPTIONAL_TABLE_NAME',
   ENT_DUPLICATED: 'ENT_DUPLICATED',
   FLD_OPTIONAL_COMMAS: 'FLD_OPTIONAL_COMMAS',
   REL_INDIVIDUAL_DECL: 'REL_INDIVIDUAL_DECL',
@@ -38,11 +37,6 @@ export const rules: Record<RuleNames, Rule> = {
     name: 'ShorterEntityDeclaration',
     level: INFO,
     comment: 'When an entity does not have any field, it is possible to omit the curly braces.',
-  }),
-  ENT_OPTIONAL_TABLE_NAME: new Rule({
-    name: 'OptionalEntityTableName',
-    level: WARNING,
-    comment: 'Setting custom table names is possible, but not recommended.',
   }),
   ENT_DUPLICATED: new Rule({
     name: 'DuplicatedEntityDeclaration',
