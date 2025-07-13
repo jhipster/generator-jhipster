@@ -27,7 +27,11 @@ trim_trailing_whitespace = false
     "stateCleared": "modified",
   },
   ".husky/pre-commit": {
-    "contents": "lint-staged
+    "contents": "if [ -z "$(which lint-staged)" ]; then
+    ./npmw install
+fi
+
+lint-staged
 ",
     "stateCleared": "modified",
   },

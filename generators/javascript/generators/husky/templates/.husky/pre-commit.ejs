@@ -1,1 +1,5 @@
+if [ -z "$(which lint-staged)" ]; then
+    ./npmw install
+fi
+
 lint-staged

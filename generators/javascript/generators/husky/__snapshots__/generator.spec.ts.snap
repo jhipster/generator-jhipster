@@ -5,7 +5,11 @@ exports[`generator - javascript:husky skipCommitHook(false) should call source s
 exports[`generator - javascript:husky skipCommitHook(false) should match files snapshot 1`] = `
 {
   ".husky/pre-commit": {
-    "contents": "lint-staged
+    "contents": "if [ -z "$(which lint-staged)" ]; then
+    ./npmw install
+fi
+
+lint-staged
 ",
     "stateCleared": "modified",
   },
