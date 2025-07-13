@@ -63,6 +63,8 @@ export type Field = Property &
     uniqueValue?: any[];
 
     generateFakeDataFromPattern?: () => string | undefined;
+    /** @deprecated */
+    createRandexp: () => any;
 
     generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts') => any;
 
