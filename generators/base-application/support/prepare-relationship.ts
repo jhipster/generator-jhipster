@@ -162,33 +162,5 @@ export default function prepareRelationship(
     }
   }
 
-  (relationship as any).reference = relationshipToReference(entityWithConfig, relationship);
-
   return relationship;
-}
-
-function relationshipToReference(entity, relationship, pathPrefix = []) {
-  const collection = relationship.collection;
-  const name = collection ? relationship.relationshipNamePlural : relationship.relationshipName;
-  const reference = {
-    id: relationship.id,
-    entity,
-    relationship,
-    owned: relationship.ownerSide,
-    collection,
-    doc: relationship.documentation,
-    get propertyJavadoc() {
-      return relationship.relationshipJavadoc;
-    },
-    get propertyApiDescription() {
-      return relationship.relationshipApiDescription;
-    },
-    name,
-    nameCapitalized: collection ? relationship.relationshipNameCapitalizedPlural : relationship.relationshipNameCapitalized,
-    get type() {
-      return relationship.otherEntity.primaryKey ? relationship.otherEntity.primaryKey.type : undefined;
-    },
-    path: [...pathPrefix, name],
-  };
-  return reference;
 }

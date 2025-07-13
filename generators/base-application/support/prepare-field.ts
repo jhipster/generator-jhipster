@@ -366,7 +366,6 @@ function prepareCommonFieldForTemplates(entityWithConfig: CommonEntity, field: C
   };
   field.relationshipsPath = [];
 
-  field.reference = fieldToReference(entityWithConfig, field);
   _derivedProperties(field);
   return field;
 }
@@ -390,26 +389,4 @@ export function getEnumValuesWithCustomValues(enumValues: string): { name: strin
       value: matched![2],
     };
   });
-}
-
-export function fieldToReference(entity: CommonEntity, field: CommonField, pathPrefix = []) {
-  return {
-    id: field.id,
-    entity,
-    field,
-    multiple: false,
-    owned: true,
-    doc: field.documentation,
-    get propertyJavadoc() {
-      return (field as any).fieldJavadoc;
-    },
-    get propertyApiDescription() {
-      return field.fieldApiDescription;
-    },
-    label: field.fieldNameHumanized,
-    name: field.fieldName,
-    type: field.fieldType,
-    nameCapitalized: field.fieldNameCapitalized,
-    path: [...pathPrefix, field.fieldName],
-  };
 }

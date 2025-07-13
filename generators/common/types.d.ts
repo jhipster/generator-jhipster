@@ -60,6 +60,8 @@ export interface Entity<F extends Field = Field, R extends JavascriptRelationshi
     JavascriptEntity<F, R> {
   entityApiUrl: string;
   entityApi: string;
+
+  restProperties?: (F | R)[];
 }
 
 export type Application<E extends BaseApplicationEntity = Entity> = JavascriptApplication<E> &

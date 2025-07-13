@@ -95,8 +95,6 @@ export type Field = Property &
     /** @deprecated */
     fieldTypeNumeric: boolean;
 
-    /** @deprecated */
-    reference?: any;
     relationshipsPath?: string[];
 
     fieldValidationMin?: boolean;

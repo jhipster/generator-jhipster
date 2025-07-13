@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 export * from './needles.js';
-export * from './path-utils.js';
 export * from './reserved-keywords.js';
 export * from './translate-angular.js';
 export { default as updateLanguagesTask } from './update-languages.js';
