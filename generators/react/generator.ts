@@ -20,6 +20,7 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import chalk from 'chalk';
 
 import { ClientApplicationGenerator } from '../client/generator.ts';
+import type { Entity as ClientEntity, Field as ClientField } from '../client/types.ts';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.js';
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.js';
 import {
@@ -33,14 +34,15 @@ import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files-react.js';
-import { prepareEntity } from './application/entities/index.js';
 import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.js';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 const { REACT } = clientFrameworkTypes;
 
-export default class ReactGenerator extends ClientApplicationGenerator {
+export default class ReactGenerator extends ClientApplicationGenerator<
+  ClientEntity<ClientField & { fieldValidateRulesPatternReact?: string }> & { entityReactState?: string }
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -196,7 +198,9 @@ ${comment}
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       react({ application, entity }) {
-        prepareEntity({ entity, application });
+        entity.entityReactState = application.applicationTypeMonolith
+          ? entity.entityInstance
+          : `${application.lowercaseBaseName}.${entity.entityInstance}`;
       },
     });
   }
@@ -208,7 +212,7 @@ ${comment}
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       react({ field }) {
-        (field as any).fieldValidateRulesPatternReact ??= field.fieldValidateRulesPattern?.replace(/'/g, "\\'");
+        field.fieldValidateRulesPatternReact ??= field.fieldValidateRulesPattern?.replace(/'/g, "\\'");
       },
     });
   }
