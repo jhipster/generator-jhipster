@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { lowerFirst, upperFirst } from 'lodash-es';
 import JDLObject from '../core/models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../core/models/index.js';
 import JDLField from '../core/models/jdl-field.js';
@@ -25,8 +26,6 @@ import type { JDLRelationshipModel, JDLRelationshipOptions, JDLSourceEntitySide 
 import JDLRelationship from '../core/models/jdl-relationship.js';
 import JDLUnaryOption from '../core/models/jdl-unary-option.js';
 import JDLBinaryOption from '../core/models/jdl-binary-option.js';
-
-import { lowerFirst, upperFirst } from '../core/utils/string-utils.js';
 
 import { binaryOptions, relationshipOptions, unaryOptions } from '../core/built-in-options/index.js';
 import { asJdlRelationshipType } from '../core/basic-types/relationship-types.js';

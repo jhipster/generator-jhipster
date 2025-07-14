@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
+import { lowerFirst } from 'lodash-es';
 import JDLField from '../../core/models/jdl-field.js';
 import { formatComment } from '../../core/utils/format-utils.js';
-import { lowerFirst } from '../../core/utils/string-utils.js';
 import type { ParsedJDLEntityField } from '../../core/types/parsed.js';
 
 export default { convertField };
