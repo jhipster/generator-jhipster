@@ -24,7 +24,7 @@ import { getGeneratorFolder } from '../../lib/testing/get-generator.js';
 
 const fixEnforcements = process.argv.includes('--fix-enforcements');
 
-const readDir = dirPath => {
+const readDir = (dirPath: string) => {
   const files: string[] = [];
   const dir = opendirSync(dirPath);
   let dirent = dir.readSync();

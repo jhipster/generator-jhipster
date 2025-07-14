@@ -52,7 +52,7 @@ export const createJHipsterLogger = (options: LoggerOptions & { namespace?: stri
   const customJHipsterLogger = {
     debugger: debug,
 
-    debug(msg, ...args) {
+    debug(msg: any, ...args: any[]) {
       this.debugger(msg, ...args);
     },
 
@@ -71,7 +71,7 @@ export const createJHipsterLogger = (options: LoggerOptions & { namespace?: stri
       return this;
     },
 
-    error(this: DefaultLogger, msg, error) {
+    error(this: DefaultLogger, msg: string, error: string) {
       const errorMessage = formatErrorMessageHeader(msg);
       this.console.error(...errorMessage);
       if (error) {
@@ -81,7 +81,7 @@ export const createJHipsterLogger = (options: LoggerOptions & { namespace?: stri
       process.exitCode = 1;
     },
 
-    fatal(this: any, msg, trace?) {
+    fatal(this: any, msg: string, trace?: boolean) {
       const fatalMessage = formatFatalMessageHeader(msg);
       this.console.error(...fatalMessage);
       if (trace) {

@@ -20,7 +20,7 @@ const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 
 
 const testSamples = buildClientSamples(commonConfig);
 
-const clientAdminFiles = clientSrcDir => [
+const clientAdminFiles = (clientSrcDir: string) => [
   `${clientSrcDir}app/admin/configuration/configuration.component.html`,
   `${clientSrcDir}app/admin/configuration/configuration.component.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.service.ts`,

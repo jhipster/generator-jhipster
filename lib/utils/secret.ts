@@ -39,9 +39,9 @@ export function convertSecretToBase64(secret: string) {
  * @param len the length to use for random hex, defaults to 50
  * @param reproducible generate a reproducible content
  */
-export function createBase64Secret(len?: number, reproducible?: boolean);
-export function createBase64Secret(reproducible?: boolean);
-export function createBase64Secret(len?: number | boolean, reproducible = false) {
+export function createBase64Secret(len?: number, reproducible?: boolean): string;
+export function createBase64Secret(reproducible?: boolean): string;
+export function createBase64Secret(len?: number | boolean, reproducible = false): string {
   if (typeof len === 'boolean') {
     reproducible = len;
     len = undefined;

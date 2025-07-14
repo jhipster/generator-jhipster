@@ -16,12 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Remove 'generator-' prefix from generators for compatibility with yeoman namespaces.
- * @param {string} packageName - name of the blueprint's package name
- * @returns {string} namespace of the blueprint
- */
+import type { GENERATOR_JHIPSTER } from '../../constants/jhipster.ts';
+import type { YoRcConfigValue, YoRcFileContent } from '../../constants/yeoman.ts';
 
-export function packageNameToNamespace(packageName: string): string {
-  return packageName.replace('generator-', '');
-}
+export type YoRcJHipsterContent<Content extends YoRcConfigValue = YoRcConfigValue> = YoRcFileContent<Content, typeof GENERATOR_JHIPSTER>;

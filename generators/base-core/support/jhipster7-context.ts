@@ -14,10 +14,23 @@ import { getDBCExtraOption } from '../../spring-data-relational/support/database
 import { getJdbcUrl, getR2dbcUrl } from '../../spring-data-relational/support/database-url.js';
 import { fieldTypes } from '../../../lib/jhipster/index.js';
 import { upperFirstCamelCase } from '../../../lib/utils/index.js';
+import type { ApplicationAll } from '../../../lib/types/application-properties-all.js';
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 
-export const jhipster7deprecatedProperties = {
+type Handler = { log: (msg: string) => void };
+type HandledContext = { generator: any; data: ApplicationAll };
+
+type MigrationProperty = Record<
+  string,
+  {
+    behaviorOnlyReason?: string;
+    replacement?: string;
+    get: (args: HandledContext) => any;
+  }
+>;
+
+export const jhipster7deprecatedProperties: MigrationProperty = {
   devDatabaseType: {
     behaviorOnlyReason: 'v8: devDatabaseType is only used in jhipster:spring-data-relational generator',
     get: ({ data }) => {
@@ -99,11 +112,11 @@ export const jhipster7deprecatedProperties = {
   },
   userPrimaryKeyTypeString: {
     replacement: 'user.primaryKey.typeString',
-    get: ({ data }) => data.user.primaryKey.typeString,
+    get: ({ data }) => data.user?.primaryKey?.typeString,
   },
   userPrimaryKeyTypeUUID: {
     replacement: 'user.primaryKey.typeUUID',
-    get: ({ data }) => data.user.primaryKey.typeUUID,
+    get: ({ data }) => data.user?.primaryKey?.typeUUID,
   },
   _getClientTranslation: {
     replacement: 'getWebappTranslation',
@@ -239,20 +252,20 @@ export const jhipster7deprecatedProperties = {
   },
   getJavaValueGeneratorForType: {
     replacement: 'javaValueGenerator property',
-    get: () => type => getJavaValueGeneratorForType(type).replace('longCount', 'count'),
+    get: () => (type: string) => getJavaValueGeneratorForType(type).replace('longCount', 'count'),
   },
   asEntity: {
     replacement: 'persistClass property',
     get:
       ({ data }) =>
-      name =>
+      (name: any) =>
         `${name}${data.entitySuffix}`,
   },
   asDto: {
     replacement: 'restClass property',
     get:
       ({ data }) =>
-      name =>
+      (name: any) =>
         `${name}${data.dtoSuffix}`,
   },
   upperFirstCamelCase: {
@@ -272,11 +285,11 @@ export const jhipster7deprecatedProperties = {
   },
   _generateSqlSafeName: {
     replacement: 'relationshipSqlSafeName property',
-    get: () => name => (isReservedTableName(name, 'sql') ? `e_${name}` : name),
+    get: () => (name: any) => (isReservedTableName(name, 'sql') ? `e_${name}` : name),
   },
   isFilterableType: {
     replacement: 'filterableField property',
-    get: () => fieldType => ![BYTES, BYTE_BUFFER].includes(fieldType),
+    get: () => (fieldType: string) => ![BYTES, BYTE_BUFFER].includes(fieldType as any),
   },
   getSpecificationBuilder: {
     replacement: 'field.fieldJavaBuildSpecification || primaryKey.javaBuildSpecification',
@@ -319,12 +332,12 @@ export const jhipster7deprecatedProperties = {
   },
 };
 
-const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
-const javascriptBuiltInProperties = ['parseInt', 'Boolean', 'JSON', 'Object', 'toString'];
+const ejsBuiltInProperties: (string | symbol)[] = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
+const javascriptBuiltInProperties: (string | symbol)[] = ['parseInt', 'Boolean', 'JSON', 'Object', 'toString'];
 
 const getPropertBuilder =
-  ({ log = msg => console.log(msg) } = {}) =>
-  (context, prop) => {
+  ({ log = (msg: any) => console.log(msg) } = {}) =>
+  (context: { generator: any; data: any }, prop: string | symbol) => {
     if (typeof prop === 'symbol') {
       return undefined;
     }
@@ -367,7 +380,7 @@ const getPropertBuilder =
     return undefined;
   };
 
-const createHandler = ({ log }: { log: (msg: string) => void } = { log: msg => console.log(msg) }) => {
+const createHandler = ({ log }: Handler = { log: msg => console.log(msg) }): ProxyHandler<HandledContext> => {
   const getProperty = getPropertBuilder({ log });
   return {
     ...Object.fromEntries(
@@ -383,7 +396,7 @@ const createHandler = ({ log }: { log: (msg: string) => void } = { log: msg => c
         'preventExtensions',
         'setPrototypeOf',
         'set',
-      ].map(method => [method, (...args) => console.log(`Fixme: template data called ${method}(${args?.pop() ?? ''})`)]),
+      ].map(method => [method, (...args: any[]) => console.log(`Fixme: template data called ${method}(${args?.pop() ?? ''})`)]),
     ),
     ownKeys: ({ data }) => Reflect.ownKeys(data),
     getPrototypeOf: ({ data }) => Object.getPrototypeOf(data),
@@ -406,6 +419,6 @@ const createHandler = ({ log }: { log: (msg: string) => void } = { log: msg => c
   };
 };
 
-export function createJHipster7Context(generator, data, options: { log: (msg: string) => void }) {
+export function createJHipster7Context(generator: any, data: ApplicationAll, options: { log: (msg: string) => void }) {
   return new Proxy({ generator, data }, createHandler(options));
 }

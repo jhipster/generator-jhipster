@@ -1,0 +1,31 @@
+{
+  "include": ["cli/**/*", "generators/**/*", "lib/**/*", "test/**/*", ".blueprint/**/*"],
+  "exclude": [
+    ".blueprint",
+    "cli/cli.spec.mts",
+    "cli/environment-builder.spec.mts",
+    "cli/program.mts",
+    "generators/*.*",
+    "generators/*/*.*",
+    "generators/*/generators/",
+    "generators/*/support/",
+    "generators/*/internal/",
+    "generators/*/__test-support/",
+    "generators/bootstrap*/**/*",
+    "generators/angular",
+    "generators/app",
+    "lib/command",
+    "lib/jdl",
+    "lib/jhipster/*.*",
+    "lib/testing",
+    "lib/types",
+    "cli",
+    "test"
+  ],
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "noImplicitAny": true,
+    "types": ["node"]
+  }
+}

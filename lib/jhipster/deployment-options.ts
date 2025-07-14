@@ -33,7 +33,7 @@ const { PROMETHEUS } = monitoringTypes;
 export const DeploymentTypes = {
   DOCKERCOMPOSE: 'docker-compose',
   KUBERNETES: 'kubernetes',
-  exists: (deploymentType?: any) => !!deploymentType && !!DeploymentTypes[deploymentType.toUpperCase().replace('-', '')],
+  exists: (deploymentType?: string) => !!deploymentType && !!DeploymentTypes[deploymentType.toUpperCase().replace('-', '')],
 } as const;
 
 const kubernetesServiceType = {
