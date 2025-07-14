@@ -19,10 +19,17 @@
 
 import type { JSONEntity } from '../../core/types/json-config.js';
 import type { JhipsterJSONJDLExporterWrapper } from '../../core/types/exporter.js';
-import applicationTypes from '../../../jhipster/application-types.js';
 import { readEntityFile } from '../../../utils/yo-rc.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 
-let configuration: any = {};
+let configuration: JhipsterJSONJDLExporterWrapper = {
+  entities: [],
+  application: {
+    forSeveralApplications: false,
+    name: '',
+    type: '',
+  },
+};
 
 /**
  * Exports the passed entities to JSON.
@@ -77,10 +84,8 @@ function updateEntityToGenerateWithExistingOne(applicationPath: string, entity: 
   return entity;
 }
 
-function shouldFilterOutEntitiesBasedOnMicroservice(): string {
-  return (
-    configuration.application.type && configuration.application.type === applicationTypes.MICROSERVICE && configuration.application.name
-  );
+function shouldFilterOutEntitiesBasedOnMicroservice(): boolean {
+  return configuration.application.type === APPLICATION_TYPE_MICROSERVICE && Boolean(configuration.application.name);
 }
 
 function filterOutEntitiesByMicroservice(): JSONEntity[] {

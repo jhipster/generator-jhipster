@@ -20,7 +20,7 @@
 import { expect } from 'chai';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import helpers from 'yeoman-test';
-import { applicationTypes } from '../jhipster/index.js';
+import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.js';
 import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 import exportToJDL from './converters/exporters/jdl-exporter.js';
 import {
@@ -31,8 +31,6 @@ import {
   parseFromFiles,
 } from './core/__test-support__/index.js';
 import type { ApplicationWithEntities } from './jdl-importer.js';
-
-const { MONOLITH } = applicationTypes;
 
 describe('jdl - integration tests', () => {
   beforeEach(async () => {
@@ -46,12 +44,12 @@ describe('jdl - integration tests', () => {
     beforeEach(() => {
       originalContent = parseFromConfigurationObject({
         parsedContent: parseFromFiles([getTestFile('big_sample.jdl')]),
-        applicationType: MONOLITH,
+        applicationType: APPLICATION_TYPE_MONOLITH,
       });
       exportToJDL(originalContent, 'exported.jdl');
       writtenContent = parseFromConfigurationObject({
         parsedContent: parseFromFiles(['exported.jdl']),
-        applicationType: MONOLITH,
+        applicationType: APPLICATION_TYPE_MONOLITH,
       });
     });
 
@@ -80,7 +78,7 @@ entity A
       beforeEach(() => {
         const jdlObject = parseFromConfigurationObject({
           parsedContent: parseFromContent(jdl),
-          applicationType: MONOLITH,
+          applicationType: APPLICATION_TYPE_MONOLITH,
         });
         result = convertWithoutApplication(jdlObject, applicationName);
         convertedJdl = jdlObject.toString();
@@ -137,7 +135,7 @@ relationship ManyToOne {
         result = convertWithoutApplication(
           parseFromConfigurationObject({
             parsedContent: parseFromContent(jdl),
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
           }),
           applicationName,
         );
@@ -220,7 +218,7 @@ relationship ManyToOne {
       beforeEach(() => {
         const jdlObject = parseFromConfigurationObject({
           parsedContent: parseFromContent(jdl),
-          applicationType: MONOLITH,
+          applicationType: APPLICATION_TYPE_MONOLITH,
         });
         result = convertWithoutApplication(jdlObject, applicationName);
         convertedJdl = jdlObject.toString();
@@ -301,7 +299,7 @@ relationship ManyToOne {
         result = convertWithoutApplication(
           parseFromConfigurationObject({
             parsedContent: parseFromContent(jdl),
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
           }),
           applicationName,
         );

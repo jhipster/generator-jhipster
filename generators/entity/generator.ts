@@ -25,9 +25,10 @@ import { upperFirst } from 'lodash-es';
 import type { Storage } from 'yeoman-generator';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { applicationTypes, reservedKeywords } from '../../lib/jhipster/index.js';
+import { reservedKeywords } from '../../lib/jhipster/index.js';
 import { GENERATOR_ENTITIES } from '../generator-list.js';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import {
   askForDTO,
   askForFields,
@@ -48,7 +49,6 @@ import type {
   Options as EntityOptions,
 } from './types.js';
 
-const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { isReservedClassName } = reservedKeywords;
 
 export default class EntityGenerator extends BaseApplicationGenerator<
@@ -176,12 +176,12 @@ export default class EntityGenerator extends BaseApplicationGenerator<
       setupMicroServiceEntity({ application }) {
         const context = this.entityData;
 
-        if (application.applicationType === MICROSERVICE) {
+        if (application.applicationType === APPLICATION_TYPE_MICROSERVICE) {
           context.microserviceName = this.entityConfig.microserviceName = this.jhipsterConfig.baseName!;
           if (!this.entityConfig.clientRootFolder) {
             context.clientRootFolder = this.entityConfig.clientRootFolder = this.entityConfig.microserviceName;
           }
-        } else if (application.applicationType === GATEWAY) {
+        } else if (application.applicationType === APPLICATION_TYPE_GATEWAY) {
           // If microservicePath is set we are loading the entity from the microservice side.
           context.useMicroserviceJson = !!this.entityConfig.microservicePath;
           if (context.useMicroserviceJson) {
@@ -226,7 +226,7 @@ The entity ${context.name} is being updated.
       bootstrapConfig({ application }) {
         const context = this.entityData;
         const entityName = context.name;
-        if ([MICROSERVICE, GATEWAY].includes(application.applicationType)) {
+        if ([APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_GATEWAY].includes(application.applicationType!)) {
           if (this.entityConfig.databaseType === undefined) {
             this.entityConfig.databaseType = context.databaseType!;
           }

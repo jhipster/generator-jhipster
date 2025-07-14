@@ -19,6 +19,7 @@
 import { uniqBy } from 'lodash-es';
 import { applicationOptions } from '../jhipster/index.js';
 import { readCurrentPathYoRcFile } from '../utils/yo-rc.js';
+import type { ApplicationType } from '../core/application-types.ts';
 import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 import { convert } from './converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
@@ -45,11 +46,11 @@ const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the gen
 
 type JDLApplicationConfiguration = {
   applicationName?: string;
-  applicationType?: string;
+  applicationType?: ApplicationType;
   application?: {
     [GENERATOR_JHIPSTER]: {
       baseName?: string;
-      applicationType?: string;
+      applicationType?: ApplicationType;
     };
   };
 };

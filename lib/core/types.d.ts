@@ -16,18 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-const APPLICATION_TYPE_MONOLITH = 'monolith';
-const APPLICATION_TYPE_MICROSERVICE = 'microservice';
-const APPLICATION_TYPE_GATEWAY = 'gateway';
-
-export { APPLICATION_TYPE_MONOLITH, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_GATEWAY };
-
-/** @deprecated */
-const applicationTypes: any = {
-  MONOLITH: APPLICATION_TYPE_MONOLITH,
-  MICROSERVICE: APPLICATION_TYPE_MICROSERVICE,
-  GATEWAY: APPLICATION_TYPE_GATEWAY,
-};
-
-export default applicationTypes;
+export type JHipsterNamedChoice = { value: string; name: string };

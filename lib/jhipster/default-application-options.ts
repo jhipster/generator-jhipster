@@ -18,7 +18,7 @@
  */
 
 import type { ConfigAll } from '../types/application-config-all.js';
-import applicationTypes from './application-types.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';
 import applicationOptions from './application-options.js';
@@ -27,7 +27,6 @@ import serviceDiscoveryTypes from './service-discovery-types.js';
 import clientFrameworkTypes from './client-framework-types.js';
 import buildToolTypes from './build-tool-types.js';
 
-const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 const { CONSUL } = serviceDiscoveryTypes;
 const { SQL, POSTGRESQL } = databaseTypes;
 const { OptionNames, OptionValues } = applicationOptions;
@@ -92,10 +91,10 @@ const commonDefaultOptions: ApplicationDefaults = {
 
 export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}) {
   const applicationType = customOptions.applicationType;
-  if (applicationType === GATEWAY) {
+  if (applicationType === APPLICATION_TYPE_GATEWAY) {
     return getConfigForGatewayApplication(customOptions);
   }
-  if (applicationType === MICROSERVICE) {
+  if (applicationType === APPLICATION_TYPE_MICROSERVICE) {
     return getConfigForMicroserviceApplication(customOptions);
   }
   return getConfigForMonolithApplication(customOptions);
@@ -215,7 +214,7 @@ export function getServerConfigForMonolithApplication(customOptions: Application
   };
   return {
     ...options,
-    [APPLICATION_TYPE]: MONOLITH,
+    [APPLICATION_TYPE]: APPLICATION_TYPE_MONOLITH,
   };
 }
 
@@ -245,7 +244,7 @@ export function getServerConfigForGatewayApplication(customOptions: ApplicationD
   return {
     [REACTIVE]: true,
     ...options,
-    [APPLICATION_TYPE]: GATEWAY,
+    [APPLICATION_TYPE]: APPLICATION_TYPE_GATEWAY,
   };
 }
 
@@ -275,7 +274,7 @@ export function getServerConfigForMicroserviceApplication(customOptions: Applica
   options[WITH_ADMIN_UI] = false;
   return {
     ...options,
-    [APPLICATION_TYPE]: MICROSERVICE,
+    [APPLICATION_TYPE]: APPLICATION_TYPE_MICROSERVICE,
   };
 }
 

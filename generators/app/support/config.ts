@@ -1,11 +1,10 @@
 import { upperFirst } from 'lodash-es';
-import { applicationTypes, authenticationTypes, databaseTypes } from '../../../lib/jhipster/index.js';
-import { mutateData } from '../../../lib/utils/index.js';
+import { authenticationTypes, databaseTypes } from '../../../lib/jhipster/index.js';
 import { loadDerivedConfig } from '../../base-core/internal/index.js';
 import serverCommand from '../../server/command.js';
 import type { Application as CommonApplication } from '../../common/types.d.ts';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MONOLITH } from '../../../lib/core/application-types.ts';
 
-const { GATEWAY, MONOLITH } = applicationTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { NO: NO_DATABASE } = databaseTypes;
 
@@ -38,7 +37,8 @@ export const loadDerivedAppConfig = ({ application }: { application: CommonAppli
   application.authenticationTypeJwt = application.authenticationType === JWT;
   application.authenticationTypeOauth2 = application.authenticationType === OAUTH2;
 
-  application.generateAuthenticationApi = application.applicationType === MONOLITH || application.applicationType === GATEWAY;
+  application.generateAuthenticationApi =
+    application.applicationType === APPLICATION_TYPE_MONOLITH || application.applicationType === APPLICATION_TYPE_GATEWAY;
   const authenticationApiWithUserManagement = application.authenticationType !== OAUTH2 && application.generateAuthenticationApi;
   application.generateUserManagement =
     !application.skipUserManagement && application.databaseType !== NO_DATABASE && authenticationApiWithUserManagement;

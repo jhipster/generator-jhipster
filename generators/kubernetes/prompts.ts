@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { applicationTypes, databaseTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
+import { APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
+import { databaseTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
 import { asPromptingTask } from '../base-application/support/index.js';
 import { asPromptingWorkspacesTask } from '../base-workspaces/support/task-type-inference.ts';
 import type { BaseKubernetesGenerator } from './generator.ts';
 
-const { MONOLITH } = applicationTypes;
 const { IngressTypes, ServiceTypes } = kubernetesPlatformTypes;
 
 const NO_DATABASE = databaseTypes.NO;
@@ -171,7 +171,7 @@ export const askForIngressDomain = asPromptingTask(async function askForIngressD
 
 export const askForIstioSupport = asPromptingTask(async function askForIstioSupport(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
-  if (this.jhipsterConfigWithDefaults.deploymentApplicationType === MONOLITH) {
+  if (this.jhipsterConfigWithDefaults.deploymentApplicationType === APPLICATION_TYPE_MONOLITH) {
     this.jhipsterConfigWithDefaults.istio = false;
     return;
   }

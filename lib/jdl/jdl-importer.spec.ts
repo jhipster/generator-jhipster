@@ -22,11 +22,10 @@ import { rmSync } from 'fs';
 import { after, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
-import { applicationTypes, clientFrameworkTypes, databaseTypes } from '../jhipster/index.js';
+import { clientFrameworkTypes, databaseTypes } from '../jhipster/index.js';
 import { readYoRcFile } from '../utils/yo-rc.js';
+import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.js';
 import { createImporterFromContent, createImporterFromFiles, getTestFile } from './core/__test-support__/index.js';
-
-const { MONOLITH } = applicationTypes;
 
 const { NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
 
@@ -68,7 +67,7 @@ relationship OneToMany {
       before(() => {
         const importer = createImporterFromFiles([getTestFile('big_sample.jdl')], {
           applicationName: 'MyApp',
-          applicationType: MONOLITH,
+          applicationType: APPLICATION_TYPE_MONOLITH,
           databaseType: databaseTypes.SQL,
         });
         returned = importer.import();
@@ -269,7 +268,7 @@ relationship OneToOne {
       before(() => {
         importer = createImporterFromFiles([getTestFile('simple.jdl')], {
           applicationName: 'MyApp',
-          applicationType: MONOLITH,
+          applicationType: APPLICATION_TYPE_MONOLITH,
           databaseType: databaseTypes.NO,
         });
       });
@@ -312,7 +311,7 @@ relationship OneToOne {
       before(() => {
         const importer = createImporterFromFiles([getTestFile('regex_validation.jdl')], {
           applicationName: 'MyApp',
-          applicationType: MONOLITH,
+          applicationType: APPLICATION_TYPE_MONOLITH,
           databaseType: databaseTypes.SQL,
         });
         returned = importer.import();
@@ -328,7 +327,7 @@ relationship OneToOne {
       before(() => {
         const importer = createImporterFromFiles([getTestFile('pattern_validation_with_quote.jdl')], {
           applicationName: 'MyApp',
-          applicationType: MONOLITH,
+          applicationType: APPLICATION_TYPE_MONOLITH,
           databaseType: databaseTypes.SQL,
         });
         returned = importer.import();

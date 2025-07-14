@@ -7,8 +7,6 @@ export {
   /** @deprecated */
   fieldTypes,
   /** @deprecated */
-  applicationTypes,
-  /** @deprecated */
   databaseTypes,
   /** @deprecated */
   applicationOptions,

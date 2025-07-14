@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { ApplicationType } from '../../../core/application-types.ts';
 import type { RelationshipType } from '../basic-types/relationships.js';
 
 export type ParsedJDLAnnotation = {
@@ -118,6 +119,6 @@ export type ParsedJDLRoot = {
   parsedContent: ParsedJDLApplications;
   document?: ParsedJDLApplications; // deprecated
   entities?: ParsedJDLEntity[];
-  applicationType?: string;
+  applicationType?: ApplicationType;
   applicationName?: string;
 };

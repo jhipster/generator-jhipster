@@ -19,10 +19,8 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { applicationTypes } from '../../core/built-in-options/index.js';
 import { convertApplications, createJDLApplication } from '../../core/__test-support__/index.js';
-
-const { MONOLITH } = applicationTypes;
+import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
 
 describe('jdl - ApplicationConverter', () => {
   describe('convertApplications', () => {
@@ -68,7 +66,7 @@ describe('jdl - ApplicationConverter', () => {
             convertedApplication = convertApplications([
               {
                 config: {
-                  applicationType: MONOLITH,
+                  applicationType: APPLICATION_TYPE_MONOLITH,
                   baseName: 'mono',
                   creationTimestamp: 42,
                 },
@@ -79,7 +77,7 @@ describe('jdl - ApplicationConverter', () => {
             ]);
             expectedApplication = [
               createJDLApplication({
-                applicationType: MONOLITH,
+                applicationType: APPLICATION_TYPE_MONOLITH,
                 baseName: 'mono',
                 creationTimestamp: 42,
               }),
@@ -99,7 +97,7 @@ describe('jdl - ApplicationConverter', () => {
               convertedApplication = convertApplications([
                 {
                   config: {
-                    applicationType: MONOLITH,
+                    applicationType: APPLICATION_TYPE_MONOLITH,
                     baseName: 'mono',
                     blueprints: ['generator-jhipster-nodejs', 'vuejs', 'generator-jhipster-imaginary-blueprint', 'super-framework'],
                   },
@@ -110,7 +108,7 @@ describe('jdl - ApplicationConverter', () => {
               ]);
               expectedApplication = [
                 createJDLApplication({
-                  applicationType: MONOLITH,
+                  applicationType: APPLICATION_TYPE_MONOLITH,
                   baseName: 'mono',
                   blueprints: ['generator-jhipster-nodejs', 'vuejs', 'generator-jhipster-imaginary-blueprint', 'super-framework'],
                 }),

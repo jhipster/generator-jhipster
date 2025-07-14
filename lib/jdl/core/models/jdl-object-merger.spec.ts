@@ -20,7 +20,7 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { relationshipTypes } from '../basic-types/index.js';
-import { applicationTypes, fieldTypes, unaryOptions } from '../built-in-options/index.js';
+import { fieldTypes, unaryOptions } from '../built-in-options/index.js';
 import JDLObject from '../models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';
@@ -28,8 +28,7 @@ import JDLRelationship from '../models/jdl-relationship.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import mergeJDLObjects from '../models/jdl-object-merger.js';
 import { createJDLApplication } from '.././__test-support__/index.js';
-
-const { MONOLITH } = applicationTypes;
+import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
 
 describe('jdl - JDLObjectMerger', () => {
   describe('mergeJDLObjects', () => {
@@ -90,7 +89,7 @@ describe('jdl - JDLObjectMerger', () => {
 function createFirstJDLObjectForTheMergeTest() {
   const jdlObject = new JDLObject();
   const application = createJDLApplication({
-    applicationType: MONOLITH,
+    applicationType: APPLICATION_TYPE_MONOLITH,
     baseName: 'anApp',
     databaseType: 'sql',
   });
@@ -131,7 +130,7 @@ function createFirstJDLObjectForTheMergeTest() {
 function createSecondJDLObjectForTheMergeTest() {
   const jdlObject = new JDLObject();
   const application = createJDLApplication({
-    applicationType: MONOLITH,
+    applicationType: APPLICATION_TYPE_MONOLITH,
     baseName: 'anotherApp',
     databaseType: 'sql',
   });

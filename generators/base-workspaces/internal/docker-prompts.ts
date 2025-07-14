@@ -20,12 +20,12 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import chalk from 'chalk';
-import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../../lib/jhipster/index.js';
+import { monitoringTypes, serviceDiscoveryTypes } from '../../../lib/jhipster/index.js';
 import { asPromptingTask } from '../../base-application/support/index.js';
 import { asPromptingWorkspacesTask } from '../support/task-type-inference.ts';
 import type { BaseKubernetesGenerator } from '../../kubernetes/generator.ts';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../lib/core/application-types.ts';
 
-const { MICROSERVICE, MONOLITH, GATEWAY } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;
 const monitoring = monitoringTypes;
 
@@ -46,15 +46,15 @@ export const askForApplicationType = asPromptingTask(async function askForApplic
         message: 'Which *type* of application would you like to deploy?',
         choices: [
           {
-            value: MONOLITH,
+            value: APPLICATION_TYPE_MONOLITH,
             name: 'Monolithic application',
           },
           {
-            value: MICROSERVICE,
+            value: APPLICATION_TYPE_MICROSERVICE,
             name: 'Microservice application',
           },
         ],
-        default: MONOLITH,
+        default: APPLICATION_TYPE_MONOLITH,
       },
     ],
     this.config,
@@ -66,7 +66,7 @@ export const askForApplicationType = asPromptingTask(async function askForApplic
  */
 export const askForGatewayType = asPromptingTask(async function askForGatewayType(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
-  if (this.jhipsterConfigWithDefaults.deploymentApplicationType !== MICROSERVICE) return;
+  if (this.jhipsterConfigWithDefaults.deploymentApplicationType !== APPLICATION_TYPE_MICROSERVICE) return;
 
   await this.prompt(
     [
@@ -95,7 +95,7 @@ export const askForPath = asPromptingTask(async function askForPath(this: BaseKu
 
   const deploymentApplicationType = this.jhipsterConfigWithDefaults.deploymentApplicationType;
   let messageAskForPath;
-  if (deploymentApplicationType === MONOLITH) {
+  if (deploymentApplicationType === APPLICATION_TYPE_MONOLITH) {
     messageAskForPath = 'Enter the root directory where your applications are located';
   } else {
     messageAskForPath = 'Enter the root directory where your gateway(s) and microservices are located';
@@ -115,7 +115,7 @@ export const askForPath = asPromptingTask(async function askForPath(this: BaseKu
               const appsFolders = getAppFolders.call(this, path, deploymentApplicationType);
 
               if (appsFolders.length === 0) {
-                return deploymentApplicationType === MONOLITH
+                return deploymentApplicationType === APPLICATION_TYPE_MONOLITH
                   ? `No monolith found in ${path}`
                   : `No microservice or gateway found in ${path}`;
               }
@@ -438,8 +438,9 @@ export function getAppFolders(this: BaseKubernetesGenerator, directory: string, 
             if (
               fileData['generator-jhipster'].baseName !== undefined &&
               (deploymentApplicationType === undefined ||
-                deploymentApplicationType === (fileData['generator-jhipster'].applicationType ?? MONOLITH) ||
-                (deploymentApplicationType === MICROSERVICE && fileData['generator-jhipster'].applicationType === GATEWAY))
+                deploymentApplicationType === (fileData['generator-jhipster'].applicationType ?? APPLICATION_TYPE_MONOLITH) ||
+                (deploymentApplicationType === APPLICATION_TYPE_MICROSERVICE &&
+                  fileData['generator-jhipster'].applicationType === APPLICATION_TYPE_GATEWAY))
             ) {
               appsFolders.push(/([^/]*)\/*$/.exec(file)![1]);
             }

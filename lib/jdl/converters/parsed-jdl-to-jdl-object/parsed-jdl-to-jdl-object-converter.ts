@@ -34,7 +34,7 @@ import type {
   ParsedJDLEntityField,
   ParsedJDLRoot,
 } from '../../core/types/parsed.js';
-import { applicationTypes } from '../../../jhipster/index.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import { convertApplications } from './application-converter.js';
 import { convertEntities } from './entity-converter.js';
 import { convertEnums } from './enum-converter.js';
@@ -170,7 +170,7 @@ function convertAnnotationsToOptions(
 }
 
 function fillOptions(): void {
-  if (configuration.applicationType === applicationTypes.MICROSERVICE && !parsedContent.options.microservice) {
+  if (configuration.applicationType === APPLICATION_TYPE_MICROSERVICE && !parsedContent.options.microservice) {
     globallyAddMicroserviceOption(configuration.applicationName!);
   }
   fillUnaryAndBinaryOptions();
@@ -189,7 +189,7 @@ function globallyAddMicroserviceOption(applicationName: string): void {
 
 function fillUnaryAndBinaryOptions(): void {
   // TODO: move it to another file? it may not be the parser's responsibility to do it
-  if (configuration.applicationType === applicationTypes.MICROSERVICE) {
+  if (configuration.applicationType === APPLICATION_TYPE_MICROSERVICE) {
     jdlObject.addOption(
       new JDLBinaryOption({
         name: binaryOptions.Options.CLIENT_ROOT_FOLDER,

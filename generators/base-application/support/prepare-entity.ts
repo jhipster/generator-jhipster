@@ -24,7 +24,7 @@ import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/in
 import { parseChangelog } from '../../base/support/timestamp.js';
 import { getMicroserviceAppName, mutateData, normalizePathEnd, stringHashCode, upperFirstCamelCase } from '../../../lib/utils/index.js';
 import { getTypescriptKeyType } from '../../client/support/index.js';
-import { applicationTypes, databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
+import { databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
 
 import type { PrimaryKey } from '../types.js';
@@ -35,11 +35,11 @@ import type { Config as SpringDataRelationalConfig } from '../../spring-data-rel
 import type { Application as CommonApplication, Entity as CommonEntity } from '../../common/types.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../../lib/core/application-types.ts';
 import { createFaker } from './faker.js';
 import { fieldIsEnum } from './field-utils.js';
 
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
-const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { CommonDBTypes } = fieldTypes;
 
 const { BOOLEAN, LONG, STRING, UUID, INTEGER } = CommonDBTypes;
@@ -168,7 +168,7 @@ export default function prepareEntity(entityWithConfig: CommonEntity, generator,
 
   entityWithConfig.useMicroserviceJson = entityWithConfig.useMicroserviceJson || entityWithConfig.microserviceName !== undefined;
   entityWithConfig.microserviceAppName = '';
-  if (generator.jhipsterConfig.applicationType === GATEWAY && entityWithConfig.useMicroserviceJson) {
+  if (generator.jhipsterConfig.applicationType === APPLICATION_TYPE_GATEWAY && entityWithConfig.useMicroserviceJson) {
     if (!entityWithConfig.microserviceName) {
       throw new Error('Microservice name for the entity is not found. Entity cannot be generated!');
     }
@@ -500,7 +500,7 @@ export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntit
     entitySuffix: config.entitySuffix,
     dtoSuffix: config.dtoSuffix,
     packageName: config.packageName,
-    microserviceName: ({ builtIn }) => (!builtIn && config.applicationType === MICROSERVICE ? config.baseName : undefined),
+    microserviceName: ({ builtIn }) => (!builtIn && config.applicationType === APPLICATION_TYPE_MICROSERVICE ? config.baseName : undefined),
   } as any);
   if ((entity as any).searchEngine === true && (!entity.microserviceName || entity.microserviceName === config.baseName)) {
     // If the entity belongs to this application and searchEngine is true.

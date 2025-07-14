@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { applicationTypes, authenticationTypes, monitoringTypes } from '../../lib/jhipster/index.js';
+import { authenticationTypes, monitoringTypes } from '../../lib/jhipster/index.js';
 import { asWritingWorkspacesTask } from '../base-workspaces/support/task-type-inference.js';
 import { asWriteFilesSection } from '../base-application/support/index.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 
 const { PROMETHEUS } = monitoringTypes;
-const { MICROSERVICE } = applicationTypes;
 const { OAUTH2 } = authenticationTypes;
 
 export const files = asWriteFilesSection({
@@ -38,7 +38,7 @@ export const files = asWriteFilesSection({
   ],
   keycloak: [
     {
-      condition: deployment => deployment.authenticationType === OAUTH2 && deployment.applicationType !== MICROSERVICE,
+      condition: deployment => deployment.authenticationType === OAUTH2 && deployment.applicationType !== APPLICATION_TYPE_MICROSERVICE,
       templates: ['realm-config/keycloak-health-check.sh', 'realm-config/jhipster-realm.json'],
     },
   ],

@@ -22,12 +22,13 @@ import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { binaryOptions, relationshipOptions, unaryOptions } from '../core/built-in-options/index.js';
 import { getTestFile } from '../core/__test-support__/index.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../core/application-types.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 
 const {
-  Options: { DTO, SEARCH, PAGINATION, MICROSERVICE, ANGULAR_SUFFIX, SERVICE },
+  Options: { DTO, SEARCH, PAGINATION, ANGULAR_SUFFIX, SERVICE },
   Values: {
     dto: { MAPSTRUCT },
     pagination,
@@ -117,8 +118,10 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           expect(
             jdlObject
               .getOptions()
-              .filter(option => option.name === MICROSERVICE && option.value === 'mymicroservice' && option.entityNames.has('Employee'))
-              .length,
+              .filter(
+                option =>
+                  option.name === APPLICATION_TYPE_MICROSERVICE && option.value === 'mymicroservice' && option.entityNames.has('Employee'),
+              ).length,
           ).to.equal(1);
           expect(
             jdlObject

@@ -21,13 +21,12 @@ import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import helpers from 'yeoman-test';
 import exportEntities from '../exporters/jhipster-entity-exporter.js';
-import { applicationTypes } from '../../core/built-in-options/index.js';
 
 import { doesDirectoryExist } from '../../core/utils/file-utils.js';
 import { entityOptions } from '../../../jhipster/index.js';
+import { APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
 
 const { MapperTypes, PaginationTypes, ServiceTypes } = entityOptions;
-const { MONOLITH, MICROSERVICE } = applicationTypes;
 const { SERVICE_CLASS } = ServiceTypes;
 const NO_DTO = MapperTypes.NO;
 const NO_PAGINATION = PaginationTypes.NO;
@@ -81,7 +80,7 @@ describe('jdl - JHipsterEntityExporter', () => {
             entities,
             application: {
               name: 'MyApp',
-              type: MONOLITH,
+              type: APPLICATION_TYPE_MONOLITH,
             },
           });
         });
@@ -98,7 +97,7 @@ describe('jdl - JHipsterEntityExporter', () => {
             entities: [],
             application: {
               name: 'MyApp',
-              type: MONOLITH,
+              type: APPLICATION_TYPE_MONOLITH,
             },
           });
         });
@@ -140,7 +139,7 @@ describe('jdl - JHipsterEntityExporter', () => {
             entities,
             application: {
               name: 'MyApp',
-              type: MONOLITH,
+              type: APPLICATION_TYPE_MONOLITH,
             },
           });
         });
@@ -271,7 +270,7 @@ describe('jdl - JHipsterEntityExporter', () => {
               entities,
               application: {
                 name: 'client',
-                type: MONOLITH,
+                type: APPLICATION_TYPE_MONOLITH,
               },
             });
           });
@@ -473,7 +472,7 @@ describe('jdl - JHipsterEntityExporter', () => {
                 entities,
                 application: {
                   name: 'client',
-                  type: MICROSERVICE,
+                  type: APPLICATION_TYPE_MICROSERVICE,
                 },
               });
             });
@@ -552,7 +551,7 @@ describe('jdl - JHipsterEntityExporter', () => {
                 entities,
                 application: {
                   name: 'client',
-                  type: MICROSERVICE,
+                  type: APPLICATION_TYPE_MICROSERVICE,
                 },
               });
             });

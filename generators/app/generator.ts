@@ -30,11 +30,9 @@ import type {
 import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_SERVER } from '../generator-list.js';
 import { getDefaultAppName } from '../project-name/support/index.js';
 
-import { applicationTypes } from '../../lib/jhipster/index.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import cleanupOldFilesTask from './cleanup.js';
 import { checkNode } from './support/index.js';
-
-const { MICROSERVICE } = applicationTypes;
 
 export default class AppGenerator extends BaseApplicationGenerator<
   CommonEntity,
@@ -82,7 +80,7 @@ export default class AppGenerator extends BaseApplicationGenerator<
   get configuring() {
     return this.asConfiguringTaskGroup({
       setup() {
-        if (this.jhipsterConfig.applicationType === MICROSERVICE) {
+        if (this.jhipsterConfig.applicationType === APPLICATION_TYPE_MICROSERVICE) {
           this.jhipsterConfig.skipUserManagement = true;
         }
       },

@@ -18,14 +18,10 @@
  */
 import chalk from 'chalk';
 import { intersection } from 'lodash-es';
-import {
-  APPLICATION_TYPE_GATEWAY,
-  APPLICATION_TYPE_MICROSERVICE,
-  clientFrameworkTypes,
-  testFrameworkTypes,
-} from '../../lib/jhipster/index.js';
+import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.js';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_COMMON } from '../generator-list.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 
 const { CYPRESS } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;

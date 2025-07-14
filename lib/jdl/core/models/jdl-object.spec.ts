@@ -20,7 +20,7 @@
 import { afterEach, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { relationshipTypes } from '../basic-types/index.js';
-import { applicationTypes, binaryOptions, unaryOptions } from '../built-in-options/index.js';
+import { binaryOptions, unaryOptions } from '../built-in-options/index.js';
 
 import JDLObject from '../models/jdl-object.js';
 import { createJDLApplication } from '.././__test-support__/index.js';
@@ -31,8 +31,7 @@ import JDLValidation from '../models/jdl-validation.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
-
-const { MONOLITH } = applicationTypes;
+import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
 
 describe('jdl - JDLObject', () => {
   describe('addApplication', () => {
@@ -54,7 +53,7 @@ describe('jdl - JDLObject', () => {
 
       before(() => {
         const object = new JDLObject();
-        originalApplication = createJDLApplication({ applicationType: MONOLITH, jhipsterVersion: '4.9.0' }, undefined);
+        originalApplication = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, jhipsterVersion: '4.9.0' }, undefined);
         const baseName = originalApplication.getConfigurationOptionValue('baseName');
         object.addApplication(originalApplication);
         addedApplication = object.applications[baseName];
@@ -82,7 +81,7 @@ describe('jdl - JDLObject', () => {
       before(() => {
         jdlObject.addApplication(
           createJDLApplication({
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
           }),
         );
       });
@@ -200,8 +199,8 @@ describe('jdl - JDLObject', () => {
 
     before(() => {
       jdlObject = new JDLObject();
-      jdlObject.addApplication(createJDLApplication({ applicationType: MONOLITH, baseName: 'A' }, undefined));
-      jdlObject.addApplication(createJDLApplication({ applicationType: MONOLITH, baseName: 'B' }, undefined));
+      jdlObject.addApplication(createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'A' }, undefined));
+      jdlObject.addApplication(createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'B' }, undefined));
     });
 
     describe('when not passing a function', () => {
@@ -988,7 +987,7 @@ describe('jdl - JDLObject', () => {
 
     before(() => {
       object = new JDLObject();
-      application = createJDLApplication({ applicationType: MONOLITH, jhipsterVersion: '4.9.0' });
+      application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, jhipsterVersion: '4.9.0' });
       object.addApplication(application);
       deployment = new JDLDeployment({
         deploymentType: 'docker-compose',
