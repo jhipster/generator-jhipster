@@ -75,7 +75,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
       });
 
       it('should return a list with no entity', () => {
-        expect(result.get('toto').length).to.equal(0);
+        expect(result.get('toto')?.length).to.equal(0);
       });
     });
     describe('when passing a JDL object with entities', () => {
@@ -99,9 +99,9 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
           jdlObject.addEntity(entityA);
           jdlObject.addEntity(userEntity);
           jdlObject.addEntity(authorityEntity);
-          const returnedMap: any = convert(jdlObject, 'toto');
-          customEntitiesAreConverted = returnedMap.get('toto').some(entity => entity.name === 'A');
-          builtInEntitiesAreConverted = returnedMap.get('toto').some(entity => entity.name === 'User' || entity.name === 'Authority');
+          const returnedMap = convert(jdlObject, 'toto');
+          customEntitiesAreConverted = returnedMap.get('toto')?.some(entity => entity.name === 'A');
+          builtInEntitiesAreConverted = returnedMap.get('toto')?.some(entity => entity.name === 'User' || entity.name === 'Authority');
         });
 
         it('should convert built-in entities', () => {
@@ -122,8 +122,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
             comment: 'The best entity',
           });
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject, 'toto');
-          convertedEntity = returnedMap.get('toto')[0];
+          const returnedMap = convert(jdlObject, 'toto');
+          convertedEntity = returnedMap.get('toto')?.[0];
         });
 
         it('should convert the entity', () => {
@@ -220,8 +220,8 @@ JSONEntity {
           ];
           jdlObject.addEntity(entityA);
           options.forEach(option => jdlObject.addOption(option));
-          const returnedMap: any = convert(jdlObject, 'toto');
-          convertedEntity = returnedMap.get('toto')[0];
+          const returnedMap = convert(jdlObject, 'toto');
+          convertedEntity = returnedMap.get('toto')?.[0];
         });
 
         it('should convert the entity', () => {
@@ -271,8 +271,8 @@ JSONEntity {
               entityNames: new Set(['A']),
             }),
           );
-          const returnedMap: any = convert(jdlObject, 'toto');
-          convertedEntity = returnedMap.get('toto')[0];
+          const returnedMap = convert(jdlObject, 'toto');
+          convertedEntity = returnedMap.get('toto')?.[0];
         });
 
         after(() => {
@@ -325,8 +325,8 @@ JSONEntity {
               entityNames: new Set(['A']),
             }),
           );
-          const returnedMap: any = convert(jdlObject, 'toto');
-          convertedEntity = returnedMap.get('toto')[0];
+          const returnedMap = convert(jdlObject, 'toto');
+          convertedEntity = returnedMap.get('toto')?.[0];
         });
 
         after(() => {
@@ -379,8 +379,8 @@ JSONEntity {
               excludedNames: new Set(['A']),
             }),
           );
-          const returnedMap: any = convert(jdlObject, 'toto');
-          convertedEntity = returnedMap.get('toto')[0];
+          const returnedMap = convert(jdlObject, 'toto');
+          convertedEntity = returnedMap.get('toto')?.[0];
         });
 
         it('should prevent the entities from being searched', () => {
@@ -427,8 +427,8 @@ JSONEntity {
             entityA.addField(firstFieldForA);
             entityA.addField(secondFieldForA);
             jdlObject.addEntity(entityA);
-            const returnedMap: any = convert(jdlObject, 'toto');
-            convertedEntity = returnedMap.get('toto')[0];
+            const returnedMap = convert(jdlObject, 'toto');
+            convertedEntity = returnedMap.get('toto')?.[0];
           });
 
           it('should convert them', () => {
@@ -492,8 +492,8 @@ JSONEntity {
             entityA.addField(blobField);
             entityA.addField(imageBlobField);
             jdlObject.addEntity(entityA);
-            const returnedMap: any = convert(jdlObject, 'toto');
-            convertedEntity = returnedMap.get('toto')[0];
+            const returnedMap = convert(jdlObject, 'toto');
+            convertedEntity = returnedMap.get('toto')?.[0];
           });
 
           it('should convert them', () => {
@@ -551,8 +551,8 @@ JSONEntity {
             jdlObject.addEnum(enumType);
             entityA.addField(enumField);
             jdlObject.addEntity(entityA);
-            const returnedMap: any = convert(jdlObject, 'toto');
-            convertedEntity = returnedMap.get('toto')[0];
+            const returnedMap = convert(jdlObject, 'toto');
+            convertedEntity = returnedMap.get('toto')?.[0];
           });
 
           it('should convert them', () => {
@@ -599,8 +599,8 @@ JSONEntity {
             });
             entityA.addField(firstFieldForA);
             jdlObject.addEntity(entityA);
-            const returnedMap: any = convert(jdlObject, 'toto');
-            convertedEntity = returnedMap.get('toto')[0];
+            const returnedMap = convert(jdlObject, 'toto');
+            convertedEntity = returnedMap.get('toto')?.[0];
           });
 
           it('should convert them', () => {
@@ -702,8 +702,8 @@ JSONEntity {
             entityA.addField(integerField);
             entityA.addField(blobField);
             jdlObject.addEntity(entityA);
-            const returnedMap: any = convert(jdlObject, 'toto');
-            convertedEntity = returnedMap.get('toto')[0];
+            const returnedMap = convert(jdlObject, 'toto');
+            convertedEntity = returnedMap.get('toto')?.[0];
           });
 
           it('should convert them', () => {
@@ -782,8 +782,8 @@ JSONEntity {
             });
             entityA.addField(firstFieldForA);
             jdlObject.addEntity(entityA);
-            const returnedMap: any = convert(jdlObject, 'toto');
-            convertedEntity = returnedMap.get('toto')[0];
+            const returnedMap = convert(jdlObject, 'toto');
+            convertedEntity = returnedMap.get('toto')?.[0];
           });
 
           it('should convert them', () => {
@@ -860,9 +860,9 @@ JSONEntity {
             jdlObject.addRelationship(manyToManyRelationship);
             jdlObject.addRelationship(oneToManyRelationship);
             jdlObject.addRelationship(manyToOneRelationship);
-            const returned: any = convert(jdlObject, 'toto');
-            relationshipsForA = returned.get('toto').find(entity => entity.name === 'A').relationships;
-            relationshipsForB = returned.get('toto').find(entity => entity.name === 'B').relationships;
+            const returned = convert(jdlObject, 'toto');
+            relationshipsForA = returned.get('toto')?.find(entity => entity.name === 'A')?.relationships;
+            relationshipsForB = returned.get('toto')?.find(entity => entity.name === 'B')?.relationships;
           });
 
           it('should convert them', () => {
@@ -957,8 +957,8 @@ JSONEntity {
               jdlObject.addEntity(entityA);
               jdlObject.addEntity(entityB);
               jdlObject.addRelationship(oneToOneRelationship);
-              const returned: any = convert(jdlObject, 'toto');
-              convertedRelationship = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
+              const returned = convert(jdlObject, 'toto');
+              convertedRelationship = returned.get('toto')?.find(entity => entity.name === 'A')?.relationships[0];
             });
 
             it('should convert them', () => {
@@ -1000,8 +1000,8 @@ JSONEntity {
               jdlObject.addEntity(entityA);
               jdlObject.addEntity(entityB);
               jdlObject.addRelationship(oneToOneRelationship);
-              const returned: any = convert(jdlObject, 'toto');
-              convertedRelationship = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
+              const returned = convert(jdlObject, 'toto');
+              convertedRelationship = returned.get('toto')?.find(entity => entity.name === 'A')?.relationships[0];
             });
 
             it('should convert them', () => {
@@ -1038,9 +1038,9 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             jdlObject.addEntity(entityB);
             jdlObject.addRelationship(oneToOneRelationship);
-            const returned: any = convert(jdlObject, 'toto');
-            relationshipsForA = returned.get('toto').find(entity => entity.name === 'A').relationships;
-            relationshipsForB = returned.get('toto').find(entity => entity.name === 'B').relationships;
+            const returned = convert(jdlObject, 'toto');
+            relationshipsForA = returned.get('toto')?.find(entity => entity.name === 'A')?.relationships;
+            relationshipsForB = returned.get('toto')?.find(entity => entity.name === 'B')?.relationships;
           });
 
           it('should convert them', () => {
@@ -1090,9 +1090,9 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             jdlObject.addEntity(entityB);
             jdlObject.addRelationship(oneToOneRelationship);
-            const returned: any = convert(jdlObject, 'toto');
-            relationshipsForA = returned.get('toto').find(entity => entity.name === 'A').relationships;
-            relationshipsForB = returned.get('toto').find(entity => entity.name === 'B').relationships;
+            const returned = convert(jdlObject, 'toto');
+            relationshipsForA = returned.get('toto')?.find(entity => entity.name === 'A')?.relationships;
+            relationshipsForB = returned.get('toto')?.find(entity => entity.name === 'B')?.relationships;
           });
 
           it('should convert them', () => {
@@ -1140,9 +1140,9 @@ JSONEntity {
               jdlObject.addEntity(entityA);
               jdlObject.addEntity(entityB);
               jdlObject.addRelationship(oneToOneRelationship);
-              const returned: any = convert(jdlObject, 'toto');
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              const returned = convert(jdlObject, 'toto');
+              relationshipFromSourceToDestination = returned.get('toto')?.find(entity => entity.name === 'A')?.relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto')?.find(entity => entity.name === 'B')?.relationships[0];
             });
 
             it('should add the relationship for the source entity', () => {
@@ -1176,9 +1176,9 @@ JSONEntity {
               jdlObject.addEntity(entityA);
               jdlObject.addEntity(entityB);
               jdlObject.addRelationship(oneToManyRelationship);
-              const returned: any = convert(jdlObject, 'toto');
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              const returned = convert(jdlObject, 'toto');
+              relationshipFromSourceToDestination = returned.get('toto')?.find(entity => entity.name === 'A')?.relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto')?.find(entity => entity.name === 'B')?.relationships[0];
             });
 
             it('should add the relationship for the source entity', () => {
@@ -1212,9 +1212,9 @@ JSONEntity {
               jdlObject.addEntity(entityA);
               jdlObject.addEntity(entityB);
               jdlObject.addRelationship(manyToOneRelationship);
-              const returned: any = convert(jdlObject, 'toto');
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              const returned = convert(jdlObject, 'toto');
+              relationshipFromSourceToDestination = returned.get('toto')?.find(entity => entity.name === 'A')?.relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto')?.find(entity => entity.name === 'B')?.relationships[0];
             });
 
             it('should add the relationship for the source entity', () => {
@@ -1248,9 +1248,9 @@ JSONEntity {
               jdlObject.addEntity(entityA);
               jdlObject.addEntity(entityB);
               jdlObject.addRelationship(manyToManyRelationship);
-              const returned: any = convert(jdlObject, 'toto');
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              const returned = convert(jdlObject, 'toto');
+              relationshipFromSourceToDestination = returned.get('toto')?.find(entity => entity.name === 'A')?.relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto')?.find(entity => entity.name === 'B')?.relationships[0];
             });
 
             it('should add the relationship for the source entity', () => {
@@ -1287,9 +1287,9 @@ JSONEntity {
               jdlObject.addEntity(entityA);
               jdlObject.addEntity(entityB);
               jdlObject.addRelationship(oneToOneRelationship);
-              const returned: any = convert(jdlObject, 'toto');
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              const returned = convert(jdlObject, 'toto');
+              relationshipFromSourceToDestination = returned.get('toto')?.find(entity => entity.name === 'A')?.relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto')?.find(entity => entity.name === 'B')?.relationships[0];
             });
 
             it('should add it for the source entity', () => {
@@ -1335,9 +1335,9 @@ JSONEntity {
               jdlObject.addEntity(entityA);
               jdlObject.addEntity(entityB);
               jdlObject.addRelationship(oneToManyRelationship);
-              const returned: any = convert(jdlObject, 'toto');
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              const returned = convert(jdlObject, 'toto');
+              relationshipFromSourceToDestination = returned.get('toto')?.find(entity => entity.name === 'A')?.relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto')?.find(entity => entity.name === 'B')?.relationships[0];
             });
 
             it('should ignore it for the source entity', () => {
@@ -1383,9 +1383,9 @@ JSONEntity {
               jdlObject.addEntity(entityA);
               jdlObject.addEntity(entityB);
               jdlObject.addRelationship(manyToOneRelationship);
-              const returned: any = convert(jdlObject, 'toto');
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              const returned = convert(jdlObject, 'toto');
+              relationshipFromSourceToDestination = returned.get('toto')?.find(entity => entity.name === 'A')?.relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto')?.find(entity => entity.name === 'B')?.relationships[0];
             });
 
             it('should add it for the source entity', () => {
@@ -1431,9 +1431,9 @@ JSONEntity {
               jdlObject.addEntity(entityA);
               jdlObject.addEntity(entityB);
               jdlObject.addRelationship(manyToManyRelationship);
-              const returned: any = convert(jdlObject, 'toto');
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              const returned = convert(jdlObject, 'toto');
+              relationshipFromSourceToDestination = returned.get('toto')?.find(entity => entity.name === 'A')?.relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto')?.find(entity => entity.name === 'B')?.relationships[0];
             });
 
             it('should add it for the source entity', () => {
