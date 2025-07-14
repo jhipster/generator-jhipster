@@ -21,10 +21,10 @@ import fs from 'fs';
 import path from 'path';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
+import helpers from 'yeoman-test';
 import exportDeployments from '../exporters/jhipster-deployment-exporter.js';
 import JDLDeployment from '../../core/models/jdl-deployment.js';
 import { deploymentOptions } from '../../core/built-in-options/index.js';
-import { basicHelpers as helpers } from '../../../../lib/testing/index.js';
 
 const {
   DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },
