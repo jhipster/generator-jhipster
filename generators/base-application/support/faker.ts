@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Faker, base, en } from '@faker-js/faker';
+import { Faker, type LocaleDefinition, base, en } from '@faker-js/faker';
 import Randexp from 'randexp';
 
 import { languageToJavaLanguage } from '../../languages/support/index.js';
@@ -50,10 +50,7 @@ export class FakerWithRandexp extends Faker {
 
 export async function createFaker(nativeLanguage = 'en') {
   nativeLanguage = languageToJavaLanguage(nativeLanguage);
-  let locale;
-  // Faker >=6 doesn't exports locales by itself, it exports a faker instance with the locale.
-  // We need a Faker instance for each entity, to build additional fake instances, use the locale from the exported localized faker instance.
-  // See https://github.com/faker-js/faker/pull/642
+  let locale: LocaleDefinition;
   try {
     locale = (await import(`@faker-js/faker`))[nativeLanguage];
   } catch {
