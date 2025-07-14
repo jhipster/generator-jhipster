@@ -40,13 +40,13 @@ import type {
 const { ANGULAR, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
 
-export class ClientApplicationGenerator extends BaseApplicationGenerator<
-  ClientEntity,
-  ClientApplication<ClientEntity>,
-  ClientConfig,
-  ClientOptions,
-  ClientSource
-> {}
+export class ClientApplicationGenerator<
+  Entity extends ClientEntity = ClientEntity,
+  Application extends ClientApplication<Entity> = ClientApplication<Entity>,
+  Config extends ClientConfig = ClientConfig,
+  Options extends ClientOptions = ClientOptions,
+  Source extends ClientSource = ClientSource,
+> extends BaseApplicationGenerator<Entity, Application, Config, Options, Source> {}
 
 export default class ClientGenerator extends ClientApplicationGenerator {
   async beforeQueue() {
