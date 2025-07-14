@@ -67,7 +67,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when passing a custom client theme and no variant', () => {
-      let clientThemeVariantOption: any;
+      let clientThemeVariantOption: string | undefined;
 
       before(() => {
         clientThemeVariantOption = getConfigForMonolithApplication({
@@ -80,7 +80,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when the authentication type is oauth2', () => {
-      let skipUserManagementOption: any;
+      let skipUserManagementOption: boolean | undefined;
 
       before(() => {
         skipUserManagementOption = getConfigForMonolithApplication({
