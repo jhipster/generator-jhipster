@@ -22,66 +22,66 @@
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import { camelCase, lowerFirst, upperFirst } from '../utils/string-utils.js';
+import { customCamelCase } from '../utils/string-utils.js';
 
 describe('jdl - StringUtils', () => {
-  describe('camelCase', () => {
+  describe('customCamelCase', () => {
     describe('when passing a valid string', () => {
       describe('with only one letter', () => {
         it('should keep it as it is', () => {
-          expect(camelCase('e')).to.equal('e');
+          expect(customCamelCase('e')).to.equal('e');
         });
       });
       describe('with only lowercase letters', () => {
         it('should keep it as it is', () => {
-          expect(camelCase('entity')).to.equal('entity');
+          expect(customCamelCase('entity')).to.equal('entity');
         });
       });
       describe('with an uppercase first letter', () => {
         it('should lowercase the first letter', () => {
-          expect(camelCase('Entity')).to.equal('entity');
+          expect(customCamelCase('Entity')).to.equal('entity');
         });
       });
       describe('with an uppercase first letter and ending with an uppercase letter', () => {
         it('should lowercase the first letter', () => {
-          expect(camelCase('EntityA')).to.equal('entityA');
+          expect(customCamelCase('EntityA')).to.equal('entityA');
         });
       });
       describe('with an uppercase first letter and ending with more than one uppercase letter', () => {
         it('should lowercase the first letter', () => {
-          expect(camelCase('EntityAN')).to.equal('entityAN');
+          expect(customCamelCase('EntityAN')).to.equal('entityAN');
         });
       });
       describe('with an underscore inside the word', () => {
         it('should remove it', () => {
-          expect(camelCase('Entity_AN')).not.to.include('_');
+          expect(customCamelCase('Entity_AN')).not.to.include('_');
         });
         it('should lowercase the word', () => {
-          expect(camelCase('Entity_AN')).to.equal('entityAN');
+          expect(customCamelCase('Entity_AN')).to.equal('entityAN');
         });
       });
       describe('beginning with an underscore and having one inside', () => {
         it('should remove the two underscores', () => {
-          expect(camelCase('_entity_AN')).not.to.include('_');
+          expect(customCamelCase('_entity_AN')).not.to.include('_');
         });
         it('should lowercase the word', () => {
-          expect(camelCase('_entity_AN')).to.equal('entityAN');
+          expect(customCamelCase('_entity_AN')).to.equal('entityAN');
         });
       });
       describe('with dashes inside', () => {
         it('should remove them', () => {
-          expect(camelCase('_entit--y_AN---')).not.to.include('-');
+          expect(customCamelCase('_entit--y_AN---')).not.to.include('-');
         });
         it('should lowercase the word', () => {
-          expect(camelCase('_entit--y_AN---')).to.equal('entityAN');
+          expect(customCamelCase('_entit--y_AN---')).to.equal('entityAN');
         });
       });
       describe('with spaces inside', () => {
         it('should remove them', () => {
-          expect(camelCase('En tity_AN ')).not.to.include(' ');
+          expect(customCamelCase('En tity_AN ')).not.to.include(' ');
         });
         it('should lowercase the word', () => {
-          expect(camelCase('En tity_AN ')).to.equal('entityAN');
+          expect(customCamelCase('En tity_AN ')).to.equal('entityAN');
         });
       });
     });
@@ -90,54 +90,14 @@ describe('jdl - StringUtils', () => {
         it('should fail', () => {
           expect(() => {
             // @ts-expect-error
-            camelCase();
+            customCamelCase();
           }).to.throw(/^The passed string cannot be nil\.$/);
         });
       });
       describe('as it is empty', () => {
         it('should return it', () => {
-          expect(camelCase('')).to.equal('');
+          expect(customCamelCase('')).to.equal('');
         });
-      });
-    });
-  });
-  describe('lowerFirst', () => {
-    describe('when passing a nil string', () => {
-      it('should fail', () => {
-        expect(() => {
-          // @ts-expect-error
-          lowerFirst();
-        }).to.throw(/^The passed string cannot be nil.$/);
-      });
-    });
-    describe('when passing an empty string', () => {
-      it('should return it', () => {
-        expect(lowerFirst('')).to.equal('');
-      });
-    });
-    describe('when passing a valid string', () => {
-      it('should lower the first letter', () => {
-        expect(lowerFirst('Abc')).to.equal('abc');
-      });
-    });
-  });
-  describe('upperFirst', () => {
-    describe('when passing a nil string', () => {
-      it('should fail', () => {
-        expect(() => {
-          // @ts-expect-error
-          upperFirst();
-        }).to.throw(/^The passed string cannot be nil\.$/);
-      });
-    });
-    describe('when passing an empty string', () => {
-      it('should return it', () => {
-        expect(upperFirst('')).to.equal('');
-      });
-    });
-    describe('when passing a valid string', () => {
-      it('should upper the first letter', () => {
-        expect(upperFirst('abc')).to.equal('Abc');
       });
     });
   });

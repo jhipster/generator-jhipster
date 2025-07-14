@@ -16,32 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { lowerFirst } from 'lodash-es';
 
-export function camelCase(string: string): string {
+export function customCamelCase(string: string): string {
   checkStringIsValid(string);
   if (string === '') {
     return string;
   }
-  const [firstLetter, ...rest] = string.replace(/[\W_]/g, '');
-  return `${firstLetter.toLowerCase()}${rest.join('')}`;
-}
-
-export function upperFirst(string: string): string {
-  checkStringIsValid(string);
-  if (string === '') {
-    return string;
-  }
-  const [firstLetter, ...rest] = string;
-  return `${firstLetter.toUpperCase()}${rest.join('')}`;
-}
-
-export function lowerFirst(string: string): string {
-  checkStringIsValid(string);
-  if (string === '') {
-    return string;
-  }
-  const [firstLetter, ...rest] = string;
-  return `${firstLetter.toLowerCase()}${rest.join('')}`;
+  return lowerFirst(string.replace(/[\W_]/g, ''));
 }
 
 function checkStringIsValid(string: string) {

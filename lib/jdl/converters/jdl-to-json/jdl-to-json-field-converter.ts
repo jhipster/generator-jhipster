@@ -20,12 +20,12 @@ import { capitalize } from 'lodash-es';
 
 import { validations } from '../../core/built-in-options/index.js';
 import { formatComment } from '../../core/utils/format-utils.js';
-import { camelCase } from '../../core/utils/string-utils.js';
 import type JDLObject from '../../core/models/jdl-object.js';
 import type { JSONField } from '../../core/types/json-config.js';
 import type { JDLEntity } from '../../core/models/index.js';
 import type JDLField from '../../core/models/jdl-field.js';
 import type { FieldType } from '../../../jhipster/field-types.js';
+import { customCamelCase } from '../../../utils/string-utils.ts';
 
 const {
   Validations: { UNIQUE, REQUIRED },
@@ -54,7 +54,7 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
   const convertedEntityFields: JSONField[] = [];
   jdlEntity.forEachField((jdlField: JDLField) => {
     let fieldData: JSONField = {
-      fieldName: camelCase(jdlField.name),
+      fieldName: customCamelCase(jdlField.name),
       fieldType: jdlField.type as FieldType,
     };
     const comment = formatComment(jdlField.comment);

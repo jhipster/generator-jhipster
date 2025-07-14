@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
+import { upperFirst } from 'lodash-es';
 import { merge } from '../utils/object-utils.js';
-import { upperFirst } from '../utils/string-utils.js';
 
 /**
  * The JSONEntity class represents a read-to-be exported to JSON entity.

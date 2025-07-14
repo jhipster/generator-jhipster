@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import { kebabCase, lowerFirst } from 'lodash-es';
+import { kebabCase, lowerFirst, upperFirst } from 'lodash-es';
 import chalk from 'chalk';
 import { passthrough } from '@yeoman/transform';
 
@@ -51,7 +51,6 @@ import {
   isFieldBinaryType,
   isFieldBlobType,
 } from '../base-application/internal/types/field-types.ts';
-import { upperFirst } from '../../lib/jdl/core/utils/string-utils.js';
 import { baseNameProperties } from '../project-name/support/index.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
