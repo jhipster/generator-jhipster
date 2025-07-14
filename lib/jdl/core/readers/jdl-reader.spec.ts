@@ -21,7 +21,7 @@ import fs from 'fs';
 
 import { after, beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { basicHelpers as helpers } from '../../../../lib/testing/index.js';
+import helpers from 'yeoman-test';
 import { getTestFile, parseFromContent, parseFromFiles } from '.././__test-support__/index.js';
 
 describe('jdl - JDLReader', () => {

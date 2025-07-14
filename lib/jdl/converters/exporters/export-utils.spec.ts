@@ -19,8 +19,8 @@
 
 import { readFileSync, writeFileSync } from 'fs';
 import { beforeEach, describe, expect, it } from 'esmocha';
+import helpers from 'yeoman-test';
 import { writeConfigFile } from '../exporters/export-utils.js';
-import { basicHelpers as helpers } from '../../../../lib/testing/index.js';
 
 describe('jdl - ExportUtils', () => {
   beforeEach(async () => {
