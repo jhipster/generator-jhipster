@@ -24,7 +24,7 @@ import { expect } from 'chai';
 import helpers from 'yeoman-test';
 import exportDeployments from '../exporters/jhipster-deployment-exporter.js';
 import JDLDeployment from '../../core/models/jdl-deployment.js';
-import { deploymentOptions } from '../../core/built-in-options/index.js';
+import deploymentOptions from '../../../jhipster/deployment-options.js';
 
 const {
   DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },

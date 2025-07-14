@@ -20,7 +20,8 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { relationshipTypes } from '../basic-types/index.js';
-import { fieldTypes, unaryOptions } from '../built-in-options/index.js';
+import { unaryOptions } from '../built-in-options/index.js';
+import fieldTypes from '../../../jhipster/field-types.js';
 import JDLObject from '../models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';

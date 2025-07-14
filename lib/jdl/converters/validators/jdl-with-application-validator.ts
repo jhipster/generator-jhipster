@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { relationshipOptions } from '../../core/built-in-options/index.js';
-import { applicationOptions, fieldTypes } from '../../../jhipster/index.js';
+import { BASE_NAME_KEY, relationshipOptions } from '../../core/built-in-options/index.js';
+import fieldTypes from '../../../jhipster/field-types.ts';
 import type JDLObject from '../../core/models/jdl-object.js';
 import type JDLRelationship from '../../core/models/jdl-relationship.js';
 import type JDLApplication from '../../core/models/jdl-application.js';
@@ -33,10 +33,7 @@ import DeploymentValidator from './deployment-validator.js';
 import UnaryOptionValidator from './unary-option-validator.js';
 import BinaryOptionValidator from './binary-option-validator.js';
 
-const { OptionNames } = applicationOptions;
-
 const { BUILT_IN_ENTITY } = relationshipOptions;
-const { BASE_NAME } = OptionNames;
 /**
  * Constructor taking the jdl object to check against application settings.
  */
@@ -193,9 +190,11 @@ function checkIfRelationshipIsBetweenApplications({ jdlRelationship, application
   if (!applicationsForDestinationEntity || !applicationsForSourceEntity) {
     return;
   }
-  applicationsForSourceEntity = applicationsForSourceEntity.map(jdlApplication => jdlApplication.getConfigurationOptionValue(BASE_NAME));
+  applicationsForSourceEntity = applicationsForSourceEntity.map(jdlApplication =>
+    jdlApplication.getConfigurationOptionValue(BASE_NAME_KEY),
+  );
   applicationsForDestinationEntity = applicationsForDestinationEntity.map(jdlApplication =>
-    jdlApplication.getConfigurationOptionValue(BASE_NAME),
+    jdlApplication.getConfigurationOptionValue(BASE_NAME_KEY),
   );
   const difference = applicationsForSourceEntity.filter(application => !applicationsForDestinationEntity.includes(application));
   if (difference.length !== 0) {

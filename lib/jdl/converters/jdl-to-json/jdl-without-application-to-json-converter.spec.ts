@@ -26,7 +26,8 @@ chaiUse(sinonChai);
 
 import { relationshipTypes } from '../../core/basic-types/index.js';
 
-import { binaryOptions, fieldTypes, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.js';
+import { binaryOptions, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.js';
+import fieldTypes from '../../../jhipster/field-types.js';
 
 import JDLObject from '../../core/models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../../core/models/index.js';

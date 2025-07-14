@@ -576,7 +576,8 @@ async function askForField(this: EntityGenerator) {
           },
         ];
         if (response.fieldType === STRING || response.fieldTypeBlobContent === TEXT) {
-          opts.push(
+          return [
+            ...opts,
             {
               name: 'Minimum length',
               value: MINLENGTH,
@@ -589,9 +590,10 @@ async function askForField(this: EntityGenerator) {
               name: 'Regular expression pattern',
               value: PATTERN,
             },
-          );
+          ];
         } else if ([INTEGER, LONG, FLOAT, DOUBLE, BIG_DECIMAL].includes(response.fieldType)) {
-          opts.push(
+          return [
+            ...opts,
             {
               name: 'Minimum',
               value: MIN,
@@ -600,7 +602,7 @@ async function askForField(this: EntityGenerator) {
               name: 'Maximum',
               value: MAX,
             },
-          );
+          ];
         }
         return opts;
       },

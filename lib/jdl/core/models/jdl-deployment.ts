@@ -17,12 +17,11 @@
  * limitations under the License.
  */
 import { isEqual } from 'lodash-es';
-import { applicationOptions, deploymentOptions } from '../built-in-options/index.js';
+import deploymentOptions from '../../../jhipster/deployment-options.ts';
 import { merge } from '../utils/object-utils.js';
 import { join } from '../utils/set-utils.js';
 import type { ParsedJDLDeployment } from '../types/parsed.js';
 
-const { Options } = deploymentOptions;
 const arrayTypes = ['appsFolders', 'clusteredDbApps'];
 
 export default class JDLDeployment {
@@ -46,8 +45,6 @@ export default class JDLDeployment {
     Object.entries(merged).forEach(([key, option]) => {
       if (Array.isArray(option) && arrayTypes.includes(key)) {
         this[key] = new Set(option);
-      } else if (key === applicationOptions.OptionNames.SERVICE_DISCOVERY_TYPE && option === Options.serviceDiscoveryType.no) {
-        this[key] = 'no';
       } else {
         this[key] = option;
       }

@@ -20,7 +20,10 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import { binaryOptions, databaseTypes, fieldTypes, validations } from '../../core/built-in-options/index.js';
+import { binaryOptions, validations } from '../../core/built-in-options/index.js';
+import fieldTypes from '../../../jhipster/field-types.js';
+import databaseTypes from '../../../jhipster/database-types.js';
+
 import JDLObject from '../../core/models/jdl-object.js';
 import { createJDLApplication } from '../../core/models/jdl-application-factory.js';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
@@ -31,7 +34,7 @@ import JDLValidation from '../../core/models/jdl-validation.js';
 import createValidator from '../validators/jdl-with-application-validator.js';
 import { relationshipTypes } from '../../core/basic-types/index.js';
 import { getDefaultRuntime } from '../../core/runtime.js';
-import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
 
 const {
   Validations: { MIN },

@@ -53,7 +53,7 @@ describe('jdl - ApplicationConverter', () => {
           ];
         });
 
-        it(`should convert it as a ${MONOLITH}`, () => {
+        it(`should convert it as a ${APPLICATION_TYPE_MONOLITH}`, () => {
           expect(convertedApplication).to.deep.equal(expectedApplication);
         });
       });

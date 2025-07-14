@@ -173,7 +173,7 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
   const { applicationType, reactive, databaseType } = this.jhipsterConfigWithDefaults;
 
   const choices: any[] = [];
-  if ([SQL, MONGODB, NEO4J].includes(databaseType)) {
+  if (([SQL, MONGODB, NEO4J] as string[]).includes(databaseType as string)) {
     choices.push({
       name: 'Elasticsearch as search engine',
       value: 'searchEngine:elasticsearch',

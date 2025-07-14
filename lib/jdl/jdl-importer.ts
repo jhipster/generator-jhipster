@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 import { uniqBy } from 'lodash-es';
-import { applicationOptions } from '../jhipster/index.js';
 import { readCurrentPathYoRcFile } from '../utils/yo-rc.js';
-import type { ApplicationType } from '../core/application-types.ts';
+import { APPLICATION_TYPE_KEY, type ApplicationType } from '../core/application-types.ts';
 import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 import { convert } from './converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
@@ -39,9 +38,8 @@ import type { PostProcessedJDLJSONApplication } from './core/types/exporter.js';
 import type { JDLApplicationConfig } from './core/types/parsing.js';
 import type { JDLRuntime } from './core/types/runtime.js';
 import { createRuntime, getDefaultRuntime } from './core/runtime.js';
+import { BASE_NAME_KEY } from './core/built-in-options/index.ts';
 
-const { OptionNames } = applicationOptions;
-const { APPLICATION_TYPE, BASE_NAME } = OptionNames;
 const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the generator as it circles
 
 type JDLApplicationConfiguration = {
@@ -185,7 +183,7 @@ function importOneApplicationAndEntities(jdlObject: JDLObject) {
   const formattedApplication: PostProcessedJDLJSONApplication = formatApplicationToExport(jdlObject.getApplications()[0]);
   importState.exportedApplications.push(formattedApplication);
   const jdlApplication = jdlObject.getApplications()[0];
-  const applicationName = jdlApplication.getConfigurationOptionValue(BASE_NAME);
+  const applicationName = jdlApplication.getConfigurationOptionValue(BASE_NAME_KEY);
   const entitiesPerApplicationMap = convert(jdlObject);
   const jsonEntities: any = entitiesPerApplicationMap.get(applicationName);
   const { [GENERATOR_NAME]: config, ...remaining } = formattedApplication;
@@ -197,7 +195,7 @@ function importOneApplicationAndEntities(jdlObject: JDLObject) {
   if (jsonEntities.length !== 0) {
     const exportedJSONEntities = exportJSONEntities(jsonEntities, {
       applicationName,
-      applicationType: jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE),
+      applicationType: jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE_KEY),
       forSeveralApplications: false,
     });
     importState.exportedApplicationsWithEntities[applicationName].entities = exportedJSONEntities;
@@ -221,7 +219,7 @@ function importApplicationsAndEntities(jdlObject) {
     const jdlApplication = jdlObject.getApplication(applicationName);
     const exportedJSONEntities = exportJSONEntities(jsonEntities, {
       applicationName,
-      applicationType: jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE),
+      applicationType: jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE_KEY),
       forSeveralApplications: true,
     });
     const exportedConfig = importState.exportedApplications.find(config => applicationName === config['generator-jhipster'].baseName);

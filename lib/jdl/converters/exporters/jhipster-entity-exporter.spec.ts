@@ -23,7 +23,7 @@ import helpers from 'yeoman-test';
 import exportEntities from '../exporters/jhipster-entity-exporter.js';
 
 import { doesDirectoryExist } from '../../core/utils/file-utils.js';
-import { entityOptions } from '../../../jhipster/index.js';
+import entityOptions from '../../../jhipster/entity-options.js';
 import { APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
 
 const { MapperTypes, PaginationTypes, ServiceTypes } = entityOptions;

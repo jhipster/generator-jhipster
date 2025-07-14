@@ -19,7 +19,7 @@
 
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { applicationOptions } from '../../../jhipster/index.js';
+import applicationOptions from '../../../jhipster/application-options.js';
 import { getDefaultRuntime } from '../runtime.js';
 
 const { OptionNames } = applicationOptions;

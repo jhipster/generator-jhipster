@@ -19,7 +19,7 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { deploymentOptions } from '../../core/built-in-options/index.js';
+import deploymentOptions from '../../../jhipster/deployment-options.js';
 
 import DeploymentValidator from '../validators/deployment-validator.js';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.js';

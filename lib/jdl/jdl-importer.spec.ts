@@ -22,7 +22,8 @@ import { rmSync } from 'fs';
 import { after, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
-import { clientFrameworkTypes, databaseTypes } from '../jhipster/index.js';
+import clientFrameworkTypes from '../jhipster/client-framework-types.js';
+import databaseTypes from '../jhipster/database-types.js';
 import { readYoRcFile } from '../utils/yo-rc.js';
 import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.js';
 import { createImporterFromContent, createImporterFromFiles, getTestFile } from './core/__test-support__/index.js';

@@ -25,18 +25,16 @@ import JDLField from '../../core/models/jdl-field.js';
 import JDLValidation from '../../core/models/jdl-validation.js';
 import JDLUnaryOption from '../../core/models/jdl-unary-option.js';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
-import { applicationOptions, binaryOptions, fieldTypes, unaryOptions, validations } from '../../core/built-in-options/index.js';
+import { binaryOptions, unaryOptions, validations } from '../../core/built-in-options/index.js';
+import fieldTypes from '../../../jhipster/field-types.js';
 import { getTestFile, parseFromConfigurationObject, parseFromContent, parseFromFiles } from '../../core/__test-support__/index.js';
 import { entityOptions } from '../../../jhipster/index.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
-
-const { OptionNames } = applicationOptions;
 
 const { MapperTypes, ServiceTypes, PaginationTypes } = entityOptions;
 
 const BinaryOptionValues = binaryOptions.Values;
 const { DTO } = binaryOptions.Options;
-const { SKIP_CLIENT, SKIP_SERVER } = OptionNames;
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 const { INFINITE_SCROLL, PAGINATION } = PaginationTypes;
@@ -396,8 +394,8 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         describe('checking the options', () => {
           it('should parse them', () => {
             expect(options.length).to.equal(7);
-            expect(options[0].name).to.equal(SKIP_CLIENT);
-            expect(options[1].name).to.equal(SKIP_SERVER);
+            expect(options[0].name).to.equal('skipClient');
+            expect(options[1].name).to.equal('skipServer');
             expect(options[2].name).to.equal(DTO);
             expect(options[2].value).to.equal(MAPSTRUCT);
             expect(options[3].name).to.equal('service');

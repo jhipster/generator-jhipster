@@ -16,28 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ValueOf } from 'type-fest';
 import type { JHipsterNamedChoice } from './types.js';
+
+export const APPLICATION_TYPE_KEY = 'applicationType';
 
 export const APPLICATION_TYPE_MONOLITH = 'monolith';
 export const APPLICATION_TYPE_MICROSERVICE = 'microservice';
 export const APPLICATION_TYPE_GATEWAY = 'gateway';
 
-const applicationTypes = {
-  MONOLITH: {
+export const applicationTypesChoices = [
+  {
     value: APPLICATION_TYPE_MONOLITH,
     name: 'Monolithic application (recommended for simple projects)',
   },
-  MICROSERVICE: {
+  {
     value: APPLICATION_TYPE_MICROSERVICE,
     name: 'Microservice application',
   },
-  GATEWAY: {
+  {
     value: APPLICATION_TYPE_GATEWAY,
     name: 'Gateway application',
   },
-} as const satisfies Record<string, JHipsterNamedChoice>;
+] as const satisfies JHipsterNamedChoice[];
 
-export const applicationTypesChoices = Object.values(applicationTypes);
-
-export type ApplicationType = ValueOf<typeof applicationTypes>['value'];
+export type ApplicationType = (typeof applicationTypesChoices)[number]['value'];
