@@ -78,6 +78,8 @@ export type Application<E extends BaseApplicationEntity = Entity> = JavascriptAp
     anyEntityHasRelationshipWithUser: boolean;
 
     gatewayServicesApiAvailable?: boolean;
+    generateAuthenticationApi?: boolean;
+    generateInMemoryUserCredentials?: boolean;
   };
 
 export type { JavascriptRelationship as Relationship, BaseApplicationSource as Source };

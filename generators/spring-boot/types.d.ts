@@ -154,9 +154,6 @@ export type Application<E extends BaseApplicationEntity = Entity> = Command['App
     skipFakeData: boolean;
     skipCheckLengthOfIdentifier: boolean;
 
-    generateAuthenticationApi?: boolean;
-    generateInMemoryUserCredentials?: boolean;
-
     databaseMigration: string;
     databaseMigrationLiquibase: boolean;
 

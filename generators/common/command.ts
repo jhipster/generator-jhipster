@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/jhipster/index.js';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
+import { applicationTypesChoices } from '../../lib/core/application-types.ts';
 
 const command = {
   configs: {
@@ -64,20 +64,7 @@ const command = {
         type: 'list',
         message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
       },
-      choices: [
-        {
-          value: APPLICATION_TYPE_MONOLITH,
-          name: 'Monolithic application (recommended for simple projects)',
-        },
-        {
-          value: APPLICATION_TYPE_GATEWAY,
-          name: 'Gateway application',
-        },
-        {
-          value: APPLICATION_TYPE_MICROSERVICE,
-          name: 'Microservice application',
-        },
-      ],
+      choices: applicationTypesChoices,
       scope: 'storage',
     },
   },

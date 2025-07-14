@@ -3,6 +3,7 @@ import { applicationTypes, authenticationTypes, databaseTypes } from '../../../l
 import { mutateData } from '../../../lib/utils/index.js';
 import { loadDerivedConfig } from '../../base-core/internal/index.js';
 import serverCommand from '../../server/command.js';
+import type { Application as CommonApplication } from '../../common/types.d.ts';
 
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
@@ -11,12 +12,8 @@ const { NO: NO_DATABASE } = databaseTypes;
 /**
  * @param {Object} dest - destination context to use default is context
  */
-export const loadDerivedAppConfig = ({ application }: { application: any }) => {
+export const loadDerivedAppConfig = ({ application }: { application: CommonApplication }) => {
   loadDerivedConfig(serverCommand.configs, { application });
-
-  mutateData(application, {
-    endpointPrefix: ({ applicationType, lowercaseBaseName }) => (applicationType === 'microservice' ? `services/${lowercaseBaseName}` : ''),
-  } as any);
 
   if (application.microfrontends && application.microfrontends.length > 0) {
     application.microfrontends.forEach(microfrontend => {
