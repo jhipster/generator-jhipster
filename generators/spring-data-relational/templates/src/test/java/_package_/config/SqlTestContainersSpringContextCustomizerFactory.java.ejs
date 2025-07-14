@@ -63,8 +63,8 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                     log.info("Warming up the sql database");
                     if (null == prodTestContainer) {
                         try {
-                            Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".<% if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypePostgresql) { %>PostgreSql<% } %>TestContainer");
-                            prodTestContainer = beanFactory.createBean(containerClass);
+                            Class<?> containerClass = Class.forName(this.getClass().getPackageName() + ".<% if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypePostgresql) { %>PostgreSql<% } %>TestContainer");
+                            prodTestContainer = (SqlTestContainer) beanFactory.createBean(containerClass);
                             beanFactory.registerSingleton(containerClass.getName(), prodTestContainer);
                             /*
                              * ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(containerClass.getName(), prodTestContainer);
