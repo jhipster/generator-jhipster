@@ -1,9 +1,8 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { RECOMMENDED_JAVA_VERSION, RECOMMENDED_NODE_VERSION } from '../../generators/index.js';
+import { JAVA_COMPATIBLE_VERSIONS, RECOMMENDED_JAVA_VERSION, RECOMMENDED_NODE_VERSION } from '../../generators/generator-constants.js';
 import { getSourceRoot } from '../index.js';
-import { JAVA_COMPATIBLE_VERSIONS, JAVA_VERSION, NODE_VERSION } from '../../generators/generator-constants.js';
 
 const knwonGitHubMatrixProperties = [
   'os',
@@ -77,8 +76,8 @@ type RandomEnvironmentOptions = { useVersionPlaceholders?: boolean; javaVersions
 const randomEnvironmentMatrix = (key: string, options: RandomEnvironmentOptions) => {
   const {
     useVersionPlaceholders,
-    javaVersions = [JAVA_VERSION, ...JAVA_COMPATIBLE_VERSIONS],
-    nodeVersions = [NODE_VERSION, '20', '22'],
+    javaVersions = [RECOMMENDED_JAVA_VERSION, ...JAVA_COMPATIBLE_VERSIONS],
+    nodeVersions = [RECOMMENDED_NODE_VERSION, '20', '22'],
   } = options;
   const javaVersion = randomReproducibleValue(`java-${key}`, javaVersions, { useVersionPlaceholders });
   const nodeVersion = randomReproducibleValue(`node-${key}`, nodeVersions, { useVersionPlaceholders });

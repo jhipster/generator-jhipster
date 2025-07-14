@@ -24,7 +24,7 @@ import { glob } from 'glob';
 import type { Options as ExecaOptions } from 'execa';
 import BaseApplicationGenerator from '../base-application/index.ts';
 
-import { JAVA_COMPATIBLE_VERSIONS, JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.js';
+import { JAVA_COMPATIBLE_VERSIONS, RECOMMENDED_JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.js';
 import prepareSqlApplicationProperties from '../spring-data-relational/support/application-properties.ts';
@@ -196,7 +196,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<
               name: 'herokuJavaVersion',
               message: 'Which Java version would you like to use to build and run your app?',
               choices: JAVA_COMPATIBLE_VERSIONS.map(version => ({ value: version })),
-              default: JAVA_VERSION,
+              default: RECOMMENDED_JAVA_VERSION,
             },
           ],
           this.config,

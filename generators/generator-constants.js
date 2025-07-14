@@ -27,14 +27,17 @@ export const BLUEPRINT_API_VERSION = 'jhipster-8';
 // jhipster-bom version
 export const JHIPSTER_DEPENDENCIES_VERSION = '8.11.0';
 // Version of Java
-export const JAVA_VERSION = '17';
+export const RECOMMENDED_JAVA_VERSION = '17';
 // Supported Java versions, https://www.oracle.com/java/technologies/java-se-support-roadmap.html
 export const JAVA_COMPATIBLE_VERSIONS = ['17', '21', '24'];
 // Force spring milestone repository. Spring Boot milestones are detected.
 export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 
 // Version of Node, NPM
-export const NODE_VERSION = readFileSync(join(fileURLToPath(import.meta.url), '../init/resources/.node-version'), 'utf-8').trim();
+export const RECOMMENDED_NODE_VERSION = readFileSync(
+  join(fileURLToPath(import.meta.url), '../init/resources/.node-version'),
+  'utf-8',
+).trim();
 
 // The version should be coherent with the one from spring-data-elasticsearch project
 export const ELASTICSEARCH_TAG = '8.13.4';

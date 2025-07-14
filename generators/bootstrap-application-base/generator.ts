@@ -35,7 +35,7 @@ import {
   prepareRelationship,
   stringifyApplicationData,
 } from '../base-application/support/index.js';
-import { JAVA_DOCKER_DIR, LOGIN_REGEX, NODE_VERSION } from '../generator-constants.js';
+import { JAVA_DOCKER_DIR, LOGIN_REGEX, RECOMMENDED_NODE_VERSION } from '../generator-constants.js';
 import { GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
 import { loadLanguagesConfig } from '../languages/support/index.js';
@@ -146,7 +146,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
       loadApplication({ application, control, applicationDefaults }) {
         applicationDefaults({
           ...baseNameProperties,
-          nodeVersion: this.useVersionPlaceholders ? 'NODE_VERSION' : NODE_VERSION,
+          nodeVersion: this.useVersionPlaceholders ? 'NODE_VERSION' : RECOMMENDED_NODE_VERSION,
           jhipsterVersion: this.useVersionPlaceholders ? 'JHIPSTER_VERSION' : packageJson.version,
           jhipsterPackageJson: packageJson,
 

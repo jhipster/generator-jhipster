@@ -2,7 +2,7 @@ import { camelCase, upperFirst } from 'lodash-es';
 import BaseGenerator from '../../generators/base-core/index.js';
 
 export default class extends BaseGenerator {
-  generatorNamespace;
+  generatorNamespace!: string;
 
   get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({

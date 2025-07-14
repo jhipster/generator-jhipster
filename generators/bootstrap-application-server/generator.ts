@@ -24,7 +24,7 @@ import type { Application as SpringDataRelationalApplication } from '../spring-d
 import {
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
-  JAVA_VERSION,
+  RECOMMENDED_JAVA_VERSION,
   SERVER_MAIN_RES_DIR,
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_RES_DIR,
@@ -118,7 +118,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         );
 
         applicationDefaults({
-          javaVersion: this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION,
+          javaVersion: this.useVersionPlaceholders ? 'JAVA_VERSION' : RECOMMENDED_JAVA_VERSION,
           packageInfoJavadocs: [],
           javaNodeBuildPaths: [],
           javaProperties: {},

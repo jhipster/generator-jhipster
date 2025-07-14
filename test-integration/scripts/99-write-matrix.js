@@ -4,11 +4,11 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   BUILD_JHIPSTER_BOM,
-  JAVA_VERSION,
   JHIPSTER_BOM_BRANCH,
   JHIPSTER_BOM_CICD_VERSION,
-  NODE_VERSION,
   NPM_VERSION,
+  RECOMMENDED_JAVA_VERSION,
+  RECOMMENDED_NODE_VERSION,
   packageRoot,
 } from '../integration-test-constants.js';
 import { JAVA_COMPATIBLE_VERSIONS } from '../../generators/generator-constants.js';
@@ -41,8 +41,8 @@ writeFileSync(
               return JSON.parse(readFileSync(file).toString())
                 .include.filter(sample => !sample.disabled)
                 .map(({ generatorOptions, name, ...sample }) => {
-                  const javaVersion = randomReproducibleValue(`java-${name}`, [JAVA_VERSION, ...JAVA_COMPATIBLE_VERSIONS]);
-                  const nodeVersion = randomReproducibleValue(`node-${name}`, [NODE_VERSION, '20', '22']);
+                  const javaVersion = randomReproducibleValue(`java-${name}`, [RECOMMENDED_JAVA_VERSION, ...JAVA_COMPATIBLE_VERSIONS]);
+                  const nodeVersion = randomReproducibleValue(`node-${name}`, [RECOMMENDED_NODE_VERSION, '20', '22']);
                   return {
                     name,
                     workspaces: generatorOptions?.workspaces ? 'true' : undefined,

@@ -9,7 +9,7 @@ export type InfoData = {
   jdlApplications: number | undefined;
   jdlEntitiesDefinitions: string | undefined;
   yoRcBlank: boolean;
-  yoRcValid: boolean;
+  yoRcValid?: boolean;
   files: InfoFile[];
   workspacesFolders: string[] | undefined;
 };
@@ -52,7 +52,7 @@ export const extractDataFromInfo = (info: string): InfoData => {
   }
 
   let yoRcBlank = true;
-  let yoRcValid;
+  let yoRcValid: boolean | undefined;
   if (yoRcContent) {
     yoRcBlank = false;
     try {

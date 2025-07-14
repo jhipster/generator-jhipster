@@ -5,7 +5,7 @@ import { getPackageRoot } from '../../lib/index.js';
 import { defaultSamplesFolder, promptSamplesFolder, samplesFolderConfig } from '../support.mjs';
 
 export default class extends BaseGenerator {
-  samplePath;
+  samplePath?: string;
 
   get [BaseGenerator.PROMPTING]() {
     return this.asAnyTaskGroup({
@@ -28,9 +28,9 @@ export default class extends BaseGenerator {
   /**
    * Merge value to an existing JSON and write to destination
    */
-  addSampleToCodeWorkspace(samplePath) {
+  addSampleToCodeWorkspace(samplePath?: string) {
     this.editFile(this.getCodeWorkspacePath(), { create: true }, content => {
-      const data = content ? JSON.parse(content) : {};
+      const data: { folders: { path: string }[]; settings: any; launch: any } = content ? JSON.parse(content) : {};
       merge(data, {
         folders: [
           {
