@@ -17,18 +17,13 @@
  * limitations under the License.
  */
 
+import type { CstNode, IToken } from 'chevrotain';
 import { relationshipTypes } from '../basic-types/index.js';
 import RelationshipIssue from './issues/relationship-issue.js';
 
 import { rulesNames } from './rules.js';
 
 let issues: RelationshipIssue[];
-
-type RelationshipDeclaration = {
-  children: {
-    relationshipType: any[];
-  };
-};
 
 export default {
   checkRelationships,
@@ -40,7 +35,7 @@ export default {
  * @param {Array} relationshipDeclarations - the list of relationship declarations
  * @return the found relationship issues.
  */
-export function checkRelationships(relationshipDeclarations: RelationshipDeclaration[]): RelationshipIssue[] {
+export function checkRelationships(relationshipDeclarations: CstNode[]): RelationshipIssue[] {
   if (!relationshipDeclarations || relationshipDeclarations.length === 0) {
     return [];
   }
@@ -49,17 +44,20 @@ export function checkRelationships(relationshipDeclarations: RelationshipDeclara
   return issues;
 }
 
-function checkForCollapsibleRelationships(relationshipDeclarations: RelationshipDeclaration[]) {
+function checkForCollapsibleRelationships(relationshipDeclarations: CstNode[]) {
   const sortedRelationships: Record<string, { from: string; to: string }[]> = {
     [relationshipTypes.ONE_TO_ONE]: [],
     [relationshipTypes.ONE_TO_MANY]: [],
     [relationshipTypes.MANY_TO_ONE]: [],
     [relationshipTypes.MANY_TO_MANY]: [],
   };
-  relationshipDeclarations.forEach((relationshipDeclaration: any) => {
-    const type = relationshipDeclaration.children.relationshipType[0].children.RELATIONSHIP_TYPE[0].image;
-    const from = relationshipDeclaration.children.relationshipBody[0].children.from[0].children.NAME[0].image;
-    const to = relationshipDeclaration.children.relationshipBody[0].children.to[0].children.NAME[0].image;
+  relationshipDeclarations.forEach(relationshipDeclaration => {
+    const type = ((relationshipDeclaration.children.relationshipType[0] as CstNode).children.RELATIONSHIP_TYPE[0] as IToken).image;
+    const from = (
+      ((relationshipDeclaration.children.relationshipBody[0] as CstNode).children.from[0] as CstNode).children.NAME[0] as IToken
+    ).image;
+    const to = (((relationshipDeclaration.children.relationshipBody[0] as CstNode).children.to[0] as CstNode).children.NAME[0] as IToken)
+      .image;
     sortedRelationships[type].push({ from, to });
   });
   Object.keys(sortedRelationships).forEach(type => {

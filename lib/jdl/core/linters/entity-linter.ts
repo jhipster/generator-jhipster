@@ -16,18 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { CstNode, IToken } from 'chevrotain';
 import EntityIssue from './issues/entity-issue.js';
 import { rulesNames } from './rules.js';
 
 let issues: EntityIssue[];
-
-export type EntityDeclaration = {
-  children: {
-    entityTableNameDeclaration: any;
-    NAME: [any, ...any];
-    entityBody: [any, ...any];
-  };
-};
 
 /**
  * Check entities for lint issues.
@@ -35,7 +28,7 @@ export type EntityDeclaration = {
  * @param entityDeclarations - the list of entity declarations
  * @return the found entity issues.
  */
-export function checkEntities(entityDeclarations: EntityDeclaration[]): EntityIssue[] {
+export function checkEntities(entityDeclarations: CstNode[]): EntityIssue[] {
   if (!entityDeclarations) {
     return [];
   }
@@ -47,11 +40,11 @@ export function checkEntities(entityDeclarations: EntityDeclaration[]): EntityIs
   return issues;
 }
 
-function checkForDuplicatedEntities(entityDeclarations: EntityDeclaration[]) {
+function checkForDuplicatedEntities(entityDeclarations: CstNode[]) {
   const entityNames = new Set();
   const duplicatedEntityIssues = new Map(); // key: entityName, value: issue
   entityDeclarations.forEach(entityDeclaration => {
-    const entityName = entityDeclaration.children.NAME[0].image;
+    const entityName = (entityDeclaration.children.NAME[0] as IToken).image;
     if (entityNames.has(entityName)) {
       if (!duplicatedEntityIssues.has(entityName)) {
         duplicatedEntityIssues.set(
@@ -71,15 +64,15 @@ function checkForDuplicatedEntities(entityDeclarations: EntityDeclaration[]) {
   });
 }
 
-function checkForUselessEntityBraces(entityDeclaration: EntityDeclaration) {
+function checkForUselessEntityBraces(entityDeclaration: CstNode) {
   const entityBody = entityDeclaration.children.entityBody;
-  const nextTokensAfterRelationshipType = entityBody?.[0].children;
+  const nextTokensAfterRelationshipType = (entityBody?.[0] as CstNode)?.children;
   const onlyCurlyBracesAsRelationshipBody = entityBody && Object.keys(nextTokensAfterRelationshipType).length === 2;
   if (onlyCurlyBracesAsRelationshipBody) {
     issues.push(
       new EntityIssue({
         ruleName: rulesNames.ENT_SHORTER_DECL,
-        entityName: entityDeclaration.children.NAME[0].image,
+        entityName: (entityDeclaration.children.NAME[0] as IToken).image,
       }),
     );
   }

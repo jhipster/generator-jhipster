@@ -20,7 +20,7 @@
 import { readFileSync } from 'fs';
 import logger from '../utils/objects/logger.js';
 
-import * as parser from '../parsing/api.js';
+import { getCst as apiGetCst, parse as apiParser } from '../parsing/api.js';
 import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks.js';
 import type { JDLRuntime } from '../types/runtime.js';
 
@@ -84,7 +84,7 @@ function parse(content: string, runtime: JDLRuntime) {
   }
   try {
     const processedInput = filterJDLDirectives(removeInternalJDLComments(content));
-    const parsedContent = parser.parse(processedInput, undefined, runtime);
+    const parsedContent = apiParser(processedInput, runtime);
     return performJDLPostParsingTasks(parsedContent);
   } catch (error) {
     if (error instanceof SyntaxError) {
@@ -100,7 +100,7 @@ function getCst(content: string, runtime: JDLRuntime) {
   }
   try {
     const processedInput = filterJDLDirectives(removeInternalJDLComments(content));
-    return parser.getCst(processedInput, undefined, runtime);
+    return apiGetCst(processedInput, runtime);
   } catch (error) {
     if (error instanceof SyntaxError) {
       logger.error(`Syntax error message:\n\t${error.message}`);
