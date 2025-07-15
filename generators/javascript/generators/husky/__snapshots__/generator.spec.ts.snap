@@ -6,7 +6,8 @@ exports[`generator - javascript:husky skipCommitHook(false) should match files s
 {
   ".husky/pre-commit": {
     "contents": "if [ -z "$(which lint-staged)" ]; then
-    ./npmw install
+    echo 'Running package manager install'
+    npm install
 fi
 
 lint-staged

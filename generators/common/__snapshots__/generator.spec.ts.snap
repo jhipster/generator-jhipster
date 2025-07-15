@@ -28,7 +28,8 @@ trim_trailing_whitespace = false
   },
   ".husky/pre-commit": {
     "contents": "if [ -z "$(which lint-staged)" ]; then
-    ./npmw install
+    echo 'Running package manager install'
+    npm install
 fi
 
 lint-staged
