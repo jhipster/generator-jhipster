@@ -79,7 +79,7 @@ function setOptionsToEachEntityName(jdlOption: AbstractJDLOption): void {
   });
   jdlOption.entityNames.forEach(entityName => {
     const serviceOptionValue = convertedOptionContent.get(entityName).service;
-    if ((!serviceOptionValue || serviceOptionValue === 'no') && [DTO, FILTER].includes(jdlOption.name)) {
+    if ((!serviceOptionValue || serviceOptionValue === 'no') && ([DTO, FILTER] as string[]).includes(jdlOption.name)) {
       logger.info(
         `The ${jdlOption.name} option is set for ${entityName}, the '${serviceClassOptionValue}' value for the ` +
           "'service' is gonna be set for this entity if no other value has been set.",

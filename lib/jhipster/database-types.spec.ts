@@ -27,6 +27,7 @@ describe('jdl - DatabaseTypes', () => {
   describe('isSql', () => {
     describe('when not passing anything', () => {
       it('should return false', () => {
+        // @ts-expect-error invalid argument
         expect(databaseTypes.isSql()).to.be.false;
       });
     });

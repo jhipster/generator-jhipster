@@ -79,7 +79,7 @@ function forEach(passedFunction: (optionName: string) => void): void {
   optionNames.forEach(passedFunction);
 }
 
-function exists(passedOption: keyof typeof Values | 'microservice' | 'angularSuffix' | 'clientRootFolder', passedValue?: any) {
+function exists(passedOption: string | keyof typeof Values | 'microservice' | 'angularSuffix' | 'clientRootFolder', passedValue?: any) {
   return (
     !(optionNames as string[]).includes(passedOption) ||
     optionNames.some(

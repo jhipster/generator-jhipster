@@ -34,6 +34,7 @@ describe('jdl - JSONEntity', () => {
     describe('when not passing an entity name', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error invalid argument
           new JSONEntity({});
         }).to.throw(/^At least an entity name must be passed\.$/);
       });
@@ -81,13 +82,13 @@ JSONEntity {
           entityName: 'Titi',
           dto: 'mapstruct',
           entityTableName: 'titi',
-          fields: [42],
+          fields: [42 as any],
           fluentMethods: true,
           documentation: '',
           jpaMetamodelFiltering: true,
           pagination: 'pagination',
           embedded: true,
-          relationships: [42, 43],
+          relationships: [42 as any, 43 as any],
           service: 'serviceClass',
           microserviceName: 'nope',
           angularJSSuffix: 'yes',

@@ -59,7 +59,7 @@ relationship OneToMany {
 `,
           { applicationName: 'MyApp', databaseType: databaseTypes.SQL },
         ).import();
-        jestExpect(importState.exportedEntities[0].relationships[0].relationshipWithBuiltInEntity).toBe(true);
+        jestExpect(importState.exportedEntities[0].relationships?.[0].relationshipWithBuiltInEntity).toBe(true);
       });
     });
     describe('when not parsing applications', () => {
@@ -576,8 +576,8 @@ relationship OneToOne {
 `;
         const importer = createImporterFromContent(content, { databaseType: 'postgresql', applicationName: 'toto' });
         const imported = importer.import();
-        relationshipOnSource = imported.exportedEntities[0].relationships[0];
-        relationshipOnDestination = imported.exportedEntities[1].relationships[0];
+        relationshipOnSource = imported.exportedEntities[0].relationships?.[0];
+        relationshipOnDestination = imported.exportedEntities[1].relationships?.[0];
       });
 
       it('should export them', () => {
