@@ -20,6 +20,9 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 
+export * from '../lib/constants/yeoman.ts';
+export * from '../lib/constants/jhipster.ts';
+
 export const BLUEPRINT_API_VERSION = 'jhipster-8';
 // jhipster-bom version
 export const JHIPSTER_DEPENDENCIES_VERSION = '8.11.0';
@@ -66,9 +69,6 @@ export const GRADLE_BUILD_SRC_MAIN_DIR = `${GRADLE_BUILD_SRC_DIR}/src/main/groov
 
 // Note: this will be prepended with 'target/classes' for Maven, or with 'build/resources/main' for Gradle.
 export const CLIENT_DIST_DIR = 'static/';
-
-export const GENERATOR_JHIPSTER = 'generator-jhipster';
-export const YO_RC_FILE = '.yo-rc.json';
 
 export const JHIPSTER_CONFIG_DIR = '.jhipster';
 export const TEMPLATES_DOCKER_DIR = 'docker/';

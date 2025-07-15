@@ -19,7 +19,7 @@
 
 import type { OmitIndexSignature, Simplify } from 'type-fest';
 
-const filterNullishValues = value => value !== undefined && value !== null;
+const filterNullishValues = (value: unknown): boolean => value !== undefined && value !== null;
 
 /**
  * Copy and remove null and undefined values
@@ -39,10 +39,10 @@ export function removeFieldsWithNullishValues<const T extends Record<string, any
 
 function filterValue<const T extends Record<string, any>>(
   object: T,
-  customFilterValue: (any) => boolean = filterNullishValues,
+  customFilterValue: (arg: unknown) => boolean = filterNullishValues,
   deep = 1,
 ): T {
-  const clone = {};
+  const clone: Record<string, any> = {};
   for (const [key, value] of Object.entries(object)) {
     if (customFilterValue(value)) {
       if (typeof value === 'object') {

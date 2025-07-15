@@ -16,12 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Remove 'generator-' prefix from generators for compatibility with yeoman namespaces.
- * @param {string} packageName - name of the blueprint's package name
- * @returns {string} namespace of the blueprint
- */
+import type { JsonObject as YoRcConfigValue } from 'type-fest';
 
-export function packageNameToNamespace(packageName: string): string {
-  return packageName.replace('generator-', '');
-}
+export const YO_RC_FILE = '.yo-rc.json';
+
+export type { YoRcConfigValue };
+
+export type YoRcFileContent<Content extends YoRcConfigValue, Key extends string> = Record<Key, Content>;

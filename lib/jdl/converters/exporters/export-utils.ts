@@ -20,7 +20,8 @@
 import fs from 'fs';
 import { doesFileExist } from '../../core/utils/file-utils.js';
 import type { JHipsterYoRcContent } from '../../core/types/json-config.js';
-import { YO_RC_FILE, mergeYoRcContent, readYoRcFile } from '../../../utils/yo-rc.js';
+import { YO_RC_FILE } from '../../../constants/yeoman.ts';
+import { mergeYoRcContent, readYoRcFile } from '../../../utils/yo-rc.js';
 
 export const GENERATOR_NAME = 'generator-jhipster';
 

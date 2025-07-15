@@ -267,7 +267,7 @@ export function derivedPrimaryKeyProperties(primaryKey: PrimaryKey) {
     typeLong: primaryKey.type === LONG,
     typeInteger: primaryKey.type === INTEGER,
     typeNumeric: !primaryKey.composite && (primaryKey.fields[0] as any).fieldTypeNumeric,
-  } as any);
+  });
 }
 
 export function prepareEntityPrimaryKeyForTemplates(

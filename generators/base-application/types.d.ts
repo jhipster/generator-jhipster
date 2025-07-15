@@ -164,6 +164,15 @@ export type PrimaryKey<F extends Field = Field> = {
 
   tsSampleValues?: (string | number)[];
   javaSampleValues?: string[];
+
+  hasUUID?: boolean;
+  hasLong: boolean;
+  hasInteger?: boolean;
+  typeUUID?: boolean;
+  typeString?: boolean;
+  typeLong?: boolean;
+  typeInteger?: boolean;
+  typeNumeric?: boolean;
 };
 
 /**

@@ -73,12 +73,12 @@ export type JHipsterChoices = readonly [...(string | JHipsterNamedChoice)[]];
 
 export type PromptSpec = {
   readonly type: 'input' | 'list' | 'confirm' | 'checkbox';
-  readonly message: string | ((any) => string);
-  readonly when?: boolean | ((any) => boolean);
-  readonly default?: any | ((any) => any);
-  readonly filter?: any | ((any) => any);
-  readonly transformer?: any | ((any) => any);
-  readonly validate?: any | ((any) => any);
+  readonly message: string | ((arg: any) => string);
+  readonly when?: boolean | ((arg: any) => boolean);
+  readonly default?: any | ((arg: any) => any);
+  readonly filter?: any | ((arg: any) => any);
+  readonly transformer?: any | ((arg: any) => any);
+  readonly validate?: any | ((arg: any) => any);
 };
 
 type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & { scope?: CommandConfigScope };
