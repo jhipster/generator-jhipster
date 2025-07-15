@@ -30,7 +30,7 @@ describe('jdl - JDL DSL API', () => {
       let ast;
 
       before(() => {
-        ast = parse('@service(serviceClass) entity A {@Id field String}');
+        ast = parse('@service(serviceClass) entity A {@Id field String}', getDefaultRuntime());
       });
 
       it('should return an AST', () => {
@@ -57,7 +57,7 @@ describe('jdl - JDL DSL API', () => {
       let parseInvalidToken;
 
       before(() => {
-        parseInvalidToken = () => parse('entity ± {');
+        parseInvalidToken = () => parse('entity ± {', getDefaultRuntime());
       });
 
       it('should throw an error with the offset information', () => {
@@ -74,7 +74,7 @@ describe('jdl - JDL DSL API', () => {
         let parseWrongClosingBraces;
 
         before(() => {
-          parseWrongClosingBraces = () => parse('entity Person { ]');
+          parseWrongClosingBraces = () => parse('entity Person { ]', getDefaultRuntime());
         });
 
         it('should throw an error with position information', () => {
@@ -90,7 +90,7 @@ describe('jdl - JDL DSL API', () => {
         let parseMissingClosingBraces;
 
         before(() => {
-          parseMissingClosingBraces = () => parse('entity Person {');
+          parseMissingClosingBraces = () => parse('entity Person {', getDefaultRuntime());
         });
 
         it('should throw an error with typeof MismatchTokenException', () => {
@@ -110,7 +110,7 @@ describe('jdl - JDL DSL API', () => {
       it('should throw an error', () => {
         // lower case entityName first char
         const invalidInput = 'entity person { }';
-        expect(() => parse(invalidInput)).to.throw(/.+\/\^\[A-Z][^]+line: 1.+column: 8/);
+        expect(() => parse(invalidInput, getDefaultRuntime())).to.throw(/.+\/\^\[A-Z][^]+line: 1.+column: 8/);
       });
     });
   });
@@ -120,7 +120,7 @@ describe('jdl - JDL DSL API', () => {
       let result;
 
       before(() => {
-        result = getSyntacticAutoCompleteSuggestions('');
+        result = getSyntacticAutoCompleteSuggestions('', getDefaultRuntime());
       });
 
       it('should provide suggestions', () => {
@@ -145,7 +145,7 @@ describe('jdl - JDL DSL API', () => {
 
       before(() => {
         const input = 'lastName string ';
-        result = getSyntacticAutoCompleteSuggestions(input, 'fieldDeclaration');
+        result = getSyntacticAutoCompleteSuggestions(input, getDefaultRuntime(), { startRule: 'fieldDeclaration' });
       });
 
       it('should provide suggestions', () => {
@@ -160,7 +160,7 @@ describe('jdl - JDL DSL API', () => {
 
       before(() => {
         const input = 'entity person { lastName string ';
-        result = getSyntacticAutoCompleteSuggestions(input);
+        result = getSyntacticAutoCompleteSuggestions(input, getDefaultRuntime());
       });
 
       it('should provide suggestions', () => {

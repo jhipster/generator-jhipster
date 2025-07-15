@@ -17,17 +17,11 @@
  * limitations under the License.
  */
 
+import type { CstNode, IToken } from 'chevrotain';
 import { rulesNames } from './rules.js';
 import EnumIssue from './issues/enum-issue.js';
-import type { FieldDeclaration } from './field-linter.js';
 
 let issues: EnumIssue[];
-
-export type EnumDeclaration = {
-  children: {
-    NAME: any[];
-  };
-};
 
 /**
  * Check enums for lint issues.
@@ -36,7 +30,7 @@ export type EnumDeclaration = {
  * @param fieldDeclarations - the list of field declarations, to check for unused enums
  * @return the found entity issues.
  */
-export function checkEnums(enumDeclarations: EnumDeclaration[], fieldDeclarations: FieldDeclaration[]): EnumIssue[] {
+export function checkEnums(enumDeclarations: CstNode[], fieldDeclarations: CstNode[]): EnumIssue[] {
   if (!enumDeclarations) {
     return [];
   }
@@ -46,11 +40,11 @@ export function checkEnums(enumDeclarations: EnumDeclaration[], fieldDeclaration
   return issues;
 }
 
-function checkForDuplicatedEnums(enumDeclarations: EnumDeclaration[]) {
+function checkForDuplicatedEnums(enumDeclarations: CstNode[]) {
   const enumNames = new Set();
   const duplicatedEnumIssues = new Map(); // key: enumName, value: issue
   enumDeclarations.forEach(enumDeclaration => {
-    const enumName = enumDeclaration.children.NAME[0].image;
+    const enumName = (enumDeclaration.children.NAME[0] as IToken).image;
     if (enumNames.has(enumName)) {
       if (!duplicatedEnumIssues.has(enumName)) {
         duplicatedEnumIssues.set(
@@ -70,9 +64,11 @@ function checkForDuplicatedEnums(enumDeclarations: EnumDeclaration[]) {
   });
 }
 
-function checkForUnusedEnums(enumDeclarations: EnumDeclaration[], fieldDeclarations: FieldDeclaration[]) {
-  const fieldTypes = fieldDeclarations.map(fieldDeclaration => fieldDeclaration.children.type[0].children.NAME[0].image);
-  const declaredEnums = new Set(enumDeclarations.map(enumDeclaration => enumDeclaration.children.NAME[0].image));
+function checkForUnusedEnums(enumDeclarations: CstNode[], fieldDeclarations: CstNode[]) {
+  const fieldTypes = fieldDeclarations.map(
+    fieldDeclaration => ((fieldDeclaration.children.type[0] as CstNode).children.NAME[0] as IToken).image,
+  );
+  const declaredEnums = new Set(enumDeclarations.map(enumDeclaration => (enumDeclaration.children.NAME[0] as IToken).image));
   fieldTypes.forEach(usedEnum => {
     declaredEnums.delete(usedEnum);
   });

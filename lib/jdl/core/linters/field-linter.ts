@@ -17,15 +17,9 @@
  * limitations under the License.
  */
 
+import type { CstNode, IToken } from 'chevrotain';
 import { rulesNames } from './rules.js';
 import FieldIssue from './issues/field-issue.js';
-
-export type FieldDeclaration = {
-  children: {
-    NAME: any[];
-    type: any[];
-  };
-};
 
 let issues: FieldIssue[];
 
@@ -36,7 +30,7 @@ let issues: FieldIssue[];
  * @param {Array} fieldDeclarations - the field declaration list
  * @return the found entity issues.
  */
-export function checkFields(entityName: string, fieldDeclarations: FieldDeclaration[]): FieldIssue[] {
+export function checkFields(entityName: string, fieldDeclarations: CstNode[]): FieldIssue[] {
   if (fieldDeclarations.length === 0) {
     return [];
   }
@@ -45,11 +39,11 @@ export function checkFields(entityName: string, fieldDeclarations: FieldDeclarat
   return issues;
 }
 
-function checkForDuplicatedFields(entityName: string, fieldDeclarations: FieldDeclaration[]) {
+function checkForDuplicatedFields(entityName: string, fieldDeclarations: CstNode[]) {
   const fieldNames = new Set();
   const duplicatedFieldIssues = new Map<string, FieldIssue>(); // key: fieldName, value: issue
   fieldDeclarations.forEach(fieldDeclaration => {
-    const fieldName = fieldDeclaration.children.NAME[0].image;
+    const fieldName = (fieldDeclaration.children.NAME[0] as IToken).image;
     if (fieldNames.has(fieldName)) {
       if (!duplicatedFieldIssues.has(fieldName)) {
         duplicatedFieldIssues.set(

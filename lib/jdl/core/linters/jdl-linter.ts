@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
+import type { CstNode, IToken } from 'chevrotain';
 import type { JDLRuntime } from '../types/runtime.js';
 import { getCstFromContent } from '../readers/jdl-reader.js';
 import Issues from './issues/issues.js';
-import type { EntityDeclaration } from './entity-linter.js';
 import { checkEntities } from './entity-linter.js';
 import { checkFields } from './field-linter.js';
 import { checkEnums } from './enum-linter.js';
@@ -43,15 +43,7 @@ export function createJDLLinterFromContent(jdlString: string, runtime: JDLRuntim
   return makeJDLLinter(jdlString, runtime);
 }
 
-type CST = {
-  children: {
-    entityDeclaration: EntityDeclaration[];
-    enumDeclaration: [];
-    relationDeclaration: [];
-  };
-};
-
-let cst: CST;
+let cst: CstNode;
 let issues: Issues;
 
 function makeJDLLinter(content: any, runtime: JDLRuntime) {
@@ -71,17 +63,17 @@ function makeJDLLinter(content: any, runtime: JDLRuntime) {
 
 function checkForEntityDeclarationIssues() {
   const entityDeclarations = cst.children.entityDeclaration;
-  const entityIssues = checkEntities(entityDeclarations);
+  const entityIssues = checkEntities(entityDeclarations as CstNode[]);
   issues.addEntityIssues(entityIssues);
 }
 
 function checkForFieldDeclarationIssues() {
-  const entityDeclarations = cst.children.entityDeclaration;
+  const entityDeclarations = cst.children.entityDeclaration as CstNode[];
   if (!entityDeclarations) {
     return;
   }
   entityDeclarations.forEach(entityDeclaration => {
-    const entityName = entityDeclaration.children.NAME[0].image;
+    const entityName = (entityDeclaration.children.NAME[0] as IToken).image;
     const fieldDeclarations = getFieldDeclarationsFromEntity(entityDeclaration);
     if (fieldDeclarations.length !== 0) {
       const fieldIssues = checkFields(entityName, fieldDeclarations);
@@ -91,34 +83,30 @@ function checkForFieldDeclarationIssues() {
 }
 
 function checkForEnumDeclarationIssues() {
-  const enumDeclarations = cst.children.enumDeclaration;
-  const entityDeclarations = cst.children.entityDeclaration;
+  const enumDeclarations = cst.children.enumDeclaration as CstNode[];
+  const entityDeclarations = cst.children.entityDeclaration as CstNode[];
   const fieldDeclarations = getAllFieldDeclarations(entityDeclarations);
   const enumIssues = checkEnums(enumDeclarations, fieldDeclarations);
   issues.addEnumIssues(enumIssues);
 }
 
 function checkForRelationshipIssues() {
-  const relationshipDeclarations = cst.children.relationDeclaration;
+  const relationshipDeclarations = cst.children.relationDeclaration as CstNode[];
   const relationshipIssues = checkRelationships(relationshipDeclarations);
   issues.addRelationshipIssues(relationshipIssues);
 }
 
-function getAllFieldDeclarations(entityDeclarations: EntityDeclaration[]) {
+function getAllFieldDeclarations(entityDeclarations: CstNode[]): CstNode[] {
   if (!entityDeclarations) {
     return [];
   }
   return entityDeclarations.reduce(
-    (fieldDeclarations, entityDeclaration) => fieldDeclarations.concat(getFieldDeclarationsFromEntity(entityDeclaration)),
+    (fieldDeclarations: CstNode[], entityDeclaration) => fieldDeclarations.concat(getFieldDeclarationsFromEntity(entityDeclaration)),
     [],
   );
 }
 
-function getFieldDeclarationsFromEntity(entityDeclaration: EntityDeclaration) {
-  const entityBody = entityDeclaration.children.entityBody;
-  const entityFields = entityBody?.[0].children.fieldDeclaration;
-  if (entityBody && entityFields) {
-    return entityFields;
-  }
-  return [];
+function getFieldDeclarationsFromEntity(entityDeclaration: CstNode): CstNode[] {
+  const entityBody = entityDeclaration.children.entityBody?.[0] as CstNode | undefined;
+  return (entityBody?.children.fieldDeclaration as CstNode[]) ?? [];
 }
