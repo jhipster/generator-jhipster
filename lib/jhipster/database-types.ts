@@ -26,7 +26,7 @@ const ORACLE = 'oracle';
 const H2_DISK = 'h2Disk';
 const H2_MEMORY = 'h2Memory';
 
-const databaseTypes: any = {
+const databaseTypes = {
   SQL,
   MYSQL,
   MARIADB,
@@ -40,7 +40,7 @@ const databaseTypes: any = {
   H2_DISK,
   H2_MEMORY,
   NO: 'no',
+  isSql: (type: string) => [SQL, MYSQL, POSTGRESQL, ORACLE, MARIADB, MSSQL, H2_DISK, H2_MEMORY].includes(type),
 };
-databaseTypes.isSql = type => [SQL, MYSQL, POSTGRESQL, ORACLE, MARIADB, MSSQL, H2_DISK, H2_MEMORY].includes(type);
 
 export default databaseTypes;

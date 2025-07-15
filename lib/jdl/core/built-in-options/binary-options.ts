@@ -32,7 +32,7 @@ const Options = {
   SEARCH: 'search',
   ANGULAR_SUFFIX: 'angularSuffix',
   CLIENT_ROOT_FOLDER: 'clientRootFolder',
-};
+} as const satisfies Record<string, string>;
 
 const optionNames = Object.values(Options);
 
@@ -50,7 +50,7 @@ const Values = {
   service: serviceValues,
   pagination: paginationValues,
   search: searchValues,
-};
+} as const;
 
 const DefaultValues = {
   [Options.DTO]: Values[Options.DTO].NO,
@@ -58,8 +58,8 @@ const DefaultValues = {
   [Options.PAGINATION]: Values[Options.PAGINATION].NO,
 };
 
-function getOptionName(optionValue): string | undefined {
-  return optionNames.find(optionName => Values[optionName]?.[optionValue]);
+function getOptionName(optionValue: string): string | undefined {
+  return optionNames.find(optionName => (Values as Record<string, Record<string, string>>)[optionName]?.[optionValue]);
 }
 
 const OptionValues = {
@@ -70,25 +70,25 @@ const OptionValues = {
   'infinite-scroll': 'INFINITE-SCROLL',
   elasticsearch: 'ELASTICSEARCH',
   couchbase: 'COUCHBASE',
-};
+} as const;
 
-function forEach(passedFunction) {
+function forEach(passedFunction: (optionName: string) => void): void {
   if (!passedFunction) {
     throw new Error('A function has to be passed to loop over the binary options.');
   }
   optionNames.forEach(passedFunction);
 }
 
-function exists(passedOption, passedValue?: any) {
+function exists(passedOption: keyof typeof Values | 'microservice' | 'angularSuffix' | 'clientRootFolder', passedValue?: any) {
   return (
-    !Object.values(Options).includes(passedOption) ||
-    Object.values(Options).some(
+    !(optionNames as string[]).includes(passedOption) ||
+    optionNames.some(
       option =>
         passedOption === option &&
         (passedOption === Options.MICROSERVICE ||
           passedOption === Options.ANGULAR_SUFFIX ||
           passedOption === Options.CLIENT_ROOT_FOLDER ||
-          Object.values(Values[option]).includes(passedValue)),
+          Object.values((Values as Record<string, Record<string, string>>)[option]).includes(passedValue)),
     )
   );
 }

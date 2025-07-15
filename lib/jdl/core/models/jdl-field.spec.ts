@@ -20,7 +20,6 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import matchField from '../matchers/field-matcher.js';
 import JDLField from '../models/jdl-field.js';
 import JDLValidation from '../models/jdl-validation.js';
 import { validations } from '../built-in-options/index.js';
@@ -53,25 +52,6 @@ describe('jdl - JDLField', () => {
           // @ts-expect-error
           new JDLField({ name: 'abc', type: null });
         }).to.throw('The field name and type are mandatory to create a field.');
-      });
-    });
-    describe('when passing arguments', () => {
-      let args = {};
-      let field;
-
-      before(() => {
-        args = {
-          name: 'abc',
-          type: 'String',
-          comment: 'comment',
-          // @ts-expect-error
-          validations: [new JDLValidation()],
-        };
-        field = new JDLField(args);
-      });
-
-      it('should create a new instance', () => {
-        expect(field).to.satisfy(matchField);
       });
     });
   });

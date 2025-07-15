@@ -5,7 +5,15 @@ export default class JDLApplicationDefinition {
   optionTypes: Record<string, JDLApplicationOptionType>;
   quotedOptionNames: string[];
 
-  constructor({ optionValues, optionTypes, quotedOptionNames }) {
+  constructor({
+    optionValues,
+    optionTypes,
+    quotedOptionNames,
+  }: {
+    optionValues: Record<string, JDLApplicationOptionValue>;
+    optionTypes: Record<string, JDLApplicationOptionType>;
+    quotedOptionNames: string[];
+  }) {
     this.optionValues = optionValues;
     this.optionTypes = optionTypes;
     this.quotedOptionNames = quotedOptionNames;

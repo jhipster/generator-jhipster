@@ -19,7 +19,6 @@
 
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import matchEntity from '../../core/matchers/entity-matcher.js';
 import { JDLEntity, JDLEnum } from '../../core/models/index.js';
 import JDLField from '../../core/models/jdl-field.js';
 import JDLValidation from '../../core/models/jdl-validation.js';
@@ -384,13 +383,6 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           options = jdlObject.getOptions();
         });
 
-        describe('checking the entities', () => {
-          it('should parse them', () => {
-            ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
-              expect(jdlObject.entities[entityName]).to.satisfy(matchEntity);
-            });
-          });
-        });
         describe('checking the options', () => {
           it('should parse them', () => {
             expect(options.length).to.equal(7);

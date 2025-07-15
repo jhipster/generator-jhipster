@@ -19,10 +19,10 @@
 
 const Options = {
   BUILT_IN_ENTITY: 'builtInEntity',
-};
+} as const;
 
-function exists(option) {
-  return Object.values(Options).includes(option);
+function exists(option: string): boolean {
+  return (Object.values(Options) as string[]).includes(option);
 }
 
 export default {

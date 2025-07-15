@@ -27,31 +27,27 @@ const ValidationTypes = {
   PATTERN: 'pattern',
   MINBYTES: 'minbytes',
   MAXBYTES: 'maxbytes',
+} as const;
+
+const exists = (validation: string) => (Object.values(ValidationTypes) as string[]).includes(validation);
+
+const needsValuedMap = {
+  required: false,
+  unique: false,
+  min: true,
+  max: true,
+  minlength: true,
+  maxlength: true,
+  pattern: true,
+  minbytes: true,
+  maxbytes: true,
+} as const;
+
+const needsValue = (validation: keyof typeof needsValuedMap) => {
+  return needsValuedMap[validation];
 };
 
-const exists = validation =>
-  Object.keys(ValidationTypes)
-    .map(key => ValidationTypes[key])
-    .includes(validation);
-
-const needsValue = validation => {
-  const valuedMap = {
-    required: false,
-    unique: false,
-    min: true,
-    max: true,
-    minlength: true,
-    maxlength: true,
-    pattern: true,
-    minbytes: true,
-    maxbytes: true,
-  };
-  return valuedMap[validation];
-};
-
-const SUPPORTED_VALIDATION_RULES = Object.keys(ValidationTypes)
-  .map(key => ValidationTypes[key])
-  .filter(e => typeof e === 'string');
+const SUPPORTED_VALIDATION_RULES = Object.values(ValidationTypes) as string[];
 
 const Validations = {
   ...ValidationTypes,
