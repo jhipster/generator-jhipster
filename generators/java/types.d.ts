@@ -175,8 +175,6 @@ export type Application<E extends BaseApplicationEntity<BaseApplicationField, Ba
 
       domains: string[];
       jhipsterDependenciesVersion?: string;
-
-      endpointPrefix?: string;
     };
 
 export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };

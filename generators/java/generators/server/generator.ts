@@ -31,21 +31,6 @@ export default class ServerGenerator extends JavaApplicationGenerator {
     }
   }
 
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      preparing({ applicationDefaults }) {
-        applicationDefaults({
-          endpointPrefix: ({ applicationTypeMicroservice, lowercaseBaseName }) =>
-            applicationTypeMicroservice ? `services/${lowercaseBaseName}` : '',
-        });
-      },
-    });
-  }
-
-  get [JavaApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
-  }
-
   get postWriting() {
     return this.asPostWritingTaskGroup({
       packageJsonScripts({ application }) {

@@ -30,12 +30,12 @@ export const applicationTypesChoices = [
     name: 'Monolithic application (recommended for simple projects)',
   },
   {
-    value: APPLICATION_TYPE_MICROSERVICE,
-    name: 'Microservice application',
-  },
-  {
     value: APPLICATION_TYPE_GATEWAY,
     name: 'Gateway application',
+  },
+  {
+    value: APPLICATION_TYPE_MICROSERVICE,
+    name: 'Microservice application',
   },
 ] as const satisfies JHipsterNamedChoice[];
 
