@@ -39,6 +39,8 @@ import type { JDLApplicationConfig } from './core/types/parsing.js';
 import type { JDLRuntime } from './core/types/runtime.js';
 import { createRuntime, getDefaultRuntime } from './core/runtime.js';
 import { BASE_NAME_KEY } from './core/built-in-options/index.ts';
+import type { JSONEntity } from './core/types/json-config.js';
+import type JDLJSONEntity from './core/basic-types/json-entity.ts';
 
 const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the generator as it circles
 
@@ -86,9 +88,9 @@ export function createImporterFromContent(jdlString, configuration?: JDLApplicat
 export type ApplicationWithEntities = { config: any; namespaceConfigs: Record<string, Record<string, any>>; entities: any[] };
 
 export type ImportState = {
-  exportedApplications: any[];
+  exportedApplications: PostProcessedJDLJSONApplication[];
   exportedApplicationsWithEntities: Record<string, ApplicationWithEntities>;
-  exportedEntities: any[];
+  exportedEntities: JSONEntity[];
   exportedDeployments: any[];
 };
 
@@ -170,7 +172,7 @@ function importOnlyEntities(jdlObject: JDLObject, configuration: JDLApplicationC
 
   const entitiesPerApplicationMap = JDLWithoutApplicationToJSONConverter.convert(jdlObject, applicationName!);
   const jsonEntities = entitiesPerApplicationMap.get(applicationName!);
-  return exportJSONEntities(jsonEntities, configuration);
+  return exportJSONEntities(jsonEntities!, configuration);
 }
 
 function importOneApplicationAndEntities(jdlObject: JDLObject) {
@@ -223,7 +225,7 @@ function importApplicationsAndEntities(jdlObject) {
       forSeveralApplications: true,
     });
     const exportedConfig = importState.exportedApplications.find(config => applicationName === config['generator-jhipster'].baseName);
-    const { 'generator-jhipster': config, ...remaining } = exportedConfig;
+    const { 'generator-jhipster': config, ...remaining } = exportedConfig!;
     importState.exportedApplicationsWithEntities[applicationName] = {
       config,
       ...remaining,
@@ -238,7 +240,7 @@ function importDeployments(deployments) {
   return exportDeployments(deployments);
 }
 
-function exportJSONEntities(entities, configuration) {
+function exportJSONEntities(entities: JDLJSONEntity[], configuration) {
   let baseName = configuration.applicationName;
   let applicationType = configuration.applicationType;
 

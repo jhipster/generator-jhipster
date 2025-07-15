@@ -16,7 +16,6 @@
     "lib/command",
     "lib/jdl/**/*.spec.ts",
     "lib/jdl/*.*",
-    "lib/jdl/core/basic-types",
     "lib/jdl/core/__test-support__",
     "lib/jdl/core/linters",
     "lib/jdl/core/models",

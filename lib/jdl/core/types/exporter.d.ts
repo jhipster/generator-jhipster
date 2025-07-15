@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { GENERATOR_NAME } from '../../converters/exporters/export-utils.ts';
-import type { JSONEntity } from './json-config.js';
+import type JDLJSONEntity from '../basic-types/json-entity.ts';
 
 export type JDLJSONApplicationContent = {
   entities?: string[];
@@ -56,6 +56,6 @@ export type JhipsterJSONJDLApplicationExporter = {
 };
 
 export type JhipsterJSONJDLExporterWrapper = {
-  entities: JSONEntity[];
+  entities: JDLJSONEntity[];
   application: JhipsterJSONJDLApplicationExporter;
 };

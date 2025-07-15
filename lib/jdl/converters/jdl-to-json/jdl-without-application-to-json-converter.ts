@@ -90,6 +90,6 @@ function setRelationships(): void {
 
 function setApplicationToEntities(): void {
   Object.keys(entities!).forEach(entityName => {
-    entities![entityName].applications = '*';
+    entities![entityName].applications.push('*');
   });
 }
