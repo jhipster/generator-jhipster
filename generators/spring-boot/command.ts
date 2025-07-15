@@ -20,10 +20,11 @@ import chalk from 'chalk';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
 import { createBase64Secret, createSecret } from '../../lib/utils/index.js';
-import { applicationTypes, authenticationTypes } from '../../lib/jhipster/index.js';
+import { applicationTypes, authenticationTypes, databaseTypes } from '../../lib/jhipster/index.js';
 
 const { OAUTH2, SESSION, JWT } = authenticationTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
+const NO_DATABASE = databaseTypes.NO;
 
 const ALPHANUMERIC_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
 
@@ -196,6 +197,11 @@ const command = {
       },
       choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
       scope: 'storage',
+      configure: gen => {
+        if (gen.jhipsterConfig.syncUserWithIdp && gen.jhipsterConfig.databaseType === NO_DATABASE) {
+          throw new Error('syncUserWithIdp and no databaseType are not compatible');
+        }
+      },
     },
     databaseMigration: {
       description: 'Database migration',
