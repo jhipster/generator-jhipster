@@ -43,7 +43,7 @@ export const createRuntime = (definition: JDLApplicationConfig): JDLRuntime => {
   let parser: JDLParser;
 
   return {
-    get tokens() {
+    get tokens(): Record<string, TokenType> {
       if (!tokens) {
         const applicationTokens = buildApplicationTokens(newDefinition.tokenConfigs);
         tokens = buildTokens({ applicationTokens, deploymentTokens });
@@ -52,13 +52,13 @@ export const createRuntime = (definition: JDLApplicationConfig): JDLRuntime => {
       }
       return tokens;
     },
-    get lexer() {
+    get lexer(): Lexer {
       if (!lexer) {
         lexer = createJDLLexer(this.tokens);
       }
       return lexer;
     },
-    get parser() {
+    get parser(): JDLParser {
       if (!parser) {
         parser = new JDLParser(this.tokens);
         parser.parse();

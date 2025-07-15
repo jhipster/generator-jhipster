@@ -17,7 +17,19 @@
  * limitations under the License.
  */
 
-import type { Alternation, Alternative, NonTerminal, Option, Repetition, RepetitionMandatory, Rule } from 'chevrotain';
+import type {
+  Alternation,
+  Alternative,
+  NonTerminal,
+  Option,
+  Repetition,
+  RepetitionMandatory,
+  RepetitionMandatoryWithSeparator,
+  RepetitionWithSeparator,
+  Rule,
+  Terminal,
+  TokenType,
+} from 'chevrotain';
 import { GAstVisitor } from 'chevrotain';
 
 export default class TokenCollectorVisitor extends GAstVisitor {
@@ -29,22 +41,22 @@ export default class TokenCollectorVisitor extends GAstVisitor {
   visitAlternation(_node: Alternation) {}
   visitRule(_node: Rule) {}
 
-  actualTokens: any[];
+  actualTokens: TokenType[];
 
   constructor() {
     super();
     this.actualTokens = [];
   }
 
-  visitTerminal(node) {
+  visitTerminal(node: Terminal) {
     this.actualTokens.push(node.terminalType);
   }
 
-  visitRepetitionMandatoryWithSeparator(node) {
+  visitRepetitionMandatoryWithSeparator(node: RepetitionMandatoryWithSeparator) {
     this.actualTokens.push(node.separator);
   }
 
-  visitRepetitionWithSeparator(node) {
+  visitRepetitionWithSeparator(node: RepetitionWithSeparator) {
     this.actualTokens.push(node.separator);
   }
 }
