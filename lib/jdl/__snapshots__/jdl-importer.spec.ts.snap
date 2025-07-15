@@ -25,13 +25,13 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
   "exportedApplicationsWithEntities": {},
   "exportedDeployments": [],
   "exportedEntities": [
-    JSONEntity {
+    {
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
       "documentation": "",
-      "dto": undefined,
       "embedded": true,
-      "entityTableName": undefined,
       "fields": [
         {
           "fieldName": "name",
@@ -53,12 +53,8 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "fieldType": "ImageBlob",
         },
       ],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Department",
-      "pagination": undefined,
-      "readOnly": undefined,
       "relationships": [
         {
           "options": {
@@ -85,15 +81,13 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "many-to-many",
         },
       ],
-      "service": undefined,
     },
-    JSONEntity {
+    {
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
       "documentation": "JobHistory comment.",
-      "dto": undefined,
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [
         {
           "fieldName": "startDate",
@@ -113,8 +107,6 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "fieldType": "Duration",
         },
       ],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "JobHistory",
       "pagination": "infinite-scroll",
@@ -143,15 +135,13 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "many-to-many",
         },
       ],
-      "service": undefined,
     },
-    JSONEntity {
+    {
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
       "documentation": "",
-      "dto": undefined,
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [
         {
           "fieldName": "title",
@@ -177,12 +167,9 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "fieldType": "Long",
         },
       ],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Job",
       "pagination": "pagination",
-      "readOnly": undefined,
       "relationships": [
         {
           "otherEntityField": "title",
@@ -208,15 +195,14 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "many-to-many",
         },
       ],
-      "service": undefined,
     },
-    JSONEntity {
+    {
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
       "documentation": "The Employee entity.\\nSecond line in documentation.",
       "dto": "mapstruct",
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [
         {
           "documentation": "The firstname attribute.",
@@ -248,12 +234,9 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "fieldType": "Long",
         },
       ],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Employee",
       "pagination": "infinite-scroll",
-      "readOnly": undefined,
       "relationships": [
         {
           "otherEntityName": "job",
@@ -296,13 +279,12 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
       "searchEngine": "elasticsearch",
       "service": "serviceClass",
     },
-    JSONEntity {
+    {
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
       "documentation": "",
-      "dto": undefined,
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [
         {
           "fieldName": "streetAddress",
@@ -321,12 +303,8 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "fieldType": "String",
         },
       ],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Location",
-      "pagination": undefined,
-      "readOnly": undefined,
       "relationships": [
         {
           "otherEntityName": "country",
@@ -345,15 +323,13 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "one-to-one",
         },
       ],
-      "service": undefined,
     },
-    JSONEntity {
+    {
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
       "documentation": "",
-      "dto": undefined,
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [
         {
           "fieldName": "title",
@@ -364,12 +340,8 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "fieldType": "String",
         },
       ],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Task",
-      "pagination": undefined,
-      "readOnly": undefined,
       "relationships": [
         {
           "otherEntityField": "jobTitle",
@@ -380,27 +352,21 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "many-to-many",
         },
       ],
-      "service": undefined,
     },
-    JSONEntity {
+    {
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
       "documentation": "",
-      "dto": undefined,
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [
         {
           "fieldName": "name",
           "fieldType": "String",
         },
       ],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Country",
-      "pagination": undefined,
-      "readOnly": undefined,
       "relationships": [
         {
           "otherEntityField": "region",
@@ -410,30 +376,23 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "one-to-many",
         },
       ],
-      "service": undefined,
       "skipServer": true,
     },
-    JSONEntity {
+    {
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
       "documentation": "",
-      "dto": undefined,
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [
         {
           "fieldName": "name",
           "fieldType": "String",
         },
       ],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Region",
-      "pagination": undefined,
-      "readOnly": undefined,
       "relationships": [],
-      "service": undefined,
     },
   ],
 }
@@ -657,21 +616,13 @@ exports[`jdl - JDLImporter import when parsing deployment config should export t
 
 exports[`jdl - JDLImporter import when passing the unidirectionalRelationships option when parsing one JDL application and entities should return the corresponding exportedApplicationsWithEntities 1`] = `
 [
-  JSONEntity {
+  {
     "annotations": {},
     "applications": [
       "jhipster",
     ],
-    "documentation": undefined,
-    "dto": undefined,
-    "embedded": undefined,
-    "entityTableName": undefined,
     "fields": [],
-    "fluentMethods": undefined,
-    "jpaMetamodelFiltering": undefined,
     "name": "A",
-    "pagination": undefined,
-    "readOnly": undefined,
     "relationships": [
       {
         "otherEntityName": "b",
@@ -726,23 +677,14 @@ exports[`jdl - JDLImporter import when passing the unidirectionalRelationships o
         "relationshipType": "many-to-many",
       },
     ],
-    "service": undefined,
   },
-  JSONEntity {
+  {
     "annotations": {},
     "applications": [
       "jhipster",
     ],
-    "documentation": undefined,
-    "dto": undefined,
-    "embedded": undefined,
-    "entityTableName": undefined,
     "fields": [],
-    "fluentMethods": undefined,
-    "jpaMetamodelFiltering": undefined,
     "name": "B",
-    "pagination": undefined,
-    "readOnly": undefined,
     "relationships": [
       {
         "otherEntityName": "a",
@@ -773,7 +715,6 @@ exports[`jdl - JDLImporter import when passing the unidirectionalRelationships o
         "relationshipType": "many-to-many",
       },
     ],
-    "service": undefined,
   },
 ]
 `;

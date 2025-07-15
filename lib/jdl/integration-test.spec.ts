@@ -92,6 +92,7 @@ entity A
 Map {
   "jhipster" => [
     JSONEntity {
+      "angularJSSuffix": undefined,
       "annotations": {
         "booleanFalse": false,
         "booleanTrue": true,
@@ -101,7 +102,10 @@ Map {
         "string": "foo",
         "unary": true,
       },
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
+      "clientRootFolder": undefined,
       "documentation": undefined,
       "dto": undefined,
       "embedded": undefined,
@@ -109,11 +113,14 @@ Map {
       "fields": [],
       "fluentMethods": undefined,
       "jpaMetamodelFiltering": undefined,
+      "microserviceName": undefined,
       "name": "A",
       "pagination": undefined,
       "readOnly": undefined,
       "relationships": [],
       "service": undefined,
+      "skipClient": undefined,
+      "skipServer": undefined,
     },
   ],
 }
@@ -151,8 +158,12 @@ relationship ManyToOne {
 Map {
   "jhipster" => [
     JSONEntity {
+      "angularJSSuffix": undefined,
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
+      "clientRootFolder": undefined,
       "documentation": undefined,
       "dto": undefined,
       "embedded": undefined,
@@ -160,6 +171,7 @@ Map {
       "fields": [],
       "fluentMethods": undefined,
       "jpaMetamodelFiltering": undefined,
+      "microserviceName": undefined,
       "name": "A",
       "pagination": undefined,
       "readOnly": undefined,
@@ -173,10 +185,16 @@ Map {
         },
       ],
       "service": undefined,
+      "skipClient": undefined,
+      "skipServer": undefined,
     },
     JSONEntity {
+      "angularJSSuffix": undefined,
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
+      "clientRootFolder": undefined,
       "documentation": undefined,
       "dto": undefined,
       "embedded": undefined,
@@ -184,6 +202,7 @@ Map {
       "fields": [],
       "fluentMethods": undefined,
       "jpaMetamodelFiltering": undefined,
+      "microserviceName": undefined,
       "name": "B",
       "pagination": undefined,
       "readOnly": undefined,
@@ -197,6 +216,8 @@ Map {
         },
       ],
       "service": undefined,
+      "skipClient": undefined,
+      "skipServer": undefined,
     },
   ],
 }
@@ -238,8 +259,12 @@ relationship ManyToOne {
 Map {
   "jhipster" => [
     JSONEntity {
+      "angularJSSuffix": undefined,
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
+      "clientRootFolder": undefined,
       "documentation": undefined,
       "dto": undefined,
       "embedded": undefined,
@@ -247,6 +272,7 @@ Map {
       "fields": [],
       "fluentMethods": undefined,
       "jpaMetamodelFiltering": undefined,
+      "microserviceName": undefined,
       "name": "A",
       "pagination": undefined,
       "readOnly": undefined,
@@ -262,10 +288,16 @@ Map {
         },
       ],
       "service": undefined,
+      "skipClient": undefined,
+      "skipServer": undefined,
     },
     JSONEntity {
+      "angularJSSuffix": undefined,
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
+      "clientRootFolder": undefined,
       "documentation": undefined,
       "dto": undefined,
       "embedded": undefined,
@@ -273,11 +305,14 @@ Map {
       "fields": [],
       "fluentMethods": undefined,
       "jpaMetamodelFiltering": undefined,
+      "microserviceName": undefined,
       "name": "B",
       "pagination": undefined,
       "readOnly": undefined,
       "relationships": [],
       "service": undefined,
+      "skipClient": undefined,
+      "skipServer": undefined,
     },
   ],
 }
@@ -315,8 +350,12 @@ relationship ManyToOne {
 Map {
   "jhipster" => [
     JSONEntity {
+      "angularJSSuffix": undefined,
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
+      "clientRootFolder": undefined,
       "documentation": undefined,
       "dto": undefined,
       "embedded": undefined,
@@ -324,6 +363,7 @@ Map {
       "fields": [],
       "fluentMethods": undefined,
       "jpaMetamodelFiltering": undefined,
+      "microserviceName": undefined,
       "name": "A",
       "pagination": undefined,
       "readOnly": undefined,
@@ -339,10 +379,16 @@ Map {
         },
       ],
       "service": undefined,
+      "skipClient": undefined,
+      "skipServer": undefined,
     },
     JSONEntity {
+      "angularJSSuffix": undefined,
       "annotations": {},
-      "applications": "*",
+      "applications": [
+        "*",
+      ],
+      "clientRootFolder": undefined,
       "documentation": undefined,
       "dto": undefined,
       "embedded": undefined,
@@ -350,6 +396,7 @@ Map {
       "fields": [],
       "fluentMethods": undefined,
       "jpaMetamodelFiltering": undefined,
+      "microserviceName": undefined,
       "name": "B",
       "pagination": undefined,
       "readOnly": undefined,
@@ -366,6 +413,8 @@ Map {
         },
       ],
       "service": undefined,
+      "skipClient": undefined,
+      "skipServer": undefined,
     },
   ],
 }

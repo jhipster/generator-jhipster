@@ -159,10 +159,12 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
         it('should convert the entity', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -170,11 +172,14 @@ JSONEntity {
   "fields": [],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
         });
@@ -328,10 +333,12 @@ JSONEntity {
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": "mapstruct",
   "embedded": undefined,
@@ -339,11 +346,14 @@ JSONEntity {
   "fields": [],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": "serviceClass",
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
         });
@@ -387,10 +397,12 @@ JSONEntity {
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -398,11 +410,14 @@ JSONEntity {
   "fields": [],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": true,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": "serviceClass",
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
         });
@@ -436,10 +451,12 @@ JSONEntity {
         it('should prevent the entities from being searched', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -447,12 +464,15 @@ JSONEntity {
   "fields": [],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "searchEngine": "no",
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
         });
@@ -489,10 +509,12 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -509,11 +531,14 @@ JSONEntity {
   ],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
           });
@@ -559,10 +584,12 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -587,11 +614,14 @@ JSONEntity {
   ],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
           });
@@ -623,10 +653,12 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -640,11 +672,14 @@ JSONEntity {
   ],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
           });
@@ -676,10 +711,12 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -693,11 +730,14 @@ JSONEntity {
   ],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
           });
@@ -784,10 +824,12 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -830,11 +872,14 @@ JSONEntity {
   ],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
           });
@@ -869,10 +914,12 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -889,11 +936,14 @@ JSONEntity {
   ],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
           });
@@ -1676,10 +1726,12 @@ JSONEntity {
           jestExpect(convertedEntitiesForTataApplication).toMatchInlineSnapshot(`
 [
   JSONEntity {
+    "angularJSSuffix": undefined,
     "annotations": {},
     "applications": [
       "tata",
     ],
+    "clientRootFolder": undefined,
     "documentation": "The best entity",
     "dto": undefined,
     "embedded": undefined,
@@ -1687,17 +1739,22 @@ JSONEntity {
     "fields": [],
     "fluentMethods": undefined,
     "jpaMetamodelFiltering": undefined,
+    "microserviceName": undefined,
     "name": "A",
     "pagination": "pagination",
     "readOnly": undefined,
     "relationships": [],
     "service": undefined,
+    "skipClient": undefined,
+    "skipServer": undefined,
   },
   JSONEntity {
+    "angularJSSuffix": undefined,
     "annotations": {},
     "applications": [
       "tata",
     ],
+    "clientRootFolder": undefined,
     "documentation": "The best entity",
     "dto": undefined,
     "embedded": undefined,
@@ -1705,18 +1762,23 @@ JSONEntity {
     "fields": [],
     "fluentMethods": undefined,
     "jpaMetamodelFiltering": undefined,
+    "microserviceName": undefined,
     "name": "B",
     "pagination": "infinite-scroll",
     "readOnly": undefined,
     "relationships": [],
     "service": undefined,
+    "skipClient": undefined,
+    "skipServer": undefined,
   },
   JSONEntity {
+    "angularJSSuffix": undefined,
     "annotations": {},
     "applications": [
       "tata",
       "tutu",
     ],
+    "clientRootFolder": undefined,
     "documentation": "The best entity",
     "dto": undefined,
     "embedded": undefined,
@@ -1724,22 +1786,27 @@ JSONEntity {
     "fields": [],
     "fluentMethods": undefined,
     "jpaMetamodelFiltering": undefined,
+    "microserviceName": undefined,
     "name": "C",
     "pagination": "pagination",
     "readOnly": undefined,
     "relationships": [],
     "service": undefined,
+    "skipClient": undefined,
+    "skipServer": undefined,
   },
 ]
 `);
           jestExpect(convertedEntitiesForTutuApplication).toMatchInlineSnapshot(`
 [
   JSONEntity {
+    "angularJSSuffix": undefined,
     "annotations": {},
     "applications": [
       "tata",
       "tutu",
     ],
+    "clientRootFolder": undefined,
     "documentation": "The best entity",
     "dto": undefined,
     "embedded": undefined,
@@ -1747,17 +1814,22 @@ JSONEntity {
     "fields": [],
     "fluentMethods": undefined,
     "jpaMetamodelFiltering": undefined,
+    "microserviceName": undefined,
     "name": "C",
     "pagination": "pagination",
     "readOnly": undefined,
     "relationships": [],
     "service": undefined,
+    "skipClient": undefined,
+    "skipServer": undefined,
   },
   JSONEntity {
+    "angularJSSuffix": undefined,
     "annotations": {},
     "applications": [
       "tutu",
     ],
+    "clientRootFolder": undefined,
     "documentation": "The best entity",
     "dto": "mapstruct",
     "embedded": undefined,
@@ -1765,17 +1837,22 @@ JSONEntity {
     "fields": [],
     "fluentMethods": undefined,
     "jpaMetamodelFiltering": undefined,
+    "microserviceName": undefined,
     "name": "D",
     "pagination": "infinite-scroll",
     "readOnly": undefined,
     "relationships": [],
     "service": "serviceClass",
+    "skipClient": undefined,
+    "skipServer": undefined,
   },
   JSONEntity {
+    "angularJSSuffix": undefined,
     "annotations": {},
     "applications": [
       "tutu",
     ],
+    "clientRootFolder": undefined,
     "documentation": "The best entity",
     "dto": undefined,
     "embedded": undefined,
@@ -1783,11 +1860,14 @@ JSONEntity {
     "fields": [],
     "fluentMethods": undefined,
     "jpaMetamodelFiltering": undefined,
+    "microserviceName": undefined,
     "name": "E",
     "pagination": "infinite-scroll",
     "readOnly": undefined,
     "relationships": [],
     "service": undefined,
+    "skipClient": undefined,
+    "skipServer": undefined,
   },
 ]
 `);

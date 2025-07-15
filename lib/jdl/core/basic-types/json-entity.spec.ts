@@ -50,8 +50,10 @@ describe('jdl - JSONEntity', () => {
       it('should set default values', () => {
         jestExpect(entity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [],
+  "clientRootFolder": undefined,
   "documentation": undefined,
   "dto": undefined,
   "embedded": undefined,
@@ -59,11 +61,14 @@ JSONEntity {
   "fields": [],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "Toto",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
       });
@@ -273,8 +278,10 @@ JSONEntity {
       it('should set them', () => {
         jestExpect(jsonEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [],
+  "clientRootFolder": undefined,
   "documentation": "A comment",
   "dto": "mapstruct",
   "embedded": undefined,
@@ -282,11 +289,14 @@ JSONEntity {
   "fields": [],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "Toto",
   "pagination": "pagination",
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
       });
