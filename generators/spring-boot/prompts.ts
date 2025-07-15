@@ -20,22 +20,15 @@
 import chalk from 'chalk';
 import { intersection } from 'lodash-es';
 
-import {
-  applicationOptions,
-  applicationTypes,
-  authenticationTypes,
-  cacheTypes,
-  databaseTypes,
-  testFrameworkTypes,
-} from '../../lib/jhipster/index.js';
+import { applicationOptions, authenticationTypes, cacheTypes, databaseTypes, testFrameworkTypes } from '../../lib/jhipster/index.js';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.js';
 import { asPromptingTask } from '../base-application/support/task-type-inference.js';
 import type { Config as SpringDataRelationalConfig } from '../spring-data-relational/types.js';
 import type { Config as SpringCacheConfig } from '../spring-cache/types.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
 import type SpringBootGenerator from './generator.js';
 
 const { OptionNames } = applicationOptions;
-const { GATEWAY, MONOLITH } = applicationTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { OAUTH2 } = authenticationTypes;
 const { CASSANDRA, H2_DISK, H2_MEMORY, MONGODB, NEO4J, SQL, COUCHBASE } = databaseTypes;
@@ -160,7 +153,8 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
       },
       {
         when: answers =>
-          ((answers.cacheProvider !== NO_CACHE_PROVIDER && answers.cacheProvider !== MEMCACHED) || applicationType === GATEWAY) &&
+          ((answers.cacheProvider !== NO_CACHE_PROVIDER && answers.cacheProvider !== MEMCACHED) ||
+            applicationType === APPLICATION_TYPE_GATEWAY) &&
           answers.databaseType === SQL &&
           !reactive,
         type: 'confirm',
@@ -179,7 +173,7 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
   const { applicationType, reactive, databaseType } = this.jhipsterConfigWithDefaults;
 
   const choices: any[] = [];
-  if ([SQL, MONGODB, NEO4J].includes(databaseType)) {
+  if (([SQL, MONGODB, NEO4J] as string[]).includes(databaseType as string)) {
     choices.push({
       name: 'Elasticsearch as search engine',
       value: 'searchEngine:elasticsearch',
@@ -192,7 +186,7 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
     });
   }
   if (!reactive) {
-    if (applicationType === MONOLITH || applicationType === GATEWAY) {
+    if (applicationType === APPLICATION_TYPE_MONOLITH || applicationType === APPLICATION_TYPE_GATEWAY) {
       choices.push({
         name: 'WebSockets using Spring Websocket',
         value: 'websocket:spring-websocket',

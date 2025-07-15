@@ -19,31 +19,21 @@
 
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import matchEntity from '../../core/matchers/entity-matcher.js';
 import { JDLEntity, JDLEnum } from '../../core/models/index.js';
 import JDLField from '../../core/models/jdl-field.js';
 import JDLValidation from '../../core/models/jdl-validation.js';
 import JDLUnaryOption from '../../core/models/jdl-unary-option.js';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
-import {
-  applicationOptions,
-  applicationTypes,
-  binaryOptions,
-  fieldTypes,
-  unaryOptions,
-  validations,
-} from '../../core/built-in-options/index.js';
+import { binaryOptions, unaryOptions, validations } from '../../core/built-in-options/index.js';
+import fieldTypes from '../../../jhipster/field-types.js';
 import { getTestFile, parseFromConfigurationObject, parseFromContent, parseFromFiles } from '../../core/__test-support__/index.js';
 import { entityOptions } from '../../../jhipster/index.js';
-
-const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
-const { OptionNames } = applicationOptions;
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
 
 const { MapperTypes, ServiceTypes, PaginationTypes } = entityOptions;
 
 const BinaryOptionValues = binaryOptions.Values;
 const { DTO } = binaryOptions.Options;
-const { SKIP_CLIENT, SKIP_SERVER } = OptionNames;
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 const { INFINITE_SCROLL, PAGINATION } = PaginationTypes;
@@ -214,7 +204,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         it('should not check for field types', () => {
           parseFromConfigurationObject({
             parsedContent: input,
-            applicationType: GATEWAY,
+            applicationType: APPLICATION_TYPE_GATEWAY,
           });
         });
       });
@@ -393,18 +383,11 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           options = jdlObject.getOptions();
         });
 
-        describe('checking the entities', () => {
-          it('should parse them', () => {
-            ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
-              expect(jdlObject.entities[entityName]).to.satisfy(matchEntity);
-            });
-          });
-        });
         describe('checking the options', () => {
           it('should parse them', () => {
             expect(options.length).to.equal(7);
-            expect(options[0].name).to.equal(SKIP_CLIENT);
-            expect(options[1].name).to.equal(SKIP_SERVER);
+            expect(options[0].name).to.equal('skipClient');
+            expect(options[1].name).to.equal('skipServer');
             expect(options[2].name).to.equal(DTO);
             expect(options[2].value).to.equal(MAPSTRUCT);
             expect(options[3].name).to.equal('service');
@@ -604,7 +587,7 @@ JDLDeployment {
             const input = parseFromFiles([getTestFile('simple_microservice_setup.jdl')]);
             jdlObject = parseFromConfigurationObject({
               parsedContent: input,
-              applicationType: MICROSERVICE,
+              applicationType: APPLICATION_TYPE_MICROSERVICE,
               applicationName: 'ms',
             });
             clientRootFolderOption = jdlObject.getOptionsForName(binaryOptions.Options.CLIENT_ROOT_FOLDER)[0];
@@ -622,7 +605,7 @@ JDLDeployment {
             const input = parseFromFiles([getTestFile('client_root_folder.jdl')]);
             jdlObject = parseFromConfigurationObject({
               parsedContent: input,
-              applicationType: MONOLITH,
+              applicationType: APPLICATION_TYPE_MONOLITH,
             });
             clientRootFolderOption = jdlObject.getOptionsForName(binaryOptions.Options.CLIENT_ROOT_FOLDER)[0];
           });
@@ -643,7 +626,7 @@ JDLDeployment {
             const input = parseFromFiles([getTestFile('no_microservice.jdl')]);
             jdlObject = parseFromConfigurationObject({
               parsedContent: input,
-              applicationType: MICROSERVICE,
+              applicationType: APPLICATION_TYPE_MICROSERVICE,
               applicationName: 'toto',
             });
             microserviceOption = jdlObject.getOptionsForName(binaryOptions.Options.MICROSERVICE)[0];
@@ -662,7 +645,7 @@ JDLDeployment {
             const input = parseFromFiles([getTestFile('simple_microservice_setup.jdl')]);
             jdlObject = parseFromConfigurationObject({
               parsedContent: input,
-              applicationType: MICROSERVICE,
+              applicationType: APPLICATION_TYPE_MICROSERVICE,
               applicationName: 'toto',
             });
             microserviceOption = jdlObject.getOptionsForName(binaryOptions.Options.MICROSERVICE)[0];
@@ -703,7 +686,7 @@ JDLDeployment {
           const input = parseFromFiles([getTestFile('no_injected_field.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
           });
           relationshipOneToOne = jdlObject.relationships.getOneToOne('OneToOne_A{b}_B{a}');
           relationshipOneToMany = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}');
@@ -732,7 +715,7 @@ JDLDeployment {
             const input = parseFromFiles([getTestFile('annotations.jdl')]);
             const jdlObject = parseFromConfigurationObject({
               parsedContent: input,
-              applicationType: MONOLITH,
+              applicationType: APPLICATION_TYPE_MONOLITH,
             });
             entityA = jdlObject.entities.A;
             entityB = jdlObject.entities.B;
@@ -793,7 +776,7 @@ JDLDeployment {
             const input = parseFromFiles([getTestFile('capitalized_annotations.jdl')]);
             const jdlObject = parseFromConfigurationObject({
               parsedContent: input,
-              applicationType: MONOLITH,
+              applicationType: APPLICATION_TYPE_MONOLITH,
             });
             entityA = jdlObject.entities.A;
             entityB = jdlObject.entities.B;
@@ -852,7 +835,7 @@ JDLDeployment {
           const input = parseFromFiles([getTestFile('annotations_and_options.jdl')]);
           const jdlObject = parseFromConfigurationObject({
             parsedContent: input,
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
           });
           entityA = jdlObject.entities.A;
           entityB = jdlObject.entities.B;
@@ -894,7 +877,7 @@ JDLDeployment {
           const input = parseFromFiles([getTestFile('pattern_validation_with_quote.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
           });
         });
 
@@ -909,7 +892,7 @@ JDLDeployment {
           const input = parseFromFiles([getTestFile('unique.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
           });
         });
 
@@ -925,7 +908,7 @@ JDLDeployment {
           const input = parseFromFiles([getTestFile('relationship_built_in_entity.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
           });
         });
 

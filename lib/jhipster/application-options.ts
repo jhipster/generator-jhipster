@@ -23,7 +23,7 @@ import type {
   JDLApplicationOptionTypeValue,
   JDLApplicationOptionValue,
 } from '../jdl/core/types/parsing.js';
-import applicationTypes from './application-types.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';
 import cacheTypes from './cache-types.js';
@@ -35,7 +35,6 @@ import testFrameworkTypes from './test-framework-types.js';
 import websocketTypes from './websocket-types.js';
 import { builtInConfigPropsValidations } from './jdl-validator-definition.js';
 
-const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, ORACLE, POSTGRESQL, SQL, H2_DISK, H2_MEMORY } = databaseTypes;
 
 const NO_DATABASE = databaseTypes.NO;
@@ -123,9 +122,9 @@ const optionNames = {
 export const jhipsterOptionValues: Record<string, JDLApplicationOptionValue> = {
   // TODO refactor it mixes default values (e.g. BaseName=Jhipster) and element list (e.g. application types)
   [optionNames.APPLICATION_TYPE]: {
-    [MONOLITH]: MONOLITH,
-    [MICROSERVICE]: MICROSERVICE,
-    [GATEWAY]: GATEWAY,
+    [APPLICATION_TYPE_MONOLITH]: APPLICATION_TYPE_MONOLITH,
+    [APPLICATION_TYPE_MICROSERVICE]: APPLICATION_TYPE_MICROSERVICE,
+    [APPLICATION_TYPE_GATEWAY]: APPLICATION_TYPE_GATEWAY,
   },
   [optionNames.AUTHENTICATION_TYPE]: {
     [JWT]: JWT,
@@ -303,10 +302,9 @@ export const builtInJDLApplicationConfig: JDLApplicationConfig = {
   tokenConfigs: [],
 };
 
-const OptionNames = optionNames;
-const OptionValues = jhipsterOptionValues;
+export { optionNames as OptionNames };
 export default {
-  OptionNames,
-  OptionValues,
+  OptionNames: optionNames,
+  OptionValues: jhipsterOptionValues,
   QuotedOptionNames: jhipsterQuotedOptionNames,
 };

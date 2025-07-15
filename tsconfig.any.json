@@ -1,5 +1,4 @@
 {
-  "include": ["cli/**/*", "generators/**/*", "lib/**/*", "test/**/*", ".blueprint/**/*"],
   "exclude": [
     ".blueprint",
     "cli/cli.spec.mts",
@@ -15,14 +14,22 @@
     "generators/angular",
     "generators/app",
     "lib/command",
-    "lib/jdl",
+    "lib/jdl/**/*.spec.ts",
+    "lib/jdl/*.*",
+    "lib/jdl/core/__test-support__",
+    "lib/jdl/core/linters",
+    "lib/jdl/core/models",
+    "lib/jdl/core/parsing",
+    "lib/jdl/core/readers",
+    "lib/jdl/core/runtime.ts",
+    "lib/jdl/converters",
     "lib/jhipster/*.*",
     "lib/testing",
     "lib/types",
     "cli",
     "test"
   ],
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.spec.json",
   "compilerOptions": {
     "noEmit": true,
     "noImplicitAny": true,

@@ -22,18 +22,11 @@ import { existsSync } from 'fs';
 import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 
-import {
-  applicationTypes,
-  databaseTypes,
-  entityOptions,
-  fieldTypes,
-  reservedKeywords,
-  searchEngineTypes,
-  validations,
-} from '../../lib/jhipster/index.js';
+import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, searchEngineTypes, validations } from '../../lib/jhipster/index.js';
 import { stringifyApplicationData } from '../base-application/support/index.js';
 import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.js';
 import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
+import { APPLICATION_TYPE_GATEWAY } from '../../lib/core/application-types.ts';
 import { hibernateSnakeCase } from './support/index.js';
 import type {
   Application as ServerApplication,
@@ -46,7 +39,6 @@ import type {
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
 const { SQL, NO: NO_DATABASE } = databaseTypes;
-const { GATEWAY } = applicationTypes;
 
 const { NO: NO_SEARCH_ENGINE } = searchEngineTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -158,7 +150,10 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
       configurePagination({ application, entityName, entityConfig }) {
         const entityDatabaseType = entityConfig.databaseType ?? application.databaseType;
         // disable pagination if there is no database, unless it’s a microservice entity published by a gateway
-        if (entityDatabaseType === NO_DATABASE && (application.applicationType !== GATEWAY || !entityConfig.microserviceName)) {
+        if (
+          entityDatabaseType === NO_DATABASE &&
+          (application.applicationType !== APPLICATION_TYPE_GATEWAY || !entityConfig.microserviceName)
+        ) {
           const errorMessage = `Pagination is not supported for entity ${entityName} when the app doesn't use a database.`;
           if (!this.skipChecks) {
             throw new Error(errorMessage);

@@ -23,8 +23,9 @@ import { fileURLToPath } from 'url';
 import { before, describe, it } from 'esmocha';
 import sortKeys from 'sort-keys';
 
-import { applicationTypes, authenticationTypes } from '../lib/jhipster/index.js';
+import { authenticationTypes } from '../lib/jhipster/index.js';
 import { formatDateForChangelog } from '../generators/base/support/index.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../lib/core/application-types.js';
 
 const writeJsonSync = (file, content) => writeFileSync(file, JSON.stringify(content, null, 2));
 const readJsonSync = file => JSON.parse(fs.readFileSync(file, 'utf-8'));
@@ -33,7 +34,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const { JWT, SESSION } = authenticationTypes;
-const { GATEWAY, MICROSERVICE } = applicationTypes;
 
 const fixSamples = process.argv.includes('--fix-samples');
 const itSamplesPath = path.join(__dirname, '..', 'test-integration', 'samples');
@@ -79,7 +79,9 @@ describe('integration-test', () => {
               config.rememberMeKey = REMEMBER_ME_KEY;
               writeJsonSync(yoFile, yoJson);
             } else if (
-              (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
+              (config.authenticationType === JWT ||
+                config.applicationType === APPLICATION_TYPE_MICROSERVICE ||
+                config.applicationType === APPLICATION_TYPE_GATEWAY) &&
               config.jwtSecretKey !== JWT_SECRET_KEY
             ) {
               config.jwtSecretKey = JWT_SECRET_KEY;
@@ -95,7 +97,11 @@ describe('integration-test', () => {
         it('should contain creationTimestamp', () => {
           assert(config.creationTimestamp);
         });
-        if (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) {
+        if (
+          config.authenticationType === JWT ||
+          config.applicationType === APPLICATION_TYPE_MICROSERVICE ||
+          config.applicationType === APPLICATION_TYPE_GATEWAY
+        ) {
           it('should contain jwtSecretKey', () => {
             assert(config.jwtSecretKey);
           });

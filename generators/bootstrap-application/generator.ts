@@ -84,6 +84,8 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           prettierExtensions,
           documentationArchiveUrl: ({ jhipsterVersion }) =>
             `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`,
+          endpointPrefix: ({ applicationTypeMicroservice, lowercaseBaseName }) =>
+            applicationTypeMicroservice ? `services/${lowercaseBaseName}` : '',
         });
       },
     });

@@ -21,7 +21,7 @@ import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import JDLApplicationConfiguration from '../models/jdl-application-configuration.js';
 import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.js';
-import { applicationOptions } from '../built-in-options/index.js';
+import applicationOptions from '../../../jhipster/application-options.js';
 
 const { OptionNames } = applicationOptions;
 

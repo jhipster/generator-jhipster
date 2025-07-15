@@ -1,7 +1,6 @@
 import { before, describe, it } from 'esmocha';
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import {
-  applicationTypes,
   authenticationTypes,
   buildToolTypes,
   cacheTypes,
@@ -10,8 +9,8 @@ import {
   testFrameworkTypes,
 } from '../../lib/jhipster/index.js';
 import { GENERATOR_APP } from '../generator-list.js';
+import { APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.js';
 
-const { MONOLITH } = applicationTypes;
 const { H2_DISK, MYSQL, SQL } = databaseTypes;
 const { EHCACHE } = cacheTypes;
 const { JWT } = authenticationTypes;
@@ -31,7 +30,7 @@ describe('generator - client - prompts', () => {
           .withAnswers({
             baseName: 'sampleMysql',
             packageName: 'com.mycompany.myapp',
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
             databaseType: SQL,
             devDatabaseType: H2_DISK,
             prodDatabaseType: MYSQL,

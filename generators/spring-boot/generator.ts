@@ -47,8 +47,6 @@ import { addJavaImport, generateKeyStore, javaBeanCase } from '../java/support/i
 import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
 import { mutateData } from '../../lib/utils/index.js';
 import {
-  APPLICATION_TYPE_MICROSERVICE,
-  applicationTypes,
   cacheTypes,
   databaseTypes,
   fieldTypes,
@@ -62,6 +60,7 @@ import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import type { Config as ClientConfig } from '../client/types.js';
 import type { Config as SpringCacheConfig } from '../spring-cache/types.js';
 import type { Config as SpringCloudStreamConfig } from '../spring-cloud-stream/types.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
 import cleanupTask from './cleanup.js';
 import { serverFiles } from './files.js';
@@ -77,7 +76,6 @@ import type {
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
-const { MICROSERVICE, GATEWAY } = applicationTypes;
 const { KAFKA, PULSAR } = messageBrokerTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
@@ -183,7 +181,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           await this.composeWithJHipster('jhipster:java:openapi-generator');
         }
 
-        if (applicationType === GATEWAY) {
+        if (applicationType === APPLICATION_TYPE_GATEWAY) {
           await this.composeWithJHipster('jhipster:spring-cloud:gateway');
         }
 
@@ -271,7 +269,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           if (application.reactive) {
             throw new Error('Spring Websocket is not supported with reactive applications.');
           }
-          if (application.applicationType === MICROSERVICE) {
+          if (application.applicationType === APPLICATION_TYPE_MICROSERVICE) {
             throw new Error('Spring Websocket is not supported with microservice applications.');
           }
         }

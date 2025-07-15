@@ -20,10 +20,10 @@ import chalk from 'chalk';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
 import { createBase64Secret, createSecret } from '../../lib/utils/index.js';
-import { applicationTypes, authenticationTypes } from '../../lib/jhipster/index.js';
+import { authenticationTypes } from '../../lib/jhipster/index.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
 
 const { OAUTH2, SESSION, JWT } = authenticationTypes;
-const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 
 const ALPHANUMERIC_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
 
@@ -109,7 +109,7 @@ const command = {
         type: 'list',
         message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
         choices: () =>
-          gen.jhipsterConfigWithDefaults.applicationType !== MONOLITH
+          gen.jhipsterConfigWithDefaults.applicationType !== APPLICATION_TYPE_MONOLITH
             ? (config.choices as any).filter(({ value }) => value !== SESSION)
             : config.choices,
         default: () => gen.jhipsterConfigWithDefaults.authenticationType,
@@ -127,7 +127,7 @@ const command = {
           gen.jhipsterConfig.skipUserManagement = true;
         } else if (
           jwtSecretKey === undefined &&
-          (authenticationType === JWT || applicationType === MICROSERVICE || applicationType === GATEWAY)
+          (authenticationType === JWT || applicationType === APPLICATION_TYPE_MICROSERVICE || applicationType === APPLICATION_TYPE_GATEWAY)
         ) {
           gen.jhipsterConfig.jwtSecretKey = createBase64Secret(64, gen.options.reproducibleTests);
         }
@@ -143,7 +143,7 @@ const command = {
         type: 'confirm',
         message: 'Do you want to generate a feign client?',
         when: ({ reactive }) =>
-          [MICROSERVICE].includes(gen.jhipsterConfigWithDefaults.applicationType) &&
+          [APPLICATION_TYPE_MICROSERVICE].includes(gen.jhipsterConfigWithDefaults.applicationType) &&
           (reactive ?? gen.jhipsterConfigWithDefaults.reactive) === false,
       }),
       jdl: {

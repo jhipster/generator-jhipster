@@ -16,18 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { JHipsterNamedChoice } from './types.js';
 
-const APPLICATION_TYPE_MONOLITH = 'monolith';
-const APPLICATION_TYPE_MICROSERVICE = 'microservice';
-const APPLICATION_TYPE_GATEWAY = 'gateway';
+export const APPLICATION_TYPE_KEY = 'applicationType';
 
-export { APPLICATION_TYPE_MONOLITH, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_GATEWAY };
+export const APPLICATION_TYPE_MONOLITH = 'monolith';
+export const APPLICATION_TYPE_MICROSERVICE = 'microservice';
+export const APPLICATION_TYPE_GATEWAY = 'gateway';
 
-/** @deprecated */
-const applicationTypes: any = {
-  MONOLITH: APPLICATION_TYPE_MONOLITH,
-  MICROSERVICE: APPLICATION_TYPE_MICROSERVICE,
-  GATEWAY: APPLICATION_TYPE_GATEWAY,
-};
+export const applicationTypesChoices = [
+  {
+    value: APPLICATION_TYPE_MONOLITH,
+    name: 'Monolithic application (recommended for simple projects)',
+  },
+  {
+    value: APPLICATION_TYPE_GATEWAY,
+    name: 'Gateway application',
+  },
+  {
+    value: APPLICATION_TYPE_MICROSERVICE,
+    name: 'Microservice application',
+  },
+] as const satisfies JHipsterNamedChoice[];
 
-export default applicationTypes;
+export type ApplicationType = (typeof applicationTypesChoices)[number]['value'];

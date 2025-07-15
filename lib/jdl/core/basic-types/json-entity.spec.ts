@@ -34,6 +34,7 @@ describe('jdl - JSONEntity', () => {
     describe('when not passing an entity name', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error invalid argument
           new JSONEntity({});
         }).to.throw(/^At least an entity name must be passed\.$/);
       });
@@ -50,8 +51,10 @@ describe('jdl - JSONEntity', () => {
       it('should set default values', () => {
         jestExpect(entity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [],
+  "clientRootFolder": undefined,
   "documentation": undefined,
   "dto": undefined,
   "embedded": undefined,
@@ -59,11 +62,14 @@ JSONEntity {
   "fields": [],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "Toto",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
       });
@@ -76,13 +82,13 @@ JSONEntity {
           entityName: 'Titi',
           dto: 'mapstruct',
           entityTableName: 'titi',
-          fields: [42],
+          fields: [42 as any],
           fluentMethods: true,
           documentation: '',
           jpaMetamodelFiltering: true,
           pagination: 'pagination',
           embedded: true,
-          relationships: [42, 43],
+          relationships: [42 as any, 43 as any],
           service: 'serviceClass',
           microserviceName: 'nope',
           angularJSSuffix: 'yes',
@@ -273,8 +279,10 @@ JSONEntity {
       it('should set them', () => {
         jestExpect(jsonEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [],
+  "clientRootFolder": undefined,
   "documentation": "A comment",
   "dto": "mapstruct",
   "embedded": undefined,
@@ -282,11 +290,14 @@ JSONEntity {
   "fields": [],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "Toto",
   "pagination": "pagination",
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
       });

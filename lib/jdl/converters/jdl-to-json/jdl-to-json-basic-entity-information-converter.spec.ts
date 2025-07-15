@@ -86,8 +86,10 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
         it('should convert the entity', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -95,11 +97,14 @@ JSONEntity {
   "fields": [],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
         });

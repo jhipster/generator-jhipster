@@ -26,12 +26,7 @@ import { JDLEntity } from '../../core/models/index.js';
 import exportToJDL from '../exporters/jdl-exporter.js';
 import JDLApplication from '../../core/models/jdl-application.js';
 import type { JDLJSONApplicationConfiguration } from '../../core/parsing/jdl-parsing-types.js';
-import { applicationOptions } from '../../core/built-in-options/index.js';
 import { getDefaultRuntime } from '../../core/runtime.js';
-
-const {
-  OptionNames: { CLIENT_FRAMEWORK },
-} = applicationOptions;
 
 const runtime = getDefaultRuntime();
 
@@ -106,7 +101,7 @@ describe('jdl - JDLExporter', () => {
             beforeEach(() => {
               jdlObject = new JDLObject();
               const jdlApplication: JDLJSONApplicationConfiguration = {
-                config: { [CLIENT_FRAMEWORK]: 'no' },
+                config: { clientFramework: 'no' },
               };
               jdlObject.addApplication(new JDLApplication(jdlApplication, runtime));
             });

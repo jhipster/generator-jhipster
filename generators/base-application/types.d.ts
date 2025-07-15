@@ -264,7 +264,7 @@ type MicroservicesArchitectureApplication = {
 };
 
 type GatewayApplication = MicroservicesArchitectureApplication & {
-  microfrontends: string[];
+  microfrontends: { baseName: string; lowercaseBaseName?: string; capitalizedBaseName?: string; endpointPrefix?: string }[];
 };
 
 /*

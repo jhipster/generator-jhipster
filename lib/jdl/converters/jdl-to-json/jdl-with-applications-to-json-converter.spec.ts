@@ -25,14 +25,8 @@ import sinonChai from 'sinon-chai';
 chaiUse(sinonChai);
 
 import { relationshipTypes } from '../../core/basic-types/index.js';
-import {
-  applicationTypes,
-  binaryOptions,
-  fieldTypes,
-  relationshipOptions,
-  unaryOptions,
-  validations,
-} from '../../core/built-in-options/index.js';
+import { binaryOptions, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.js';
+import fieldTypes from '../../../jhipster/field-types.js';
 import JDLObject from '../../core/models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../../core/models/index.js';
 import JDLField from '../../core/models/jdl-field.js';
@@ -43,12 +37,12 @@ import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
 
 import logger from '../../core/utils/objects/logger.js';
 import { createJDLApplication } from '../../core/__test-support__/index.js';
+import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
 import { convert } from './jdl-with-applications-to-json-converter.js';
 
 const {
   Validations: { REQUIRED, UNIQUE, MIN, MAX, MINLENGTH, MAXLENGTH, PATTERN, MINBYTES, MAXBYTES },
 } = validations;
-const { MONOLITH } = applicationTypes;
 const { CommonDBTypes } = fieldTypes;
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
@@ -72,12 +66,12 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
 
       before(() => {
         const jdlObject = new JDLObject();
-        const application1 = createJDLApplication({ applicationType: MONOLITH, baseName: 'app1' });
+        const application1 = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'app1' });
         jdlObject.addApplication(application1);
         const entity = new JDLEntity({
           name: 'EntityA',
         });
-        const application2 = createJDLApplication({ applicationType: MONOLITH, baseName: 'app2' });
+        const application2 = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'app2' });
         application2.addEntityName('EntityA');
         jdlObject.addEntity(entity);
         jdlObject.addApplication(application2);
@@ -95,7 +89,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
 
       before(() => {
         const jdlObject = new JDLObject();
-        const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+        const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
         jdlObject.addApplication(application);
         result = convert(jdlObject);
       });
@@ -113,7 +107,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
 
         before(() => {
           const jdlObject = new JDLObject();
-          const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -149,7 +143,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
 
         before(() => {
           const jdlObject = new JDLObject();
-          const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -165,10 +159,12 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
         it('should convert the entity', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -176,11 +172,14 @@ JSONEntity {
   "fields": [],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
         });
@@ -190,7 +189,7 @@ JSONEntity {
 
         before(() => {
           const jdlObject = new JDLObject();
-          const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -301,7 +300,7 @@ JSONEntity {
         before(() => {
           loggerSpy = sinon.spy(logger, 'info');
           const jdlObject = new JDLObject();
-          const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -334,10 +333,12 @@ JSONEntity {
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": "mapstruct",
   "embedded": undefined,
@@ -345,11 +346,14 @@ JSONEntity {
   "fields": [],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": "serviceClass",
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
         });
@@ -361,7 +365,7 @@ JSONEntity {
         before(() => {
           loggerSpy = sinon.spy(logger, 'info');
           const jdlObject = new JDLObject();
-          const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -393,10 +397,12 @@ JSONEntity {
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -404,11 +410,14 @@ JSONEntity {
   "fields": [],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": true,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": "serviceClass",
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
         });
@@ -418,7 +427,7 @@ JSONEntity {
 
         before(() => {
           const jdlObject = new JDLObject();
-          const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -442,10 +451,12 @@ JSONEntity {
         it('should prevent the entities from being searched', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -453,12 +464,15 @@ JSONEntity {
   "fields": [],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "searchEngine": "no",
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
         });
@@ -469,7 +483,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
             const entityA = new JDLEntity({
               name: 'A',
               tableName: 'entity_a',
@@ -495,10 +509,12 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -515,11 +531,14 @@ JSONEntity {
   ],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
           });
@@ -529,7 +548,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
             const entityA = new JDLEntity({
               name: 'A',
               tableName: 'entity_a',
@@ -565,10 +584,12 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -593,11 +614,14 @@ JSONEntity {
   ],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
           });
@@ -607,7 +631,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
             const entityA = new JDLEntity({
               name: 'A',
               comment: 'The best entity',
@@ -629,10 +653,12 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -646,11 +672,14 @@ JSONEntity {
   ],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
           });
@@ -660,7 +689,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
             const entityA = new JDLEntity({
               name: 'A',
               tableName: 'entity_a',
@@ -682,10 +711,12 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -699,11 +730,14 @@ JSONEntity {
   ],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
           });
@@ -713,7 +747,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
             const entityA = new JDLEntity({
               name: 'A',
               tableName: 'entity_a',
@@ -790,10 +824,12 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -836,11 +872,14 @@ JSONEntity {
   ],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
           });
@@ -850,7 +889,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
             const entityA = new JDLEntity({
               name: 'A',
               tableName: 'entity_a',
@@ -875,10 +914,12 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "angularJSSuffix": undefined,
   "annotations": {},
   "applications": [
     "toto",
   ],
+  "clientRootFolder": undefined,
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
@@ -895,11 +936,14 @@ JSONEntity {
   ],
   "fluentMethods": undefined,
   "jpaMetamodelFiltering": undefined,
+  "microserviceName": undefined,
   "name": "A",
   "pagination": undefined,
   "readOnly": undefined,
   "relationships": [],
   "service": undefined,
+  "skipClient": undefined,
+  "skipServer": undefined,
 }
 `);
           });
@@ -912,7 +956,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
             const entityA = new JDLEntity({ name: 'A', comment: 'a' });
             const entityB = new JDLEntity({ name: 'B', comment: 'b' });
             const oneToOneRelationship = new JDLRelationship({
@@ -1030,7 +1074,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const oneToOneRelationship = new JDLRelationship({
@@ -1077,7 +1121,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const oneToOneRelationship = new JDLRelationship({
@@ -1124,7 +1168,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
             const entityA = new JDLEntity({ name: 'A', comment: 'a' });
             const entityB = new JDLEntity({ name: 'B', comment: 'b' });
             const oneToOneRelationship = new JDLRelationship({
@@ -1180,7 +1224,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
             const entityA = new JDLEntity({ name: 'A', comment: 'a' });
             const entityB = new JDLEntity({ name: 'B', comment: 'b' });
             const oneToOneRelationship = new JDLRelationship({
@@ -1237,7 +1281,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const oneToOneRelationship = new JDLRelationship({
@@ -1277,7 +1321,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const oneToManyRelationship = new JDLRelationship({
@@ -1317,7 +1361,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const manyToOneRelationship = new JDLRelationship({
@@ -1357,7 +1401,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const manyToManyRelationship = new JDLRelationship({
@@ -1399,7 +1443,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const oneToOneRelationship = new JDLRelationship({
@@ -1451,7 +1495,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const oneToManyRelationship = new JDLRelationship({
@@ -1503,7 +1547,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const manyToOneRelationship = new JDLRelationship({
@@ -1555,7 +1599,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const manyToManyRelationship = new JDLRelationship({
@@ -1609,8 +1653,8 @@ JSONEntity {
 
         before(() => {
           const jdlObject = new JDLObject();
-          const tataApplication = createJDLApplication({ applicationType: MONOLITH, baseName: 'tata' });
-          const tutuApplication = createJDLApplication({ applicationType: MONOLITH, baseName: 'tutu' });
+          const tataApplication = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'tata' });
+          const tutuApplication = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'tutu' });
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -1682,10 +1726,12 @@ JSONEntity {
           jestExpect(convertedEntitiesForTataApplication).toMatchInlineSnapshot(`
 [
   JSONEntity {
+    "angularJSSuffix": undefined,
     "annotations": {},
     "applications": [
       "tata",
     ],
+    "clientRootFolder": undefined,
     "documentation": "The best entity",
     "dto": undefined,
     "embedded": undefined,
@@ -1693,17 +1739,22 @@ JSONEntity {
     "fields": [],
     "fluentMethods": undefined,
     "jpaMetamodelFiltering": undefined,
+    "microserviceName": undefined,
     "name": "A",
     "pagination": "pagination",
     "readOnly": undefined,
     "relationships": [],
     "service": undefined,
+    "skipClient": undefined,
+    "skipServer": undefined,
   },
   JSONEntity {
+    "angularJSSuffix": undefined,
     "annotations": {},
     "applications": [
       "tata",
     ],
+    "clientRootFolder": undefined,
     "documentation": "The best entity",
     "dto": undefined,
     "embedded": undefined,
@@ -1711,18 +1762,23 @@ JSONEntity {
     "fields": [],
     "fluentMethods": undefined,
     "jpaMetamodelFiltering": undefined,
+    "microserviceName": undefined,
     "name": "B",
     "pagination": "infinite-scroll",
     "readOnly": undefined,
     "relationships": [],
     "service": undefined,
+    "skipClient": undefined,
+    "skipServer": undefined,
   },
   JSONEntity {
+    "angularJSSuffix": undefined,
     "annotations": {},
     "applications": [
       "tata",
       "tutu",
     ],
+    "clientRootFolder": undefined,
     "documentation": "The best entity",
     "dto": undefined,
     "embedded": undefined,
@@ -1730,22 +1786,27 @@ JSONEntity {
     "fields": [],
     "fluentMethods": undefined,
     "jpaMetamodelFiltering": undefined,
+    "microserviceName": undefined,
     "name": "C",
     "pagination": "pagination",
     "readOnly": undefined,
     "relationships": [],
     "service": undefined,
+    "skipClient": undefined,
+    "skipServer": undefined,
   },
 ]
 `);
           jestExpect(convertedEntitiesForTutuApplication).toMatchInlineSnapshot(`
 [
   JSONEntity {
+    "angularJSSuffix": undefined,
     "annotations": {},
     "applications": [
       "tata",
       "tutu",
     ],
+    "clientRootFolder": undefined,
     "documentation": "The best entity",
     "dto": undefined,
     "embedded": undefined,
@@ -1753,17 +1814,22 @@ JSONEntity {
     "fields": [],
     "fluentMethods": undefined,
     "jpaMetamodelFiltering": undefined,
+    "microserviceName": undefined,
     "name": "C",
     "pagination": "pagination",
     "readOnly": undefined,
     "relationships": [],
     "service": undefined,
+    "skipClient": undefined,
+    "skipServer": undefined,
   },
   JSONEntity {
+    "angularJSSuffix": undefined,
     "annotations": {},
     "applications": [
       "tutu",
     ],
+    "clientRootFolder": undefined,
     "documentation": "The best entity",
     "dto": "mapstruct",
     "embedded": undefined,
@@ -1771,17 +1837,22 @@ JSONEntity {
     "fields": [],
     "fluentMethods": undefined,
     "jpaMetamodelFiltering": undefined,
+    "microserviceName": undefined,
     "name": "D",
     "pagination": "infinite-scroll",
     "readOnly": undefined,
     "relationships": [],
     "service": "serviceClass",
+    "skipClient": undefined,
+    "skipServer": undefined,
   },
   JSONEntity {
+    "angularJSSuffix": undefined,
     "annotations": {},
     "applications": [
       "tutu",
     ],
+    "clientRootFolder": undefined,
     "documentation": "The best entity",
     "dto": undefined,
     "embedded": undefined,
@@ -1789,11 +1860,14 @@ JSONEntity {
     "fields": [],
     "fluentMethods": undefined,
     "jpaMetamodelFiltering": undefined,
+    "microserviceName": undefined,
     "name": "E",
     "pagination": "infinite-scroll",
     "readOnly": undefined,
     "relationships": [],
     "service": undefined,
+    "skipClient": undefined,
+    "skipServer": undefined,
   },
 ]
 `);

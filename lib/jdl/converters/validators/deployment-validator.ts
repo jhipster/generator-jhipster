@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 
-import { applicationTypes, deploymentOptions } from '../../../jhipster/index.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
+import deploymentOptions from '../../../jhipster/deployment-options.ts';
 import type JDLDeployment from '../../core/models/jdl-deployment.js';
 import Validator from './validator.js';
 
 const { Options } = deploymentOptions;
-const { MICROSERVICE } = applicationTypes;
 
 export default class DeploymentValidator extends Validator {
   constructor() {
@@ -46,7 +46,7 @@ export default class DeploymentValidator extends Validator {
 }
 
 function validateDockerComposeRelatedDeployment(jdlDeployment: JDLDeployment, options: any = {}) {
-  if (jdlDeployment.gatewayType !== Options.gatewayType.springCloudGateway && options.applicationType === MICROSERVICE) {
+  if (jdlDeployment.gatewayType !== Options.gatewayType.springCloudGateway && options.applicationType === APPLICATION_TYPE_MICROSERVICE) {
     throw new Error('A gateway type must be provided when dealing with microservices and the deployment type is docker-compose.');
   }
 }

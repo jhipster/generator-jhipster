@@ -24,7 +24,6 @@ import type JDLObject from '../../core/models/jdl-object.js';
 import type { JSONField } from '../../core/types/json-config.js';
 import type { JDLEntity } from '../../core/models/index.js';
 import type JDLField from '../../core/models/jdl-field.js';
-import type { FieldType } from '../../../jhipster/field-types.js';
 import { customCamelCase } from '../../../utils/string-utils.ts';
 
 const {
@@ -55,7 +54,7 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
   jdlEntity.forEachField((jdlField: JDLField) => {
     let fieldData: JSONField = {
       fieldName: customCamelCase(jdlField.name),
-      fieldType: jdlField.type as FieldType,
+      fieldType: jdlField.type,
     };
     const comment = formatComment(jdlField.comment);
     if (comment) {

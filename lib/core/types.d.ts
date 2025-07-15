@@ -16,17 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-const Options = {
-  BUILT_IN_ENTITY: 'builtInEntity',
-} as const;
-
-function exists(option: string): boolean {
-  return (Object.values(Options) as string[]).includes(option);
-}
-
-export default {
-  ...Options,
-  exists,
-  doesRelationshipOptionExist: exists,
-};
+export type JHipsterNamedChoice = { value: string; name: string };

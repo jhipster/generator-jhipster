@@ -20,7 +20,10 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, validations } from '../../core/built-in-options/index.js';
+import { binaryOptions, validations } from '../../core/built-in-options/index.js';
+import fieldTypes from '../../../jhipster/field-types.js';
+import databaseTypes from '../../../jhipster/database-types.js';
+
 import JDLObject from '../../core/models/jdl-object.js';
 import { createJDLApplication } from '../../core/models/jdl-application-factory.js';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
@@ -31,8 +34,8 @@ import JDLValidation from '../../core/models/jdl-validation.js';
 import createValidator from '../validators/jdl-with-application-validator.js';
 import { relationshipTypes } from '../../core/basic-types/index.js';
 import { getDefaultRuntime } from '../../core/runtime.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
 
-const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const {
   Validations: { MIN },
 } = validations;
@@ -57,7 +60,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
           const jdlObject = new JDLObject();
           const application = createJDLApplication(
             {
-              applicationType: GATEWAY,
+              applicationType: APPLICATION_TYPE_GATEWAY,
               databaseType: databaseTypes.SQL,
             },
             undefined,
@@ -91,7 +94,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication(
           {
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
             databaseType: databaseTypes.SQL,
           },
           undefined,
@@ -139,7 +142,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication(
           {
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
             databaseType: databaseTypes.SQL,
           },
           undefined,
@@ -184,7 +187,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
           const jdlObject = new JDLObject();
           const application = createJDLApplication(
             {
-              applicationType: MONOLITH,
+              applicationType: APPLICATION_TYPE_MONOLITH,
               databaseType: databaseTypes.SQL,
             },
             undefined,
@@ -219,7 +222,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
           const jdlObject = new JDLObject();
           const application = createJDLApplication(
             {
-              applicationType: MONOLITH,
+              applicationType: APPLICATION_TYPE_MONOLITH,
               databaseType: databaseTypes.SQL,
             },
             undefined,
@@ -248,7 +251,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         const jdlObject = new JDLObject();
         const application1 = createJDLApplication(
           {
-            applicationType: MICROSERVICE,
+            applicationType: APPLICATION_TYPE_MICROSERVICE,
             baseName: 'app1',
           },
           undefined,
@@ -257,7 +260,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         application1.addEntityNames(['A', 'B']);
         const application2 = createJDLApplication(
           {
-            applicationType: MICROSERVICE,
+            applicationType: APPLICATION_TYPE_MICROSERVICE,
             baseName: 'app2',
           },
           undefined,
@@ -266,7 +269,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         application2.addEntityNames(['B', 'C']);
         const application3 = createJDLApplication(
           {
-            applicationType: MICROSERVICE,
+            applicationType: APPLICATION_TYPE_MICROSERVICE,
             baseName: 'app3',
           },
           undefined,
@@ -333,7 +336,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication(
           {
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
             databaseType: databaseTypes.SQL,
           },
           undefined,
@@ -370,7 +373,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication(
           {
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
             databaseType: databaseTypes.SQL,
           },
           undefined,
@@ -436,7 +439,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication(
           {
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
             databaseType: databaseTypes.SQL,
           },
           undefined,
@@ -474,7 +477,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         const jdlObject = new JDLObject();
         const application = createJDLApplication(
           {
-            applicationType: MONOLITH,
+            applicationType: APPLICATION_TYPE_MONOLITH,
             databaseType: databaseTypes.SQL,
           },
           undefined,

@@ -19,11 +19,11 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { applicationTypes, deploymentOptions } from '../../core/built-in-options/index.js';
+import deploymentOptions from '../../../jhipster/deployment-options.js';
 
 import DeploymentValidator from '../validators/deployment-validator.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.js';
 
-const { MICROSERVICE } = applicationTypes;
 const { Options } = deploymentOptions;
 
 describe('jdl - DeploymentValidator', () => {
@@ -93,7 +93,7 @@ describe('jdl - DeploymentValidator', () => {
                     serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
                   },
                   {
-                    applicationType: MICROSERVICE,
+                    applicationType: APPLICATION_TYPE_MICROSERVICE,
                   },
                 ),
               ).to.throw(/^A gateway type must be provided when dealing with microservices and the deployment type is docker-compose.$/);

@@ -19,22 +19,14 @@
 import fs from 'fs';
 import chalk from 'chalk';
 import { isArray, lowerFirst, snakeCase, uniq, upperFirst } from 'lodash-es';
-import {
-  applicationTypes,
-  clientFrameworkTypes,
-  databaseTypes,
-  entityOptions,
-  fieldTypes,
-  reservedKeywords,
-  validations,
-} from '../../lib/jhipster/index.js';
+import { clientFrameworkTypes, databaseTypes, entityOptions, fieldTypes, reservedKeywords, validations } from '../../lib/jhipster/index.js';
 import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
+import { APPLICATION_TYPE_GATEWAY } from '../../lib/core/application-types.ts';
 import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.js';
 import type EntityGenerator from './generator.js';
 
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;
 const { NO: NO_DATABASE, CASSANDRA, SQL } = databaseTypes;
-const { GATEWAY } = applicationTypes;
 const { FilteringTypes, MapperTypes, ServiceTypes, PaginationTypes } = entityOptions;
 const { ANGULAR, REACT } = clientFrameworkTypes;
 const { NO: NO_FILTERING, JPA_METAMODEL } = FilteringTypes;
@@ -71,7 +63,7 @@ const getFieldNameUndercored = fields => ['id'].concat(fields.map(field => snake
 
 export const askForMicroserviceJson = asPromptingTask<EntityGenerator>(async function askForMicroserviceJson(this: EntityGenerator) {
   const context = this.entityData;
-  if (this.jhipsterConfig.applicationType !== GATEWAY || context.configExisted) {
+  if (this.jhipsterConfig.applicationType !== APPLICATION_TYPE_GATEWAY || context.configExisted) {
     return undefined;
   }
 
@@ -584,7 +576,8 @@ async function askForField(this: EntityGenerator) {
           },
         ];
         if (response.fieldType === STRING || response.fieldTypeBlobContent === TEXT) {
-          opts.push(
+          return [
+            ...opts,
             {
               name: 'Minimum length',
               value: MINLENGTH,
@@ -597,9 +590,10 @@ async function askForField(this: EntityGenerator) {
               name: 'Regular expression pattern',
               value: PATTERN,
             },
-          );
+          ];
         } else if ([INTEGER, LONG, FLOAT, DOUBLE, BIG_DECIMAL].includes(response.fieldType)) {
-          opts.push(
+          return [
+            ...opts,
             {
               name: 'Minimum',
               value: MIN,
@@ -608,7 +602,7 @@ async function askForField(this: EntityGenerator) {
               name: 'Maximum',
               value: MAX,
             },
-          );
+          ];
         }
         return opts;
       },

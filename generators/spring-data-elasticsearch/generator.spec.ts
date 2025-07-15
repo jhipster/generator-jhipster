@@ -30,8 +30,9 @@ import {
   runResult,
 } from '../../lib/testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { applicationTypes, authenticationTypes, databaseTypes, searchEngineTypes } from '../../lib/jhipster/index.js';
+import { authenticationTypes, databaseTypes, searchEngineTypes } from '../../lib/jhipster/index.js';
 import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.js';
 import Generator from './generator.js';
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.js';
 
@@ -46,7 +47,6 @@ const { SQL, CASSANDRA, MONGODB, NEO4J } = databaseTypes;
 const commonConfig = { baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 const { ELASTICSEARCH } = searchEngineTypes;
 const { OAUTH2 } = authenticationTypes;
-const { MICROSERVICE } = applicationTypes;
 
 let samples = buildServerMatrix();
 
@@ -110,7 +110,7 @@ describe('generator - elasticsearch', () => {
         matchElasticSearchUser(
           elasticsearch &&
             (sampleConfig.authenticationType === OAUTH2 ||
-              (sampleConfig.applicationType !== MICROSERVICE && !sampleConfig.skipUserManagement)),
+              (sampleConfig.applicationType !== APPLICATION_TYPE_MICROSERVICE && !sampleConfig.skipUserManagement)),
         );
       });
       shouldComposeWithSpringCloudStream(sampleConfig, () => runResult);

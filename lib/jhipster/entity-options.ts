@@ -19,30 +19,30 @@
 export const MapperTypes = {
   MAPSTRUCT: 'mapstruct',
   NO: 'no',
-};
+} as const;
 
 export const ServiceTypes = {
   SERVICE_CLASS: 'serviceClass',
   SERVICE_IMPL: 'serviceImpl',
   NO: 'no',
-};
+} as const;
 
 export const PaginationTypes = {
   PAGINATION: 'pagination',
   INFINITE_SCROLL: 'infinite-scroll',
   NO: 'no',
-};
+} as const;
 
 export const SearchTypes = {
   ELASTICSEARCH: 'elasticsearch',
   COUCHBASE: 'couchbase',
   NO: 'no',
-};
+} as const;
 
 export const FilteringTypes = {
   JPA_METAMODEL: 'jpaMetamodel',
   NO: 'no',
-};
+} as const;
 
 export default {
   MapperTypes,

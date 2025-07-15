@@ -26,7 +26,8 @@ import JDLValidation from '../../core/models/jdl-validation.js';
 import JDLRelationship from '../../core/models/jdl-relationship.js';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
 import { relationshipTypes } from '../../core/basic-types/index.js';
-import { binaryOptions, fieldTypes, validations } from '../../core/built-in-options/index.js';
+import { binaryOptions, validations } from '../../core/built-in-options/index.js';
+import fieldTypes from '../../../jhipster/field-types.js';
 import createValidator from '../validators/jdl-without-application-validator.js';
 
 const {

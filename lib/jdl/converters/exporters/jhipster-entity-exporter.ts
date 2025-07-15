@@ -18,11 +18,20 @@
  */
 
 import type { JSONEntity } from '../../core/types/json-config.js';
+import type JDLJSONEntity from '../../core/basic-types/json-entity.ts';
 import type { JhipsterJSONJDLExporterWrapper } from '../../core/types/exporter.js';
-import applicationTypes from '../../../jhipster/application-types.js';
 import { readEntityFile } from '../../../utils/yo-rc.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
+import { removeFieldsWithNullishValues } from '../../../utils/object.ts';
 
-let configuration: any = {};
+let configuration: JhipsterJSONJDLExporterWrapper = {
+  entities: [],
+  application: {
+    forSeveralApplications: false,
+    name: '',
+    type: '',
+  },
+};
 
 /**
  * Exports the passed entities to JSON.
@@ -38,14 +47,14 @@ let configuration: any = {};
 export default function exportEntities(passedConfiguration: JhipsterJSONJDLExporterWrapper): JSONEntity[] {
   init(passedConfiguration);
   if (configuration.entities.length === 0) {
-    return configuration.entities;
+    return [];
   }
   const subFolder = passedConfiguration.application.forSeveralApplications ? configuration.application.name : '';
-  configuration.entities = updateEntities(subFolder);
+  const entities = updateEntities(subFolder).map(entity => removeFieldsWithNullishValues(entity));
   if (shouldFilterOutEntitiesBasedOnMicroservice()) {
-    configuration.entities = filterOutEntitiesByMicroservice();
+    return filterOutEntitiesByMicroservice(entities);
   }
-  return configuration.entities;
+  return entities;
 }
 
 function init(passedConfiguration: JhipsterJSONJDLExporterWrapper) {
@@ -60,31 +69,29 @@ function init(passedConfiguration: JhipsterJSONJDLExporterWrapper) {
  * @param subFolder the folder (to create) in which the JHipster entity folder will be.
  */
 function updateEntities(applicationPath: string): JSONEntity[] {
-  return configuration.entities.map((entity: JSONEntity) => updateEntityToGenerateWithExistingOne(applicationPath, entity));
+  return configuration.entities.map((entity: JDLJSONEntity) => updateEntityToGenerateWithExistingOne(applicationPath, entity));
 }
 
-function updateEntityToGenerateWithExistingOne(applicationPath: string, entity: JSONEntity): JSONEntity {
+function updateEntityToGenerateWithExistingOne(applicationPath: string, entity: JDLJSONEntity): JSONEntity {
   try {
     const fileOnDisk = readEntityFile<JSONEntity>(applicationPath, entity.name);
     if (!entity.annotations?.changelogDate && fileOnDisk?.annotations?.changelogDate) {
       entity.annotations = entity.annotations || {};
       entity.annotations.changelogDate = fileOnDisk.annotations.changelogDate;
-      return { ...fileOnDisk, ...entity };
+      return { ...fileOnDisk, ...entity } as JSONEntity;
     }
   } catch {
     // New entity
   }
-  return entity;
+  return { ...entity } as JSONEntity;
 }
 
-function shouldFilterOutEntitiesBasedOnMicroservice(): string {
-  return (
-    configuration.application.type && configuration.application.type === applicationTypes.MICROSERVICE && configuration.application.name
-  );
+function shouldFilterOutEntitiesBasedOnMicroservice(): boolean {
+  return configuration.application.type === APPLICATION_TYPE_MICROSERVICE && Boolean(configuration.application.name);
 }
 
-function filterOutEntitiesByMicroservice(): JSONEntity[] {
-  return configuration.entities.filter(
+function filterOutEntitiesByMicroservice(entities: JSONEntity[]): JSONEntity[] {
+  return entities.filter(
     entity => !(entity.microserviceName && entity.microserviceName.toLowerCase() !== configuration.application.name.toLowerCase()),
   );
 }

@@ -20,46 +20,44 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { createJDLApplication } from '../models/jdl-application-factory.js';
-import { applicationTypes } from '../built-in-options/index.js';
 import { getDefaultRuntime } from '../runtime.js';
-
-const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
 
 const runtime = getDefaultRuntime();
 
 describe('jdl - JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {
-    describe(`when passing a ${MICROSERVICE} config`, () => {
+    describe(`when passing a ${APPLICATION_TYPE_MICROSERVICE} config`, () => {
       let application;
 
       before(() => {
-        application = createJDLApplication({ applicationType: MICROSERVICE }, undefined, runtime);
+        application = createJDLApplication({ applicationType: APPLICATION_TYPE_MICROSERVICE }, undefined, runtime);
       });
 
       it('should create the app', () => {
-        expect(application.getConfigurationOptionValue('applicationType')).to.equal(MICROSERVICE);
+        expect(application.getConfigurationOptionValue('applicationType')).to.equal(APPLICATION_TYPE_MICROSERVICE);
       });
     });
-    describe(`when passing a ${GATEWAY} config`, () => {
+    describe(`when passing a ${APPLICATION_TYPE_GATEWAY} config`, () => {
       let application;
 
       before(() => {
-        application = createJDLApplication({ applicationType: GATEWAY }, undefined, runtime);
+        application = createJDLApplication({ applicationType: APPLICATION_TYPE_GATEWAY }, undefined, runtime);
       });
 
       it('should create the app', () => {
-        expect(application.getConfigurationOptionValue('applicationType')).to.equal(GATEWAY);
+        expect(application.getConfigurationOptionValue('applicationType')).to.equal(APPLICATION_TYPE_GATEWAY);
       });
     });
-    describe(`when passing a ${MONOLITH} config`, () => {
+    describe(`when passing a ${APPLICATION_TYPE_MONOLITH} config`, () => {
       let application;
 
       before(() => {
-        application = createJDLApplication({ applicationType: MONOLITH }, undefined, runtime);
+        application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH }, undefined, runtime);
       });
 
       it('should create the app', () => {
-        expect(application.getConfigurationOptionValue('applicationType')).to.equal(MONOLITH);
+        expect(application.getConfigurationOptionValue('applicationType')).to.equal(APPLICATION_TYPE_MONOLITH);
       });
     });
   });

@@ -115,7 +115,6 @@ describe('jdl - ExportUtils', () => {
             question: 'No comment',
           },
         };
-        // @ts-expect-error
         writeConfigFile(newConfig);
         exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
       });
@@ -160,7 +159,6 @@ describe('jdl - ExportUtils', () => {
             question: 'No comment',
           },
         };
-        // @ts-expect-error
         writeConfigFile(newConfig);
         exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
       });

@@ -16,26 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const Options: any = {
+const Options = {
   SKIP_CLIENT: 'skipClient',
   SKIP_SERVER: 'skipServer',
   NO_FLUENT_METHOD: 'noFluentMethod',
   READ_ONLY: 'readOnly',
   FILTER: 'filter',
   EMBEDDED: 'embedded',
-};
+} as const;
 
 const optionNames = Object.values(Options);
 
-Options.forEach = passedFunction => {
-  if (!passedFunction) {
-    throw new Error('A function has to be passed to loop over the unary options.');
-  }
-  optionNames.forEach(optionName => {
-    passedFunction(optionName);
-  });
+export default {
+  ...Options,
+  forEach: (passedFunction: (optionName: string) => void) => {
+    if (!passedFunction) {
+      throw new Error('A function has to be passed to loop over the unary options.');
+    }
+    optionNames.forEach(optionName => {
+      passedFunction(optionName);
+    });
+  },
+  exists: (optionName: string) => (Object.values(Options) as string[]).includes(optionName),
 };
-
-Options.exists = option => Object.values(Options).includes(option);
-
-export default Options;

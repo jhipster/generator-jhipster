@@ -1,11 +1,10 @@
 import { before, describe, expect, it } from 'esmocha';
 import monitoringTypes from '../../lib/jhipster/monitoring-types.js';
-import applicationTypes from '../../lib/jhipster/application-types.js';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.js';
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.js';
 
 const { PROMETHEUS } = monitoringTypes;
-const { MICROSERVICE, MONOLITH } = applicationTypes;
 
 const NO_MONITORING = monitoringTypes.NO;
 
@@ -29,7 +28,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MICROSERVICE,
+        deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
         directoryPath: '../',
         appsFolders: chosenApps,
         clusteredDbApps: [],
@@ -61,7 +60,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MICROSERVICE,
+        deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
         directoryPath: '../',
         appsFolders: chosenApps,
         clusteredDbApps: [],
@@ -93,7 +92,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MICROSERVICE,
+        deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
         directoryPath: '..',
         appsFolders: chosenApps,
         clusteredDbApps: [],
@@ -120,7 +119,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MICROSERVICE,
+        deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
         directoryPath: '../',
         appsFolders: chosenApps,
         clusteredDbApps: [],
@@ -152,7 +151,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MICROSERVICE,
+        deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
         directoryPath: '../',
         appsFolders: chosenApps,
         clusteredDbApps: [],
@@ -186,7 +185,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MICROSERVICE,
+        deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
         directoryPath: '../',
         appsFolders: chosenApps,
         clusteredDbApps: [],
@@ -220,7 +219,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MICROSERVICE,
+        deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
         directoryPath: '../',
         appsFolders: chosenApps,
         clusteredDbApps: [],
@@ -255,7 +254,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MICROSERVICE,
+        deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
         directoryPath: '../',
         appsFolders: chosenApps,
         clusteredDbApps: [],
@@ -289,7 +288,7 @@ describe('generator - Docker Compose', () => {
         .runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE)
 
         .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
+          deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
           directoryPath: '../',
           appsFolders: chosenApps,
           clusteredDbApps: ['04-mongo'],
@@ -320,7 +319,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MICROSERVICE,
+        deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
         directoryPath: '../',
         appsFolders: chosenApps,
         clusteredDbApps: [],
@@ -351,7 +350,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MONOLITH,
+        deploymentApplicationType: APPLICATION_TYPE_MONOLITH,
         directoryPath: '../',
         appsFolders: chosenApps,
         clusteredDbApps: [],
@@ -379,7 +378,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MICROSERVICE,
+        deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
         directoryPath: '../',
         appsFolders: chosenApps,
         clusteredDbApps: [],
@@ -415,7 +414,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MICROSERVICE,
+        deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
         directoryPath: '../',
         appsFolders: chosenApps,
         clusteredDbApps: [],
@@ -446,7 +445,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MICROSERVICE,
+        deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
         directoryPath: '../',
         appsFolders: chosenApps,
         clusteredDbApps: ['10-couchbase'],
@@ -477,7 +476,7 @@ describe('generator - Docker Compose', () => {
         .withGenerateWorkspaceApplications();
 
       await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
-        deploymentApplicationType: MONOLITH,
+        deploymentApplicationType: APPLICATION_TYPE_MONOLITH,
         directoryPath: '../',
         appsFolders: chosenApps,
         clusteredDbApps: [],

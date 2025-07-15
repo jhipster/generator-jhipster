@@ -37,6 +37,7 @@ describe('jdl - UnaryOptions', () => {
   describe('forEach', () => {
     describe('when not passing a function', () => {
       it('should fail', () => {
+        // @ts-expect-error ivalid argument
         expect(() => unaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the unary options\.$/);
       });
     });

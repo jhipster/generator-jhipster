@@ -18,7 +18,7 @@
  */
 
 import { relationshipOptions } from '../../core/built-in-options/index.js';
-import { fieldTypes } from '../../../jhipster/index.js';
+import fieldTypes from '../../../jhipster/field-types.ts';
 import type JDLObject from '../../core/models/jdl-object.js';
 import type JDLRelationship from '../../core/models/jdl-relationship.js';
 import type JDLField from '../../core/models/jdl-field.js';

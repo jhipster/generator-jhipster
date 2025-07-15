@@ -18,18 +18,14 @@
  */
 
 import { createJDLApplication } from '../../core/models/jdl-application-factory.js';
-import { applicationOptions as ApplicationOptions } from '../../../jhipster/index.js';
 import type JDLUnaryOption from '../../core/models/jdl-unary-option.js';
 import type JDLBinaryOption from '../../core/models/jdl-binary-option.js';
 import type AbstractJDLOption from '../../core/models/abstract-jdl-option.js';
 import type JDLApplication from '../../core/models/jdl-application.js';
 import type { JDLRuntime } from '../../core/types/runtime.js';
 import type { ParsedJDLApplication } from '../../core/types/parsed.js';
+import { BASE_NAME_KEY } from '../../core/built-in-options/index.ts';
 import { convertOptions } from './option-converter.js';
-
-const {
-  OptionNames: { BASE_NAME },
-} = ApplicationOptions;
 
 export default { convertApplications };
 
@@ -46,7 +42,7 @@ export function convertApplications(parsedApplications: ParsedJDLApplication[], 
     const jdlApplication = createJDLApplication(parsedApplication.config, parsedApplication.namespaceConfigs, runtime);
     jdlApplication.addEntityNames(parsedApplication.entities);
     const entityOptions = getEntityOptionsInApplication(parsedApplication);
-    checkEntityNamesInOptions(jdlApplication.getConfigurationOptionValue(BASE_NAME), entityOptions, parsedApplication.entities);
+    checkEntityNamesInOptions(jdlApplication.getConfigurationOptionValue(BASE_NAME_KEY), entityOptions, parsedApplication.entities);
     entityOptions.forEach(option => jdlApplication.addOption(option));
     return jdlApplication;
   });

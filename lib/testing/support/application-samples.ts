@@ -1,27 +1,27 @@
-import { applicationTypes, authenticationTypes } from '../../jhipster/index.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../core/application-types.ts';
+import { authenticationTypes } from '../../jhipster/index.js';
 
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
-const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 export const AuthenticationTypeMatrix = {
   authenticationType: [OAUTH2, JWT, SESSION],
 };
 
 export const MatrixMonolith = {
-  applicationType: [MONOLITH],
+  applicationType: [APPLICATION_TYPE_MONOLITH],
   ...AuthenticationTypeMatrix,
 };
 
 export const MatrixMicroservice = {
-  applicationType: [MICROSERVICE],
+  applicationType: [APPLICATION_TYPE_MICROSERVICE],
   authenticationType: [OAUTH2, JWT],
 };
 
 export const MatrixGateway = {
-  applicationType: [GATEWAY],
+  applicationType: [APPLICATION_TYPE_GATEWAY],
   authenticationType: [OAUTH2, JWT],
 };
 
 export const MatrixMicroserviceGateway = {
-  applicationType: [MICROSERVICE, GATEWAY],
+  applicationType: [APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_GATEWAY],
   authenticationType: [OAUTH2, JWT],
 };

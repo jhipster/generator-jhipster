@@ -23,11 +23,12 @@ import type JDLObject from '../../core/models/jdl-object.js';
 import type JDLApplication from '../../core/models/jdl-application.js';
 import type AbstractJDLOption from '../../core/models/abstract-jdl-option.js';
 import type JDLBinaryOption from '../../core/models/jdl-binary-option.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
 const {
-  Options: { ANGULAR_SUFFIX, MICROSERVICE, SEARCH, DTO },
+  Options: { ANGULAR_SUFFIX, SEARCH, DTO },
 } = binaryOptions;
 const serviceClassOptionValue = binaryOptions.Values.service.SERVICE_CLASS;
 
@@ -99,7 +100,7 @@ function getJSONOptionKeyAndValue(jdlOption: AbstractJDLOption): { key: string; 
     case READ_ONLY:
     case EMBEDDED:
       return { key: jdlOption.name, value: true };
-    case MICROSERVICE:
+    case APPLICATION_TYPE_MICROSERVICE:
       return { key: 'microserviceName', value: (jdlOption as JDLBinaryOption).value };
     case NO_FLUENT_METHOD:
       return { key: 'fluentMethods', value: false };

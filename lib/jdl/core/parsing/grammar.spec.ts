@@ -23,6 +23,7 @@ import { parseFromContent as originalParseFromContent } from '../readers/jdl-rea
 import { relationshipTypes } from '../basic-types/index.js';
 import { binaryOptions, unaryOptions, validations } from '../built-in-options/index.js';
 import { getDefaultRuntime } from '../runtime.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.js';
 
 const runtime = getDefaultRuntime();
 const parseFromContent = (content: string) => originalParseFromContent(content, runtime);
@@ -35,7 +36,7 @@ const { READ_ONLY, NO_FLUENT_METHOD, FILTER, SKIP_SERVER, SKIP_CLIENT, EMBEDDED 
 
 const { Options, Values, OptionValues } = binaryOptions;
 
-const { SEARCH, SERVICE, PAGINATION, DTO, ANGULAR_SUFFIX, MICROSERVICE } = Options;
+const { SEARCH, SERVICE, PAGINATION, DTO, ANGULAR_SUFFIX } = Options;
 
 describe('jdl - Grammar tests', () => {
   describe('when parsing constants', () => {
@@ -1914,7 +1915,7 @@ entity A {
           });
         });
       });
-      [MICROSERVICE, ANGULAR_SUFFIX].forEach(option => {
+      [APPLICATION_TYPE_MICROSERVICE, ANGULAR_SUFFIX].forEach(option => {
         describe(option, () => {
           let parsedOption;
 
