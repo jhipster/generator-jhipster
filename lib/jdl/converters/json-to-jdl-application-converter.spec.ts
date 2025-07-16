@@ -33,6 +33,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
       let jdlObject;
 
       before(() => {
+        // @ts-expect-error invalid argument
         jdlObject = convertApplicationsToJDL({});
       });
 

@@ -33,7 +33,7 @@ export default {
  * @param jdl to which the parsed options are added. If undefined a new JDLObject is created.
  * @returns the JDLObject
  */
-export function convertServerOptionsToJDL(config, jdl: JDLObject): JDLObject {
+export function convertServerOptionsToJDL(config: any, jdl: JDLObject): JDLObject {
   const jdlObject = jdl || new JDLObject();
   const jhipsterConfig = config || {};
   [SKIP_CLIENT, SKIP_SERVER].forEach(option => {

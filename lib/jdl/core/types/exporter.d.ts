@@ -19,14 +19,10 @@
 import type { YoRcJHipsterContent } from '../../../jhipster/types/yo-rc.js';
 import type JDLJSONEntity from '../basic-types/json-entity.ts';
 
-export type JDLJSONApplicationContent = {
-  baseName?: string;
-  entities?: string[];
-  creationTimestamp?: number;
-} & Record<string, any>;
+export type JDLJSONApplicationContent = Record<string, any>;
 
 export type JDLJSONApplication<Content extends JDLJSONApplicationContent = JDLJSONApplicationContent> = YoRcJHipsterContent<Content> & {
-  namespaceConfigs: Record<string, Record<string, any>>;
+  namespaceConfigs?: Record<string, Record<string, any>>;
 };
 
 export type JDLJSONBlueprint = {

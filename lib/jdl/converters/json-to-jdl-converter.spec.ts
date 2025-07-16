@@ -23,9 +23,12 @@ import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { createJHipsterConfigFiles, basicHelpers as helpers } from '../../../lib/testing/index.js';
 import { getTestFile } from '../core/__test-support__/index.js';
+import { getDefaultRuntime } from '../../jdl-config/jhipster-jdl-config.js';
 import { convertSingleContentToJDL, convertToJDL } from './json-to-jdl-converter.js';
 
 describe('jdl - JSONToJDLConverter', () => {
+  const runtime = getDefaultRuntime();
+
   beforeEach(async () => {
     await helpers.prepareTemporaryDir();
   });
@@ -72,7 +75,7 @@ describe('jdl - JSONToJDLConverter', () => {
               }),
             )
             .commitFiles();
-          convertToJDL();
+          convertToJDL(runtime);
           jdlFileContent = fs.readFileSync('app.jdl', 'utf-8');
         });
 
@@ -117,7 +120,7 @@ describe('jdl - JSONToJDLConverter', () => {
       describe('with entities', () => {
         beforeEach(() => {
           const dir = getTestFile('json_to_jdl_converter', 'app_with_entities');
-          convertToJDL(dir);
+          convertToJDL(runtime, dir);
           jdlFileContent = fs.readFileSync(path.join(dir, 'app.jdl'), 'utf-8');
         });
 
@@ -226,7 +229,7 @@ paginate Country with pager
     describe('when there is no yo-rc file in the passed directory', () => {
       describe('with no JHipster app', () => {
         it('does not fail', () => {
-          expect(() => convertToJDL()).not.to.throw();
+          expect(() => convertToJDL(runtime)).not.to.throw();
         });
       });
       describe('with several JHipster apps', () => {
@@ -237,7 +240,7 @@ paginate Country with pager
         beforeEach(() => {
           rootDir = getTestFile('json_to_jdl_converter', 'multi_apps');
           jdlFilename = 'app.jdl';
-          convertToJDL(rootDir);
+          convertToJDL(runtime, rootDir);
           jdlFileContent = fs.readFileSync(path.join(rootDir, jdlFilename), 'utf-8');
         });
 
@@ -370,7 +373,7 @@ noFluentMethod Region, Country, Location
           .prepareTemporaryDir()
           .withFiles(createJHipsterConfigFiles({ baseName: 'jhipster' }))
           .commitFiles();
-        convertToJDL('.', file);
+        convertToJDL(runtime, '.', file);
       });
 
       it('should output it to the output file', () => {
@@ -389,19 +392,22 @@ noFluentMethod Region, Country, Location
     describe('with microservices attribute', () => {
       let jdl;
       beforeEach(() => {
-        jdl = convertSingleContentToJDL({
-          'generator-jhipster': {
-            baseName: 'x',
-            microfrontends: [
-              {
-                baseName: 'foo',
-              },
-              {
-                baseName: 'bar',
-              },
-            ],
+        jdl = convertSingleContentToJDL(
+          {
+            'generator-jhipster': {
+              baseName: 'x',
+              microfrontends: [
+                {
+                  baseName: 'foo',
+                },
+                {
+                  baseName: 'bar',
+                },
+              ],
+            },
           },
-        });
+          runtime,
+        );
       });
 
       it('should write a JDL file with the application', () => {
@@ -410,11 +416,14 @@ noFluentMethod Region, Country, Location
     });
     describe('with nullish attributes', () => {
       it('should not fail', () => {
-        convertSingleContentToJDL({
-          'generator-jhipster': {
-            baseName: 'x',
+        convertSingleContentToJDL(
+          {
+            'generator-jhipster': {
+              baseName: 'x',
+            },
           },
-        });
+          runtime,
+        );
       });
     });
   });

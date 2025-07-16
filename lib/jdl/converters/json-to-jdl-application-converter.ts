@@ -20,25 +20,25 @@
 import JDLObject from '../core/models/jdl-object.js';
 import { createJDLApplication } from '../core/models/jdl-application-factory.js';
 import type { JDLRuntime } from '../core/types/runtime.js';
-import type { JHipsterYoRcContent, JHipsterYoRcContentWrapper } from '../core/types/json-config.js';
+import type { RawJDLJSONApplication } from '../core/types/exporter.js';
+import type JDLApplication from '../core/models/jdl-application.ts';
 
 const GENERATOR_NAME = 'generator-jhipster';
 
 export type JHipsterYoRcContentAndJDLWrapper = {
-  applications?: JHipsterYoRcContent[];
+  applications: RawJDLJSONApplication[];
   jdl?: JDLObject;
 };
 
 export function convertApplicationsToJDL({ applications, jdl }: JHipsterYoRcContentAndJDLWrapper, runtime: JDLRuntime) {
-  const jsonApplications: JHipsterYoRcContent[] = applications || [];
-  const jdlObject: JDLObject = jdl || new JDLObject();
-  jsonApplications.forEach((application: JHipsterYoRcContent) => {
-    const convertedApplication = convertApplicationToJDL({ application }, runtime);
-    jdlObject.addApplication(convertedApplication);
+  jdl ??= new JDLObject();
+  applications.forEach((application: RawJDLJSONApplication) => {
+    const convertedApplication = convertApplicationToJDL(application, runtime);
+    jdl.addApplication(convertedApplication);
   });
-  return jdlObject;
+  return jdl;
 }
 
-export function convertApplicationToJDL({ application }: JHipsterYoRcContentWrapper = {}, runtime: JDLRuntime) {
+export function convertApplicationToJDL(application: RawJDLJSONApplication, runtime: JDLRuntime): JDLApplication {
   return createJDLApplication(application![GENERATOR_NAME], runtime);
 }

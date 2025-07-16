@@ -2,10 +2,13 @@ import { before, describe, expect, it } from 'esmocha';
 import type { ImportState } from '../../../../../lib/jdl/jdl-importer.js';
 import { createImporterFromContent } from '../../../../../lib/jdl/jdl-importer.js';
 import { convertSingleContentToJDL } from '../../../../../lib/jdl/converters/json-to-jdl-converter.js';
+import { getDefaultRuntime } from '../../../../../lib/jdl-config/jhipster-jdl-config.js';
 
 const optionName = 'routes';
 
 describe('generators - spring-cloud:gateway - jdl', () => {
+  const runtime = getDefaultRuntime();
+
   it('should not accept route and port', () => {
     expect(() => createImporterFromContent(`application { config { ${optionName} ["blog:123"] } }`)).toThrow(
       /The routes property name must match:/,
@@ -58,9 +61,12 @@ describe('generators - spring-cloud:gateway - jdl', () => {
     let jdl: string;
 
     before(() => {
-      jdl = convertSingleContentToJDL({
-        'generator-jhipster': { baseName: 'bar', [optionName]: ['blog:blog_host:123', 'store:store_host', 'notification'] },
-      });
+      jdl = convertSingleContentToJDL(
+        {
+          'generator-jhipster': { baseName: 'bar', [optionName]: ['blog:blog_host:123', 'store:store_host', 'notification'] },
+        },
+        runtime,
+      );
     });
 
     it('should set expected value', () => {

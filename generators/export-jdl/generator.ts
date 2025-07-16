@@ -22,6 +22,8 @@ import CoreGenerator from '../base-core/index.js';
 
 import { convertToJDL } from '../../lib/jdl/converters/json-to-jdl-converter.js';
 import { CommandCoreGenerator } from '../base-core/generator.js';
+import { getDefaultRuntime } from '../../lib/jdl-config/jhipster-jdl-config.ts';
+import { createRuntime } from '../../lib/jdl/core/runtime.ts';
 import type command from './command.js';
 
 export default class extends CommandCoreGenerator<typeof command> {
@@ -32,7 +34,8 @@ export default class extends CommandCoreGenerator<typeof command> {
     return this.asAnyTaskGroup({
       convertToJDL() {
         try {
-          const jdlObject = convertToJDL(this.destinationPath(), false, this.options.jdlDefinition);
+          const runtime = this.options.jdlDefinition ? createRuntime(this.options.jdlDefinition) : getDefaultRuntime();
+          const jdlObject = convertToJDL(runtime, this.destinationPath(), false);
           if (jdlObject) {
             this.jdlContent = jdlObject.toString();
           }

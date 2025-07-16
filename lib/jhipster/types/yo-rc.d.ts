@@ -19,4 +19,24 @@
 import type { GENERATOR_JHIPSTER } from '../../constants/jhipster.ts';
 import type { YoRcConfigValue, YoRcFileContent } from '../../constants/yeoman.ts';
 
+export type YoRcJHipsterApplicationConfigValue = {
+  baseName?: string;
+  entities?: string[];
+  creationTimestamp?: number;
+  blueprints?: { name: string }[];
+  microfrontends?: { baseName: string }[];
+};
+
+export type YoRcJHipsterDeploymentConfigValue = {
+  deploymentType?: string;
+  appsFolders?: string[];
+  clusteredDbApps?: string[];
+};
+
 export type YoRcJHipsterContent<Content extends YoRcConfigValue = YoRcConfigValue> = YoRcFileContent<Content, typeof GENERATOR_JHIPSTER>;
+
+export type YoRcJHipsterApplicationContent<Content extends YoRcJHipsterApplicationConfigValue = YoRcJHipsterApplicationConfigValue> =
+  YoRcFileContent<Content, typeof GENERATOR_JHIPSTER>;
+
+export type YoRcJHipsterDeploymentContent<Content extends YoRcJHipsterDeploymentConfigValue = YoRcJHipsterDeploymentConfigValue> =
+  YoRcFileContent<Content, typeof GENERATOR_JHIPSTER>;
