@@ -19,7 +19,7 @@ import BaseGenerator from '../../generators/base/index.js';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.js';
 import type CoreGenerator from '../../generators/base-core/generator.js';
 import type { ConfigAll as ApplicationConfiguration } from '../types/application-config-all.js';
-import { getDefaultJDLApplicationConfig } from '../command/jdl.js';
+import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
 import type { Entity } from '../jhipster/types/entity.js';
 import { buildJHipster, createProgram } from '../../cli/program.mjs';
 import type { CliCommand } from '../../cli/types.js';

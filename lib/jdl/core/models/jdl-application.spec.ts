@@ -24,11 +24,11 @@ import applicationOptions from '../../../jhipster/application-options.js';
 import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.js';
 import JDLApplication from '../models/jdl-application.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
-import { getDefaultRuntime } from '../runtime.js';
+import { createRuntime } from '../runtime.js';
 
 const { OptionNames } = applicationOptions;
 
-const runtime = getDefaultRuntime();
+const runtime = createRuntime();
 
 describe('jdl - JDLApplication', () => {
   describe('hasConfigurationOption', () => {

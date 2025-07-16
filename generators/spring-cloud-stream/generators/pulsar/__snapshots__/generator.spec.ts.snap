@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - spring-cloud-stream:pulsar jdl support should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "baseName": "jhipster",
+    "creationTimestamp": 1577836800000,
+    "entities": [],
+    "messageBroker": "pulsar"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - spring-cloud-stream:pulsar with defaults options should call source snapshot 1`] = `
+{
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "EmbeddedPulsar",
+      "package": "com.mycompany.myapp.config",
+    },
+  ],
+  "addMainLog": [
+    {
+      "level": "INFO",
+      "name": "org.apache.pulsar",
+    },
+  ],
+  "addMavenDefinition": [
+    {
+      "dependencies": [
+        {
+          "artifactId": "spring-cloud-stream",
+          "groupId": "org.springframework.cloud",
+        },
+        {
+          "artifactId": "spring-cloud-stream-binder-pulsar",
+          "groupId": "org.springframework.cloud",
+        },
+        {
+          "artifactId": "junit-jupiter",
+          "groupId": "org.testcontainers",
+          "scope": "test",
+        },
+        {
+          "artifactId": "testcontainers",
+          "groupId": "org.testcontainers",
+          "scope": "test",
+        },
+        {
+          "artifactId": "pulsar",
+          "groupId": "org.testcontainers",
+          "scope": "test",
+        },
+      ],
+      "properties": [
+        {
+          "property": "spring-pulsar.version",
+          "value": undefined,
+        },
+      ],
+    },
+  ],
+  "addTestSpringFactory": [
+    {
+      "key": "org.springframework.test.context.ContextCustomizerFactory",
+      "value": "com.mycompany.myapp.config.PulsarTestContainersSpringContextCustomizerFactory",
+    },
+  ],
+}
+`;
+
+exports[`generator - spring-cloud-stream:pulsar with defaults options should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/broker/PulsarIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/BrokerConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/EmbeddedPulsar.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PulsarTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+}
+`;

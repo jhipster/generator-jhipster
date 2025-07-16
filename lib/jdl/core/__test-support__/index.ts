@@ -1,6 +1,5 @@
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { getDefaultRuntime } from '../runtime.js';
 import { parseFromContent as originalParseFromContent, parseFromFiles as originalParseFromFiles } from '../readers/jdl-reader.js';
 import { parseFromConfigurationObject as originalParseFromConfigurationObject } from '../../converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import {
@@ -13,7 +12,7 @@ import { convertApplications as originalConvertApplications } from '../../conver
 import { createJDLApplication as originalCreateJDLApplication } from '../models/jdl-application-factory.js';
 import type { JHipsterYoRcContentAndJDLWrapper } from '../../converters/json-to-jdl-application-converter.js';
 import { convertApplicationsToJDL as originalConvertApplicationsToJDL } from '../../converters/json-to-jdl-application-converter.js';
-import { getDefaultJDLApplicationConfig } from '../../../command/jdl.js';
+import { getDefaultJDLApplicationConfig, getDefaultRuntime } from '../../../jdl-config/jhipster-jdl-config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -19,18 +19,19 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { getDefaultRuntime } from '../runtime.js';
+import { createRuntime } from '../runtime.js';
 import { getSyntacticAutoCompleteSuggestions, parse } from './api.js';
 
-const { tokens } = getDefaultRuntime();
-
 describe('jdl - JDL DSL API', () => {
+  const jdlRuntime = createRuntime();
+  const { tokens } = jdlRuntime;
+
   describe('when wanting an AST', () => {
     describe('with a valid input', () => {
       let ast;
 
       before(() => {
-        ast = parse('@service(serviceClass) entity A {@Id field String}', getDefaultRuntime());
+        ast = parse('@service(serviceClass) entity A {@Id field String}', jdlRuntime);
       });
 
       it('should return an AST', () => {
@@ -57,7 +58,7 @@ describe('jdl - JDL DSL API', () => {
       let parseInvalidToken;
 
       before(() => {
-        parseInvalidToken = () => parse('entity ± {', getDefaultRuntime());
+        parseInvalidToken = () => parse('entity ± {', jdlRuntime);
       });
 
       it('should throw an error with the offset information', () => {
@@ -74,7 +75,7 @@ describe('jdl - JDL DSL API', () => {
         let parseWrongClosingBraces;
 
         before(() => {
-          parseWrongClosingBraces = () => parse('entity Person { ]', getDefaultRuntime());
+          parseWrongClosingBraces = () => parse('entity Person { ]', jdlRuntime);
         });
 
         it('should throw an error with position information', () => {
@@ -90,7 +91,7 @@ describe('jdl - JDL DSL API', () => {
         let parseMissingClosingBraces;
 
         before(() => {
-          parseMissingClosingBraces = () => parse('entity Person {', getDefaultRuntime());
+          parseMissingClosingBraces = () => parse('entity Person {', jdlRuntime);
         });
 
         it('should throw an error with typeof MismatchTokenException', () => {
@@ -110,7 +111,7 @@ describe('jdl - JDL DSL API', () => {
       it('should throw an error', () => {
         // lower case entityName first char
         const invalidInput = 'entity person { }';
-        expect(() => parse(invalidInput, getDefaultRuntime())).to.throw(/.+\/\^\[A-Z][^]+line: 1.+column: 8/);
+        expect(() => parse(invalidInput, jdlRuntime)).to.throw(/.+\/\^\[A-Z][^]+line: 1.+column: 8/);
       });
     });
   });
@@ -120,7 +121,7 @@ describe('jdl - JDL DSL API', () => {
       let result;
 
       before(() => {
-        result = getSyntacticAutoCompleteSuggestions('', getDefaultRuntime());
+        result = getSyntacticAutoCompleteSuggestions('', jdlRuntime);
       });
 
       it('should provide suggestions', () => {
@@ -145,7 +146,7 @@ describe('jdl - JDL DSL API', () => {
 
       before(() => {
         const input = 'lastName string ';
-        result = getSyntacticAutoCompleteSuggestions(input, getDefaultRuntime(), { startRule: 'fieldDeclaration' });
+        result = getSyntacticAutoCompleteSuggestions(input, jdlRuntime, { startRule: 'fieldDeclaration' });
       });
 
       it('should provide suggestions', () => {
@@ -160,7 +161,7 @@ describe('jdl - JDL DSL API', () => {
 
       before(() => {
         const input = 'entity person { lastName string ';
-        result = getSyntacticAutoCompleteSuggestions(input, getDefaultRuntime());
+        result = getSyntacticAutoCompleteSuggestions(input, jdlRuntime);
       });
 
       it('should provide suggestions', () => {

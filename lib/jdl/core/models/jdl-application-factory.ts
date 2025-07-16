@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { getDefaultRuntime } from '../runtime.js';
+import { getDefaultRuntime } from '../../../jdl-config/jhipster-jdl-config.ts';
 import type { JDLRuntime } from '../types/runtime.js';
 import JDLApplication from './jdl-application.js';
 

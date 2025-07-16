@@ -20,11 +20,11 @@
 import { before, describe, expect, it } from 'esmocha';
 import createApplicationConfigurationFromObject from '../models/jdl-application-configuration-factory.js';
 import applicationOptions from '../../../jhipster/application-options.js';
-import { getDefaultRuntime } from '../runtime.js';
+import { createRuntime } from '../runtime.js';
 
 const { OptionNames } = applicationOptions;
 
-const runtime = getDefaultRuntime();
+const runtime = createRuntime();
 
 describe('jdl - JDLApplicationConfigurationFactory', () => {
   describe('createApplicationConfigurationFromObject', () => {

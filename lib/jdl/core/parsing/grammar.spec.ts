@@ -23,10 +23,10 @@ import type { ParsedJDLOption } from '../types/parsed.js';
 import { parseFromContent as originalParseFromContent } from '../readers/jdl-reader.js';
 import { relationshipTypes } from '../basic-types/index.js';
 import { binaryOptions, unaryOptions, validations } from '../built-in-options/index.js';
-import { getDefaultRuntime } from '../runtime.js';
+import { createRuntime } from '../runtime.js';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.js';
 
-const runtime = getDefaultRuntime();
+const runtime = createRuntime();
 const parseFromContent = (content: string) => originalParseFromContent(content, runtime);
 
 const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = relationshipTypes;

@@ -33,14 +33,14 @@ import JDLRelationship from '../../core/models/jdl-relationship.js';
 import JDLValidation from '../../core/models/jdl-validation.js';
 import createValidator from '../validators/jdl-with-application-validator.js';
 import { relationshipTypes } from '../../core/basic-types/index.js';
-import { getDefaultRuntime } from '../../core/runtime.js';
+import { createRuntime } from '../../core/runtime.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
 
 const {
   Validations: { MIN },
 } = validations;
 
-const runtime = getDefaultRuntime();
+const runtime = createRuntime();
 
 describe('jdl - JDLWithApplicationValidator', () => {
   describe('createValidator', () => {

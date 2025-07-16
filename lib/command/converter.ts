@@ -1,4 +1,3 @@
-import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
 import type {
   CommandConfigDefault,
   CommandConfigScope,
@@ -27,16 +26,6 @@ export const extractArgumentsFromConfigs = (configs: JHipsterConfigs | undefined
       ]),
   ) as JHipsterArgumentsWithChoices;
 };
-
-export const extractJdlDefinitionFromCommandConfig = (configs: JHipsterConfigs = {}): JHipsterOptionDefinition[] =>
-  Object.entries(configs)
-    .filter(([_name, def]) => def.jdl)
-    .map(([name, def]) => ({
-      ...(def.jdl as Omit<JHipsterOptionDefinition, 'name' | 'knownChoices'>),
-      name,
-      knownChoices: def.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value)),
-    }))
-    .sort((a, b) => (b.name.startsWith(a.name) ? 1 : a.name.localeCompare(b.name)));
 
 export const convertConfigToOption = <const T extends ConfigSpec<any>>(
   name: string,
