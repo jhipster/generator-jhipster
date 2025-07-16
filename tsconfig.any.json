@@ -24,7 +24,7 @@
     "lib/jdl/core/utils/**/*.spec.ts",
     "lib/jdl/converters/*.*",
     "lib/jdl/converters/exporters/*.spec.ts",
-    "lib/jdl/converters/jdl-to-json",
+    "lib/jdl/converters/jdl-to-json/*.spec.ts",
     "lib/jdl/converters/parsed-jdl-to-jdl-object",
     "lib/jdl/converters/validators/*.spec.ts",
     "lib/jdl-config/",

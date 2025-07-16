@@ -24,6 +24,7 @@ import type JDLApplication from '../../core/models/jdl-application.js';
 import type AbstractJDLOption from '../../core/models/abstract-jdl-option.js';
 import type JDLBinaryOption from '../../core/models/jdl-binary-option.js';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
+import type { ParsedJDLAnnotation } from '../../core/types/parsed.js';
 
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
@@ -75,7 +76,7 @@ function setOptionsToEachEntityName(jdlOption: AbstractJDLOption): void {
   const { key, value } = getJSONOptionKeyAndValue(jdlOption);
 
   jdlOption.entityNames.forEach(entityName => {
-    setOptionToEntityName({ optionName: key, optionValue: value }, entityName);
+    setOptionToEntityName({ optionName: key, type: 'BINARY', optionValue: value }, entityName);
   });
   jdlOption.entityNames.forEach(entityName => {
     const serviceOptionValue = convertedOptionContent.get(entityName).service;
@@ -84,7 +85,7 @@ function setOptionsToEachEntityName(jdlOption: AbstractJDLOption): void {
         `The ${jdlOption.name} option is set for ${entityName}, the '${serviceClassOptionValue}' value for the ` +
           "'service' is gonna be set for this entity if no other value has been set.",
       );
-      setOptionToEntityName({ optionName: 'service', optionValue: serviceClassOptionValue }, entityName);
+      setOptionToEntityName({ optionName: 'service', type: 'BINARY', optionValue: serviceClassOptionValue }, entityName);
     }
   });
 
@@ -117,11 +118,11 @@ function getJSONOptionKeyAndValue(jdlOption: AbstractJDLOption): { key: string; 
 
 function preventEntitiesFromBeingSearched(entityNames: Set<string>) {
   entityNames.forEach(entityName => {
-    setOptionToEntityName({ optionName: 'searchEngine', optionValue: 'no' }, entityName);
+    setOptionToEntityName({ optionName: 'searchEngine', type: 'BINARY', optionValue: 'no' }, entityName);
   });
 }
 
-function setOptionToEntityName(option, entityName: string): void {
+function setOptionToEntityName(option: ParsedJDLAnnotation, entityName: string): void {
   const { optionName, optionValue } = option;
   const optionContentForEntity = convertedOptionContent.get(entityName) ?? {};
   optionContentForEntity[optionName] = optionValue;

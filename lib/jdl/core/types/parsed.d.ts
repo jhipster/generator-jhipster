@@ -21,7 +21,7 @@ import type { RelationshipType } from '../basic-types/relationships.js';
 
 export type ParsedJDLAnnotation = {
   optionName: string;
-  type: 'UNARY' | string;
+  type: 'UNARY' | 'BINARY';
   optionValue?: boolean | string | number;
 };
 
