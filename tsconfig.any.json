@@ -25,7 +25,7 @@
     "lib/jdl/converters/*.*",
     "lib/jdl/converters/exporters/*.spec.ts",
     "lib/jdl/converters/jdl-to-json/*.spec.ts",
-    "lib/jdl/converters/parsed-jdl-to-jdl-object",
+    "lib/jdl/converters/parsed-jdl-to-jdl-object/*.spec.ts",
     "lib/jdl/converters/validators/*.spec.ts",
     "lib/jdl-config/",
     "lib/jhipster/default-application-options.*",
