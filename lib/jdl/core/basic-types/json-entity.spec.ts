@@ -26,7 +26,7 @@ describe('jdl - JSONEntity', () => {
     describe('when not passing a configuration', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-expect-error
+          // @ts-expect-error invalid argument
           new JSONEntity();
         }).to.throw(/^At least an entity name must be passed\.$/);
       });
@@ -40,7 +40,7 @@ describe('jdl - JSONEntity', () => {
       });
     });
     describe('when only passing an entity name', () => {
-      let entity;
+      let entity: JSONEntity;
 
       before(() => {
         entity = new JSONEntity({
@@ -75,7 +75,7 @@ JSONEntity {
       });
     });
     describe('when passing values', () => {
-      let entity;
+      let entity: JSONEntity;
 
       before(() => {
         entity = new JSONEntity({
@@ -132,7 +132,7 @@ JSONEntity {
     });
   });
   describe('addField', () => {
-    let entity;
+    let entity: JSONEntity;
 
     before(() => {
       entity = new JSONEntity({
@@ -142,6 +142,7 @@ JSONEntity {
 
     describe('when not passing anything', () => {
       before(() => {
+        // @ts-expect-error invalid argument
         entity.addField();
       });
 
@@ -151,6 +152,7 @@ JSONEntity {
     });
     describe('when passing something', () => {
       before(() => {
+        // @ts-expect-error TODO convert to field
         entity.addField(42);
       });
 
@@ -160,7 +162,7 @@ JSONEntity {
     });
   });
   describe('addFields', () => {
-    let entity;
+    let entity: JSONEntity;
 
     before(() => {
       entity = new JSONEntity({
@@ -170,6 +172,7 @@ JSONEntity {
 
     describe('when not passing anything', () => {
       before(() => {
+        // @ts-expect-error invalid argument
         entity.addFields();
       });
 
@@ -179,6 +182,7 @@ JSONEntity {
     });
     describe('when passing something', () => {
       before(() => {
+        // @ts-expect-error TODD convert to fields
         entity.addFields([42, 43]);
       });
 
@@ -188,7 +192,7 @@ JSONEntity {
     });
   });
   describe('addRelationship', () => {
-    let entity;
+    let entity: JSONEntity;
 
     before(() => {
       entity = new JSONEntity({
@@ -198,6 +202,7 @@ JSONEntity {
 
     describe('when not passing anything', () => {
       before(() => {
+        // @ts-expect-error invalid argument
         entity.addRelationship();
       });
 
@@ -207,6 +212,7 @@ JSONEntity {
     });
     describe('when passing something', () => {
       before(() => {
+        // @ts-expect-error TODO convert to relationship
         entity.addRelationship(42);
       });
 
@@ -216,7 +222,7 @@ JSONEntity {
     });
   });
   describe('addRelationships', () => {
-    let entity;
+    let entity: JSONEntity;
 
     before(() => {
       entity = new JSONEntity({
@@ -226,6 +232,7 @@ JSONEntity {
 
     describe('when not passing anything', () => {
       before(() => {
+        // @ts-expect-error invalid argument
         entity.addRelationships();
       });
 
@@ -235,6 +242,7 @@ JSONEntity {
     });
     describe('when passing something', () => {
       before(() => {
+        // @ts-expect-error TODD convert to relationships
         entity.addRelationships([42, 43]);
       });
 
@@ -245,8 +253,8 @@ JSONEntity {
   });
   describe('setOptions', () => {
     describe('when not passing options', () => {
-      let originalJSONEntity;
-      let touchedJSONEntity;
+      let originalJSONEntity: JSONEntity;
+      let touchedJSONEntity: JSONEntity;
 
       before(() => {
         originalJSONEntity = new JSONEntity({
@@ -263,7 +271,7 @@ JSONEntity {
       });
     });
     describe('when passing options', () => {
-      let jsonEntity;
+      let jsonEntity: JSONEntity;
 
       before(() => {
         jsonEntity = new JSONEntity({

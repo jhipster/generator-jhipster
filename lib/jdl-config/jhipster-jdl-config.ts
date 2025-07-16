@@ -17,13 +17,24 @@
  * limitations under the License.
  */
 import { snakeCase, upperCase } from 'lodash-es';
-import type { JDLApplicationConfig } from '../jdl/core/types/parsing.js';
-import springBootCommand from '../../generators/spring-boot/command.js';
-import springCloudStreamCommand from '../../generators/spring-cloud-stream/command.js';
-import liquibaseCommand from '../../generators/liquibase/command.js';
-import gatewayCommand from '../../generators/spring-cloud/generators/gateway/command.js';
-import { extractJdlDefinitionFromCommandConfig } from './converter.js';
-import type { JHipsterConfigs } from './types.js';
+import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
+import springBootCommand from '../../generators/spring-boot/command.ts';
+import springCloudStreamCommand from '../../generators/spring-cloud-stream/command.ts';
+import liquibaseCommand from '../../generators/liquibase/command.ts';
+import gatewayCommand from '../../generators/spring-cloud/generators/gateway/command.ts';
+import type { JHipsterConfigs } from '../command/types.js';
+import type { JDLRuntime } from '../jdl/core/types/runtime.js';
+import { createRuntime } from '../jdl/core/runtime.ts';
+
+export const extractJdlDefinitionFromCommandConfig = (configs: JHipsterConfigs = {}): JHipsterOptionDefinition[] =>
+  Object.entries(configs)
+    .filter(([_name, def]) => def.jdl)
+    .map(([name, def]) => ({
+      ...(def.jdl as Omit<JHipsterOptionDefinition, 'name' | 'knownChoices'>),
+      name,
+      knownChoices: def.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value)),
+    }))
+    .sort((a, b) => (b.name.startsWith(a.name) ? 1 : a.name.localeCompare(b.name)));
 
 export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicationConfig => {
   const jdlOptions = extractJdlDefinitionFromCommandConfig(configs);
@@ -70,4 +81,13 @@ export const getDefaultJDLApplicationConfig = () => {
     });
   }
   return defaultJDLApplicationConfig;
+};
+
+let defaultRuntime: JDLRuntime;
+export const getDefaultRuntime = (): JDLRuntime => {
+  if (!defaultRuntime) {
+    defaultRuntime = createRuntime(getDefaultJDLApplicationConfig());
+  }
+
+  return defaultRuntime;
 };

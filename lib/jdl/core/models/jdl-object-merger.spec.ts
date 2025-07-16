@@ -28,8 +28,11 @@ import JDLField from '../models/jdl-field.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import mergeJDLObjects from '../models/jdl-object-merger.js';
-import { createJDLApplication } from '.././__test-support__/index.js';
+import { createJDLApplication } from '../__test-support__/index.js';
 import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
+import { createRuntime } from '../runtime.js';
+
+const runtime = createRuntime();
 
 describe('jdl - JDLObjectMerger', () => {
   describe('mergeJDLObjects', () => {
@@ -89,11 +92,14 @@ describe('jdl - JDLObjectMerger', () => {
 
 function createFirstJDLObjectForTheMergeTest() {
   const jdlObject = new JDLObject();
-  const application = createJDLApplication({
-    applicationType: APPLICATION_TYPE_MONOLITH,
-    baseName: 'anApp',
-    databaseType: 'sql',
-  });
+  const application = createJDLApplication(
+    {
+      applicationType: APPLICATION_TYPE_MONOLITH,
+      baseName: 'anApp',
+      databaseType: 'sql',
+    },
+    runtime,
+  );
   const entityA = new JDLEntity({
     name: 'A',
   });
@@ -130,11 +136,14 @@ function createFirstJDLObjectForTheMergeTest() {
 
 function createSecondJDLObjectForTheMergeTest() {
   const jdlObject = new JDLObject();
-  const application = createJDLApplication({
-    applicationType: APPLICATION_TYPE_MONOLITH,
-    baseName: 'anotherApp',
-    databaseType: 'sql',
-  });
+  const application = createJDLApplication(
+    {
+      applicationType: APPLICATION_TYPE_MONOLITH,
+      baseName: 'anotherApp',
+      databaseType: 'sql',
+    },
+    runtime,
+  );
   const entityC = new JDLEntity({
     name: 'C',
   });

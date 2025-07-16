@@ -20,10 +20,10 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { createJDLApplication } from '../models/jdl-application-factory.js';
-import { getDefaultRuntime } from '../runtime.js';
+import { createRuntime } from '../runtime.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
 
-const runtime = getDefaultRuntime();
+const runtime = createRuntime();
 
 describe('jdl - JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {
@@ -31,7 +31,7 @@ describe('jdl - JDLApplicationFactory', () => {
       let application;
 
       before(() => {
-        application = createJDLApplication({ applicationType: APPLICATION_TYPE_MICROSERVICE }, undefined, runtime);
+        application = createJDLApplication({ applicationType: APPLICATION_TYPE_MICROSERVICE }, runtime);
       });
 
       it('should create the app', () => {
@@ -42,7 +42,7 @@ describe('jdl - JDLApplicationFactory', () => {
       let application;
 
       before(() => {
-        application = createJDLApplication({ applicationType: APPLICATION_TYPE_GATEWAY }, undefined, runtime);
+        application = createJDLApplication({ applicationType: APPLICATION_TYPE_GATEWAY }, runtime);
       });
 
       it('should create the app', () => {
@@ -53,7 +53,7 @@ describe('jdl - JDLApplicationFactory', () => {
       let application;
 
       before(() => {
-        application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH }, undefined, runtime);
+        application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH }, runtime);
       });
 
       it('should create the app', () => {

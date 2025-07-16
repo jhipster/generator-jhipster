@@ -19,6 +19,7 @@
 import { uniqBy } from 'lodash-es';
 import { readCurrentPathYoRcFile } from '../utils/yo-rc.js';
 import { APPLICATION_TYPE_KEY, type ApplicationType } from '../core/application-types.ts';
+import { getDefaultRuntime } from '../jdl-config/jhipster-jdl-config.ts';
 import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 import { convert } from './converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
@@ -37,7 +38,7 @@ import type { ParsedJDLApplications } from './core/types/parsed.js';
 import type { PostProcessedJDLJSONApplication } from './core/types/exporter.js';
 import type { JDLApplicationConfig } from './core/types/parsing.js';
 import type { JDLRuntime } from './core/types/runtime.js';
-import { createRuntime, getDefaultRuntime } from './core/runtime.js';
+import { createRuntime } from './core/runtime.js';
 import { BASE_NAME_KEY } from './core/built-in-options/index.ts';
 import type { JSONEntity } from './core/types/json-config.js';
 import type JDLJSONEntity from './core/basic-types/json-entity.ts';

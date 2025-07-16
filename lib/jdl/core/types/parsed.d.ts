@@ -61,20 +61,29 @@ export type ParsedJDLEnum = {
   values: ParsedJDLEnumValue[];
   documentation?: string;
 };
-export type ParsedJDLOption = {
+
+export type ParsedJDLOptionConfig = {
   list: string[]; // entity names
   excluded: string[]; // excluded entity names
 };
 
+export type ParsedJDLOption = {
+  optionName: string;
+} & ParsedJDLOptionConfig;
+
+export type ParsedJDLBinaryOption = {
+  optionValue: string;
+} & ParsedJDLOption;
+
 export type ParsedJDLUseOption = {
   optionValues: string[];
-} & ParsedJDLOption;
+} & ParsedJDLOptionConfig;
 
 export type ParsedJDLApplication = {
   config: ParsedJDLApplicationConfig;
   namespaceConfigs?: Record<string, Record<string, boolean | number | string[] | string>>;
   entities?: string[];
-  options?: Record<string, ParsedJDLOption | Record<string, ParsedJDLOption>>;
+  options?: Record<string, ParsedJDLOptionConfig | Record<string, ParsedJDLOptionConfig>>;
   useOptions?: ParsedJDLUseOption[];
 };
 

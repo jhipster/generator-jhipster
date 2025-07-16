@@ -32,8 +32,11 @@ import JDLRelationship from '../models/jdl-relationship.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
 import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
+import { createRuntime } from '../runtime.js';
 
 describe('jdl - JDLObject', () => {
+  const runtime = createRuntime();
+
   describe('addApplication', () => {
     describe('when adding an invalid application', () => {
       const object = new JDLObject();
@@ -53,7 +56,7 @@ describe('jdl - JDLObject', () => {
 
       before(() => {
         const object = new JDLObject();
-        originalApplication = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, jhipsterVersion: '4.9.0' }, undefined);
+        originalApplication = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, jhipsterVersion: '4.9.0' }, runtime);
         const baseName = originalApplication.getConfigurationOptionValue('baseName');
         object.addApplication(originalApplication);
         addedApplication = object.applications[baseName];
@@ -80,9 +83,12 @@ describe('jdl - JDLObject', () => {
     describe('when having one or more applications', () => {
       before(() => {
         jdlObject.addApplication(
-          createJDLApplication({
-            applicationType: APPLICATION_TYPE_MONOLITH,
-          }),
+          createJDLApplication(
+            {
+              applicationType: APPLICATION_TYPE_MONOLITH,
+            },
+            runtime,
+          ),
         );
       });
 
@@ -97,7 +103,7 @@ describe('jdl - JDLObject', () => {
 
       before(() => {
         jdlObject = new JDLObject();
-        jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }));
+        jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }, runtime));
       });
 
       it('should return undefined', () => {
@@ -111,7 +117,7 @@ describe('jdl - JDLObject', () => {
 
         before(() => {
           jdlObject = new JDLObject();
-          jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }));
+          jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }, runtime));
         });
 
         it('should return undefined', () => {
@@ -124,7 +130,7 @@ describe('jdl - JDLObject', () => {
 
         before(() => {
           jdlObject = new JDLObject();
-          jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }));
+          jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }, runtime));
         });
 
         it('should return undefined', () => {
@@ -199,8 +205,8 @@ describe('jdl - JDLObject', () => {
 
     before(() => {
       jdlObject = new JDLObject();
-      jdlObject.addApplication(createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'A' }, undefined));
-      jdlObject.addApplication(createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'B' }, undefined));
+      jdlObject.addApplication(createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'A' }, runtime));
+      jdlObject.addApplication(createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'B' }, runtime));
     });
 
     describe('when not passing a function', () => {
@@ -987,7 +993,7 @@ describe('jdl - JDLObject', () => {
 
     before(() => {
       object = new JDLObject();
-      application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, jhipsterVersion: '4.9.0' });
+      application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, jhipsterVersion: '4.9.0' }, runtime);
       object.addApplication(application);
       deployment = new JDLDeployment({
         deploymentType: 'docker-compose',

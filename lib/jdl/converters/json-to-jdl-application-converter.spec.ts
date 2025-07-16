@@ -23,8 +23,11 @@ import { createJDLApplication } from '../core/models/jdl-application-factory.js'
 import JDLObject from '../core/models/jdl-object.js';
 import { convertApplicationsToJDL } from '../core/__test-support__/index.js';
 import { APPLICATION_TYPE_MONOLITH } from '../../core/application-types.js';
+import { createRuntime } from '../core/runtime.js';
 
 describe('jdl - JSONToJDLApplicationConverter', () => {
+  const runtime = createRuntime();
+
   describe('convert', () => {
     describe('when not passing any argument', () => {
       let jdlObject;
@@ -48,7 +51,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
 
       it('should return the converted applications', () => {
         expect(jdlObject.applications.toto).to.deep.equal(
-          createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, undefined),
+          createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime),
         );
       });
     });
@@ -57,7 +60,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
 
       before(() => {
         const previousJDLObject = new JDLObject();
-        previousJDLObject.addApplication(createJDLApplication({ baseName: 'tata', applicationType: APPLICATION_TYPE_MONOLITH }, undefined));
+        previousJDLObject.addApplication(createJDLApplication({ baseName: 'tata', applicationType: APPLICATION_TYPE_MONOLITH }, runtime));
         jdlObject = convertApplicationsToJDL({
           applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: APPLICATION_TYPE_MONOLITH } }],
           jdl: previousJDLObject,
@@ -66,10 +69,10 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
 
       it('should add the converted applications', () => {
         expect(jdlObject.applications.tata).to.deep.equal(
-          createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'tata' }, undefined),
+          createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'tata' }, runtime),
         );
         expect(jdlObject.applications.toto).to.deep.equal(
-          createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, undefined),
+          createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime),
         );
       });
     });

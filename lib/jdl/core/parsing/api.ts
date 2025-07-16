@@ -41,7 +41,7 @@ export function getCst(input: string, runtime: JDLRuntime, options?: ParseOption
 
   runtime.parser.input = lexResult.tokens;
 
-  const cst = runtime.parser[options?.startRule ?? 'prog']();
+  const cst = (runtime.parser as unknown as Record<string, () => CstNode>)[options?.startRule ?? 'prog']();
 
   if (runtime.parser.errors.length > 0) {
     throwParserError(runtime.parser.errors);
@@ -75,7 +75,7 @@ function throwErrorAboutInvalidToken(parserError: IRecognitionException) {
   throw Error(`${parserError.name}: ${errorMessageBeginning}${errorMessageLocation}.\n\t${errorMessageComplement}`);
 }
 
-function throwSyntaxError(errors) {
+function throwSyntaxError(errors: IRecognitionException[]) {
   throw Error(errors.map(error => `${error.message}\n\tat line: ${error.token.startLine}, column: ${error.token.startColumn}`).join('\n'));
 }
 

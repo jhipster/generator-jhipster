@@ -50,31 +50,32 @@ const ReservedWords = {
   MONGODB: ['DOCUMENT'],
   MSSQL: mssqlReservedKeywords,
   NEO4J: neo4jReservedKeywords,
-};
+} satisfies Record<string, readonly string[]>;
 
-export const keywordsForType = (type: string) => ReservedWords[type.toUpperCase()];
+export const keywordsForType = (type: string): readonly string[] =>
+  (ReservedWords as Record<string, readonly string[]>)[type.toUpperCase()];
 
-export function isReserved(keyword?: any, type?: string) {
+export function isReserved(keyword?: string, type?: string) {
   return !!keyword && !!type && !!keywordsForType(type)?.includes(keyword.toUpperCase());
 }
 
-export function isReservedClassName(keyword) {
+export function isReservedClassName(keyword: string) {
   return (
     isReserved(keyword, 'JHIPSTER') || isReserved(keyword, 'ANGULAR') || isReserved(keyword, 'TYPESCRIPT') || isReserved(keyword, 'JAVA')
   );
 }
 
-export function isReservedTableName(keyword, databaseType) {
+export function isReservedTableName(keyword: string, databaseType: string) {
   return databaseType.toUpperCase() === 'SQL'
     ? isReserved(keyword, 'MYSQL') || isReserved(keyword, 'POSTGRESQL') || isReserved(keyword, 'ORACLE') || isReserved(keyword, 'MSSQL')
     : isReserved(keyword, databaseType);
 }
 
-export function isReservedPaginationWords(keyword) {
+export function isReservedPaginationWords(keyword: string) {
   return isReserved(keyword, 'PAGING');
 }
 
-export function isReservedFieldName(keyword, clientFramework?: any) {
+export function isReservedFieldName(keyword: string, clientFramework?: any) {
   if (clientFramework) {
     if (clientFramework === clientFrameworks.angular) {
       // Angular client framework

@@ -21,7 +21,7 @@ import JDLUnaryOption from '../../core/models/jdl-unary-option.js';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
 import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.js';
 import type AbstractJDLOption from '../../core/models/abstract-jdl-option.js';
-import type { ParsedJDLOption, ParsedJDLUseOption } from '../../core/types/parsed.js';
+import type { ParsedJDLOption, ParsedJDLOptionConfig, ParsedJDLUseOption } from '../../core/types/parsed.js';
 
 const { OptionValues, getOptionName } = binaryOptions;
 export default { convertOptions };
@@ -33,7 +33,7 @@ export default { convertOptions };
  * @returns {Array<JDLUnaryOption|JDLBinaryOption>} the converted JDLUnaryOption & JDLBinaryOption objects.
  */
 export function convertOptions(
-  parsedOptions: Record<string, ParsedJDLOption | Record<string, ParsedJDLOption>> | undefined,
+  parsedOptions: Record<string, ParsedJDLOptionConfig | Record<string, ParsedJDLOptionConfig>> | undefined,
   useOptions: ParsedJDLUseOption[],
 ): AbstractJDLOption[] {
   if (!parsedOptions) {

@@ -1,6 +1,5 @@
 import type { Lexer, TokenType } from 'chevrotain';
 import { builtInJDLApplicationConfig } from '../../jhipster/application-options.js';
-import { getDefaultJDLApplicationConfig } from '../../command/jdl.js';
 import { buildTokens, createJDLLexer } from './parsing/lexer/lexer.js';
 import JDLParser from './parsing/jdl-parser.js';
 import { checkConfigKeys, checkTokens } from './parsing/self-checks/parsing-system-checker.js';
@@ -29,8 +28,8 @@ const mergeDefinition = (definition: JDLApplicationConfig, defaultDefinition: JD
   };
 };
 
-export const createRuntime = (definition: JDLApplicationConfig): JDLRuntime => {
-  const newDefinition = mergeDefinition(definition, builtInJDLApplicationConfig);
+export const createRuntime = (definition?: JDLApplicationConfig): JDLRuntime => {
+  const newDefinition = definition ? mergeDefinition(definition, builtInJDLApplicationConfig) : builtInJDLApplicationConfig;
   const propertyValidations: Record<string, JDLValidatorOption> = newDefinition.validatorConfig;
   const applicationDefinition = new JDLApplicationDefinition({
     optionValues: newDefinition.optionsValues,
@@ -71,13 +70,4 @@ export const createRuntime = (definition: JDLApplicationConfig): JDLRuntime => {
     applicationDefinition,
     propertyValidations,
   };
-};
-
-let defaultRuntime: JDLRuntime;
-export const getDefaultRuntime = (): JDLRuntime => {
-  if (!defaultRuntime) {
-    defaultRuntime = createRuntime(getDefaultJDLApplicationConfig());
-  }
-
-  return defaultRuntime;
 };

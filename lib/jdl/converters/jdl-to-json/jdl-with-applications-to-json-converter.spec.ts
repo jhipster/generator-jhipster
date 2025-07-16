@@ -38,6 +38,7 @@ import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
 import logger from '../../core/utils/objects/logger.js';
 import { createJDLApplication } from '../../core/__test-support__/index.js';
 import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
+import { createRuntime } from '../../core/runtime.js';
 import { convert } from './jdl-with-applications-to-json-converter.js';
 
 const {
@@ -50,6 +51,8 @@ const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes
 const { BUILT_IN_ENTITY } = relationshipOptions;
 
 describe('jdl - JDLWithApplicationsToJSONConverter', () => {
+  const runtime = createRuntime();
+
   describe('convert', () => {
     describe('when passing invalid parameters', () => {
       describe('such as no JDL object', () => {
@@ -66,12 +69,12 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
 
       before(() => {
         const jdlObject = new JDLObject();
-        const application1 = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'app1' });
+        const application1 = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'app1' }, runtime);
         jdlObject.addApplication(application1);
         const entity = new JDLEntity({
           name: 'EntityA',
         });
-        const application2 = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'app2' });
+        const application2 = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'app2' }, runtime);
         application2.addEntityName('EntityA');
         jdlObject.addEntity(entity);
         jdlObject.addApplication(application2);
@@ -89,7 +92,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
 
       before(() => {
         const jdlObject = new JDLObject();
-        const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+        const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
         jdlObject.addApplication(application);
         result = convert(jdlObject);
       });
@@ -107,7 +110,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
 
         before(() => {
           const jdlObject = new JDLObject();
-          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -143,7 +146,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
 
         before(() => {
           const jdlObject = new JDLObject();
-          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -189,7 +192,7 @@ JSONEntity {
 
         before(() => {
           const jdlObject = new JDLObject();
-          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -300,7 +303,7 @@ JSONEntity {
         before(() => {
           loggerSpy = sinon.spy(logger, 'info');
           const jdlObject = new JDLObject();
-          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -365,7 +368,7 @@ JSONEntity {
         before(() => {
           loggerSpy = sinon.spy(logger, 'info');
           const jdlObject = new JDLObject();
-          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -427,7 +430,7 @@ JSONEntity {
 
         before(() => {
           const jdlObject = new JDLObject();
-          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+          const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',
@@ -483,7 +486,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
             const entityA = new JDLEntity({
               name: 'A',
               tableName: 'entity_a',
@@ -548,7 +551,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
             const entityA = new JDLEntity({
               name: 'A',
               tableName: 'entity_a',
@@ -631,7 +634,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
             const entityA = new JDLEntity({
               name: 'A',
               comment: 'The best entity',
@@ -689,7 +692,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
             const entityA = new JDLEntity({
               name: 'A',
               tableName: 'entity_a',
@@ -747,7 +750,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
             const entityA = new JDLEntity({
               name: 'A',
               tableName: 'entity_a',
@@ -889,7 +892,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
             const entityA = new JDLEntity({
               name: 'A',
               tableName: 'entity_a',
@@ -956,7 +959,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
             const entityA = new JDLEntity({ name: 'A', comment: 'a' });
             const entityB = new JDLEntity({ name: 'B', comment: 'b' });
             const oneToOneRelationship = new JDLRelationship({
@@ -1074,7 +1077,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const oneToOneRelationship = new JDLRelationship({
@@ -1121,7 +1124,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const oneToOneRelationship = new JDLRelationship({
@@ -1168,7 +1171,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
             const entityA = new JDLEntity({ name: 'A', comment: 'a' });
             const entityB = new JDLEntity({ name: 'B', comment: 'b' });
             const oneToOneRelationship = new JDLRelationship({
@@ -1224,7 +1227,7 @@ JSONEntity {
 
           before(() => {
             const jdlObject = new JDLObject();
-            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+            const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
             const entityA = new JDLEntity({ name: 'A', comment: 'a' });
             const entityB = new JDLEntity({ name: 'B', comment: 'b' });
             const oneToOneRelationship = new JDLRelationship({
@@ -1281,7 +1284,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const oneToOneRelationship = new JDLRelationship({
@@ -1321,7 +1324,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const oneToManyRelationship = new JDLRelationship({
@@ -1361,7 +1364,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const manyToOneRelationship = new JDLRelationship({
@@ -1401,7 +1404,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const manyToManyRelationship = new JDLRelationship({
@@ -1443,7 +1446,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const oneToOneRelationship = new JDLRelationship({
@@ -1495,7 +1498,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const oneToManyRelationship = new JDLRelationship({
@@ -1547,7 +1550,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const manyToOneRelationship = new JDLRelationship({
@@ -1599,7 +1602,7 @@ JSONEntity {
 
             before(() => {
               const jdlObject = new JDLObject();
-              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' });
+              const application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime);
               const entityA = new JDLEntity({ name: 'A', comment: 'a' });
               const entityB = new JDLEntity({ name: 'B', comment: 'b' });
               const manyToManyRelationship = new JDLRelationship({
@@ -1653,8 +1656,8 @@ JSONEntity {
 
         before(() => {
           const jdlObject = new JDLObject();
-          const tataApplication = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'tata' });
-          const tutuApplication = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'tutu' });
+          const tataApplication = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'tata' }, runtime);
+          const tutuApplication = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'tutu' }, runtime);
           const entityA = new JDLEntity({
             name: 'A',
             tableName: 'entity_a',

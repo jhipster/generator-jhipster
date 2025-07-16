@@ -30,10 +30,15 @@ const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_MONITORING = monitoringTypes.NO;
 const { PROMETHEUS } = monitoringTypes;
 
-export const DeploymentTypes = {
+const DeploymentTypesOptions = {
   DOCKERCOMPOSE: 'docker-compose',
   KUBERNETES: 'kubernetes',
-  exists: (deploymentType?: string) => !!deploymentType && !!DeploymentTypes[deploymentType.toUpperCase().replace('-', '')],
+};
+
+export const DeploymentTypes = {
+  ...DeploymentTypesOptions,
+  exists: (deploymentType?: string): boolean =>
+    !!deploymentType && !!(DeploymentTypesOptions as Record<string, string>)[deploymentType.toUpperCase().replace('-', '')],
 } as const;
 
 const kubernetesServiceType = {

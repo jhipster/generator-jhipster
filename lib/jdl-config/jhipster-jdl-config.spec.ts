@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'esmocha';
-import { lookupCommandsConfigs } from './lookup-commands-configs.js';
-import { buildJDLApplicationConfig, getDefaultJDLApplicationConfig } from './jdl.js';
+import { lookupCommandsConfigs } from '../command/lookup-commands-configs.js';
+import { buildJDLApplicationConfig, getDefaultJDLApplicationConfig } from './jhipster-jdl-config.js';
 
 describe('getDefaultJDLApplicationConfig()', () => {
   it('should return the default JDL application config', async () => {

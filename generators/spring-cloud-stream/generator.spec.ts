@@ -58,4 +58,16 @@ describe(`generator - ${generator}`, () => {
       });
     });
   });
+
+  describe('invalid option in jdl', () => {
+    it('should fail', async () => {
+      await expect(
+        helpers
+          .runJDL('application { config { baseName jhipster, messageBroker foo } }')
+          .withMockedJHipsterGenerators()
+          .withMockedSource()
+          .withJHipsterConfig(),
+      ).rejects.toThrowError(`The value 'foo' is not allowed for the option 'messageBroker'`);
+    });
+  });
 });

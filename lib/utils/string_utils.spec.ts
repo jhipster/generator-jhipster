@@ -22,7 +22,7 @@
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import { customCamelCase } from '../utils/string-utils.js';
+import { customCamelCase } from './string-utils.js';
 
 describe('jdl - StringUtils', () => {
   describe('customCamelCase', () => {

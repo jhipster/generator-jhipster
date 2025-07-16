@@ -100,7 +100,7 @@ export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}) {
   return getConfigForMonolithApplication(customOptions);
 }
 
-export function getConfigForClientApplication(options: ApplicationDefaults = {}): ApplicationDefaults {
+function getConfigForClientApplication(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (options[SKIP_CLIENT]) {
     options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
   }
@@ -134,7 +134,7 @@ export function getConfigForClientApplication(options: ApplicationDefaults = {})
   return options;
 }
 
-export function getConfigForAuthenticationType(options: ApplicationDefaults = {}): ApplicationDefaults {
+function getConfigForAuthenticationType(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (typeof options[SKIP_USER_MANAGEMENT] !== 'boolean') {
     if (options[AUTHENTICATION_TYPE] === OAUTH2) {
       options[SKIP_USER_MANAGEMENT] = true;
@@ -145,7 +145,7 @@ export function getConfigForAuthenticationType(options: ApplicationDefaults = {}
   return options;
 }
 
-export function getConfigForPackageName(options: ApplicationDefaults = {}): ApplicationDefaults {
+function getConfigForPackageName(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (!options[PACKAGE_NAME]) {
     if (!options[PACKAGE_FOLDER]) {
       options[PACKAGE_NAME] = OptionValues[PACKAGE_NAME];
@@ -156,7 +156,7 @@ export function getConfigForPackageName(options: ApplicationDefaults = {}): Appl
   return options;
 }
 
-export function getConfigForCacheProvider(options: ApplicationDefaults = {}): ApplicationDefaults {
+function getConfigForCacheProvider(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (options[REACTIVE] || options[CACHE_PROVIDER] === undefined) {
     options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   }
@@ -165,14 +165,14 @@ export function getConfigForCacheProvider(options: ApplicationDefaults = {}): Ap
   return options;
 }
 
-export function getConfigForReactive(options: ApplicationDefaults = {}): ApplicationDefaults {
+function getConfigForReactive(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (options[REACTIVE] === undefined) {
     options[REACTIVE] = false;
   }
   return options;
 }
 
-export function getConfigForTranslation(options: ApplicationDefaults = {}): ApplicationDefaults {
+function getConfigForTranslation(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (options[ENABLE_TRANSLATION] === undefined) {
     options[ENABLE_TRANSLATION] = true;
   }
@@ -185,7 +185,7 @@ export function getConfigForTranslation(options: ApplicationDefaults = {}): Appl
   return options;
 }
 
-export function getConfigForDatabaseType(options: ApplicationDefaults = {}): ApplicationDefaults {
+function getConfigForDatabaseType(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (options[DATABASE_TYPE] === undefined) {
     options[DATABASE_TYPE] = SQL;
   }
@@ -202,7 +202,7 @@ export function getConfigForDatabaseType(options: ApplicationDefaults = {}): App
   return options;
 }
 
-export function getServerConfigForMonolithApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
+function getServerConfigForMonolithApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   const options = {
     ...commonDefaultOptions,
     [CACHE_PROVIDER]: EHCACHE,
@@ -229,7 +229,7 @@ export function getConfigForMonolithApplication(customOptions: ApplicationDefaul
   return getConfigForAuthenticationType(options);
 }
 
-export function getServerConfigForGatewayApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
+function getServerConfigForGatewayApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   const options = {
     ...commonDefaultOptions,
     [CLIENT_FRAMEWORK]: ANGULAR,
@@ -259,7 +259,7 @@ export function getConfigForGatewayApplication(customOptions: ApplicationDefault
   return getConfigForAuthenticationType(options);
 }
 
-export function getServerConfigForMicroserviceApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
+function getServerConfigForMicroserviceApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   const DEFAULT_SERVER_PORT = 8081;
   const options = {
     ...commonDefaultOptions,

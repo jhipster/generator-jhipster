@@ -19,9 +19,9 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { getDefaultRuntime } from '../../runtime.js';
+import { createRuntime } from '../../runtime.js';
 
-const { lexer: JDLLexer } = getDefaultRuntime();
+const { lexer: JDLLexer } = createRuntime();
 
 describe('jdl - JDLLexer', () => {
   describe('when passing a valid JDL input', () => {

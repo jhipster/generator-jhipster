@@ -19,6 +19,7 @@
 
 import { before, describe, expect, it } from 'esmocha';
 import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.js';
+import type { ParsedJDLOption } from '../../core/types/parsed.js';
 import { convertOptions } from './option-converter.js';
 
 describe('jdl - OptionConverter', () => {
@@ -37,7 +38,7 @@ describe('jdl - OptionConverter', () => {
           before(() => {
             convertedOptions = convertOptions(
               {
-                [unaryOptionName]: { list: ['A'], excluded: ['B'] },
+                [unaryOptionName]: { list: ['A'], excluded: ['B'] } as ParsedJDLOption,
               },
               [],
             );
@@ -65,7 +66,7 @@ describe('jdl - OptionConverter', () => {
             convertedOptions = convertOptions(
               {
                 [optionName]: {
-                  [optionValue]: { list: ['A'], excluded: ['B'] },
+                  [optionValue]: { list: ['A'], excluded: ['B'] } as ParsedJDLOption,
                 },
               },
               [],

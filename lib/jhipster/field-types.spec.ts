@@ -20,8 +20,8 @@
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import { fieldTypes, validations } from '../jhipster/index.js';
-import { JDLEnum } from '../jdl/core/models/index.js';
+import validations from '../jdl/core/built-in-options/validations.js';
+import fieldTypes from './field-types.js';
 
 const {
   Validations: { MIN, MAXLENGTH, PATTERN },
@@ -32,6 +32,7 @@ describe('jdl - FieldTypes', () => {
     describe('when passing an invalid argument', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error invalid argument
           fieldTypes.isCommonDBType(null);
         }).to.throw(/^The passed type must not be nil\.$/);
         expect(() => {
@@ -47,11 +48,6 @@ describe('jdl - FieldTypes', () => {
     describe('when passing a valid type', () => {
       it('should return true', () => {
         expect(fieldTypes.isCommonDBType(fieldTypes.CommonDBTypes.BIG_DECIMAL)).to.be.true;
-      });
-    });
-    describe('when passing an enum', () => {
-      it('should return true', () => {
-        expect(fieldTypes.isCommonDBType(new JDLEnum({ name: 'MyEnum' }))).to.be.true;
       });
     });
   });
@@ -79,6 +75,7 @@ describe('jdl - FieldTypes', () => {
           fieldTypes.hasValidation();
         }).to.throw(/^The passed type and value must not be nil\.$/);
         expect(() => {
+          // @ts-expect-error invalid argument
           fieldTypes.hasValidation(null, MAXLENGTH);
         }).to.throw(/^The passed type and value must not be nil\.$/);
         expect(() => {

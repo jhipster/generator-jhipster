@@ -39,7 +39,7 @@ export function convertApplications(parsedApplications: ParsedJDLApplication[], 
     throw new Error('Applications have to be passed so as to be converted.');
   }
   return parsedApplications.map(parsedApplication => {
-    const jdlApplication = createJDLApplication(parsedApplication.config, parsedApplication.namespaceConfigs, runtime);
+    const jdlApplication = createJDLApplication(parsedApplication.config, runtime, parsedApplication.namespaceConfigs);
     jdlApplication.addEntityNames(parsedApplication.entities);
     const entityOptions = getEntityOptionsInApplication(parsedApplication);
     checkEntityNamesInOptions(jdlApplication.getConfigurationOptionValue(BASE_NAME_KEY), entityOptions, parsedApplication.entities);

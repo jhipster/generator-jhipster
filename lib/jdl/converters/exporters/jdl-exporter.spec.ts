@@ -26,9 +26,9 @@ import { JDLEntity } from '../../core/models/index.js';
 import exportToJDL from '../exporters/jdl-exporter.js';
 import JDLApplication from '../../core/models/jdl-application.js';
 import type { JDLJSONApplicationConfiguration } from '../../core/parsing/jdl-parsing-types.js';
-import { getDefaultRuntime } from '../../core/runtime.js';
+import { createRuntime } from '../../core/runtime.js';
 
-const runtime = getDefaultRuntime();
+const runtime = createRuntime();
 
 describe('jdl - JDLExporter', () => {
   beforeEach(async () => {
