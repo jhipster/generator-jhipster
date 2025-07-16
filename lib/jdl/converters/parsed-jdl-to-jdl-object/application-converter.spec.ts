@@ -21,8 +21,11 @@ import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { convertApplications, createJDLApplication } from '../../core/__test-support__/index.js';
 import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
+import { createRuntime } from '../../core/runtime.js';
 
 describe('jdl - ApplicationConverter', () => {
+  const runtime = createRuntime();
+
   describe('convertApplications', () => {
     describe('when not passing applications', () => {
       it('should fail', () => {
@@ -47,9 +50,12 @@ describe('jdl - ApplicationConverter', () => {
             },
           ]);
           expectedApplication = [
-            createJDLApplication({
-              baseName: 'mono',
-            }),
+            createJDLApplication(
+              {
+                baseName: 'mono',
+              },
+              runtime,
+            ),
           ];
         });
 
@@ -76,11 +82,14 @@ describe('jdl - ApplicationConverter', () => {
               },
             ]);
             expectedApplication = [
-              createJDLApplication({
-                applicationType: APPLICATION_TYPE_MONOLITH,
-                baseName: 'mono',
-                creationTimestamp: 42,
-              }),
+              createJDLApplication(
+                {
+                  applicationType: APPLICATION_TYPE_MONOLITH,
+                  baseName: 'mono',
+                  creationTimestamp: 42,
+                },
+                runtime,
+              ),
             ];
           });
 
@@ -107,11 +116,14 @@ describe('jdl - ApplicationConverter', () => {
                 },
               ]);
               expectedApplication = [
-                createJDLApplication({
-                  applicationType: APPLICATION_TYPE_MONOLITH,
-                  baseName: 'mono',
-                  blueprints: ['generator-jhipster-nodejs', 'vuejs', 'generator-jhipster-imaginary-blueprint', 'super-framework'],
-                }),
+                createJDLApplication(
+                  {
+                    applicationType: APPLICATION_TYPE_MONOLITH,
+                    baseName: 'mono',
+                    blueprints: ['generator-jhipster-nodejs', 'vuejs', 'generator-jhipster-imaginary-blueprint', 'super-framework'],
+                  },
+                  runtime,
+                ),
               ];
             });
 
@@ -136,9 +148,12 @@ describe('jdl - ApplicationConverter', () => {
               useOptions: [],
             },
           ]);
-          const application = createJDLApplication({
-            baseName: 'mono',
-          });
+          const application = createJDLApplication(
+            {
+              baseName: 'mono',
+            },
+            runtime,
+          );
           application.addEntityNames(['A', 'B']);
           expectedApplication = [application];
         });
@@ -186,9 +201,12 @@ describe('jdl - ApplicationConverter', () => {
               useOptions: [],
             },
           ]);
-          const application = createJDLApplication({
-            baseName: 'mono',
-          });
+          const application = createJDLApplication(
+            {
+              baseName: 'mono',
+            },
+            runtime,
+          );
           application.addEntityNames(['B']);
           expectedApplication = [application];
         });

@@ -40,5 +40,5 @@ export function convertApplicationsToJDL({ applications, jdl }: JHipsterYoRcCont
 }
 
 export function convertApplicationToJDL({ application }: JHipsterYoRcContentWrapper = {}, runtime: JDLRuntime) {
-  return createJDLApplication(application![GENERATOR_NAME], undefined, runtime);
+  return createJDLApplication(application![GENERATOR_NAME], runtime);
 }

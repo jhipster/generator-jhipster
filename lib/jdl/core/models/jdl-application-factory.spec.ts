@@ -31,7 +31,7 @@ describe('jdl - JDLApplicationFactory', () => {
       let application;
 
       before(() => {
-        application = createJDLApplication({ applicationType: APPLICATION_TYPE_MICROSERVICE }, undefined, runtime);
+        application = createJDLApplication({ applicationType: APPLICATION_TYPE_MICROSERVICE }, runtime);
       });
 
       it('should create the app', () => {
@@ -42,7 +42,7 @@ describe('jdl - JDLApplicationFactory', () => {
       let application;
 
       before(() => {
-        application = createJDLApplication({ applicationType: APPLICATION_TYPE_GATEWAY }, undefined, runtime);
+        application = createJDLApplication({ applicationType: APPLICATION_TYPE_GATEWAY }, runtime);
       });
 
       it('should create the app', () => {
@@ -53,7 +53,7 @@ describe('jdl - JDLApplicationFactory', () => {
       let application;
 
       before(() => {
-        application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH }, undefined, runtime);
+        application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH }, runtime);
       });
 
       it('should create the app', () => {

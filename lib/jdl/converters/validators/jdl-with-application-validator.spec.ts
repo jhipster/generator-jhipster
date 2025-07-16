@@ -63,7 +63,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
               applicationType: APPLICATION_TYPE_GATEWAY,
               databaseType: databaseTypes.SQL,
             },
-            undefined,
             runtime,
           );
           const validEntity = new JDLEntity({
@@ -97,7 +96,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
             applicationType: APPLICATION_TYPE_MONOLITH,
             databaseType: databaseTypes.SQL,
           },
-          undefined,
           runtime,
         );
         const entity = new JDLEntity({
@@ -145,7 +143,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
             applicationType: APPLICATION_TYPE_MONOLITH,
             databaseType: databaseTypes.SQL,
           },
-          undefined,
           runtime,
         );
         jdlObject.addEntity(otherEntity);
@@ -190,7 +187,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
               applicationType: APPLICATION_TYPE_MONOLITH,
               databaseType: databaseTypes.SQL,
             },
-            undefined,
             runtime,
           );
           jdlObject.addEntity(sourceEntity);
@@ -225,7 +221,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
               applicationType: APPLICATION_TYPE_MONOLITH,
               databaseType: databaseTypes.SQL,
             },
-            undefined,
             runtime,
           );
           jdlObject.addEntity(sourceEntity);
@@ -254,7 +249,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
             applicationType: APPLICATION_TYPE_MICROSERVICE,
             baseName: 'app1',
           },
-          undefined,
           runtime,
         );
         application1.addEntityNames(['A', 'B']);
@@ -263,7 +257,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
             applicationType: APPLICATION_TYPE_MICROSERVICE,
             baseName: 'app2',
           },
-          undefined,
           runtime,
         );
         application2.addEntityNames(['B', 'C']);
@@ -272,7 +265,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
             applicationType: APPLICATION_TYPE_MICROSERVICE,
             baseName: 'app3',
           },
-          undefined,
           runtime,
         );
         application3.addEntityNames(['A', 'B', 'C']);
@@ -339,7 +331,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
             applicationType: APPLICATION_TYPE_MONOLITH,
             databaseType: databaseTypes.SQL,
           },
-          undefined,
           runtime,
         );
         jdlObject.addApplication(application);
@@ -376,7 +367,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
             applicationType: APPLICATION_TYPE_MONOLITH,
             databaseType: databaseTypes.SQL,
           },
-          undefined,
           runtime,
         );
         jdlObject.addEntity(
@@ -442,7 +432,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
             applicationType: APPLICATION_TYPE_MONOLITH,
             databaseType: databaseTypes.SQL,
           },
-          undefined,
           runtime,
         );
         jdlObject.addEntity(sourceEntity);
@@ -480,7 +469,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
             applicationType: APPLICATION_TYPE_MONOLITH,
             databaseType: databaseTypes.SQL,
           },
-          undefined,
           runtime,
         );
         jdlObject.addEntity(sourceEntity);

@@ -22,7 +22,6 @@
     "lib/jdl/core/parsing/**/*.spec.ts",
     "lib/jdl/core/readers/**/*.spec.ts",
     "lib/jdl/core/utils/**/*.spec.ts",
-    "lib/jdl/core/runtime.ts",
     "lib/jdl/converters",
     "lib/jdl/converters/**/*.spec.ts",
     "lib/jdl-config/",

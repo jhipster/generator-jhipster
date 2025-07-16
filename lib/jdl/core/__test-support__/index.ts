@@ -13,6 +13,7 @@ import { createJDLApplication as originalCreateJDLApplication } from '../models/
 import type { JHipsterYoRcContentAndJDLWrapper } from '../../converters/json-to-jdl-application-converter.js';
 import { convertApplicationsToJDL as originalConvertApplicationsToJDL } from '../../converters/json-to-jdl-application-converter.js';
 import { getDefaultJDLApplicationConfig, getDefaultRuntime } from '../../../jdl-config/jhipster-jdl-config.js';
+import type { JDLRuntime } from '../types/runtime.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,8 +32,11 @@ export const parseFromContent = (content: string) => originalParseFromContent(co
 export const createJDLLinterFromContent = (content: string) => originalCreateJDLLinterFromContent(content, runtime);
 
 export const convertApplications = (applications: ParsedJDLApplication[]) => originalConvertApplications(applications, runtime);
-export const createJDLApplication = (config: any, namespaceConfigs?: Record<string, Record<string, any>> | undefined) =>
-  originalCreateJDLApplication(config, namespaceConfigs, runtime);
+export const createJDLApplication = (
+  config: any,
+  runtime: JDLRuntime,
+  namespaceConfigs?: Record<string, Record<string, any>> | undefined,
+) => originalCreateJDLApplication(config, runtime, namespaceConfigs);
 
 export const convertApplicationsToJDL = (applications: JHipsterYoRcContentAndJDLWrapper) =>
   originalConvertApplicationsToJDL(applications, runtime);
