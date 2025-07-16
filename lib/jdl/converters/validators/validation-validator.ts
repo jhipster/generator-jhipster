@@ -18,6 +18,7 @@
  */
 
 import { validations } from '../../core/built-in-options/index.js';
+import type JDLValidation from '../../core/models/jdl-validation.ts';
 import Validator from './validator.js';
 
 const {
@@ -29,30 +30,30 @@ export default class ValidationValidator extends Validator {
     super('validation', ['name']);
   }
 
-  validate(jdlValidation) {
+  validate(jdlValidation: JDLValidation) {
     super.validate(jdlValidation);
     checkForInvalidName(jdlValidation);
     checkForRequiredValue(jdlValidation);
-    if ([MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES].includes(jdlValidation.name)) {
+    if (([MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES] as string[]).includes(jdlValidation.name)) {
       checkForInvalidNumericValue(jdlValidation);
     }
   }
 }
 
-function checkForInvalidName(jdlValidation) {
+function checkForInvalidName(jdlValidation: JDLValidation) {
   if (!exists(jdlValidation.name)) {
     throw new Error(`The validation ${jdlValidation.name} doesn't exist.`);
   }
 }
 
-function checkForRequiredValue(jdlValidation) {
+function checkForRequiredValue(jdlValidation: JDLValidation) {
   if (jdlValidation.value == null && needsValue(jdlValidation.name)) {
     throw new Error(`The validation ${jdlValidation.name} requires a value.`);
   }
 }
 
-function checkForInvalidNumericValue(jdlValidation) {
-  if (jdlValidation.value.toString().includes('.')) {
+function checkForInvalidNumericValue(jdlValidation: JDLValidation) {
+  if (jdlValidation.value!.toString().includes('.')) {
     throw new Error(`Decimal values are forbidden for the ${jdlValidation.name} validation.`);
   }
 }

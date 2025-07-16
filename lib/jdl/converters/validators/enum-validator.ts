@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type JDLEnum from '../../core/models/jdl-enum.ts';
 import Validator from './validator.js';
 
 export default class EnumValidator extends Validator {
@@ -23,7 +24,7 @@ export default class EnumValidator extends Validator {
     super('enum', ['name']);
   }
 
-  validate(jdlEnum) {
+  validate(jdlEnum: JDLEnum) {
     super.validate(jdlEnum);
   }
 }

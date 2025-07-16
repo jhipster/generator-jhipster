@@ -37,7 +37,7 @@ export default class Validator {
 function checkForAbsentAttributes(validator: Validator, object: Record<string, any>) {
   const absentAttributes: string[] = [];
   validator.fieldsToCheck.forEach(attribute => {
-    if (!object[attribute]) {
+    if (object[attribute] === undefined) {
       absentAttributes.push(attribute);
     }
   });

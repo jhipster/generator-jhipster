@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type JDLEntity from '../../core/models/jdl-entity.ts';
 import Validator from './validator.js';
 
 export default class EntityValidator extends Validator {
@@ -23,7 +24,7 @@ export default class EntityValidator extends Validator {
     super('entity', ['name']);
   }
 
-  validate(jdlEntity) {
+  validate(jdlEntity: JDLEntity) {
     super.validate(jdlEntity);
   }
 }
