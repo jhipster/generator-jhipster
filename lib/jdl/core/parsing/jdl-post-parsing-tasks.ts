@@ -17,16 +17,18 @@
  * limitations under the License.
  */
 
-export default function performJDLPostParsingTasks(parsedContent) {
+import type { ParsedJDLApplication, ParsedJDLApplications } from '../types/parsed.js';
+
+export default function performJDLPostParsingTasks(parsedContent: ParsedJDLApplications): ParsedJDLApplications {
   return resolveEntityNames(parsedContent);
 }
 
-function resolveEntityNames(parsedContent) {
+function resolveEntityNames(parsedContent: ParsedJDLApplications): ParsedJDLApplications {
   parsedContent.applications = resolveEntityNamesForApplications(parsedContent);
   return parsedContent;
 }
 
-function resolveEntityNamesForApplications(parsedContent) {
+function resolveEntityNamesForApplications(parsedContent: ParsedJDLApplications): ParsedJDLApplication[] {
   const entityNames = parsedContent.entities.map(entity => entity.name);
   return parsedContent.applications.map(application => {
     application.entities = resolveApplicationEntityNames(application, entityNames);
@@ -34,8 +36,8 @@ function resolveEntityNamesForApplications(parsedContent) {
   });
 }
 
-function resolveApplicationEntityNames(application, entityNames) {
-  const { entityList, excluded } = application.entities;
+function resolveApplicationEntityNames(application: ParsedJDLApplications['applications'][number], entityNames: string[]): string[] {
+  const { entityList, excluded } = application.entitiesOptions!;
   let applicationEntityNames = new Set(entityList);
   if (entityList.includes('*')) {
     applicationEntityNames = new Set(entityNames);
@@ -48,7 +50,7 @@ function resolveApplicationEntityNames(application, entityNames) {
   return [...applicationEntityNames];
 }
 
-function checkEntityNamesInApplication(applicationName, entityNamesInApplication, entityNames) {
+function checkEntityNamesInApplication(applicationName: string, entityNamesInApplication: Set<string>, entityNames: string[]) {
   const entityNameSet = new Set(entityNames);
   entityNamesInApplication.forEach(entityNameInApplication => {
     if (!entityNameSet.has(entityNameInApplication)) {

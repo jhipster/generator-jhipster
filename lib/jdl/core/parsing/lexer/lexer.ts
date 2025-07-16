@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { TokenType } from 'chevrotain';
+import type { ITokenConfig, TokenType } from 'chevrotain';
 import { Lexer } from 'chevrotain';
 
 import { relationshipOptions } from '../../built-in-options/index.js';
@@ -37,7 +37,7 @@ export const buildTokens = (tokens: { applicationTokens: TokenParam; deploymentT
 
   const { BUILT_IN_ENTITY } = relationshipOptions;
 
-  function createTokenFromConfig(config) {
+  function createTokenFromConfig(config: ITokenConfig) {
     const newToken = createTokenFromConfigCreator(config);
     _tokens[config.name] = newToken;
     return newToken;

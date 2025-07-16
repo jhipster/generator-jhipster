@@ -19,6 +19,7 @@
 
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
+import type { ParsedJDLOption } from '../types/parsed.js';
 import { parseFromContent as originalParseFromContent } from '../readers/jdl-reader.js';
 import { relationshipTypes } from '../basic-types/index.js';
 import { binaryOptions, unaryOptions, validations } from '../built-in-options/index.js';
@@ -89,6 +90,10 @@ MAX = 43`);
 {
   "config": {},
   "entities": [],
+  "entitiesOptions": {
+    "entityList": [],
+    "excluded": [],
+  },
   "namespaceConfigs": {},
   "options": {},
   "useOptions": [],
@@ -116,6 +121,10 @@ MAX = 43`);
     "applicationType": "monolith",
   },
   "entities": [],
+  "entitiesOptions": {
+    "entityList": [],
+    "excluded": [],
+  },
   "namespaceConfigs": {},
   "options": {},
   "useOptions": [],
@@ -142,6 +151,10 @@ MAX = 43`);
     "baseName": "toto",
   },
   "entities": [],
+  "entitiesOptions": {
+    "entityList": [],
+    "excluded": [],
+  },
   "namespaceConfigs": {},
   "options": {},
   "useOptions": [],
@@ -171,6 +184,10 @@ MAX = 43`);
     ],
   },
   "entities": [],
+  "entitiesOptions": {
+    "entityList": [],
+    "excluded": [],
+  },
   "namespaceConfigs": {},
   "options": {},
   "useOptions": [],
@@ -209,6 +226,10 @@ application {
       "baseName": "superApp2",
     },
     "entities": [],
+    "entitiesOptions": {
+      "entityList": [],
+      "excluded": [],
+    },
     "namespaceConfigs": {},
     "options": {},
     "useOptions": [],
@@ -219,6 +240,10 @@ application {
       "baseName": "superApp1",
     },
     "entities": [],
+    "entitiesOptions": {
+      "entityList": [],
+      "excluded": [],
+    },
     "namespaceConfigs": {},
     "options": {},
     "useOptions": [],
@@ -1921,7 +1946,7 @@ entity A {
 
           before(() => {
             const content = parseFromContent(`${option} A with toto`);
-            parsedOption = content.options[option].toto;
+            parsedOption = (content.options[option] as Record<string, ParsedJDLOption>).toto;
           });
 
           it('should parse it', () => {

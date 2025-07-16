@@ -105,7 +105,7 @@ export type ParsedJDLRelationship = {
 };
 
 export type ParsedJDLApplications = {
-  applications: ParsedJDLApplication[];
+  applications: (ParsedJDLApplication & { entitiesOptions?: { entityList: string[]; excluded: string[] } })[];
   entities: ParsedJDLEntity[];
   relationships: ParsedJDLRelationship[];
   deployments: ParsedJDLDeployment[];
