@@ -38,22 +38,24 @@ describe('jdl - JDLObjectMerger', () => {
   describe('mergeJDLObjects', () => {
     describe('when not passing the first object', () => {
       it('should fail', () => {
+        // @ts-expect-error invalid argment
         expect(() => mergeJDLObjects(undefined, {})).to.throw(/^Can't merge nil JDL objects\.$/);
       });
     });
     describe('when not passing the second object', () => {
       it('should fail', () => {
+        // @ts-expect-error invalid argment
         expect(() => mergeJDLObjects({}, undefined)).to.throw(/^Can't merge nil JDL objects\.$/);
       });
     });
     describe('when passing two jdl objects', () => {
-      let merged;
-      let firstJDLObject;
-      let secondJDLObject;
-      let originalFirstJDLObjectToString;
-      let originalSecondJDLObjectToString;
-      let firstJDLObjectAfterMergeToString;
-      let secondJDLObjectAfterMergeToString;
+      let merged: JDLObject;
+      let firstJDLObject: JDLObject;
+      let secondJDLObject: JDLObject;
+      let originalFirstJDLObjectToString: string;
+      let originalSecondJDLObjectToString: string;
+      let firstJDLObjectAfterMergeToString: string;
+      let secondJDLObjectAfterMergeToString: string;
 
       before(() => {
         firstJDLObject = createFirstJDLObjectForTheMergeTest();
