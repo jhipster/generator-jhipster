@@ -106,9 +106,9 @@ const Options = {
     }
     if (deploymentType === this.deploymentType.kubernetes) {
       return {
-        appsFolders: [],
+        appsFolders: [] as string[],
         directoryPath: this.directoryPath,
-        clusteredDbApps: [],
+        clusteredDbApps: [] as string[],
         serviceDiscoveryType: this.serviceDiscoveryType.consul,
         dockerRepositoryName: this.dockerRepositoryName,
         dockerPushCommand: this.dockerPushCommand,

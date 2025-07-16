@@ -227,11 +227,11 @@ export default class JDLObject {
     this.options.addOption(option);
   }
 
-  getOptionsForName(optionName: string): any[] {
+  getOptionsForName(optionName: string): AbstractJDLOption[] {
     return this.options.getOptionsForName(optionName);
   }
 
-  forEachOption(passedFunction: (option: any) => void) {
+  forEachOption(passedFunction: (option: AbstractJDLOption) => void) {
     if (!passedFunction) {
       return;
     }

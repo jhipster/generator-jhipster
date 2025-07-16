@@ -44,9 +44,9 @@ export default class JDLDeployment {
     const merged = merge(defaults(args.deploymentType), args);
     Object.entries(merged).forEach(([key, option]) => {
       if (Array.isArray(option) && arrayTypes.includes(key)) {
-        this[key] = new Set(option);
+        (this as any)[key] = new Set(option);
       } else {
-        this[key] = option;
+        (this as any)[key] = option;
       }
     });
   }
@@ -56,10 +56,11 @@ export default class JDLDeployment {
   }
 }
 
-function stringifyConfig(applicationConfig) {
+function stringifyConfig(applicationConfig: Record<string, any>): string {
   let config = 'deployment {';
+  const deploymentTypeDefaults: Record<string, any> = defaults(applicationConfig.deploymentType);
   Object.entries(applicationConfig).forEach(([option, value]) => {
-    if (!isEqual(defaults(applicationConfig.deploymentType)[option], value) || option === 'deploymentType') {
+    if (!isEqual(deploymentTypeDefaults[option], value) || option === 'deploymentType') {
       config = `${config}\n    ${option}${stringifyOptionValue(option, value)}`;
     }
   });

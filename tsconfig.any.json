@@ -18,7 +18,7 @@
     "lib/jdl/core/__test-support__",
     "lib/jdl/core/built-in-options/**/*.spec.ts",
     "lib/jdl/core/linters/**/*.spec.ts",
-    "lib/jdl/core/models",
+    "lib/jdl/core/models/**/*.spec.ts",
     "lib/jdl/core/parsing/**/*.spec.ts",
     "lib/jdl/core/readers/**/*.spec.ts",
     "lib/jdl/core/utils/**/*.spec.ts",
