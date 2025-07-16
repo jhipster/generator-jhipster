@@ -135,7 +135,7 @@ const deploymentConfigPropsValidations = {
     pattern: ALPHABETIC_LOWER,
     msg: 'storageType property',
   },
-};
+} as const;
 
 interface JDLCstVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   // eslint-disable-next-line @typescript-eslint/no-misused-new
@@ -281,33 +281,39 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
       }
     }
 
-    checkConfigPropSyntax(key, value) {
+    checkConfigPropSyntax(key: IToken, value: CstElement) {
       const propertyName = key.tokenType.name;
       const validation = runtime.propertyValidations[propertyName];
       if (!validation) {
         throw Error(`Got an invalid application config property: '${propertyName}'.`);
       }
 
-      if (this.checkExpectedValueType(validation.type, value) && validation.pattern && value.children) {
+      if (this.checkExpectedValueType(validation.type, value) && validation.pattern && 'children' in value && value.children) {
         if (value.children.NAME) {
-          value.children.NAME.forEach(nameTok => this.checkNameSyntax(nameTok, validation.pattern!, validation.msg!));
+          value.children.NAME.forEach(nameTok => this.checkNameSyntax(nameTok as IToken, validation.pattern!, validation.msg!));
         }
         if (value.children.STRING) {
-          value.children.STRING.forEach(nameTok => this.checkNameSyntax(nameTok, validation.pattern!, validation.msg!));
+          value.children.STRING.forEach(nameTok => this.checkNameSyntax(nameTok as IToken, validation.pattern!, validation.msg!));
         }
       }
     }
 
-    checkDeploymentConfigPropSyntax(key, value) {
+    checkDeploymentConfigPropSyntax(key: IToken, value: CstElement) {
       const propertyName = key.tokenType.name;
-      const validation = deploymentConfigPropsValidations[propertyName];
+      const validation = deploymentConfigPropsValidations[propertyName as keyof typeof deploymentConfigPropsValidations];
       if (!validation) {
         throw Error(`Got an invalid deployment config property: '${propertyName}'.`);
       }
 
-      if (this.checkExpectedValueType(validation.type, value) && validation.pattern && value.children?.NAME) {
-        value.children.NAME.forEach(nameTok => this.checkNameSyntax(nameTok, validation.pattern, validation.msg));
-      } else if (value.image && validation.pattern) {
+      if (
+        this.checkExpectedValueType(validation.type, value) &&
+        'pattern' in validation &&
+        validation.pattern &&
+        'children' in value &&
+        value.children?.NAME
+      ) {
+        value.children.NAME.forEach(nameTok => this.checkNameSyntax(nameTok as IToken, validation.pattern, validation.msg));
+      } else if ('image' in value && value.image && 'pattern' in validation && validation.pattern) {
         this.checkNameSyntax(value, validation.pattern, validation.msg);
       }
     }
@@ -413,7 +419,7 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
 
     configValue(context: Record<string, CstElement[]>, configKey: IToken) {
       const configValue = first(first(Object.values(context)));
-      this.checkConfigPropSyntax(configKey, configValue);
+      this.checkConfigPropSyntax(configKey, configValue!);
     }
 
     deploymentConfigDeclaration(context: Record<'DEPLOYMENT_KEY', IToken[]> & Record<'deploymentConfigValue', CstNode[]>) {
@@ -422,7 +428,7 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
 
     deploymentConfigValue(context: Record<string, CstElement[]>, configKey: IToken) {
       const configValue = first(first(Object.values(context)));
-      this.checkDeploymentConfigPropSyntax(configKey, configValue);
+      this.checkDeploymentConfigPropSyntax(configKey, configValue!);
     }
   }
   const syntaxValidatorVisitor = new JDLSyntaxValidatorVisitor(runtime);

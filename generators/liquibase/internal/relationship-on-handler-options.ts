@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+import type { Logger } from '../../../lib/utils/logger.ts';
+
 const validOptions = ['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL', 'SET DEFAULT'];
 
 /**
@@ -25,12 +27,12 @@ const validOptions = ['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL', 'SET DEFAU
  * @param generator
  * @returns
  */
-export default function checkAndReturnRelationshipOnValue(onValue, generator) {
+export function checkAndReturnRelationshipOnValue(onValue: string | undefined, { log }: { log: Logger }) {
   let result = onValue;
 
   if (result) {
     if (!validOptions.includes(result)) {
-      generator.log.warn(`Invalid value '${result}' for onDelete or onUpdate - resetting to undefined.`);
+      log.warn(`Invalid value '${result}' for onDelete or onUpdate - resetting to undefined.`);
 
       result = undefined;
     }

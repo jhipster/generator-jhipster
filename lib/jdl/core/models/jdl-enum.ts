@@ -43,7 +43,7 @@ export default class JDLEnum {
   }
 
   getValueJavadocs(): Record<string, string> {
-    const documentations = {};
+    const documentations: Record<string, string> = {};
     this.values.forEach(jdlEnumValue => {
       if (jdlEnumValue.comment) {
         documentations[jdlEnumValue.name] = jdlEnumValue.comment;

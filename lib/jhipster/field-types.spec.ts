@@ -20,8 +20,9 @@
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import { fieldTypes, validations } from '../jhipster/index.js';
 import { JDLEnum } from '../jdl/core/models/index.js';
+import validations from '../jdl/core/built-in-options/validations.js';
+import fieldTypes from './field-types.js';
 
 const {
   Validations: { MIN, MAXLENGTH, PATTERN },

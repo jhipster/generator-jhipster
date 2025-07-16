@@ -18,7 +18,6 @@
  */
 
 import { snakeCase } from 'lodash-es';
-import JDLEnum from '../jdl/core/models/jdl-enum.js';
 import validations from '../jdl/core/built-in-options/validations.js';
 
 const {
@@ -88,22 +87,22 @@ export default {
   BlobTypes,
 };
 
-export function isCommonDBType(type): boolean {
+export function isCommonDBType(type: string): boolean {
   if (!type) {
     throw new Error('The passed type must not be nil.');
   }
 
-  return snakeCase(type).toUpperCase() in CommonDBTypes || type instanceof JDLEnum;
+  return snakeCase(type).toUpperCase() in CommonDBTypes;
 }
 
-export function hasValidation(type: any, validation, isAnEnum?: boolean): boolean {
+export function hasValidation(type: string, validation: string, isAnEnum?: boolean): boolean {
   if (!type || !validation) {
     throw new Error('The passed type and value must not be nil.');
   }
   if (isAnEnum) {
     type = 'Enum';
   }
-  return isCommonDBType(type) && CommonDBValidations[type].has(validation);
+  return isCommonDBType(type) && (CommonDBValidations as Record<string, Set<string>>)[type].has(validation);
 }
 
 export const blobFieldTypesValues = {

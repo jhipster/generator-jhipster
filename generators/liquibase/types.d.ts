@@ -54,8 +54,8 @@ type Property = {
 export interface Relationship extends BaseEntityChangesRelationship, DatabaseRelationship, Property {
   columnDataType?: string;
 
-  onDelete?: boolean;
-  onUpdate?: boolean;
+  onDelete?: string;
+  onUpdate?: string;
 
   shouldWriteRelationship?: boolean;
 

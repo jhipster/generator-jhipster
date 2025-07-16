@@ -21,7 +21,6 @@ export { default as testFrameworkTypes } from './test-framework-types.js';
 export { default as validations } from '../jdl/core/built-in-options/validations.js';
 export * from '../jdl/core/built-in-options/validations.js';
 export { default as websocketTypes } from './websocket-types.js';
-export { default as checkAndReturnRelationshipOnValue } from './relationship-on-handler-options.js';
 export { IngressTypes as ingressTypes } from './kubernetes-platform-types.js';
 
 export { defaultApplicationOptions };
