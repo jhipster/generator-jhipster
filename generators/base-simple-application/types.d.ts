@@ -1,6 +1,6 @@
 import { type Config as BaseConfig } from '../base/index.js';
 import type packageJson from '../../package.json';
-import type { WriteContext } from '../base-core/types.js';
+import type { WriteContext } from '../base-core/api.js';
 
 export type { Source } from '../base/types.js';
 export type { Options } from '../base/types.js';

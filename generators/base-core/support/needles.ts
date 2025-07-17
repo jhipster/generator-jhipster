@@ -90,7 +90,7 @@ export const convertToPrettierExpressions = (str: string): string =>
  * @param content
  * @param [ignoreWhitespaces=true]
  */
-export const checkContentIn = (contentToCheck: string | RegExp, content, ignoreWhitespaces = true) => {
+export const checkContentIn = (contentToCheck: string | RegExp, content: string, ignoreWhitespaces = true) => {
   assert(content, 'content is required');
   assert(contentToCheck, 'contentToCheck is required');
 

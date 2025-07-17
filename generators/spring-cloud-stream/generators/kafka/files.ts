@@ -36,7 +36,7 @@ export const kafkaFiles = asWriteFilesSection({
   resources: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      to: moveToJavaPackageSrcDir,
+      renameTo: moveToJavaPackageSrcDir,
       templates: [
         {
           sourceFile: data => `web/rest/KafkaResource_${data.imperativeOrReactive}.java`,
@@ -57,7 +57,7 @@ export const kafkaFiles = asWriteFilesSection({
     },
     {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
-      to: moveToJavaPackageTestDir,
+      renameTo: moveToJavaPackageTestDir,
       templates: [
         {
           sourceFile: data => `web/rest/KafkaResourceIT_${data.imperativeOrReactive}.java`,

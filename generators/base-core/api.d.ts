@@ -22,7 +22,7 @@ export type WriteFileTemplate<DataType, Generator = CoreGenerator> =
       /** @deprecated, use sourceFile instead */
       file?: DataCallback<string, DataType, Generator>;
       /** @deprecated, use destinationFile instead */
-      renameTo?: string | ((this: Generator, data: DataType, filePath: string) => string);
+      renameTo?: string | ((this: Generator, data: DataType) => string);
       /** transforms (files processing) to be applied */
       transform?: boolean | (() => string)[];
       /** binary files skips ejs render, ejs extension and file transform */
@@ -36,7 +36,7 @@ export type WriteFileBlock<DataType, Generator = CoreGenerator> = {
   /** relative path were sources are placed */
   from?: ((this: Generator, data: DataType) => string) | string;
   /** relative path were the files should be written, fallbacks to from/path */
-  to?: ((this: Generator, data: DataType, filePath: string) => string) | string;
+  to?: ((this: Generator, data: DataType) => string) | string;
   path?: ((this: Generator, data: DataType) => string) | string;
   /** generate destinationFile based on sourceFile */
   renameTo?: (this: Generator, data: DataType, filePath: string) => string;
@@ -81,3 +81,25 @@ export type WriteFileOptions<DataType, Generator = CoreGenerator> = {
       blocks: WriteFileBlock<DataType, Generator>[];
     }
 );
+
+export type ValidationResult = {
+  debug?: unknown;
+  info?: string | string[];
+  warning?: string | string[];
+  error?: string | string[];
+};
+
+export type WriteContext = {
+  /** Customize templates sourceFile and destinationFile */
+  customizeTemplatePaths: ((
+    this: CoreGenerator,
+    file: {
+      namespace: string;
+      sourceFile: string;
+      resolvedSourceFile: string;
+      destinationFile: string;
+      templatesRoots: string[];
+    },
+    context: any,
+  ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
+};
