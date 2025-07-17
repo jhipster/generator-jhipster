@@ -12,7 +12,7 @@ import { coerce } from 'semver';
 import { defaultHelpers as helpers, createBlueprintFiles } from '../lib/testing/index.js';
 import { getCommand as actualGetCommonand } from './utils.mjs';
 import { createProgram } from './program.mjs';
-import { CliCommand } from './types.js';
+import type { CliCommand } from './types.js';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {

@@ -34,7 +34,6 @@
     "lib/jhipster/index.ts",
     "lib/jhipster/*.spec.ts",
     "lib/testing",
-    "lib/types",
     "cli",
     "test"
   ],
