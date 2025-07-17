@@ -15,11 +15,12 @@ import { getJdbcUrl, getR2dbcUrl } from '../../spring-data-relational/support/da
 import { fieldTypes } from '../../../lib/jhipster/index.js';
 import { upperFirstCamelCase } from '../../../lib/utils/index.js';
 import type { ApplicationAll } from '../../../lib/types/application-properties-all.js';
+import type CoreGenerator from '../generator.ts';
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 
 type Handler = { log: (msg: string) => void };
-type HandledContext = { generator: any; data: ApplicationAll };
+type HandledContext = { generator: CoreGenerator; data: ApplicationAll };
 
 type MigrationProperty = Record<
   string,
@@ -337,7 +338,7 @@ const javascriptBuiltInProperties: (string | symbol)[] = ['parseInt', 'Boolean',
 
 const getPropertBuilder =
   ({ log = (msg: any) => console.log(msg) } = {}) =>
-  (context: { generator: any; data: any }, prop: string | symbol) => {
+  (context: HandledContext, prop: string | symbol) => {
     if (typeof prop === 'symbol') {
       return undefined;
     }
@@ -362,7 +363,7 @@ const getPropertBuilder =
           `dockerContainers.${container}`,
         )}.`,
       );
-      return value ?? data.dockerContainers[container];
+      return value ?? data.dockerContainers?.[container];
     }
     if (prop in data) {
       return value;
@@ -416,9 +417,9 @@ const createHandler = ({ log }: Handler = { log: msg => console.log(msg) }): Pro
       return true;
     },
     get: getProperty,
-  };
+  } satisfies ProxyHandler<HandledContext>;
 };
 
-export function createJHipster7Context(generator: any, data: ApplicationAll, options: { log: (msg: string) => void }) {
+export function createJHipster7Context(generator: CoreGenerator, data: ApplicationAll, options: { log: (msg: string) => void }) {
   return new Proxy({ generator, data }, createHandler(options));
 }

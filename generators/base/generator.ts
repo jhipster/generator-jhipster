@@ -188,7 +188,7 @@ export default class BaseGenerator<
       return super.writeFiles<DataType>(options);
     }
 
-    const context = createJHipster7Context(this, options.context, {
+    const context = createJHipster7Context(this, options.context ?? {}, {
       log: jhipster7Migration === 'verbose' ? (msg: string) => this.log.info(msg) : () => {},
     });
     return super.writeFiles<DataType>({ ...options, context });
