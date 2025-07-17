@@ -108,7 +108,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
           'java',
         );
 
-        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile'));
+        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile')) as string;
         const applicationDockerContainers = this.prepareDependencies(
           {
             ...dockerContainers,

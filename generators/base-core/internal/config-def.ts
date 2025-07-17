@@ -1,15 +1,14 @@
 import type { CommandConfigScope, JHipsterConfigs } from '../../../lib/command/index.ts';
 import type CoreGenerator from '../index.ts';
-import type BaseGenerator from '../../base/index.js';
 import { applyDerivedProperty } from '../../../lib/utils/derived-property.ts';
 
-export function loadConfig(this: CoreGenerator, configsDef: JHipsterConfigs | undefined, data: { application: any });
-export function loadConfig(configsDef: JHipsterConfigs | undefined, data: { application: any; config?: any });
+export function loadConfig(this: CoreGenerator, configsDef: JHipsterConfigs | undefined, data: { application: any }): void;
+export function loadConfig(configsDef: JHipsterConfigs | undefined, data: { application: any; config?: any }): void;
 export function loadConfig(
   this: CoreGenerator | void,
   configsDef: JHipsterConfigs | undefined,
   { application, config }: { application: any; config?: any },
-) {
+): void {
   if (configsDef) {
     for (const [name, def] of Object.entries(configsDef)) {
       let value = application[name];
@@ -19,7 +18,8 @@ export function loadConfig(
           if (def.scope === 'context') {
             source = (this as CoreGenerator).context!;
           } else if (def.scope === 'blueprint') {
-            source = (this as BaseGenerator).blueprintStorage!.getAll();
+            // TODO Convert type to BaseGenerator
+            source = (this as any).blueprintStorage!.getAll();
           } else if (def.scope === 'storage' || def.scope === undefined) {
             source = (this as CoreGenerator).jhipsterConfigWithDefaults;
           }
@@ -36,7 +36,7 @@ export function loadConfig(
   }
 }
 
-export const loadDerivedConfig = (configsDef: JHipsterConfigs, { application }) => {
+export const loadDerivedConfig = (configsDef: JHipsterConfigs, { application }: { application: any }) => {
   for (const [name, def] of Object.entries(configsDef)) {
     if (['storage', 'blueprint', 'context'].includes(def.scope) && def.choices) {
       applyDerivedProperty(application, name, def.choices, { addAny: true });

@@ -11,7 +11,7 @@ import type {
   Options as BaseApplicationOptions,
   Relationship as BaseApplicationRelationship,
   Source as BaseApplicationSource,
-} from '../base-application/index.ts';
+} from '../base-application/types.d.ts';
 import type { JavaAnnotation } from './support/add-java-annotation.ts';
 import type {
   Application as JavaBootstrapApplication,

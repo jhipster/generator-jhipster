@@ -1,5 +1,3 @@
-import * as defaultApplicationOptions from './default-application-options.js';
-
 export { default as applicationOptions } from './application-options.js';
 export * from './application-options.js';
 export { default as authenticationTypes } from './authentication-types.js';
@@ -22,7 +20,3 @@ export { default as validations } from '../jdl/core/built-in-options/validations
 export * from '../jdl/core/built-in-options/validations.js';
 export { default as websocketTypes } from './websocket-types.js';
 export { IngressTypes as ingressTypes } from './kubernetes-platform-types.js';
-
-export { defaultApplicationOptions };
-
-export * from './default-application-options.js';

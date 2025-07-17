@@ -18,7 +18,7 @@
  */
 
 import { addOtherRelationship } from '../../base-application/support/index.js';
-import type { ValidationResult } from '../../base-core/index.js';
+import type { ValidationResult } from '../../base-core/api.d.ts';
 import { databaseTypes } from '../../../lib/jhipster/index.js';
 import type { Entity as ServerEntity } from '../../server/types.js';
 

@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './jhipster7-context.js';
 export * from './needles.js';
 export * from './os.js';
 export * from './write-files.js';

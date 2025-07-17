@@ -25,6 +25,7 @@ import semver, { lt as semverLessThan } from 'semver';
 import { execaCommandSync } from 'execa';
 import { union } from 'lodash-es';
 import type { PackageJson } from 'type-fest';
+import { type ComposeOptions } from 'yeoman-generator';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
@@ -40,6 +41,9 @@ import {
   formatDateForChangelog,
 } from '../base/support/index.js';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
+import type GeneratorsByNamespace from '../types.js';
+import type { WriteFileOptions } from '../base-core/api.js';
+import { createJHipster7Context } from '../base-core/internal/jhipster7-context.ts';
 import type { TaskTypes as BaseTasks } from './tasks.js';
 import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.js';
 import type {
@@ -149,6 +153,45 @@ export default class BaseGenerator<
         }
       }
     });
+  }
+
+  /**
+   * Compose with a jhipster generator using default jhipster config, but queue it immediately.
+   */
+  async dependsOnJHipster<const G extends keyof GeneratorsByNamespace>(
+    gen: G,
+    options?: ComposeOptions<GeneratorsByNamespace[G]>,
+  ): Promise<GeneratorsByNamespace[G]>;
+  async dependsOnJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator>;
+  async dependsOnJHipster(generator: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator> {
+    // TODO move to base-core once types are fixed
+    return this.composeWithJHipster(generator, {
+      ...options,
+      schedule: false,
+    });
+  }
+
+  async composeWithJHipster<const G extends keyof GeneratorsByNamespace>(
+    gen: G,
+    options?: ComposeOptions<GeneratorsByNamespace[G]>,
+  ): Promise<GeneratorsByNamespace[G]>;
+  async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator>;
+  override async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator> {
+    // TODO move to base-core once types are fixed
+    return super.composeWithJHipster(gen, options);
+  }
+
+  override async writeFiles<DataType = any>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
+    // TODO move to base-core
+    const { jhipster7Migration } = this.getFeatures();
+    if (!jhipster7Migration) {
+      return super.writeFiles<DataType>(options);
+    }
+
+    const context = createJHipster7Context(this, options.context ?? {}, {
+      log: jhipster7Migration === 'verbose' ? (msg: string) => this.log.info(msg) : () => {},
+    });
+    return super.writeFiles<DataType>({ ...options, context });
   }
 
   /**

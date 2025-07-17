@@ -22,7 +22,7 @@ import buildToolCommand from '../java/generators/build-tool/command.js';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const { buildTool } = buildToolCommand.configs;
-const includesValue = (prop, values) => answers => answers[prop] && intersection(answers[prop], values).length > 0;
+const includesValue = (prop: string, values: string[]) => (answers: any) => answers[prop] && intersection(answers[prop], values).length > 0;
 
 const command = {
   configs: {

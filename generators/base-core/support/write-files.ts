@@ -62,8 +62,8 @@ export function addSectionsCondition(files: Record<string, any[]>, commonConditi
  * Merging { foo: [blocks1], bar: [block2]} and { foo: [blocks3], bar: [block4]}
  * Results in { foo: [blocks1, block3], bar: [block2, block4]}
  */
-export function mergeSections(...allFiles: Record<string, any>[]) {
-  const generated = {};
+export function mergeSections(...allFiles: Record<string, any>[]): Record<string, any[]> {
+  const generated: Record<string, any[]> = {};
   for (const files of allFiles) {
     for (const [sectionName, sectionValue] of Object.entries(files)) {
       generated[sectionName] = generated[sectionName] || [];

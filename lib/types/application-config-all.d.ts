@@ -6,8 +6,8 @@ import type { Config as BaseConfig } from '../../generators/base/types.js';
 import type { Config as ClientConfig } from '../../generators/client/types.js';
 import type { Config as JavaConfig } from '../../generators/java/types.d.ts';
 import type { Config as JavascriptConfig } from '../../generators/javascript/types.d.ts';
-import type { Config as SpringCacheConfig } from '../../generators/spring-cache/index.js';
-import type { Config as SpringCloudStreanConfig } from '../../generators/spring-cloud-stream/index.js';
+import type { Config as SpringCacheConfig } from '../../generators/spring-cache/types.d.ts';
+import type { Config as SpringCloudStreanConfig } from '../../generators/spring-cloud-stream/types.d.ts';
 import type { Config as BaseApplicationConfig } from '../../generators/base-application/types.js';
 
 export type ConfigAll = Simplify<

@@ -40,26 +40,28 @@ const {
   BLOB,
 } = CommonDBTypes;
 
-export function fieldIsEnum(fieldType) {
-  return ![
-    STRING,
-    INTEGER,
-    LONG,
-    FLOAT,
-    DOUBLE,
-    BIG_DECIMAL,
-    LOCAL_DATE,
-    INSTANT,
-    ZONED_DATE_TIME,
-    LOCAL_TIME,
-    DURATION,
-    UUID,
-    BOOLEAN,
-    BYTES,
-    BYTE_BUFFER,
-    ANY_BLOB,
-    BLOB,
-    IMAGE_BLOB,
-    TEXT_BLOB,
-  ].includes(fieldType);
+export function fieldIsEnum(fieldType: string): boolean {
+  return !(
+    [
+      STRING,
+      INTEGER,
+      LONG,
+      FLOAT,
+      DOUBLE,
+      BIG_DECIMAL,
+      LOCAL_DATE,
+      INSTANT,
+      ZONED_DATE_TIME,
+      LOCAL_TIME,
+      DURATION,
+      UUID,
+      BOOLEAN,
+      BYTES,
+      BYTE_BUFFER,
+      ANY_BLOB,
+      BLOB,
+      IMAGE_BLOB,
+      TEXT_BLOB,
+    ] as string[]
+  ).includes(fieldType);
 }

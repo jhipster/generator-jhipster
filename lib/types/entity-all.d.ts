@@ -18,7 +18,7 @@
  */
 import type { Entity as SpringBootEntity } from '../../generators/spring-boot/types.js';
 import type { Entity as AngularEntity } from '../../generators/angular/types.d.ts';
-import type { Entity as LiquibaseEntity } from '../../generators/liquibase/index.js';
+import type { Entity as LiquibaseEntity } from '../../generators/liquibase/types.d.ts';
 import type { Entity as SpringDataRelationalEntity } from '../../generators/spring-data-relational/types.d.ts';
 import type { Entity as BaseApplicationEntity } from '../../generators/base-application/types.js';
 import type { FieldAll } from './field-all.js';

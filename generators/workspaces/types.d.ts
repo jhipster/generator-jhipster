@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Config as BaseWorkspacesConfig, Options as BaseWorkspacesOptions } from '../base-workspaces/index.js';
+import type { Config as BaseWorkspacesConfig, Options as BaseWorkspacesOptions } from '../base-workspaces/types.d.ts';
 export type { WorkspacesApplication } from '../base-workspaces/types.js';
 
 export type Config = BaseWorkspacesConfig & { baseName: string; monorepository: boolean };

@@ -44,24 +44,23 @@ import type {
   ParseableCommand,
 } from '../../lib/command/index.js';
 import { packageJson } from '../../lib/index.js';
-import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from '../base-core/internal/index.js';
 import baseCommand from '../base/command.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.js';
-import type GeneratorsByNamespace from '../types.js';
-import type { CascatedEditFileCallback, EditFileCallback, EditFileOptions, WriteFileOptions } from './api.js';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
-import { createJHipster7Context, joinCallbacks } from './support/index.js';
+import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from './internal/index.js';
 import type {
-  Config as CoreConfig,
-  Features as CoreFeatures,
-  Options as CoreOptions,
-  GenericTaskGroup,
+  CascatedEditFileCallback,
+  EditFileCallback,
+  EditFileOptions,
   ValidationResult,
   WriteContext,
-} from './types.js';
+  WriteFileOptions,
+} from './api.js';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
+import { joinCallbacks } from './support/index.js';
+import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions, GenericTaskGroup } from './types.js';
 
 const {
   INITIALIZING,
@@ -419,7 +418,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     }
 
     for (const [name, def] of Object.entries(generatorCommand.configs)) {
-      def.configure?.(this, this.options[name]);
+      def.configure?.(this, (this.options as any)[name]);
     }
   }
 
@@ -473,10 +472,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       const envName = configDesc.cli?.env;
       // Hidden options are test options, which doesn't rely on commander for options parsing.
       // We must parse environment variables manually
-      if (this.options[name] === undefined && envName && process.env[envName]) {
+      if ((this.options as Record<string, any>)[name] === undefined && envName && process.env[envName]) {
         optionValue = process.env[envName];
       } else {
-        optionValue = this.options[name];
+        optionValue = (this.options as Record<string, any>)[name];
       }
       if (optionValue !== undefined) {
         optionValue = type !== Array && type !== Function ? type(optionValue) : optionValue;
@@ -485,14 +484,18 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         } else if (optionsDesc.scope === 'blueprint') {
           this.blueprintStorage!.set(optionName, optionValue);
         } else if (optionsDesc.scope === 'generator') {
-          this[optionName] = optionValue;
+          (this as Record<string, any>)[optionName] = optionValue;
         } else if (optionsDesc.scope === 'context') {
           this.context![optionName] = optionValue;
         } else if (optionsDesc.scope !== 'none') {
           throw new Error(`Scope ${optionsDesc.scope} not supported`);
         }
-      } else if (optionsDesc.default !== undefined && optionsDesc.scope === 'generator' && this[optionName] === undefined) {
-        this[optionName] = optionsDesc.default;
+      } else if (
+        optionsDesc.default !== undefined &&
+        optionsDesc.scope === 'generator' &&
+        (this as Record<string, any>)[optionName] === undefined
+      ) {
+        (this as Record<string, any>)[optionName] = optionsDesc.default;
       }
     });
   }
@@ -507,7 +510,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
 
     argumentEntries.find(([argumentName, argumentDef]) => {
       if (positionalArguments.length > 0) {
-        let argument;
+        let argument: any;
         if (hasPositionalArguments || argumentDef.type !== Array) {
           // Positional arguments already parsed or a single argument.
           argument = Array.isArray(positionalArguments) ? positionalArguments.shift() : positionalArguments;
@@ -521,7 +524,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         if (argument !== undefined) {
           const convertedValue = !argumentDef.type || argumentDef.type === Array ? argument : argumentDef.type(argument);
           if (argumentDef.scope === undefined || argumentDef.scope === 'generator') {
-            this[argumentName] = convertedValue;
+            (this as Record<string, any>)[argumentName] = convertedValue;
           } else if (argumentDef.scope === 'context') {
             this.context![argumentName] = convertedValue;
           } else if (argumentDef.scope === 'storage') {
@@ -552,19 +555,19 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         if ((def.scope ?? 'storage') === 'storage') {
           storage = this.config;
           if (promptSpec.default === undefined) {
-            promptSpec = { ...promptSpec, default: () => this.jhipsterConfigWithDefaults?.[name] };
+            promptSpec = { ...promptSpec, default: () => (this.jhipsterConfigWithDefaults as Record<string, any>)[name] };
           }
         } else if (def.scope === 'blueprint') {
           storage = this.blueprintStorage;
         } else if (def.scope === 'generator') {
           storage = {
-            getPath: path => get(this, path),
-            setPath: (path, value) => set(this, path, value),
+            getPath: (path: string) => get(this, path),
+            setPath: (path: string, value: any) => set(this, path, value),
           };
         } else if (def.scope === 'context') {
           storage = {
-            getPath: path => get(this.context, path),
-            setPath: (path, value) => set(this.context!, path, value),
+            getPath: (path: string) => get(this.context, path),
+            setPath: (path: string, value: any) => set(this.context!, path, value),
           };
         }
         return {
@@ -601,11 +604,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Compose with a jhipster generator using default jhipster config.
    * @return {object} the composed generator
    */
-  async composeWithJHipster<const G extends keyof GeneratorsByNamespace>(
-    gen: G,
-    options?: ComposeOptions<GeneratorsByNamespace[G]>,
-  ): Promise<GeneratorsByNamespace[G]>;
-  async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator>;
   async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator> {
     assert(typeof gen === 'string', 'generator should to be a string');
     let generator: string = gen;
@@ -626,21 +624,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         positionalArguments: undefined,
         ...options?.generatorOptions,
       },
-    });
-  }
-
-  /**
-   * Compose with a jhipster generator using default jhipster config, but queue it immediately.
-   */
-  async dependsOnJHipster<const G extends keyof GeneratorsByNamespace>(
-    gen: G,
-    options?: ComposeOptions<GeneratorsByNamespace[G]>,
-  ): Promise<GeneratorsByNamespace[G]>;
-  async dependsOnJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator>;
-  async dependsOnJHipster(generator: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator> {
-    return this.composeWithJHipster(generator, {
-      ...options,
-      schedule: false,
     });
   }
 
@@ -720,15 +703,12 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
-    const { context = {} } = options;
+    const { context: templateData = {} } = options;
     const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const startTime = new Date().getMilliseconds();
-    const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = context as WriteContext;
+    const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = templateData as WriteContext;
 
     const { jhipster7Migration } = this.getFeatures();
-    const templateData = jhipster7Migration
-      ? createJHipster7Context(this, context, { log: jhipster7Migration === 'verbose' ? msg => this.log.info(msg) : () => {} })
-      : context;
 
     /* Build lookup order first has preference.
      * Example
@@ -740,7 +720,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
      * /.../generator-jhispter/server/templates/reactive/templatePath
      * /.../generator-jhispter/server/templates/common/templatePath
      */
-    let rootTemplatesAbsolutePath;
+    let rootTemplatesAbsolutePath: string | string[];
     if (!rootTemplatesPath) {
       rootTemplatesAbsolutePath = this.jhipsterTemplatesFolders;
     } else if (typeof rootTemplatesPath === 'string' && isAbsolute(rootTemplatesPath)) {
@@ -751,8 +731,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         .flat();
     }
 
-    const normalizeEjs = file => file.replace('.ejs', '');
-    const resolveCallback = (maybeCallback, fallback?) => {
+    const normalizeEjs = (file: string) => file.replace('.ejs', '');
+    const resolveCallback = (maybeCallback: boolean | string | ((data: any) => any) | undefined, fallback?: boolean | string) => {
       if (maybeCallback === undefined) {
         if (typeof fallback === 'function') {
           return resolveCallback(fallback);
@@ -778,21 +758,29 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       binary?: boolean;
     };
 
-    const renderTemplate = async ({ condition, sourceFile, destinationFile, options, noEjs, transform, binary }: RenderTemplateParam) => {
+    const renderTemplate = async ({
+      condition,
+      sourceFile,
+      destinationFile,
+      options,
+      noEjs,
+      transform,
+      binary,
+    }: RenderTemplateParam): Promise<undefined | string> => {
       if (condition !== undefined && !resolveCallback(condition, true)) {
         return undefined;
       }
       const extension = extname(sourceFile);
       const isBinary = binary || ['.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
       const appendEjs = noEjs === undefined ? !isBinary && extension !== '.ejs' : !noEjs;
-      let targetFile;
+      let targetFile: string;
       if (typeof destinationFile === 'function') {
         targetFile = resolveCallback(destinationFile);
       } else {
         targetFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
       }
 
-      let sourceFileFrom;
+      let sourceFileFrom: string;
       if (Array.isArray(rootTemplatesAbsolutePath)) {
         // Look for existing templates
         let existingTemplates = rootTemplatesAbsolutePath
@@ -814,7 +802,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             this.log.debug(moreThanOneMessage);
           }
         }
-        sourceFileFrom = existingTemplates.shift();
+        sourceFileFrom = existingTemplates.shift()!;
       } else if (typeof rootTemplatesAbsolutePath === 'string') {
         sourceFileFrom = this.templatePath(rootTemplatesAbsolutePath, sourceFile);
       } else {
@@ -828,19 +816,20 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       sourceFileFrom = file.resolvedSourceFile;
       targetFile = file.destinationFile;
 
-      let templatesRoots: string[] = [].concat(rootTemplatesAbsolutePath);
+      let templatesRoots = ([] as string[]).concat(rootTemplatesAbsolutePath);
       for (const contextCustomizeTemplatePath of contextCustomizeTemplatePaths) {
-        const file = contextCustomizeTemplatePath.call(
-          this,
-          {
-            namespace: this.options.namespace,
-            sourceFile,
-            resolvedSourceFile: sourceFileFrom,
-            destinationFile: targetFile,
-            templatesRoots,
-          },
-          context,
-        );
+        const file: undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] } =
+          contextCustomizeTemplatePath.call(
+            this,
+            {
+              namespace: this.options.namespace,
+              sourceFile,
+              resolvedSourceFile: sourceFileFrom,
+              destinationFile: targetFile,
+              templatesRoots,
+            },
+            templateData,
+          );
         if (!file) {
           return undefined;
         }
@@ -858,12 +847,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           await this.copyTemplateAsync(sourceFileFrom, targetFile);
         } else {
           let useAsync = true;
-          if (context.entityClass) {
-            if (!context.baseName) {
+          if (templateData.entityClass) {
+            if (!templateData.baseName) {
               throw new Error('baseName is required at templates context');
             }
             const sourceBasename = basename(sourceFileFrom);
-            this.emit('before:render', sourceBasename, context);
+            this.emit('before:render', sourceBasename, templateData);
             // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
             useAsync = false;
           }
@@ -930,7 +919,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               `File must be an object, a string or a function for ${fileSpecPath}`,
             );
             if (typeof fileSpec === 'function') {
-              fileSpec = fileSpec.call(this, context);
+              fileSpec = fileSpec.call(this, templateData);
             }
             let noEjs: boolean | undefined;
             let derivedTransform;
@@ -944,7 +933,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               const sourceFile = join(blockPath, fileSpec);
               let destinationFile;
               if (blockRenameTo) {
-                destinationFile = this.destinationPath(blockRenameTo.call(this, context, fileSpec));
+                destinationFile = this.destinationPath(blockRenameTo.call(this, templateData, fileSpec));
               } else {
                 destinationFile = this.destinationPath(blockTo, fileSpec);
               }
@@ -966,7 +955,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             sourceFile = join(blockPath, normalizedFile);
             destinationFile = join(resolveCallback(destinationFile || renameTo, normalizedFile));
             if (blockRenameTo) {
-              destinationFile = this.destinationPath(blockRenameTo.call(this, context, destinationFile));
+              destinationFile = this.destinationPath(blockRenameTo.call(this, templateData, destinationFile));
             } else {
               destinationFile = this.destinationPath(blockTo, destinationFile);
             }
@@ -999,7 +988,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       }) as RenderTemplateParam[];
     }
 
-    const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)).filter(Boolean));
+    const files = (await Promise.all(parsedTemplates.map(template => renderTemplate(template)).filter(Boolean))) as string[];
     this.log.debug(`Time taken to write files: ${new Date().getMilliseconds() - startTime}ms`);
     return files.filter(file => file);
   }
@@ -1039,9 +1028,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       filePath = `${filePath}.jhi`;
     }
 
-    let originalContent;
+    let originalContent: string | undefined | null;
     try {
-      originalContent = this.readDestination(filePath);
+      originalContent = this.readDestination(filePath) as string;
     } catch {
       // null return should be treated like an error.
     }

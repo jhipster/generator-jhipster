@@ -3,8 +3,8 @@ import type { Simplify } from 'type-fest';
 import type { ExportGeneratorOptionsFromCommand } from '../../lib/command/types.js';
 import type { Options as ClientOptions } from '../../generators/client/types.d.ts';
 import type { Options as JavascriptOptions } from '../../generators/javascript/types.d.ts';
-import type { Options as SpringCacheOptions } from '../../generators/spring-cache/index.js';
-import type { Options as SpringCloudStreanOptions } from '../../generators/spring-cloud-stream/index.js';
+import type { Options as SpringCacheOptions } from '../../generators/spring-cache/types.d.ts';
+import type { Options as SpringCloudStreanOptions } from '../../generators/spring-cloud-stream/types.d.ts';
 
 export type OptionsAll = Simplify<
   JavascriptOptions &

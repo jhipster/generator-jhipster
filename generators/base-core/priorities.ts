@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { Priority } from 'yeoman-generator';
 
 export const PRIORITY_PREFIX = '>';
 export const QUEUE_PREFIX = 'jhipster:';
@@ -73,96 +74,98 @@ const PRE_CONFLICTS_QUEUE = `${QUEUE_PREFIX}${PRE_CONFLICTS}`;
 /**
  * Custom priorities to improve jhipster workflow.
  */
-export const CUSTOM_PRIORITIES = [
-  {
-    priorityName: INITIALIZING,
-    args: generator => generator.getArgsForPriority(INITIALIZING),
-    edit: true,
-  },
-  {
-    priorityName: PROMPTING,
-    args: generator => generator.getArgsForPriority(PROMPTING),
-    edit: true,
-  },
-  {
-    priorityName: CONFIGURING,
-    args: generator => generator.getArgsForPriority(CONFIGURING),
-    edit: true,
-  },
-  {
-    priorityName: COMPOSING,
-    queueName: COMPOSING_QUEUE,
-    before: COMPOSING_COMPONENT,
-    args: generator => generator.getArgsForPriority(COMPOSING),
-  },
-  {
-    priorityName: COMPOSING_COMPONENT,
-    queueName: COMPOSING_COMPONENT_QUEUE,
-    before: LOADING,
-    args: generator => generator.getArgsForPriority(COMPOSING_COMPONENT),
-  },
-  {
-    priorityName: LOADING,
-    queueName: LOADING_QUEUE,
-    before: PREPARING,
-    args: generator => generator.getArgsForPriority(LOADING),
-  },
-  {
-    priorityName: PREPARING,
-    queueName: PREPARING_QUEUE,
-    before: POST_PREPARING,
-    args: generator => generator.getArgsForPriority(PREPARING),
-  },
-  {
-    priorityName: POST_PREPARING,
-    queueName: POST_PREPARING_QUEUE,
-    before: DEFAULT,
-    args: generator => generator.getArgsForPriority(POST_PREPARING),
-  },
-  {
-    priorityName: DEFAULT,
-    args: generator => generator.getArgsForPriority(DEFAULT),
-    edit: true,
-  },
-  {
-    priorityName: WRITING,
-    args: generator => generator.getArgsForPriority(WRITING),
-    edit: true,
-  },
-  {
-    priorityName: MULTISTEP_TRANSFORM,
-    queueName: MULTISTEP_TRANSFORM_QUEUE,
-    before: POST_WRITING,
-  },
-  {
-    priorityName: POST_WRITING,
-    queueName: POST_WRITING_QUEUE,
-    before: PRE_CONFLICTS,
-    args: generator => generator.getArgsForPriority(POST_WRITING),
-  },
-  {
-    priorityName: PRE_CONFLICTS,
-    queueName: PRE_CONFLICTS_QUEUE,
-    args: generator => generator.getArgsForPriority(PRE_CONFLICTS),
-    before: TRANSFORM,
-  },
-  {
-    priorityName: INSTALL,
-    args: generator => generator.getArgsForPriority(INSTALL),
-    edit: true,
-  },
-  {
-    priorityName: POST_INSTALL,
-    queueName: POST_INSTALL_QUEUE,
-    before: END,
-    args: generator => generator.getArgsForPriority(POST_INSTALL),
-  },
-  {
-    priorityName: END,
-    args: generator => generator.getArgsForPriority(END),
-    edit: true,
-  },
-].reverse();
+export const CUSTOM_PRIORITIES = (
+  [
+    {
+      priorityName: INITIALIZING,
+      args: (generator: any) => generator.getArgsForPriority(INITIALIZING),
+      edit: true,
+    },
+    {
+      priorityName: PROMPTING,
+      args: (generator: any) => generator.getArgsForPriority(PROMPTING),
+      edit: true,
+    },
+    {
+      priorityName: CONFIGURING,
+      args: (generator: any) => generator.getArgsForPriority(CONFIGURING),
+      edit: true,
+    },
+    {
+      priorityName: COMPOSING,
+      queueName: COMPOSING_QUEUE,
+      before: COMPOSING_COMPONENT,
+      args: (generator: any) => generator.getArgsForPriority(COMPOSING),
+    },
+    {
+      priorityName: COMPOSING_COMPONENT,
+      queueName: COMPOSING_COMPONENT_QUEUE,
+      before: LOADING,
+      args: (generator: any) => generator.getArgsForPriority(COMPOSING_COMPONENT),
+    },
+    {
+      priorityName: LOADING,
+      queueName: LOADING_QUEUE,
+      before: PREPARING,
+      args: (generator: any) => generator.getArgsForPriority(LOADING),
+    },
+    {
+      priorityName: PREPARING,
+      queueName: PREPARING_QUEUE,
+      before: POST_PREPARING,
+      args: (generator: any) => generator.getArgsForPriority(PREPARING),
+    },
+    {
+      priorityName: POST_PREPARING,
+      queueName: POST_PREPARING_QUEUE,
+      before: DEFAULT,
+      args: (generator: any) => generator.getArgsForPriority(POST_PREPARING),
+    },
+    {
+      priorityName: DEFAULT,
+      args: (generator: any) => generator.getArgsForPriority(DEFAULT),
+      edit: true,
+    },
+    {
+      priorityName: WRITING,
+      args: (generator: any) => generator.getArgsForPriority(WRITING),
+      edit: true,
+    },
+    {
+      priorityName: MULTISTEP_TRANSFORM,
+      queueName: MULTISTEP_TRANSFORM_QUEUE,
+      before: POST_WRITING,
+    },
+    {
+      priorityName: POST_WRITING,
+      queueName: POST_WRITING_QUEUE,
+      before: PRE_CONFLICTS,
+      args: (generator: any) => generator.getArgsForPriority(POST_WRITING),
+    },
+    {
+      priorityName: PRE_CONFLICTS,
+      queueName: PRE_CONFLICTS_QUEUE,
+      args: (generator: any) => generator.getArgsForPriority(PRE_CONFLICTS),
+      before: TRANSFORM,
+    },
+    {
+      priorityName: INSTALL,
+      args: (generator: any) => generator.getArgsForPriority(INSTALL),
+      edit: true,
+    },
+    {
+      priorityName: POST_INSTALL,
+      queueName: POST_INSTALL_QUEUE,
+      before: END,
+      args: (generator: any) => generator.getArgsForPriority(POST_INSTALL),
+    },
+    {
+      priorityName: END,
+      args: (generator: any) => generator.getArgsForPriority(END),
+      edit: true,
+    },
+  ] satisfies Priority[]
+).reverse();
 
 export const PRIORITY_NAMES = {
   INITIALIZING,

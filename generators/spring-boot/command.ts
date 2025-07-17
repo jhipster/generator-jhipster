@@ -54,7 +54,7 @@ const command = {
       prompt: gen => ({
         when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
         type: 'input',
-        validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
+        validate: (input: string) => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
         message:
           'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
         default: () => gen.jhipsterConfigWithDefaults.serverPort,
@@ -105,12 +105,12 @@ const command = {
         description: 'Provide authentication type for the application when skipping server side generation',
         type: String,
       },
-      prompt: (gen, config) => ({
+      prompt: (gen: any, config: any) => ({
         type: 'list',
         message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
         choices: () =>
           gen.jhipsterConfigWithDefaults.applicationType !== APPLICATION_TYPE_MONOLITH
-            ? (config.choices as any).filter(({ value }) => value !== SESSION)
+            ? (config.choices as any).filter(({ value }: { value: any }) => value !== SESSION)
             : config.choices,
         default: () => gen.jhipsterConfigWithDefaults.authenticationType,
       }),

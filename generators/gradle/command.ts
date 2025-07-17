@@ -40,7 +40,7 @@ const command = {
         when: answers => answers.enableGradleDevelocity,
         type: 'input',
         message: 'Enter your Gradle Develocity host',
-        validate: input => (input.length === 0 ? 'Please enter your Gradle Develocity host' : true),
+        validate: (input: string) => (input.length === 0 ? 'Please enter your Gradle Develocity host' : true),
       },
       description: 'Gradle Develocity Host',
       scope: 'storage',

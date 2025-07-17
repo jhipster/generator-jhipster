@@ -122,7 +122,7 @@ function cleanYoRcFileContent(yoRcFileContent: YoRcFileContent): RawJDLJSONAppli
     [YO_RC_CONFIG_KEY]: removeFieldsWithNullishValues({ ...yoRcFileContent[YO_RC_CONFIG_KEY], blueprints, microfrontends }),
   };
   for (const key of Object.keys(result)) {
-    result[key] = removeFieldsWithNullishValues(result[key]);
+    result[key as keyof RawJDLJSONApplication] = removeFieldsWithNullishValues(result[key as keyof RawJDLJSONApplication]!);
   }
   return result;
 }

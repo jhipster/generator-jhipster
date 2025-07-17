@@ -24,20 +24,20 @@ import { camelCase, kebabCase } from 'lodash-es';
  * @param {string} pomContent
  * @returns {Record<string, string>}
  */
-export function getDockerfileContainers(dockerfileContent) {
+export function getDockerfileContainers(dockerfileContent: string) {
   const dockerfile = DockerfileParser.parse(dockerfileContent);
-  const containers = {};
-  let imageWithTag;
-  let image;
-  let tag;
+  const containers: Record<string, string> = {};
+  let imageWithTag: string | undefined | null;
+  let image: string | undefined | null;
+  let tag: string | undefined | null;
   for (const instruction of dockerfile.getInstructions()) {
-    let alias;
+    let alias: string | undefined;
     if (instruction.getKeyword() === 'FROM') {
       imageWithTag = instruction.getArgumentsContent();
       const split = instruction.getArgumentsContent()!.split(':');
       image = split[0];
       tag = split[1];
-      containers[image] = imageWithTag;
+      containers[image] = imageWithTag!;
       if (/^[a-zA-Z0-9-]*$/.test(image)) {
         // If the container name is simple enough, use it as alias
         alias = camelCase(image);
@@ -49,9 +49,9 @@ export function getDockerfileContainers(dockerfileContent) {
       }
     }
     if (alias) {
-      containers[alias] = imageWithTag;
-      containers[`${alias}Tag`] = tag;
-      containers[`${alias}Image`] = image;
+      containers[alias] = imageWithTag!;
+      containers[`${alias}Tag`] = tag!;
+      containers[`${alias}Image`] = image!;
     }
   }
   return containers;
@@ -63,4 +63,4 @@ export function getDockerfileContainers(dockerfileContent) {
  * @param {string}
  * @returns {string}
  */
-export const dockerPlaceholderGenerator = value => `${kebabCase(value)}-placeholder`;
+export const dockerPlaceholderGenerator = (value: string) => `${kebabCase(value)}-placeholder`;

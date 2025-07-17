@@ -19,7 +19,7 @@
 import { createNeedleCallback } from '../../base-core/support/needles.ts';
 import { upperFirstCamelCase } from '../../../lib/utils/index.js';
 import { joinCallbacks } from '../../base-core/support/write-files.ts';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../../client/index.ts';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../../client/types.d.ts';
 
 export function addRoute({
   needle,

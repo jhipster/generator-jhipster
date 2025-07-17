@@ -21,9 +21,9 @@ import type {
   Entity as ClientEntity,
   Field as ClientField,
   Relationship as ClientRelationship,
-} from '../client/index.js';
+} from '../client/types.d.ts';
 
-export type { Config, Relationship, Options, Source } from '../client/index.js';
+export type { Config, Relationship, Options, Source } from '../client/types.d.ts';
 
 export interface Entity<F extends ClientField = ClientField, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
   /**

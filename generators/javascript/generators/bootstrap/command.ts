@@ -23,7 +23,7 @@ const command = {
     packageJsonNodeEngine: {
       cli: {
         // Accepts a boolean or a string
-        type: val => val,
+        type: (val: any) => val,
         hide: true,
       },
       scope: 'storage',

@@ -19,8 +19,8 @@
 import crypto from 'crypto';
 
 import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.js';
-import { databaseData } from '../../spring-data-relational/support/index.js';
-import type { ValidationResult } from '../../base-core/index.js';
+import databaseData from '../../spring-data-relational/support/database-data.js';
+import type { ValidationResult } from '../../base-core/api.d.ts';
 import { hibernateSnakeCase } from './string.js';
 
 const dbTypes = fieldTypes;
@@ -108,7 +108,7 @@ export const SQL_DB_OPTIONS = [
  * Get DB type from DB value
  * @param {string} db - db
  */
-export function getDBTypeFromDBValue(db) {
+export function getDBTypeFromDBValue(db: string): string {
   if (SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
     return SQL;
   }
@@ -165,7 +165,7 @@ export function calculateDbName(
   { prodDatabaseType, noSnakeCase = false, prefix = '', suffix = '', skipCheckLengthOfIdentifier = false }: ConstraintName = {},
 ): ValidationResult & { value: string } {
   const separator = '__';
-  const convertCase = noSnakeCase ? str => str : hibernateSnakeCase;
+  const convertCase = noSnakeCase ? (str: string) => str : hibernateSnakeCase;
   const constraintName = `${prefix}${convertCase(tableOrEntityName)}${separator}${convertCase(columnOrRelationshipName)}${suffix}`;
   const { name, constraintNameMaxLength } = (prodDatabaseType && databaseData[prodDatabaseType]) || {};
   if (constraintNameMaxLength && constraintName.length > constraintNameMaxLength && !skipCheckLengthOfIdentifier) {
@@ -213,8 +213,8 @@ type JoinTableName = {
  * get a table name for joined tables in JHipster preferred style.
  */
 export function getJoinTableName(
-  entityName,
-  relationshipName,
+  entityName: string,
+  relationshipName: string,
   { prodDatabaseType, skipCheckLengthOfIdentifier }: JoinTableName = {},
 ): ValidationResult & { value: string } {
   const separator = '__';

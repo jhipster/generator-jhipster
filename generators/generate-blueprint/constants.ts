@@ -46,7 +46,7 @@ export const requiredConfig = () => ({});
 /**
  * Default config that will be used for templates
  */
-export const defaultConfig = ({ config = {} } = {}) => ({
+export const defaultConfig = ({ config = {} }: { config?: any } = {}) => ({
   ...requiredConfig,
   [DYNAMIC]: false,
   [JS]: !config[LOCAL_BLUEPRINT_OPTION],
@@ -63,7 +63,7 @@ export const defaultSubGeneratorConfig = () => ({
   [PRIORITIES]: [],
 });
 
-const allSubGeneratorConfig = subGenerator => ({
+const allSubGeneratorConfig = (subGenerator: string) => ({
   [SBS]: true,
   [COMMAND]: false,
   [PRIORITIES]: prioritiesForSub(subGenerator),
@@ -99,7 +99,7 @@ export const prompts = () => {
       type: 'input',
       name: ADDITIONAL_SUB_GENERATORS,
       message: 'Comma separated additional sub-generators.',
-      validate: input => {
+      validate: (input: string) => {
         if (input) {
           return /^([\w,-:]*)$/.test(input) ? true : 'Please provide valid generator names (must match ([w,-:]*))';
         }
@@ -107,7 +107,7 @@ export const prompts = () => {
       },
     },
     {
-      when: answers => !answers[LOCAL_BLUEPRINT_OPTION],
+      when: (answers: any) => !answers[LOCAL_BLUEPRINT_OPTION],
       type: 'confirm',
       name: CLI_OPTION,
       message: 'Add a cli?',
@@ -149,7 +149,7 @@ export const subGeneratorPrompts = ({
       message: `What task do you want do implement at ${chalk.yellow(subGenerator)} generator?`,
       choices: prioritiesForSub(subGenerator),
       pageSize: 30,
-      default: answers => (answers.sbs || additionalSubGenerator ? [] : prioritiesForSub(subGenerator)),
+      default: (answers: any) => (answers.sbs || additionalSubGenerator ? [] : prioritiesForSub(subGenerator)),
       loop: false,
     },
   ] as const;

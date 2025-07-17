@@ -3,11 +3,11 @@ import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/t
 import type { Application as ClientApplication } from '../../generators/client/types.js';
 import type { Application as DockerApplication } from '../../generators/docker/types.js';
 import type { Application as SpringBootApplication } from '../../generators/spring-boot/types.js';
-import type { Application as SpringDataRelationalApplication } from '../../generators/spring-data-relational/index.js';
-import type { Application as LiqbuibaseApplication } from '../../generators/liquibase/index.js';
+import type { Application as SpringDataRelationalApplication } from '../../generators/spring-data-relational/types.d.ts';
+import type { Application as LiqbuibaseApplication } from '../../generators/liquibase/types.d.ts';
 import type { Application as I18nApplication } from '../../generators/languages/types.js';
-import type { Application as SpringCacheApplication } from '../../generators/spring-cache/index.js';
-import type { Application as SpringCloudStreanApplication } from '../../generators/spring-cloud-stream/index.js';
+import type { Application as SpringCacheApplication } from '../../generators/spring-cache/types.d.ts';
+import type { Application as SpringCloudStreanApplication } from '../../generators/spring-cloud-stream/types.d.ts';
 import type { Application as SpringCloudApplication } from '../../generators/spring-cloud/types.js';
 import type { Application as BaseApplication } from '../../generators/base-application/types.js';
 import type { EntityAll } from './entity-all.js';

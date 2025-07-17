@@ -25,14 +25,13 @@ export const convertWriteFileSectionsToBlocks = <DataType, Generator>(
   assert(typeof sections === 'object', 'sections must be an object');
   const parsedSections = Object.entries(sections)
     .map(([sectionName, sectionBlocks]) => {
-      if (sectionName.startsWith('_')) return undefined;
       assert(Array.isArray(sectionBlocks), `Section must be an array for ${sectionName}`);
       return { sectionName, sectionBlocks };
     })
-    .filter(Boolean);
+    .filter(({ sectionName }) => !sectionName.startsWith('_'));
 
   return parsedSections
-    .map(({ sectionName, sectionBlocks }: any) => {
+    .map(({ sectionName, sectionBlocks }) => {
       return sectionBlocks.map((block, blockIdx) => {
         const blockSpecPath = `${sectionName}[${blockIdx}]`;
         assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);

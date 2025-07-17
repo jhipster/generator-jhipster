@@ -22,7 +22,7 @@
  * @param language
  * @returns
  */
-export function languageSnakeCase(language) {
+export function languageSnakeCase(language: string): string {
   return language.replace(/-/g, '_');
 }
 
@@ -40,7 +40,7 @@ export function languageSnakeCase(language) {
  * @param language
  * @returns
  */
-function languageUpperCaseCountry(language) {
+function languageUpperCaseCountry(language: string): string {
   const split = splitLanguageTag(language);
   split.country = split.country ? split.country.toUpperCase() : split.country;
   return buildLanguageTag(split);
@@ -51,7 +51,7 @@ function languageUpperCaseCountry(language) {
  * @param language
  * @returns
  */
-export function languageToJavaLanguage(language) {
+export function languageToJavaLanguage(language: string): string {
   return languageSnakeCase(languageUpperCaseCountry(language));
 }
 

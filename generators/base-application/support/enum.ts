@@ -18,10 +18,23 @@
  */
 import { lowerFirst } from 'lodash-es';
 import { formatDocAsJavaDoc } from '../../java/support/doc.js';
+import type { Field as BaseApplicationField } from '../types.d.ts';
 
-const doesTheEnumValueHaveACustomValue = enumValue => enumValue.includes('(');
+type EnumValuesData = {
+  withoutCustomValues: boolean;
+  withSomeCustomValues: boolean;
+  withCustomValues: boolean;
+};
 
-const getCustomValuesState = enumValues => {
+type EnumNameValue = {
+  name: string;
+  value: string;
+  comment?: string;
+};
+
+const doesTheEnumValueHaveACustomValue = (enumValue: string) => enumValue.includes('(');
+
+const getCustomValuesState = (enumValues: string[]): EnumValuesData => {
   const state = {
     withoutCustomValue: 0,
     withCustomValue: 0,
@@ -40,7 +53,7 @@ const getCustomValuesState = enumValues => {
   };
 };
 
-const getEnums = (enums, customValuesState, comments) => {
+const getEnums = (enums: string[], customValuesState: EnumValuesData, comments?: Record<string, string>): EnumNameValue[] => {
   if (customValuesState.withoutCustomValues) {
     return enums.map(enumValue => ({
       name: enumValue,
@@ -66,12 +79,13 @@ const getEnums = (enums, customValuesState, comments) => {
   });
 };
 
-const extractEnumInstance = field => {
+const extractEnumInstance = (field: BaseApplicationField): string => {
   const fieldType = field.fieldType;
   return lowerFirst(fieldType);
 };
 
-const extractEnumEntries = field => field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
+const extractEnumEntries = (field: BaseApplicationField): string[] =>
+  field.fieldValues!.split(',').map((fieldValue: string) => fieldValue.trim());
 
 /**
  * Build an enum object
@@ -80,7 +94,17 @@ const extractEnumEntries = field => field.fieldValues.split(',').map(fieldValue 
  * @return {Object} the enum info.
  */
 
-export const getEnumInfo = (field, clientRootFolder?) => {
+export const getEnumInfo = (
+  field: BaseApplicationField,
+  clientRootFolder?: string,
+): EnumValuesData & {
+  enumName: string;
+  enumInstance: string;
+  enums: string[];
+  enumValues: EnumNameValue[];
+  clientRootFolder: string;
+  enumJavadoc?: string;
+} => {
   field.enumInstance = extractEnumInstance(field); // TODO remove side effect
   const enums = extractEnumEntries(field);
   const customValuesState = getCustomValuesState(enums);
