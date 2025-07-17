@@ -22,4 +22,4 @@ export const YO_RC_FILE = '.yo-rc.json';
 
 export type { YoRcConfigValue };
 
-export type YoRcFileContent<Content extends YoRcConfigValue, Key extends string> = Record<Key, Content>;
+export type YoRcFileContent<Content extends YoRcConfigValue = YoRcConfigValue, Key extends string = string> = Record<Key, Content>;

@@ -29,7 +29,7 @@ const {
 } = validations;
 const { BUILT_IN_ENTITY } = relationshipOptions;
 
-let convertedRelationships;
+let convertedRelationships: Map<string, any[]>;
 
 export default { convert };
 
@@ -103,12 +103,12 @@ function setRelationshipsFromEntity(relatedRelationships: RelationshipsRelatedTo
       convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
     }
     setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRelationship);
-    const convertedEntityRelationships = convertedRelationships.get(entityName);
+    const convertedEntityRelationships = convertedRelationships.get(entityName)!;
     convertedEntityRelationships.push(convertedRelationship);
   });
 }
 
-export const otherRelationshipType = relationshipType => relationshipType.split('-').reverse().join('-');
+export const otherRelationshipType = (relationshipType: string) => relationshipType.split('-').reverse().join('-');
 
 function setRelationshipsToEntity(relatedRelationships: RelationshipsRelatedToEntity, entityName: string): void {
   relatedRelationships.to.forEach(relationshipToConvert => {
@@ -136,7 +136,7 @@ function setRelationshipsToEntity(relatedRelationships: RelationshipsRelatedToEn
     relationshipToConvert.injectedFieldInTo = relationshipToConvert.injectedFieldInTo ?? lowerFirst(relationshipToConvert.from);
 
     setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship);
-    const convertedEntityRelationships = convertedRelationships.get(entityName);
+    const convertedEntityRelationships = convertedRelationships.get(entityName)!;
     convertedEntityRelationships.push(convertedRelationship);
   });
 }

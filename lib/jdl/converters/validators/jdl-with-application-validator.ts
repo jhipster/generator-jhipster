@@ -24,6 +24,7 @@ import type JDLRelationship from '../../core/models/jdl-relationship.js';
 import type JDLApplication from '../../core/models/jdl-application.js';
 import type JDLField from '../../core/models/jdl-field.js';
 import type JDLApplicationConfigurationOption from '../../core/models/jdl-application-configuration-option.js';
+import type JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 import EntityValidator from './entity-validator.js';
 import FieldValidator from './field-validator.js';
 import ValidationValidator from './validation-validator.js';
@@ -144,7 +145,7 @@ export default function createValidator(jdlObject: JDLObject) {
       if (option.getType() === 'UNARY') {
         unaryOptionValidator.validate(option);
       } else {
-        binaryOptionValidator.validate(option);
+        binaryOptionValidator.validate(option as JDLBinaryOption);
       }
     });
   }
@@ -165,7 +166,7 @@ function checkForAbsentEntities({
   doesEntityExist,
 }: {
   jdlRelationship: JDLRelationship;
-  doesEntityExist: (string) => boolean;
+  doesEntityExist: (arg: string) => boolean;
 }) {
   const absentEntities: any[] = [];
   if (!doesEntityExist(jdlRelationship.from)) {
@@ -184,7 +185,13 @@ function checkForAbsentEntities({
   }
 }
 
-function checkIfRelationshipIsBetweenApplications({ jdlRelationship, applicationsPerEntityName }) {
+function checkIfRelationshipIsBetweenApplications({
+  jdlRelationship,
+  applicationsPerEntityName,
+}: {
+  jdlRelationship: JDLRelationship;
+  applicationsPerEntityName: Record<string, JDLApplication[]>;
+}): void {
   let applicationsForSourceEntity = applicationsPerEntityName[jdlRelationship.from];
   let applicationsForDestinationEntity = applicationsPerEntityName[jdlRelationship.to];
   if (!applicationsForDestinationEntity || !applicationsForSourceEntity) {
@@ -203,11 +210,11 @@ function checkIfRelationshipIsBetweenApplications({ jdlRelationship, application
     );
   }
 }
-function getApplicationsPerEntityNames(jdlObject: JDLObject) {
-  const applicationsPerEntityName = {};
+function getApplicationsPerEntityNames(jdlObject: JDLObject): Record<string, JDLApplication[]> {
+  const applicationsPerEntityName: Record<string, JDLApplication[]> = {};
   jdlObject.forEachApplication(jdlApplication => {
     jdlApplication.forEachEntityName(entityName => {
-      applicationsPerEntityName[entityName] = applicationsPerEntityName[entityName] || [];
+      applicationsPerEntityName[entityName] ??= [];
       applicationsPerEntityName[entityName].push(jdlApplication);
     });
   });

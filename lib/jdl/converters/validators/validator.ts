@@ -18,15 +18,15 @@
  */
 
 export default class Validator {
-  objectType: any;
-  fieldsToCheck: any;
+  objectType: string;
+  fieldsToCheck: string[];
 
-  constructor(objectType, fieldsToCheck) {
+  constructor(objectType: string, fieldsToCheck: string[]) {
     this.objectType = objectType;
     this.fieldsToCheck = fieldsToCheck;
   }
 
-  validate(object) {
+  validate(object: Record<string, any>) {
     if (!object) {
       throw new Error(`No ${this.objectType}.`);
     }
@@ -34,10 +34,10 @@ export default class Validator {
   }
 }
 
-function checkForAbsentAttributes(validator, object) {
-  const absentAttributes: any[] = [];
+function checkForAbsentAttributes(validator: Validator, object: Record<string, any>) {
+  const absentAttributes: string[] = [];
   validator.fieldsToCheck.forEach(attribute => {
-    if (!object[attribute]) {
+    if (object[attribute] === undefined) {
       absentAttributes.push(attribute);
     }
   });

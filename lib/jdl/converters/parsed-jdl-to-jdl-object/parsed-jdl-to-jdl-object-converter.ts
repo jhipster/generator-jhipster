@@ -28,7 +28,6 @@ import type { JDLEntity } from '../../core/models/index.js';
 import type { JDLRuntime } from '../../core/types/runtime.js';
 import type {
   ParsedJDLAnnotation,
-  ParsedJDLApplication,
   ParsedJDLApplications,
   ParsedJDLEntity,
   ParsedJDLEntityField,
@@ -48,7 +47,7 @@ let parsedContent: ParsedJDLApplications;
 let configuration: ParsedJDLRoot;
 let jdlObject: JDLObject;
 let entityNames: string[];
-let applicationsPerEntityName: Map<string, ParsedJDLApplication>;
+let applicationsPerEntityName: Record<string, JDLApplication[]> = {};
 
 /**
  * Converts the intermediate parsedContent to a JDLObject from a configuration object.
@@ -72,7 +71,7 @@ function init(passedConfiguration: ParsedJDLRoot) {
   configuration = passedConfiguration;
   jdlObject = new JDLObject();
   entityNames = parsedContent.entities.map(entity => entity.name);
-  applicationsPerEntityName = new Map();
+  applicationsPerEntityName = {};
 }
 
 function fillApplications(runtime: JDLRuntime): void {
@@ -87,7 +86,7 @@ function fillApplications(runtime: JDLRuntime): void {
 
 function fillApplicationsPerEntityName(application: JDLApplication): void {
   application.forEachEntityName((entityName: string) => {
-    applicationsPerEntityName[entityName] = applicationsPerEntityName[entityName] || [];
+    applicationsPerEntityName[entityName] ??= [];
     applicationsPerEntityName[entityName].push(application);
   });
 }
@@ -127,10 +126,13 @@ function getJDLFieldsFromParsedEntity(entity: ParsedJDLEntity): JDLField[] {
 }
 
 function getValidations(field: ParsedJDLEntityField): Record<string, JDLValidation> {
-  return convertValidations(field.validations, getConstantValueFromConstantName).reduce((jdlValidations, jdlValidation) => {
-    jdlValidations[jdlValidation.name] = jdlValidation;
-    return jdlValidations;
-  }, {});
+  return convertValidations(field.validations, getConstantValueFromConstantName).reduce(
+    (jdlValidations, jdlValidation) => {
+      jdlValidations[jdlValidation.name] = jdlValidation;
+      return jdlValidations;
+    },
+    {} as Record<string, JDLValidation>,
+  );
 }
 
 function getConstantValueFromConstantName(constantName: string): string {
@@ -149,7 +151,7 @@ function fillAssociations(): void {
 function convertAnnotationsToOptions(
   annotations: ParsedJDLAnnotation[],
 ): Record<string, boolean | string | number | string[] | boolean[] | number[]> {
-  const result = {};
+  const result: Record<string, boolean | string | number | any[]> = {};
   annotations.forEach(annotation => {
     const annotationName = lowerFirst(annotation.optionName);
     const value = annotation.optionValue ?? true;

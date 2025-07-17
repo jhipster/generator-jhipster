@@ -86,7 +86,7 @@ export function createImporterFromContent(jdlString, configuration?: JDLApplicat
   return makeJDLImporter(content, configuration || {}, runtime);
 }
 
-export type ApplicationWithEntities = { config: any; namespaceConfigs: Record<string, Record<string, any>>; entities: any[] };
+export type ApplicationWithEntities = { config: any; namespaceConfigs?: Record<string, Record<string, any>>; entities: JSONEntity[] };
 
 export type ImportState = {
   exportedApplications: PostProcessedJDLJSONApplication[];

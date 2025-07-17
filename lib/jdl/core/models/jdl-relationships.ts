@@ -99,7 +99,7 @@ export default class JDLRelationships {
   toArray(): JDLRelationship[] {
     const relationships: any[] = [];
     Object.keys(this.relationships).forEach(type => {
-      this.relationships[type].forEach(relationship => {
+      this.relationships[type as JDLRelationshipType].forEach(relationship => {
         relationships.push(relationship);
       });
     });

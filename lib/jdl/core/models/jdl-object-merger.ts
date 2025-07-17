@@ -17,7 +17,12 @@
  * limitations under the License.
  */
 
+import type AbstractJDLOption from './abstract-jdl-option.ts';
+import type JDLApplication from './jdl-application.ts';
+import type JDLEntity from './jdl-entity.ts';
+import type JDLEnum from './jdl-enum.ts';
 import JDLObject from './jdl-object.js';
+import type JDLRelationship from './jdl-relationship.ts';
 
 /**
  * Merges two JDL objects together, without altering any of the two passed objects.
@@ -25,16 +30,16 @@ import JDLObject from './jdl-object.js';
  * @param {JDLObject} secondJDLObject the second one.
  * @return {JDLObject} the merged JDL object.
  */
-export default function mergeJDLObjects(firstJDLObject, secondJDLObject) {
+export default function mergeJDLObjects(firstJDLObject: JDLObject, secondJDLObject: JDLObject): JDLObject {
   if (!firstJDLObject || !secondJDLObject) {
     throw new Error("Can't merge nil JDL objects.");
   }
   const merged = new JDLObject();
-  const addApplication = application => merged.addApplication(application);
-  const addEntity = entity => merged.addEntity(entity);
-  const addEnumeration = enumeration => merged.addEnum(enumeration);
-  const addRelationship = relationship => merged.addRelationship(relationship);
-  const addOption = option => merged.addOption(option);
+  const addApplication = (application: JDLApplication) => merged.addApplication(application);
+  const addEntity = (entity: JDLEntity) => merged.addEntity(entity);
+  const addEnumeration = (enumeration: JDLEnum) => merged.addEnum(enumeration);
+  const addRelationship = (relationship: JDLRelationship) => merged.addRelationship(relationship);
+  const addOption = (option: AbstractJDLOption) => merged.addOption(option);
 
   firstJDLObject.forEachApplication(addApplication);
   secondJDLObject.forEachApplication(addApplication);

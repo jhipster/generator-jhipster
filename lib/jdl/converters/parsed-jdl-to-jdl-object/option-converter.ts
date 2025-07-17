@@ -92,12 +92,13 @@ function convertUseOptions(useOptions: ParsedJDLUseOption[]): JDLBinaryOption[] 
     const { optionValues, list, excluded } = useValue;
 
     optionValues.forEach(optionValue => {
-      if (!OptionValues[optionValue]) {
+      const optionName = (OptionValues as Record<string, string>)[optionValue];
+      if (!optionName) {
         return;
       }
       convertedUseOptions.push(
         new JDLBinaryOption({
-          name: getOptionName(OptionValues[optionValue])!,
+          name: getOptionName(optionName)!,
           value: optionValue,
           entityNames: list,
           excludedNames: excluded,

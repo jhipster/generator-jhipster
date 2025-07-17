@@ -25,14 +25,14 @@ import { doesDirectoryExist, doesFileExist } from '../core/utils/file-utils.js';
 import { removeFieldsWithNullishValues } from '../../utils/object.js';
 import type JDLApplication from '../core/models/jdl-application.js';
 import type { JDLRuntime } from '../core/types/runtime.js';
-import { createRuntime } from '../core/runtime.js';
 import { YO_RC_CONFIG_KEY, readEntityFile, readYoRcFile } from '../../utils/yo-rc.js';
-import type { JDLApplicationConfig } from '../core/types/parsing.js';
-import type { JHipsterYoRcContent, JSONEntity, PostProcessedJSONRootObject } from '../core/types/json-config.js';
-import { getDefaultRuntime } from '../../jdl-config/jhipster-jdl-config.ts';
-import exportJDLObject from './exporters/jdl-exporter.js';
-import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
+import type { RawJDLJSONApplication } from '../core/types/exporter.js';
+import type { YoRcJHipsterApplicationConfigValue, YoRcJHipsterApplicationContent } from '../../jhipster/types/yo-rc.js';
+import type { JSONEntity } from '../core/types/json-config.js';
+import type { YoRcFileContent } from '../../constants/yeoman.ts';
 import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
+import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
+import exportJDLObject from './exporters/jdl-exporter.js';
 
 export default {
   convertToJDL,
@@ -44,20 +44,15 @@ export default {
  * @param directory the directory to find JHipster files.
  * @param output the file where the JDL will be written
  */
-export function convertToJDL(
-  directory = '.',
-  output: string | false = 'app.jdl',
-  definition?: JDLApplicationConfig,
-): JDLObject | undefined {
+export function convertToJDL(runtime: JDLRuntime, directory = '.', output: string | false = 'app.jdl'): JDLObject | undefined {
   let jdlObject: JDLObject;
-  const runtime = definition ? createRuntime(definition) : getDefaultRuntime();
   if (doesFileExist(path.join(directory, '.yo-rc.json'))) {
-    const yoRcFileContent: JHipsterYoRcContent = readYoRcFile(directory);
+    const yoRcFileContent: YoRcJHipsterApplicationContent = readYoRcFile(directory);
     let entities: Map<string, JSONEntity> | undefined;
     if (doesDirectoryExist(path.join(directory, '.jhipster'))) {
       entities = getJSONEntityFiles(directory);
     }
-    jdlObject = getJDLObjectFromSingleApplication(yoRcFileContent, entities, undefined, runtime);
+    jdlObject = getJDLObjectFromSingleApplication(yoRcFileContent, runtime, entities);
   } else {
     try {
       jdlObject = getJDLObjectFromMultipleApplications(directory, runtime);
@@ -72,8 +67,12 @@ export function convertToJDL(
   return jdlObject;
 }
 
-export function convertSingleContentToJDL(yoRcFileContent: JHipsterYoRcContent, entities?: Map<string, JSONEntity>): string {
-  return getJDLObjectFromSingleApplication(yoRcFileContent, entities).toString();
+export function convertSingleContentToJDL(
+  yoRcFileContent: YoRcJHipsterApplicationContent<Record<string, any>>,
+  runtime: JDLRuntime,
+  entities?: Map<string, JSONEntity>,
+): string {
+  return getJDLObjectFromSingleApplication(yoRcFileContent, runtime, entities).toString();
 }
 
 function getJDLObjectFromMultipleApplications(directory: string, runtime: JDLRuntime): JDLObject {
@@ -84,24 +83,24 @@ function getJDLObjectFromMultipleApplications(directory: string, runtime: JDLRun
   let jdlObject = new JDLObject();
   subDirectories.forEach(subDirectory => {
     const applicationDirectory = path.join(directory, subDirectory);
-    const yoRcFileContent: JHipsterYoRcContent = readYoRcFile(applicationDirectory);
+    const yoRcFileContent = readYoRcFile<YoRcJHipsterApplicationConfigValue>(applicationDirectory);
     let entities = new Map<string, JSONEntity>();
     if (doesDirectoryExist(path.join(applicationDirectory, '.jhipster'))) {
       entities = getJSONEntityFiles(applicationDirectory);
     }
-    jdlObject = getJDLObjectFromSingleApplication(yoRcFileContent, entities, jdlObject, runtime);
+    jdlObject = getJDLObjectFromSingleApplication(yoRcFileContent, runtime, entities, jdlObject);
   });
   return jdlObject;
 }
 
 export function getJDLObjectFromSingleApplication(
-  yoRcFileContent: JHipsterYoRcContent,
+  yoRcFileContent: YoRcJHipsterApplicationContent,
+  runtime: JDLRuntime,
   entities?: Map<string, JSONEntity>,
   existingJDLObject = new JDLObject(),
-  runtime: JDLRuntime = getDefaultRuntime(),
 ): JDLObject {
-  const cleanedYoRcFileContent: PostProcessedJSONRootObject = cleanYoRcFileContent(yoRcFileContent);
-  const jdlApplication: JDLApplication = convertApplicationToJDL({ application: cleanedYoRcFileContent }, runtime);
+  const cleanedYoRcFileContent = cleanYoRcFileContent(yoRcFileContent);
+  const jdlApplication: JDLApplication = convertApplicationToJDL(cleanedYoRcFileContent, runtime);
   if (!entities) {
     existingJDLObject.addApplication(jdlApplication);
     return existingJDLObject;
@@ -112,17 +111,18 @@ export function getJDLObjectFromSingleApplication(
   return mergeJDLObjects(existingJDLObject, jdlObject);
 }
 
-function cleanYoRcFileContent(yoRcFileContent: JHipsterYoRcContent): PostProcessedJSONRootObject {
-  for (const key of Object.keys(yoRcFileContent)) {
-    yoRcFileContent[key] = removeFieldsWithNullishValues(yoRcFileContent[key]);
-  }
-  delete yoRcFileContent[YO_RC_CONFIG_KEY].promptValues;
-  const result: PostProcessedJSONRootObject = structuredClone(yoRcFileContent) as PostProcessedJSONRootObject;
-  if (yoRcFileContent[YO_RC_CONFIG_KEY].blueprints) {
-    result[YO_RC_CONFIG_KEY].blueprints = yoRcFileContent[YO_RC_CONFIG_KEY].blueprints.map(blueprint => blueprint.name);
-  }
-  if (yoRcFileContent[YO_RC_CONFIG_KEY].microfrontends) {
-    result[YO_RC_CONFIG_KEY].microfrontends = yoRcFileContent[YO_RC_CONFIG_KEY].microfrontends.map(({ baseName }) => baseName);
+function cleanYoRcFileContent(yoRcFileContent: YoRcFileContent): RawJDLJSONApplication {
+  yoRcFileContent = structuredClone(yoRcFileContent);
+  const blueprints = (yoRcFileContent as YoRcJHipsterApplicationContent)[YO_RC_CONFIG_KEY].blueprints?.map(blueprint => blueprint.name);
+  const microfrontends = (yoRcFileContent as YoRcJHipsterApplicationContent)[YO_RC_CONFIG_KEY].microfrontends?.map(
+    ({ baseName }) => baseName,
+  );
+  const result: RawJDLJSONApplication = {
+    ...yoRcFileContent,
+    [YO_RC_CONFIG_KEY]: removeFieldsWithNullishValues({ ...yoRcFileContent[YO_RC_CONFIG_KEY], blueprints, microfrontends }),
+  };
+  for (const key of Object.keys(result)) {
+    result[key] = removeFieldsWithNullishValues(result[key]);
   }
   return result;
 }

@@ -256,7 +256,7 @@ function getDestinationEntitySideAttributes(
 }
 
 function getRelationshipOptions(relationship: JSONRelationship): JDLRelationshipOptions {
-  const options = {
+  const options: JDLRelationshipOptions = {
     global: {},
     source: relationship.options ?? {},
     destination: {},

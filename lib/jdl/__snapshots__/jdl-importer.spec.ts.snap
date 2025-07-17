@@ -14,6 +14,7 @@ exports[`jdl - JDLImporter import when importing a JDL application with blueprin
         },
       ],
       "entities": [],
+      "microfrontends": undefined,
     },
   },
 ]
@@ -405,7 +406,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
       "generator-jhipster": {
         "applicationType": "monolith",
         "baseName": "tata",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.tata",
       },
     },
@@ -413,7 +416,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
       "generator-jhipster": {
         "applicationType": "gateway",
         "baseName": "titi",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.titi",
       },
     },
@@ -421,7 +426,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
       "generator-jhipster": {
         "applicationType": "microservice",
         "baseName": "toto",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.toto",
       },
     },
@@ -429,7 +436,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
       "generator-jhipster": {
         "applicationType": "monolith",
         "baseName": "tutu",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.tutu",
       },
     },
@@ -439,7 +448,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
       "config": {
         "applicationType": "monolith",
         "baseName": "tata",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.tata",
       },
       "entities": [],
@@ -448,7 +459,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
       "config": {
         "applicationType": "gateway",
         "baseName": "titi",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.titi",
       },
       "entities": [],
@@ -457,7 +470,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
       "config": {
         "applicationType": "microservice",
         "baseName": "toto",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.toto",
       },
       "entities": [],
@@ -466,7 +481,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
       "config": {
         "applicationType": "monolith",
         "baseName": "tutu",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.tutu",
       },
       "entities": [],
@@ -500,7 +517,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
       "generator-jhipster": {
         "applicationType": "monolith",
         "baseName": "tata",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.tata",
       },
     },
@@ -508,7 +527,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
       "generator-jhipster": {
         "applicationType": "gateway",
         "baseName": "titi",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.titi",
       },
     },
@@ -516,7 +537,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
       "generator-jhipster": {
         "applicationType": "microservice",
         "baseName": "toto",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.toto",
       },
     },
@@ -524,7 +547,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
       "generator-jhipster": {
         "applicationType": "monolith",
         "baseName": "tutu",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.tutu",
       },
     },
@@ -534,7 +559,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
       "config": {
         "applicationType": "monolith",
         "baseName": "tata",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.tata",
       },
       "entities": [],
@@ -543,7 +570,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
       "config": {
         "applicationType": "gateway",
         "baseName": "titi",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.titi",
       },
       "entities": [],
@@ -552,7 +581,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
       "config": {
         "applicationType": "microservice",
         "baseName": "toto",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.toto",
       },
       "entities": [],
@@ -561,7 +592,9 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
       "config": {
         "applicationType": "monolith",
         "baseName": "tutu",
+        "blueprints": undefined,
         "entities": [],
+        "microfrontends": undefined,
         "packageName": "com.mathieu.tutu",
       },
       "entities": [],

@@ -79,10 +79,9 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
       };
     }
     if (jdlField.optionQuantity() !== 0) {
-      const fieldOptions = getOptionsForField(jdlField);
       fieldData = {
         ...fieldData,
-        ...fieldOptions,
+        options: getOptionsForField(jdlField),
       };
     }
     convertedEntityFields.push(fieldData);
@@ -90,26 +89,22 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
   return convertedEntityFields;
 }
 
-function getFieldValidations(jdlField: JDLField) {
-  const fieldValidations: any = {
-    fieldValidateRules: [],
-  };
+function getFieldValidations(jdlField: JDLField): Record<string, any> {
+  const fieldValidations: Record<string, any> = {};
+  const fieldValidateRules: string[] = [];
   jdlField.forEachValidation(validation => {
-    fieldValidations.fieldValidateRules.push(validation.name);
+    fieldValidateRules.push(validation.name);
     if (validation.name !== REQUIRED && validation.name !== UNIQUE) {
       fieldValidations[`fieldValidateRules${capitalize(validation.name)}`] = validation.value;
     }
   });
-  return fieldValidations;
+  return { ...fieldValidations, fieldValidateRules };
 }
 
-function getOptionsForField(jdlField: JDLField) {
-  const fieldOptions = {
-    options: {},
-  };
-  fieldOptions.options = {};
+function getOptionsForField(jdlField: JDLField): Record<string, any> {
+  const fieldOptions: Record<string, any> = {};
   jdlField.forEachOption(([key, value]) => {
-    fieldOptions.options[key] = value;
+    fieldOptions[key] = value;
   });
   return fieldOptions;
 }

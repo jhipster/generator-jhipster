@@ -28,7 +28,7 @@ import ListJDLApplicationConfigurationOption from './list-jdl-application-config
 import type JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
 export default function createApplicationConfigurationFromObject(
-  configurationObject = {},
+  configurationObject: Record<string, any> = {},
   runtime: JDLRuntime,
 ): JDLApplicationConfiguration {
   const configuration = new JDLApplicationConfiguration();
@@ -67,7 +67,7 @@ function createUnknownJDLConfigurationOption(
   value: boolean | number | string[] | string,
   runtime: JDLRuntime,
 ): JDLApplicationConfigurationOption<any> {
-  let type;
+  let type: JDLApplicationOptionTypeValue;
   if (typeof value === 'boolean') {
     type = 'boolean';
   } else if (/^\d+$/.test(value as string)) {

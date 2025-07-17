@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import type JDLField from '../../core/models/jdl-field.ts';
 import Validator from './validator.js';
 
 export default class FieldValidator extends Validator {
@@ -24,7 +25,7 @@ export default class FieldValidator extends Validator {
     super('field', ['name', 'type']);
   }
 
-  validate(jdlField) {
+  validate(jdlField: JDLField) {
     super.validate(jdlField);
   }
 }

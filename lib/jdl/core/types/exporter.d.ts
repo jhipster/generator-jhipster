@@ -16,17 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { GENERATOR_NAME } from '../../converters/exporters/export-utils.ts';
+import type { YoRcJHipsterContent } from '../../../jhipster/types/yo-rc.js';
 import type JDLJSONEntity from '../basic-types/json-entity.ts';
 
-export type JDLJSONApplicationContent = {
-  entities?: string[];
-  creationTimestamp?: number;
-} & Record<string, any>;
+export type JDLJSONApplicationContent = Record<string, any>;
 
-export type JDLJSONApplication = {
-  [GENERATOR_NAME]: JDLJSONApplicationContent;
-  namespaceConfigs: Record<string, Record<string, any>>;
+export type JDLJSONApplication<Content extends JDLJSONApplicationContent = JDLJSONApplicationContent> = YoRcJHipsterContent<Content> & {
+  namespaceConfigs?: Record<string, Record<string, any>>;
 };
 
 export type JDLJSONBlueprint = {
@@ -37,17 +33,20 @@ export type JDLJSONMicrofrontend = {
   baseName: string;
 };
 
-export type PostProcessedJDLJSONApplication = {
-  blueprints: JDLJSONBlueprint[];
-  microfrontends: JDLJSONMicrofrontend[];
-} & JDLJSONApplication;
+export type PostProcessedJDLJSONApplication = JDLJSONApplication<
+  {
+    blueprints?: JDLJSONBlueprint[];
+    microfrontends?: JDLJSONMicrofrontend[];
+  } & JDLJSONApplicationContent
+>;
 
-export type RawJDLJSONApplication = {
-  entityNames?: string;
-  frontEndBuilder?: string;
-  blueprints?: string;
-  microfrontends?: string;
-} & JDLJSONApplication;
+export type RawJDLJSONApplication = JDLJSONApplication<
+  {
+    entityNames?: string;
+    blueprints?: string[];
+    microfrontends?: string[];
+  } & JDLJSONApplicationContent
+>;
 
 export type JhipsterJSONJDLApplicationExporter = {
   forSeveralApplications?: boolean;

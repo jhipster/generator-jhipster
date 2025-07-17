@@ -48,9 +48,9 @@ export function convert(jdlObjectArg: JDLObject) {
   setFields();
   setRelationships();
   setApplicationToEntities();
-  const entitiesForEachApplication = getEntitiesForEachApplicationMap();
-  setOptions(entitiesForEachApplication);
-  formatEntitiesForEachApplication(entitiesForEachApplication);
+  const entitiesForEachApplicationMap = getEntitiesForEachApplicationMap();
+  setOptions(entitiesForEachApplicationMap);
+  const entitiesForEachApplication = formatEntitiesForEachApplication(entitiesForEachApplicationMap);
   addApplicationsWithoutEntities(entitiesForEachApplication);
   return entitiesForEachApplication;
 }
@@ -113,7 +113,7 @@ function setApplicationToEntities(): void {
   });
 }
 
-function setOptions(entitiesForEachApplication) {
+function setOptions(entitiesForEachApplication: Map<string, Record<string, JSONEntity>>) {
   const convertedOptionContents = OptionConverter.convert(jdlObject);
   convertedOptionContents.forEach((optionContent, entityName) => {
     entities![entityName].setOptions(optionContent);
@@ -121,7 +121,7 @@ function setOptions(entitiesForEachApplication) {
   jdlObject?.forEachApplication(jdlApplication => {
     const convertedOptionContentsForApplication = OptionConverter.convert(jdlApplication);
     const applicationName = jdlApplication.getConfigurationOptionValue('baseName');
-    const applicationEntities = entitiesForEachApplication.get(applicationName);
+    const applicationEntities = entitiesForEachApplication.get(applicationName)!;
     convertedOptionContentsForApplication.forEach((optionContent, entityName) => {
       if (!applicationEntities[entityName]) {
         return;
@@ -131,31 +131,36 @@ function setOptions(entitiesForEachApplication) {
   });
 }
 
-function getEntitiesForEachApplicationMap(): Map<string, any> {
-  const entitiesForEachApplication = new Map();
+function getEntitiesForEachApplicationMap(): Map<string, Record<string, JSONEntity>> {
+  const entitiesForEachApplication = new Map<string, Record<string, JSONEntity>>();
   entitiesPerApplication.forEach((entityNames, applicationName) => {
     const entitiesInObject = entityNames
       .filter(entityName => !!entities![entityName])
       .map(entityName => entities![entityName])
-      .reduce((accumulator, currentEntity) => {
-        return {
-          ...accumulator,
-          [currentEntity.name]: currentEntity,
-        };
-      }, {});
+      .reduce(
+        (accumulator, currentEntity) => {
+          return {
+            ...accumulator,
+            [currentEntity.name]: currentEntity,
+          };
+        },
+        {} as Record<string, JSONEntity>,
+      );
 
     entitiesForEachApplication.set(applicationName, entitiesInObject);
   });
   return entitiesForEachApplication;
 }
 
-function formatEntitiesForEachApplication(entitiesForEachApplication) {
+function formatEntitiesForEachApplication(entitiesForEachApplication: Map<string, Record<string, JSONEntity>>): Map<string, JSONEntity[]> {
+  const map = new Map<string, JSONEntity[]>();
   entitiesForEachApplication.forEach((applicationEntities, applicationName) => {
-    entitiesForEachApplication.set(applicationName, Object.values(applicationEntities));
+    map.set(applicationName, Object.values(applicationEntities));
   });
+  return map;
 }
 
-function addApplicationsWithoutEntities(entitiesForEachApplication: Map<string, string[]>) {
+function addApplicationsWithoutEntities(entitiesForEachApplication: Map<string, JSONEntity[]>): void {
   jdlObject?.forEachApplication(jdlApplication => {
     if (jdlApplication.getEntityNames().length === 0) {
       entitiesForEachApplication.set(jdlApplication.getConfigurationOptionValue('baseName'), []);

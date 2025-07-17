@@ -489,6 +489,7 @@ application {
       },
     ],
     "entities": [],
+    "microfrontends": undefined,
   },
   "entities": [],
   "namespaceConfigs": {

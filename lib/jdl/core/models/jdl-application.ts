@@ -94,7 +94,7 @@ export default class JDLApplication {
     return this.entityNames.has(entityName);
   }
 
-  forEachEntityName(passedFunction) {
+  forEachEntityName(passedFunction: (entityName: string) => void): void {
     this.entityNames.forEach(passedFunction);
   }
 

@@ -98,7 +98,7 @@ function defaults(): Pick<JDLEntity, 'fields' | 'annotations'> {
   };
 }
 
-function formatFieldObjects(jdlFieldObjects) {
+function formatFieldObjects(jdlFieldObjects: Record<string, JDLField>): string {
   let string = '';
   Object.keys(jdlFieldObjects).forEach(jdlField => {
     string += `${formatFieldObject(jdlFieldObjects[jdlField])}`;
@@ -107,7 +107,7 @@ function formatFieldObjects(jdlFieldObjects) {
   return string;
 }
 
-function formatFieldObject(jdlFieldObject) {
+function formatFieldObject(jdlFieldObject: JDLField): string {
   let string = '';
   const lines = jdlFieldObject.toString().split('\n');
   for (let j = 0; j < lines.length; j++) {

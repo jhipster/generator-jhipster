@@ -41,7 +41,7 @@ export default class JDLField {
     this.options = merged.options ?? {};
   }
 
-  addValidation(validation) {
+  addValidation(validation: JDLValidation) {
     if (!validation) {
       throw new Error("Can't add a nil JDL validation to the JDL field.");
     }

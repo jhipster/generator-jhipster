@@ -65,8 +65,8 @@ function setUpApplicationStructure(application: JDLApplication): PostProcessedJD
   return postProcessedApplicationToExport;
 }
 
-function getApplicationConfig(application: JDLApplication): Partial<JDLJSONApplicationContent> {
-  const result = {};
+function getApplicationConfig(application: JDLApplication): JDLJSONApplicationContent {
+  const result: JDLJSONApplicationContent = {};
   application.forEachConfigurationOption((option: JDLApplicationConfigurationOption<any>) => {
     result[option.name] = option.getValue();
   });
@@ -77,9 +77,9 @@ function getApplicationNamespaceConfig(application: JDLApplication) {
   if (application.namespaceConfigs.length === 0) {
     return undefined;
   }
-  const result = {};
+  const result: Record<string, Record<string, any>> = {};
   application.forEachNamespaceConfiguration((configurationOption: JDLApplicationConfiguration) => {
-    result[configurationOption.namespace!] = result[configurationOption.namespace!] ?? {};
+    result[configurationOption.namespace!] ??= {};
     configurationOption.forEachOption(option => {
       result[configurationOption.namespace!][option.name] = option.getValue();
     });
@@ -88,20 +88,12 @@ function getApplicationNamespaceConfig(application: JDLApplication) {
 }
 
 function cleanUpOptions(application: RawJDLJSONApplication): PostProcessedJDLJSONApplication {
-  const res: RawJDLJSONApplication = structuredClone(application);
-  if (res[GENERATOR_NAME].frontEndBuilder) {
-    delete res[GENERATOR_NAME].frontEndBuilder;
-  }
-  delete res.entityNames;
-  if (application[GENERATOR_NAME].blueprints) {
-    res[GENERATOR_NAME].blueprints = application[GENERATOR_NAME].blueprints.map(blueprintName => ({
-      name: blueprintName,
-    }));
-  }
-  if (application[GENERATOR_NAME].microfrontends) {
-    res[GENERATOR_NAME].microfrontends = application[GENERATOR_NAME].microfrontends.map(baseName => ({
-      baseName,
-    }));
-  }
-  return res as unknown as PostProcessedJDLJSONApplication;
+  const res = structuredClone(application);
+  const blueprints = application[GENERATOR_NAME].blueprints?.map(blueprintName => ({
+    name: blueprintName,
+  }));
+  const microfrontends = application[GENERATOR_NAME].microfrontends?.map(baseName => ({
+    baseName,
+  }));
+  return { ...res, [GENERATOR_NAME]: { ...res[GENERATOR_NAME], blueprints, microfrontends } };
 }

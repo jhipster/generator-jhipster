@@ -32,11 +32,8 @@ export const parseFromContent = (content: string) => originalParseFromContent(co
 export const createJDLLinterFromContent = (content: string) => originalCreateJDLLinterFromContent(content, runtime);
 
 export const convertApplications = (applications: ParsedJDLApplication[]) => originalConvertApplications(applications, runtime);
-export const createJDLApplication = (
-  config: any,
-  runtime: JDLRuntime,
-  namespaceConfigs?: Record<string, Record<string, any>> | undefined,
-) => originalCreateJDLApplication(config, runtime, namespaceConfigs);
+export const createJDLApplication = (config: any, runtime: JDLRuntime, namespaceConfigs?: Record<string, Record<string, any>>) =>
+  originalCreateJDLApplication(config, runtime, namespaceConfigs);
 
 export const convertApplicationsToJDL = (applications: JHipsterYoRcContentAndJDLWrapper) =>
   originalConvertApplicationsToJDL(applications, runtime);
