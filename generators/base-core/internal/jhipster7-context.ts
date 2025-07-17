@@ -410,7 +410,7 @@ const createHandler = ({ log }: Handler = { log: msg => console.log(msg) }): Pro
         return false;
       }
       const propValue = getProperty(context, prop);
-      if (propValue === undefined) {
+      if (propValue === undefined && context.data !== undefined) {
         return prop in context.data;
       }
       return true;
