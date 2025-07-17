@@ -26,8 +26,9 @@ import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../l
 const { CYPRESS } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 
-const microfrontendsToPromptValue = answer => (Array.isArray(answer) ? answer.map(({ baseName }) => baseName).join(',') : answer);
-const promptValueToMicrofrontends = answer =>
+const microfrontendsToPromptValue = (answer: string | { baseName: string }[]) =>
+  Array.isArray(answer) ? answer.map(({ baseName }) => baseName).join(',') : answer;
+const promptValueToMicrofrontends = (answer: string): { baseName: string }[] =>
   answer
     ? answer
         .split(',')

@@ -20,14 +20,9 @@
 import { beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { formatDateForChangelog } from '../../base/support/index.js';
-import BaseGenerator from '../../base/index.js';
-import { getConfigWithDefaults } from '../../../lib/jhipster/index.js';
 import { entityDefaultConfig, prepareEntityPrimaryKeyForTemplates } from './prepare-entity.js';
 
 describe('generator - base-application - support - prepareEntity', () => {
-  const defaultGenerator = { jhipsterConfig: getConfigWithDefaults() };
-  Object.setPrototypeOf(defaultGenerator, BaseGenerator.prototype);
-
   describe('prepareEntityPrimaryKeyForTemplates', () => {
     describe('with field with id name', () => {
       describe('without @Id', () => {

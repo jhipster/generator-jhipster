@@ -40,7 +40,7 @@ const command = {
       },
       prompt: gen => ({
         type: 'input',
-        validate: input => gen.validateBaseName(input),
+        validate: (input: string) => gen.validateBaseName(input),
         message: 'What is the base name of your application?',
         default: () => gen.defaultBaseName(),
       }),

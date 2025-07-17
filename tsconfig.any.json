@@ -1,5 +1,5 @@
 {
-  "include": ["cli/**/*", "generators/base-core", "lib/**/*", "test/**/*", ".blueprint/**/*"],
+  "include": ["cli/**/*", "generators/*/command.ts", "generators/base-core", "lib/**/*", "test/**/*", ".blueprint/**/*"],
   "exclude": [
     ".blueprint",
     "cli/cli.spec.mts",
