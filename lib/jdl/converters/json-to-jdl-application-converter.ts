@@ -32,7 +32,7 @@ export type JHipsterYoRcContentAndJDLWrapper = {
 
 export function convertApplicationsToJDL({ applications, jdl }: JHipsterYoRcContentAndJDLWrapper, runtime: JDLRuntime) {
   jdl ??= new JDLObject();
-  applications.forEach((application: RawJDLJSONApplication) => {
+  applications?.forEach((application: RawJDLJSONApplication) => {
     const convertedApplication = convertApplicationToJDL(application, runtime);
     jdl.addApplication(convertedApplication);
   });

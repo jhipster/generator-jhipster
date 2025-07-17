@@ -112,15 +112,19 @@ export function getJDLObjectFromSingleApplication(
 }
 
 function cleanYoRcFileContent(yoRcFileContent: YoRcFileContent): RawJDLJSONApplication {
-  for (const key of Object.keys(yoRcFileContent)) {
-    yoRcFileContent[key] = removeFieldsWithNullishValues(yoRcFileContent[key]);
-  }
-  const result = structuredClone(yoRcFileContent);
+  yoRcFileContent = structuredClone(yoRcFileContent);
   const blueprints = (yoRcFileContent as YoRcJHipsterApplicationContent)[YO_RC_CONFIG_KEY].blueprints?.map(blueprint => blueprint.name);
   const microfrontends = (yoRcFileContent as YoRcJHipsterApplicationContent)[YO_RC_CONFIG_KEY].microfrontends?.map(
     ({ baseName }) => baseName,
   );
-  return { ...result, [YO_RC_CONFIG_KEY]: { ...result[YO_RC_CONFIG_KEY], blueprints, microfrontends } };
+  const result: RawJDLJSONApplication = {
+    ...yoRcFileContent,
+    [YO_RC_CONFIG_KEY]: removeFieldsWithNullishValues({ ...yoRcFileContent[YO_RC_CONFIG_KEY], blueprints, microfrontends }),
+  };
+  for (const key of Object.keys(result)) {
+    result[key] = removeFieldsWithNullishValues(result[key]);
+  }
+  return result;
 }
 
 function getJSONEntityFiles(applicationDirectory: string): Map<string, JSONEntity> {
