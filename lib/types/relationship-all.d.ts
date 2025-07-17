@@ -1,5 +1,5 @@
-import type { Relationship as SpringDataRelationalRelationship } from '../../generators/spring-data-relational/index.ts';
-import type { Relationship as ServerRelationship } from '../../generators/server/index.ts';
-import type { Relationship as LiquibaseRelationship } from '../../generators/liquibase/index.ts';
+import type { Relationship as SpringDataRelationalRelationship } from '../../generators/spring-data-relational/types.d.ts';
+import type { Relationship as ServerRelationship } from '../../generators/server/types.d.ts';
+import type { Relationship as LiquibaseRelationship } from '../../generators/liquibase/types.d.ts';
 
 export interface RelationshipAll extends SpringDataRelationalRelationship, ServerRelationship, LiquibaseRelationship {}
