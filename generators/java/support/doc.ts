@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { formatDocAsSingleLine } from '../../base-application/support/index.js';
+import { formatDocAsSingleLine } from '../../base-application/support/doc.ts';
 
 const escapeDoubleQuotes = (text: string): string => {
   if (text.includes('"')) {

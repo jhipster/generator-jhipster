@@ -24,13 +24,13 @@ import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRe
 import { findEntityInEntities } from './entity.js';
 import { stringifyApplicationData } from './debug.js';
 
-export const otherRelationshipType = relationshipType => relationshipType.split('-').reverse().join('-');
+export const otherRelationshipType = (relationshipType: string): string => relationshipType.split('-').reverse().join('-');
 
 export const findOtherRelationshipInRelationships = (
   entityName: string,
   relationship: BaseApplicationRelationship,
   inRelationships: BaseApplicationRelationship[],
-) => {
+): BaseApplicationRelationship | undefined => {
   return inRelationships.find(otherRelationship => {
     if (upperFirst(otherRelationship.otherEntityName) !== entityName) {
       return false;
@@ -47,7 +47,7 @@ export const findOtherRelationshipInRelationships = (
   });
 };
 
-export const loadEntitiesAnnotations = (entities: BaseApplicationEntity[]) => {
+export const loadEntitiesAnnotations = (entities: BaseApplicationEntity[]): void => {
   for (const entity of entities) {
     // Load field annotations
     for (const field of entity.fields ?? []) {

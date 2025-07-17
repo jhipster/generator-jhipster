@@ -107,6 +107,8 @@ export type Field = Property &
     fieldValidationMaxBytes?: boolean;
 
     relatedByOtherEntity?: boolean;
+
+    enumInstance?: string;
   };
 
 /**

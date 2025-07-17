@@ -10,7 +10,7 @@ describe('base-application - support - enum', () => {
       before(() => {
         const clientRootFolder = 'root';
         const field = { enumName: 'fieldName', fieldType: 'BigLetters', fieldValues: 'AAA, BBB', fieldTypeDocumentation: 'enum comment' };
-        enumInfo = getEnumInfo(field, clientRootFolder);
+        enumInfo = getEnumInfo(field as any, clientRootFolder);
       });
 
       it("returns the enum's name", () => {
@@ -32,7 +32,7 @@ describe('base-application - support - enum', () => {
       before(() => {
         const clientRootFolder = 'root';
         const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
-        enumInfo = getEnumInfo(field, clientRootFolder);
+        enumInfo = getEnumInfo(field as any, clientRootFolder);
       });
 
       it('returns whether there are custom enums', () => {
@@ -53,7 +53,7 @@ describe('base-application - support - enum', () => {
       before(() => {
         const clientRootFolder = 'root';
         const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB' };
-        enumInfo = getEnumInfo(field, clientRootFolder);
+        enumInfo = getEnumInfo(field as any, clientRootFolder);
       });
 
       it('returns whether there are custom enums', () => {
@@ -79,7 +79,7 @@ describe('base-application - support - enum', () => {
         before(() => {
           const clientRootFolder = 'root';
           const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb)' };
-          enumInfo = getEnumInfo(field, clientRootFolder);
+          enumInfo = getEnumInfo(field as any, clientRootFolder);
         });
 
         it('returns whether there are custom enums', () => {
@@ -104,7 +104,7 @@ describe('base-application - support - enum', () => {
         before(() => {
           const clientRootFolder = 'root';
           const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb and b)' };
-          enumInfo = getEnumInfo(field, clientRootFolder);
+          enumInfo = getEnumInfo(field as any, clientRootFolder);
         });
 
         it('returns whether there are custom enums', () => {
@@ -136,7 +136,7 @@ describe('base-application - support - enum', () => {
               BBB: 'second comment',
             },
           };
-          enumInfo = getEnumInfo(field, clientRootFolder);
+          enumInfo = getEnumInfo(field as any, clientRootFolder);
         });
 
         it('returns whether there are custom enums', () => {
@@ -161,7 +161,7 @@ describe('base-application - support - enum', () => {
 
       before(() => {
         const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
-        enumInfo = getEnumInfo(field);
+        enumInfo = getEnumInfo(field as any);
       });
 
       it('returns an empty string for the clientRootFolder property', () => {
@@ -174,7 +174,7 @@ describe('base-application - support - enum', () => {
       before(() => {
         const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
         const clientRootFolder = 'root';
-        enumInfo = getEnumInfo(field, clientRootFolder);
+        enumInfo = getEnumInfo(field as any, clientRootFolder);
       });
 
       it('returns the clientRootFolder property suffixed by a dash', () => {

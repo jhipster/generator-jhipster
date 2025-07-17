@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export const stringifyApplicationData = data =>
+export const stringifyApplicationData = (data: any) =>
   JSON.stringify(
     data,
     (key, value) => {

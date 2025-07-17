@@ -18,6 +18,11 @@
  */
 import { requireNamespace } from '@yeoman/namespace';
 
+type Blueprint = {
+  name: string;
+  version?: string;
+};
+
 /**
  * @private
  * Splits and normalizes a comma separated list of blueprint names with optional versions.
@@ -25,7 +30,7 @@ import { requireNamespace } from '@yeoman/namespace';
  * no processing is performed and it is returned as is.
  * @returns {Array} an array that contains the info for each blueprint
  */
-export function parseBlueprints(blueprints?: string | { name: string; version: string }[]) {
+export function parseBlueprints(blueprints?: string | Blueprint[]) {
   if (Array.isArray(blueprints)) {
     return blueprints;
   }
@@ -44,7 +49,7 @@ export function parseBlueprints(blueprints?: string | { name: string; version: s
  * @param {...Blueprint[]} [blueprintsToMerge] - Blueprint arrays to be merged.
  * @returns {Blueprint[]} an array that contains the info for each blueprint
  */
-export function mergeBlueprints(...blueprintsToMerge) {
+export function mergeBlueprints(...blueprintsToMerge: Blueprint[][]): Blueprint[] {
   if (!blueprintsToMerge || blueprintsToMerge.length === 0) {
     return [];
   }
@@ -62,7 +67,7 @@ export function mergeBlueprints(...blueprintsToMerge) {
  * @param {Blueprint[]} blueprints - Blueprint arrays to be merged.
  * @returns {Blueprint[]} an array that contains the info for each blueprint
  */
-export function removeBlueprintDuplicates(blueprints) {
+export function removeBlueprintDuplicates(blueprints: Blueprint[]): Blueprint[] {
   const uniqueBlueprints = new Map();
   blueprints.forEach(blueprintToAdd => {
     if (uniqueBlueprints.get(blueprintToAdd.name) === undefined) {
@@ -82,7 +87,7 @@ export function removeBlueprintDuplicates(blueprints) {
  * @param {string} blueprint - name of the blueprint and optionally a version, e.g kotlin[@0.8.1]
  * @returns {object} containing the name and version of the blueprint
  */
-export function parseBlueprintInfo(blueprint) {
+export function parseBlueprintInfo(blueprint: string): Blueprint {
   let bpName = normalizeBlueprintName(blueprint);
   const idx = bpName.lastIndexOf('@');
   if (idx > 0) {
@@ -105,7 +110,7 @@ export function parseBlueprintInfo(blueprint) {
  * @param {string} blueprint - name of the blueprint
  * @returns {string} the normalized blueprint name
  */
-export function normalizeBlueprintName(blueprint) {
+export function normalizeBlueprintName(blueprint: string): string {
   try {
     const ns = requireNamespace(blueprint);
     if (ns.unscoped.startsWith('generator-jhipster-')) {

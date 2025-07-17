@@ -191,6 +191,7 @@
     "@types/diff": "^7.0.2",
     "@types/estree": "1.0.8",
     "@types/node": "20.19.8",
+    "@types/normalize-path": "^3.0.2",
     "@types/npmcli__arborist": "^6.3.1",
     "@types/semver": "7.7.0",
     "@types/sinon-chai": "4.0.0",
