@@ -2,13 +2,13 @@ import type {
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
   Relationship as BaseApplicationRelationship,
-} from '../base-application/index.ts';
+} from '../base-application/types.d.ts';
 import type {
   Entity as BaseEntityChangesEntity,
   Field as BaseEntityChangesField,
   Relationship as BaseEntityChangesRelationship,
   Source as BaseEntityChangesSource,
-} from '../base-entity-changes/index.js';
+} from '../base-entity-changes/types.d.ts';
 import type { Application as JavaApplication, Entity as JavaEntity, Field as JavaField, Source as JavaSource } from '../java/types.js';
 import type { LiquibaseColumnType, LiquibaseLoadColumnType } from './support/prepare-field.ts';
 

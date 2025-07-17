@@ -4,7 +4,7 @@ import type {
   Config as BaseSimpleApplicationConfig,
   Options as BaseSimpleApplicationOptions,
   Source as BaseSimpleApplicationSource,
-} from '../base-simple-application/index.js';
+} from '../base-simple-application/types.d.ts';
 import type command from './command.js';
 
 type Command = HandleCommandTypes<typeof command>;

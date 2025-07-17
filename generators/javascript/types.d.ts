@@ -9,13 +9,13 @@ import type {
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
   Relationship as BaseApplicationRelationship,
-} from '../base-application/index.ts';
+} from '../base-application/types.d.ts';
 import type {
   Application as BaseSimpleApplicationApplication,
   Config as BaseSimpleApplicationConfig,
   Options as BaseSimpleApplicationOptions,
   Source as BaseSimpleApplicationSource,
-} from '../base-simple-application/index.ts';
+} from '../base-simple-application/types.d.ts';
 import type EslintCommand from './generators/eslint/command.js';
 import type HuskyCommand from './generators/husky/command.js';
 import type JavascriptBootstrapCommand from './generators/bootstrap/command.js';

@@ -9,7 +9,7 @@ import type {
   Entity as CommonEntity,
   Field as CommonField,
   Relationship as CommonRelationship,
-} from '../common/index.js';
+} from '../common/types.d.ts';
 import type {
   Application as JavaApplication,
   Config as JavaConfig,
@@ -19,7 +19,7 @@ import type {
   Relationship as JavaRelationship,
   Source as JavaSource,
 } from '../java/types.js';
-import type { Relationship as LanguagesRelationship } from '../languages/index.js';
+import type { Relationship as LanguagesRelationship } from '../languages/types.d.ts';
 import type { DatabaseEntity } from '../liquibase/types.js';
 import type Command from './command.ts';
 

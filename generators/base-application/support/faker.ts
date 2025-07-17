@@ -19,7 +19,7 @@
 import { Faker, type LocaleDefinition, base, en } from '@faker-js/faker';
 import Randexp from 'randexp';
 
-import { languageToJavaLanguage } from '../../languages/support/index.js';
+import { languageToJavaLanguage } from '../../languages/support/languages.js';
 
 class RandexpWithFaker extends Randexp {
   faker: Faker;
@@ -52,7 +52,7 @@ export async function createFaker(nativeLanguage = 'en') {
   nativeLanguage = languageToJavaLanguage(nativeLanguage);
   let locale: LocaleDefinition;
   try {
-    locale = (await import(`@faker-js/faker`))[nativeLanguage];
+    locale = ((await import(`@faker-js/faker`)) as any)[nativeLanguage];
   } catch {
     // Faker not implemented for the native language, fallback to en.
 

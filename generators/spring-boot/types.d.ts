@@ -6,7 +6,7 @@ import type {
   Source as JavaSource,
 } from '../java/types.js';
 import type { Entity as BaseApplicationEntity } from '../base-application/types.js';
-import type { Config as CommonConfig } from '../common/index.js';
+import type { Config as CommonConfig } from '../common/types.d.ts';
 import type {
   Application as ServerApplication,
   Config as ServerConfig,

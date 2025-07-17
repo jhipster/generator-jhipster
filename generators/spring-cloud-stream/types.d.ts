@@ -1,9 +1,9 @@
-import type { Application as JavaApplication, Entity as JavaEntity } from '../java/index.ts';
+import type { Application as JavaApplication, Entity as JavaEntity } from '../java/types.d.ts';
 import type {
   Config as BaseApplicationConfig,
   Entity as BaseApplicationEntity,
   Options as BaseApplicationOptions,
-} from '../base-application/index.js';
+} from '../base-application/types.d.ts';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type command from './command.ts';
 

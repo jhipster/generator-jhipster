@@ -20,7 +20,7 @@ import type {
   Source as CommonSource,
 } from '../common/types.js';
 import type { Language } from '../languages/support/languages.ts';
-import type { Entity as LanguagesEntity, Field as LanguagesField, Relationship as LanguagesRelationship } from '../languages/index.js';
+import type { Entity as LanguagesEntity, Field as LanguagesField, Relationship as LanguagesRelationship } from '../languages/types.d.ts';
 import type { GetWebappTranslationCallback } from './translation.js';
 import type command from './command.ts';
 
@@ -87,6 +87,6 @@ export type Source = JavascriptSource &
     /**
      * Add webpack config.
      */
-    addWebpackConfig?(args: { config: string });
-    addLanguagesInFrontend?(args: { languagesDefinition: readonly Language[] });
+    addWebpackConfig?(args: { config: string }): void;
+    addLanguagesInFrontend?(args: { languagesDefinition: readonly Language[] }): void;
   };

@@ -57,7 +57,7 @@ const liquibaseFieldTypeByFieldType = {
 export type LiquibaseColumnType = ValueOf<typeof liquibaseFieldTypeByFieldType>;
 
 function parseLiquibaseColumnType(field: LiquibaseField): LiquibaseColumnType {
-  const liquibaseColumnType = liquibaseFieldTypeByFieldType[field.fieldType];
+  const liquibaseColumnType = liquibaseFieldTypeByFieldType[field.fieldType as keyof typeof liquibaseFieldTypeByFieldType];
   if (liquibaseColumnType === 'varchar' || field.fieldIsEnum) {
     return `varchar(${field.fieldValidateRulesMaxlength || 255})` as 'varchar';
   }

@@ -7,7 +7,7 @@ import type {
   Application as BaseSimpleApplicationApplication,
   Config as BaseSimpleApplicationConfig,
   Options as BaseSimpleApplicationOptions,
-} from '../base-simple-application/index.ts';
+} from '../base-simple-application/types.d.ts';
 import type { OptionWithDerivedProperties } from './internal/types/application-options.js';
 import type { FakerWithRandexp } from './support/faker.ts';
 

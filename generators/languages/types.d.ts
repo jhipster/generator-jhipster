@@ -24,7 +24,7 @@ import type {
   Options as BaseApplicationOptions,
   Relationship as BaseApplicationRelationship,
   Source as BaseApplicationSource,
-} from '../base-application/index.js';
+} from '../base-application/types.d.ts';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { Language } from './support/languages.js';
 import type command from './command.js';
