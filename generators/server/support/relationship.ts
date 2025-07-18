@@ -20,11 +20,11 @@
 import { addOtherRelationship } from '../../base-application/support/index.js';
 import type { ValidationResult } from '../../base-core/api.d.ts';
 import { databaseTypes } from '../../../lib/jhipster/index.js';
-import type { Entity as ServerEntity } from '../../server/types.js';
+import type { Entity as BaseApplicationEntity } from '../../base-application/types.js';
 
 const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;
 
-export const addEntitiesOtherRelationships = (entities: ServerEntity[]): ValidationResult => {
+export const addEntitiesOtherRelationships = (entities: BaseApplicationEntity[]): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
   for (const entity of entities.filter(entity => !entity.builtIn)) {
     for (const relationship of entity.relationships ?? []) {

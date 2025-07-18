@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.js';
+import type { BaseChangelog } from '../base-entity-changes/types.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
+import type { Entity as LiquibaseEntity, Application as TemplateData } from './types.js';
 
-export const addEntityFiles = asWriteFilesSection({
+export const addEntityFiles = asWriteFilesSection<TemplateData<LiquibaseEntity> & BaseChangelog<LiquibaseEntity>>({
   dbChangelog: [
     {
       path: SERVER_MAIN_RES_DIR,
@@ -31,7 +33,7 @@ export const addEntityFiles = asWriteFilesSection({
       ],
     },
     {
-      condition: (generator: any) => generator.entity.anyRelationshipIsOwnerSide,
+      condition: generator => generator.entity.anyRelationshipIsOwnerSide,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
@@ -44,14 +46,14 @@ export const addEntityFiles = asWriteFilesSection({
   ],
 });
 
-export const updateEntityFiles = asWriteFilesSection({
+export const updateEntityFiles = asWriteFilesSection<any>({
   dbChangelog: [
     {
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
           file: 'config/liquibase/changelog/updated_entity.xml',
-          renameTo: (generator: any) =>
+          renameTo: generator =>
             `config/liquibase/changelog/${generator.databaseChangelog.changelogDate}_updated_entity_${generator.entity.entityClass}.xml`,
         },
       ],
@@ -59,14 +61,14 @@ export const updateEntityFiles = asWriteFilesSection({
   ],
 });
 
-export const updateConstraintsFiles = asWriteFilesSection({
+export const updateConstraintsFiles = asWriteFilesSection<any>({
   dbChangelog: [
     {
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
           file: 'config/liquibase/changelog/updated_entity_constraints.xml',
-          renameTo: (generator: any) =>
+          renameTo: generator =>
             `config/liquibase/changelog/${generator.databaseChangelog.changelogDate}_updated_entity_constraints_${generator.entity.entityClass}.xml`,
         },
       ],
@@ -74,14 +76,14 @@ export const updateConstraintsFiles = asWriteFilesSection({
   ],
 });
 
-export const updateMigrateFiles = asWriteFilesSection({
+export const updateMigrateFiles = asWriteFilesSection<any>({
   dbChangelog: [
     {
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
           file: 'config/liquibase/changelog/updated_entity_migrate.xml',
-          renameTo: (generator: any) =>
+          renameTo: generator =>
             `config/liquibase/changelog/${generator.databaseChangelog.changelogDate}_updated_entity_migrate_${generator.entity.entityClass}.xml`,
         },
       ],
@@ -89,7 +91,7 @@ export const updateMigrateFiles = asWriteFilesSection({
   ],
 });
 
-export const fakeFiles = asWriteFilesSection({
+export const fakeFiles = asWriteFilesSection<any>({
   fakeData: [
     {
       path: SERVER_MAIN_RES_DIR,
@@ -107,7 +109,7 @@ export const fakeFiles = asWriteFilesSection({
       ],
     },
     {
-      condition: (generator: any) => generator.entity.anyFieldHasImageContentType || generator.entity.anyFieldIsBlobDerived,
+      condition: generator => generator.entity.anyFieldHasImageContentType || generator.entity.anyFieldIsBlobDerived,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
@@ -117,7 +119,7 @@ export const fakeFiles = asWriteFilesSection({
       ],
     },
     {
-      condition: (generator: any) => generator.entity.anyFieldHasTextContentType,
+      condition: generator => generator.entity.anyFieldHasTextContentType,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/fake-data/blob/hipster.txt'],
     },

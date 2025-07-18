@@ -33,7 +33,9 @@ import { prepareSqlApplicationProperties } from '../spring-data-relational/suppo
 import { fieldTypes } from '../../lib/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../base-entity-changes/types.js';
+import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions, BaseChangelog } from '../base-entity-changes/types.js';
+import type { Field as CommonField, Entity as ServerEntity } from '../server/types.js';
+import type { Application as CommonApplication, Entity as CommonEntity } from '../common/types.js';
 import type { Source as SpringBootSource } from '../spring-boot/index.js';
 import { checkAndReturnRelationshipOnValue } from './internal/relationship-on-handler-options.ts';
 import { liquibaseFiles } from './files.js';
@@ -64,16 +66,19 @@ const {
 
 type CommandType = HandleCommandTypes<typeof command>;
 
-export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
-  LiquibaseEntity,
-  LiquibaseApplication<LiquibaseEntity>,
+export default class LiquibaseGenerator<
+  Entity extends LiquibaseEntity = LiquibaseEntity<LiquibaseField>,
+  Application extends LiquibaseApplication<Entity> = LiquibaseApplication<Entity>,
+> extends BaseEntityChangesGenerator<
+  Entity,
+  Application,
   BaseApplicationConfig & CommandType['Config'],
   BaseApplicationOptions & CommandType['Options'],
   LiquibaseSource
 > {
   recreateInitialChangelog: boolean;
   numberOfRows: number;
-  databaseChangelogs: any[] = [];
+  databaseChangelogs: BaseChangelog<Entity>[] = [];
   injectBuildTool = true;
   injectLogs = true;
 
@@ -105,7 +110,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       preparing({ application }) {
         application.liquibaseDefaultSchemaName = '';
         // Generate h2 properties at master.xml for blueprints that uses h2 for tests or others purposes.
-        application.liquibaseAddH2Properties = application.liquibaseAddH2Properties ?? application.devDatabaseTypeH2Any;
+        application.liquibaseAddH2Properties ??= application.devDatabaseTypeH2Any;
       },
       checkDatabaseCompatibility({ application }) {
         if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {
@@ -189,17 +194,17 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
           if (!databaseChangelog.newEntity) {
             // Previous entities are not prepared using default jhipster priorities.
             // Prepare them.
-            const { previousEntity: entity } = databaseChangelog;
-            loadRequiredConfigIntoEntity(entity, this.jhipsterConfigWithDefaults);
+            const entity = databaseChangelog.previousEntity!;
+            loadRequiredConfigIntoEntity(entity as unknown as ServerEntity, this.jhipsterConfigWithDefaults);
             // TODO fix types
-            prepareEntity(entity, this, application as any);
+            prepareEntity(entity as unknown as CommonEntity, this, application as unknown as CommonApplication);
             // TODO fix types
             prepareEntityForServer(entity, application as any);
             if (!entity.embedded && !entity.primaryKey) {
               prepareEntityPrimaryKeyForTemplates.call(this, { entity, application });
             }
             for (const field of entity.fields ?? []) {
-              prepareField(entity, field, this);
+              prepareField(entity as unknown as CommonEntity, field as unknown as CommonField, this);
               prepareFieldForLiquibase(application, field);
             }
           }
@@ -209,7 +214,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
           if (!databaseChangelog.newEntity) {
             // Previous entities are not prepared using default jhipster priorities.
             // Prepare them.
-            const { previousEntity: entity } = databaseChangelog;
+            const entity = databaseChangelog.previousEntity!;
             for (const relationship of entity.relationships ?? []) {
               prepareRelationship.call(this, entity, relationship, true);
               prepareRelationshipForLiquibase({ application, entity, relationship });
@@ -231,17 +236,17 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
               this.prepareChangelog({
                 databaseChangelog: {
                   ...databaseChangelog,
-                  changelogData: { ...databaseChangelog.changelogData },
+                  changelogData: { ...databaseChangelog.changelogData! },
                 },
                 application,
-              }),
+              })!,
             );
           } else if (databaseChangelog.addedFields.length > 0 || databaseChangelog.removedFields.length > 0) {
             this.databaseChangelogs.push(
               this.prepareChangelog({
                 databaseChangelog: {
                   ...databaseChangelog,
-                  changelogData: { ...databaseChangelog.changelogData },
+                  changelogData: { ...databaseChangelog.changelogData! },
                   fieldChangelog: true,
                   addedRelationships: [],
                   removedRelationships: [],
@@ -250,7 +255,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
                   relationshipsToRecreateForeignKeysOnly: [],
                 },
                 application,
-              }),
+              })!,
             );
           }
         }
@@ -267,13 +272,13 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
               this.prepareChangelog({
                 databaseChangelog: {
                   ...databaseChangelog,
-                  changelogData: { ...databaseChangelog.changelogData },
+                  changelogData: { ...databaseChangelog.changelogData! },
                   relationshipChangelog: true,
                   addedFields: [],
                   removedFields: [],
                 },
                 application,
-              }),
+              })!,
             );
           }
         }
@@ -289,13 +294,12 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
-        const context = {
-          ...application,
-          recreateInitialChangelog: this.recreateInitialChangelog,
-        } as any;
         await this.writeFiles({
           sections: liquibaseFiles,
-          context,
+          context: {
+            ...application,
+            recreateInitialChangelog: this.recreateInitialChangelog,
+          },
         });
       },
     });
@@ -545,7 +549,22 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
       postWriteChangelogs({ source }) {
-        return Promise.all(this.databaseChangelogs.map(databaseChangelog => this.postWriteChangelog({ source, databaseChangelog })));
+        return Promise.all(
+          this.databaseChangelogs.map(databaseChangelog => {
+            const { entity, changelogData } = databaseChangelog;
+            if (entity.skipServer) {
+              return undefined;
+            }
+
+            if (databaseChangelog.newEntity) {
+              return this._addLiquibaseFilesReferences({ entity, databaseChangelog, source });
+            }
+            if (changelogData!.requiresUpdateChangelogs) {
+              return this._addUpdateFilesReferences({ entity, databaseChangelog, changelogData, source });
+            }
+            return undefined;
+          }),
+        );
       },
     });
   }
@@ -712,7 +731,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     return `${leadingWhitespace ? ' ' : ''}${field.liquibaseDefaultValueAttributeName}="${escape(field.liquibaseDefaultValueAttributeValue)}"`;
   }
 
-  prepareChangelog({ databaseChangelog, application }) {
+  prepareChangelog({ databaseChangelog, application }: { databaseChangelog: BaseChangelog<Entity>; application: Application }) {
     if (!databaseChangelog.changelogDate) {
       databaseChangelog.changelogDate = this.nextTimestamp();
     }
@@ -722,7 +741,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       return undefined;
     }
 
-    const entityChanges = databaseChangelog.changelogData;
+    const entityChanges = databaseChangelog.changelogData!;
     entityChanges.skipFakeData = application.skipFakeData || entity.skipFakeData;
 
     entityChanges.allFields = entity.fields.filter(field => !field.transient);
@@ -788,15 +807,16 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       entityChanges.addedDefaultValueFields = databaseChangelog.addedDefaultValueFields;
     }
 
+    const { prodDatabaseType, databaseType, authenticationType, jhiPrefix } = entity as any;
     /* Required by the templates */
     databaseChangelog.writeContext = {
       entity,
-      databaseChangelog,
+      databaseChangelog: databaseChangelog as any,
       changelogDate: databaseChangelog.changelogDate,
-      databaseType: entity.databaseType,
-      prodDatabaseType: entity.prodDatabaseType,
-      authenticationType: entity.authenticationType,
-      jhiPrefix: entity.jhiPrefix,
+      databaseType,
+      prodDatabaseType,
+      authenticationType,
+      jhiPrefix,
       reactive: application.reactive,
       incrementalChangelog: application.incrementalChangelog,
       recreateInitialChangelog: this.recreateInitialChangelog,
@@ -839,21 +859,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     }
     if (changelogData.requiresUpdateChangelogs) {
       return this._writeUpdateFiles({ context, changelogData });
-    }
-    return undefined;
-  }
-
-  postWriteChangelog({ databaseChangelog, source }) {
-    const { entity, changelogData } = databaseChangelog;
-    if (entity.skipServer) {
-      return undefined;
-    }
-
-    if (databaseChangelog.newEntity) {
-      return this._addLiquibaseFilesReferences({ entity, databaseChangelog, source });
-    }
-    if (changelogData.requiresUpdateChangelogs) {
-      return this._addUpdateFilesReferences({ entity, databaseChangelog, changelogData, source });
     }
     return undefined;
   }

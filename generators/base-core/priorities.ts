@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { Priority } from 'yeoman-generator';
+import type CoreGenerator from './generator.ts';
 
 export const PRIORITY_PREFIX = '>';
 export const QUEUE_PREFIX = 'jhipster:';
@@ -78,57 +79,57 @@ export const CUSTOM_PRIORITIES = (
   [
     {
       priorityName: INITIALIZING,
-      args: (generator: any) => generator.getArgsForPriority(INITIALIZING),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(INITIALIZING),
       edit: true,
     },
     {
       priorityName: PROMPTING,
-      args: (generator: any) => generator.getArgsForPriority(PROMPTING),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(PROMPTING),
       edit: true,
     },
     {
       priorityName: CONFIGURING,
-      args: (generator: any) => generator.getArgsForPriority(CONFIGURING),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(CONFIGURING),
       edit: true,
     },
     {
       priorityName: COMPOSING,
       queueName: COMPOSING_QUEUE,
       before: COMPOSING_COMPONENT,
-      args: (generator: any) => generator.getArgsForPriority(COMPOSING),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(COMPOSING),
     },
     {
       priorityName: COMPOSING_COMPONENT,
       queueName: COMPOSING_COMPONENT_QUEUE,
       before: LOADING,
-      args: (generator: any) => generator.getArgsForPriority(COMPOSING_COMPONENT),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(COMPOSING_COMPONENT),
     },
     {
       priorityName: LOADING,
       queueName: LOADING_QUEUE,
       before: PREPARING,
-      args: (generator: any) => generator.getArgsForPriority(LOADING),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(LOADING),
     },
     {
       priorityName: PREPARING,
       queueName: PREPARING_QUEUE,
       before: POST_PREPARING,
-      args: (generator: any) => generator.getArgsForPriority(PREPARING),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(PREPARING),
     },
     {
       priorityName: POST_PREPARING,
       queueName: POST_PREPARING_QUEUE,
       before: DEFAULT,
-      args: (generator: any) => generator.getArgsForPriority(POST_PREPARING),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(POST_PREPARING),
     },
     {
       priorityName: DEFAULT,
-      args: (generator: any) => generator.getArgsForPriority(DEFAULT),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(DEFAULT),
       edit: true,
     },
     {
       priorityName: WRITING,
-      args: (generator: any) => generator.getArgsForPriority(WRITING),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(WRITING),
       edit: true,
     },
     {
@@ -140,28 +141,28 @@ export const CUSTOM_PRIORITIES = (
       priorityName: POST_WRITING,
       queueName: POST_WRITING_QUEUE,
       before: PRE_CONFLICTS,
-      args: (generator: any) => generator.getArgsForPriority(POST_WRITING),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(POST_WRITING),
     },
     {
       priorityName: PRE_CONFLICTS,
       queueName: PRE_CONFLICTS_QUEUE,
-      args: (generator: any) => generator.getArgsForPriority(PRE_CONFLICTS),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(PRE_CONFLICTS),
       before: TRANSFORM,
     },
     {
       priorityName: INSTALL,
-      args: (generator: any) => generator.getArgsForPriority(INSTALL),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(INSTALL),
       edit: true,
     },
     {
       priorityName: POST_INSTALL,
       queueName: POST_INSTALL_QUEUE,
       before: END,
-      args: (generator: any) => generator.getArgsForPriority(POST_INSTALL),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(POST_INSTALL),
     },
     {
       priorityName: END,
-      args: (generator: any) => generator.getArgsForPriority(END),
+      args: generator => (generator as CoreGenerator).getArgsForPriority(END),
       edit: true,
     },
   ] satisfies Priority[]

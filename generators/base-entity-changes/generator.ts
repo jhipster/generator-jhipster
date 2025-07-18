@@ -25,8 +25,8 @@ import { addEntitiesOtherRelationships } from '../server/support/index.js';
 import type { TaskTypes as ApplicationTaskTypes } from '../base-application/tasks.js';
 import type { TaskParamWithApplication } from '../base-simple-application/tasks.js';
 import type {
-  BaseChangelog,
   Application as BaseEntityChangesApplication,
+  BaseChangelog as BaseEntityChangesChangelog,
   Config as BaseEntityChangesConfig,
   Entity as BaseEntityChangesEntity,
   Features as BaseEntityChangesFeatures,
@@ -37,7 +37,7 @@ import type {
 
 const { DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES } = PRIORITY_NAMES;
 
-const baseChangelog: () => Omit<BaseChangelog, 'changelogDate' | 'entityName' | 'entity'> = () => ({
+const baseChangelog = (): Omit<BaseEntityChangesChangelog<any>, 'changelogDate' | 'entityName' | 'entity'> => ({
   newEntity: false,
   changedEntity: false,
   incremental: false,
@@ -49,17 +49,17 @@ const baseChangelog: () => Omit<BaseChangelog, 'changelogDate' | 'entityName' | 
   relationshipsToRecreateForeignKeysOnly: [],
   removedDefaultValueFields: [],
   addedDefaultValueFields: [],
-  changelogData: {},
 });
 
 type BaseEntityChangesTaskTypes<
   E extends BaseEntityChangesEntity,
+  B extends BaseEntityChangesChangelog<E>,
   A extends BaseEntityChangesApplication<E>,
   S extends BaseEntityChangesSource,
 > = ApplicationTaskTypes<E, A, S> & {
-  DefaultTaskParam: { entityChanges?: BaseChangelog[] };
-  WritingEntitiesTaskParam: { entityChanges?: BaseChangelog[] };
-  PostWritingEntitiesTaskParam: { entityChanges?: BaseChangelog[] };
+  DefaultTaskParam: { entityChanges?: B[] };
+  WritingEntitiesTaskParam: { entityChanges?: B[] };
+  PostWritingEntitiesTaskParam: { entityChanges?: B[] };
 };
 
 /**
@@ -72,7 +72,12 @@ export default abstract class BaseEntityChangesGenerator<
   Options extends BaseEntityChangesOptions = BaseEntityChangesOptions,
   Source extends BaseEntityChangesSource = BaseEntityChangesSource,
   Features extends BaseEntityChangesFeatures = BaseEntityChangesFeatures,
-  Tasks extends BaseEntityChangesTaskTypes<Entity, Application, Source> = BaseEntityChangesTaskTypes<Entity, Application, Source>,
+  Tasks extends BaseEntityChangesTaskTypes<Entity, BaseEntityChangesChangelog<Entity>, Application, Source> = BaseEntityChangesTaskTypes<
+    Entity,
+    BaseEntityChangesChangelog<Entity>,
+    Application,
+    Source
+  >,
 > extends BaseApplicationGenerator<Entity, Application, Config, Options, Source, Features, Tasks> {
   recreateInitialChangelog!: boolean;
   private entityChanges!: any[];
@@ -104,7 +109,7 @@ export default abstract class BaseEntityChangesGenerator<
   protected generateIncrementalChanges({
     application,
     entities: paramEntities,
-  }: Pick<Tasks['DefaultTaskParam'], 'application' | 'entities'>): BaseChangelog[] {
+  }: Pick<Tasks['DefaultTaskParam'], 'application' | 'entities'>): BaseEntityChangesChangelog<Entity>[] {
     const recreateInitialChangelog = this.recreateInitialChangelog;
     const { incrementalChangelog } = application;
     const entityNames = paramEntities.filter(e => !e.builtIn).map(e => e.name);
@@ -119,7 +124,7 @@ export default abstract class BaseEntityChangesGenerator<
         .filter(({ entityConfigPath }) => existsSync(entityConfigPath))
         .map(({ entityName, entityConfigPath }) => [
           entityName,
-          { name: entityName, ...JSON.parse(readFileSync(entityConfigPath).toString()) },
+          { name: entityName, ...JSON.parse(readFileSync(entityConfigPath).toString()) } as Entity,
         ]),
     );
 
@@ -129,44 +134,44 @@ export default abstract class BaseEntityChangesGenerator<
       }
     }
 
-    const entities: any[] = Object.values(previousEntitiesByName);
+    const entities = Object.values(previousEntitiesByName);
     loadEntitiesAnnotations(entities);
     loadEntitiesOtherSide(entities);
     addEntitiesOtherRelationships(entities);
 
     // Compare entity changes and create changelogs
     return entityNames.map(entityName => {
-      const newConfig: any = entitiesByName[entityName];
-      const newFields: any[] = (newConfig.fields || []).filter((field: any) => !field.transient);
-      const newRelationships: any[] = newConfig.relationships || [];
+      const newConfig = entitiesByName[entityName];
+      const newFields = (newConfig.fields || []).filter((field: any) => !field.transient);
+      const newRelationships = newConfig.relationships || [];
 
-      const oldConfig: any = previousEntitiesByName[entityName];
+      const oldConfig = previousEntitiesByName[entityName];
 
       if (!oldConfig || recreateInitialChangelog || !incrementalChangelog || !entitiesWithExistingChangelog.includes(entityName)) {
         return {
           ...baseChangelog(),
-          incremental: newConfig.incrementalChangelog,
+          incremental: newConfig.incrementalChangelog!,
           changelogDate: newConfig.changelogDate,
           newEntity: true,
           entity: newConfig,
           entityName,
-        };
+        } satisfies BaseEntityChangesChangelog<Entity>;
       }
 
       this._debug(`Calculating diffs for ${entityName}`);
 
-      const oldFields: any[] = (oldConfig.fields || []).filter((field: any) => !field.transient);
+      const oldFields = (oldConfig.fields || []).filter((field: any) => !field.transient);
       const oldFieldNames: string[] = oldFields.filter(field => !field.id).map(field => field.fieldName);
       const newFieldNames: string[] = newFields.filter(field => !field.id).map(field => field.fieldName);
 
       // Calculate new fields
       const addedFieldNames = newFieldNames.filter(fieldName => !oldFieldNames.includes(fieldName));
-      const addedFields = addedFieldNames.map(fieldName => newFields.find(field => fieldName === field.fieldName));
+      const addedFields = addedFieldNames.map(fieldName => newFields.find(field => fieldName === field.fieldName)!);
       // Calculate removed fields
       const removedFieldNames = oldFieldNames.filter(fieldName => !newFieldNames.includes(fieldName));
-      const removedFields = removedFieldNames.map(fieldName => oldFields.find(field => fieldName === field.fieldName));
+      const removedFields = removedFieldNames.map(fieldName => oldFields.find(field => fieldName === field.fieldName)!);
 
-      const oldRelationships: any[] = oldConfig.relationships || [];
+      const oldRelationships = oldConfig.relationships || [];
 
       // Calculate changed/newly added relationships
       const addedRelationships = newRelationships.filter(
@@ -208,11 +213,7 @@ export default abstract class BaseEntityChangesGenerator<
         .filter(oldField => !removedFieldNames.includes(oldField.fieldName))
         .filter(
           // field was not removed, so check its default value
-          oldField =>
-            this.doDefaultValuesDiffer(
-              oldField,
-              newFields.find(newField => newField.fieldName === oldField.fieldName),
-            ),
+          oldField => this.doDefaultValuesDiffer(oldField, newFields.find(newField => newField.fieldName === oldField.fieldName)!),
         );
 
       // find the new fields that have not been added newly anyway or otherwise where the old field had a different default value
@@ -220,11 +221,7 @@ export default abstract class BaseEntityChangesGenerator<
         .filter(newField => !addedFieldNames.includes(newField.fieldName))
         .filter(
           // field was not added newly, so check its default value
-          newField =>
-            this.doDefaultValuesDiffer(
-              oldFields.find(oldField => oldField.fieldName === newField.fieldName),
-              newField,
-            ),
+          newField => this.doDefaultValuesDiffer(oldFields.find(oldField => oldField.fieldName === newField.fieldName)!, newField),
         );
 
       return {
@@ -241,7 +238,7 @@ export default abstract class BaseEntityChangesGenerator<
         relationshipsToRecreateForeignKeysOnly,
         removedDefaultValueFields,
         addedDefaultValueFields,
-      };
+      } satisfies BaseEntityChangesChangelog<Entity>;
     });
   }
 
