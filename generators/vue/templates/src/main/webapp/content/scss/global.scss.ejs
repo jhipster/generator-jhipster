@@ -17,6 +17,17 @@
  limitations under the License.
 -%>
 @import 'bootstrap-variables';
+@import 'bootstrap/scss/functions';
+<%_ if (!clientThemeNone) { _%>
+@import 'bootswatch/dist/<%= clientTheme %>/variables';
+<%_ } _%>
+@import 'bootstrap/scss/variables';
+// Import Bootstrap source files from node_modules
+@import 'bootstrap/scss/bootstrap';
+<%_ if (!clientThemeNone) { _%>
+@import 'bootswatch/dist/<%= clientTheme %>/bootswatch';
+<%_ } _%>
+@import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 
 /* ==============================================================
 Bootstrap tweaks
@@ -30,35 +41,34 @@ h4 {
   font-weight: 300;
 }
 
-body {
-    margin: 0;
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    text-align: left;
 <%_ if (clientThemeNone) { _%>
-    color: #212529;
-    background: #e4e5e6;
-    background-color: #fff;
-<%_ } _%>
-}
-
+/* Increase contrast of links to get 100% on Lighthouse Accessibility Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
 a {
   color: #533f03;
   font-weight: bold;
 }
 
+/* override hover color for dropdown-item forced by bootstrap to all a:not([href]):not([tabindex]) elements in _reboot.scss */
+a:not([href]):not([tabindex]):hover.dropdown-item {
+  color: $dropdown-link-hover-color;
+}
+
+/* override .dropdown-item.active background-color on hover */
+.dropdown-item.active:hover {
+  background-color: mix($dropdown-link-hover-bg, $dropdown-link-active-bg, 50%);
+}
+<%_ } _%>
+
 a:hover {
+  <%_ if (clientThemeNone) { _%>
   color: #533f03;
+  <%_ } _%>
   /* make sure browsers use the pointer cursor for anchors, even with no href */
   cursor: pointer;
 }
-.dropdown-item:hover,
-.dropdown-item:focus {
-  color: white;
-  text-decoration: none;
-  background-color: #373a3c;
+
+.dropdown-item:hover {
+  color: $dropdown-link-hover-color;
 }
 
 /* ==========================================================================
@@ -72,53 +82,12 @@ Browser Upgrade Prompt
 }
 
 /* ==========================================================================
-Main page styles
-========================================================================== */
-
-.hipster.img-fluid {
-    display: inline-block;
-    width: 347px;
-    height: 497px;
-    background: url("/content/images/<%=hipster%>.svg") no-repeat center top;
-    background-size: contain;
-}
-
-/* wait autoprefixer update to allow simple generation of high pixel density media query */
-@media only screen and (-webkit-min-device-pixel-ratio: 2),
-only screen and (min--moz-device-pixel-ratio: 2),
-only screen and (-o-min-device-pixel-ratio: 2/1),
-only screen and (min-device-pixel-ratio: 2),
-only screen and (min-resolution: 192dpi),
-only screen and (min-resolution: 2dppx) {
-    .hipster {
-        background: url("/content/images/<%=hipster%>.svg") no-repeat center top;
-        background-size: contain;
-    }
-}
-
-/* ==========================================================================
 Generic styles
 ========================================================================== */
-
-/* Error highlight on input fields */
-.valid[required],
-.valid.required {
-  border-left: 5px solid green;
-}
-
-.invalid:not(form) {
-  border-left: 5px solid red;
-}
-
-/* other generic styles */
-
 .jh-card {
-    padding: 1.5%;
-    margin-top: 20px;
-    border: none;
-<%_ if (!clientThemeNone) { _%>
-    background: inherit;
-<%_ } _%>
+  padding: 1.5%;
+  margin-top: 20px;
+  border: none;
 }
 
 .error {
@@ -143,6 +112,12 @@ Generic styles
   word-break: break-all;
 }
 
+<%_ if (clientThemeNone || clientTheme !== 'quartz') { _%>
+.form-control {
+  background-color: #fff;
+}
+<%_ } _%>
+
 .readonly {
   background-color: #eee;
   opacity: 1;
@@ -153,7 +128,7 @@ Generic styles
 }
 
 .hand,
-[jhisortby] {
+[<%= jhiPrefix.toLowerCase() %>sortby] {
   cursor: pointer;
 }
 
@@ -175,7 +150,7 @@ Custom alerts for notification
       font-size: 10px;
     }
   }
-  .toast {
+  .jhi-toast {
     position: fixed;
     width: 100%;
     &.left {
@@ -194,44 +169,23 @@ Custom alerts for notification
 }
 
 @media screen and (min-width: 480px) {
-  .alerts .toast {
+  .alerts .jhi-toast {
     width: 50%;
   }
 }
 
 /* ==========================================================================
-entity tables helpers
+entity list page css
 ========================================================================== */
 
-/* Remove Bootstrap padding from the element
-http://stackoverflow.com/questions/19562903/remove-padding-from-columns-in-bootstrap-3 */
-@mixin no-padding($side) {
-  @if $side == 'all' {
-    .no-padding {
-      padding: 0 !important;
-    }
-  } @else {
-    .no-padding-#{$side} {
-      padding-#{$side}: 0 !important;
-    }
-  }
-}
-@include no-padding('left');
-@include no-padding('right');
-@include no-padding('top');
-@include no-padding('bottom');
-@include no-padding('all');
-
-/* bootstrap 3 input-group 100% width
-http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
-.width-min {
-  width: 1% !important;
+.table-entities thead th .d-flex > * {
+  margin: auto 0;
 }
 
 /* ==========================================================================
 entity detail page css
 ========================================================================== */
-.row.jh-entity-details {
+.row-md.jh-entity-details {
   display: grid;
   grid-template-columns: auto 1fr;
   column-gap: 10px;
@@ -239,7 +193,7 @@ entity detail page css
 }
 
 @media screen and (min-width: 768px) {
-  .row.jh-entity-details > {
+  .row-md.jh-entity-details > {
     dt {
       float: left;
       overflow: hidden;
@@ -263,18 +217,8 @@ ui bootstrap tweaks
 .nav,
 .pagination,
 .carousel,
-.card-title a {
+.panel-title a {
   cursor: pointer;
-}
-
-.datetime-picker-dropdown > li.date-picker-menu div > table .btn-secondary,
-.uib-datepicker-popup > li > div.uib-datepicker > table .btn-secondary {
-  border: 0;
-}
-
-.datetime-picker-dropdown > li.date-picker-menu div > table:focus,
-.uib-datepicker-popup > li > div.uib-datepicker > table:focus {
-  outline: none;
 }
 
 .thread-dump-modal-lock {
@@ -284,8 +228,19 @@ ui bootstrap tweaks
   white-space: nowrap;
 }
 
-.svg-inline--fa {
-  padding: 0 5px;
+.dropdown-menu {
+  padding-left: 0;
+}
+
+// Add space between icon and text in dropdowns
+.dropdown-menu svg:first-child,
+.btn svg:first-child,
+.nav-item span svg:first-child {
+  margin-right: 0.4em;
+}
+
+th svg:last-child {
+  margin-left: 0.4em;
 }
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */
