@@ -1,6 +1,18 @@
 import sortKeys from 'sort-keys';
 
-const appendTitle = (title: string, config: string, value: boolean | string | number) => {
+export type ValueType = string | boolean | number | undefined | (string | boolean)[];
+
+export type MatrixSample = Record<string, ValueType>;
+
+export type Matrix = Record<string, MatrixSample>;
+
+export type MatrixInput = Record<string, ValueType[]>;
+
+type AdditionalValue = { value: ValueType; additional?: Record<string, ValueType> };
+
+export type MatrixAdditionalInput = Record<string, (AdditionalValue | ValueType)[]>;
+
+const appendTitle = (title: string, config: string, value: ValueType): string => {
   if (Array.isArray(value)) value = value[0];
   if (value === undefined) return title;
   const newTitle = typeof value === 'string' && value !== 'no' ? value : `${config}(${value})`;
@@ -18,18 +30,18 @@ const appendTitle = (title: string, config: string, value: boolean | string | nu
  * //  'a(false)-b(false)': { a: false, b: false },
  * // }
  */
-export const fromMatrix = (configMatrix: Record<string, any[]>) => {
+export const fromMatrix = (configMatrix: MatrixInput): Matrix => {
   const configEntries = Object.entries(configMatrix);
   const samples = configEntries.reduce(
-    (previousValue: any, currentValue: [string, any]) => {
+    (previousValue, currentValue) => {
       const [config, configValues] = currentValue;
       return previousValue
         .map(([previousName, previousConfig]) =>
-          configValues.map(value => {
+          configValues.map((value: ValueType) => {
             return [
-              appendTitle(previousName, config, value),
+              appendTitle(previousName as string, config, value),
               {
-                ...previousConfig,
+                ...(previousConfig as Record<string, ValueType>),
                 [config]: value,
               },
             ];
@@ -37,34 +49,36 @@ export const fromMatrix = (configMatrix: Record<string, any[]>) => {
         )
         .flat();
     },
-    [['', {}]],
+    [['', {} as Record<string, ValueType>]],
   );
   return Object.fromEntries(samples);
 };
 
-const applyExtendedMatrix = (matrixEntries, configMatrix) => {
+const applyExtendedMatrix = (matrixEntries: [string, MatrixSample][], configMatrix: MatrixAdditionalInput): [string, MatrixSample][] => {
   const configEntries = Object.entries(configMatrix);
   const additionalMatrixTemp = configEntries.reduce(
-    (currentArray, [configName, configValues]: [string, any]) => {
-      const currentConfigObjects = configValues.map(configValue => ({ [configName]: configValue }));
+    (currentArray, [configName, configValues]) => {
+      const currentConfigObjects: Record<string, ValueType | AdditionalValue>[] = configValues.map(configValue => ({
+        [configName]: configValue,
+      }));
       return currentArray
         .map(existingConfig => currentConfigObjects.map(currentObject => ({ ...existingConfig, ...currentObject })))
         .flat();
     },
-    [{}],
+    [{} as Record<string, ValueType | AdditionalValue>],
   );
-  const additionalMatrix: any = [];
+  const additionalMatrix: Record<string, ValueType | AdditionalValue>[] = [];
   while (additionalMatrixTemp.length > 0) {
-    additionalMatrix.push(additionalMatrixTemp.shift());
+    additionalMatrix.push(additionalMatrixTemp.shift()!);
     if (additionalMatrixTemp.length > 0) {
-      additionalMatrix.push(additionalMatrixTemp.pop());
+      additionalMatrix.push(additionalMatrixTemp.pop()!);
     }
   }
   matrixEntries.forEach((entry, matrixIndex) => {
     let matrixName = entry[0];
     const matrixConfig = entry[1];
     let newValues = additionalMatrix[matrixIndex % additionalMatrix.length];
-    Object.entries(newValues).forEach(([configName, configValue]: [string, any]) => {
+    Object.entries(newValues).forEach(([configName, configValue]) => {
       if (typeof configValue === 'object' && !Array.isArray(configValue)) {
         const additionalValues = configValue.additional;
         configValue = configValue.value;
@@ -87,9 +101,14 @@ const applyExtendedMatrix = (matrixEntries, configMatrix) => {
  * //  'initialMatrix(false)-toBeMerged(false)': { initialMatrix: false, toBeMerged: false },
  * // }
  */
-export const extendMatrix = (matrix, configMatrix) => Object.fromEntries(applyExtendedMatrix(Object.entries(matrix), configMatrix));
+export const extendMatrix = (matrix: Matrix, configMatrix: MatrixAdditionalInput): Matrix =>
+  Object.fromEntries(applyExtendedMatrix(Object.entries(matrix), configMatrix));
 
-export const extendFilteredMatrix = (matrix, filter, extendedConfig) => {
+export const extendFilteredMatrix = (
+  matrix: Matrix,
+  filter: (sample: MatrixSample) => boolean,
+  extendedConfig: MatrixAdditionalInput,
+): Matrix => {
   const matrixEntries = Object.entries(matrix);
   const filteredEntries = matrixEntries.filter(([_name, sample]) => filter(sample));
   applyExtendedMatrix(filteredEntries, extendedConfig);
