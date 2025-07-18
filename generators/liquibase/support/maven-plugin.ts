@@ -11,6 +11,19 @@ export default function mavenPluginContent({
   password,
   hibernateDialect,
   defaultSchemaName = '',
+}: {
+  backendTypeSpringBoot: boolean;
+  reactive: boolean;
+  packageName: string;
+  srcMainResources: string;
+  authenticationTypeOauth2: boolean;
+  devDatabaseTypeH2Any: boolean;
+  driver: string;
+  url: string;
+  username: string;
+  password: string;
+  hibernateDialect: string;
+  defaultSchemaName?: string;
 }): string {
   // prettier-ignore
   return `

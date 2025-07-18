@@ -38,10 +38,10 @@ export const createMultiStepTransform = () => {
     },
     async function () {
       for (const templateFile of templateFiles) {
-        const file = templateFile.file;
-        file.path = templateFile.basePath;
+        const file = templateFile.file!;
+        file.path = templateFile.basePath!;
         file.contents = Buffer.from(templateFile.render().concat('\n'));
-        this.push(templateFile.file);
+        this.push(templateFile.file!);
       }
     },
   ) as any;

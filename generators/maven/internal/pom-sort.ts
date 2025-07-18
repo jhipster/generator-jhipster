@@ -20,7 +20,21 @@ import sortKeys from 'sort-keys';
 
 import type { MavenDependency, MavenProfile } from '../types.js';
 
-export const formatPomFirstLevel = content =>
+export type MavenProjectLike = {
+  properties?: Record<string, any>;
+  dependencies?: { dependency: MavenDependency[] };
+  dependencyManagement?: { dependencies: { dependency: MavenDependency[] } };
+  build?: {
+    plugins?: { plugin: MavenDependency[] };
+    pluginManagement?: { plugins: { plugin: MavenDependency[] } };
+  };
+};
+
+export type MavenProject = MavenProjectLike & {
+  profiles?: { profile: (MavenProfile & MavenProjectLike)[] };
+}
+
+export const formatPomFirstLevel = (content: string) =>
   content.replace(
     /(\n {4}<(?:groupId|distributionManagement|repositories|pluginRepositories|properties|dependencyManagement|dependencies|build|profiles)>)/g,
     '\n$1',
@@ -73,7 +87,7 @@ const groupIdOrder = [
   'org.springdoc',
 ];
 
-const sortSection = section => {
+const sortSection = <S extends Record<string, any>>(section: S): S => {
   return Object.fromEntries(
     Object.entries(section).sort(([key1, value1], [key2, value2]) => {
       if (typeof value1 === typeof value2) key1.localeCompare(key2);
@@ -81,14 +95,14 @@ const sortSection = section => {
       if (typeof value2 === 'string') return 1;
       return 0;
     }),
-  );
+  ) as S;
 };
 
-const isComment = name => name.startsWith('#');
+const isComment = (name: string): boolean => name.startsWith('#');
 
-const toMaxInt = nr => (nr === -1 ? Number.MAX_SAFE_INTEGER : nr);
+const toMaxInt = (nr: number): number => (nr === -1 ? Number.MAX_SAFE_INTEGER : nr);
 
-const sortWithTemplate = (template: string[], a: string, b: string) => {
+const sortWithTemplate = (template: string[], a: string, b: string): number => {
   if (isComment(a)) return -1;
   if (isComment(b)) return 1;
   const indexOfA = toMaxInt(template.indexOf(a));
@@ -101,7 +115,7 @@ const sortWithTemplate = (template: string[], a: string, b: string) => {
 
 const comparator = (order: string[]) => (a: string, b: string) => sortWithTemplate(order, a, b);
 
-const sortProperties = properties => sortKeys(properties, { compare: comparator(propertiesOrder) });
+const sortProperties = (properties: Record<string, any>) => sortKeys(properties, { compare: comparator(propertiesOrder) });
 
 const sortArtifacts = (artifacts: MavenDependency[]) =>
   artifacts.sort((a: MavenDependency, b: MavenDependency) => {
@@ -126,7 +140,7 @@ const sortArtifacts = (artifacts: MavenDependency[]) =>
 
 const sortProfiles = (profiles: MavenProfile[]) => profiles.sort((a, b) => a.id?.localeCompare(b.id) ?? 1);
 
-const sortProjectLike = (projectLike: any, options: { sortPlugins?: boolean } = {}): any => {
+const sortProjectLike = <P extends MavenProjectLike>(projectLike: P, options: { sortPlugins?: boolean } = {}): P => {
   const { sortPlugins = true } = options;
   projectLike = sortKeys(projectLike, { compare: comparator(rootAndProfileOrder) });
   if (projectLike.properties) {
@@ -151,10 +165,10 @@ const sortProjectLike = (projectLike: any, options: { sortPlugins?: boolean } = 
   return projectLike;
 };
 
-export const sortPomProject = (project: any): any => {
+export const sortPomProject = <const T extends MavenProject>(project: T): T => {
   project = sortProjectLike(project);
   if (Array.isArray(project.profiles?.profile)) {
-    project.profiles.profile = sortProfiles(project.profiles.profile.map(profile => sortProjectLike(profile, { sortPlugins: false })));
+    project.profiles.profile = sortProfiles(project.profiles!.profile!.map(profile => sortProjectLike(profile, { sortPlugins: false })));
   } else if (project.profiles?.profile) {
     project.profiles.profile = sortProjectLike(project.profiles.profile, { sortPlugins: false });
   }

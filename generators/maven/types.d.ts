@@ -39,6 +39,19 @@ export type MavenRepository = {
   inProfile?: string;
 };
 
+export type MavenPomRepository = {
+  id: string;
+  name?: string;
+  url: string;
+  releases?: {
+    enabled?: boolean;
+  };
+  snapshots?: {
+    enabled?: boolean;
+  };
+  inProfile?: string;
+};
+
 export type MavenDependency = MavenArtifact & {
   optional?: boolean;
   additionalContent?: string;

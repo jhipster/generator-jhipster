@@ -147,7 +147,7 @@ export function prepareServerEntity(entity: ServerEntity, application: CommonApp
   });
 }
 
-export default function prepareEntity(entityWithConfig: CommonEntity, generator, application: CommonApplication) {
+export default function prepareEntity(entityWithConfig: CommonEntity, generator: CoreGenerator, application: CommonApplication) {
   const { applicationTypeMicroservice, microfrontend } = application;
 
   const entityName = upperFirst(entityWithConfig.name);

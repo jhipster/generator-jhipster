@@ -18,6 +18,7 @@
  */
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 import type { GetWebappTranslationCallback } from '../../client/translation.js';
 
 const TRANSLATE_IMPORT_1 = /import { ?[T|t]ranslate(?:, ?[T|t]ranslate)? ?} from 'react-jhipster';?/.source; // Translate imports
@@ -61,7 +62,7 @@ const replaceTranslationKeysWithText = (
       interpolate = interpolateMatch?.groups?.interpolate;
     }
 
-    let data;
+    let data: any;
     if (interpolate) {
       const interpolateMatches = interpolate.matchAll(/(?<field>[^{\s:,}]+)(?::\s*(?<value>[^,}]+))?/g);
       data = {};
@@ -121,7 +122,7 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
   };
 
 const minimatch = new Minimatch('**/*.tsx');
-export const isTranslatedReactFile = file => minimatch.match(file.path);
+export const isTranslatedReactFile = (file: MemFsEditorFile) => minimatch.match(file.path);
 
 const translateReactFilesTransform = (getWebappTranslation: GetWebappTranslationCallback) => {
   const translate = createTranslationReplacer(getWebappTranslation);

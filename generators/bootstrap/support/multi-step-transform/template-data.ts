@@ -1,37 +1,39 @@
+import type TemplateFile from './template-file.ts';
+
 export default class TemplateData {
-  private _templateFile: any;
+  private _templateFile: TemplateFile;
   private _defaultData: { fragment?: any; section?: string };
-  private _sections: any;
+  private _sections: Record<string, number>;
   private _defaultFragment: any;
   private last: any;
 
-  constructor(templateFile, defaultData = {}) {
+  constructor(templateFile: TemplateFile, defaultData = {}) {
     this._templateFile = templateFile;
     this._defaultData = defaultData;
     this._sections = {};
     this._defaultFragment = {};
   }
 
-  registerSections(sections) {
+  registerSections(sections: Record<string, number>) {
     this._sections = sections;
     this._defaultFragment = Object.fromEntries(Object.keys(this._sections).map(section => [section, false]));
     Object.keys(this._sections).forEach(section => {
-      this[section] = (fragmentData, suffix) => this.renderSection(section, fragmentData, suffix);
+      (this as any)[section] = (fragmentData: any, suffix?: string) => this.renderSection(section, fragmentData, suffix);
     });
   }
 
-  renderSection(section, fragmentData, suffix) {
+  renderSection(section: string, fragmentData: any, suffix?: string) {
     if (typeof fragmentData === 'string') {
       suffix = fragmentData;
       fragmentData = {};
     }
-    if (!this[`_${section}`]) {
-      this[`_${section}`] = this.render(
+    if (!(this as any)[`_${section}`]) {
+      (this as any)[`_${section}`] = this.render(
         { ...fragmentData, fragment: { [section]: true }, section, sections: Object.keys(this._sections) },
         suffix,
       );
     }
-    return this[`_${section}`];
+    return (this as any)[`_${section}`];
   }
 
   /**

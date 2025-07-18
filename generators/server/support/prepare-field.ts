@@ -26,6 +26,7 @@ import type { Entity as ServerEntity, Field as ServerField } from '../types.d.ts
 import type { Field as LiquibaseField } from '../../liquibase/types.d.ts';
 import type { Field as SpringBootField } from '../../spring-boot/types.d.ts';
 import type { Field as SpringDataRelationalField } from '../../spring-data-relational/types.d.ts';
+import type CoreGenerator from '../../base-core/generator.ts';
 import { getUXConstraintName } from './database.js';
 import { getJavaValueGeneratorForType } from './templates/field-values.js';
 
@@ -40,7 +41,7 @@ const { INTEGER, LONG, UUID } = CommonDBTypes;
 export default function prepareField(
   entityWithConfig: ServerEntity,
   field: ServerField & LiquibaseField & SpringBootField & SpringDataRelationalField,
-  generator,
+  generator: CoreGenerator,
 ) {
   if (field.mapstructExpression) {
     assert.equal(

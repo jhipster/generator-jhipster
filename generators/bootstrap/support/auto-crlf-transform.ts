@@ -31,7 +31,7 @@ import { CRLF, normalizeLineEndings } from '../../../lib/utils/index.js';
  */
 export function detectCrLf(filePath: string): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
-    let isCrlf;
+    let isCrlf = false;
     const rs = createReadStream(filePath, { encoding: 'utf8' });
     rs.on('data', function (chunk) {
       const n = chunk.indexOf('\n');

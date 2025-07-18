@@ -20,7 +20,7 @@ import assert from 'node:assert';
 
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.js';
 import type { FieldType } from '../../../lib/jhipster/field-types.js';
-import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/types.js';
+import type { Relationship as BaseApplicationRelationship, PrimaryKey, RelationshipWithEntity } from '../../base-application/types.js';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../../client/types.js';
 import { normalizePathEnd } from '../../../lib/utils/path.ts';
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
@@ -34,9 +34,7 @@ const { ANGULAR, VUE } = clientFrameworkTypes;
  * @param {Array|Object} relationships - array of relationships
  * @returns {Array|Object} filtered relationships
  */
-export const filterRelevantRelationships = (
-  relationships: RelationshipWithEntity<ClientRelationship, ClientEntity>[],
-): RelationshipWithEntity<ClientRelationship, ClientEntity>[] =>
+export const filterRelevantRelationships = <const R extends BaseApplicationRelationship>(relationships: R[]): R[] =>
   relationships.filter(rel => rel.persistableRelationship || rel.relationshipEagerLoad);
 
 /**
@@ -50,8 +48,8 @@ export const filterRelevantRelationships = (
  */
 export const generateEntityClientImports = (
   relationships: RelationshipWithEntity<ClientRelationship, ClientEntity>[],
-  dto?,
-  clientFramework?,
+  _dto?: string,
+  clientFramework?: string,
 ) => {
   const typeImports = new Map();
 
@@ -83,7 +81,7 @@ export const generateEntityClientImports = (
  */
 export const generateEntityClientEnumImports = (fields: ClientField[], clientFramework: string) => {
   const typeImports = new Map();
-  const uniqueEnums = {};
+  const uniqueEnums: Record<string, string> = {};
   for (const field of fields) {
     const { enumFileName, fieldType } = field;
     if (field.fieldIsEnum && (!uniqueEnums[fieldType] || (uniqueEnums[fieldType] && field.fieldValues?.length !== 0))) {

@@ -38,7 +38,7 @@ const tomlItemToString = (item: Record<string, string | undefined>) =>
 
 const gradleNameToReference = (name: string) => name.replaceAll('-', '.');
 
-const scopeSortOrder = {
+const scopeSortOrder: Record<string, number> = {
   'implementation platform': 1,
   implementation: 2,
   compileOnly: 3,

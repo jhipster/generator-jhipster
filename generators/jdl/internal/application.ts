@@ -42,7 +42,7 @@ export const customizeForMicroservices = (applicationsWithEntities: Record<strin
     gateway.entities
       .map(entity => entity.microserviceName)
       .filter(Boolean)
-      .forEach(basename => !relatedBaseNames.includes(basename) && relatedBaseNames.push(basename));
+      .forEach(basename => !relatedBaseNames.includes(basename!) && relatedBaseNames.push(basename!));
 
     if (relatedBaseNames.length > 0) {
       gateway.config.applications = Object.fromEntries(

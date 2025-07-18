@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { addOtherRelationship } from '../../base-application/support/index.js';
+import { addOtherRelationship } from '../../base-application/support/relationship.js';
 import type { ValidationResult } from '../../base-core/api.d.ts';
 import { databaseTypes } from '../../../lib/jhipster/index.js';
 import type { Entity as BaseApplicationEntity } from '../../base-application/types.js';

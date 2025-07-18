@@ -25,7 +25,7 @@ type DatabaseTypeDependencies = {
   r2dbc: MavenDefinition;
 };
 
-const testcontainerFileForDB = {
+const testcontainerFileForDB: Record<string, string> = {
   mariadb: 'MariadbTestContainer.java',
   mssql: 'MsSqlTestContainer.java',
   mysql: 'MysqlTestContainer.java',

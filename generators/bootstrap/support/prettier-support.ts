@@ -59,7 +59,7 @@ export const createPrettierTransform = async function (
   const globExpression = extensions.includes(',') ? `**/*.{${extensions}}` : `**/*.${extensions}`;
   const minimatch = new Minimatch(globExpression, { dot: true });
 
-  let applyPrettier;
+  let applyPrettier: (data: any) => Promise<{ result?: string; errorMessage?: string }>;
   const pool = skipForks ? undefined : new PrettierPool();
   if (skipForks) {
     const { default: applyPrettierWorker } = await import('./prettier-worker.js');

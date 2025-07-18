@@ -44,7 +44,7 @@ export const defaultXmlBuildOptions: Partial<XmlBuilderOptions> = {
 
 export default class XmlStorage {
   sortFile: boolean;
-  protected readonly saveFile: (string) => void;
+  protected readonly saveFile: (content: string) => void;
   protected readonly loadFile: () => string;
 
   protected readonly parser: XMLParser;
@@ -58,7 +58,7 @@ export default class XmlStorage {
     xmlBuildOptions,
     sortFile,
   }: {
-    saveFile: (string) => void;
+    saveFile: (content: string) => void;
     loadFile: () => string;
     xmlParserOptions?: Partial<X2jOptions>;
     xmlBuildOptions?: Partial<XmlBuilderOptions>;
@@ -86,7 +86,7 @@ export default class XmlStorage {
     this.persist(false);
   }
 
-  public merge(source) {
+  public merge(source: any) {
     assert(typeof source === 'object', 'Storage `merge` method only accept objects');
     this._cachedStore = merge({}, this.store, source);
   }

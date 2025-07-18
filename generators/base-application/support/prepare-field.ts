@@ -54,7 +54,7 @@ const {
 } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 
-const fakeStringTemplateForFieldName = columnName => {
+const fakeStringTemplateForFieldName = (columnName: string) => {
   let fakeTemplate;
   if (columnName === 'first_name') {
     fakeTemplate = 'person.firstName';
@@ -107,7 +107,7 @@ function generateFakeDataForField(
   this: CoreGenerator,
   field: CommonField,
   faker: FakerWithRandexp,
-  changelogDate,
+  changelogDate: any,
   type: 'csv' | 'cypress' | 'json-serializable' | 'ts' = 'csv',
 ) {
   let originalData;
