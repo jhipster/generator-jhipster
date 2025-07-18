@@ -92,4 +92,5 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
 export type Application<E extends Entity> = JavaApplication<E> & {
   liquibaseDefaultSchemaName: string;
+  liquibaseAddH2Properties: boolean;
 };
