@@ -24,19 +24,32 @@ export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
   get [BaseCoreGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async writing() {
-        const generators = Object.entries(this.env.getGeneratorsMeta()).filter(([key]) => key.startsWith('jhipster:'));
+        const generators = Object.entries(this.env.getGeneratorsMeta()).filter(
+          ([key]) => key.startsWith('jhipster:') && !key.startsWith('jhipster:.'),
+        );
+        generators.sort((a, b) => {
+          return a[0].localeCompare(b[0]);
+        });
+
+        const contentToAdd = generators
+          .map(([ns, meta]) => {
+            const parts = ns.split(':').length;
+            if (ns.startsWith('jhipster:base')) {
+              // Base generators cannot be composed with.
+              return [];
+            }
+            const relativePath = this.relativeDir(this.templatePath('../../../generators/'), dirname(meta.resolved!));
+
+            const generateImport = (key: string) =>
+              `${/[:-]/.test(key) ? `'${key}'` : key}: import('./${relativePath}generator.ts').default;`;
+            return parts === 2 ? [generateImport(ns.replace('jhipster:', '')), generateImport(ns)] : [generateImport(ns)];
+          })
+          .flat();
         this.editFile(
-          'generators/types.ts',
+          this.templatePath('../../../generators/types.d.ts'),
           createNeedleCallback({
             needle: 'add-generator-by-namespace',
-            contentToAdd: generators
-              .map(([ns, meta]) => {
-                const parts = ns.split(':').length;
-                const relativePath = this.relativeDir(this.templatePath('../../../generators/'), dirname(meta.resolved!));
-                const generateImport = (key: string) => `'${key}': import('./${relativePath}generator.js').default;`;
-                return parts === 2 ? [generateImport(ns.replace('jhipster:', '')), generateImport(ns)] : [generateImport(ns)];
-              })
-              .flat(),
+            contentToAdd,
           }),
         );
       },

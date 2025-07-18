@@ -1,4 +1,4 @@
-import { dirname, join, resolve } from 'path';
+import { dirname, isAbsolute, join, resolve } from 'path';
 import { existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 
@@ -13,6 +13,9 @@ export const getGeneratorRelativeFolder = (generatorName: string) => {
 export const getGeneratorFolder = (generatorName: string) => resolve(__dirname, '../..', getGeneratorRelativeFolder(generatorName));
 
 const getGenerator = (generatorName: string) => {
+  if (isAbsolute(generatorName)) {
+    return generatorName;
+  }
   const generatorFolder = getGeneratorFolder(generatorName);
   const resolved = resolve(generatorFolder, 'index.ts');
   if (existsSync(resolved)) {
