@@ -2,7 +2,7 @@ import { cpSync, mkdirSync, statSync } from 'fs';
 import { extname, join } from 'path';
 import { jdlEntitiesSamplesFolder } from '../../constants.js';
 
-const isDirectory = dir => {
+const isDirectory = (dir: string) => {
   try {
     return statSync(dir).isDirectory();
   } catch {
@@ -10,7 +10,7 @@ const isDirectory = dir => {
   }
 };
 
-export default function copyJdlEntitySamples(dest, ...entities) {
+export default function copyJdlEntitySamples(dest: string, ...entities: string[]) {
   mkdirSync(dest, { recursive: true });
   for (const entity of entities) {
     const samplePath = join(jdlEntitiesSamplesFolder, entity);

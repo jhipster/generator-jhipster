@@ -21,7 +21,14 @@ import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.js';
-import { AuthenticationTypeMatrix, extendMatrix, fromMatrix, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import {
+  AuthenticationTypeMatrix,
+  type Matrix,
+  extendMatrix,
+  fromMatrix,
+  defaultHelpers as helpers,
+  runResult,
+} from '../../lib/testing/index.js';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
 import { GENERATOR_CYPRESS } from '../generator-list.js';
 import Generator from './generator.js';
@@ -47,7 +54,7 @@ const e2eMatrix = extendMatrix(
   },
 );
 
-const e2eSamples = Object.fromEntries(
+const e2eSamples: Matrix = Object.fromEntries(
   Object.entries(e2eMatrix).map(([name, sample]) => [
     name,
     {
@@ -56,6 +63,7 @@ const e2eSamples = Object.fromEntries(
     },
   ]),
 );
+
 const entities = [
   {
     name: 'EntityA',

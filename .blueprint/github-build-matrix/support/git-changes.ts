@@ -17,7 +17,6 @@ export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
   const hasClientWorkflowChanges = (client: 'angular' | 'react' | 'vue') =>
     hasPatternChanges(`.github/workflows/${client}.yml`) || hasPatternChanges(`test-integration/workflow-samples/${client}.json`);
   return {
-    hasPatternChanges,
     angular: hasPatternChanges('generators/angular/**'),
     angularWorkflow: hasClientWorkflowChanges('angular'),
     base:

@@ -1,5 +1,6 @@
 {
   "include": [
+    ".blueprint",
     "cli/**/*",
     "generators/*/command.ts",
     "generators/*/types.d.ts",
@@ -13,7 +14,7 @@
     ".blueprint/**/*"
   ],
   "exclude": [
-    ".blueprint",
+    ".blueprint/**/*.spec.ts",
     "cli/cli.spec.mts",
     "cli/environment-builder.spec.mts",
     "cli/program.mts",

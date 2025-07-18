@@ -9,12 +9,12 @@ import { GENERATOR_APP, GENERATOR_INFO, GENERATOR_JDL } from '../../generators/g
 import { entitiesByType, generateSample } from './support/index.js';
 
 export default class extends BaseGenerator<Config & { entities: string[] }> {
-  sampleName;
-  global;
-  projectFolder;
-  projectVersion;
-  entitiesSample;
-  sampleYorcFolder;
+  sampleName!: string;
+  global?: boolean;
+  projectFolder!: string;
+  projectVersion?: string;
+  entitiesSample!: string;
+  sampleYorcFolder?: boolean;
 
   get [BaseGenerator.INITIALIZING]() {
     return this.asAnyTaskGroup({
@@ -73,7 +73,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
           transform(() => undefined),
         );
 
-        let generatorOptions = {
+        let generatorOptions: any = {
           projectVersion: this.projectVersion,
           destinationRoot: this.projectFolder,
           ...sample.sample.generatorOptions,

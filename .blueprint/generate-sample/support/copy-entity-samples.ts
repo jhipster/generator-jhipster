@@ -26,7 +26,7 @@ const sql = [
   'MapsIdUserProfileWithDTO',
 ];
 
-export const entitiesByType = {
+export const entitiesByType: Record<string, string[]> = {
   document: [
     'DocumentBankAccount',
     'EmbeddedOperation',
@@ -102,7 +102,7 @@ export const entitiesByType = {
   ],
 };
 
-export default function copyEntitySamples(dest, type) {
+export default function copyEntitySamples(dest: string, type: string) {
   if (type === 'mongodb' || type === 'couchbase') {
     type = 'document';
   }

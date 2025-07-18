@@ -1,7 +1,8 @@
 import { join } from 'node:path';
 
 import BaseGenerator from '../../generators/base-core/index.js';
-import { getGithubIssue, setGithubTaskOutput, prepareSample, appendToSummary } from '../../lib/testing/index.js';
+import { getGithubIssue, setGithubTaskOutput, appendToSummary } from '../../lib/testing/github.js';
+import { prepareSample } from '../../lib/testing/sample-config.js';
 import { promptSamplesFolder } from '../support.mjs';
 import { GENERATOR_APP, GENERATOR_JDL, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
 import { extractDataFromInfo, markdownDetails, type InfoData } from '../../generators/info/support/index.js';
@@ -85,7 +86,7 @@ export default class extends BaseGenerator {
 
         setGithubTaskOutput(ENTITIES_JDL_OUTPUT, this.data.jdlEntitiesDefinitions ? VALID : BLANK);
         setGithubTaskOutput(CONTAINS_SAMPLE, Boolean(this.data.jdlDefinitions || this.data.yoRcContent));
-        setGithubTaskOutput(VALID_OUTPUT, this.data.yoRcValid);
+        setGithubTaskOutput(VALID_OUTPUT, this.data.yoRcValid!);
         this.summaryFooter = generateFooter(this.data);
         setGithubTaskOutput(FOOTER_OUTPUT, this.summaryFooter);
 
