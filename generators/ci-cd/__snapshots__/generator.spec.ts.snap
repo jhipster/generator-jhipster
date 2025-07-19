@@ -99,7 +99,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "clientThemeVariantPrimary": false,
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
-  "cucumberTests": false,
   "customizeTemplatePaths": [],
   "cypressAudit": undefined,
   "cypressCoverage": undefined,
