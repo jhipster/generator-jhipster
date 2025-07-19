@@ -474,8 +474,8 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
 
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
-      prepareFieldsForTemplates({ entity, field }) {
-        prepareFieldForTemplates(entity, field, this);
+      prepareFieldsForTemplates({ application, entity, field }) {
+        prepareFieldForTemplates(application, entity, field, this);
       },
     });
   }

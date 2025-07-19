@@ -33,7 +33,7 @@ describe('generator - base-application - support - prepareField', () => {
 
   const defaultEntity = prepareEntityForTemplates(
     loadRequiredConfigIntoEntity({ changelogDate: formatDateForChangelog(new Date()), name: 'Entity' } as any, defaultConfig as any),
-    defaultGenerator,
+    defaultGenerator as any,
     defaultConfig as any,
   );
 
@@ -41,29 +41,11 @@ describe('generator - base-application - support - prepareField', () => {
     describe('when called', () => {
       let field: any = { fieldName: 'name', fieldType: 'String' };
       beforeEach(() => {
-        field = prepareFieldForTemplates(defaultEntity, field, defaultGenerator as any);
+        field = prepareFieldForTemplates(defaultConfig as any, defaultEntity, field, defaultGenerator as any);
       });
       it('should prepare path and relationshipsPath correctly', () => {
         expect(field.path).to.deep.eq(['name']);
         expect(field.relationshipsPath).to.deep.eq([]);
-      });
-    });
-    describe('with dto != mapstruct and @MapstructExpression', () => {
-      const field = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
-      it('should fail', () => {
-        expect(() => prepareFieldForTemplates(defaultEntity, field as any, defaultGenerator as any)).to.throw(
-          /^@MapstructExpression requires an Entity with mapstruct dto \[Entity.name\].$/,
-        );
-      });
-    });
-    describe('with dto == mapstruct and @MapstructExpression', () => {
-      let field: any = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
-      beforeEach(() => {
-        field = prepareFieldForTemplates({ ...defaultEntity, dto: 'mapstruct' }, field, defaultGenerator as any);
-      });
-      it('should set field as transient and readonly', () => {
-        expect(field.transient).to.be.true;
-        expect(field.readonly).to.be.true;
       });
     });
   });

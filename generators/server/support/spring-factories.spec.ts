@@ -4,9 +4,11 @@ import { addSpringFactory } from './spring-factories.js';
 describe('generator - server - support - spring-factories', () => {
   describe('addSpringFactory', () => {
     it('should add the first property', () => {
+      // @ts-expect-error testing invalid arguments
       expect(addSpringFactory({ key: 'key.prop', value: 'value' })(null)).toBe('key.prop = value');
     });
     it('should add wrap long value', () => {
+      // @ts-expect-error testing invalid arguments
       expect(addSpringFactory({ key: 'key.prop', value: '12345678901234567890123456789012345678901234567890' })(null)).toBe(
         'key.prop = 12345678901234567890123456789012345678901234567890',
       );

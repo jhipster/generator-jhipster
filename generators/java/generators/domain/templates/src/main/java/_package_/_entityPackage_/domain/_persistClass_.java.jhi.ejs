@@ -78,12 +78,12 @@ import java.util.Set;
 <%_ } _%>
 <%_ if (anyFieldIsUUID || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
 import java.util.UUID;
-<%_ }
-Object.keys(uniqueEnums).forEach(function(element) { _%>
-
-import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
-<%_ }); _%>
+<%_ } _%>
+<%_ for (const enumField of uniqueEnums) { _%>
+import <%- entityAbsolutePackage %>.domain.enumeration.<%- enumField.fieldType %>;
+<%_ } _%>
 <%_ if (!updatableEntity) { _%>
+
 import java.util.Objects;
 <%_ } _%>
 

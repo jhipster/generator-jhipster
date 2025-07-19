@@ -237,6 +237,27 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
   }
 
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      postPreparingEntity({ entity, application }) {
+        entity.relationships
+          .filter(relationship => relationship.ignoreOtherSideProperty === undefined)
+          .forEach(relationship => {
+            relationship.ignoreOtherSideProperty =
+              (application as any).databaseType !== 'neo4j' &&
+              !entity.embedded &&
+              !relationship.otherEntity.embedded &&
+              relationship.otherEntity.relationships.length > 0;
+          });
+        entity.relationshipsContainOtherSideIgnore = entity.relationships.some(relationship => relationship.ignoreOtherSideProperty);
+      },
+    });
+  }
+
+  get [JavaApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+  }
+
   get default() {
     return this.asDefaultTaskGroup({
       loadDomains({ application, entities }) {
@@ -254,7 +275,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
               filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && file.path.endsWith('.java'),
               refresh: false,
             },
-            generatedAnnotationTransform(application.packageName),
+            generatedAnnotationTransform(application.packageName!),
           );
         }
       },

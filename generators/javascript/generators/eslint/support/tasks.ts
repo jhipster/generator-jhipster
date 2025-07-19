@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingTask } from '../../../../base-application/support/index.js';
+import { asWritingTask } from '../../../../base-application/support/task-type-inference.ts';
 import { clientRootTemplatesBlock } from '../../../../client/support/files.js';
 import type { Application as JavascriptApplication, Entity as JavascriptEntity } from '../../../types.d.ts';
 

@@ -20,7 +20,7 @@
 /**
  * @private
  */
-const generateDateTimeFormat = (language, index, length) => {
+const generateDateTimeFormat = (language: string, index: number, length: number) => {
   let config = `  '${language}': {\n`;
 
   config += '    short: {\n';

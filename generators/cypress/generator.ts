@@ -18,7 +18,7 @@
  */
 
 import { createFaker } from '../base-application/support/index.ts';
-import { stringHashCode } from '../../lib/utils/index.js';
+import { mutateData, stringHashCode } from '../../lib/utils/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
@@ -95,11 +95,12 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareForTemplates({ application }) {
-        application.cypressDir = (application.cypressDir ?? application.clientTestDir) ? `${application.clientTestDir}cypress/` : 'cypress';
-        application.cypressTemporaryDir =
-          (application.cypressTemporaryDir ?? application.temporaryDir) ? `${application.temporaryDir}cypress/` : '.cypress/';
-        application.cypressBootstrapEntities = application.cypressBootstrapEntities ?? true;
+      prepareForTemplates({ applicationDefaults }) {
+        applicationDefaults({
+          cypressDir: ({ clientTestDir }) => (clientTestDir ? `${clientTestDir}cypress/` : 'cypress/'),
+          cypressTemporaryDir: ({ temporaryDir }) => (temporaryDir ? `${temporaryDir}cypress/` : '.cypress/'),
+          cypressBootstrapEntities: true,
+        });
       },
       npmScripts({ application }) {
         const { devServerPort, devServerPortProxy: devServerPortE2e = devServerPort } = application;
@@ -139,16 +140,19 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
-  get preparingEachEntity() {
+  get postPreparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       prepareForTemplates({ entity }) {
-        this._.defaults(entity, { workaroundEntityCannotBeEmpty: false, workaroundInstantReactiveMariaDB: false });
+        mutateData(entity, {
+          workaroundEntityCannotBeEmpty: false,
+          workaroundInstantReactiveMariaDB: false,
+        });
       },
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
   get writing() {

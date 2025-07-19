@@ -55,6 +55,7 @@ export interface Relationship extends BaseApplicationRelationship, Property {
   propertyDtoJavaType?: string;
   relationshipUpdateBackReference?: boolean;
   relationshipNameCapitalizedPlural?: string;
+  ignoreOtherSideProperty?: boolean;
 }
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends BaseApplicationEntity<F, R> {
@@ -87,6 +88,10 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   restInstance: string;
 
   skipJunitTests?: string;
+
+  /** Import swagger Schema annotation */
+  importApiModelProperty?: boolean;
+  relationshipsContainOtherSideIgnore?: boolean;
 }
 
 export type JavaDependencyVersion = {

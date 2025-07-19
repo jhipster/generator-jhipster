@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Entity as ClientEntity } from '../../client/index.js';
+import type { Entity as ClientEntity } from '../../client/types.js';
 import { mutateData } from '../../../lib/utils/object.ts';
 import { isClientField } from './filter-entities.js';
 import { generateTestEntityId, generateTsTestEntityForFields, stringifyTsEntity } from './template-utils.js';

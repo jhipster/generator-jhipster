@@ -1,8 +1,8 @@
 import properties from 'dot-properties';
 
 export const addSpringFactory =
-  ({ key, value }) =>
-  content => {
+  ({ key, value }: { key: string; value: string }) =>
+  (content: string) => {
     const obj = properties.parse(content ?? '');
     const oldContent = obj[key] as string;
     const factories = (oldContent?.split(',') ?? []).map(val => val.trim());

@@ -2,26 +2,27 @@ import assert from 'assert';
 import path from 'path';
 import debugBuilder from 'debug';
 import ejs from 'ejs';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 
 import TemplateData from './template-data.js';
 
 export default class TemplateFile {
-  file;
+  file?: MemFsEditorFile;
   rootTemplate: boolean;
   basePath?: string;
   parentPath?: string;
   filePath?: string;
 
   private depth: number;
-  private _filename: any;
-  private _extension: any;
+  private _filename: string;
+  private _extension: string;
   private _compiled: ejs.TemplateFunction;
 
   private _fragments: TemplateFile[];
   private _fragmentName: string;
   private _debug: { enabled: boolean } & ((msg: string) => void);
 
-  constructor(filename, extension) {
+  constructor(filename: string, extension: string) {
     this._filename = filename;
     this._extension = extension;
     this._compiled = () => '';
@@ -37,7 +38,7 @@ export default class TemplateFile {
     }
   }
 
-  compile(filePath, contents, options) {
+  compile(filePath: string, contents: string, options: ejs.Options) {
     assert(filePath, 'filePath is required');
     assert(contents, 'contents is required');
     assert(options, 'options is required');
@@ -62,13 +63,13 @@ export default class TemplateFile {
     }
   }
 
-  addFragment(templateFile) {
+  addFragment(templateFile: TemplateFile) {
     assert(templateFile, 'templateFile is required');
 
     this._fragments.push(templateFile);
   }
 
-  renderFragments(data) {
+  renderFragments(data: any) {
     return this._fragments.map(templateFile => templateFile.render(data));
   }
 

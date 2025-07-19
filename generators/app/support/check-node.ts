@@ -20,13 +20,14 @@ import semver from 'semver';
 import chalk from 'chalk';
 
 import { packageJson } from '../../../lib/index.js';
+import type { Logger } from '../../../lib/utils/logger.ts';
 
-const isNodeVersionCompliantWithRequirement = (gatheredFromEnvironment, requiredVersion) =>
+const isNodeVersionCompliantWithRequirement = (gatheredFromEnvironment: string, requiredVersion: string) =>
   !semver.satisfies(gatheredFromEnvironment, requiredVersion);
 
 const getNodeReleaseFromCurrentProcess = () => process.release || {};
 
-const isNodeLTS = release => release.lts;
+const isNodeLTS = (release?: { lts?: string }) => Boolean(release?.lts);
 const getNodeVersionFromCurrentProcess = () => process.version;
 const requiredEngineFromPackageJson = () => packageJson.engines.node;
 
@@ -39,7 +40,7 @@ const requiredEngineFromPackageJson = () => packageJson.engines.node;
  * @param {string} currentNodeVersion - the version of Node installed on the machine (defaulted to the one running the generator)
  */
 const checkNode = (
-  logger,
+  logger: Logger,
   requiredNodeVersion = requiredEngineFromPackageJson(),
   currentNodeVersion = getNodeVersionFromCurrentProcess(),
 ) => {

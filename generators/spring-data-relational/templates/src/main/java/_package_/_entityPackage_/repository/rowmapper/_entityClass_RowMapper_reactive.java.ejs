@@ -38,9 +38,9 @@ import java.util.function.BiFunction;
 import org.springframework.stereotype.Service;
 
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
-<%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
-import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
-<%_ }); _%>
+<%_ for (const enumField of uniqueEnums) { _%>
+import <%- entityAbsolutePackage %>.domain.enumeration.<%- enumField.fieldType %>;
+<%_ } _%>
 <%_ if (packageName !== entityAbsolutePackage) { _%>
 import <%= packageName %>.repository.rowmapper.ColumnConverter;
 <%_ } _%>

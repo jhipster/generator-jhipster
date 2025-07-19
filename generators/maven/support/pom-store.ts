@@ -27,11 +27,12 @@ import type {
   MavenDependency,
   MavenDistributionManagement,
   MavenPlugin,
+  MavenPomRepository,
   MavenProfile,
   MavenProperty,
   MavenRepository,
 } from '../types.js';
-import { formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.js';
+import { type MavenProjectLike, formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.js';
 
 const artifactEquals = (a: MavenArtifact, b: MavenArtifact) => a.groupId === b.groupId && a.artifactId === b.artifactId;
 
@@ -39,7 +40,7 @@ const dependencyEquals = (a: MavenDependency, b: MavenDependency) => artifactEqu
 
 const idEquals = (a: { id: string }, b: { id: string }) => a.id === b.id;
 
-const ensureChildIsArray = (node, childPath) => {
+const ensureChildIsArray = (node: Record<string, any>, childPath: string): any[] => {
   let dependencyArray = get(node, childPath);
   if (!dependencyArray) {
     dependencyArray = [];
@@ -70,12 +71,12 @@ function appendOrGet<T>(array: T[], item: T, equals: (a: T, b: T) => boolean) {
   return item;
 }
 
-const ensureProfile = (project, profileId: string) => {
+const ensureProfile = (project: Record<string, any>, profileId: string) => {
   const profileArray = ensureChildIsArray(project, 'profiles.profile');
   return appendOrGet(profileArray, { id: profileId }, idEquals);
 };
 
-const ensureChildPath = (node: any, childPath) => {
+const ensureChildPath = (node: Record<string, any>, childPath: string): Record<string, any> => {
   let child = get(node, childPath);
   if (child) return child;
   child = {};
@@ -83,7 +84,7 @@ const ensureChildPath = (node: any, childPath) => {
   return child;
 };
 
-const ensureChild = (current: any, ...childPath) => {
+const ensureChild = (current: Record<string, any>, ...childPath: (string | ((node: any) => Record<string, any>))[]) => {
   for (const node of childPath) {
     if (typeof node === 'string') {
       current = ensureChildPath(current, node);
@@ -119,7 +120,7 @@ const reorderDependency = <Dependency extends MavenDependency = MavenDependency>
 }: Dependency): Dependency => ({ inProfile, groupId, artifactId, version, type, scope, classifier, ...rest }) as Dependency;
 
 export default class PomStorage extends XmlStorage {
-  constructor({ saveFile, loadFile, sortFile }: { saveFile: (string) => void; loadFile: () => string; sortFile?: boolean }) {
+  constructor({ saveFile, loadFile, sortFile }: { saveFile: (content: string) => void; loadFile: () => string; sortFile?: boolean }) {
     super({ saveFile, loadFile, sortFile });
   }
 
@@ -197,7 +198,7 @@ export default class PomStorage extends XmlStorage {
       },
       'configuration.annotationProcessorPaths',
     );
-    const paths = ensureChildIsArray(annotationProcessorPaths, 'path');
+    const paths = ensureChildIsArray(annotationProcessorPaths!, 'path');
     appendOrReplace(paths, reorderArtifact(artifact), artifactEquals);
     this.persist();
   }
@@ -210,28 +211,28 @@ export default class PomStorage extends XmlStorage {
     return node;
   }
 
-  protected addDependencyAt(node, { additionalContent, ...dependency }: MavenDependency) {
+  protected addDependencyAt(node: MavenProjectLike, { additionalContent, ...dependency }: MavenDependency) {
     const dependencyArray = ensureChildIsArray(node, 'dependencies.dependency');
     appendOrReplace(dependencyArray, this.mergeContent(reorderDependency(dependency), additionalContent), dependencyEquals);
   }
 
-  protected addPluginAt(node, { additionalContent, ...artifact }: MavenPlugin) {
+  protected addPluginAt(node: MavenProjectLike, { additionalContent, ...artifact }: MavenPlugin) {
     const artifactArray = ensureChildIsArray(node, 'plugins.plugin');
     appendOrReplace(artifactArray, this.mergeContent(reorderArtifact(artifact), additionalContent), artifactEquals);
   }
 
-  protected addRepositoryAt(node, { releasesEnabled, snapshotsEnabled, ...repository }: MavenRepository): void {
+  protected addRepositoryAt(node: MavenProjectLike, { releasesEnabled, snapshotsEnabled, ...repository }: MavenRepository): void {
     const releases = releasesEnabled === undefined ? undefined : { enabled: releasesEnabled };
     const snapshots = snapshotsEnabled === undefined ? undefined : { enabled: snapshotsEnabled };
     const repositoryArray = ensureChildIsArray(node, 'repositories.repository');
-    appendOrReplace(repositoryArray, { ...repository, releases, snapshots }, idEquals);
+    appendOrReplace<MavenPomRepository>(repositoryArray, { ...repository, releases, snapshots }, idEquals);
   }
 
-  protected addPluginRepositoryAt(node, { releasesEnabled, snapshotsEnabled, ...repository }: MavenRepository): void {
+  protected addPluginRepositoryAt(node: MavenProjectLike, { releasesEnabled, snapshotsEnabled, ...repository }: MavenRepository): void {
     const releases = releasesEnabled === undefined ? undefined : { enabled: releasesEnabled };
     const snapshots = snapshotsEnabled === undefined ? undefined : { enabled: snapshotsEnabled };
     const repositoryArray = ensureChildIsArray(node, 'pluginRepositories.pluginRepository');
-    appendOrReplace(repositoryArray, { ...repository, releases, snapshots }, idEquals);
+    appendOrReplace<MavenPomRepository>(repositoryArray, { ...repository, releases, snapshots }, idEquals);
   }
 
   protected sort() {

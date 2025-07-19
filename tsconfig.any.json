@@ -2,6 +2,8 @@
   "include": [
     ".blueprint",
     "cli/**/*",
+    "generators/*/internal",
+    "generators/*/support",
     "generators/*/command.ts",
     "generators/*/types.d.ts",
     "generators/base-core",
@@ -22,6 +24,9 @@
     "generators/base-core/internal/jhipster7-context.ts",
     "generators/base-application/support/prepare*.ts",
     "generators/base-application/support/index.ts",
+    "generators/base-workspaces/internal",
+    "generators/base-workspaces/support",
+    "generators/server/support",
     "lib/command/*.spec.ts",
     "lib/jdl/*.*",
     "lib/jdl/core/__test-support__",

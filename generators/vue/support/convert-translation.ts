@@ -19,11 +19,11 @@
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 
-export function convertVueTranslations(body) {
+export function convertVueTranslations(body: string) {
   return body.replace(/\{\{\s*(\w+)\s*\}\}/g, '{ $1 }').replace(/([@|||$])/g, "{'$1'}");
 }
 
-const convertTranslationsSupport = ({ clientSrcDir }) => {
+const convertTranslationsSupport = ({ clientSrcDir }: { clientSrcDir: string }) => {
   const minimatch = new Minimatch(`**/${clientSrcDir}i18n/**/*.json`);
   const isTranslationFile = (file: { path: string }) => minimatch.match(file.path);
   const transform = passthrough(file => {

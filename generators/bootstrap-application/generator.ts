@@ -169,7 +169,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
       prepareEntityDerivedProperties({ entity }) {
         preparePostEntityCommonDerivedProperties(entity);
         if (!entity.skipServer) {
-          preparePostEntityServerDerivedProperties(entity);
+          preparePostEntityServerDerivedProperties(entity as any);
         }
       },
     });

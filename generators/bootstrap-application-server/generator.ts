@@ -34,6 +34,7 @@ import {
 import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } from '../base-application/support/index.js';
 import {
   addEntitiesOtherRelationships,
+  getDatabaseTypeData,
   getPrimaryKeyValue,
   hibernateSnakeCase,
   loadRequiredConfigDerivedProperties,
@@ -46,6 +47,7 @@ import { getMainClassName } from '../java/support/index.js';
 import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
 import serverCommand from '../server/command.js';
 import { mutateData, normalizePathEnd } from '../../lib/utils/index.js';
+import type { Application as SpringBootApplication } from '../spring-boot/types.js';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator<ServerEntity, ServerApplication<ServerEntity>> {
   async beforeQueue() {
@@ -155,6 +157,23 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
           jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
           imperativeOrReactive: ({ reactive }) => (reactive ? 'reactive' : 'imperative'),
           authenticationUsesCsrf: ({ authenticationType }) => ['oauth2', 'session'].includes(authenticationType!),
+        });
+      },
+      prepareSpringData({ application }) {
+        // TODO move to spring-data:bootstrap generator
+        mutateData(application as SpringBootApplication, {
+          springDataDescription: ({ databaseType, reactive }) => {
+            let springDataDatabase: string;
+            if (databaseType !== 'sql') {
+              springDataDatabase = getDatabaseTypeData(databaseType as string).name;
+              if (reactive) {
+                springDataDatabase += ' reactive';
+              }
+            } else {
+              springDataDatabase = reactive ? 'R2DBC' : 'JPA';
+            }
+            return `Spring Data ${springDataDatabase}`;
+          },
         });
       },
     });

@@ -26,7 +26,7 @@ const { SQL } = databaseTypes;
 /**
  * Returns the java value generator for the given primaryKey type
  */
-export const getJavaValueGeneratorForType = (type) => {
+export const getJavaValueGeneratorForType = (type: string) => {
   if (type === STRING) {
     return 'UUID.randomUUID().toString()';
   }

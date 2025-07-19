@@ -62,6 +62,8 @@ export interface Entity<F extends Field = Field, R extends JavascriptRelationshi
   entityApi: string;
 
   restProperties?: (F | R)[];
+
+  uniqueEnums?: F[];
 }
 
 export type Application<E extends BaseApplicationEntity = Entity> = JavascriptApplication<E> &

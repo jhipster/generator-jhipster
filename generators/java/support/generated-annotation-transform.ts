@@ -21,7 +21,7 @@ import { passthrough } from '@yeoman/transform';
 import { isFileStateDeleted } from 'mem-fs-editor/state';
 import { addJavaAnnotation } from './add-java-annotation.js';
 
-const generatedAnnotationTransform = packageName => {
+const generatedAnnotationTransform = (packageName: string) => {
   return passthrough(file => {
     if (
       !file.path.endsWith('package-info.java') &&

@@ -20,6 +20,7 @@ import { extname } from 'node:path';
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 
+import type { MemFsEditorFile } from 'mem-fs-editor';
 import {
   type JHITranslateConverterOptions,
   createJhiTransformTranslateReplacer,
@@ -49,8 +50,8 @@ export type ReplacerOptions = { jhiPrefix: string; enableTranslation: boolean };
  */
 function replaceTranslationKeysWithText(
   getWebappTranslation: GetWebappTranslationCallback,
-  content,
-  regexSource,
+  content: string,
+  regexSource: string,
   {
     keyIndex = 1,
     replacementIndex = 1,
@@ -79,7 +80,7 @@ function replaceTranslationKeysWithText(
  * @param {string} jsKey
  * @returns string with jsKey value replaced
  */
-function replaceJSTranslation(getWebappTranslation: GetWebappTranslationCallback, content, jsKey) {
+function replaceJSTranslation(getWebappTranslation: GetWebappTranslationCallback, content: string, jsKey: string) {
   return replaceTranslationKeysWithText(
     getWebappTranslation,
     content,
@@ -96,18 +97,18 @@ function replaceJSTranslation(getWebappTranslation: GetWebappTranslationCallback
  * @param {string} content html content
  * @returns string with pageTitle replaced
  */
-function replacePageTitles(getWebappTranslation: GetWebappTranslationCallback, content) {
+function replacePageTitles(getWebappTranslation: GetWebappTranslationCallback, content: string) {
   return replaceJSTranslation(getWebappTranslation, content, 'title');
 }
 
-function replacePlaceholders(getWebappTranslation: GetWebappTranslationCallback, content) {
+function replacePlaceholders(getWebappTranslation: GetWebappTranslationCallback, content: string) {
   return replaceTranslationKeysWithText(getWebappTranslation, content, PLACEHOLDER_REGEX, { keyIndex: 2 });
 }
 
 /**
  * Replace error code translation key with translated message
  */
-function replaceErrorMessage(getWebappTranslation: GetWebappTranslationCallback, content) {
+function replaceErrorMessage(getWebappTranslation: GetWebappTranslationCallback, content: string) {
   return replaceJSTranslation(getWebappTranslation, content, 'errorMessage');
 }
 
@@ -330,7 +331,7 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
 };
 
 const minimatch = new Minimatch('**/*{.html,.ts}');
-export const isTranslatedAngularFile = file => minimatch.match(file.path);
+export const isTranslatedAngularFile = (file: MemFsEditorFile) => minimatch.match(file.path);
 
 export const translateAngularFilesTransform = (getWebappTranslation: GetWebappTranslationCallback, opts: ReplacerOptions | boolean) => {
   const translate = createTranslationReplacer(getWebappTranslation, opts);

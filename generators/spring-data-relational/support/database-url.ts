@@ -24,7 +24,7 @@ const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_DISK, H2_MEMORY } = databa
 
 type DatabaseUrlOptions = Parameters<getData>[0] & { databaseName?: string; hostname?: string; skipExtraOptions?: boolean };
 
-export default function getDatabaseUrl(databaseType: string, protocol: string, options: DatabaseUrlOptions = {}): string {
+export default function getDatabaseUrl(databaseType: string, protocol: 'r2dbc' | 'jdbc', options: DatabaseUrlOptions = {}): string {
   if (!protocol) {
     throw new Error('protocol is required');
   }

@@ -18,6 +18,7 @@
  */
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 import type CoreGenerator from '../../base-core/index.js';
 import type { GetWebappTranslationCallback } from '../../client/translation.js';
 
@@ -107,7 +108,7 @@ export function replaceTranslations({
   return content.replaceAll(regex, (_complete, ...args) => {
     const groups: Record<string, string> = args.pop();
     const key = groups.key.substring(1, groups.key.length - 1).replaceAll("\\'", "'");
-    let data;
+    let data: any;
     if (groups.data) {
       const interpolateMatches = groups.data.matchAll(/(?<field>[^{\s:,}]+)(?:\s*:\s*(?<value>[^,}]+))?/g);
       data = {};
@@ -151,7 +152,7 @@ export function replaceTranslations({
 }
 
 const minimatch = new Minimatch('**/*.{vue,ts}');
-export const isTranslatedVueFile = file => minimatch.match(file.path);
+export const isTranslatedVueFile = (file: MemFsEditorFile) => minimatch.match(file.path);
 
 function translateVueFilesTransform(
   this: CoreGenerator | void,
