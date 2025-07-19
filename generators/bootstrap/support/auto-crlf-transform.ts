@@ -29,9 +29,9 @@ import { CRLF, normalizeLineEndings } from '../../../lib/utils/index.js';
 /**
  * Detect the file first line endings
  */
-export function detectCrLf(filePath: string): Promise<boolean> {
-  return new Promise<boolean>((resolve, reject) => {
-    let isCrlf = false;
+export function detectCrLf(filePath: string): Promise<boolean | undefined> {
+  return new Promise<boolean | undefined>((resolve, reject) => {
+    let isCrlf: boolean | undefined;
     const rs = createReadStream(filePath, { encoding: 'utf8' });
     rs.on('data', function (chunk) {
       const n = chunk.indexOf('\n');

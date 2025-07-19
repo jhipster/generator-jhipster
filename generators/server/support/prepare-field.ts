@@ -22,7 +22,7 @@ import { snakeCase, upperFirst } from 'lodash-es';
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../lib/jhipster/index.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 import { applyDerivedProperty, mutateData } from '../../../lib/utils/index.js';
-import type { Entity as ServerEntity, Field as ServerField } from '../types.d.ts';
+import type { Application as ServerApplication, Entity as ServerEntity, Field as ServerField } from '../types.d.ts';
 import type { Field as LiquibaseField } from '../../liquibase/types.d.ts';
 import type { Field as SpringBootField } from '../../spring-boot/types.d.ts';
 import type { Field as SpringDataRelationalField } from '../../spring-data-relational/types.d.ts';
@@ -38,22 +38,24 @@ const { MapperTypes } = entityOptions;
 const { MAPSTRUCT } = MapperTypes;
 const { INTEGER, LONG, UUID } = CommonDBTypes;
 
-export default function prepareField(
-  entityWithConfig: ServerEntity,
-  field: ServerField & LiquibaseField & SpringBootField & SpringDataRelationalField,
-  generator: CoreGenerator,
-) {
+export const prepareMapstructField = (entity: ServerEntity, field: SpringBootField): SpringBootField => {
   if (field.mapstructExpression) {
-    assert.equal(
-      entityWithConfig.dto,
-      MAPSTRUCT,
-      `@MapstructExpression requires an Entity with mapstruct dto [${entityWithConfig.name}.${field.fieldName}].`,
-    );
+    assert.equal(entity.dto, MAPSTRUCT, `@MapstructExpression requires an Entity with mapstruct dto [${entity.name}.${field.fieldName}].`);
     // Remove from Entity.java and liquibase.
     field.transient = true;
     // Disable update form.
     field.readonly = true;
   }
+  return field;
+};
+
+export default function prepareField(
+  application: ServerApplication<ServerEntity>,
+  entityWithConfig: ServerEntity,
+  field: ServerField & LiquibaseField & SpringBootField & SpringDataRelationalField,
+  generator: CoreGenerator,
+) {
+  prepareMapstructField(entityWithConfig, field);
 
   if (field.documentation) {
     mutateData(field, {
@@ -112,16 +114,14 @@ export default function prepareField(
 
   if (field.fieldNameAsDatabaseColumn === undefined) {
     const fieldNameUnderscored = snakeCase(field.fieldName);
-    const jhiFieldNamePrefix = entityWithConfig.jhiTablePrefix;
-
     if (isReservedTableName(fieldNameUnderscored, entityProdDatabaseType ?? entityWithConfig.databaseType)) {
-      if (!jhiFieldNamePrefix) {
+      if (!application.jhiTablePrefix) {
         generator.log.warn(
           `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`,
         );
         field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
       } else {
-        field.fieldNameAsDatabaseColumn = `${jhiFieldNamePrefix}_${fieldNameUnderscored}`;
+        field.fieldNameAsDatabaseColumn = `${application.jhiTablePrefix}_${fieldNameUnderscored}`;
       }
     } else {
       field.fieldNameAsDatabaseColumn = fieldNameUnderscored;

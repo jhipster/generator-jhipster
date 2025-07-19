@@ -10,6 +10,9 @@ export type CypressProperties = {
   cypressBootstrapEntities: boolean;
 };
 
-export type Entity = JavascriptEntity;
+export interface Entity extends JavascriptEntity {
+  workaroundEntityCannotBeEmpty?: boolean;
+  workaroundInstantReactiveMariaDB?: boolean;
+}
 
 export type Application<E extends Entity = Entity> = JavascriptApplication<E> & CypressProperties;

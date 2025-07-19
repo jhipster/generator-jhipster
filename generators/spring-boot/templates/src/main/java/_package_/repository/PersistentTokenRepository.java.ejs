@@ -67,7 +67,7 @@ import java.util.Set;
 <%_ } _%>
 
 /**
- * <%= user.springDataDescription %> repository for the {@link PersistentToken} entity.
+ * <%= springDataDescription %> repository for the {@link PersistentToken} entity.
  */
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 public interface PersistentTokenRepository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><PersistentToken, String> {

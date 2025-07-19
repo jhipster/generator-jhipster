@@ -204,7 +204,7 @@ export default class LiquibaseGenerator<
               prepareEntityPrimaryKeyForTemplates.call(this, { entity, application });
             }
             for (const field of entity.fields ?? []) {
-              prepareField(entity as unknown as CommonEntity, field as unknown as CommonField, this);
+              prepareField(application as any, entity as unknown as CommonEntity, field as unknown as CommonField, this);
               prepareFieldForLiquibase(application, field);
             }
           }
@@ -424,9 +424,9 @@ export default class LiquibaseGenerator<
               // eslint-disable-next-line no-template-curly-in-string
               version: '${liquibase.version}',
               additionalContent: mavenPlugin({
-                backendTypeSpringBoot: application.backendTypeSpringBoot,
-                reactive: application.reactive,
-                packageName: application.packageName,
+                backendTypeSpringBoot: application.backendTypeSpringBoot!,
+                reactive: application.reactive!,
+                packageName: application.packageName!,
                 srcMainResources: application.srcMainResources,
                 authenticationTypeOauth2: application.authenticationTypeOauth2,
                 devDatabaseTypeH2Any: applicationAny.devDatabaseTypeH2Any,

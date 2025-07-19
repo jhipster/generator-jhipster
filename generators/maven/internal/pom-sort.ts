@@ -32,7 +32,7 @@ export type MavenProjectLike = {
 
 export type MavenProject = MavenProjectLike & {
   profiles?: { profile: (MavenProfile & MavenProjectLike)[] };
-}
+};
 
 export const formatPomFirstLevel = (content: string) =>
   content.replace(

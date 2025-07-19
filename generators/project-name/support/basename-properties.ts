@@ -2,13 +2,14 @@ import { kebabCase, startCase, upperFirst } from 'lodash-es';
 import { customCamelCase } from '../../../lib/utils/string-utils.ts';
 import { getHipster } from '../internal/index.ts';
 import { upperFirstCamelCase } from '../../../lib/utils/index.js';
+import type { Application as BaseSimpleApplication } from '../../base-simple-application/types.js';
 
 export const baseNameProperties = {
-  camelizedBaseName: ({ baseName }) => customCamelCase(baseName),
-  hipster: ({ baseName }) => getHipster(baseName),
-  capitalizedBaseName: ({ baseName }) => upperFirst(baseName),
-  dasherizedBaseName: ({ baseName }) => kebabCase(baseName),
-  lowercaseBaseName: ({ baseName }) => baseName?.toLowerCase(),
-  upperFirstCamelCaseBaseName: ({ baseName }) => upperFirstCamelCase(baseName),
-  humanizedBaseName: ({ baseName }) => (baseName.toLowerCase() === 'jhipster' ? 'JHipster' : startCase(baseName)),
+  camelizedBaseName: ({ baseName }: BaseSimpleApplication) => customCamelCase(baseName),
+  hipster: ({ baseName }: BaseSimpleApplication) => getHipster(baseName),
+  capitalizedBaseName: ({ baseName }: BaseSimpleApplication) => upperFirst(baseName),
+  dasherizedBaseName: ({ baseName }: BaseSimpleApplication) => kebabCase(baseName),
+  lowercaseBaseName: ({ baseName }: BaseSimpleApplication) => baseName?.toLowerCase(),
+  upperFirstCamelCaseBaseName: ({ baseName }: BaseSimpleApplication) => upperFirstCamelCase(baseName),
+  humanizedBaseName: ({ baseName }: BaseSimpleApplication) => (baseName.toLowerCase() === 'jhipster' ? 'JHipster' : startCase(baseName)),
 } as const;

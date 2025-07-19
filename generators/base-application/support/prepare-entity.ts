@@ -168,7 +168,7 @@ export default function prepareEntity(entityWithConfig: CommonEntity, generator:
 
   entityWithConfig.useMicroserviceJson = entityWithConfig.useMicroserviceJson || entityWithConfig.microserviceName !== undefined;
   entityWithConfig.microserviceAppName = '';
-  if (generator.jhipsterConfig.applicationType === APPLICATION_TYPE_GATEWAY && entityWithConfig.useMicroserviceJson) {
+  if ((generator.jhipsterConfig as any).applicationType === APPLICATION_TYPE_GATEWAY && entityWithConfig.useMicroserviceJson) {
     if (!entityWithConfig.microserviceName) {
       throw new Error('Microservice name for the entity is not found. Entity cannot be generated!');
     }

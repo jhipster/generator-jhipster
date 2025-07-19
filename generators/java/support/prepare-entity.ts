@@ -15,5 +15,7 @@ export function prepareEntity(entity: JavaEntity, application: JavaApplication) 
     entityAbsoluteClass: ({ entityAbsolutePackage, persistClass }) => `${entityAbsolutePackage}.domain.${persistClass}`,
     entityJavadoc: ({ documentation }) => (documentation ? formatDocAsJavaDoc(documentation) : documentation),
     entityApiDescription: ({ documentation }) => (documentation ? formatDocAsApiDescription(documentation) : documentation),
+    importApiModelProperty: ({ relationships, fields }) =>
+      relationships.some(relationship => relationship.documentation) || fields.some(field => field.documentation),
   });
 }

@@ -60,6 +60,7 @@ import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import type { Config as ClientConfig } from '../client/types.js';
 import type { Config as SpringCacheConfig } from '../spring-cache/types.js';
 import type { Config as SpringCloudStreamConfig } from '../spring-cloud-stream/types.js';
+import type { Entity as CypressEntity } from '../cypress/types.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
 import cleanupTask from './cleanup.js';
@@ -558,6 +559,15 @@ ${classProperties
             ...entity.relationships.filter(rel => !application.reactive || (rel.persistableRelationship && !rel.collection)),
           ],
           entityJavaCustomFilters: sortedUniqBy(entity.fields.map(field => field.propertyJavaCustomFilter).filter(Boolean), 'type'),
+        });
+
+        mutateData(entity as CypressEntity, {
+          __override__: true,
+          // Reactive with some r2dbc databases doesn't allow insertion without data.
+          workaroundEntityCannotBeEmpty: ({ reactive, prodDatabaseType }: any) =>
+            reactive && ['postgresql', 'mysql', 'mariadb'].includes(prodDatabaseType),
+          // Reactive with MariaDB doesn't allow null value at Instant fields.
+          workaroundInstantReactiveMariaDB: ({ reactive, prodDatabaseType }: any) => reactive && prodDatabaseType === 'mariadb',
         });
       },
     });

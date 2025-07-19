@@ -19,72 +19,42 @@
 
 import { databaseTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 
+import type {
+  Entity as SpringBootEntity,
+  Field as SpringBootField,
+  Relationship as SpringBootRelationship,
+} from '../../spring-boot/types.d.ts';
+
+import type { RelationshipWithEntity } from '../../base-application/types.js';
+import { mutateData } from '../../../lib/utils/object.ts';
+import type { DatabaseField, DatabaseRelationship } from '../../liquibase/types.js';
 import { hibernateSnakeCase } from './string.js';
-import { getDatabaseTypeData } from './database.js';
 
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
-const { POSTGRESQL, MYSQL, MARIADB, COUCHBASE, SQL, NEO4J } = databaseTypes;
+const { COUCHBASE } = databaseTypes;
 
 export function loadRequiredConfigDerivedProperties(entity: any) {
-  entity.jhiTablePrefix = hibernateSnakeCase(entity.jhiPrefix);
   entity.searchEngineCouchbase = entity.searchEngine === COUCHBASE;
   entity.searchEngineElasticsearch = entity.searchEngine === ELASTICSEARCH;
   entity.searchEngineAny = entity.searchEngine && entity.searchEngine !== NO_SEARCH_ENGINE;
   entity.searchEngineNo = !entity.searchEngineAny;
 }
 
-export function preparePostEntityServerDerivedProperties(entity: any) {
-  const { databaseType, reactive } = entity;
-  entity.officialDatabaseType = getDatabaseTypeData(databaseType).name;
-  let springDataDatabase;
-  if (entity.databaseType !== SQL) {
-    springDataDatabase = entity.officialDatabaseType;
-    if (reactive) {
-      springDataDatabase += ' reactive';
-    }
-  } else {
-    springDataDatabase = reactive ? 'R2DBC' : 'JPA';
-  }
-  entity.springDataDescription = `Spring Data ${springDataDatabase}`;
-
-  // Blueprints may disable cypress relationships by setting to false.
-  entity.cypressBootstrapEntities = true;
-
-  // Reactive with some r2dbc databases doesn't allow insertion without data.
-  entity.workaroundEntityCannotBeEmpty = entity.reactive && [POSTGRESQL, MYSQL, MARIADB].includes(entity.prodDatabaseType);
-  // Reactive with MariaDB doesn't allow null value at Instant fields.
-  entity.workaroundInstantReactiveMariaDB = entity.reactive && entity.prodDatabaseType === MARIADB;
-
-  entity.relationships
-    .filter(relationship => relationship.ignoreOtherSideProperty === undefined)
-    .forEach(relationship => {
-      relationship.ignoreOtherSideProperty =
-        entity.databaseType !== NEO4J &&
-        !entity.embedded &&
-        !relationship.otherEntity.embedded &&
-        relationship.otherEntity.relationships.length > 0;
-    });
-  entity.relationshipsContainOtherSideIgnore = entity.relationships.some(relationship => relationship.ignoreOtherSideProperty);
-
-  entity.importApiModelProperty =
-    entity.relationships.some(relationship => relationship.documentation) || entity.fields.some(field => field.documentation);
-
-  entity.uniqueEnums = {};
-
-  entity.fields.forEach(field => {
-    if (
-      field.fieldIsEnum &&
-      (!entity.uniqueEnums[field.fieldType] || (entity.uniqueEnums[field.fieldType] && field.fieldValues.length !== 0))
-    ) {
-      entity.uniqueEnums[field.fieldType] = field.fieldType;
-    }
+export function preparePostEntityServerDerivedProperties(
+  entity: SpringBootEntity<SpringBootField, RelationshipWithEntity<SpringBootRelationship, SpringBootEntity>>,
+) {
+  mutateData(entity, {
+    uniqueEnums: ({ fields }) => {
+      return [...new Set(fields.filter(field => field.fieldIsEnum))];
+    },
   });
+
   if (entity.primaryKey?.derived) {
     entity.isUsingMapsId = true;
     entity.mapsIdAssoc = entity.relationships.find(rel => rel.id);
   } else {
     entity.isUsingMapsId = false;
-    entity.mapsIdAssoc = null;
+    entity.mapsIdAssoc = undefined;
   }
   entity.reactiveOtherEntities = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity));
   entity.reactiveUniqueEntityTypes = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity.entityNameCapitalized));
@@ -92,9 +62,9 @@ export function preparePostEntityServerDerivedProperties(entity: any) {
   if (entity.databaseType === 'sql') {
     for (const relationship of entity.relationships) {
       if (!relationship.otherEntity.embedded) {
-        relationship.joinColumnNames = relationship.otherEntity.primaryKey.fields.map(
+        (relationship as DatabaseRelationship).joinColumnNames = relationship.otherEntity.primaryKey!.fields.map(
           otherField =>
-            `${relationship.id && relationship.relationshipOneToOne ? '' : `${hibernateSnakeCase(relationship.relationshipName)}_`}${otherField.columnName}`,
+            `${relationship.id && relationship.relationshipOneToOne ? '' : `${hibernateSnakeCase(relationship.relationshipName)}_`}${(otherField as DatabaseField).columnName}`,
         );
       }
     }

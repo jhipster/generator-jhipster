@@ -57,9 +57,9 @@ import java.util.UUID;
 <%_ if (anyFieldIsBlobDerived && databaseTypeSql) { _%>
 import jakarta.persistence.Lob;
 <%_ } _%>
-<%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
-import <%- entityAbsolutePackage %>.domain.enumeration.<%- element %>;
-<%_ }); _%>
+<%_ for (const enumField of uniqueEnums) { _%>
+import <%- entityAbsolutePackage %>.domain.enumeration.<%- enumField.fieldType %>;
+<%_ } _%>
 
 <%_ for (const otherEntity of otherEntities.filter(otherEntity => otherEntity.entityPackage !== entityPackage)) { _%>
 import <%- `${otherEntity.entityAbsolutePackage}.service.dto.${otherEntity.dtoClass}` %>;

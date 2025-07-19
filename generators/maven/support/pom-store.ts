@@ -32,7 +32,7 @@ import type {
   MavenProperty,
   MavenRepository,
 } from '../types.js';
-import { formatPomFirstLevel, sortPomProject, type MavenProjectLike } from '../internal/pom-sort.js';
+import { type MavenProjectLike, formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.js';
 
 const artifactEquals = (a: MavenArtifact, b: MavenArtifact) => a.groupId === b.groupId && a.artifactId === b.artifactId;
 

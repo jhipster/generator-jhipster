@@ -73,10 +73,9 @@ import tech.jhipster.service.ConditionBuilder;
 import <%= rel.otherEntity.entityAbsolutePackage %>.domain.<%= rel.otherEntity.persistClass %>;
   <%_ } _%>
 <%_ }); _%>
-<%_ Object.keys(uniqueEnums).forEach(element => { _%>
-
-import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
-<%_ }); _%>
+<%_ for (const enumField of uniqueEnums) { _%>
+import <%- entityAbsolutePackage %>.domain.enumeration.<%- enumField.fieldType %>;
+<%_ } _%>
 
 <%_ [...reactiveOtherEntities, locals].forEach(otherEntity => { _%>
 import <%= otherEntity.entityAbsolutePackage %>.repository.rowmapper.<%= otherEntity.entityClass %>RowMapper;

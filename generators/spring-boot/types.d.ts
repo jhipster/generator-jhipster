@@ -5,7 +5,7 @@ import type {
   Relationship as JavaRelationship,
   Source as JavaSource,
 } from '../java/types.js';
-import type { Entity as BaseApplicationEntity } from '../base-application/types.js';
+import type { Entity as BaseApplicationEntity, RelationshipWithEntity } from '../base-application/types.js';
 import type { Config as CommonConfig } from '../common/types.d.ts';
 import type {
   Application as ServerApplication,
@@ -59,12 +59,18 @@ export type Field = ServerField &
 
 export interface Relationship extends ServerRelationship, JavaRelationship {}
 
-export type Entity<F extends Field = Field, R extends Relationship = Relationship> = ServerEntity<F, R> &
-  SpringEntity & {
-    skipDbChangelog?: boolean;
-    entityJavaFilterableProperties: any[];
-    entityJavaCustomFilters: any[];
-  };
+export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends ServerEntity<F, R>, SpringEntity {
+  skipDbChangelog?: boolean;
+  entityJavaFilterableProperties: any[];
+  entityJavaCustomFilters: any[];
+
+  isUsingMapsId?: boolean;
+  mapsIdAssoc?: R;
+  reactiveEagerRelations: RelationshipWithEntity<R, this>[];
+
+  reactiveOtherEntities: Set<this>;
+  reactiveUniqueEntityTypes: Set<string>;
+}
 
 export type Source = JavaSource &
   ServerSource & {
@@ -159,4 +165,6 @@ export type Application<E extends BaseApplicationEntity = Entity> = Command['App
 
     communicationSpringWebsocket: boolean;
     requiresDeleteAllUsers: boolean;
+
+    springDataDescription: string;
   };
