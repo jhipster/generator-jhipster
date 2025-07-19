@@ -1,0 +1,30 @@
+<version>${maven-failsafe-plugin.version}</version>
+<configuration>
+   <!-- Due to spring-boot repackage, without adding this property test classes are not found
+        See https://github.com/spring-projects/spring-boot/issues/6254 -->
+   <!-- Force alphabetical order to have a reproducible build -->
+   <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+   <runOrder>alphabetical</runOrder>
+   <includes>
+       <include>**/*IT*</include>
+       <include>**/*IntTest*</include>
+   </includes>
+   <excludes>
+      <exclude>**/*CucumberIT*</exclude>
+   </excludes>
+   <argLine>@{argLine} -Dspring.profiles.active=${profile.test}</argLine>
+</configuration>
+<executions>
+   <execution>
+       <id>integration-test</id>
+       <goals>
+           <goal>integration-test</goal>
+       </goals>
+   </execution>
+   <execution>
+       <id>verify</id>
+       <goals>
+           <goal>verify</goal>
+       </goals>
+   </execution>
+</executions>

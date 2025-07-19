@@ -46,14 +46,6 @@
       }
     },
     {
-      "name": "vue-mongodb-kafka-cucumber",
-      "app-sample": "vue-mongodb-kafka-cucumber",
-      "entity": "mongodb",
-      "generatorOptions": {
-        "defaultEnvironment": "dev"
-      }
-    },
-    {
       "name": "ms-vue-eureka-jwt-couchbase-hazelcast",
       "jdl-samples": "ms-vue-eureka-jwt-couchbase-hazelcast",
       "generatorOptions": {

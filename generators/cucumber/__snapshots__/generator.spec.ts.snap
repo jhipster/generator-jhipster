@@ -544,7 +544,7 @@ exports[`generator - cucumber with default config should match files snapshot 1`
                     <version>\${maven-failsafe-plugin.version}</version>
                     <configuration>
                         <!-- Due to spring-boot repackage, without adding this property test classes are not found
-                             See https://github.com/spring-projects/spring-boot/issues/6254 -->
+        See https://github.com/spring-projects/spring-boot/issues/6254 -->
                         <!-- Force alphabetical order to have a reproducible build -->
                         <classesDirectory>\${project.build.outputDirectory}</classesDirectory>
                         <runOrder>alphabetical</runOrder>
@@ -552,6 +552,9 @@ exports[`generator - cucumber with default config should match files snapshot 1`
                             <include>**/*IT*</include>
                             <include>**/*IntTest*</include>
                         </includes>
+                        <excludes>
+                            <exclude>**/*CucumberIT*</exclude>
+                        </excludes>
                         <argLine>@{argLine} -Dspring.profiles.active=\${profile.test}</argLine>
                     </configuration>
                     <executions>
@@ -1036,7 +1039,7 @@ exports[`generator - cucumber with default config should match files snapshot 1`
 junit.jupiter.execution.timeout.testable.method.default = 15 s
 junit.jupiter.execution.timeout.beforeall.method.default = 60 s
 junit.jupiter.testclass.order.default=com.mycompany.myapp.config.SpringBootTestClassOrderer
-cucumber.publish.enabled=true,
+cucumber.publish.enabled=true
 cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html,
 # jhipster-needle-add-junit-platform-properties
 ",
@@ -1565,7 +1568,7 @@ integrationTest.dependsOn test
 junit.jupiter.execution.timeout.testable.method.default = 15 s
 junit.jupiter.execution.timeout.beforeall.method.default = 60 s
 junit.jupiter.testclass.order.default=com.mycompany.myapp.config.SpringBootTestClassOrderer
-cucumber.publish.enabled=true,
+cucumber.publish.enabled=true
 cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html,
 # jhipster-needle-add-junit-platform-properties
 ",

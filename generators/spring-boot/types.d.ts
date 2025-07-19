@@ -80,7 +80,7 @@ export type Source = JavaSource &
     addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
     addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
     addApplicationPropertiesProperty?({ propertyName, propertyType }: { propertyName: string; propertyType: string }): void;
-    addIntegrationTestPluginAdditionalConfiguration?(args: { config: string }): void;
+    addIntegrationTestPluginAdditionalConfiguration?(args: { additionalData: string }): void;
     /**
      * @example
      * addApplicationPropertiesClass({
