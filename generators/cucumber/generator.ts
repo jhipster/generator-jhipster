@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import fs from 'fs';
+import path from 'path';
 import { JavaApplicationGenerator } from '../java/generator.ts';
 import { createNeedleCallback } from '../base-core/support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
@@ -60,11 +62,11 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
               { ignoreNonExisting },
               createNeedleCallback({
                 needle: 'jhipster-needle-add-junit-platform-properties',
-                contentToAdd: `${args.config},`,
+                contentToAdd: `${args.additionalData},`,
               }),
             );
           };
-          if (application.cucumberTests && application.buildToolGradle) {
+          if (application.buildToolGradle) {
             source.addIntegrationTestPluginAdditionalConfiguration = args => {
               const gradleDevProfilePath = `gradle/profile_dev.gradle`;
               const ignoreNonExisting = this.ignoreNeedlesError && 'gradle dev profile file not found';
@@ -73,7 +75,7 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
                 { ignoreNonExisting },
                 createNeedleCallback({
                   needle: 'jhipster-needle-gradle-integration-test',
-                  contentToAdd: `${args.config},`,
+                  contentToAdd: `${args.additionalData},`,
                 }),
               );
             };
@@ -85,7 +87,21 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
                 { ignoreNonExisting },
                 createNeedleCallback({
                   needle: 'jhipster-needle-gradle-integration-test',
-                  contentToAdd: `${args.config},`,
+                  contentToAdd: `${args.additionalData},`,
+                }),
+              );
+            };
+          } else if (application.buildToolMaven) {
+            source.addIntegrationTestPluginAdditionalConfiguration = args => {
+              const mavenProdProfilePath = `pom.xml`;
+              const ignoreNonExisting = this.ignoreNeedlesError && 'maven pom file not found';
+              this.editFile(
+                mavenProdProfilePath,
+                { ignoreNonExisting },
+                createNeedleCallback({
+                  needle: 'jhipster-needle-maven-integration-test',
+                  contentToAdd: `${args.additionalData},`,
+                  autoIndent: true,
                 }),
               );
             };
@@ -172,6 +188,13 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
 </executions>
 `,
                 },
+                {
+                  groupId: 'org.apache.maven.plugins',
+                  artifactId: 'maven-failsafe-plugin',
+                  additionalContent: fs.readFileSync(path.join(this.templatePath(), '..', 'blocks', 'failsafe-plugin-content.xml'), {
+                    encoding: 'utf8',
+                  }),
+                },
               ],
             },
           },
@@ -184,14 +207,13 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
       junitPlatformProperties({ application, source }) {
         if (application.cucumberTests) {
           source.addJunitPlatformPropertyEntry!({
-            config: `cucumber.publish.enabled=true`,
-          });
-          source.addJunitPlatformPropertyEntry!({
-            config: `cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html`,
+            additionalData: `
+              cucumber.publish.enabled=true
+              cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html`,
           });
           if (application.buildToolGradle) {
             source.addIntegrationTestPluginAdditionalConfiguration!({
-              config: `exclude "**/*CucumberIT*"`,
+              additionalData: 'exclude "**/*CucumberIT*"',
             });
           }
         }
