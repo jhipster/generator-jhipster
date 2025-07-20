@@ -65,7 +65,7 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
               { ignoreNonExisting },
               createNeedleCallback({
                 needle: 'jhipster-needle-add-junit-platform-properties',
-                contentToAdd: `${args.additionalData},`,
+                contentToAdd: `${args.additionalData}`,
               }),
             );
           };
@@ -78,7 +78,7 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
                 { ignoreNonExisting },
                 createNeedleCallback({
                   needle: 'jhipster-needle-gradle-integration-test',
-                  contentToAdd: `${args.additionalData},`,
+                  contentToAdd: `${args.additionalData}`,
                 }),
               );
             };
@@ -90,7 +90,7 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
                 { ignoreNonExisting },
                 createNeedleCallback({
                   needle: 'jhipster-needle-gradle-integration-test',
-                  contentToAdd: `${args.additionalData},`,
+                  contentToAdd: `${args.additionalData}`,
                 }),
               );
             };

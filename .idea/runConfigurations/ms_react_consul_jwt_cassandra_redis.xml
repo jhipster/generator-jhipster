@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ms-react-consul-jwt-cassandra-redis" type="NodeJSConfigurationType" application-parameters="generate-sample ms-react-consul-jwt-cassandra-redis --global" path-to-js-file="bin/jhipster.cjs" typescript-loader="bundled" working-dir="$PROJECT_DIR$">
+    <method v="2" />
+  </configuration>
+</component>

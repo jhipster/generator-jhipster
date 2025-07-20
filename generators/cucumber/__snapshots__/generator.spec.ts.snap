@@ -1040,7 +1040,7 @@ junit.jupiter.execution.timeout.testable.method.default = 15 s
 junit.jupiter.execution.timeout.beforeall.method.default = 60 s
 junit.jupiter.testclass.order.default=com.mycompany.myapp.config.SpringBootTestClassOrderer
 cucumber.publish.enabled=true
-cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html,
+cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html
 # jhipster-needle-add-junit-platform-properties
 ",
     "stateCleared": "modified",
@@ -1487,7 +1487,7 @@ task integrationTest(type: Test) {
     description = "Execute integration tests."
     group = "verification"
     include "**/*IT*", "**/*IntTest*"
-    exclude "**/*CucumberIT*",
+    exclude "**/*CucumberIT*"
     // jhipster-needle-gradle-integration-test
     testLogging {
         events 'FAILED', 'SKIPPED'
@@ -1546,7 +1546,7 @@ task integrationTest(type: Test) {
     description = "Execute integration tests."
     group = "verification"
     include "**/*IT*", "**/*IntTest*"
-    exclude "**/*CucumberIT*",
+    exclude "**/*CucumberIT*"
     // jhipster-needle-gradle-integration-test
     testLogging {
         events 'FAILED', 'SKIPPED'
@@ -1570,7 +1570,7 @@ junit.jupiter.execution.timeout.testable.method.default = 15 s
 junit.jupiter.execution.timeout.beforeall.method.default = 60 s
 junit.jupiter.testclass.order.default=com.mycompany.myapp.config.SpringBootTestClassOrderer
 cucumber.publish.enabled=true
-cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html,
+cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html
 # jhipster-needle-add-junit-platform-properties
 ",
     "stateCleared": "modified",
