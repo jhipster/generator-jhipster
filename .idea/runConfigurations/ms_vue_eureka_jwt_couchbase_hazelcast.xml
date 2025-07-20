@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ms-vue-eureka-jwt-couchbase-hazelcast" type="NodeJSConfigurationType" application-parameters="generate-sample ms-vue-eureka-jwt-couchbase-hazelcast --global" path-to-js-file="bin/jhipster.cjs" show_console_on_std_err="true" show_console_on_std_out="true" typescript-loader="bundled" working-dir="$PROJECT_DIR$">
+    <method v="2" />
+  </configuration>
+</component>

@@ -1487,6 +1487,7 @@ task integrationTest(type: Test) {
     description = "Execute integration tests."
     group = "verification"
     include "**/*IT*", "**/*IntTest*"
+    exclude "**/*CucumberIT*",
     // jhipster-needle-gradle-integration-test
     testLogging {
         events 'FAILED', 'SKIPPED'

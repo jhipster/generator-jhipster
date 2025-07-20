@@ -24,8 +24,11 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import type { Config as JavaConfig, Entity as JavaEntity, Options as JavaOptions } from '../java/index.js';
 import type { Source as SpringBootSource } from '../spring-boot/types.js';
 import type { Application as CucumberApplication } from '../java/types.js';
+import { buildToolTypes } from '../../lib/jhipster/index.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
+
+const { MAVEN, GRADLE } = buildToolTypes;
 
 export class CucumberApplicationGenerator extends BaseApplicationGenerator<
   JavaEntity,
@@ -66,9 +69,9 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
               }),
             );
           };
-          if (application.buildToolGradle) {
-            source.addIntegrationTestPluginAdditionalConfiguration = args => {
-              const gradleDevProfilePath = `gradle/profile_dev.gradle`;
+          if (application.buildTool === GRADLE) {
+            source.addIntegrationTestPluginAdditionalDevConfiguration = args => {
+              const gradleDevProfilePath = path.join(`${application.gradleBuildSrc}`, '..', 'gradle', 'profile_dev.gradle');
               const ignoreNonExisting = this.ignoreNeedlesError && 'gradle dev profile file not found';
               this.editFile(
                 gradleDevProfilePath,
@@ -79,8 +82,8 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
                 }),
               );
             };
-            source.addIntegrationTestPluginAdditionalConfiguration = args => {
-              const gradleProdProfilePath = `gradle/profile_prod.gradle`;
+            source.addIntegrationTestPluginAdditionalProdConfiguration = args => {
+              const gradleProdProfilePath = path.join(`${application.gradleBuildSrc}`, '..', 'gradle', 'profile_prod.gradle');
               const ignoreNonExisting = this.ignoreNeedlesError && 'gradle prod profile file not found';
               this.editFile(
                 gradleProdProfilePath,
@@ -88,20 +91,6 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
                 createNeedleCallback({
                   needle: 'jhipster-needle-gradle-integration-test',
                   contentToAdd: `${args.additionalData},`,
-                }),
-              );
-            };
-          } else if (application.buildToolMaven) {
-            source.addIntegrationTestPluginAdditionalConfiguration = args => {
-              const mavenProdProfilePath = `pom.xml`;
-              const ignoreNonExisting = this.ignoreNeedlesError && 'maven pom file not found';
-              this.editFile(
-                mavenProdProfilePath,
-                { ignoreNonExisting },
-                createNeedleCallback({
-                  needle: 'jhipster-needle-maven-integration-test',
-                  contentToAdd: `${args.additionalData},`,
-                  autoIndent: true,
                 }),
               );
             };
@@ -211,8 +200,11 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
               cucumber.publish.enabled=true
               cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html`,
           });
-          if (application.buildToolGradle) {
-            source.addIntegrationTestPluginAdditionalConfiguration!({
+          if (application.buildTool === GRADLE) {
+            source.addIntegrationTestPluginAdditionalDevConfiguration!({
+              additionalData: 'exclude "**/*CucumberIT*"',
+            });
+            source.addIntegrationTestPluginAdditionalProdConfiguration!({
               additionalData: 'exclude "**/*CucumberIT*"',
             });
           }
