@@ -555,7 +555,7 @@ exports[`generator - cucumber with default config should match files snapshot 1`
                         <excludes>
                             <exclude>**/*CucumberIT*</exclude>
                         </excludes>
-                        <argLine>@{argLine} -Dspring.profiles.active=\${profile.test}</argLine>
+                        <argLine>@{argLine} -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=\${profile.test}</argLine>
                     </configuration>
                     <executions>
                         <execution>
