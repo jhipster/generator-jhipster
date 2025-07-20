@@ -12,7 +12,7 @@
    <excludes>
       <exclude>**/*CucumberIT*</exclude>
    </excludes>
-   <argLine>@{argLine} -Dspring.profiles.active=${profile.test}</argLine>
+   <argLine>@{argLine} -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=${profile.test}</argLine>
 </configuration>
 <executions>
    <execution>
