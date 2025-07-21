@@ -16,11 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.js';
 import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/index.js';
+import type { Application as JavaApplication } from '../java/types.js';
 
-export const mongoDbFiles = {
+export const mongoDbFiles = asWriteFilesSection<JavaApplication>({
   serverResource: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
@@ -39,7 +40,7 @@ export const mongoDbFiles = {
       templates: ['config/MongoDbTestContainer.java', 'config/EmbeddedMongo.java'],
     },
   ],
-};
+});
 
 export default asWritingTask(async function writeMongodbFilesTask({ application }) {
   await this.writeFiles({

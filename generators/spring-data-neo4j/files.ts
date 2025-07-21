@@ -18,10 +18,10 @@
  */
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/index.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import type { Application as JavaApplication, Entity as JavaEntity } from '../java/index.js';
-import { asWritingTask } from '../base-application/support/task-type-inference.ts';
+import type { Application as JavaApplication, Entity as JavaEntity } from '../java/types.d.ts';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.ts';
 
-export const neo4jFiles = {
+export const neo4jFiles = asWriteFilesSection<JavaApplication>({
   serverResource: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
@@ -51,7 +51,7 @@ export const neo4jFiles = {
       ],
     },
   ],
-};
+});
 
 export default asWritingTask<JavaEntity, JavaApplication<JavaEntity>>(async function writeFilesTask({ application }) {
   await this.writeFiles({

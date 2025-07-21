@@ -150,7 +150,7 @@ for (relationship of relationships) {
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
         <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
-        "<%= otherRelationship.relationshipReferenceField %>",
+        "<%= otherRelationship.propertyName %>",
         <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
@@ -160,7 +160,7 @@ for (relationship of relationships) {
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
       <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
-        "<%= otherRelationship.relationshipReferenceField %>",
+        "<%= otherRelationship.propertyName %>",
       <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
@@ -170,7 +170,7 @@ for (relationship of relationships) {
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
       <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
-        "<%= otherRelationship.relationshipReferenceField %>",
+        "<%= otherRelationship.propertyName %>",
       <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>

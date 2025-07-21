@@ -38,6 +38,7 @@ import type { DatabaseProperty } from '../../liquibase/types.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../../lib/core/application-types.ts';
 import type { EntityAll } from '../../../lib/types/entity-all.js';
 import type { FieldAll } from '../../../lib/types/field-all.js';
+import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { createFaker } from './faker.js';
 import { fieldIsEnum } from './field-utils.js';
 
@@ -394,8 +395,8 @@ export function prepareEntityPrimaryKeyForTemplates(
     };
   } else {
     const composite = enableCompositeId ? idCount > 1 : false;
-    let primaryKeyName;
-    let primaryKeyType;
+    let primaryKeyName: string;
+    let primaryKeyType: string;
     if (composite) {
       primaryKeyName = 'id';
       primaryKeyType = `${entityWithConfig.entityClass}Id`;
@@ -415,8 +416,8 @@ export function prepareEntityPrimaryKeyForTemplates(
       name: primaryKeyName,
       hibernateSnakeCaseName: hibernateSnakeCase(primaryKeyName),
       nameCapitalized: upperFirst(primaryKeyName),
-      type: primaryKeyType,
-      tsType: getTypescriptKeyType(primaryKeyType),
+      type: primaryKeyType as FieldType,
+      tsType: getTypescriptKeyType(primaryKeyType as FieldType),
       composite,
       relationships: idRelationships,
       // Fields declared in this entity
@@ -481,11 +482,11 @@ export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntit
   entity: E,
   config: SpringBootConfig,
 ): E {
-  mutateData(entity, {
+  mutateData(entity as Partial<ServerEntity>, {
     __override__: false,
-    applicationType: config.applicationType,
-    baseName: config.baseName,
-    authenticationType: config.authenticationType,
+    // applicationType: config.applicationType,
+    // baseName: config.baseName,
+    // authenticationType: config.authenticationType,
     reactive: config.reactive,
     microfrontend: (config as ClientConfig).microfrontend,
     // Workaround different paths
@@ -496,12 +497,12 @@ export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntit
 
     searchEngine: config.searchEngine,
 
-    jhiPrefix: config.jhiPrefix,
+    // jhiPrefix: config.jhiPrefix,
     entitySuffix: config.entitySuffix,
-    dtoSuffix: config.dtoSuffix,
-    packageName: config.packageName,
+    // dtoSuffix: config.dtoSuffix,
+    // packageName: config.packageName,
     microserviceName: ({ builtIn }) => (!builtIn && config.applicationType === APPLICATION_TYPE_MICROSERVICE ? config.baseName : undefined),
-  } as any);
+  });
   if ((entity as any).searchEngine === true && (!entity.microserviceName || entity.microserviceName === config.baseName)) {
     // If the entity belongs to this application and searchEngine is true.
     if (config.searchEngine && config.searchEngine !== NO_SEARCH_ENGINE) {
@@ -542,10 +543,10 @@ export function preparePostEntityCommonDerivedProperties(entity: CommonEntity) {
     entity.anyFieldHasTextContentType = blobFieldsContentType.includes(TEXT);
   }
 
-  preparePostEntityCommonDerivedPropertiesNotTyped(entity);
+  preparePostEntityCommonDerivedPropertiesNotTyped(entity as EntityAll);
 }
 
-function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
+function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   const { relationships, fields } = entity;
   const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
   entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
@@ -553,22 +554,22 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.anyPropertyHasValidation =
     entity.anyPropertyHasValidation || relationships.some(({ relationshipValidate }) => relationshipValidate);
 
-  const relationshipsByOtherEntity: Record<string, any> = relationships
-    .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship])
-    .reduce((relationshipsByOtherEntity: any, [type, relationship]) => {
-      if (!relationshipsByOtherEntity[type]) {
-        relationshipsByOtherEntity[type] = [relationship];
-      } else {
-        relationshipsByOtherEntity[type].push(relationship);
-      }
-      return relationshipsByOtherEntity;
-    }, {});
+  const relationshipsByOtherEntity = relationships
+    .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship] as const)
+    .reduce(
+      (relationshipsByOtherEntity, [type, relationship]) => {
+        if (!relationshipsByOtherEntity[type]) {
+          relationshipsByOtherEntity[type] = [relationship];
+        } else {
+          relationshipsByOtherEntity[type].push(relationship);
+        }
+        return relationshipsByOtherEntity;
+      },
+      {} as Record<string, typeof relationships>,
+    );
 
   entity.relationshipsByOtherEntity = relationshipsByOtherEntity;
   entity.differentRelationships = relationshipsByOtherEntity;
-  entity.persistableOtherEntities = Object.values(relationshipsByOtherEntity).filter(relationships =>
-    relationships.some(({ persistableRelationship, otherEntity }) => persistableRelationship && otherEntity !== entity),
-  );
 
   entity.anyPropertyHasValidation = entity.anyPropertyHasValidation || fields.some(({ fieldValidate }) => fieldValidate);
 
@@ -581,13 +582,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
     entity.fields.some(field => !field.id && !field.transient) ||
     entity.relationships.some(relationship => !relationship.id && relationship.persistableRelationship);
 
-  entity.relationships.forEach(relationship => {
-    relationship.relationshipCollection = ['one-to-many', 'many-to-many'].includes(relationship.relationshipType);
-    relationship.relationshipReferenceField = relationship.relationshipCollection
-      ? relationship.relationshipFieldNamePlural
-      : relationship.relationshipFieldName;
-  });
-  entity.entityContainsCollectionField = entity.relationships.some(relationship => relationship.relationshipCollection);
+  entity.entityContainsCollectionField = entity.relationships.some(relationship => relationship.collection);
 
   if (entity.primaryKey) {
     derivedPrimaryKeyProperties(entity.primaryKey);
@@ -597,7 +592,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
 
   const types = entity.relationships
     .filter(rel => rel.otherEntity.primaryKey)
-    .map(rel => rel.otherEntity.primaryKey.fields.map(f => f.fieldType))
+    .map(rel => rel.otherEntity.primaryKey!.fields.map(f => f.fieldType))
     .flat();
   entity.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
   entity.otherEntityPrimaryKeyTypesIncludesUUID = types.includes(UUID);
@@ -616,8 +611,8 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
         (bagRelationship ||
           entity.eagerLoad ||
           // Fetch relationships if otherEntityField differs otherwise the id is enough
-          (ownerSide && otherEntity.primaryKey.name !== otherEntityField)),
-    } as any);
+          (ownerSide && otherEntity.primaryKey!.name !== otherEntityField)),
+    });
   });
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
   entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);

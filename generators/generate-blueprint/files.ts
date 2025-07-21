@@ -18,8 +18,9 @@
  */
 import { asWriteFilesSection } from '../base-application/support/index.js';
 import { LOCAL_BLUEPRINT_OPTION } from './constants.js';
+import type { Application as GenerateBlueprintApplication, TemplateData } from './types.js';
 
-export const files = asWriteFilesSection<any>({
+export const files = asWriteFilesSection<GenerateBlueprintApplication>({
   baseFiles: [
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION],
@@ -65,7 +66,7 @@ export const files = asWriteFilesSection<any>({
   ],
 });
 
-export const generatorFiles = asWriteFilesSection<any>({
+export const generatorFiles = asWriteFilesSection<TemplateData>({
   generator: [
     {
       path: 'generators/generator',
@@ -94,7 +95,7 @@ export const generatorFiles = asWriteFilesSection<any>({
       path: 'generators/generator',
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator.replaceAll(':', '/generators/')}`,
       condition(ctx) {
-        return !ctx.written && ctx.priorities.find(priority => priority.name === 'writing');
+        return !ctx.written && ctx.priorities.some(priority => priority.name === 'writing');
       },
       transform: false,
       templates: [

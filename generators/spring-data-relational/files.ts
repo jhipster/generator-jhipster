@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingTask } from '../base-application/support/index.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
 import { addSectionsCondition, mergeSections } from '../base-core/support/index.ts';
 import {
   javaMainPackageTemplatesBlock,
@@ -26,7 +26,7 @@ import {
 } from '../java/support/index.js';
 import type { Application, Entity } from './types.js';
 
-export const sqlFiles = {
+export const sqlFiles = asWriteFilesSection<Application>({
   serverFiles: [
     {
       ...javaMainPackageTemplatesBlock(),
@@ -79,52 +79,52 @@ export const sqlFiles = {
       templates: ['config/JacksonNativeConfiguration.java'],
     }),
   ],
-};
+});
 
-export const h2Files = {
+export const h2Files = asWriteFilesSection<Application>({
   serverResource: [
     {
       ...javaMainResourceTemplatesBlock(),
       templates: ['.h2.server.properties'],
     },
   ],
-};
+});
 
-export const mysqlFiles = {
+export const mysqlFiles = asWriteFilesSection<Application>({
   serverTestSources: [
     {
       ...javaTestPackageTemplatesBlock(),
       templates: ['config/MysqlTestContainer.java'],
     },
   ],
-};
+});
 
-export const mariadbFiles = {
+export const mariadbFiles = asWriteFilesSection<Application>({
   serverTestSources: [
     {
       ...javaTestPackageTemplatesBlock(),
       templates: ['config/MariadbTestContainer.java'],
     },
   ],
-};
+});
 
-export const mssqlFiles = {
+export const mssqlFiles = asWriteFilesSection<Application>({
   serverTestSources: [
     {
       ...javaTestPackageTemplatesBlock(),
       templates: ['config/MsSqlTestContainer.java'],
     },
   ],
-};
+});
 
-export const postgresFiles = {
+export const postgresFiles = asWriteFilesSection<Application>({
   serverTestSources: [
     {
       ...javaTestPackageTemplatesBlock(),
       templates: ['config/PostgreSqlTestContainer.java'],
     },
   ],
-};
+});
 
 export const serverFiles = mergeSections(
   sqlFiles,

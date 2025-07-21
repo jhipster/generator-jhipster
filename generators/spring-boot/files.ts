@@ -24,8 +24,10 @@ import {
   moveToJavaPackageTestDir,
   moveToSrcMainResourcesDir,
 } from '../java/support/index.js';
+import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
+import type { Application as SpringBootApplication } from './types.js';
 
-const imperativeConfigFiles = {
+const imperativeConfigFiles = asWriteFilesSection<SpringBootApplication>({
   imperativeFiles: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
@@ -38,9 +40,9 @@ const imperativeConfigFiles = {
       templates: ['config/CRLFLogConverterTest.java', 'config/WebConfigurerTest.java', 'config/WebConfigurerTestController.java'],
     },
   ],
-};
+});
 
-const reactiveConfigFiles = {
+const reactiveConfigFiles = asWriteFilesSection<SpringBootApplication>({
   reactiveFiles: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
@@ -57,9 +59,9 @@ const reactiveConfigFiles = {
       templates: ['META-INF/services/reactor.blockhound.integration.BlockHoundIntegration'],
     },
   ],
-};
+});
 
-const oauth2Files = {
+const oauth2Files = asWriteFilesSection<SpringBootApplication>({
   oauth2Files: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
@@ -118,9 +120,9 @@ const oauth2Files = {
       templates: ['security/oauth2/CustomClaimConverterIT.java'],
     },
   ],
-};
+});
 
-const accountFiles = {
+const accountFiles = asWriteFilesSection<SpringBootApplication>({
   accountResource: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
@@ -151,9 +153,9 @@ const accountFiles = {
       ],
     },
   ],
-};
+});
 
-const userManagementFiles = {
+const userManagementFiles = asWriteFilesSection<SpringBootApplication>({
   userManagementFiles: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
@@ -196,9 +198,9 @@ const userManagementFiles = {
       templates: ['i18n/messages_en.properties'],
     },
   ],
-};
+});
 
-const jwtFiles = {
+const jwtFiles = asWriteFilesSection<SpringBootApplication>({
   jwtBaseFiles: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
@@ -238,9 +240,9 @@ const jwtFiles = {
       templates: ['web/rest/AuthenticateControllerIT.java'],
     },
   ],
-};
+});
 
-const swaggerFiles = {
+const swaggerFiles = asWriteFilesSection<SpringBootApplication>({
   swagger: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
@@ -248,13 +250,13 @@ const swaggerFiles = {
       templates: ['config/OpenApiConfiguration.java'],
     },
   ],
-};
+});
 
 /**
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
-export const baseServerFiles = {
+export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
   readme: [
     {
       templates: ['README.md.jhi.spring-boot'],
@@ -505,7 +507,7 @@ export const baseServerFiles = {
       templates: ['web/rest/WithUnauthenticatedMockUser.java'],
     },
   ],
-};
+});
 
 export const serverFiles = mergeSections(
   baseServerFiles,

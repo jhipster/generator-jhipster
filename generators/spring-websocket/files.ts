@@ -19,7 +19,6 @@
 import { moveToJavaPackageSrcDir } from '../java/support/index.js';
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
 import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.ts';
-import type Generator from './generator.js';
 
 const files = asWriteFilesSection({
   websocketFiles: [
@@ -36,7 +35,7 @@ const files = asWriteFilesSection({
   ],
 });
 
-export default asWritingTask(async function writeTask(this: Generator, { application }) {
+export default asWritingTask(async function writeTask({ application }) {
   await this.writeFiles({
     sections: files,
     context: application,

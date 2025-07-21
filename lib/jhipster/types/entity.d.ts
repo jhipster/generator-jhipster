@@ -2,7 +2,15 @@ import type { Field } from './field.js';
 import type { Relationship } from './relationship.js';
 
 type MicroserviceEntity = {
+  // Required to define the entity id type.
   databaseType?: string;
+  // Some features requires backend reactive information like some cypress adjustments related to incompatible implementations.
+  reactive?: boolean;
+  // Some databases have different bahavior in cypress tests.
+  prodDatabaseType?: string;
+  // Workaround different paths?
+  clientFramework?: string;
+  searchEngine?: string;
 };
 
 export type Entity<F extends Field = Field, R extends Relationship = Relationship> = MicroserviceEntity & {
@@ -12,7 +20,6 @@ export type Entity<F extends Field = Field, R extends Relationship = Relationshi
   entitySuffix?: string;
   service?: 'no' | 'serviceClass' | 'serviceImpl';
   documentation?: string;
-  searchEngine?: string;
   entityPackage?: string;
 
   fields?: F[];

@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { GRADLE_BUILD_SRC_MAIN_DIR, TEST_DIR } from '../generator-constants.js';
-import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
-import type Generator from './generator.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.ts';
 
 const gatlingFiles = asWriteFilesSection({
   gatlingFiles: [
@@ -41,9 +40,9 @@ const gatlingFiles = asWriteFilesSection({
   ],
 });
 
-export default async function writeTask(this: Generator, { application }) {
+export default asWritingTask(async function writeTask({ application }) {
   await this.writeFiles({
     sections: gatlingFiles,
     context: application,
   });
-}
+});

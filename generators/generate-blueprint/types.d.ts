@@ -17,24 +17,30 @@
  * limitations under the License.
  */
 import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { ConfigAll } from '../../lib/types/application-config-all.js';
-import type { OptionsAll } from '../../lib/types/application-options-all.js';
-import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
-import type { EntityAll } from '../../lib/types/entity-all.js';
-import type { Source as BaseApplicationSource } from '../base-application/types.js';
-import type command from './command.ts';
+import type { Application as BaseSimpleApplication } from '../base-simple-application/types.d.ts';
+import type command from './command.js';
 
 type Command = HandleCommandTypes<typeof command>;
 
-export type Config = Command['Config'] & ConfigAll;
+export type Application = Command['Application'] &
+  BaseSimpleApplication & {
+    blueprintMjsExtension: string;
+    commands: string[];
+  };
 
-export type Options = Command['Options'] & OptionsAll;
+export type Config = Command['Config'];
 
-export { BaseApplicationSource as Source };
-
-export interface Entity extends EntityAll {
-  microserviceName: string;
-  microservicePath?: string;
-}
-
-export type Application<E extends EntityAll = EntityAll> = Command['Application'] & ApplicationAll<E>;
+export type TemplateData = Application & {
+  skipWorkflows: boolean;
+  ignoreExistingGenerators: boolean;
+  application: Application;
+  generator: string;
+  customGenerator: boolean;
+  jhipsterGenerator: string;
+  generatorClass: string;
+  priorities: {
+    name: string;
+    asTaskGroup: string;
+    constant: string;
+  }[];
+};
