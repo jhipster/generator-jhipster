@@ -25,6 +25,6 @@ const cacheTypes = {
   MEMCACHED: 'memcached',
   REDIS: 'redis',
   NO: 'no',
-};
+} as const;
 
 export default cacheTypes;

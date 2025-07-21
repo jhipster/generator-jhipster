@@ -85,11 +85,11 @@ const commonDefaultOptions: ApplicationDefaults = {
   [ENTITY_SUFFIX]: OptionValues[ENTITY_SUFFIX],
   [JHI_PREFIX]: OptionValues[JHI_PREFIX],
   messageBroker: 'no',
-  [SEARCH_ENGINE]: (OptionValues[SEARCH_ENGINE] as Record<string, string>).no,
-  [WEBSOCKET]: (OptionValues[WEBSOCKET] as Record<string, string>).no,
+  [SEARCH_ENGINE]: OptionValues[SEARCH_ENGINE].no,
+  [WEBSOCKET]: OptionValues[WEBSOCKET].no,
 };
 
-export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}) {
+export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   const applicationType = customOptions.applicationType;
   if (applicationType === APPLICATION_TYPE_GATEWAY) {
     return getConfigForGatewayApplication(customOptions);
@@ -113,7 +113,6 @@ function getConfigForClientApplication(options: ApplicationDefaults = {}): Appli
   }
   if (!options[CLIENT_THEME]) {
     options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
-    options[CLIENT_THEME_VARIANT] = '';
   } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
     options[CLIENT_THEME_VARIANT] = 'primary';
   }
@@ -161,7 +160,7 @@ function getConfigForCacheProvider(options: ApplicationDefaults = {}): Applicati
     options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   }
   options[ENABLE_HIBERNATE_CACHE] ??=
-    options[DATABASE_TYPE] === SQL && !options[REACTIVE] && ![NO_CACHE_PROVIDER, MEMCACHED].includes(options[CACHE_PROVIDER]);
+    options[DATABASE_TYPE] === SQL && !options[REACTIVE] && ![NO_CACHE_PROVIDER as string, MEMCACHED].includes(options[CACHE_PROVIDER]);
   return options;
 }
 

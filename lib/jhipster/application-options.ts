@@ -117,9 +117,9 @@ const optionNames = {
   WEBSOCKET: 'websocket',
   ENABLE_GRADLE_DEVELOCITY: 'enableGradleDevelocity',
   GRADLE_DEVELOCITY_HOST: 'gradleDevelocityHost',
-};
+} as const;
 
-export const jhipsterOptionValues: Record<string, JDLApplicationOptionValue> = {
+export const jhipsterOptionValues = {
   // TODO refactor it mixes default values (e.g. BaseName=Jhipster) and element list (e.g. application types)
   [optionNames.APPLICATION_TYPE]: {
     [APPLICATION_TYPE_MONOLITH]: APPLICATION_TYPE_MONOLITH,
@@ -231,7 +231,7 @@ export const jhipsterOptionValues: Record<string, JDLApplicationOptionValue> = {
   [optionNames.WITH_ADMIN_UI]: true,
   [optionNames.ENABLE_GRADLE_DEVELOCITY]: false,
   [optionNames.GRADLE_DEVELOCITY_HOST]: '',
-};
+} as const satisfies Record<string, JDLApplicationOptionValue>;
 
 export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.APPLICATION_TYPE]: { type: ApplicationOptionTypes.STRING },

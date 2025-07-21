@@ -216,7 +216,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         if (websocket === SPRING_WEBSOCKET) {
           await this.composeWithJHipster(GENERATOR_SPRING_WEBSOCKET);
         }
-        if ([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(cacheProvider!)) {
+        if (([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS] as string[]).includes(cacheProvider!)) {
           await this.composeWithJHipster(GENERATOR_SPRING_CACHE);
         }
       },

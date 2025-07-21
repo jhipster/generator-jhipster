@@ -32,9 +32,9 @@ export default function getDatabaseUrl(databaseType: string, protocol: 'r2dbc' |
   if (!databaseName) {
     throw new Error("option 'databaseName' is required");
   }
-  if ([MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL].includes(databaseType) && !hostname) {
+  if (([MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL] as string[]).includes(databaseType) && !hostname) {
     throw new Error(`option 'hostname' is required for ${databaseType} databaseType`);
-  } else if (![MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL, H2_DISK, H2_MEMORY].includes(databaseType)) {
+  } else if (!([MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL, H2_DISK, H2_MEMORY] as string[]).includes(databaseType)) {
     throw new Error(`${databaseType} databaseType is not supported`);
   }
   let databaseDataForType = databaseData[databaseType];
