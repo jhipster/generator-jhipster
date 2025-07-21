@@ -43,9 +43,8 @@ describe('generator - base-application - support - prepareField', () => {
       beforeEach(() => {
         field = prepareFieldForTemplates(defaultConfig as any, defaultEntity, field, defaultGenerator as any);
       });
-      it('should prepare path and relationshipsPath correctly', () => {
+      it('should prepare path correctly', () => {
         expect(field.path).to.deep.eq(['name']);
-        expect(field.relationshipsPath).to.deep.eq([]);
       });
     });
   });

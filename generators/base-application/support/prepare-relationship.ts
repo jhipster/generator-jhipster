@@ -71,7 +71,7 @@ export default function prepareRelationship(
   mutateData(relationship, {
     __override__: false,
     relationshipFieldName: lowerFirst(relationshipName),
-    relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName),
+    relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName!),
     relationshipNamePlural: pluralize(relationshipName),
     relationshipNameCapitalized: upperFirst(relationshipName),
     relationshipNameHumanized: startCase(relationshipName),
@@ -124,7 +124,7 @@ export default function prepareRelationship(
           );
         }
         const { otherEntityField } = relationship;
-        const fields = otherEntity.primaryKey.derived ? otherEntity.primaryKey.derivedFields : otherEntity.primaryKey.fields;
+        const fields = otherEntity.primaryKey.derived ? otherEntity.primaryKey.derivedFields! : otherEntity.primaryKey.fields;
         if (otherEntityField) {
           const relatedField = fields.find(field => field.fieldName === otherEntityField);
           if (!relatedField) {

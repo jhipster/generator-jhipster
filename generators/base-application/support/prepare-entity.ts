@@ -36,6 +36,8 @@ import type { Application as CommonApplication, Entity as CommonEntity } from '.
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../../lib/core/application-types.ts';
+import type { EntityAll } from '../../../lib/types/entity-all.js';
+import type { FieldAll } from '../../../lib/types/field-all.js';
 import { createFaker } from './faker.js';
 import { fieldIsEnum } from './field-utils.js';
 
@@ -272,7 +274,11 @@ export function derivedPrimaryKeyProperties(primaryKey: PrimaryKey) {
 
 export function prepareEntityPrimaryKeyForTemplates(
   this: CoreGenerator | void,
-  { entity: entityWithConfig, enableCompositeId = true, application }: { entity: any; enableCompositeId?: boolean; application?: any },
+  {
+    entity: entityWithConfig,
+    enableCompositeId = true,
+    application,
+  }: { entity: EntityAll; enableCompositeId?: boolean; application?: any },
 ) {
   const idFields = entityWithConfig.fields.filter(field => field.id);
   const idRelationships = entityWithConfig.relationships.filter(relationship => relationship.id);
@@ -295,7 +301,7 @@ export function prepareEntityPrimaryKeyForTemplates(
         fieldNameHumanized: 'ID',
         fieldTranslationKey: 'global.field.id',
         autoGenerate: true,
-      };
+      } as FieldAll;
       entityWithConfig.fields.unshift(idField);
     }
     idFields.push(idField);
@@ -305,7 +311,7 @@ export function prepareEntityPrimaryKeyForTemplates(
       // relationships id data are not available at this point, so calculate it when needed.
       relationship.derivedPrimaryKey = {
         get derivedFields() {
-          return relationship.otherEntity.primaryKey.fields.map(field => ({
+          return relationship.otherEntity.primaryKey!.fields.map(field => ({
             originalField: field,
             ...field,
             derived: true,
@@ -317,7 +323,7 @@ export function prepareEntityPrimaryKeyForTemplates(
             readonly: true,
             get derivedPath() {
               if (field.derivedPath) {
-                if (relationship.otherEntity.primaryKey.derived) {
+                if (relationship.otherEntity.primaryKey!.derived) {
                   return [relationship.relationshipName, ...field.derivedPath.splice(1)];
                 }
                 return [relationship.relationshipName, ...field.derivedPath];
@@ -325,7 +331,7 @@ export function prepareEntityPrimaryKeyForTemplates(
               return [relationship.relationshipName, field.fieldName];
             },
             get path() {
-              return [relationship.relationshipName, ...field.path];
+              return [relationship.relationshipName, ...field.path!];
             },
             get fieldName() {
               return idCount === 1 ? field.fieldName : `${relationship.relationshipName}${field.fieldNameCapitalized}`;
@@ -337,9 +343,6 @@ export function prepareEntityPrimaryKeyForTemplates(
             },
             get columnName() {
               return idCount === 1 ? field.columnName : `${hibernateSnakeCase(relationship.relationshipName)}_${field.columnName}`;
-            },
-            get relationshipsPath() {
-              return [relationship, ...field.relationshipsPath];
             },
           }));
         },
@@ -353,37 +356,37 @@ export function prepareEntityPrimaryKeyForTemplates(
     // Almost every info is taken from the parent, except some info like autoGenerate and derived.
     // calling fieldName as id is for backward compatibility, in the future we may want to prefix it with relationship name.
     entityWithConfig.primaryKey = {
-      fieldName: 'id',
+      // fieldName: 'id',
       derived: true,
       // MapsId copy the id from the relationship.
       autoGenerate: true,
       get fields() {
-        return this.derivedFields;
+        return this.derivedFields!;
       },
       get derivedFields() {
-        return relationshipId.derivedPrimaryKey.derivedFields;
+        return relationshipId.derivedPrimaryKey!.derivedFields;
       },
       get ownFields() {
-        return relationshipId.otherEntity.primaryKey.ownFields;
+        return relationshipId.otherEntity.primaryKey!.ownFields;
       },
       relationships: idRelationships,
       get name() {
-        return relationshipId.otherEntity.primaryKey.name;
+        return relationshipId.otherEntity.primaryKey!.name;
       },
       get hibernateSnakeCaseName() {
-        return hibernateSnakeCase(relationshipId.otherEntity.primaryKey.name);
+        return hibernateSnakeCase(relationshipId.otherEntity.primaryKey!.name);
       },
       get nameCapitalized() {
-        return relationshipId.otherEntity.primaryKey.nameCapitalized;
+        return relationshipId.otherEntity.primaryKey!.nameCapitalized;
       },
       get type() {
-        return relationshipId.otherEntity.primaryKey.type;
+        return relationshipId.otherEntity.primaryKey!.type;
       },
       get tsType() {
-        return relationshipId.otherEntity.primaryKey.tsType;
+        return relationshipId.otherEntity.primaryKey!.tsType;
       },
       get composite() {
-        return relationshipId.otherEntity.primaryKey.composite;
+        return relationshipId.otherEntity.primaryKey!.composite;
       },
       get ids() {
         return this.fields.map(field => fieldToId(field));
@@ -420,7 +423,7 @@ export function prepareEntityPrimaryKeyForTemplates(
       ownFields: idFields,
       // Fields declared and inherited
       get fields() {
-        return [...this.ownFields, ...this.derivedFields];
+        return [...this.ownFields!, ...this.derivedFields!];
       },
       get autoGenerate() {
         return this.composite ? false : this.fields[0].autoGenerate;
@@ -437,7 +440,7 @@ export function prepareEntityPrimaryKeyForTemplates(
   return entityWithConfig;
 }
 
-function fieldToId(field) {
+function fieldToId(field: FieldAll): any {
   return {
     field,
     get name() {
@@ -460,9 +463,6 @@ function fieldToId(field) {
     },
     get autoGenerate() {
       return !!field.autoGenerate;
-    },
-    get relationshipsPath() {
-      return field.relationshipsPath;
     },
   };
 }

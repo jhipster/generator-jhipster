@@ -371,7 +371,7 @@ const getPropertBuilder =
     if (prop in generator) {
       log(`Template data ${chalk.yellow(String(prop))} is a generator property.`);
       log(`Change the template to '${chalk.yellow(`this.${String(prop)}`)}'`);
-      return generator[prop];
+      return generator[prop as keyof typeof generator];
     }
     // console.log(`Template data '${chalk.yellow(String(prop))}' not found. Check your data.`);
     // throw new Error(`Template data '${chalk.yellow(String(prop))}' not found. Check your data.`);

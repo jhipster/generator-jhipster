@@ -37,6 +37,7 @@ import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions
 import type { Field as CommonField, Entity as ServerEntity } from '../server/types.js';
 import type { Application as CommonApplication, Entity as CommonEntity } from '../common/types.js';
 import type { Source as SpringBootSource } from '../spring-boot/index.js';
+import type { EntityAll } from '../../lib/types/entity-all.js';
 import { checkAndReturnRelationshipOnValue } from './internal/relationship-on-handler-options.ts';
 import { liquibaseFiles } from './files.js';
 import {
@@ -201,7 +202,7 @@ export default class LiquibaseGenerator<
             // TODO fix types
             prepareEntityForServer(entity, application as any);
             if (!entity.embedded && !entity.primaryKey) {
-              prepareEntityPrimaryKeyForTemplates.call(this, { entity, application });
+              prepareEntityPrimaryKeyForTemplates.call(this, { entity: entity as unknown as EntityAll, application });
             }
             for (const field of entity.fields ?? []) {
               prepareField(application as any, entity as unknown as CommonEntity, field as unknown as CommonField, this);

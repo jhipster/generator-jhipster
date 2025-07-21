@@ -20,6 +20,7 @@
 import { beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { formatDateForChangelog } from '../../base/support/index.js';
+import type { EntityAll } from '../../../lib/types/entity-all.js';
 import { entityDefaultConfig, prepareEntityPrimaryKeyForTemplates } from './prepare-entity.js';
 
 describe('generator - base-application - support - prepareEntity', () => {
@@ -30,7 +31,7 @@ describe('generator - base-application - support - prepareEntity', () => {
           ...entityDefaultConfig,
           name: 'Entity',
           changelogDate: formatDateForChangelog(new Date()),
-          fields: [{ fieldName: 'id', fieldType: 'CustomType', path: ['id'], relationshipsPath: [] }],
+          fields: [{ fieldName: 'id', fieldType: 'CustomType', path: ['id'] }],
         };
         beforeEach(() => {
           entity = prepareEntityPrimaryKeyForTemplates({ entity });
@@ -43,7 +44,6 @@ describe('generator - base-application - support - prepareEntity', () => {
             fieldType: 'CustomType',
             id: true,
             path: ['id'],
-            relationshipsPath: [],
           });
         });
 
@@ -65,10 +65,10 @@ describe('generator - base-application - support - prepareEntity', () => {
           name: 'Entity',
           changelogDate: formatDateForChangelog(new Date()),
           fields: [
-            { fieldName: 'id', fieldType: 'CustomType', path: ['id'], relationshipsPath: [] },
-            { fieldName: 'uuid', fieldType: 'UUID', id: true, path: ['uuid'], relationshipsPath: [] },
+            { fieldName: 'id', fieldType: 'CustomType', path: ['id'] },
+            { fieldName: 'uuid', fieldType: 'UUID', id: true, path: ['uuid'] },
           ],
-        };
+        } as unknown as EntityAll;
         beforeEach(() => {
           entity = prepareEntityPrimaryKeyForTemplates({ entity });
         });
@@ -77,7 +77,6 @@ describe('generator - base-application - support - prepareEntity', () => {
             fieldName: 'id',
             fieldType: 'CustomType',
             path: ['id'],
-            relationshipsPath: [],
           });
         });
       });
@@ -102,7 +101,6 @@ describe('generator - base-application - support - prepareEntity', () => {
                 fieldType: 'String',
                 id: true,
                 path: ['id'],
-                relationshipsPath: [],
               },
             ],
           };
@@ -120,7 +118,6 @@ describe('generator - base-application - support - prepareEntity', () => {
                 id: true,
                 autoGenerate: true,
                 path: ['uuid'],
-                relationshipsPath: [],
               },
             ],
           };
@@ -152,7 +149,6 @@ describe('generator - base-application - support - prepareEntity', () => {
                 id: true,
                 autoGenerate: false,
                 path: ['uuid'],
-                relationshipsPath: [],
               },
             ],
             relationships: [
@@ -246,7 +242,6 @@ describe('generator - base-application - support - prepareEntity', () => {
             columnName: 'other_entity1_id',
             derivedPath: ['otherEntity1', 'id'],
             path: ['otherEntity1', 'id'],
-            relationshipsPath: [entity4.relationships[0]],
             autoGenerate: true,
             derivedEntity: entity1,
           });
@@ -274,7 +269,6 @@ describe('generator - base-application - support - prepareEntity', () => {
             columnName: 'other_entity3_uuid',
             derivedPath: ['otherEntity3', 'uuid'],
             path: ['otherEntity3', 'entity2', 'uuid'],
-            relationshipsPath: [entity4.relationships[1], entity3.relationships[0]],
             derivedEntity: entity3,
           });
         });
