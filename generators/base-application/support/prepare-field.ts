@@ -110,10 +110,15 @@ function generateFakeDataForField(
   changelogDate: any,
   type: 'csv' | 'cypress' | 'json-serializable' | 'ts' = 'csv',
 ) {
-  let originalData;
-  let data;
-  for (const prop of ['fieldValidateRulesMax', 'fieldValidateRulesMin', 'fieldValidateRulesMaxlength', 'fieldValidateRulesMinlength']) {
-    if (prop in field && field[prop] !== undefined) {
+  let originalData: string | number | boolean | Date | undefined;
+  let data: string | number | boolean | Date | undefined;
+  for (const prop of [
+    'fieldValidateRulesMax',
+    'fieldValidateRulesMin',
+    'fieldValidateRulesMaxlength',
+    'fieldValidateRulesMinlength',
+  ] as const) {
+    if (prop in field && typeof field[prop] === 'string') {
       try {
         field[prop] = parseInt(field[prop], 10);
       } catch {
@@ -201,7 +206,7 @@ function generateFakeDataForField(
   originalData ??= data;
 
   if (field.fieldType === BYTES && type === 'json-serializable') {
-    data = Buffer.from(data).toString('base64');
+    data = Buffer.from(data as string).toString('base64');
   }
 
   // Validation rules
@@ -209,20 +214,35 @@ function generateFakeDataForField(
     const { fieldValidateRulesMinlength = 0, fieldValidateRulesMaxlength } = field;
     // manage String max length
     if (field.fieldValidateRules.includes(MAXLENGTH) && fieldValidateRulesMaxlength !== undefined) {
-      const maxlength = field.fieldValidateRulesMaxlength;
-      data = data.substring(0, maxlength);
+      if (typeof data === 'string') {
+        const maxlength = field.fieldValidateRulesMaxlength;
+        data = data.substring(0, maxlength);
+      } else {
+        this.log.error(`Error at field ${field.fieldName}: maxLength validation rule is only supported for string fields.`);
+      }
     }
 
     // manage String min length
     if (field.fieldValidateRules.includes(MINLENGTH) && fieldValidateRulesMinlength !== undefined) {
-      data = data.length > fieldValidateRulesMinlength ? data : data + 'X'.repeat(fieldValidateRulesMinlength - data.length);
+      if (typeof data === 'string') {
+        data = data.length > fieldValidateRulesMinlength ? data : data + 'X'.repeat(fieldValidateRulesMinlength - data.length);
+      } else {
+        this.log.error(`Error at field ${field.fieldName}: minLength validation rule is only supported for string fields.`);
+      }
     }
 
     // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
-    if (field.fieldValidateRules.includes(PATTERN) && !new RegExp(`^${field.fieldValidateRulesPattern}$`).test(data)) {
-      data = undefined;
+    if (field.fieldValidateRules.includes(PATTERN)) {
+      if (typeof data === 'string') {
+        if (!new RegExp(`^${field.fieldValidateRulesPattern}$`).test(data)) {
+          data = undefined;
+        }
+      } else {
+        this.log.error(`Error at field ${field.fieldName}: pattern validation rule is only supported for string fields.`);
+      }
     }
   }
+
   if (data !== undefined) {
     // eslint-disable-next-line no-template-curly-in-string
     if (type === 'ts' && ![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {
@@ -369,7 +389,6 @@ function prepareCommonFieldForTemplates(entityWithConfig: CommonEntity, field: C
     }
     return generated.data;
   };
-  field.relationshipsPath = [];
 
   _derivedProperties(field);
   return field;

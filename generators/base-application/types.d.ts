@@ -95,8 +95,6 @@ export type Field = Property &
     /** @deprecated */
     fieldTypeNumeric: boolean;
 
-    relationshipsPath?: string[];
-
     fieldValidationMin?: boolean;
     fieldValidationMinLength?: boolean;
     fieldValidationMax?: boolean;
@@ -156,8 +154,11 @@ export type RelationshipWithEntity<R, E extends BaseEntity> = R & {
 
 export type PrimaryKey<F extends Field = Field> = {
   name: string;
+  nameCapitalized: string;
+  hibernateSnakeCaseName: string;
   fields: F[];
-  derivedFields: F[];
+  relationships: any[];
+
   type: FieldType;
   composite: boolean;
   derived: boolean;
@@ -168,13 +169,24 @@ export type PrimaryKey<F extends Field = Field> = {
   javaSampleValues?: string[];
 
   hasUUID?: boolean;
-  hasLong: boolean;
+  hasLong?: boolean;
   hasInteger?: boolean;
   typeUUID?: boolean;
   typeString?: boolean;
   typeLong?: boolean;
   typeInteger?: boolean;
   typeNumeric?: boolean;
+
+  derivedFields?: (F & {
+    originalField: F;
+    derived: boolean;
+  })[];
+  ownFields?: F[];
+
+  tsType?: string;
+  autoGenerate?: boolean;
+  /** @deprecated */
+  ids: any[];
 };
 
 /**

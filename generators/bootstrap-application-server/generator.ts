@@ -48,6 +48,7 @@ import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
 import serverCommand from '../server/command.js';
 import { mutateData, normalizePathEnd } from '../../lib/utils/index.js';
 import type { Application as SpringBootApplication } from '../spring-boot/types.js';
+import type { EntityAll } from '../../lib/types/entity-all.js';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator<ServerEntity, ServerApplication<ServerEntity>> {
   async beforeQueue() {
@@ -208,7 +209,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
       preparePrimaryKey({ entity, application }) {
         // If primaryKey doesn't exist, create it.
         if (!entity.embedded && !entity.primaryKey) {
-          prepareEntityPrimaryKeyForTemplates.call(this, { entity, application });
+          prepareEntityPrimaryKeyForTemplates.call(this, { entity: entity as EntityAll, application });
         }
       },
     });
@@ -239,7 +240,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         }
         // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
         const derivedFields = primaryKey.derivedFields;
-        entity.fields.unshift(...derivedFields);
+        entity.fields.unshift(...derivedFields!);
       },
     });
   }
