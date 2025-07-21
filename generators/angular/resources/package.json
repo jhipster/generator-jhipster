@@ -37,7 +37,7 @@
     "copy-webpack-plugin": "13.0.0",
     "deepmerge": "4.3.1",
     "eslint": "9.31.0",
-    "eslint-config-prettier": "10.1.5",
+    "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.1",
     "folder-hash": "4.1.1",
     "globals": "16.3.0",
