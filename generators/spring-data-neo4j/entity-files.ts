@@ -17,29 +17,29 @@
  * limitations under the License.
  */
 import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
-import type { Application as JavaApplication, Entity as JavaEntity } from '../java/index.js';
-import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
+import type { Application as JavaApplication, Entity as JavaEntity } from '../java/types.d.ts';
+import { asWriteFilesBlock, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
 
 const domainFiles = [
-  {
+  asWriteFilesBlock({
     condition: ctx => ctx.entityDomainLayer,
     ...javaMainPackageTemplatesBlock('_entityPackage_'),
     templates: ['domain/_persistClass_.java.jhi.spring_data_neo4j'],
-  },
+  }),
 ];
 
 const repositoryFiles = [
-  {
+  asWriteFilesBlock({
     condition: ctx => ctx.entityPersistenceLayer,
     ...javaMainPackageTemplatesBlock('_entityPackage_'),
     templates: ['repository/_entityClass_Repository.java'],
-  },
+  }),
 ];
 
-export const entityFiles = {
+export const entityFiles = asWriteFilesSection({
   domainFiles,
   repositoryFiles,
-};
+});
 
 export function cleanupEntitiesTask() {}
 

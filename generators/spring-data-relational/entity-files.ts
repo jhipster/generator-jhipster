@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import { asWriteFilesBlock, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
 
-const domainFiles = [
+const domainFiles = asWriteFilesBlock([
   {
     condition: generator => !generator.reactive && generator.entityDomainLayer,
     ...javaMainPackageTemplatesBlock('_entityPackage_'),
@@ -50,9 +50,9 @@ const domainFiles = [
     ...javaMainPackageTemplatesBlock('_entityPackage_'),
     templates: ['domain/_persistClass_Callback.java'],
   },
-];
+]);
 
-const sqlFiles = {
+const sqlFiles = asWriteFilesSection({
   domainFiles,
   repositoryFiles: [
     {
@@ -85,7 +85,7 @@ const sqlFiles = {
       templates: ['repository/_entityClass_Repository_r2dbc.java'],
     },
   ],
-};
+});
 
 export function cleanupEntitiesTask() {}
 

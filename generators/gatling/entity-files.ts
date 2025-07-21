@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asWriteEntityFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
 import { TEST_DIR } from '../generator-constants.js';
-import type Generator from './generator.js';
 
-export const gatlingFiles = {
+export const gatlingFiles = asWriteEntityFilesSection({
   gatlingFiles: [
     {
       path: TEST_DIR,
@@ -31,15 +31,15 @@ export const gatlingFiles = {
       ],
     },
   ],
-};
+});
 
 export function cleanupEntitiesTask() {}
 
-export default async function writeEntitiesTask(this: Generator, { application, entities }) {
+export default asWritingEntitiesTask(async function writeEntitiesTask({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
     await this.writeFiles({
       sections: gatlingFiles,
       context: { ...application, ...entity },
     });
   }
-}
+});

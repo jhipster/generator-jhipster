@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import { asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
 
-export const entityFiles = {
+export const entityFiles = asWriteFilesSection({
   elasticSearchFiles: [
     {
       condition: generator => !generator.embedded && generator.entitySearchLayer,
@@ -32,7 +32,7 @@ export const entityFiles = {
       templates: ['domain/_persistClass_.java.jhi.elastic_search'],
     },
   ],
-};
+});
 
 export function cleanupElasticsearchEntityFilesTask() {}
 
