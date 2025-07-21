@@ -498,7 +498,7 @@ export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntit
     searchEngine: config.searchEngine,
 
     // jhiPrefix: config.jhiPrefix,
-    entitySuffix: config.entitySuffix,
+    // entitySuffix: config.entitySuffix,
     // dtoSuffix: config.dtoSuffix,
     // packageName: config.packageName,
     microserviceName: ({ builtIn }) => (!builtIn && config.applicationType === APPLICATION_TYPE_MICROSERVICE ? config.baseName : undefined),
