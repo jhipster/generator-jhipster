@@ -21,6 +21,6 @@ const authenticationTypes = {
   JWT: 'jwt',
   OAUTH2: 'oauth2',
   SESSION: 'session',
-};
+} as const;
 
 export default authenticationTypes;

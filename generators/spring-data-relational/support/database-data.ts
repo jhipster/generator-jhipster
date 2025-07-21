@@ -79,7 +79,7 @@ const h2GetProdDatabaseData = (
     data.port = ':12344';
   }
 
-  const h2ProdDatabaseMode = prodDatabaseType ? (H2_PROD_DATABASE_MODE[prodDatabaseType] ?? '') : '';
+  const h2ProdDatabaseMode = prodDatabaseType ? ((H2_PROD_DATABASE_MODE as Record<string, string>)[prodDatabaseType] ?? '') : '';
   return {
     ...data,
     localDirectory,

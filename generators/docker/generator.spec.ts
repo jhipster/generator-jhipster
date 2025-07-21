@@ -46,7 +46,7 @@ const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
 
-const NO_SQL = [CASSANDRA, COUCHBASE, MONGODB, NEO4J];
+const NO_SQL = [CASSANDRA, COUCHBASE, MONGODB, NEO4J] as string[];
 
 let matrix = buildServerMatrix();
 

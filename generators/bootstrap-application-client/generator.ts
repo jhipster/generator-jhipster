@@ -80,8 +80,12 @@ export default class BootStrapApplicationClient extends ClientApplicationGenerat
           jsLoginRegex: LOGIN_REGEX_JS,
         });
       },
-      prepareApplication({ application }) {
+      prepareApplication({ application, applicationDefaults }) {
         loadDerivedConfig(clientCommand.configs, { application });
+
+        applicationDefaults({
+          clientThemeVariant: undefined,
+        });
       },
     });
   }

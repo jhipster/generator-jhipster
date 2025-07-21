@@ -132,7 +132,8 @@ export const dtoFiles = javaWriteFileSection({
       templates: ['service/dto/_dtoClass_Test.java'],
     },
     {
-      condition: generator => generator.dto === MAPSTRUCT && [SQL, MONGODB, COUCHBASE, NEO4J].includes(generator.databaseType),
+      condition: generator =>
+        generator.dto === MAPSTRUCT && ([SQL, MONGODB, COUCHBASE, NEO4J] as string[]).includes(generator.databaseType),
       ...javaTestPackageTemplatesBlock('_entityPackage_/'),
       templates: ['service/mapper/_entityClass_MapperTest.java'],
     },

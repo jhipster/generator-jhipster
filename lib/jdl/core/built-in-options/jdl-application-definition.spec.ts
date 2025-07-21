@@ -81,13 +81,13 @@ describe('jdl - ApplicationOptions', () => {
     });
   });
   describe('shouldTheValueBeQuoted', () => {
-    const optionsThatShouldBeQuoted = new Set([
+    const optionsThatShouldBeQuoted = new Set<string>([
       OptionNames.JHIPSTER_VERSION,
       OptionNames.REMEMBER_ME_KEY,
       OptionNames.JWT_SECRET_KEY,
       OptionNames.GRADLE_DEVELOCITY_HOST,
     ]);
-    const optionsThatShouldNotBeQuoted = new Set(
+    const optionsThatShouldNotBeQuoted = new Set<string>(
       Object.values(OptionNames).filter(optionName => !optionsThatShouldBeQuoted.has(optionName)),
     );
 

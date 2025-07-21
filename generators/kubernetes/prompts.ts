@@ -204,7 +204,7 @@ export const askForPersistentStorage = asPromptingWorkspacesTask(async function 
   { control, applications },
 ) {
   if (!this.shouldAskForPrompts({ control })) return;
-  const usingDataBase = applications.some(appConfig => appConfig.prodDatabaseType !== NO_DATABASE);
+  const usingDataBase = applications.some(appConfig => appConfig.databaseType !== NO_DATABASE);
   await this.prompt(
     [
       {

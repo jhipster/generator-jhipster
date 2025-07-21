@@ -36,8 +36,6 @@
     "lib/jdl/converters/parsed-jdl-to-jdl-object/*.spec.ts",
     "lib/jdl/converters/validators/*.spec.ts",
     "lib/jdl-config/",
-    "lib/jhipster/default-application-options.*",
-    "lib/jhipster/index.ts",
     "lib/jhipster/*.spec.ts",
     "lib/testing",
     "cli",

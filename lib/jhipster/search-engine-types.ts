@@ -21,5 +21,5 @@ const searchEngineTypes = {
   ELASTICSEARCH: 'elasticsearch',
   COUCHBASE: 'couchbase',
   NO: 'no',
-};
+} as const;
 export default searchEngineTypes;
