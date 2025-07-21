@@ -989,7 +989,7 @@ describe(`generator - ${generator}`, () => {
         "nameCapitalized": "Id",
         "nameDotted": "id",
         "nameDottedAsserted": "id!",
-          "setter": "setId",
+        "setter": "setId",
       },
     ],
     "javaSampleValues": [
@@ -1441,7 +1441,7 @@ describe(`generator - ${generator}`, () => {
         "nameCapitalized": "Id",
         "nameDotted": "id",
         "nameDottedAsserted": "id!",
-          "setter": "setId",
+        "setter": "setId",
       },
     ],
     "javaSampleValues": [
@@ -1787,7 +1787,7 @@ describe(`generator - ${generator}`, () => {
         "nameCapitalized": "Id",
         "nameDotted": "id",
         "nameDottedAsserted": "id!",
-          "setter": "setId",
+        "setter": "setId",
       },
     ],
     "javaSampleValues": [
