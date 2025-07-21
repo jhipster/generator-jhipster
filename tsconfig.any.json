@@ -2,6 +2,7 @@
   "include": [
     ".blueprint",
     "cli/**/*",
+    "generators/**/cleanup.ts",
     "generators/**/entity-files.ts",
     "generators/**/files.ts",
     "generators/**/internal",
