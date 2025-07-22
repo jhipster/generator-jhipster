@@ -105,7 +105,7 @@ import org.hibernate.type.SqlTypes;
       <%_ if (relationship.ignoreOtherSideProperty) { -%>
     @JsonIgnoreProperties(value = {
         <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
-        "<%= otherRelationship.relationshipReferenceField %>",
+        "<%= otherRelationship.propertyName %>",
         <%_ }); _%>
     }, allowSetters = true)
       <%_ } _%>

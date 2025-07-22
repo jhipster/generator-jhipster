@@ -16,27 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import { asWriteFilesBlock, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
 
 const domainFiles = [
-  {
+  asWriteFilesBlock({
     condition: ctx => ctx.entityDomainLayer,
     ...javaMainPackageTemplatesBlock('_entityPackage_'),
     templates: ['domain/_persistClass_.java.jhi.spring_data_cassandra'],
-  },
+  }),
 ];
 
 const repositoryFiles = [
-  {
+  asWriteFilesBlock({
     condition: ctx => ctx.entityPersistenceLayer,
     ...javaMainPackageTemplatesBlock('_entityPackage_'),
     templates: ['repository/_entityClass_Repository.java', 'domain/_persistClass_.java.jhi.spring_data_cassandra'],
-  },
+  }),
 ];
 
-export const entityFiles = {
+export const entityFiles = asWriteFilesSection({
   dbChangelog: [
     {
       condition: ctx => !ctx.skipDbChangelog,
@@ -51,7 +51,7 @@ export const entityFiles = {
   ],
   domainFiles,
   repositoryFiles,
-};
+});
 
 export function cleanupCassandraEntityFilesTask() {}
 

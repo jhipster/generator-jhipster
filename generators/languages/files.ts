@@ -16,9 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
+import type { Application as LanguagesApplication } from './types.js';
 
-export const clientI18nFiles = {
+export const clientI18nFiles = asWriteFilesSection<LanguagesApplication>({
   clientI18nFiles: [
     {
       from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
@@ -67,4 +69,4 @@ export const clientI18nFiles = {
       templates: ['gateway.json'],
     },
   ],
-};
+});

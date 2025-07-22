@@ -16,27 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import { asWriteFilesBlock, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
 
 const domainFiles = [
-  {
+  asWriteFilesBlock({
     condition: ctx => ctx.entityDomainLayer,
     ...javaMainPackageTemplatesBlock('_entityPackage_'),
     templates: ['domain/_persistClass_.java.jhi.spring_data_couchbase'],
-  },
+  }),
 ];
 
 const repositoryFiles = [
-  {
+  asWriteFilesBlock({
     condition: generator => !generator.embedded && generator.entityPersistenceLayer,
     ...javaMainPackageTemplatesBlock('_entityPackage_'),
     templates: ['repository/_entityClass_Repository.java'],
-  },
+  }),
 ];
 
-export const entityFiles = {
+export const entityFiles = asWriteFilesSection({
   dbChangelog: [
     {
       condition: generator => !generator.skipDbChangelog && !generator.embedded,
@@ -62,7 +62,7 @@ export const entityFiles = {
   ],
   domainFiles,
   repositoryFiles,
-};
+});
 
 export const cleanupCouchbaseEntityFilesTask = asWritingEntitiesTask(function ({ application, control, entities }) {
   for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {

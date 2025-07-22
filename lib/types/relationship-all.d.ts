@@ -4,6 +4,7 @@ import type { Relationship as LiquibaseRelationship } from '../../generators/liq
 import type { FieldAll } from './field-all.js';
 
 export interface RelationshipAll extends SpringDataRelationalRelationship, ServerRelationship, LiquibaseRelationship {
+  bagRelationship?: boolean;
   derivedPrimaryKey?: {
     derivedFields: (FieldAll & {
       originalField: FieldAll;

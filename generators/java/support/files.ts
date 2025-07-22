@@ -51,7 +51,7 @@ export const moveToSrcMainResourcesDir = (data: any, filePath: string) =>
   `${data.srcMainResources}${replaceEntityFilePathVariables(data, filePath) ?? ''}`;
 
 type JavaWriteFileData = JavaEntity & JavaApplication<JavaEntity>;
-type JavaWriteFileBlock = WriteFileBlock<JavaWriteFileData>;
+type JavaWriteFileBlock<Data = JavaWriteFileData> = WriteFileBlock<Data>;
 
 export function javaWriteFileSection<const Data = JavaWriteFileData>(section: WriteFileSection<Data>): WriteFileSection<Data> {
   return section;
@@ -62,7 +62,9 @@ type RelativeWriteFileBlock = JavaWriteFileBlock & { relativePath?: string };
 export function javaMainPackageTemplatesBlock<Data = JavaWriteFileData>(
   blockOrRelativePath?: string,
 ): Pick<WriteFileBlock<Data>, 'path' | 'renameTo'>;
-export function javaMainPackageTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): JavaWriteFileBlock;
+export function javaMainPackageTemplatesBlock<Data = JavaWriteFileData>(
+  blockOrRelativePath: RelativeWriteFileBlock,
+): JavaWriteFileBlock<Data>;
 export function javaMainPackageTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
 ): JavaWriteFileBlock | Pick<JavaWriteFileBlock, 'path' | 'renameTo'> {
@@ -73,8 +75,12 @@ export function javaMainPackageTemplatesBlock(
   });
 }
 
-export function javaMainResourceTemplatesBlock(blockOrRelativePath?: string): Pick<JavaWriteFileBlock, 'path' | 'renameTo'>;
-export function javaMainResourceTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): JavaWriteFileBlock;
+export function javaMainResourceTemplatesBlock<Data = JavaWriteFileData>(
+  blockOrRelativePath?: string,
+): Pick<JavaWriteFileBlock<Data>, 'path' | 'renameTo'>;
+export function javaMainResourceTemplatesBlock<Data = JavaWriteFileData>(
+  blockOrRelativePath: RelativeWriteFileBlock,
+): JavaWriteFileBlock<Data>;
 export function javaMainResourceTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
 ): JavaWriteFileBlock | Pick<JavaWriteFileBlock, 'path' | 'renameTo'> {

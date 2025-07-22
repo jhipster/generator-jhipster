@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.js';
 import { clientRootTemplatesBlock, clientSrcTemplatesBlock } from './support/files.js';
 import type { Application as ClientApplication, Entity as ClientEntity } from './types.js';
 
-export const files = {
+export const files = asWriteFilesSection({
   common: [
     {
       templates: ['README.md.jhi.client', '.prettierignore.jhi.client'],
@@ -75,7 +75,7 @@ export const files = {
       templates: ['swagger-ui/index.html'],
     },
   ],
-};
+});
 
 export const writeFiles = asWritingTask<ClientEntity, ClientApplication<ClientEntity>>(async function writeFiles({ application }) {
   if (!application.clientFrameworkBuiltIn) {

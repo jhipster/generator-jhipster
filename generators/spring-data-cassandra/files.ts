@@ -16,11 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/index.js';
+import type { Application as JavaApplication } from '../java/types.js';
 
-export const cassandraFiles = {
+export const cassandraFiles = asWriteFilesSection<JavaApplication>({
   serverFiles: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
@@ -62,7 +63,7 @@ export const cassandraFiles = {
       ],
     },
   ],
-};
+});
 
 export default asWritingTask(async function writeCassandraFilesTask({ application }) {
   await this.writeFiles({

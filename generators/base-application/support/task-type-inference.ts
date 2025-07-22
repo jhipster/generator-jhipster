@@ -17,7 +17,7 @@
 import type { TaskTypes as BaseTasks } from '../../base/tasks.js';
 import type { TaskTypes } from '../tasks.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import type { WriteFileSection } from '../../base-core/api.js';
+import type { WriteFileBlock, WriteFileSection } from '../../base-core/api.js';
 import type {
   Application as BaseApplicationApplication,
   Entity as BaseApplicationEntity,
@@ -30,6 +30,12 @@ import type { SourceAll } from '../../../lib/types/source-all.js';
 
 export function asWriteFilesSection<Data = ApplicationAll<EntityAll>>(section: WriteFileSection<Data>): WriteFileSection<Data> {
   return section;
+}
+
+export function asWriteFilesBlock<Data = ApplicationAll<EntityAll>>(block: WriteFileBlock<Data>[]): WriteFileBlock<Data>[];
+export function asWriteFilesBlock<Data = ApplicationAll<EntityAll>>(block: WriteFileBlock<Data>): WriteFileBlock<Data>;
+export function asWriteFilesBlock(block: any): any {
+  return block;
 }
 
 export function asWriteEntityFilesSection<Data = EntityAll & ApplicationAll<EntityAll>>(

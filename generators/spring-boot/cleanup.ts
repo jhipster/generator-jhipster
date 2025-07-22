@@ -18,7 +18,7 @@
  */
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 
-import { asWritingTask } from '../base-application/support/index.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
 import cleanupOauth2 from './cleanup-oauth2.js';
 
 /**

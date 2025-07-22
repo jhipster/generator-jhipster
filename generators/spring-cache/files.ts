@@ -18,8 +18,7 @@
  */
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/index.js';
 import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
-import type Generator from './generator.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.ts';
 
 const files = asWriteFilesSection({
   cacheFiles: [
@@ -45,9 +44,9 @@ const files = asWriteFilesSection({
   ],
 });
 
-export default async function writeTask(this: Generator, { application }) {
+export default asWritingTask(async function writeTask({ application }) {
   await this.writeFiles({
     sections: files,
     context: application,
   });
-}
+});

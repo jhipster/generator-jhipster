@@ -20,7 +20,7 @@ import type { Entity as SpringBootEntity } from '../../generators/spring-boot/ty
 import type { Entity as AngularEntity } from '../../generators/angular/types.d.ts';
 import type { Entity as LiquibaseEntity } from '../../generators/liquibase/types.d.ts';
 import type { Entity as SpringDataRelationalEntity } from '../../generators/spring-data-relational/types.d.ts';
-import type { Entity as BaseApplicationEntity } from '../../generators/base-application/types.js';
+import type { Entity as BaseApplicationEntity, RelationshipWithEntity } from '../../generators/base-application/types.js';
 import type { FieldAll } from './field-all.js';
 import type { RelationshipAll } from './relationship-all.js';
 
@@ -29,7 +29,32 @@ export interface EntityAll<F extends FieldAll = FieldAll, R extends Relationship
     AngularEntity<F, R>,
     LiquibaseEntity<F, R>,
     SpringDataRelationalEntity<F, R>,
-    SpringBootEntity<F, R> {}
+    SpringBootEntity<F, R> {
+  updatableEntity?: boolean;
+  eagerLoad?: boolean;
+  implementsEagerLoadApis?: boolean;
+  requiresPersistableImplementation?: boolean;
+
+  fieldsContainNoOwnerOneToOne?: boolean;
+  anyPropertyHasValidation?: boolean;
+  entityContainsCollectionField?: boolean;
+  relationshipsContainEagerLoad?: boolean;
+  containsBagRelationships?: boolean;
+
+  otherEntityPrimaryKeyTypes?: string[];
+  otherEntityPrimaryKeyTypesIncludesUUID?: boolean;
+
+  otherEntities?: this[];
+  otherEntitiesWithPersistableRelationship?: this[];
+
+  regularEagerRelations?: RelationshipWithEntity<R, this>[];
+  eagerRelations?: RelationshipWithEntity<R, this>[];
+  reactiveRegularEagerRelations?: RelationshipWithEntity<R, this>[];
+  persistableRelationships?: RelationshipWithEntity<R, this>[];
+
+  relationshipsByOtherEntity?: Record<string, RelationshipWithEntity<R, this>[]>;
+  differentRelationships?: Record<string, RelationshipWithEntity<R, this>[]>;
+}
 
 export interface UserEntity extends EntityAll {
   hasImageField?: boolean;

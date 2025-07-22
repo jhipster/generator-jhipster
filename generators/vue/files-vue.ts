@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import { asWritingEntitiesTask, asWritingTask } from '../base-application/support/index.js';
+import { asWriteFilesSection, asWritingEntitiesTask, asWritingTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
 import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
 
-export const vueFiles = {
+export const vueFiles = asWriteFilesSection({
   common: [
     clientRootTemplatesBlock({
       templates: [
@@ -268,7 +268,7 @@ export const vueFiles = {
       templates: ['entities/user/user.service.ts'],
     },
   ],
-};
+});
 
 export const entitiesFiles = {
   entities: [

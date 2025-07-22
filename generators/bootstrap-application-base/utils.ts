@@ -77,7 +77,7 @@ export function createUserEntity(this: BaseApplicationGenerator, customUserData 
   // Fallback to defaults for test cases.
   loadRequiredConfigIntoEntity(user, this.jhipsterConfigWithDefaults);
 
-  const oauth2 = (user as any).authenticationType === OAUTH2;
+  const oauth2 = application.authenticationTypeOauth2;
   // If oauth2 or databaseType is cassandra, force type string, otherwise keep undefined for later processing.
   const userIdType = oauth2 || user.databaseType === CASSANDRA ? TYPE_STRING : undefined;
   const fieldValidateRulesMaxlength = userIdType === TYPE_STRING ? 100 : undefined;

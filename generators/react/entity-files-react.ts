@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import { asPostWritingEntitiesTask, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.js';
 import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
 
-export const reactFiles = {
+export const reactFiles = asWriteFilesSection({
   client: [
     {
       condition: generator => !generator.embedded,
@@ -50,7 +50,7 @@ export const reactFiles = {
       templates: ['entities/_entityFolder_/_entityFile_-reducer.spec.ts'],
     },
   ],
-};
+});
 
 export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(async function ({
   application,

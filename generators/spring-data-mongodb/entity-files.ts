@@ -16,34 +16,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import { asWriteFilesBlock, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
 
 const domainFiles = [
-  {
+  asWriteFilesBlock({
     condition: ctx => ctx.entityDomainLayer,
     ...javaMainPackageTemplatesBlock('_entityPackage_'),
     templates: ['domain/_persistClass_.java.jhi.spring_data_mongodb'],
-  },
+  }),
 ];
 
 const repositoryFiles = [
-  {
+  asWriteFilesBlock({
     condition: ctx => !ctx.reactive && !ctx.embedded && ctx.entityPersistenceLayer,
     ...javaMainPackageTemplatesBlock('_entityPackage_'),
     templates: ['repository/_entityClass_Repository.java'],
-  },
-  {
+  }),
+  asWriteFilesBlock({
     condition: ctx => ctx.reactive && !ctx.embedded && ctx.entityPersistenceLayer,
     ...javaMainPackageTemplatesBlock('_entityPackage_'),
     templates: ['repository/_entityClass_Repository_reactive.java'],
-  },
+  }),
 ];
 
-export const entityFiles = {
+export const entityFiles = asWriteFilesSection({
   domainFiles,
   repositoryFiles,
-};
+});
 
 export function cleanupMongodbEntityFilesTask() {}
 
