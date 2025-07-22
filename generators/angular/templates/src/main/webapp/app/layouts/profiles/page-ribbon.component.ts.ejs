@@ -16,8 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, Injector, OnInit, Signal, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -27,22 +26,18 @@ import { ProfileService } from './profile.service';
 @Component({
   selector: '<%= jhiPrefixDashed %>-page-ribbon',
   template: `
-    @if (ribbonEnvSignal; as ribbonEnv) {
+    @if (ribbonEnv(); as env) {
       <div class="ribbon">
-        <a href="">__jhiTranslateTagEnum__('global.ribbon', { "value": "ribbonEnv() ?? ''" })</a>
+        <a href="">__jhiTranslateTagEnum__('global.ribbon', { "value": "env ?? ''" })</a>
       </div>
     }
   `,
   styleUrl: './page-ribbon.component.scss',
   imports: [SharedModule],
 })
-export default class PageRibbonComponent implements OnInit {
-  ribbonEnvSignal?: Signal<string | undefined>;
-  private readonly injector = inject(Injector);
+export default class PageRibbonComponent {
   private readonly profileService = inject(ProfileService);
-
-  ngOnInit(): void {
-    const ribbonEnv$: Observable<string | undefined> = this.profileService.getProfileInfo().pipe(map(profileInfo => profileInfo.ribbonEnv));
-    this.ribbonEnvSignal = toSignal(ribbonEnv$, { injector: this.injector });
-  }
+  ribbonEnv = toSignal(
+    this.profileService.getProfileInfo().pipe(map(info => info.ribbonEnv))
+  );
 }
