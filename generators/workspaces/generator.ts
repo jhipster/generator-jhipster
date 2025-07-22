@@ -23,9 +23,9 @@ import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENER
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import { packageJson } from '../../lib/index.js';
-import type { Config as WorkspacesConfig, Options as WorkspacesOptions } from './types.js';
+import type { WorkspacesApplication, Config as WorkspacesConfig, Options as WorkspacesOptions } from './types.js';
 
-export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, any, WorkspacesConfig, WorkspacesOptions> {
+export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, WorkspacesApplication, WorkspacesConfig, WorkspacesOptions> {
   workspaces!: boolean;
   generateApplications!: () => Promise<void>;
   generateWith!: string;
@@ -186,7 +186,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, an
       generatePackageJson({ applications }) {
         if (!this.generateWorkspaces) return;
 
-        const findDependencyVersion = dependency =>
+        const findDependencyVersion = (dependency: string): string | undefined =>
           applications.find(app => app.nodeDependencies[dependency])?.nodeDependencies[dependency];
         this.packageJson.merge({
           workspaces: {
@@ -259,7 +259,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, an
     return {};
   }
 
-  createConcurrentlyScript(...scripts) {
+  createConcurrentlyScript(...scripts: string[]) {
     const scriptsList = scripts
       .map(script => {
         const packageScripts = this.appsFolders!.map(packageName => [
@@ -273,7 +273,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, an
     return Object.fromEntries(scriptsList);
   }
 
-  createWorkspacesScript(...scripts) {
+  createWorkspacesScript(...scripts: string[]) {
     return Object.fromEntries(scripts.map(script => [`${script}`, `npm run ${script} --workspaces --if-present`]));
   }
 }
