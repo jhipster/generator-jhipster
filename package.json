@@ -189,7 +189,7 @@
     "@types/chai": "5.2.2",
     "@types/debug": "4.1.12",
     "@types/estree": "1.0.8",
-    "@types/node": "20.19.8",
+    "@types/node": "20.19.9",
     "@types/normalize-path": "^3.0.2",
     "@types/npmcli__arborist": "^6.3.1",
     "@types/pluralize": "0.0.33",
