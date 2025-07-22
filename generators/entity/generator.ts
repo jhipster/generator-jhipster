@@ -29,6 +29,7 @@ import { reservedKeywords } from '../../lib/jhipster/index.js';
 import { GENERATOR_ENTITIES } from '../generator-list.js';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
+import type { Features } from '../base/types.js';
 import {
   askForDTO,
   askForFields,
@@ -88,7 +89,7 @@ export default class EntityGenerator extends BaseApplicationGenerator<
     existingEnum?: boolean;
   };
 
-  constructor(args, options, features) {
+  constructor(args: string | string[], options: EntityOptions, features: Features) {
     super(args, options, { unique: 'argument', ...features });
   }
 
@@ -332,7 +333,7 @@ The entity ${entityName} is being created.
    * Validate the entityName
    * @return {true|string} true for a valid value or error message.
    */
-  _validateEntityName(entityName) {
+  _validateEntityName(entityName: string): true | string {
     if (!/^([a-zA-Z0-9]*)$/.test(entityName)) {
       return 'The entity name must be alphanumeric only';
     }
