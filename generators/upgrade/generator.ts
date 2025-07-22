@@ -46,12 +46,12 @@ const DEFAULT_MERGE_OPTIONS = ['--strategy', 'ours'];
 
 export default class UpgradeGenerator extends BaseGenerator<Config & { baseName: string }> {
   requiredPackage = GENERATOR_JHIPSTER;
-  createEnvBuilder;
-  actualApplicationBranch;
-  silent;
-  applyConfig;
+  createEnvBuilder!: typeof EnvironmentBuilder.createDefaultBuilder;
+  actualApplicationBranch!: string;
+  silent!: boolean;
+  applyConfig!: boolean;
   spawnStdio: 'inherit' | 'ignore' | 'pipe' | 'overlapped' = 'inherit';
-  executable;
+  executable!: string;
   verbose!: boolean;
 
   async beforeQueue() {
@@ -280,7 +280,7 @@ export default class UpgradeGenerator extends BaseGenerator<Config & { baseName:
     return this.delegateTasksToBlueprint(() => this.end);
   }
 
-  async rmRf(file) {
+  async rmRf(file: string) {
     const absolutePath = this.destinationPath(file);
     if (this.verbose) {
       this.log.verboseInfo(`Removing ${absolutePath}`);
@@ -297,7 +297,7 @@ export default class UpgradeGenerator extends BaseGenerator<Config & { baseName:
    * Remove every generated file not related to the generation.
    */
   async cleanUp() {
-    const gitignoreContent = this.readDestination('.gitignore', { defaults: '' });
+    const gitignoreContent = this.readDestination('.gitignore', { defaults: '' }) as string;
     const ignoredFiles = gitignoreContent ? (gitignore(gitignoreContent).patterns ?? []) : [];
     const filesToKeep = ['.yo-rc.json', '.jhipster', 'package.json', 'package-lock.json', 'node_modules', '.git', ...ignoredFiles];
     for (const file of await readdir(this.destinationPath())) {
@@ -312,8 +312,8 @@ export default class UpgradeGenerator extends BaseGenerator<Config & { baseName:
     return this.readDestinationJSON('package.json').devDependencies?.['generator-jhipster'];
   }
 
-  isV7(version) {
-    return version.includes('.') && parseInt(version.split('.', 2), 10) < 8;
+  isV7(version: string): boolean {
+    return version.includes('.') && parseInt(version.split('.', 2)[0], 10) < 8;
   }
 
   async runNonInteractive(inherit = true) {
@@ -331,7 +331,7 @@ export default class UpgradeGenerator extends BaseGenerator<Config & { baseName:
   /**
    * Check git version.
    */
-  async checkGitVersion(minVersion) {
+  async checkGitVersion(minVersion?: string): Promise<boolean> {
     try {
       const rawVersion = await this.createGit().raw('--version');
       const gitVersion = String(rawVersion.match(/([0-9]+\.[0-9]+\.[0-9]+)/g));

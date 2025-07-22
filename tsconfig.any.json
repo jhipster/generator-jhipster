@@ -18,8 +18,6 @@
     "generators/kubernetes/kubernetes-base.ts",
     "generators/kubernetes/generators/*/generator.ts",
     "generators/kubernetes/generators/*/index.ts",
-    "generators/upgrade/generator.ts",
-    "generators/upgrade/index.ts",
     "generators/workspaces/generator.ts",
     "generators/workspaces/index.ts",
     "lib/command/*.spec.ts",
