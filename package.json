@@ -144,7 +144,7 @@
     "commander": "14.0.0",
     "debug": "4.4.1",
     "didyoumean": "1.2.2",
-    "dockerfile-ast": "0.7.0",
+    "dockerfile-ast": "0.7.1",
     "dot-properties": "1.1.0",
     "ejs": "3.1.10",
     "eslint": "9.31.0",
