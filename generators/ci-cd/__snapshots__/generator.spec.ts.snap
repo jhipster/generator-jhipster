@@ -328,6 +328,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "reactive": false,
   "rememberMeKey": undefined,
   "routes": undefined,
+  "sampleWritten": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
   "searchEngineCouchbase": false,

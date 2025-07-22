@@ -208,7 +208,8 @@ export default class AngularGenerator extends BaseApplicationGenerator<
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity }) {
-        const asAuthorities = authorities => (authorities.length > 0 ? authorities.map(auth => `'${auth}'`).join(', ') : undefined);
+        const asAuthorities = (authorities: string[]): string | undefined =>
+          authorities.length > 0 ? authorities.map(auth => `'${auth}'`).join(', ') : undefined;
         mutateData(entity, {
           entityAngularAuthorities: asAuthorities(entity.entityAuthority?.split(',') ?? []),
           entityAngularReadAuthorities: asAuthorities([
@@ -216,7 +217,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
             ...(entity.entityReadAuthority?.split(',') ?? []),
           ]),
         });
-        entity.generateEntityClientEnumImports = fields => getClientEnumImportsFormat(fields, ANGULAR);
+        entity.generateEntityClientEnumImports = (fields: any) => getClientEnumImportsFormat(fields, ANGULAR);
       },
     });
   }
@@ -251,7 +252,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
             }
             return returnValue;
           },
-        } as any);
+        });
       },
     });
   }
@@ -350,7 +351,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
       },
       addWebsocketDependencies({ application, source }) {
         const { authenticationTypeSession, communicationSpringWebsocket, nodeDependencies } = application;
-        const dependencies = {};
+        const dependencies: Record<string, string> = {};
         if (communicationSpringWebsocket) {
           if (authenticationTypeSession) {
             dependencies['ngx-cookie-service'] = nodeDependencies['ngx-cookie-service'];

@@ -22,6 +22,7 @@ import chalk from 'chalk';
 import { passthrough } from '@yeoman/transform';
 
 import { isFileStateModified } from 'mem-fs-editor/state';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 import BaseApplicationGenerator from '../base-application/index.js';
 import type { Entity as BaseApplicationEntity } from '../base-application/index.js';
 import type { Application as SpringBootApplication } from '../spring-boot/types.js';
@@ -52,6 +53,7 @@ import {
   isFieldBlobType,
 } from '../base-application/internal/types/field-types.ts';
 import { baseNameProperties } from '../project-name/support/index.js';
+import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
 import type {
@@ -379,7 +381,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
             createUserManagementEntity.call(
               this as any,
               { ...customUserManagementData, ...customUserManagementData.annotations },
-              application,
+              application as ApplicationAll,
             ),
           );
           application.userManagement = bootstrap;
@@ -502,7 +504,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
         entity.anyRelationshipIsRequired = entity.relationships.some(rel => rel.relationshipRequired || rel.id);
       },
       checkForCircularRelationships({ entity }) {
-        const detectCyclicRequiredRelationship = (entity: BaseApplicationEntity, relatedEntities: Set<BaseApplicationEntity>) => {
+        const detectCyclicRequiredRelationship = (entity: BaseApplicationEntity, relatedEntities: Set<BaseApplicationEntity>): boolean => {
           if (relatedEntities.has(entity)) return true;
           relatedEntities.add(entity);
           return entity.relationships
@@ -545,8 +547,8 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
         if (application.clientRootDir) {
           packageJsonFiles.push(this.destinationPath(`${application.clientRootDir}package.json`));
         }
-        const isPackageJson = file => packageJsonFiles.includes(file.path);
-        const populateNullValues = dependencies => {
+        const isPackageJson = (file: MemFsEditorFile): boolean => packageJsonFiles.includes(file.path);
+        const populateNullValues = (dependencies: Record<string, string | null>) => {
           if (!dependencies) return;
           for (const key of Object.keys(dependencies)) {
             if (dependencies[key] === null && application.nodeDependencies[key]) {

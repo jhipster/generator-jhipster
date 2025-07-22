@@ -20,8 +20,17 @@ import { inspect } from 'node:util';
 import { defaultsDeep, get, merge, template } from 'lodash-es';
 import { transform } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
+import type CoreGenerator from '../base-core/generator.ts';
 
-export const createTranslationsFilter = ({ clientSrcDir, nativeLanguage, fallbackLanguage }) => {
+export const createTranslationsFilter = ({
+  clientSrcDir,
+  nativeLanguage,
+  fallbackLanguage,
+}: {
+  clientSrcDir: string;
+  nativeLanguage: string;
+  fallbackLanguage?: string;
+}) => {
   const pattern =
     !fallbackLanguage || nativeLanguage === fallbackLanguage
       ? `**/${clientSrcDir}i18n/${nativeLanguage}/*.json`
@@ -36,15 +45,28 @@ export const createTranslationsFileFilter = opts => {
 };
 
 export default class TranslationData {
-  translations;
-  generator;
+  translations: Record<string, any>;
+  generator: CoreGenerator;
 
-  constructor({ generator, translations }) {
+  constructor({ generator, translations }: { generator: CoreGenerator; translations: Record<string, any> }) {
+    if (!generator) {
+      throw new Error('Generator is required');
+    }
     this.generator = generator;
     this.translations = translations;
   }
 
-  loadFromStreamTransform({ enableTranslation, clientSrcDir, nativeLanguage, fallbackLanguage = 'en' }) {
+  loadFromStreamTransform({
+    enableTranslation,
+    clientSrcDir,
+    nativeLanguage,
+    fallbackLanguage = 'en',
+  }: {
+    enableTranslation: boolean;
+    clientSrcDir: string;
+    nativeLanguage: string;
+    fallbackLanguage?: string;
+  }) {
     const filter = createTranslationsFileFilter({ clientSrcDir, nativeLanguage, fallbackLanguage });
     const minimatchNative = new Minimatch(`**/${clientSrcDir}i18n/${nativeLanguage}/*.json`);
     return transform(file => {
@@ -59,7 +81,7 @@ export default class TranslationData {
     });
   }
 
-  mergeTranslation(translation, fallback) {
+  mergeTranslation(translation: Record<string, any>, fallback: boolean) {
     if (fallback) {
       defaultsDeep(this.translations, translation);
     } else {
@@ -69,11 +91,8 @@ export default class TranslationData {
 
   /**
    * Get translation value for a key.
-   *
-   * @param translationKey {string} - key to be translated
-   * @param [data] {object} - template data in case translated value is a template
    */
-  getClientTranslation(translationKey, data) {
+  getClientTranslation(translationKey: string, data?: Record<string, any>) {
     let translatedValue = get(this.translations, translationKey);
     if (translatedValue === undefined) {
       const [last, second, third, ...others] = translationKey.split('.').reverse();

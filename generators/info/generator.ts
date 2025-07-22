@@ -31,7 +31,7 @@ import type { Entity } from '../../lib/jhipster/types/entity.js';
 import { getEntitiesFromDir } from '../base-application/support/index.js';
 import { replaceSensitiveConfig } from './support/utils.js';
 
-const isInfoCommand = commandName => commandName === 'info' || undefined;
+const isInfoCommand = (commandName: string): true | undefined => commandName === 'info' || undefined;
 
 export default class InfoGenerator extends BaseCoreGenerator<
   CoreConfig & { appsFolders?: string[]; baseName?: string; packages?: string[] }

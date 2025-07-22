@@ -25,6 +25,7 @@ import { asPromptingTask } from '../../base-application/support/index.js';
 import { asPromptingWorkspacesTask } from '../support/task-type-inference.ts';
 import type { BaseKubernetesGenerator } from '../../kubernetes/generator.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../lib/core/application-types.ts';
+import type CoreGenerator from '../../base-core/generator.ts';
 
 const { PROMETHEUS } = monitoringTypes;
 const monitoring = monitoringTypes;
@@ -35,7 +36,7 @@ const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 /**
  * Ask For Application Type
  */
-export const askForApplicationType = asPromptingTask(async function askForApplicationType(this: BaseKubernetesGenerator, { control }) {
+export const askForApplicationType = asPromptingTask(async function askForApplicationType({ control }) {
   if (!this.shouldAskForPrompts({ control })) return;
 
   await this.prompt(
@@ -424,7 +425,7 @@ export const askForDockerPushCommand = asPromptingTask(async function askForDock
  * @param deploymentApplicationType type of application being composed
  * @returns {Array} array of string representing app folders
  */
-export function getAppFolders(this: BaseKubernetesGenerator, directory: string, deploymentApplicationType) {
+export function getAppFolders(this: CoreGenerator, directory: string, deploymentApplicationType?: string): string[] {
   const files = readdirSync(directory);
   const appsFolders: string[] = [];
 

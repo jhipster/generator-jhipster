@@ -1,4 +1,4 @@
-export const mavenProfileContent = data => {
+export const mavenProfileContent = (data: any) => {
   return `
             <!-- force dependency version as used bonsai add-on as of now only supports 7.10.x -->
             <!-- https://github.com/jhipster/generator-jhipster/issues/18650 -->

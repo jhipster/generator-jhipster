@@ -19,7 +19,7 @@
 import { rm } from 'fs/promises';
 import { createConflicterTransform, createYoResolveTransform, forceYoFiles } from '@yeoman/conflicter';
 import { transform } from '@yeoman/transform';
-import type { MemFsEditorFile } from 'mem-fs-editor';
+import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
 import { isFilePending, isFileStateModified } from 'mem-fs-editor/state';
 import { createCommitTransform } from 'mem-fs-editor/transform';
 import type { Options as PrettierOptions } from 'prettier';
@@ -29,8 +29,7 @@ import BaseGenerator from '../base/index.js';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
 import { GENERATOR_UPGRADE } from '../generator-list.js';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.js';
-import type { TaskParamWithControl } from '../base/tasks.js';
-import type { GenericTaskGroup } from '../base-core/types.js';
+import type { Features as BaseFeatures, Options as BaseOptions } from '../base/types.d.ts';
 import {
   autoCrlfTransform,
   createESLintTransform,
@@ -61,7 +60,7 @@ export default class BootstrapGenerator extends BaseGenerator {
   prettierOptions: PrettierOptions = { plugins: [] };
   refreshOnCommit = false;
 
-  constructor(args: any, options: any, features: any) {
+  constructor(args: string | string[], options: BaseOptions, features: BaseFeatures) {
     super(args, options, { uniqueGlobally: true, customCommitTask: () => this.commitTask(), ...features });
   }
 
@@ -91,12 +90,12 @@ export default class BootstrapGenerator extends BaseGenerator {
     return this.multistepTransform;
   }
 
-  get preConflicts(): GenericTaskGroup<this, TaskParamWithControl> {
-    return {
+  get preConflicts() {
+    return this.asAnyTaskGroup({
       queueCommitPrettierConfig() {
         this.queueCommitPrettierConfig();
       },
-    };
+    });
   }
 
   get [PRE_CONFLICTS_PRIORITY]() {
@@ -108,7 +107,7 @@ export default class BootstrapGenerator extends BaseGenerator {
    */
   queueMultistepTransform() {
     const multiStepTransform = createMultiStepTransform();
-    const listener = filePath => {
+    const listener = (filePath: string) => {
       if (multiStepTransform.templateFileFs.isTemplate(filePath)) {
         this.env.sharedFs.removeListener('change', listener);
         this.queueMultistepTransform();
@@ -136,7 +135,7 @@ export default class BootstrapGenerator extends BaseGenerator {
   }
 
   queueCommitPrettierConfig() {
-    const listener = filePath => {
+    const listener = (filePath: string): void => {
       if (isPrettierConfigFilePath(filePath)) {
         this.env.sharedFs.removeListener('change', listener);
         this.queueCommitPrettierConfig();
@@ -209,11 +208,11 @@ export default class BootstrapGenerator extends BaseGenerator {
       autoCrlfTransforms.push(await autoCrlfTransform({ baseDir: this.destinationPath() }));
     }
 
-    let customizeActions;
+    let customizeActions: NonNullable<Parameters<typeof createConflicterTransform>[1]>['customizeActions'];
     if (this.options.devBlueprintEnabled) {
       customizeActions = (actions, { separator }) => {
         return [
-          ...actions,
+          ...(actions as any),
           ...(separator ? [separator()] : []),
           {
             key: 't',
@@ -221,8 +220,8 @@ export default class BootstrapGenerator extends BaseGenerator {
             value: async ({ file }) => {
               const { applyChangesToFileOrCopy } = await import('../../lib/testing/apply-patch-to-template.js');
 
-              if (file.history?.[0] && file.conflicterData?.diskContents) {
-                const templateFile = file.history[0];
+              if ((file as VinylMemFsEditorFile).history?.[0] && file.conflicterData?.diskContents) {
+                const templateFile = (file as VinylMemFsEditorFile).history[0];
                 if (!file.contents) {
                   await rm(templateFile, { force: true });
                 } else {

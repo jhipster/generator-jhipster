@@ -80,7 +80,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
           const cacheConfigurationFile = `${application.javaPackageSrcDir}config/CacheConfiguration.java`;
           const needle = `${application.cacheProvider}-add-entry`;
           const useJcacheConfiguration = application.cacheProviderRedis;
-          const addEntryToCacheCallback = entry =>
+          const addEntryToCacheCallback = (entry: string) =>
             createNeedleCallback({
               needle,
               contentToAdd: `createCache(cm, ${entry}${useJcacheConfiguration ? ', jcacheConfiguration' : ''});`,

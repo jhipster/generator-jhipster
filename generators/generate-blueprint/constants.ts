@@ -125,7 +125,7 @@ export const subGeneratorPrompts = ({
 }: {
   subGenerator: string;
   additionalSubGenerator: boolean;
-  localBlueprint: boolean;
+  localBlueprint?: boolean;
 }) => {
   const { [SBS]: SBS_DEFAULT_VALUE } = defaultSubGeneratorConfig();
   const prompts = [

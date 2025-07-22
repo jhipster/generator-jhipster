@@ -24,7 +24,7 @@ import { createPomStorage } from '../maven/support/pom-store.js';
 import type { Application as CiCdApplication } from './types.js';
 
 export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplication> {
-  insideDocker;
+  insideDocker!: boolean;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {

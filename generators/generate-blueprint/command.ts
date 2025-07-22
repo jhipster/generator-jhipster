@@ -38,6 +38,13 @@ const command = {
       },
       scope: 'storage',
     },
+    defaults: {
+      cli: {
+        description: 'Use default values for the generator',
+        type: Boolean,
+      },
+      scope: 'none',
+    },
     gitDependency: {
       cli: {
         description: 'Use git dependency (eg: github:jhipster/generator-jhipster#main)',
@@ -157,6 +164,14 @@ const command = {
         type: Boolean,
       },
       scope: 'none',
+    },
+    sampleWritten: {
+      description: 'Sample has been written',
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
+      scope: 'storage',
     },
   },
   import: [GENERATOR_INIT],
