@@ -1,11 +1,10 @@
 import { readFileSync, writeFileSync } from 'fs';
-import { applyPatch, structuredPatch } from 'diff';
+import { type StructuredPatchHunk, applyPatch, structuredPatch } from 'diff';
 
-const splitHunk = ({ lines, ...hunk }, contextSize) => {
-  let contextLines: any = [];
-  // let nextHunkContextLines = [];
-  let hunkLines: any = [];
-  const hunks: any = [];
+const splitHunk = ({ lines, ...hunk }: StructuredPatchHunk, contextSize: number) => {
+  let contextLines: string[] = [];
+  let hunkLines: string[] = [];
+  const hunks: StructuredPatchHunk[] = [];
   for (const line of lines) {
     if (line.startsWith(' ')) {
       contextLines.push(line);
@@ -30,7 +29,7 @@ type ApplyOptions = { templateFile: string; oldFileContents: string; newFileCont
 export const applyChangesToFile = ({ templateFile, oldFileContents, newFileContents, contextSize = 2, fuzzFactor = 0 }: ApplyOptions) => {
   const patch = structuredPatch(templateFile, templateFile, oldFileContents, newFileContents, undefined, undefined, {
     context: contextSize,
-    newlineIsToken: false,
+    // newlineIsToken: false,
     // ignoreWhitespace: true,
     // oneChangePerToken: true,
     // maxEditLength: 3,
