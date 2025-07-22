@@ -210,7 +210,7 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
 
   if (choices.length > 0) {
     const selectedChoices: string[] = [WEBSOCKET, SEARCH_ENGINE, 'messageBroker', ENABLE_SWAGGER_CODEGEN]
-      .map(property => [property, this.jhipsterConfig[property]])
+      .map(property => [property, (this.jhipsterConfig as any)[property]] as [string, any])
       .filter(([, value]) => value !== undefined)
       .map(([key, value]) => `${key}:${value}`)
       .filter(Boolean) as string[];
@@ -230,7 +230,7 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
     Object.assign(
       this.jhipsterConfig,
       Object.fromEntries(
-        answers.serverSideOptions
+        (answers.serverSideOptions as string[])
           .map(it => it.split(':'))
           .map(([key, value]) => [key, ['true', 'false'].includes(value) ? value === 'true' : value]),
       ),

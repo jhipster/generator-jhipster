@@ -196,7 +196,10 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
           optionalOrMono: ({ reactive }) => (reactive ? 'Mono' : 'Optional'),
           optionalOrMonoOfNullable: ({ reactive }) => (reactive ? 'Mono.justOrEmpty' : 'Optional.ofNullable'),
           optionalOrMonoClassPath: ({ reactive }) => (reactive ? 'reactor.core.publisher.Mono' : 'java.util.Optional'),
-          wrapMono: ctx => (className: string) => (ctx.reactive ? `Mono<${className}>` : className),
+          wrapMono:
+            ctx =>
+            (className: string): string =>
+              ctx.reactive ? `Mono<${className}>` : className,
           listOrFlux: ({ reactive }) => (reactive ? 'Flux' : 'List'),
           listOrFluxClassPath: ({ reactive }) => (reactive ? 'reactor.core.publisher.Flux' : 'java.util.List'),
         });
@@ -380,7 +383,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
    *   super.checkJava(['8', '11', '17'], { throwOnError: true });
    * }
    */
-  checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS, checkResultValidation?) {
+  checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS, checkResultValidation?: Parameters<typeof this.validateResult>[1]) {
     this.validateResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
   }
 }

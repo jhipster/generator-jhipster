@@ -42,7 +42,10 @@ export type ApplicationDefaultsTaskParam<A extends BaseSimpleApplicationApplicat
         [Key in keyof (Partial<A> & { __override__?: boolean })]?: Key extends '__override__'
           ? boolean
           : Key extends keyof A
-            ? A[Key] | ((ctx: A) => A[Key])
+            ? // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+              A[Key] extends Function
+              ? (ctx: A) => A[Key]
+              : A[Key] | ((ctx: A) => A[Key])
             : never;
       }>
     >[]

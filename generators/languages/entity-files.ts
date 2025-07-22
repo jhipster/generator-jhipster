@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingEntitiesTask, getEnumInfo } from '../base-application/support/index.js';
+import { asWriteFilesSection, asWritingEntitiesTask, getEnumInfo } from '../base-application/support/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import type LanguagesGenerator from './generator.js';
 import type { Application as LanguagesApplication, Entity as LanguagesEntity } from './types.js';
@@ -25,7 +25,7 @@ import type { Application as LanguagesApplication, Entity as LanguagesEntity } f
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
-export const entityClientI18nFiles = {
+export const entityClientI18nFiles = asWriteFilesSection({
   entityBaseFiles: [
     {
       templates: [
@@ -36,9 +36,9 @@ export const entityClientI18nFiles = {
       ],
     },
   ],
-};
+});
 
-export const userTranslationfiles = {
+export const userTranslationfiles = asWriteFilesSection({
   userTranslationfiles: [
     {
       from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
@@ -47,9 +47,9 @@ export const userTranslationfiles = {
       templates: ['user-management.json'],
     },
   ],
-};
+});
 
-export const enumClientI18nFiles = {
+export const enumClientI18nFiles = asWriteFilesSection({
   enumBaseFiles: [
     {
       templates: [
@@ -60,7 +60,7 @@ export const enumClientI18nFiles = {
       ],
     },
   ],
-};
+});
 
 export function writeEntityFiles() {
   return {

@@ -20,6 +20,7 @@ import { inspect } from 'node:util';
 import { defaultsDeep, get, merge, template } from 'lodash-es';
 import { transform } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 import type CoreGenerator from '../base-core/generator.ts';
 
 export const createTranslationsFilter = ({
@@ -36,12 +37,12 @@ export const createTranslationsFilter = ({
       ? `**/${clientSrcDir}i18n/${nativeLanguage}/*.json`
       : `**/${clientSrcDir}i18n/{${nativeLanguage},${fallbackLanguage}}/*.json`;
   const minimatch = new Minimatch(pattern);
-  return filePath => minimatch.match(filePath);
+  return (filePath: string): boolean => minimatch.match(filePath);
 };
 
-export const createTranslationsFileFilter = opts => {
+export const createTranslationsFileFilter = (opts: Parameters<typeof createTranslationsFilter>[0]) => {
   const filter = createTranslationsFilter(opts);
-  return file => filter(file.path);
+  return (file: MemFsEditorFile): boolean => filter(file.path);
 };
 
 export default class TranslationData {

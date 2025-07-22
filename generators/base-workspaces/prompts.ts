@@ -24,7 +24,7 @@ import type BaseWorkspacesGenerator from './generator.js';
  */
 export const askForDirectoryPath = asPromptingTask(async function askForDirectoryPath(this: BaseWorkspacesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
-  let appsFolders;
+  let appsFolders: string[];
   await this.prompt(
     [
       {

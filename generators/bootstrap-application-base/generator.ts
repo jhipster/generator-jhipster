@@ -400,7 +400,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
           const customEntityData: any = customEntity?.entityStorage.getAll() ?? {};
           Object.assign(
             bootstrap,
-            createAuthorityEntity.call(this as any, { ...customEntityData, ...customEntityData.annotations }, application),
+            createAuthorityEntity.call(this as any, { ...customEntityData, ...customEntityData.annotations }, application as any),
           );
           application.authority = bootstrap;
         }

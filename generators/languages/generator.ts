@@ -60,21 +60,15 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   askForMoreLanguages!: boolean;
   askForNativeLanguage!: boolean;
   translationData!: TranslationData;
-  languages;
+  languages?: string[];
   /**
    * Languages to be generated.
    * Can be incremental or every language.
    */
-  languagesToApply;
-  languageCommand;
-  writeJavaLanguageFiles;
-  regenerateLanguages;
-
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    this.languageCommand = this.options.commandName === 'languages';
-  }
+  languagesToApply!: string[];
+  languageCommand!: boolean;
+  writeJavaLanguageFiles!: boolean;
+  regenerateLanguages!: boolean;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -104,10 +98,13 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return this.asInitializingTaskGroup({
+      initializing() {
+        this.languageCommand = this.options.commandName === 'languages';
+      },
       languagesToApply() {
         // Validate languages passed as argument.
         // Additional languages, will not replace current ones.
-        this.languagesToApply = [this.options.nativeLanguage, ...(this.languages ?? [])].filter(Boolean);
+        this.languagesToApply = [this.options.nativeLanguage, ...(this.languages ?? [])].filter(Boolean) as string[];
       },
       validateSupportedLanguages() {
         if (this.languagesToApply.length > 0) {
@@ -173,7 +170,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
         this.config.defaults({ languages: [] });
         if (!isLanguageConfigured && this.languagesToApply.length === 0) {
           // If languages is not configured, apply defaults.
-          this.languagesToApply = this.jhipsterConfigWithDefaults.languages;
+          this.languagesToApply = this.jhipsterConfigWithDefaults.languages as string[];
         }
         if (this.jhipsterConfig.languages!.length === 0 || this.jhipsterConfig.languages![0] !== this.jhipsterConfig.nativeLanguage) {
           // Set native language as first language.
@@ -232,7 +229,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
         const fallbackLanguage = 'en';
         this.queueLoadLanguages({ clientSrcDir, enableTranslation, nativeLanguage, fallbackLanguage });
         const filter = createTranslationsFilter({ clientSrcDir, nativeLanguage, fallbackLanguage });
-        const listener = filePath => {
+        const listener = (filePath: string): void => {
           if (filter(filePath)) {
             this.env.sharedFs.removeListener('change', listener);
             this.queueLoadLanguages({ clientSrcDir, enableTranslation, nativeLanguage, fallbackLanguage });
@@ -393,7 +390,17 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
     }
   }
 
-  queueLoadLanguages({ enableTranslation, clientSrcDir, nativeLanguage, fallbackLanguage = 'en' }) {
+  queueLoadLanguages({
+    enableTranslation,
+    clientSrcDir,
+    nativeLanguage,
+    fallbackLanguage = 'en',
+  }: {
+    enableTranslation: boolean;
+    clientSrcDir: string;
+    nativeLanguage: string;
+    fallbackLanguage?: string;
+  }) {
     this.queueTask({
       method: async () => {
         const filter = createTranslationsFileFilter({ clientSrcDir, nativeLanguage, fallbackLanguage });
