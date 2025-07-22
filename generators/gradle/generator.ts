@@ -59,7 +59,7 @@ export default class GradleGenerator extends BaseApplicationGenerator<
   GradleOptions,
   GradleSource
 > {
-  gradleVersionFromWrapper;
+  gradleVersionFromWrapper: string | undefined;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {

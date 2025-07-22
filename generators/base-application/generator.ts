@@ -223,7 +223,7 @@ export default class BaseApplicationGenerator<
    * Get Entities configuration path
    * @returns
    */
-  getEntitiesConfigPath(...args) {
+  getEntitiesConfigPath(...args: string[]): string {
     return this.destinationPath(JHIPSTER_CONFIG_DIR, ...args);
   }
 
@@ -258,7 +258,10 @@ export default class BaseApplicationGenerator<
    * get sorted list of entities according to changelog date (i.e. the order in which they were added)
    */
   getExistingEntities(): { name: string; definition: Entity }[] {
-    function isBefore(e1, e2) {
+    function isBefore(
+      e1: { definition: { annotations?: { changelogDate?: number } } },
+      e2: { definition: { annotations?: { changelogDate?: number } } },
+    ): number {
       return (e1.definition.annotations?.changelogDate ?? 0) - (e2.definition.annotations?.changelogDate ?? 0);
     }
 
@@ -431,7 +434,7 @@ export default class BaseApplicationGenerator<
       args.application = this.#application;
     }
     if (applicationDefaults) {
-      args.applicationDefaults = (...args) => mutateData(this.#application, ...args.map(data => ({ __override__: false, ...data })));
+      args.applicationDefaults = (...args: any[]) => mutateData(this.#application, ...args.map(data => ({ __override__: false, ...data })));
     }
     if (entitiesToLoad) {
       args.entitiesToLoad = this.#getEntitiesDataToLoad();

@@ -18,6 +18,7 @@
  */
 import type ClientGenerator from '../client/generator.js';
 import { asPromptingTask } from '../base-application/support/task-type-inference.js';
+import type CoreGenerator from '../base-core/generator.ts';
 
 type Choice = { value: string; name: string };
 
@@ -34,10 +35,7 @@ export const askForClientTheme = asPromptingTask(async function askForClientThem
       when: () => ['angular', 'react', 'vue'].includes(clientFramework!),
       message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
       choices: async () => {
-        const bootswatchChoices = await retrieveOnlineBootswatchThemes({ clientFramework }).catch(errorMessage => {
-          this.log.warn(errorMessage);
-          return retrieveLocalBootswatchThemes({ clientFramework });
-        });
+        const bootswatchChoices = await retrieveBootswatchThemes.call(this, { clientFramework });
         return [
           {
             value: 'none',
@@ -76,16 +74,17 @@ export const askForClientThemeVariant = asPromptingTask(async function askForCli
   );
 });
 
-async function retrieveOnlineBootswatchThemes({ clientFramework }): Promise<Choice[]> {
-  return _retrieveBootswatchThemes({ clientFramework, useApi: true });
-}
+async function retrieveBootswatchThemes(this: CoreGenerator, { clientFramework }: { clientFramework?: string }): Promise<Choice[]> {
+  try {
+    const response = await fetch(`https://bootswatch.com/api/${clientFramework === 'vue' ? '4' : '5'}.json`);
+    const { themes } = (await response.json()) as { themes: { name: string }[] };
+    return themes.map(theme => ({
+      value: theme.name.toLowerCase(),
+      name: theme.name,
+    }));
+  } catch (error) {
+    this.log.warn(error);
 
-async function retrieveLocalBootswatchThemes({ clientFramework }): Promise<Choice[]> {
-  return _retrieveBootswatchThemes({ clientFramework, useApi: false });
-}
-
-async function _retrieveBootswatchThemes({ clientFramework, useApi }): Promise<Choice[]> {
-  if (!useApi) {
     return [
       { value: 'cerulean', name: 'Cerulean' },
       { value: 'cosmo', name: 'Cosmo' },
@@ -114,11 +113,4 @@ async function _retrieveBootswatchThemes({ clientFramework, useApi }): Promise<C
       { value: 'zephyr', name: 'Zephyr' },
     ];
   }
-
-  const response = await fetch(`https://bootswatch.com/api/${clientFramework === 'vue' ? '4' : '5'}.json`);
-  const { themes } = (await response.json()) as { themes: { name: string }[] };
-  return themes.map(theme => ({
-    value: theme.name.toLowerCase(),
-    name: theme.name,
-  }));
 }

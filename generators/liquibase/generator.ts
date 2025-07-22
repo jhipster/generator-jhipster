@@ -578,7 +578,7 @@ export default class LiquibaseGenerator<
   /* private methods use within generator                                     */
   /* ======================================================================== */
 
-  isChangelogNew({ entityName, changelogDate }) {
+  override isChangelogNew({ entityName, changelogDate }: { entityName: string; changelogDate: string }): boolean {
     return !fs.existsSync(
       this.destinationPath(`src/main/resources/config/liquibase/changelog/${changelogDate}_added_entity_${entityName}.xml`),
     );

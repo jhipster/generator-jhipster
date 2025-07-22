@@ -326,12 +326,9 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
   /**
    * @private
    * Returns the JDBC URL for a databaseType
-   *
-   * @param {string} databaseType
-   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
    */
-  getJDBCUrl(databaseType, options = {}) {
-    return getJdbcUrl(databaseType, options);
+  getJDBCUrl(...args: Parameters<typeof getJdbcUrl>) {
+    return getJdbcUrl(...args);
   }
 
   /**
@@ -341,7 +338,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
    * @param {string} databaseType
    * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
    */
-  getR2DBCUrl(databaseType, options = {}) {
-    return getR2dbcUrl(databaseType, options);
+  getR2DBCUrl(...args: Parameters<typeof getR2dbcUrl>) {
+    return getR2dbcUrl(...args);
   }
 }

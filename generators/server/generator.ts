@@ -32,7 +32,9 @@ import type {
   Application as ServerApplication,
   Config as ServerConfig,
   Entity as ServerEntity,
+  Field as ServerField,
   Options as ServerOptions,
+  Relationship as ServerRelationship,
   Source as ServerSource,
 } from './types.js';
 
@@ -59,10 +61,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
   ServerOptions,
   ServerSource
 > {
-  /** @type {string} */
-  jhipsterDependenciesVersion;
-  /** @type {string} */
-  projectVersion;
+  jhipsterDependenciesVersion!: string;
+  projectVersion!: string;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -313,8 +313,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
    * Validate the entityTableName
    * @return {true|string} true for a valid value or error message.
    */
-  _validateTableName(entityTableName, prodDatabaseType, entity) {
-    const jhiTablePrefix = entity.jhiTablePrefix;
+  _validateTableName(entityTableName: string, prodDatabaseType: string, entity: ServerEntity): true | string {
+    const jhiTablePrefix = (entity as any).jhiTablePrefix;
     const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${entity.name}.json file and then run again 'jhipster entity ${entity.name}.'`;
 
     if (!/^([a-zA-Z0-9_]*)$/.test(entityTableName)) {
@@ -341,7 +341,7 @@ ${instructions}`,
     return true;
   }
 
-  _validateField(entityName, field) {
+  _validateField(entityName: string, field: ServerField) {
     if (field.fieldName === undefined) {
       throw new Error(`fieldName is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
     }
@@ -397,7 +397,7 @@ ${instructions}`,
     }
   }
 
-  _validateRelationship(entityName, relationship) {
+  _validateRelationship(entityName: string, relationship: ServerRelationship) {
     if (relationship.otherEntityName === undefined) {
       throw new Error(
         `otherEntityName is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`,

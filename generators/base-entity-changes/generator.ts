@@ -82,7 +82,7 @@ export default abstract class BaseEntityChangesGenerator<
   recreateInitialChangelog!: boolean;
   private entityChanges!: any[];
 
-  abstract isChangelogNew({ entityName, changelogDate }): boolean;
+  abstract isChangelogNew({ entityName, changelogDate }: { entityName: string; changelogDate: string }): boolean;
 
   protected getTaskFirstArgForPriority(
     priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES],
@@ -116,7 +116,7 @@ export default abstract class BaseEntityChangesGenerator<
 
     const entitiesByName = Object.fromEntries(paramEntities.map(entity => [entity.name, entity]));
     const entitiesWithExistingChangelog = entityNames.filter(
-      entityName => !this.isChangelogNew({ entityName, changelogDate: entitiesByName[entityName].annotations?.changelogDate }),
+      entityName => !this.isChangelogNew({ entityName, changelogDate: entitiesByName[entityName].annotations?.changelogDate as string }),
     );
     const previousEntitiesByName = Object.fromEntries(
       entityNames

@@ -92,7 +92,7 @@ export class SpringBootApplicationGenerator extends BaseApplicationGenerator<
 > {}
 
 export default class SpringBootGenerator extends SpringBootApplicationGenerator {
-  fakeKeytool;
+  fakeKeytool!: boolean;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -435,7 +435,11 @@ ${classProperties
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity, application }) {
-        const hasAnyAuthority = authorities =>
+        if (entity.entityRestLayer === false) {
+          entity.entityClientModelOnly = true;
+        }
+
+        const hasAnyAuthority = (authorities: string[]): string | undefined =>
           authorities.length > 0 ? `hasAnyAuthority(${authorities.map(auth => `'${auth}'`).join(',')})` : undefined;
         mutateData(entity, {
           entityPersistenceLayer: true,

@@ -343,12 +343,9 @@ ${comment}
   /**
    * @private
    * Generate Entity Client Field Default Values
-   *
-   * @param {Array|Object} fields - array of fields
-   * @returns {Array} defaultVariablesValues
    */
-  generateEntityClientFieldDefaultValues(fields) {
-    const defaultVariablesValues = {};
+  generateEntityClientFieldDefaultValues(fields: ClientField[]): Record<string, string> {
+    const defaultVariablesValues: Record<string, string> = {};
     fields.forEach(field => {
       const fieldType = field.fieldType;
       const fieldName = field.fieldName;

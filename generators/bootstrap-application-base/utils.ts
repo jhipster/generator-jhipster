@@ -17,23 +17,28 @@
  * limitations under the License.
  */
 import { defaults } from 'lodash-es';
-import { Validations, authenticationTypes, databaseTypes, fieldTypes } from '../../lib/jhipster/index.js';
+import { Validations, databaseTypes, fieldTypes } from '../../lib/jhipster/index.js';
 import { loadRequiredConfigIntoEntity } from '../base-application/support/index.js';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
 import { getDatabaseTypeData } from '../server/support/database.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import { formatDateForChangelog } from '../base/support/timestamp.ts';
 import type { EntityAll as ApplicationEntity, UserEntity } from '../../lib/types/entity-all.js';
+import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../base-application/types.d.ts';
+import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
 
 const { CASSANDRA } = databaseTypes;
-const { OAUTH2 } = authenticationTypes;
 const { CommonDBTypes } = fieldTypes;
 
 const { STRING: TYPE_STRING, BOOLEAN: TYPE_BOOLEAN } = CommonDBTypes;
 
 const authorityEntityName = 'Authority';
 
-export function createUserEntity(this: BaseApplicationGenerator, customUserData = {}, application): Partial<UserEntity> {
+export function createUserEntity(
+  this: BaseApplicationGenerator,
+  customUserData: Partial<UserEntity> = {},
+  application: BaseApplicationApplication<BaseApplicationEntity>,
+): Partial<UserEntity> {
   const userEntityDefinition = this.getEntityConfig('User')?.getAll() as Partial<UserEntity>;
   if (userEntityDefinition) {
     if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
@@ -159,8 +164,8 @@ export function createUserEntity(this: BaseApplicationGenerator, customUserData 
 
 export function createUserManagementEntity(
   this: BaseApplicationGenerator,
-  customUserManagementData = {},
-  application,
+  customUserManagementData: Partial<ApplicationEntity> = {},
+  application: ApplicationAll,
 ): Partial<ApplicationEntity> {
   const user = createUserEntity.call(this, {}, application);
   for (const field of user.fields ?? []) {
@@ -171,7 +176,7 @@ export function createUserManagementEntity(
       (field as any).id = false;
       field.fieldValidateRules = [Validations.REQUIRED];
       // Set id type fallback since it's not id anymore and will not be calculated.
-      field.fieldType = field.fieldType ?? getDatabaseTypeData(application.databaseType).defaultPrimaryKeyType;
+      field.fieldType = field.fieldType ?? getDatabaseTypeData(application.databaseType!).defaultPrimaryKeyType;
     }
   }
 

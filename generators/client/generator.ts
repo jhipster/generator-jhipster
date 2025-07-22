@@ -191,20 +191,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
-  get preparingEachEntity() {
-    return {
-      prepareEntity({ entity }) {
-        if (entity.entityRestLayer === false) {
-          entity.entityClientModelOnly = true;
-        }
-      },
-    };
-  }
-
-  get [ClientApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
-  }
-
   // Public API method used by the getter and also by Blueprints
   get writing() {
     return this.asWritingTaskGroup({

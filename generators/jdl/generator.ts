@@ -39,7 +39,7 @@ import type { Config as JdlConfig, Options as JdlOptions } from './types.js';
 /**
  * Add jdl extension to the file
  */
-const toJdlFile = file => {
+const toJdlFile = (file: string): string => {
   if (!extname(file)) {
     return `${file}.jdl`;
   }
@@ -265,7 +265,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 
-  async runNonInteractive(applications: ApplicationWithEntitiesAndPath[], options) {
+  async runNonInteractive(applications: ApplicationWithEntitiesAndPath[], options: any) {
     await Promise.all(
       applications.map(async application => {
         const rootCwd = this.destinationPath();

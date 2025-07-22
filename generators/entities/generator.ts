@@ -20,7 +20,7 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_APP } from '../generator-list.js';
 
 export default class EntitiesGenerator extends BaseApplicationGenerator {
-  entities;
+  entities?: string[];
 
   async beforeQueue() {
     if (!this.fromBlueprint) {

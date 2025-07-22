@@ -25,7 +25,12 @@ import type {
 
 export type { Config, Relationship, Options, Source } from '../client/types.d.ts';
 
-export interface Entity<F extends ClientField = ClientField, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
+export type Field = ClientField & {
+  fieldTsDefaultValue?: string;
+  defaultValue?: string;
+};
+
+export interface Entity<F extends Field = Field, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
   /**
    * @experimental to be replaced with a calculated property
    * Returns the typescript import section of enums referenced by all fields of the entity.

@@ -129,7 +129,8 @@ export default class BaseSimpleApplicationGenerator<
       args.source = this.#source;
     }
     if (applicationDefaults) {
-      args.applicationDefaults = (...args) => mutateData(this.context, ...args.map(data => ({ __override__: false, ...data })));
+      args.applicationDefaults = (...args: any[]): void =>
+        mutateData(this.context, ...args.map(data => ({ __override__: false, ...data })));
     }
     return args;
   }

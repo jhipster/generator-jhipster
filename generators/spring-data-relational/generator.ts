@@ -160,7 +160,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         assert.ok(javaDependencies, 'javaDependencies is required');
         assert.ok(packageFolder, 'packageFolder is required');
 
-        const { prodDatabaseType, devDatabaseTypeH2Any } = application as any;
+        const { prodDatabaseType, devDatabaseTypeH2Any } = application;
         const dbDefinitions = getDatabaseTypeMavenDefinition(prodDatabaseType, {
           inProfile: devDatabaseTypeH2Any ? 'prod' : undefined,
           javaDependencies,
@@ -218,7 +218,13 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         if (application.buildToolGradle) {
           const artifacts = javaSqlDatabaseArtifacts[prodDatabaseType];
           source.addJavaDefinition!(
-            { dependencies: [artifacts.jdbc, artifacts.testContainer, ...(reactive && artifacts.r2dbc ? [artifacts.r2dbc] : [])] },
+            {
+              dependencies: [
+                artifacts.jdbc,
+                artifacts.testContainer,
+                ...(reactive && 'r2dbc' in artifacts && artifacts.r2dbc ? [artifacts.r2dbc] : []),
+              ],
+            },
             { gradleFile: devDatabaseTypeH2Any ? 'gradle/profile_prod.gradle' : 'build.gradle' },
           );
           if (devDatabaseTypeH2Any) {
@@ -291,22 +297,16 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   /**
    * @private
    * Returns the JDBC URL for a databaseType
-   *
-   * @param {string} databaseType
-   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
    */
-  getJDBCUrl(databaseType, options = {}) {
-    return getJdbcUrl(databaseType, options);
+  getJDBCUrl(...args: Parameters<typeof getJdbcUrl>): string {
+    return getJdbcUrl(...args);
   }
 
   /**
    * @private
    * Returns the R2DBC URL for a databaseType
-   *
-   * @param {string} databaseType
-   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
    */
-  getR2DBCUrl(databaseType, options = {}) {
-    return getR2dbcUrl(databaseType, options);
+  getR2DBCUrl(...args: Parameters<typeof getR2dbcUrl>): string {
+    return getR2dbcUrl(...args);
   }
 }

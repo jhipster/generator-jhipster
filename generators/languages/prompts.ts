@@ -16,11 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
 import type LanguagesGenerator from './generator.js';
 import detectLanguage from './support/detect-language.js';
 import { languagesAsChoices } from './support/languages.js';
 
-export async function askI18n(this: LanguagesGenerator) {
+export const askI18n = asPromptingTask<LanguagesGenerator>(async function askI18n() {
   if (!this.askForMoreLanguages) return;
   const nativeLanguage = this.jhipsterConfig.nativeLanguage;
   const answers = await this.prompt(
@@ -45,9 +46,9 @@ export async function askI18n(this: LanguagesGenerator) {
   if (nativeLanguage !== answers.nativeLanguage) {
     this.languagesToApply.push(answers.nativeLanguage);
   }
-}
+});
 
-export async function askForLanguages(this: LanguagesGenerator, { control }) {
+export const askForLanguages = asPromptingTask<LanguagesGenerator>(async function askForLanguages({ control }) {
   if (!this.askForMoreLanguages) {
     return;
   }
@@ -75,4 +76,4 @@ export async function askForLanguages(this: LanguagesGenerator, { control }) {
       this.languagesToApply.push(...answers.languages);
     }
   }
-}
+});

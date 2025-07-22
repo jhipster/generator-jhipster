@@ -17,18 +17,28 @@
  * limitations under the License.
  */
 import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { Application as BaseSimpleApplication } from '../base-simple-application/types.d.ts';
+import type {
+  Application as BaseSimpleApplicationApplication,
+  Config as BaseSimpleApplicationConfig,
+  Options as BaseSimpleApplicationOptions,
+} from '../base-simple-application/types.d.ts';
+import type { Options as GitOptions } from '../git/types.d.ts';
 import type command from './command.js';
+
+export type { Features } from '../base-simple-application/types.d.ts';
 
 type Command = HandleCommandTypes<typeof command>;
 
 export type Application = Command['Application'] &
-  BaseSimpleApplication & {
+  BaseSimpleApplicationApplication & {
     blueprintMjsExtension: string;
     commands: string[];
+    blueprintsPath: string;
   };
 
-export type Config = Command['Config'];
+export type Config = Command['Config'] & BaseSimpleApplicationConfig;
+
+export type Options = Command['Options'] & BaseSimpleApplicationOptions & GitOptions;
 
 export type TemplateData = Application & {
   skipWorkflows: boolean;

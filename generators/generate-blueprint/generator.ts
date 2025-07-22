@@ -20,13 +20,11 @@ import { rm } from 'node:fs/promises';
 import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 
-import type { Application, Config, Options } from '../base-simple-application/index.js';
-import BaseGenerator from '../base-simple-application/index.js';
+import BaseSimpleApplicationGenerator from '../base-simple-application/index.js';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
 
 import * as GENERATOR_LIST from '../generator-list.js';
 import { BLUEPRINT_API_VERSION } from '../generator-constants.js';
-import type { ExportGeneratorOptionsFromCommand } from '../../lib/command/types.js';
 import { files, generatorFiles } from './files.js';
 import {
   DYNAMIC,
@@ -42,43 +40,21 @@ import {
   requiredConfig,
   subGeneratorPrompts,
 } from './constants.js';
-import type command from './command.js';
+import type {
+  Application as GenerateBlueprintApplication,
+  Config as GenerateBlueprintConfig,
+  Features as GenerateBlueprintFeatures,
+  Options as GenerateBlueprintOptions,
+} from './types.js';
 
 const { GENERATOR_INIT } = GENERATOR_LIST;
 
 const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spec.?(c|m)js'];
 
-type BlueprintConfig = {
-  sampleWritten?: boolean;
-  githubRepository?: string;
-  cli?: boolean;
-  cliName?: string;
-  blueprintMjsExtension: string;
-  generators: Record<string, any>;
-  js: boolean;
-};
-
-type BlueprintApplication = BlueprintConfig & { commands: string[]; blueprintsPath?: string; js?: boolean };
-
-type BlueprintOptions = ExportGeneratorOptionsFromCommand<typeof command> & {
-  skipGit: boolean;
-  existed: boolean;
-  defaults: boolean;
-};
-
-export default class extends BaseGenerator<
-  Application & BlueprintApplication,
-  Config &
-    BlueprintConfig & {
-      cli?: boolean;
-      caret: boolean;
-      dynamic: boolean;
-      localBlueprint: boolean;
-      subGenerators: string[];
-      additionalSubGenerators: string;
-      generators: Record<string, any>;
-    },
-  Options & BlueprintOptions
+export default class extends BaseSimpleApplicationGenerator<
+  GenerateBlueprintApplication,
+  GenerateBlueprintConfig,
+  GenerateBlueprintOptions
 > {
   recreatePackageLock!: boolean;
   skipWorkflows!: boolean;
@@ -86,7 +62,7 @@ export default class extends BaseGenerator<
   gitDependency!: string;
   allGenerators!: boolean;
 
-  constructor(args, options, features) {
+  constructor(args: string | string[], options: GenerateBlueprintOptions, features: GenerateBlueprintFeatures) {
     super(args, options, { storeJHipsterVersion: true, ...features });
   }
 
@@ -113,7 +89,7 @@ export default class extends BaseGenerator<
     });
   }
 
-  get [BaseGenerator.INITIALIZING]() {
+  get [BaseSimpleApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
@@ -125,16 +101,13 @@ export default class extends BaseGenerator<
       async eachSubGenerator() {
         const { localBlueprint } = this.jhipsterConfig;
         const { allPriorities } = this.options;
-        const subGenerators = this.jhipsterConfig.subGenerators ?? [];
+        const subGenerators = (this.jhipsterConfig.subGenerators ?? []) as string[];
         for (const subGenerator of subGenerators) {
           const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
           if (allPriorities) {
             subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
           }
-          await this.prompt(
-            subGeneratorPrompts({ subGenerator, localBlueprint, additionalSubGenerator: false }) as any,
-            subGeneratorStorage,
-          );
+          await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint, additionalSubGenerator: false }), subGeneratorStorage);
         }
       },
       async eachAdditionalSubGenerator() {
@@ -155,7 +128,7 @@ export default class extends BaseGenerator<
     });
   }
 
-  get [BaseGenerator.PROMPTING]() {
+  get [BaseSimpleApplicationGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
@@ -175,7 +148,7 @@ export default class extends BaseGenerator<
     });
   }
 
-  get [BaseGenerator.CONFIGURING]() {
+  get [BaseSimpleApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -189,7 +162,7 @@ export default class extends BaseGenerator<
     });
   }
 
-  get [BaseGenerator.COMPOSING]() {
+  get [BaseSimpleApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -201,7 +174,7 @@ export default class extends BaseGenerator<
     });
   }
 
-  get [BaseGenerator.LOADING]() {
+  get [BaseSimpleApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -230,7 +203,7 @@ export default class extends BaseGenerator<
     });
   }
 
-  get [BaseGenerator.PREPARING]() {
+  get [BaseSimpleApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -293,7 +266,7 @@ export default class extends BaseGenerator<
     });
   }
 
-  get [BaseGenerator.WRITING]() {
+  get [BaseSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -404,7 +377,7 @@ export default class extends BaseGenerator<
     });
   }
 
-  get [BaseGenerator.POST_WRITING]() {
+  get [BaseSimpleApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
@@ -415,8 +388,7 @@ export default class extends BaseGenerator<
         const {
           skipInstall,
           skipGit,
-          existed,
-          [GENERATE_SNAPSHOTS]: generateSnapshots = !localBlueprint && !skipInstall && !skipGit && !existed,
+          [GENERATE_SNAPSHOTS]: generateSnapshots = !localBlueprint && !skipInstall && !skipGit && !control.existingProject,
         } = this.options;
 
         if (this.recreatePackageLock) {
@@ -463,7 +435,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
     });
   }
 
-  get [BaseGenerator.POST_INSTALL]() {
+  get [BaseSimpleApplicationGenerator.POST_INSTALL]() {
     return this.delegateTasksToBlueprint(() => this.postInstall);
   }
 
@@ -487,7 +459,7 @@ To begin to work:
     });
   }
 
-  get [BaseGenerator.END]() {
+  get [BaseSimpleApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 
