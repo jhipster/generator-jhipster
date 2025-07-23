@@ -20,19 +20,19 @@
             />
 
             <div v-if="v$.userAccount.login.$anyDirty && v$.userAccount.login.$invalid">
-              <small class="form-text text-danger" v-if="!v$.userAccount.login.required" v-text="t$('entity.validation.required')">
+              <small class="form-text text-danger" v-if="v$.userAccount.login.required.$invalid" v-text="t$('entity.validation.required')">
                 This field is required.
               </small>
 
               <small
                 class="form-text text-danger"
-                v-if="!v$.userAccount.login.maxLength"
+                v-if="v$.userAccount.login.maxLength.$invalid"
                 v-text="t$('entity.validation.maxlength', { max: 50 })"
               >
                 This field cannot be longer than 50 characters.
               </small>
 
-              <small class="form-text text-danger" v-if="!v$.userAccount.login.pattern" v-text="t$('entity.validation.patternLogin')">
+              <small class="form-text text-danger" v-if="v$.userAccount.login.pattern.$invalid" v-text="t$('entity.validation.patternLogin')">
                 This field can only contain letters, digits and e-mail addresses.
               </small>
             </div>
@@ -51,7 +51,7 @@
             <div v-if="v$.userAccount.firstName.$anyDirty && v$.userAccount.firstName.$invalid">
               <small
                 class="form-text text-danger"
-                v-if="!v$.userAccount.firstName.maxLength"
+                v-if="v$.userAccount.firstName.maxLength.$invalid"
                 v-text="t$('entity.validation.maxlength', { max: 50 })"
               >
                 This field cannot be longer than 50 characters.
@@ -72,7 +72,7 @@
             <div v-if="v$.userAccount.lastName.$anyDirty && v$.userAccount.lastName.$invalid">
               <small
                 class="form-text text-danger"
-                v-if="!v$.userAccount.lastName.maxLength"
+                v-if="v$.userAccount.lastName.maxLength.$invalid"
                 v-text="t$('entity.validation.maxlength', { max: 50 })"
               >
                 This field cannot be longer than 50 characters.
@@ -95,24 +95,24 @@
             <div v-if="v$.userAccount.email.$anyDirty && v$.userAccount.email.$invalid">
               <small
                 class="form-text text-danger"
-                v-if="!v$.userAccount.email.required"
+                v-if="v$.userAccount.email.required.$invalid"
                 v-text="t$('global.messages.validate.email.required')"
               >
                 Your email is required.
               </small>
-              <small class="form-text text-danger" v-if="!v$.userAccount.email.email" v-text="t$('global.messages.validate.email.invalid')">
+              <small class="form-text text-danger" v-if="v$.userAccount.email.email.$invalid" v-text="t$('global.messages.validate.email.invalid')">
                 Your email is invalid.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.userAccount.email.minLength"
+                v-if="v$.userAccount.email.minLength.$invalid"
                 v-text="t$('global.messages.validate.email.minlength')"
               >
                 Your email is required to be at least 5 characters.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.userAccount.email.maxLength"
+                v-if="v$.userAccount.email.maxLength.$invalid"
                 v-text="t$('global.messages.validate.email.maxlength')"
               >
                 Your email cannot be longer than 50 characters.

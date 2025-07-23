@@ -43,28 +43,28 @@
             <div v-if="v$.registerAccount.login.$anyDirty && v$.registerAccount.login.$invalid">
               <small
                 class="form-text text-danger"
-                v-if="!v$.registerAccount.login.required"
+                v-if="v$.registerAccount.login.required.$invalid"
                 v-text="t$('register.messages.validate.login.required')"
               >
                 Your username is required.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.registerAccount.login.minLength"
+                v-if="v$.registerAccount.login.minLength.$invalid"
                 v-text="t$('register.messages.validate.login.minlength')"
               >
                 Your username is required to be at least 1 character.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.registerAccount.login.maxLength"
+                v-if="v$.registerAccount.login.maxLength.$invalid"
                 v-text="t$('register.messages.validate.login.maxlength')"
               >
                 Your username cannot be longer than 50 characters.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.registerAccount.login.pattern"
+                v-if="v$.registerAccount.login.pattern.$invalid"
                 v-text="t$('register.messages.validate.login.pattern')"
               >
                 Your username can only contain letters and digits.
@@ -90,28 +90,28 @@
             <div v-if="v$.registerAccount.email.$anyDirty && v$.registerAccount.email.$invalid">
               <small
                 class="form-text text-danger"
-                v-if="!v$.registerAccount.email.required"
+                v-if="v$.registerAccount.email.required.$invalid"
                 v-text="t$('global.messages.validate.email.required')"
               >
                 Your email is required.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.registerAccount.email.email"
+                v-if="v$.registerAccount.email.email.$invalid"
                 v-text="t$('global.messages.validate.email.invalid')"
               >
                 Your email is invalid.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.registerAccount.email.minLength"
+                v-if="v$.registerAccount.email.minLength.$invalid"
                 v-text="t$('global.messages.validate.email.minlength')"
               >
                 Your email is required to be at least 5 characters.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.registerAccount.email.maxLength"
+                v-if="v$.registerAccount.email.maxLength.$invalid"
                 v-text="t$('global.messages.validate.email.maxlength')"
               >
                 Your email cannot be longer than 100 characters.
@@ -136,21 +136,21 @@
             <div v-if="v$.registerAccount.password.$anyDirty && v$.registerAccount.password.$invalid">
               <small
                 class="form-text text-danger"
-                v-if="!v$.registerAccount.password.required"
+                v-if="v$.registerAccount.password.required.$invalid"
                 v-text="t$('global.messages.validate.newpassword.required')"
               >
                 Your password is required.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.registerAccount.password.minLength"
+                v-if="v$.registerAccount.password.minLength.$invalid"
                 v-text="t$('global.messages.validate.newpassword.minlength')"
               >
                 Your password is required to be at least 4 characters.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.registerAccount.password.maxLength"
+                v-if="v$.registerAccount.password.maxLength.$invalid"
                 v-text="t$('global.messages.validate.newpassword.maxlength')"
               >
                 Your password cannot be longer than 50 characters.
@@ -177,26 +177,26 @@
             <div v-if="v$.confirmPassword.$dirty && v$.confirmPassword.$invalid">
               <small
                 class="form-text text-danger"
-                v-if="!v$.confirmPassword.required"
+                v-if="v$.confirmPassword.required.$invalid"
                 v-text="t$('global.messages.validate.confirmpassword.required')"
               >
                 Your confirmation password is required.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.confirmPassword.minLength"
+                v-if="v$.confirmPassword.minLength.$invalid"
                 v-text="t$('global.messages.validate.confirmpassword.minlength')"
               >
                 Your confirmation password is required to be at least 4 characters.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.confirmPassword.maxLength"
+                v-if="v$.confirmPassword.maxLength.$invalid"
                 v-text="t$('global.messages.validate.confirmpassword.maxlength')"
               >
                 Your confirmation password cannot be longer than 50 characters.
               </small>
-              <small class="form-text text-danger" v-if="!v$.confirmPassword.sameAsPassword" v-text="t$('global.messages.error.dontmatch')">
+              <small class="form-text text-danger" v-if="v$.confirmPassword.sameAsPassword" v-text="t$('global.messages.error.dontmatch').$invalid">
                 The password and its confirmation do not match!
               </small>
             </div>

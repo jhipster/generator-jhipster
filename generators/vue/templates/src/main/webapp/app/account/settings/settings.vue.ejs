@@ -39,21 +39,21 @@
             <div v-if="v$.settingsAccount.firstName.$anyDirty && v$.settingsAccount.firstName.$invalid">
               <small
                 class="form-text text-danger"
-                v-if="!v$.settingsAccount.firstName.required"
+                v-if="v$.settingsAccount.firstName.required.$invalid"
                 v-text="t$('settings.messages.validate.firstname.required')"
               >
                 Your first name is required.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.settingsAccount.firstName.minLength"
+                v-if="v$.settingsAccount.firstName.minLength.$invalid"
                 v-text="t$('settings.messages.validate.firstname.minlength')"
               >
                 Your first name is required to be at least 1 character.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.settingsAccount.firstName.maxLength"
+                v-if="v$.settingsAccount.firstName.maxLength.$invalid"
                 v-text="t$('settings.messages.validate.firstname.maxlength')"
               >
                 Your first name cannot be longer than 50 characters.
@@ -78,21 +78,21 @@
             <div v-if="v$.settingsAccount.lastName.$anyDirty && v$.settingsAccount.lastName.$invalid">
               <small
                 class="form-text text-danger"
-                v-if="!v$.settingsAccount.lastName.required"
+                v-if="v$.settingsAccount.lastName.required.$invalid"
                 v-text="t$('settings.messages.validate.lastname.required')"
               >
                 Your last name is required.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.settingsAccount.lastName.minLength"
+                v-if="v$.settingsAccount.lastName.minLength.$invalid"
                 v-text="t$('settings.messages.validate.lastname.minlength')"
               >
                 Your last name is required to be at least 1 character.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.settingsAccount.lastName.maxLength"
+                v-if="v$.settingsAccount.lastName.maxLength.$invalid"
                 v-text="t$('settings.messages.validate.lastname.maxlength')"
               >
                 Your last name cannot be longer than 50 characters.
@@ -118,28 +118,28 @@
             <div v-if="v$.settingsAccount.email.$anyDirty && v$.settingsAccount.email.$invalid">
               <small
                 class="form-text text-danger"
-                v-if="!v$.settingsAccount.email.required"
+                v-if="v$.settingsAccount.email.required.$invalid"
                 v-text="t$('global.messages.validate.email.required')"
               >
                 Your email is required.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.settingsAccount.email.email"
+                v-if="v$.settingsAccount.email.email.$invalid"
                 v-text="t$('global.messages.validate.email.invalid')"
               >
                 Your email is invalid.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.settingsAccount.email.minLength"
+                v-if="v$.settingsAccount.email.minLength.$invalid"
                 v-text="t$('global.messages.validate.email.minlength')"
               >
                 Your email is required to be at least 5 characters.
               </small>
               <small
                 class="form-text text-danger"
-                v-if="!v$.settingsAccount.email.maxLength"
+                v-if="v$.settingsAccount.email.maxLength.$invalid"
                 v-text="t$('global.messages.validate.email.maxlength')"
               >
                 Your email cannot be longer than 100 characters.
