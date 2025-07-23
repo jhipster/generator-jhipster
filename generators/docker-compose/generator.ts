@@ -168,7 +168,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
         deployment.keycloakRedirectUris = '';
         deployment.appsYaml = applications.map(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
-          const parentConfiguration = {};
+          const parentConfiguration: Record<string, any> = {};
           const path = this.workspacePath(appConfig.appFolder!);
           // Add application configuration
           const yaml = parseYaml(this.fs.read(`${path}/src/main/docker/app.yml`)!);
@@ -202,7 +202,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
           }
 
           if (yamlConfig.environment) {
-            yamlConfig.environment = yamlConfig.environment.map(envOption => {
+            yamlConfig.environment = yamlConfig.environment.map((envOption: string) => {
               // Doesn't applies to keycloak, jhipster-registry and consul.
               // docker-compose changes the container name to `${lowercaseBaseName}-${databaseType}`.
               // we need to update the environment urls to the new container host.
@@ -348,7 +348,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
   }
 
   get end() {
-    return this.asAnyTaskGroup({
+    return this.asEndTaskGroup({
       end({ applications }) {
         this.checkApplicationsDockerImages({ applications });
 

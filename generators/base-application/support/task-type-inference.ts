@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { TaskTypes as BaseTasks } from '../../base/tasks.js';
+import type { TaskTypes as BaseTasks, SimpleTask } from '../../base/tasks.js';
 import type { TaskTypes } from '../tasks.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { WriteFileBlock, WriteFileSection } from '../../base-core/api.js';
@@ -44,9 +44,15 @@ export function asWriteEntityFilesSection<Data = EntityAll & ApplicationAll<Enti
   return section;
 }
 
+export function asInitializingTask<const G extends CoreGenerator = CoreGenerator>(
+  task: SimpleTask<G, BaseTasks['InitializingTaskParam']>,
+): SimpleTask<any, BaseTasks['InitializingTaskParam']> {
+  return task;
+}
+
 export function asPromptingTask<const G extends CoreGenerator = CoreGenerator>(
-  task: (this: G, params: BaseTasks['PromptingTaskParam']) => void,
-) {
+  task: SimpleTask<G, BaseTasks['PromptingTaskParam']>,
+): SimpleTask<any, BaseTasks['PromptingTaskParam']> {
   return task;
 }
 

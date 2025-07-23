@@ -20,9 +20,10 @@ import type { Merge } from 'type-fest';
 import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource, TaskTypes } from '../base/tasks.js';
 import type { Application as BaseSimpleApplicationApplication } from '../base-simple-application/types.d.ts';
 import type { Source as BaseSource } from '../base/types.d.ts';
+import type { Deployment as BaseWorkspacesDeployment } from './types.d.ts';
 
 export type TaskParamWithApplications<
-  D,
+  D extends BaseWorkspacesDeployment,
   A extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication,
 > = TaskParamWithControl & {
   applications: A[];
@@ -30,7 +31,7 @@ export type TaskParamWithApplications<
 };
 
 export type Tasks<
-  D = any,
+  D extends BaseWorkspacesDeployment = BaseWorkspacesDeployment,
   S extends BaseSource = BaseSource,
   A extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication,
 > = Merge<

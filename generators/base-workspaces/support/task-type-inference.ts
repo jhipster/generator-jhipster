@@ -18,15 +18,22 @@ import type BaseWorkspacesGenerator from '../generator.js';
 import type { Tasks } from '../tasks.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { Deployment, Source, WorkspacesApplication } from '../types.js';
+import type { SimpleTask } from '../../base/tasks.js';
 
 export function asWritingWorkspacesTask<const G extends CoreGenerator = BaseWorkspacesGenerator>(
-  task: (this: G, params: Tasks<Deployment, Source, WorkspacesApplication>['WritingTaskParam']) => void,
-) {
+  task: SimpleTask<G, Tasks<Deployment, Source, WorkspacesApplication>['WritingTaskParam']>,
+): SimpleTask<any, Tasks<Deployment, Source, WorkspacesApplication>['WritingTaskParam']> {
   return task;
 }
 
 export function asPromptingWorkspacesTask<const G extends CoreGenerator = BaseWorkspacesGenerator>(
-  task: (this: G, params: Tasks<Deployment, Source, WorkspacesApplication>['PromptingWorkspacesTaskParam']) => void,
-) {
+  task: SimpleTask<G, Tasks<Deployment, Source, WorkspacesApplication>['PromptingWorkspacesTaskParam']>,
+): SimpleTask<any, Tasks<Deployment, Source, WorkspacesApplication>['PromptingWorkspacesTaskParam']> {
+  return task;
+}
+
+export function asPreparingWorkspacesTask<const G extends CoreGenerator = BaseWorkspacesGenerator>(
+  task: SimpleTask<G, Tasks<Deployment, Source, WorkspacesApplication>['PreparingWorkspacesTaskParam']>,
+): SimpleTask<any, Tasks<Deployment, Source, WorkspacesApplication>['PreparingWorkspacesTaskParam']> {
   return task;
 }

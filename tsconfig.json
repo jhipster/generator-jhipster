@@ -27,7 +27,6 @@
 
     /* Type Checking */
     "strict": true /* Enable all strict type-checking options. */,
-    "noImplicitAny": false,
     "rewriteRelativeImportExtensions": true,
     "erasableSyntaxOnly": true,
     "verbatimModuleSyntax": true,

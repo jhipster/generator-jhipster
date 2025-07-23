@@ -23,6 +23,7 @@ import { normalizePathEnd } from '../../../lib/utils/index.js';
 import { buildToolTypes } from '../../../lib/jhipster/index.js';
 import type { BaseKubernetesGenerator } from '../../kubernetes/generator.ts';
 import type { WorkspacesApplication } from '../types.js';
+import { asPreparingWorkspacesTask } from '../support/task-type-inference.ts';
 
 const { MAVEN } = buildToolTypes;
 
@@ -31,7 +32,10 @@ export { checkDocker } from '../../docker/support/index.js';
 /**
  * Check Images
  */
-export function checkImages(this: BaseKubernetesGenerator, { applications }: { applications: WorkspacesApplication[] }) {
+export const checkImages = function checkImages(
+  this: BaseKubernetesGenerator,
+  { applications }: { applications: WorkspacesApplication[] },
+) {
   this.log.log('\nChecking Docker images in applications directories...');
 
   let imagePath = '';
@@ -53,15 +57,19 @@ export function checkImages(this: BaseKubernetesGenerator, { applications }: { a
   }
 
   return { hasWarning, warningMessage };
-}
+};
 
 /**
  * Configure Image Names
  */
-export function configureImageNames(this: BaseKubernetesGenerator, { applications }: { applications: WorkspacesApplication[] }) {
+export const configureImageNames = asPreparingWorkspacesTask(function configureImageNames({
+  applications,
+}: {
+  applications: WorkspacesApplication[];
+}) {
   for (const app of applications) {
     const originalImageName = app.baseName.toLowerCase();
     const targetImageName = `${normalizePathEnd(this.jhipsterConfigWithDefaults.dockerRepositoryName)}${originalImageName}`;
     app.targetImageName = targetImageName;
   }
-}
+});
