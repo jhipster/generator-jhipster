@@ -10,8 +10,6 @@
     "generators/base-workspaces/internal",
     "generators/docker-compose/generator.ts",
     "generators/docker-compose/index.ts",
-    "generators/heroku/generator.ts",
-    "generators/heroku/index.ts",
     "generators/kubernetes*/prompts.ts",
     "generators/kubernetes*/generator.ts",
     "generators/kubernetes*/index.ts",
