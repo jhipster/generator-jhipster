@@ -33,7 +33,8 @@
     "lib/jdl-config/",
     "lib/jhipster/*.spec.ts",
     "lib/testing",
-    "cli",
+    "cli/**/*.spec.ts",
+    "cli/**/*.spec.?ts",
     "test"
   ],
   "extends": "./tsconfig.spec.json",

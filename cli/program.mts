@@ -83,8 +83,8 @@ export const printJHipsterLogo = () => {
 const buildAllDependencies = async (
   generatorNames: string[],
   { env, blueprintNamespaces = [] }: { env: Environment; blueprintNamespaces?: string[] },
-): Promise<Record<string, { meta: GeneratorMeta; blueprintNamespace: string }>> => {
-  const allDependencies = {};
+): Promise<Record<string, { meta: GeneratorMeta; blueprintNamespace?: string }>> => {
+  const allDependencies: Record<string, { meta: GeneratorMeta; blueprintNamespace?: string }> = {};
 
   const registerDependency = async ({
     namespace,
@@ -103,7 +103,7 @@ const buildAllDependencies = async (
   };
 
   const lookupDependencyOptions = async ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
-    const lookupGeneratorAndImports = async ({ namespace, blueprintNamespace }) => {
+    const lookupGeneratorAndImports = async ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
       const module = await registerDependency({ namespace, blueprintNamespace });
       if (module?.command?.import) {
         for (const generator of module?.command?.import ?? []) {
@@ -138,10 +138,10 @@ const buildAllDependencies = async (
 
 const addCommandGeneratorOptions = async (
   command: JHipsterCommand,
-  generatorMeta,
+  generatorMeta: GeneratorMeta,
   { root, blueprintOptionDescription, info }: { root?: boolean; blueprintOptionDescription?: string; info?: string } = {},
 ) => {
-  const generatorModule = (await generatorMeta.importModule()) as JHipsterModule;
+  const generatorModule = (await generatorMeta.importModule!()) as JHipsterModule;
   if (generatorModule.command) {
     const { configs } = generatorModule.command;
     if (configs) {
@@ -155,7 +155,7 @@ const addCommandGeneratorOptions = async (
     ) {
       const generator = await generatorMeta.instantiateHelp();
       // Add basic yeoman generator options
-      command.addGeneratorOptions(generator._options, blueprintOptionDescription);
+      command.addGeneratorOptions((generator as any)._options, blueprintOptionDescription);
     }
   } catch (error) {
     if (!info) {
@@ -165,16 +165,16 @@ const addCommandGeneratorOptions = async (
   }
 };
 
-const addCommandRootGeneratorOptions = async (command, generatorMeta, { usage = true } = {}) => {
-  const generatorModule = await generatorMeta.importModule();
+const addCommandRootGeneratorOptions = async (command: JHipsterCommand, generatorMeta: GeneratorMeta, { usage = true } = {}) => {
+  const generatorModule = (await generatorMeta.importModule!()) as JHipsterModule;
   if (generatorModule.command) {
     command.addJHipsterArguments(generatorModule.command.arguments ?? extractArgumentsFromConfigs(generatorModule.command.configs));
   } else {
     const generator = await generatorMeta.instantiateHelp();
-    command.addGeneratorArguments(generator._arguments);
+    command.addGeneratorArguments((generator as any)._arguments);
   }
   if (usage) {
-    const usagePath = path.resolve(path.dirname(generatorMeta.resolved), 'USAGE');
+    const usagePath = path.resolve(path.dirname(generatorMeta.resolved!), 'USAGE');
     if (fs.existsSync(usagePath)) {
       command.addHelpText('after', `\n${fs.readFileSync(usagePath, 'utf8')}`);
     }
@@ -210,7 +210,7 @@ export const createProgram = ({
   );
 };
 
-const rejectExtraArgs = ({ program, command, extraArgs }) => {
+const rejectExtraArgs = ({ program, command, extraArgs }: { program: JHipsterCommand; command: JHipsterCommand; extraArgs: string[] }) => {
   // if extraArgs exists: Unknown commands or unknown argument.
   const first = extraArgs[0];
   if (command.name() !== GENERATOR_APP) {
@@ -220,7 +220,7 @@ const rejectExtraArgs = ({ program, command, extraArgs }) => {
       )}'.`,
     );
   }
-  const availableCommands = program.commands.map(c => c._name);
+  const availableCommands = program.commands.map(c => c.name());
 
   const suggestion = didYouMean(first, availableCommands);
   if (suggestion) {
@@ -260,7 +260,7 @@ export const buildCommands = ({
       .excessArgumentsCallback(function (this, receivedArgs) {
         rejectExtraArgs({ program, command: this, extraArgs: receivedArgs });
       })
-      .lazyBuildCommand(async function (this, operands) {
+      .lazyBuildCommand(async function (this, operands = []) {
         logger.debug(`cmd: lazyBuildCommand ${cmdName} ${operands}`);
         if (removed) {
           logger.fatal(removed);
@@ -288,8 +288,8 @@ export const buildCommands = ({
                 logger.fatal(chalk.red(`\nGenerator ${namespace} not found.\n`));
               }
 
-              await addCommandRootGeneratorOptions(command, generatorMeta, { usage: command.generatorNamespaces.length === 1 });
-              await addCommandGeneratorOptions(command, generatorMeta, { root: true });
+              await addCommandRootGeneratorOptions(command, generatorMeta!, { usage: command.generatorNamespaces.length === 1 });
+              await addCommandGeneratorOptions(command, generatorMeta!, { root: true });
             }),
           );
           return;
@@ -331,7 +331,7 @@ export const buildCommands = ({
       .action(async (...everything) => {
         logger.debug('cmd: action');
         // [args, opts, command]
-        const command = everything.pop();
+        const command = everything.pop() as JHipsterCommand;
         const cmdOptions = everything.pop();
         const args = everything;
         const commandsConfigs = Object.freeze({ ...command.configs, ...command.blueprintConfigs });
@@ -362,9 +362,9 @@ export const buildCommands = ({
         }
 
         if (cmdName === 'run') {
-          return Promise.all(command.generatorNamespaces.map(generator => env.run(generator, options))).then(
+          return Promise.all(command.generatorNamespaces.map(generator => env.run(generator as any, options))).then(
             results => silent || done(results.find(result => result)),
-            errors => silent || done(errors.find(error => error)),
+            errors => silent || done(errors.find((error: any) => error)),
           );
         }
         if (cmdName === 'upgrade') {

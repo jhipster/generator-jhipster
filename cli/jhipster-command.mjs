@@ -25,6 +25,8 @@ import { convertConfigToOption } from '../lib/command/index.js';
 export default class JHipsterCommand extends Command {
   configs = {};
   blueprintConfigs = {};
+  /** @type {string[]} */
+  generatorNamespaces = [];
 
   createCommand(name) {
     return new JHipsterCommand(name);
@@ -45,7 +47,7 @@ export default class JHipsterCommand extends Command {
   /**
    * Register a callback to be executed before _parseCommand.
    * Used to lazy load options.
-   * @param {Function} lazyBuildCommandCallBack
+   * @param {(this: JHipsterCommand, args: string | string[]) => Promise<void>} lazyBuildCommandCallBack
    * @return {JHipsterCommand} this;
    */
   lazyBuildCommand(lazyBuildCommandCallBack) {
@@ -55,7 +57,7 @@ export default class JHipsterCommand extends Command {
 
   /**
    * Register callback to customize _excessArguments behavior.
-   * @param {Function} excessArgumentsCallback
+   * @param {(this: JHipsterCommand, receivedArgs: string[]) => void} excessArgumentsCallback
    * @return {JHipsterCommand} this;
    */
   excessArgumentsCallback(excessArgumentsCallback) {
