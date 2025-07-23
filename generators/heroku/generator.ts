@@ -42,18 +42,18 @@ export default class HerokuGenerator extends BaseApplicationGenerator<
   HerokuConfig,
   HerokuOptions
 > {
-  hasHerokuCli;
+  hasHerokuCli!: boolean;
 
-  herokuAppName;
-  herokuDeployType;
-  herokuJavaVersion;
-  herokuRegion;
-  herokuAppExists;
-  herokuSkipDeploy;
-  herokuSkipBuild;
-  dynoSize;
+  herokuAppName!: string;
+  herokuDeployType!: string;
+  herokuJavaVersion!: string;
+  herokuRegion!: string;
+  herokuAppExists!: boolean;
+  herokuSkipDeploy!: boolean;
+  herokuSkipBuild!: boolean;
+  dynoSize!: string;
 
-  constructor(args, options, features) {
+  constructor(args: string | string[], options: any, features: any) {
     super(args, options, features);
 
     this.option('skip-build', {
@@ -132,7 +132,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<
           });
           if (exitCode !== 0) {
             this.log.error(`Could not find application: ${chalk.cyan(this.jhipsterConfig.herokuAppName)}`);
-            this.herokuAppName = null;
+            this.herokuAppName = undefined as any;
             throw new Error('Run the generator again to create a new application.');
           } else {
             const json = JSON.parse(stdout);
@@ -213,8 +213,8 @@ export default class HerokuGenerator extends BaseApplicationGenerator<
     return this.asLoadingTaskGroup({
       saveConfig() {
         this.herokuAppName = kebabCase(this.jhipsterConfig.herokuAppName);
-        this.herokuJavaVersion = this.jhipsterConfig.herokuJavaVersion;
-        this.herokuDeployType = this.jhipsterConfig.herokuDeployType;
+        this.herokuJavaVersion = this.jhipsterConfig.herokuJavaVersion!;
+        this.herokuDeployType = this.jhipsterConfig.herokuDeployType!;
       },
     });
   }
@@ -327,14 +327,14 @@ export default class HerokuGenerator extends BaseApplicationGenerator<
         this.log.log(chalk.bold('\nProvisioning addons'));
         if (application.searchEngineElasticsearch) {
           this.log.log(chalk.bold('\nProvisioning bonsai elasticsearch addon'));
-          const { stdout, stderr } = await this.spawn('heroku', [
+          const { stdout, stderr } = (await this.spawn('heroku', [
             'addons:create',
             'bonsai:sandbox-6',
             '--as',
             'BONSAI',
             '--app',
             this.herokuAppName,
-          ]);
+          ])) as { stdout: string; stderr: string };
           this.checkAddOnReturn({ addOn: 'Elasticsearch', stdout, stderr });
         }
 
@@ -349,14 +349,14 @@ export default class HerokuGenerator extends BaseApplicationGenerator<
 
         if (dbAddOn) {
           this.log.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
-          const { stdout, stderr } = await this.spawn('heroku', [
+          const { stdout, stderr } = (await this.spawn('heroku', [
             'addons:create',
             dbAddOn,
             '--as',
             'DATABASE',
             '--app',
             this.herokuAppName,
-          ]);
+          ])) as { stdout: string; stderr: string };
           this.checkAddOnReturn({ addOn: 'Database', stdout, stderr });
         } else {
           this.log.log(chalk.bold(`\nNo suitable database addon for database ${application.prodDatabaseType} available.`));
@@ -372,7 +372,10 @@ export default class HerokuGenerator extends BaseApplicationGenerator<
         if (cacheAddOn) {
           this.log.log(chalk.bold(`\nProvisioning cache addon '${cacheAddOn}'`));
 
-          const { stdout, stderr } = await this.spawn('heroku', ['addons:create', ...cacheAddOn, '--app', this.herokuAppName]);
+          const { stdout, stderr } = (await this.spawn('heroku', ['addons:create', ...cacheAddOn, '--app', this.herokuAppName])) as {
+            stdout: string;
+            stderr: string;
+          };
           this.checkAddOnReturn({ addOn: 'Cache', stdout, stderr });
         }
       },
@@ -554,7 +557,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<
    * @param {string} profileId - profile ID
    * @param {string} other - explicit other thing: build, dependencies...
    */
-  addMavenProfile(profileId, other) {
+  addMavenProfile(profileId: string, other: string) {
     createPomStorage(this, { sortFile: false }).addProfile({ id: profileId, content: other });
   }
 
@@ -582,20 +585,23 @@ export default class HerokuGenerator extends BaseApplicationGenerator<
     return (await this.printChildOutput(child)) as any;
   }
 
-  printChildOutput<const T extends { stdout?: any; stderr?: any }>(child: T, log = data => this.log.verboseInfo(data)): T {
+  printChildOutput<const T extends { stdout?: NodeJS.ReadableStream | null; stderr?: NodeJS.ReadableStream | null }>(
+    child: T,
+    log = (data: any) => this.log.verboseInfo(data),
+  ): T {
     const { stdout, stderr } = child;
-    stdout!.on('data', data => {
+    stdout!.on('data', (data: any) => {
       data.toString().split(/\r?\n/).filter(Boolean).forEach(log);
     });
-    stderr!.on('data', data => {
+    stderr!.on('data', (data: any) => {
       data.toString().split(/\r?\n/).filter(Boolean).forEach(log);
     });
     return child;
   }
 
-  checkAddOnReturn({ addOn, stdout, stderr }) {
+  checkAddOnReturn({ addOn, stdout, stderr }: { addOn: string; stdout: string; stderr: string }) {
     if (stdout) {
-      this.log.ok(`Created ${addOn.valueOf()} add-on`);
+      this.log.ok(`Created ${addOn} add-on`);
       this.log.ok(stdout);
     } else if (stderr) {
       const verifyAccountUrl = 'https://heroku.com/verify';

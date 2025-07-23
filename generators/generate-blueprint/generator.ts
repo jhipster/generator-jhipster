@@ -20,6 +20,7 @@ import { rm } from 'node:fs/promises';
 import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 
+import type { Storage } from 'yeoman-generator';
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.js';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
 
@@ -103,7 +104,7 @@ export default class extends BaseSimpleApplicationGenerator<
         const { allPriorities } = this.options;
         const subGenerators = (this.jhipsterConfig.subGenerators ?? []) as string[];
         for (const subGenerator of subGenerators) {
-          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
+          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator) as Storage<Record<string, any>>;
           if (allPriorities) {
             subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
           }
@@ -118,7 +119,7 @@ export default class extends BaseSimpleApplicationGenerator<
           .split(',')
           .map(sub => sub.trim())
           .filter(Boolean)) {
-          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
+          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator) as Storage<Record<string, any>>;
           if (allPriorities) {
             subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
           }
@@ -234,12 +235,14 @@ export default class extends BaseSimpleApplicationGenerator<
         const { skipWorkflows, ignoreExistingGenerators } = this;
         for (const generator of Object.keys(application.generators)) {
           const subGeneratorStorage = this.getSubGeneratorStorage(generator);
-          const subGeneratorConfig = subGeneratorStorage.getAll() as any;
-          const priorities = (subGeneratorConfig[PRIORITIES] || []).map(priority => ({
-            name: priority,
-            asTaskGroup: `as${upperFirst(priority)}TaskGroup`,
-            constant: `${snakeCase(priority).toUpperCase()}`,
-          }));
+          const subGeneratorConfig = subGeneratorStorage.getAll();
+          const priorities: { name: string; asTaskGroup: string; constant: string }[] = (subGeneratorConfig[PRIORITIES] || []).map(
+            (priority: string) => ({
+              name: priority,
+              asTaskGroup: `as${upperFirst(priority)}TaskGroup`,
+              constant: `${snakeCase(priority).toUpperCase()}`,
+            }),
+          );
           const customGenerator = !Object.values(GENERATOR_LIST).includes(generator as any);
           const jhipsterGenerator = customGenerator || subGeneratorConfig.sbs ? 'base-application' : generator;
           const subTemplateData = {
@@ -463,16 +466,16 @@ To begin to work:
     return this.delegateTasksToBlueprint(() => this.end);
   }
 
-  getSubGeneratorStorage(subGenerator) {
-    return this.config.createStorage(`generators.${subGenerator}`);
+  getSubGeneratorStorage(subGenerator: string) {
+    return this.config.createStorage<Record<string, any>>(`generators.${subGenerator}`);
   }
 
-  validateGitHubName(input) {
+  validateGitHubName(input: string): boolean | string {
     if (/^([a-zA-Z0-9]+)(-([a-zA-Z0-9])+)*$/.test(input) && input !== '') return true;
     return 'Your username is mandatory, cannot contain special characters or a blank space';
   }
 
-  validateModuleName(input) {
+  validateModuleName(input: string): boolean | string {
     return /^[a-zA-Z0-9-]+$/.test(input)
       ? true
       : 'Your blueprint name is mandatory, cannot contain special characters or a blank space, using the default name instead';

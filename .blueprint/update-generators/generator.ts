@@ -33,15 +33,16 @@ export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
 
         const contentToAdd = generators
           .map(([ns, meta]) => {
-            const parts = ns.split(':').length;
             if (ns.startsWith('jhipster:base')) {
               // Base generators cannot be composed with.
               return [];
             }
+            const parts = ns.split(':').length;
             const relativePath = this.relativeDir(this.templatePath('../../../generators/'), dirname(meta.resolved!));
+            const commentType = ns.match('jhipster:(entity|heroku|docker-compose|kubernetes|upgrade|workspaces)');
 
             const generateImport = (key: string) =>
-              `${/[:-]/.test(key) ? `'${key}'` : key}: import('./${relativePath}generator.ts').default;`;
+              `${commentType ? '// ' : ''}${/[:-]/.test(key) ? `'${key}'` : key}: import('./${relativePath}generator.ts').default;`;
             return parts === 2 ? [generateImport(ns.replace('jhipster:', '')), generateImport(ns)] : [generateImport(ns)];
           })
           .flat();

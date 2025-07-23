@@ -107,7 +107,14 @@ export type Field = Property &
     relatedByOtherEntity?: boolean;
 
     enumInstance?: string;
+    builtIn?: boolean;
   };
+
+export type DerivedField<E extends Entity = Entity, F extends Field = Entity['fields'][number]> = F & {
+  derived: true;
+  originalField: F;
+  derivedEntity: E;
+};
 
 /**
  * Represents a relationship with an otherRelationship.

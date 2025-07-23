@@ -22,6 +22,7 @@ import { isArray, lowerFirst, snakeCase, uniq, upperFirst } from 'lodash-es';
 import { clientFrameworkTypes, databaseTypes, entityOptions, fieldTypes, reservedKeywords, validations } from '../../lib/jhipster/index.js';
 import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
 import { APPLICATION_TYPE_GATEWAY } from '../../lib/core/application-types.ts';
+import type { Field as BaseApplicationField } from '../base-application/types.js';
 import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.js';
 import type EntityGenerator from './generator.js';
 
@@ -59,7 +60,7 @@ const {
   Validations: { PATTERN, MINBYTES, MAXBYTES, MINLENGTH, MAXLENGTH, MIN, MAX, REQUIRED, UNIQUE },
 } = validations;
 
-const getFieldNameUndercored = fields => ['id'].concat(fields.map(field => snakeCase(field.fieldName)));
+const getFieldNameUndercored = (fields: BaseApplicationField[]): string[] => ['id'].concat(fields.map(field => snakeCase(field.fieldName)));
 
 export const askForMicroserviceJson = asPromptingTask<EntityGenerator>(async function askForMicroserviceJson(this: EntityGenerator) {
   const context = this.entityData;
@@ -183,7 +184,7 @@ export function askForFieldsToRemove(this: EntityGenerator) {
       const fields = this.entityConfig.fields;
       for (let i = fields.length - 1; i >= 0; i -= 1) {
         const field = this.entityConfig.fields[i];
-        if (props.fieldsToRemove.filter(val => val === field.fieldName).length > 0) {
+        if (props.fieldsToRemove.filter((val: string) => val === field.fieldName).length > 0) {
           fields.splice(i, 1);
         }
       }
@@ -192,7 +193,7 @@ export function askForFieldsToRemove(this: EntityGenerator) {
   });
 }
 
-export function askForRelationships(this: EntityGenerator, ...args) {
+export const askForRelationships = function askForRelationships(this: EntityGenerator, ...args: any[]) {
   const context = this.entityData;
   // don't prompt if data is imported from a file
   if (context.useConfigurationFile && context.updateEntity !== 'add') {
@@ -203,7 +204,7 @@ export function askForRelationships(this: EntityGenerator, ...args) {
   }
 
   return askForRelationship.call(this, ...args);
-}
+};
 
 export function askForRelationsToRemove(this: EntityGenerator) {
   const context = this.entityData;
@@ -241,7 +242,7 @@ export function askForRelationsToRemove(this: EntityGenerator) {
       const relationships = this.entityConfig.relationships;
       for (let i = relationships.length - 1; i >= 0; i -= 1) {
         const rel = relationships[i];
-        if (props.relsToRemove.filter(val => val === `${rel.relationshipName}:${rel.relationshipType}`).length > 0) {
+        if ((props.relsToRemove as string[]).filter(val => val === `${rel.relationshipName}:${rel.relationshipType}`).length > 0) {
           relationships.splice(i, 1);
         }
       }
@@ -716,7 +717,7 @@ async function askForField(this: EntityGenerator) {
 /**
  * ask question for a relationship creation
  */
-async function askForRelationship(this: EntityGenerator, ...args) {
+async function askForRelationship(this: EntityGenerator, ...args: any[]) {
   const [{ application }] = args;
   const context = this.entityData;
   const name = context.name;

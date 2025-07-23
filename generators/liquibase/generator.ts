@@ -38,6 +38,7 @@ import type { Field as CommonField, Entity as ServerEntity } from '../server/typ
 import type { Application as CommonApplication, Entity as CommonEntity } from '../common/types.js';
 import type { Source as SpringBootSource } from '../spring-boot/index.js';
 import type { EntityAll } from '../../lib/types/entity-all.js';
+import type { DerivedField } from '../base-application/types.js';
 import { checkAndReturnRelationshipOnValue } from './internal/relationship-on-handler-options.ts';
 import { liquibaseFiles } from './files.js';
 import {
@@ -587,7 +588,7 @@ export default class LiquibaseGenerator<
   /**
    * Write files for new entities.
    */
-  _writeLiquibaseFiles({ context: writeContext, changelogData }) {
+  _writeLiquibaseFiles({ context: writeContext, changelogData }: { context: any; changelogData: any }) {
     const promises: any[] = [];
     const context = {
       ...writeContext,
@@ -608,20 +609,28 @@ export default class LiquibaseGenerator<
   /**
    * Write files for new entities.
    */
-  _addLiquibaseFilesReferences({ entity, databaseChangelog, source }) {
+  _addLiquibaseFilesReferences({
+    entity,
+    databaseChangelog,
+    source,
+  }: {
+    entity: Entity;
+    databaseChangelog: BaseChangelog<Entity>;
+    source: LiquibaseSource;
+  }) {
     const fileName = `${databaseChangelog.changelogDate}_added_entity_${entity.entityClass}`;
-    source.addLiquibaseChangelog({ changelogName: fileName, section: entity.incremental ? 'incremental' : 'base' });
+    source.addLiquibaseChangelog!({ changelogName: fileName, section: entity.incremental ? 'incremental' : 'base' });
 
     if (entity.anyRelationshipIsOwnerSide) {
       const constFileName = `${databaseChangelog.changelogDate}_added_entity_constraints_${entity.entityClass}`;
-      source.addLiquibaseChangelog({ changelogName: constFileName, section: entity.incremental ? 'incremental' : 'constraints' });
+      source.addLiquibaseChangelog!({ changelogName: constFileName, section: entity.incremental ? 'incremental' : 'constraints' });
     }
   }
 
   /**
    * Write files for updated entities.
    */
-  _writeUpdateFiles({ context: writeContext, changelogData }) {
+  _writeUpdateFiles({ context: writeContext, changelogData }: { context: any; changelogData: any }) {
     const {
       addedFields,
       allFields,
@@ -687,19 +696,31 @@ export default class LiquibaseGenerator<
   /**
    * Write files for updated entities.
    */
-  _addUpdateFilesReferences({ entity, databaseChangelog, changelogData, source }) {
+  _addUpdateFilesReferences({
+    entity,
+    databaseChangelog,
+    changelogData,
+    source,
+  }: {
+    entity: Entity;
+    databaseChangelog: BaseChangelog<Entity>;
+    changelogData: any;
+    source: LiquibaseSource;
+  }) {
     if (this._isBasicEntityUpdate(changelogData)) {
-      source.addLiquibaseIncrementalChangelog({ changelogName: `${databaseChangelog.changelogDate}_updated_entity_${entity.entityClass}` });
+      source.addLiquibaseIncrementalChangelog!({
+        changelogName: `${databaseChangelog.changelogDate}_updated_entity_${entity.entityClass}`,
+      });
     }
 
     if (this._requiresWritingFakeData(changelogData)) {
-      source.addLiquibaseIncrementalChangelog({
+      source.addLiquibaseIncrementalChangelog!({
         changelogName: `${databaseChangelog.changelogDate}_updated_entity_migrate_${entity.entityClass}`,
       });
     }
 
     if (this._requiresConstraintUpdates(changelogData)) {
-      source.addLiquibaseIncrementalChangelog({
+      source.addLiquibaseIncrementalChangelog!({
         changelogName: `${databaseChangelog.changelogDate}_updated_entity_constraints_${entity.entityClass}`,
       });
     }
@@ -713,7 +734,7 @@ export default class LiquibaseGenerator<
    * @param {boolean} addRemarksTag - add remarks tag
    * @returns formatted liquibase remarks
    */
-  formatAsLiquibaseRemarks(text, addRemarksTag = false) {
+  formatAsLiquibaseRemarks(text: string, addRemarksTag = false) {
     return liquibaseComment(text, addRemarksTag);
   }
 
@@ -769,28 +790,29 @@ export default class LiquibaseGenerator<
     });
 
     for (let rowNumber = 0; rowNumber < this.numberOfRows; rowNumber++) {
-      const rowData = {};
-      const fields = databaseChangelog.newEntity
+      const rowData: Record<string, any> = {};
+      const fields: LiquibaseField[] = databaseChangelog.newEntity
         ? // generate id fields first to improve reproducibility
           [...entityChanges.fields.filter(f => f.id), ...entityChanges.fields.filter(f => !f.id)]
         : [...entityChanges.allFields.filter(f => f.id), ...entityChanges.addedFields.filter(f => !f.id)];
       fields.forEach(field => {
-        if (field.derived) {
+        if ('derived' in field && field.derived) {
+          const derivedField = field as DerivedField<LiquibaseEntity, LiquibaseField>;
           Object.defineProperty(rowData, field.fieldName, {
             get: () => {
-              if (!field.derivedEntity.liquibaseFakeData || rowNumber >= field.derivedEntity.liquibaseFakeData.length) {
+              if (!derivedField.derivedEntity.liquibaseFakeData || rowNumber >= derivedField.derivedEntity.liquibaseFakeData.length) {
                 return undefined;
               }
-              return field.derivedEntity.liquibaseFakeData[rowNumber][field.fieldName];
+              return derivedField.derivedEntity.liquibaseFakeData[rowNumber][field.fieldName];
             },
           });
           return;
         }
         let data;
-        if (field.id && [TYPE_INTEGER, TYPE_LONG].includes(field.fieldType)) {
+        if (field.id && ([TYPE_INTEGER, TYPE_LONG] as string[]).includes(field.fieldType)) {
           data = rowNumber + 1;
         } else {
-          data = field.generateFakeData();
+          data = field.generateFakeData!();
         }
         rowData[field.fieldName] = data;
       });
@@ -853,12 +875,12 @@ export default class LiquibaseGenerator<
     return databaseChangelog;
   }
 
-  writeChangelog({ databaseChangelog }) {
+  writeChangelog({ databaseChangelog }: { databaseChangelog: BaseChangelog<Entity> }): Promise<any[]> | undefined {
     const { writeContext: context, changelogData } = databaseChangelog;
     if (databaseChangelog.newEntity) {
       return this._writeLiquibaseFiles({ context, changelogData });
     }
-    if (changelogData.requiresUpdateChangelogs) {
+    if (changelogData!.requiresUpdateChangelogs) {
       return this._writeUpdateFiles({ context, changelogData });
     }
     return undefined;

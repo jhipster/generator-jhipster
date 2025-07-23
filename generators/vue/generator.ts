@@ -30,6 +30,8 @@ import {
 } from '../client/support/index.js';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
+import type { Field as ClientField } from '../client/types.js';
+import type { Field } from '../base-application/types.js';
 import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeEntitiesFiles, writeFiles } from './files-vue.js';
@@ -416,12 +418,9 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   /**
    * @private
    * Generate Entity Client Field Default Values
-   *
-   * @param {Array|Object} fields - array of fields
-   * @returns {Array} defaultVariablesValues
    */
-  generateEntityClientFieldDefaultValues(fields) {
-    const defaultVariablesValues = {};
+  generateEntityClientFieldDefaultValues(fields: ClientField[]): Record<string, string> {
+    const defaultVariablesValues: Record<string, string> = {};
     fields.forEach(field => {
       const fieldType = field.fieldType;
       const fieldName = field.fieldName;
@@ -432,15 +431,25 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     return defaultVariablesValues;
   }
 
-  generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
+  generateEntityClientFields(
+    primaryKey: Parameters<typeof getHydratedEntityClientFields>[0],
+    fields: Parameters<typeof getHydratedEntityClientFields>[1],
+    relationships: Parameters<typeof getHydratedEntityClientFields>[2],
+    dto: Parameters<typeof getHydratedEntityClientFields>[3],
+    customDateType: Parameters<typeof getHydratedEntityClientFields>[4] = 'dayjs.Dayjs',
+    embedded: Parameters<typeof getHydratedEntityClientFields>[5] = false,
+  ) {
     return getHydratedEntityClientFields(primaryKey, fields, relationships, dto, customDateType, embedded, VUE);
   }
 
-  generateEntityClientImports(relationships, dto) {
+  generateEntityClientImports(
+    relationships: Parameters<typeof formatEntityClientImports>[0],
+    dto: Parameters<typeof formatEntityClientImports>[1],
+  ) {
     return formatEntityClientImports(relationships, dto, VUE);
   }
 
-  generateEntityClientEnumImports(fields) {
+  generateEntityClientEnumImports(fields: Field[]): Map<string, string> {
     return getClientEnumImportsFormat(fields, VUE);
   }
 }

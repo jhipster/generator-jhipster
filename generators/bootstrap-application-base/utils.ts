@@ -24,7 +24,12 @@ import { getDatabaseTypeData } from '../server/support/database.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import { formatDateForChangelog } from '../base/support/timestamp.ts';
 import type { EntityAll as ApplicationEntity, UserEntity } from '../../lib/types/entity-all.js';
-import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../base-application/types.d.ts';
+import type {
+  Application as BaseApplicationApplication,
+  Entity as BaseApplicationEntity,
+  Field as BaseApplicationField,
+  Relationship as BaseApplicationRelationship,
+} from '../base-application/types.d.ts';
 import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
 
 const { CASSANDRA } = databaseTypes;
@@ -87,7 +92,7 @@ export function createUserEntity(
   const userIdType = oauth2 || user.databaseType === CASSANDRA ? TYPE_STRING : undefined;
   const fieldValidateRulesMaxlength = userIdType === TYPE_STRING ? 100 : undefined;
 
-  addOrExtendFields(user.fields, [
+  addOrExtendFields(user.fields!, [
     {
       fieldName: 'id',
       fieldType: userIdType,
@@ -157,7 +162,7 @@ export function createUserEntity(
           },
         ]
       : []),
-  ]);
+  ] as BaseApplicationField[]);
 
   return user;
 }
@@ -200,20 +205,24 @@ export function createUserManagementEntity(
   };
 
   if (application.generateBuiltInAuthorityEntity) {
-    addOrExtendRelationships(userManagement.relationships, [
+    addOrExtendRelationships(userManagement.relationships!, [
       {
         otherEntityName: 'Authority',
         relationshipName: 'authority',
         relationshipType: 'many-to-many',
         relationshipIgnoreBackReference: true,
       },
-    ]);
+    ] as BaseApplicationRelationship[]);
   }
 
   return userManagement;
 }
 
-export function createAuthorityEntity(this: BaseApplicationGenerator, customAuthorityData = {}, application): Partial<ApplicationEntity> {
+export function createAuthorityEntity(
+  this: BaseApplicationGenerator,
+  customAuthorityData: Partial<ApplicationEntity> = {},
+  application: ApplicationAll,
+): Partial<ApplicationEntity> {
   const entityDefinition = this.getEntityConfig(authorityEntityName)?.getAll() as Partial<ApplicationEntity>;
   if (entityDefinition) {
     if (entityDefinition.relationships && entityDefinition.relationships.length > 0) {
@@ -250,11 +259,11 @@ export function createAuthorityEntity(this: BaseApplicationGenerator, customAuth
     ...customAuthorityData,
   };
 
-  loadRequiredConfigIntoEntity(authorityEntity, application);
+  loadRequiredConfigIntoEntity(authorityEntity, application as any);
   // Fallback to defaults for test cases.
   loadRequiredConfigIntoEntity(authorityEntity, this.jhipsterConfigWithDefaults);
 
-  addOrExtendFields(authorityEntity.fields, [
+  addOrExtendFields(authorityEntity.fields!, [
     {
       fieldName: 'name',
       fieldType: TYPE_STRING,
@@ -262,14 +271,13 @@ export function createAuthorityEntity(this: BaseApplicationGenerator, customAuth
       fieldValidateRules: [Validations.MAXLENGTH, Validations.REQUIRED],
       fieldValidateRulesMaxlength: 50,
       builtIn: true,
-    },
+    } as BaseApplicationField,
   ]);
 
   return authorityEntity;
 }
 
-function addOrExtendFields(fields, fieldsToAdd) {
-  fieldsToAdd = [].concat(fieldsToAdd);
+function addOrExtendFields<const F extends BaseApplicationField>(fields: F[], fieldsToAdd: F[]): void {
   for (const fieldToAdd of fieldsToAdd) {
     const { fieldName: newFieldName, id } = fieldToAdd;
     let field = fields.find(field => field.fieldName === newFieldName);
@@ -286,8 +294,7 @@ function addOrExtendFields(fields, fieldsToAdd) {
   }
 }
 
-function addOrExtendRelationships(relationships, relationshipsToAdd) {
-  relationshipsToAdd = [].concat(relationshipsToAdd);
+function addOrExtendRelationships<const R extends BaseApplicationRelationship>(relationships: R[], relationshipsToAdd: R[]): void {
   for (const relationshipToAdd of relationshipsToAdd) {
     const { relationshipName: newrelationshipName } = relationshipToAdd;
     let relationship = relationships.find(relationship => relationship.relationshipName === newrelationshipName);

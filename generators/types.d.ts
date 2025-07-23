@@ -48,12 +48,12 @@ type GeneratorsByNamespace = {
   'jhipster:cypress': import('./cypress/generator.ts').default;
   docker: import('./docker/generator.ts').default;
   'jhipster:docker': import('./docker/generator.ts').default;
-  'docker-compose': import('./docker-compose/generator.ts').default;
-  'jhipster:docker-compose': import('./docker-compose/generator.ts').default;
+  // 'docker-compose': import('./docker-compose/generator.ts').default;
+  // 'jhipster:docker-compose': import('./docker-compose/generator.ts').default;
   entities: import('./entities/generator.ts').default;
   'jhipster:entities': import('./entities/generator.ts').default;
-  entity: import('./entity/generator.ts').default;
-  'jhipster:entity': import('./entity/generator.ts').default;
+  // entity: import('./entity/generator.ts').default;
+  // 'jhipster:entity': import('./entity/generator.ts').default;
   'export-jdl': import('./export-jdl/generator.ts').default;
   'jhipster:export-jdl': import('./export-jdl/generator.ts').default;
   'feign-client': import('./feign-client/generator.ts').default;
@@ -69,8 +69,8 @@ type GeneratorsByNamespace = {
   'jhipster:gradle:code-quality': import('./gradle/generators/code-quality/generator.ts').default;
   'jhipster:gradle:jib': import('./gradle/generators/jib/generator.ts').default;
   'jhipster:gradle:node-gradle': import('./gradle/generators/node-gradle/generator.ts').default;
-  heroku: import('./heroku/generator.ts').default;
-  'jhipster:heroku': import('./heroku/generator.ts').default;
+  // heroku: import('./heroku/generator.ts').default;
+  // 'jhipster:heroku': import('./heroku/generator.ts').default;
   info: import('./info/generator.ts').default;
   'jhipster:info': import('./info/generator.ts').default;
   init: import('./init/generator.ts').default;
@@ -92,13 +92,13 @@ type GeneratorsByNamespace = {
   'jhipster:javascript:prettier': import('./javascript/generators/prettier/generator.ts').default;
   jdl: import('./jdl/generator.ts').default;
   'jhipster:jdl': import('./jdl/generator.ts').default;
-  kubernetes: import('./kubernetes/generator.ts').default;
-  'jhipster:kubernetes': import('./kubernetes/generator.ts').default;
-  'kubernetes-helm': import('./kubernetes-helm/generator.ts').default;
-  'jhipster:kubernetes-helm': import('./kubernetes-helm/generator.ts').default;
-  'kubernetes-knative': import('./kubernetes-knative/generator.ts').default;
-  'jhipster:kubernetes-knative': import('./kubernetes-knative/generator.ts').default;
-  'jhipster:kubernetes:bootstrap': import('./kubernetes/generators/bootstrap/generator.ts').default;
+  // kubernetes: import('./kubernetes/generator.ts').default;
+  // 'jhipster:kubernetes': import('./kubernetes/generator.ts').default;
+  // 'kubernetes-helm': import('./kubernetes-helm/generator.ts').default;
+  // 'jhipster:kubernetes-helm': import('./kubernetes-helm/generator.ts').default;
+  // 'kubernetes-knative': import('./kubernetes-knative/generator.ts').default;
+  // 'jhipster:kubernetes-knative': import('./kubernetes-knative/generator.ts').default;
+  // 'jhipster:kubernetes:bootstrap': import('./kubernetes/generators/bootstrap/generator.ts').default;
   languages: import('./languages/generator.ts').default;
   'jhipster:languages': import('./languages/generator.ts').default;
   liquibase: import('./liquibase/generator.ts').default;
@@ -137,12 +137,12 @@ type GeneratorsByNamespace = {
   'jhipster:spring-data-relational': import('./spring-data-relational/generator.ts').default;
   'spring-websocket': import('./spring-websocket/generator.ts').default;
   'jhipster:spring-websocket': import('./spring-websocket/generator.ts').default;
-  upgrade: import('./upgrade/generator.ts').default;
-  'jhipster:upgrade': import('./upgrade/generator.ts').default;
+  // upgrade: import('./upgrade/generator.ts').default;
+  // 'jhipster:upgrade': import('./upgrade/generator.ts').default;
   vue: import('./vue/generator.ts').default;
   'jhipster:vue': import('./vue/generator.ts').default;
-  workspaces: import('./workspaces/generator.ts').default;
-  'jhipster:workspaces': import('./workspaces/generator.ts').default;
+  // workspaces: import('./workspaces/generator.ts').default;
+  // 'jhipster:workspaces': import('./workspaces/generator.ts').default;
   // jhipster-needle-add-generator-by-namespace - JHipster will add generators here
 };
 

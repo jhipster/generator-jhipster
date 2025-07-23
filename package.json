@@ -188,6 +188,7 @@
     "@node-loaders/esbuild": "2.0.0",
     "@types/chai": "5.2.2",
     "@types/debug": "4.1.12",
+    "@types/didyoumean": "1.2.3",
     "@types/estree": "1.0.8",
     "@types/node": "20.19.9",
     "@types/normalize-path": "^3.0.2",

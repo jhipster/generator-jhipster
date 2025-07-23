@@ -50,14 +50,14 @@ export const generateEntityClientImports = (
   relationships: RelationshipWithEntity<ClientRelationship, ClientEntity>[],
   _dto?: string,
   clientFramework?: string,
-) => {
-  const typeImports = new Map();
+): Map<string, string> => {
+  const typeImports = new Map<string, string>();
 
   const relevantRelationships = filterRelevantRelationships(relationships);
 
   relevantRelationships.forEach(relationship => {
     const importType = `I${relationship.otherEntity.entityAngularName}`;
-    let importPath;
+    let importPath: string;
     if (relationship.otherEntity?.builtInUser) {
       importPath = clientFramework === ANGULAR ? 'app/entities/user/user.model' : 'app/shared/model/user.model';
     } else {
@@ -74,12 +74,8 @@ export const generateEntityClientImports = (
 /**
  * @private
  * Generate Entity Client Enum Imports
- *
- * @param {Array|Object} fields - array of the entity fields
- * @param {string} clientFramework the client framework, 'angular' or 'react'.
- * @returns typeImports: Map
  */
-export const generateEntityClientEnumImports = (fields: ClientField[], clientFramework: string) => {
+export const generateEntityClientEnumImports = (fields: ClientField[], clientFramework: string): Map<string, string> => {
   const typeImports = new Map();
   const uniqueEnums: Record<string, string> = {};
   for (const field of fields) {

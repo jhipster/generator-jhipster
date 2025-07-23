@@ -356,15 +356,25 @@ ${comment}
     return defaultVariablesValues;
   }
 
-  generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
+  generateEntityClientFields(
+    primaryKey: Parameters<typeof getHydratedEntityClientFields>[0],
+    fields: Parameters<typeof getHydratedEntityClientFields>[1],
+    relationships: Parameters<typeof getHydratedEntityClientFields>[2],
+    dto: Parameters<typeof getHydratedEntityClientFields>[3],
+    customDateType: Parameters<typeof getHydratedEntityClientFields>[4],
+    embedded: Parameters<typeof getHydratedEntityClientFields>[5] = false,
+  ) {
     return getHydratedEntityClientFields(primaryKey, fields, relationships, dto, customDateType, embedded, REACT);
   }
 
-  generateEntityClientImports(relationships, dto) {
+  generateEntityClientImports(
+    relationships: Parameters<typeof formatEntityClientImports>[0],
+    dto: Parameters<typeof formatEntityClientImports>[1],
+  ) {
     return formatEntityClientImports(relationships, dto, REACT);
   }
 
-  generateEntityClientEnumImports(fields) {
+  generateEntityClientEnumImports(fields: ClientField[]) {
     return getClientEnumImportsFormat(fields, REACT);
   }
 
@@ -372,7 +382,7 @@ ${comment}
    * get the an upperFirst camelCase value.
    * @param {string} value string to convert
    */
-  upperFirstCamelCase(value) {
+  upperFirstCamelCase(value: string): string {
     return upperFirstCamelCase(value);
   }
 }

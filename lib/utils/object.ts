@@ -91,7 +91,10 @@ export const mutateData = <const T extends Record<string | number, any>>(
       [Key in keyof (Partial<T> & { __override__?: boolean })]?: Key extends '__override__'
         ? boolean
         : Key extends keyof T
-          ? T[Key] | ((ctx: T) => T[Key])
+          ? // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+            T[Key] extends Function
+            ? (ctx: T) => T[Key]
+            : T[Key] | ((ctx: T) => T[Key])
           : never;
     }>
   >[]
