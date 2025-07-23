@@ -41,14 +41,14 @@ const readDir = (dirPath: string) => {
   return files;
 };
 
-export default function checkEnforcements({ client }: { client?: boolean }, generator, ...generatorUsage: string[]) {
+export default function checkEnforcements({ client }: { client?: boolean }, generator: string, ...generatorUsage: string[]) {
   describe('enforce some developments patterns', () => {
     const allFiles = readDir(getGeneratorFolder(generator));
     allFiles
       .filter(file => !/\.spec\.[mc]?[jt]s(.snap)?$/.test(file))
       .forEach(file => {
         describe(`file ${path.basename(file)}`, () => {
-          let content;
+          let content: string;
           before(() => {
             content = readFileSync(file, 'utf-8');
           });

@@ -26,7 +26,7 @@ class CommandGenerator extends BaseApplicationGenerator {
     return this._context;
   }
 
-  constructor(args, opts, features) {
+  constructor(args: any, opts: any, features: any) {
     super(args, opts, { ...features, jhipsterBootstrap: false });
     this.customLifecycle = true;
   }
