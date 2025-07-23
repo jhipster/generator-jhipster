@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asInitializingTask } from '../base-application/support/task-type-inference.ts';
 import type { BaseKubernetesGenerator } from './generator.ts';
 
-export const checkHelm = async function (this: BaseKubernetesGenerator) {
+export const checkHelm = asInitializingTask(async function (this: BaseKubernetesGenerator) {
   if (this.skipChecks) return;
 
   try {
@@ -29,4 +30,4 @@ export const checkHelm = async function (this: BaseKubernetesGenerator) {
         'Make sure you have helm installed. Read https://github.com/helm/helm/\n',
     );
   }
-};
+});

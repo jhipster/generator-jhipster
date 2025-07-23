@@ -244,7 +244,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
    * @param {string} databaseType
    * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
    */
-  getJDBCUrl(databaseType, options = {}) {
-    return getJdbcUrl(databaseType, options);
+  getJDBCUrl(...args: Parameters<typeof getJdbcUrl>) {
+    return getJdbcUrl(...args);
   }
 }
