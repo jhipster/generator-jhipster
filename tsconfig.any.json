@@ -32,7 +32,6 @@
     "lib/jdl/converters/validators/*.spec.ts",
     "lib/jdl-config/",
     "lib/jhipster/*.spec.ts",
-    "lib/testing",
     "cli/**/*.spec.ts",
     "cli/**/*.spec.?ts",
     "test"
