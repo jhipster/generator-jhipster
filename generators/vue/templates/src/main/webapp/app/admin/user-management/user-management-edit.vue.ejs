@@ -15,7 +15,7 @@
               type="text"
               class="form-control"
               name="login"
-              :class="{ valid: !v$.userAccount.login.$invalid, invalid: v$.userAccount.login.$invalid }"
+              :class="{ 'is-valid': !v$.userAccount.login.$invalid, 'is-invalid': v$.userAccount.login.$invalid }"
               v-model="v$.userAccount.login.$model"
             />
 
@@ -45,7 +45,7 @@
               id="firstName"
               name="firstName"
               :placeholder="t$('settings.form[\'firstname.placeholder\']')"
-              :class="{ valid: !v$.userAccount.firstName.$invalid, invalid: v$.userAccount.firstName.$invalid }"
+              :class="{ 'is-valid': !v$.userAccount.firstName.$invalid, 'is-invalid': v$.userAccount.firstName.$invalid }"
               v-model="v$.userAccount.firstName.$model"
             />
             <div v-if="v$.userAccount.firstName.$anyDirty && v$.userAccount.firstName.$invalid">
@@ -66,7 +66,7 @@
               id="lastName"
               name="lastName"
               :placeholder="t$('settings.form[\'lastname.placeholder\']')"
-              :class="{ valid: !v$.userAccount.lastName.$invalid, invalid: v$.userAccount.lastName.$invalid }"
+              :class="{ 'is-valid': !v$.userAccount.lastName.$invalid, 'is-invalid': v$.userAccount.lastName.$invalid }"
               v-model="v$.userAccount.lastName.$model"
             />
             <div v-if="v$.userAccount.lastName.$anyDirty && v$.userAccount.lastName.$invalid">
@@ -87,7 +87,7 @@
               id="email"
               name="email"
               :placeholder="t$('global.form[\'email.placeholder\']')"
-              :class="{ valid: !v$.userAccount.email.$invalid, invalid: v$.userAccount.email.$invalid }"
+              :class="{ 'is-valid': !v$.userAccount.email.$invalid, 'is-invalid': v$.userAccount.email.$invalid }"
               v-model="v$.userAccount.email.$model"
               email
               required
