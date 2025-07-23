@@ -1,5 +1,4 @@
 {
-  "include": [".blueprint", "cli/**/*", "generators", "generators/base-core", "lib/**/*", "test/**/*", ".blueprint/**/*"],
   "exclude": [
     "cli/cli.spec.mts",
     "cli/environment-builder.spec.mts",
