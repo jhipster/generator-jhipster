@@ -4,7 +4,7 @@
             <form name="editForm" novalidate @submit.prevent="save()" >
                 <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%= entityClass %>CreateUpdateHeading" v-text="t$('<%= i18nKeyPrefix %>.home.createOrEditLabel')">Create or edit a <%= entityAngularName %></h2>
                 <div>
-                    <div class="form-group" v-if="<%= entityInstance %>.<%= primaryKey.name %>">
+                    <div class="mb-3" v-if="<%= entityInstance %>.<%= primaryKey.name %>">
                         <label for="id" v-text="t$('global.field.id')"><%= primaryKey.nameCapitalized %></label>
                         <input type="text" class="form-control" id="id" name="<%= primaryKey.name %>"
                                v-model="<%= entityInstance %>.<%= primaryKey.name %>" readonly />
@@ -32,7 +32,7 @@
     fieldInputType = 'hidden';
   }
 _%>
-                    <div class="form-group">
+                    <div class="mb-3">
                         <label class="form-control-label" v-text="t$('<%= translationKey %>')" for="<%= entityFileName %>-<%= fieldName %>"><%= fieldNameHumanized %></label>
   <%_ if (field.fieldIsEnum) { _%>
                         <select class="form-control" name="<%= fieldName %>" :class="{'valid': !v$.<%= fieldName %>.$invalid, 'invalid': v$.<%= fieldName %>.$invalid }" v-model="v$.<%= fieldName %>.$model" id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>>
@@ -132,7 +132,7 @@ _%>
   const relationshipRequired = relationship.relationshipRequired;
   const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
   <%_ if (!relationship.collection && relationship.persistableRelationship) { _%>
-                    <div class="form-group">
+                    <div class="mb-3">
                         <label class="form-control-label" v-text="t$('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                         <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
     <%_ if (!relationshipRequired) { _%>
@@ -144,7 +144,7 @@ _%>
                         </select>
                     </div>
   <%_ } else if (relationship.persistableRelationship) { _%>
-                    <div class="form-group">
+                    <div class="mb-3">
                         <label v-text="t$('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                         <select class="form-control" id="<%= entityFileName %>-<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipName %>" v-if="<%=entityInstance %>.<%=relationshipFieldNamePlural %> !== undefined" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
                             <option :value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option, '<%= relationship.otherEntity.primaryKey.name %>')" v-for="<%=otherEntityName %>Option in <%= relationship.otherEntity.entityInstancePlural %>" :key="<%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>

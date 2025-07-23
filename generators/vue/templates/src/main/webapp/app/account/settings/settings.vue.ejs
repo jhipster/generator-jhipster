@@ -21,7 +21,7 @@
         </div>
 
         <form name="form" id="settings-form" @submit.prevent="save()" v-if="settingsAccount" novalidate>
-          <div class="form-group">
+          <div class="mb-3">
             <label class="form-control-label" for="firstName" v-text="t$('settings.form.firstname')">First Name</label>
             <input
               type="text"
@@ -60,7 +60,7 @@
               </small>
             </div>
           </div>
-          <div class="form-group">
+          <div class="mb-3">
             <label class="form-control-label" for="lastName" v-text="t$('settings.form.lastname')">Last Name</label>
             <input
               type="text"
@@ -99,7 +99,7 @@
               </small>
             </div>
           </div>
-          <div class="form-group">
+          <div class="mb-3">
             <label class="form-control-label" for="email" v-text="t$('global.form[\'email.label\']')">Email</label>
             <input
               type="email"
@@ -147,7 +147,7 @@
             </div>
           </div>
 <%_ if (enableTranslation) { _%>
-          <div class="form-group" v-if="languages && Object.keys(languages).length > 1">
+          <div class="mb-3" v-if="languages && Object.keys(languages).length > 1">
             <label for="langKey" v-text="t$('settings.form.language')">Language</label>
             <select class="form-control" id="langKey" name="langKey" v-model="settingsAccount.langKey" data-cy="langKey">
               <option v-for="(language, key) in languages" :value="key" :key="`lang-${key}`">{{ language.name }}
