@@ -31,6 +31,18 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
     }
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      preparing({ application }) {
+        application.javaIntegrationTestExclude.push('**/*CucumberIT*');
+      },
+    });
+  }
+
+  get [JavaApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       cleanupTask,
@@ -44,6 +56,12 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      junitPlatform({ application, source }) {
+        source.editJUnitPlatformProperties?.([
+          { key: 'cucumber.publish.enabled', value: 'true' },
+          { key: 'cucumber.plugin', value: `pretty, html:${application.testResources}cucumber-reports/Cucumber.html` },
+        ]);
+      },
       addDependencies({ application, source }) {
         const { javaDependencies, gradleBuildSrc } = application;
         source.addJavaDefinitions?.(

@@ -557,6 +557,13 @@
                             <include>**/*IT*</include>
                             <include>**/*IntTest*</include>
                         </includes>
+<%_ if (javaIntegrationTestExclude.length > 0) { _%>
+                        <excludes>
+  <%_ for (exclude in javaIntegrationTestExclude) { _%>
+                            <exclude><%- exclude %></exclude>
+  <%_ } _%>
+                        </excludes>
+<%_ } _%>
 <%_ if (reactive) { _%>
                         <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
                         <argLine>@{argLine} -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=${profile.test}</argLine>

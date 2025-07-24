@@ -101,8 +101,8 @@ task integrationTest(type: Test) {
     description = "Execute integration tests."
     group = "verification"
     include "**/*IT*", "**/*IntTest*"
-<%_ if (cucumberTests) { _%>
-    exclude "**/*CucumberIT*"
+<%_ if (javaIntegrationTestExclude.length > 0) { _%>
+    exclude<%- javaIntegrationTestExclude.map(exclude => `"${exclude}"`).join('') %>
 <%_ } _%>
     testLogging {
         events 'FAILED', 'SKIPPED'
