@@ -28,7 +28,7 @@ import { buildToolTypes } from '../../lib/jhipster/index.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 
-const { MAVEN, GRADLE } = buildToolTypes;
+const { GRADLE } = buildToolTypes;
 
 export class CucumberApplicationGenerator extends BaseApplicationGenerator<
   JavaEntity,
@@ -69,7 +69,7 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
               }),
             );
           };
-          if (application.buildTool === GRADLE) {
+          if (application.buildToolGradle) {
             source.addIntegrationTestPluginAdditionalDevConfiguration = args => {
               const gradleDevProfilePath = path.join(`${application.gradleBuildSrc}`, '..', 'gradle', 'profile_dev.gradle');
               const ignoreNonExisting = this.ignoreNeedlesError && 'gradle dev profile file not found';
@@ -200,7 +200,7 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
               cucumber.publish.enabled=true
               cucumber.plugin=pretty, html:target/cucumber-reports/Cucumber.html`,
           });
-          if (application.buildTool === GRADLE) {
+          if (application.buildToolGradle) {
             source.addIntegrationTestPluginAdditionalDevConfiguration!({
               additionalData: 'exclude "**/*CucumberIT*"',
             });
