@@ -53,10 +53,7 @@ export const downloadJdlFile = async (jdlFile: string, { skipSampleRepository }:
     return await downloadFile(url, jdlFile);
   } catch (error) {
     logger.verboseInfo((error as any).message);
-    // TODO replace when any v8 is released.
-    // const branchName = `v${packageJson.version.split('.', 2)[0]}`;
-    const branchName = 'v8';
-    url = new URL(jdlFile, `https://raw.githubusercontent.com/jhipster/jdl-samples/${branchName}/`).toString();
+    url = new URL(jdlFile, `https://raw.githubusercontent.com/jhipster/jdl-samples/v${packageJson.version.split('.')[0]}/`).toString();
     return downloadFile(url, jdlFile);
   }
 };

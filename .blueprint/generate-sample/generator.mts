@@ -53,8 +53,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
 
         await this.composeWithJHipster(GENERATOR_JDL, {
           generatorArgs: [this.templatePath('samples', this.sampleName)],
-          // TODO remove any type
-          generatorOptions: { projectVersion: this.projectVersion, destinationRoot: this.projectFolder } as any,
+          generatorOptions: { projectVersion: this.projectVersion, destinationRoot: this.projectFolder },
         });
       },
       async generateSample() {
@@ -90,8 +89,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
           if (sample.jdlFiles) {
             await this.composeWithJHipster(GENERATOR_JDL, {
               generatorArgs: sample.jdlFiles,
-              // TODO remove any type
-              generatorOptions: { jsonOnly: true, destinationRoot: this.projectFolder } as any,
+              generatorOptions: { jsonOnly: true, destinationRoot: this.projectFolder },
             });
           }
           await this.composeWithJHipster(GENERATOR_APP, { generatorOptions });

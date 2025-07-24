@@ -37,11 +37,10 @@ describe(`generator - ${generator}`, () => {
   });
   shouldSupportFeatures(Generator);
 
-  // TODO test is broken due to @esbuild-kit/esm-loader
-  describe.skip('EnvironmentBuilder', () => {
-    let envBuilder;
-    before(() => {
-      envBuilder = EnvironmentBuilder.createDefaultBuilder();
+  describe('EnvironmentBuilder', () => {
+    let envBuilder: EnvironmentBuilder;
+    before(async () => {
+      envBuilder = await EnvironmentBuilder.createDefaultBuilder();
     });
     it(`should be registered as jhipster:${generator} at yeoman-environment`, async () => {
       expect(await envBuilder.getEnvironment().get(`jhipster:${generator}`)).toBe(Generator);
