@@ -20,7 +20,7 @@ import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
 import { GENERATOR_GRADLE } from '../../../generator-list.js';
 
-export default class CodeQualityGenerator extends JavaApplicationGenerator {
+export default class GradleJibGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -55,7 +55,7 @@ export default class CodeQualityGenerator extends JavaApplicationGenerator {
           {
             libraryName: 'jib-plugin',
             module: 'com.google.cloud.tools:jib-gradle-plugin',
-            version: javaDependencies!['jib-maven-plugin'],
+            version: javaDependencies!['gradle-jib'],
             scope: 'implementation',
           },
         ]);

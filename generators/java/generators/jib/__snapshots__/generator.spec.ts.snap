@@ -192,7 +192,7 @@ exports[`generator - java:jib with gradle buildTool should match source snapshot
         "libraryName": "jib-plugin",
         "module": "com.google.cloud.tools:jib-gradle-plugin",
         "scope": "implementation",
-        "version": "'JIB-MAVEN-PLUGIN-VERSION'",
+        "version": "'GRADLE-JIB-VERSION'",
       },
     ],
   ],
