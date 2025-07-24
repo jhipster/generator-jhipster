@@ -1260,7 +1260,7 @@ dependencies {
 # jhipster-needle-gradle-build-src-dependency-catalog-version - Deprecated: JHipster will add additional versions for convention plugins here
 
 [libraries]
-jib-plugin = { module = "com.google.cloud.tools:jib-gradle-plugin", version = "'JIB-MAVEN-PLUGIN-VERSION'" }
+jib-plugin = { module = "com.google.cloud.tools:jib-gradle-plugin", version = "'GRADLE-JIB-VERSION'" }
 modernizer-plugin = { module = "com.github.andygoossens:gradle-modernizer-plugin", version = "'GRADLE-MODERNIZER-PLUGIN-VERSION'" }
 nohttp-plugin = { module = "io.spring.nohttp:nohttp-gradle", version = "'NOHTTP-CHECKSTYLE-VERSION'" }
 sonarqube-plugin = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "'GRADLE-SONARQUBE-VERSION'" }
