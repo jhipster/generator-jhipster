@@ -36,8 +36,5 @@ import { ProfileService } from './profile.service';
   imports: [SharedModule],
 })
 export default class PageRibbonComponent {
-  private readonly profileService = inject(ProfileService);
-  ribbonEnv = toSignal(
-    this.profileService.getProfileInfo().pipe(map(info => info.ribbonEnv))
-  );
+  ribbonEnv = toSignal(inject(ProfileService).getProfileInfo().pipe(map(info => info.ribbonEnv)));
 }
