@@ -103,3 +103,8 @@ export type WriteContext = {
     context: any,
   ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
 };
+
+export type PropertyFileKeyUpdate = {
+  key: string;
+  value: string | ((oldValue?: string) => string);
+};

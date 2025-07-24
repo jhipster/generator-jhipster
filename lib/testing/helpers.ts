@@ -492,7 +492,7 @@ plugins {
     priorityName:
       | (typeof APPLICATION_PRIORITY_NAMES)[keyof typeof APPLICATION_PRIORITY_NAMES]
       | (typeof WORKSPACES_PRIORITY_NAMES)[keyof typeof WORKSPACES_PRIORITY_NAMES],
-    method: (...args: any[]) => any,
+    method: (this: CoreGenerator, ...args: any[]) => any,
   ): this {
     return this.onGenerator(async gen => {
       const generator = gen as BaseApplicationGenerator;
