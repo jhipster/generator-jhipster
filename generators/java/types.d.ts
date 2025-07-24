@@ -1,6 +1,6 @@
 import type { RequireOneOrNone } from 'type-fest';
 import type { Application as GradleApplication, GradleNeedleOptions, Source as GradleSource } from '../gradle/types.js';
-import type { EditFileCallback } from '../base-core/api.js';
+import type { EditFileCallback, PropertyFileKeyUpdate } from '../base-core/api.js';
 import type { MavenDefinition, Source as MavenSource } from '../maven/types.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
 import type {
@@ -165,7 +165,6 @@ export type Application<E extends BaseApplicationEntity<BaseApplicationField, Ba
       useNpmWrapper: boolean;
       graalvmReachabilityMetadata: string;
 
-      cucumberTests: boolean;
       gatlingTests: boolean;
 
       imperativeOrReactive: string;
@@ -180,6 +179,8 @@ export type Application<E extends BaseApplicationEntity<BaseApplicationField, Ba
 
       domains: string[];
       jhipsterDependenciesVersion?: string;
+
+      javaIntegrationTestExclude: string[];
     };
 
 export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };
@@ -205,6 +206,7 @@ export type Source = BaseApplicationSource &
     addMainLog?({ name, level }: { name: string; level: string }): void;
     addTestLog?({ name, level }: { name: string; level: string }): void;
 
+    editJUnitPlatformProperties?(properties: PropertyFileKeyUpdate[]): void;
     /**
      * Edit a Java file by adding static imports, imports and annotations.
      * Callbacks are passed to the editFile method.
