@@ -44,48 +44,26 @@
             <small>{{ logger.name }}</small>
           </td>
           <td>
-            <button
-              @click="updateLevel(logger.name, 'TRACE')"
-              :class="logger.level === 'TRACE' ? 'btn-primary' : 'btn-light'"
-              class="btn btn-sm"
-            >
-              TRACE
-            </button>
-            <button
-              @click="updateLevel(logger.name, 'DEBUG')"
-              :class="logger.level === 'DEBUG' ? 'btn-success' : 'btn-light'"
-              class="btn btn-sm"
-            >
-              DEBUG
-            </button>
-            <button
-              @click="updateLevel(logger.name, 'INFO')"
-              :class="logger.level === 'INFO' ? 'btn-info' : 'btn-light'"
-              class="btn btn-sm"
-            >
-              INFO
-            </button>
-            <button
-              @click="updateLevel(logger.name, 'WARN')"
-              :class="logger.level === 'WARN' ? 'btn-warning' : 'btn-light'"
-              class="btn btn-sm"
-            >
-              WARN
-            </button>
-            <button
-              @click="updateLevel(logger.name, 'ERROR')"
-              :class="logger.level === 'ERROR' ? 'btn-danger' : 'btn-light'"
-              class="btn btn-sm"
-            >
-              ERROR
-            </button>
-            <button
-              @click="updateLevel(logger.name, 'OFF')"
-              :class="logger.level === 'OFF' ? 'btn-secondary' : 'btn-light'"
-              class="btn btn-sm"
-            >
-              OFF
-            </button>
+            <BButtonGroup role="group" aria-label="Log level" size="sm" class="flex-nowrap">
+              <BButton @click="updateLevel(logger.name, 'TRACE')" :variant="logger.level === 'TRACE' ? 'primary' : 'light'" size="sm">
+                TRACE
+              </BButton>
+              <BButton @click="updateLevel(logger.name, 'DEBUG')" :variant="logger.level === 'DEBUG' ? 'success' : 'light'" size="sm">
+                DEBUG
+              </BButton>
+              <BButton @click="updateLevel(logger.name, 'INFO')" :variant="logger.level === 'INFO' ? 'info' : 'light'" size="sm">
+                INFO
+              </BButton>
+              <BButton @click="updateLevel(logger.name, 'WARN')" :variant="logger.level === 'WARN' ? 'warning' : 'light'" size="sm">
+                WARN
+              </BButton>
+              <BButton @click="updateLevel(logger.name, 'ERROR')" :variant="logger.level === 'ERROR' ? 'danger' : 'light'" size="sm">
+                ERROR
+              </BButton>
+              <BButton @click="updateLevel(logger.name, 'OFF')" :variant="logger.level === 'OFF' ? 'secondary' : 'light'" size="sm">
+                OFF
+              </BButton>
+            </BButtonGroup>
           </td>
         </tr>
       </table>
