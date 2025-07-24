@@ -204,7 +204,7 @@ export type Source = BaseApplicationSource &
     hasJavaManagedProperty?(propertyName: string): boolean;
     addMainLog?({ name, level }: { name: string; level: string }): void;
     addTestLog?({ name, level }: { name: string; level: string }): void;
-
+    addJunitPlatformPropertyEntry?(args: { config: string }): void;
     /**
      * Edit a Java file by adding static imports, imports and annotations.
      * Callbacks are passed to the editFile method.
