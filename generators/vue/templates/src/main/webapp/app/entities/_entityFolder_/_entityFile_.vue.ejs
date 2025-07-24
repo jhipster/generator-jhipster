@@ -79,7 +79,7 @@
                         <span v-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     </td>
   <%_ } else if (field.fieldIsEnum) { _%>
-                    <td>{{ t$('<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>) }}</td>
+                    <td><% if (enableTranslation) { %>{{ t$('<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>) }}<% } else { %>{{ <%= entityInstance %>.<%= fieldName %> }}<% } %></td>
   <%_ } else if (field.fieldTypeDuration) { _%>
                     <td>{{formatDuration(<%=entityInstance %>.<%=fieldName%>)}}</td>
   <%_ } else if (field.fieldTypeTimed) { _%>

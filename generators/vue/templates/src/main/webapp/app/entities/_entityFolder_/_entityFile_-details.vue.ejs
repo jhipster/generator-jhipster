@@ -12,7 +12,7 @@
                     </dt>
                     <dd>
   <%_ if (field.fieldIsEnum) { _%>
-                        <span>{{ t$('<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>) }}</span>
+                        <span><% if (enableTranslation) { %>{{ t$('<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>) }}<% } else { %>{{ <%= entityInstance %>.<%= fieldName %> }}<% } %></span>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                         <div v-if="<%= entityInstance %>.<%= fieldName %>">
                             <a @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
