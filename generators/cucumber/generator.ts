@@ -53,7 +53,9 @@ export default class CucumberGenerator extends CucumberApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ application, applicationDefaults }) {
-        applicationDefaults({ cucumberTests: ({ testFrameworks }) => testFrameworks?.includes('cucumber') ?? false } as any);
+        applicationDefaults({
+          cucumberTests: ({ testFrameworks }: { testFrameworks: string[] }) => testFrameworks?.includes('cucumber') ?? false,
+        } as any);
       },
       addNeedles({ source, application }) {
         if (application.cucumberTests) {
