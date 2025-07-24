@@ -52,10 +52,10 @@
             </b-form-input>
           </b-form-group>
           <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked <% if (authenticationTypeSession && databaseTypeNo) { %> hidden<% } %>>
-            <span v-text="t$('login.form.rememberme')"></span>
+            <span>{{ t$('login.form.rememberme') }}</span>
           </b-form-checkbox>
           <div>
-            <b-button data-cy="submit" type="submit" variant="primary" v-text="t$('login.form.button')"></b-button>
+            <b-button data-cy="submit" type="submit" variant="primary">{{ t$('login.form.button') }}</b-button>
           </div>
         </b-form>
         <p></p>
@@ -65,15 +65,14 @@
             <b-link
               :to="'/account/reset/request'"
               class="alert-link"
-              v-text="t$('login.password.forgot')"
               data-cy="forgetYourPasswordSelector"
-            ></b-link>
+            >{{ t$('login.password.forgot') }}</b-link>
           </b-alert>
         </div>
         <div>
           <b-alert :model-value="true" variant="warning">
-            <span v-text="t$('global.messages.info.register.noaccount')"></span>
-            <b-link :to="'/register'" class="alert-link" v-text="t$('global.messages.info.register.link')"></b-link>
+            <span>{{ t$('global.messages.info.register.noaccount') }}</span>
+            <b-link :to="'/register'" class="alert-link">{{ t$('global.messages.info.register.link') }}</b-link>
           </b-alert>
         </div>
 <%_ } _%>

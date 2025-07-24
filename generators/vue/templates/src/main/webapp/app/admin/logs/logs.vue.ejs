@@ -18,22 +18,22 @@
 -%>
 <template>
   <div class="table-responsive">
-    <h2 id="logs-page-heading" v-text="t$('logs.title')" data-cy="logsPageHeading"></h2>
+    <h2 id="logs-page-heading" data-cy="logsPageHeading">{{ t$('logs.title') }}</h2>
 
     <div v-if="loggers">
-      <p v-text="t$('logs.nbloggers', { total: loggers.length })"></p>
+      <p>{{ t$('logs.nbloggers', { total: loggers.length }) }}</p>
 
-      <span v-text="t$('logs.filter')"></span> <input type="text" v-model="filtered" class="form-control" />
+      <span>{{ t$('logs.filter') }}</span> <input type="text" v-model="filtered" class="form-control" />
 
       <table class="table table-sm table-striped table-bordered" aria-describedby="Logs">
         <thead>
           <tr title="click to order">
             <th @click="changeOrder('name')" scope="col">
-              <span v-text="t$('logs.table.name')"></span>
+              <span>{{ t$('logs.table.name') }}</span>
               <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" :field-name="'name'"></jhi-sort-indicator>
             </th>
             <th @click="changeOrder('level')" scope="col">
-              <span v-text="t$('logs.table.level')"></span>
+              <span>{{ t$('logs.table.level') }}</span>
               <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" :field-name="'level'"></jhi-sort-indicator>
             </th>
           </tr>

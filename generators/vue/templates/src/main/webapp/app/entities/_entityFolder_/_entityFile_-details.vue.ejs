@@ -2,17 +2,17 @@
     <div class="d-flex justify-content-center">
         <div class="col-8">
             <div v-if="<%= entityInstance %>">
-                <h2 class="jh-entity-heading" data-cy="<%= entityInstance %>DetailsHeading"><span v-text="t$('<%= i18nKeyPrefix %>.detail.title')"><%= entityAngularName %></span> {{<%= entityInstance %>.<%= primaryKey.name %>}}</h2>
+                <h2 class="jh-entity-heading" data-cy="<%= entityInstance %>DetailsHeading"><span>{{ t$('<%= i18nKeyPrefix %>.detail.title') }}<%= entityAngularName %></span> {{<%= entityInstance %>.<%= primaryKey.name %>}}</h2>
                 <dl class="row-md jh-entity-details">
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;_%>
                     <dt>
-                        <span v-text="t$('<%= i18nKeyPrefix %>.<%= fieldName %>')"><%= field.fieldNameHumanized %></span>
+                        <span>{{ t$('<%= i18nKeyPrefix %>.<%= fieldName %>') }}</span>
                     </dt>
                     <dd>
   <%_ if (field.fieldIsEnum) { _%>
-                        <span v-text="t$('<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</span>
+                        <span>{{ t$('<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>) }}</span>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                         <div v-if="<%= entityInstance %>.<%= fieldName %>">
                             <a @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
@@ -22,7 +22,7 @@
                         </div>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                         <div v-if="<%= entityInstance %>.<%= fieldName %>">
-                            <a @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="t$('entity.action.open')">open</a>
+                            <a @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">{{ t$('entity.action.open') }}</a>
                             {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
                         </div>
   <%_ } else if (field.fieldTypeDuration) { _%>
@@ -44,7 +44,7 @@
 _%>
   <%_ if (relationship.persistableRelationship) { _%>
                     <dt>
-                        <span v-text="t$('<%= i18nKeyPrefix %>.<%= relationshipName %>')"><%= relationshipNameHumanized %></span>
+                        <span>{{ t$('<%= i18nKeyPrefix %>.<%= relationshipName %>') }}</span>
                     </dt>
                     <dd>
     <%_ if (relationship.otherEntityUser) { _%>
@@ -74,12 +74,12 @@ _%>
                         @click.prevent="previousState()"
                         class="btn btn-info"
                         data-cy="entityDetailsBackButton">
-                    <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.back')"> Back</span>
+                    <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.back') }}</span>
                 </button>
 <%_ if (!readOnly) { _%>
                 <router-link v-if="<%= entityInstance %>.<%= primaryKey.name %>" :to="{name: '<%= entityAngularName %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.<%= primaryKey.name %>}}" custom v-slot="{ navigate }">
                     <button @click="navigate" class="btn btn-primary">
-                        <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.edit')"> Edit</span>
+                        <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.edit') }}</span>
                     </button>
                     </router-link>
 <%_ } _%>

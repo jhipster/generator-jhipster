@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex justify-content-center">
       <div class="col-md-8 toastify-container">
-        <h1 v-text="t$('register.title')" id="register-title" data-cy="registerTitle">Registration</h1>
+        <h1 id="register-title" data-cy="registerTitle">{{ t$('register.title') }}</h1>
 
         <div class="alert alert-success" role="alert" v-if="success" v-html="t$('register.messages.success')">
           <strong>Registration saved!</strong> Please check your email for confirmation.
@@ -25,7 +25,7 @@
       <div class="col-md-8">
         <form id="register-form" name="registerForm" @submit.prevent="register()" v-if="!success" no-validate>
           <div class="mb-3">
-            <label class="form-control-label" for="username" v-text="t$('global.form[\'username.label\']')">Username</label>
+            <label class="form-control-label" for="username">{{ t$('global.form[\'username.label\']') }}</label>
             <input
               type="text"
               class="form-control"
@@ -44,35 +44,23 @@
               <small
                 class="form-text text-danger"
                 v-if="v$.registerAccount.login.required.$invalid"
-                v-text="t$('register.messages.validate.login.required')"
-              >
-                Your username is required.
-              </small>
+              >{{ t$('register.messages.validate.login.required') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.registerAccount.login.minLength.$invalid"
-                v-text="t$('register.messages.validate.login.minlength')"
-              >
-                Your username is required to be at least 1 character.
-              </small>
+              >{{ t$('register.messages.validate.login.minlength') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.registerAccount.login.maxLength.$invalid"
-                v-text="t$('register.messages.validate.login.maxlength')"
-              >
-                Your username cannot be longer than 50 characters.
-              </small>
+              >{{ t$('register.messages.validate.login.maxlength') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.registerAccount.login.pattern.$invalid"
-                v-text="t$('register.messages.validate.login.pattern')"
-              >
-                Your username can only contain letters and digits.
-              </small>
+              >{{ t$('register.messages.validate.login.pattern') }}</small>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="email" v-text="t$('global.form[\'email.label\']')">Email</label>
+            <label class="form-control-label" for="email">{{ t$('global.form[\'email.label\']') }}</label>
             <input
               type="email"
               class="form-control"
@@ -91,35 +79,23 @@
               <small
                 class="form-text text-danger"
                 v-if="v$.registerAccount.email.required.$invalid"
-                v-text="t$('global.messages.validate.email.required')"
-              >
-                Your email is required.
-              </small>
+              >{{ t$('global.messages.validate.email.required') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.registerAccount.email.email.$invalid"
-                v-text="t$('global.messages.validate.email.invalid')"
-              >
-                Your email is invalid.
-              </small>
+              >{{ t$('global.messages.validate.email.invalid') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.registerAccount.email.minLength.$invalid"
-                v-text="t$('global.messages.validate.email.minlength')"
-              >
-                Your email is required to be at least 5 characters.
-              </small>
+              >{{ t$('global.messages.validate.email.minlength') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.registerAccount.email.maxLength.$invalid"
-                v-text="t$('global.messages.validate.email.maxlength')"
-              >
-                Your email cannot be longer than 100 characters.
-              </small>
+              >{{ t$('global.messages.validate.email.maxlength') }}</small>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="firstPassword" v-text="t$('global.form[\'newpassword.label\']')">New password</label>
+            <label class="form-control-label" for="firstPassword">{{ t$('global.form[\'newpassword.label\']') }}</label>
             <input
               type="password"
               class="form-control"
@@ -137,29 +113,20 @@
               <small
                 class="form-text text-danger"
                 v-if="v$.registerAccount.password.required.$invalid"
-                v-text="t$('global.messages.validate.newpassword.required')"
-              >
-                Your password is required.
-              </small>
+              >{{ t$('global.messages.validate.newpassword.required') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.registerAccount.password.minLength.$invalid"
-                v-text="t$('global.messages.validate.newpassword.minlength')"
-              >
-                Your password is required to be at least 4 characters.
-              </small>
+              >{{ t$('global.messages.validate.newpassword.minlength') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.registerAccount.password.maxLength.$invalid"
-                v-text="t$('global.messages.validate.newpassword.maxlength')"
-              >
-                Your password cannot be longer than 50 characters.
-              </small>
+              >{{ t$('global.messages.validate.newpassword.maxlength') }}</small>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="secondPassword" v-text="t$('global.form[\'confirmpassword.label\']')"
-              >New password confirmation</label
+            <label class="form-control-label" for="secondPassword"
+              >{{ t$('global.form[\'confirmpassword.label\']') }}</label
             >
             <input
               type="password"
@@ -178,38 +145,25 @@
               <small
                 class="form-text text-danger"
                 v-if="v$.confirmPassword.required.$invalid"
-                v-text="t$('global.messages.validate.confirmpassword.required')"
-              >
-                Your confirmation password is required.
-              </small>
+              >{{ t$('global.messages.validate.confirmpassword.required') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.confirmPassword.minLength.$invalid"
-                v-text="t$('global.messages.validate.confirmpassword.minlength')"
-              >
-                Your confirmation password is required to be at least 4 characters.
-              </small>
+              >{{ t$('global.messages.validate.confirmpassword.minlength') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.confirmPassword.maxLength.$invalid"
-                v-text="t$('global.messages.validate.confirmpassword.maxlength')"
-              >
-                Your confirmation password cannot be longer than 50 characters.
-              </small>
-              <small class="form-text text-danger" v-if="v$.confirmPassword.sameAsPassword" v-text="t$('global.messages.error.dontmatch').$invalid">
-                The password and its confirmation do not match!
-              </small>
+              >{{ t$('global.messages.validate.confirmpassword.maxlength') }}</small>
+              <small class="form-text text-danger" v-if="v$.confirmPassword.sameAsPassword">{{ t$('global.messages.error.dontmatch') }}</small>
             </div>
           </div>
 
-          <button type="submit" :disabled="v$.$invalid" class="btn btn-primary" v-text="t$('register.form.button')" data-cy="submit">
-            Register
-          </button>
+          <button type="submit" :disabled="v$.$invalid" class="btn btn-primary" data-cy="submit">{{ t$('register.form.button') }}</button>
         </form>
         <p></p>
         <div class="alert alert-warning">
-          <span v-text="t$('global.messages.info.authenticated.prefix')">If you want to </span>
-          <a class="alert-link" @click="showLogin()" v-text="t$('global.messages.info.authenticated.link')">sign in</a
+          <span>{{ t$('global.messages.info.authenticated.prefix') }}</span>
+          <a class="alert-link" @click="showLogin()">{{ t$('global.messages.info.authenticated.link') }}</a
           ><span v-html="t$('global.messages.info.authenticated.suffix')"
             >, you can try the default accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
             password="user").</span

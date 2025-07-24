@@ -30,7 +30,7 @@
 <%_ if (!authenticationTypeOauth2) { _%>
       <b-modal id="login-page" focus="username" v-model="loginModalOpen" :no-footer="true" lazy>
         <template #title>
-          <span data-cy="loginTitle" id="login-title" v-text="t$('login.title')"></span>
+          <span data-cy="loginTitle" id="login-title">{{ t$('login.title') }}</span>
         </template>
         <login-form v-if="loginModalOpen"></login-form>
       </b-modal>

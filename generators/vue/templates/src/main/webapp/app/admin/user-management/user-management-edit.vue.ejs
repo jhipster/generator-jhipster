@@ -2,15 +2,15 @@
   <div class="d-flex justify-content-center">
     <div class="col-8">
       <form name="editForm" novalidate @submit.prevent="save()" v-if="userAccount">
-        <h2 id="myUserLabel" v-text="t$('userManagement.home.createOrEditLabel')">Create or edit a User</h2>
+        <h2 id="myUserLabel">{{ t$('userManagement.home.createOrEditLabel') }}</h2>
         <div>
           <div class="mb-3" :hidden="!userAccount.id">
-            <label v-text="t$('global.field.id')">ID</label>
+            <label>{{ t$('global.field.id') }}</label>
             <input type="text" class="form-control" name="id" v-model="userAccount.id" readonly />
           </div>
 
           <div class="mb-3">
-            <label class="form-control-label" v-text="t$('userManagement.login')">Login</label>
+            <label class="form-control-label">{{ t$('userManagement.login') }}</label>
             <input
               type="text"
               class="form-control"
@@ -20,25 +20,18 @@
             />
 
             <div v-if="v$.userAccount.login.$anyDirty && v$.userAccount.login.$invalid">
-              <small class="form-text text-danger" v-if="v$.userAccount.login.required.$invalid" v-text="t$('entity.validation.required')">
-                This field is required.
-              </small>
+              <small class="form-text text-danger" v-if="v$.userAccount.login.required.$invalid">{{ t$('entity.validation.required') }}</small>
 
               <small
                 class="form-text text-danger"
                 v-if="v$.userAccount.login.maxLength.$invalid"
-                v-text="t$('entity.validation.maxlength', { max: 50 })"
-              >
-                This field cannot be longer than 50 characters.
-              </small>
+              >{{ t$('entity.validation.maxlength', { max: 50 }) }}</small>
 
-              <small class="form-text text-danger" v-if="v$.userAccount.login.pattern.$invalid" v-text="t$('entity.validation.patternLogin')">
-                This field can only contain letters, digits and e-mail addresses.
-              </small>
+              <small class="form-text text-danger" v-if="v$.userAccount.login.pattern.$invalid">{{ t$('entity.validation.patternLogin') }}</small>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="firstName" v-text="t$('userManagement.firstName')">First Name</label>
+            <label class="form-control-label" for="firstName">{{ t$('userManagement.firstName') }}</label>
             <input
               type="text"
               class="form-control"
@@ -52,14 +45,11 @@
               <small
                 class="form-text text-danger"
                 v-if="v$.userAccount.firstName.maxLength.$invalid"
-                v-text="t$('entity.validation.maxlength', { max: 50 })"
-              >
-                This field cannot be longer than 50 characters.
-              </small>
+              >{{ t$('entity.validation.maxlength', { max: 50 }) }}</small>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="lastName" v-text="t$('userManagement.lastName')">Last Name</label>
+            <label class="form-control-label" for="lastName">{{ t$('userManagement.lastName') }}</label>
             <input
               type="text"
               class="form-control"
@@ -73,14 +63,11 @@
               <small
                 class="form-text text-danger"
                 v-if="v$.userAccount.lastName.maxLength.$invalid"
-                v-text="t$('entity.validation.maxlength', { max: 50 })"
-              >
-                This field cannot be longer than 50 characters.
-              </small>
+              >{{ t$('entity.validation.maxlength', { max: 50 }) }}</small>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="email" v-text="t$('userManagement.email')">Email</label>
+            <label class="form-control-label" for="email">{{ t$('userManagement.email') }}</label>
             <input
               type="email"
               class="form-control"
@@ -96,27 +83,16 @@
               <small
                 class="form-text text-danger"
                 v-if="v$.userAccount.email.required.$invalid"
-                v-text="t$('global.messages.validate.email.required')"
-              >
-                Your email is required.
-              </small>
-              <small class="form-text text-danger" v-if="v$.userAccount.email.email.$invalid" v-text="t$('global.messages.validate.email.invalid')">
-                Your email is invalid.
-              </small>
+              >{{ t$('global.messages.validate.email.required') }}</small>
+              <small class="form-text text-danger" v-if="v$.userAccount.email.email.$invalid">{{ t$('global.messages.validate.email.invalid') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.userAccount.email.minLength.$invalid"
-                v-text="t$('global.messages.validate.email.minlength')"
-              >
-                Your email is required to be at least 5 characters.
-              </small>
+              >{{ t$('global.messages.validate.email.minlength') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.userAccount.email.maxLength.$invalid"
-                v-text="t$('global.messages.validate.email.maxlength')"
-              >
-                Your email cannot be longer than 50 characters.
-              </small>
+              >{{ t$('global.messages.validate.email.maxlength') }}</small>
             </div>
           </div>
           <div class="form-check">
@@ -129,20 +105,20 @@
                 name="activated"
                 v-model="userAccount.activated"
               />
-              <span v-text="t$('userManagement.activated')">Activated</span>
+              <span>{{ t$('userManagement.activated') }}</span>
             </label>
           </div>
 
 <%_ if (enableTranslation) { _%>
           <div class="mb-3" v-if="languages && Object.keys(languages).length > 0">
-            <label for="langKey" v-text="t$('userManagement.langKey')">Language</label>
+            <label for="langKey">{{ t$('userManagement.langKey') }}</label>
             <select class="form-control" id="langKey" name="langKey" v-model="userAccount.langKey">
               <option v-for="(language, key) in languages" :value="key" :key="key">{{ language.name }}</option>
             </select>
           </div>
 <%_ } _%>
           <div class="mb-3">
-            <label v-text="t$('userManagement.profiles')">Profiles</label>
+            <label>{{ t$('userManagement.profiles') }}</label>
             <select class="form-control" multiple name="authority" v-model="userAccount.authorities">
               <option v-for="authority of authorities" :value="authority" :key="authority">{{ authority }}</option>
             </select>
@@ -150,10 +126,10 @@
         </div>
         <div>
           <button type="button" class="btn btn-secondary" @click="previousState()">
-            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.cancel')">Cancel</span>
+            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.cancel') }}</span>
           </button>
           <button type="submit" :disabled="v$.userAccount.$invalid || isSaving" class="btn btn-primary">
-            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.save')">Save</span>
+            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.save') }}</span>
           </button>
         </div>
       </form>

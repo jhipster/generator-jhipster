@@ -22,7 +22,7 @@
 
         <form name="form" id="settings-form" @submit.prevent="save()" v-if="settingsAccount" novalidate>
           <div class="mb-3">
-            <label class="form-control-label" for="firstName" v-text="t$('settings.form.firstname')">First Name</label>
+            <label class="form-control-label" for="firstName">{{ t$('settings.form.firstname') }}</label>
             <input
               type="text"
               class="form-control"
@@ -40,28 +40,19 @@
               <small
                 class="form-text text-danger"
                 v-if="v$.settingsAccount.firstName.required.$invalid"
-                v-text="t$('settings.messages.validate.firstname.required')"
-              >
-                Your first name is required.
-              </small>
+              >{{ t$('settings.messages.validate.firstname.required') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.settingsAccount.firstName.minLength.$invalid"
-                v-text="t$('settings.messages.validate.firstname.minlength')"
-              >
-                Your first name is required to be at least 1 character.
-              </small>
+              >{{ t$('settings.messages.validate.firstname.minlength') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.settingsAccount.firstName.maxLength.$invalid"
-                v-text="t$('settings.messages.validate.firstname.maxlength')"
-              >
-                Your first name cannot be longer than 50 characters.
-              </small>
+              >{{ t$('settings.messages.validate.firstname.maxlength') }}</small>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="lastName" v-text="t$('settings.form.lastname')">Last Name</label>
+            <label class="form-control-label" for="lastName">{{ t$('settings.form.lastname') }}</label>
             <input
               type="text"
               class="form-control"
@@ -79,28 +70,19 @@
               <small
                 class="form-text text-danger"
                 v-if="v$.settingsAccount.lastName.required.$invalid"
-                v-text="t$('settings.messages.validate.lastname.required')"
-              >
-                Your last name is required.
-              </small>
+              >{{ t$('settings.messages.validate.lastname.required') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.settingsAccount.lastName.minLength.$invalid"
-                v-text="t$('settings.messages.validate.lastname.minlength')"
-              >
-                Your last name is required to be at least 1 character.
-              </small>
+              >{{ t$('settings.messages.validate.lastname.minlength') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.settingsAccount.lastName.maxLength.$invalid"
-                v-text="t$('settings.messages.validate.lastname.maxlength')"
-              >
-                Your last name cannot be longer than 50 characters.
-              </small>
+              >{{ t$('settings.messages.validate.lastname.maxlength') }}</small>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="email" v-text="t$('global.form[\'email.label\']')">Email</label>
+            <label class="form-control-label" for="email">{{ t$('global.form[\'email.label\']') }}</label>
             <input
               type="email"
               class="form-control"
@@ -119,46 +101,31 @@
               <small
                 class="form-text text-danger"
                 v-if="v$.settingsAccount.email.required.$invalid"
-                v-text="t$('global.messages.validate.email.required')"
-              >
-                Your email is required.
-              </small>
+              >{{ t$('global.messages.validate.email.required') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.settingsAccount.email.email.$invalid"
-                v-text="t$('global.messages.validate.email.invalid')"
-              >
-                Your email is invalid.
-              </small>
+              >{{ t$('global.messages.validate.email.invalid') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.settingsAccount.email.minLength.$invalid"
-                v-text="t$('global.messages.validate.email.minlength')"
-              >
-                Your email is required to be at least 5 characters.
-              </small>
+              >{{ t$('global.messages.validate.email.minlength') }}</small>
               <small
                 class="form-text text-danger"
                 v-if="v$.settingsAccount.email.maxLength.$invalid"
-                v-text="t$('global.messages.validate.email.maxlength')"
-              >
-                Your email cannot be longer than 100 characters.
-              </small>
+              >{{ t$('global.messages.validate.email.maxlength') }}</small>
             </div>
           </div>
 <%_ if (enableTranslation) { _%>
           <div class="mb-3" v-if="languages && Object.keys(languages).length > 1">
-            <label for="langKey" v-text="t$('settings.form.language')">Language</label>
+            <label for="langKey">{{ t$('settings.form.language') }}</label>
             <select class="form-control" id="langKey" name="langKey" v-model="settingsAccount.langKey" data-cy="langKey">
               <option v-for="(language, key) in languages" :value="key" :key="`lang-${key}`">{{ language.name }}
               </option>
             </select>
           </div>
 <%_ } _%>
-          <button type="submit" :disabled="v$.settingsAccount.$invalid" class="btn btn-primary"
-            v-text="t$('settings.form.button')" data-cy="submit">
-            Save
-          </button>
+          <button type="submit" :disabled="v$.settingsAccount.$invalid" class="btn btn-primary" data-cy="submit">{{ t$('settings.form.button') }}</button>
         </form>
       </div>
     </div>
