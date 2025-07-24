@@ -22,6 +22,9 @@ couchmove = { module = 'com.github.differentway:couchmove', version = '3.4.1' }
 # jib
 jib-maven-plugin = { module = 'com.google.cloud.tools:jib-maven-plugin', version = '3.4.5' }
 jib-spring-boot-extension-maven = { module = 'com.google.cloud.tools:jib-spring-boot-extension-maven', version = '0.1.0' }
+# Dependabot: gradle plugin com.google.cloud.tools.jib is resolving to the same version as the Maven plugin, we need jib-gradle-plugin artifact instead
+# use module instead of plugin id.
+gradle-jib = { module = 'com.google.cloud.tools:jib-gradle-plugin', version = '3.4.5' }
 
 [plugins]
 gradle-git-properties = { id = 'com.gorylenko.gradle-git-properties', version = '2.5.2' }
@@ -43,5 +46,3 @@ common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-da
 gatling-gradle = { id = 'io.gatling.gradle', version = '3.14.3.3' }
 
 gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.14.0' }
-
-gradle-jib = { id = "com.google.cloud.tools.jib", version = "3.4.5" }
