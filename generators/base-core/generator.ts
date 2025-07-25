@@ -1036,7 +1036,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           obj[key] = value;
         }
       }
-      return dotProperties.stringify(sortKeys(obj));
+      return dotProperties.stringify(sortKeys(obj), { lineWidth: 120 });
     });
   }
 
