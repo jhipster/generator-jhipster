@@ -59,7 +59,7 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
       junitPlatform({ application, source }) {
         source.editJUnitPlatformProperties?.([
           { key: 'cucumber.publish.enabled', value: 'true' },
-          { key: 'cucumber.plugin', value: `pretty, html:${application.testResources}cucumber-reports/Cucumber.html` },
+          { key: 'cucumber.plugin', value: `pretty, html:${application.srcTestResources}cucumber-reports/Cucumber.html` },
         ]);
       },
       addDependencies({ application, source }) {
