@@ -58,8 +58,8 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           });
           entityA.addField(firstFieldForA);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject);
-          convertedField = returnedMap.get('A')[0];
+          const returnedMap = convert(jdlObject);
+          convertedField = returnedMap.get('A')?.[0];
         });
 
         it('should convert them', () => {
@@ -103,7 +103,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
             entityA.addField(blobField);
             entityA.addField(imageBlobField);
             jdlObject.addEntity(entityA);
-            const returnedMap: any = convert(jdlObject);
+            const returnedMap = convert(jdlObject);
             convertedFields = returnedMap.get('A');
           });
 
@@ -150,8 +150,8 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           jdlObject.addEnum(enumType);
           entityA.addField(enumField);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject);
-          convertedField = returnedMap.get('A')[0];
+          const returnedMap = convert(jdlObject);
+          convertedField = returnedMap.get('A')?.[0];
         });
 
         it('should convert them', () => {
@@ -185,8 +185,8 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           jdlObject.addEnum(enumType);
           entityA.addField(enumField);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject);
-          convertedField = returnedMap.get('A')[0];
+          const returnedMap = convert(jdlObject);
+          convertedField = returnedMap.get('A')?.[0];
         });
 
         it('should convert them', () => {
@@ -221,8 +221,8 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           });
           entityA.addField(firstFieldForA);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject);
-          convertedField = returnedMap.get('A')[0];
+          const returnedMap = convert(jdlObject);
+          convertedField = returnedMap.get('A')?.[0];
         });
 
         it('should convert them', () => {
@@ -307,7 +307,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           entityA.addField(integerField);
           entityA.addField(blobField);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject);
+          const returnedMap = convert(jdlObject);
           convertedFields = returnedMap.get('A');
         });
 
@@ -372,8 +372,8 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           });
           entityA.addField(firstFieldForA);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject);
-          convertedField = returnedMap.get('A')[0];
+          const returnedMap = convert(jdlObject);
+          convertedField = returnedMap.get('A')?.[0];
         });
 
         it('should convert them', () => {

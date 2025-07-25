@@ -129,9 +129,9 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
           application.addEntityName('User');
           application.addEntityName('Authority');
           jdlObject.addApplication(application);
-          const returnedMap: any = convert(jdlObject);
-          customEntitiesAreConverted = returnedMap.get('toto').some(entity => entity.name === 'A');
-          builtInEntitiesAreConverted = returnedMap.get('toto').some(entity => entity.name === 'User' || entity.name === 'Authority');
+          const returnedMap = convert(jdlObject);
+          customEntitiesAreConverted = returnedMap.get('toto')?.some(entity => entity.name === 'A');
+          builtInEntitiesAreConverted = returnedMap.get('toto')?.some(entity => entity.name === 'User' || entity.name === 'Authority');
         });
 
         it('should not convert built-in entities', () => {
@@ -155,8 +155,8 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
           application.addEntityName('A');
           jdlObject.addApplication(application);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject);
-          convertedEntity = returnedMap.get('toto')[0];
+          const returnedMap = convert(jdlObject);
+          convertedEntity = returnedMap.get('toto')?.[0];
         });
 
         it('should convert the entity', () => {
@@ -263,8 +263,8 @@ JSONEntity {
           jdlObject.addEntity(entityA);
           jdlObject.addApplication(application);
           options.forEach(option => jdlObject.addOption(option));
-          const returnedMap: any = convert(jdlObject);
-          convertedEntity = returnedMap.get('toto')[0];
+          const returnedMap = convert(jdlObject);
+          convertedEntity = returnedMap.get('toto')?.[0];
         });
 
         it('should convert the entity', () => {
@@ -319,8 +319,8 @@ JSONEntity {
               entityNames: new Set(['A']),
             }),
           );
-          const returnedMap: any = convert(jdlObject);
-          convertedEntity = returnedMap.get('toto')[0];
+          const returnedMap = convert(jdlObject);
+          convertedEntity = returnedMap.get('toto')?.[0];
         });
 
         after(() => {
@@ -383,8 +383,8 @@ JSONEntity {
               entityNames: new Set(['A']),
             }),
           );
-          const returnedMap: any = convert(jdlObject);
-          convertedEntity = returnedMap.get('toto')[0];
+          const returnedMap = convert(jdlObject);
+          convertedEntity = returnedMap.get('toto')?.[0];
         });
 
         after(() => {
@@ -447,8 +447,8 @@ JSONEntity {
               excludedNames: new Set(['A']),
             }),
           );
-          const returnedMap: any = convert(jdlObject);
-          convertedEntity = returnedMap.get('toto')[0];
+          const returnedMap = convert(jdlObject);
+          convertedEntity = returnedMap.get('toto')?.[0];
         });
 
         it('should prevent the entities from being searched', () => {
@@ -505,8 +505,8 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             application.addEntityName('A');
             jdlObject.addApplication(application);
-            const returnedMap: any = convert(jdlObject);
-            convertedEntity = returnedMap.get('toto')[0];
+            const returnedMap = convert(jdlObject);
+            convertedEntity = returnedMap.get('toto')?.[0];
           });
 
           it('should convert them', () => {
@@ -580,8 +580,8 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             application.addEntityName('A');
             jdlObject.addApplication(application);
-            const returnedMap: any = convert(jdlObject);
-            convertedEntity = returnedMap.get('toto')[0];
+            const returnedMap = convert(jdlObject);
+            convertedEntity = returnedMap.get('toto')?.[0];
           });
 
           it('should convert them', () => {
@@ -649,8 +649,8 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             application.addEntityName('A');
             jdlObject.addApplication(application);
-            const returnedMap: any = convert(jdlObject);
-            convertedEntity = returnedMap.get('toto')[0];
+            const returnedMap = convert(jdlObject);
+            convertedEntity = returnedMap.get('toto')?.[0];
           });
 
           it('should convert them', () => {
@@ -707,8 +707,8 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             application.addEntityName('A');
             jdlObject.addApplication(application);
-            const returnedMap: any = convert(jdlObject);
-            convertedEntity = returnedMap.get('toto')[0];
+            const returnedMap = convert(jdlObject);
+            convertedEntity = returnedMap.get('toto')?.[0];
           });
 
           it('should convert them', () => {
@@ -820,8 +820,8 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             application.addEntityName('A');
             jdlObject.addApplication(application);
-            const returnedMap: any = convert(jdlObject);
-            convertedEntity = returnedMap.get('toto')[0];
+            const returnedMap = convert(jdlObject);
+            convertedEntity = returnedMap.get('toto')?.[0];
           });
 
           it('should convert them', () => {
@@ -910,8 +910,8 @@ JSONEntity {
             jdlObject.addEntity(entityA);
             application.addEntityName('A');
             jdlObject.addApplication(application);
-            const returnedMap: any = convert(jdlObject);
-            convertedEntity = returnedMap.get('toto')[0];
+            const returnedMap = convert(jdlObject);
+            convertedEntity = returnedMap.get('toto')?.[0];
           });
 
           it('should convert them', () => {
@@ -1720,7 +1720,7 @@ JSONEntity {
           jdlObject.addEntity(entityF);
           jdlObject.addApplication(tataApplication);
           jdlObject.addApplication(tutuApplication);
-          const returnedMap: any = convert(jdlObject);
+          const returnedMap = convert(jdlObject);
           convertedEntitiesForTataApplication = returnedMap.get('tata');
           convertedEntitiesForTutuApplication = returnedMap.get('tutu');
         });

@@ -75,7 +75,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             injectedFieldInTo: 'a',
             injectedFieldInFrom: 'b',
           });
-          const returned: any = convert(
+          const returned = convert(
             [oneToOneRelationship, oneToManyRelationship, manyToOneRelationship, manyToManyRelationship],
             ['A', 'B'],
           );
@@ -169,7 +169,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
                 },
               },
             });
-            const returned: any = convert([oneToOneRelationship], ['A', 'B']);
+            const returned = convert([oneToOneRelationship], ['A', 'B']);
             convertedRelationship = returned.get('A')[0];
           });
 
@@ -206,7 +206,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
                 },
               },
             });
-            const returned: any = convert([oneToOneRelationship], ['A', 'B']);
+            const returned = convert([oneToOneRelationship], ['A', 'B']);
             convertedRelationship = returned.get('A')[0];
           });
 
@@ -238,7 +238,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             isInjectedFieldInFromRequired: true,
             isInjectedFieldInToRequired: true,
           });
-          const returned: any = convert([oneToOneRelationship], ['A', 'B']);
+          const returned = convert([oneToOneRelationship], ['A', 'B']);
           relationshipsForA = returned.get('A');
           relationshipsForB = returned.get('B');
         });
@@ -284,7 +284,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             commentInFrom: 'A to B',
             commentInTo: 'A to B but in the destination',
           });
-          const returned: any = convert([oneToOneRelationship], ['A', 'B']);
+          const returned = convert([oneToOneRelationship], ['A', 'B']);
           relationshipsForA = returned.get('A');
           relationshipsForB = returned.get('B');
         });
@@ -328,7 +328,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               type: ONE_TO_ONE,
               injectedFieldInFrom: 'b',
             });
-            const returned: any = convert([oneToOneRelationship], ['A', 'B']);
+            const returned = convert([oneToOneRelationship], ['A', 'B']);
             relationshipFromSourceToDestination = returned.get('A')[0];
             relationshipFromDestinationToSource = returned.get('B')[0];
           });
@@ -358,7 +358,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               type: ONE_TO_MANY,
               injectedFieldInFrom: 'b',
             });
-            const returned: any = convert([oneToManyRelationship], ['A', 'B']);
+            const returned = convert([oneToManyRelationship], ['A', 'B']);
             relationshipFromSourceToDestination = returned.get('A')[0];
             relationshipFromDestinationToSource = returned.get('B')[0];
           });
@@ -388,7 +388,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               type: MANY_TO_ONE,
               injectedFieldInFrom: 'b',
             });
-            const returned: any = convert([manyToOneRelationship], ['A', 'B']);
+            const returned = convert([manyToOneRelationship], ['A', 'B']);
             relationshipFromSourceToDestination = returned.get('A')[0];
             relationshipFromDestinationToSource = returned.get('B')[0];
           });
@@ -418,7 +418,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               type: MANY_TO_MANY,
               injectedFieldInFrom: 'b',
             });
-            const returned: any = convert([manyToManyRelationship], ['A', 'B']);
+            const returned = convert([manyToManyRelationship], ['A', 'B']);
             relationshipFromSourceToDestination = returned.get('A')[0];
             relationshipFromDestinationToSource = returned.get('B')[0];
           });
@@ -450,7 +450,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               type: ONE_TO_ONE,
               injectedFieldInTo: 'a',
             });
-            const returned: any = convert([oneToOneRelationship], ['A', 'B']);
+            const returned = convert([oneToOneRelationship], ['A', 'B']);
             relationshipFromSourceToDestination = returned.get('A')[0];
             relationshipFromDestinationToSource = returned.get('B')[0];
           });
@@ -488,7 +488,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               type: ONE_TO_MANY,
               injectedFieldInTo: 'a',
             });
-            const returned: any = convert([oneToManyRelationship], ['A', 'B']);
+            const returned = convert([oneToManyRelationship], ['A', 'B']);
             relationshipFromSourceToDestination = returned.get('A')[0];
             relationshipFromDestinationToSource = returned.get('B')[0];
           });
@@ -526,7 +526,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               type: MANY_TO_ONE,
               injectedFieldInTo: 'a',
             });
-            const returned: any = convert([manyToOneRelationship], ['A', 'B']);
+            const returned = convert([manyToOneRelationship], ['A', 'B']);
             relationshipFromSourceToDestination = returned.get('A')[0];
             relationshipFromDestinationToSource = returned.get('B')[0];
           });
@@ -564,7 +564,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               type: MANY_TO_MANY,
               injectedFieldInTo: 'a',
             });
-            const returned: any = convert([manyToManyRelationship], ['A', 'B']);
+            const returned = convert([manyToManyRelationship], ['A', 'B']);
             relationshipFromSourceToDestination = returned.get('A')[0];
             relationshipFromDestinationToSource = returned.get('B')[0];
           });
@@ -605,7 +605,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               injectedFieldInFrom: 'b(name)',
               injectedFieldInTo: 'a(name)',
             });
-            const returned: any = convert([oneToOneRelationship], ['A', 'B']);
+            const returned = convert([oneToOneRelationship], ['A', 'B']);
             relationshipFromSourceToDestination = returned.get('A')[0];
             relationshipFromDestinationToSource = returned.get('B')[0];
           });
@@ -647,7 +647,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               injectedFieldInFrom: 'b(name)',
               injectedFieldInTo: 'a(name)',
             });
-            const returned: any = convert([oneToManyRelationship], ['A', 'B']);
+            const returned = convert([oneToManyRelationship], ['A', 'B']);
             relationshipFromSourceToDestination = returned.get('A')[0];
             relationshipFromDestinationToSource = returned.get('B')[0];
           });
@@ -689,7 +689,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               injectedFieldInFrom: 'b(name)',
               injectedFieldInTo: 'a(name)',
             });
-            const returned: any = convert([manyToOneRelationship], ['A', 'B']);
+            const returned = convert([manyToOneRelationship], ['A', 'B']);
             relationshipFromSourceToDestination = returned.get('A')[0];
             relationshipFromDestinationToSource = returned.get('B')[0];
           });
@@ -731,7 +731,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               injectedFieldInFrom: 'b(name)',
               injectedFieldInTo: 'a(name)',
             });
-            const returned: any = convert([manyToManyRelationship], ['A', 'B']);
+            const returned = convert([manyToManyRelationship], ['A', 'B']);
             relationshipFromSourceToDestination = returned.get('A')[0];
             relationshipFromDestinationToSource = returned.get('B')[0];
           });
