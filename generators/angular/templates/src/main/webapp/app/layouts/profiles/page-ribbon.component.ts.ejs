@@ -27,9 +27,9 @@ import { ProfileService } from './profile.service';
 @Component({
   selector: '<%= jhiPrefixDashed %>-page-ribbon',
   template: `
-    @if (ribbonEnvSignal; as ribbonEnv) {
+    @if (ribbonEnvSignal?.(); as ribbonEnv) {
       <div class="ribbon">
-        <a href="">__jhiTranslateTagEnum__('global.ribbon', { "value": "ribbonEnv() ?? ''" })</a>
+        <a href="">__jhiTranslateTagEnum__('global.ribbon', { "value": "ribbonEnv ?? ''" })</a>
       </div>
     }
   `,
