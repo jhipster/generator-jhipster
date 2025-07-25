@@ -51,9 +51,6 @@ sonar.issue.ignore.multicriteria=\
   <%_ if (backendTypeSpringBoot) { _%>
   S125,\
   <%_ } _%>
-  <%_ if (gatlingTests) { _%>
-  S2187,\
-  <%_ } _%>
   S3437,\
   <%_ if (authenticationTypeJwt) { _%>
   S4502,\
@@ -64,11 +61,6 @@ sonar.issue.ignore.multicriteria=\
 # Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes
 sonar.issue.ignore.multicriteria.S6437.resourceKey=<%= srcMainResources %>config/*
 sonar.issue.ignore.multicriteria.S6437.ruleKey=java:S6437
-  <%_ } _%>
-  <%_ if (gatlingTests) { _%>
-# Rule https://rules.sonarsource.com/java/RSPEC-2187 is ignored, gatling tests are not supported by sonar
-sonar.issue.ignore.multicriteria.S2187.resourceKey= <%- srcTestJava %>gatling/**/*
-sonar.issue.ignore.multicriteria.S2187.ruleKey=java:S2187
   <%_ } _%>
 # Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored, as a JPA-managed field cannot be transient
 sonar.issue.ignore.multicriteria.S3437.resourceKey= <%- srcMainJava %>**/*
