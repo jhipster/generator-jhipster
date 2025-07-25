@@ -96,65 +96,100 @@ describe('generator - base-core', () => {
     });
   });
   describe('editPropertiesFile', () => {
-    describe('when properties file does not exist', () => {
-      it('should throw by default', async () => {
-        await expect(
-          helpers.run('dummy').withGenerators([
-            [
-              helpers.createDummyGenerator(Base as any, {
-                [Base.POST_WRITING]() {
-                  this.editPropertyFile('dummy.properties', [{ key: 'new.property', value: 'newValue' }]);
-                },
-              }),
-              { namespace: 'dummy' },
-            ],
-          ]),
-        ).rejects.toThrow(/Unable to find(.*)dummy.properties./);
-      });
-      it('should optionally create the file', async () => {
-        await helpers.run('dummy').withGenerators([
-          [
-            helpers.createDummyGenerator(Base as any, {
-              [Base.POST_WRITING]() {
-                this.editPropertyFile('dummy.properties', [{ key: 'new.property', value: 'newValue' }], { create: true });
-              },
-            }),
-            { namespace: 'dummy' },
-          ],
-        ]);
-        runResult.assertFileContent('dummy.properties', 'new.property = newValue');
-      });
+    it('supports callbacks', async () => {
+      await helpers.run('dummy').withGenerators([
+        [
+          helpers.createDummyGenerator(Base as any, {
+            [Base.POST_WRITING]() {
+              this.editPropertiesFile('dummy.properties', () => [['key', 'value']], { create: true });
+            },
+          }),
+          { namespace: 'dummy' },
+        ],
+      ]);
+      runResult.assertFileContent('dummy.properties', 'key = value');
     });
-    describe('when properties file exists', () => {
-      before(async () => {
-        await helpers
-          .run('dummy')
-          .withFiles({ 'dummy.properties': 'append.existing = existingValue\noverride.existing = existingValue' })
-          .withGenerators([
-            [
-              helpers.createDummyGenerator(Base as any, {
-                [Base.POST_WRITING]() {
-                  this.editPropertyFile('dummy.properties', [{ key: 'new.property', value: 'newValue' }]);
-                  this.editPropertyFile('dummy.properties', [{ key: 'override.existing', value: 'overriddenValue' }]);
-                  this.editPropertyFile('dummy.properties', [
-                    { key: 'append.existing', value: oldValue => `${oldValue ? `${oldValue}, ` : ''}appendedValue` },
-                  ]);
-                },
-              }),
-              { namespace: 'dummy' },
-            ],
-          ]);
-      });
+    for (const sortFile of [true, false]) {
+      describe(`passing sortFile option as ${sortFile}`, () => {
+        describe('when properties file does not exist', () => {
+          it('should throw by default', async () => {
+            await expect(
+              helpers.run('dummy').withGenerators([
+                [
+                  helpers.createDummyGenerator(Base as any, {
+                    [Base.POST_WRITING]() {
+                      this.editPropertiesFile('dummy.properties', [{ key: 'new.property', value: 'newValue' }], { sortFile });
+                    },
+                  }),
+                  { namespace: 'dummy' },
+                ],
+              ]),
+            ).rejects.toThrow(/Unable to find(.*)dummy.properties./);
+          });
+          it('should optionally create the file', async () => {
+            await helpers.run('dummy').withGenerators([
+              [
+                helpers.createDummyGenerator(Base as any, {
+                  [Base.POST_WRITING]() {
+                    this.editPropertiesFile('dummy.properties', [{ key: 'new.property', value: 'newValue' }], { create: true, sortFile });
+                  },
+                }),
+                { namespace: 'dummy' },
+              ],
+            ]);
+            runResult.assertFileContent('dummy.properties', 'new.property = newValue');
+          });
+        });
+        describe('when properties file exists', () => {
+          before(async () => {
+            await helpers
+              .run('dummy')
+              .withFiles({
+                'dummy.properties': `append.existing = existingValue
+# comment will be kept for no sortFile
+override.existing = existingValue`,
+              })
+              .withGenerators([
+                [
+                  helpers.createDummyGenerator(Base as any, {
+                    [Base.POST_WRITING]() {
+                      this.editPropertiesFile('dummy.properties', [{ key: 'new.property', value: 'newValue' }], { sortFile });
+                      this.editPropertiesFile('dummy.properties', [{ key: 'override.existing', value: 'overriddenValue' }], { sortFile });
+                      this.editPropertiesFile(
+                        'dummy.properties',
+                        [{ key: 'append.existing', value: oldValue => `${oldValue ? `${oldValue}, ` : ''}appendedValueUsingFunction` }],
+                        { sortFile },
+                      );
+                      this.editPropertiesFile(
+                        'dummy.properties',
+                        [
+                          { key: 'append.separator', value: 'firstSeparator', valueSep: ', ', comment: 'comment added' },
+                          { key: 'append.separator', value: 'firstSeparator', valueSep: ', ', comment: 'comment ignored' },
+                          { key: 'append.separator', value: 'secondSeparator', valueSep: ', ', comment: 'comment ignored' },
+                        ],
+                        { sortFile },
+                      );
+                    },
+                  }),
+                  { namespace: 'dummy' },
+                ],
+              ]);
+          });
 
-      it('should add new property', async () => {
-        runResult.assertFileContent('dummy.properties', 'new.property = newValue');
+          it('should add new property', async () => {
+            runResult.assertFileContent('dummy.properties', 'new.property = newValue');
+          });
+          it('should override an existing property', async () => {
+            runResult.assertFileContent('dummy.properties', 'override.existing = overriddenValue');
+          });
+          it('should append to an existing property', async () => {
+            runResult.assertFileContent('dummy.properties', 'append.existing = existingValue, appendedValue');
+          });
+          it('should append to an existing property', async () => {
+            expect(runResult.getSnapshot('**/dummy.properties')).toMatchSnapshot();
+          });
+        });
       });
-      it('should override an existing property', async () => {
-        runResult.assertFileContent('dummy.properties', 'override.existing = overriddenValue');
-      });
-      it('should append to an existing property', async () => {
-        runResult.assertFileContent('dummy.properties', 'append.existing = existingValue, appendedValue');
-      });
-    });
+    }
   });
 });
