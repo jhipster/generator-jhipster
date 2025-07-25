@@ -23,7 +23,6 @@ export * from './prepare-entity.js';
 export { default as prepareField } from './prepare-field.js';
 export * from './prepare-relationship.js';
 export * from './relationship.js';
-export * from './spring-factories.js';
 export * from './string.js';
 export * from './templates/field-values.js';
 export { default as updateLanguagesTask } from './update-languages.js';

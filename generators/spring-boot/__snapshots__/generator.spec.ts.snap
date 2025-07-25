@@ -1,5 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`generator - spring-boot addTestSpringFactory should add a test spring factory 1`] = `
+{
+  "src/test/resources/META-INF/spring.factories": {
+    "contents": "key = first.value,second.value",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - spring-boot source api editJavaFile with springBeans should match file content snapshot 1`] = `
 {
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
