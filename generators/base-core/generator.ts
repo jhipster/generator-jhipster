@@ -1026,8 +1026,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * Edit a property file, adding or updating a key.
    */
-  editPropertyFile(file: string, properties: PropertyFileKeyUpdate[], options: EditFileOptions = {}): void {
-    this.editFile(file, options, content => {
+  editPropertyFile(file: string, properties: PropertyFileKeyUpdate[], options: EditFileOptions & { sortFile?: boolean } = {}): void {
+    const { sortFile = true, ...editOptions } = options;
+    this.editFile(file, editOptions, content => {
       const obj = dotProperties.parse(content ?? '');
       for (const { key, value } of properties) {
         if (typeof value === 'function') {
@@ -1036,7 +1037,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           obj[key] = value;
         }
       }
-      return dotProperties.stringify(sortKeys(obj), { lineWidth: 120 });
+      return dotProperties.stringify(sortFile ? sortKeys(obj) : obj, { lineWidth: 120 });
     });
   }
 
