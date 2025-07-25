@@ -1,5 +1,5 @@
-import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
-import { defaultHelpers as helpers } from '../../lib/testing/index.js';
+import { before, beforeEach, describe, expect, it, expect as jestExpect } from 'esmocha';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 
 import { createJHipsterLogger } from '../../lib/utils/index.js';
 import Base from './index.js';
@@ -93,6 +93,68 @@ describe('generator - base-core', () => {
       jestExpect(base.first).toBe('bar');
       jestExpect(base.jdlFiles).toHaveLength(1);
       jestExpect(base.jdlFiles[0]).toBe('foo');
+    });
+  });
+  describe('editPropertiesFile', () => {
+    describe('when properties file does not exist', () => {
+      it('should throw by default', async () => {
+        await expect(
+          helpers.run('dummy').withGenerators([
+            [
+              helpers.createDummyGenerator(Base as any, {
+                [Base.POST_WRITING]() {
+                  this.editPropertyFile('dummy.properties', [{ key: 'new.property', value: 'newValue' }]);
+                },
+              }),
+              { namespace: 'dummy' },
+            ],
+          ]),
+        ).rejects.toThrow(/Unable to find(.*)dummy.properties./);
+      });
+      it('should optionally create the file', async () => {
+        await helpers.run('dummy').withGenerators([
+          [
+            helpers.createDummyGenerator(Base as any, {
+              [Base.POST_WRITING]() {
+                this.editPropertyFile('dummy.properties', [{ key: 'new.property', value: 'newValue' }], { create: true });
+              },
+            }),
+            { namespace: 'dummy' },
+          ],
+        ]);
+        runResult.assertFileContent('dummy.properties', 'new.property = newValue');
+      });
+    });
+    describe('when properties file exists', () => {
+      before(async () => {
+        await helpers
+          .run('dummy')
+          .withFiles({ 'dummy.properties': 'append.existing = existingValue\noverride.existing = existingValue' })
+          .withGenerators([
+            [
+              helpers.createDummyGenerator(Base as any, {
+                [Base.POST_WRITING]() {
+                  this.editPropertyFile('dummy.properties', [{ key: 'new.property', value: 'newValue' }]);
+                  this.editPropertyFile('dummy.properties', [{ key: 'override.existing', value: 'overriddenValue' }]);
+                  this.editPropertyFile('dummy.properties', [
+                    { key: 'append.existing', value: oldValue => `${oldValue ? `${oldValue}, ` : ''}appendedValue` },
+                  ]);
+                },
+              }),
+              { namespace: 'dummy' },
+            ],
+          ]);
+      });
+
+      it('should add new property', async () => {
+        runResult.assertFileContent('dummy.properties', 'new.property = newValue');
+      });
+      it('should override an existing property', async () => {
+        runResult.assertFileContent('dummy.properties', 'override.existing = overriddenValue');
+      });
+      it('should append to an existing property', async () => {
+        runResult.assertFileContent('dummy.properties', 'append.existing = existingValue, appendedValue');
+      });
     });
   });
 });

@@ -33,6 +33,8 @@ import semver, { lt as semverLessThan } from 'semver';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
+import dotProperties from 'dot-properties';
+import sortKeys from 'sort-keys';
 
 import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.js';
 import type {
@@ -55,6 +57,7 @@ import type {
   CascatedEditFileCallback,
   EditFileCallback,
   EditFileOptions,
+  PropertyFileKeyUpdate,
   ValidationResult,
   WriteContext,
   WriteFileOptions,
@@ -1018,6 +1021,24 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     const files = (await Promise.all(parsedTemplates.map(template => renderTemplate(template)).filter(Boolean))) as string[];
     this.log.debug(`Time taken to write files: ${new Date().getMilliseconds() - startTime}ms`);
     return files.filter(file => file);
+  }
+
+  /**
+   * Edit a property file, adding or updating a key.
+   */
+  editPropertyFile(file: string, properties: PropertyFileKeyUpdate[], options: EditFileOptions & { sortFile?: boolean } = {}): void {
+    const { sortFile = true, ...editOptions } = options;
+    this.editFile(file, editOptions, content => {
+      const obj = dotProperties.parse(content ?? '');
+      for (const { key, value } of properties) {
+        if (typeof value === 'function') {
+          obj[key] = value(obj[key] as string);
+        } else {
+          obj[key] = value;
+        }
+      }
+      return dotProperties.stringify(sortFile ? sortKeys(obj) : obj, { lineWidth: 120 });
+    });
   }
 
   /**
