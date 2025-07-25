@@ -126,7 +126,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
           ];
           jdlObject.addEntity(entityA);
           options.forEach(option => jdlObject.addOption(option));
-          const returned: any = convert(jdlObject);
+          const returned = convert(jdlObject);
           convertedOptions = returned.get('A');
         });
 
@@ -170,7 +170,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
               entityNames: ['A'],
             }),
           );
-          const returnedMap: any = convert(jdlObject);
+          const returnedMap = convert(jdlObject);
           convertedOptions = returnedMap.get('A');
         });
 
@@ -212,7 +212,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
               entityNames: ['A'],
             }),
           );
-          const returnedMap: any = convert(jdlObject);
+          const returnedMap = convert(jdlObject);
           convertedOptions = returnedMap.get('A');
         });
 
@@ -254,7 +254,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
               excludedNames: ['A'],
             }),
           );
-          const returnedMap: any = convert(jdlObject);
+          const returnedMap = convert(jdlObject);
           convertedOptions = returnedMap.get('A');
         });
 
