@@ -559,7 +559,7 @@
                         </includes>
 <%_ if (javaIntegrationTestExclude.length > 0) { _%>
                         <excludes>
-  <%_ for (exclude in javaIntegrationTestExclude) { _%>
+  <%_ for (exclude of javaIntegrationTestExclude) { _%>
                             <exclude><%- exclude %></exclude>
   <%_ } _%>
                         </excludes>
