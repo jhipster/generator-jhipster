@@ -102,7 +102,7 @@ task integrationTest(type: Test) {
     group = "verification"
     include "**/*IT*", "**/*IntTest*"
 <%_ if (javaIntegrationTestExclude.length > 0) { _%>
-    exclude<%- javaIntegrationTestExclude.map(exclude => `"${exclude}"`).join('') %>
+    exclude <%- javaIntegrationTestExclude.map(exclude => `"${exclude}"`).join('') %>
 <%_ } _%>
     testLogging {
         events 'FAILED', 'SKIPPED'
