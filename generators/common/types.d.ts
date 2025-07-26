@@ -22,6 +22,7 @@ import type {
 import type huskyCommand from '../javascript/generators/husky/command.js';
 import type prettierCommand from '../javascript/generators/prettier/command.js';
 import type appCommand from '../app/command.ts';
+import type { PropertiesFileKeyUpdate } from '../base-core/api.js';
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
@@ -86,4 +87,19 @@ export type Application<E extends BaseApplicationEntity = Entity> = JavascriptAp
     endpointPrefix?: string;
   };
 
-export type { JavascriptRelationship as Relationship, BaseApplicationSource as Source };
+type SonarRule = {
+  /** Custom rule ID */
+  ruleId: string;
+  /** SonarQube rule key */
+  ruleKey: string;
+  /** SonarQube resource pattern */
+  resourceKey: string;
+  comment?: string;
+};
+
+export type Source = BaseApplicationSource & {
+  ignoreSonarRule?: (rule: SonarRule) => void;
+  addSonarProperties?: (properties: PropertiesFileKeyUpdate[]) => void;
+};
+
+export type { JavascriptRelationship as Relationship };

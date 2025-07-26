@@ -57,7 +57,9 @@ import type {
   CascatedEditFileCallback,
   EditFileCallback,
   EditFileOptions,
-  PropertyFileKeyUpdate,
+  PropertiesFileKeyUpdate,
+  PropertiesFileLines,
+  PropertiesFileValueCallback,
   ValidationResult,
   WriteContext,
   WriteFileOptions,
@@ -1026,18 +1028,63 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * Edit a property file, adding or updating a key.
    */
-  editPropertyFile(file: string, properties: PropertyFileKeyUpdate[], options: EditFileOptions & { sortFile?: boolean } = {}): void {
-    const { sortFile = true, ...editOptions } = options;
+  editPropertiesFile(
+    file: string,
+    properties:
+      | PropertiesFileKeyUpdate[]
+      | ((lines: PropertiesFileLines, newValueCallback: PropertiesFileValueCallback) => PropertiesFileLines),
+    options: EditFileOptions & {
+      /** Comments are only supported if sortFile is set to false, otherwise they will be removed */
+      sortFile?: boolean;
+    } = {},
+  ): void {
+    const { sortFile = false, ...editOptions } = options;
+    const getNewValue: PropertiesFileValueCallback = (newValue, oldValue?, sep?): string => {
+      if (typeof newValue === 'function') {
+        return newValue(oldValue);
+      }
+      if (sep && oldValue) {
+        const factories = (oldValue.split(sep) ?? []).map(val => val.trim());
+        return factories.includes(newValue) ? oldValue : `${oldValue}${sep}${newValue}`;
+      }
+      return newValue;
+    };
     this.editFile(file, editOptions, content => {
-      const obj = dotProperties.parse(content ?? '');
-      for (const { key, value } of properties) {
-        if (typeof value === 'function') {
-          obj[key] = value(obj[key] as string);
-        } else {
-          obj[key] = value;
+      if (sortFile) {
+        if (typeof properties === 'function') {
+          throw new Error('Cannot use a function to edit properties file with sortFile enabled');
+        }
+        const obj = dotProperties.parse(content ?? '');
+        for (const { key, value, valueSep } of properties) {
+          if (typeof value === 'function' || valueSep) {
+            obj[key] = getNewValue(value, obj[key] as string, valueSep);
+          } else {
+            obj[key] = value;
+          }
+        }
+        return dotProperties.stringify(sortKeys(obj), { lineWidth: 120 });
+      }
+      let lines = dotProperties.parseLines(content ?? '') as PropertiesFileLines;
+      if (typeof properties === 'function') {
+        lines = properties(lines, getNewValue);
+      } else {
+        for (const { key, value, valueSep, comment } of properties) {
+          const existingLine = lines.find(line => Array.isArray(line) && line[0] === key) as string[] | undefined;
+          if (existingLine) {
+            if (typeof value === 'function' || valueSep) {
+              existingLine[1] = getNewValue(value, existingLine[1] as string, valueSep);
+            } else {
+              existingLine[1] = value;
+            }
+          } else {
+            if (comment) {
+              lines.push(comment);
+            }
+            lines.push([key, typeof value === 'function' ? value() : value]);
+          }
         }
       }
-      return dotProperties.stringify(sortFile ? sortKeys(obj) : obj, { lineWidth: 120 });
+      return dotProperties.stringify(lines, { lineWidth: 120 });
     });
   }
 
@@ -1083,7 +1130,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       // null return should be treated like an error.
     }
 
-    if (!originalContent) {
+    if (typeof originalContent !== 'string') {
       const { ignoreNonExisting, create } = actualOptions;
       const errorMessage = typeof ignoreNonExisting === 'string' ? ` ${ignoreNonExisting}.` : '';
       if (!create || transformCallbacks.length === 0) {

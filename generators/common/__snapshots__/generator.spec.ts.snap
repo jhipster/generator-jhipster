@@ -1,5 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`generator - common source apis addSonarProperties with empty properties should ignore sonar rule 1`] = `
+{
+  "sonar-project.properties": {
+    "contents": "
+# New property comment
+sonar.new.property = newValue
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - common source apis addSonarProperties with existing sonar.issue.ignore.multicriteria key should ignore sonar rule 1`] = `
+{
+  "sonar-project.properties": {
+    "contents": "
+# New property comment
+sonar.new.property = newValue
+
+sonar.issue.ignore.multicriteria = ruleId, ruleId2
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - common source apis ignoreSonarRule should ignore sonar rule 1`] = `
+{
+  "sonar-project.properties": {
+    "contents": "
+sonar.issue.ignore.multicriteria = ruleId, ruleId2
+# comment
+sonar.issue.ignore.multicriteria.ruleId.resourceKey = resourceKey
+sonar.issue.ignore.multicriteria.ruleId.ruleKey = ruleKey
+# comment 2
+sonar.issue.ignore.multicriteria.ruleId2.resourceKey = resourceKey2
+sonar.issue.ignore.multicriteria.ruleId2.ruleKey = ruleKey2
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - common with default config should succeed 1`] = `
 {
   ".editorconfig": {

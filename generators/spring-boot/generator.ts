@@ -38,7 +38,6 @@ import {
 } from '../generator-list.js';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.js';
 import {
-  addSpringFactory,
   getJavaValueGeneratorForType,
   getSpecificationBuildForType,
   insertContentIntoApplicationProperties,
@@ -100,6 +99,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
     }
 
     if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster('jhipster:java:bootstrap');
       await this.dependsOnJHipster(GENERATOR_SERVER);
       await this.dependsOnJHipster('jhipster:java:domain');
       await this.dependsOnJHipster('jhipster:java:build-tool');
@@ -316,7 +316,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
       registerSpringFactory({ source, application }) {
         source.addTestSpringFactory = ({ key, value }) => {
           const springFactoriesFile = `${application.srcTestResources}META-INF/spring.factories`;
-          this.editFile(springFactoriesFile, { create: true }, addSpringFactory({ key, value }));
+          this.editPropertiesFile(springFactoriesFile, [{ key, value, valueSep: ',' }], { create: true, sortFile: true });
         };
       },
       addSpringIntegrationTest({ application, source }) {

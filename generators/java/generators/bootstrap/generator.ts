@@ -39,7 +39,6 @@ import {
   prepareEntity,
 } from '../../support/index.js';
 import { mutateData, normalizePathEnd } from '../../../../lib/utils/index.js';
-import type { PropertyFileKeyUpdate } from '../../../base-core/api.js';
 
 export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   packageInfoFile!: boolean;
@@ -162,8 +161,8 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
       prepareJavaApplication({ application, source }) {
         source.hasJavaProperty = (property: string) => application.javaProperties![property] !== undefined;
         source.hasJavaManagedProperty = (property: string) => application.javaManagedProperties![property] !== undefined;
-        source.editJUnitPlatformProperties = (properties: PropertyFileKeyUpdate[]) =>
-          this.editPropertyFile(`${application.srcTestResources}junit-platform.properties`, properties, { create: true });
+        source.editJUnitPlatformProperties = properties =>
+          this.editPropertiesFile(`${application.srcTestResources}junit-platform.properties`, properties, { create: true, sortFile: true });
       },
       editJavaFileNeedles({ source }) {
         source.editJavaFile = (

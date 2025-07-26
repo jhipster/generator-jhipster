@@ -4,11 +4,11 @@ import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
-import Generator from '../server/index.js';
 
 import { filterBasicServerGenerators } from '../server/__test-support/index.js';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
 import { PRIORITY_NAMES } from '../base-application/priorities.js';
+import Generator from './generator.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,6 +23,28 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
   checkEnforcements({}, generator);
 
+  describe('addTestSpringFactory', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig()
+        .withMockedJHipsterGenerators()
+        .withSkipWritingPriorities()
+        .withTask(
+          'postWriting',
+          asPostWritingTask(function ({ source }) {
+            source.addTestSpringFactory!({ key: 'key', value: 'first.value' });
+            source.addTestSpringFactory!({ key: 'key', value: 'second.value' });
+            // Existring value should not be added again
+            source.addTestSpringFactory!({ key: 'key', value: 'second.value' });
+          }),
+        );
+    });
+
+    it('should add a test spring factory', () => {
+      expect(runResult.getSnapshot('**/spring.factories')).toMatchSnapshot();
+    });
+  });
   describe('with jwt', () => {
     before(async () => {
       await helpers
