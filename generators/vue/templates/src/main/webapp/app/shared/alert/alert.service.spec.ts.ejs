@@ -66,11 +66,11 @@ describe('Alert Service test suite', () => {
     expect(toastStub).toBeCalledTimes(1);
     expect(toastStub).toHaveBeenCalledWith({
       props: {
-        pos: 'top-center',
         body: expect.any(String),
+        pos: 'top-center',
+        solid: true,
         title: 'Error',
         variant: 'danger',
-        solid: true,
       },
     });
   });
@@ -113,9 +113,9 @@ describe('Alert Service test suite', () => {
       props: {
         body: expect.any(String),
         pos: 'top-center',
+        solid: true,
         title: 'Error',
         variant: 'danger',
-        solid: true,
       },
     });
   });
@@ -154,9 +154,9 @@ describe('Alert Service test suite', () => {
       props: {
         body: expect.any(String),
         pos: 'top-center',
+        solid: true,
         title: 'Error',
         variant: 'danger',
-        solid: true,
       },
     });
   });
@@ -188,9 +188,9 @@ describe('Alert Service test suite', () => {
       props: {
         body: expect.any(String),
         pos: 'top-center',
+        solid: true,
         title: 'Error',
         variant: 'danger',
-        solid: true,
       },
     });
   });
@@ -222,9 +222,9 @@ describe('Alert Service test suite', () => {
       props: {
         body: expect.any(String),
         pos: 'top-center',
+        solid: true,
         title: 'Error',
         variant: 'danger',
-        solid: true,
       },
     });
   });
