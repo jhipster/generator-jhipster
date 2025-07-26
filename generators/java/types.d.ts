@@ -1,6 +1,6 @@
 import type { RequireOneOrNone } from 'type-fest';
 import type { Application as GradleApplication, GradleNeedleOptions, Source as GradleSource } from '../gradle/types.js';
-import type { EditFileCallback, PropertiesFileKeyUpdate } from '../base-core/api.js';
+import type { EditFileCallback } from '../base-core/api.js';
 import type { MavenDefinition, Source as MavenSource } from '../maven/types.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
 import type {
@@ -12,6 +12,7 @@ import type {
   Relationship as BaseApplicationRelationship,
   Source as BaseApplicationSource,
 } from '../base-application/types.d.ts';
+import type { PropertiesFileKeyUpdate } from '../base-core/support/index.ts';
 import type { JavaAnnotation } from './support/add-java-annotation.ts';
 import type {
   Application as JavaBootstrapApplication,

@@ -24,7 +24,8 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { JHIPSTER_DOCUMENTATION_URL, MAIN_DIR, TEST_DIR } from '../generator-constants.js';
 import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.js';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.js';
-import type { PropertiesFileLines } from '../base-core/api.js';
+import type { PropertiesFileLines } from '../base-core/support/index.ts';
+import { editPropertiesFileCallback } from '../base-core/support/index.ts';
 import command from './command.js';
 import { writeFiles } from './files.js';
 import type {
@@ -166,45 +167,51 @@ export default class CommonGenerator extends BaseApplicationGenerator<
       },
       sonarSourceApi({ source }) {
         source.ignoreSonarRule = ({ ruleId, ruleKey, resourceKey, comment }) => {
-          this.editPropertiesFile('sonar-project.properties', [
-            {
-              key: 'sonar.issue.ignore.multicriteria',
-              value: ruleId,
-              valueSep: ', ',
-            },
-            {
-              key: `sonar.issue.ignore.multicriteria.${ruleId}.resourceKey`,
-              value: resourceKey,
-              comment,
-            },
-            {
-              key: `sonar.issue.ignore.multicriteria.${ruleId}.ruleKey`,
-              value: ruleKey,
-            },
-          ]);
+          this.editFile(
+            'sonar-project.properties',
+            editPropertiesFileCallback([
+              {
+                key: 'sonar.issue.ignore.multicriteria',
+                value: ruleId,
+                valueSep: ', ',
+              },
+              {
+                key: `sonar.issue.ignore.multicriteria.${ruleId}.resourceKey`,
+                value: resourceKey,
+                comment,
+              },
+              {
+                key: `sonar.issue.ignore.multicriteria.${ruleId}.ruleKey`,
+                value: ruleKey,
+              },
+            ]),
+          );
         };
         source.addSonarProperties = properties => {
           // Adds new properties before the sonar.issue.ignore.multicriteria key
-          this.editPropertiesFile('sonar-project.properties', (lines, newValueCallback) => {
-            let multicriteriaIndex = lines.findIndex(line => Array.isArray(line) && line[0] === 'sonar.issue.ignore.multicriteria');
-            if (lines[multicriteriaIndex - 1] === '') {
-              multicriteriaIndex--;
-            }
-            const indexToInsert = multicriteriaIndex === -1 ? lines.length : multicriteriaIndex;
-            for (const { key, value, valueSep, comment } of properties) {
-              const existingLine = lines.find(line => Array.isArray(line) && line[0] === key) as [string, string] | undefined;
-              if (existingLine) {
-                existingLine[1] = newValueCallback(value, existingLine[1], valueSep);
-              } else {
-                const itemsToAdd: PropertiesFileLines = [[key, newValueCallback(value)]];
-                if (comment) {
-                  itemsToAdd.unshift(comment);
-                }
-                lines.splice(indexToInsert, 0, ...itemsToAdd);
+          this.editFile(
+            'sonar-project.properties',
+            editPropertiesFileCallback((lines, newValueCallback) => {
+              let multicriteriaIndex = lines.findIndex(line => Array.isArray(line) && line[0] === 'sonar.issue.ignore.multicriteria');
+              if (lines[multicriteriaIndex - 1] === '') {
+                multicriteriaIndex--;
               }
-            }
-            return lines;
-          });
+              const indexToInsert = multicriteriaIndex === -1 ? lines.length : multicriteriaIndex;
+              for (const { key, value, valueSep, comment } of properties) {
+                const existingLine = lines.find(line => Array.isArray(line) && line[0] === key) as [string, string] | undefined;
+                if (existingLine) {
+                  existingLine[1] = newValueCallback(value, existingLine[1], valueSep);
+                } else {
+                  const itemsToAdd: PropertiesFileLines = [[key, newValueCallback(value)]];
+                  if (comment) {
+                    itemsToAdd.unshift(comment);
+                  }
+                  lines.splice(indexToInsert, 0, ...itemsToAdd);
+                }
+              }
+              return lines;
+            }),
+          );
         };
       },
     });

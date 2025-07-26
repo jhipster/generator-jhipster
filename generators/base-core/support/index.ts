@@ -18,4 +18,5 @@
  */
 export * from './needles.js';
 export * from './os.js';
+export * from './properties-file.ts';
 export * from './write-files.js';
