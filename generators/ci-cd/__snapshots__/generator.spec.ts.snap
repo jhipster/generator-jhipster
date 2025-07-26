@@ -168,7 +168,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,
   "gatewayServicesApiAvailable": undefined,
-  "gatlingTests": false,
   "generateAuthenticationApi": true,
   "generateBuiltInAuthorityEntity": true,
   "generateBuiltInUserEntity": true,

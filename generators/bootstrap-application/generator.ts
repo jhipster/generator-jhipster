@@ -63,7 +63,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           },
           {
             cypressTests: ({ testFrameworks }: { testFrameworks: string[] }) => testFrameworks?.includes('cypress') ?? false,
-            gatlingTests: ({ testFrameworks }: { testFrameworks: string[] }) => testFrameworks?.includes('gatling') ?? false,
           } as any,
         );
 

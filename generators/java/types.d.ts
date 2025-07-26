@@ -166,8 +166,6 @@ export type Application<E extends BaseApplicationEntity<BaseApplicationField, Ba
       useNpmWrapper: boolean;
       graalvmReachabilityMetadata: string;
 
-      gatlingTests: boolean;
-
       imperativeOrReactive: string;
       optionalOrMono: string;
       optionalOrMonoOfNullable: string;
