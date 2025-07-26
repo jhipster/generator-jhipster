@@ -25,10 +25,6 @@ If you find a bug in the source code or a mistake in the documentation, you can 
 
 **Please see the Submission Guidelines below**.
 
-## <a name="bounties"></a> Bug bounties
-
-If you submitted a Pull Request that fixes a ticket with the "\$100" tag, then you are eligible for our bug bounty program! Go to our [bug bounties documentation](https://www.jhipster.tech/bug-bounties/) for more information, and claim your money.
-
 ## <a name="feature"></a> Feature Requests
 
 You can request a new feature by submitting a ticket to our [GitHub issues](https://github.com/jhipster/generator-jhipster/issues). If you
@@ -36,26 +32,6 @@ would like to implement a new feature then consider what kind of change it is:
 
 - **Major Changes** that you wish to contribute to the project should be discussed first. Please open a ticket which clearly states that it is a feature request in the title and explain clearly what you want to achieve in the description, and the JHipster team will discuss with you what should be done in that ticket. You can then start working on a Pull Request. In order to communicate major changes proposals and receive reviews from the core team, you can also submit an RFC.
 - **Small Changes** can be proposed without any discussion. Open up a ticket which clearly states that it is a feature request in the title. Explain your change in the description, and you can propose a Pull Request straight away.
-
-## <a name="rfcs"></a> RFCs
-
-Sometimes, major feature requests are "complex" or "substantial". In this case, GitHub Issues might not be the best tool to present them because we will need a lot of going back and forth to reach a consensus.
-
-So we ask that these feature request be put through a formal design process and have their specifications described in an "RFC" (request for comments) that will be validated by the team through a Pull Request Review.
-
-The RFC process is intended to provide a consistent and controlled path for major features and directions of the project.
-
-To submit an RFC follow those steps:
-
-1. Discuss the RFC proposal with the core team through GitHub issues or other channels
-2. Create the initial GitHub issue for the Feature Request if it doesn't already exist
-3. Copy the `rfcs/0-jhipster-rfc-template.md` to `rfcs/${featureRequestIssueNumber}-my-feature-request-name.md`
-4. Fill in the RFC, make sure to complete every required section
-5. Submit the RFC as a Pull Request with the summary of the proposal in the PR description
-6. Build consensus and integrate feedback from the reviewers
-7. The Pull Request is either accepted (merged), rejected (closed) or postponed (given an "on hold" status)
-
-Note: The JHipster RFC process is inspired by [Rust RFCs](https://rust-lang.github.io/rfcs/).
 
 ## <a name="submit"></a> Submission Guidelines
 
@@ -88,13 +64,16 @@ You can run `jhipster info` in your project folder to get most of the above requ
 
 Issues opened without any of these info will be **closed** without any explanation.
 
+## Development environment setup
+
+See our [Development Guide](DEVELOPMENT.md) for more information on how to configure the jhipster generator for contributing.
+
 ### [Submitting a Pull Request](https://opensource.guide/how-to-contribute/#opening-a-pull-request)
 
 Before you submit your pull request consider the following guidelines:
 
 - Search [GitHub](https://github.com/jhipster/generator-jhipster/pulls?utf8=%E2%9C%93&q=is%3Apr) for an open or closed Pull Request
   that relates to your submission.
-- If you want to modify the JHipster generator, read our [Development Guide](DEVELOPMENT.md)
 - Follow our [Coding Rules](#rules).
 - In GitHub, send a pull request to `jhipster/generator-jhipster:main`.
 - **Every CI tests must pass**.
@@ -183,3 +162,27 @@ or joined the [JHipster team](https://www.jhipster.tech/team/).
 
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
+
+## <a name="rfcs"></a> RFCs
+
+Sometimes, major feature requests are "complex" or "substantial". In this case, GitHub Issues might not be the best tool to present them because we will need a lot of going back and forth to reach a consensus.
+
+So we ask that these feature request be put through a formal design process and have their specifications described in an "RFC" (request for comments) that will be validated by the team through a Pull Request Review.
+
+The RFC process is intended to provide a consistent and controlled path for major features and directions of the project.
+
+To submit an RFC follow those steps:
+
+1. Discuss the RFC proposal with the core team through GitHub issues or other channels
+2. Create the initial GitHub issue for the Feature Request if it doesn't already exist
+3. Copy the `rfcs/0-jhipster-rfc-template.md` to `rfcs/${featureRequestIssueNumber}-my-feature-request-name.md`
+4. Fill in the RFC, make sure to complete every required section
+5. Submit the RFC as a Pull Request with the summary of the proposal in the PR description
+6. Build consensus and integrate feedback from the reviewers
+7. The Pull Request is either accepted (merged), rejected (closed) or postponed (given an "on hold" status)
+
+Note: The JHipster RFC process is inspired by [Rust RFCs](https://rust-lang.github.io/rfcs/).
+
+## <a name="bounties"></a> Bug bounties
+
+If you submitted a Pull Request that fixes a ticket with the "\$100" tag, then you are eligible for our bug bounty program! Go to our [bug bounties documentation](https://www.jhipster.tech/bug-bounties/) for more information, and claim your money.
