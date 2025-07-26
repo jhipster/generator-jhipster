@@ -26,7 +26,6 @@ import { useLoginModal } from '@/account/login-modal';
 import type AccountService from '../account.service';
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
   setup() {
     const authenticationError: Ref<boolean> = ref(false);
     const login: Ref<string> = ref(null);

@@ -3,7 +3,7 @@
 <%_ for (entity of entities.filter(entity => !entity.embedded)) { _%>
     <b-dropdown-item to="/<%= entity.entityPage %>">
       <font-awesome-icon icon="asterisk" />
-      <span v-text="t$('global.menu.entities.<%= entity.entityTranslationKeyMenu %>')"><%= entity.entityClassHumanized %></span>
+      <span>{{ t$('global.menu.entities.<%= entity.entityTranslationKeyMenu %>') }}</span>
     </b-dropdown-item>
 <%_ } _%>
     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->

@@ -7,7 +7,6 @@ import { orderAndFilterBy } from '@/shared/computables';
 import LogsService from './logs.service';
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>Logs',
   setup() {
     const logsService = inject('logsService', () => new LogsService(), true);

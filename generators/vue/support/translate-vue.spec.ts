@@ -19,12 +19,16 @@
 import { inspect } from 'node:util';
 import { describe, expect, it } from 'esmocha';
 import type { GetWebappTranslationCallback } from '../../client/translation.js';
-import { removeDeclarations, replaceTranslationTags, replaceTranslations } from './translate-vue.js';
+import { removeDeclarations, replaceTranslations, replaceVueTranslations } from './translate-vue.js';
 
 const FULL_BODY = `
 <span v-html="t$('activate.messages.success')"><strong>Your user account has been activated.</strong> Please </span>
 <b-link :to="'/account/reset/request'" class="alert-link" v-text="t$('login.password.forgot')"
  data-cy="forgetYourPasswordSelector" >Did you forget your password?</b-link>
+<span>{{ t$('login.password.forgot') }}"</span>
+<span>{{ t$('login.password.forgot1')}}"</span>
+<span>{{t$('login.password.forgot2') }}"</span>
+<span>{{t$('login.password.forgot3')}}"</span>
 <b-form-group :label="t$('login.form.password')" label-for="password">
   <b-form-input
     id="password"
@@ -126,11 +130,11 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
 `);
     });
   });
-  describe('replaceTranslationTags', () => {
+  describe('replaceVueTranslations', () => {
     describe('with nested tag', () => {
       it('should throw', () => {
         expect(() =>
-          replaceTranslationTags({
+          replaceVueTranslations({
             getWebappTranslation,
             body: '<div v-text="t$(\'entity.action.cancel\')" foo=")"><div>fooo</div>fooo</div>',
             enableTranslation: false,
@@ -140,11 +144,15 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
     });
     describe('with translation disabled', () => {
       it('should return the body without translation attributes', () => {
-        expect(replaceTranslationTags({ getWebappTranslation, body: FULL_BODY, enableTranslation: false })).toMatchInlineSnapshot(`
+        expect(replaceVueTranslations({ getWebappTranslation, body: FULL_BODY, enableTranslation: false })).toMatchInlineSnapshot(`
 "
 <span>getWebappTranslation('activate.messages.success')</span>
 <b-link :to="'/account/reset/request'" class="alert-link"
  data-cy="forgetYourPasswordSelector" >getWebappTranslation('login.password.forgot')</b-link>
+<span>getWebappTranslation('login.password.forgot')"</span>
+<span>getWebappTranslation('login.password.forgot1')"</span>
+<span>getWebappTranslation('login.password.forgot2')"</span>
+<span>getWebappTranslation('login.password.forgot3')"</span>
 <b-form-group label="getWebappTranslation('login.form.password')" label-for="password">
   <b-form-input
     id="password"
@@ -179,11 +187,15 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
 
     describe('with translation enabled', () => {
       it('should return the body without translation tags contents', () => {
-        expect(replaceTranslationTags({ getWebappTranslation, body: FULL_BODY, enableTranslation: true })).toMatchInlineSnapshot(`
+        expect(replaceVueTranslations({ getWebappTranslation, body: FULL_BODY, enableTranslation: true })).toMatchInlineSnapshot(`
 "
 <span v-html="t$('activate.messages.success')"></span>
 <b-link :to="'/account/reset/request'" class="alert-link" v-text="t$('login.password.forgot')"
  data-cy="forgetYourPasswordSelector" ></b-link>
+<span>{{ t$('login.password.forgot') }}"</span>
+<span>{{ t$('login.password.forgot1') }}"</span>
+<span>{{ t$('login.password.forgot2') }}"</span>
+<span>{{ t$('login.password.forgot3') }}"</span>
 <b-form-group :label="t$('login.form.password')" label-for="password">
   <b-form-input
     id="password"

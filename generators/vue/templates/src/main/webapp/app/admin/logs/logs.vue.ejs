@@ -1,17 +1,41 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 <template>
   <div class="table-responsive">
-    <h2 id="logs-page-heading" v-text="t$('logs.title')" data-cy="logsPageHeading">Logs</h2>
+    <h2 id="logs-page-heading" data-cy="logsPageHeading">{{ t$('logs.title') }}</h2>
 
     <div v-if="loggers">
-      <p v-text="t$('logs.nbloggers', { total: loggers.length })">There are {{ loggers.length }} loggers.</p>
+      <p>{{ t$('logs.nbloggers', { total: loggers.length }) }}</p>
 
-      <span v-text="t$('logs.filter')">Filter</span> <input type="text" v-model="filtered" class="form-control" />
+      <span>{{ t$('logs.filter') }}</span> <input type="text" v-model="filtered" class="form-control" />
 
       <table class="table table-sm table-striped table-bordered" aria-describedby="Logs">
         <thead>
           <tr title="click to order">
-            <th @click="changeOrder('name')" scope="col"><span v-text="t$('logs.table.name')">Name</span></th>
-            <th @click="changeOrder('level')" scope="col"><span v-text="t$('logs.table.level')">Level</span></th>
+            <th @click="changeOrder('name')" scope="col">
+              <span>{{ t$('logs.table.name') }}</span>
+              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" :field-name="'name'"></jhi-sort-indicator>
+            </th>
+            <th @click="changeOrder('level')" scope="col">
+              <span>{{ t$('logs.table.level') }}</span>
+              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" :field-name="'level'"></jhi-sort-indicator>
+            </th>
           </tr>
         </thead>
 
@@ -20,48 +44,26 @@
             <small>{{ logger.name }}</small>
           </td>
           <td>
-            <button
-              @click="updateLevel(logger.name, 'TRACE')"
-              :class="logger.level === 'TRACE' ? 'btn-primary' : 'btn-light'"
-              class="btn btn-sm"
-            >
-              TRACE
-            </button>
-            <button
-              @click="updateLevel(logger.name, 'DEBUG')"
-              :class="logger.level === 'DEBUG' ? 'btn-success' : 'btn-light'"
-              class="btn btn-sm"
-            >
-              DEBUG
-            </button>
-            <button
-              @click="updateLevel(logger.name, 'INFO')"
-              :class="logger.level === 'INFO' ? 'btn-info' : 'btn-light'"
-              class="btn btn-sm"
-            >
-              INFO
-            </button>
-            <button
-              @click="updateLevel(logger.name, 'WARN')"
-              :class="logger.level === 'WARN' ? 'btn-warning' : 'btn-light'"
-              class="btn btn-sm"
-            >
-              WARN
-            </button>
-            <button
-              @click="updateLevel(logger.name, 'ERROR')"
-              :class="logger.level === 'ERROR' ? 'btn-danger' : 'btn-light'"
-              class="btn btn-sm"
-            >
-              ERROR
-            </button>
-            <button
-              @click="updateLevel(logger.name, 'OFF')"
-              :class="logger.level === 'OFF' ? 'btn-secondary' : 'btn-light'"
-              class="btn btn-sm"
-            >
-              OFF
-            </button>
+            <BButtonGroup role="group" aria-label="Log level" size="sm" class="flex-nowrap">
+              <BButton @click="updateLevel(logger.name, 'TRACE')" :variant="logger.level === 'TRACE' ? 'primary' : 'light'" size="sm">
+                TRACE
+              </BButton>
+              <BButton @click="updateLevel(logger.name, 'DEBUG')" :variant="logger.level === 'DEBUG' ? 'success' : 'light'" size="sm">
+                DEBUG
+              </BButton>
+              <BButton @click="updateLevel(logger.name, 'INFO')" :variant="logger.level === 'INFO' ? 'info' : 'light'" size="sm">
+                INFO
+              </BButton>
+              <BButton @click="updateLevel(logger.name, 'WARN')" :variant="logger.level === 'WARN' ? 'warning' : 'light'" size="sm">
+                WARN
+              </BButton>
+              <BButton @click="updateLevel(logger.name, 'ERROR')" :variant="logger.level === 'ERROR' ? 'danger' : 'light'" size="sm">
+                ERROR
+              </BButton>
+              <BButton @click="updateLevel(logger.name, 'OFF')" :variant="logger.level === 'OFF' ? 'secondary' : 'light'" size="sm">
+                OFF
+              </BButton>
+            </BButtonGroup>
           </td>
         </tr>
       </table>
