@@ -56,7 +56,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
 
     if (!this.delegateToBlueprint) {
       // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrapApplicationClient();
       await this.dependsOnJHipster(GENERATOR_COMMON);
     }
   }

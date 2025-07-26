@@ -19,7 +19,6 @@
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import type { Application as ServerApplication, Entity as ServerEntity } from '../server/types.js';
-import type { Application as SpringCloudApplication } from '../spring-cloud/types.js';
 import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.js';
 import {
   CLIENT_MAIN_SRC_DIR,
@@ -29,26 +28,26 @@ import {
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_RES_DIR,
   SERVER_TEST_SRC_DIR,
-  dockerContainers,
 } from '../generator-constants.js';
-import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } from '../base-application/support/index.js';
+import { loadRequiredConfigIntoEntity } from '../base-application/support/index.js';
 import {
   addEntitiesOtherRelationships,
   getDatabaseTypeData,
   getPrimaryKeyValue,
   hibernateSnakeCase,
   loadRequiredConfigDerivedProperties,
+  preparePostEntityServerDerivedProperties,
   prepareRelationship,
+  prepareField as prepareServerFieldForTemplates,
 } from '../server/support/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/index.js';
 import { getPomVersionProperties } from '../maven/support/index.js';
-import { getDockerfileContainers } from '../docker/utils.js';
 import { getMainClassName } from '../java/support/index.js';
 import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.js';
 import serverCommand from '../server/command.js';
 import { mutateData, normalizePathEnd } from '../../lib/utils/index.js';
 import type { Application as SpringBootApplication } from '../spring-boot/types.js';
-import type { EntityAll } from '../../lib/types/entity-all.js';
+import { loadDockerDependenciesTask } from '../base-workspaces/internal/docker-dependencies.ts';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator<ServerEntity, ServerApplication<ServerEntity>> {
   async beforeQueue() {
@@ -111,14 +110,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
           'java',
         );
 
-        const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile')) as string;
-        const applicationDockerContainers = this.prepareDependencies(
-          {
-            ...dockerContainers,
-            ...getDockerfileContainers(dockerfile),
-          },
-          'docker',
-        );
+        loadDockerDependenciesTask.call(this, { context: application });
 
         applicationDefaults({
           javaVersion: this.useVersionPlaceholders ? 'JAVA_VERSION' : RECOMMENDED_JAVA_VERSION,
@@ -129,10 +121,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
           javaDependencies: ({ javaDependencies }) => ({
             ...applicationJavaDependencies,
             ...javaDependencies,
-          }),
-          dockerContainers: ({ dockerContainers: currentDockerContainers = {} }) => ({
-            ...applicationDockerContainers,
-            ...currentDockerContainers,
           }),
         });
       },
@@ -147,17 +135,12 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
         loadDerivedConfig(serverCommand.configs, { application });
-
-        mutateData(application as unknown as SpringCloudApplication, {
-          gatewayRoutes: undefined,
-        });
       },
       prepareForTemplates({ applicationDefaults }) {
         applicationDefaults({
           mainClass: ({ baseName }) => getMainClassName({ baseName }),
           jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
           imperativeOrReactive: ({ reactive }) => (reactive ? 'reactive' : 'imperative'),
-          authenticationUsesCsrf: ({ authenticationType }) => ['oauth2', 'session'].includes(authenticationType!),
         });
       },
       prepareSpringData({ application }) {
@@ -206,17 +189,25 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
       prepareEntity({ entity }) {
         loadRequiredConfigDerivedProperties(entity);
       },
-      preparePrimaryKey({ entity, application }) {
-        // If primaryKey doesn't exist, create it.
-        if (!entity.embedded && !entity.primaryKey) {
-          prepareEntityPrimaryKeyForTemplates.call(this, { entity: entity as EntityAll, application });
-        }
-      },
     });
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.preparingEachEntity;
+  }
+
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      prepareFieldsForTemplates({ application, entity, field }) {
+        if (application.databaseTypeAny) {
+          prepareServerFieldForTemplates(application, entity, field, this);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.preparingEachEntityField;
   }
 
   get preparingEachEntityRelationship() {
@@ -241,6 +232,9 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator<
         // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
         const derivedFields = primaryKey.derivedFields;
         entity.fields.unshift(...derivedFields!);
+      },
+      prepareEntityDerivedProperties({ entity }) {
+        preparePostEntityServerDerivedProperties(entity as any);
       },
     });
   }

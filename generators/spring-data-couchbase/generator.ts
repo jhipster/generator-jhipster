@@ -27,7 +27,7 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnJHipster('jhipster:java:bootstrap');
     }
   }
 

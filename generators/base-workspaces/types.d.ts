@@ -68,6 +68,7 @@ export type Deployment = DeploymentConfig & {
   appConfigs?: WorkspacesApplication[];
   appsYaml?: string[];
   clusteredDbApps?: string[];
+  dockerContainers?: Record<string, string>;
 
   keycloakRedirectUris?: string;
   keycloakSecrets?: string[];

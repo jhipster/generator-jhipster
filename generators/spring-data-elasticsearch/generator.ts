@@ -30,7 +30,7 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnJHipster('jhipster:java:bootstrap');
     }
   }
 

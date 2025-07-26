@@ -85,6 +85,8 @@ export type Application<E extends BaseApplicationEntity = Entity> = JavascriptAp
     generateInMemoryUserCredentials?: boolean;
 
     endpointPrefix?: string;
+    authenticationUsesCsrf: boolean;
+    gatewayRoutes?: { route: string; host: string; serverPort: string }[];
   };
 
 type SonarRule = {

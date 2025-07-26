@@ -28,7 +28,7 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplicationServer();
+      await this.dependsOnJHipster('jhipster:java:bootstrap');
     }
   }
 

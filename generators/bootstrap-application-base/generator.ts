@@ -29,10 +29,14 @@ import type { Application as SpringBootApplication } from '../spring-boot/types.
 import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.js';
 import {
   addFakerToEntity,
+  derivedPrimaryKeyProperties,
   loadEntitiesAnnotations,
   loadEntitiesOtherSide,
+  prepareCommonFieldForTemplates,
   prepareEntity as prepareEntityForTemplates,
-  prepareField as prepareFieldForTemplates,
+  prepareEntityPrimaryKeyForTemplates,
+  preparePostEntitiesCommonDerivedProperties,
+  preparePostEntityCommonDerivedProperties,
   prepareRelationship,
   stringifyApplicationData,
 } from '../base-application/support/index.js';
@@ -129,10 +133,13 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
         applicationDefaults(removeFieldsWithNullishValues(this.config.getAll()) as any, {
           nodeDependencies: {},
           customizeTemplatePaths: [],
-          user: undefined,
           packageJsonScripts: {},
           clientPackageJsonScripts: {},
           testFrameworks: [],
+          dockerContainers: {},
+          user: undefined,
+          authenticationUsesCsrf: undefined,
+          gatewayRoutes: undefined,
         });
       },
     });
@@ -243,6 +250,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
 
           backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
           backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
+          authenticationUsesCsrf: ({ authenticationType }) => ['oauth2', 'session'].includes(authenticationType!),
+          endpointPrefix: ({ applicationType, lowercaseBaseName }) =>
+            applicationType === 'microservice' ? `services/${lowercaseBaseName}` : '',
 
           loginRegex: LOGIN_REGEX,
 
@@ -468,6 +478,12 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
         await addFakerToEntity(entity, application.nativeLanguage);
         prepareEntityForTemplates(entity, this, application);
       },
+      preparePrimaryKey({ entity, application }) {
+        // If primaryKey doesn't exist, create it.
+        if (!entity.embedded && !entity.primaryKey) {
+          prepareEntityPrimaryKeyForTemplates.call(this, { entity: entity as any, application });
+        }
+      },
     });
   }
 
@@ -477,8 +493,8 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
 
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
-      prepareFieldsForTemplates({ application, entity, field }) {
-        prepareFieldForTemplates(application, entity, field, this);
+      prepareFieldsForTemplates({ entity, field }) {
+        prepareCommonFieldForTemplates(entity, field, this);
       },
     });
   }
@@ -514,11 +530,18 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
         };
         entity.hasCyclicRequiredRelationship = detectCyclicRequiredRelationship(entity, new Set());
       },
+      prepareEntityDerivedProperties({ entity }) {
+        preparePostEntityCommonDerivedProperties(entity);
+      },
+      processEntityPrimaryKeysDerivedProperties({ entity }) {
+        if (!entity.primaryKey) return;
+        derivedPrimaryKeyProperties(entity.primaryKey);
+      },
     });
   }
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+    return this.postPreparingEachEntity;
   }
 
   get default() {
@@ -574,6 +597,19 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
             }
           }),
         );
+      },
+      postPreparingEntities({ entities }) {
+        preparePostEntitiesCommonDerivedProperties(entities);
+      },
+      checkProperties({ entities }) {
+        for (const entity of entities) {
+          const properties = [...entity.fields.map(entity => entity.propertyName), ...entity.relationships.map(rel => rel.propertyName)];
+          if (new Set(properties).size !== properties.length) {
+            // Has duplicated properties.
+            const duplicated = [...new Set(properties.filter((v, i, a) => a.indexOf(v) !== i))];
+            throw new Error(`You have duplicate properties in entity ${entity.name}: ${duplicated.join(', ')}`);
+          }
+        }
       },
     });
   }
