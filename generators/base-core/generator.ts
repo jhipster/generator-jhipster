@@ -33,8 +33,6 @@ import semver, { lt as semverLessThan } from 'semver';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
-import dotProperties from 'dot-properties';
-import sortKeys from 'sort-keys';
 
 import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.js';
 import type {
@@ -57,9 +55,6 @@ import type {
   CascatedEditFileCallback,
   EditFileCallback,
   EditFileOptions,
-  PropertiesFileKeyUpdate,
-  PropertiesFileLines,
-  PropertiesFileValueCallback,
   ValidationResult,
   WriteContext,
   WriteFileOptions,
@@ -1023,69 +1018,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     const files = (await Promise.all(parsedTemplates.map(template => renderTemplate(template)).filter(Boolean))) as string[];
     this.log.debug(`Time taken to write files: ${new Date().getMilliseconds() - startTime}ms`);
     return files.filter(file => file);
-  }
-
-  /**
-   * Edit a property file, adding or updating a key.
-   */
-  editPropertiesFile(
-    file: string,
-    properties:
-      | PropertiesFileKeyUpdate[]
-      | ((lines: PropertiesFileLines, newValueCallback: PropertiesFileValueCallback) => PropertiesFileLines),
-    options: EditFileOptions & {
-      /** Comments are only supported if sortFile is set to false, otherwise they will be removed */
-      sortFile?: boolean;
-    } = {},
-  ): void {
-    const { sortFile = false, ...editOptions } = options;
-    const getNewValue: PropertiesFileValueCallback = (newValue, oldValue?, sep?): string => {
-      if (typeof newValue === 'function') {
-        return newValue(oldValue);
-      }
-      if (sep && oldValue) {
-        const factories = (oldValue.split(sep) ?? []).map(val => val.trim());
-        return factories.includes(newValue) ? oldValue : `${oldValue}${sep}${newValue}`;
-      }
-      return newValue;
-    };
-    this.editFile(file, editOptions, content => {
-      if (sortFile) {
-        if (typeof properties === 'function') {
-          throw new Error('Cannot use a function to edit properties file with sortFile enabled');
-        }
-        const obj = dotProperties.parse(content ?? '');
-        for (const { key, value, valueSep } of properties) {
-          if (typeof value === 'function' || valueSep) {
-            obj[key] = getNewValue(value, obj[key] as string, valueSep);
-          } else {
-            obj[key] = value;
-          }
-        }
-        return dotProperties.stringify(sortKeys(obj), { lineWidth: 120 });
-      }
-      let lines = dotProperties.parseLines(content ?? '') as PropertiesFileLines;
-      if (typeof properties === 'function') {
-        lines = properties(lines, getNewValue);
-      } else {
-        for (const { key, value, valueSep, comment } of properties) {
-          const existingLine = lines.find(line => Array.isArray(line) && line[0] === key) as string[] | undefined;
-          if (existingLine) {
-            if (typeof value === 'function' || valueSep) {
-              existingLine[1] = getNewValue(value, existingLine[1] as string, valueSep);
-            } else {
-              existingLine[1] = value;
-            }
-          } else {
-            if (comment) {
-              lines.push(comment);
-            }
-            lines.push([key, typeof value === 'function' ? value() : value]);
-          }
-        }
-      }
-      return dotProperties.stringify(lines, { lineWidth: 120 });
-    });
   }
 
   /**

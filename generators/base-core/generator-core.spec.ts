@@ -2,6 +2,7 @@ import { before, beforeEach, describe, expect, it, expect as jestExpect } from '
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 
 import { createJHipsterLogger } from '../../lib/utils/index.js';
+import { editPropertiesFileCallback } from './support/properties-file.js';
 import Base from './index.js';
 
 const BaseGenerator: any = Base.prototype;
@@ -101,7 +102,11 @@ describe('generator - base-core', () => {
         [
           helpers.createDummyGenerator(Base as any, {
             [Base.POST_WRITING]() {
-              this.editPropertiesFile('dummy.properties', () => [['key', 'value']], { create: true });
+              this.editFile(
+                'dummy.properties',
+                { create: true },
+                editPropertiesFileCallback(() => [['key', 'value']]),
+              );
             },
           }),
           { namespace: 'dummy' },
@@ -118,7 +123,10 @@ describe('generator - base-core', () => {
                 [
                   helpers.createDummyGenerator(Base as any, {
                     [Base.POST_WRITING]() {
-                      this.editPropertiesFile('dummy.properties', [{ key: 'new.property', value: 'newValue' }], { sortFile });
+                      this.editFile(
+                        'dummy.properties',
+                        editPropertiesFileCallback([{ key: 'new.property', value: 'newValue' }], { sortFile }),
+                      );
                     },
                   }),
                   { namespace: 'dummy' },
@@ -131,7 +139,11 @@ describe('generator - base-core', () => {
               [
                 helpers.createDummyGenerator(Base as any, {
                   [Base.POST_WRITING]() {
-                    this.editPropertiesFile('dummy.properties', [{ key: 'new.property', value: 'newValue' }], { create: true, sortFile });
+                    this.editFile(
+                      'dummy.properties',
+                      { create: true },
+                      editPropertiesFileCallback([{ key: 'new.property', value: 'newValue' }], { sortFile }),
+                    );
                   },
                 }),
                 { namespace: 'dummy' },
@@ -153,21 +165,31 @@ override.existing = existingValue`,
                 [
                   helpers.createDummyGenerator(Base as any, {
                     [Base.POST_WRITING]() {
-                      this.editPropertiesFile('dummy.properties', [{ key: 'new.property', value: 'newValue' }], { sortFile });
-                      this.editPropertiesFile('dummy.properties', [{ key: 'override.existing', value: 'overriddenValue' }], { sortFile });
-                      this.editPropertiesFile(
+                      this.editFile(
                         'dummy.properties',
-                        [{ key: 'append.existing', value: oldValue => `${oldValue ? `${oldValue}, ` : ''}appendedValueUsingFunction` }],
-                        { sortFile },
+                        editPropertiesFileCallback([{ key: 'new.property', value: 'newValue' }], { sortFile }),
                       );
-                      this.editPropertiesFile(
+                      this.editFile(
                         'dummy.properties',
-                        [
-                          { key: 'append.separator', value: 'firstSeparator', valueSep: ', ', comment: 'comment added' },
-                          { key: 'append.separator', value: 'firstSeparator', valueSep: ', ', comment: 'comment ignored' },
-                          { key: 'append.separator', value: 'secondSeparator', valueSep: ', ', comment: 'comment ignored' },
-                        ],
-                        { sortFile },
+                        editPropertiesFileCallback([{ key: 'override.existing', value: 'overriddenValue' }], { sortFile }),
+                      );
+                      this.editFile(
+                        'dummy.properties',
+                        editPropertiesFileCallback(
+                          [{ key: 'append.existing', value: oldValue => `${oldValue ? `${oldValue}, ` : ''}appendedValueUsingFunction` }],
+                          { sortFile },
+                        ),
+                      );
+                      this.editFile(
+                        'dummy.properties',
+                        editPropertiesFileCallback(
+                          [
+                            { key: 'append.separator', value: 'firstSeparator', valueSep: ', ', comment: 'comment added' },
+                            { key: 'append.separator', value: 'firstSeparator', valueSep: ', ', comment: 'comment ignored' },
+                            { key: 'append.separator', value: 'secondSeparator', valueSep: ', ', comment: 'comment ignored' },
+                          ],
+                          { sortFile },
+                        ),
                       );
                     },
                   }),

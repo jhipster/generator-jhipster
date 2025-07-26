@@ -103,14 +103,3 @@ export type WriteContext = {
     context: any,
   ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
 };
-
-export type PropertiesFileKeyUpdate = {
-  key: string;
-  value: string | ((oldValue?: string) => string);
-  valueSep?: string;
-  /** Only supported if sortFile is set to false, and at key creation */
-  comment?: string;
-};
-
-export type PropertiesFileLines = (string | [string, string])[];
-export type PropertiesFileValueCallback = (newValue: PropertiesFileKeyUpdate['value'], oldValue?: string, sep?: string) => string;

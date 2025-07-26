@@ -61,6 +61,7 @@ import type { Config as SpringCacheConfig } from '../spring-cache/types.js';
 import type { Config as SpringCloudStreamConfig } from '../spring-cloud-stream/types.js';
 import type { Entity as CypressEntity } from '../cypress/types.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
+import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
 import cleanupTask from './cleanup.js';
 import { serverFiles } from './files.js';
@@ -316,7 +317,11 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
       registerSpringFactory({ source, application }) {
         source.addTestSpringFactory = ({ key, value }) => {
           const springFactoriesFile = `${application.srcTestResources}META-INF/spring.factories`;
-          this.editPropertiesFile(springFactoriesFile, [{ key, value, valueSep: ',' }], { create: true, sortFile: true });
+          this.editFile(
+            springFactoriesFile,
+            { create: true },
+            editPropertiesFileCallback([{ key, value, valueSep: ',' }], { sortFile: true }),
+          );
         };
       },
       addSpringIntegrationTest({ application, source }) {

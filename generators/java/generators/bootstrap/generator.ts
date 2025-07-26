@@ -39,6 +39,7 @@ import {
   prepareEntity,
 } from '../../support/index.js';
 import { mutateData, normalizePathEnd } from '../../../../lib/utils/index.js';
+import { editPropertiesFileCallback } from '../../../base-core/support/properties-file.ts';
 
 export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   packageInfoFile!: boolean;
@@ -162,7 +163,11 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
         source.hasJavaProperty = (property: string) => application.javaProperties![property] !== undefined;
         source.hasJavaManagedProperty = (property: string) => application.javaManagedProperties![property] !== undefined;
         source.editJUnitPlatformProperties = properties =>
-          this.editPropertiesFile(`${application.srcTestResources}junit-platform.properties`, properties, { create: true, sortFile: true });
+          this.editFile(
+            `${application.srcTestResources}junit-platform.properties`,
+            { create: true },
+            editPropertiesFileCallback(properties, { sortFile: true }),
+          );
       },
       editJavaFileNeedles({ source }) {
         source.editJavaFile = (

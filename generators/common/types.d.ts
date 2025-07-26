@@ -22,7 +22,7 @@ import type {
 import type huskyCommand from '../javascript/generators/husky/command.js';
 import type prettierCommand from '../javascript/generators/prettier/command.js';
 import type appCommand from '../app/command.ts';
-import type { PropertiesFileKeyUpdate } from '../base-core/api.js';
+import type { PropertiesFileKeyUpdate } from '../base-core/support/index.ts';
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
