@@ -27,6 +27,7 @@ import databaseTypes from '../jhipster/database-types.js';
 import { readYoRcFile } from '../utils/yo-rc.js';
 import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.js';
 import { createImporterFromContent, createImporterFromFiles, getTestFile } from './core/__test-support__/index.js';
+import type { ImportState } from './jdl-importer.js';
 
 const { NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
 
@@ -227,7 +228,7 @@ relationship OneToOne {
       });
     });
     describe('when parsing JDL applications and exporting them', () => {
-      let contents: any;
+      let contents: ImportState;
 
       before(() => {
         const importer = createImporterFromFiles([getTestFile('applications2.jdl')]);
@@ -339,7 +340,7 @@ relationship OneToOne {
       });
     });
     describe('when parsing JDL applications and deployment config', () => {
-      let importState: any;
+      let importState: ImportState;
 
       before(() => {
         const importer = createImporterFromFiles([getTestFile('applications3.jdl')]);
