@@ -17,7 +17,7 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 ### Set `jhipster` command to use the cloned project
 
 Since v8 `generator-jhipster` is written in TypeScript.
-To run it you need to compile to JavaScript or use a just-in-time compilation.
+To run it you need to compile to JavaScript or use a just-in-time compilation. `npm run compile` will be your best friend here: see [package.json script section](./package.json) for the entire list of commands.
 
 #### Running jit executable
 
@@ -41,6 +41,17 @@ In your cloned `generator-jhipster` project, run `npm ci` and then run `npm link
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
+#### Generating new applications from the tests samples using node bin/jhipster.cjs
+
+To generate a new application, you can run the following command in your terminal:
+
+```shell
+node bin/jhipster.cjs generate-sample ng-default --global 
+```
+From the root of your cloned `generator-jhipster` project, this will generate a sample application in the current folder using the local version of JHipster. ng-default is the name of the sample application, you can replace it with any other sample name in the [code samples](./test-integration/samples) to generate a sample application. By default, the sample will be generated in the `../jhipster-samples` folder.
+For workspaces, an additional `jhipster-samples.code-workspace` file will be generated in the same folder, which can be used to open the samples in a single VSCode workspace. Still, you'll need to delete the `jhipster-samples.code-workspace` file if you want to generate another workspace sample in the same folder.
+
+#### Generating a new application using npm link
 To overcome this, you need to run `npm link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
 Also add the option `--skip-jhipster-dependencies` to generate the application ignoring the JHipster dependencies (otherwise a released version will be installed each time npm install/ci is called). You can later on re-add the dependency with the command `jhipster --no-skip-jhipster-dependencies`.
 
@@ -94,6 +105,16 @@ It is possible to debug JHipster's code using a Node.js debugger. To achieve thi
 To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl/Cmd+Shift+D). This will start the generator in debug mode and generate files in the [test-integration/samples/app-sample-dev](test-integration/samples/app-sample-dev) folder.
 
 It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
+
+#### Debugging with IntelliJ IDEA
+
+When you start intelliJ IDEA on the `generator-jhipster` project, you'll have access to a run configuration letting execute any `.spec.ts` file within any package.
+If you want to test a specific generator, you can create a new node.js run configuration with the following settings:
+```
+application-parameters="generate-sample ms-ng-oauth2-mongodb-caffeine --global" path-to-js-file="bin/jhipster.cjs" typescript-loader="bundled" working-dir="$PROJECT_DIR$"
+```
+
+ms-ng-oauth2-mongodb-caffeine is the name of the sample application, you can replace it with any other sample name in the [code samples](./test-integration/samples) to generate a sample application. By default, the sample will be generated in the `../jhipster-samples` folder.
 
 ## Generator implementation
 
@@ -152,6 +173,7 @@ npm run ci:e2e:package # Builds the application
 npm run ci:e2e:prepare # Starts the application using docker
 npm run ci:e2e:run # Runs e2e tests
 ```
+List of commands being in the package.json scripts section of the generated sample.
 
 ## DX using vscode
 
