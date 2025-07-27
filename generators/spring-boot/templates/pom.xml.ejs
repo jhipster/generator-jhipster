@@ -793,16 +793,5 @@
                 </pluginManagement>
             </build>
         </profile>
-<%_ if (cypressTests) { _%>
-        <profile>
-            <id>e2e</id>
-            <properties>
-                <profile.e2e>,e2e</profile.e2e>
-            </properties>
-            <build>
-                <finalName>e2e</finalName>
-            </build>
-        </profile>
-<%_ } _%>
     </profiles>
 </project>

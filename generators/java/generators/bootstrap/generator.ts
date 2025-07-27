@@ -158,6 +158,9 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
         applicationDefaults({
           useNpmWrapper: application => Boolean(application.clientFrameworkAny && application.backendTypeJavaAny),
         });
+        if (application.useNpmWrapper) {
+          application.nodePackageManagerCommand = './npmw';
+        }
       },
       prepareJavaApplication({ application, source }) {
         source.hasJavaProperty = (property: string) => application.javaProperties![property] !== undefined;

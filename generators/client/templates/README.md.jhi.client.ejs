@@ -201,17 +201,6 @@ Unit tests are run by [<%= clientTestFrameworkName %>][]. They're located near c
 ```
 <%= clientPackageMngrWrapper %> test
 ```
-
-  <%_ if (cypressTests) { _%>
-UI end-to-end tests are powered by [Cypress][]. They're located in [<%= clientTestDir %>cypress](<%= clientTestDir %>cypress)
-and can be run by starting Spring Boot in one terminal (`<% if (buildToolMaven) { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageMngrWrapper %> run e2e`) in a second one.
-
-#### Lighthouse audits
-
-You can execute automated [Lighthouse audits](https://developers.google.com/web/tools/lighthouse/) with [cypress-audit](https://github.com/mfrachet/cypress-audit) by running `<%= clientPackageMngrWrapper %> run e2e:cypress:audits`.
-You should only run the audits when your application is packaged with the production profile.
-The lighthouse report is created in <% if (buildToolMaven) { %>`target/cypress/lhreport.html`<% } else { %>`build/cypress/lhreport.html`<% } %>
-  <%_ } _%>
 <&_ } -&>
 <&_ if (fragment.referenceSection) { -&>
 <%_ if (clientBundlerWebpack) { _%>
@@ -222,9 +211,6 @@ The lighthouse report is created in <% if (buildToolMaven) { %>`target/cypress/l
 <%_ } -%>
 <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
 [Jest]: https://jestjs.io
-<%_ } -%>
-<%_ if (cypressTests) { _%>
-[Cypress]: https://www.cypress.io/
 <%_ } -%>
 [Leaflet]: https://leafletjs.com/
 [DefinitelyTyped]: https://definitelytyped.org/
