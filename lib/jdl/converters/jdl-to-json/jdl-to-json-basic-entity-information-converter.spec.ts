@@ -56,7 +56,7 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
           const authorityEntity = new JDLEntity({
             name: 'Authority',
           });
-          const returnedMap: any = convert([entityA, userEntity, authorityEntity]);
+          const returnedMap = convert([entityA, userEntity, authorityEntity]);
           customEntitiesAreConverted = returnedMap.has('A');
           builtInEntitiesAreConverted = returnedMap.has('User') || returnedMap.has('Authority');
         });
@@ -79,7 +79,7 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
           });
           // TODO: Convert only accepts one argument. This might be a bug.
           // @ts-expect-error
-          const returnedMap: any = convert([entityA], new Date(2020, 0, 1, 1, 0, 0));
+          const returnedMap = convert([entityA], new Date(2020, 0, 1, 1, 0, 0));
           convertedEntity = returnedMap.get('A');
         });
 
