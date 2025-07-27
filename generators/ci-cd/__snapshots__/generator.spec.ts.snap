@@ -259,6 +259,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
     "wait-on": "WAIT_ON_VERSION",
   },
   "nodePackageManager": "npm",
+  "nodePackageManagerCommand": "./npmw",
   "nodeVersion": "NODE_VERSION",
   "optionalOrMono": "Optional",
   "optionalOrMonoClassPath": "java.util.Optional",

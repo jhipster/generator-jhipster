@@ -26,6 +26,7 @@ export type Application = WriteContext & {
 
   nodeVersion: string;
   nodePackageManager: string;
+  nodePackageManagerCommand: string;
   nodeDependencies: Record<string, string>;
 
   jhipsterPackageJson: typeof packageJson;

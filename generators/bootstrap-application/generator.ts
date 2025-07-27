@@ -57,14 +57,9 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           application.skipUserManagement = true;
         }
 
-        applicationDefaults(
-          {
-            gatewayServicesApiAvailable: undefined,
-          },
-          {
-            cypressTests: ({ testFrameworks }: { testFrameworks: string[] }) => testFrameworks?.includes('cypress') ?? false,
-          } as any,
-        );
+        applicationDefaults({
+          gatewayServicesApiAvailable: undefined,
+        });
 
         let prettierExtensions = 'md,json,yml,html';
         if (application.clientFrameworkAny) {
