@@ -1,6 +1,6 @@
 <template>
   <div class="ribbon" v-if="ribbonEnabled">
-    <a href="" v-text="t$('global.ribbon.' + ribbonEnv)">{{ ribbonEnv }}</a>
+    <a href="">{{ <% if (enableTranslation) { %>t$('global.ribbon.' + ribbonEnv)<% } else { %>ribbonEnv<% } %> }}</a>
   </div>
 </template>
 

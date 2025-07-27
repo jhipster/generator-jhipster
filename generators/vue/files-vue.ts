@@ -102,6 +102,10 @@ export const vueFiles = asWriteFilesSection({
       ...clientApplicationTemplatesBlock(),
       templates: ['locale/translation.service.ts', 'shared/config/store/translation-store.ts', 'shared/config/languages.ts'],
     },
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.enableTranslation && ctx.enableI18nRTL,
+      templates: ['postcss.config.ts'],
+    }),
   ],
   sharedVueApp: [
     {

@@ -1,16 +1,16 @@
 <template>
   <div>
     <h2>
-      <span id="metrics-page-heading" v-text="t$('metrics.title')" data-cy="metricsPageHeading">Application Metrics</span>
-      <button class="btn btn-primary float-right" @click="refresh()">
-        <font-awesome-icon icon="sync"></font-awesome-icon> <span v-text="t$('metrics[\'refresh.button\']')">Refresh</span>
+      <span id="metrics-page-heading" data-cy="metricsPageHeading">{{ t$('metrics.title') }}</span>
+      <button class="btn btn-primary float-end" @click="refresh()">
+        <font-awesome-icon icon="sync"></font-awesome-icon> <span>{{ t$('metrics[\'refresh.button\']') }}</span>
       </button>
     </h2>
 
-    <h3 v-text="t$('metrics.jvm.title')">JVM Metrics</h3>
+    <h3>{{ t$('metrics.jvm.title') }}</h3>
     <div class="row" v-if="!updatingMetrics">
       <div class="col-md-4">
-        <h4 v-text="t$('metrics.jvm.memory.title')">Memory</h4>
+        <h4>{{ t$('metrics.jvm.memory.title') }}</h4>
         <div>
           <div v-for="(entry, key) of metrics.jvm" :key="key">
             <span v-if="entry.max !== -1">
@@ -27,8 +27,8 @@
         </div>
       </div>
       <div class="col-md-4">
-        <h4 v-text="t$('metrics.jvm.threads.title')">Threads</h4>
-        <span><span v-text="t$('metrics.jvm.threads.runnable')">Runnable</span> {{ threadStats.threadDumpRunnable }}</span>
+        <h4>{{ t$('metrics.jvm.threads.title') }}</h4>
+        <span><span>{{ t$('metrics.jvm.threads.runnable') }}</span> {{ threadStats.threadDumpRunnable }}</span>
         <b-progress variant="success" :max="threadStats.threadDumpAll" striped>
           <b-progress-bar
             :value="threadStats.threadDumpRunnable"
@@ -37,7 +37,7 @@
           </b-progress-bar>
         </b-progress>
 
-        <span><span v-text="t$('metrics.jvm.threads.timedwaiting')">Timed Waiting</span> ({{ threadStats.threadDumpTimedWaiting }})</span>
+        <span><span>{{ t$('metrics.jvm.threads.timedwaiting') }}</span> ({{ threadStats.threadDumpTimedWaiting }})</span>
         <b-progress variant="success" :max="threadStats.threadDumpAll" striped>
           <b-progress-bar
             :value="threadStats.threadDumpTimedWaiting"
@@ -46,7 +46,7 @@
           </b-progress-bar>
         </b-progress>
 
-        <span><span v-text="t$('metrics.jvm.threads.waiting')">Waiting</span> ({{ threadStats.threadDumpWaiting }})</span>
+        <span><span>{{ t$('metrics.jvm.threads.waiting') }}</span> ({{ threadStats.threadDumpWaiting }})</span>
         <b-progress variant="success" :max="threadStats.threadDumpAll" striped>
           <b-progress-bar
             :value="threadStats.threadDumpWaiting"
@@ -55,7 +55,7 @@
           </b-progress-bar>
         </b-progress>
 
-        <span><span v-text="t$('metrics.jvm.threads.blocked')">Blocked</span> ({{ threadStats.threadDumpBlocked }})</span>
+        <span><span>{{ t$('metrics.jvm.threads.blocked') }}</span> ({{ threadStats.threadDumpBlocked }})</span>
         <b-progress variant="success" :max="threadStats.threadDumpAll" striped>
           <b-progress-bar
             :value="threadStats.threadDumpBlocked"
@@ -75,15 +75,15 @@
         <h4>System</h4>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-4">Uptime</div>
-          <div class="col-md-8 text-right">{{ convertMillisecondsToDuration(metrics.processMetrics['process.uptime']) }}</div>
+          <div class="col-md-8 text-end">{{ convertMillisecondsToDuration(metrics.processMetrics['process.uptime']) }}</div>
         </div>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-4">Start time</div>
-          <div class="col-md-8 text-right">{{ formatDate(metrics.processMetrics['process.start.time']) }}</div>
+          <div class="col-md-8 text-end">{{ formatDate(metrics.processMetrics['process.start.time']) }}</div>
         </div>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-9">Process CPU usage</div>
-          <div class="col-md-3 text-right">{{ formatNumber2(100 * metrics.processMetrics['process.cpu.usage']) }} %</div>
+          <div class="col-md-3 text-end">{{ formatNumber2(100 * metrics.processMetrics['process.cpu.usage']) }} %</div>
         </div>
         <b-progress variant="success" :max="100" striped>
           <b-progress-bar
@@ -94,7 +94,7 @@
         </b-progress>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-9">System CPU usage</div>
-          <div class="col-md-3 text-right">{{ formatNumber2(100 * metrics.processMetrics['system.cpu.usage']) }} %</div>
+          <div class="col-md-3 text-end">{{ formatNumber2(100 * metrics.processMetrics['system.cpu.usage']) }} %</div>
         </div>
         <b-progress variant="success" :max="100" striped>
           <b-progress-bar
@@ -105,24 +105,24 @@
         </b-progress>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-9">System CPU count</div>
-          <div class="col-md-3 text-right">{{ metrics.processMetrics['system.cpu.count'] }}</div>
+          <div class="col-md-3 text-end">{{ metrics.processMetrics['system.cpu.count'] }}</div>
         </div>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-9">System 1m Load average</div>
-          <div class="col-md-3 text-right">{{ formatNumber2(metrics.processMetrics['system.load.average.1m']) }}</div>
+          <div class="col-md-3 text-end">{{ formatNumber2(metrics.processMetrics['system.load.average.1m']) }}</div>
         </div>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-9">Process files max</div>
-          <div class="col-md-3 text-right">{{ formatNumber1(metrics.processMetrics['process.files.max']) }}</div>
+          <div class="col-md-3 text-end">{{ formatNumber1(metrics.processMetrics['process.files.max']) }}</div>
         </div>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-9">Process files open</div>
-          <div class="col-md-3 text-right">{{ formatNumber1(metrics.processMetrics['process.files.open']) }}</div>
+          <div class="col-md-3 text-end">{{ formatNumber1(metrics.processMetrics['process.files.open']) }}</div>
         </div>
       </div>
     </div>
 
-    <h3 v-text="t$('metrics.jvm.gc.title')">Garbage collections</h3>
+    <h3>{{ t$('metrics.jvm.gc.title') }}</h3>
     <div class="row" v-if="!updatingMetrics && isObjectExisting(metrics, 'garbageCollector')">
       <div class="col-md-4">
         <div>
@@ -165,11 +165,11 @@
       <div class="col-md-4">
         <div class="row">
           <div class="col-md-9">Classes loaded</div>
-          <div class="col-md-3 text-right">{{ metrics.garbageCollector.classesLoaded }}</div>
+          <div class="col-md-3 text-end">{{ metrics.garbageCollector.classesLoaded }}</div>
         </div>
         <div class="row">
           <div class="col-md-9">Classes unloaded</div>
-          <div class="col-md-3 text-right">{{ metrics.garbageCollector.classesUnloaded }}</div>
+          <div class="col-md-3 text-end">{{ metrics.garbageCollector.classesUnloaded }}</div>
         </div>
       </div>
       <div class="table-responsive">
@@ -177,34 +177,34 @@
           <thead>
             <tr>
               <th scope="col"></th>
-              <th scope="col" class="text-right" v-text="t$('metrics.servicesstats.table.count')">Count</th>
-              <th scope="col" class="text-right" v-text="t$('metrics.servicesstats.table.mean')">Mean</th>
-              <th scope="col" class="text-right" v-text="t$('metrics.servicesstats.table.min')">Min</th>
-              <th scope="col" class="text-right" v-text="t$('metrics.servicesstats.table.p50')">p50</th>
-              <th scope="col" class="text-right" v-text="t$('metrics.servicesstats.table.p75')">p75</th>
-              <th scope="col" class="text-right" v-text="t$('metrics.servicesstats.table.p95')">p95</th>
-              <th scope="col" class="text-right" v-text="t$('metrics.servicesstats.table.p99')">p99</th>
-              <th scope="col" class="text-right" v-text="t$('metrics.servicesstats.table.max')">Max</th>
+              <th scope="col" class="text-end">{{ t$('metrics.servicesstats.table.count') }}</th>
+              <th scope="col" class="text-end">{{ t$('metrics.servicesstats.table.mean') }}</th>
+              <th scope="col" class="text-end">{{ t$('metrics.servicesstats.table.min') }}</th>
+              <th scope="col" class="text-end">{{ t$('metrics.servicesstats.table.p50') }}</th>
+              <th scope="col" class="text-end">{{ t$('metrics.servicesstats.table.p75') }}</th>
+              <th scope="col" class="text-end">{{ t$('metrics.servicesstats.table.p95') }}</th>
+              <th scope="col" class="text-end">{{ t$('metrics.servicesstats.table.p99') }}</th>
+              <th scope="col" class="text-end">{{ t$('metrics.servicesstats.table.max') }}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>jvm.gc.pause</td>
-              <td class="text-right">{{ metrics.garbageCollector['jvm.gc.pause'].count }}</td>
-              <td class="text-right">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause'].mean) }}</td>
-              <td class="text-right">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause']['0.0']) }}</td>
-              <td class="text-right">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause']['0.5']) }}</td>
-              <td class="text-right">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause']['0.75']) }}</td>
-              <td class="text-right">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause']['0.95']) }}</td>
-              <td class="text-right">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause']['0.99']) }}</td>
-              <td class="text-right">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause'].max) }}</td>
+              <td class="text-end">{{ metrics.garbageCollector['jvm.gc.pause'].count }}</td>
+              <td class="text-end">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause'].mean) }}</td>
+              <td class="text-end">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause']['0.0']) }}</td>
+              <td class="text-end">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause']['0.5']) }}</td>
+              <td class="text-end">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause']['0.75']) }}</td>
+              <td class="text-end">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause']['0.95']) }}</td>
+              <td class="text-end">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause']['0.99']) }}</td>
+              <td class="text-end">{{ formatNumber2(metrics.garbageCollector['jvm.gc.pause'].max) }}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <h3 v-text="t$('metrics.jvm.http.title')">HTTP requests (time in millisecond)</h3>
+    <h3>{{ t$('metrics.jvm.http.title') }}</h3>
     <table
       class="table table-striped"
       v-if="!updatingMetrics && isObjectExisting(metrics, 'http.server.requests')"
@@ -212,10 +212,10 @@
     >
       <thead>
         <tr>
-          <th scope="col" v-text="t$('metrics.jvm.http.table.code')">Code</th>
-          <th scope="col" v-text="t$('metrics.jvm.http.table.count')">Count</th>
-          <th scope="col" class="text-right" v-text="t$('metrics.jvm.http.table.mean')">Mean</th>
-          <th scope="col" class="text-right" v-text="t$('metrics.jvm.http.table.max')">Max</th>
+          <th scope="col">{{ t$('metrics.jvm.http.table.code') }}</th>
+          <th scope="col">{{ t$('metrics.jvm.http.table.count') }}</th>
+          <th scope="col" class="text-end">{{ t$('metrics.jvm.http.table.mean') }}</th>
+          <th scope="col" class="text-end">{{ t$('metrics.jvm.http.table.max') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -226,10 +226,10 @@
               <b-progress-bar :value="entry.count" :label="formatNumber1(entry.count)"></b-progress-bar>
             </b-progress>
           </td>
-          <td class="text-right">
+          <td class="text-end">
             {{ formatNumber2(filterNaN(entry.mean)) }}
           </td>
-          <td class="text-right">{{ formatNumber2(entry.max) }}</td>
+          <td class="text-end">{{ formatNumber2(entry.max) }}</td>
         </tr>
       </tbody>
     </table>
@@ -241,8 +241,8 @@
           <tr>
             <th scope="col">Method</th>
             <th scope="col">Endpoint url</th>
-            <th scope="col" class="text-right">Count</th>
-            <th scope="col" class="text-right">Mean</th>
+            <th scope="col" class="text-end">Count</th>
+            <th scope="col" class="text-end">Mean</th>
           </tr>
         </thead>
         <tbody>
@@ -250,43 +250,43 @@
             <tr v-for="(method, methodKey) of entry" :key="entryKey + '-' + methodKey">
               <td>{{ methodKey }}</td>
               <td>{{ entryKey }}</td>
-              <td class="text-right">{{ method.count }}</td>
-              <td class="text-right">{{ formatNumber2(method.mean) }}</td>
+              <td class="text-end">{{ method.count }}</td>
+              <td class="text-end">{{ formatNumber2(method.mean) }}</td>
             </tr>
           </template>
         </tbody>
       </table>
     </div>
 
-    <h3 v-text="t$('metrics.cache.title')">Cache statistics</h3>
+    <h3>{{ t$('metrics.cache.title') }}</h3>
     <div class="table-responsive" v-if="!updatingMetrics && isObjectExisting(metrics, 'cache')">
       <table class="table table-striped" aria-describedby="Cache">
         <thead>
           <tr>
-            <th scope="col" v-text="t$('metrics.cache.cachename')">Cache name</th>
-            <th scope="col" class="text-right" data-translate="metrics.cache.hits">Cache Hits</th>
-            <th scope="col" class="text-right" data-translate="metrics.cache.misses">Cache Misses</th>
-            <th scope="col" class="text-right" data-translate="metrics.cache.gets">Cache Gets</th>
-            <th scope="col" class="text-right" data-translate="metrics.cache.puts">Cache Puts</th>
-            <th scope="col" class="text-right" data-translate="metrics.cache.removals">Cache Removals</th>
-            <th scope="col" class="text-right" data-translate="metrics.cache.evictions">Cache Evictions</th>
-            <th scope="col" class="text-right" data-translate="metrics.cache.hitPercent">Cache Hit %</th>
-            <th scope="col" class="text-right" data-translate="metrics.cache.missPercent">Cache Miss %</th>
+            <th scope="col">{{ t$('metrics.cache.cachename') }}</th>
+            <th scope="col" class="text-end" data-translate="metrics.cache.hits">Cache Hits</th>
+            <th scope="col" class="text-end" data-translate="metrics.cache.misses">Cache Misses</th>
+            <th scope="col" class="text-end" data-translate="metrics.cache.gets">Cache Gets</th>
+            <th scope="col" class="text-end" data-translate="metrics.cache.puts">Cache Puts</th>
+            <th scope="col" class="text-end" data-translate="metrics.cache.removals">Cache Removals</th>
+            <th scope="col" class="text-end" data-translate="metrics.cache.evictions">Cache Evictions</th>
+            <th scope="col" class="text-end" data-translate="metrics.cache.hitPercent">Cache Hit %</th>
+            <th scope="col" class="text-end" data-translate="metrics.cache.missPercent">Cache Miss %</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(entry, key) of metrics.cache" :key="key">
             <td>{{ key }}</td>
-            <td class="text-right">{{ entry['cache.gets.hit'] }}</td>
-            <td class="text-right">{{ entry['cache.gets.miss'] }}</td>
-            <td class="text-right">{{ entry['cache.gets.hit'] + entry['cache.gets.miss'] }}</td>
-            <td class="text-right">{{ entry['cache.puts'] }}</td>
-            <td class="text-right">{{ entry['cache.removals'] }}</td>
-            <td class="text-right">{{ entry['cache.evictions'] }}</td>
-            <td class="text-right">
+            <td class="text-end">{{ entry['cache.gets.hit'] }}</td>
+            <td class="text-end">{{ entry['cache.gets.miss'] }}</td>
+            <td class="text-end">{{ entry['cache.gets.hit'] + entry['cache.gets.miss'] }}</td>
+            <td class="text-end">{{ entry['cache.puts'] }}</td>
+            <td class="text-end">{{ entry['cache.removals'] }}</td>
+            <td class="text-end">{{ entry['cache.evictions'] }}</td>
+            <td class="text-end">
               {{ formatNumber2(filterNaN((100 * entry['cache.gets.hit']) / (entry['cache.gets.hit'] + entry['cache.gets.miss']))) }}
             </td>
-            <td class="text-right">
+            <td class="text-end">
               {{ formatNumber2(filterNaN((100 * entry['cache.gets.miss']) / (entry['cache.gets.hit'] + entry['cache.gets.miss']))) }}
             </td>
           </tr>
@@ -294,66 +294,66 @@
       </table>
     </div>
 
-    <h3 v-text="t$('metrics.datasource.title')">DataSource statistics (time in millisecond)</h3>
+    <h3>{{ t$('metrics.datasource.title') }}</h3>
     <div class="table-responsive" v-if="!updatingMetrics && isObjectExistingAndNotEmpty(metrics, 'databases')">
       <table class="table table-striped" aria-describedby="Connection pool">
         <thead>
           <tr>
             <th scope="col">
-              <span v-text="t$('metrics.datasource.usage')">Connection Pool Usage</span> (active: {{ metrics.databases.active.value }}, min:
+              <span>{{ t$('metrics.datasource.usage') }}</span> (active: {{ metrics.databases.active.value }}, min:
               {{ metrics.databases.min.value }}, max: {{ metrics.databases.max.value }}, idle: {{ metrics.databases.idle.value }})
             </th>
-            <th scope="col" class="text-right" v-text="t$('metrics.datasource.count')">Count</th>
-            <th scope="col" class="text-right" v-text="t$('metrics.datasource.mean')">Mean</th>
-            <th scope="col" class="text-right" v-text="t$('metrics.servicesstats.table.min')">Min</th>
-            <th scope="col" class="text-right" v-text="t$('metrics.servicesstats.table.p50')">p50</th>
-            <th scope="col" class="text-right" v-text="t$('metrics.servicesstats.table.p75')">p75</th>
-            <th scope="col" class="text-right" v-text="t$('metrics.servicesstats.table.p95')">p95</th>
-            <th scope="col" class="text-right" v-text="t$('metrics.servicesstats.table.p99')">p99</th>
-            <th scope="col" class="text-right" v-text="t$('metrics.datasource.max')">Max</th>
+            <th scope="col" class="text-end">{{ t$('metrics.datasource.count') }}</th>
+            <th scope="col" class="text-end">{{ t$('metrics.datasource.mean') }}</th>
+            <th scope="col" class="text-end">{{ t$('metrics.servicesstats.table.min') }}</th>
+            <th scope="col" class="text-end">{{ t$('metrics.servicesstats.table.p50') }}</th>
+            <th scope="col" class="text-end">{{ t$('metrics.servicesstats.table.p75') }}</th>
+            <th scope="col" class="text-end">{{ t$('metrics.servicesstats.table.p95') }}</th>
+            <th scope="col" class="text-end">{{ t$('metrics.servicesstats.table.p99') }}</th>
+            <th scope="col" class="text-end">{{ t$('metrics.datasource.max') }}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>Acquire</td>
-            <td class="text-right">{{ metrics.databases.acquire.count }}</td>
-            <td class="text-right">{{ formatNumber2(filterNaN(metrics.databases.acquire.mean)) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.acquire['0.0']) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.acquire['0.5']) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.acquire['0.75']) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.acquire['0.95']) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.acquire['0.99']) }}</td>
-            <td class="text-right">{{ formatNumber2(filterNaN(metrics.databases.acquire.max)) }}</td>
+            <td class="text-end">{{ metrics.databases.acquire.count }}</td>
+            <td class="text-end">{{ formatNumber2(filterNaN(metrics.databases.acquire.mean)) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.acquire['0.0']) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.acquire['0.5']) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.acquire['0.75']) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.acquire['0.95']) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.acquire['0.99']) }}</td>
+            <td class="text-end">{{ formatNumber2(filterNaN(metrics.databases.acquire.max)) }}</td>
           </tr>
           <tr>
             <td>Creation</td>
-            <td class="text-right">{{ metrics.databases.creation.count }}</td>
-            <td class="text-right">{{ formatNumber2(filterNaN(metrics.databases.creation.mean)) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.creation['0.0']) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.creation['0.5']) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.creation['0.75']) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.creation['0.95']) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.creation['0.99']) }}</td>
-            <td class="text-right">{{ formatNumber2(filterNaN(metrics.databases.creation.max)) }}</td>
+            <td class="text-end">{{ metrics.databases.creation.count }}</td>
+            <td class="text-end">{{ formatNumber2(filterNaN(metrics.databases.creation.mean)) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.creation['0.0']) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.creation['0.5']) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.creation['0.75']) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.creation['0.95']) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.creation['0.99']) }}</td>
+            <td class="text-end">{{ formatNumber2(filterNaN(metrics.databases.creation.max)) }}</td>
           </tr>
           <tr>
             <td>Usage</td>
-            <td class="text-right">{{ metrics.databases.usage.count }}</td>
-            <td class="text-right">{{ formatNumber2(filterNaN(metrics.databases.usage.mean)) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.usage['0.0']) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.usage['0.5']) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.usage['0.75']) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.usage['0.95']) }}</td>
-            <td class="text-right">{{ formatNumber2(metrics.databases.usage['0.99']) }}</td>
-            <td class="text-right">{{ formatNumber2(filterNaN(metrics.databases.usage.max)) }}</td>
+            <td class="text-end">{{ metrics.databases.usage.count }}</td>
+            <td class="text-end">{{ formatNumber2(filterNaN(metrics.databases.usage.mean)) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.usage['0.0']) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.usage['0.5']) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.usage['0.75']) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.usage['0.95']) }}</td>
+            <td class="text-end">{{ formatNumber2(metrics.databases.usage['0.99']) }}</td>
+            <td class="text-end">{{ formatNumber2(filterNaN(metrics.databases.usage.max)) }}</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <b-modal ref="metricsModal" size="lg">
-      <template #modal-title>
-        <h4 class="modal-title" id="showMetricsLabel" v-text="t$('metrics.jvm.threads.dump.title')">Threads dump</h4>
+    <b-modal ref="metricsModal" size="lg" ok-only>
+      <template #title>
+        <h4 class="modal-title" id="showMetricsLabel">{{ t$('metrics.jvm.threads.dump.title') }}</h4>
       </template>
       <metrics-modal :thread-dump="threadData"></metrics-modal>
     </b-modal>

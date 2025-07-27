@@ -1,19 +1,18 @@
-import type { BvToast } from 'bootstrap-vue';
-import { getCurrentInstance } from 'vue';
+import { type BToastProps, useToastController } from 'bootstrap-vue-next';
 <%_ if (enableTranslation) { _%>
 import { type Composer, useI18n } from 'vue-i18n';
 <%_ } _%>
 
 export const useAlertService = () => {
-  const bvToast = getCurrentInstance().root.proxy._bv__toast;
-  if (!bvToast) {
+  const toastController = useToastController();
+  if (!toastController) {
     throw new Error('BootstrapVue toast component was not found');
   }
 <%_ if (enableTranslation) { _%>
   const i18n = useI18n();
 <%_ } _%>
   return new AlertService({
-    bvToast,
+    toastController,
 <%_ if (enableTranslation) { _%>
     i18n,
 <%_ } _%>
@@ -21,56 +20,52 @@ export const useAlertService = () => {
 };
 
 export default class AlertService {
-  private bvToast: BvToast;
+  private toastController: ReturnType<typeof useToastController>;
 <%_ if (enableTranslation) { _%>
   private i18n: Composer;
 <%_ } _%>
 
   constructor({
-    bvToast,
+    toastController,
 <%_ if (enableTranslation) { _%>
     i18n,
 <%_ } _%>
   }: {
-    bvToast: BvToast;
+    toastController: ReturnType<typeof useToastController>;
 <%_ if (enableTranslation) { _%>
     i18n: Composer,
 <%_ } _%>
   }) {
-    this.bvToast = bvToast;
+    this.toastController = toastController;
 <%_ if (enableTranslation) { _%>
     this.i18n = i18n;
 <%_ } _%>
   }
 
-  showInfo(toastMessage: string, toastOptions?: any) {
-    this.bvToast.toast(toastMessage, {
-      toaster: 'b-toaster-top-center',
-      title: 'Info',
-      variant: 'info',
-      solid: true,
-      autoHideDelay: 5000,
-      ...toastOptions,
+  showInfo(toastMessage: string, props: BToastProps = {}) {
+    this.toastController.show!({
+      props: {
+        pos: 'top-center',
+        title: 'Info',
+        variant: 'info',
+        solid: true,
+        body: toastMessage,
+        ...props,
+      },
     });
   }
 
   showSuccess(toastMessage: string) {
-    this.bvToast.toast(toastMessage, {
-      toaster: 'b-toaster-top-center',
+    this.showInfo(toastMessage, {
       title: 'Success',
       variant: 'success',
-      solid: true,
-      autoHideDelay: 5000,
     });
   }
 
   showError(toastMessage: string) {
-    this.bvToast.toast(toastMessage, {
-      toaster: 'b-toaster-top-center',
+    this.showInfo(toastMessage, {
       title: 'Error',
       variant: 'danger',
-      solid: true,
-      autoHideDelay: 5000,
     });
   }
 
@@ -90,10 +85,10 @@ export default class AlertService {
           if (entry.toLowerCase().endsWith('app-error')) {
             errorMessage = httpErrorResponse.headers[entry];
 <%_ if (enableTranslation) { _%>
-            } else if (entry.toLowerCase().endsWith('app-params')) {
-              entityKey = httpErrorResponse.headers[entry];
+          } else if (entry.toLowerCase().endsWith('app-params')) {
+            entityKey = httpErrorResponse.headers[entry];
 <%_ } _%>
-            }
+          }
         }
 <%_ if (enableTranslation) { _%>
         if (errorMessage && entityKey) {

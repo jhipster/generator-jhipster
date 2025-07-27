@@ -7,7 +7,6 @@ import HealthService from './health.service';
 import <%=jhiPrefixCapitalized%>HealthModal from './health-modal.vue';
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>Health',
   components: {
     'health-modal': <%=jhiPrefixCapitalized%>HealthModal,
@@ -38,9 +37,9 @@ export default defineComponent({
     },
     getBadgeClass(statusState: any): string {
       if (statusState === 'UP') {
-        return 'badge-success';
+        return 'bg-success';
       }
-      return 'badge-danger';
+      return 'bg-danger';
     },
     refresh(): void {
       this.updatingHealth = true;

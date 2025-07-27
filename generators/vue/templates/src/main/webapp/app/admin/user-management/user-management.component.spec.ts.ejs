@@ -31,8 +31,8 @@ describe('UserManagement Component', () => {
 <%_ if (enableTranslation) { _%>
       i18n: { t: vitest.fn() } as any,
 <%_ } _%>
-      bvToast: {
-        toast: vitest.fn(),
+      toastController: {
+        show: vitest.fn(),
       } as any,
     });
 

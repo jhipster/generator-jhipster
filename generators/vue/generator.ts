@@ -216,7 +216,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
                 needle: 'add-entity-to-menu',
                 contentToAdd: `<b-dropdown-item to="/${entityPage}">
   <font-awesome-icon icon="asterisk" />
-  <span${enableTranslation ? ` v-text="$t('global.menu.entities.${entityTranslationKeyMenu}')"` : ''}>${entityClassHumanized}</span>
+  <span>${enableTranslation ? `{{ $t('global.menu.entities.${entityTranslationKeyMenu}') }}` : entityClassHumanized}</span>
 </b-dropdown-item>`,
                 contentToCheck: `<b-dropdown-item to="/${entityPage}">`,
               }),
