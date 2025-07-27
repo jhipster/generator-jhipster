@@ -21,6 +21,25 @@
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
 <&_ if (fragment.testingSection) { -&>
+#### E2E tests
+
+UI end-to-end tests are powered by [Cypress][]. They're located in [<%= cypressDir %>](<%= cypressDir %>)
+and can be run by starting Spring Boot in one terminal (`<%= nodePackageManagerCommand %> run app:start`) and running the tests (`<%= nodePackageManagerCommand %> run e2e`) in a second one.
+
+Before running Cypress tests, specify user credentials by overriding the `CYPRESS_E2E_USERNAME` and `CYPRESS_E2E_PASSWORD` environment variables.
+
+```
+export CYPRESS_E2E_USERNAME="<your-username>"
+export CYPRESS_E2E_PASSWORD="<your-password>"
+```
+
+See Cypress' documentation for setting OS [environment variables](https://docs.cypress.io/guides/guides/environment-variables#Setting) to learn more.
+
+#### Lighthouse audits
+
+You can execute automated [Lighthouse audits](https://developers.google.com/web/tools/lighthouse/) with [cypress-audit](https://github.com/mfrachet/cypress-audit) by running `<%= nodePackageManagerCommand %> run e2e:cypress:audits`.
+You should only run the audits when your application is packaged with the production profile.
+The lighthouse report is created in `<%= cypressTemporaryDir %>lhreport.html`.
 <%_ if (cypressCoverage) { _%>
 
 ### E2E Webapp Code Coverage
@@ -29,17 +48,20 @@ When using Cypress, you can generate code coverage report by running your dev se
 
 Build your Angular application with instrumented code:
 
-    npm run webapp:instrumenter
+    <%= nodePackageManagerCommand %> run webapp:instrumenter
 
 Start your backend without compiling frontend:
 
-    npm run backend:start
+    <%= nodePackageManagerCommand %> run backend:start
 
 Start your Cypress end to end testing:
 
-    npm run e2e:cypress:coverage
+    <%= nodePackageManagerCommand %> run e2e:cypress:coverage
 
 The coverage report is generated under `./coverage/lcov-report/`
 
 <%_ } _%>
+<&_ } -&>
+<&_ if (fragment.referenceSection) { -&>
+[Cypress]: https://www.cypress.io/
 <&_ } -&>

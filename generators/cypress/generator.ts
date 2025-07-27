@@ -25,6 +25,7 @@ import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
 import { generateTestEntity } from '../client/support/index.js';
 import type { Source as ClientSource } from '../client/types.js';
+import type { Source as JavaSource } from '../java/types.d.ts';
 import { cypressEntityFiles, cypressFiles } from './files.js';
 import type { Application as CypressApplication, Entity as CypressEntity, Field as CypressField } from './types.js';
 
@@ -231,6 +232,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
         const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
         clientPackageJson.merge({
           devDependencies: {
+            cypress: application.nodeDependencies.cypress,
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
           },
         });
@@ -301,6 +303,19 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
       : {}`,
           });
         }
+      },
+      mavenProfile({ source }) {
+        (source as JavaSource).addMavenProfile?.({
+          id: 'e2e',
+          content: `
+            <properties>
+                <profile.e2e>,e2e</profile.e2e>
+            </properties>
+            <build>
+                <finalName>e2e</finalName>
+            </build>
+          `,
+        });
       },
     });
   }
