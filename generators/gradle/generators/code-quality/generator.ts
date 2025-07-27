@@ -19,6 +19,7 @@
 import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
 import { GENERATOR_GRADLE } from '../../../generator-list.js';
+import type { Source as CommonSource } from '../../../common/types.d.ts';
 
 export default class CodeQualityGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
@@ -49,12 +50,21 @@ export default class CodeQualityGenerator extends JavaApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      jacoco({ application, source }) {
+        const { javaDependencies } = application;
+        source.addGradleDependencyCatalogVersions!([{ name: 'jacoco', version: javaDependencies!['jacoco-maven-plugin'] }]);
+        (source as CommonSource).addSonarProperties?.([
+          { key: 'sonar.coverage.jacoco.xmlReportPaths', value: `${application.temporaryDir}reports/jacoco/test/jacocoTestReport.xml` },
+          { key: 'sonar.java.codeCoveragePlugin', value: 'jacoco' },
+          {
+            key: 'sonar.junit.reportPaths',
+            value: `${application.temporaryDir}test-results/test,${application.temporaryDir}test-results/integrationTest`,
+          },
+        ]);
+      },
       customize({ application, source }) {
         const { javaDependencies } = application;
-        source.addGradleDependencyCatalogVersions!([
-          { name: 'jacoco', version: javaDependencies!['jacoco-maven-plugin'] },
-          { name: 'checkstyle', version: javaDependencies!.checkstyle },
-        ]);
+        source.addGradleDependencyCatalogVersions!([{ name: 'checkstyle', version: javaDependencies!.checkstyle }]);
         source.addGradleBuildSrcDependencyCatalogLibraries?.([
           {
             libraryName: 'sonarqube-plugin',

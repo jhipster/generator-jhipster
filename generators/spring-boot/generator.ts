@@ -62,6 +62,7 @@ import type { Config as SpringCloudStreamConfig } from '../spring-cloud-stream/t
 import type { Entity as CypressEntity } from '../cypress/types.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';
+import type { Source as CommonSource } from '../common/types.js';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
 import cleanupTask from './cleanup.js';
 import { serverFiles } from './files.js';
@@ -746,6 +747,44 @@ ${classProperties
           });
           source.addMavenDependency!({ inProfile: 'docker-compose', ...dockerComposeArtifact, optional: true });
         }
+      },
+      sonar({ application, source }) {
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S125',
+          ruleKey: 'xml:S125',
+          resourceKey: `${application.srcMainResources}logback-spring.xml`,
+          comment: `Rule https://rules.sonarsource.com/xml/RSPEC-125 is ignored, we provide commented examples`,
+        });
+
+        if (!application.authenticationUsesCsrf && application.generateAuthenticationApi) {
+          (source as CommonSource).ignoreSonarRule?.({
+            ruleId: 'S4502',
+            ruleKey: 'java:S4502',
+            resourceKey: `${application.javaPackageSrcDir}config/SecurityConfiguration.java`,
+            comment: `Rule https://rules.sonarsource.com/java/RSPEC-4502 is ignored, as for JWT tokens we are not subject to CSRF attack`,
+          });
+        }
+
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S4684',
+          ruleKey: 'java:S4684',
+          resourceKey: `${application.javaPackageSrcDir}web/rest/**/*`,
+          comment: `Rule https://rules.sonarsource.com/java/RSPEC-4684`,
+        });
+
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S5145',
+          ruleKey: 'javasecurity:S5145',
+          resourceKey: `${application.javaPackageSrcDir}**/*`,
+          comment: `Rule https://rules.sonarsource.com/java/RSPEC-5145 is ignored, as we use log filter to format log messages`,
+        });
+
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S6437',
+          ruleKey: 'java:S6437',
+          resourceKey: `${application.srcMainResources}config/*`,
+          comment: `Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes`,
+        });
       },
     });
   }
