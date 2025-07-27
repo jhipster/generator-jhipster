@@ -697,6 +697,28 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
       "source": "TaskParameter[source]",
     },
   ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "clientRoot/src/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
+  ],
   "mergeClientPackageJson": [
     {
       "dependencies": {},
@@ -1637,6 +1659,28 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
       "source": "TaskParameter[source]",
     },
   ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "clientRoot/src/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
+  ],
   "mergeClientPackageJson": [
     {
       "dependencies": {
@@ -2336,6 +2380,28 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
       ],
       "source": "TaskParameter[source]",
     },
+  ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "clientRoot/src/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
   ],
   "addWebpackConfig": [
     {
@@ -3043,6 +3109,28 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
       ],
       "source": "TaskParameter[source]",
     },
+  ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "src/main/webapp/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
   ],
   "addWebpackConfig": [
     {
@@ -4161,6 +4249,28 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       "source": "TaskParameter[source]",
     },
   ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "src/main/webapp/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
+  ],
   "mergeClientPackageJson": [
     {
       "dependencies": {
@@ -4851,6 +4961,28 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
       ],
       "source": "TaskParameter[source]",
     },
+  ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "src/main/webapp/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
   ],
   "mergeClientPackageJson": [
     {
@@ -5547,6 +5679,28 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
       ],
       "source": "TaskParameter[source]",
     },
+  ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "src/main/webapp/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
   ],
   "mergeClientPackageJson": [
     {

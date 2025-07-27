@@ -232,6 +232,22 @@ exports[`generator - maven:code-quality with defaults options should call source
       ],
     },
   ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.coverage.jacoco.xmlReportPaths",
+        "value": "target/site/**/jacoco*.xml",
+      },
+      {
+        "key": "sonar.java.codeCoveragePlugin",
+        "value": "jacoco",
+      },
+      {
+        "key": "sonar.junit.reportPaths",
+        "value": "target/surefire-reports,target/failsafe-reports",
+      },
+    ],
+  ],
 }
 `;
 

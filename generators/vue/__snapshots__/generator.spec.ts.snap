@@ -474,6 +474,28 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
       "resource": "<script type="module" src="./app/main.ts"></script>",
     },
   ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "clientRoot/src/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
+  ],
   "mergeClientPackageJson": [
     {
       "scripts": {
@@ -1035,6 +1057,28 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
       "resource": "<script type="module" src="./app/main.ts"></script>",
     },
   ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "clientRoot/src/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
+  ],
   "mergeClientPackageJson": [
     {
       "scripts": {
@@ -1531,6 +1575,28 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
         "Entity[EntityWithCustomId]",
       ],
     },
+  ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "clientRoot/src/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
   ],
   "addWebpackConfig": [
     {
@@ -2052,6 +2118,28 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
         "Entity[EntityWithCustomId]",
       ],
     },
+  ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "src/main/webapp/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
   ],
   "addWebpackConfig": [
     {
@@ -2727,6 +2815,28 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
       "resource": "<script type="module" src="./app/main.ts"></script>",
     },
   ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "src/main/webapp/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
+  ],
   "mergeClientPackageJson": [
     {
       "scripts": {
@@ -3191,6 +3301,28 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
       "comment": "Load vue main",
       "resource": "<script type="module" src="./app/main.ts"></script>",
     },
+  ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "src/main/webapp/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
   ],
   "mergeClientPackageJson": [
     {
@@ -3671,6 +3803,28 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
       "comment": "Load vue main",
       "resource": "<script type="module" src="./app/main.ts"></script>",
     },
+  ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "src/main/webapp/app/**/*.spec.ts",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
   ],
   "mergeClientPackageJson": [
     {

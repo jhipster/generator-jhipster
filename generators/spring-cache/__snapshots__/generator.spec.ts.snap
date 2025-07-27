@@ -92,6 +92,14 @@ exports[`generator - spring-cache caffeine-gradle should match source calls 1`] 
       },
     ],
   ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
+    },
+  ],
   "mergePrettierConfig": [
     {
       "overrides": [
@@ -181,6 +189,14 @@ exports[`generator - spring-cache caffeine-maven should match source calls 1`] =
         ],
       },
     ],
+  ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
+    },
   ],
   "mergePrettierConfig": [
     {
@@ -272,6 +288,14 @@ exports[`generator - spring-cache ehcache-gradle should match source calls 1`] =
       },
     ],
   ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
+    },
+  ],
   "mergePrettierConfig": [
     {
       "overrides": [
@@ -353,6 +377,14 @@ exports[`generator - spring-cache ehcache-maven should match source calls 1`] = 
         ],
       },
     ],
+  ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
+    },
   ],
   "mergePrettierConfig": [
     {
@@ -465,6 +497,14 @@ exports[`generator - spring-cache hazelcast-gradle should match source calls 1`]
       },
     ],
   ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
+    },
+  ],
   "mergePrettierConfig": [
     {
       "overrides": [
@@ -547,6 +587,14 @@ exports[`generator - spring-cache hazelcast-maven should match source calls 1`] 
         ],
       },
     ],
+  ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
+    },
   ],
   "mergePrettierConfig": [
     {
@@ -648,6 +696,14 @@ exports[`generator - spring-cache infinispan-gradle should match source calls 1`
       },
     ],
   ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
+    },
+  ],
   "mergePrettierConfig": [
     {
       "overrides": [
@@ -739,6 +795,14 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
         "condition": false,
       },
     ],
+  ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
+    },
   ],
   "mergePrettierConfig": [
     {
@@ -840,6 +904,14 @@ exports[`generator - spring-cache memcached-gradle should match source calls 1`]
       },
     ],
   ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
+    },
+  ],
   "mergePrettierConfig": [
     {
       "overrides": [
@@ -931,6 +1003,14 @@ exports[`generator - spring-cache memcached-maven should match source calls 1`] 
         "condition": false,
       },
     ],
+  ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
+    },
   ],
   "mergePrettierConfig": [
     {
@@ -1043,6 +1123,14 @@ exports[`generator - spring-cache redis-gradle should match source calls 1`] = `
       "value": "com.mycompany.myapp.config.RedisTestContainersSpringContextCustomizerFactory",
     },
   ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
+    },
+  ],
   "mergePrettierConfig": [
     {
       "overrides": [
@@ -1144,6 +1232,14 @@ exports[`generator - spring-cache redis-maven should match source calls 1`] = `
     {
       "key": "org.springframework.test.context.ContextCustomizerFactory",
       "value": "com.mycompany.myapp.config.RedisTestContainersSpringContextCustomizerFactory",
+    },
+  ],
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
     },
   ],
   "mergePrettierConfig": [
