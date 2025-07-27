@@ -66,7 +66,7 @@ Issues opened without any of these info will be **closed** without any explanati
 
 ## Development environment setup
 
-See our [Development Guide](DEVELOPMENT.md) for more information on how to configure the jhipster generator for contributing.
+See our [Development Guide](DEVELOPMENT.md) for more information on how to configure the JHipster generator for contributing.
 
 ### [Submitting a Pull Request](https://opensource.guide/how-to-contribute/#opening-a-pull-request)
 
@@ -87,6 +87,8 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 - All features or bug fixes **must be tested** by one or more tests.
 - Most files formatting are checked by prettier and eslint.
 - EJS files use a two-space indentation for template logic and follow the generated file rules for the templating parts.
+
+The jhipster generator structure and file naming conventions are documented in the [RFC 6](./rfcs/6-jhipster-rfc-jhipster-generator-file-structure.md).
 
 Please ensure to run `npm run lint` and `npm test` on the project root before submitting a pull request. You can also run `npm run lint-fix` to fix some of the lint issues automatically.
 
@@ -167,7 +169,7 @@ or joined the [JHipster team](https://www.jhipster.tech/team/).
 
 Sometimes, major feature requests are "complex" or "substantial". In this case, GitHub Issues might not be the best tool to present them because we will need a lot of going back and forth to reach a consensus.
 
-So we ask that these feature request be put through a formal design process and have their specifications described in an "RFC" (request for comments) that will be validated by the team through a Pull Request Review.
+So we ask that these feature requests be put through a formal design process and have their specifications described in an "RFC" (request for comments) that will be validated by the team through a Pull Request Review.
 
 The RFC process is intended to provide a consistent and controlled path for major features and directions of the project.
 

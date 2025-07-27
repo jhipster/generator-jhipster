@@ -109,7 +109,7 @@ It is also possible to debug sub generators by selecting one of the other debug 
 #### Debugging with IntelliJ IDEA
 
 When you start intelliJ IDEA on the `generator-jhipster` project, you'll have access to a run configuration letting execute any `.spec.ts` file within any package.
-If you want to test a specific generator, you can create a new node.js run configuration with the following settings:
+If you want to test a specific generator, you can create a new Node.js run configuration with the following settings:
 ```
 application-parameters="generate-sample ms-ng-oauth2-mongodb-caffeine --global" path-to-js-file="bin/jhipster.cjs" typescript-loader="bundled" working-dir="$PROJECT_DIR$"
 ```
