@@ -46,12 +46,14 @@ For testing, you will want to generate an application, and there is a specific i
 To generate a new application, you can run the following command in your terminal:
 
 ```shell
-node bin/jhipster.cjs generate-sample ng-default --global 
+node bin/jhipster.cjs generate-sample ng-default --global
 ```
+
 From the root of your cloned `generator-jhipster` project, this will generate a sample application in the current folder using the local version of JHipster. ng-default is the name of the sample application, you can replace it with any other sample name in the [code samples](./test-integration/samples) to generate a sample application. By default, the sample will be generated in the `../jhipster-samples` folder.
 For workspaces, an additional `jhipster-samples.code-workspace` file will be generated in the same folder, which can be used to open the samples in a single VSCode workspace. Still, you'll need to delete the `jhipster-samples.code-workspace` file if you want to generate another workspace sample in the same folder.
 
 #### Generating a new application using npm link
+
 To overcome this, you need to run `npm link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
 Also add the option `--skip-jhipster-dependencies` to generate the application ignoring the JHipster dependencies (otherwise a released version will be installed each time npm install/ci is called). You can later on re-add the dependency with the command `jhipster --no-skip-jhipster-dependencies`.
 
@@ -110,6 +112,7 @@ It is also possible to debug sub generators by selecting one of the other debug 
 
 When you start intelliJ IDEA on the `generator-jhipster` project, you'll have access to a run configuration letting execute any `.spec.ts` file within any package.
 If you want to test a specific generator, you can create a new Node.js run configuration with the following settings:
+
 ```
 application-parameters="generate-sample ms-ng-oauth2-mongodb-caffeine --global" path-to-js-file="bin/jhipster.cjs" typescript-loader="bundled" working-dir="$PROJECT_DIR$"
 ```
@@ -173,6 +176,7 @@ npm run ci:e2e:package # Builds the application
 npm run ci:e2e:prepare # Starts the application using docker
 npm run ci:e2e:run # Runs e2e tests
 ```
+
 List of commands being in the package.json scripts section of the generated sample.
 
 ## DX using vscode
