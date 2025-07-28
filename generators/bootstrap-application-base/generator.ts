@@ -530,12 +530,12 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
         };
         entity.hasCyclicRequiredRelationship = detectCyclicRequiredRelationship(entity, new Set());
       },
-      prepareEntityDerivedProperties({ entity }) {
-        preparePostEntityCommonDerivedProperties(entity);
-      },
       processEntityPrimaryKeysDerivedProperties({ entity }) {
         if (!entity.primaryKey) return;
         derivedPrimaryKeyProperties(entity.primaryKey);
+      },
+      prepareEntityDerivedProperties({ entity }) {
+        preparePostEntityCommonDerivedProperties(entity);
       },
     });
   }
