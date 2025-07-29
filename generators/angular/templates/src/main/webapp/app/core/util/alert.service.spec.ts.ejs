@@ -43,7 +43,7 @@ describe('Alert service test', () => {
       });
 <%_ if (enableTranslation) { _%>
       const translateService = TestBed.inject(TranslateService);
-      translateService.setDefaultLang('en');
+      translateService.setFallbackLang('en');
 <%_ } _%>
       jest.useFakeTimers();
       extAlerts = [];

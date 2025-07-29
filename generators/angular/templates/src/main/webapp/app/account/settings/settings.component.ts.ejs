@@ -86,7 +86,7 @@ export default class SettingsComponent implements OnInit {
       this.accountService.authenticate(account);
 
 <%_ if (enableTranslation) { _%>
-      if (account.langKey !== this.translateService.currentLang) {
+      if (account.langKey !== this.translateService.getCurrentLang()) {
         this.translateService.use(account.langKey);
       }
 <%_ } _%>

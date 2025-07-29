@@ -19,23 +19,16 @@
 import { inject, NgModule } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateService, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
-<%_ if (applicationTypeMicroservice) { _%>import { TranslateHttpLoader } from '@ngx-translate/http-loader';<%_ } _%>
 import { translatePartialLoader, missingTranslationHandler } from 'app/config/translation.config';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 <%_ if (applicationTypeMicroservice) { _%>
-function lazyTranslatePartialLoader(http: HttpClient): TranslateLoader {
-  return new TranslateHttpLoader(http, 'services/<%= lowercaseBaseName %>/i18n/', `.json?_=${I18N_HASH}`);
-}
 
 @NgModule({
   imports: [
     TranslateModule.forChild({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: lazyTranslatePartialLoader,
-        deps: [HttpClient],
-      },
+      loader: provideTranslateHttpLoader({ prefix: 'services/<%= lowercaseBaseName %>/i18n/', suffix: `.json?_=${I18N_HASH}` }),
       isolate: false,
       extend: true,
     }),
@@ -47,7 +40,7 @@ export class LazyTranslationModule {
   private readonly stateStorageService = inject(StateStorageService);
 
   constructor() {
-    const { currentLang } = this.translateService.store;
+    const currentLang = this.translateService.getCurrentLang();
     this.translateLoader.getTranslation(currentLang).subscribe(translation => {
       this.translateService.setTranslation(currentLang, translation);
     });
@@ -58,11 +51,15 @@ export class LazyTranslationModule {
 @NgModule({
   imports: [
     TranslateModule.forRoot({
+      <%_ if (clientBundlerExperimentalEsbuild) { _%>
       loader: {
         provide: TranslateLoader,
         useFactory: translatePartialLoader,
         deps: [HttpClient],
       },
+      <%_ } else { _%>
+      loader: provideTranslateHttpLoader({ prefix: './i18n/', suffix: `.json?_=${I18N_HASH}` }),
+      <%_ } _%>
       missingTranslationHandler: {
         provide: MissingTranslationHandler,
         useFactory: missingTranslationHandler,
@@ -75,7 +72,7 @@ export class TranslationModule {
   private readonly stateStorageService = inject(StateStorageService);
 
   constructor() {
-    this.translateService.setDefaultLang('<%= nativeLanguage %>');
+    this.translateService.setFallbackLang('<%= nativeLanguage %>');
     // if user have changed language and navigates away from the application and back to the application then use previously chosen language
     const langKey = this.stateStorageService.getLocale() ?? '<%= nativeLanguage %>';
     this.translateService.use(langKey);
