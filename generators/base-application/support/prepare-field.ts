@@ -19,11 +19,9 @@
 import { defaults, kebabCase, snakeCase, startCase, upperFirst } from 'lodash-es';
 import { fieldTypes, validations } from '../../../lib/jhipster/index.js';
 import { getTypescriptType } from '../../client/support/index.js';
-import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
 import { applyDerivedPropertyOnly, mutateData } from '../../../lib/utils/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import type { Application as CommonApplication, Entity as CommonEntity, Field as CommonField } from '../../common/types.d.ts';
-import type { Application as ServerApplication, Entity as ServerEntity } from '../../server/types.d.ts';
+import type { Entity as CommonEntity, Field as CommonField } from '../../common/types.d.ts';
 import { isFieldEnumType } from '../internal/types/field-types.ts';
 import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.js';
@@ -289,22 +287,7 @@ function _derivedProperties(field: CommonField) {
   });
 }
 
-export default function prepareField(
-  application: CommonApplication,
-  entityWithConfig: CommonEntity,
-  field: CommonField,
-  generator: CoreGenerator,
-): CommonField {
-  prepareCommonFieldForTemplates(entityWithConfig, field, generator);
-
-  if (application.databaseTypeAny) {
-    prepareServerFieldForTemplates(application as ServerApplication, entityWithConfig as ServerEntity, field, generator);
-  }
-
-  return field;
-}
-
-function prepareCommonFieldForTemplates(entityWithConfig: CommonEntity, field: CommonField, generator: CoreGenerator): CommonField {
+export function prepareCommonFieldForTemplates(entityWithConfig: CommonEntity, field: CommonField, generator: CoreGenerator): CommonField {
   mutateData(field, {
     __override__: false,
     path: [field.fieldName],

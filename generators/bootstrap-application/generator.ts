@@ -20,14 +20,8 @@ import assert from 'assert';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { validations } from '../../lib/jhipster/index.js';
-import {
-  derivedPrimaryKeyProperties,
-  preparePostEntitiesCommonDerivedProperties,
-  preparePostEntityCommonDerivedProperties,
-  stringifyApplicationData,
-} from '../base-application/support/index.js';
+import { stringifyApplicationData } from '../base-application/support/index.js';
 
-import { preparePostEntityServerDerivedProperties } from '../server/support/index.js';
 import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.js';
 import type { Application as CommonApplication, Entity as CommonEntity, Field as CommonField } from '../common/types.js';
 
@@ -77,8 +71,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           prettierExtensions,
           documentationArchiveUrl: ({ jhipsterVersion }) =>
             `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`,
-          endpointPrefix: ({ applicationTypeMicroservice, lowercaseBaseName }) =>
-            applicationTypeMicroservice ? `services/${lowercaseBaseName}` : '',
         });
       },
     });
@@ -150,47 +142,5 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
 
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.configuringEachEntity;
-  }
-
-  get postPreparingEachEntity() {
-    return this.asPostPreparingEachEntityTaskGroup({
-      processEntityPrimaryKeysDerivedProperties({ entity }) {
-        if (!entity.primaryKey) return;
-        derivedPrimaryKeyProperties(entity.primaryKey);
-      },
-
-      prepareEntityDerivedProperties({ entity }) {
-        preparePostEntityCommonDerivedProperties(entity);
-        if (!entity.skipServer) {
-          preparePostEntityServerDerivedProperties(entity as any);
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.postPreparingEachEntity;
-  }
-
-  get default() {
-    return this.asDefaultTaskGroup({
-      postPreparingEntities({ entities }) {
-        preparePostEntitiesCommonDerivedProperties(entities);
-      },
-      checkProperties({ entities }) {
-        for (const entity of entities) {
-          const properties = [...entity.fields.map(entity => entity.propertyName), ...entity.relationships.map(rel => rel.propertyName)];
-          if (new Set(properties).size !== properties.length) {
-            // Has duplicated properties.
-            const duplicated = [...new Set(properties.filter((v, i, a) => a.indexOf(v) !== i))];
-            throw new Error(`You have duplicate properties in entity ${entity.name}: ${duplicated.join(', ')}`);
-          }
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.default;
   }
 }

@@ -67,7 +67,7 @@ export default class GradleGenerator extends BaseApplicationGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplicationServer();
+      await this.dependsOnJHipster('jhipster:java:bootstrap');
     }
   }
 

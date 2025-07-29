@@ -55,8 +55,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
     if (!this.delegateToBlueprint) {
       const projectNameGenerator = await this.dependsOnJHipster('project-name');
       projectNameGenerator.javaApplication = true;
-      // TODO depends on application-server
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrapApplicationServer();
     }
   }
 
@@ -156,7 +155,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
       applicationDefaults({ application, applicationDefaults }) {
         (application as unknown as JavascriptApplication).addPrettierExtensions?.(['java']);
         applicationDefaults({
-          useNpmWrapper: application => Boolean(application.clientFrameworkAny && application.backendTypeJavaAny),
+          useNpmWrapper: application => Boolean((application.clientFramework ?? 'no' !== 'no') && application.backendTypeJavaAny),
         });
         if (application.useNpmWrapper) {
           application.nodePackageManagerCommand = './npmw';

@@ -17,16 +17,24 @@
  * limitations under the License.
  */
 import type BaseCoreGenerator from '../../base-core/generator.ts';
-import { dockerContainers as elasticDockerContainer } from '../../generator-constants.js';
+import { dockerContainers } from '../../generator-constants.js';
 import { getDockerfileContainers } from '../../docker/utils.js';
+import { mutateData } from '../../../lib/utils/object.ts';
 
-export async function loadDockerDependenciesTask<const G extends BaseCoreGenerator>(this: G, { context = this }: { context?: any } = {}) {
+export function loadDockerDependenciesTask<const G extends BaseCoreGenerator>(
+  this: G,
+  { context }: { context: { dockerContainers?: Record<string, string> } },
+) {
+  context.dockerContainers ??= {};
   const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile')) as string;
-  context.dockerContainers = this.prepareDependencies(
-    {
-      ...elasticDockerContainer,
-      ...getDockerfileContainers(dockerfile),
-    },
-    'docker',
+  mutateData(
+    context.dockerContainers,
+    this.prepareDependencies(
+      {
+        ...dockerContainers,
+        ...getDockerfileContainers(dockerfile),
+      },
+      'docker',
+    ),
   );
 }

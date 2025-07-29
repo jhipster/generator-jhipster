@@ -185,7 +185,7 @@ server:
 jhipster:
 <%_ if (!skipClient) { _%>
   clientApp:
-    name: "<%= frontendAppName %>"
+    name: "<%= locals.frontendAppName %>"
 <%_ } _%>
   mail:
     from: <%= baseName %>@localhost.com

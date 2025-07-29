@@ -140,10 +140,6 @@ type DatabaseApplication = {
   jhiTablePrefix: string;
 };
 
-type CommonProperties = {
-  authenticationUsesCsrf: boolean;
-};
-
 type SpringApplication = {
   generateSpringAuditor: boolean;
 };
@@ -153,7 +149,6 @@ export type Application<E extends BaseApplicationEntity<BaseApplicationField, Ba
     JavaBootstrapApplication &
     BuildToolApplication &
     GradleApplication &
-    CommonProperties &
     SpringApplication &
     DatabaseApplication & {
       reactive?: boolean;
