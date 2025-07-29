@@ -31,7 +31,7 @@ describe('jdl options', () => {
     }
 
     if (!choices) {
-      if (['routes'].includes(optionName)) {
+      if (['routes', 'appsFolders'].includes(optionName)) {
         // Option is manually tested.
         continue;
       }

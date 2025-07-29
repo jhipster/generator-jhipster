@@ -20,12 +20,6 @@ const dummyMeta = {
 };
 
 class CommandGenerator extends BaseApplicationGenerator {
-  _context: any = {};
-
-  get context() {
-    return this._context;
-  }
-
   constructor(args: any, opts: any, features: any) {
     super(args, opts, { ...features, jhipsterBootstrap: false });
     this.customLifecycle = true;
@@ -100,7 +94,7 @@ describe('generator commands', () => {
           expectGeneratorTestOption().toBe(value);
         }
 
-        if (scope !== 'context') {
+        if (!['application', 'context', 'storage', 'blueprint'].includes(scope)) {
           expectContextTestOption().toBeUndefined();
         } else if (Array.isArray(value)) {
           expectContextTestOption().toEqual(value);

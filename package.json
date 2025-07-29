@@ -114,14 +114,13 @@
     "jsdoc": "jsdoc --configure jsdoc-conf.json",
     "lint": "npm run eslint && npm run ejslint",
     "lint-fix": "npm run eslint -- --fix && npm run prettier:format",
-    "mocha-test": "esmocha lib/jdl --no-insight --forbid-only --parallel --max-old-space-size=4096",
     "prepare": "npm run build",
     "prettier:check": "prettier --check \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java}\"",
     "prettier:format": "prettier --write \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java}\"",
     "pretest": "npm run lint && npm run check-types",
-    "test": "npm run mocha-test test generators cli .blueprint",
+    "test": "esmocha test generators cli .blueprint lib/jdl lib/testing lib/jhipster lib/utils --forbid-only",
     "update-snapshot": "esmocha --no-insight --no-parallel --update-snapshot --",
-    "update-snapshots": "esmocha lib/jdl generators cli .blueprint --update-snapshot --no-insight --forbid-only"
+    "update-snapshots": "esmocha test generators cli .blueprint lib/jdl lib/testing lib/jhipster lib/utils --forbid-only --update-snapshot --enable-source-maps"
   },
   "overrides": {
     "ejs-lint": {
