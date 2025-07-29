@@ -23,7 +23,7 @@ describe('jdl options', () => {
   });
 
   for (const [optionName, config] of jdlConfigs) {
-    let choices: any[] | undefined = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value));
+    let choices: (string | boolean)[] | undefined = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value));
     const isBoolean = config.cli?.type === Boolean;
     const isArray = config.cli?.type === Array;
     if (!choices && isBoolean) {
@@ -31,7 +31,7 @@ describe('jdl options', () => {
     }
 
     if (!choices) {
-      if (['routes', 'appsFolders'].includes(optionName)) {
+      if (['routes'].includes(optionName)) {
         // Option is manually tested.
         continue;
       }

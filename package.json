@@ -118,9 +118,9 @@
     "prettier:check": "prettier --check \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java}\"",
     "prettier:format": "prettier --write \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java}\"",
     "pretest": "npm run lint && npm run check-types",
-    "test": "esmocha test generators cli .blueprint lib/jdl lib/testing lib/jhipster lib/utils --forbid-only",
+    "test": "esmocha test generators cli .blueprint lib --forbid-only",
     "update-snapshot": "esmocha --no-insight --no-parallel --update-snapshot --",
-    "update-snapshots": "esmocha test generators cli .blueprint lib/jdl lib/testing lib/jhipster lib/utils --forbid-only --update-snapshot --enable-source-maps"
+    "update-snapshots": "esmocha test generators cli .blueprint lib/jdl lib --forbid-only --update-snapshot --enable-source-maps"
   },
   "overrides": {
     "ejs-lint": {
