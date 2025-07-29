@@ -5,7 +5,7 @@ import { lookupCommandsConfigs } from './lookup-commands-configs.js';
 
 const jhipsterConfigsWithJDL = await lookupCommandsConfigs({ filter: config => Boolean(config.jdl) });
 
-describe.skip('jdl options', () => {
+describe('jdl options', () => {
   const jdlConfigs = Object.entries(jhipsterConfigsWithJDL!);
 
   it('jdl configs names should match snapshot', () => {
@@ -31,7 +31,7 @@ describe.skip('jdl options', () => {
     }
 
     if (!choices) {
-      if (['routes'].includes(optionName)) {
+      if (['routes', 'appsFolders'].includes(optionName)) {
         // Option is manually tested.
         continue;
       }
