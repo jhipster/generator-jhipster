@@ -37,7 +37,7 @@ export interface Entity<F extends Field = Field, R extends ClientRelationship = 
    * @param fields returns the import of enums that are referenced by the fields
    * @returns {typeImports:Map} the fields that potentially contains some enum types
    */
-  generateEntityClientEnumImports?: (fields: any) => Map<any, any>;
+  generateEntityClientEnumImports?: (fields: Field[]) => Map<string, string>;
   entityAngularAuthorities?: string;
   entityAngularReadAuthorities?: string;
 }
