@@ -484,6 +484,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         if (optionsDesc.scope === 'storage') {
           this.config.set(optionName as keyof Config, optionValue);
         } else if (optionsDesc.scope === 'blueprint') {
+          if (!this.blueprintStorage) {
+            throw new Error('Blueprint storage is not initialized');
+          }
           this.blueprintStorage!.set(optionName, optionValue);
         } else if (optionsDesc.scope === 'generator') {
           (this as Record<string, any>)[optionName] = optionValue;
@@ -532,6 +535,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           } else if (argumentDef.scope === 'storage') {
             this.config.set(argumentName as keyof Config, convertedValue);
           } else if (argumentDef.scope === 'blueprint') {
+            if (!this.blueprintStorage) {
+              throw new Error('Blueprint storage is not initialized');
+            }
             this.blueprintStorage!.set(argumentName, convertedValue);
           }
         }
@@ -560,6 +566,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
             promptSpec = { ...promptSpec, default: () => (this.jhipsterConfigWithDefaults as Record<string, any>)[name] };
           }
         } else if (def.scope === 'blueprint') {
+          if (!this.blueprintStorage) {
+            throw new Error('Blueprint storage is not initialized');
+          }
           storage = this.blueprintStorage;
         } else if (def.scope === 'generator') {
           storage = {

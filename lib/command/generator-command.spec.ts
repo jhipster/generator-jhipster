@@ -24,6 +24,11 @@ class CommandGenerator extends BaseApplicationGenerator {
     super(args, opts, { ...features, jhipsterBootstrap: false });
     this.customLifecycle = true;
   }
+
+  rootGeneratorName() {
+    // Simulates a blueprint generator.
+    return 'blueprint';
+  }
 }
 
 const runDummyCli = (cliArgs: string, config: JHipsterConfig<any>) => {
