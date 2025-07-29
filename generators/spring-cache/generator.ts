@@ -18,6 +18,7 @@
  */
 import BaseApplicationGenerator from '../base-application/index.js';
 import { createNeedleCallback } from '../base-core/support/needles.ts';
+import type { Source as CommonSource } from '../common/types.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import { getCacheProviderMavenDefinition } from './internal/dependencies.js';
@@ -184,6 +185,14 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
             ...definition.hibernateCache,
           },
         );
+      },
+      sonar({ application, source }) {
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S1192',
+          resourceKey: `${application.javaPackageSrcDir}config/CacheConfiguration.java`,
+          ruleKey: 'java:S1192',
+          comment: 'Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue',
+        });
       },
     });
   }

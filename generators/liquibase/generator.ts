@@ -20,13 +20,13 @@ import fs from 'fs';
 import { escape, min } from 'lodash-es';
 
 import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
-import { getFKConstraintName, getUXConstraintName } from '../server/support/index.js';
+import { getFKConstraintName, getUXConstraintName, prepareField as prepareServerFieldForTemplates } from '../server/support/index.js';
 import { prepareEntity as prepareEntityForServer } from '../java/support/index.js';
 import {
   loadRequiredConfigIntoEntity,
+  prepareCommonFieldForTemplates,
   prepareEntity,
   prepareEntityPrimaryKeyForTemplates,
-  prepareField,
   prepareRelationship,
 } from '../base-application/support/index.js';
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
@@ -206,7 +206,8 @@ export default class LiquibaseGenerator<
               prepareEntityPrimaryKeyForTemplates.call(this, { entity: entity as unknown as EntityAll, application });
             }
             for (const field of entity.fields ?? []) {
-              prepareField(application as any, entity as unknown as CommonEntity, field as unknown as CommonField, this);
+              prepareCommonFieldForTemplates(entity as unknown as CommonEntity, field as unknown as CommonField, this);
+              prepareServerFieldForTemplates(application as any, entity as unknown as ServerEntity, field as any, this);
               prepareFieldForLiquibase(application, field);
             }
           }

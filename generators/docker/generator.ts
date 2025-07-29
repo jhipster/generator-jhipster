@@ -47,7 +47,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:bootstrap-application-server');
+      await this.dependsOnBootstrapApplicationBase();
     }
   }
 

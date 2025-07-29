@@ -31,7 +31,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnJHipster('jhipster:java:bootstrap');
       (await this.dependsOnJHipster('jhipster:java:domain')).useJacksonIdentityInfo = true;
     }
   }

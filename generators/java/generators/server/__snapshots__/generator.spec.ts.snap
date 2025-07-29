@@ -2,6 +2,20 @@
 
 exports[`generator - java:server with defaults options should call source snapshot 1`] = `
 {
+  "ignoreSonarRule": [
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for dtos",
+      "resourceKey": "src/main/java/com/mycompany/myapp/service/dto/**/*",
+      "ruleId": "S7027-dto",
+      "ruleKey": "javaarchitecture:S7027",
+    },
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1176 is ignored, as we want to follow "clean code" guidelines and classes, methods and arguments names should be self-explanatory",
+      "resourceKey": "src/main/java/com/mycompany/myapp/**/*",
+      "ruleId": "UndocumentedApi",
+      "ruleKey": "squid:UndocumentedApi",
+    },
+  ],
   "mergePrettierConfig": [
     {
       "overrides": [

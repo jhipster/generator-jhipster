@@ -431,6 +431,28 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
       ],
     },
   ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "clientRoot/src/app/**/*.spec.ts, clientRoot/src/app/**/*.spec.tsx",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
+  ],
   "mergeClientPackageJson": [
     {
       "overrides": {
@@ -905,6 +927,28 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
       ],
     },
   ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "clientRoot/src/app/**/*.spec.ts, clientRoot/src/app/**/*.spec.tsx",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
+  ],
   "mergeClientPackageJson": [
     {
       "overrides": {
@@ -1351,6 +1395,28 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
         "Entity[EntityWithCustomId]",
       ],
     },
+  ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "clientRoot/src/app/**/*.spec.ts, clientRoot/src/app/**/*.spec.tsx",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
   ],
   "addWebpackConfig": [
     {
@@ -1823,6 +1889,28 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
         "Entity[EntityWithCustomId]",
       ],
     },
+  ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "src/main/webapp/app/**/*.spec.ts, src/main/webapp/app/**/*.spec.tsx",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
   ],
   "addWebpackConfig": [
     {
@@ -2365,6 +2453,28 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
       ],
     },
   ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "src/main/webapp/app/**/*.spec.ts, src/main/webapp/app/**/*.spec.tsx",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
+  ],
   "mergeClientPackageJson": [
     {
       "overrides": {
@@ -2806,6 +2916,28 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
       ],
     },
   ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "src/main/webapp/app/**/*.spec.ts, src/main/webapp/app/**/*.spec.tsx",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
+  ],
   "mergeClientPackageJson": [
     {
       "overrides": {
@@ -3240,6 +3372,28 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
         "Entity[EntityWithCustomId]",
       ],
     },
+  ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.test.inclusions",
+        "value": "src/main/webapp/app/**/*.spec.ts, src/main/webapp/app/**/*.spec.tsx",
+        "valueSep": ", ",
+      },
+      {
+        "key": "sonar.testExecutionReportPaths",
+        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
+      },
+      {
+        "key": "sonar.exclusions",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "valueSep": ", ",
+      },
+    ],
   ],
   "mergeClientPackageJson": [
     {
