@@ -18,6 +18,7 @@
 -%>
 package <%= packageName %>.config;
 
+import java.time.Duration;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.slf4j.Logger;
@@ -43,6 +44,7 @@ public class KafkaTestContainer implements InitializingBean, DisposableBean {
         if (null == kafkaContainer) {
             kafkaContainer = new KafkaContainer(DockerImageName.parse("<%- dockerContainers.kafka %>"))
                 .withLogConsumer(new Slf4jLogConsumer(LOG))
+                .withStartupTimeout(Duration.ofMinutes(3))
                 .withEnv("KAFKA_LISTENERS", "PLAINTEXT://:9092,BROKER://:9093,CONTROLLER://:9094")
                 .withReuse(true);
         }
