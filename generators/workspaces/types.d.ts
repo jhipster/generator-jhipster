@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import type { Config as BaseWorkspacesConfig, Options as BaseWorkspacesOptions } from '../base-workspaces/types.d.ts';
+import type { Options as GitOptions } from '../git/types.d.ts';
 export type { WorkspacesApplication } from '../base-workspaces/types.js';
 
-export type Config = BaseWorkspacesConfig & { baseName: string; monorepository: boolean };
-export type Options = BaseWorkspacesOptions & { monorepository: boolean };
+export type Config = BaseWorkspacesConfig & { baseName: string };
+export type Options = BaseWorkspacesOptions & GitOptions;

@@ -60,7 +60,6 @@ export type Options = YeomanOptions & {
   generateApplications?: boolean | (() => Promise<void>);
   generateWorkspaces?: boolean;
   generateWith?: string;
-  monorepository?: boolean;
   workspaces?: boolean;
   workspacesFolders?: string[];
 };

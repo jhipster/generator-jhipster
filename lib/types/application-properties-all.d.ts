@@ -29,6 +29,5 @@ export type ApplicationAll<E extends EntityAll = EntityAll> = BaseApplication<E>
   ClientApplication<E> &
   DockerApplication &
   LiqbuibaseApplication<E> &
-  ExportApplicationPropertiesFromCommand<typeof import('../../generators/git/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../../generators/project-name/command.ts').default> &
   ExportApplicationPropertiesFromCommand<typeof import('../../generators/spring-boot/command.ts').default>;

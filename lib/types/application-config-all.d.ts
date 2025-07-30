@@ -22,7 +22,6 @@ export type ConfigAll = Simplify<
       microfrontends?: { baseName: string }[];
     } & ExportStoragePropertiesFromCommand<typeof import('../../generators/app/command.ts').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../generators/bootstrap-application-base/command.ts').default> &
-    ExportStoragePropertiesFromCommand<typeof import('../../generators/git/command.ts').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../generators/jdl/command.ts').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../generators/languages/command.ts').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../generators/liquibase/command.ts').default> &
