@@ -68,10 +68,7 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
       },
       addKafkaMavenDependencies({ application, source }) {
         source.addJavaDefinition?.({
-          versions: [{
-            name: 'spring-kafka',
-            version: '3.3.5',
-          }],
+          versions: [{ name: 'spring-kafka', version: '3.3.6' }],
         });
         if (application.buildToolMaven) {
           source.addMavenDependency?.([
