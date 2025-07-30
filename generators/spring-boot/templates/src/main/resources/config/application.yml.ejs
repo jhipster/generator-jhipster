@@ -225,6 +225,8 @@ spring:
           httpclient:
             pool:
               max-connections: 1000
+          # See alternatives in https://github.com/spring-cloud/spring-cloud-gateway/issues/3818
+          trusted-proxies: '.*'
     <%_ } else { _%>
       server:
         webmvc:
