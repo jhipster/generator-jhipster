@@ -92,7 +92,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   get composing() {
     return this.asComposingTaskGroup({
       async composeGit() {
-        if (this.options.monorepository) {
+        if (this.options.monorepository || this.jhipsterConfig.monorepository) {
           await this.composeWithJHipster(GENERATOR_GIT);
           await this.composeWithJHipster('jhipster:javascript:prettier', { generatorOptions: { monorepositoryRoot: true } });
         }

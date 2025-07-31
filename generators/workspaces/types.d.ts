@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { Simplify } from 'type-fest';
 import type { Config as BaseWorkspacesConfig, Options as BaseWorkspacesOptions } from '../base-workspaces/types.d.ts';
-import type { Options as GitOptions } from '../git/types.d.ts';
+import type { Config as GitConfig, Options as GitOptions } from '../git/types.d.ts';
 export type { WorkspacesApplication } from '../base-workspaces/types.js';
 
-export type Config = BaseWorkspacesConfig & { baseName: string };
+export type Config = BaseWorkspacesConfig & { baseName: string } & Simplify<GitConfig>;
 export type Options = BaseWorkspacesOptions & GitOptions;

@@ -1,7 +1,7 @@
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { ApplicationType } from '../../lib/core/application-types.ts';
 import type { Config as BaseConfig, Options as BaseOptions } from '../base/types.js';
-import type { Options as GitOptions } from '../git/types.js';
+import type { Options as WorkspaceOptions } from '../workspaces/types.js';
 import type command from './command.js';
 
 type Command = HandleCommandTypes<typeof command>;
@@ -14,4 +14,4 @@ type JdlOptions = {
 
 export type Config = BaseConfig & JdlOptions & Command['Config'];
 
-export type Options = BaseOptions & JdlOptions & Command['Options'] & GitOptions;
+export type Options = BaseOptions & JdlOptions & Command['Options'] & WorkspaceOptions;

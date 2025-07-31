@@ -17,19 +17,22 @@
  * limitations under the License.
  */
 import type { Simplify } from 'type-fest';
-import type { ExportGeneratorOptionsFromCommand, HandleCommandTypes } from '../../lib/command/types.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, HandleCommandTypes } from '../../lib/command/types.js';
 import type { Config as ProjectNameConfig, Options as ProjectNameOptions, Source as ProjectNameSource } from '../project-name/types.js';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../base-application/types.js';
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
 
-export type Config = Command['Config'] & ProjectNameConfig;
+export type Config = Command['Config'] &
+  ProjectNameConfig &
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+  Simplify<ExportStoragePropertiesFromCommand<typeof import('./command.ts').default>>;
 
 export type Options = Command['Options'] &
   ProjectNameOptions &
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  Simplify<ExportGeneratorOptionsFromCommand<typeof import('../../generators/git/command.ts').default>>;
+  Simplify<ExportGeneratorOptionsFromCommand<typeof import('./command.ts').default>>;
 
 export { ProjectNameSource as Source, BaseApplicationEntity as Entity };
 
