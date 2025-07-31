@@ -23,14 +23,13 @@ import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
 import { getDatabaseTypeData } from '../server/support/database.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import { formatDateForChangelog } from '../base/support/timestamp.ts';
-import type { EntityAll as ApplicationEntity, UserEntity } from '../../lib/types/entity-all.js';
+import type { ApplicationAll, EntityAll as ApplicationEntity, UserEntity } from '../../lib/types/application-all.d.ts';
 import type {
   Application as BaseApplicationApplication,
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
   Relationship as BaseApplicationRelationship,
 } from '../base-application/types.d.ts';
-import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
 
 const { CASSANDRA } = databaseTypes;
 const { CommonDBTypes } = fieldTypes;

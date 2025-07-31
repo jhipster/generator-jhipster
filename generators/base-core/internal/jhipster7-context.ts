@@ -14,7 +14,7 @@ import { getDBCExtraOption } from '../../spring-data-relational/support/database
 import { getJdbcUrl, getR2dbcUrl } from '../../spring-data-relational/support/database-url.js';
 import { fieldTypes } from '../../../lib/jhipster/index.js';
 import { upperFirstCamelCase } from '../../../lib/utils/index.js';
-import type { ApplicationAll } from '../../../lib/types/application-properties-all.js';
+import type { ApplicationAll } from '../../../lib/types/application-all.js';
 import type CoreGenerator from '../generator.ts';
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;

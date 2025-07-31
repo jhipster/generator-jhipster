@@ -1,8 +1,6 @@
-import type { ApplicationAll } from '../lib/types/application-properties-all.d.ts';
-import type { ConfigAll } from '../lib/types/application-config-all.d.ts';
-import type { OptionsAll } from '../lib/types/application-options-all.d.ts';
+import type { ApplicationAll, EntityAll } from '../lib/types/application-all.js';
+import type { ConfigAll, OptionsAll } from '../lib/types/command-all.js';
 import type { SourceAll } from '../lib/types/source-all.d.ts';
-import type { EntityAll } from '../lib/types/entity-all.d.ts';
 import BaseApplicationGenerator from './base-application/index.ts';
 export {
   JHIPSTER_DOCUMENTATION_URL,

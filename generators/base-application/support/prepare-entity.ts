@@ -36,8 +36,7 @@ import type { Application as CommonApplication, Entity as CommonEntity } from '.
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../../lib/core/application-types.ts';
-import type { EntityAll } from '../../../lib/types/entity-all.js';
-import type { FieldAll } from '../../../lib/types/field-all.js';
+import type { EntityAll, FieldAll } from '../../../lib/types/application-all.d.ts';
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { createFaker } from './faker.js';
 import { fieldIsEnum } from './field-utils.js';

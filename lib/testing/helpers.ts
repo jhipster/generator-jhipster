@@ -18,7 +18,7 @@ import { parseCreationTimestamp } from '../../generators/base/support/index.js';
 import BaseGenerator from '../../generators/base/index.js';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.js';
 import type CoreGenerator from '../../generators/base-core/generator.js';
-import type { ConfigAll as ApplicationConfiguration } from '../types/application-config-all.js';
+import type { ConfigAll as ApplicationConfiguration, OptionsAll } from '../types/command-all.js';
 import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
 import type { Entity } from '../jhipster/types/entity.js';
 import type { Relationship } from '../jhipster/types/relationship.d.ts';
@@ -29,12 +29,11 @@ import type { PRIORITY_NAMES as APPLICATION_PRIORITY_NAMES } from '../../generat
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
 import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY } from '../../generators/base-application/support/constants.js';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../generators/base-simple-application/support/constants.js';
-import type { ApplicationAll } from '../types/application-properties-all.d.ts';
-import type { OptionsAll as AllOptions } from '../types/application-options-all.d.ts';
+import type { ApplicationAll } from '../types/application-all.js';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
-type GeneratorTestType = YeomanGenerator<AllOptions>;
-type GeneratorTestOptions = AllOptions;
+type GeneratorTestType = YeomanGenerator<OptionsAll>;
+type GeneratorTestOptions = OptionsAll;
 type WithJHipsterGenerators = {
   /**
    * Apply default mocks.
@@ -230,7 +229,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   private commonWorkspacesConfig!: Record<string, unknown>;
   private generateApplicationsSet = false;
 
-  withOptions(options: Partial<Omit<AllOptions, 'env' | 'resolved' | 'namespace'> & Record<string, any>>): this {
+  withOptions(options: Partial<Omit<OptionsAll, 'env' | 'resolved' | 'namespace'> & Record<string, any>>): this {
     return super.withOptions(options as any);
   }
 
