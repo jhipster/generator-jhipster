@@ -22,14 +22,14 @@ import type { QueuedAdapter } from '@yeoman/types';
 
 import BaseGenerator from '../base/index.js';
 import { files } from './files.js';
-import type { Config as GitConfig, Options as GitOptions } from './types.js';
+import type { Config as GitConfig, GeneratorProperties as GitGeneratorProperties, Options as GitOptions } from './types.js';
 
 export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
   gitInitialized!: boolean;
-  skipGit!: boolean;
-  forceGit!: boolean;
   existingRepository!: boolean;
-  commitMsg!: string;
+  skipGit!: GitGeneratorProperties['skipGit'];
+  readonly forceGit!: GitGeneratorProperties['forceGit'];
+  readonly commitMsg!: GitGeneratorProperties['commitMsg'];
 
   async beforeQueue() {
     if (!this.fromBlueprint) {

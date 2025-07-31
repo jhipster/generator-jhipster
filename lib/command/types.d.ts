@@ -56,6 +56,18 @@ export type DerivedPropertiesWithInferenceUnion<Choices extends [...string[]], P
 
 type CommandConfigScope = 'storage' | 'blueprint' | 'generator' | 'context' | 'none';
 
+type ScopedConfig = {
+  /**
+   * Command configuration scope
+   * - `storage`: Used for storing configuration in `jhipsterConfig`.
+   * - `blueprint`: Used for storing blueprint-specific configurations in `blueprintConfig`.
+   * - `generator`: Used for generator options, will be inserted as a generator property, may conflict with existing properties.
+   * - `context`: Used for options that are specific to the template context, will be inserted in `context`.
+   * - `none`: Used for options that will be handled manually, such as options that are stored differently than they are received.
+   */
+  readonly scope: CommandConfigScope;
+};
+
 export type CommandConfigType = typeof String | typeof Boolean | typeof Number | typeof Object | ((opt: string) => any);
 
 export type CommandConfigDefault<ConfigContext> =
@@ -65,7 +77,6 @@ export type CommandConfigDefault<ConfigContext> =
   | readonly string[]
   | ((this: ConfigContext | void, ctx: any) => string | boolean | number | readonly string[]);
 
-export type ConfigScope = CommandConfigScope;
 type CliSpecType = CliOptionSpec['type'] | typeof Object;
 
 export type JHipsterChoices = readonly [...(string | JHipsterNamedChoice)[]];
@@ -80,7 +91,7 @@ export type PromptSpec = {
   readonly validate?: any | ((arg: any) => any);
 };
 
-type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & { scope?: CommandConfigScope };
+type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & Partial<ScopedConfig>;
 
 type CliSpec = Omit<SetOptional<CliOptionSpec, 'name'>, 'storage'> & {
   env?: string;
@@ -100,7 +111,6 @@ export type ConfigSpec<ConfigContext> = {
     | PromptSpec
     | ((gen: ConfigContext & { jhipsterConfigWithDefaults: Record<string, any> }, config: ConfigSpec<ConfigContext>) => PromptSpec);
   readonly jdl?: Omit<JHipsterOptionDefinition, 'name' | 'knownChoices'>;
-  readonly scope: CommandConfigScope;
   /**
    * The callback receives the generator as input for 'generator' scope.
    * The callback receives jhipsterConfigWithDefaults as input for 'storage' (default) scope.
@@ -114,7 +124,7 @@ export type ConfigSpec<ConfigContext> = {
    * Configure the generator according to the selected configuration.
    */
   readonly configure?: (gen: ConfigContext, value: any) => void;
-};
+} & ScopedConfig;
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
 
@@ -158,8 +168,7 @@ type ParseableConfig = {
     readonly type: CliSpecType;
   };
   readonly choices?: JHipsterChoices;
-  readonly scope: ConfigScope;
-};
+} & ScopedConfig;
 
 type ParseableConfigs = Record<string, ParseableConfig>;
 
@@ -170,7 +179,7 @@ export type ParseableCommand = {
 
 /** Extract contructor return type, eg: Boolean, String */
 type ConstructorReturn<T> = T extends new () => infer R ? R : undefined;
-type FilteredConfigScope = ConfigScope | undefined;
+type FilteredConfigScope = CommandConfigScope | undefined;
 
 /** Filter Options/Config by scope */
 type FilterScope<D extends ParseableConfig, S extends FilteredConfigScope> = D extends Record<'scope', S> ? D : never;
@@ -294,6 +303,9 @@ export type ExportStoragePropertiesFromCommand<C extends ParseableCommand> = Exp
 
 export type ExportGeneratorOptionsFromCommand<C extends ParseableCommand> = ExportScopedPropertiesFromCommand<C, any>;
 
+export type ExportGeneratorPropertiesFromCommand<C extends ParseableCommand> = Readonly<ExportScopedPropertiesFromCommand<C, 'generator'>>;
+
 export type HandleCommandTypes<C1 extends ParseableCommand> = Record<'Config', ExportStoragePropertiesFromCommand<C1>> &
   Record<'Options', ExportGeneratorOptionsFromCommand<C1>> &
+  Record<'Generator', ExportGeneratorPropertiesFromCommand<C1>> &
   Record<'Application', ExportApplicationPropertiesFromCommand<C1>>;
