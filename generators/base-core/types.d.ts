@@ -35,7 +35,6 @@ export type Options = YeomanOptions & {
   commandName: string;
   programName: string;
   positionalArguments?: unknown[];
-  createEnvBuilder?: any;
   devBlueprintEnabled?: boolean;
 
   skipPriorities?: string[];
@@ -47,20 +46,6 @@ export type Options = YeomanOptions & {
 
   /** boostrap options */
   applyDefaults?: <const T = any>(data: T) => T;
-
-  /* generate-blueprint options */
-  localBlueprint?: boolean;
-
-  /* application options */
-  db?: string;
-
-  /* workspaces options */
-  generateApplications?: boolean | (() => Promise<void>);
-  generateWorkspaces?: boolean;
-  generateWith?: string;
-  monorepository?: boolean;
-  workspaces?: boolean;
-  workspacesFolders?: string[];
 };
 
 export type Features = YeomanFeatures & {

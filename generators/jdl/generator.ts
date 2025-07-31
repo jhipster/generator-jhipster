@@ -33,6 +33,7 @@ import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.
 import { mergeYoRcContent } from '../../lib/utils/yo-rc.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.js';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
+import type { Options as GitOptions } from '../git/types.d.ts';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
 import type { Config as JdlConfig, Options as JdlOptions } from './types.js';
 
@@ -216,9 +217,10 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           this.log.info(`Generating ${this.applications.length} applications`);
           await this.composeWithJHipster(this.workspacesGenerator as 'workspaces', {
             generatorOptions: {
+              /** TODO types contains appsFolders which is not correcly handled, {@see file:../workspaces/command.ts} */
               workspacesFolders: this.applications.map(app => app.folder!),
               generateApplications: async () => this.runNonInteractive(this.applications, generatorOptions),
-            },
+            } as any,
           });
         } else {
           this.log.info('Generating 1 application');
@@ -275,7 +277,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
 
         // Install should happen at the root of the monorepository. Force skip install at childs.
-        if (this.options.monorepository) {
+        if ((this.options as GitOptions).monorepository) {
           generatorOptions.skipInstall = true;
         }
         const envBuilder = await this.createEnvBuilder(envOptions);
