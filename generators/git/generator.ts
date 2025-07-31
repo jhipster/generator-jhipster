@@ -127,7 +127,6 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
           this.log.debug('Committing files to git');
           const git = this.createGit();
           const repositoryRoot = await git.revparse(['--show-toplevel']);
-          const msg = await git.log(['-n', '1']).catch(() => ({ total: 0 }));
           const result = await git.log(['-n', '1', '--', '.yo-rc.json']).catch(() => ({ total: 0 }));
           const existingApplication = result.total > 0;
           if (existingApplication && !this.options.forceGit) {
