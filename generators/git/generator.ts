@@ -34,25 +34,6 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
     }
   }
 
-  async initializeGitRepository() {
-    try {
-      const git = this.createGit();
-      if (await git.checkIsRepo()) {
-        if (await git.checkIsRepo('root' as any)) {
-          this.log.info('Using existing git repository.');
-        } else {
-          this.log.info('Using existing git repository at parent folder.');
-        }
-        this.existingRepository = true;
-      } else if (await git.init()) {
-        this.log.ok('Git repository initialized.');
-      }
-      this.gitInitialized = true;
-    } catch (error) {
-      this.log.warn(`Failed to initialize Git repository.\n ${error}`);
-    }
-  }
-
   get initializing() {
     return this.asInitializingTaskGroup({
       async checkGit() {
@@ -60,7 +41,7 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
           const gitInstalled = (await this.createGit().version()).installed;
           if (!gitInstalled) {
             this.log.warn('Git repository will not be created, as Git is not installed on your system');
-            this.options.skipGit = true;
+            this.gitInitialized = false;
           }
         }
       },
@@ -127,7 +108,6 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
           this.log.debug('Committing files to git');
           const git = this.createGit();
           const repositoryRoot = await git.revparse(['--show-toplevel']);
-          const msg = await git.log(['-n', '1']).catch(() => ({ total: 0 }));
           const result = await git.log(['-n', '1', '--', '.yo-rc.json']).catch(() => ({ total: 0 }));
           const existingApplication = result.total > 0;
           if (existingApplication && !this.options.forceGit) {
@@ -174,5 +154,24 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
 
   get [BaseGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
+  }
+
+  async initializeGitRepository() {
+    try {
+      const git = this.createGit();
+      if (await git.checkIsRepo()) {
+        if (await git.checkIsRepo('root' as any)) {
+          this.log.info('Using existing git repository.');
+        } else {
+          this.log.info('Using existing git repository at parent folder.');
+        }
+        this.existingRepository = true;
+      } else if (await git.init()) {
+        this.log.ok('Git repository initialized.');
+      }
+      this.gitInitialized = true;
+    } catch (error) {
+      this.log.warn(`Failed to initialize Git repository.\n ${error}`);
+    }
   }
 }
