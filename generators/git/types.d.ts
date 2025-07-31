@@ -27,6 +27,8 @@ export type Config = Command['Config'] & ProjectNameConfig;
 
 export type Options = Command['Options'] & ProjectNameOptions;
 
+export type GeneratorProperties = Command['Generator'];
+
 export { ProjectNameSource as Source, BaseApplicationEntity as Entity };
 
 export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = Command['Application'] & BaseApplicationApplication<E>;
