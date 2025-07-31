@@ -61,7 +61,7 @@ import type {
 } from './api.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
 import { joinCallbacks } from './support/index.js';
-import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions, GenericTaskGroup } from './types.js';
+import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions, GenericTask } from './types.js';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
 
 const {
@@ -223,7 +223,7 @@ export default class CoreGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asAnyTaskGroup(taskGroup: GenericTaskGroup<this, any, any>): GenericTaskGroup<any, any, any> {
+  asAnyTaskGroup<const T extends Record<string, GenericTask<this, any>>>(taskGroup: T): Record<keyof T, GenericTask<any, any>> {
     return taskGroup;
   }
 

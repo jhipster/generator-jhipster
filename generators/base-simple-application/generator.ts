@@ -24,7 +24,7 @@ import { mutateData } from '../../lib/utils/index.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { GenericTaskGroup } from '../base-core/types.js';
+import type { GenericTask } from '../base-core/types.js';
 import type { SimpleTaskTypes } from './tasks.js';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.js';
 import type {
@@ -142,9 +142,9 @@ export default class BaseSimpleApplicationGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asBootstrapApplicationTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['BootstrapApplicationTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['BootstrapApplicationTaskParam']> {
+  asBootstrapApplicationTaskGroup<const T extends Record<string, GenericTask<this, Tasks['BootstrapApplicationTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['BootstrapApplicationTaskParam']>> {
     return taskGroup;
   }
 }

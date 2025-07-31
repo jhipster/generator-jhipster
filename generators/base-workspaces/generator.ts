@@ -25,7 +25,7 @@ import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support
 import { deploymentOptions } from '../../lib/jhipster/index.js';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
 import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
-import type { GenericTaskGroup } from '../base-core/types.js';
+import type { GenericTask } from '../base-core/types.js';
 import { removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 import {
@@ -202,36 +202,36 @@ export default abstract class BaseWorkspacesGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPromptingWorkspacesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PromptingWorkspacesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PromptingWorkspacesTaskParam']> {
+  asPromptingWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PromptingWorkspacesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PromptingWorkspacesTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asConfiguringWorkspacesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['ConfiguringWorkspacesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['ConfiguringWorkspacesTaskParam']> {
+  asConfiguringWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ConfiguringWorkspacesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['ConfiguringWorkspacesTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asLoadingWorkspacesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['LoadingWorkspacesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['LoadingWorkspacesTaskParam']> {
+  asLoadingWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['LoadingWorkspacesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['LoadingWorkspacesTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingWorkspacesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PreparingWorkspacesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PreparingWorkspacesTaskParam']> {
+  asPreparingWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PreparingWorkspacesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PreparingWorkspacesTaskParam']>> {
     return taskGroup;
   }
 }

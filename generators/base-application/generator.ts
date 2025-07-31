@@ -29,7 +29,7 @@ import {
   GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
   GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
 } from '../generator-list.js';
-import type { GenericTaskGroup } from '../base-core/types.js';
+import type { GenericTask } from '../base-core/types.js';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
@@ -330,72 +330,72 @@ export default class BaseApplicationGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asConfiguringEachEntityTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['ConfiguringEachEntityTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['ConfiguringEachEntityTaskParam']> {
+  asConfiguringEachEntityTaskGroup<T extends Record<string, GenericTask<this, Tasks['ConfiguringEachEntityTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['ConfiguringEachEntityTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asLoadingEntitiesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['LoadingEntitiesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['LoadingEntitiesTaskParam']> {
+  asLoadingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['LoadingEntitiesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['LoadingEntitiesTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingEachEntityTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PreparingEachEntityTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PreparingEachEntityTaskParam']> {
+  asPreparingEachEntityTaskGroup<T extends Record<string, GenericTask<this, Tasks['PreparingEachEntityTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PreparingEachEntityTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingEachEntityFieldTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PreparingEachEntityFieldTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PreparingEachEntityFieldTaskParam']> {
+  asPreparingEachEntityFieldTaskGroup<T extends Record<string, GenericTask<this, Tasks['PreparingEachEntityFieldTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PreparingEachEntityFieldTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingEachEntityRelationshipTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PreparingEachEntityRelationshipTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PreparingEachEntityRelationshipTaskParam']> {
+  asPreparingEachEntityRelationshipTaskGroup<
+    T extends Record<string, GenericTask<this, Tasks['PreparingEachEntityRelationshipTaskParam']>>,
+  >(taskGroup: T): Record<keyof T, GenericTask<any, Tasks['PreparingEachEntityRelationshipTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostPreparingEachEntityTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PostPreparingEachEntityTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PostPreparingEachEntityTaskParam']> {
+  asPostPreparingEachEntityTaskGroup<T extends Record<string, GenericTask<this, Tasks['PostPreparingEachEntityTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PostPreparingEachEntityTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asWritingEntitiesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['WritingEntitiesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['WritingEntitiesTaskParam']> {
+  asWritingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['WritingEntitiesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['WritingEntitiesTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostWritingEntitiesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PostWritingEntitiesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PostWritingEntitiesTaskParam']> {
+  asPostWritingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['PostWritingEntitiesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PostWritingEntitiesTaskParam']>> {
     return taskGroup;
   }
 
