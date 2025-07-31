@@ -15,7 +15,6 @@ export type OptionsAll = Simplify<
     ExportGeneratorOptionsFromCommand<typeof import('../../generators/base/command.ts').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../generators/bootstrap-application-base/command.ts').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../generators/client/command.ts').default> &
-    ExportGeneratorOptionsFromCommand<typeof import('../../generators/git/command.ts').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../generators/java/generators/bootstrap/command.ts').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../generators/java/generators/build-tool/command.ts').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../generators/java/generators/graalvm/command.ts').default> &
