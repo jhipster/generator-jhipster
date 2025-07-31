@@ -17,22 +17,11 @@
  * limitations under the License.
  */
 import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { ConfigAll, OptionsAll } from '../../lib/types/command-all.js';
-import type { ApplicationAll, EntityAll } from '../../lib/types/application-all.js';
-import type { Source as BaseApplicationSource } from '../base-application/types.js';
+import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../base-application/types.js';
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
 
-export type Config = Command['Config'] & ConfigAll;
+export type Config = Command['Config'] & BaseApplicationConfig;
 
-export type Options = Command['Options'] & OptionsAll;
-
-export { BaseApplicationSource as Source };
-
-export interface Entity extends EntityAll {
-  microserviceName: string;
-  microservicePath?: string;
-}
-
-export type Application<E extends EntityAll = EntityAll> = Command['Application'] & ApplicationAll<E>;
+export type Options = Command['Options'] & BaseApplicationOptions;

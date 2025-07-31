@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { ConfigAll } from '../types/application-config-all.js';
+import type { ConfigAll } from '../types/command-all.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';

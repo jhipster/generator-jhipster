@@ -57,7 +57,7 @@ import {
   isFieldBlobType,
 } from '../base-application/internal/types/field-types.ts';
 import { baseNameProperties } from '../project-name/support/index.js';
-import type { ApplicationAll } from '../../lib/types/application-properties-all.js';
+import type { ApplicationAll } from '../../lib/types/application-all.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
 import type {
