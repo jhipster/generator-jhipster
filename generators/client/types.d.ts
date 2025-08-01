@@ -14,6 +14,7 @@ import type {
   Application as CommonApplication,
   Config as CommonConfig,
   Entity as CommonEntity,
+  Features as CommonFeatures,
   Field as CommonField,
   Options as CommonOptions,
   Relationship as CommonRelationship,
@@ -25,6 +26,8 @@ import type { GetWebappTranslationCallback } from './translation.js';
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
+
+export type { CommonFeatures as Features };
 
 export type Config = JavascriptConfig & CommonConfig & Command['Config'];
 

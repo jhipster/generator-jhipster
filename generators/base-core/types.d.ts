@@ -18,7 +18,7 @@
  */
 import type { BaseFeatures as YeomanFeatures, BaseOptions as YeomanOptions } from 'yeoman-generator';
 import type { JDLApplicationConfig } from '../../lib/jdl/core/types/parsing.js';
-import type { JHipsterConfigs } from '../../lib/command/types.js';
+import type { JHipsterCommandDefinition, JHipsterConfigs } from '../../lib/command/types.js';
 
 export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) => unknown;
 
@@ -80,4 +80,17 @@ export type Features = YeomanFeatures & {
    * Defaults to true for built-in generator-jhipster generators and false for blueprints.
    */
   queueCommandTasks?: boolean;
+
+  /**
+   * Queue tasks to load and prepare properties from command.
+   * This is useful for bootstrap generator.
+   */
+  loadCommand?: JHipsterCommandDefinition[];
+
+  /**
+   * Skip load and prepare properties from command.
+   * This is useful when the command is loaded and prepared by a bootstrap generator.
+   * @see loadCommand
+   */
+  skipLoadCommand?: boolean;
 };

@@ -40,7 +40,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
       throw new Error('Only sbs blueprint is supported');
     }
 
-    await this.dependsOnBootstrapApplicationClient();
+    await this.dependsOnBootstrap('client');
     await this.dependsOnBootstrapApplicationServer();
   }
 

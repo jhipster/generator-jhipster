@@ -2,6 +2,7 @@ import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type {
   Config as BaseApplicationConfig,
   Entity as BaseApplicationEntity,
+  Features as BaseApplicationFeatures,
   Options as BaseApplicationOptions,
   Source as BaseApplicationSource,
 } from '../base-application/types.js';
@@ -24,6 +25,8 @@ import type prettierCommand from '../javascript/generators/prettier/command.js';
 import type appCommand from '../app/command.ts';
 import type { PropertiesFileKeyUpdate } from '../base-core/support/index.ts';
 import type command from './command.ts';
+
+export type { BaseApplicationFeatures as Features };
 
 type Command = HandleCommandTypes<typeof command>;
 type AppCommand = HandleCommandTypes<typeof appCommand>;

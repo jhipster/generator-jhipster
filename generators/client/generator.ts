@@ -33,6 +33,7 @@ import type {
   Application as ClientApplication,
   Config as ClientConfig,
   Entity as ClientEntity,
+  Features as ClientFeatures,
   Options as ClientOptions,
   Source as ClientSource,
 } from './types.d.ts';
@@ -49,14 +50,17 @@ export class ClientApplicationGenerator<
 > extends BaseApplicationGenerator<Entity, Application, Config, Options, Source> {}
 
 export default class ClientGenerator extends ClientApplicationGenerator {
+  constructor(args: string | string[], opts: ClientOptions, features: ClientFeatures) {
+    super(args, opts, { skipLoadCommand: true, ...features });
+  }
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
-      await this.dependsOnBootstrapApplicationClient();
+      await this.dependsOnBootstrap('client');
       await this.dependsOnJHipster(GENERATOR_COMMON);
     }
   }
