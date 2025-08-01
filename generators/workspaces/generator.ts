@@ -23,17 +23,19 @@ import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENER
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import { packageJson } from '../../lib/index.js';
+import type { Config as GitConfig, Options as GitOptions } from '../git/types.d.ts';
+import type { Config as ProjectNameConfig } from '../project-name/types.d.ts';
 import type { WorkspacesApplication, Config as WorkspacesConfig, Options as WorkspacesOptions } from './types.js';
 
 export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, WorkspacesApplication, WorkspacesConfig, WorkspacesOptions> {
-  workspaces!: boolean;
-  generateApplications!: () => Promise<void>;
-  generateWith!: string;
-  entrypointGenerator!: string;
   dockerCompose!: boolean;
-
   generateWorkspaces!: boolean;
   workspacesConfig!: Record<string, any>;
+
+  readonly workspaces!: boolean;
+  readonly generateApplications!: () => Promise<void>;
+  readonly generateWith!: string;
+  readonly entrypointGenerator!: string;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -56,7 +58,8 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
     return this.asInitializingTaskGroup({
       loadConfig() {
         // Generate workspaces file if workspace option is passed, or if workspace option is ommitted and monorepository is enabled, or if regenerating.
-        this.generateWorkspaces = (this.workspaces ?? this.jhipsterConfig.monorepository) || Boolean(this.packageJson?.get('workspaces'));
+        this.generateWorkspaces =
+          (this.workspaces ?? (this.jhipsterConfig as GitConfig).monorepository) || Boolean(this.packageJson?.get('workspaces'));
 
         // When generating workspaces, save to .yo-rc.json. Use a dummy config otherwise.
         this.workspacesConfig = this.generateWorkspaces ? this.jhipsterConfig : {};
@@ -71,7 +74,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   get configuring() {
     return this.asConfiguringTaskGroup({
       defaults() {
-        this.jhipsterConfig.baseName = this.jhipsterConfig.baseName ?? 'workspaces';
+        (this.jhipsterConfig as ProjectNameConfig).baseName ??= 'workspaces';
       },
       async configureUsingFiles() {
         if (!this.generateWorkspaces) return;
@@ -92,7 +95,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   get composing() {
     return this.asComposingTaskGroup({
       async composeGit() {
-        if (this.options.monorepository || this.jhipsterConfig.monorepository) {
+        if ((this.options as GitOptions).monorepository || (this.jhipsterConfig as GitConfig).monorepository) {
           await this.composeWithJHipster(GENERATOR_GIT);
           await this.composeWithJHipster('jhipster:javascript:prettier', { generatorOptions: { monorepositoryRoot: true } });
         }
@@ -122,7 +125,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   get loading() {
     return this.asLoadingTaskGroup({
       checkWorkspaces() {
-        if (this.generateWorkspaces && !this.jhipsterConfig.monorepository) {
+        if (this.generateWorkspaces && !(this.jhipsterConfig as GitConfig).monorepository) {
           throw new Error('Workspaces option is only supported with monorepositories.');
         }
       },

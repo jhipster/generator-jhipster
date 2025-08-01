@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { Config as BaseWorkspacesConfig, Options as BaseWorkspacesOptions } from '../base-workspaces/types.d.ts';
-export type { WorkspacesApplication } from '../base-workspaces/types.js';
-import type command from './command.ts';
+import type { Config as BaseConfig, Options as BaseOptions } from '../base/types.js';
+import type command from './command.js';
 
 type Command = HandleCommandTypes<typeof command>;
 
-export type Config = BaseWorkspacesConfig & Command['Config'];
-export type Options = BaseWorkspacesOptions & Command['Options'];
+export type Config = BaseConfig & Command['Config'];
+
+export type Options = BaseOptions & Command['Options'] & { createEnvBuilder?: typeof EnvironmentBuilder.createDefaultBuilder };

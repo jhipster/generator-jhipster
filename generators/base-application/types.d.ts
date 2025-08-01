@@ -412,7 +412,6 @@ export type Application<E extends Entity> = BaseSimpleApplicationApplication &
 
     skipClient?: boolean;
     skipServer?: boolean;
-    monorepository?: boolean;
 
     blueprints?: { name: string; version: string }[];
     testFrameworks?: string[];
