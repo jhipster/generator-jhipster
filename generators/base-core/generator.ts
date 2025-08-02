@@ -50,6 +50,7 @@ import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type GeneratorsByNamespace from '../types.js';
+import type { GeneratorsWithBootstrap } from '../types.js';
 import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from './internal/index.js';
 import type {
   CascatedEditFileCallback,
@@ -336,20 +337,34 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       },
     });
 
+    const { loadCommand = [], skipLoadCommand } = this.getFeatures();
+
     this.queueTask({
       queueName: QUEUES.LOADING_QUEUE,
       taskName: 'loadCurrentCommand',
       cancellable: true,
       async method() {
-        try {
-          const command = await this.#getCurrentJHipsterCommand();
-          if (!command.configs) return;
+        if (!skipLoadCommand) {
+          try {
+            const command = await this.#getCurrentJHipsterCommand();
+            if (!command.configs) return;
 
+            const context = this.context;
+            loadConfig.call(this, command.configs, { application: context });
+            loadDerivedConfig(command.configs, { application: context });
+          } catch {
+            // Ignore non existing command
+          }
+        }
+
+        if (loadCommand.length > 0) {
           const context = this.context;
-          loadConfig.call(this, command.configs, { application: context });
-          loadDerivedConfig(command.configs, { application: context });
-        } catch {
-          // Ignore non existing command
+          for (const commandToLoad of loadCommand) {
+            if (commandToLoad.configs) {
+              loadConfig.call(this, commandToLoad.configs, { application: context });
+              loadDerivedConfig(commandToLoad.configs, { application: context });
+            }
+          }
         }
       },
     });
@@ -359,14 +374,25 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       taskName: 'preparingCurrentCommand',
       cancellable: true,
       async method() {
-        try {
-          const command = await this.#getCurrentJHipsterCommand();
-          if (!command.configs) return;
+        if (!skipLoadCommand) {
+          try {
+            const command = await this.#getCurrentJHipsterCommand();
+            if (!command.configs) return;
 
+            const context = this.context;
+            loadConfigDefaults(command.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
+          } catch {
+            // Ignore non existing command
+          }
+        }
+
+        if (loadCommand.length > 0) {
           const context = this.context;
-          loadConfigDefaults(command.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
-        } catch {
-          // Ignore non existing command
+          for (const commandToLoad of loadCommand) {
+            if (commandToLoad.configs) {
+              loadConfigDefaults(commandToLoad.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
+            }
+          }
         }
       },
     });
@@ -624,6 +650,16 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       ...options,
       schedule: false,
     });
+  }
+
+  /**
+   * Compose with a jhipster bootstrap generator using default jhipster config, but queue it immediately.
+   */
+  dependsOnBootstrap<const G extends GeneratorsWithBootstrap>(
+    gen: G,
+    options?: ComposeOptions<GeneratorsByNamespace[`jhipster:${G}:bootstrap`]>,
+  ) {
+    return this.dependsOnJHipster(`jhipster:${gen}:bootstrap`, options);
   }
 
   /**

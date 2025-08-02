@@ -213,6 +213,9 @@ export default class BaseApplicationGenerator<
     return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER, options);
   }
 
+  /**
+   * @deprecated use dependsOnBootstrap('client')
+   */
   dependsOnBootstrapApplicationClient(
     options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_CLIENT]> | undefined,
   ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_CLIENT]> {

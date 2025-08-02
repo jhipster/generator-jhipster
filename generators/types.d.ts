@@ -17,6 +17,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// jhipster-needle-add-generator-with-bootstrap-start
+export type GeneratorsWithBootstrap = 'client' | 'java' | 'javascript' | 'kubernetes';
+// jhipster-needle-add-generator-with-bootstrap
+
 type GeneratorsByNamespace = {
   // jhipster-needle-add-generator-by-namespace-start
   angular: import('./angular/generator.ts').default;
@@ -39,6 +43,7 @@ type GeneratorsByNamespace = {
   'jhipster:ci-cd': import('./ci-cd/generator.ts').default;
   client: import('./client/generator.ts').default;
   'jhipster:client': import('./client/generator.ts').default;
+  'jhipster:client:bootstrap': import('./client/generators/bootstrap/generator.ts').default;
   'jhipster:client:common': import('./client/generators/common/generator.ts').default;
   common: import('./common/generator.ts').default;
   'jhipster:common': import('./common/generator.ts').default;

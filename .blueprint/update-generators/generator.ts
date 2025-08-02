@@ -45,11 +45,21 @@ export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
             return parts === 2 ? [generateImport(ns.replace('jhipster:', '')), generateImport(ns)] : [generateImport(ns)];
           })
           .flat();
+
+        const generatorsWithBootstrap = generators
+          .map(([ns]) => ns)
+          .filter(ns => ns.split(':').length > 2 && ns.endsWith(':bootstrap'))
+          .map(ns => ns.replace(':bootstrap', '').replace('jhipster:', ''));
+
         this.editFile(
           this.templatePath('../../../generators/types.d.ts'),
           createNeedleCallback({
             needle: 'add-generator-by-namespace',
             contentToAdd,
+          }),
+          createNeedleCallback({
+            needle: 'add-generator-with-bootstrap',
+            contentToAdd: `export type GeneratorsWithBootstrap = '${generatorsWithBootstrap.join("' | '")}';`,
           }),
         );
       },
