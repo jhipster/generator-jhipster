@@ -521,11 +521,11 @@ async function askForField(this: EntityGenerator) {
         if (uniq(enums).length !== enums.length) {
           return `Enum values cannot contain duplicates (typed values: ${input})`;
         }
-        for (let i = 0; i < enums.length; i++) {
-          if (/^[0-9].*/.test(enums[i])) {
-            return `Enum value "${enums[i]}" cannot start with a number`;
+        for (const enumValue of enums) {
+          if (/^[0-9].*/.test(enumValue)) {
+            return `Enum value "${enumValue}" cannot start with a number`;
           }
-          if (enums[i] === '') {
+          if (enumValue === '') {
             return 'Enum value cannot be empty (did you accidentally type "," twice in a row?)';
           }
         }

@@ -68,8 +68,8 @@ function getFilesContent(files: string[]): string {
 }
 
 function checkAllTheFilesAreJDLFiles(files: string[]) {
-  for (let i = 0; i < files.length; i++) {
-    checkFileIsJDLFile(files[i]);
+  for (const file of files) {
+    checkFileIsJDLFile(file);
   }
 }
 

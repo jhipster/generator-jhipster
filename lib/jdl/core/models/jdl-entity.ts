@@ -110,8 +110,8 @@ function formatFieldObjects(jdlFieldObjects: Record<string, JDLField>): string {
 function formatFieldObject(jdlFieldObject: JDLField): string {
   let string = '';
   const lines = jdlFieldObject.toString().split('\n');
-  for (let j = 0; j < lines.length; j++) {
-    string += `  ${lines[j]}\n`;
+  for (const line of lines) {
+    string += `  ${line}\n`;
   }
   string = `${string.slice(0, string.length - 1)}\n`;
   return string;
