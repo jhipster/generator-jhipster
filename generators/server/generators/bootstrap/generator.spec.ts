@@ -20,10 +20,12 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
+import { snakeCase } from 'lodash-es';
 
-import Generator from './index.ts';
+import { defaultHelpers as helpers, runResult } from '../../../../lib/testing/index.ts';
+import { shouldSupportFeatures } from '../../../../test/support/tests.js';
+
+import Generator from './generator.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,24 +33,36 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
+  it('generator-list constant matches folder name', async () => {
+    await expect((await import('../../../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+  });
+  it('generator-list esm exports constant matches folder name', async () => {
+    await expect((await import('../../../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+  });
   shouldSupportFeatures(Generator);
-  describe('blueprint support', () => testBlueprintSupport(generator));
 
-  describe('with defaults options', () => {
-    before(async () => {
-      await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig();
-    });
+  describe('with', () => {
+    describe('default config', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig();
+      });
 
-    it('should match files snapshot', () => {
-      expect(result.getStateSnapshot()).toMatchSnapshot();
-    });
-
-    it('should call source snapshot', () => {
-      expect(result.sourceCallsArg).toMatchSnapshot();
-    });
-
-    it('should compose with generators', () => {
-      expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
+      it('should succeed', () => {
+        expect(runResult.getSnapshot()).toMatchInlineSnapshot(`
+{
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "baseName": "jhipster",
+    "creationTimestamp": 1577836800000
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`);
+      });
     });
   });
 });

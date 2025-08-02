@@ -113,7 +113,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "databaseTypeNeo4j": false,
   "databaseTypeNo": false,
   "databaseTypeSql": true,
-  "db": undefined,
   "defaultEnvironment": undefined,
   "defaultEnvironmentAny": false,
   "defaultEnvironmentDev": false,

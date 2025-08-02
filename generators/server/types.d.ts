@@ -3,7 +3,7 @@ import type {
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
 } from '../../lib/command/index.ts';
-import type { Entity as BaseApplicationEntity } from '../base-application/types.ts';
+import type { Entity as BaseApplicationEntity, Features as BaseApplicationFeatures } from '../base-application/types.ts';
 import type {
   Application as CommonApplication,
   Entity as CommonEntity,
@@ -23,6 +23,8 @@ import type { Relationship as LanguagesRelationship } from '../languages/types.d
 import type { DatabaseEntity } from '../liquibase/types.ts';
 
 import type Command from './command.ts';
+
+export { BaseApplicationFeatures as Features };
 
 export type Config = JavaConfig & ExportStoragePropertiesFromCommand<typeof Command>;
 

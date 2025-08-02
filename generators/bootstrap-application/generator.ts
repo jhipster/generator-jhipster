@@ -40,7 +40,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
     }
 
     await this.dependsOnBootstrap('client');
-    await this.dependsOnBootstrapApplicationServer();
+    await this.dependsOnBootstrap('server');
   }
 
   get preparing() {

@@ -62,5 +62,6 @@ export const filterBasicServerGenerators = (ns: string) =>
     `jhipster:${GENERATOR_JAVA}:bootstrap`,
     `jhipster:${GENERATOR_JAVA}:domain`,
     `jhipster:${GENERATOR_SERVER}`,
+    `jhipster:${GENERATOR_SERVER}:bootstrap`,
     `jhipster:${GENERATOR_SPRING_BOOT}`,
   ].includes(ns);
