@@ -19,6 +19,7 @@
 apply plugin: "war"
 
 bootWar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     mainClass = "<%= packageName %>.<%= mainClass %>"
     includes = ["WEB-INF/**", "META-INF/**"]
 <%_ if (!skipClient) { _%>
@@ -28,7 +29,7 @@ bootWar {
 
 war {
 <%_ if (!skipClient) { _%>
-    webAppDirName = "<%= locals.clientDistDir %>"
+    from("<%= locals.clientDistDir %>")
     webXml = file("${project.rootDir}/<%= locals.clientSrcDir %>WEB-INF/web.xml")
 <%_ } _%>
     enabled = true
