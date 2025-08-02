@@ -18,6 +18,7 @@
  */
 import chalk from 'chalk';
 import { execaCommandSync } from 'execa';
+
 import type { ValidationResult } from '../../../base-core/api.js';
 
 /**

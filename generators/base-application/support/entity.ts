@@ -18,6 +18,7 @@
  */
 
 import { upperFirst } from 'lodash-es';
+
 import type { Entity as BaseApplicationEntity } from '../types.ts';
 
 export const findEntityInEntities = (entityName: string, entities: BaseApplicationEntity[]): BaseApplicationEntity | undefined =>

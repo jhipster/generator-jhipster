@@ -1,4 +1,4 @@
-import type { Source as BaseSource, Control } from './types.js';
+import type { Control, Source as BaseSource } from './types.js';
 
 export type SimpleTask<G = any, Param = any> = (this: G, params: Param) => void | Promise<void>;
 

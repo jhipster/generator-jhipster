@@ -18,9 +18,12 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { createRuntime } from '../runtime.js';
-import { getSyntacticAutoCompleteSuggestions, parse } from './api.js';
+
+import { createRuntime } from '../runtime.ts';
+
+import { getSyntacticAutoCompleteSuggestions, parse } from './api.ts';
 
 describe('jdl - JDL DSL API', () => {
   const jdlRuntime = createRuntime();

@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import { XMLParser } from 'fast-xml-parser';
-import { defaultXmlParserOptions } from '../internal/xml-store.js';
+
+import { defaultXmlParserOptions } from '../internal/xml-store.ts';
 
 /**
  * Extract properties from pom content

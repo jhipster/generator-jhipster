@@ -1,3 +1,5 @@
+import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type { Entity as BaseApplicationEntity } from '../base-application/types.d.ts';
 import type {
   Application as SpringBootApplication,
   Config as SpringBootConfig,
@@ -5,8 +7,7 @@ import type {
   Options as SpringBootOptions,
   Source as SpringBootSource,
 } from '../spring-boot/types.d.ts';
-import type { Entity as BaseApplicationEntity } from '../base-application/types.d.ts';
-import type { HandleCommandTypes } from '../../lib/command/types.js';
+
 import type command from './command.ts';
 
 export type Source = SpringBootSource & {

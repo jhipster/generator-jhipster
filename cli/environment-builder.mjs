@@ -16,18 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
-import { existsSync } from 'fs';
-import path, { dirname, resolve } from 'path';
-import { fileURLToPath, pathToFileURL } from 'url';
+import assert from 'node:assert';
+import { existsSync } from 'node:fs';
+import path, { dirname, resolve } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+import { QueuedAdapter } from '@yeoman/adapter';
 import chalk from 'chalk';
 import { cloneDeep, mergeWith } from 'lodash-es';
 import Environment from 'yeoman-environment';
-import { QueuedAdapter } from '@yeoman/adapter';
 
-import { createJHipsterLogger, packageNameToNamespace } from '../lib/utils/index.js';
-import { mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.js';
-import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.js';
+import { mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.ts';
+import { createJHipsterLogger, packageNameToNamespace } from '../lib/utils/index.ts';
+import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.ts';
+
 import { CLI_NAME, logger } from './utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);

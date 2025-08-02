@@ -18,9 +18,11 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { KEYWORD, NAME } from '../../parsing/lexer/shared-tokens.js';
-import createTokenFromConfig from '../../parsing/lexer/token-creator.js';
+
+import { KEYWORD, NAME } from './shared-tokens.ts';
+import createTokenFromConfig from './token-creator.ts';
 
 describe('jdl - TokenCreator', () => {
   describe('createTokenFromConfig', () => {

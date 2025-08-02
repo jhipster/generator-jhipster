@@ -21,7 +21,7 @@ import type AbstractJDLOption from './abstract-jdl-option.ts';
 import type JDLApplication from './jdl-application.ts';
 import type JDLEntity from './jdl-entity.ts';
 import type JDLEnum from './jdl-enum.ts';
-import JDLObject from './jdl-object.js';
+import JDLObject from './jdl-object.ts';
 import type JDLRelationship from './jdl-relationship.ts';
 
 /**

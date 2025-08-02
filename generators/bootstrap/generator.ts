@@ -16,20 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { rm } from 'fs/promises';
+import { rm } from 'node:fs/promises';
+
 import { createConflicterTransform, createYoResolveTransform, forceYoFiles } from '@yeoman/conflicter';
 import { transform } from '@yeoman/transform';
+import type { FileTransform, PipelineOptions } from 'mem-fs';
 import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
 import { isFilePending, isFileStateModified } from 'mem-fs-editor/state';
 import { createCommitTransform } from 'mem-fs-editor/transform';
 import type { Options as PrettierOptions } from 'prettier';
-import type { FileTransform, PipelineOptions } from 'mem-fs';
 
-import BaseGenerator from '../base/index.js';
-import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
-import { GENERATOR_UPGRADE } from '../generator-list.js';
-import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.js';
+import BaseGenerator from '../base/index.ts';
 import type { Features as BaseFeatures, Options as BaseOptions } from '../base/types.d.ts';
+import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.ts';
+import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
+import { GENERATOR_UPGRADE } from '../generator-list.ts';
+
 import {
   autoCrlfTransform,
   createESLintTransform,
@@ -39,7 +41,7 @@ import {
   createRemoveUnusedImportsTransform,
   createSortConfigFilesTransform,
   isPrettierConfigFilePath,
-} from './support/index.js';
+} from './support/index.ts';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const { MULTISTEP_TRANSFORM_QUEUE, PRE_CONFLICTS_QUEUE } = QUEUES;
@@ -218,7 +220,7 @@ export default class BootstrapGenerator extends BaseGenerator {
             key: 't',
             name: 'apply to template',
             value: async ({ file }) => {
-              const { applyChangesToFileOrCopy } = await import('../../lib/testing/apply-patch-to-template.js');
+              const { applyChangesToFileOrCopy } = await import('../../lib/testing/apply-patch-to-template.ts');
 
               if ((file as VinylMemFsEditorFile).history?.[0] && file.conflicterData?.diskContents) {
                 const templateFile = (file as VinylMemFsEditorFile).history[0];

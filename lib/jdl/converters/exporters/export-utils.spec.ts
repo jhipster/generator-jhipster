@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 
-import { readFileSync, writeFileSync } from 'fs';
 import { beforeEach, describe, expect, it } from 'esmocha';
+import { readFileSync, writeFileSync } from 'node:fs';
+
 import helpers from 'yeoman-test';
-import { writeConfigFile } from '../exporters/export-utils.js';
+
+import { writeConfigFile } from './export-utils.ts';
 
 describe('jdl - ExportUtils', () => {
   beforeEach(async () => {

@@ -1,4 +1,4 @@
-import { runResult } from '../helpers.js';
+import { runResult } from '../helpers.ts';
 
 /**
  * Requires a global `it` function to be available.

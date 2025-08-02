@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { passthrough } from 'p-transform';
+import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import { Minimatch } from 'minimatch';
+import { passthrough } from 'p-transform';
 import { Piscina } from 'piscina';
 import type { Options as PrettierOptions } from 'prettier';
-import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
+
 import type CoreGenerator from '../../base-core/index.js';
 
 const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');

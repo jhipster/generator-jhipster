@@ -16,22 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { snakeCase } from 'lodash-es';
-import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.js';
+
+import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import {
   AuthenticationTypeMatrix,
   type Matrix,
+  defaultHelpers as helpers,
   extendMatrix,
   fromMatrix,
-  defaultHelpers as helpers,
   runResult,
-} from '../../lib/testing/index.js';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
-import { GENERATOR_CYPRESS } from '../generator-list.js';
-import Generator from './generator.js';
+} from '../../lib/testing/index.ts';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
+import { GENERATOR_CYPRESS } from '../generator-list.ts';
+
+import Generator from './generator.ts';
 
 const { CYPRESS } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
@@ -73,7 +76,7 @@ const entities = [
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));

@@ -1,2 +1,2 @@
-export * from './export-jdl-transform.js';
-export * from './import-jdl-transform.js';
+export * from './export-jdl-transform.ts';
+export * from './import-jdl-transform.ts';

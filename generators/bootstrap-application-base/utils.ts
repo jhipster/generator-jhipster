@@ -17,19 +17,20 @@
  * limitations under the License.
  */
 import { defaults } from 'lodash-es';
-import { Validations, databaseTypes, fieldTypes } from '../../lib/jhipster/index.js';
-import { loadRequiredConfigIntoEntity } from '../base-application/support/index.js';
-import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
-import { getDatabaseTypeData } from '../server/support/database.js';
-import type BaseApplicationGenerator from '../base-application/generator.js';
-import { formatDateForChangelog } from '../base/support/timestamp.ts';
+
+import { Validations, databaseTypes, fieldTypes } from '../../lib/jhipster/index.ts';
 import type { ApplicationAll, EntityAll as ApplicationEntity, UserEntity } from '../../lib/types/application-all.d.ts';
+import { formatDateForChangelog } from '../base/support/timestamp.ts';
+import type BaseApplicationGenerator from '../base-application/generator.js';
+import { loadRequiredConfigIntoEntity } from '../base-application/support/index.ts';
 import type {
   Application as BaseApplicationApplication,
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
   Relationship as BaseApplicationRelationship,
 } from '../base-application/types.d.ts';
+import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
+import { getDatabaseTypeData } from '../server/support/database.ts';
 
 const { CASSANDRA } = databaseTypes;
 const { CommonDBTypes } = fieldTypes;

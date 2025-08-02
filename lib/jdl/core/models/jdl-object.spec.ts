@@ -17,22 +17,24 @@
  * limitations under the License.
  */
 
-import { afterEach, before, describe, it, expect as jestExpect } from 'esmocha';
-import { expect } from 'chai';
-import { relationshipTypes } from '../basic-types/index.js';
-import { binaryOptions, unaryOptions } from '../built-in-options/index.js';
+import { afterEach, before, describe, expect as jestExpect, it } from 'esmocha';
 
-import JDLObject from '../models/jdl-object.js';
-import { createJDLApplication } from '.././__test-support__/index.js';
-import JDLDeployment from '../models/jdl-deployment.js';
-import { JDLEntity, JDLEnum } from '../models/index.js';
-import JDLField from '../models/jdl-field.js';
-import JDLValidation from '../models/jdl-validation.js';
-import JDLRelationship from '../models/jdl-relationship.js';
-import JDLUnaryOption from '../models/jdl-unary-option.js';
-import JDLBinaryOption from '../models/jdl-binary-option.js';
-import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
-import { createRuntime } from '../runtime.js';
+import { expect } from 'chai';
+
+import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import { createJDLApplication } from '../__test-support__/index.ts';
+import { relationshipTypes } from '../basic-types/index.ts';
+import { binaryOptions, unaryOptions } from '../built-in-options/index.ts';
+import { createRuntime } from '../runtime.ts';
+
+import { JDLEntity, JDLEnum } from './index.ts';
+import JDLBinaryOption from './jdl-binary-option.ts';
+import JDLDeployment from './jdl-deployment.ts';
+import JDLField from './jdl-field.ts';
+import JDLObject from './jdl-object.ts';
+import JDLRelationship from './jdl-relationship.ts';
+import JDLUnaryOption from './jdl-unary-option.ts';
+import JDLValidation from './jdl-validation.ts';
 
 describe('jdl - JDLObject', () => {
   const runtime = createRuntime();

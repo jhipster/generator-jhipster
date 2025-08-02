@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 
-import { validations } from '../../core/built-in-options/index.js';
+import { validations } from '../../core/built-in-options/index.ts';
 import type JDLValidation from '../../core/models/jdl-validation.ts';
-import Validator from './validator.js';
+
+import Validator from './validator.ts';
 
 const {
   Validations: { exists, needsValue, MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES },

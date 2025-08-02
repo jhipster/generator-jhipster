@@ -17,14 +17,15 @@
  * limitations under the License.
  */
 
-import BaseApplicationGenerator from '../base-application/index.js';
-import BaseSimpleApplicationGenerator from '../base-simple-application/index.js';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
+
 import type {
   Application as JavascriptApplication,
   Config as JavascriptConfig,
   Entity as JavascriptEntity,
-  Options as JavascriptOptions,
   JavascriptSimpleApplication,
+  Options as JavascriptOptions,
   Source as JavascriptSource,
 } from './types.js';
 

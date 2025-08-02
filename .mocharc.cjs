@@ -1,5 +1,5 @@
-const Module = require('module');
-const process = require('process');
+const Module = require('node:module');
+const process = require('node:process');
 
 if (!Module.register) {
   // eslint-disable-next-line no-console

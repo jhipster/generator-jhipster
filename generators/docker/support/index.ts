@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './check-docker.js';
-export * from './docker-compose-file.js';
+export * from './check-docker.ts';
+export * from './docker-compose-file.ts';

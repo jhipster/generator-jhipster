@@ -16,16 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
-import fs, { existsSync, writeFileSync } from 'fs';
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, it } from 'esmocha';
+import assert from 'node:assert';
+import fs, { existsSync, writeFileSync } from 'node:fs';
+import path, { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import sortKeys from 'sort-keys';
 
-import { authenticationTypes } from '../lib/jhipster/index.js';
-import { formatDateForChangelog } from '../generators/base/support/index.js';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../lib/core/application-types.js';
+import { formatDateForChangelog } from '../generators/base/support/index.ts';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../lib/core/application-types.ts';
+import { authenticationTypes } from '../lib/jhipster/index.ts';
 
 const writeJsonSync = (file, content) => writeFileSync(file, JSON.stringify(content, null, 2));
 const readJsonSync = file => JSON.parse(fs.readFileSync(file, 'utf-8'));

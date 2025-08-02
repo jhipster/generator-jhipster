@@ -20,23 +20,24 @@
 import chalk from 'chalk';
 import { padEnd, startCase } from 'lodash-es';
 
-import BaseApplicationGenerator from '../base-application/index.js';
-import { updateLanguagesTask as updateLanguagesInAngularTask } from '../angular/support/index.js';
-import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/index.js';
-import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/index.js';
-import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.js';
-import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
-import { QUEUES } from '../base-application/priorities.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { updateLanguagesTask as updateLanguagesInAngularTask } from '../angular/support/index.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import { QUEUES } from '../base-application/priorities.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import type { Application as ClientApplication, Config as ClientConfig, Source as ClientSource } from '../client/types.js';
+import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
+import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/index.ts';
+import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.ts';
+import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/index.ts';
+
+import { writeEntityFiles } from './entity-files.ts';
+import { clientI18nFiles } from './files.ts';
+import { askForLanguages, askI18n } from './prompts.ts';
+import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.ts';
 import type { Language } from './support/languages.js';
-import { findLanguageForTag, supportedLanguages } from './support/languages.js';
-import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
-import { writeEntityFiles } from './entity-files.js';
-import { clientI18nFiles } from './files.js';
-import { askForLanguages, askI18n } from './prompts.js';
-import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.js';
+import { findLanguageForTag, supportedLanguages } from './support/languages.ts';
+import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.ts';
 import type {
   Application as LanguagesApplication,
   Config as LanguagesConfig,

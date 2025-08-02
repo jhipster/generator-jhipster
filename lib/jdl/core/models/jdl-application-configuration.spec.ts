@@ -18,10 +18,13 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLApplicationConfiguration from '../models/jdl-application-configuration.js';
-import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.js';
-import applicationOptions from '../../../jhipster/application-options.js';
+
+import applicationOptions from '../../../jhipster/application-options.ts';
+
+import JDLApplicationConfiguration from './jdl-application-configuration.ts';
+import StringJDLApplicationConfigurationOption from './string-jdl-application-configuration-option.ts';
 
 const { OptionNames } = applicationOptions;
 

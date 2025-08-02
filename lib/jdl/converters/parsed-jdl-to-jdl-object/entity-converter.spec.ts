@@ -18,7 +18,8 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import { convertEntities } from './entity-converter.js';
+
+import { convertEntities } from './entity-converter.ts';
 
 describe('jdl - EntityConverter', () => {
   describe('convertEntities', () => {

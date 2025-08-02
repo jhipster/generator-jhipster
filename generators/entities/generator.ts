@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_APP } from '../generator-list.js';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import { GENERATOR_APP } from '../generator-list.ts';
 
 export default class EntitiesGenerator extends BaseApplicationGenerator {
   entities?: string[];

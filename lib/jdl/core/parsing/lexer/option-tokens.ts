@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import createTokenFromConfig from './token-creator.js';
-import { BINARY_OPTION, KEYWORD, UNARY_OPTION } from './shared-tokens.js';
+import { BINARY_OPTION, KEYWORD, UNARY_OPTION } from './shared-tokens.ts';
+import createTokenFromConfig from './token-creator.ts';
 
 const tokens = [
   { name: 'WITH', pattern: 'with' },

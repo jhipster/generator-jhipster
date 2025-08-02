@@ -19,12 +19,13 @@
 import { lowerFirst, startCase, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
-import { databaseTypes, entityOptions, validations } from '../../../lib/jhipster/index.js';
-import { mutateData } from '../../../lib/utils/index.js';
+import { databaseTypes, entityOptions, validations } from '../../../lib/jhipster/index.ts';
+import { mutateData } from '../../../lib/utils/index.ts';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../types.js';
-import { prepareProperty } from './prepare-property.js';
-import { stringifyApplicationData } from './debug.js';
+
+import { stringifyApplicationData } from './debug.ts';
+import { prepareProperty } from './prepare-property.ts';
 
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;
 const { MapperTypes } = entityOptions;

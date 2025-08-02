@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.ts';
 
 /**
  * The default is to use a file path string. It implies use of the template method.

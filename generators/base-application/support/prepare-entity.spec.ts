@@ -18,10 +18,13 @@
  */
 
 import { beforeEach, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { formatDateForChangelog } from '../../base/support/index.js';
+
 import type { EntityAll } from '../../../lib/types/application-all.d.ts';
-import { entityDefaultConfig, prepareEntityPrimaryKeyForTemplates } from './prepare-entity.js';
+import { formatDateForChangelog } from '../../base/support/index.ts';
+
+import { entityDefaultConfig, prepareEntityPrimaryKeyForTemplates } from './prepare-entity.ts';
 
 describe('generator - base-application - support - prepareEntity', () => {
   describe('prepareEntityPrimaryKeyForTemplates', () => {

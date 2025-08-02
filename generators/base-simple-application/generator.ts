@@ -18,15 +18,17 @@
  */
 import type { ComposeOptions } from 'yeoman-generator';
 
-import type GeneratorsByNamespace from '../types.js';
-import BaseGenerator from '../base/index.js';
-import { mutateData } from '../../lib/utils/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
-import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
+import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
+import { mutateData } from '../../lib/utils/index.ts';
+import BaseGenerator from '../base/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.ts';
+import type GeneratorsByNamespace from '../types.js';
+
+import { BOOTSTRAP_APPLICATION, CUSTOM_PRIORITIES } from './priorities.ts';
+import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.ts';
 import type { SimpleTaskTypes } from './tasks.js';
-import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.js';
 import type {
   Application as BaseSimpleApplicationApplication,
   Config as BaseSimpleApplicationConfig,
@@ -34,7 +36,6 @@ import type {
   Options as BaseSimpleApplicationOptions,
   Source as BaseSimpleApplicationSource,
 } from './types.js';
-import { BOOTSTRAP_APPLICATION, CUSTOM_PRIORITIES } from './priorities.js';
 
 const { LOADING, PREPARING, POST_PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
 

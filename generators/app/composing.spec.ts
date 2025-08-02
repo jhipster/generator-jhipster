@@ -1,7 +1,7 @@
 import { before, describe, it } from 'esmocha';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { GENERATOR_APP } from '../generator-list.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+import { GENERATOR_APP } from '../generator-list.ts';
 
 const allMockedComposedGenerators = [
   'jhipster:common',

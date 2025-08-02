@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 import { SpringBootApplicationGenerator } from '../spring-boot/generator.ts';
-import writeMongodbFilesTask from './files.js';
-import cleanupMongodbFilesTask from './cleanup.js';
-import writeMongodbEntityFilesTask, { cleanupMongodbEntityFilesTask } from './entity-files.js';
+
+import cleanupMongodbFilesTask from './cleanup.ts';
+import writeMongodbEntityFilesTask, { cleanupMongodbEntityFilesTask } from './entity-files.ts';
+import writeMongodbFilesTask from './files.ts';
 
 export default class MongoDBGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {

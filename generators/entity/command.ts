@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import serverCommand from '../server/command.js';
-import commonCommand from '../common/command.js';
+import commonCommand from '../common/command.ts';
+import serverCommand from '../server/command.ts';
 
 const { skipCheckLengthOfIdentifier } = serverCommand.configs;
 

@@ -1,4 +1,4 @@
-import { fieldTypes } from '../../jhipster/index.js';
+import { fieldTypes } from '../../jhipster/index.ts';
 import type { Entity } from '../../jhipster/types/entity.js';
 
 const {

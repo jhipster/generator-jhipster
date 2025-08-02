@@ -1,11 +1,13 @@
-import globals from 'globals';
 import js from '@eslint/js';
 import { defineConfig } from 'eslint/config';
-import ts from 'typescript-eslint';
-import prettier from 'eslint-plugin-prettier/recommended';
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import chai from 'eslint-plugin-chai-friendly';
 import imports from 'eslint-plugin-import-x';
-import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
+import n from 'eslint-plugin-n';
+import prettier from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
+import ts from 'typescript-eslint';
+
 import jhipster from './lib/eslint/index.js';
 
 export default defineConfig(
@@ -22,6 +24,12 @@ export default defineConfig(
   js.configs.recommended,
   jhipster.base,
   {
+    plugins: { n },
+    rules: {
+      'n/prefer-node-protocol': 'error',
+    },
+  },
+  {
     files: ['**/*.ts'],
     extends: [...ts.configs.recommended, ...ts.configs.stylistic],
     languageOptions: {
@@ -32,12 +40,10 @@ export default defineConfig(
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
-      '@typescript-eslint/ban-ts-comment': ['off', { 'ts-nocheck': true }],
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/prefer-for-of': 'off',
       '@typescript-eslint/no-this-alias': 'off',
     },
   },
@@ -61,8 +67,9 @@ export default defineConfig(
       'import-x/resolver-next': [createTypeScriptImportResolver()],
     },
     rules: {
-      'import-x/no-named-as-default-member': 'off',
+      'import-x/extensions': ['error', 'ignorePackages', { fix: true }],
       'import-x/namespace': 'off',
+      'import-x/no-named-as-default-member': 'off',
     },
   },
   {

@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../../lib/testing/index.js';
-import { GENERATOR_SPRING_BOOT } from '../../generator-list.js';
-import { insertContentIntoApplicationProperties } from './needles.js';
+
+import { defaultHelpers as helpers, runResult } from '../../../lib/testing/index.ts';
+import { GENERATOR_SPRING_BOOT } from '../../generator-list.ts';
+
+import { insertContentIntoApplicationProperties } from './needles.ts';
 
 describe('generator - server - support - needles', () => {
   describe('generated project', () => {

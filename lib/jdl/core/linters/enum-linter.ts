@@ -18,8 +18,9 @@
  */
 
 import type { CstNode, IToken } from 'chevrotain';
-import { rulesNames } from './rules.js';
-import EnumIssue from './issues/enum-issue.js';
+
+import EnumIssue from './issues/enum-issue.ts';
+import { rulesNames } from './rules.ts';
 
 let issues: EnumIssue[];
 

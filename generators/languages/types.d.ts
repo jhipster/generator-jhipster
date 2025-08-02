@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,
@@ -25,9 +26,9 @@ import type {
   Relationship as BaseApplicationRelationship,
   Source as BaseApplicationSource,
 } from '../base-application/types.d.ts';
-import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { Language } from './support/languages.js';
+
 import type command from './command.js';
+import type { Language } from './support/languages.js';
 
 type Command = HandleCommandTypes<typeof command>;
 

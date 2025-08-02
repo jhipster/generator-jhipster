@@ -17,4 +17,4 @@
  * limitations under the License.
  */
 export * from './config-def.ts';
-export * from './write-files.js';
+export * from './write-files.ts';

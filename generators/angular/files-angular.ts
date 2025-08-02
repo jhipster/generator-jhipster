@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
-import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.ts';
+import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.ts';
+
 import type { Application as AngularApplication, Entity as AngularEntity } from './types.js';
 
 export const files = asWriteFilesSection({

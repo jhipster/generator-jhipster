@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 
-import chalk from 'chalk';
 import type { QueuedAdapter } from '@yeoman/types';
+import chalk from 'chalk';
 
-import BaseGenerator from '../base/index.js';
-import { files } from './files.js';
+import BaseGenerator from '../base/index.ts';
+
+import { files } from './files.ts';
 import type { Config as GitConfig, GeneratorProperties as GitGeneratorProperties, Options as GitOptions } from './types.js';
 
 export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {

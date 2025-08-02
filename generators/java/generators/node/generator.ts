@@ -18,8 +18,9 @@
  */
 import chalk from 'chalk';
 import type { ExecaError } from 'execa';
-import { JavaApplicationGenerator } from '../../generator.ts';
+
 import { isWin32 } from '../../../base-core/support/os.ts';
+import { JavaApplicationGenerator } from '../../generator.ts';
 
 // TODO adjust type
 export default class NodeGenerator extends JavaApplicationGenerator {

@@ -1,8 +1,9 @@
 import { kebabCase, startCase, upperFirst } from 'lodash-es';
+
+import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import { customCamelCase } from '../../../lib/utils/string-utils.ts';
-import { getHipster } from '../internal/index.ts';
-import { upperFirstCamelCase } from '../../../lib/utils/index.js';
 import type { Application as BaseSimpleApplication } from '../../base-simple-application/types.js';
+import { getHipster } from '../internal/index.ts';
 
 export const baseNameProperties = {
   camelizedBaseName: ({ baseName }: BaseSimpleApplication) => customCamelCase(baseName),

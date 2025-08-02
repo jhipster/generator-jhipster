@@ -18,8 +18,8 @@
  */
 
 import type EntityIssue from './entity-issue.js';
-import type FieldIssue from './field-issue.js';
 import type EnumIssue from './enum-issue.js';
+import type FieldIssue from './field-issue.js';
 import type RelationshipIssue from './relationship-issue.js';
 
 export default class Issues {

@@ -1,6 +1,7 @@
-import { cpSync, mkdirSync, statSync } from 'fs';
-import { extname, join } from 'path';
-import { jdlEntitiesSamplesFolder } from '../../constants.js';
+import { cpSync, mkdirSync, statSync } from 'node:fs';
+import { extname, join } from 'node:path';
+
+import { jdlEntitiesSamplesFolder } from '../../constants.ts';
 
 const isDirectory = (dir: string) => {
   try {

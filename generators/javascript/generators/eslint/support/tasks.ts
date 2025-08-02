@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { asWritingTask } from '../../../../base-application/support/task-type-inference.ts';
-import { clientRootTemplatesBlock } from '../../../../client/support/files.js';
+import { clientRootTemplatesBlock } from '../../../../client/support/files.ts';
 import type { Application as JavascriptApplication, Entity as JavascriptEntity } from '../../../types.d.ts';
 
 export const writeEslintClientRootConfigFile = asWritingTask<JavascriptEntity, JavascriptApplication<JavascriptEntity>>(

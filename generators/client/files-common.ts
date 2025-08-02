@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.js';
-import { clientRootTemplatesBlock, clientSrcTemplatesBlock } from './support/files.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.ts';
+
+import { clientRootTemplatesBlock, clientSrcTemplatesBlock } from './support/files.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from './types.js';
 
 export const files = asWriteFilesSection({

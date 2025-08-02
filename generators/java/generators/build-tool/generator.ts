@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { buildToolTypes } from '../../../../lib/jhipster/index.js';
-import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.js';
+import { buildToolTypes } from '../../../../lib/jhipster/index.ts';
+import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.ts';
 import type { MavenDependency } from '../../../maven/types.js';
 import { JavaApplicationGenerator } from '../../generator.ts';
-import { javaScopeToGradleScope } from '../../support/index.js';
+import { javaScopeToGradleScope } from '../../support/index.ts';
 import type { ConditionalJavaDefinition, JavaDependency, JavaNeedleOptions } from '../../types.js';
 
 const { GRADLE, MAVEN } = buildToolTypes;

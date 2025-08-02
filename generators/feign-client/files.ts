@@ -1,7 +1,7 @@
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/index.js';
-import type { Application as JavaApplication } from './../java/types.js';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/index.ts';
+import type { Application as JavaApplication } from '../java/types.js';
 
 export const feignFiles = asWriteFilesSection<JavaApplication>({
   microserviceFeignFiles: [

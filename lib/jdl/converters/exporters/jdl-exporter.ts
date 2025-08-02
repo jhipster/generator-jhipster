@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-import fs from 'fs';
+import fs from 'node:fs';
+
 import type JDLObject from '../../core/models/jdl-object.js';
 
 /**

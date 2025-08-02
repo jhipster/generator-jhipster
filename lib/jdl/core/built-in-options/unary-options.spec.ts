@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 
-import { before, describe, it, expect as jestExpect } from 'esmocha';
+import { before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { unaryOptions } from '../built-in-options/index.js';
+
+import { unaryOptions } from './index.ts';
 
 describe('jdl - UnaryOptions', () => {
   describe('exists', () => {

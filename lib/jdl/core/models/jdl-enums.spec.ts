@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 
-import { after, before, describe, it, expect as jestExpect } from 'esmocha';
+import { after, before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLEnums from '../models/jdl-enums.js';
-import { JDLEnum } from '../models/index.js';
+
+import { JDLEnum } from './index.ts';
+import JDLEnums from './jdl-enums.ts';
 
 describe('jdl - JDLEnums', () => {
   describe('add', () => {

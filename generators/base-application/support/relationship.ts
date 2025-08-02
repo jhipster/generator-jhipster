@@ -21,8 +21,9 @@ import { lowerFirst, upperFirst } from 'lodash-es';
 
 import type { ValidationResult } from '../../base-core/api.d.ts';
 import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../types.js';
-import { findEntityInEntities } from './entity.js';
-import { stringifyApplicationData } from './debug.js';
+
+import { stringifyApplicationData } from './debug.ts';
+import { findEntityInEntities } from './entity.ts';
 
 export const otherRelationshipType = (relationshipType: string): string => relationshipType.split('-').reverse().join('-');
 

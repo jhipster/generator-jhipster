@@ -18,7 +18,26 @@
  */
 import chalk from 'chalk';
 import { lowerFirst, sortedUniqBy } from 'lodash-es';
-import BaseApplicationGenerator from '../base-application/index.js';
+
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
+import type { FieldType } from '../../lib/jhipster/field-types.ts';
+import {
+  cacheTypes,
+  databaseTypes,
+  fieldTypes,
+  messageBrokerTypes,
+  searchEngineTypes,
+  testFrameworkTypes,
+  websocketTypes,
+} from '../../lib/jhipster/index.ts';
+import { mutateData } from '../../lib/utils/index.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
+import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';
+import type { Config as ClientConfig } from '../client/types.js';
+import type { Source as CommonSource } from '../common/types.js';
+import type { Entity as CypressEntity } from '../cypress/types.js';
+import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.js';
 import {
   GENERATOR_CUCUMBER,
   GENERATOR_DOCKER,
@@ -35,38 +54,21 @@ import {
   GENERATOR_SPRING_DATA_NEO4J,
   GENERATOR_SPRING_DATA_RELATIONAL,
   GENERATOR_SPRING_WEBSOCKET,
-} from '../generator-list.js';
-import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.js';
+} from '../generator-list.ts';
+import { addJavaImport, generateKeyStore, javaBeanCase } from '../java/support/index.ts';
+import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.ts';
 import {
   getJavaValueGeneratorForType,
   getSpecificationBuildForType,
   insertContentIntoApplicationProperties,
-} from '../server/support/index.js';
-import { addJavaImport, generateKeyStore, javaBeanCase } from '../java/support/index.js';
-import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
-import { mutateData } from '../../lib/utils/index.js';
-import {
-  cacheTypes,
-  databaseTypes,
-  fieldTypes,
-  messageBrokerTypes,
-  searchEngineTypes,
-  testFrameworkTypes,
-  websocketTypes,
-} from '../../lib/jhipster/index.js';
-import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.js';
-import type { FieldType } from '../../lib/jhipster/field-types.ts';
-import type { Config as ClientConfig } from '../client/types.js';
+} from '../server/support/index.ts';
 import type { Config as SpringCacheConfig } from '../spring-cache/types.js';
 import type { Config as SpringCloudStreamConfig } from '../spring-cloud-stream/types.js';
-import type { Entity as CypressEntity } from '../cypress/types.js';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
-import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';
-import type { Source as CommonSource } from '../common/types.js';
-import { writeFiles as writeEntityFiles } from './entity-files.js';
-import cleanupTask from './cleanup.js';
-import { serverFiles } from './files.js';
-import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
+
+import cleanupTask from './cleanup.ts';
+import { writeFiles as writeEntityFiles } from './entity-files.ts';
+import { serverFiles } from './files.ts';
+import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.ts';
 import type {
   Application as SpringBootApplication,
   Config as SpringBootConfig,

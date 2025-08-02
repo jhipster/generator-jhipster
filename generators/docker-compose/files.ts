@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { authenticationTypes, monitoringTypes } from '../../lib/jhipster/index.js';
-import { asWritingWorkspacesTask } from '../base-workspaces/support/task-type-inference.js';
-import { asWriteFilesSection } from '../base-application/support/index.js';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
+import { authenticationTypes, monitoringTypes } from '../../lib/jhipster/index.ts';
+import { asWriteFilesSection } from '../base-application/support/index.ts';
+import { asWritingWorkspacesTask } from '../base-workspaces/support/task-type-inference.ts';
 
 const { PROMETHEUS } = monitoringTypes;
 const { OAUTH2 } = authenticationTypes;

@@ -16,14 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
+import assert from 'node:assert';
 
-import BaseApplicationGenerator from '../base-application/index.js';
-import { validations } from '../../lib/jhipster/index.js';
-import { stringifyApplicationData } from '../base-application/support/index.js';
-
-import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.js';
+import { validations } from '../../lib/jhipster/index.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import { stringifyApplicationData } from '../base-application/support/index.ts';
 import type { Application as CommonApplication, Entity as CommonEntity, Field as CommonField } from '../common/types.js';
+import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.js';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },

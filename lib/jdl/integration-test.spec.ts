@@ -17,19 +17,22 @@
  * limitations under the License.
  */
 
+import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import helpers from 'yeoman-test';
-import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.js';
-import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
-import exportToJDL from './converters/exporters/jdl-exporter.js';
+
+import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
+
+import exportToJDL from './converters/exporters/jdl-exporter.ts';
+import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.ts';
 import {
   createImporterFromContent,
   getTestFile,
   parseFromConfigurationObject,
   parseFromContent,
   parseFromFiles,
-} from './core/__test-support__/index.js';
+} from './core/__test-support__/index.ts';
 import type { ApplicationWithEntities } from './jdl-importer.js';
 
 describe('jdl - integration tests', () => {

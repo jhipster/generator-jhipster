@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 
-import { readFileSync } from 'fs';
-import logger from '../utils/objects/logger.js';
+import { readFileSync } from 'node:fs';
 
-import { getCst as apiGetCst, parse as apiParser } from '../parsing/api.js';
-import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks.js';
+import { getCst as apiGetCst, parse as apiParser } from '../parsing/api.ts';
+import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks.ts';
 import type { JDLRuntime } from '../types/runtime.js';
+import logger from '../utils/objects/logger.ts';
 
 /**
  * Parses the given files and returns the resulting intermediate object.
@@ -68,8 +68,8 @@ function getFilesContent(files: string[]): string {
 }
 
 function checkAllTheFilesAreJDLFiles(files: string[]) {
-  for (let i = 0; i < files.length; i++) {
-    checkFileIsJDLFile(files[i]);
+  for (const file of files) {
+    checkFileIsJDLFile(file);
   }
 }
 

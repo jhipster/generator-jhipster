@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './needles.js';
-export * from './os.js';
+export * from './needles.ts';
+export * from './os.ts';
 export * from './properties-file.ts';
-export * from './write-files.js';
+export * from './write-files.ts';

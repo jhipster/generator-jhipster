@@ -17,4 +17,4 @@
  * limitations under the License.
  */
 
-export * from './dependabot-gradle.js';
+export * from './dependabot-gradle.ts';

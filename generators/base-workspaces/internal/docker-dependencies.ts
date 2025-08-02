@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type BaseCoreGenerator from '../../base-core/generator.ts';
-import { dockerContainers } from '../../generator-constants.js';
-import { getDockerfileContainers } from '../../docker/utils.js';
 import { mutateData } from '../../../lib/utils/object.ts';
+import type BaseCoreGenerator from '../../base-core/generator.ts';
+import { getDockerfileContainers } from '../../docker/utils.ts';
+import { dockerContainers } from '../../generator-constants.js';
 
 export function loadDockerDependenciesTask<const G extends BaseCoreGenerator>(
   this: G,

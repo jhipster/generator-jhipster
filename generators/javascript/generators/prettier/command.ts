@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../../../lib/command/index.js';
-import gitCommand from '../../../git/command.js';
+import gitCommand from '../../../git/command.ts';
 
 const { monorepository } = gitCommand.configs!;
 

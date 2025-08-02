@@ -1,16 +1,18 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import BaseGenerator from '../../generators/base-core/index.js';
+
+import BaseGenerator from '../../generators/base-core/index.ts';
+import { getPackageRoot } from '../../lib/index.ts';
+import { getGithubSamplesGroup } from '../../lib/testing/github-group.ts';
 import type { GitHubMatrixGroup } from '../../lib/testing/github-matrix.js';
-import { convertToGitHubMatrix } from '../../lib/testing/github-matrix.js';
-import { getGithubOutputFile, setGithubTaskOutput } from '../../lib/testing/github.js';
-import { getGithubSamplesGroup } from '../../lib/testing/github-group.js';
+import { convertToGitHubMatrix } from '../../lib/testing/github-matrix.ts';
+import { getGithubOutputFile, setGithubTaskOutput } from '../../lib/testing/github.ts';
 import type { JHipsterGitHubInputMatrix, WorkflowSamples } from '../../lib/testing/workflow-samples.js';
-import { getPackageRoot } from '../../lib/index.js';
 import { BUILD_JHIPSTER_BOM, JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from '../../test-integration/integration-test-constants.js';
-import { getGitChanges } from './support/git-changes.js';
-import { devServerMatrix } from './samples/dev-server.js';
+
 import type { eventNameChoices, workflowChoices } from './command.js';
+import { devServerMatrix } from './samples/dev-server.ts';
+import { getGitChanges } from './support/git-changes.ts';
 
 export default class extends BaseGenerator {
   workflow!: (typeof workflowChoices)[number];

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'esmocha';
+
 import type { Entity as SpringBootEntity, Field as SpringBootField } from '../types.d.ts';
-import { prepareMapstructField } from './prepare-field.js';
+
+import { prepareMapstructField } from './prepare-field.ts';
 
 describe('prepareField', () => {
   describe('prepareMapstructField', () => {

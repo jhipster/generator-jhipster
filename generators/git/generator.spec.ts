@@ -16,13 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, resolve } from 'path';
-import { fileURLToPath } from 'url';
-import { access } from 'fs/promises';
 import { before, describe, expect, it } from 'esmocha';
+import { access } from 'node:fs/promises';
+import { basename, dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { runResult, skipPrettierHelpers as helpers } from '../../lib/testing/index.ts';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { skipPrettierHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { GENERATOR_GIT } from '../generator-list.js';
+import { GENERATOR_GIT } from '../generator-list.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

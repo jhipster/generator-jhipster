@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
 
 /**

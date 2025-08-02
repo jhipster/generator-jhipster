@@ -18,17 +18,20 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLObject from '../../core/models/jdl-object.js';
-import { JDLEntity } from '../../core/models/index.js';
-import JDLField from '../../core/models/jdl-field.js';
-import JDLValidation from '../../core/models/jdl-validation.js';
-import JDLRelationship from '../../core/models/jdl-relationship.js';
-import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
-import { relationshipTypes } from '../../core/basic-types/index.js';
-import { binaryOptions, validations } from '../../core/built-in-options/index.js';
-import fieldTypes from '../../../jhipster/field-types.js';
-import createValidator from '../validators/jdl-without-application-validator.js';
+
+import fieldTypes from '../../../jhipster/field-types.ts';
+import { relationshipTypes } from '../../core/basic-types/index.ts';
+import { binaryOptions, validations } from '../../core/built-in-options/index.ts';
+import { JDLEntity } from '../../core/models/index.ts';
+import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+import JDLField from '../../core/models/jdl-field.ts';
+import JDLObject from '../../core/models/jdl-object.ts';
+import JDLRelationship from '../../core/models/jdl-relationship.ts';
+import JDLValidation from '../../core/models/jdl-validation.ts';
+
+import createValidator from './jdl-without-application-validator.ts';
 
 const {
   Validations: { MIN },

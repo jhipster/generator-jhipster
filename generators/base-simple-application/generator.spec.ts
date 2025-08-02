@@ -16,14 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, esmocha, expect, it } from 'esmocha';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-import { defaultHelpers as helpers } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
-import Generator from './index.js';
+
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

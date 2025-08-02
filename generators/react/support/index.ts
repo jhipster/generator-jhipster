@@ -16,6 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './translate-react.js';
-export { default as translateReactFilesTransform } from './translate-react.js';
-export { default as updateLanguagesTask } from './update-languages.js';
+export * from './translate-react.ts';
+export { default as translateReactFilesTransform } from './translate-react.ts';
+export { default as updateLanguagesTask } from './update-languages.ts';

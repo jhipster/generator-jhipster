@@ -21,15 +21,16 @@
  */
 import chalk from 'chalk';
 
-import BaseCoreGenerator from '../base-core/index.js';
-import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/index.js';
-import JSONToJDLEntityConverter from '../../lib/jdl/converters/json-to-jdl-entity-converter.js';
-import JSONToJDLOptionConverter from '../../lib/jdl/converters/json-to-jdl-option-converter.js';
-import { JHIPSTER_CONFIG_DIR, YO_RC_FILE } from '../generator-constants.js';
-import { applicationsLookup } from '../workspaces/support/applications-lookup.js';
+import JSONToJDLEntityConverter from '../../lib/jdl/converters/json-to-jdl-entity-converter.ts';
+import JSONToJDLOptionConverter from '../../lib/jdl/converters/json-to-jdl-option-converter.ts';
 import type { Entity } from '../../lib/jhipster/types/entity.js';
-import { getEntitiesFromDir } from '../base-application/support/index.js';
-import { replaceSensitiveConfig } from './support/utils.js';
+import { getEntitiesFromDir } from '../base-application/support/index.ts';
+import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/index.js';
+import BaseCoreGenerator from '../base-core/index.ts';
+import { JHIPSTER_CONFIG_DIR, YO_RC_FILE } from '../generator-constants.js';
+import { applicationsLookup } from '../workspaces/support/applications-lookup.ts';
+
+import { replaceSensitiveConfig } from './support/utils.ts';
 
 const isInfoCommand = (commandName: string): true | undefined => commandName === 'info' || undefined;
 

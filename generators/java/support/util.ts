@@ -1,5 +1,6 @@
 import { upperFirst } from 'lodash-es';
-import { getMicroserviceAppName } from '../../../lib/utils/index.js';
+
+import { getMicroserviceAppName } from '../../../lib/utils/index.ts';
 
 /**
  * get the java main class name.

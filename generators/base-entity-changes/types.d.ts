@@ -4,7 +4,7 @@ import type {
   Relationship as BaseApplicationRelationship,
   RelationshipWithEntity,
 } from '../base-application/types.js';
-export type { Application, Config, Options, Features, Relationship, Source } from '../base-application/types.js';
+export type { Application, Config, Features, Options, Relationship, Source } from '../base-application/types.js';
 
 export type Field = BaseApplicationField & {
   defaultValue?: any;

@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 import { extname } from 'node:path';
+
 import { passthrough } from '@yeoman/transform';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';
 
-import type { MemFsEditorFile } from 'mem-fs-editor';
+import type { GetWebappTranslationCallback } from '../../client/translation.js';
 import {
   type JHITranslateConverterOptions,
   createJhiTransformTranslateReplacer,
@@ -28,8 +30,7 @@ import {
   createJhiTranslateReplacer,
   escapeHtmlTranslationValue,
   escapeTsTranslationValue,
-} from '../../languages/support/index.js';
-import type { GetWebappTranslationCallback } from '../../client/translation.js';
+} from '../../languages/support/index.ts';
 
 const PLACEHOLDER_REGEX = /(?:placeholder|title)=['|"](\{\{\s?['|"]([a-zA-Z0-9.\-_]+)['|"]\s?\|\s?translate\s?\}\})['|"]/.source;
 

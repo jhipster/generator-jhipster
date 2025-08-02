@@ -20,7 +20,8 @@
 import { get, set } from 'lodash-es';
 
 import type CoreGenerator from '../../base-core/index.js';
-import XmlStorage from '../internal/xml-store.js';
+import { type MavenProjectLike, formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.ts';
+import XmlStorage from '../internal/xml-store.ts';
 import type {
   MavenAnnotationProcessor,
   MavenArtifact,
@@ -32,7 +33,6 @@ import type {
   MavenProperty,
   MavenRepository,
 } from '../types.js';
-import { type MavenProjectLike, formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.js';
 
 const artifactEquals = (a: MavenArtifact, b: MavenArtifact) => a.groupId === b.groupId && a.artifactId === b.artifactId;
 
