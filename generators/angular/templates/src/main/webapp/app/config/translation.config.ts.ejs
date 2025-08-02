@@ -20,9 +20,6 @@ import { MissingTranslationHandler, MissingTranslationHandlerParams, TranslateLo
 <%_ if (clientBundlerExperimentalEsbuild) { _%>
 import { loadLocale } from 'i18n';
 import { Observable, from } from 'rxjs';
-<%_ } else { _%>
-import { HttpClient } from '@angular/common/http';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 <%_ } _%>
 
 export const translationNotFoundMessage = 'translation-not-found';
@@ -41,10 +38,6 @@ export function translatePartialLoader(): TranslateLoader {
       return from(loadLocale(lang as any));
     },
   };
-}
-<%_ } else { _%>
-export function translatePartialLoader(http: HttpClient): TranslateLoader {
-  return new TranslateHttpLoader(http, 'i18n/', `.json?_=${I18N_HASH}`);
 }
 <%_ } _%>
 

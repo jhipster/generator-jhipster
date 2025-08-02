@@ -23,7 +23,7 @@ import { Router, TitleStrategy } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import { Component, NgZone } from '@angular/core';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 <%_ if (enableTranslation) { _%>
 import { InterpolatableTranslationObject, TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
 <%_ } _%>
@@ -42,6 +42,7 @@ describe('MainComponent', () => {
   let titleService: Title;
 <%_ if (enableTranslation) { _%>
   let translateService: TranslateService;
+  let langChangeSubject: Subject<LangChangeEvent>;
   <%_ if (enableI18nRTL) { _%>
   let findLanguageFromKeyPipe: FindLanguageFromKeyPipe;
   <%_ } _%>
@@ -93,6 +94,13 @@ describe('MainComponent', () => {
     ngZone = TestBed.inject(NgZone);
     router = TestBed.inject(Router);
     document = TestBed.inject(DOCUMENT);
+    <%_ if (enableTranslation) { _%>
+    langChangeSubject = new Subject<LangChangeEvent>();
+    Object.defineProperty(translateService, 'onLangChange', {
+      value: langChangeSubject,
+      writable: true,
+    });
+    <%_ } _%>
   });
 
   describe('page title', () => {
@@ -107,7 +115,7 @@ describe('MainComponent', () => {
       routerState.snapshot.root = { data: {} };
 <%_ if (enableTranslation) { _%>
       jest.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
-      translateService.currentLang = '<%= nativeLanguage %>';
+      jest.spyOn(translateService, 'getCurrentLang').mockReturnValue('<%= nativeLanguage %>');
 <%_ } _%>
       jest.spyOn(titleService, 'setTitle');
       comp.ngOnInit();
@@ -176,7 +184,7 @@ describe('MainComponent', () => {
     describe('language change', () => {
       it('should set page title to default title if pageTitle is missing on routes', () => {
         // WHEN
-        translateService.onLangChange.emit(langChangeEvent);
+        langChangeSubject.next(langChangeEvent);
 
         // THEN
         expect(document.title).toBe(`${defaultPageTitle} translated`);
@@ -198,7 +206,7 @@ describe('MainComponent', () => {
         document.title = 'other title';
 
         // WHEN
-        translateService.onLangChange.emit(langChangeEvent);
+        langChangeSubject.next(langChangeEvent);
 
         // THEN
         expect(document.title).toBe(`${parentRoutePageTitle} translated`);
@@ -225,7 +233,7 @@ describe('MainComponent', () => {
         document.title = 'other title';
 
         // WHEN
-        translateService.onLangChange.emit(langChangeEvent);
+        langChangeSubject.next(langChangeEvent);
 
         // THEN
         expect(document.title).toBe(`${childRoutePageTitle} translated`);
@@ -252,7 +260,7 @@ describe('MainComponent', () => {
         document.title = 'other title';
 
         // WHEN
-        translateService.onLangChange.emit(langChangeEvent);
+        langChangeSubject.next(langChangeEvent);
 
         // THEN
         expect(document.title).toBe(`${parentRoutePageTitle} translated`);
@@ -271,7 +279,7 @@ describe('MainComponent', () => {
   <%_ if (enableI18nRTL) { _%>
       findLanguageFromKeyPipe.isRTL = jest.fn(() => false);
   <%_ } _%>
-      translateService.onLangChange.emit({ lang: 'lang1', translations: {} as InterpolatableTranslationObject });
+      langChangeSubject.next({ lang: 'lang1', translations: {} as InterpolatableTranslationObject });
 
       // THEN
       expect(document.querySelector('html')?.getAttribute('lang')).toEqual('lang1');
@@ -283,7 +291,7 @@ describe('MainComponent', () => {
   <%_ if (enableI18nRTL) { _%>
       findLanguageFromKeyPipe.isRTL = jest.fn(() => true);
   <%_ } _%>
-      translateService.onLangChange.emit({ lang: 'lang2', translations: {} as InterpolatableTranslationObject });
+      langChangeSubject.next({ lang: 'lang2', translations: {} as InterpolatableTranslationObject });
 
       // THEN
       expect(document.querySelector('html')?.getAttribute('lang')).toEqual('lang2');
