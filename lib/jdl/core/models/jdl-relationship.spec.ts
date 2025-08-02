@@ -18,11 +18,12 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
 
-import JDLRelationship from '../models/jdl-relationship.ts';
-import { relationshipOptions } from '../built-in-options/index.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
+import { relationshipOptions } from '../built-in-options/index.ts';
+import JDLRelationship from '../models/jdl-relationship.ts';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 

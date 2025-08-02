@@ -1,26 +1,26 @@
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, describe, expect, it } from 'esmocha';
+
 import { snakeCase } from 'lodash-es';
 
+import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.ts';
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
+  defaultHelpers as helpers,
   extendFilteredMatrix,
   extendMatrix,
-  defaultHelpers as helpers,
   runResult,
 } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import Generator from '../server/index.ts';
-
-import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.ts';
+import { GENERATOR_SERVER } from '../generator-list.ts';
 import {
   filterBasicServerGenerators,
   shouldComposeWithLiquibase,
   shouldComposeWithSpringCloudStream,
 } from '../server/__test-support/index.ts';
-import { GENERATOR_SERVER } from '../generator-list.ts';
+import Generator from '../server/index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -19,13 +19,14 @@
 
 import { isFileStateModified } from 'mem-fs-editor/state';
 import { CheckRepoActions } from 'simple-git';
-import BaseApplicationGenerator from '../base-application/index.ts';
 
-import { JHIPSTER_DOCUMENTATION_URL, MAIN_DIR, TEST_DIR } from '../generator-constants.js';
-import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.ts';
-import { createPrettierTransform } from '../bootstrap/support/prettier-support.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
 import type { PropertiesFileLines } from '../base-core/support/index.ts';
 import { editPropertiesFileCallback } from '../base-core/support/index.ts';
+import { createPrettierTransform } from '../bootstrap/support/prettier-support.ts';
+import { JHIPSTER_DOCUMENTATION_URL, MAIN_DIR, TEST_DIR } from '../generator-constants.js';
+import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.ts';
+
 import command from './command.ts';
 import { writeFiles } from './files.ts';
 import type {

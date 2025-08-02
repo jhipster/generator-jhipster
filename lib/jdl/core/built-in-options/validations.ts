@@ -55,5 +55,5 @@ const Validations = {
   needsValue,
 };
 
-export { Validations, SUPPORTED_VALIDATION_RULES };
+export { SUPPORTED_VALIDATION_RULES, Validations };
 export default { Validations, SUPPORTED_VALIDATION_RULES };

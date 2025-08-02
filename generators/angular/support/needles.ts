@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createNeedleCallback } from '../../base-core/support/needles.ts';
 import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
+import { createNeedleCallback } from '../../base-core/support/needles.ts';
 import { joinCallbacks } from '../../base-core/support/write-files.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from '../../client/types.d.ts';
 

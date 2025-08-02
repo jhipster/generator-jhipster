@@ -24,6 +24,7 @@ import {
   javaTestPackageTemplatesBlock,
   javaTestResourceTemplatesBlock,
 } from '../java/support/index.ts';
+
 import type { Application, Entity } from './types.js';
 
 export const sqlFiles = asWriteFilesSection<Application>({

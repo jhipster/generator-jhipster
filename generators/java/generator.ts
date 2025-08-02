@@ -18,6 +18,7 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.ts';
+
 import type {
   Application as JavaApplication,
   Config as JavaConfig,

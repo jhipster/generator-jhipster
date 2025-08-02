@@ -18,7 +18,9 @@
  */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
 import deploymentOptions from './deployment-options.ts';
 
 const { DeploymentTypes, Options } = deploymentOptions;

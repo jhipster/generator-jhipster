@@ -1,8 +1,8 @@
 import { before, describe, it } from 'esmocha';
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 
-import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
 const generator = 'languages';
 

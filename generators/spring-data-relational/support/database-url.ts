@@ -18,6 +18,7 @@
  */
 
 import { databaseTypes } from '../../../lib/jhipster/index.ts';
+
 import databaseData, { type getData } from './database-data.ts';
 
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_DISK, H2_MEMORY } = databaseTypes;

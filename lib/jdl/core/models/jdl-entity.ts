@@ -18,7 +18,9 @@
  */
 
 import { upperFirst } from 'lodash-es';
+
 import { merge } from '../utils/object-utils.ts';
+
 import type JDLField from './jdl-field.js';
 
 export default class JDLEntity {

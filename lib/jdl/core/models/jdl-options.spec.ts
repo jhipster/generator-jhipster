@@ -17,12 +17,14 @@
  * limitations under the License.
  */
 
-import { afterEach, before, describe, it, expect as jestExpect } from 'esmocha';
+import { afterEach, before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
+
 import { binaryOptions, unaryOptions } from '../built-in-options/index.ts';
+import JDLBinaryOption from '../models/jdl-binary-option.ts';
 import JDLOptions from '../models/jdl-options.ts';
 import JDLUnaryOption from '../models/jdl-unary-option.ts';
-import JDLBinaryOption from '../models/jdl-binary-option.ts';
 
 describe('jdl - JDLOptions', () => {
   describe('addOption', () => {

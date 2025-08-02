@@ -18,11 +18,12 @@
  */
 
 import { before, describe, it } from 'esmocha';
-import { expect } from 'chai';
-import deploymentOptions from '../../../jhipster/deployment-options.ts';
 
-import DeploymentValidator from '../validators/deployment-validator.ts';
+import { expect } from 'chai';
+
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
+import deploymentOptions from '../../../jhipster/deployment-options.ts';
+import DeploymentValidator from '../validators/deployment-validator.ts';
 
 const { Options } = deploymentOptions;
 

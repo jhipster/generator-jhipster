@@ -18,8 +18,8 @@
  */
 
 import JSONEntity from '../../core/basic-types/json-entity.ts';
-import { formatComment } from '../../core/utils/format-utils.ts';
 import type { JDLEntity } from '../../core/models/index.js';
+import { formatComment } from '../../core/utils/format-utils.ts';
 
 export default {
   convert,

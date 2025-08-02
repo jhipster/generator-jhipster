@@ -21,6 +21,7 @@ import type {
 } from '../java/types.js';
 import type { Relationship as LanguagesRelationship } from '../languages/types.d.ts';
 import type { DatabaseEntity } from '../liquibase/types.js';
+
 import type Command from './command.ts';
 
 export type Config = JavaConfig & ExportStoragePropertiesFromCommand<typeof Command>;

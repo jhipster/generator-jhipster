@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { ReadonlyDeep } from 'type-fest';
+
 import type { JHipsterCommandDefinition } from '../lib/command/index.js';
 
 function deepFreeze<const T>(obj: T): ReadonlyDeep<T> {

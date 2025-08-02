@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JavascriptSimpleApplicationGenerator } from '../../generator.ts';
 import { createNeedleCallback } from '../../../base-core/support/needles.ts';
+import { JavascriptSimpleApplicationGenerator } from '../../generator.ts';
 
 export default class EslintGenerator extends JavascriptSimpleApplicationGenerator {
   async beforeQueue() {

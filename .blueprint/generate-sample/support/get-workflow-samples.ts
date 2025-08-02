@@ -1,7 +1,8 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { testIntegrationFolder } from '../../constants.ts';
+
 import type { WorkflowSample, WorkflowSamples } from '../../../lib/testing/workflow-samples.js';
+import { testIntegrationFolder } from '../../constants.ts';
 
 const WORKFLOW_NAMES = ['angular', 'react', 'vue', 'daily-ms-oauth2', 'daily-neo4j'];
 export const DAILY_PREFIX = 'daily-';

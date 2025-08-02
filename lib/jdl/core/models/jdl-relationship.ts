@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 import { upperFirst } from 'lodash-es';
+
+import { relationshipTypeExists } from '../basic-types/relationship-types.ts';
 import type { JDLRelationshipType, RelationshipSide } from '../basic-types/relationships.js';
 import { Validations } from '../built-in-options/index.ts';
-import { relationshipTypeExists } from '../basic-types/relationship-types.ts';
 
 const { REQUIRED } = Validations;
 

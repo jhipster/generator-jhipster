@@ -19,30 +19,31 @@
 import { upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
-import type GeneratorsByNamespace from '../types.js';
+import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
+import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
+import { mutateData } from '../../lib/utils/index.ts';
+import type { GenericTask } from '../base-core/types.js';
 import BaseGenerator from '../base-simple-application/index.ts';
+import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.ts';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-simple-application/support/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { mutateData } from '../../lib/utils/index.ts';
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
   GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
   GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
 } from '../generator-list.ts';
-import type { GenericTask } from '../base-core/types.js';
-import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
-import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
-import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.ts';
+import type GeneratorsByNamespace from '../types.js';
+
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
+import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, getEntitiesFromDir } from './support/index.ts';
 import type {
   ConfiguringEachEntityTaskParam,
-  TaskTypes as DefaultTasks,
   EntityToLoad,
   PreparingEachEntityFieldTaskParam,
   PreparingEachEntityRelationshipTaskParam,
   PreparingEachEntityTaskParam,
+  TaskTypes as DefaultTasks,
 } from './tasks.js';
-import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, getEntitiesFromDir } from './support/index.ts';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
 import type {
   Application as BaseApplication,
   Config as BaseApplicationConfig,

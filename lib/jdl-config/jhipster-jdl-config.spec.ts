@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'esmocha';
+
 import { lookupCommandsConfigs } from '../command/lookup-commands-configs.ts';
 import type { JDLApplicationConfig } from '../jdl/core/types/parsing.js';
+
 import { buildJDLApplicationConfig, getDefaultJDLApplicationConfig } from './jhipster-jdl-config.ts';
 
 describe('getDefaultJDLApplicationConfig()', () => {

@@ -1,13 +1,15 @@
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, describe, expect, it } from 'esmocha';
+
 import { snakeCase } from 'lodash-es';
+
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
-
-import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
-import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
+import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
+
 import Generator from './generator.ts';
 
 const __filename = fileURLToPath(import.meta.url);

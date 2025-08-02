@@ -19,8 +19,9 @@
  */
 
 import type { ValueOf } from 'type-fest';
-import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
+
 import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
+import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import { mutateData } from '../../../lib/utils/index.ts';
 import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Field as LiquibaseField } from '../types.d.ts';
 

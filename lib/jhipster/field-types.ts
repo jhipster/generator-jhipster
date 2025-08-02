@@ -18,6 +18,7 @@
  */
 
 import { snakeCase } from 'lodash-es';
+
 import validations from '../jdl/core/built-in-options/validations.ts';
 
 const {

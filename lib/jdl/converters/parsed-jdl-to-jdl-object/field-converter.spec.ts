@@ -18,7 +18,9 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
+
 import type JDLField from '../../core/models/jdl-field.js';
+
 import { convertField } from './field-converter.ts';
 
 describe('jdl - FieldConverter', () => {

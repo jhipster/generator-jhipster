@@ -16,21 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, describe, expect, it } from 'esmocha';
+
 import { snakeCase } from 'lodash-es';
+
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import {
   AuthenticationTypeMatrix,
   type Matrix,
+  defaultHelpers as helpers,
   extendMatrix,
   fromMatrix,
-  defaultHelpers as helpers,
   runResult,
 } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { GENERATOR_CYPRESS } from '../generator-list.ts';
+
 import Generator from './generator.ts';
 
 const { CYPRESS } = testFrameworkTypes;

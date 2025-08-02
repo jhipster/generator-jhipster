@@ -17,8 +17,10 @@
  * limitations under the License.
  */
 
-import { before, describe, it, expect as jestExpect } from 'esmocha';
+import { before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
+
 import { JDLEnum } from '../models/index.ts';
 
 describe('jdl - JDLEnum', () => {

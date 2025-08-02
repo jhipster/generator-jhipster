@@ -18,8 +18,10 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
+
 import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.ts';
 import type { ParsedJDLOption } from '../../core/types/parsed.js';
+
 import { convertOptions } from './option-converter.ts';
 
 describe('jdl - OptionConverter', () => {

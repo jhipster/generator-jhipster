@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import { getEnumInfo } from '../base-application/support/index.ts';
 import type CoreGenerator from '../base-core/generator.js';
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
+
 import type { Application as ClientApplication, Entity as ClientEntity } from './types.d.ts';
 
 export async function addEnumerationFiles(

@@ -17,16 +17,18 @@
  * limitations under the License.
  */
 import assert from 'assert';
+
 import { snakeCase, upperFirst } from 'lodash-es';
 
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../lib/jhipster/index.ts';
-import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.ts';
 import { applyDerivedProperty, mutateData } from '../../../lib/utils/index.ts';
-import type { Application as ServerApplication, Entity as ServerEntity, Field as ServerField } from '../types.d.ts';
+import type CoreGenerator from '../../base-core/generator.ts';
+import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.ts';
 import type { Field as LiquibaseField } from '../../liquibase/types.d.ts';
 import type { Field as SpringBootField } from '../../spring-boot/types.d.ts';
 import type { Field as SpringDataRelationalField } from '../../spring-data-relational/types.d.ts';
-import type CoreGenerator from '../../base-core/generator.ts';
+import type { Application as ServerApplication, Entity as ServerEntity, Field as ServerField } from '../types.d.ts';
+
 import { getUXConstraintName } from './database.ts';
 import { getJavaValueGeneratorForType } from './templates/field-values.ts';
 

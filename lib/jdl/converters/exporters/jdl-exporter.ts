@@ -18,6 +18,7 @@
  */
 
 import fs from 'fs';
+
 import type JDLObject from '../../core/models/jdl-object.js';
 
 /**

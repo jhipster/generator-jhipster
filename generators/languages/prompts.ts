@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
+
 import type LanguagesGenerator from './generator.js';
 import detectLanguage from './support/detect-language.ts';
 import { languagesAsChoices } from './support/languages.ts';

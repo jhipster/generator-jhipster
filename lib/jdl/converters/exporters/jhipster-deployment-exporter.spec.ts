@@ -17,14 +17,16 @@
  * limitations under the License.
  */
 
+import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
 import fs from 'fs';
 import path from 'path';
-import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
+
 import { expect } from 'chai';
 import helpers from 'yeoman-test';
-import exportDeployments from '../exporters/jhipster-deployment-exporter.ts';
-import JDLDeployment from '../../core/models/jdl-deployment.ts';
+
 import deploymentOptions from '../../../jhipster/deployment-options.ts';
+import JDLDeployment from '../../core/models/jdl-deployment.ts';
+import exportDeployments from '../exporters/jhipster-deployment-exporter.ts';
 
 const {
   DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },

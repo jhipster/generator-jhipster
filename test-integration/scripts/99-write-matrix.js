@@ -2,6 +2,8 @@
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+
+import { JAVA_COMPATIBLE_VERSIONS } from '../../generators/generator-constants.js';
 import {
   BUILD_JHIPSTER_BOM,
   JHIPSTER_BOM_BRANCH,
@@ -11,7 +13,6 @@ import {
   RECOMMENDED_NODE_VERSION,
   packageRoot,
 } from '../integration-test-constants.js';
-import { JAVA_COMPATIBLE_VERSIONS } from '../../generators/generator-constants.js';
 
 const MATRIX_FILE = 'matrix.json';
 

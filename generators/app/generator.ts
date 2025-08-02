@@ -20,6 +20,7 @@
 import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
+import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import type {
   Application as CommonApplication,
@@ -30,7 +31,6 @@ import type {
 import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_SERVER } from '../generator-list.ts';
 import { getDefaultAppName } from '../project-name/support/index.ts';
 
-import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import cleanupOldFilesTask from './cleanup.ts';
 import { checkNode } from './support/index.ts';
 

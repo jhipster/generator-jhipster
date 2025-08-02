@@ -18,12 +18,12 @@
  */
 import chalk from 'chalk';
 
+import { convertToJDL } from '../../lib/jdl/converters/json-to-jdl-converter.ts';
+import { createRuntime } from '../../lib/jdl/core/runtime.ts';
+import { getDefaultRuntime } from '../../lib/jdl-config/jhipster-jdl-config.ts';
+import { CommandCoreGenerator } from '../base-core/generator.ts';
 import CoreGenerator from '../base-core/index.ts';
 
-import { convertToJDL } from '../../lib/jdl/converters/json-to-jdl-converter.ts';
-import { CommandCoreGenerator } from '../base-core/generator.ts';
-import { getDefaultRuntime } from '../../lib/jdl-config/jhipster-jdl-config.ts';
-import { createRuntime } from '../../lib/jdl/core/runtime.ts';
 import type command from './command.js';
 
 export default class extends CommandCoreGenerator<typeof command> {

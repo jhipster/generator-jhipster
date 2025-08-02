@@ -19,15 +19,16 @@
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/needles.ts';
 import type { Source as CommonSource } from '../common/types.js';
-import writeTask from './files.ts';
+
 import cleanupTask from './cleanup.ts';
+import writeTask from './files.ts';
 import { getCacheProviderMavenDefinition } from './internal/dependencies.ts';
 import type {
+  Application as SpringCacneApplication,
   Config as SpringCacheConfig,
   Entity as SpringCacheEntity,
   Options as SpringCacheOptions,
   Source as SpringCacheSource,
-  Application as SpringCacneApplication,
 } from './types.js';
 
 export default class SpringCacheGenerator extends BaseApplicationGenerator<

@@ -18,23 +18,23 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
 
-import { binaryOptions, validations } from '../../core/built-in-options/index.ts';
-import fieldTypes from '../../../jhipster/field-types.ts';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import databaseTypes from '../../../jhipster/database-types.ts';
-
-import JDLObject from '../../core/models/jdl-object.ts';
+import fieldTypes from '../../../jhipster/field-types.ts';
+import { relationshipTypes } from '../../core/basic-types/index.ts';
+import { binaryOptions, validations } from '../../core/built-in-options/index.ts';
+import { JDLEntity } from '../../core/models/index.ts';
 import { createJDLApplication } from '../../core/models/jdl-application-factory.ts';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
-import { JDLEntity } from '../../core/models/index.ts';
 import JDLField from '../../core/models/jdl-field.ts';
+import JDLObject from '../../core/models/jdl-object.ts';
 import JDLRelationship from '../../core/models/jdl-relationship.ts';
 import JDLValidation from '../../core/models/jdl-validation.ts';
-import createValidator from '../validators/jdl-with-application-validator.ts';
-import { relationshipTypes } from '../../core/basic-types/index.ts';
 import { createRuntime } from '../../core/runtime.ts';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import createValidator from '../validators/jdl-with-application-validator.ts';
 
 const {
   Validations: { MIN },

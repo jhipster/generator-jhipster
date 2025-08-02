@@ -17,12 +17,13 @@
  * limitations under the License.
  */
 
-import type JDLObject from '../../core/models/jdl-object.js';
 import type JSONEntity from '../../core/basic-types/json-entity.js';
+import type JDLObject from '../../core/models/jdl-object.js';
+
 import BasicEntityConverter from './jdl-to-json-basic-entity-converter.ts';
 import FieldConverter from './jdl-to-json-field-converter.ts';
-import RelationshipConverter from './jdl-to-json-relationship-converter.ts';
 import OptionConverter from './jdl-to-json-option-converter.ts';
+import RelationshipConverter from './jdl-to-json-relationship-converter.ts';
 
 let entities: Record<string, JSONEntity> | null | undefined;
 let jdlObject: JDLObject | null | undefined;

@@ -17,16 +17,19 @@
  * limitations under the License.
  */
 import { extname } from 'path';
-import { isFileStateDeleted, isFileStateModified } from 'mem-fs-editor/state';
+
 import { passthrough } from '@yeoman/transform';
-import { JavaApplicationGenerator } from '../../generator.ts';
+import { isFileStateDeleted, isFileStateModified } from 'mem-fs-editor/state';
+
 import { addJavaAnnotation } from '../../../java/support/add-java-annotation.ts';
 import { javaMainPackageTemplatesBlock } from '../../../java/support/files.ts';
-import type { Source as SpringBootSource } from '../../../spring-boot/index.ts';
 import type { Application as LanguagesApplication } from '../../../languages/index.ts';
+import type { Source as SpringBootSource } from '../../../spring-boot/index.ts';
 import type { Config as SpringCacheConfig } from '../../../spring-cache/index.ts';
-import { mavenDefinition } from './internal/maven-definition.ts';
+import { JavaApplicationGenerator } from '../../generator.ts';
+
 import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.ts';
+import { mavenDefinition } from './internal/maven-definition.ts';
 
 export default class GraalvmGenerator extends JavaApplicationGenerator {
   async beforeQueue() {

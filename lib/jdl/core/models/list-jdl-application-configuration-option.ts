@@ -18,6 +18,7 @@
  */
 
 import { join } from '../utils/set-utils.ts';
+
 import JDLApplicationConfigurationOption from './jdl-application-configuration-option.ts';
 
 export default class ListJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption<any> {

@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientApplicationTemplatesBlock } from '../client/support/files.ts';
 import { asPostWritingEntitiesTask, asWriteEntityFilesSection, asWritingEntitiesTask } from '../base-application/support/index.ts';
+import { clientApplicationTemplatesBlock } from '../client/support/files.ts';
 import { filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/filter-entities.ts';
+
 import type { Application as AngularApplication, Entity as AngularEntity, Source as AngularSource } from './types.js';
 
 const entityModelFiles = clientApplicationTemplatesBlock({

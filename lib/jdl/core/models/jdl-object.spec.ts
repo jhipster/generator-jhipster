@@ -17,21 +17,22 @@
  * limitations under the License.
  */
 
-import { afterEach, before, describe, it, expect as jestExpect } from 'esmocha';
+import { afterEach, before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
+
+import { createJDLApplication } from '.././__test-support__/index.ts';
+import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
 import { binaryOptions, unaryOptions } from '../built-in-options/index.ts';
-
-import JDLObject from '../models/jdl-object.ts';
-import { createJDLApplication } from '.././__test-support__/index.ts';
-import JDLDeployment from '../models/jdl-deployment.ts';
 import { JDLEntity, JDLEnum } from '../models/index.ts';
+import JDLBinaryOption from '../models/jdl-binary-option.ts';
+import JDLDeployment from '../models/jdl-deployment.ts';
 import JDLField from '../models/jdl-field.ts';
-import JDLValidation from '../models/jdl-validation.ts';
+import JDLObject from '../models/jdl-object.ts';
 import JDLRelationship from '../models/jdl-relationship.ts';
 import JDLUnaryOption from '../models/jdl-unary-option.ts';
-import JDLBinaryOption from '../models/jdl-binary-option.ts';
-import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import JDLValidation from '../models/jdl-validation.ts';
 import { createRuntime } from '../runtime.ts';
 
 describe('jdl - JDLObject', () => {

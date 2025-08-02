@@ -16,14 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, describe, expect, it } from 'esmocha';
+
 import { snakeCase } from 'lodash-es';
 
-import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
+import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
+
 import Generator from './generator.ts';
 
 const __filename = fileURLToPath(import.meta.url);

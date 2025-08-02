@@ -1,15 +1,5 @@
-import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/needles.js';
 import type { HandleCommandTypes } from '../../lib/command/index.js';
-import type { Application as CypressApplication } from '../cypress/types.js';
-import type {
-  Application as JavascriptApplication,
-  Config as JavascriptConfig,
-  Entity as JavascriptEntity,
-  Field as JavascriptField,
-  Options as JavascriptOptions,
-  Relationship as JavascriptRelationship,
-  Source as JavascriptSource,
-} from '../javascript/types.js';
+import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/needles.js';
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
@@ -20,10 +10,21 @@ import type {
   Relationship as CommonRelationship,
   Source as CommonSource,
 } from '../common/types.js';
+import type { Application as CypressApplication } from '../cypress/types.js';
+import type {
+  Application as JavascriptApplication,
+  Config as JavascriptConfig,
+  Entity as JavascriptEntity,
+  Field as JavascriptField,
+  Options as JavascriptOptions,
+  Relationship as JavascriptRelationship,
+  Source as JavascriptSource,
+} from '../javascript/types.js';
 import type { Language } from '../languages/support/languages.ts';
 import type { Entity as LanguagesEntity, Field as LanguagesField, Relationship as LanguagesRelationship } from '../languages/types.d.ts';
-import type { GetWebappTranslationCallback } from './translation.js';
+
 import type command from './command.ts';
+import type { GetWebappTranslationCallback } from './translation.js';
 
 type Command = HandleCommandTypes<typeof command>;
 

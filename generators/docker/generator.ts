@@ -18,15 +18,17 @@
  */
 
 import { intersection } from 'lodash-es';
+
+import { stringHashCode } from '../../lib/utils/index.ts';
+import { createFaker } from '../base-application/support/index.ts';
 import BaseApplicationGenerator from '../base-simple-application/index.ts';
 import { createDockerComposeFile, createDockerExtendedServices } from '../docker/support/index.ts';
-import { createFaker } from '../base-application/support/index.ts';
-import { stringHashCode } from '../../lib/utils/index.ts';
-import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.ts';
 import type { Application as SpringBootApplication } from '../spring-boot/index.js';
 import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/index.js';
-import { dockerFiles } from './files.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.ts';
+
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.ts';
+import { dockerFiles } from './files.ts';
 import type {
   Application as DockerApplication,
   Config as DockerConfig,

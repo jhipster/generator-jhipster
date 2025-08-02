@@ -19,6 +19,7 @@
 
 import { databaseTypes } from '../../../lib/jhipster/index.ts';
 import type { Application as SpringDataRelationalApplication, Entity as SpringDataRelationalEntity } from '../types.d.ts';
+
 import { getDatabaseData } from './database-data.ts';
 import { getJdbcUrl, getR2dbcUrl } from './database-url.ts';
 

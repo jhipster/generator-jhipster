@@ -17,19 +17,21 @@
  * limitations under the License.
  */
 import { rm } from 'fs/promises';
+
 import { createConflicterTransform, createYoResolveTransform, forceYoFiles } from '@yeoman/conflicter';
 import { transform } from '@yeoman/transform';
+import type { FileTransform, PipelineOptions } from 'mem-fs';
 import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
 import { isFilePending, isFileStateModified } from 'mem-fs-editor/state';
 import { createCommitTransform } from 'mem-fs-editor/transform';
 import type { Options as PrettierOptions } from 'prettier';
-import type { FileTransform, PipelineOptions } from 'mem-fs';
 
 import BaseGenerator from '../base/index.ts';
+import type { Features as BaseFeatures, Options as BaseOptions } from '../base/types.d.ts';
+import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.ts';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
 import { GENERATOR_UPGRADE } from '../generator-list.ts';
-import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.ts';
-import type { Features as BaseFeatures, Options as BaseOptions } from '../base/types.d.ts';
+
 import {
   autoCrlfTransform,
   createESLintTransform,

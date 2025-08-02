@@ -1,7 +1,8 @@
 import { extname } from 'path';
-import { passthrough } from 'p-transform';
-import { isFileStateModified } from 'mem-fs-editor/state';
+
 import type { VinylMemFsEditorFile } from 'mem-fs-editor';
+import { isFileStateModified } from 'mem-fs-editor/state';
+import { passthrough } from 'p-transform';
 import { Piscina } from 'piscina';
 
 import type CoreGenerator from '../../base-core/index.js';

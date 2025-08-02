@@ -17,16 +17,28 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import { kebabCase, lowerFirst, upperFirst } from 'lodash-es';
-import chalk from 'chalk';
-import { passthrough } from '@yeoman/transform';
 
-import { isFileStateModified } from 'mem-fs-editor/state';
+import { passthrough } from '@yeoman/transform';
+import chalk from 'chalk';
+import { kebabCase, lowerFirst, upperFirst } from 'lodash-es';
 import type { MemFsEditorFile } from 'mem-fs-editor';
-import BaseApplicationGenerator from '../base-application/index.ts';
+import { isFileStateModified } from 'mem-fs-editor/state';
+
+import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../lib/command/load.ts';
+import { lookupCommandsConfigs } from '../../lib/command/lookup-commands-configs.ts';
+import { packageJson } from '../../lib/index.ts';
+import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
+import type { ApplicationAll } from '../../lib/types/application-all.js';
+import { mutateData, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
+import { loadDerivedAppConfig } from '../app/support/index.ts';
 import type { Entity as BaseApplicationEntity } from '../base-application/index.js';
-import type { Application as SpringBootApplication } from '../spring-boot/types.js';
-import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.js';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import {
+  convertFieldBlobType,
+  getBlobContentType,
+  isFieldBinaryType,
+  isFieldBlobType,
+} from '../base-application/internal/types/field-types.ts';
 import {
   addFakerToEntity,
   derivedPrimaryKeyProperties,
@@ -40,25 +52,14 @@ import {
   prepareRelationship,
   stringifyApplicationData,
 } from '../base-application/support/index.ts';
+import { isWin32 } from '../base-core/support/index.ts';
 import { JAVA_DOCKER_DIR, LOGIN_REGEX, RECOMMENDED_NODE_VERSION } from '../generator-constants.js';
 import { GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.ts';
-import { packageJson } from '../../lib/index.ts';
 import { loadLanguagesConfig } from '../languages/support/index.ts';
-import { loadDerivedAppConfig } from '../app/support/index.ts';
-import { lookupCommandsConfigs } from '../../lib/command/lookup-commands-configs.ts';
-import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../lib/command/load.ts';
-import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
-import { isWin32 } from '../base-core/support/index.ts';
-import { mutateData, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
-import {
-  convertFieldBlobType,
-  getBlobContentType,
-  isFieldBinaryType,
-  isFieldBlobType,
-} from '../base-application/internal/types/field-types.ts';
 import { baseNameProperties } from '../project-name/support/index.ts';
-import type { ApplicationAll } from '../../lib/types/application-all.js';
-import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.ts';
+import type { Application as SpringBootApplication } from '../spring-boot/types.js';
+import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.js';
+
 import { exportJDLTransform, importJDLTransform } from './support/index.ts';
 import type {
   Application as BootstrapApplicationBaseApplication,
@@ -66,6 +67,7 @@ import type {
   Entity as BootstrapApplicationBaseEntity,
   Options as BootstrapApplicationBaseOptions,
 } from './types.js';
+import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.ts';
 
 export default class BootstrapApplicationBase extends BaseApplicationGenerator<
   BootstrapApplicationBaseEntity,

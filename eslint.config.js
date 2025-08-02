@@ -1,11 +1,12 @@
-import globals from 'globals';
 import js from '@eslint/js';
 import { defineConfig } from 'eslint/config';
-import ts from 'typescript-eslint';
-import prettier from 'eslint-plugin-prettier/recommended';
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import chai from 'eslint-plugin-chai-friendly';
 import imports from 'eslint-plugin-import-x';
-import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
+import prettier from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
+import ts from 'typescript-eslint';
+
 import jhipster from './lib/eslint/index.js';
 
 export default defineConfig(
@@ -60,8 +61,8 @@ export default defineConfig(
     },
     rules: {
       'import-x/extensions': ['error', 'ignorePackages', { fix: true }],
-      'import-x/no-named-as-default-member': 'off',
       'import-x/namespace': 'off',
+      'import-x/no-named-as-default-member': 'off',
     },
   },
   {

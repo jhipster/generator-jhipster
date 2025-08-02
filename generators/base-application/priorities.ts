@@ -18,6 +18,7 @@
  */
 
 import type { Priority } from 'yeoman-generator';
+
 import { PRIORITY_NAMES as PRIORITY_NAMES_BASE, QUEUES as QUEUES_BASE, QUEUE_PREFIX } from '../base-core/priorities.ts';
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.ts';
 

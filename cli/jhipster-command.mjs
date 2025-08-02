@@ -20,6 +20,7 @@
 import chalk from 'chalk';
 import { Argument, Command, Option } from 'commander';
 import { kebabCase } from 'lodash-es';
+
 import { convertConfigToOption } from '../lib/command/index.ts';
 
 export default class JHipsterCommand extends Command {

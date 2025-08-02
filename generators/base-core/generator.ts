@@ -16,25 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import assert from 'assert';
+import { existsSync, rmSync, statSync } from 'fs';
 import { basename, dirname, extname, isAbsolute, join, join as joinPath, relative } from 'path';
 import { relative as posixRelative } from 'path/posix';
 import { fileURLToPath } from 'url';
-import { existsSync, rmSync, statSync } from 'fs';
-import assert from 'assert';
+
 import { requireNamespace } from '@yeoman/namespace';
 import type { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
-import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
-import { simpleGit } from 'simple-git';
-import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
-import semver, { lt as semverLessThan } from 'semver';
-import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
-import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
+import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
+import type { CopyOptions } from 'mem-fs-editor';
+import semver, { lt as semverLessThan } from 'semver';
+import { simpleGit } from 'simple-git';
+import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
+import type Environment from 'yeoman-environment';
+import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 
-import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
 import type {
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
@@ -43,15 +43,16 @@ import type {
   JHipsterConfigs,
   ParseableCommand,
 } from '../../lib/command/index.js';
+import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.ts';
 import { packageJson } from '../../lib/index.ts';
+import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
 import baseCommand from '../base/command.ts';
 import { dockerPlaceholderGenerator } from '../docker/utils.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.ts';
-import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.ts';
 import type GeneratorsByNamespace from '../types.js';
 import type { GeneratorsWithBootstrap } from '../types.js';
-import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from './internal/index.ts';
+
 import type {
   CascatedEditFileCallback,
   EditFileCallback,
@@ -60,10 +61,11 @@ import type {
   WriteContext,
   WriteFileOptions,
 } from './api.js';
+import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from './internal/index.ts';
+import { createJHipster7Context } from './internal/jhipster7-context.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
 import { joinCallbacks } from './support/index.ts';
-import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions, GenericTask } from './types.js';
-import { createJHipster7Context } from './internal/jhipster7-context.ts';
+import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.js';
 
 const {
   INITIALIZING,

@@ -1,5 +1,5 @@
-import { dirname, isAbsolute, join, resolve } from 'path';
 import { existsSync } from 'fs';
+import { dirname, isAbsolute, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);

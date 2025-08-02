@@ -2,7 +2,10 @@
 import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
+import { fieldTypes } from '../../../lib/jhipster/index.ts';
 import { isReservedTableName } from '../../../lib/jhipster/reserved-keywords.ts';
+import type { ApplicationAll } from '../../../lib/types/application-all.js';
+import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import {
   getJavaValueGeneratorForType,
   getJoinTableName,
@@ -12,9 +15,6 @@ import {
 } from '../../server/support/index.ts';
 import { getDBCExtraOption } from '../../spring-data-relational/support/database-data.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../../spring-data-relational/support/database-url.ts';
-import { fieldTypes } from '../../../lib/jhipster/index.ts';
-import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
-import type { ApplicationAll } from '../../../lib/types/application-all.js';
 import type CoreGenerator from '../generator.ts';
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;

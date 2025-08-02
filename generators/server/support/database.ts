@@ -19,8 +19,9 @@
 import crypto from 'crypto';
 
 import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
-import databaseData from '../../spring-data-relational/support/database-data.ts';
 import type { ValidationResult } from '../../base-core/api.d.ts';
+import databaseData from '../../spring-data-relational/support/database-data.ts';
+
 import { hibernateSnakeCase } from './string.ts';
 
 const dbTypes = fieldTypes;

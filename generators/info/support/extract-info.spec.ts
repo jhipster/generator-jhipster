@@ -1,7 +1,9 @@
-import { readFile } from 'fs/promises';
 import { describe, expect } from 'esmocha';
+import { readFile } from 'fs/promises';
+
 import { getPackageRoot } from '../../../lib/index.ts';
 import { YO_RC_FILE } from '../../generator-constants.js';
+
 import { extractDataFromInfo } from './extract-info.ts';
 import { markdownDetails } from './markdown-content.ts';
 

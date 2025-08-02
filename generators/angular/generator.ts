@@ -18,17 +18,19 @@
  */
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
-import BaseApplicationGenerator from '../base-application/index.ts';
-import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.ts';
-import { defaultLanguage } from '../languages/support/index.ts';
+
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
-import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
-import { createNeedleCallback } from '../base-core/support/index.ts';
 import { mutateData } from '../../lib/utils/index.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import { createNeedleCallback } from '../base-core/support/index.ts';
+import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
+import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.ts';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.ts';
+import { defaultLanguage } from '../languages/support/index.ts';
+
+import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.ts';
 import { writeFiles } from './files-angular.ts';
-import cleanupOldFilesTask from './cleanup.ts';
 import type { addItemToMenu } from './support/index.js';
 import {
   addEntitiesRoute,

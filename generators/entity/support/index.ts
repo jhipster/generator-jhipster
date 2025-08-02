@@ -19,6 +19,6 @@
 
 export {
   isNumber as inputIsNumber,
-  isSignedNumber as inputIsSignedNumber,
   isSignedDecimalNumber as inputIsSignedDecimalNumber,
+  isSignedNumber as inputIsSignedNumber,
 } from './asserts.ts';

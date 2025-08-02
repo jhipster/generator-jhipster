@@ -18,12 +18,11 @@
  */
 import assert from 'assert';
 
-import BaseApplicationGenerator from '../base-application/index.ts';
 import { validations } from '../../lib/jhipster/index.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
 import { stringifyApplicationData } from '../base-application/support/index.ts';
-
-import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.js';
 import type { Application as CommonApplication, Entity as CommonEntity, Field as CommonField } from '../common/types.js';
+import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.js';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },

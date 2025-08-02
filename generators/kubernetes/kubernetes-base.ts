@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { asInitializingTask } from '../base-application/support/task-type-inference.ts';
+
 import type { BaseKubernetesGenerator } from './generator.ts';
 
 export const checkHelm = asInitializingTask(async function (this: BaseKubernetesGenerator) {

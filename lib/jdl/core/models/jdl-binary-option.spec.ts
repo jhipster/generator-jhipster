@@ -18,9 +18,11 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLBinaryOption from '../models/jdl-binary-option.ts';
+
 import { binaryOptions } from '../built-in-options/index.ts';
+import JDLBinaryOption from '../models/jdl-binary-option.ts';
 
 describe('jdl - JDLBinaryOption', () => {
   describe('new', () => {

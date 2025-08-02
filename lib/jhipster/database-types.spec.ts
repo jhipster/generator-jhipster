@@ -18,7 +18,9 @@
  */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
 import databaseTypes from './database-types.ts';
 
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = databaseTypes;

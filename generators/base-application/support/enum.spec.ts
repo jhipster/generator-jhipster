@@ -1,5 +1,6 @@
-import assert from 'assert';
 import { before, describe, it } from 'esmocha';
+import assert from 'assert';
+
 import { getEnumInfo } from './enum.ts';
 
 describe('base-application - support - enum', () => {

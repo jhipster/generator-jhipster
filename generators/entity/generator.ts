@@ -19,17 +19,19 @@
 
 import fs from 'fs';
 import path from 'path';
+
 import chalk from 'chalk';
 import { upperFirst } from 'lodash-es';
-
 import type { Storage } from 'yeoman-generator';
+
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
+import { reservedKeywords } from '../../lib/jhipster/index.ts';
+import type { Features } from '../base/types.js';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { reservedKeywords } from '../../lib/jhipster/index.ts';
 import { GENERATOR_ENTITIES } from '../generator-list.ts';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.ts';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
-import type { Features } from '../base/types.js';
+
 import {
   askForDTO,
   askForFields,

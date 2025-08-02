@@ -18,7 +18,9 @@
  */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
 import { getRule, rules, rulesNames } from './rules.ts';
 
 describe('jdl - Rules', () => {

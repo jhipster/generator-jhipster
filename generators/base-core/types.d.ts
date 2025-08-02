@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 import type { BaseFeatures as YeomanFeatures, BaseOptions as YeomanOptions } from 'yeoman-generator';
-import type { JDLApplicationConfig } from '../../lib/jdl/core/types/parsing.js';
+
 import type { JHipsterCommandDefinition, JHipsterConfigs } from '../../lib/command/types.js';
+import type { JDLApplicationConfig } from '../../lib/jdl/core/types/parsing.js';
 
 export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) => unknown;
 

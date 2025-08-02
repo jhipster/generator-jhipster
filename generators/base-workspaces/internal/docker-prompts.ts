@@ -19,13 +19,15 @@
 
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+
 import chalk from 'chalk';
+
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../lib/core/application-types.ts';
 import { monitoringTypes, serviceDiscoveryTypes } from '../../../lib/jhipster/index.ts';
 import { asPromptingTask } from '../../base-application/support/index.ts';
-import { asPromptingWorkspacesTask } from '../support/task-type-inference.ts';
-import type { BaseKubernetesGenerator } from '../../kubernetes/generator.ts';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../lib/core/application-types.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
+import type { BaseKubernetesGenerator } from '../../kubernetes/generator.ts';
+import { asPromptingWorkspacesTask } from '../support/task-type-inference.ts';
 
 const { PROMETHEUS } = monitoringTypes;
 const monitoring = monitoringTypes;

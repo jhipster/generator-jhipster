@@ -18,9 +18,10 @@
  */
 
 import type { CstNode, IToken } from 'chevrotain';
-import { relationshipTypes } from '../basic-types/index.ts';
-import RelationshipIssue from './issues/relationship-issue.ts';
 
+import { relationshipTypes } from '../basic-types/index.ts';
+
+import RelationshipIssue from './issues/relationship-issue.ts';
 import { rulesNames } from './rules.ts';
 
 let issues: RelationshipIssue[];

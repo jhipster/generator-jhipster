@@ -17,8 +17,10 @@
  * limitations under the License.
  */
 import { extname } from 'path';
+
 import { passthrough } from '@yeoman/transform';
 import { isFileStateDeleted } from 'mem-fs-editor/state';
+
 import { addJavaAnnotation } from './add-java-annotation.ts';
 
 const generatedAnnotationTransform = (packageName: string) => {

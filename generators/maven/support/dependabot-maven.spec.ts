@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { describe, expect } from 'esmocha';
+
 import { parseMavenPom } from './dependabot-maven.ts';
 
 describe('parseMavenPom', () => {

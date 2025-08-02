@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type JDLEnum from '../../core/models/jdl-enum.ts';
+
 import Validator from './validator.ts';
 
 export default class EnumValidator extends Validator {

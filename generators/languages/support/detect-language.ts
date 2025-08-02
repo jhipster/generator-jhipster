@@ -18,6 +18,7 @@
  */
 
 import { osLocaleSync } from 'os-locale';
+
 import type { Language } from './languages.js';
 import { findLanguageForTag, supportedLanguages } from './languages.ts';
 

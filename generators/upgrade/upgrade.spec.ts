@@ -1,11 +1,13 @@
-import path from 'path';
-import { mkdirSync, writeFileSync } from 'fs';
-import { escapeRegExp } from 'lodash-es';
 import { before, describe, expect, it } from 'esmocha';
+import { mkdirSync, writeFileSync } from 'fs';
+import path from 'path';
+
 import { execaCommandSync } from 'execa';
+import { escapeRegExp } from 'lodash-es';
+
 import { packageJson } from '../../lib/index.ts';
-import { GENERATOR_APP, GENERATOR_UPGRADE } from '../generator-list.ts';
 import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
+import { GENERATOR_APP, GENERATOR_UPGRADE } from '../generator-list.ts';
 
 const writeJsonSync = (file, content) => writeFileSync(file, JSON.stringify(content, null, 2));
 

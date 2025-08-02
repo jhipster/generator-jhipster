@@ -16,14 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, describe, expect, it } from 'esmocha';
+
 import { snakeCase } from 'lodash-es';
 
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { GENERATOR_SERVER, GENERATOR_SPRING_BOOT } from '../generator-list.ts';
+
 import { filterBasicServerGenerators, shouldComposeWithCouchbase, shouldComposeWithSpringCloudStream } from './__test-support/index.ts';
 import Generator from './index.ts';
 

@@ -17,14 +17,17 @@
  * limitations under the License.
  */
 
-import { before, describe, it, expect as jestExpect } from 'esmocha';
+import { before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLObject from '../../core/models/jdl-object.ts';
+
+import fieldTypes from '../../../jhipster/field-types.ts';
+import { validations } from '../../core/built-in-options/index.ts';
 import { JDLEntity, JDLEnum } from '../../core/models/index.ts';
 import JDLField from '../../core/models/jdl-field.ts';
+import JDLObject from '../../core/models/jdl-object.ts';
 import JDLValidation from '../../core/models/jdl-validation.ts';
-import { validations } from '../../core/built-in-options/index.ts';
-import fieldTypes from '../../../jhipster/field-types.ts';
+
 import { convert } from './jdl-to-json-field-converter.ts';
 
 const { CommonDBTypes } = fieldTypes;

@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { filterEntitiesForClient, filterEntityPropertiesForClient, preparePostEntityClientDerivedProperties } from '../../support/index.ts';
-import { ClientApplicationGenerator } from '../../generator.ts';
 import { getFrontendAppName } from '../../../../lib/utils/index.ts';
 import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, LOGIN_REGEX_JS } from '../../../generator-constants.js';
-import type { Features as ClientFeatures, Options as ClientOptions } from '../../types.d.ts';
 import clientCommand from '../../command.ts';
+import { ClientApplicationGenerator } from '../../generator.ts';
+import { filterEntitiesForClient, filterEntityPropertiesForClient, preparePostEntityClientDerivedProperties } from '../../support/index.ts';
+import type { Features as ClientFeatures, Options as ClientOptions } from '../../types.d.ts';
 
 export default class ClientBootstrap extends ClientApplicationGenerator {
   constructor(args: string | string[], opts: ClientOptions, features: ClientFeatures) {

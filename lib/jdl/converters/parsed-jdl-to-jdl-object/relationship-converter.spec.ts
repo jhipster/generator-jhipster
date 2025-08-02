@@ -18,6 +18,7 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
+
 import { convertRelationships } from './relationship-converter.ts';
 
 describe('jdl - RelationshipConverter', () => {

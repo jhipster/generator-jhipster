@@ -19,14 +19,14 @@
 
 import { existsSync } from 'fs';
 
-import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.ts';
-import BaseApplicationGenerator from '../base-application/index.ts';
-
-import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, searchEngineTypes, validations } from '../../lib/jhipster/index.ts';
-import { stringifyApplicationData } from '../base-application/support/index.ts';
-import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.ts';
-import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.ts';
 import { APPLICATION_TYPE_GATEWAY } from '../../lib/core/application-types.ts';
+import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, searchEngineTypes, validations } from '../../lib/jhipster/index.ts';
+import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import { stringifyApplicationData } from '../base-application/support/index.ts';
+import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.ts';
+import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.ts';
+
 import { hibernateSnakeCase } from './support/index.ts';
 import type {
   Application as ServerApplication,

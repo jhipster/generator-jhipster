@@ -1,12 +1,13 @@
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, describe, expect, it } from 'esmocha';
+
 import { snakeCase } from 'lodash-es';
 
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
-
+import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import { GENERATOR_CUCUMBER } from '../generator-list.ts';
+
 import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);

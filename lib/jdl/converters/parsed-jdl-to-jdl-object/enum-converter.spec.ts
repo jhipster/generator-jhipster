@@ -18,6 +18,7 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
+
 import { convertEnums } from './enum-converter.ts';
 
 describe('jdl - EnumConverter', () => {

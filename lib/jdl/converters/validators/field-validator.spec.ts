@@ -18,7 +18,9 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
 import JDLField from '../../core/models/jdl-field.ts';
 import FieldValidator from '../validators/field-validator.ts';
 

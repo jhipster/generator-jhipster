@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
+
 import { packageJson } from '../lib/index.ts';
 
 export default `${chalk.green('        ██╗')}${chalk.red(' ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗')}

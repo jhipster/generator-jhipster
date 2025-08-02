@@ -18,7 +18,9 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
 import { KEYWORD, NAME } from '../../parsing/lexer/shared-tokens.ts';
 import createTokenFromConfig from '../../parsing/lexer/token-creator.ts';
 

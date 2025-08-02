@@ -18,11 +18,13 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
+import { APPLICATION_TYPE_MONOLITH } from '../../core/application-types.ts';
+import { convertApplicationsToJDL } from '../core/__test-support__/index.ts';
 import { createJDLApplication } from '../core/models/jdl-application-factory.ts';
 import JDLObject from '../core/models/jdl-object.ts';
-import { convertApplicationsToJDL } from '../core/__test-support__/index.ts';
-import { APPLICATION_TYPE_MONOLITH } from '../../core/application-types.ts';
 import { createRuntime } from '../core/runtime.ts';
 
 describe('jdl - JSONToJDLApplicationConverter', () => {

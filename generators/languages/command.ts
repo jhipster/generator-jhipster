@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+
 import detectLanguage from './support/detect-language.ts';
 
 const command = {

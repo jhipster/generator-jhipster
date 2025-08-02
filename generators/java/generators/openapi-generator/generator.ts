@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JavaApplicationGenerator } from '../../generator.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
+import { JavaApplicationGenerator } from '../../generator.ts';
 import { javaMainResourceTemplatesBlock } from '../../support/files.ts';
 
 export default class OpenapiGeneratorGenerator extends JavaApplicationGenerator {

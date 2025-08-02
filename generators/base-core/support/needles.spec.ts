@@ -16,9 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import test from 'node:test';
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import test from 'node:test';
+
 import { createJHipsterLogger } from '../../../lib/utils/index.ts';
+
 import {
   checkContentIn,
   convertToPrettierExpressions,

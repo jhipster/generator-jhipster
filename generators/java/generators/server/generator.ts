@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JavaApplicationGenerator } from '../../generator.ts';
 import type { Source as CommonSource } from '../../../common/types.d.ts';
+import { JavaApplicationGenerator } from '../../generator.ts';
 
 const WAIT_TIMEOUT = 3 * 60000;
 

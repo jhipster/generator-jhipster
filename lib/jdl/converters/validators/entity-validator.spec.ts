@@ -18,7 +18,9 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
 import { JDLEntity } from '../../core/models/index.ts';
 import EntityValidator from '../validators/entity-validator.ts';
 

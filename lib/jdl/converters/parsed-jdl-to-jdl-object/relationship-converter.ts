@@ -18,10 +18,11 @@
  */
 
 import { lowerFirst } from 'lodash-es';
-import JDLRelationship from '../../core/models/jdl-relationship.ts';
-import { formatComment } from '../../core/utils/format-utils.ts';
+
 import { asJdlRelationshipType } from '../../core/basic-types/relationship-types.ts';
+import JDLRelationship from '../../core/models/jdl-relationship.ts';
 import type { ParsedJDLAnnotation, ParsedJDLRelationship } from '../../core/types/parsed.js';
+import { formatComment } from '../../core/utils/format-utils.ts';
 
 export default { convertRelationships };
 

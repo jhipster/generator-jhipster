@@ -17,15 +17,16 @@
  * limitations under the License.
  */
 
-import type { ConfigAll } from '../types/command-all.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
-import authenticationTypes from './authentication-types.ts';
-import databaseTypes from './database-types.ts';
+import type { ConfigAll } from '../types/command-all.js';
+
 import applicationOptions from './application-options.ts';
-import cacheTypes from './cache-types.ts';
-import serviceDiscoveryTypes from './service-discovery-types.ts';
-import clientFrameworkTypes from './client-framework-types.ts';
+import authenticationTypes from './authentication-types.ts';
 import buildToolTypes from './build-tool-types.ts';
+import cacheTypes from './cache-types.ts';
+import clientFrameworkTypes from './client-framework-types.ts';
+import databaseTypes from './database-types.ts';
+import serviceDiscoveryTypes from './service-discovery-types.ts';
 
 const { CONSUL } = serviceDiscoveryTypes;
 const { SQL, POSTGRESQL } = databaseTypes;

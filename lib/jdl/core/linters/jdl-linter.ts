@@ -18,12 +18,14 @@
  */
 
 import type { CstNode, IToken } from 'chevrotain';
-import type { JDLRuntime } from '../types/runtime.js';
+
 import { getCstFromContent } from '../readers/jdl-reader.ts';
-import Issues from './issues/issues.ts';
+import type { JDLRuntime } from '../types/runtime.js';
+
 import { checkEntities } from './entity-linter.ts';
-import { checkFields } from './field-linter.ts';
 import { checkEnums } from './enum-linter.ts';
+import { checkFields } from './field-linter.ts';
+import Issues from './issues/issues.ts';
 import { checkRelationships } from './relationship-linter.ts';
 
 export type JDLLinter = {

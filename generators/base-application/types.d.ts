@@ -1,13 +1,14 @@
 import type { DerivedPropertiesOnlyOf } from '../../lib/command/types.js';
+import type { FieldType } from '../../lib/jhipster/field-types.js';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
 import type { Field as BaseField } from '../../lib/jhipster/types/field.js';
-import type { FieldType } from '../../lib/jhipster/field-types.js';
 import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.js';
 import type {
   Application as BaseSimpleApplicationApplication,
   Config as BaseSimpleApplicationConfig,
   Options as BaseSimpleApplicationOptions,
 } from '../base-simple-application/types.d.ts';
+
 import type { OptionWithDerivedProperties } from './internal/types/application-options.js';
 import type { FakerWithRandexp } from './support/faker.ts';
 

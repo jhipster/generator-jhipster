@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { snakeCase, upperFirst } from 'lodash-es';
+
 import { mutateData } from '../../../lib/utils/index.ts';
 import type { Field as BaseApplicationField, Relationship as BaseApplicationRelationship } from '../types.d.ts';
 

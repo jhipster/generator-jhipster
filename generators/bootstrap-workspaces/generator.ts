@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 import { defaults } from 'lodash-es';
+
+import { removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
+import { normalizePathEnd } from '../../lib/utils/path.ts';
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base/support/constants.ts';
 import { CommandBaseWorkspacesGenerator as BaseWorkspacesGenerator } from '../base-workspaces/index.ts';
-import { normalizePathEnd } from '../../lib/utils/path.ts';
-import { removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
+
 import type command from './command.js';
 
 export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerator<typeof command> {

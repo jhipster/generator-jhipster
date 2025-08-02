@@ -1,13 +1,15 @@
 import { cpSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import process from 'process';
-import { globSync } from 'glob';
+
 import { execa } from 'execa';
+import { globSync } from 'glob';
 
 import { dailyBuildsFolder, jdlEntitiesSamplesFolder, jdlSamplesFolder, jhipsterBin, samplesFolder } from '../../constants.ts';
-import getSamples, { DAILY_PREFIX, isDaily } from './get-workflow-samples.ts';
+
 import copyEntitySamples from './copy-entity-samples.ts';
 import copyJdlEntitySamples from './copy-jdl-entity-samples.ts';
+import getSamples, { DAILY_PREFIX, isDaily } from './get-workflow-samples.ts';
 
 const commonCliOptions = ['--skip-jhipster-dependencies', '--skip-checks', '--skip-install', '--no-insight'];
 

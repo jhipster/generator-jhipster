@@ -18,6 +18,7 @@
  */
 
 import assert from 'assert';
+
 import type { X2jOptions, XmlBuilderOptions } from 'fast-xml-parser';
 import { XMLBuilder, XMLParser } from 'fast-xml-parser';
 import { merge } from 'lodash-es';

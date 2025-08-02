@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'url';
+
 import { minimatch } from 'minimatch';
 import { simpleGit } from 'simple-git';
 

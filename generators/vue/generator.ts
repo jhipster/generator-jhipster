@@ -17,23 +17,25 @@
  * limitations under the License.
  */
 import assert from 'node:assert';
+
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
-import { ClientApplicationGenerator } from '../client/generator.ts';
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
-import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_VUE } from '../generator-list.ts';
+import type { Field } from '../base-application/types.js';
+import { createNeedleCallback } from '../base-core/support/index.ts';
+import { ClientApplicationGenerator } from '../client/generator.ts';
 import {
-  generateEntityClientImports as formatEntityClientImports,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
+  generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.ts';
-import { createNeedleCallback } from '../base-core/support/index.ts';
-import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.ts';
 import type { Field as ClientField } from '../client/types.js';
-import type { Field } from '../base-application/types.js';
-import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.ts';
+import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_VUE } from '../generator-list.ts';
+import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.ts';
+
 import cleanupOldFilesTask from './cleanup.ts';
+import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.ts';
 import { writeEntitiesFiles, writeFiles } from './files-vue.ts';
 import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.ts';
 

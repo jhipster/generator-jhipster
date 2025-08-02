@@ -18,13 +18,12 @@
  */
 import { startCase } from 'lodash-es';
 
+import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
-
+import { createNeedleCallback } from '../base-core/support/index.ts';
 import { LOGIN_REGEX_JS } from '../generator-constants.js';
 import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS } from '../generator-list.ts';
 
-import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
-import { createNeedleCallback } from '../base-core/support/index.ts';
 import { addEnumerationFiles } from './entity-files.ts';
 import { writeFiles as writeCommonFiles } from './files-common.ts';
 import { askForClientTheme, askForClientThemeVariant } from './prompts.ts';

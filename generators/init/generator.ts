@@ -18,6 +18,7 @@
  */
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
 import { GENERATOR_GIT } from '../generator-list.ts';
+
 import { files, readme } from './files.ts';
 import type { Application as InitApplication, Config as InitConfig, Options as InitOptions } from './types.js';
 

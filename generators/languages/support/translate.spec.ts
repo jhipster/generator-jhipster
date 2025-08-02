@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+
 import {
   createJhiTransformTranslateReplacer,
   createJhiTransformTranslateStringifyReplacer,

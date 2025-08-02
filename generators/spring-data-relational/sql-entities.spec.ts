@@ -1,17 +1,17 @@
 import { before, describe, expect, it } from 'esmocha';
+
+import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.ts';
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
+  defaultHelpers as helpers,
   entitiesServerSamples as entities,
   extendFilteredMatrix,
   extendMatrix,
-  defaultHelpers as helpers,
   runResult,
 } from '../../lib/testing/index.ts';
-import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
-
-import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.ts';
 import { GENERATOR_SERVER } from '../generator-list.ts';
+import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };

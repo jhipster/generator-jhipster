@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asWritingTask } from '../base-application/support/task-type-inference.ts';
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 
-import { asWritingTask } from '../base-application/support/task-type-inference.ts';
 import cleanupOauth2 from './cleanup-oauth2.ts';
 
 /**

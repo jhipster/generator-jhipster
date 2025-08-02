@@ -17,12 +17,16 @@
  * limitations under the License.
  */
 import { basename } from 'node:path';
-import pluralize from 'pluralize';
-import { isFileStateModified } from 'mem-fs-editor/state';
+
 import { upperFirst } from 'lodash-es';
-import { JavaApplicationGenerator } from '../../generator.ts';
-import type { Application as JavascriptApplication, Source as JavascriptSource } from '../../../javascript/types.js';
+import { isFileStateModified } from 'mem-fs-editor/state';
+import pluralize from 'pluralize';
+
+import { mutateData, normalizePathEnd } from '../../../../lib/utils/index.ts';
+import { editPropertiesFileCallback } from '../../../base-core/support/properties-file.ts';
 import { JAVA_COMPATIBLE_VERSIONS, JHIPSTER_DEPENDENCIES_VERSION } from '../../../generator-constants.js';
+import type { Application as JavascriptApplication, Source as JavascriptSource } from '../../../javascript/types.js';
+import { JavaApplicationGenerator } from '../../generator.ts';
 import {
   addJavaAnnotation,
   addJavaImport,
@@ -38,8 +42,6 @@ import {
   packageInfoTransform,
   prepareEntity,
 } from '../../support/index.ts';
-import { mutateData, normalizePathEnd } from '../../../../lib/utils/index.ts';
-import { editPropertiesFileCallback } from '../../../base-core/support/properties-file.ts';
 
 export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   packageInfoFile!: boolean;

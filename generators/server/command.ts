@@ -18,6 +18,7 @@
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.ts';
+
 import { getDBTypeFromDBValue } from './support/database.ts';
 
 const command = {

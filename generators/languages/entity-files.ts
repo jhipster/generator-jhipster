@@ -18,6 +18,7 @@
  */
 import { asWriteFilesSection, asWritingEntitiesTask, getEnumInfo } from '../base-application/support/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
+
 import type LanguagesGenerator from './generator.js';
 import type { Application as LanguagesApplication, Entity as LanguagesEntity } from './types.js';
 

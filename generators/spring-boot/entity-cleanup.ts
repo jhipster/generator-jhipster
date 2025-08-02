@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
+
 import type { Application as SpringBootApplication, Entity as SpringBootEntity } from './types.js';
 
 /**

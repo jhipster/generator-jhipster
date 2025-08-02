@@ -2,6 +2,7 @@ import { mutateData } from '../../../lib/utils/index.ts';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.ts';
 import type { DatabaseEntity, DatabaseRelationship } from '../../liquibase/types.js';
 import type { Application as ServerApplication, Entity as ServerEntity, Relationship as ServerRelationship } from '../types.ts';
+
 import { getJoinTableName } from './database.ts';
 import { hibernateSnakeCase } from './string.ts';
 

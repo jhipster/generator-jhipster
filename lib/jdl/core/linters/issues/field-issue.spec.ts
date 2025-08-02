@@ -18,7 +18,9 @@
  */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
 import FieldIssue from './field-issue.ts';
 
 describe('jdl - FieldIssue', () => {

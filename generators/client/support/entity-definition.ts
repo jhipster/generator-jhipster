@@ -20,8 +20,9 @@
 import { clientFrameworkTypes, fieldTypes, validations } from '../../../lib/jhipster/index.ts';
 import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/types.js';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.d.ts';
-import getTypescriptKeyType from './types-utils.ts';
+
 import { filterRelevantRelationships } from './template-utils.ts';
+import getTypescriptKeyType from './types-utils.ts';
 
 const dbTypes = fieldTypes;
 const {

@@ -18,7 +18,9 @@
  */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
 import applicationOptions from '../../../jhipster/application-options.ts';
 import { createRuntime } from '../runtime.ts';
 

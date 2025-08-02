@@ -18,8 +18,9 @@
  */
 
 import { upperFirst } from 'lodash-es';
-import { merge } from '../utils/object-utils.ts';
+
 import type { JSONField, JSONRelationship } from '../types/json-config.js';
+import { merge } from '../utils/object-utils.ts';
 
 /**
  * The JSONEntity class represents a read-to-be exported to JSON entity.

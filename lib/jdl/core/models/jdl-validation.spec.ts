@@ -18,9 +18,11 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLValidation from '../models/jdl-validation.ts';
+
 import { validations } from '../built-in-options/index.ts';
+import JDLValidation from '../models/jdl-validation.ts';
 
 const {
   Validations: { PATTERN },

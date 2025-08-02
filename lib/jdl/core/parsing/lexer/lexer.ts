@@ -21,13 +21,12 @@ import type { ITokenConfig, TokenType } from 'chevrotain';
 import { Lexer } from 'chevrotain';
 
 import { relationshipOptions } from '../../built-in-options/index.ts';
-import { BINARY_OPTION, NAME, UNARY_OPTION } from './shared-tokens.ts';
 
-import ValidationTokens from './validation-tokens.ts';
-import RelationshipTypeTokens from './relationship-type-tokens.ts';
 import OptionTokens from './option-tokens.ts';
-
+import RelationshipTypeTokens from './relationship-type-tokens.ts';
+import { BINARY_OPTION, NAME, UNARY_OPTION } from './shared-tokens.ts';
 import createTokenFromConfigCreator from './token-creator.ts';
+import ValidationTokens from './validation-tokens.ts';
 
 type TokenParam = { categoryToken: TokenType; tokens: TokenType[] };
 

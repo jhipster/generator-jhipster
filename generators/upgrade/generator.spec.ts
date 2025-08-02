@@ -16,16 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { before, describe, expect, fn, it } from 'esmocha';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, describe, expect, fn, it } from 'esmocha';
+
 import { snakeCase } from 'lodash-es';
 import { simpleGit } from 'simple-git';
 
-import { shouldSupportFeatures } from '../../test/support/tests.js';
 import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
-import { UPGRADE_BRANCH } from './support/index.ts';
+import { shouldSupportFeatures } from '../../test/support/tests.js';
+
 import Generator from './index.ts';
+import { UPGRADE_BRANCH } from './support/index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

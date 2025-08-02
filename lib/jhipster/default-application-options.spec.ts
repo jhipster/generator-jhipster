@@ -18,6 +18,7 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
 
 import * as defaultApplicationOptions from './default-application-options.ts';

@@ -18,4 +18,4 @@
  */
 export { default } from './generator.ts';
 export { default as command } from './command.ts';
-export { cypressFiles, cypressEntityFiles } from './files.ts';
+export { cypressEntityFiles, cypressFiles } from './files.ts';

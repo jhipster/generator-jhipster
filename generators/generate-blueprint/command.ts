@@ -18,6 +18,7 @@
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_INIT } from '../generator-list.ts';
+
 import {
   ADDITIONAL_SUB_GENERATORS,
   CLI_OPTION,

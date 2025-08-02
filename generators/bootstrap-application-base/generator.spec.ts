@@ -16,14 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { before, beforeEach, describe, expect, it } from 'esmocha';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { before, beforeEach, describe, expect, it } from 'esmocha';
+
 import { snakeCase } from 'lodash-es';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { basicTests, shouldSupportFeatures } from '../../test/support/tests.js';
 import { parseChangelog } from '../base/support/timestamp.ts';
+
 import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);

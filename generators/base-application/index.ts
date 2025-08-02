@@ -22,4 +22,4 @@
  */
 export { default } from './generator.ts';
 export { default as comand } from './command.ts';
-export type { Application, Field, Entity, Relationship, Config, Options, Source } from './types.js';
+export type { Application, Config, Entity, Field, Options, Relationship, Source } from './types.js';

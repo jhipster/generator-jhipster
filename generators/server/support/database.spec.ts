@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'esmocha';
+
 import { databaseTypes } from '../../../lib/jhipster/index.ts';
+
 import { getDBTypeFromDBValue, getFKConstraintName, getJoinTableName, getUXConstraintName } from './database.ts';
 import { hibernateSnakeCase } from './string.ts';
 

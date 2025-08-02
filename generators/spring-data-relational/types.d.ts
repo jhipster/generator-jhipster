@@ -27,6 +27,7 @@ import type {
   Relationship as SpringBootRelationship,
   Source as SpringBootSource,
 } from '../spring-boot/types.ts';
+
 import type command from './command.ts';
 
 type CommandTypes = HandleCommandTypes<typeof command>;

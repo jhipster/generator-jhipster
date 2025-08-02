@@ -18,18 +18,20 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
+import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import fieldTypes from '../../../jhipster/field-types.ts';
+import { createJDLApplication } from '../__test-support__/index.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
 import { unaryOptions } from '../built-in-options/index.ts';
-import fieldTypes from '../../../jhipster/field-types.ts';
-import JDLObject from '../models/jdl-object.ts';
 import { JDLEntity, JDLEnum } from '../models/index.ts';
 import JDLField from '../models/jdl-field.ts';
+import mergeJDLObjects from '../models/jdl-object-merger.ts';
+import JDLObject from '../models/jdl-object.ts';
 import JDLRelationship from '../models/jdl-relationship.ts';
 import JDLUnaryOption from '../models/jdl-unary-option.ts';
-import mergeJDLObjects from '../models/jdl-object-merger.ts';
-import { createJDLApplication } from '../__test-support__/index.ts';
-import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import { createRuntime } from '../runtime.ts';
 
 const runtime = createRuntime();

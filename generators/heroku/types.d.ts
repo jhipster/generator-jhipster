@@ -24,6 +24,7 @@ import type {
   Options as BaseApplicationOptions,
   Source as BaseApplicationSource,
 } from '../base-application/types.js';
+
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
@@ -40,6 +41,6 @@ export type Config = Command['Config'] & BaseApplicationConfig & HerokuOptions;
 
 export type Options = Command['Options'] & BaseApplicationOptions & HerokuOptions;
 
-export { BaseApplicationSource as Source, BaseApplicationEntity as Entity };
+export { BaseApplicationEntity as Entity, BaseApplicationSource as Source };
 
 export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = Command['Application'] & BaseApplicationApplication<E>;

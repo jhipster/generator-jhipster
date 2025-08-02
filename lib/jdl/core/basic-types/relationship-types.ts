@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { camelCase, upperFirst } from 'lodash-es';
+
 import type { JDLRelationshipType, RelationshipType } from './relationships.js';
 import { relationshipTypes } from './relationships.ts';
 

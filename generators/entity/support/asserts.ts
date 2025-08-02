@@ -57,4 +57,4 @@ const isSignedNumber = (input: any): boolean => !isNaN(filterNumber(input, true)
  */
 const isSignedDecimalNumber = (input: any): boolean => !isNaN(filterNumber(input, true, true));
 
-export { isNumber, isSignedNumber, isSignedDecimalNumber };
+export { isNumber, isSignedDecimalNumber, isSignedNumber };

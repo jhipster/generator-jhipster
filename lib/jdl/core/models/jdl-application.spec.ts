@@ -17,13 +17,15 @@
  * limitations under the License.
  */
 
-import { before, describe, it, expect as jestExpect } from 'esmocha';
+import { before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { binaryOptions } from '../built-in-options/index.ts';
+
 import applicationOptions from '../../../jhipster/application-options.ts';
-import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.ts';
+import { binaryOptions } from '../built-in-options/index.ts';
 import JDLApplication from '../models/jdl-application.ts';
 import JDLBinaryOption from '../models/jdl-binary-option.ts';
+import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.ts';
 import { createRuntime } from '../runtime.ts';
 
 const { OptionNames } = applicationOptions;

@@ -17,16 +17,19 @@
  * limitations under the License.
  */
 
+import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
 import { readFileSync, writeFileSync } from 'fs';
+
 import { expect } from 'chai';
-import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import helpers from 'yeoman-test';
+
 import { createJDLLinterFromContent, getTestFile } from '.././__test-support__/index.ts';
-import type { JDLLinter } from './jdl-linter.js';
-import type Issues from './issues/issues.js';
-import type EnumIssue from './issues/enum-issue.js';
-import type relationshipIssue from './issues/relationship-issue.js';
+
 import type EntityIssue from './issues/entity-issue.js';
+import type EnumIssue from './issues/enum-issue.js';
+import type Issues from './issues/issues.js';
+import type relationshipIssue from './issues/relationship-issue.js';
+import type { JDLLinter } from './jdl-linter.js';
 
 /**
  * Creates a new JDL linters from a JDL file.

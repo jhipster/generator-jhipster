@@ -1,14 +1,16 @@
 import { basename, join } from 'path';
 import { Duplex } from 'stream';
+
 import { loadFile } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
-import { Minimatch } from 'minimatch';
 import { setModifiedFileState } from 'mem-fs-editor/state';
-import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
+import { Minimatch } from 'minimatch';
+
 import { getJDLObjectFromSingleApplication } from '../../../lib/jdl/converters/json-to-jdl-converter.ts';
 import { createRuntime } from '../../../lib/jdl/core/runtime.ts';
 import type { JDLApplicationConfig } from '../../../lib/jdl/core/types/parsing.js';
 import type { Entity } from '../../../lib/jhipster/types/entity.js';
+import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 
 export const exportJDLTransform = ({
   destinationPath,

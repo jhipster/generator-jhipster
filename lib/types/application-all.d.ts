@@ -16,35 +16,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Application as ClientApplication, Field as ClientField } from '../../generators/client/types.d.ts';
-import type { Application as GitApplication } from '../../generators/git/types.d.ts';
-import type { Application as DockerApplication } from '../../generators/docker/types.d.ts';
-import type { Application as SpringBootApplication, Entity as SpringBootEntity } from '../../generators/spring-boot/types.d.ts';
+import type { Entity as AngularEntity } from '../../generators/angular/types.d.ts';
 import type {
-  Application as SpringDataRelationalApplication,
-  Entity as SpringDataRelationalEntity,
-  Field as SpringDataRelationalField,
-  Relationship as SpringDataRelationalRelationship,
-} from '../../generators/spring-data-relational/types.d.ts';
+  Application as BaseApplication,
+  Entity as BaseApplicationEntity,
+  RelationshipWithEntity,
+} from '../../generators/base-application/types.d.ts';
+import type { Application as ClientApplication, Field as ClientField } from '../../generators/client/types.d.ts';
+import type { Application as DockerApplication } from '../../generators/docker/types.d.ts';
+import type { Application as GitApplication } from '../../generators/git/types.d.ts';
+import type { Application as I18nApplication } from '../../generators/languages/types.d.ts';
 import type {
   Application as LiqbuibaseApplication,
   Entity as LiquibaseEntity,
   Field as LiquibaseField,
   Relationship as LiquibaseRelationship,
 } from '../../generators/liquibase/types.d.ts';
-import type { Application as I18nApplication } from '../../generators/languages/types.d.ts';
-import type { Application as SpringCacheApplication } from '../../generators/spring-cache/types.d.ts';
-import type { Application as SpringCloudStreanApplication } from '../../generators/spring-cloud-stream/types.d.ts';
-import type { Application as SpringCloudApplication } from '../../generators/spring-cloud/types.d.ts';
-import type {
-  Application as BaseApplication,
-  Entity as BaseApplicationEntity,
-  RelationshipWithEntity,
-} from '../../generators/base-application/types.d.ts';
 import type { Application as ProjectNameApplication } from '../../generators/project-name/types.d.ts';
-
 import type { Relationship as ServerRelationship } from '../../generators/server/types.d.ts';
-import type { Entity as AngularEntity } from '../../generators/angular/types.d.ts';
+import type { Application as SpringBootApplication, Entity as SpringBootEntity } from '../../generators/spring-boot/types.d.ts';
+import type { Application as SpringCacheApplication } from '../../generators/spring-cache/types.d.ts';
+import type { Application as SpringCloudApplication } from '../../generators/spring-cloud/types.d.ts';
+import type { Application as SpringCloudStreanApplication } from '../../generators/spring-cloud-stream/types.d.ts';
+import type {
+  Application as SpringDataRelationalApplication,
+  Entity as SpringDataRelationalEntity,
+  Field as SpringDataRelationalField,
+  Relationship as SpringDataRelationalRelationship,
+} from '../../generators/spring-data-relational/types.d.ts';
 
 export type FieldAll = SpringDataRelationalField &
   LiquibaseField &

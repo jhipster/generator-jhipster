@@ -17,17 +17,20 @@
  * limitations under the License.
  */
 import fs from 'fs';
-import * as _ from 'lodash-es';
+
 import chalk from 'chalk';
+import * as _ from 'lodash-es';
+
+import { databaseTypes, entityOptions } from '../../lib/jhipster/index.ts';
+import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
+import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import {
   javaMainPackageTemplatesBlock,
   javaTestPackageTemplatesBlock,
   javaWriteFileSection,
   moveToJavaPackageSrcDir,
 } from '../java/support/index.ts';
-import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import { databaseTypes, entityOptions } from '../../lib/jhipster/index.ts';
-import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
+
 import { cleanupOldFiles } from './entity-cleanup.ts';
 import type { Application as SpringBootApplication, Entity as SpringBootEntity } from './types.js';
 

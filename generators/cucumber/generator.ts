@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 import { JavaApplicationGenerator } from '../java/generator.ts';
-import writeTask from './files.ts';
+
 import cleanupTask from './cleanup.ts';
+import writeTask from './files.ts';
 
 export default class CucumberGenerator extends JavaApplicationGenerator {
   async beforeQueue() {

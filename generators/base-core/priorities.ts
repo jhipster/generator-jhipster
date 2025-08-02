@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { Priority } from 'yeoman-generator';
+
 import type CoreGenerator from './generator.ts';
 
 export const PRIORITY_PREFIX = '>';

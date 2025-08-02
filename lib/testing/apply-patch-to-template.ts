@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs';
+
 import { type StructuredPatchHunk, applyPatch, structuredPatch } from 'diff';
 
 const splitHunk = ({ lines, ...hunk }: StructuredPatchHunk, contextSize: number) => {

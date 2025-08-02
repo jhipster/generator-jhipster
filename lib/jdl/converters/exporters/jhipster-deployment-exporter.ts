@@ -18,10 +18,12 @@
  */
 
 import path from 'path';
+
+import type { YoRcJHipsterDeploymentContent } from '../../../jhipster/types/yo-rc.js';
+import type JDLDeployment from '../../core/models/jdl-deployment.js';
 import { createFolderIfItDoesNotExist, doesFileExist } from '../../core/utils/file-utils.ts';
 import DeploymentValidator from '../validators/deployment-validator.ts';
-import type JDLDeployment from '../../core/models/jdl-deployment.js';
-import type { YoRcJHipsterDeploymentContent } from '../../../jhipster/types/yo-rc.js';
+
 import { GENERATOR_NAME, writeConfigFile } from './export-utils.ts';
 
 /**

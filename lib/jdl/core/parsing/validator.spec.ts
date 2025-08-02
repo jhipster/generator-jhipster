@@ -18,8 +18,11 @@
  */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
 import { createRuntime } from '../../core/runtime.ts';
+
 import { parse } from './api.ts';
 
 describe('jdl - JDLSyntaxValidatorVisitor', () => {

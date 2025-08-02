@@ -18,6 +18,7 @@
  */
 
 import { SpringBootApplicationGenerator } from '../../../spring-boot/generator.ts';
+
 import cleanupKafkaFilesTask from './cleanup.ts';
 import { kafkaFiles } from './files.ts';
 

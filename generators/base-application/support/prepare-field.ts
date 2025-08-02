@@ -17,14 +17,16 @@
  * limitations under the License.
  */
 import { defaults, kebabCase, snakeCase, startCase, upperFirst } from 'lodash-es';
+
+import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import { fieldTypes, validations } from '../../../lib/jhipster/index.ts';
-import { getTypescriptType } from '../../client/support/index.ts';
 import { applyDerivedPropertyOnly, mutateData } from '../../../lib/utils/index.ts';
 import type CoreGenerator from '../../base-core/generator.js';
+import { getTypescriptType } from '../../client/support/index.ts';
 import type { Entity as CommonEntity, Field as CommonField } from '../../common/types.d.ts';
-import { isFieldEnumType } from '../internal/types/field-types.ts';
-import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.js';
+import { isFieldEnumType } from '../internal/types/field-types.ts';
+
 import type { FakerWithRandexp } from './faker.js';
 import { prepareProperty } from './prepare-property.ts';
 

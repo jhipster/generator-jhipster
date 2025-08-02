@@ -18,15 +18,17 @@
  */
 
 import assert from 'assert';
+
+import { databaseTypes } from '../../lib/jhipster/index.ts';
+import { isReservedTableName } from '../../lib/jhipster/reserved-keywords.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { GENERATOR_LIQUIBASE } from '../generator-list.ts';
-import { isReservedTableName } from '../../lib/jhipster/reserved-keywords.ts';
-import { databaseTypes } from '../../lib/jhipster/index.ts';
-import writeTask from './files.ts';
+
 import cleanupTask from './cleanup.ts';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.ts';
-import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from './support/index.ts';
+import writeTask from './files.ts';
 import { getDatabaseTypeMavenDefinition, getH2MavenDefinition, javaSqlDatabaseArtifacts } from './internal/dependencies.ts';
+import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from './support/index.ts';
 import type {
   Application as SpringDataRelationalApplication,
   Config as SpringDataRelationalConfig,

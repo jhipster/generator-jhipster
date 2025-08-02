@@ -1,6 +1,6 @@
 import { before, describe, it } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { GENERATOR_SPRING_DATA_CASSANDRA } from '../generator-list.ts';
 

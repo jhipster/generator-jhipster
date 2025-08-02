@@ -18,8 +18,9 @@
  */
 import chalk from 'chalk';
 import { intersection, kebabCase } from 'lodash-es';
-import buildToolCommand from '../java/generators/build-tool/command.ts';
+
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+import buildToolCommand from '../java/generators/build-tool/command.ts';
 
 const { buildTool } = buildToolCommand.configs;
 const includesValue = (prop: string, values: string[]) => (answers: any) => answers[prop] && intersection(answers[prop], values).length > 0;

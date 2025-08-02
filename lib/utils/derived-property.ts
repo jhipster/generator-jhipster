@@ -1,5 +1,7 @@
 import { camelCase, upperFirst } from 'lodash-es';
+
 import type { JHipsterChoices } from '../command/types.js';
+
 import { upperFirstCamelCase } from './string.ts';
 
 export const flatChoices = (choices: JHipsterChoices): string[] =>

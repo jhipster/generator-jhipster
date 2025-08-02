@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { ValueOf } from 'type-fest';
+
 import kubernetesPlatformTypes from './kubernetes-platform-types.ts';
 import monitoringTypes from './monitoring-types.ts';
 import serviceDiscoveryTypes from './service-discovery-types.ts';

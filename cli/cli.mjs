@@ -19,6 +19,7 @@
 import semver from 'semver';
 
 import { packageJson } from '../lib/index.ts';
+
 import { runJHipster } from './program.mts';
 import { done, logger } from './utils.mjs';
 

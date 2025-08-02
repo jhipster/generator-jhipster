@@ -18,18 +18,19 @@
  */
 
 import { angularReservedKeywords } from '../../generators/angular/support/reserved-keywords.ts';
-import { mysqlReservedKeywords } from '../../generators/spring-data-relational/support/mysql-reserved-keywords.ts';
 import { javaReservedKeywords } from '../../generators/java/support/reserved-keywords.ts';
 import { typescriptReservedKeywords } from '../../generators/javascript/support/reserved-words.ts';
-import { postgresqlReservedKeywords } from '../../generators/spring-data-relational/support/postgresql-reserved-keywords.ts';
 import { cassandraReservedKeywords } from '../../generators/spring-data-cassandra/support/reserved-keywords.ts';
 import { couchbaseReservedKeywords } from '../../generators/spring-data-couchbase/support/reserved-keywords.ts';
-import { oracleReservedKeywords } from '../../generators/spring-data-relational/support/oracle-reserved-keywords.ts';
-import { mssqlReservedKeywords } from '../../generators/spring-data-relational/support/mssql-reserved-keywords.ts';
 import { neo4jReservedKeywords } from '../../generators/spring-data-neo4j/support/reserved-keywords.ts';
-import PagingReservedKeywords from './reserved-keywords/paging.ts';
-import JHipsterReservedKeywords from './reserved-keywords/jhipster.ts';
+import { mssqlReservedKeywords } from '../../generators/spring-data-relational/support/mssql-reserved-keywords.ts';
+import { mysqlReservedKeywords } from '../../generators/spring-data-relational/support/mysql-reserved-keywords.ts';
+import { oracleReservedKeywords } from '../../generators/spring-data-relational/support/oracle-reserved-keywords.ts';
+import { postgresqlReservedKeywords } from '../../generators/spring-data-relational/support/postgresql-reserved-keywords.ts';
+
 import applicationOptions from './application-options.ts';
+import JHipsterReservedKeywords from './reserved-keywords/jhipster.ts';
+import PagingReservedKeywords from './reserved-keywords/paging.ts';
 
 const clientFrameworks = applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK] as Record<string, string>;
 

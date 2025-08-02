@@ -17,12 +17,15 @@
  * limitations under the License.
  */
 
+import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import helpers from 'yeoman-test';
+
 import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
-import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.ts';
+
 import exportToJDL from './converters/exporters/jdl-exporter.ts';
+import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.ts';
 import {
   createImporterFromContent,
   getTestFile,

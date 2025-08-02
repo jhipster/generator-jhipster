@@ -1,13 +1,15 @@
 import type { Lexer, TokenType } from 'chevrotain';
+
 import { builtInJDLApplicationConfig } from '../../jhipster/application-options.ts';
-import { buildTokens, createJDLLexer } from './parsing/lexer/lexer.ts';
-import JDLParser from './parsing/jdl-parser.ts';
-import { checkConfigKeys, checkTokens } from './parsing/self-checks/parsing-system-checker.ts';
-import type { JDLRuntime } from './types/runtime.js';
-import type { JDLApplicationConfig, JDLValidatorOption } from './types/parsing.js';
+
 import JDLApplicationDefinition from './built-in-options/jdl-application-definition.ts';
 import { buildApplicationTokens } from './built-in-options/tokens/application-tokens.ts';
 import { deploymentTokens } from './built-in-options/tokens/deployment-tokens.ts';
+import JDLParser from './parsing/jdl-parser.ts';
+import { buildTokens, createJDLLexer } from './parsing/lexer/lexer.ts';
+import { checkConfigKeys, checkTokens } from './parsing/self-checks/parsing-system-checker.ts';
+import type { JDLApplicationConfig, JDLValidatorOption } from './types/parsing.js';
+import type { JDLRuntime } from './types/runtime.js';
 
 const mergeDefinition = (definition: JDLApplicationConfig, defaultDefinition: JDLApplicationConfig) => {
   return {

@@ -20,6 +20,7 @@
 /* define global expect */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
 
 import { customCamelCase } from './string-utils.ts';

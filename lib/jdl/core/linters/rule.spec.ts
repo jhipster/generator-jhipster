@@ -18,9 +18,11 @@
  */
 
 import { before, beforeEach, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import Rule from './rule.ts';
+
 import { ERROR, INFO } from './rule-levels.ts';
+import Rule from './rule.ts';
 
 describe('jdl - Rule', () => {
   describe('new', () => {

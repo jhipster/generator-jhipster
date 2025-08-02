@@ -16,23 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, describe, expect, it } from 'esmocha';
+
 import { snakeCase } from 'lodash-es';
 
+import { cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.ts';
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
+  defaultHelpers as helpers,
   extendFilteredMatrix,
   extendMatrix,
-  defaultHelpers as helpers,
   runResult,
 } from '../../lib/testing/index.ts';
+import { shouldSupportFeatures } from '../../test/support/tests.js';
 import { matchElasticSearchDocker } from '../spring-data-elasticsearch/__test-support/elastic-search-matcher.ts';
 
-import { cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.ts';
-import { shouldSupportFeatures } from '../../test/support/tests.js';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.ts';
 import Generator from './index.ts';
 

@@ -18,9 +18,11 @@
  */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
 
 import validations from '../jdl/core/built-in-options/validations.ts';
+
 import fieldTypes from './field-types.ts';
 
 const {

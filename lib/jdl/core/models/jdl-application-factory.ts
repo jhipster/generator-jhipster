@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JDLRuntime } from '../types/runtime.js';
+
 import JDLApplication from './jdl-application.ts';
 
 /**

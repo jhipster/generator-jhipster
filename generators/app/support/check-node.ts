@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import semver from 'semver';
 import chalk from 'chalk';
+import semver from 'semver';
 
 import { packageJson } from '../../../lib/index.ts';
 import type { Logger } from '../../../lib/utils/logger.ts';

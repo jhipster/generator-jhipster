@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'esmocha';
+
 import { parseIssue } from './github.ts';
 
 describe('github', () => {

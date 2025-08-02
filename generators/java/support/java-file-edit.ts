@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import assert from 'assert';
+
 import { escapeRegExp } from 'lodash-es';
 
 export type JavaClassName = { className: string };

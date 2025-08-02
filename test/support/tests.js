@@ -1,12 +1,14 @@
-import { existsSync } from 'fs';
-import sinon from 'sinon';
 import { before, describe, expect, it } from 'esmocha';
+import { existsSync } from 'fs';
+
+import sinon from 'sinon';
+
 import { buildJHipster } from '../../cli/index.mts';
-import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
-import { getGenerator, skipPrettierHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { ENTITY_PRIORITY_NAMES, PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.ts';
-import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../../generators/base-simple-application/support/constants.ts';
+import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
+import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
+import { getGenerator, runResult, skipPrettierHelpers as helpers } from '../../lib/testing/index.ts';
 
 const workspacesPriorityList = Object.values(WORKSPACES_PRIORITY_NAMES);
 

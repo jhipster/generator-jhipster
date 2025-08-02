@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { XMLParser } from 'fast-xml-parser';
+
 import { defaultXmlParserOptions } from '../internal/xml-store.ts';
 
 /**

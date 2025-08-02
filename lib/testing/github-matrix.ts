@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+
 import { JAVA_COMPATIBLE_VERSIONS, RECOMMENDED_JAVA_VERSION, RECOMMENDED_NODE_VERSION } from '../../generators/generator-constants.js';
 import { getSourceRoot } from '../index.ts';
 

@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type JDLEntity from '../../core/models/jdl-entity.ts';
+
 import Validator from './validator.ts';
 
 export default class EntityValidator extends Validator {

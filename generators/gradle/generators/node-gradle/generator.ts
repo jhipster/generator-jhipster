@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
 import { GENERATOR_GRADLE } from '../../../generator-list.ts';
+import { JavaApplicationGenerator } from '../../../java/generator.ts';
 
 export default class NodeGradleGenerator extends JavaApplicationGenerator {
   async beforeQueue() {

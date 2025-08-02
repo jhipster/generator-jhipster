@@ -17,18 +17,20 @@
  * limitations under the License.
  */
 
-import { before, describe, it, expect as jestExpect } from 'esmocha';
+import { before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { JDLEntity, JDLEnum } from '../../core/models/index.ts';
-import JDLField from '../../core/models/jdl-field.ts';
-import JDLValidation from '../../core/models/jdl-validation.ts';
-import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
-import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
-import { binaryOptions, unaryOptions, validations } from '../../core/built-in-options/index.ts';
-import fieldTypes from '../../../jhipster/field-types.ts';
-import { getTestFile, parseFromConfigurationObject, parseFromContent, parseFromFiles } from '../../core/__test-support__/index.ts';
-import { entityOptions } from '../../../jhipster/index.ts';
+
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import fieldTypes from '../../../jhipster/field-types.ts';
+import { entityOptions } from '../../../jhipster/index.ts';
+import { getTestFile, parseFromConfigurationObject, parseFromContent, parseFromFiles } from '../../core/__test-support__/index.ts';
+import { binaryOptions, unaryOptions, validations } from '../../core/built-in-options/index.ts';
+import { JDLEntity, JDLEnum } from '../../core/models/index.ts';
+import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+import JDLField from '../../core/models/jdl-field.ts';
+import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
+import JDLValidation from '../../core/models/jdl-validation.ts';
 
 const { MapperTypes, ServiceTypes, PaginationTypes } = entityOptions;
 

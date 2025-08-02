@@ -18,8 +18,11 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
 import { createRuntime } from '../runtime.ts';
+
 import { getSyntacticAutoCompleteSuggestions, parse } from './api.ts';
 
 describe('jdl - JDL DSL API', () => {

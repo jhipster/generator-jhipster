@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 import { dirname, join, relative } from 'path';
-import { passthrough } from 'p-transform';
-import type { MemFsEditorFile } from 'mem-fs-editor';
+
 import { loadFile } from 'mem-fs';
-import { Minimatch } from 'minimatch';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 import { setModifiedFileState } from 'mem-fs-editor/state';
+import { Minimatch } from 'minimatch';
+import { passthrough } from 'p-transform';
 
 type PackageInfoTransformOptions = { javaRoots: string[]; javadocs?: Record<string, string> };
 

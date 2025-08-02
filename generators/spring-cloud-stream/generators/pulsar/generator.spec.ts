@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { before, describe, expect, it } from 'esmocha';
 
-import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
 import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
+
 import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);

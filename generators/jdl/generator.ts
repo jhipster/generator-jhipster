@@ -16,24 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { extname } from 'path';
 import { readFile } from 'fs/promises';
+import { extname } from 'path';
+
 import { upperFirst } from 'lodash-es';
 import { type Store as MemFs, create as createMemFs } from 'mem-fs';
 import { type MemFsEditor, create as createMemFsEditor } from 'mem-fs-editor';
 
-import BaseGenerator from '../base/index.ts';
 import { downloadJdlFile } from '../../cli/download.mts';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { CLI_NAME } from '../../cli/utils.mjs';
-import { GENERATOR_APP, GENERATOR_ENTITIES, GENERATOR_WORKSPACES } from '../generator-list.ts';
 import type { ApplicationWithEntities } from '../../lib/jdl/jdl-importer.js';
 import { createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
-import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
+import BaseGenerator from '../base/index.ts';
 import { normalizeBlueprintName } from '../base/internal/blueprint.ts';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.ts';
+import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
+import { GENERATOR_APP, GENERATOR_ENTITIES, GENERATOR_WORKSPACES } from '../generator-list.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
+
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.ts';
 import type { Config as JdlConfig, Options as JdlOptions } from './types.js';
 

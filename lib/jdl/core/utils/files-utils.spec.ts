@@ -17,14 +17,16 @@
  * limitations under the License.
  */
 
+import { after, before, describe, it } from 'esmocha';
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { after, before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils.ts';
+
 import { getPackageRoot } from '../../../index.ts';
 import { getTestFile } from '../__test-support__/index.ts';
+import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

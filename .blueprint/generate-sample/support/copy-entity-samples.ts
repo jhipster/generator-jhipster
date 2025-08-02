@@ -1,5 +1,6 @@
 import { cpSync, mkdirSync } from 'fs';
 import { join } from 'path';
+
 import { entitiesSamplesDir } from '../../constants.ts';
 
 const sqllight = ['BankAccount', 'Label', 'Operation'];

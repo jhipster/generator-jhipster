@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { lowerFirst } from 'lodash-es';
+
 import { formatDocAsJavaDoc } from '../../java/support/doc.ts';
 import type { Field as BaseApplicationField } from '../types.d.ts';
 

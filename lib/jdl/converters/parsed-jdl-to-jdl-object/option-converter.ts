@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
-import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.ts';
 import type AbstractJDLOption from '../../core/models/abstract-jdl-option.js';
+import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
 import type { ParsedJDLOption, ParsedJDLOptionConfig, ParsedJDLUseOption } from '../../core/types/parsed.js';
 
 const { OptionValues, getOptionName } = binaryOptions;

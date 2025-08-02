@@ -17,26 +17,26 @@
  * limitations under the License.
  */
 
-import { after, before, describe, it, expect as jestExpect } from 'esmocha';
-import { use as chaiUse, expect } from 'chai';
+import { after, before, describe, expect as jestExpect, it } from 'esmocha';
+
+import { expect, use as chaiUse } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 chaiUse(sinonChai);
 
-import { relationshipTypes } from '../../core/basic-types/index.ts';
-
-import { binaryOptions, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.ts';
 import fieldTypes from '../../../jhipster/field-types.ts';
-
-import JDLObject from '../../core/models/jdl-object.ts';
+import { relationshipTypes } from '../../core/basic-types/index.ts';
+import { binaryOptions, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.ts';
 import { JDLEntity, JDLEnum } from '../../core/models/index.ts';
+import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 import JDLField from '../../core/models/jdl-field.ts';
-import JDLValidation from '../../core/models/jdl-validation.ts';
+import JDLObject from '../../core/models/jdl-object.ts';
 import JDLRelationship from '../../core/models/jdl-relationship.ts';
 import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
-import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+import JDLValidation from '../../core/models/jdl-validation.ts';
 import logger from '../../core/utils/objects/logger.ts';
+
 import { convert } from './jdl-without-application-to-json-converter.ts';
 
 const {

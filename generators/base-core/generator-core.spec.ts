@@ -1,9 +1,10 @@
-import { before, beforeEach, describe, expect, it, expect as jestExpect } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+import { before, beforeEach, describe, expect, expect as jestExpect, it } from 'esmocha';
 
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { createJHipsterLogger } from '../../lib/utils/index.ts';
-import { editPropertiesFileCallback } from './support/properties-file.ts';
+
 import Base from './index.ts';
+import { editPropertiesFileCallback } from './support/properties-file.ts';
 
 const BaseGenerator: any = Base.prototype;
 

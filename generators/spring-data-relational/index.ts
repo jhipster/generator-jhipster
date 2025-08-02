@@ -18,4 +18,4 @@
  */
 export { default } from './generator.ts';
 export { default as command } from './command.ts';
-export type { Application, Field, Entity, Relationship } from './types.js';
+export type { Application, Entity, Field, Relationship } from './types.js';

@@ -17,15 +17,17 @@
  * limitations under the License.
  */
 
-import path from 'path';
+import { after, before, describe, expect as jestExpect, it } from 'esmocha';
 import { rmSync } from 'fs';
-import { after, before, describe, it, expect as jestExpect } from 'esmocha';
+import path from 'path';
+
 import { expect } from 'chai';
 
+import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
 import clientFrameworkTypes from '../jhipster/client-framework-types.ts';
 import databaseTypes from '../jhipster/database-types.ts';
 import { readYoRcFile } from '../utils/yo-rc.ts';
-import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
+
 import { createImporterFromContent, createImporterFromFiles, getTestFile } from './core/__test-support__/index.ts';
 import type { ImportState } from './jdl-importer.js';
 

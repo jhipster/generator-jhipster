@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+
 import { BASE_NAME_DESCRIPTION } from './constants.ts';
 
 const command = {

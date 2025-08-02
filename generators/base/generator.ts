@@ -18,19 +18,17 @@
  */
 import assert from 'assert';
 import fs, { existsSync, readFileSync, statSync } from 'fs';
-import path, { join, relative } from 'path';
 import { rm } from 'fs/promises';
+import path, { join, relative } from 'path';
+
 import chalk from 'chalk';
-import semver, { lt as semverLessThan } from 'semver';
 import { execaCommandSync } from 'execa';
 import { union } from 'lodash-es';
+import semver, { lt as semverLessThan } from 'semver';
 import type { PackageJson } from 'type-fest';
-import { packageJson } from '../../lib/index.ts';
-import CoreGenerator from '../base-core/index.ts';
-import { GENERATOR_JHIPSTER } from '../generator-constants.js';
+
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
-import { GENERATOR_BOOTSTRAP } from '../generator-list.ts';
-import type { GenericTask } from '../base-core/types.js';
+import { packageJson } from '../../lib/index.ts';
 import { packageNameToNamespace } from '../../lib/utils/index.ts';
 import {
   CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE,
@@ -39,16 +37,21 @@ import {
   LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
   formatDateForChangelog,
 } from '../base/support/index.ts';
+import CoreGenerator from '../base-core/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { TaskTypes as BaseTasks } from './tasks.js';
+import type { GenericTask } from '../base-core/types.js';
+import { GENERATOR_JHIPSTER } from '../generator-constants.js';
+import { GENERATOR_BOOTSTRAP } from '../generator-list.ts';
+
 import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.ts';
+import type { TaskTypes as BaseTasks } from './tasks.js';
 import type {
+  CleanupArgumentType,
   Config as BaseConfig,
+  Control,
   Features as BaseFeatures,
   Options as BaseOptions,
   Source as BaseSource,
-  CleanupArgumentType,
-  Control,
 } from './types.js';
 
 const { WRITING } = PRIORITY_NAMES;

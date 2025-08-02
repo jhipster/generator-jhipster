@@ -1,14 +1,15 @@
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, describe, expect, it } from 'esmocha';
+
 import { snakeCase } from 'lodash-es';
 
-import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
-
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { buildClientSamples, defaultHelpers as helpers, entitiesClientSamples as entities, runResult } from '../../lib/testing/index.ts';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import { GENERATOR_VUE } from '../generator-list.ts';
+
 import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);

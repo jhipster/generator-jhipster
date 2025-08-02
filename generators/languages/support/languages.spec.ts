@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'esmocha';
+
 import { findLanguageForTag, generateLanguagesWebappOptions } from './languages.ts';
 
 describe('generator - languages - support', () => {

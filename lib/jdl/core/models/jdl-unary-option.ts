@@ -18,6 +18,7 @@
  */
 
 import { join } from '../utils/set-utils.ts';
+
 import AbstractJDLOption from './abstract-jdl-option.ts';
 
 /**

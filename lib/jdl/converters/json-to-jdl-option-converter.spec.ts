@@ -18,10 +18,13 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
+import { unaryOptions } from '../core/built-in-options/index.ts';
 import JDLObject from '../core/models/jdl-object.ts';
 import JDLUnaryOption from '../core/models/jdl-unary-option.ts';
-import { unaryOptions } from '../core/built-in-options/index.ts';
+
 import { convertServerOptionsToJDL } from './json-to-jdl-option-converter.ts';
 
 const { SKIP_CLIENT } = unaryOptions;

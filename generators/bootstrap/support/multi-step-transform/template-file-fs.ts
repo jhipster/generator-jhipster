@@ -18,9 +18,10 @@
  */
 import assert from 'assert';
 import path from 'path';
-import { minimatch } from 'minimatch';
 
 import type { MemFsEditorFile } from 'mem-fs-editor';
+import { minimatch } from 'minimatch';
+
 import TemplateFile from './template-file.ts';
 
 export default class TemplateFileFs {

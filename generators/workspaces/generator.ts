@@ -16,16 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'node:assert';
 import { existsSync } from 'fs';
+import assert from 'node:assert';
 
-import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENERATOR_REACT } from '../generator-list.ts';
-
-import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
 import { packageJson } from '../../lib/index.ts';
+import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
+import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENERATOR_REACT } from '../generator-list.ts';
 import type { Config as GitConfig, Options as GitOptions } from '../git/types.d.ts';
 import type { Config as ProjectNameConfig } from '../project-name/types.d.ts';
-import type { WorkspacesApplication, Config as WorkspacesConfig, Options as WorkspacesOptions } from './types.js';
+
+import type { Config as WorkspacesConfig, Options as WorkspacesOptions, WorkspacesApplication } from './types.js';
 
 export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, WorkspacesApplication, WorkspacesConfig, WorkspacesOptions> {
   dockerCompose!: boolean;

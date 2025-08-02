@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 
+import { mutateData, normalizePathEnd } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
-import type { Application as ServerApplication, Entity as ServerEntity } from '../server/types.js';
-import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.js';
+import { loadRequiredConfigIntoEntity } from '../base-application/support/index.ts';
+import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.ts';
+import { loadDockerDependenciesTask } from '../base-workspaces/internal/docker-dependencies.ts';
 import {
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
@@ -29,25 +31,23 @@ import {
   SERVER_TEST_RES_DIR,
   SERVER_TEST_SRC_DIR,
 } from '../generator-constants.js';
-import { loadRequiredConfigIntoEntity } from '../base-application/support/index.ts';
+import { getGradleLibsVersionsProperties } from '../gradle/support/index.ts';
+import { getMainClassName } from '../java/support/index.ts';
+import { getPomVersionProperties } from '../maven/support/index.ts';
+import serverCommand from '../server/command.ts';
 import {
   addEntitiesOtherRelationships,
   getDatabaseTypeData,
   getPrimaryKeyValue,
   hibernateSnakeCase,
   loadRequiredConfigDerivedProperties,
+  prepareField as prepareServerFieldForTemplates,
   preparePostEntityServerDerivedProperties,
   prepareRelationship,
-  prepareField as prepareServerFieldForTemplates,
 } from '../server/support/index.ts';
-import { getGradleLibsVersionsProperties } from '../gradle/support/index.ts';
-import { getPomVersionProperties } from '../maven/support/index.ts';
-import { getMainClassName } from '../java/support/index.ts';
-import { loadConfig, loadDerivedConfig } from '../base-core/internal/index.ts';
-import serverCommand from '../server/command.ts';
-import { mutateData, normalizePathEnd } from '../../lib/utils/index.ts';
+import type { Application as ServerApplication, Entity as ServerEntity } from '../server/types.js';
 import type { Application as SpringBootApplication } from '../spring-boot/types.js';
-import { loadDockerDependenciesTask } from '../base-workspaces/internal/docker-dependencies.ts';
+import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.js';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator<ServerEntity, ServerApplication<ServerEntity>> {
   async beforeQueue() {

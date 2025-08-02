@@ -18,6 +18,7 @@
  */
 
 import type JDLField from '../../core/models/jdl-field.ts';
+
 import Validator from './validator.ts';
 
 export default class FieldValidator extends Validator {

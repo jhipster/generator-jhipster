@@ -23,8 +23,9 @@ import { databaseTypes, entityOptions, validations } from '../../../lib/jhipster
 import { mutateData } from '../../../lib/utils/index.ts';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../types.js';
-import { prepareProperty } from './prepare-property.ts';
+
 import { stringifyApplicationData } from './debug.ts';
+import { prepareProperty } from './prepare-property.ts';
 
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;
 const { MapperTypes } = entityOptions;

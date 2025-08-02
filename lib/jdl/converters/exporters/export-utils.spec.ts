@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 
-import { readFileSync, writeFileSync } from 'fs';
 import { beforeEach, describe, expect, it } from 'esmocha';
+import { readFileSync, writeFileSync } from 'fs';
+
 import helpers from 'yeoman-test';
+
 import { writeConfigFile } from '../exporters/export-utils.ts';
 
 describe('jdl - ExportUtils', () => {

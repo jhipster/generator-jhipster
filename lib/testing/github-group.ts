@@ -1,5 +1,6 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { extname, join } from 'node:path';
+
 import type { GitHubMatrixGroup } from './github-matrix.js';
 import { getUnknownGitHubMatrixGroupProperties } from './github-matrix.ts';
 

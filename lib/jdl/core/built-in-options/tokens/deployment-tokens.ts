@@ -18,6 +18,7 @@
  */
 
 import { Lexer } from 'chevrotain';
+
 import createTokenFromConfig from '../../parsing/lexer/token-creator.ts';
 
 const deploymentCategoryToken = createTokenFromConfig({

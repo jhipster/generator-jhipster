@@ -18,6 +18,7 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
+
 import { addAll, join } from '../utils/set-utils.ts';
 
 describe('jdl - SetUtils', () => {

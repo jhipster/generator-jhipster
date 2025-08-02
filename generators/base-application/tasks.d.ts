@@ -17,8 +17,10 @@
  * limitations under the License.
  */
 import type { Storage } from 'yeoman-generator';
+
 import type { TaskParamWithSource } from '../base/tasks.js';
 import type { SimpleTaskTypes, TaskParamWithApplication } from '../base-simple-application/tasks.js';
+
 import type {
   Application as BaseApplicationApplication,
   Entity as BaseApplicationEntity,

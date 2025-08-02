@@ -18,13 +18,13 @@
  */
 import { capitalize } from 'lodash-es';
 
+import { customCamelCase } from '../../../utils/string-utils.ts';
 import { validations } from '../../core/built-in-options/index.ts';
-import { formatComment } from '../../core/utils/format-utils.ts';
-import type JDLObject from '../../core/models/jdl-object.js';
-import type { JSONField } from '../../core/types/json-config.js';
 import type { JDLEntity } from '../../core/models/index.js';
 import type JDLField from '../../core/models/jdl-field.js';
-import { customCamelCase } from '../../../utils/string-utils.ts';
+import type JDLObject from '../../core/models/jdl-object.js';
+import type { JSONField } from '../../core/types/json-config.js';
+import { formatComment } from '../../core/utils/format-utils.ts';
 
 const {
   Validations: { UNIQUE, REQUIRED },

@@ -17,22 +17,24 @@
  * limitations under the License.
  */
 
-import path from 'path';
 import fs from 'fs';
-import JDLObject from '../core/models/jdl-object.ts';
-import mergeJDLObjects from '../core/models/jdl-object-merger.ts';
-import { doesDirectoryExist, doesFileExist } from '../core/utils/file-utils.ts';
-import { removeFieldsWithNullishValues } from '../../utils/object.ts';
-import type JDLApplication from '../core/models/jdl-application.js';
-import type { JDLRuntime } from '../core/types/runtime.js';
-import { YO_RC_CONFIG_KEY, readEntityFile, readYoRcFile } from '../../utils/yo-rc.ts';
-import type { RawJDLJSONApplication } from '../core/types/exporter.js';
-import type { YoRcJHipsterApplicationConfigValue, YoRcJHipsterApplicationContent } from '../../jhipster/types/yo-rc.js';
-import type { JSONEntity } from '../core/types/json-config.js';
+import path from 'path';
+
 import type { YoRcFileContent } from '../../constants/yeoman.ts';
+import type { YoRcJHipsterApplicationConfigValue, YoRcJHipsterApplicationContent } from '../../jhipster/types/yo-rc.js';
+import { removeFieldsWithNullishValues } from '../../utils/object.ts';
+import { YO_RC_CONFIG_KEY, readEntityFile, readYoRcFile } from '../../utils/yo-rc.ts';
+import type JDLApplication from '../core/models/jdl-application.js';
+import mergeJDLObjects from '../core/models/jdl-object-merger.ts';
+import JDLObject from '../core/models/jdl-object.ts';
+import type { RawJDLJSONApplication } from '../core/types/exporter.js';
+import type { JSONEntity } from '../core/types/json-config.js';
+import type { JDLRuntime } from '../core/types/runtime.js';
+import { doesDirectoryExist, doesFileExist } from '../core/utils/file-utils.ts';
+
+import exportJDLObject from './exporters/jdl-exporter.ts';
 import { convertApplicationToJDL } from './json-to-jdl-application-converter.ts';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.ts';
-import exportJDLObject from './exporters/jdl-exporter.ts';
 
 export default {
   convertToJDL,

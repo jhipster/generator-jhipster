@@ -17,15 +17,15 @@
  * limitations under the License.
  */
 
-import { createFaker } from '../base-application/support/index.ts';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { mutateData, stringHashCode } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
-import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
-import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-
+import { createFaker } from '../base-application/support/index.ts';
 import { generateTestEntity } from '../client/support/index.ts';
 import type { Source as ClientSource } from '../client/types.js';
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import type { Source as JavaSource } from '../java/types.d.ts';
+
 import { cypressEntityFiles, cypressFiles } from './files.ts';
 import type { Application as CypressApplication, Entity as CypressEntity, Field as CypressField } from './types.js';
 

@@ -19,6 +19,7 @@
 
 import BinaryOptions from '../../core/built-in-options/binary-options.ts';
 import type JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+
 import OptionValidator from './option-validator.ts';
 
 export default class BinaryOptionValidator extends OptionValidator {

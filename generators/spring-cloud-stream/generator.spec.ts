@@ -16,14 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, describe, expect, it } from 'esmocha';
+
 import { snakeCase } from 'lodash-es';
 
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { messageBrokerTypes } from '../../lib/jhipster/index.ts';
+import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
+
 import Generator from './index.ts';
 
 const { KAFKA } = messageBrokerTypes;

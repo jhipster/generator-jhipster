@@ -18,15 +18,16 @@
  */
 
 import { binaryOptions } from '../built-in-options/index.ts';
-import JDLEnums from './jdl-enums.ts';
-import JDLRelationships from './jdl-relationships.ts';
-import JDLOptions from './jdl-options.ts';
-import type JDLEntity from './jdl-entity.js';
-import type JDLRelationship from './jdl-relationship.js';
+
 import type AbstractJDLOption from './abstract-jdl-option.js';
-import type JDLEnum from './jdl-enum.js';
-import type JDLDeployment from './jdl-deployment.js';
 import type JDLApplication from './jdl-application.js';
+import type JDLDeployment from './jdl-deployment.js';
+import type JDLEntity from './jdl-entity.js';
+import type JDLEnum from './jdl-enum.js';
+import JDLEnums from './jdl-enums.ts';
+import JDLOptions from './jdl-options.ts';
+import type JDLRelationship from './jdl-relationship.js';
+import JDLRelationships from './jdl-relationships.ts';
 
 /**
  * The JDL object class, containing applications, entities etc.

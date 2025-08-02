@@ -16,10 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CLIENT_TEST_SRC_DIR } from '../generator-constants.js';
-
-import { clientRootTemplatesBlock } from '../client/support/index.ts';
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
+import { clientRootTemplatesBlock } from '../client/support/index.ts';
+import { CLIENT_TEST_SRC_DIR } from '../generator-constants.js';
 
 const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;
 

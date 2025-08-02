@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
+
 import type CoreGenerator from '../../base-core/generator.js';
 
 /**

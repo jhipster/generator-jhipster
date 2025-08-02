@@ -20,14 +20,16 @@ import assert from 'assert';
 import { existsSync } from 'fs';
 import path, { dirname, resolve } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
+
+import { QueuedAdapter } from '@yeoman/adapter';
 import chalk from 'chalk';
 import { cloneDeep, mergeWith } from 'lodash-es';
 import Environment from 'yeoman-environment';
-import { QueuedAdapter } from '@yeoman/adapter';
 
-import { createJHipsterLogger, packageNameToNamespace } from '../lib/utils/index.ts';
 import { mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.ts';
+import { createJHipsterLogger, packageNameToNamespace } from '../lib/utils/index.ts';
 import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.ts';
+
 import { CLI_NAME, logger } from './utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);

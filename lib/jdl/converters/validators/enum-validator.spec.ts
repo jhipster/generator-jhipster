@@ -18,7 +18,9 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
+
 import { JDLEnum } from '../../core/models/index.ts';
 import EnumValidator from '../validators/enum-validator.ts';
 

@@ -17,15 +17,15 @@
  * limitations under the License.
  */
 import { lowerFirst } from 'lodash-es';
-import JDLObject from '../../core/models/jdl-object.ts';
-import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
-import { binaryOptions } from '../../core/built-in-options/index.ts';
 
-import type JDLApplication from '../../core/models/jdl-application.js';
-import type JDLField from '../../core/models/jdl-field.js';
-import type JDLValidation from '../../core/models/jdl-validation.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
+import { binaryOptions } from '../../core/built-in-options/index.ts';
 import type { JDLEntity } from '../../core/models/index.js';
-import type { JDLRuntime } from '../../core/types/runtime.js';
+import type JDLApplication from '../../core/models/jdl-application.js';
+import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+import type JDLField from '../../core/models/jdl-field.js';
+import JDLObject from '../../core/models/jdl-object.ts';
+import type JDLValidation from '../../core/models/jdl-validation.js';
 import type {
   ParsedJDLAnnotation,
   ParsedJDLApplications,
@@ -33,15 +33,16 @@ import type {
   ParsedJDLEntityField,
   ParsedJDLRoot,
 } from '../../core/types/parsed.js';
-import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
+import type { JDLRuntime } from '../../core/types/runtime.js';
+
 import { convertApplications } from './application-converter.ts';
+import { convertDeployments } from './deployment-converter.ts';
 import { convertEntities } from './entity-converter.ts';
 import { convertEnums } from './enum-converter.ts';
 import { convertField } from './field-converter.ts';
-import { convertValidations } from './validation-converter.ts';
 import { convertOptions } from './option-converter.ts';
 import { convertRelationships } from './relationship-converter.ts';
-import { convertDeployments } from './deployment-converter.ts';
+import { convertValidations } from './validation-converter.ts';
 
 let parsedContent: ParsedJDLApplications;
 let configuration: ParsedJDLRoot;

@@ -16,9 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { inspect } from 'node:util';
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import { inspect } from 'node:util';
+
 import type { GetWebappTranslationCallback } from '../../client/translation.js';
+
 import { createTranslationReplacer } from './translate-angular.ts';
 
 describe('generator - angular - transform', () => {

@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 import fs from 'fs';
+
 import { escape, min } from 'lodash-es';
 
-import BaseEntityChangesGenerator from '../base-entity-changes/index.ts';
-import { getFKConstraintName, getUXConstraintName, prepareField as prepareServerFieldForTemplates } from '../server/support/index.ts';
-import { prepareEntity as prepareEntityForServer } from '../java/support/index.ts';
+import { fieldTypes } from '../../lib/jhipster/index.ts';
+import type { EntityAll } from '../../lib/types/application-all.d.ts';
 import {
   loadRequiredConfigIntoEntity,
   prepareCommonFieldForTemplates,
@@ -29,17 +29,25 @@ import {
   prepareEntityPrimaryKeyForTemplates,
   prepareRelationship,
 } from '../base-application/support/index.ts';
-import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.ts';
-import { fieldTypes } from '../../lib/jhipster/index.ts';
-import type { MavenProperty } from '../maven/types.js';
-import type { BaseChangelog } from '../base-entity-changes/types.js';
-import type { Field as CommonField, Entity as ServerEntity } from '../server/types.js';
-import type { Application as CommonApplication, Entity as CommonEntity } from '../common/types.js';
-import type { Source as SpringBootSource } from '../spring-boot/index.js';
-import type { EntityAll } from '../../lib/types/application-all.d.ts';
 import type { DerivedField } from '../base-application/types.js';
-import { checkAndReturnRelationshipOnValue } from './internal/relationship-on-handler-options.ts';
+import BaseEntityChangesGenerator from '../base-entity-changes/index.ts';
+import type { BaseChangelog } from '../base-entity-changes/types.js';
+import type { Application as CommonApplication, Entity as CommonEntity } from '../common/types.js';
+import { prepareEntity as prepareEntityForServer } from '../java/support/index.ts';
+import type { MavenProperty } from '../maven/types.js';
+import { getFKConstraintName, getUXConstraintName, prepareField as prepareServerFieldForTemplates } from '../server/support/index.ts';
+import type { Entity as ServerEntity, Field as CommonField } from '../server/types.js';
+import type { Source as SpringBootSource } from '../spring-boot/index.js';
+import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.ts';
+
+import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.ts';
 import { liquibaseFiles } from './files.ts';
+import {
+  addLiquibaseChangelogCallback,
+  addLiquibaseConstraintsChangelogCallback,
+  addLiquibaseIncrementalChangelogCallback,
+} from './internal/needles.ts';
+import { checkAndReturnRelationshipOnValue } from './internal/relationship-on-handler-options.ts';
 import {
   liquibaseComment,
   postPrepareEntity,
@@ -47,12 +55,6 @@ import {
   prepareRelationshipForLiquibase,
 } from './support/index.ts';
 import mavenPlugin from './support/maven-plugin.ts';
-import {
-  addLiquibaseChangelogCallback,
-  addLiquibaseConstraintsChangelogCallback,
-  addLiquibaseIncrementalChangelogCallback,
-} from './internal/needles.ts';
-import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.ts';
 import type {
   Application as LiquibaseApplication,
   Config as LiquibaseConfig,

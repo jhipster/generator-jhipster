@@ -17,14 +17,16 @@
  * limitations under the License.
  */
 
-import { before, describe, it, expect as jestExpect } from 'esmocha';
+import { before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import type { ParsedJDLOption } from '../types/parsed.js';
-import { parseFromContent as originalParseFromContent } from '../readers/jdl-reader.ts';
+
+import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
 import { binaryOptions, unaryOptions, validations } from '../built-in-options/index.ts';
+import { parseFromContent as originalParseFromContent } from '../readers/jdl-reader.ts';
 import { createRuntime } from '../runtime.ts';
-import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
+import type { ParsedJDLOption } from '../types/parsed.js';
 
 const runtime = createRuntime();
 const parseFromContent = (content: string) => originalParseFromContent(content, runtime);

@@ -18,8 +18,8 @@
  */
 
 import { JDLEnum } from '../../core/models/index.ts';
-import { formatComment } from '../../core/utils/format-utils.ts';
 import type { ParsedJDLEnum } from '../../core/types/parsed.js';
+import { formatComment } from '../../core/utils/format-utils.ts';
 
 export default { convertEnums };
 

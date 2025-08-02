@@ -1,4 +1,5 @@
 import { join } from 'path';
+
 import { getPackageRoot } from '../lib/index.ts';
 
 const packageRoot = getPackageRoot();

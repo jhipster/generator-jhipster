@@ -16,25 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { before, describe, expect, it } from 'esmocha';
+
 import { snakeCase } from 'lodash-es';
 
+import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
+import { authenticationTypes, databaseTypes, searchEngineTypes } from '../../lib/jhipster/index.ts';
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
+  defaultHelpers as helpers,
   entitiesServerSamples as entities,
   extendMatrix,
-  defaultHelpers as helpers,
   runResult,
 } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { authenticationTypes, databaseTypes, searchEngineTypes } from '../../lib/jhipster/index.ts';
 import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.ts';
-import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
-import Generator from './generator.ts';
+
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.ts';
+import Generator from './generator.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

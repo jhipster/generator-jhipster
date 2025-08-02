@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { asWritingTask } from '../base-application/support/task-type-inference.ts';
+
 import type { Application as GradleApplication, Entity as GradleEntity } from './types.js';
 
 /**

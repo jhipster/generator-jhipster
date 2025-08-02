@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { asWriteFilesSection } from '../base-application/support/index.ts';
+
 import { LOCAL_BLUEPRINT_OPTION } from './constants.ts';
 import type { Application as GenerateBlueprintApplication, TemplateData } from './types.js';
 

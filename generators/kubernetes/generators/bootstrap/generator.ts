@@ -16,16 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'node:assert';
 import { randomBytes } from 'crypto';
-import { defaults } from 'lodash-es';
+import assert from 'node:assert';
+
 import chalk from 'chalk';
+import { defaults } from 'lodash-es';
+
+import { convertSecretToBase64, createBase64Secret } from '../../../../lib/utils/secret.ts';
 import BaseWorkspacesGenerator from '../../../base-workspaces/index.ts';
-import { BaseKubernetesGenerator } from '../../generator.ts';
-import { helmConstants, kubernetesConstants } from '../../support/constants.ts';
 import { loadDockerDependenciesTask } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import { checkDocker } from '../../../docker/support/index.ts';
-import { convertSecretToBase64, createBase64Secret } from '../../../../lib/utils/secret.ts';
+import { BaseKubernetesGenerator } from '../../generator.ts';
+import { helmConstants, kubernetesConstants } from '../../support/constants.ts';
 
 export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {

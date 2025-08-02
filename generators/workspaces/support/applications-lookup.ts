@@ -18,6 +18,7 @@
  */
 import { readFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
+
 import { glob } from 'tinyglobby';
 
 const isApplication = async (cwd: string): Promise<boolean> => {

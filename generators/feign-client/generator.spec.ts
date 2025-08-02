@@ -1,11 +1,11 @@
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, describe, expect, it } from 'esmocha';
+
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
-import Generator from '../server/index.ts';
-
 import { GENERATOR_FEIGN_CLIENT } from '../generator-list.ts';
+import Generator from '../server/index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

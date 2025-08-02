@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'esmocha';
+
 import formatAsLiquibaseRemarks from './formatting.ts';
 
 describe('generator - liquibase - support - formatting', () => {

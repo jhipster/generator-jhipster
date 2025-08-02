@@ -18,6 +18,7 @@
  */
 
 import { Lexer } from 'chevrotain';
+
 import { KEYWORD } from './shared-tokens.ts';
 import createTokenFromConfig from './token-creator.ts';
 

@@ -18,9 +18,11 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { convertApplications, createJDLApplication } from '../../core/__test-support__/index.ts';
+
 import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import { convertApplications, createJDLApplication } from '../../core/__test-support__/index.ts';
 import { createRuntime } from '../../core/runtime.ts';
 
 describe('jdl - ApplicationConverter', () => {

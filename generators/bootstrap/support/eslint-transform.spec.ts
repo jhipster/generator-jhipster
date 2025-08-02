@@ -1,8 +1,9 @@
+import { describe, expect, it } from 'esmocha';
 import { Readable } from 'stream';
 import { pipeline } from 'stream/promises';
-import { describe, expect, it } from 'esmocha';
-import { transform } from 'p-transform';
+
 import { setModifiedFileState } from 'mem-fs-editor/state';
+import { transform } from 'p-transform';
 
 import { createESLintTransform } from './eslint-transform.ts';
 

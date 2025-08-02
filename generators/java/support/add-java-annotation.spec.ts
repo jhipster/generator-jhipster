@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'esmocha';
+
 import { addJavaAnnotation, addJavaImport } from './add-java-annotation.ts';
 
 describe('generator > java', () => {

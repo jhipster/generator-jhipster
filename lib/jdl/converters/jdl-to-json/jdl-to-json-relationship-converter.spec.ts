@@ -17,11 +17,14 @@
  * limitations under the License.
  */
 
-import { before, describe, it, expect as jestExpect } from 'esmocha';
+import { before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLRelationship from '../../core/models/jdl-relationship.ts';
+
 import { relationshipTypes } from '../../core/basic-types/index.ts';
 import { relationshipOptions } from '../../core/built-in-options/index.ts';
+import JDLRelationship from '../../core/models/jdl-relationship.ts';
+
 import { convert } from './jdl-to-json-relationship-converter.ts';
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;

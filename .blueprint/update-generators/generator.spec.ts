@@ -1,8 +1,10 @@
+import { describe, it } from 'esmocha';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { describe, it } from 'esmocha';
+
 import { basicHelpers as helpers } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../test/support/index.ts';
+
 import Generator from './generator.ts';
 
 const __filename = fileURLToPath(import.meta.url);

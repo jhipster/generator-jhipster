@@ -16,14 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { stat } from 'fs/promises';
 import { createReadStream } from 'fs';
+import { stat } from 'fs/promises';
 import { relative } from 'path';
-import { transform } from 'p-transform';
+
 import { isBinaryFile } from 'isbinaryfile';
-import { simpleGit } from 'simple-git';
-import { isFileStateModified } from 'mem-fs-editor/state';
 import type { MemFsEditorFile } from 'mem-fs-editor';
+import { isFileStateModified } from 'mem-fs-editor/state';
+import { transform } from 'p-transform';
+import { simpleGit } from 'simple-git';
+
 import { CRLF, normalizeLineEndings } from '../../../lib/utils/index.ts';
 
 /**
