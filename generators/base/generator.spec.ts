@@ -22,9 +22,9 @@ import { before, describe, esmocha, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-import { defaultHelpers as helpers } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers } from '../../lib/testing/index.ts';
 import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.js';
-import BaseGenerator from './index.js';
+import BaseGenerator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -33,7 +33,7 @@ const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(BaseGenerator);
   describe('help', () => {

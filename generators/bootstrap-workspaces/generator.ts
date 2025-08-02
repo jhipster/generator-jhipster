@@ -18,7 +18,7 @@
  */
 import { defaults } from 'lodash-es';
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base/support/constants.ts';
-import { CommandBaseWorkspacesGenerator as BaseWorkspacesGenerator } from '../base-workspaces/index.js';
+import { CommandBaseWorkspacesGenerator as BaseWorkspacesGenerator } from '../base-workspaces/index.ts';
 import { normalizePathEnd } from '../../lib/utils/path.ts';
 import { removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import type command from './command.js';

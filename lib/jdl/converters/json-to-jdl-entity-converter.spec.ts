@@ -20,10 +20,10 @@
 import fs from 'fs';
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { binaryOptions, relationshipOptions, unaryOptions } from '../core/built-in-options/index.js';
-import { getTestFile } from '../core/__test-support__/index.js';
-import { APPLICATION_TYPE_MICROSERVICE } from '../../core/application-types.js';
-import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
+import { binaryOptions, relationshipOptions, unaryOptions } from '../core/built-in-options/index.ts';
+import { getTestFile } from '../core/__test-support__/index.ts';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../core/application-types.ts';
+import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.ts';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 

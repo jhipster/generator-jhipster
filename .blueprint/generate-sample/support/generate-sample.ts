@@ -4,10 +4,10 @@ import process from 'process';
 import { globSync } from 'glob';
 import { execa } from 'execa';
 
-import { dailyBuildsFolder, jdlEntitiesSamplesFolder, jdlSamplesFolder, jhipsterBin, samplesFolder } from '../../constants.js';
-import getSamples, { DAILY_PREFIX, isDaily } from './get-workflow-samples.js';
-import copyEntitySamples from './copy-entity-samples.js';
-import copyJdlEntitySamples from './copy-jdl-entity-samples.js';
+import { dailyBuildsFolder, jdlEntitiesSamplesFolder, jdlSamplesFolder, jhipsterBin, samplesFolder } from '../../constants.ts';
+import getSamples, { DAILY_PREFIX, isDaily } from './get-workflow-samples.ts';
+import copyEntitySamples from './copy-entity-samples.ts';
+import copyJdlEntitySamples from './copy-jdl-entity-samples.ts';
 
 const commonCliOptions = ['--skip-jhipster-dependencies', '--skip-checks', '--skip-install', '--no-insight'];
 

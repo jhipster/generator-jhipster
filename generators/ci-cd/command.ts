@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import { intersection, kebabCase } from 'lodash-es';
-import buildToolCommand from '../java/generators/build-tool/command.js';
+import buildToolCommand from '../java/generators/build-tool/command.ts';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const { buildTool } = buildToolCommand.configs;

@@ -1,10 +1,10 @@
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { shouldSupportFeatures } from '../../test/support/index.js';
-import Generator from './generator.js';
-import { workflowChoices } from './command.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+import { shouldSupportFeatures } from '../../test/support/index.ts';
+import Generator from './generator.ts';
+import { workflowChoices } from './command.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

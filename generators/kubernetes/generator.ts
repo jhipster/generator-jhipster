@@ -19,11 +19,11 @@
 
 import chalk from 'chalk';
 
-import BaseWorkspacesGenerator from '../base-workspaces/index.js';
-import { buildToolTypes } from '../../lib/jhipster/index.js';
+import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
+import { buildToolTypes } from '../../lib/jhipster/index.ts';
 
-import { checkImages, configureImageNames } from '../base-workspaces/internal/docker-base.js';
-import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
+import { checkImages, configureImageNames } from '../base-workspaces/internal/docker-base.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.ts';
 import {
   askForAdminPassword,
   askForApplicationType,
@@ -34,7 +34,7 @@ import {
   askForMonitoring,
   askForPath,
   askForServiceDiscovery,
-} from '../base-workspaces/internal/docker-prompts.js';
+} from '../base-workspaces/internal/docker-prompts.ts';
 import {
   askForIngressDomain,
   askForIngressType,
@@ -43,7 +43,7 @@ import {
   askForKubernetesServiceType,
   askForPersistentStorage,
   askForStorageClassName,
-} from './prompts.js';
+} from './prompts.ts';
 import { applicationFiles, writeDeploymentFiles } from './files.ts';
 import type {
   Config as KubernetesConfig,

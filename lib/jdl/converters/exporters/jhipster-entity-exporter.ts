@@ -20,7 +20,7 @@
 import type { JSONEntity } from '../../core/types/json-config.js';
 import type JDLJSONEntity from '../../core/basic-types/json-entity.ts';
 import type { JhipsterJSONJDLExporterWrapper } from '../../core/types/exporter.js';
-import { readEntityFile } from '../../../utils/yo-rc.js';
+import { readEntityFile } from '../../../utils/yo-rc.ts';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import { removeFieldsWithNullishValues } from '../../../utils/object.ts';
 

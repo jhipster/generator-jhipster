@@ -21,7 +21,7 @@ import path from 'path';
 import { minimatch } from 'minimatch';
 
 import type { MemFsEditorFile } from 'mem-fs-editor';
-import TemplateFile from './template-file.js';
+import TemplateFile from './template-file.ts';
 
 export default class TemplateFileFs {
   fragmentFiles: Record<string, TemplateFile>;

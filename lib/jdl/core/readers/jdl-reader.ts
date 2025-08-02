@@ -18,10 +18,10 @@
  */
 
 import { readFileSync } from 'fs';
-import logger from '../utils/objects/logger.js';
+import logger from '../utils/objects/logger.ts';
 
-import { getCst as apiGetCst, parse as apiParser } from '../parsing/api.js';
-import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks.js';
+import { getCst as apiGetCst, parse as apiParser } from '../parsing/api.ts';
+import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks.ts';
 import type { JDLRuntime } from '../types/runtime.js';
 
 /**

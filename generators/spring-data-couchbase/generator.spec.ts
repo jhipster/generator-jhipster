@@ -28,16 +28,16 @@ import {
   extendMatrix,
   defaultHelpers as helpers,
   runResult,
-} from '../../lib/testing/index.js';
+} from '../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 
-import { databaseTypes } from '../../lib/jhipster/index.js';
+import { databaseTypes } from '../../lib/jhipster/index.ts';
 import {
   filterBasicServerGenerators,
   shouldComposeWithLiquibase,
   shouldComposeWithSpringCloudStream,
-} from '../server/__test-support/index.js';
-import Generator from './generator.js';
+} from '../server/__test-support/index.ts';
+import Generator from './generator.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -57,7 +57,7 @@ const testSamples = buildSamplesFromMatrix(couchbaseSamples, { commonConfig });
 
 describe(`generator - ${databaseType}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));

@@ -19,11 +19,11 @@
 
 import { beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { formatDateForChangelog } from '../../base/support/index.js';
-import BaseGenerator from '../../base/index.js';
-import { getConfigWithDefaults } from '../../../lib/jhipster/default-application-options.js';
-import { getEnumValuesWithCustomValues, prepareCommonFieldForTemplates } from './prepare-field.js';
-import prepareEntityForTemplates, { loadRequiredConfigIntoEntity } from './prepare-entity.js';
+import { formatDateForChangelog } from '../../base/support/index.ts';
+import BaseGenerator from '../../base/index.ts';
+import { getConfigWithDefaults } from '../../../lib/jhipster/default-application-options.ts';
+import { getEnumValuesWithCustomValues, prepareCommonFieldForTemplates } from './prepare-field.ts';
+import prepareEntityForTemplates, { loadRequiredConfigIntoEntity } from './prepare-entity.ts';
 
 const defaultConfig = getConfigWithDefaults();
 

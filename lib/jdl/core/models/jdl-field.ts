@@ -18,7 +18,7 @@
  */
 
 import { upperFirst } from 'lodash-es';
-import { merge } from '../utils/object-utils.js';
+import { merge } from '../utils/object-utils.ts';
 import type JDLValidation from './jdl-validation.js';
 import type AbstractJDLOption from './abstract-jdl-option.js';
 

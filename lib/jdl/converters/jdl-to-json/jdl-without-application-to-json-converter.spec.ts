@@ -24,20 +24,20 @@ import sinonChai from 'sinon-chai';
 
 chaiUse(sinonChai);
 
-import { relationshipTypes } from '../../core/basic-types/index.js';
+import { relationshipTypes } from '../../core/basic-types/index.ts';
 
-import { binaryOptions, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.js';
-import fieldTypes from '../../../jhipster/field-types.js';
+import { binaryOptions, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.ts';
+import fieldTypes from '../../../jhipster/field-types.ts';
 
-import JDLObject from '../../core/models/jdl-object.js';
-import { JDLEntity, JDLEnum } from '../../core/models/index.js';
-import JDLField from '../../core/models/jdl-field.js';
-import JDLValidation from '../../core/models/jdl-validation.js';
-import JDLRelationship from '../../core/models/jdl-relationship.js';
-import JDLUnaryOption from '../../core/models/jdl-unary-option.js';
-import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
-import logger from '../../core/utils/objects/logger.js';
-import { convert } from './jdl-without-application-to-json-converter.js';
+import JDLObject from '../../core/models/jdl-object.ts';
+import { JDLEntity, JDLEnum } from '../../core/models/index.ts';
+import JDLField from '../../core/models/jdl-field.ts';
+import JDLValidation from '../../core/models/jdl-validation.ts';
+import JDLRelationship from '../../core/models/jdl-relationship.ts';
+import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
+import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+import logger from '../../core/utils/objects/logger.ts';
+import { convert } from './jdl-without-application-to-json-converter.ts';
 
 const {
   Validations: { REQUIRED, UNIQUE, MIN, MAX, MINLENGTH, MAXLENGTH, PATTERN, MINBYTES, MAXBYTES },

@@ -19,9 +19,9 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { createJDLApplication } from '../models/jdl-application-factory.js';
-import { createRuntime } from '../runtime.js';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
+import { createJDLApplication } from '../models/jdl-application-factory.ts';
+import { createRuntime } from '../runtime.ts';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 
 const runtime = createRuntime();
 

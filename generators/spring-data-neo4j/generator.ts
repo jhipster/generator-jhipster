@@ -18,11 +18,11 @@
  */
 
 import { SpringBootApplicationGenerator } from '../spring-boot/generator.ts';
-import { GENERATOR_LIQUIBASE } from '../generator-list.js';
+import { GENERATOR_LIQUIBASE } from '../generator-list.ts';
 import type { Source as SpringBootSource } from '../spring-boot/index.js';
-import writeTask from './files.js';
-import cleanupTask from './cleanup.js';
-import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
+import writeTask from './files.ts';
+import cleanupTask from './cleanup.ts';
+import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.ts';
 
 export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {

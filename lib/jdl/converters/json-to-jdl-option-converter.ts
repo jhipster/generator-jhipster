@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import JDLObject from '../core/models/jdl-object.js';
-import { unaryOptions } from '../core/built-in-options/index.js';
-import JDLUnaryOption from '../core/models/jdl-unary-option.js';
+import JDLObject from '../core/models/jdl-object.ts';
+import { unaryOptions } from '../core/built-in-options/index.ts';
+import JDLUnaryOption from '../core/models/jdl-unary-option.ts';
 
 const { SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 

@@ -34,7 +34,7 @@ import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-gener
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
 
-import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.js';
+import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
 import type {
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
@@ -43,15 +43,15 @@ import type {
   JHipsterConfigs,
   ParseableCommand,
 } from '../../lib/command/index.js';
-import { packageJson } from '../../lib/index.js';
-import baseCommand from '../base/command.js';
-import { dockerPlaceholderGenerator } from '../docker/utils.js';
+import { packageJson } from '../../lib/index.ts';
+import baseCommand from '../base/command.ts';
+import { dockerPlaceholderGenerator } from '../docker/utils.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
-import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.js';
+import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.ts';
+import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.ts';
 import type GeneratorsByNamespace from '../types.js';
 import type { GeneratorsWithBootstrap } from '../types.js';
-import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from './internal/index.js';
+import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from './internal/index.ts';
 import type {
   CascatedEditFileCallback,
   EditFileCallback,
@@ -61,7 +61,7 @@ import type {
   WriteFileOptions,
 } from './api.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
-import { joinCallbacks } from './support/index.js';
+import { joinCallbacks } from './support/index.ts';
 import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions, GenericTask } from './types.js';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
 

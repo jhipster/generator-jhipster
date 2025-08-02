@@ -23,7 +23,7 @@ import {
   moveToJavaPackageSrcDir,
   moveToJavaPackageTestDir,
   moveToSrcMainResourcesDir,
-} from '../java/support/index.js';
+} from '../java/support/index.ts';
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import type { Application as SpringBootApplication } from './types.js';
 

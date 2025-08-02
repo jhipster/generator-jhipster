@@ -1,7 +1,7 @@
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { describe, expect, it } from 'esmocha';
-import generatedAnnotationTransform from './generated-annotation-transform.js';
+import generatedAnnotationTransform from './generated-annotation-transform.ts';
 
 describe('generators - java - generated-annotation-transform', () => {
   it('should add GeneratedByJHipster to interface', async () => {

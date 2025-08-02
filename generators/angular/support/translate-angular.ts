@@ -28,7 +28,7 @@ import {
   createJhiTranslateReplacer,
   escapeHtmlTranslationValue,
   escapeTsTranslationValue,
-} from '../../languages/support/index.js';
+} from '../../languages/support/index.ts';
 import type { GetWebappTranslationCallback } from '../../client/translation.js';
 
 const PLACEHOLDER_REGEX = /(?:placeholder|title)=['|"](\{\{\s?['|"]([a-zA-Z0-9.\-_]+)['|"]\s?\|\s?translate\s?\}\})['|"]/.source;

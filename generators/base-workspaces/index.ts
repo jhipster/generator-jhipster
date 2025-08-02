@@ -16,6 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default, CommandBaseWorkspacesGenerator } from './generator.js';
-export { default as command } from './command.js';
+export { default, CommandBaseWorkspacesGenerator } from './generator.ts';
+export { default as command } from './command.ts';
 export type { Config, Options, Features, Deployment, WorkspacesApplication } from './types.js';

@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
-import deduplicate from '../utils/array-utils.js';
+import deduplicate from '../utils/array-utils.ts';
 
-import { relationshipOptions, validations } from '../built-in-options/index.js';
-import logger from '../utils/objects/logger.js';
+import { relationshipOptions, validations } from '../built-in-options/index.ts';
+import logger from '../utils/objects/logger.ts';
 import type { JDLRuntime } from '../types/runtime.js';
 import type {
   ParsedJDLAnnotation,

@@ -22,7 +22,7 @@ import fs from 'fs';
 import { after, beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import helpers from 'yeoman-test';
-import { getTestFile, parseFromContent, parseFromFiles } from '.././__test-support__/index.js';
+import { getTestFile, parseFromContent, parseFromFiles } from '.././__test-support__/index.ts';
 
 describe('jdl - JDLReader', () => {
   beforeEach(async () => {

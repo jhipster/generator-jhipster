@@ -1,4 +1,4 @@
-import { applyDerivedProperty } from '../utils/derived-property.js';
+import { applyDerivedProperty } from '../utils/derived-property.ts';
 import type { CommandConfigScope, JHipsterConfigs } from './types.js';
 
 const filteredScopeEntries = (commandsConfigs: JHipsterConfigs, scopes: CommandConfigScope[]) =>

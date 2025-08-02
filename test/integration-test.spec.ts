@@ -23,9 +23,9 @@ import { fileURLToPath } from 'url';
 import { before, describe, it } from 'esmocha';
 import sortKeys from 'sort-keys';
 
-import { authenticationTypes } from '../lib/jhipster/index.js';
-import { formatDateForChangelog } from '../generators/base/support/index.js';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../lib/core/application-types.js';
+import { authenticationTypes } from '../lib/jhipster/index.ts';
+import { formatDateForChangelog } from '../generators/base/support/index.ts';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../lib/core/application-types.ts';
 
 const writeJsonSync = (file, content) => writeFileSync(file, JSON.stringify(content, null, 2));
 const readJsonSync = file => JSON.parse(fs.readFileSync(file, 'utf-8'));

@@ -19,14 +19,14 @@
 
 import assert from 'assert/strict';
 
-import BaseApplicationGenerator from '../base-application/index.js';
+import BaseApplicationGenerator from '../base-application/index.ts';
 
 import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
-import { mutateData } from '../../lib/utils/index.js';
+import { mutateData } from '../../lib/utils/index.ts';
 import { QUEUES } from '../base-core/priorities.ts';
-import files from './files.js';
-import { GRADLE } from './constants.js';
-import cleanupOldServerFilesTask from './cleanup.js';
+import files from './files.ts';
+import { GRADLE } from './constants.ts';
+import cleanupOldServerFilesTask from './cleanup.ts';
 import {
   addGradleDependenciesCallback,
   addGradleDependenciesCatalogVersionCallback,
@@ -40,7 +40,7 @@ import {
   applyFromGradleCallback,
   gradleNeedleOptionsWithDefaults,
   sortDependencies,
-} from './internal/needles.js';
+} from './internal/needles.ts';
 import type {
   Application as GradleApplication,
   Config as GradleConfig,

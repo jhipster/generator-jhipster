@@ -18,8 +18,8 @@
  */
 import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
 import type LanguagesGenerator from './generator.js';
-import detectLanguage from './support/detect-language.js';
-import { languagesAsChoices } from './support/languages.js';
+import detectLanguage from './support/detect-language.ts';
+import { languagesAsChoices } from './support/languages.ts';
 
 export const askI18n = asPromptingTask<LanguagesGenerator>(async function askI18n() {
   if (!this.askForMoreLanguages) return;

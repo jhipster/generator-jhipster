@@ -19,12 +19,12 @@
 
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { binaryOptions } from '../built-in-options/index.js';
-import applicationOptions from '../../../jhipster/application-options.js';
-import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.js';
-import JDLApplication from '../models/jdl-application.js';
-import JDLBinaryOption from '../models/jdl-binary-option.js';
-import { createRuntime } from '../runtime.js';
+import { binaryOptions } from '../built-in-options/index.ts';
+import applicationOptions from '../../../jhipster/application-options.ts';
+import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.ts';
+import JDLApplication from '../models/jdl-application.ts';
+import JDLBinaryOption from '../models/jdl-binary-option.ts';
+import { createRuntime } from '../runtime.ts';
 
 const { OptionNames } = applicationOptions;
 

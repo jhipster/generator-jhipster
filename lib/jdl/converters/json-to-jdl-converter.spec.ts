@@ -21,10 +21,10 @@ import fs, { readFileSync } from 'fs';
 import path from 'path';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { createJHipsterConfigFiles, basicHelpers as helpers } from '../../../lib/testing/index.js';
-import { getTestFile } from '../core/__test-support__/index.js';
-import { getDefaultRuntime } from '../../jdl-config/jhipster-jdl-config.js';
-import { convertSingleContentToJDL, convertToJDL } from './json-to-jdl-converter.js';
+import { createJHipsterConfigFiles, basicHelpers as helpers } from '../../../lib/testing/index.ts';
+import { getTestFile } from '../core/__test-support__/index.ts';
+import { getDefaultRuntime } from '../../jdl-config/jhipster-jdl-config.ts';
+import { convertSingleContentToJDL, convertToJDL } from './json-to-jdl-converter.ts';
 
 describe('jdl - JSONToJDLConverter', () => {
   const runtime = getDefaultRuntime();

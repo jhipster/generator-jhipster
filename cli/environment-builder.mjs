@@ -25,9 +25,9 @@ import { cloneDeep, mergeWith } from 'lodash-es';
 import Environment from 'yeoman-environment';
 import { QueuedAdapter } from '@yeoman/adapter';
 
-import { createJHipsterLogger, packageNameToNamespace } from '../lib/utils/index.js';
-import { mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.js';
-import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.js';
+import { createJHipsterLogger, packageNameToNamespace } from '../lib/utils/index.ts';
+import { mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.ts';
+import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.ts';
 import { CLI_NAME, logger } from './utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);

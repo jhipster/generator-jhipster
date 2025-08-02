@@ -19,7 +19,7 @@
 import { Faker, type LocaleDefinition, base, en } from '@faker-js/faker';
 import Randexp from 'randexp';
 
-import { languageToJavaLanguage } from '../../languages/support/languages.js';
+import { languageToJavaLanguage } from '../../languages/support/languages.ts';
 
 class RandexpWithFaker extends Randexp {
   faker: Faker;

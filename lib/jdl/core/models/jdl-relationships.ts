@@ -18,8 +18,8 @@
  */
 
 import type { JDLRelationshipType } from '../basic-types/relationships.js';
-import { relationshipTypes } from '../basic-types/index.js';
-import { relationshipTypeExists } from '../basic-types/relationship-types.js';
+import { relationshipTypes } from '../basic-types/index.ts';
+import { relationshipTypeExists } from '../basic-types/relationship-types.ts';
 import type JDLRelationship from './jdl-relationship.js';
 
 export default class JDLRelationships {

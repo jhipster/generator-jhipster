@@ -3,8 +3,8 @@ import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.js';
-import Generator from './index.js';
+import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

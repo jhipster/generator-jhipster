@@ -26,7 +26,7 @@ import {
   GENERATOR_GIT,
   GENERATOR_LANGUAGES,
   GENERATOR_SERVER,
-} from '../generator-list.js';
+} from '../generator-list.ts';
 
 const command = {
   configs: {

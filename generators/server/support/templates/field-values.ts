@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { databaseTypes, fieldTypes } from '../../../../lib/jhipster/index.js';
+import { databaseTypes, fieldTypes } from '../../../../lib/jhipster/index.ts';
 import type { PrimaryKey } from '../../../base-application/types.js';
 
 const dbTypes = fieldTypes;

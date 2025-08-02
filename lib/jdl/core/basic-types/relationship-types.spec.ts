@@ -19,7 +19,7 @@
 
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
-import relationshipTypes, { relationshipTypeExists } from './relationship-types.js';
+import relationshipTypes, { relationshipTypeExists } from './relationship-types.ts';
 
 describe('jdl - RelationshipTypes', () => {
   describe('exists', () => {

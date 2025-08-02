@@ -18,8 +18,8 @@
  */
 
 import { lowerFirst } from 'lodash-es';
-import { JDLEntity } from '../../core/models/index.js';
-import { formatComment } from '../../core/utils/format-utils.js';
+import { JDLEntity } from '../../core/models/index.ts';
+import { formatComment } from '../../core/utils/format-utils.ts';
 import type JDLField from '../../core/models/jdl-field.js';
 import type { ParsedJDLEntity } from '../../core/types/parsed.js';
 

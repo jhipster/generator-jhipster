@@ -18,7 +18,7 @@
  */
 
 import { kebabCase, lowerFirst } from 'lodash-es';
-import { relationshipOptions, validations } from '../../core/built-in-options/index.js';
+import { relationshipOptions, validations } from '../../core/built-in-options/index.ts';
 import { customCamelCase } from '../../../utils/string-utils.ts';
 import type JDLRelationship from '../../core/models/jdl-relationship.js';
 import type { JSONRelationship } from '../../core/types/json-config.js';

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'esmocha';
-import { databaseTypes } from '../../../lib/jhipster/index.js';
-import { getDBTypeFromDBValue, getFKConstraintName, getJoinTableName, getUXConstraintName } from './database.js';
-import { hibernateSnakeCase } from './string.js';
+import { databaseTypes } from '../../../lib/jhipster/index.ts';
+import { getDBTypeFromDBValue, getFKConstraintName, getJoinTableName, getUXConstraintName } from './database.ts';
+import { hibernateSnakeCase } from './string.ts';
 
 const { CASSANDRA, MONGODB, MYSQL, SQL, POSTGRESQL } = databaseTypes;
 

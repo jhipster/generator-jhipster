@@ -19,7 +19,7 @@
 
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
-import EntityIssue from './entity-issue.js';
+import EntityIssue from './entity-issue.ts';
 
 describe('jdl - EntityIssue', () => {
   describe('new', () => {

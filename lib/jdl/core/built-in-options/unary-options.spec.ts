@@ -19,7 +19,7 @@
 
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { unaryOptions } from '../built-in-options/index.js';
+import { unaryOptions } from '../built-in-options/index.ts';
 
 describe('jdl - UnaryOptions', () => {
   describe('exists', () => {

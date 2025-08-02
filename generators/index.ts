@@ -27,7 +27,7 @@ export {
   CLIENT_TEST_SRC_DIR as TEMPLATES_JAVASCRIPT_TEST_DIR,
 } from './generator-constants.js';
 
-export * from './type-utils.js';
+export * from './type-utils.ts';
 
 export type { JHipsterCommandDefinition } from '../lib/command/index.js';
 
@@ -39,6 +39,6 @@ class BaseApplicationGeneratorAll extends BaseApplicationGenerator<
   SourceAll
 > {}
 
-export { default as GeneratorBase } from './base/index.js';
-export { default as GeneratorBaseCore } from './base-core/index.js';
+export { default as GeneratorBase } from './base/index.ts';
+export { default as GeneratorBaseCore } from './base-core/index.ts';
 export { BaseApplicationGeneratorAll as GeneratorBaseApplication };

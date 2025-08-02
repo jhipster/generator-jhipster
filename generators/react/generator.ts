@@ -21,20 +21,20 @@ import chalk from 'chalk';
 
 import { ClientApplicationGenerator } from '../client/generator.ts';
 import type { Entity as ClientEntity, Field as ClientField } from '../client/types.ts';
-import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.js';
-import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.js';
+import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.ts';
+import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
 import {
   generateEntityClientImports as formatEntityClientImports,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
-} from '../client/support/index.js';
+} from '../client/support/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
-import { upperFirstCamelCase } from '../../lib/utils/index.js';
-import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
-import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.js';
-import cleanupOldFilesTask from './cleanup.js';
-import { writeFiles } from './files-react.js';
-import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.js';
+import { upperFirstCamelCase } from '../../lib/utils/index.ts';
+import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.ts';
+import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.ts';
+import cleanupOldFilesTask from './cleanup.ts';
+import { writeFiles } from './files-react.ts';
+import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.ts';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;

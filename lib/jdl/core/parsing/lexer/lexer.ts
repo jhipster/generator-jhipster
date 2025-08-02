@@ -20,14 +20,14 @@
 import type { ITokenConfig, TokenType } from 'chevrotain';
 import { Lexer } from 'chevrotain';
 
-import { relationshipOptions } from '../../built-in-options/index.js';
-import { BINARY_OPTION, NAME, UNARY_OPTION } from './shared-tokens.js';
+import { relationshipOptions } from '../../built-in-options/index.ts';
+import { BINARY_OPTION, NAME, UNARY_OPTION } from './shared-tokens.ts';
 
-import ValidationTokens from './validation-tokens.js';
-import RelationshipTypeTokens from './relationship-type-tokens.js';
-import OptionTokens from './option-tokens.js';
+import ValidationTokens from './validation-tokens.ts';
+import RelationshipTypeTokens from './relationship-type-tokens.ts';
+import OptionTokens from './option-tokens.ts';
 
-import createTokenFromConfigCreator from './token-creator.js';
+import createTokenFromConfigCreator from './token-creator.ts';
 
 type TokenParam = { categoryToken: TokenType; tokens: TokenType[] };
 

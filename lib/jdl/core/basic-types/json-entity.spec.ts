@@ -19,7 +19,7 @@
 
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import JSONEntity from './json-entity.js';
+import JSONEntity from './json-entity.ts';
 
 describe('jdl - JSONEntity', () => {
   describe('new', () => {

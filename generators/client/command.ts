@@ -18,9 +18,9 @@
  */
 import chalk from 'chalk';
 import { intersection } from 'lodash-es';
-import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.js';
+import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_COMMON } from '../generator-list.js';
+import { GENERATOR_COMMON } from '../generator-list.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 
 const { CYPRESS } = testFrameworkTypes;

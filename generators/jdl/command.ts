@@ -1,5 +1,5 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_WORKSPACES } from '../generator-list.js';
+import { GENERATOR_WORKSPACES } from '../generator-list.ts';
 
 const command = {
   arguments: {

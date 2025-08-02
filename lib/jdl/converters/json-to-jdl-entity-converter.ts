@@ -18,17 +18,17 @@
  */
 
 import { lowerFirst, upperFirst } from 'lodash-es';
-import JDLObject from '../core/models/jdl-object.js';
-import { JDLEntity, JDLEnum } from '../core/models/index.js';
-import JDLField from '../core/models/jdl-field.js';
-import JDLValidation from '../core/models/jdl-validation.js';
+import JDLObject from '../core/models/jdl-object.ts';
+import { JDLEntity, JDLEnum } from '../core/models/index.ts';
+import JDLField from '../core/models/jdl-field.ts';
+import JDLValidation from '../core/models/jdl-validation.ts';
 import type { JDLRelationshipModel, JDLRelationshipOptions, JDLSourceEntitySide } from '../core/models/jdl-relationship.js';
-import JDLRelationship from '../core/models/jdl-relationship.js';
-import JDLUnaryOption from '../core/models/jdl-unary-option.js';
-import JDLBinaryOption from '../core/models/jdl-binary-option.js';
+import JDLRelationship from '../core/models/jdl-relationship.ts';
+import JDLUnaryOption from '../core/models/jdl-unary-option.ts';
+import JDLBinaryOption from '../core/models/jdl-binary-option.ts';
 
-import { binaryOptions, relationshipOptions, unaryOptions } from '../core/built-in-options/index.js';
-import { asJdlRelationshipType } from '../core/basic-types/relationship-types.js';
+import { binaryOptions, relationshipOptions, unaryOptions } from '../core/built-in-options/index.ts';
+import { asJdlRelationshipType } from '../core/basic-types/relationship-types.ts';
 import type { JSONEntity, JSONField, JSONRelationship } from '../core/types/json-config.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;

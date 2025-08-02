@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.ts';
 import { applicationTypesChoices } from '../../lib/core/application-types.ts';
 
 const command = {

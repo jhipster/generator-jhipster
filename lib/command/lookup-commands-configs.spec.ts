@@ -1,7 +1,7 @@
 import { before, describe, expect, it } from 'esmocha';
 import type { ImportState } from '../jdl/jdl-importer.js';
-import { createImporterFromContent } from '../jdl/jdl-importer.js';
-import { lookupCommandsConfigs } from './lookup-commands-configs.js';
+import { createImporterFromContent } from '../jdl/jdl-importer.ts';
+import { lookupCommandsConfigs } from './lookup-commands-configs.ts';
 
 const jhipsterConfigsWithJDL = await lookupCommandsConfigs({ filter: config => Boolean(config.jdl) });
 

@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import type { CstNode, IToken } from 'chevrotain';
-import EntityIssue from './issues/entity-issue.js';
-import { rulesNames } from './rules.js';
+import EntityIssue from './issues/entity-issue.ts';
+import { rulesNames } from './rules.ts';
 
 let issues: EntityIssue[];
 

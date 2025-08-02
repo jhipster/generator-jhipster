@@ -17,5 +17,5 @@
  * limitations under the License.
  */
 
-export { default as JDLEntity } from './jdl-entity.js';
-export { default as JDLEnum } from './jdl-enum.js';
+export { default as JDLEntity } from './jdl-entity.ts';
+export { default as JDLEnum } from './jdl-enum.ts';

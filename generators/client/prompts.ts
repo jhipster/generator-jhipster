@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type ClientGenerator from '../client/generator.js';
-import { asPromptingTask } from '../base-application/support/task-type-inference.js';
+import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
 import type CoreGenerator from '../base-core/generator.ts';
 
 type Choice = { value: string; name: string };

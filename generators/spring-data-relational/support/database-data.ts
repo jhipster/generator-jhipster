@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { databaseTypes } from '../../../lib/jhipster/index.js';
+import { databaseTypes } from '../../../lib/jhipster/index.ts';
 
 export type DatabaseData = {
   name: string;

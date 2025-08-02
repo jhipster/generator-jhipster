@@ -17,6 +17,6 @@
  * limitations under the License.
  */
 
-export { default, CommandBaseGenerator } from './generator.js';
-export { default as command } from './command.js';
+export { default, CommandBaseGenerator } from './generator.ts';
+export { default as command } from './command.ts';
 export type { Config, Options, Features } from './types.js';

@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 import { describe } from 'esmocha';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
-import Generator from './index.js';
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

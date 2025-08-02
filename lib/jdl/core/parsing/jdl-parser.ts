@@ -18,7 +18,7 @@
  */
 import type { CstNode, TokenType } from 'chevrotain';
 import { CstParser } from 'chevrotain';
-import { NAME } from './lexer/shared-tokens.js';
+import { NAME } from './lexer/shared-tokens.ts';
 
 // Chevrotain actually returns a CstNode instead of this noopCst
 const noopCst = undefined as unknown as CstNode;

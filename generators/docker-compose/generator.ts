@@ -24,26 +24,26 @@ import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import normalize from 'normalize-path';
 
-import BaseWorkspacesGenerator from '../base-workspaces/index.js';
+import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
 import type {
   Deployment as BaseDeployment,
   WorkspacesApplication as BaseWorkspacesApplication,
   WorkspacesApplication,
 } from '../base-workspaces/index.js';
 
-import { monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
-import { createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
+import { monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.ts';
+import { createBase64Secret, stringHashCode } from '../../lib/utils/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
-import { checkDocker } from '../base-workspaces/internal/docker-base.js';
-import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
+import { checkDocker } from '../base-workspaces/internal/docker-base.ts';
+import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.ts';
 import {
   askForClustersModeWorkspace,
   askForMonitoring,
   askForServiceDiscoveryWorkspace,
-} from '../base-workspaces/internal/docker-prompts.js';
+} from '../base-workspaces/internal/docker-prompts.ts';
 import { askForDirectoryPath } from '../base-workspaces/prompts.ts';
-import cleanupOldFilesTask from './cleanup.js';
-import { writeFiles } from './files.js';
+import cleanupOldFilesTask from './cleanup.ts';
+import { writeFiles } from './files.ts';
 
 const { PROMETHEUS } = monitoringTypes;
 const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;

@@ -21,11 +21,11 @@ import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { basicHelpers, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
-import { GENERATOR_COMMON } from '../generator-list.js';
-import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
-import Generator from './index.js';
+import { basicHelpers, defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
+import { GENERATOR_COMMON } from '../generator-list.ts';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,7 +36,7 @@ const mockedGenerators = ['jhipster:git'];
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));

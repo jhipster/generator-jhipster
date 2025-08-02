@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'esmocha';
-import { createDockerComposeFile } from './docker-compose-file.js';
+import { createDockerComposeFile } from './docker-compose-file.ts';
 
 describe('generator - docker - docker-compose-file', () => {
   describe('createDockerComposeFile', () => {

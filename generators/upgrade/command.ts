@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_APP } from '../generator-list.js';
+import { GENERATOR_APP } from '../generator-list.ts';
 
 const command = {
   configs: {

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../../../base-application/index.ts';
-import { javaMainPackageTemplatesBlock } from '../../../java/support/files.js';
+import { javaMainPackageTemplatesBlock } from '../../../java/support/files.ts';
 import type {
   Application as SpringCloudApplication,
   Config as SpringCloudConfig,

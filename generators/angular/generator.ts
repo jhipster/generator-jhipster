@@ -18,17 +18,17 @@
  */
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
-import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.js';
-import { defaultLanguage } from '../languages/support/index.js';
-import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
-import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.js';
-import { createNeedleCallback } from '../base-core/support/index.js';
-import { mutateData } from '../../lib/utils/index.js';
-import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
-import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.js';
-import { writeFiles } from './files-angular.js';
-import cleanupOldFilesTask from './cleanup.js';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.ts';
+import { defaultLanguage } from '../languages/support/index.ts';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
+import { createNeedleCallback } from '../base-core/support/index.ts';
+import { mutateData } from '../../lib/utils/index.ts';
+import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.ts';
+import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.ts';
+import { writeFiles } from './files-angular.ts';
+import cleanupOldFilesTask from './cleanup.ts';
 import type { addItemToMenu } from './support/index.js';
 import {
   addEntitiesRoute,
@@ -38,7 +38,7 @@ import {
   addToEntitiesMenu,
   isTranslatedAngularFile,
   translateAngularFilesTransform,
-} from './support/index.js';
+} from './support/index.ts';
 import type {
   Application as AngularApplication,
   Config as AngularConfig,

@@ -24,16 +24,16 @@ import type {
   JDLApplicationOptionValue,
 } from '../jdl/core/types/parsing.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
-import authenticationTypes from './authentication-types.js';
-import databaseTypes from './database-types.js';
-import cacheTypes from './cache-types.js';
-import serviceDiscoveryTypes from './service-discovery-types.js';
-import clientFrameworkTypes from './client-framework-types.js';
-import buildToolTypes from './build-tool-types.js';
-import searchEngineTypes from './search-engine-types.js';
-import testFrameworkTypes from './test-framework-types.js';
-import websocketTypes from './websocket-types.js';
-import { builtInConfigPropsValidations } from './jdl-validator-definition.js';
+import authenticationTypes from './authentication-types.ts';
+import databaseTypes from './database-types.ts';
+import cacheTypes from './cache-types.ts';
+import serviceDiscoveryTypes from './service-discovery-types.ts';
+import clientFrameworkTypes from './client-framework-types.ts';
+import buildToolTypes from './build-tool-types.ts';
+import searchEngineTypes from './search-engine-types.ts';
+import testFrameworkTypes from './test-framework-types.ts';
+import websocketTypes from './websocket-types.ts';
+import { builtInConfigPropsValidations } from './jdl-validator-definition.ts';
 
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, ORACLE, POSTGRESQL, SQL, H2_DISK, H2_MEMORY } = databaseTypes;
 

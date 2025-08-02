@@ -21,8 +21,8 @@ import { fileURLToPath } from 'url';
 import { access } from 'fs/promises';
 import { before, describe, expect, it } from 'esmocha';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { skipPrettierHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { GENERATOR_GIT } from '../generator-list.js';
+import { skipPrettierHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+import { GENERATOR_GIT } from '../generator-list.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

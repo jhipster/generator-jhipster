@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as command } from '../kubernetes/command.js';
-export { default } from './generator.js';
+export { default as command } from '../kubernetes/command.ts';
+export { default } from './generator.ts';

@@ -19,13 +19,13 @@
 
 import type { ConfigAll } from '../types/command-all.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
-import authenticationTypes from './authentication-types.js';
-import databaseTypes from './database-types.js';
-import applicationOptions from './application-options.js';
-import cacheTypes from './cache-types.js';
-import serviceDiscoveryTypes from './service-discovery-types.js';
-import clientFrameworkTypes from './client-framework-types.js';
-import buildToolTypes from './build-tool-types.js';
+import authenticationTypes from './authentication-types.ts';
+import databaseTypes from './database-types.ts';
+import applicationOptions from './application-options.ts';
+import cacheTypes from './cache-types.ts';
+import serviceDiscoveryTypes from './service-discovery-types.ts';
+import clientFrameworkTypes from './client-framework-types.ts';
+import buildToolTypes from './build-tool-types.ts';
 
 const { CONSUL } = serviceDiscoveryTypes;
 const { SQL, POSTGRESQL } = databaseTypes;

@@ -3,9 +3,9 @@ import { mkdirSync, writeFileSync } from 'fs';
 import { escapeRegExp } from 'lodash-es';
 import { before, describe, expect, it } from 'esmocha';
 import { execaCommandSync } from 'execa';
-import { packageJson } from '../../lib/index.js';
-import { GENERATOR_APP, GENERATOR_UPGRADE } from '../generator-list.js';
-import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+import { packageJson } from '../../lib/index.ts';
+import { GENERATOR_APP, GENERATOR_UPGRADE } from '../generator-list.ts';
+import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 
 const writeJsonSync = (file, content) => writeFileSync(file, JSON.stringify(content, null, 2));
 

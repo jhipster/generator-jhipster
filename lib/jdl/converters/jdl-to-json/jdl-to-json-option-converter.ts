@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import logger from '../../core/utils/objects/logger.js';
-import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.js';
+import logger from '../../core/utils/objects/logger.ts';
+import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.ts';
 import type JDLObject from '../../core/models/jdl-object.js';
 import type JDLApplication from '../../core/models/jdl-application.js';
 import type AbstractJDLOption from '../../core/models/abstract-jdl-option.js';

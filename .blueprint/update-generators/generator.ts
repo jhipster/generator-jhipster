@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import { dirname } from 'path';
-import BaseCoreGenerator from '../../generators/base-core/index.js';
-import { createNeedleCallback } from '../../generators/base-core/support/needles.js';
+import BaseCoreGenerator from '../../generators/base-core/index.ts';
+import { createNeedleCallback } from '../../generators/base-core/support/needles.ts';
 
 export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
   get [BaseCoreGenerator.WRITING]() {

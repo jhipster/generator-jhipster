@@ -19,13 +19,13 @@
 
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import JDLObject from '../../core/models/jdl-object.js';
-import { JDLEntity, JDLEnum } from '../../core/models/index.js';
-import JDLField from '../../core/models/jdl-field.js';
-import JDLValidation from '../../core/models/jdl-validation.js';
-import { validations } from '../../core/built-in-options/index.js';
-import fieldTypes from '../../../jhipster/field-types.js';
-import { convert } from './jdl-to-json-field-converter.js';
+import JDLObject from '../../core/models/jdl-object.ts';
+import { JDLEntity, JDLEnum } from '../../core/models/index.ts';
+import JDLField from '../../core/models/jdl-field.ts';
+import JDLValidation from '../../core/models/jdl-validation.ts';
+import { validations } from '../../core/built-in-options/index.ts';
+import fieldTypes from '../../../jhipster/field-types.ts';
+import { convert } from './jdl-to-json-field-converter.ts';
 
 const { CommonDBTypes } = fieldTypes;
 

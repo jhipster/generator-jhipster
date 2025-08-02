@@ -20,8 +20,8 @@ import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { describe, expect, it } from 'esmocha';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { GENERATOR_PROJECT_NAME } from '../generator-list.js';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/helpers.js';
+import { GENERATOR_PROJECT_NAME } from '../generator-list.ts';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/helpers.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

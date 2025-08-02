@@ -1,6 +1,6 @@
 import { camelCase, upperFirst } from 'lodash-es';
 import type { JHipsterChoices } from '../command/types.js';
-import { upperFirstCamelCase } from './string.js';
+import { upperFirstCamelCase } from './string.ts';
 
 export const flatChoices = (choices: JHipsterChoices): string[] =>
   choices.map(choice => (typeof choice === 'string' ? choice : choice.value)).filter(Boolean);

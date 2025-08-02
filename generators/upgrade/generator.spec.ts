@@ -23,9 +23,9 @@ import { snakeCase } from 'lodash-es';
 import { simpleGit } from 'simple-git';
 
 import { shouldSupportFeatures } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '../../lib/testing/index.js';
-import { UPGRADE_BRANCH } from './support/index.js';
-import Generator from './index.js';
+import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
+import { UPGRADE_BRANCH } from './support/index.ts';
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -34,7 +34,7 @@ const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
 

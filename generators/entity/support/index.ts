@@ -21,4 +21,4 @@ export {
   isNumber as inputIsNumber,
   isSignedNumber as inputIsSignedNumber,
   isSignedDecimalNumber as inputIsSignedDecimalNumber,
-} from './asserts.js';
+} from './asserts.ts';

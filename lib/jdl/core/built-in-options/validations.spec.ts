@@ -19,7 +19,7 @@
 
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
-import validations from './validations.js';
+import validations from './validations.ts';
 
 const {
   Validations: { REQUIRED, MAXLENGTH, MAXBYTES },

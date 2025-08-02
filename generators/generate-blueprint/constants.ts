@@ -19,8 +19,8 @@
 import chalk from 'chalk';
 
 import type { WritableDeep } from 'type-fest';
-import * as GENERATOR_LIST from '../generator-list.js';
-import { PRIORITY_NAMES_LIST } from '../base-application/priorities.js';
+import * as GENERATOR_LIST from '../generator-list.ts';
+import { PRIORITY_NAMES_LIST } from '../base-application/priorities.ts';
 
 const prioritiesForSub = (_subGen: string) => PRIORITY_NAMES_LIST;
 

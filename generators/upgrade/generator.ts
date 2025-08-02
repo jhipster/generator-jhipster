@@ -23,12 +23,12 @@ import gitignore from 'parse-gitignore';
 import semver from 'semver';
 import { ResetMode } from 'simple-git';
 
-import BaseGenerator from '../base/index.js';
-import { packageJson } from '../../lib/index.js';
+import BaseGenerator from '../base/index.ts';
+import { packageJson } from '../../lib/index.ts';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import type { Config as ProjectNameConfig } from '../project-name/types.d.ts';
-import { GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES, UPGRADE_BRANCH } from './support/index.js';
+import { GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES, UPGRADE_BRANCH } from './support/index.ts';
 import type { Config as UpgradeConfig, Options as UpgradeOptions } from './types.js';
 
 /* Constants used throughout */

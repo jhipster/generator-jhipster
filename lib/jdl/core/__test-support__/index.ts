@@ -1,18 +1,18 @@
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { parseFromContent as originalParseFromContent, parseFromFiles as originalParseFromFiles } from '../readers/jdl-reader.js';
-import { parseFromConfigurationObject as originalParseFromConfigurationObject } from '../../converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
+import { parseFromContent as originalParseFromContent, parseFromFiles as originalParseFromFiles } from '../readers/jdl-reader.ts';
+import { parseFromConfigurationObject as originalParseFromConfigurationObject } from '../../converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.ts';
 import {
   createImporterFromContent as originalCreateImporterFromContent,
   createImporterFromFiles as originalCreateImporterFromFiles,
-} from '../../jdl-importer.js';
+} from '../../jdl-importer.ts';
 import type { ParsedJDLApplication, ParsedJDLRoot } from '../types/parsed.js';
-import { createJDLLinterFromContent as originalCreateJDLLinterFromContent } from '../linters/jdl-linter.js';
-import { convertApplications as originalConvertApplications } from '../../converters/parsed-jdl-to-jdl-object/application-converter.js';
-import { createJDLApplication as originalCreateJDLApplication } from '../models/jdl-application-factory.js';
+import { createJDLLinterFromContent as originalCreateJDLLinterFromContent } from '../linters/jdl-linter.ts';
+import { convertApplications as originalConvertApplications } from '../../converters/parsed-jdl-to-jdl-object/application-converter.ts';
+import { createJDLApplication as originalCreateJDLApplication } from '../models/jdl-application-factory.ts';
 import type { JHipsterYoRcContentAndJDLWrapper } from '../../converters/json-to-jdl-application-converter.js';
-import { convertApplicationsToJDL as originalConvertApplicationsToJDL } from '../../converters/json-to-jdl-application-converter.js';
-import { getDefaultJDLApplicationConfig, getDefaultRuntime } from '../../../jdl-config/jhipster-jdl-config.js';
+import { convertApplicationsToJDL as originalConvertApplicationsToJDL } from '../../converters/json-to-jdl-application-converter.ts';
+import { getDefaultJDLApplicationConfig, getDefaultRuntime } from '../../../jdl-config/jhipster-jdl-config.ts';
 import type { JDLRuntime } from '../types/runtime.js';
 
 const __filename = fileURLToPath(import.meta.url);

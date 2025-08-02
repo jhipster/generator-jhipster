@@ -21,10 +21,10 @@ import { fileURLToPath } from 'url';
 import { before, beforeEach, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { basicTests, shouldSupportFeatures } from '../../test/support/tests.js';
-import { parseChangelog } from '../base/support/timestamp.js';
-import Generator from './index.js';
+import { parseChangelog } from '../base/support/timestamp.ts';
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -34,10 +34,10 @@ const generatorPath = join(__dirname, 'index.js');
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   it('generator-list esm exports constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
   basicTests({

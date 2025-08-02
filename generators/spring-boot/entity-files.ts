@@ -24,11 +24,11 @@ import {
   javaTestPackageTemplatesBlock,
   javaWriteFileSection,
   moveToJavaPackageSrcDir,
-} from '../java/support/index.js';
+} from '../java/support/index.ts';
 import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import { databaseTypes, entityOptions } from '../../lib/jhipster/index.js';
-import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
-import { cleanupOldFiles } from './entity-cleanup.js';
+import { databaseTypes, entityOptions } from '../../lib/jhipster/index.ts';
+import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
+import { cleanupOldFiles } from './entity-cleanup.ts';
 import type { Application as SpringBootApplication, Entity as SpringBootEntity } from './types.js';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;

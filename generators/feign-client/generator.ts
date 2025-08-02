@@ -18,8 +18,8 @@
  */
 
 import { JavaApplicationGenerator } from '../java/generator.ts';
-import { feignFiles } from './files.js';
-import cleanupTask from './cleanup.js';
+import { feignFiles } from './files.ts';
+import cleanupTask from './cleanup.ts';
 
 export default class FeignClientGenerator extends JavaApplicationGenerator {
   async beforeQueue() {

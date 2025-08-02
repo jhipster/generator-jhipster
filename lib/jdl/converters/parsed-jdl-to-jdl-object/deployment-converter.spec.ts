@@ -18,7 +18,7 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import { convertDeployments } from './deployment-converter.js';
+import { convertDeployments } from './deployment-converter.ts';
 
 describe('jdl - DeploymentConverter', () => {
   describe('convertDeployments', () => {

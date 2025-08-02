@@ -21,12 +21,12 @@ import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 
 import type { Storage } from 'yeoman-generator';
-import BaseSimpleApplicationGenerator from '../base-simple-application/index.js';
+import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
 
-import * as GENERATOR_LIST from '../generator-list.js';
+import * as GENERATOR_LIST from '../generator-list.ts';
 import { BLUEPRINT_API_VERSION } from '../generator-constants.js';
-import { files, generatorFiles } from './files.js';
+import { files, generatorFiles } from './files.ts';
 import {
   DYNAMIC,
   GENERATE_SNAPSHOTS,
@@ -40,7 +40,7 @@ import {
   prompts,
   requiredConfig,
   subGeneratorPrompts,
-} from './constants.js';
+} from './constants.ts';
 import type {
   Application as GenerateBlueprintApplication,
   Config as GenerateBlueprintConfig,

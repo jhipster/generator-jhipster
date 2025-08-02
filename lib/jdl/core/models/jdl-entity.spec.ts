@@ -19,9 +19,9 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { JDLEntity } from '../models/index.js';
-import JDLField from '../models/jdl-field.js';
-import JDLValidation from '../models/jdl-validation.js';
+import { JDLEntity } from '../models/index.ts';
+import JDLField from '../models/jdl-field.ts';
+import JDLValidation from '../models/jdl-validation.ts';
 
 describe('jdl - JDLEntity', () => {
   describe('new', () => {

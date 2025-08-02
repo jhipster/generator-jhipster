@@ -3,7 +3,7 @@ import { join } from 'node:path';
 
 import type { InfoFile } from '../../generators/info/support/extract-info.js';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
-import { mutateData } from '../utils/object.js';
+import { mutateData } from '../utils/object.ts';
 import type { YoRcContent } from '../types/command-all.js';
 
 const isFile = async (filename: string): Promise<boolean> => {

@@ -21,7 +21,7 @@ import { isString } from 'lodash-es';
 import type { ITokenConfig } from 'chevrotain';
 import { createToken } from 'chevrotain';
 
-import { KEYWORD, NAME, namePattern } from './shared-tokens.js';
+import { KEYWORD, NAME, namePattern } from './shared-tokens.ts';
 
 export default function createTokenFromConfig(config: ITokenConfig) {
   if (!config) {

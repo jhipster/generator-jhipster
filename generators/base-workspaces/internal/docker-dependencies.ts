@@ -18,7 +18,7 @@
  */
 import type BaseCoreGenerator from '../../base-core/generator.ts';
 import { dockerContainers } from '../../generator-constants.js';
-import { getDockerfileContainers } from '../../docker/utils.js';
+import { getDockerfileContainers } from '../../docker/utils.ts';
 import { mutateData } from '../../../lib/utils/object.ts';
 
 export function loadDockerDependenciesTask<const G extends BaseCoreGenerator>(

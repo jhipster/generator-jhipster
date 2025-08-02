@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.ts';
 import { addSectionsCondition, mergeSections } from '../base-core/support/index.ts';
 import {
   javaMainPackageTemplatesBlock,
   javaMainResourceTemplatesBlock,
   javaTestPackageTemplatesBlock,
   javaTestResourceTemplatesBlock,
-} from '../java/support/index.js';
+} from '../java/support/index.ts';
 import type { Application, Entity } from './types.js';
 
 export const sqlFiles = asWriteFilesSection<Application>({

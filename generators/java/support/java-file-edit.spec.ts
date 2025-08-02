@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'esmocha';
-import { injectJavaConstructorParam, injectJavaConstructorSetter, injectJavaField } from './java-file-edit.js';
+import { injectJavaConstructorParam, injectJavaConstructorSetter, injectJavaField } from './java-file-edit.ts';
 
 describe('generator > java', () => {
   describe('injectJavaConstructorParam', () => {

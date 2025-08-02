@@ -19,7 +19,7 @@
 
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { binaryOptions } from '../built-in-options/index.js';
+import { binaryOptions } from '../built-in-options/index.ts';
 
 describe('jdl - BinaryOptions', () => {
   it('should match values', () => {

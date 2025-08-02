@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CommandBaseGenerator } from '../base/index.js';
-import { CONTEXT_DATA_EXISTING_PROJECT } from '../base/support/constants.js';
-import { getDefaultAppName } from './support/index.js';
+import { CommandBaseGenerator } from '../base/index.ts';
+import { CONTEXT_DATA_EXISTING_PROJECT } from '../base/support/constants.ts';
+import { getDefaultAppName } from './support/index.ts';
 
-import { validateProjectName } from './support/name-resolver.js';
+import { validateProjectName } from './support/name-resolver.ts';
 import type command from './command.js';
 
 export default class ProjectNameGenerator extends CommandBaseGenerator<typeof command> {

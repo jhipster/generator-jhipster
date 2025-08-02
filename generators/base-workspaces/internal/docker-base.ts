@@ -19,15 +19,15 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 
-import { normalizePathEnd } from '../../../lib/utils/index.js';
-import { buildToolTypes } from '../../../lib/jhipster/index.js';
+import { normalizePathEnd } from '../../../lib/utils/index.ts';
+import { buildToolTypes } from '../../../lib/jhipster/index.ts';
 import type { BaseKubernetesGenerator } from '../../kubernetes/generator.ts';
 import type { WorkspacesApplication } from '../types.js';
 import { asPreparingWorkspacesTask } from '../support/task-type-inference.ts';
 
 const { MAVEN } = buildToolTypes;
 
-export { checkDocker } from '../../docker/support/index.js';
+export { checkDocker } from '../../docker/support/index.ts';
 
 /**
  * Check Images

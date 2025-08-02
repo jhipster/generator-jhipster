@@ -2,8 +2,8 @@ import type { SinonStub } from 'sinon';
 import sinon from 'sinon';
 import { beforeEach, describe, expect, it } from 'esmocha';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { GENERATOR_HEROKU } from '../generator-list.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+import { GENERATOR_HEROKU } from '../generator-list.ts';
 
 const expectedFiles = {
   monolith: ['Procfile', `${SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`, `${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`],

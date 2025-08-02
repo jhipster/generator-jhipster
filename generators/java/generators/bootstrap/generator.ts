@@ -37,8 +37,8 @@ import {
   matchMainJavaFiles,
   packageInfoTransform,
   prepareEntity,
-} from '../../support/index.js';
-import { mutateData, normalizePathEnd } from '../../../../lib/utils/index.js';
+} from '../../support/index.ts';
+import { mutateData, normalizePathEnd } from '../../../../lib/utils/index.ts';
 import { editPropertiesFileCallback } from '../../../base-core/support/properties-file.ts';
 
 export default class JavaBootstrapGenerator extends JavaApplicationGenerator {

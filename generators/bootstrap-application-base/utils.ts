@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 import { defaults } from 'lodash-es';
-import { Validations, databaseTypes, fieldTypes } from '../../lib/jhipster/index.js';
-import { loadRequiredConfigIntoEntity } from '../base-application/support/index.js';
+import { Validations, databaseTypes, fieldTypes } from '../../lib/jhipster/index.ts';
+import { loadRequiredConfigIntoEntity } from '../base-application/support/index.ts';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
-import { getDatabaseTypeData } from '../server/support/database.js';
+import { getDatabaseTypeData } from '../server/support/database.ts';
 import type BaseApplicationGenerator from '../base-application/generator.js';
 import { formatDateForChangelog } from '../base/support/timestamp.ts';
 import type { ApplicationAll, EntityAll as ApplicationEntity, UserEntity } from '../../lib/types/application-all.d.ts';

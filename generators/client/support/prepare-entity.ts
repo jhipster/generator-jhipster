@@ -18,9 +18,9 @@
  */
 import type { Entity as ClientEntity } from '../../client/types.js';
 import { mutateData } from '../../../lib/utils/object.ts';
-import { isClientField } from './filter-entities.js';
-import { generateTestEntityId, generateTsTestEntityForFields, stringifyTsEntity } from './template-utils.js';
-import getTypescriptKeyType from './types-utils.js';
+import { isClientField } from './filter-entities.ts';
+import { generateTestEntityId, generateTsTestEntityForFields, stringifyTsEntity } from './template-utils.ts';
+import getTypescriptKeyType from './types-utils.ts';
 
 const SEED = 'post-prepare-client';
 

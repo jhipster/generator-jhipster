@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 import type { ValueOf } from 'type-fest';
-import kubernetesPlatformTypes from './kubernetes-platform-types.js';
-import monitoringTypes from './monitoring-types.js';
-import serviceDiscoveryTypes from './service-discovery-types.js';
+import kubernetesPlatformTypes from './kubernetes-platform-types.ts';
+import monitoringTypes from './monitoring-types.ts';
+import serviceDiscoveryTypes from './service-discovery-types.ts';
 
 const { LOAD_BALANCER, NODE_PORT, INGRESS } = kubernetesPlatformTypes.ServiceTypes;
 const { NGINX, GKE } = kubernetesPlatformTypes.IngressTypes;

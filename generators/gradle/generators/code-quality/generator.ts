@@ -18,7 +18,7 @@
  */
 import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
-import { GENERATOR_GRADLE } from '../../../generator-list.js';
+import { GENERATOR_GRADLE } from '../../../generator-list.ts';
 import type { Source as CommonSource } from '../../../common/types.d.ts';
 
 export default class CodeQualityGenerator extends JavaApplicationGenerator {

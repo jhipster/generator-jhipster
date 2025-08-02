@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import { binaryOptions } from '../built-in-options/index.js';
-import JDLEnums from './jdl-enums.js';
-import JDLRelationships from './jdl-relationships.js';
-import JDLOptions from './jdl-options.js';
+import { binaryOptions } from '../built-in-options/index.ts';
+import JDLEnums from './jdl-enums.ts';
+import JDLRelationships from './jdl-relationships.ts';
+import JDLOptions from './jdl-options.ts';
 import type JDLEntity from './jdl-entity.js';
 import type JDLRelationship from './jdl-relationship.js';
 import type AbstractJDLOption from './abstract-jdl-option.js';

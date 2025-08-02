@@ -1,1 +1,1 @@
-export { default as checkJava } from './check-java.js';
+export { default as checkJava } from './check-java.ts';

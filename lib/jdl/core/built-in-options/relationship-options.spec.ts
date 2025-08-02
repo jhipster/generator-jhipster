@@ -19,7 +19,7 @@
 
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
-import relationshipOptions from './relationship-options.js';
+import relationshipOptions from './relationship-options.ts';
 
 const { BUILT_IN_ENTITY, exists } = relationshipOptions;
 

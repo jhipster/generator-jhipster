@@ -20,7 +20,7 @@ import assert from 'node:assert';
 import { randomBytes } from 'crypto';
 import { defaults } from 'lodash-es';
 import chalk from 'chalk';
-import BaseWorkspacesGenerator from '../../../base-workspaces/index.js';
+import BaseWorkspacesGenerator from '../../../base-workspaces/index.ts';
 import { BaseKubernetesGenerator } from '../../generator.ts';
 import { helmConstants, kubernetesConstants } from '../../support/constants.ts';
 import { loadDockerDependenciesTask } from '../../../base-workspaces/internal/docker-dependencies.ts';

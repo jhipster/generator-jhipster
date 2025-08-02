@@ -20,9 +20,9 @@ import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import { GENERATOR_GRADLE } from '../generator-list.js';
+import { GENERATOR_GRADLE } from '../generator-list.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

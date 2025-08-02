@@ -19,7 +19,7 @@
 import { inspect } from 'node:util';
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
 import type { GetWebappTranslationCallback } from '../../client/translation.js';
-import { createTranslationReplacer } from './translate-angular.js';
+import { createTranslationReplacer } from './translate-angular.ts';
 
 describe('generator - angular - transform', () => {
   describe('replaceAngularTranslations', () => {

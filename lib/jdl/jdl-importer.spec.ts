@@ -22,11 +22,11 @@ import { rmSync } from 'fs';
 import { after, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
-import clientFrameworkTypes from '../jhipster/client-framework-types.js';
-import databaseTypes from '../jhipster/database-types.js';
-import { readYoRcFile } from '../utils/yo-rc.js';
-import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.js';
-import { createImporterFromContent, createImporterFromFiles, getTestFile } from './core/__test-support__/index.js';
+import clientFrameworkTypes from '../jhipster/client-framework-types.ts';
+import databaseTypes from '../jhipster/database-types.ts';
+import { readYoRcFile } from '../utils/yo-rc.ts';
+import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
+import { createImporterFromContent, createImporterFromFiles, getTestFile } from './core/__test-support__/index.ts';
 import type { ImportState } from './jdl-importer.js';
 
 const { NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;

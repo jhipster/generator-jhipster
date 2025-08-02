@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesBlock, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import { asWriteFilesBlock, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
+import { javaMainPackageTemplatesBlock } from '../java/support/index.ts';
 
 const domainFiles = [
   asWriteFilesBlock({

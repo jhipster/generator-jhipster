@@ -18,14 +18,14 @@
  */
 import test from 'node:test';
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
-import { createJHipsterLogger } from '../../../lib/utils/index.js';
+import { createJHipsterLogger } from '../../../lib/utils/index.ts';
 import {
   checkContentIn,
   convertToPrettierExpressions,
   createBaseNeedle,
   createNeedleCallback,
   insertContentBeforeNeedle,
-} from './needles.js';
+} from './needles.ts';
 
 describe('needles - support', () => {
   describe('convertToPrettierExpressions', () => {

@@ -4,7 +4,7 @@ import { describe, expect, it } from 'esmocha';
 import { transform } from 'p-transform';
 import { setModifiedFileState } from 'mem-fs-editor/state';
 
-import { createESLintTransform } from './eslint-transform.js';
+import { createESLintTransform } from './eslint-transform.ts';
 
 describe('generator - bootstrap - eslint', () => {
   describe('::createESLintTransform', () => {

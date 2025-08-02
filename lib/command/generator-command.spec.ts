@@ -1,7 +1,7 @@
 import { describe, expect } from 'esmocha';
 import type { GeneratorMeta } from '@yeoman/types';
-import { defaultHelpers as helpers, runResult } from '../testing/index.js';
-import BaseApplicationGenerator from '../../generators/base-application/generator.js';
+import { defaultHelpers as helpers, runResult } from '../testing/index.ts';
+import BaseApplicationGenerator from '../../generators/base-application/generator.ts';
 import type { JHipsterCommandDefinition, JHipsterConfig } from './types.js';
 
 const notImplementedCallback = (methodName: string) => {

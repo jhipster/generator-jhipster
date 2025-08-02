@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import { SpringBootApplicationGenerator } from '../spring-boot/generator.ts';
-import writeCouchbaseFilesTask, { cleanupCouchbaseFilesTask } from './files.js';
-import writeCouchbaseEntityFilesTask, { cleanupCouchbaseEntityFilesTask } from './entity-files.js';
+import writeCouchbaseFilesTask, { cleanupCouchbaseFilesTask } from './files.ts';
+import writeCouchbaseEntityFilesTask, { cleanupCouchbaseEntityFilesTask } from './entity-files.ts';
 
 export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {

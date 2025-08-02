@@ -19,7 +19,7 @@
 
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
-import deduplicate from './array-utils.js';
+import deduplicate from './array-utils.ts';
 
 describe('jdl - ArrayUtils', () => {
   describe('deduplicate', () => {

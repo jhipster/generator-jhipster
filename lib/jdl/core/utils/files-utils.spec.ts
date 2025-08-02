@@ -22,9 +22,9 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { after, before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils.js';
-import { getPackageRoot } from '../../../index.js';
-import { getTestFile } from '../__test-support__/index.js';
+import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils.ts';
+import { getPackageRoot } from '../../../index.ts';
+import { getTestFile } from '../__test-support__/index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

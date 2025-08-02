@@ -18,8 +18,8 @@
  */
 import { capitalize } from 'lodash-es';
 
-import { validations } from '../../core/built-in-options/index.js';
-import { formatComment } from '../../core/utils/format-utils.js';
+import { validations } from '../../core/built-in-options/index.ts';
+import { formatComment } from '../../core/utils/format-utils.ts';
 import type JDLObject from '../../core/models/jdl-object.js';
 import type { JSONField } from '../../core/types/json-config.js';
 import type { JDLEntity } from '../../core/models/index.js';

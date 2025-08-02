@@ -12,25 +12,25 @@ import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as 
 import type { EmptyObject } from 'type-fest';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.js';
-import { GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
-import { createJHipsterLogger, normalizePathEnd } from '../../lib/utils/index.js';
-import { parseCreationTimestamp } from '../../generators/base/support/index.js';
-import BaseGenerator from '../../generators/base/index.js';
-import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.js';
+import { GENERATOR_WORKSPACES } from '../../generators/generator-list.ts';
+import { createJHipsterLogger, normalizePathEnd } from '../../lib/utils/index.ts';
+import { parseCreationTimestamp } from '../../generators/base/support/index.ts';
+import BaseGenerator from '../../generators/base/index.ts';
+import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.ts';
 import type CoreGenerator from '../../generators/base-core/generator.js';
 import type { ConfigAll as ApplicationConfiguration, OptionsAll } from '../types/command-all.js';
 import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
 import type { Entity } from '../jhipster/types/entity.js';
 import type { Relationship } from '../jhipster/types/relationship.d.ts';
-import { buildJHipster, createProgram } from '../../cli/program.mjs';
+import { buildJHipster, createProgram } from '../../cli/program.mts';
 import type { CliCommand } from '../../cli/types.js';
 import type BaseApplicationGenerator from '../../generators/base-application/generator.js';
 import type { PRIORITY_NAMES as APPLICATION_PRIORITY_NAMES } from '../../generators/base-application/priorities.js';
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
-import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY } from '../../generators/base-application/support/constants.js';
-import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../generators/base-simple-application/support/constants.js';
+import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY } from '../../generators/base-application/support/constants.ts';
+import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../generators/base-simple-application/support/constants.ts';
 import type { ApplicationAll } from '../types/application-all.js';
-import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
+import getGenerator, { getGeneratorRelativeFolder } from './get-generator.ts';
 
 type GeneratorTestType = YeomanGenerator<OptionsAll>;
 type GeneratorTestOptions = OptionsAll;
@@ -269,7 +269,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   withWorkspacesSamples(...appNames: string[]): this {
     return this.onBeforePrepare(async () => {
       try {
-        const { default: deploymentTestSamples } = await import('./support/deployment-samples.js');
+        const { default: deploymentTestSamples } = await import('./support/deployment-samples.ts');
         for (const appName of appNames) {
           const application = (deploymentTestSamples as Record<string, Record<string, any>>)[appName];
           if (!application) {

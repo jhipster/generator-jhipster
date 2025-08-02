@@ -18,8 +18,8 @@
  */
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 
-import { asWritingTask } from '../base-application/support/task-type-inference.js';
-import cleanupOauth2 from './cleanup-oauth2.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.ts';
+import cleanupOauth2 from './cleanup-oauth2.ts';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore

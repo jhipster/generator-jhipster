@@ -22,9 +22,9 @@ import path from 'path';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import helpers from 'yeoman-test';
-import exportDeployments from '../exporters/jhipster-deployment-exporter.js';
-import JDLDeployment from '../../core/models/jdl-deployment.js';
-import deploymentOptions from '../../../jhipster/deployment-options.js';
+import exportDeployments from '../exporters/jhipster-deployment-exporter.ts';
+import JDLDeployment from '../../core/models/jdl-deployment.ts';
+import deploymentOptions from '../../../jhipster/deployment-options.ts';
 
 const {
   DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },

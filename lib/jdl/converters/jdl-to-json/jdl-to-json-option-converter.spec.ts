@@ -24,13 +24,13 @@ import sinonChai from 'sinon-chai';
 
 chaiUse(sinonChai);
 
-import JDLObject from '../../core/models/jdl-object.js';
-import { JDLEntity } from '../../core/models/index.js';
-import JDLUnaryOption from '../../core/models/jdl-unary-option.js';
-import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
-import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.js';
-import logger from '../../core/utils/objects/logger.js';
-import { convert } from './jdl-to-json-option-converter.js';
+import JDLObject from '../../core/models/jdl-object.ts';
+import { JDLEntity } from '../../core/models/index.ts';
+import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
+import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.ts';
+import logger from '../../core/utils/objects/logger.ts';
+import { convert } from './jdl-to-json-option-converter.ts';
 
 describe('jdl - JDLToJSONOptionConverter', () => {
   describe('convert', () => {

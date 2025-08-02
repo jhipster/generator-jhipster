@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import { APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
-import { databaseTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
-import { asPromptingTask } from '../base-application/support/index.js';
+import { databaseTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.ts';
+import { asPromptingTask } from '../base-application/support/index.ts';
 import { asPromptingWorkspacesTask } from '../base-workspaces/support/task-type-inference.ts';
 import type { BaseKubernetesGenerator } from './generator.ts';
 

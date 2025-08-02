@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseSimpleApplicationGenerator from '../base-simple-application/index.js';
-import { GENERATOR_GIT } from '../generator-list.js';
-import { files, readme } from './files.js';
+import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
+import { GENERATOR_GIT } from '../generator-list.ts';
+import { files, readme } from './files.ts';
 import type { Application as InitApplication, Config as InitConfig, Options as InitOptions } from './types.js';
 
 export default class InitGenerator extends BaseSimpleApplicationGenerator<InitApplication, InitConfig, InitOptions> {

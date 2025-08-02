@@ -1,8 +1,8 @@
 import { before, describe, it } from 'esmocha';
-import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from '../client/index.js';
 
 describe('needle API Vue: JHipster client generator with blueprint', () => {

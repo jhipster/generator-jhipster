@@ -7,11 +7,11 @@ import {
   extendMatrix,
   defaultHelpers as helpers,
   runResult,
-} from '../../lib/testing/index.js';
-import { filterBasicServerGenerators } from '../server/__test-support/index.js';
+} from '../../lib/testing/index.ts';
+import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
 
-import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.js';
-import { GENERATOR_SERVER } from '../generator-list.js';
+import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.ts';
+import { GENERATOR_SERVER } from '../generator-list.ts';
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };

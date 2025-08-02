@@ -19,8 +19,8 @@
 
 import { after, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import JDLEnums from '../models/jdl-enums.js';
-import { JDLEnum } from '../models/index.js';
+import JDLEnums from '../models/jdl-enums.ts';
+import { JDLEnum } from '../models/index.ts';
 
 describe('jdl - JDLEnums', () => {
   describe('add', () => {

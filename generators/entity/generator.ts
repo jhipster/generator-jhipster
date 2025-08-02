@@ -23,11 +23,11 @@ import chalk from 'chalk';
 import { upperFirst } from 'lodash-es';
 
 import type { Storage } from 'yeoman-generator';
-import BaseApplicationGenerator from '../base-application/index.js';
+import BaseApplicationGenerator from '../base-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { reservedKeywords } from '../../lib/jhipster/index.js';
-import { GENERATOR_ENTITIES } from '../generator-list.js';
-import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.js';
+import { reservedKeywords } from '../../lib/jhipster/index.ts';
+import { GENERATOR_ENTITIES } from '../generator-list.ts';
+import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { Features } from '../base/types.js';
 import {
@@ -42,7 +42,7 @@ import {
   askForRelationships,
   askForService,
   askForUpdate,
-} from './prompts.js';
+} from './prompts.ts';
 import type {
   Application as EntityApplication,
   Config as EntityConfig,

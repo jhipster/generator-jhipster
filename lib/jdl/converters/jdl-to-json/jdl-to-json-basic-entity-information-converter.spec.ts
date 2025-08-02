@@ -23,8 +23,8 @@ import sinonChai from 'sinon-chai';
 
 chaiUse(sinonChai);
 
-import { JDLEntity } from '../../core/models/index.js';
-import { convert } from './jdl-to-json-basic-entity-converter.js';
+import { JDLEntity } from '../../core/models/index.ts';
+import { convert } from './jdl-to-json-basic-entity-converter.ts';
 
 describe('jdl - JDLToJSONBasicEntityConverter', () => {
   describe('convert', () => {

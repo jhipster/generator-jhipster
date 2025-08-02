@@ -18,7 +18,7 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import { convertValidations } from './validation-converter.js';
+import { convertValidations } from './validation-converter.ts';
 
 describe('jdl - ValidationConverter', () => {
   describe('convertValidations', () => {

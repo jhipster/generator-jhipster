@@ -20,12 +20,12 @@ import { camelCase, intersection, kebabCase, lowerFirst, sortedUniq, startCase, 
 import pluralize from 'pluralize';
 
 import type BaseGenerator from '../../base-core/index.js';
-import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.js';
-import { parseChangelog } from '../../base/support/timestamp.js';
-import { getMicroserviceAppName, mutateData, normalizePathEnd, stringHashCode, upperFirstCamelCase } from '../../../lib/utils/index.js';
-import { getTypescriptKeyType } from '../../client/support/index.js';
-import { databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
-import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.js';
+import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.ts';
+import { parseChangelog } from '../../base/support/timestamp.ts';
+import { getMicroserviceAppName, mutateData, normalizePathEnd, stringHashCode, upperFirstCamelCase } from '../../../lib/utils/index.ts';
+import { getTypescriptKeyType } from '../../client/support/index.ts';
+import { databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.ts';
+import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.ts';
 
 import type { PrimaryKey } from '../types.js';
 import type CoreGenerator from '../../base-core/generator.js';
@@ -38,8 +38,8 @@ import type { DatabaseProperty } from '../../liquibase/types.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../../lib/core/application-types.ts';
 import type { EntityAll, FieldAll } from '../../../lib/types/application-all.d.ts';
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
-import { createFaker } from './faker.js';
-import { fieldIsEnum } from './field-utils.js';
+import { createFaker } from './faker.ts';
+import { fieldIsEnum } from './field-utils.ts';
 
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { CommonDBTypes } = fieldTypes;

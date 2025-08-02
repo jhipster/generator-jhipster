@@ -19,7 +19,7 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import JDLEnumValue from '../models/jdl-enum-value.js';
+import JDLEnumValue from '../models/jdl-enum-value.ts';
 
 describe('jdl - JDLEnumValue', () => {
   describe('new', () => {

@@ -20,13 +20,13 @@ import { extname } from 'path';
 import { isFileStateDeleted, isFileStateModified } from 'mem-fs-editor/state';
 import { passthrough } from '@yeoman/transform';
 import { JavaApplicationGenerator } from '../../generator.ts';
-import { addJavaAnnotation } from '../../../java/support/add-java-annotation.js';
-import { javaMainPackageTemplatesBlock } from '../../../java/support/files.js';
+import { addJavaAnnotation } from '../../../java/support/add-java-annotation.ts';
+import { javaMainPackageTemplatesBlock } from '../../../java/support/files.ts';
 import type { Source as SpringBootSource } from '../../../spring-boot/index.ts';
 import type { Application as LanguagesApplication } from '../../../languages/index.ts';
 import type { Config as SpringCacheConfig } from '../../../spring-cache/index.ts';
-import { mavenDefinition } from './internal/maven-definition.js';
-import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.js';
+import { mavenDefinition } from './internal/maven-definition.ts';
+import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.ts';
 
 export default class GraalvmGenerator extends JavaApplicationGenerator {
   async beforeQueue() {

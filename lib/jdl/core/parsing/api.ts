@@ -21,8 +21,8 @@ import { uniq } from 'lodash-es';
 import type { CstNode, IRecognitionException } from 'chevrotain';
 import { EOF } from 'chevrotain';
 import type { JDLRuntime } from '../types/runtime.js';
-import { buildJDLAstBuilderVisitor } from './jdl-ast-builder-visitor.js';
-import performAdditionalSyntaxChecks from './validator.js';
+import { buildJDLAstBuilderVisitor } from './jdl-ast-builder-visitor.ts';
+import performAdditionalSyntaxChecks from './validator.ts';
 
 type ParseOptions = { startRule?: string };
 

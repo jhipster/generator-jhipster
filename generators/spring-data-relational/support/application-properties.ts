@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import { databaseTypes } from '../../../lib/jhipster/index.js';
+import { databaseTypes } from '../../../lib/jhipster/index.ts';
 import type { Application as SpringDataRelationalApplication, Entity as SpringDataRelationalEntity } from '../types.d.ts';
-import { getDatabaseData } from './database-data.js';
-import { getJdbcUrl, getR2dbcUrl } from './database-url.js';
+import { getDatabaseData } from './database-data.ts';
+import { getJdbcUrl, getR2dbcUrl } from './database-url.ts';
 
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_MEMORY, H2_DISK } = databaseTypes;
 

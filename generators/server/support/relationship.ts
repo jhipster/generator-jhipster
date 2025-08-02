@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import { addOtherRelationship } from '../../base-application/support/relationship.js';
+import { addOtherRelationship } from '../../base-application/support/relationship.ts';
 import type { ValidationResult } from '../../base-core/api.d.ts';
-import { databaseTypes } from '../../../lib/jhipster/index.js';
+import { databaseTypes } from '../../../lib/jhipster/index.ts';
 import type { Entity as BaseApplicationEntity } from '../../base-application/types.js';
 
 const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;

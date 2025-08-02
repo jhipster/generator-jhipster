@@ -20,7 +20,7 @@
 import { difference, flatMap, includes, isEmpty, reject, some, uniq, values } from 'lodash-es';
 import type { Rule, TokenType } from 'chevrotain';
 import { Lexer } from 'chevrotain';
-import TokenCollectorVisitor from './token-collector-visitor.js';
+import TokenCollectorVisitor from './token-collector-visitor.ts';
 
 export function checkTokens(allDefinedTokens: TokenType[], rules: Rule[]) {
   const usedTokens = getUsedTokens(rules);

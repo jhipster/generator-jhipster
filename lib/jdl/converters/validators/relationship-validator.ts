@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import { relationshipTypes } from '../../core/basic-types/index.js';
+import { relationshipTypes } from '../../core/basic-types/index.ts';
 import type JDLRelationship from '../../core/models/jdl-relationship.js';
-import { relationshipTypeExists } from '../../core/basic-types/relationship-types.js';
-import Validator from './validator.js';
+import { relationshipTypeExists } from '../../core/basic-types/relationship-types.ts';
+import Validator from './validator.ts';
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
 

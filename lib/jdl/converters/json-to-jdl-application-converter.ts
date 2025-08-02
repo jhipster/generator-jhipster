@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import JDLObject from '../core/models/jdl-object.js';
-import { createJDLApplication } from '../core/models/jdl-application-factory.js';
+import JDLObject from '../core/models/jdl-object.ts';
+import { createJDLApplication } from '../core/models/jdl-application-factory.ts';
 import type { JDLRuntime } from '../core/types/runtime.js';
 import type { RawJDLJSONApplication } from '../core/types/exporter.js';
 import type JDLApplication from '../core/models/jdl-application.ts';

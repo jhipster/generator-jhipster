@@ -20,11 +20,11 @@
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import type { ParsedJDLOption } from '../types/parsed.js';
-import { parseFromContent as originalParseFromContent } from '../readers/jdl-reader.js';
-import { relationshipTypes } from '../basic-types/index.js';
-import { binaryOptions, unaryOptions, validations } from '../built-in-options/index.js';
-import { createRuntime } from '../runtime.js';
-import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.js';
+import { parseFromContent as originalParseFromContent } from '../readers/jdl-reader.ts';
+import { relationshipTypes } from '../basic-types/index.ts';
+import { binaryOptions, unaryOptions, validations } from '../built-in-options/index.ts';
+import { createRuntime } from '../runtime.ts';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 
 const runtime = createRuntime();
 const parseFromContent = (content: string) => originalParseFromContent(content, runtime);

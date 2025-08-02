@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import JSONEntity from '../../core/basic-types/json-entity.js';
-import { formatComment } from '../../core/utils/format-utils.js';
+import JSONEntity from '../../core/basic-types/json-entity.ts';
+import { formatComment } from '../../core/utils/format-utils.ts';
 import type { JDLEntity } from '../../core/models/index.js';
 
 export default {

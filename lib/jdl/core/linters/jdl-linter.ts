@@ -19,12 +19,12 @@
 
 import type { CstNode, IToken } from 'chevrotain';
 import type { JDLRuntime } from '../types/runtime.js';
-import { getCstFromContent } from '../readers/jdl-reader.js';
-import Issues from './issues/issues.js';
-import { checkEntities } from './entity-linter.js';
-import { checkFields } from './field-linter.js';
-import { checkEnums } from './enum-linter.js';
-import { checkRelationships } from './relationship-linter.js';
+import { getCstFromContent } from '../readers/jdl-reader.ts';
+import Issues from './issues/issues.ts';
+import { checkEntities } from './entity-linter.ts';
+import { checkFields } from './field-linter.ts';
+import { checkEnums } from './enum-linter.ts';
+import { checkRelationships } from './relationship-linter.ts';
 
 export type JDLLinter = {
   check: () => Issues;

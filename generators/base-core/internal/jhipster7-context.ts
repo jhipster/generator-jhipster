@@ -2,18 +2,18 @@
 import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
-import { isReservedTableName } from '../../../lib/jhipster/reserved-keywords.js';
+import { isReservedTableName } from '../../../lib/jhipster/reserved-keywords.ts';
 import {
   getJavaValueGeneratorForType,
   getJoinTableName,
   getPrimaryKeyValue,
   getSpecificationBuildForType,
   hibernateSnakeCase,
-} from '../../server/support/index.js';
-import { getDBCExtraOption } from '../../spring-data-relational/support/database-data.js';
-import { getJdbcUrl, getR2dbcUrl } from '../../spring-data-relational/support/database-url.js';
-import { fieldTypes } from '../../../lib/jhipster/index.js';
-import { upperFirstCamelCase } from '../../../lib/utils/index.js';
+} from '../../server/support/index.ts';
+import { getDBCExtraOption } from '../../spring-data-relational/support/database-data.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../../spring-data-relational/support/database-url.ts';
+import { fieldTypes } from '../../../lib/jhipster/index.ts';
+import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import type { ApplicationAll } from '../../../lib/types/application-all.js';
 import type CoreGenerator from '../generator.ts';
 

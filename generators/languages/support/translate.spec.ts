@@ -21,7 +21,7 @@ import {
   createJhiTransformTranslateReplacer,
   createJhiTransformTranslateStringifyReplacer,
   createJhiTranslateReplacer,
-} from './translate.js';
+} from './translate.ts';
 
 describe('generator - languages - translate', () => {
   let getWebappTranslation;

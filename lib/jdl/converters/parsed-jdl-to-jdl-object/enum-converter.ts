@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { JDLEnum } from '../../core/models/index.js';
-import { formatComment } from '../../core/utils/format-utils.js';
+import { JDLEnum } from '../../core/models/index.ts';
+import { formatComment } from '../../core/utils/format-utils.ts';
 import type { ParsedJDLEnum } from '../../core/types/parsed.js';
 
 export default { convertEnums };

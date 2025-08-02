@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { describe, it } from 'esmocha';
-import { entityOptions } from '../../../lib/jhipster/index.js';
+import { entityOptions } from '../../../lib/jhipster/index.ts';
 
-import { generateEntityClientImports, generateTestEntityId } from './template-utils.js';
+import { generateEntityClientImports, generateTestEntityId } from './template-utils.ts';
 
 const { MapperTypes } = entityOptions;
 

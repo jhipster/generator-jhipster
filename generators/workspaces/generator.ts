@@ -19,10 +19,10 @@
 import assert from 'node:assert';
 import { existsSync } from 'fs';
 
-import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENERATOR_REACT } from '../generator-list.js';
+import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENERATOR_REACT } from '../generator-list.ts';
 
-import BaseWorkspacesGenerator from '../base-workspaces/index.js';
-import { packageJson } from '../../lib/index.js';
+import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
+import { packageJson } from '../../lib/index.ts';
 import type { Config as GitConfig, Options as GitOptions } from '../git/types.d.ts';
 import type { Config as ProjectNameConfig } from '../project-name/types.d.ts';
 import type { WorkspacesApplication, Config as WorkspacesConfig, Options as WorkspacesOptions } from './types.js';

@@ -17,19 +17,19 @@
  * limitations under the License.
  */
 
-import { angularReservedKeywords } from '../../generators/angular/support/reserved-keywords.js';
-import { mysqlReservedKeywords } from '../../generators/spring-data-relational/support/mysql-reserved-keywords.js';
-import { javaReservedKeywords } from '../../generators/java/support/reserved-keywords.js';
+import { angularReservedKeywords } from '../../generators/angular/support/reserved-keywords.ts';
+import { mysqlReservedKeywords } from '../../generators/spring-data-relational/support/mysql-reserved-keywords.ts';
+import { javaReservedKeywords } from '../../generators/java/support/reserved-keywords.ts';
 import { typescriptReservedKeywords } from '../../generators/javascript/support/reserved-words.ts';
-import { postgresqlReservedKeywords } from '../../generators/spring-data-relational/support/postgresql-reserved-keywords.js';
-import { cassandraReservedKeywords } from '../../generators/spring-data-cassandra/support/reserved-keywords.js';
-import { couchbaseReservedKeywords } from '../../generators/spring-data-couchbase/support/reserved-keywords.js';
-import { oracleReservedKeywords } from '../../generators/spring-data-relational/support/oracle-reserved-keywords.js';
-import { mssqlReservedKeywords } from '../../generators/spring-data-relational/support/mssql-reserved-keywords.js';
-import { neo4jReservedKeywords } from '../../generators/spring-data-neo4j/support/reserved-keywords.js';
-import PagingReservedKeywords from './reserved-keywords/paging.js';
-import JHipsterReservedKeywords from './reserved-keywords/jhipster.js';
-import applicationOptions from './application-options.js';
+import { postgresqlReservedKeywords } from '../../generators/spring-data-relational/support/postgresql-reserved-keywords.ts';
+import { cassandraReservedKeywords } from '../../generators/spring-data-cassandra/support/reserved-keywords.ts';
+import { couchbaseReservedKeywords } from '../../generators/spring-data-couchbase/support/reserved-keywords.ts';
+import { oracleReservedKeywords } from '../../generators/spring-data-relational/support/oracle-reserved-keywords.ts';
+import { mssqlReservedKeywords } from '../../generators/spring-data-relational/support/mssql-reserved-keywords.ts';
+import { neo4jReservedKeywords } from '../../generators/spring-data-neo4j/support/reserved-keywords.ts';
+import PagingReservedKeywords from './reserved-keywords/paging.ts';
+import JHipsterReservedKeywords from './reserved-keywords/jhipster.ts';
+import applicationOptions from './application-options.ts';
 
 const clientFrameworks = applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK] as Record<string, string>;
 

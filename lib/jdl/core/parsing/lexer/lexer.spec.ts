@@ -19,7 +19,7 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { createRuntime } from '../../runtime.js';
+import { createRuntime } from '../../runtime.ts';
 
 const { lexer: JDLLexer } = createRuntime();
 

@@ -18,12 +18,12 @@
  */
 import assert from 'node:assert';
 
-import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.js';
+import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import type { FieldType } from '../../../lib/jhipster/field-types.js';
 import type { Relationship as BaseApplicationRelationship, PrimaryKey, RelationshipWithEntity } from '../../base-application/types.js';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../../client/types.js';
 import { normalizePathEnd } from '../../../lib/utils/path.ts';
-import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
+import { getEntryIfTypeOrTypeAttribute } from './types-utils.ts';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;
 const { ANGULAR, VUE } = clientFrameworkTypes;

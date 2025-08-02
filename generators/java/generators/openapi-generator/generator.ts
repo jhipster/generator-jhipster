@@ -18,7 +18,7 @@
  */
 import { JavaApplicationGenerator } from '../../generator.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
-import { javaMainResourceTemplatesBlock } from '../../support/files.js';
+import { javaMainResourceTemplatesBlock } from '../../support/files.ts';
 
 export default class OpenapiGeneratorGenerator extends JavaApplicationGenerator {
   async beforeQueue() {

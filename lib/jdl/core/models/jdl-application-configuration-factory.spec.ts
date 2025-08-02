@@ -18,9 +18,9 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import createApplicationConfigurationFromObject from '../models/jdl-application-configuration-factory.js';
-import applicationOptions from '../../../jhipster/application-options.js';
-import { createRuntime } from '../runtime.js';
+import createApplicationConfigurationFromObject from '../models/jdl-application-configuration-factory.ts';
+import applicationOptions from '../../../jhipster/application-options.ts';
+import { createRuntime } from '../runtime.ts';
 
 const { OptionNames } = applicationOptions;
 

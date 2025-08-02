@@ -1,8 +1,8 @@
 import { before, describe, it } from 'esmocha';
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import { GENERATOR_LIQUIBASE } from '../generator-list.js';
-import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
+import { GENERATOR_LIQUIBASE } from '../generator-list.ts';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
 
 const addNeedlesTask = asPostWritingTask(function ({ source }) {
   source.addLiquibaseChangelog?.({ changelogName: 'aNewChangeLog' });

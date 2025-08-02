@@ -18,8 +18,8 @@
  */
 
 import { Lexer } from 'chevrotain';
-import { KEYWORD } from './shared-tokens.js';
-import createTokenFromConfig from './token-creator.js';
+import { KEYWORD } from './shared-tokens.ts';
+import createTokenFromConfig from './token-creator.ts';
 
 const mixMaxCategoryToken = createTokenFromConfig({ name: 'MIN_MAX_KEYWORD', pattern: Lexer.NA, categories: KEYWORD });
 

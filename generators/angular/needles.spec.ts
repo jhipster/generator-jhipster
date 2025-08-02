@@ -1,7 +1,7 @@
 import { before, describe, it } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { asPostWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import { asPostWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
 import type { Application as AngularApplication, Entity as AngularEntity, Source as AngularSource } from './types.js';
 
 const postWritingTask = asPostWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>, AngularSource>(function ({

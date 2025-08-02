@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'esmocha';
-import { hibernateSnakeCase } from './string.js';
+import { hibernateSnakeCase } from './string.ts';
 
 describe('generator - server - support - string', () => {
   describe('hibernateSnakeCase', () => {

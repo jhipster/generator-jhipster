@@ -1,7 +1,7 @@
 import path, { basename, join } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { before, describe, expect, it } from 'esmocha';
-import { skipPrettierHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { skipPrettierHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 
 const exceptSourceMethods = ['addLiquibaseChangelog', 'addLiquibaseIncrementalChangelog', 'addLiquibaseConstraintsChangelog'];

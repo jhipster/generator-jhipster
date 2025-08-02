@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { getEnumInfo } from '../base-application/support/index.js';
+import { getEnumInfo } from '../base-application/support/index.ts';
 import type CoreGenerator from '../base-core/generator.js';
 import type { Application as ClientApplication, Entity as ClientEntity } from './types.d.ts';
 

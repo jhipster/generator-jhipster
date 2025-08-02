@@ -19,7 +19,7 @@
 import semver from 'semver';
 import chalk from 'chalk';
 
-import { packageJson } from '../../../lib/index.js';
+import { packageJson } from '../../../lib/index.ts';
 import type { Logger } from '../../../lib/utils/logger.ts';
 
 const isNodeVersionCompliantWithRequirement = (gatheredFromEnvironment: string, requiredVersion: string) =>

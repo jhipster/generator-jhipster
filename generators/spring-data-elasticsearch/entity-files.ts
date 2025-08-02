@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
-import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
+import { asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
+import { javaMainPackageTemplatesBlock } from '../java/support/index.ts';
 
 export const entityFiles = asWriteFilesSection({
   elasticSearchFiles: [

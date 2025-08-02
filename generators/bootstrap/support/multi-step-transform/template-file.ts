@@ -4,7 +4,7 @@ import debugBuilder from 'debug';
 import ejs from 'ejs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 
-import TemplateData from './template-data.js';
+import TemplateData from './template-data.ts';
 
 export default class TemplateFile {
   file?: MemFsEditorFile;

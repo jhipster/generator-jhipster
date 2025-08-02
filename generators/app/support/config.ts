@@ -1,7 +1,7 @@
 import { upperFirst } from 'lodash-es';
-import { authenticationTypes, databaseTypes } from '../../../lib/jhipster/index.js';
-import { loadDerivedConfig } from '../../base-core/internal/index.js';
-import serverCommand from '../../server/command.js';
+import { authenticationTypes, databaseTypes } from '../../../lib/jhipster/index.ts';
+import { loadDerivedConfig } from '../../base-core/internal/index.ts';
+import serverCommand from '../../server/command.ts';
 import type { Application as CommonApplication } from '../../common/types.d.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MONOLITH } from '../../../lib/core/application-types.ts';
 

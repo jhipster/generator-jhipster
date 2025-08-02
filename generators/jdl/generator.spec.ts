@@ -22,10 +22,10 @@ import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
-import * as GENERATORS from '../generator-list.js';
-import { GENERATOR_JDL } from '../generator-list.js';
-import Generator from './index.js';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
+import * as GENERATORS from '../generator-list.ts';
+import { GENERATOR_JDL } from '../generator-list.ts';
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -47,7 +47,7 @@ const mockedGenerators = [MOCKED_APP, MOCKED_ENTITIES, MOCKED_DOCKER_COMPOSE, MO
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
   describe('help', () => {

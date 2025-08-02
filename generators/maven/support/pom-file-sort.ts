@@ -19,8 +19,8 @@
 import type { X2jOptions, XmlBuilderOptions } from 'fast-xml-parser';
 import { XMLBuilder, XMLParser } from 'fast-xml-parser';
 
-import { defaultXmlBuildOptions, defaultXmlParserOptions } from '../internal/xml-store.js';
-import { formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.js';
+import { defaultXmlBuildOptions, defaultXmlParserOptions } from '../internal/xml-store.ts';
+import { formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.ts';
 
 type SortPomFileOptions = { xmlParserOptions?: Partial<X2jOptions>; xmlBuildOptions?: Partial<XmlBuilderOptions> };
 

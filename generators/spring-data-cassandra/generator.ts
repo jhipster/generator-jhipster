@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 import { SpringBootApplicationGenerator } from '../spring-boot/generator.ts';
-import { PaginationTypes } from '../../lib/jhipster/entity-options.js';
-import writeCassandraFilesTask from './files.js';
-import cleanupCassandraFilesTask from './cleanup.js';
-import writeCassandraEntityFilesTask, { cleanupCassandraEntityFilesTask } from './entity-files.js';
+import { PaginationTypes } from '../../lib/jhipster/entity-options.ts';
+import writeCassandraFilesTask from './files.ts';
+import cleanupCassandraFilesTask from './cleanup.ts';
+import writeCassandraEntityFilesTask, { cleanupCassandraEntityFilesTask } from './entity-files.ts';
 
 const { NO: NO_PAGINATION } = PaginationTypes;
 

@@ -20,9 +20,9 @@
 import chalk from 'chalk';
 import { intersection } from 'lodash-es';
 
-import { applicationOptions, authenticationTypes, cacheTypes, databaseTypes, testFrameworkTypes } from '../../lib/jhipster/index.js';
-import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.js';
-import { asPromptingTask } from '../base-application/support/task-type-inference.js';
+import { applicationOptions, authenticationTypes, cacheTypes, databaseTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.ts';
+import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
 import type { Config as SpringDataRelationalConfig } from '../spring-data-relational/types.js';
 import type { Config as SpringCacheConfig } from '../spring-cache/types.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';

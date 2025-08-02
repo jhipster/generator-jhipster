@@ -20,9 +20,9 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import JDLField from '../models/jdl-field.js';
-import JDLValidation from '../models/jdl-validation.js';
-import { validations } from '../built-in-options/index.js';
+import JDLField from '../models/jdl-field.ts';
+import JDLValidation from '../models/jdl-validation.ts';
+import { validations } from '../built-in-options/index.ts';
 
 const {
   Validations: { MIN },

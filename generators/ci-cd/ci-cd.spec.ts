@@ -1,6 +1,6 @@
 import { before, describe, expect, it } from 'esmocha';
-import { GENERATOR_CI_CD } from '../generator-list.js';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { GENERATOR_CI_CD } from '../generator-list.ts';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 
 const expectedFiles = {
   travis: ['.travis.yml'],

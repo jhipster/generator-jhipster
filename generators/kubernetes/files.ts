@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { asWriteFilesSection } from '../base-application/support/index.js';
+import { asWriteFilesSection } from '../base-application/support/index.ts';
 
 export const applicationFiles = (suffix: string) =>
   asWriteFilesSection<any>({

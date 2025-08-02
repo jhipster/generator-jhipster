@@ -31,7 +31,7 @@ import {
   ALPHANUMERIC_DASH,
   ALPHANUMERIC_SPACE,
   ALPHANUMERIC_UNDERSCORE,
-} from '../built-in-options/validation-patterns.js';
+} from '../built-in-options/validation-patterns.ts';
 import type { JDLValidatorOptionType } from '../types/parsing.js';
 
 const CONSTANT_PATTERN = /^[A-Z_]+$/;

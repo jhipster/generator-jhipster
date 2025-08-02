@@ -28,13 +28,13 @@ import {
   extendMatrix,
   defaultHelpers as helpers,
   runResult,
-} from '../../lib/testing/index.js';
+} from '../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { authenticationTypes, databaseTypes, searchEngineTypes } from '../../lib/jhipster/index.js';
-import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.js';
-import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.js';
-import Generator from './generator.js';
-import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.js';
+import { authenticationTypes, databaseTypes, searchEngineTypes } from '../../lib/jhipster/index.ts';
+import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.ts';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
+import Generator from './generator.ts';
+import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -59,7 +59,7 @@ const testSamples = buildSamplesFromMatrix(samples, { commonConfig });
 
 describe('generator - elasticsearch', () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));

@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import BinaryOptions from '../../core/built-in-options/binary-options.js';
+import BinaryOptions from '../../core/built-in-options/binary-options.ts';
 import type JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
-import OptionValidator from './option-validator.js';
+import OptionValidator from './option-validator.ts';
 
 export default class BinaryOptionValidator extends OptionValidator {
   constructor() {

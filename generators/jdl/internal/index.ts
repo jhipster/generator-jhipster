@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './application.js';
-export * from './utils.js';
+export * from './application.ts';
+export * from './utils.ts';

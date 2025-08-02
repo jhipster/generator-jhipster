@@ -19,7 +19,7 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import JDLApplicationEntities from '../models/jdl-application-entities.js';
+import JDLApplicationEntities from '../models/jdl-application-entities.ts';
 
 describe('jdl - JDLApplicationEntities', () => {
   describe('addEntityNames', () => {

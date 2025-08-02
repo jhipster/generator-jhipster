@@ -18,8 +18,8 @@
  */
 import { upperFirst } from 'lodash-es';
 import type { JDLRelationshipType, RelationshipSide } from '../basic-types/relationships.js';
-import { Validations } from '../built-in-options/index.js';
-import { relationshipTypeExists } from '../basic-types/relationship-types.js';
+import { Validations } from '../built-in-options/index.ts';
+import { relationshipTypeExists } from '../basic-types/relationship-types.ts';
 
 const { REQUIRED } = Validations;
 

@@ -22,9 +22,9 @@ import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { messageBrokerTypes } from '../../lib/jhipster/index.js';
-import Generator from './index.js';
+import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+import { messageBrokerTypes } from '../../lib/jhipster/index.ts';
+import Generator from './index.ts';
 
 const { KAFKA } = messageBrokerTypes;
 
@@ -39,7 +39,7 @@ const testSamples = buildSamplesFromMatrix(buildServerMatrix(), { commonConfig }
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));

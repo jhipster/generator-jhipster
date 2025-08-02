@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asPostWritingEntitiesTask, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
-import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.js';
+import { asPostWritingEntitiesTask, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
+import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
 
 export const reactFiles = asWriteFilesSection({

@@ -20,9 +20,9 @@ import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { basicTests, getCommandHelpOutput, testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '../../lib/testing/index.js';
-import { GENERATOR_INIT } from '../generator-list.js';
-import { defaultConfig, requiredConfig } from './config.js';
+import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
+import { GENERATOR_INIT } from '../generator-list.ts';
+import { defaultConfig, requiredConfig } from './config.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

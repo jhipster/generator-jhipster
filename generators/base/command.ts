@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/types.js';
-import { parseCreationTimestamp } from './support/timestamp.js';
+import { parseCreationTimestamp } from './support/timestamp.ts';
 
 const command = {
   configs: {

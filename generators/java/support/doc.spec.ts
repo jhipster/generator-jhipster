@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'esmocha';
-import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.js';
+import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.ts';
 
 describe('generator - server - support - doc', () => {
   describe('formatDocAsJavaDoc', () => {
