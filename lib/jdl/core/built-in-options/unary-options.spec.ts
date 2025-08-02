@@ -21,7 +21,7 @@ import { before, describe, expect as jestExpect, it } from 'esmocha';
 
 import { expect } from 'chai';
 
-import { unaryOptions } from '../built-in-options/index.ts';
+import { unaryOptions } from './index.ts';
 
 describe('jdl - UnaryOptions', () => {
   describe('exists', () => {

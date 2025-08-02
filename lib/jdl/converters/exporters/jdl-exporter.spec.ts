@@ -28,7 +28,8 @@ import JDLApplication from '../../core/models/jdl-application.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
 import type { JDLJSONApplicationConfiguration } from '../../core/parsing/jdl-parsing-types.js';
 import { createRuntime } from '../../core/runtime.ts';
-import exportToJDL from '../exporters/jdl-exporter.ts';
+
+import exportToJDL from './jdl-exporter.ts';
 
 const runtime = createRuntime();
 

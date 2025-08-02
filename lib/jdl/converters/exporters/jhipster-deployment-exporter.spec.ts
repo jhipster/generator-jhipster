@@ -26,7 +26,8 @@ import helpers from 'yeoman-test';
 
 import deploymentOptions from '../../../jhipster/deployment-options.ts';
 import JDLDeployment from '../../core/models/jdl-deployment.ts';
-import exportDeployments from '../exporters/jhipster-deployment-exporter.ts';
+
+import exportDeployments from './jhipster-deployment-exporter.ts';
 
 const {
   DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },

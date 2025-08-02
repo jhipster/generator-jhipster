@@ -23,8 +23,8 @@ import path from 'node:path';
 
 import { expect } from 'chai';
 
-import { basicHelpers as helpers, createJHipsterConfigFiles } from '../../../lib/testing/index.ts';
 import { getDefaultRuntime } from '../../jdl-config/jhipster-jdl-config.ts';
+import { basicHelpers as helpers, createJHipsterConfigFiles } from '../../testing/index.ts';
 import { getTestFile } from '../core/__test-support__/index.ts';
 
 import { convertSingleContentToJDL, convertToJDL } from './json-to-jdl-converter.ts';

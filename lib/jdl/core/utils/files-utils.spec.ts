@@ -26,7 +26,8 @@ import { expect } from 'chai';
 
 import { getPackageRoot } from '../../../index.ts';
 import { getTestFile } from '../__test-support__/index.ts';
-import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils.ts';
+
+import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from './file-utils.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

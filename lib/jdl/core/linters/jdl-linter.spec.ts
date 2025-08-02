@@ -23,7 +23,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { expect } from 'chai';
 import helpers from 'yeoman-test';
 
-import { createJDLLinterFromContent, getTestFile } from '.././__test-support__/index.ts';
+import { createJDLLinterFromContent, getTestFile } from '../__test-support__/index.ts';
 
 import type EntityIssue from './issues/entity-issue.js';
 import type EnumIssue from './issues/enum-issue.js';

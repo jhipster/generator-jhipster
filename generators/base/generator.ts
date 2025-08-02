@@ -30,13 +30,6 @@ import type { PackageJson } from 'type-fest';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
 import { packageJson } from '../../lib/index.ts';
 import { packageNameToNamespace } from '../../lib/utils/index.ts';
-import {
-  CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE,
-  CONTEXT_DATA_EXISTING_PROJECT,
-  CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,
-  LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
-  formatDateForChangelog,
-} from '../base/support/index.ts';
 import CoreGenerator from '../base-core/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.js';
@@ -44,6 +37,13 @@ import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.ts';
 
 import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.ts';
+import {
+  CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE,
+  CONTEXT_DATA_EXISTING_PROJECT,
+  CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,
+  LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
+  formatDateForChangelog,
+} from './support/index.ts';
 import type { TaskTypes as BaseTasks } from './tasks.js';
 import type {
   CleanupArgumentType,

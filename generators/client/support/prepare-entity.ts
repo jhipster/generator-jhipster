@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { mutateData } from '../../../lib/utils/object.ts';
-import type { Entity as ClientEntity } from '../../client/types.js';
+import type { Entity as ClientEntity } from '../types.js';
 
 import { isClientField } from './filter-entities.ts';
 import { generateTestEntityId, generateTsTestEntityForFields, stringifyTsEntity } from './template-utils.ts';

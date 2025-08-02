@@ -22,7 +22,8 @@ import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
 import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
-import BinaryOptionValidator from '../validators/binary-option-validator.ts';
+
+import BinaryOptionValidator from './binary-option-validator.ts';
 
 describe('jdl - BinaryOptionValidator', () => {
   let validator;

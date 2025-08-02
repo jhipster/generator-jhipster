@@ -23,7 +23,7 @@ import fs from 'node:fs';
 import { expect } from 'chai';
 import helpers from 'yeoman-test';
 
-import { getTestFile, parseFromContent, parseFromFiles } from '.././__test-support__/index.ts';
+import { getTestFile, parseFromContent, parseFromFiles } from '../__test-support__/index.ts';
 
 describe('jdl - JDLReader', () => {
   beforeEach(async () => {

@@ -22,7 +22,8 @@ import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
 import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
-import UnaryOptionValidator from '../validators/unary-option-validator.ts';
+
+import UnaryOptionValidator from './unary-option-validator.ts';
 
 describe('jdl - UnaryOptionValidator', () => {
   let validator;

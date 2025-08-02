@@ -24,13 +24,13 @@ import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../gen
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.js';
 import { GENERATOR_WORKSPACES } from '../../generators/generator-list.ts';
-import { createJHipsterLogger, normalizePathEnd } from '../../lib/utils/index.ts';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.ts';
 import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
 import type { Entity } from '../jhipster/types/entity.js';
 import type { Relationship } from '../jhipster/types/relationship.d.ts';
 import type { ApplicationAll } from '../types/application-all.js';
 import type { ConfigAll as ApplicationConfiguration, OptionsAll } from '../types/command-all.js';
+import { createJHipsterLogger, normalizePathEnd } from '../utils/index.ts';
 
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.ts';
 

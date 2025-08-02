@@ -22,7 +22,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 
 import helpers from 'yeoman-test';
 
-import { writeConfigFile } from '../exporters/export-utils.ts';
+import { writeConfigFile } from './export-utils.ts';
 
 describe('jdl - ExportUtils', () => {
   beforeEach(async () => {

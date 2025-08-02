@@ -20,7 +20,8 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { binaryOptions } from '../built-in-options/index.ts';
-import JDLBinaryOption from '../models/jdl-binary-option.ts';
+
+import JDLBinaryOption from './jdl-binary-option.ts';
 
 describe('jdl - AbstractJDLOption', () => {
   describe('resolveEntityNames', () => {

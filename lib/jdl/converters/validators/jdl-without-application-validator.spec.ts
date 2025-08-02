@@ -30,7 +30,8 @@ import JDLField from '../../core/models/jdl-field.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
 import JDLRelationship from '../../core/models/jdl-relationship.ts';
 import JDLValidation from '../../core/models/jdl-validation.ts';
-import createValidator from '../validators/jdl-without-application-validator.ts';
+
+import createValidator from './jdl-without-application-validator.ts';
 
 const {
   Validations: { MIN },

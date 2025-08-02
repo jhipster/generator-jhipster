@@ -22,7 +22,7 @@ import type { FieldType } from '../../../lib/jhipster/field-types.js';
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import { normalizePathEnd } from '../../../lib/utils/path.ts';
 import type { PrimaryKey, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../../base-application/types.js';
-import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../../client/types.js';
+import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.js';
 
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.ts';
 

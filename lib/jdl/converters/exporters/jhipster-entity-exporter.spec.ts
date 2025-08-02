@@ -25,7 +25,8 @@ import helpers from 'yeoman-test';
 import { APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import entityOptions from '../../../jhipster/entity-options.ts';
 import { doesDirectoryExist } from '../../core/utils/file-utils.ts';
-import exportEntities from '../exporters/jhipster-entity-exporter.ts';
+
+import exportEntities from './jhipster-entity-exporter.ts';
 
 const { MapperTypes, PaginationTypes, ServiceTypes } = entityOptions;
 const { SERVICE_CLASS } = ServiceTypes;

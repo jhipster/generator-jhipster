@@ -21,7 +21,7 @@ import { describe, it } from 'esmocha';
 
 import { expect } from 'chai';
 
-import { formatComment } from '../utils/format-utils.ts';
+import { formatComment } from './format-utils.ts';
 
 describe('jdl - FormatUtils', () => {
   describe('formatComment', () => {

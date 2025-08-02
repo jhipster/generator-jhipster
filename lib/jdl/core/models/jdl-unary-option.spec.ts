@@ -22,7 +22,8 @@ import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
 import { unaryOptions } from '../built-in-options/index.ts';
-import JDLUnaryOption from '../models/jdl-unary-option.ts';
+
+import JDLUnaryOption from './jdl-unary-option.ts';
 
 describe('jdl - JDLUnaryOption', () => {
   describe('new', () => {

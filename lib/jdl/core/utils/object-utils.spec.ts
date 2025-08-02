@@ -21,7 +21,7 @@ import { after, before, describe, it } from 'esmocha';
 
 import { expect } from 'chai';
 
-import { areEntitiesEqual, merge } from '../utils/object-utils.ts';
+import { areEntitiesEqual, merge } from './object-utils.ts';
 
 describe('jdl - ObjectUtils', () => {
   describe('merge', () => {

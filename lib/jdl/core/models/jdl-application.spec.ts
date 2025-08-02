@@ -23,10 +23,11 @@ import { expect } from 'chai';
 
 import applicationOptions from '../../../jhipster/application-options.ts';
 import { binaryOptions } from '../built-in-options/index.ts';
-import JDLApplication from '../models/jdl-application.ts';
-import JDLBinaryOption from '../models/jdl-binary-option.ts';
-import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.ts';
 import { createRuntime } from '../runtime.ts';
+
+import JDLApplication from './jdl-application.ts';
+import JDLBinaryOption from './jdl-binary-option.ts';
+import StringJDLApplicationConfigurationOption from './string-jdl-application-configuration-option.ts';
 
 const { OptionNames } = applicationOptions;
 

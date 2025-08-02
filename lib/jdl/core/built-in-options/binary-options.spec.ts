@@ -21,7 +21,7 @@ import { before, describe, expect as jestExpect, it } from 'esmocha';
 
 import { expect } from 'chai';
 
-import { binaryOptions } from '../built-in-options/index.ts';
+import { binaryOptions } from './index.ts';
 
 describe('jdl - BinaryOptions', () => {
   it('should match values', () => {

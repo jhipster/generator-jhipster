@@ -24,7 +24,8 @@ import { expect } from 'chai';
 import { relationshipTypes } from '../../core/basic-types/index.ts';
 import { relationshipOptions } from '../../core/built-in-options/index.ts';
 import JDLRelationship from '../../core/models/jdl-relationship.ts';
-import RelationshipValidator from '../validators/relationship-validator.ts';
+
+import RelationshipValidator from './relationship-validator.ts';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;

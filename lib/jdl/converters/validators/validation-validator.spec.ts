@@ -22,7 +22,8 @@ import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
 import JDLValidation from '../../core/models/jdl-validation.ts';
-import ValidationValidator from '../validators/validation-validator.ts';
+
+import ValidationValidator from './validation-validator.ts';
 
 describe('jdl - ValidationValidator', () => {
   let validator;

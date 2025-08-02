@@ -26,13 +26,14 @@ import fieldTypes from '../../../jhipster/field-types.ts';
 import { createJDLApplication } from '../__test-support__/index.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
 import { unaryOptions } from '../built-in-options/index.ts';
-import { JDLEntity, JDLEnum } from '../models/index.ts';
-import JDLField from '../models/jdl-field.ts';
-import mergeJDLObjects from '../models/jdl-object-merger.ts';
-import JDLObject from '../models/jdl-object.ts';
-import JDLRelationship from '../models/jdl-relationship.ts';
-import JDLUnaryOption from '../models/jdl-unary-option.ts';
 import { createRuntime } from '../runtime.ts';
+
+import { JDLEntity, JDLEnum } from './index.ts';
+import JDLField from './jdl-field.ts';
+import mergeJDLObjects from './jdl-object-merger.ts';
+import JDLObject from './jdl-object.ts';
+import JDLRelationship from './jdl-relationship.ts';
+import JDLUnaryOption from './jdl-unary-option.ts';
 
 const runtime = createRuntime();
 

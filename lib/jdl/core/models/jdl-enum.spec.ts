@@ -21,7 +21,7 @@ import { before, describe, expect as jestExpect, it } from 'esmocha';
 
 import { expect } from 'chai';
 
-import { JDLEnum } from '../models/index.ts';
+import { JDLEnum } from './index.ts';
 
 describe('jdl - JDLEnum', () => {
   describe('new', () => {

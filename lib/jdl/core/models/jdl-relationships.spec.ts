@@ -22,8 +22,9 @@ import { before, describe, expect as jestExpect, it } from 'esmocha';
 import { expect } from 'chai';
 
 import { relationshipTypes } from '../basic-types/index.ts';
-import JDLRelationship from '../models/jdl-relationship.ts';
-import JDLRelationships from '../models/jdl-relationships.ts';
+
+import JDLRelationship from './jdl-relationship.ts';
+import JDLRelationships from './jdl-relationships.ts';
 
 describe('jdl - JDLRelationships', () => {
   describe('add', () => {

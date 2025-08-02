@@ -22,9 +22,10 @@ import { afterEach, before, describe, expect as jestExpect, it } from 'esmocha';
 import { expect } from 'chai';
 
 import { binaryOptions, unaryOptions } from '../built-in-options/index.ts';
-import JDLBinaryOption from '../models/jdl-binary-option.ts';
-import JDLOptions from '../models/jdl-options.ts';
-import JDLUnaryOption from '../models/jdl-unary-option.ts';
+
+import JDLBinaryOption from './jdl-binary-option.ts';
+import JDLOptions from './jdl-options.ts';
+import JDLUnaryOption from './jdl-unary-option.ts';
 
 describe('jdl - JDLOptions', () => {
   describe('addOption', () => {
