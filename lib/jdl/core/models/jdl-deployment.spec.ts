@@ -18,7 +18,8 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import JDLDeployment from '../models/jdl-deployment.js';
+
+import JDLDeployment from './jdl-deployment.ts';
 
 describe('jdl - JDLDeployment', () => {
   describe('new', () => {

@@ -1,5 +1,5 @@
-import { MatrixGateway, MatrixMicroservice, MatrixMonolith } from './application-samples.js';
-import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix, fromMatrix } from './matrix-utils.js';
+import { MatrixGateway, MatrixMicroservice, MatrixMonolith } from './application-samples.ts';
+import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix, fromMatrix } from './matrix-utils.ts';
 
 export const buildServerMatrix = (matrix: Record<string, unknown> = {}) => {
   let serverMatrix = {

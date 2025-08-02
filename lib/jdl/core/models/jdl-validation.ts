@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { merge } from '../utils/object-utils.js';
-import { validations } from '../built-in-options/index.js';
+import { validations } from '../built-in-options/index.ts';
+import { merge } from '../utils/object-utils.ts';
 
 const {
   Validations: { REQUIRED, PATTERN },

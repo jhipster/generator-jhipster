@@ -18,6 +18,7 @@
  */
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
+
 import type { Application as LanguagesApplication } from './types.js';
 
 export const clientI18nFiles = asWriteFilesSection<LanguagesApplication>({

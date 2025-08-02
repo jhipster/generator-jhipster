@@ -23,7 +23,7 @@ import type {
   Relationship as ClientRelationship,
 } from '../client/types.d.ts';
 
-export type { Config, Relationship, Options, Source } from '../client/types.d.ts';
+export type { Config, Options, Relationship, Source } from '../client/types.d.ts';
 
 export type Field = ClientField & {
   fieldTsDefaultValue?: string;

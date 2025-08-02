@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import { describe, expect, it } from 'esmocha';
-import { normalizeLineEndings } from './contents.js';
+
+import { normalizeLineEndings } from './contents.ts';
 
 describe('generator - base - support - contents', () => {
   describe('::normalizeLineEndings', () => {

@@ -17,15 +17,15 @@
  * limitations under the License.
  */
 import { lowerFirst } from 'lodash-es';
-import JDLObject from '../../core/models/jdl-object.js';
-import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
-import { binaryOptions } from '../../core/built-in-options/index.js';
 
-import type JDLApplication from '../../core/models/jdl-application.js';
-import type JDLField from '../../core/models/jdl-field.js';
-import type JDLValidation from '../../core/models/jdl-validation.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
+import { binaryOptions } from '../../core/built-in-options/index.ts';
 import type { JDLEntity } from '../../core/models/index.js';
-import type { JDLRuntime } from '../../core/types/runtime.js';
+import type JDLApplication from '../../core/models/jdl-application.js';
+import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+import type JDLField from '../../core/models/jdl-field.js';
+import JDLObject from '../../core/models/jdl-object.ts';
+import type JDLValidation from '../../core/models/jdl-validation.js';
 import type {
   ParsedJDLAnnotation,
   ParsedJDLApplications,
@@ -33,15 +33,16 @@ import type {
   ParsedJDLEntityField,
   ParsedJDLRoot,
 } from '../../core/types/parsed.js';
-import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
-import { convertApplications } from './application-converter.js';
-import { convertEntities } from './entity-converter.js';
-import { convertEnums } from './enum-converter.js';
-import { convertField } from './field-converter.js';
-import { convertValidations } from './validation-converter.js';
-import { convertOptions } from './option-converter.js';
-import { convertRelationships } from './relationship-converter.js';
-import { convertDeployments } from './deployment-converter.js';
+import type { JDLRuntime } from '../../core/types/runtime.js';
+
+import { convertApplications } from './application-converter.ts';
+import { convertDeployments } from './deployment-converter.ts';
+import { convertEntities } from './entity-converter.ts';
+import { convertEnums } from './enum-converter.ts';
+import { convertField } from './field-converter.ts';
+import { convertOptions } from './option-converter.ts';
+import { convertRelationships } from './relationship-converter.ts';
+import { convertValidations } from './validation-converter.ts';
 
 let parsedContent: ParsedJDLApplications;
 let configuration: ParsedJDLRoot;
@@ -115,8 +116,8 @@ function fillClassesAndFields(): void {
 function getJDLFieldsFromParsedEntity(entity: ParsedJDLEntity): JDLField[] {
   const fields: JDLField[] = [];
   const arr = entity.body || [];
-  for (let i = 0; i < arr.length; i++) {
-    const field = arr[i];
+  for (const item of arr) {
+    const field = item;
     const jdlField = convertField(field);
     jdlField.validations = getValidations(field);
     jdlField.options = convertAnnotationsToOptions(field.annotations || []);

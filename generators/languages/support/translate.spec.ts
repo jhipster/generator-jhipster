@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+
 import {
   createJhiTransformTranslateReplacer,
   createJhiTransformTranslateStringifyReplacer,
   createJhiTranslateReplacer,
-} from './translate.js';
+} from './translate.ts';
 
 describe('generator - languages - translate', () => {
   let getWebappTranslation;

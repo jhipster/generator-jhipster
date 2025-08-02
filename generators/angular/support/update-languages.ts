@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import type BaseGenerator from '../../base-core/index.js';
-import { type UpdateClientLanguagesTaskParam, updateLanguagesInDayjsConfigurationTask } from '../../client/support/index.js';
-import { generateLanguagesWebappOptions } from '../../languages/support/index.js';
+import { type UpdateClientLanguagesTaskParam, updateLanguagesInDayjsConfigurationTask } from '../../client/support/index.ts';
+import { generateLanguagesWebappOptions } from '../../languages/support/index.ts';
 
 function updateLanguagesInPipeTask(this: BaseGenerator, { application }: UpdateClientLanguagesTaskParam) {
   const { clientSrcDir, languagesDefinition = [] } = application;

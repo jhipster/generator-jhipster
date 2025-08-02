@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 
-export { default as prepareSqlApplicationProperties } from './application-properties.js';
-export * from './database-data.js';
-export { default as databaseData } from './database-data.js';
-export * from './database-url.js';
-export { default as getDatabaseUrl } from './database-url.js';
-export * from './mssql-reserved-keywords.js';
-export * from './mysql-reserved-keywords.js';
-export * from './oracle-reserved-keywords.js';
-export * from './postgresql-reserved-keywords.js';
+export { default as prepareSqlApplicationProperties } from './application-properties.ts';
+export * from './database-data.ts';
+export { default as databaseData } from './database-data.ts';
+export * from './database-url.ts';
+export { default as getDatabaseUrl } from './database-url.ts';
+export * from './mssql-reserved-keywords.ts';
+export * from './mysql-reserved-keywords.ts';
+export * from './oracle-reserved-keywords.ts';
+export * from './postgresql-reserved-keywords.ts';

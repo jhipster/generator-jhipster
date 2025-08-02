@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'esmocha';
-import { removeFieldsWithNullishValues } from './object.js';
+
+import { removeFieldsWithNullishValues } from './object.ts';
 
 describe('generator - base - support - config', () => {
   describe('deepCleanup', () => {

@@ -17,14 +17,16 @@
  * limitations under the License.
  */
 
-import { before, describe, it, expect as jestExpect } from 'esmocha';
-import { use as chaiUse, expect } from 'chai';
+import { before, describe, expect as jestExpect, it } from 'esmocha';
+
+import { expect, use as chaiUse } from 'chai';
 import sinonChai from 'sinon-chai';
 
 chaiUse(sinonChai);
 
-import { JDLEntity } from '../../core/models/index.js';
-import { convert } from './jdl-to-json-basic-entity-converter.js';
+import { JDLEntity } from '../../core/models/index.ts';
+
+import { convert } from './jdl-to-json-basic-entity-converter.ts';
 
 describe('jdl - JDLToJSONBasicEntityConverter', () => {
   describe('convert', () => {

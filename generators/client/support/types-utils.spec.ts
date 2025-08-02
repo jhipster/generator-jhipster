@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'esmocha';
-import { fieldTypes } from '../../../lib/jhipster/index.js';
 
-import { getTypescriptType } from './types-utils.js';
+import { fieldTypes } from '../../../lib/jhipster/index.ts';
+
+import { getTypescriptType } from './types-utils.ts';
 
 const { CommonDBTypes } = fieldTypes;
 

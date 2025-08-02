@@ -18,14 +18,16 @@
  */
 
 import assert from 'node:assert/strict';
+
 import { passthrough } from '@yeoman/transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { JavaApplicationGenerator } from '../java/generator.ts';
-import files from './files.js';
-import { MAVEN } from './constants.js';
-import cleanupOldServerFilesTask from './cleanup.js';
-import { type PomStorage, createPomStorage, sortPomFile } from './support/index.js';
+
+import cleanupOldServerFilesTask from './cleanup.ts';
+import { MAVEN } from './constants.ts';
+import files from './files.ts';
+import { type PomStorage, createPomStorage, sortPomFile } from './support/index.ts';
 
 export default class MavenGenerator extends JavaApplicationGenerator {
   pomStorage!: PomStorage;

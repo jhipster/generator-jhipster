@@ -16,25 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { isFileStateModified } from 'mem-fs-editor/state';
 import chalk from 'chalk';
+import { isFileStateModified } from 'mem-fs-editor/state';
 
+import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
+import { upperFirstCamelCase } from '../../lib/utils/index.ts';
+import { createNeedleCallback } from '../base-core/support/index.ts';
 import { ClientApplicationGenerator } from '../client/generator.ts';
-import type { Entity as ClientEntity, Field as ClientField } from '../client/types.ts';
-import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.js';
-import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.js';
 import {
-  generateEntityClientImports as formatEntityClientImports,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
-} from '../client/support/index.js';
-import { createNeedleCallback } from '../base-core/support/index.ts';
-import { upperFirstCamelCase } from '../../lib/utils/index.js';
-import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
-import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.js';
-import cleanupOldFilesTask from './cleanup.js';
-import { writeFiles } from './files-react.js';
-import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.js';
+  generateEntityClientImports as formatEntityClientImports,
+} from '../client/support/index.ts';
+import type { Entity as ClientEntity, Field as ClientField } from '../client/types.ts';
+import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.ts';
+import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.ts';
+
+import cleanupOldFilesTask from './cleanup.ts';
+import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.ts';
+import { writeFiles } from './files-react.ts';
+import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.ts';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;

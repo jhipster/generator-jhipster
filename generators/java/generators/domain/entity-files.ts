@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { asWriteEntityFilesSection } from '../../../base-application/support/task-type-inference.ts';
-import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from '../../support/index.js';
+import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from '../../support/index.ts';
 
 export const entityServerFiles = asWriteEntityFilesSection({
   model: [

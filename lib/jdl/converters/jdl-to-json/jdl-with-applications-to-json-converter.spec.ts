@@ -17,29 +17,30 @@
  * limitations under the License.
  */
 
-import { after, before, describe, it, expect as jestExpect } from 'esmocha';
-import { use as chaiUse, expect } from 'chai';
+import { after, before, describe, expect as jestExpect, it } from 'esmocha';
+
+import { expect, use as chaiUse } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 chaiUse(sinonChai);
 
-import { relationshipTypes } from '../../core/basic-types/index.js';
-import { binaryOptions, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.js';
-import fieldTypes from '../../../jhipster/field-types.js';
-import JDLObject from '../../core/models/jdl-object.js';
-import { JDLEntity, JDLEnum } from '../../core/models/index.js';
-import JDLField from '../../core/models/jdl-field.js';
-import JDLValidation from '../../core/models/jdl-validation.js';
-import JDLRelationship from '../../core/models/jdl-relationship.js';
-import JDLUnaryOption from '../../core/models/jdl-unary-option.js';
-import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
+import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import fieldTypes from '../../../jhipster/field-types.ts';
+import { createJDLApplication } from '../../core/__test-support__/index.ts';
+import { relationshipTypes } from '../../core/basic-types/index.ts';
+import { binaryOptions, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.ts';
+import { JDLEntity, JDLEnum } from '../../core/models/index.ts';
+import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+import JDLField from '../../core/models/jdl-field.ts';
+import JDLObject from '../../core/models/jdl-object.ts';
+import JDLRelationship from '../../core/models/jdl-relationship.ts';
+import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
+import JDLValidation from '../../core/models/jdl-validation.ts';
+import { createRuntime } from '../../core/runtime.ts';
+import logger from '../../core/utils/objects/logger.ts';
 
-import logger from '../../core/utils/objects/logger.js';
-import { createJDLApplication } from '../../core/__test-support__/index.js';
-import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
-import { createRuntime } from '../../core/runtime.js';
-import { convert } from './jdl-with-applications-to-json-converter.js';
+import { convert } from './jdl-with-applications-to-json-converter.ts';
 
 const {
   Validations: { REQUIRED, UNIQUE, MIN, MAX, MINLENGTH, MAXLENGTH, PATTERN, MINBYTES, MAXBYTES },

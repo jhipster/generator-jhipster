@@ -18,9 +18,12 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { JDLEntity } from '../../core/models/index.js';
-import EntityValidator from '../validators/entity-validator.js';
+
+import { JDLEntity } from '../../core/models/index.ts';
+
+import EntityValidator from './entity-validator.ts';
 
 describe('jdl - EntityValidator', () => {
   let validator;

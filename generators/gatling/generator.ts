@@ -16,11 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JavaApplicationGenerator } from '../java/generator.ts';
 import type { Source as CommonSource } from '../common/types.d.ts';
-import writeTask from './files.js';
-import cleanupTask from './cleanup.js';
-import writeEntityTask, { cleanupEntitiesTask } from './entity-files.js';
+import { JavaApplicationGenerator } from '../java/generator.ts';
+
+import cleanupTask from './cleanup.ts';
+import writeEntityTask, { cleanupEntitiesTask } from './entity-files.ts';
+import writeTask from './files.ts';
 
 export default class GatlingGenerator extends JavaApplicationGenerator {
   async beforeQueue() {

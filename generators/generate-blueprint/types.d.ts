@@ -23,6 +23,7 @@ import type {
   Options as BaseSimpleApplicationOptions,
 } from '../base-simple-application/types.d.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
+
 import type command from './command.js';
 
 export type { Features } from '../base-simple-application/types.d.ts';

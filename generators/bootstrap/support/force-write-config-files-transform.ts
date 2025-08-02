@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { transformFileField } from '@yeoman/transform';
 import type { ConflicterFile } from '@yeoman/conflicter';
+import { transformFileField } from '@yeoman/transform';
 
 const createForceWriteConfigFilesTransform = () =>
   transformFileField<'conflicter', ConflicterFile>('conflicter', 'force', { pattern: '**/.jhipster/*.json' });

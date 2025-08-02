@@ -16,19 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import fs from 'fs';
-import * as _ from 'lodash-es';
+import fs from 'node:fs';
+
 import chalk from 'chalk';
+import * as _ from 'lodash-es';
+
+import { databaseTypes, entityOptions } from '../../lib/jhipster/index.ts';
+import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
+import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import {
   javaMainPackageTemplatesBlock,
   javaTestPackageTemplatesBlock,
   javaWriteFileSection,
   moveToJavaPackageSrcDir,
-} from '../java/support/index.js';
-import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import { databaseTypes, entityOptions } from '../../lib/jhipster/index.js';
-import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
-import { cleanupOldFiles } from './entity-cleanup.js';
+} from '../java/support/index.ts';
+
+import { cleanupOldFiles } from './entity-cleanup.ts';
 import type { Application as SpringBootApplication, Entity as SpringBootEntity } from './types.js';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;

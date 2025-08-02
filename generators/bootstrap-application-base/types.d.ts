@@ -24,6 +24,7 @@ import type {
   Options as CommonOptions,
   Source as CommonSource,
 } from '../common/types.js';
+
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;

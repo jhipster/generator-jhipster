@@ -1,10 +1,11 @@
+import { before, describe, expect, it } from 'esmocha';
 import type { Mock } from 'node:test';
 import { mock } from 'node:test';
-import { before, describe, expect, it } from 'esmocha';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { packageJson } from '../../lib/index.js';
-import BaseGenerator from './index.js';
+import { packageJson } from '../../lib/index.ts';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+
+import BaseGenerator from './index.ts';
 
 const jhipsterVersion = packageJson.version;
 

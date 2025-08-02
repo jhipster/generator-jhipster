@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingTask } from '../base-application/support/index.js';
+import { asWritingTask } from '../base-application/support/index.ts';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore

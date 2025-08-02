@@ -1,4 +1,5 @@
 import type { Merge, PackageJson, Simplify } from 'type-fest';
+
 import type {
   ExportApplicationPropertiesFromCommand,
   ExportGeneratorOptionsFromCommand,
@@ -16,9 +17,10 @@ import type {
   Options as BaseSimpleApplicationOptions,
   Source as BaseSimpleApplicationSource,
 } from '../base-simple-application/types.d.ts';
+
+import type JavascriptBootstrapCommand from './generators/bootstrap/command.js';
 import type EslintCommand from './generators/eslint/command.js';
 import type HuskyCommand from './generators/husky/command.js';
-import type JavascriptBootstrapCommand from './generators/bootstrap/command.js';
 import type PrettierCommand from './generators/prettier/command.js';
 
 export type Field = BaseApplicationField & {

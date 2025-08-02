@@ -18,7 +18,7 @@
  */
 
 import type { AbstractIssueArgs } from './abstract-issue.js';
-import AbstractIssue from './abstract-issue.js';
+import AbstractIssue from './abstract-issue.ts';
 
 type EntityIssueArgs = AbstractIssueArgs & { enumName: string };
 

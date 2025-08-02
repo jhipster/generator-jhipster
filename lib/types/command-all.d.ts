@@ -1,5 +1,5 @@
 import type { Simplify } from 'type-fest';
-import type { YO_RC_CONFIG_KEY } from '../utils/yo-rc.ts';
+
 import type { Config as AppConfig, Options as AppOptions } from '../../generators/app/types.d.ts';
 import type { Config as BaseConfig, Options as BaseOptions } from '../../generators/base/types.d.ts';
 import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../../generators/base-application/types.d.ts';
@@ -21,13 +21,14 @@ import type { Config as SpringBootConfig, Options as SpringBootOptions } from '.
 import type { Config as SpringCacheConfig, Options as SpringCacheOptions } from '../../generators/spring-cache/types.d.ts';
 import type { Config as SpringCloudConfig, Options as SpringCloudOptions } from '../../generators/spring-cloud/types.d.ts';
 import type {
-  Options as SpringCloudStreamOptions,
   Config as SpringCloudStreanConfig,
+  Options as SpringCloudStreamOptions,
 } from '../../generators/spring-cloud-stream/types.d.ts';
 import type {
   Config as SpringDataRelationalConfig,
   Options as SpringDataRelationalOptions,
 } from '../../generators/spring-data-relational/types.d.ts';
+import type { YO_RC_CONFIG_KEY } from '../utils/yo-rc.ts';
 
 export type ConfigAll = Simplify<
   AppConfig &

@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 import { passthrough } from '@yeoman/transform';
-import { Minimatch } from 'minimatch';
 import type { MemFsEditorFile } from 'mem-fs-editor';
+import { Minimatch } from 'minimatch';
+
 import type CoreGenerator from '../../base-core/index.js';
 import type { GetWebappTranslationCallback } from '../../client/translation.js';
 

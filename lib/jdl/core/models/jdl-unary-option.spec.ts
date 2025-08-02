@@ -18,10 +18,12 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
 
-import JDLUnaryOption from '../models/jdl-unary-option.js';
-import { unaryOptions } from '../built-in-options/index.js';
+import { unaryOptions } from '../built-in-options/index.ts';
+
+import JDLUnaryOption from './jdl-unary-option.ts';
 
 describe('jdl - JDLUnaryOption', () => {
   describe('new', () => {

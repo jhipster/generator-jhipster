@@ -1,7 +1,8 @@
 import { format, resolveConfig } from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
-import prettierPluginProperties from 'prettier-plugin-properties';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
+import prettierPluginProperties from 'prettier-plugin-properties';
+
 import { addLineNumbers } from '../internal/transform-utils.js';
 
 export default async ({

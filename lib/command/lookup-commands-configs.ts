@@ -1,6 +1,8 @@
-import { dirname, join } from 'path';
-import { fileURLToPath, pathToFileURL } from 'url';
+import { dirname, join } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
 import { glob } from 'glob';
+
 import type { JHipsterConfig, JHipsterConfigs } from './types.js';
 
 const __filename = fileURLToPath(import.meta.url);

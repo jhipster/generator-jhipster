@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import chalk from 'chalk';
-import type { Logger as LoggerApi } from '@yeoman/types';
 import type { Logger as DefaultLogger, LoggerOptions } from '@yeoman/adapter';
 import { createLogger } from '@yeoman/adapter';
+import type { Logger as LoggerApi } from '@yeoman/types';
+import chalk from 'chalk';
 import createDebug from 'debug';
 
 /**

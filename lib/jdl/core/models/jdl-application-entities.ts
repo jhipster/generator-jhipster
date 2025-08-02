@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { join } from '../utils/set-utils.js';
+import { join } from '../utils/set-utils.ts';
 
 export default class JDLApplicationEntities {
   entityNames: Set<string>;

@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { Config as ProjectNameConfig, Options as ProjectNameOptions, Source as ProjectNameSource } from '../project-name/types.js';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../base-application/types.js';
+import type { Config as ProjectNameConfig, Options as ProjectNameOptions, Source as ProjectNameSource } from '../project-name/types.js';
+
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
@@ -29,6 +30,6 @@ export type Options = Command['Options'] & ProjectNameOptions;
 
 export type GeneratorProperties = Command['Generator'];
 
-export { ProjectNameSource as Source, BaseApplicationEntity as Entity };
+export { BaseApplicationEntity as Entity, ProjectNameSource as Source };
 
 export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = Command['Application'] & BaseApplicationApplication<E>;

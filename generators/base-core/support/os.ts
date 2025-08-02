@@ -16,6 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { platform } from 'os';
+import { platform } from 'node:os';
 
 export const isWin32 = platform() === 'win32';

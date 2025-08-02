@@ -17,16 +17,18 @@
  * limitations under the License.
  */
 import { defaults, kebabCase, snakeCase, startCase, upperFirst } from 'lodash-es';
-import { fieldTypes, validations } from '../../../lib/jhipster/index.js';
-import { getTypescriptType } from '../../client/support/index.js';
-import { applyDerivedPropertyOnly, mutateData } from '../../../lib/utils/index.js';
-import type CoreGenerator from '../../base-core/generator.js';
-import type { Entity as CommonEntity, Field as CommonField } from '../../common/types.d.ts';
-import { isFieldEnumType } from '../internal/types/field-types.ts';
+
 import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
+import { fieldTypes, validations } from '../../../lib/jhipster/index.ts';
+import { applyDerivedPropertyOnly, mutateData } from '../../../lib/utils/index.ts';
+import type CoreGenerator from '../../base-core/generator.js';
+import { getTypescriptType } from '../../client/support/index.ts';
+import type { Entity as CommonEntity, Field as CommonField } from '../../common/types.d.ts';
 import type { DatabaseProperty } from '../../liquibase/types.js';
+import { isFieldEnumType } from '../internal/types/field-types.ts';
+
 import type { FakerWithRandexp } from './faker.js';
-import { prepareProperty } from './prepare-property.js';
+import { prepareProperty } from './prepare-property.ts';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const {

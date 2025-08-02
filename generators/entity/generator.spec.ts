@@ -16,13 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { describe, expect, it } from 'esmocha';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { snakeCase } from 'lodash-es';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import Generator from './index.js';
+
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,7 +33,7 @@ const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
   describe.skip('blueprint support', () => testBlueprintSupport(generator));

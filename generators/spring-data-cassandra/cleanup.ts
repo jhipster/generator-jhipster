@@ -1,4 +1,4 @@
-import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.ts';
 
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.

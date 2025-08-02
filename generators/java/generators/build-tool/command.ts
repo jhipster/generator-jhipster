@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../../../lib/command/types.js';
-import { buildToolTypes } from '../../../../lib/jhipster/index.js';
-import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.js';
+import { buildToolTypes } from '../../../../lib/jhipster/index.ts';
+import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.ts';
 
 const { GRADLE, MAVEN } = buildToolTypes;
 

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import fs from 'fs';
+import fs from 'node:fs';
 
 /**
  * Checks the file exists.

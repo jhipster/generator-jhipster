@@ -1,4 +1,4 @@
-import { removeFieldsWithNullishValues } from '../../../lib/utils/index.js';
+import { removeFieldsWithNullishValues } from '../../../lib/utils/index.ts';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 
 export type InfoFile = { filename: string; content: string; type: 'jdl' | 'yo-rc' | 'entity-jdl' | 'json' };

@@ -1,8 +1,9 @@
 import { before, describe, expect, it } from 'esmocha';
+
+import { convertSingleContentToJDL } from '../../../../../lib/jdl/converters/json-to-jdl-converter.ts';
 import type { ImportState } from '../../../../../lib/jdl/jdl-importer.js';
-import { createImporterFromContent } from '../../../../../lib/jdl/jdl-importer.js';
-import { convertSingleContentToJDL } from '../../../../../lib/jdl/converters/json-to-jdl-converter.js';
-import { getDefaultRuntime } from '../../../../../lib/jdl-config/jhipster-jdl-config.js';
+import { createImporterFromContent } from '../../../../../lib/jdl/jdl-importer.ts';
+import { getDefaultRuntime } from '../../../../../lib/jdl-config/jhipster-jdl-config.ts';
 
 const optionName = 'routes';
 

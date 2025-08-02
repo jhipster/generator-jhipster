@@ -18,8 +18,9 @@
  */
 
 import type { CstNode, IToken } from 'chevrotain';
-import { rulesNames } from './rules.js';
-import FieldIssue from './issues/field-issue.js';
+
+import FieldIssue from './issues/field-issue.ts';
+import { rulesNames } from './rules.ts';
 
 let issues: FieldIssue[];
 

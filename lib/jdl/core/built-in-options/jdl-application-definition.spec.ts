@@ -18,9 +18,11 @@
  */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import applicationOptions from '../../../jhipster/application-options.js';
-import { createRuntime } from '../runtime.js';
+
+import applicationOptions from '../../../jhipster/application-options.ts';
+import { createRuntime } from '../runtime.ts';
 
 const { OptionNames } = applicationOptions;
 

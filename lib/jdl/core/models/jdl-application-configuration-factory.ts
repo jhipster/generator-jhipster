@@ -17,15 +17,16 @@
  * limitations under the License.
  */
 
-import logger from '../utils/objects/logger.js';
 import type { JDLApplicationOptionTypeValue } from '../types/parsing.js';
 import type { JDLRuntime } from '../types/runtime.js';
-import JDLApplicationConfiguration from './jdl-application-configuration.js';
-import StringJDLApplicationConfigurationOption from './string-jdl-application-configuration-option.js';
-import IntegerJDLApplicationConfigurationOption from './integer-jdl-application-configuration-option.js';
-import BooleanJDLApplicationConfigurationOption from './boolean-jdl-application-configuration-option.js';
-import ListJDLApplicationConfigurationOption from './list-jdl-application-configuration-option.js';
+import logger from '../utils/objects/logger.ts';
+
+import BooleanJDLApplicationConfigurationOption from './boolean-jdl-application-configuration-option.ts';
+import IntegerJDLApplicationConfigurationOption from './integer-jdl-application-configuration-option.ts';
 import type JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
+import JDLApplicationConfiguration from './jdl-application-configuration.ts';
+import ListJDLApplicationConfigurationOption from './list-jdl-application-configuration-option.ts';
+import StringJDLApplicationConfigurationOption from './string-jdl-application-configuration-option.ts';
 
 export default function createApplicationConfigurationFromObject(
   configurationObject: Record<string, any> = {},

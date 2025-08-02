@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import type BaseGenerator from '../../base-core/index.js';
-import { type UpdateClientLanguagesTaskParam, updateLanguagesInDayjsConfigurationTask } from '../../client/support/update-languages.js';
-import { generateLanguagesWebappOptions } from '../../languages/support/index.js';
+import { type UpdateClientLanguagesTaskParam, updateLanguagesInDayjsConfigurationTask } from '../../client/support/update-languages.ts';
+import { generateLanguagesWebappOptions } from '../../languages/support/index.ts';
 
 function generateDateTimeFormat(language: string, index: number, length: number): string {
   let config = `  '${language}': {\n`;

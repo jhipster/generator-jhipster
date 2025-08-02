@@ -17,16 +17,16 @@
  * limitations under the License.
  */
 
-import assert from 'assert/strict';
+import assert from 'node:assert/strict';
 
-import BaseApplicationGenerator from '../base-application/index.js';
-
-import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
-import { mutateData } from '../../lib/utils/index.js';
+import { mutateData } from '../../lib/utils/index.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
 import { QUEUES } from '../base-core/priorities.ts';
-import files from './files.js';
-import { GRADLE } from './constants.js';
-import cleanupOldServerFilesTask from './cleanup.js';
+import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
+
+import cleanupOldServerFilesTask from './cleanup.ts';
+import { GRADLE } from './constants.ts';
+import files from './files.ts';
 import {
   addGradleDependenciesCallback,
   addGradleDependenciesCatalogVersionCallback,
@@ -40,12 +40,12 @@ import {
   applyFromGradleCallback,
   gradleNeedleOptionsWithDefaults,
   sortDependencies,
-} from './internal/needles.js';
+} from './internal/needles.ts';
 import type {
   Application as GradleApplication,
   Config as GradleConfig,
-  GradleDependency,
   Entity as GradleEntity,
+  GradleDependency,
   Options as GradleOptions,
   Source as GradleSource,
 } from './types.js';

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import path from 'path';
+import path from 'node:path';
 
 import { camelCase } from 'lodash-es';
 

@@ -18,7 +18,7 @@
  */
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
-import { moveToJavaPackageSrcDir } from '../java/support/index.js';
+import { moveToJavaPackageSrcDir } from '../java/support/index.ts';
 
 export const liquibaseFiles = asWriteFilesSection({
   liquibase: [

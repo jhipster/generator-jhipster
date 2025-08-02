@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { readFileSync } from 'fs';
-import { join } from 'path';
-import { fileURLToPath } from 'url';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export * from '../lib/constants/yeoman.ts';
 export * from '../lib/constants/jhipster.ts';

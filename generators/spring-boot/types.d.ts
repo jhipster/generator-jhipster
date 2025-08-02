@@ -1,3 +1,9 @@
+import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
+import type { Entity as BaseApplicationEntity, RelationshipWithEntity } from '../base-application/types.js';
+import type { Config as CommonConfig } from '../common/types.d.ts';
+import type { Application as GradleApplication } from '../gradle/types.js';
+import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
 import type {
   Config as JavaConfig,
   Field as JavaField,
@@ -5,8 +11,7 @@ import type {
   Relationship as JavaRelationship,
   Source as JavaSource,
 } from '../java/types.js';
-import type { Entity as BaseApplicationEntity, RelationshipWithEntity } from '../base-application/types.js';
-import type { Config as CommonConfig } from '../common/types.d.ts';
+import type { ApplicationPropertiesNeedles } from '../server/support/needles.ts';
 import type {
   Application as ServerApplication,
   Config as ServerConfig,
@@ -16,11 +21,7 @@ import type {
   Relationship as ServerRelationship,
   Source as ServerSource,
 } from '../server/types.d.ts';
-import type { Application as GradleApplication } from '../gradle/types.js';
-import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
-import type { ApplicationPropertiesNeedles } from '../server/support/needles.ts';
-import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
-import type { HandleCommandTypes } from '../../lib/command/types.js';
+
 import type command from './command.js';
 
 type Command = HandleCommandTypes<typeof command>;

@@ -16,10 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { inspect } from 'node:util';
 import { describe, expect, it } from 'esmocha';
+import { inspect } from 'node:util';
+
 import type { GetWebappTranslationCallback } from '../../client/translation.js';
-import { removeDeclarations, replaceTranslations, replaceVueTranslations } from './translate-vue.js';
+
+import { removeDeclarations, replaceTranslations, replaceVueTranslations } from './translate-vue.ts';
 
 const FULL_BODY = `
 <span v-html="t$('activate.messages.success')"><strong>Your user account has been activated.</strong> Please </span>

@@ -17,4 +17,4 @@
  * limitations under the License.
  */
 
-export * from './reserved-keywords.js';
+export * from './reserved-keywords.ts';

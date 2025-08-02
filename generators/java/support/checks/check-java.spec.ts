@@ -27,7 +27,7 @@ describe('generator - server - checkJava', () => {
 
     before(async () => {
       execaCommandSync.mockReturnValue({ ...baseResult, stderr });
-      const { default: checkJava } = await import('./check-java.js');
+      const { default: checkJava } = await import('./check-java.ts');
       result = checkJava([]);
     });
 
@@ -46,7 +46,7 @@ describe('generator - server - checkJava', () => {
 
     before(async () => {
       execaCommandSync.mockReturnValue({ ...baseResult, exitCode, stderr });
-      const { default: checkJava } = await import('./check-java.js');
+      const { default: checkJava } = await import('./check-java.ts');
       result = checkJava([]);
     });
 
@@ -62,7 +62,7 @@ describe('generator - server - checkJava', () => {
       execaCommandSync.mockImplementation(() => {
         throw new Error('foo');
       });
-      const { default: checkJava } = await import('./check-java.js');
+      const { default: checkJava } = await import('./check-java.ts');
       result = checkJava([]);
     });
 

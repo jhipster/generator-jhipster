@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { packageJson } from '../../../../lib/index.js';
+import { packageJson } from '../../../../lib/index.ts';
 import { JavascriptApplicationGenerator } from '../../generator.ts';
 import { isReservedTypescriptKeyword } from '../../support/reserved-words.ts';
 

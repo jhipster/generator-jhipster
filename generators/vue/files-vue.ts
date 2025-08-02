@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { asWriteFilesSection, asWritingEntitiesTask, asWritingTask } from '../base-application/support/index.js';
-import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
+import { asWriteFilesSection, asWritingEntitiesTask, asWritingTask } from '../base-application/support/index.ts';
+import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
 
 export const vueFiles = asWriteFilesSection({

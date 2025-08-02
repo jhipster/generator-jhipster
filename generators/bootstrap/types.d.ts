@@ -18,6 +18,7 @@
  */
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { Config as BaseConfig, Options as BaseOptions } from '../base/types.js';
+
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;

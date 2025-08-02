@@ -1,6 +1,8 @@
-import { lstat, mkdir } from 'fs/promises';
-import { dirname } from 'path';
+import { lstat, mkdir } from 'node:fs/promises';
+import { dirname } from 'node:path';
+
 import { execa } from 'execa';
+
 import type { ValidationResult } from '../../base-core/api.d.ts';
 
 /**

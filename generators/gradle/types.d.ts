@@ -1,4 +1,6 @@
 import type { RequireOneOrNone } from 'type-fest';
+
+import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type {
   Application as JavaBootstrapApplication,
   Config as JavaBootstrapConfig,
@@ -12,7 +14,7 @@ import type {
   Options as BuildToolOptions,
   Source as BuildToolSource,
 } from '../java/generators/build-tool/types.d.ts';
-import type { HandleCommandTypes } from '../../lib/command/types.js';
+
 import type GradleCommand from './command.js';
 
 export type GradleComment = { comment?: string };

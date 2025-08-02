@@ -1,2 +1,2 @@
-export { default } from './generator.js';
-export { default as command } from './command.js';
+export { default } from './generator.ts';
+export { default as command } from './command.ts';

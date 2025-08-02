@@ -1,5 +1,5 @@
-import type { Config as BaseConfig } from '../base/types.d.ts';
 import type packageJson from '../../package.json';
+import type { Config as BaseConfig } from '../base/types.d.ts';
 import type { WriteContext } from '../base-core/api.js';
 
 export type { Source } from '../base/types.js';

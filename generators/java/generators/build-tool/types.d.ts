@@ -24,6 +24,7 @@ import type {
   Options as BaseApplicationOptions,
   Source as BaseApplicationSource,
 } from '../../../base-application/types.js';
+
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;

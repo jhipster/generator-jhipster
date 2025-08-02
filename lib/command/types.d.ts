@@ -1,7 +1,9 @@
-import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
 import type { IsNever, Replace, RequireAtLeastOne, SetOptional, Simplify, TupleToUnion, ValueOf } from 'type-fest';
-import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
+import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
+
 import type { JHipsterNamedChoice } from '../core/types.js';
+import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
+
 import type { MergeUnion } from './support/merge-union.js';
 
 type NormalizeValue<Input extends string> = Replace<Input, '[]', '', { all: true }>;

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import liquibaseCommand from '../liquibase/command.js';
+import liquibaseCommand from '../liquibase/command.ts';
 
 const command = {
   arguments: {

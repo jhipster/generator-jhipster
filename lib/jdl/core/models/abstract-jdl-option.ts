@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { merge } from '../utils/object-utils.js';
-import { addAll } from '../utils/set-utils.js';
+import { merge } from '../utils/object-utils.ts';
+import { addAll } from '../utils/set-utils.ts';
 
 export type JDLOptionParams = {
   name: string;

@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asPostWritingEntitiesTask, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/index.js';
-import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.js';
+import { asPostWritingEntitiesTask, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/index.ts';
+import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.ts';
 import type { Application as ClientApplication, Entity as ClientEntity, Source as ClientSource } from '../client/types.js';
 
 export const entityFiles = asWriteFilesSection({

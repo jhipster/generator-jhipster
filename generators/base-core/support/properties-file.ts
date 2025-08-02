@@ -18,6 +18,7 @@
  */
 import dotProperties from 'dot-properties';
 import sortKeys from 'sort-keys';
+
 import type { EditFileCallback } from '../api.js';
 
 export type PropertiesFileKeyUpdate = {

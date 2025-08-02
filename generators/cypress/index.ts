@@ -16,6 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.js';
-export { default as command } from './command.js';
-export { cypressFiles, cypressEntityFiles } from './files.js';
+export { default } from './generator.ts';
+export { default as command } from './command.ts';
+export { cypressEntityFiles, cypressFiles } from './files.ts';

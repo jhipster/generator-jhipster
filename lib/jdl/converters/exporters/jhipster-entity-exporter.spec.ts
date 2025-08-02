@@ -17,14 +17,16 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
+import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
 import helpers from 'yeoman-test';
-import exportEntities from '../exporters/jhipster-entity-exporter.js';
 
-import { doesDirectoryExist } from '../../core/utils/file-utils.js';
-import entityOptions from '../../../jhipster/entity-options.js';
-import { APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
+import { APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import entityOptions from '../../../jhipster/entity-options.ts';
+import { doesDirectoryExist } from '../../core/utils/file-utils.ts';
+
+import exportEntities from './jhipster-entity-exporter.ts';
 
 const { MapperTypes, PaginationTypes, ServiceTypes } = entityOptions;
 const { SERVICE_CLASS } = ServiceTypes;

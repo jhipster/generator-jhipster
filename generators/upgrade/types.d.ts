@@ -19,6 +19,7 @@
 import type EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { Config as BaseConfig, Options as BaseOptions } from '../base/types.js';
+
 import type command from './command.js';
 
 type Command = HandleCommandTypes<typeof command>;

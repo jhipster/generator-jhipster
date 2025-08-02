@@ -1,4 +1,5 @@
 import type { Priority } from 'yeoman-generator';
+
 import type CoreGenerator from '../base-core/generator.js';
 import { PRIORITY_NAMES, QUEUE_PREFIX } from '../base-core/priorities.ts';
 

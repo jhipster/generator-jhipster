@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
-import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.js';
-import databaseData from '../../spring-data-relational/support/database-data.js';
+import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import type { ValidationResult } from '../../base-core/api.d.ts';
-import { hibernateSnakeCase } from './string.js';
+import databaseData from '../../spring-data-relational/support/database-data.ts';
+
+import { hibernateSnakeCase } from './string.ts';
 
 const dbTypes = fieldTypes;
 const { STRING: TYPE_STRING, LONG: TYPE_LONG, UUID: TYPE_UUID } = dbTypes.CommonDBTypes;

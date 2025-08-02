@@ -1,5 +1,5 @@
-import { MatrixMicroserviceGateway, MatrixMonolith } from './application-samples.js';
-import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix, fromMatrix } from './matrix-utils.js';
+import { MatrixMicroserviceGateway, MatrixMonolith } from './application-samples.ts';
+import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix, fromMatrix } from './matrix-utils.ts';
 
 const CLIENT_ADDITIONAL_CONFIG_MATRIX = {
   withAdminUi: [false, true],

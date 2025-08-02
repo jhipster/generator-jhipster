@@ -16,18 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../base-application/index.js';
+import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/needles.ts';
 import type { Source as CommonSource } from '../common/types.js';
-import writeTask from './files.js';
-import cleanupTask from './cleanup.js';
-import { getCacheProviderMavenDefinition } from './internal/dependencies.js';
+
+import cleanupTask from './cleanup.ts';
+import writeTask from './files.ts';
+import { getCacheProviderMavenDefinition } from './internal/dependencies.ts';
 import type {
+  Application as SpringCacneApplication,
   Config as SpringCacheConfig,
   Entity as SpringCacheEntity,
   Options as SpringCacheOptions,
   Source as SpringCacheSource,
-  Application as SpringCacneApplication,
 } from './types.js';
 
 export default class SpringCacheGenerator extends BaseApplicationGenerator<

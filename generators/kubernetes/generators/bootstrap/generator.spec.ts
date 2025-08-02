@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { describe } from 'esmocha';
 import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe } from 'esmocha';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
-import Generator from './index.js';
+
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

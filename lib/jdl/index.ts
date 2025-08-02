@@ -1,2 +1,2 @@
-export * from './jdl-importer.js';
-export * from './core/parsing/api.js';
+export * from './jdl-importer.ts';
+export * from './core/parsing/api.ts';

@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { existsSync, opendirSync } from 'fs';
-import { basename, extname } from 'path';
+import { existsSync, opendirSync } from 'node:fs';
+import { basename, extname } from 'node:path';
 
 export function getEntitiesFromDir(configDir: string): string[] {
   if (!existsSync(configDir)) {

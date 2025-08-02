@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import { SpringBootApplicationGenerator } from '../../../spring-boot/generator.ts';
-import { pulsarFiles } from './files.js';
+
+import { pulsarFiles } from './files.ts';
 
 export default class PulsarGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {

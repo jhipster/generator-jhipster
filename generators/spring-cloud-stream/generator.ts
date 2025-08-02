@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../base-application/index.ts';
+
 import type {
   Application as SpringCloudApplication,
   Config as SpringCloudConfig,

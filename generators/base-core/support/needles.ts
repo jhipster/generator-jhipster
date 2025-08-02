@@ -16,11 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
+import assert from 'node:assert';
+
 import { escapeRegExp, kebabCase } from 'lodash-es';
-import type CoreGenerator from '../index.ts';
+
 import type { CascatedEditFileCallback, EditFileCallback } from '../api.js';
-import { joinCallbacks } from './write-files.js';
+import type CoreGenerator from '../index.ts';
+
+import { joinCallbacks } from './write-files.ts';
 
 export type NeedleCallback = (content: string) => string;
 

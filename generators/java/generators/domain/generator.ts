@@ -16,13 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JavaApplicationGenerator } from '../../generator.ts';
-import { mutateData } from '../../../../lib/utils/index.js';
-import { javaBeanCase, javaTestPackageTemplatesBlock } from '../../support/index.js';
-import { getEnumInfo } from '../../../base-application/support/index.js';
-import { isReservedJavaKeyword } from '../../support/reserved-keywords.js';
+import { mutateData } from '../../../../lib/utils/index.ts';
+import { getEnumInfo } from '../../../base-application/support/index.ts';
 import type { Source as CommonSource } from '../../../common/types.d.ts';
-import { entityServerFiles, enumFiles } from './entity-files.js';
+import { JavaApplicationGenerator } from '../../generator.ts';
+import { javaBeanCase, javaTestPackageTemplatesBlock } from '../../support/index.ts';
+import { isReservedJavaKeyword } from '../../support/reserved-keywords.ts';
+
+import { entityServerFiles, enumFiles } from './entity-files.ts';
 
 export default class DomainGenerator extends JavaApplicationGenerator {
   generateEntities!: boolean;

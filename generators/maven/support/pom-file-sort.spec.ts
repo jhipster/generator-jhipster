@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import { describe, expect } from 'esmocha';
-import { sortPomFile } from './pom-file-sort.js';
+
+import { sortPomFile } from './pom-file-sort.ts';
 
 describe('sortPomProject', () => {
   it('should sort a pom file', () => {

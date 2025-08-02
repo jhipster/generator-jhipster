@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import type { Source as CommonSource } from '../../../common/types.d.ts';
+import { JavaApplicationGenerator } from '../../../java/generator.ts';
 
 export default class CodeQualityGenerator extends JavaApplicationGenerator {
   async beforeQueue() {

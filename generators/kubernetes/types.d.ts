@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
 import type {
   Config as BaseWorkspacesConfig,
   Deployment as BaseWorkspacesDeployment,
@@ -24,10 +25,10 @@ import type {
   Source as BaseWorkspacesSource,
   WorkspacesApplication as BaseWorkspacesWorkspacesApplication,
 } from '../base-workspaces/types.js';
-import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
-import type { helmConstants, kubernetesConstants } from './support/constants.ts';
+
 import type command from './command.ts';
 import type bootstrapCommand from './generators/bootstrap/command.ts';
+import type { helmConstants, kubernetesConstants } from './support/constants.ts';
 
 type KubernetesDeployment = typeof kubernetesConstants & typeof helmConstants & {};
 

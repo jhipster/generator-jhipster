@@ -1,4 +1,4 @@
-import { databaseTypes, messageBrokerTypes } from '../../../lib/jhipster/index.js';
+import { databaseTypes, messageBrokerTypes } from '../../../lib/jhipster/index.ts';
 import {
   GENERATOR_BOOTSTRAP,
   GENERATOR_JAVA,
@@ -6,7 +6,7 @@ import {
   GENERATOR_SERVER,
   GENERATOR_SPRING_BOOT,
   GENERATOR_SPRING_CLOUD_STREAM,
-} from '../../generator-list.js';
+} from '../../generator-list.ts';
 
 const { KAFKA, PULSAR } = messageBrokerTypes;
 const { SQL, COUCHBASE } = databaseTypes;

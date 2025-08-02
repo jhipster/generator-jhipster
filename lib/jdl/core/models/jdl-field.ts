@@ -18,9 +18,11 @@
  */
 
 import { upperFirst } from 'lodash-es';
-import { merge } from '../utils/object-utils.js';
-import type JDLValidation from './jdl-validation.js';
+
+import { merge } from '../utils/object-utils.ts';
+
 import type AbstractJDLOption from './abstract-jdl-option.js';
+import type JDLValidation from './jdl-validation.js';
 
 export default class JDLField {
   name: string;

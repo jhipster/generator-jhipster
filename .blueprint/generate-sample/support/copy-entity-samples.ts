@@ -1,6 +1,7 @@
-import { cpSync, mkdirSync } from 'fs';
-import { join } from 'path';
-import { entitiesSamplesDir } from '../../constants.js';
+import { cpSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+
+import { entitiesSamplesDir } from '../../constants.ts';
 
 const sqllight = ['BankAccount', 'Label', 'Operation'];
 

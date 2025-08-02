@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as convertTranslationsSupport } from './convert-translation.js';
-export * from './translate-vue.js';
-export { default as translateVueFilesTransform } from './translate-vue.js';
-export { default as updateLanguagesTask } from './update-languages.js';
+export { default as convertTranslationsSupport } from './convert-translation.ts';
+export * from './translate-vue.ts';
+export { default as translateVueFilesTransform } from './translate-vue.ts';
+export { default as updateLanguagesTask } from './update-languages.ts';

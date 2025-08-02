@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { passthrough } from 'p-transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import { Minimatch } from 'minimatch';
+import { passthrough } from 'p-transform';
 import { Piscina } from 'piscina';
 
 import type BaseGenerator from '../../base-core/index.js';

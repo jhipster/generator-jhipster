@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 import type { Merge, OmitIndexSignature, Simplify } from 'type-fest';
-import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource } from '../base/tasks.js';
+
+import type { TaskParamWithControl, TaskParamWithSource, TaskTypes as BaseTaskTypes } from '../base/tasks.js';
+
 import type { Application as BaseSimpleApplicationApplication, Source as BaseSimpleApplicationSource } from './types.d.ts';
 
 export type ApplicationDefaultsTaskParam<A extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication> = {

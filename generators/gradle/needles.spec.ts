@@ -1,7 +1,8 @@
 import { before, describe, it } from 'esmocha';
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
-import { GeneratorBaseApplication } from '../index.js';
-import { GENERATOR_SERVER } from '../generator-list.js';
+
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
+import { GENERATOR_SERVER } from '../generator-list.ts';
+import { GeneratorBaseApplication } from '../index.ts';
 
 class mockBlueprintSubGen extends GeneratorBaseApplication {
   constructor(args, opts, features) {

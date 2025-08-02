@@ -18,8 +18,10 @@
  */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import reservedKeywords from './reserved-keywords.js';
+
+import reservedKeywords from './reserved-keywords.ts';
 
 describe('jdl - ReservedKeywords', () => {
   describe('isReserved', () => {

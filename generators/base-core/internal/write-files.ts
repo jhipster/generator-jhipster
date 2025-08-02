@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import assert from 'node:assert';
+
 import type { WriteFileBlock, WriteFileSection } from '../api.js';
 
 export const convertWriteFileSectionsToBlocks = <DataType, Generator>(

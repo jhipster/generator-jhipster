@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 
-import BinaryOptions from '../built-in-options/binary-options.js';
-import { join } from '../utils/set-utils.js';
+import BinaryOptions from '../built-in-options/binary-options.ts';
+import { join } from '../utils/set-utils.ts';
+
 import type { JDLOptionParams } from './abstract-jdl-option.js';
-import AbstractJDLOption from './abstract-jdl-option.js';
+import AbstractJDLOption from './abstract-jdl-option.ts';
 
 /**
  * For options like the DTO, the service, etc.

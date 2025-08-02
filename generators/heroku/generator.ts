@@ -17,18 +17,18 @@
  * limitations under the License.
  */
 
-import { kebabCase } from 'lodash-es';
 import chalk from 'chalk';
-import { glob } from 'glob';
-
 import type { Options as ExecaOptions } from 'execa';
-import BaseApplicationGenerator from '../base-application/index.ts';
+import { glob } from 'glob';
+import { kebabCase } from 'lodash-es';
 
+import BaseApplicationGenerator from '../base-application/index.ts';
 import { JAVA_COMPATIBLE_VERSIONS, RECOMMENDED_JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import { createPomStorage } from '../maven/support/pom-store.js';
-import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.js';
+import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.ts';
+import { createPomStorage } from '../maven/support/pom-store.ts';
 import prepareSqlApplicationProperties from '../spring-data-relational/support/application-properties.ts';
-import { mavenProfileContent } from './templates.js';
+
+import { mavenProfileContent } from './templates.ts';
 import type {
   Application as HerokuApplication,
   Config as HerokuConfig,

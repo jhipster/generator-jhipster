@@ -16,13 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
-import { GENERATOR_MAVEN } from '../generator-list.js';
-import MavenGenerator from './generator.js';
+import { GENERATOR_MAVEN } from '../generator-list.ts';
+
+import MavenGenerator from './generator.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

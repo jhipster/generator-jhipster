@@ -1,5 +1,6 @@
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import { TEMPLATES_DOCKER_DIR } from '../generator-constants.js';
+
 import type { Application as DockerApplication } from './types.js';
 
 const renameTo = (ctx: DockerApplication, filepath: string) =>

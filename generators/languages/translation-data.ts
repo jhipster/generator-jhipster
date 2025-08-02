@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 import { inspect } from 'node:util';
-import { defaultsDeep, get, merge, template } from 'lodash-es';
+
 import { transform } from '@yeoman/transform';
-import { Minimatch } from 'minimatch';
+import { defaultsDeep, get, merge, template } from 'lodash-es';
 import type { MemFsEditorFile } from 'mem-fs-editor';
+import { Minimatch } from 'minimatch';
+
 import type CoreGenerator from '../base-core/generator.ts';
 
 export const createTranslationsFilter = ({

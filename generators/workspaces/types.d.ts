@@ -18,6 +18,7 @@
  */
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { Config as BaseWorkspacesConfig, Options as BaseWorkspacesOptions } from '../base-workspaces/types.d.ts';
+
 export type { WorkspacesApplication } from '../base-workspaces/types.js';
 import type command from './command.ts';
 

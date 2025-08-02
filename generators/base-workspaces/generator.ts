@@ -18,30 +18,33 @@
  */
 
 import { join } from 'node:path';
+
 import { defaults } from 'lodash-es';
-import BaseGenerator from '../base/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
-import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.js';
-import { deploymentOptions } from '../../lib/jhipster/index.js';
+
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
-import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
-import type { GenericTask } from '../base-core/types.js';
+import { deploymentOptions } from '../../lib/jhipster/index.ts';
 import { removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
+import BaseGenerator from '../base/index.ts';
+import type { GenericTask } from '../base-core/types.js';
+import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.ts';
+import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
+import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.ts';
+
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.ts';
 import {
   CONTEXT_DATA_DEPLOYMENT_KEY,
   CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY,
   CONTEXT_DATA_WORKSPACES_ROOT_KEY,
-} from './support/index.js';
+} from './support/index.ts';
+import type { Tasks as WorkspacesTasks } from './tasks.js';
 import type {
-  Deployment as BaseDeployment,
   Config as BaseWorkspacesConfig,
+  Deployment as BaseDeployment,
   Features as BaseWorkspacesFeatures,
   Options as BaseWorkspacesOptions,
   Source as BaseWorkspacesSource,
   WorkspacesApplication,
 } from './types.js';
-import type { Tasks as WorkspacesTasks } from './tasks.js';
 
 const { Options: DeploymentOptions } = deploymentOptions;
 

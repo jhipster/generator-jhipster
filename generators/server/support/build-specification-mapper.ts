@@ -1,5 +1,5 @@
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
-import { fieldTypes } from '../../../lib/jhipster/index.js';
+import { fieldTypes } from '../../../lib/jhipster/index.ts';
 
 const {
   STRING: TYPE_STRING,

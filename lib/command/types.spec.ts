@@ -1,4 +1,5 @@
 import type { IsNever } from 'type-fest';
+
 import type {
   ExportApplicationPropertiesFromCommand,
   ExportGeneratorOptionsFromCommand,

@@ -16,7 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
+import assert from 'node:assert';
+
 import { escapeRegExp } from 'lodash-es';
 
 export type JavaClassName = { className: string };

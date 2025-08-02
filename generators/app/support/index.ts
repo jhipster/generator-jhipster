@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './config.js';
-export { default as checkNode } from './check-node.js';
+export * from './config.ts';
+export { default as checkNode } from './check-node.ts';

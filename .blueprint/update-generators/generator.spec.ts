@@ -1,9 +1,11 @@
-import { basename, dirname, join } from 'path';
-import { fileURLToPath } from 'url';
 import { describe, it } from 'esmocha';
-import { basicHelpers as helpers } from '../../lib/testing/index.js';
-import { shouldSupportFeatures } from '../../test/support/index.js';
-import Generator from './generator.js';
+import { basename, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { basicHelpers as helpers } from '../../lib/testing/index.ts';
+import { shouldSupportFeatures } from '../../test/support/index.ts';
+
+import Generator from './generator.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

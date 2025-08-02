@@ -1,13 +1,15 @@
-import { Duplex } from 'stream';
-import { join } from 'path';
+import { join } from 'node:path';
+import { Duplex } from 'node:stream';
+
+import { upperFirst } from 'lodash-es';
 import { loadFile } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';
-import { upperFirst } from 'lodash-es';
-import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
-import { createImporterFromContent } from '../../../lib/jdl/jdl-importer.js';
-import { mergeYoRcContent } from '../../../lib/utils/yo-rc.js';
+
 import type { JDLApplicationConfig } from '../../../lib/jdl/core/types/parsing.js';
+import { createImporterFromContent } from '../../../lib/jdl/jdl-importer.ts';
+import { mergeYoRcContent } from '../../../lib/utils/yo-rc.ts';
+import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 
 export const importJDLTransform = ({
   destinationPath,

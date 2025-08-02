@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './build-specification-mapper.js';
-export * from './database.js';
-export * from './needles.js';
-export * from './prepare-entity.js';
-export { default as prepareField } from './prepare-field.js';
-export * from './prepare-relationship.js';
-export * from './relationship.js';
-export * from './string.js';
-export * from './templates/field-values.js';
-export { default as updateLanguagesTask } from './update-languages.js';
+export * from './build-specification-mapper.ts';
+export * from './database.ts';
+export * from './needles.ts';
+export * from './prepare-entity.ts';
+export { default as prepareField } from './prepare-field.ts';
+export * from './prepare-relationship.ts';
+export * from './relationship.ts';
+export * from './string.ts';
+export * from './templates/field-values.ts';
+export { default as updateLanguagesTask } from './update-languages.ts';
