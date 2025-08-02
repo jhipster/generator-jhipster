@@ -1,5 +1,5 @@
-import { basename, join } from 'path';
-import { Duplex } from 'stream';
+import { basename, join } from 'node:path';
+import { Duplex } from 'node:stream';
 
 import { loadFile } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';

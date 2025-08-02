@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import assert from 'assert';
+import assert from 'node:assert';
 
 import { databaseTypes } from '../../lib/jhipster/index.ts';
 import { isReservedTableName } from '../../lib/jhipster/reserved-keywords.ts';

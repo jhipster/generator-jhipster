@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { existsSync } from 'fs';
+import { existsSync } from 'node:fs';
 
 import { APPLICATION_TYPE_GATEWAY } from '../../lib/core/application-types.ts';
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, searchEngineTypes, validations } from '../../lib/jhipster/index.ts';

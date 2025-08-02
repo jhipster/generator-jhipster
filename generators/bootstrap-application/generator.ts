@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
+import assert from 'node:assert';
 
 import { validations } from '../../lib/jhipster/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';

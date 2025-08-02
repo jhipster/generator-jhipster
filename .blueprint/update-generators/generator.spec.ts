@@ -1,6 +1,6 @@
 import { describe, it } from 'esmocha';
-import { basename, dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { basename, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { basicHelpers as helpers } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../test/support/index.ts';

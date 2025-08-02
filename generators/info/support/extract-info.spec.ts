@@ -1,5 +1,5 @@
 import { describe, expect } from 'esmocha';
-import { readFile } from 'fs/promises';
+import { readFile } from 'node:fs/promises';
 
 import { getPackageRoot } from '../../../lib/index.ts';
 import { YO_RC_FILE } from '../../generator-constants.js';

@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import { before, describe, esmocha, expect, it } from 'esmocha';
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { defaultHelpers as helpers } from '../../lib/testing/index.ts';

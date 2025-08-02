@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { extname } from 'path';
+import { extname } from 'node:path';
 
 import { passthrough } from '@yeoman/transform';
 import { isFileStateDeleted } from 'mem-fs-editor/state';

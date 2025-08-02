@@ -3,6 +3,7 @@ import { defineConfig } from 'eslint/config';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import chai from 'eslint-plugin-chai-friendly';
 import imports from 'eslint-plugin-import-x';
+import n from 'eslint-plugin-n';
 import prettier from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import ts from 'typescript-eslint';
@@ -22,6 +23,12 @@ export default defineConfig(
   { ignores: ['dist'] },
   js.configs.recommended,
   jhipster.base,
+  {
+    plugins: { n },
+    rules: {
+      'n/prefer-node-protocol': 'error',
+    },
+  },
   {
     files: ['**/*.ts'],
     extends: [...ts.configs.recommended, ...ts.configs.stylistic],

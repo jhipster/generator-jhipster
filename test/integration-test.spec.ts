@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 import { before, describe, it } from 'esmocha';
-import assert from 'assert';
-import fs, { existsSync, writeFileSync } from 'fs';
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import assert from 'node:assert';
+import fs, { existsSync, writeFileSync } from 'node:fs';
+import path, { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import sortKeys from 'sort-keys';
 

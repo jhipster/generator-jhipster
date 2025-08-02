@@ -1,5 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import { existsSync } from 'fs';
+import { existsSync } from 'node:fs';
 
 import sinon from 'sinon';
 

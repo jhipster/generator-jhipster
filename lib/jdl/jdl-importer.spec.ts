@@ -18,8 +18,8 @@
  */
 
 import { after, before, describe, expect as jestExpect, it } from 'esmocha';
-import { rmSync } from 'fs';
-import path from 'path';
+import { rmSync } from 'node:fs';
+import path from 'node:path';
 
 import { expect } from 'chai';
 

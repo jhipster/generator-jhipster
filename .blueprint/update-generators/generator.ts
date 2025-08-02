@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { dirname } from 'path';
+import { dirname } from 'node:path';
 
 import BaseCoreGenerator from '../../generators/base-core/index.ts';
 import { createNeedleCallback } from '../../generators/base-core/support/needles.ts';

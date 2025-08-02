@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 import { type StructuredPatchHunk, applyPatch, structuredPatch } from 'diff';
 

@@ -1,6 +1,6 @@
-import { cpSync, existsSync, mkdirSync } from 'fs';
-import { join } from 'path';
-import process from 'process';
+import { cpSync, existsSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+import process from 'node:process';
 
 import { execa } from 'execa';
 import { globSync } from 'glob';

@@ -1,5 +1,5 @@
-import { readdir } from 'fs/promises';
-import { basename, join } from 'path';
+import { readdir } from 'node:fs/promises';
+import { basename, join } from 'node:path';
 
 import { loadFile } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';

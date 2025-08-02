@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { existsSync } from 'fs';
 import assert from 'node:assert';
+import { existsSync } from 'node:fs';
 
 import { packageJson } from '../../lib/index.ts';
 import BaseWorkspacesGenerator from '../base-workspaces/index.ts';

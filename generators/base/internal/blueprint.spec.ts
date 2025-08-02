@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'esmocha';
-import assert from 'assert';
+import assert from 'node:assert';
 
 import { mergeBlueprints, normalizeBlueprintName, parseBlueprints, removeBlueprintDuplicates } from './blueprint.ts';
 

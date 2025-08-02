@@ -1,5 +1,5 @@
-import { join } from 'path';
-import { Duplex } from 'stream';
+import { join } from 'node:path';
+import { Duplex } from 'node:stream';
 
 import { upperFirst } from 'lodash-es';
 import { loadFile } from 'mem-fs';

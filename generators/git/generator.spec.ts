@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { access } from 'fs/promises';
-import { basename, dirname, resolve } from 'path';
-import { fileURLToPath } from 'url';
+import { access } from 'node:fs/promises';
+import { basename, dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { runResult, skipPrettierHelpers as helpers } from '../../lib/testing/index.ts';
 import { testBlueprintSupport } from '../../test/support/tests.js';

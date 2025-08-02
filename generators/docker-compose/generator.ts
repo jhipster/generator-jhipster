@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { existsSync } from 'fs';
 import assert from 'node:assert';
-import pathjs from 'path';
+import { existsSync } from 'node:fs';
+import pathjs from 'node:path';
 
 import chalk from 'chalk';
 import normalize from 'normalize-path';

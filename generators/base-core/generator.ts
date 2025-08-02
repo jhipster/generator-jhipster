@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
-import { existsSync, rmSync, statSync } from 'fs';
-import { basename, dirname, extname, isAbsolute, join, join as joinPath, relative } from 'path';
-import { relative as posixRelative } from 'path/posix';
-import { fileURLToPath } from 'url';
+import assert from 'node:assert';
+import { existsSync, rmSync, statSync } from 'node:fs';
+import { basename, dirname, extname, isAbsolute, join, join as joinPath, relative } from 'node:path';
+import { relative as posixRelative } from 'node:path/posix';
+import { fileURLToPath } from 'node:url';
 
 import { requireNamespace } from '@yeoman/namespace';
 import type { GeneratorMeta } from '@yeoman/types';

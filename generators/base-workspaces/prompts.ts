@@ -1,5 +1,5 @@
-import { existsSync } from 'fs';
-import { readdir } from 'fs/promises';
+import { existsSync } from 'node:fs';
+import { readdir } from 'node:fs/promises';
 
 import chalk from 'chalk';
 

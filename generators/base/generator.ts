@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
-import fs, { existsSync, readFileSync, statSync } from 'fs';
-import { rm } from 'fs/promises';
-import path, { join, relative } from 'path';
+import assert from 'node:assert';
+import fs, { existsSync, readFileSync, statSync } from 'node:fs';
+import { rm } from 'node:fs/promises';
+import path, { join, relative } from 'node:path';
 
 import chalk from 'chalk';
 import { execaCommandSync } from 'execa';

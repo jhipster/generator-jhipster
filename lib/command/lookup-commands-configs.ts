@@ -1,5 +1,5 @@
-import { dirname, join } from 'path';
-import { fileURLToPath, pathToFileURL } from 'url';
+import { dirname, join } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { glob } from 'glob';
 

@@ -1,6 +1,6 @@
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname, resolve } from 'path';
-import { fileURLToPath } from 'url';
+import { basename, dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';

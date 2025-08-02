@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import assert from 'assert/strict';
+import assert from 'node:assert/strict';
 
 import { mutateData } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';

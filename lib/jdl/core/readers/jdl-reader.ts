@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
 
 import { getCst as apiGetCst, parse as apiParser } from '../parsing/api.ts';
 import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks.ts';

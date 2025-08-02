@@ -1,5 +1,5 @@
-import { cpSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { cpSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
 
 import { entitiesSamplesDir } from '../../constants.ts';
 

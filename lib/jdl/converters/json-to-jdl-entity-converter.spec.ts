@@ -18,7 +18,7 @@
  */
 
 import { before, describe, it } from 'esmocha';
-import fs from 'fs';
+import fs from 'node:fs';
 
 import { expect } from 'chai';
 

@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
-import path from 'path';
+import assert from 'node:assert';
+import path from 'node:path';
 
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { minimatch } from 'minimatch';

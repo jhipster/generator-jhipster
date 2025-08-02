@@ -1,5 +1,5 @@
 import { describe, it } from 'esmocha';
-import assert from 'assert';
+import assert from 'node:assert';
 
 import { stringHashCode } from './string.ts';
 

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import path from 'path';
+import path from 'node:path';
 
 import type { YoRcJHipsterDeploymentContent } from '../../../jhipster/types/yo-rc.js';
 import type JDLDeployment from '../../core/models/jdl-deployment.js';

@@ -1,5 +1,5 @@
-import { basename, dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { basename, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import packageJson from '../package.json' with { type: 'json' };
 

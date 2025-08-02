@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';

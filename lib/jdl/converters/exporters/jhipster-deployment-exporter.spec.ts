@@ -18,8 +18,8 @@
  */
 
 import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import { expect } from 'chai';
 import helpers from 'yeoman-test';

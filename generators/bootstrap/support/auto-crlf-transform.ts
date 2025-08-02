@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createReadStream } from 'fs';
-import { stat } from 'fs/promises';
-import { relative } from 'path';
+import { createReadStream } from 'node:fs';
+import { stat } from 'node:fs/promises';
+import { relative } from 'node:path';
 
 import { isBinaryFile } from 'isbinaryfile';
 import type { MemFsEditorFile } from 'mem-fs-editor';

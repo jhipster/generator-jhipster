@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import fs from 'fs';
+import fs from 'node:fs';
 
 import { YO_RC_FILE } from '../../../constants/yeoman.ts';
 import type { YoRcJHipsterContent } from '../../../jhipster/types/yo-rc.js';

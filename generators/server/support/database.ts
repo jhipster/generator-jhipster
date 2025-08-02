@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import type { ValidationResult } from '../../base-core/api.d.ts';

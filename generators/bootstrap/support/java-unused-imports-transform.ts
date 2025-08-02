@@ -1,4 +1,4 @@
-import { extname } from 'path';
+import { extname } from 'node:path';
 
 import type { VinylMemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';

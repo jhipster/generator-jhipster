@@ -18,7 +18,7 @@
  */
 
 import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 import { expect } from 'chai';
 import helpers from 'yeoman-test';

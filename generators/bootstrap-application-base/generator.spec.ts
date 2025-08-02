@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import { before, beforeEach, describe, expect, it } from 'esmocha';
-import { basename, dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { basename, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { snakeCase } from 'lodash-es';
 

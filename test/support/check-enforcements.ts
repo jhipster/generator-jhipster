@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
-import { opendirSync, readFileSync, writeFileSync } from 'fs';
-import path, { basename } from 'path';
+import assert from 'node:assert';
+import { opendirSync, readFileSync, writeFileSync } from 'node:fs';
+import path, { basename } from 'node:path';
 
 import { before, describe, it } from 'mocha';
 

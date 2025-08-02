@@ -18,7 +18,7 @@
  */
 
 import { beforeEach, describe, expect, it } from 'esmocha';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 import helpers from 'yeoman-test';
 

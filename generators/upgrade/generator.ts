@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { readdir, rm } from 'fs/promises';
-import { setTimeout } from 'timers/promises';
+import { readdir, rm } from 'node:fs/promises';
+import { setTimeout } from 'node:timers/promises';
 
 import chalk from 'chalk';
 import gitignore from 'parse-gitignore';

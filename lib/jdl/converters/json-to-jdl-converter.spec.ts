@@ -18,8 +18,8 @@
  */
 
 import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
-import fs, { readFileSync } from 'fs';
-import path from 'path';
+import fs, { readFileSync } from 'node:fs';
+import path from 'node:path';
 
 import { expect } from 'chai';
 

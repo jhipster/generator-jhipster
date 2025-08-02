@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
-import { existsSync } from 'fs';
-import path, { dirname, resolve } from 'path';
-import { fileURLToPath, pathToFileURL } from 'url';
+import assert from 'node:assert';
+import { existsSync } from 'node:fs';
+import path, { dirname, resolve } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { QueuedAdapter } from '@yeoman/adapter';
 import chalk from 'chalk';

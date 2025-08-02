@@ -1,6 +1,6 @@
 import { before, describe, it } from 'esmocha';
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.js';

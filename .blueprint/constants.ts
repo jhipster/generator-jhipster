@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { join } from 'node:path';
 
 import { getPackageRoot } from '../lib/index.ts';
 
