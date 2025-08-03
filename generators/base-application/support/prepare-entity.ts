@@ -23,7 +23,6 @@ import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../.
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.ts';
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.ts';
-import type { EntityAll, FieldAll } from '../../../lib/types/application-all.d.ts';
 import { getMicroserviceAppName, mutateData, normalizePathEnd, stringHashCode, upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import { parseChangelog } from '../../base/support/timestamp.ts';
 import type CoreGenerator from '../../base-core/generator.js';
@@ -36,7 +35,7 @@ import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/in
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { Config as SpringBootConfig } from '../../spring-boot/types.ts';
 import type { Config as SpringDataRelationalConfig } from '../../spring-data-relational/types.ts';
-import type { PrimaryKey } from '../types.js';
+import type { Entity, Field, PrimaryKey, Relationship } from '../types.ts';
 
 import { createFaker } from './faker.ts';
 import { fieldIsEnum } from './field-utils.ts';
@@ -278,7 +277,7 @@ export function prepareEntityPrimaryKeyForTemplates(
     entity: entityWithConfig,
     enableCompositeId = true,
     application,
-  }: { entity: EntityAll; enableCompositeId?: boolean; application?: any },
+  }: { entity: Entity<Field, Relationship>; enableCompositeId?: boolean; application?: any },
 ) {
   const idFields = entityWithConfig.fields.filter(field => field.id);
   const idRelationships = entityWithConfig.relationships.filter(relationship => relationship.id);
@@ -301,7 +300,7 @@ export function prepareEntityPrimaryKeyForTemplates(
         fieldNameHumanized: 'ID',
         fieldTranslationKey: 'global.field.id',
         autoGenerate: true,
-      } as FieldAll;
+      } as Field;
       entityWithConfig.fields.unshift(idField);
     }
     idFields.push(idField);
@@ -440,7 +439,7 @@ export function prepareEntityPrimaryKeyForTemplates(
   return entityWithConfig;
 }
 
-function fieldToId(field: FieldAll): any {
+function fieldToId(field: Field): any {
   return {
     field,
     get name() {
@@ -542,10 +541,10 @@ export function preparePostEntityCommonDerivedProperties(entity: CommonEntity) {
     entity.anyFieldHasTextContentType = blobFieldsContentType.includes(TEXT);
   }
 
-  preparePostEntityCommonDerivedPropertiesNotTyped(entity as EntityAll);
+  preparePostEntityCommonDerivedPropertiesNotTyped(entity as Entity);
 }
 
-function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
+function preparePostEntityCommonDerivedPropertiesNotTyped(entity: Entity) {
   const { relationships, fields } = entity;
   const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
   entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
