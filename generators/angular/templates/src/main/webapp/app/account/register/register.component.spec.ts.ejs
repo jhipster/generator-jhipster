@@ -70,7 +70,7 @@ describe('RegisterComponent', () => {
     fakeAsync((service: RegisterService<% if (enableTranslation) { %>, mockTranslateService: TranslateService<% } %>) => {
       jest.spyOn(service, 'save').mockReturnValue(of({}));
 <%_ if (enableTranslation) { _%>
-      mockTranslateService.currentLang = '<%= nativeLanguage %>';
+      jest.spyOn(mockTranslateService, 'getCurrentLang').mockReturnValue('<%= nativeLanguage %>');
 <%_ } _%>
       comp.registerForm.patchValue({
         password: 'password',
