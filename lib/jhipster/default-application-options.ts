@@ -110,7 +110,7 @@ function getConfigForClientApplication(options: ApplicationDefaults = {}): Appli
     return options;
   }
   if (options[OptionNames.MICROFRONTEND] === undefined) {
-    options[OptionNames.MICROFRONTEND] = Boolean(options[OptionNames.MICROFRONTENDS]?.length);
+    options[OptionNames.MICROFRONTEND] = Boolean(options[OptionNames.MICROFRONTENDS]?.length) || options.applicationType === 'microservice';
   }
   if (!options[CLIENT_THEME]) {
     options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
@@ -129,7 +129,8 @@ function getConfigForClientApplication(options: ApplicationDefaults = {}): Appli
   } else {
     options.devServerPort ??= 9060;
   }
-  options.devServerPortProxy ??= options.clientBundler === 'webpack' ? 9000 : undefined;
+  options.devServerPortProxy ??=
+    options.clientBundler === 'webpack' && (clientFramework !== 'angular' || options.microfrontend) ? 9000 : undefined;
 
   return options;
 }
