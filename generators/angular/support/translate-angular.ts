@@ -57,7 +57,7 @@ function replaceTranslationKeysWithText(
     keyIndex = 1,
     replacementIndex = 1,
     escape,
-  }: { keyIndex?: number; replacementIndex?: number; escape?: (str: string, match: any) => string } = {},
+  }: { keyIndex?: number; replacementIndex?: number; escape?: (str: string, match: RegExpMatchArray) => string } = {},
 ) {
   const regex = new RegExp(regexSource, 'g');
   const allMatches = content.matchAll(regex);

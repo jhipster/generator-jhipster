@@ -48,6 +48,7 @@ import type {
   Options as AngularOptions,
   Source as AngularSource,
 } from './types.js';
+import type { Field as ClientField } from '../client/types.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
@@ -154,7 +155,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
               createNeedleCallback({
                 needle: 'i18n-language-loader',
                 contentToAdd: languagesDefinition.map(
-                  lang => `'${lang.languageTag}': async (): Promise<any> => import('i18n/${lang.languageTag}.json'),`,
+                  lang => `'${lang.languageTag}': async (): Promise<Record<string, unknown>> => import('i18n/${lang.languageTag}.json'),`,
                 ),
               }),
               createNeedleCallback({
@@ -219,7 +220,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
             ...(entity.entityReadAuthority?.split(',') ?? []),
           ]),
         });
-        entity.generateEntityClientEnumImports = (fields: any) => getClientEnumImportsFormat(fields, ANGULAR);
+        entity.generateEntityClientEnumImports = (fields: ClientField[]) => getClientEnumImportsFormat(fields, ANGULAR);
       },
     });
   }
