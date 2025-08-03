@@ -17,11 +17,7 @@
  * limitations under the License.
  */
 import type { Entity as AngularEntity } from '../../generators/angular/types.d.ts';
-import type {
-  Application as BaseApplication,
-  Entity as BaseApplicationEntity,
-  RelationshipWithEntity,
-} from '../../generators/base-application/types.d.ts';
+import type { Application as BaseApplication, Entity as BaseApplicationEntity } from '../../generators/base-application/types.d.ts';
 import type { Application as ClientApplication, Field as ClientField } from '../../generators/client/types.d.ts';
 import type { Application as DockerApplication } from '../../generators/docker/types.d.ts';
 import type { Application as GitApplication } from '../../generators/git/types.d.ts';
@@ -45,54 +41,16 @@ import type {
   Relationship as SpringDataRelationalRelationship,
 } from '../../generators/spring-data-relational/types.d.ts';
 
-export type FieldAll = SpringDataRelationalField &
-  LiquibaseField &
-  ClientField & {
-    derivedPath?: string[];
-    dynamic?: boolean;
-  };
+export type FieldAll = SpringDataRelationalField & LiquibaseField & ClientField & {};
 
-export interface RelationshipAll extends SpringDataRelationalRelationship, ServerRelationship, LiquibaseRelationship {
-  bagRelationship?: boolean;
-  derivedPrimaryKey?: {
-    derivedFields: (FieldAll & {
-      originalField: FieldAll;
-      derived: boolean;
-    })[];
-  };
-}
+export interface RelationshipAll extends SpringDataRelationalRelationship, ServerRelationship, LiquibaseRelationship {}
 
 export interface EntityAll<F extends FieldAll = FieldAll, R extends RelationshipAll = RelationshipAll>
   extends BaseApplicationEntity<F, R>,
     AngularEntity<F, R>,
     LiquibaseEntity<F, R>,
     SpringDataRelationalEntity<F, R>,
-    SpringBootEntity<F, R> {
-  updatableEntity?: boolean;
-  eagerLoad?: boolean;
-  implementsEagerLoadApis?: boolean;
-  requiresPersistableImplementation?: boolean;
-
-  fieldsContainNoOwnerOneToOne?: boolean;
-  anyPropertyHasValidation?: boolean;
-  entityContainsCollectionField?: boolean;
-  relationshipsContainEagerLoad?: boolean;
-  containsBagRelationships?: boolean;
-
-  otherEntityPrimaryKeyTypes?: string[];
-  otherEntityPrimaryKeyTypesIncludesUUID?: boolean;
-
-  otherEntities?: this[];
-  otherEntitiesWithPersistableRelationship?: this[];
-
-  regularEagerRelations?: RelationshipWithEntity<R, this>[];
-  eagerRelations?: RelationshipWithEntity<R, this>[];
-  reactiveRegularEagerRelations?: RelationshipWithEntity<R, this>[];
-  persistableRelationships?: RelationshipWithEntity<R, this>[];
-
-  relationshipsByOtherEntity?: Record<string, RelationshipWithEntity<R, this>[]>;
-  differentRelationships?: Record<string, RelationshipWithEntity<R, this>[]>;
-}
+    SpringBootEntity<F, R> {}
 
 export interface UserEntity extends EntityAll {
   hasImageField?: boolean;

@@ -24,8 +24,8 @@ import { applyDerivedPropertyOnly, mutateData } from '../../../lib/utils/index.t
 import type CoreGenerator from '../../base-core/generator.js';
 import { getTypescriptType } from '../../client/support/index.ts';
 import type { Entity as CommonEntity, Field as CommonField } from '../../common/types.d.ts';
-import type { DatabaseProperty } from '../../liquibase/types.js';
 import { isFieldEnumType } from '../internal/types/field-types.ts';
+import type { Field } from '../types.js';
 
 import type { FakerWithRandexp } from './faker.js';
 import { prepareProperty } from './prepare-property.ts';
@@ -195,7 +195,7 @@ function generateFakeDataForField(
   } else if (field.fieldTypeBinary && field.fieldTypeBlobContent === TEXT) {
     data = '../fake-data/blob/hipster.txt';
   } else if (field.fieldType === STRING) {
-    data = field.id ? faker.string.uuid() : faker.helpers.fake(fakeStringTemplateForFieldName((field as DatabaseProperty).columnName!));
+    data = field.id ? faker.string.uuid() : faker.helpers.fake(fakeStringTemplateForFieldName((field as Field).columnName!));
   } else if (field.fieldType === UUID) {
     data = faker.string.uuid();
   } else if (field.fieldType === BOOLEAN) {

@@ -21,8 +21,8 @@ import { beforeEach, describe, it } from 'esmocha';
 
 import { expect } from 'chai';
 
-import type { EntityAll } from '../../../lib/types/application-all.d.ts';
 import { formatDateForChangelog } from '../../base/support/index.ts';
+import type { Entity } from '../types.d.ts';
 
 import { entityDefaultConfig, prepareEntityPrimaryKeyForTemplates } from './prepare-entity.ts';
 
@@ -71,7 +71,7 @@ describe('generator - base-application - support - prepareEntity', () => {
             { fieldName: 'id', fieldType: 'CustomType', path: ['id'] },
             { fieldName: 'uuid', fieldType: 'UUID', id: true, path: ['uuid'] },
           ],
-        } as unknown as EntityAll;
+        } as unknown as Entity;
         beforeEach(() => {
           entity = prepareEntityPrimaryKeyForTemplates({ entity });
         });

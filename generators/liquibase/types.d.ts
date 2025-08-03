@@ -35,7 +35,6 @@ export type LiquibaseSourceType = BaseEntityChangesSource & {
 export type Source = LiquibaseSourceType & JavaSource;
 
 export type DatabaseProperty = {
-  columnName?: string;
   columnRequired?: boolean;
   nullable?: boolean;
 };

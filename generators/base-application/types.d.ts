@@ -31,6 +31,7 @@ type Property = {
 
   skipClient?: boolean;
   skipServer?: boolean;
+  columnName?: string;
 };
 
 export type Field = Property &
@@ -85,6 +86,8 @@ export type Field = Property &
 
     fieldTypeBytes?: boolean;
     // Derived properties
+    dynamic?: boolean;
+    derivedPath?: string[];
     fieldTypeBinary?: boolean;
     fieldTypeDuration?: boolean;
     fieldTypeLocalDate?: boolean;
@@ -109,6 +112,7 @@ export type Field = Property &
 
     enumInstance?: string;
     builtIn?: boolean;
+    requiresPersistableImplementation?: boolean;
   };
 
 export type DerivedField<E extends Entity = Entity, F extends Field = Entity['fields'][number]> = F & {
@@ -125,6 +129,13 @@ export interface Relationship
   extends Property,
     BaseRelationship,
     DerivedPropertiesOnlyOf<'relationship', 'LeftSide' | 'RightSide' | 'ManyToOne' | 'OneToMany' | 'OneToOne' | 'ManyToMany'> {
+  derivedPrimaryKey?: {
+    derivedFields: (Field & {
+      originalField: Field;
+      derived: boolean;
+    })[];
+  };
+
   relationshipNameCapitalized: string;
   otherRelationship: this;
   collection: boolean;
@@ -149,6 +160,7 @@ export interface Relationship
 
   relationshipValidate?: boolean;
   relationshipValidateRules?: string[];
+  bagRelationship?: boolean;
 }
 
 /**
@@ -205,6 +217,7 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   extends Omit<Required<BaseEntity<F>>, 'relationships'> {
   relationships: RelationshipWithEntity<R, this>[];
   otherRelationships: R[];
+  entityClass: string;
 
   primaryKey?: PrimaryKey<F>;
 
@@ -277,6 +290,26 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   applicationType?: string;
   microfrontend?: boolean;
   skipUiGrouping?: boolean;
+  fieldsContainNoOwnerOneToOne?: boolean;
+  anyPropertyHasValidation?: boolean;
+  relationshipsByOtherEntity?: Record<string, RelationshipWithEntity<R, this>[]>;
+  differentRelationships?: Record<string, RelationshipWithEntity<R, this>[]>;
+  otherEntities?: this[];
+  persistableRelationships?: RelationshipWithEntity<R, this>[];
+  otherEntitiesWithPersistableRelationship?: this[];
+  updatableEntity?: boolean;
+  entityContainsCollectionField?: boolean;
+  requiresPersistableImplementation?: boolean;
+  otherEntityPrimaryKeyTypes?: string[];
+  otherEntityPrimaryKeyTypesIncludesUUID?: boolean;
+  eagerLoad?: boolean;
+  relationshipsContainEagerLoad?: boolean;
+  containsBagRelationships?: boolean;
+  implementsEagerLoadApis?: boolean;
+  eagerRelations?: RelationshipWithEntity<R, this>[];
+  regularEagerRelations?: RelationshipWithEntity<R, this>[];
+  reactiveEagerRelations: RelationshipWithEntity<R, this>[];
+  reactiveRegularEagerRelations?: RelationshipWithEntity<R, this>[];
 }
 
 /* ApplicationType Start */

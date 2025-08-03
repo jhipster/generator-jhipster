@@ -75,7 +75,6 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   entityJavadoc?: string;
   entityApiDescription?: string;
 
-  entityClass: string;
   entityClassPlural: string;
   entityAbsoluteClass: string;
   /** Entity folder relative to project root */

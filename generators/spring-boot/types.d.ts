@@ -1,6 +1,6 @@
 import type { HandleCommandTypes } from '../../lib/command/types.js';
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
-import type { Entity as BaseApplicationEntity, RelationshipWithEntity } from '../base-application/types.js';
+import type { Entity as BaseApplicationEntity } from '../base-application/types.js';
 import type { Config as CommonConfig } from '../common/types.d.ts';
 import type { Application as GradleApplication } from '../gradle/types.js';
 import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
@@ -54,7 +54,6 @@ export type Field = ServerField &
     autoGenerateByRepository?: boolean;
     mapstructExpression?: boolean;
 
-    requiresPersistableImplementation?: boolean;
     fieldNameAsDatabaseColumn?: string;
   };
 
@@ -67,7 +66,6 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
   isUsingMapsId?: boolean;
   mapsIdAssoc?: R;
-  reactiveEagerRelations: RelationshipWithEntity<R, this>[];
 
   reactiveOtherEntities: Set<this>;
   reactiveUniqueEntityTypes: Set<string>;
