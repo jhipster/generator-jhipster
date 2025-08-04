@@ -20,7 +20,7 @@ import type { MemFsEditorFile } from 'mem-fs-editor';
 import { type DuplexWithDebug, transform } from 'p-transform';
 
 import TemplateFileFs from './template-file-fs.ts';
-import type TemplateFile from './template-file.js';
+import type TemplateFile from './template-file.ts';
 
 export const createMultiStepTransform = () => {
   const templateFileFs = new TemplateFileFs({});

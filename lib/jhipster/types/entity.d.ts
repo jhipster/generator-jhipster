@@ -1,5 +1,5 @@
-import type { Field } from './field.js';
-import type { Relationship } from './relationship.js';
+import type { Field } from './field.ts';
+import type { Relationship } from './relationship.ts';
 
 type MicroserviceEntity = {
   // Required to define the entity id type.

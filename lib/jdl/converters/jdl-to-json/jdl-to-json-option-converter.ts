@@ -19,11 +19,11 @@
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.ts';
-import type AbstractJDLOption from '../../core/models/abstract-jdl-option.js';
-import type JDLApplication from '../../core/models/jdl-application.js';
-import type JDLBinaryOption from '../../core/models/jdl-binary-option.js';
-import type JDLObject from '../../core/models/jdl-object.js';
-import type { ParsedJDLAnnotation } from '../../core/types/parsed.js';
+import type AbstractJDLOption from '../../core/models/abstract-jdl-option.ts';
+import type JDLApplication from '../../core/models/jdl-application.ts';
+import type JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+import type JDLObject from '../../core/models/jdl-object.ts';
+import type { ParsedJDLAnnotation } from '../../core/types/parsed.ts';
 import logger from '../../core/utils/objects/logger.ts';
 
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = unaryOptions;

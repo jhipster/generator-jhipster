@@ -6,7 +6,7 @@ import type {
   JHipsterArguments,
   JHipsterChoices,
   JHipsterConfigs,
-} from './types.js';
+} from './types.ts';
 
 type JHipsterArgumentsWithChoices = JHipsterArguments & { choices?: JHipsterChoices };
 

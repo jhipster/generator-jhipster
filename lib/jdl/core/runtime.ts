@@ -8,8 +8,8 @@ import { deploymentTokens } from './built-in-options/tokens/deployment-tokens.ts
 import JDLParser from './parsing/jdl-parser.ts';
 import { buildTokens, createJDLLexer } from './parsing/lexer/lexer.ts';
 import { checkConfigKeys, checkTokens } from './parsing/self-checks/parsing-system-checker.ts';
-import type { JDLApplicationConfig, JDLValidatorOption } from './types/parsing.js';
-import type { JDLRuntime } from './types/runtime.js';
+import type { JDLApplicationConfig, JDLValidatorOption } from './types/parsing.ts';
+import type { JDLRuntime } from './types/runtime.ts';
 
 const mergeDefinition = (definition: JDLApplicationConfig, defaultDefinition: JDLApplicationConfig) => {
   return {

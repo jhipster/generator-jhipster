@@ -2,8 +2,8 @@ import type {
   ExportApplicationPropertiesFromCommand,
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
-} from '../../lib/command/index.js';
-import type { Entity as BaseApplicationEntity } from '../base-application/types.js';
+} from '../../lib/command/index.ts';
+import type { Entity as BaseApplicationEntity } from '../base-application/types.ts';
 import type {
   Application as CommonApplication,
   Entity as CommonEntity,
@@ -18,9 +18,9 @@ import type {
   Options as JavaOptions,
   Relationship as JavaRelationship,
   Source as JavaSource,
-} from '../java/types.js';
+} from '../java/types.ts';
 import type { Relationship as LanguagesRelationship } from '../languages/types.d.ts';
-import type { DatabaseEntity } from '../liquibase/types.js';
+import type { DatabaseEntity } from '../liquibase/types.ts';
 
 import type Command from './command.ts';
 

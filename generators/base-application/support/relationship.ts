@@ -20,7 +20,7 @@
 import { lowerFirst, upperFirst } from 'lodash-es';
 
 import type { ValidationResult } from '../../base-core/api.d.ts';
-import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../types.js';
+import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../types.ts';
 
 import { stringifyApplicationData } from './debug.ts';
 import { findEntityInEntities } from './entity.ts';

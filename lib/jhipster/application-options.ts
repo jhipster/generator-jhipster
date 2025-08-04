@@ -23,7 +23,7 @@ import type {
   JDLApplicationOptionType,
   JDLApplicationOptionTypeValue,
   JDLApplicationOptionValue,
-} from '../jdl/core/types/parsing.js';
+} from '../jdl/core/types/parsing.ts';
 
 import authenticationTypes from './authentication-types.ts';
 import buildToolTypes from './build-tool-types.ts';

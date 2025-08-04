@@ -1,2 +1,2 @@
 export * from './converter.ts';
-export type * from './types.js';
+export type * from './types.ts';

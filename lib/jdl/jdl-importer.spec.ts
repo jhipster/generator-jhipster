@@ -29,7 +29,7 @@ import databaseTypes from '../jhipster/database-types.ts';
 import { readYoRcFile } from '../utils/yo-rc.ts';
 
 import { createImporterFromContent, createImporterFromFiles, getTestFile } from './core/__test-support__/index.ts';
-import type { ImportState } from './jdl-importer.js';
+import type { ImportState } from './jdl-importer.ts';
 
 const { NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
 

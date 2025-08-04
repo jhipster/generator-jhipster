@@ -25,7 +25,7 @@ import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENER
 import type { Config as GitConfig, Options as GitOptions } from '../git/types.d.ts';
 import type { Config as ProjectNameConfig } from '../project-name/types.d.ts';
 
-import type { Config as WorkspacesConfig, Options as WorkspacesOptions, WorkspacesApplication } from './types.js';
+import type { Config as WorkspacesConfig, Options as WorkspacesOptions, WorkspacesApplication } from './types.ts';
 
 export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, WorkspacesApplication, WorkspacesConfig, WorkspacesOptions> {
   dockerCompose!: boolean;

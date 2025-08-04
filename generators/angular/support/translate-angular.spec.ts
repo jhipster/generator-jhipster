@@ -19,7 +19,7 @@
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
 import { inspect } from 'node:util';
 
-import type { GetWebappTranslationCallback } from '../../client/translation.js';
+import type { GetWebappTranslationCallback } from '../../client/translation.ts';
 
 import { createTranslationReplacer } from './translate-angular.ts';
 

@@ -22,10 +22,10 @@ import liquibaseCommand from '../../generators/liquibase/command.ts';
 import springBootCommand from '../../generators/spring-boot/command.ts';
 import gatewayCommand from '../../generators/spring-cloud/generators/gateway/command.ts';
 import springCloudStreamCommand from '../../generators/spring-cloud-stream/command.ts';
-import type { JHipsterConfigs } from '../command/types.js';
+import type { JHipsterConfigs } from '../command/types.ts';
 import { createRuntime } from '../jdl/core/runtime.ts';
-import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
-import type { JDLRuntime } from '../jdl/core/types/runtime.js';
+import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/types/parsing.ts';
+import type { JDLRuntime } from '../jdl/core/types/runtime.ts';
 
 export const extractJdlDefinitionFromCommandConfig = (configs: JHipsterConfigs = {}): JHipsterOptionDefinition[] =>
   Object.entries(configs)

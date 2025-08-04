@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.js';
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.ts';
 import type {
   Config as BaseWorkspacesConfig,
   Deployment as BaseWorkspacesDeployment,
   Options as BaseWorkspacesOptions,
   Source as BaseWorkspacesSource,
   WorkspacesApplication as BaseWorkspacesWorkspacesApplication,
-} from '../base-workspaces/types.js';
+} from '../base-workspaces/types.ts';
 
 import type command from './command.ts';
 import type bootstrapCommand from './generators/bootstrap/command.ts';

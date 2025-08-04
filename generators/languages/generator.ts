@@ -25,7 +25,7 @@ import { updateLanguagesTask as updateLanguagesInAngularTask } from '../angular/
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { QUEUES } from '../base-application/priorities.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { Application as ClientApplication, Config as ClientConfig, Source as ClientSource } from '../client/types.js';
+import type { Application as ClientApplication, Config as ClientConfig, Source as ClientSource } from '../client/types.ts';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
 import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/index.ts';
 import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.ts';
@@ -35,7 +35,7 @@ import { writeEntityFiles } from './entity-files.ts';
 import { clientI18nFiles } from './files.ts';
 import { askForLanguages, askI18n } from './prompts.ts';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.ts';
-import type { Language } from './support/languages.js';
+import type { Language } from './support/languages.ts';
 import { findLanguageForTag, supportedLanguages } from './support/languages.ts';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.ts';
 import type {
@@ -44,7 +44,7 @@ import type {
   Entity as LanguagesEntity,
   Options as LanguagesOptions,
   Source as LanguagesSource,
-} from './types.js';
+} from './types.ts';
 
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 

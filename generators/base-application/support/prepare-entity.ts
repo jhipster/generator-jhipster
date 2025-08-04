@@ -26,17 +26,17 @@ import { databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhips
 import type { EntityAll, FieldAll } from '../../../lib/types/application-all.d.ts';
 import { getMicroserviceAppName, mutateData, normalizePathEnd, stringHashCode, upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import { parseChangelog } from '../../base/support/timestamp.ts';
-import type CoreGenerator from '../../base-core/generator.js';
-import type BaseGenerator from '../../base-core/index.js';
+import type CoreGenerator from '../../base-core/generator.ts';
+import type BaseGenerator from '../../base-core/index.ts';
 import { getTypescriptKeyType } from '../../client/support/index.ts';
 import type { Config as ClientConfig } from '../../client/types.ts';
 import type { Application as CommonApplication, Entity as CommonEntity } from '../../common/types.ts';
-import type { DatabaseProperty } from '../../liquibase/types.js';
+import type { DatabaseProperty } from '../../liquibase/types.ts';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { Config as SpringBootConfig } from '../../spring-boot/types.ts';
 import type { Config as SpringDataRelationalConfig } from '../../spring-data-relational/types.ts';
-import type { PrimaryKey } from '../types.js';
+import type { PrimaryKey } from '../types.ts';
 
 import { createFaker } from './faker.ts';
 import { fieldIsEnum } from './field-utils.ts';

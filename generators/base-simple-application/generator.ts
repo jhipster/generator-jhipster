@@ -22,20 +22,20 @@ import { getConfigWithDefaults } from '../../lib/jhipster/default-application-op
 import { mutateData } from '../../lib/utils/index.ts';
 import BaseGenerator from '../base/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { GenericTask } from '../base-core/types.js';
+import type { GenericTask } from '../base-core/types.ts';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.ts';
-import type GeneratorsByNamespace from '../types.js';
+import type GeneratorsByNamespace from '../types.ts';
 
 import { BOOTSTRAP_APPLICATION, CUSTOM_PRIORITIES } from './priorities.ts';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.ts';
-import type { SimpleTaskTypes } from './tasks.js';
+import type { SimpleTaskTypes } from './tasks.ts';
 import type {
   Application as BaseSimpleApplicationApplication,
   Config as BaseSimpleApplicationConfig,
   Features as BaseSimpleApplicationFeatures,
   Options as BaseSimpleApplicationOptions,
   Source as BaseSimpleApplicationSource,
-} from './types.js';
+} from './types.ts';
 
 const { LOADING, PREPARING, POST_PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
 

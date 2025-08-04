@@ -20,9 +20,9 @@ import { upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
-import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
+import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import { mutateData } from '../../lib/utils/index.ts';
-import type { GenericTask } from '../base-core/types.js';
+import type { GenericTask } from '../base-core/types.ts';
 import BaseGenerator from '../base-simple-application/index.ts';
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.ts';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-simple-application/support/index.ts';
@@ -32,7 +32,7 @@ import {
   GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
   GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
 } from '../generator-list.ts';
-import type GeneratorsByNamespace from '../types.js';
+import type GeneratorsByNamespace from '../types.ts';
 
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
 import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, getEntitiesFromDir } from './support/index.ts';
@@ -43,7 +43,7 @@ import type {
   PreparingEachEntityRelationshipTaskParam,
   PreparingEachEntityTaskParam,
   TaskTypes as DefaultTasks,
-} from './tasks.js';
+} from './tasks.ts';
 import type {
   Application as BaseApplication,
   Config as BaseApplicationConfig,
@@ -51,7 +51,7 @@ import type {
   Features as BaseApplicationFeatures,
   Options as BaseApplicationOptions,
   Source as BaseApplicationSource,
-} from './types.js';
+} from './types.ts';
 
 const {
   LOADING,

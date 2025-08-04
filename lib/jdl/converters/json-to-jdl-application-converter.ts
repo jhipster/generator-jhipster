@@ -20,8 +20,8 @@
 import { createJDLApplication } from '../core/models/jdl-application-factory.ts';
 import type JDLApplication from '../core/models/jdl-application.ts';
 import JDLObject from '../core/models/jdl-object.ts';
-import type { RawJDLJSONApplication } from '../core/types/exporter.js';
-import type { JDLRuntime } from '../core/types/runtime.js';
+import type { RawJDLJSONApplication } from '../core/types/exporter.ts';
+import type { JDLRuntime } from '../core/types/runtime.ts';
 
 const GENERATOR_NAME = 'generator-jhipster';
 

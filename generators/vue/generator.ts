@@ -22,7 +22,7 @@ import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
-import type { Field } from '../base-application/types.js';
+import type { Field } from '../base-application/types.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { ClientApplicationGenerator } from '../client/generator.ts';
 import {
@@ -30,7 +30,7 @@ import {
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.ts';
-import type { Field as ClientField } from '../client/types.js';
+import type { Field as ClientField } from '../client/types.ts';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_VUE } from '../generator-list.ts';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.ts';
 

@@ -27,8 +27,8 @@ import type {
   ParsedJDLOption,
   ParsedJDLOptionConfig,
   ParsedJDLValidation,
-} from '../types/parsed.js';
-import type { JDLRuntime } from '../types/runtime.js';
+} from '../types/parsed.ts';
+import type { JDLRuntime } from '../types/runtime.ts';
 import deduplicate from '../utils/array-utils.ts';
 import logger from '../utils/objects/logger.ts';
 

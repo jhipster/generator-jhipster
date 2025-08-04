@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import { intersection, kebabCase } from 'lodash-es';
 
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import buildToolCommand from '../java/generators/build-tool/command.ts';
 
 const { buildTool } = buildToolCommand.configs;

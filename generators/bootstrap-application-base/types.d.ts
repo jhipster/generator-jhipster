@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
   Entity as CommonEntity,
   Options as CommonOptions,
   Source as CommonSource,
-} from '../common/types.js';
+} from '../common/types.ts';
 
 import type command from './command.ts';
 

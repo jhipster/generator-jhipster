@@ -45,9 +45,9 @@ import {
   preparePostEntityServerDerivedProperties,
   prepareRelationship,
 } from '../server/support/index.ts';
-import type { Application as ServerApplication, Entity as ServerEntity } from '../server/types.js';
-import type { Application as SpringBootApplication } from '../spring-boot/types.js';
-import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.js';
+import type { Application as ServerApplication, Entity as ServerEntity } from '../server/types.ts';
+import type { Application as SpringBootApplication } from '../spring-boot/types.ts';
+import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.ts';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator<ServerEntity, ServerApplication<ServerEntity>> {
   async beforeQueue() {

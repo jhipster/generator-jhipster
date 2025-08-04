@@ -27,7 +27,7 @@ import type {
   Config as CommonConfig,
   Entity as CommonEntity,
   Options as CommonOptions,
-} from '../common/types.js';
+} from '../common/types.ts';
 import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_SERVER } from '../generator-list.ts';
 import { getDefaultAppName } from '../project-name/support/index.ts';
 

@@ -1,4 +1,4 @@
-import type { GitHubMatrixGroup } from '../../../lib/testing/github-matrix.js';
+import type { GitHubMatrixGroup } from '../../../lib/testing/github-matrix.ts';
 import { extendMatrix, fromMatrix } from '../../../lib/testing/support/matrix-utils.ts';
 import { convertOptionsToJDL } from '../support/jdl.ts';
 

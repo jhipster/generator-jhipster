@@ -18,7 +18,7 @@
  */
 import { asPostWritingEntitiesTask, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
 import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.ts';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.ts';
 
 export const reactFiles = asWriteFilesSection({
   client: [

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { JavaArtifact } from '../java/types.js';
+import type { JavaArtifact } from '../java/types.ts';
 
 export type MavenArtifact = JavaArtifact & {
   version?: string;

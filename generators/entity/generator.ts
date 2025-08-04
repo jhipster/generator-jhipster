@@ -26,7 +26,7 @@ import type { Storage } from 'yeoman-generator';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import { reservedKeywords } from '../../lib/jhipster/index.ts';
-import type { Features } from '../base/types.js';
+import type { Features } from '../base/types.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import { GENERATOR_ENTITIES } from '../generator-list.ts';
@@ -50,7 +50,7 @@ import type {
   Config as EntityConfig,
   Entity as EntityEntity,
   Options as EntityOptions,
-} from './types.js';
+} from './types.ts';
 
 const { isReservedClassName } = reservedKeywords;
 

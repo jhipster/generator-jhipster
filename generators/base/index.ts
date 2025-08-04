@@ -19,4 +19,4 @@
 
 export { CommandBaseGenerator, default } from './generator.ts';
 export { default as command } from './command.ts';
-export type { Config, Features, Options } from './types.js';
+export type { Config, Features, Options } from './types.ts';

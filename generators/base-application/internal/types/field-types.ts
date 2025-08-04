@@ -1,7 +1,7 @@
 import type { SetFieldType, SetRequired } from 'type-fest';
 
 import { type FieldBinaryType, type FieldBlobType, type FieldType, blobFieldTypesValues } from '../../../../lib/jhipster/field-types.ts';
-import type { Field as BaseApplicationField } from '../../types.js';
+import type { Field as BaseApplicationField } from '../../types.ts';
 
 export const isBlobType = (fieldType: string): fieldType is FieldBlobType =>
   (Object.values(blobFieldTypesValues) as string[]).includes(fieldType);

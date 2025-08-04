@@ -21,7 +21,7 @@ import type { CstNode, IRecognitionException } from 'chevrotain';
 import { EOF } from 'chevrotain';
 import { uniq } from 'lodash-es';
 
-import type { JDLRuntime } from '../types/runtime.js';
+import type { JDLRuntime } from '../types/runtime.ts';
 
 import { buildJDLAstBuilderVisitor } from './jdl-ast-builder-visitor.ts';
 import performAdditionalSyntaxChecks from './validator.ts';

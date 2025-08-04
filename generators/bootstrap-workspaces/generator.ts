@@ -23,7 +23,7 @@ import { normalizePathEnd } from '../../lib/utils/path.ts';
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base/support/constants.ts';
 import { CommandBaseWorkspacesGenerator as BaseWorkspacesGenerator } from '../base-workspaces/index.ts';
 
-import type command from './command.js';
+import type command from './command.ts';
 
 export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerator<typeof command> {
   async beforeQueue() {

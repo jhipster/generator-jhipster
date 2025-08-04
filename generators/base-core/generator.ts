@@ -42,7 +42,7 @@ import type {
   JHipsterCommandDefinition,
   JHipsterConfigs,
   ParseableCommand,
-} from '../../lib/command/index.js';
+} from '../../lib/command/index.ts';
 import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.ts';
 import { packageJson } from '../../lib/index.ts';
 import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
@@ -50,8 +50,8 @@ import baseCommand from '../base/command.ts';
 import { dockerPlaceholderGenerator } from '../docker/utils.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.ts';
-import type GeneratorsByNamespace from '../types.js';
-import type { GeneratorsWithBootstrap } from '../types.js';
+import type GeneratorsByNamespace from '../types.ts';
+import type { GeneratorsWithBootstrap } from '../types.ts';
 
 import type {
   CascatedEditFileCallback,
@@ -60,12 +60,12 @@ import type {
   ValidationResult,
   WriteContext,
   WriteFileOptions,
-} from './api.js';
+} from './api.ts';
 import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from './internal/index.ts';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
 import { joinCallbacks } from './support/index.ts';
-import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.js';
+import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.ts';
 
 const {
   INITIALIZING,

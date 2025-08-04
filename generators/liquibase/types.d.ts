@@ -1,4 +1,4 @@
-import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type {
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
@@ -12,9 +12,9 @@ import type {
   Relationship as BaseEntityChangesRelationship,
   Source as BaseEntityChangesSource,
 } from '../base-entity-changes/types.d.ts';
-import type { Application as JavaApplication, Entity as JavaEntity, Field as JavaField, Source as JavaSource } from '../java/types.js';
+import type { Application as JavaApplication, Entity as JavaEntity, Field as JavaField, Source as JavaSource } from '../java/types.ts';
 
-import type command from './command.js';
+import type command from './command.ts';
 import type { LiquibaseColumnType, LiquibaseLoadColumnType } from './support/prepare-field.ts';
 
 type Command = HandleCommandTypes<typeof command>;

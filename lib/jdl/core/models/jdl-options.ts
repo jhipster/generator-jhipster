@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type AbstractJDLOption from './abstract-jdl-option.js';
-import type JDLBinaryOption from './jdl-binary-option.js';
-import type JDLUnaryOption from './jdl-unary-option.js';
+import type AbstractJDLOption from './abstract-jdl-option.ts';
+import type JDLBinaryOption from './jdl-binary-option.ts';
+import type JDLUnaryOption from './jdl-unary-option.ts';
 
 export default class JDLOptions {
   options: Record<string, AbstractJDLOption>;

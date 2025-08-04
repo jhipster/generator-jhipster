@@ -20,10 +20,10 @@ import { capitalize } from 'lodash-es';
 
 import { customCamelCase } from '../../../utils/string-utils.ts';
 import { validations } from '../../core/built-in-options/index.ts';
-import type { JDLEntity } from '../../core/models/index.js';
-import type JDLField from '../../core/models/jdl-field.js';
-import type JDLObject from '../../core/models/jdl-object.js';
-import type { JSONField } from '../../core/types/json-config.js';
+import type { JDLEntity } from '../../core/models/index.ts';
+import type JDLField from '../../core/models/jdl-field.ts';
+import type JDLObject from '../../core/models/jdl-object.ts';
+import type { JSONField } from '../../core/types/json-config.ts';
 import { formatComment } from '../../core/utils/format-utils.ts';
 
 const {

@@ -1,7 +1,7 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { convertSingleContentToJDL } from '../../../../../lib/jdl/converters/json-to-jdl-converter.ts';
-import type { ImportState } from '../../../../../lib/jdl/jdl-importer.js';
+import type { ImportState } from '../../../../../lib/jdl/jdl-importer.ts';
 import { createImporterFromContent } from '../../../../../lib/jdl/jdl-importer.ts';
 import { getDefaultRuntime } from '../../../../../lib/jdl-config/jhipster-jdl-config.ts';
 

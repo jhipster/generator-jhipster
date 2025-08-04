@@ -19,7 +19,7 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import type JDLField from '../../core/models/jdl-field.js';
+import type JDLField from '../../core/models/jdl-field.ts';
 
 import { convertField } from './field-converter.ts';
 

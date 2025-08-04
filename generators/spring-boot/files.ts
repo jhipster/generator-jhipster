@@ -26,7 +26,7 @@ import {
   moveToSrcMainResourcesDir,
 } from '../java/support/index.ts';
 
-import type { Application as SpringBootApplication } from './types.js';
+import type { Application as SpringBootApplication } from './types.ts';
 
 const imperativeConfigFiles = asWriteFilesSection<SpringBootApplication>({
   imperativeFiles: [

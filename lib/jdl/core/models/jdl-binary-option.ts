@@ -20,7 +20,7 @@
 import BinaryOptions from '../built-in-options/binary-options.ts';
 import { join } from '../utils/set-utils.ts';
 
-import type { JDLOptionParams } from './abstract-jdl-option.js';
+import type { JDLOptionParams } from './abstract-jdl-option.ts';
 import AbstractJDLOption from './abstract-jdl-option.ts';
 
 /**

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { AbstractIssueArgs } from './abstract-issue.js';
+import type { AbstractIssueArgs } from './abstract-issue.ts';
 import AbstractIssue from './abstract-issue.ts';
 
 type RelationshipIssueArgs = AbstractIssueArgs & { from: string; to: string; type: string };

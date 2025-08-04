@@ -31,7 +31,7 @@ import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import type { Config as ProjectNameConfig } from '../project-name/types.d.ts';
 
 import { GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES, UPGRADE_BRANCH } from './support/index.ts';
-import type { Config as UpgradeConfig, Options as UpgradeOptions } from './types.js';
+import type { Config as UpgradeConfig, Options as UpgradeOptions } from './types.ts';
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';

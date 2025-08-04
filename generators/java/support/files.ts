@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import type { WriteFileBlock, WriteFileSection } from '../../base-core/api.js';
-import type CoreGenerator from '../../base-core/generator.js';
+import type { WriteFileBlock, WriteFileSection } from '../../base-core/api.ts';
+import type CoreGenerator from '../../base-core/generator.ts';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../../generator-constants.js';
-import type { Application as JavaApplication, Entity as JavaEntity } from '../types.js';
+import type { Application as JavaApplication, Entity as JavaEntity } from '../types.ts';
 
 export const replaceEntityFilePathVariables = (data: any, filePath: string) => {
   filePath = filePath

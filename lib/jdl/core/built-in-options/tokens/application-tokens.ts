@@ -23,7 +23,7 @@ import { Lexer } from 'chevrotain';
 import applicationOptions from '../../../../jhipster/application-options.ts';
 import { KEYWORD, UNARY_OPTION } from '../../parsing/lexer/shared-tokens.ts';
 import createTokenFromConfig from '../../parsing/lexer/token-creator.ts';
-import type { JDLTokenConfig } from '../../types/parsing.js';
+import type { JDLTokenConfig } from '../../types/parsing.ts';
 
 const { OptionNames } = applicationOptions;
 

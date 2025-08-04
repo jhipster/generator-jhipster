@@ -8,8 +8,8 @@ import { Minimatch } from 'minimatch';
 
 import { getJDLObjectFromSingleApplication } from '../../../lib/jdl/converters/json-to-jdl-converter.ts';
 import { createRuntime } from '../../../lib/jdl/core/runtime.ts';
-import type { JDLApplicationConfig } from '../../../lib/jdl/core/types/parsing.js';
-import type { Entity } from '../../../lib/jhipster/types/entity.js';
+import type { JDLApplicationConfig } from '../../../lib/jdl/core/types/parsing.ts';
+import type { Entity } from '../../../lib/jhipster/types/entity.ts';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 
 export const exportJDLTransform = ({

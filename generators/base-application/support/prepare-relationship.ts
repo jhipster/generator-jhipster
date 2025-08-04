@@ -21,8 +21,8 @@ import pluralize from 'pluralize';
 
 import { databaseTypes, entityOptions, validations } from '../../../lib/jhipster/index.ts';
 import { mutateData } from '../../../lib/utils/index.ts';
-import type CoreGenerator from '../../base-core/generator.js';
-import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../types.js';
+import type CoreGenerator from '../../base-core/generator.ts';
+import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../types.ts';
 
 import { stringifyApplicationData } from './debug.ts';
 import { prepareProperty } from './prepare-property.ts';

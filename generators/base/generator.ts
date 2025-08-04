@@ -27,12 +27,12 @@ import { union } from 'lodash-es';
 import semver, { lt as semverLessThan } from 'semver';
 import type { PackageJson } from 'type-fest';
 
-import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.ts';
 import { packageJson } from '../../lib/index.ts';
 import { packageNameToNamespace } from '../../lib/utils/index.ts';
 import CoreGenerator from '../base-core/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { GenericTask } from '../base-core/types.js';
+import type { GenericTask } from '../base-core/types.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.ts';
 
@@ -44,7 +44,7 @@ import {
   LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
   formatDateForChangelog,
 } from './support/index.ts';
-import type { TaskTypes as BaseTasks } from './tasks.js';
+import type { TaskTypes as BaseTasks } from './tasks.ts';
 import type {
   CleanupArgumentType,
   Config as BaseConfig,
@@ -52,7 +52,7 @@ import type {
   Features as BaseFeatures,
   Options as BaseOptions,
   Source as BaseSource,
-} from './types.js';
+} from './types.ts';
 
 const { WRITING } = PRIORITY_NAMES;
 

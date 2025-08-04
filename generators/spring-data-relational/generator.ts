@@ -35,7 +35,7 @@ import type {
   Entity as SpringDataRelationalEntity,
   Options as SpringDataRelationalOptions,
   Source as SpringDataRelationalSource,
-} from './types.js';
+} from './types.ts';
 
 const { SQL } = databaseTypes;
 

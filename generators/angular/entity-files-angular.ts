@@ -20,7 +20,7 @@ import { asPostWritingEntitiesTask, asWriteEntityFilesSection, asWritingEntities
 import { clientApplicationTemplatesBlock } from '../client/support/files.ts';
 import { filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/filter-entities.ts';
 
-import type { Application as AngularApplication, Entity as AngularEntity, Source as AngularSource } from './types.js';
+import type { Application as AngularApplication, Entity as AngularEntity, Source as AngularSource } from './types.ts';
 
 const entityModelFiles = clientApplicationTemplatesBlock({
   templates: ['entities/_entityFolder_/_entityFile_.model.ts', 'entities/_entityFolder_/_entityFile_.test-samples.ts'],

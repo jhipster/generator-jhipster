@@ -37,14 +37,14 @@ import createWithoutApplicationValidator from './converters/validators/jdl-witho
 import type JDLJSONEntity from './core/basic-types/json-entity.ts';
 import { BASE_NAME_KEY } from './core/built-in-options/index.ts';
 import type JDLDeployment from './core/models/jdl-deployment.ts';
-import type JDLObject from './core/models/jdl-object.js';
+import type JDLObject from './core/models/jdl-object.ts';
 import { parseFromContent, parseFromFiles } from './core/readers/jdl-reader.ts';
 import { createRuntime } from './core/runtime.ts';
-import type { JDLJSONBlueprint, JDLJSONMicrofrontend, PostProcessedJDLJSONApplication } from './core/types/exporter.js';
-import type { JSONEntity } from './core/types/json-config.js';
-import type { ParsedJDLApplications } from './core/types/parsed.js';
-import type { JDLApplicationConfig } from './core/types/parsing.js';
-import type { JDLRuntime } from './core/types/runtime.js';
+import type { JDLJSONBlueprint, JDLJSONMicrofrontend, PostProcessedJDLJSONApplication } from './core/types/exporter.ts';
+import type { JSONEntity } from './core/types/json-config.ts';
+import type { ParsedJDLApplications } from './core/types/parsed.ts';
+import type { JDLApplicationConfig } from './core/types/parsing.ts';
+import type { JDLRuntime } from './core/types/runtime.ts';
 
 const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the generator as it circles
 

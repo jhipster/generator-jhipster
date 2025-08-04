@@ -18,11 +18,11 @@
  */
 import assert from 'node:assert';
 
-import type { FieldType } from '../../../lib/jhipster/field-types.js';
+import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import { normalizePathEnd } from '../../../lib/utils/path.ts';
-import type { PrimaryKey, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../../base-application/types.js';
-import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.js';
+import type { PrimaryKey, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../../base-application/types.ts';
+import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.ts';
 
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.ts';
 

@@ -1,4 +1,4 @@
-import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type appCommand from '../app/command.ts';
 import type {
   Config as BaseApplicationConfig,
@@ -6,24 +6,24 @@ import type {
   Features as BaseApplicationFeatures,
   Options as BaseApplicationOptions,
   Source as BaseApplicationSource,
-} from '../base-application/types.js';
+} from '../base-application/types.ts';
 import type { PropertiesFileKeyUpdate } from '../base-core/support/index.ts';
-import type { Application as DockerApplication } from '../docker/types.js';
-import type { Application as GitApplication, Config as GitConfig, Options as GitOptions } from '../git/types.js';
-import type huskyCommand from '../javascript/generators/husky/command.js';
-import type prettierCommand from '../javascript/generators/prettier/command.js';
+import type { Application as DockerApplication } from '../docker/types.ts';
+import type { Application as GitApplication, Config as GitConfig, Options as GitOptions } from '../git/types.ts';
+import type huskyCommand from '../javascript/generators/husky/command.ts';
+import type prettierCommand from '../javascript/generators/prettier/command.ts';
 import type {
   Application as JavascriptApplication,
   Entity as JavascriptEntity,
   Field as JavascriptField,
   Relationship as JavascriptRelationship,
-} from '../javascript/types.js';
+} from '../javascript/types.ts';
 import type {
   Application as LanguagesApplication,
   Config as LanguagesConfig,
   Entity as LanguagesEntity,
   Options as LanguagesOptions,
-} from '../languages/types.js';
+} from '../languages/types.ts';
 
 import type command from './command.ts';
 

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { ApplicationType } from '../../../core/application-types.ts';
-import type { RelationshipType } from '../basic-types/relationships.js';
+import type { RelationshipType } from '../basic-types/relationships.ts';
 
 export type ParsedJDLAnnotation = {
   optionName: string;

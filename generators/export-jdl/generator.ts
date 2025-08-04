@@ -24,7 +24,7 @@ import { getDefaultRuntime } from '../../lib/jdl-config/jhipster-jdl-config.ts';
 import { CommandCoreGenerator } from '../base-core/generator.ts';
 import CoreGenerator from '../base-core/index.ts';
 
-import type command from './command.js';
+import type command from './command.ts';
 
 export default class extends CommandCoreGenerator<typeof command> {
   jdlFile!: string;

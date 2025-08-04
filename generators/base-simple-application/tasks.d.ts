@@ -18,7 +18,7 @@
  */
 import type { Merge, OmitIndexSignature, Simplify } from 'type-fest';
 
-import type { TaskParamWithControl, TaskParamWithSource, TaskTypes as BaseTaskTypes } from '../base/tasks.js';
+import type { TaskParamWithControl, TaskParamWithSource, TaskTypes as BaseTaskTypes } from '../base/tasks.ts';
 
 import type { Application as BaseSimpleApplicationApplication, Source as BaseSimpleApplicationSource } from './types.d.ts';
 

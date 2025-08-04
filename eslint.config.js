@@ -67,7 +67,7 @@ export default defineConfig(
       'import-x/resolver-next': [createTypeScriptImportResolver()],
     },
     rules: {
-      'import-x/extensions': ['error', 'ignorePackages', { fix: true }],
+      'import-x/extensions': ['error', 'ignorePackages', { checkTypeImports: true, fix: true }],
       'import-x/namespace': 'off',
       'import-x/no-named-as-default-member': 'off',
     },

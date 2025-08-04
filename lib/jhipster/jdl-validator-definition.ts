@@ -24,7 +24,7 @@ import {
   ALPHANUMERIC_DASH,
   ALPHANUMERIC_UNDERSCORE,
 } from '../jdl/core/built-in-options/validation-patterns.ts';
-import type { JDLValidatorOption } from '../jdl/core/types/parsing.js';
+import type { JDLValidatorOption } from '../jdl/core/types/parsing.ts';
 
 const JHI_PREFIX_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
 const PACKAGE_NAME_PATTERN = /^[a-z_][a-z0-9_]*$/;

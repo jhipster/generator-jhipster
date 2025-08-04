@@ -19,7 +19,7 @@
 
 import { upperFirst } from 'lodash-es';
 
-import type { JSONField, JSONRelationship } from '../types/json-config.js';
+import type { JSONField, JSONRelationship } from '../types/json-config.ts';
 import { merge } from '../utils/object-utils.ts';
 
 /**

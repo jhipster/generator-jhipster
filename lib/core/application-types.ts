@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterNamedChoice } from './types.js';
+import type { JHipsterNamedChoice } from './types.ts';
 
 export const APPLICATION_TYPE_KEY = 'applicationType';
 
