@@ -3,7 +3,7 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.3",
     "husky": "9.1.7",
-    "lint-staged": "16.1.2"
+    "lint-staged": "16.1.4"
   },
   "packageManager": "npm@11"
 }
