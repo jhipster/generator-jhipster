@@ -75,14 +75,22 @@ jobs:
           jhipster.cjs generate-blueprint --force --link-jhipster-dependency --generate-snapshots --skip-install
           npm link generator-jhipster
           npm link
-      - name: 'GENERATION: config'
-        run: $JHI_SCRIPTS/11-generate-config.sh
-      - name: 'GENERATION: project'
-        run: $JHI_SCRIPTS/12-generate-project.sh ${{ matrix.extra-args }} ${{ matrix.new-extra-args }} --blueprints foo
-        env:
-          JHI_CLI: jhipster.cjs
-      - name: 'GENERATION: jhipster info'
-        run: $JHI_SCRIPTS/14-jhipster-info.sh
+      - name: 'Initialize environment'
+        uses: ./generator-jhipster/.github/actions/init-environment@v0
+        with:
+          generator-path: generator-jhipster
+          
+      - name: 'Generate sample configuration'
+        uses: ./generator-jhipster/.github/actions/generate-sample-config@v0
+        with:
+          sample-name: ng-default
+          database-type: sql
+          
+      - name: 'Generate project'
+        uses: ./generator-jhipster/.github/actions/generate-project@v0
+        with:
+          sample-name: ng-default
+          extra-args: ${{ matrix.extra-args }} ${{ matrix.new-extra-args }} --blueprints foo
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------

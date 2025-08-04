@@ -32,6 +32,9 @@ export const DYNAMIC = 'dynamic';
 export const JS = 'js';
 export const LOCAL_BLUEPRINT_OPTION = 'localBlueprint';
 export const CLI_OPTION = 'cli';
+export const SAMPLE_GENERATION = 'sampleGeneration';
+export const SAMPLE_NAME = 'sampleName';
+export const DATABASE_TYPE = 'databaseType';
 
 export const SBS = 'sbs';
 export const COMMAND = 'command';
@@ -54,6 +57,9 @@ export const defaultConfig = ({ config = {} }: { config?: any } = {}) => ({
   [CLI_OPTION]: !config[LOCAL_BLUEPRINT_OPTION],
   [SUB_GENERATORS]: [] as string[],
   [ADDITIONAL_SUB_GENERATORS]: '',
+  [SAMPLE_GENERATION]: false,
+  [SAMPLE_NAME]: 'ng-default',
+  [DATABASE_TYPE]: 'sql',
 });
 
 export const defaultSubGeneratorConfig = () => ({
@@ -79,8 +85,42 @@ export const allGeneratorsConfig = () => ({
 });
 
 export const prompts = () => {
-  const { [LOCAL_BLUEPRINT_OPTION]: LOCAL_BLUEPRINT_OPTION_DEFAULT_VALUE, [CLI_OPTION]: CLI_OPTION_DEFAULT_VALUE } = defaultConfig();
+  const { [LOCAL_BLUEPRINT_OPTION]: LOCAL_BLUEPRINT_OPTION_DEFAULT_VALUE, [CLI_OPTION]: CLI_OPTION_DEFAULT_VALUE, [SAMPLE_GENERATION]: SAMPLE_GENERATION_DEFAULT_VALUE, [SAMPLE_NAME]: SAMPLE_NAME_DEFAULT_VALUE, [DATABASE_TYPE]: DATABASE_TYPE_DEFAULT_VALUE } = defaultConfig();
   const ret = [
+    {
+      type: 'confirm',
+      name: SAMPLE_GENERATION,
+      message: 'Do you want to generate a sample application configuration?',
+      default: SAMPLE_GENERATION_DEFAULT_VALUE,
+    },
+    {
+      type: 'list',
+      name: SAMPLE_NAME,
+      message: 'Which sample do you want to generate?',
+      choices: [
+        { name: 'Angular Default', value: 'ng-default' },
+        { name: 'React Default', value: 'react-default' },
+        { name: 'Vue Default', value: 'vue-default' },
+      ],
+      default: SAMPLE_NAME_DEFAULT_VALUE,
+      when: (answers: any) => answers[SAMPLE_GENERATION],
+    },
+    {
+      type: 'list',
+      name: DATABASE_TYPE,
+      message: 'Which database type do you want to use?',
+      choices: [
+        { name: 'SQL', value: 'sql' },
+        { name: 'SQL Full', value: 'sqlfull' },
+        { name: 'MongoDB', value: 'mongodb' },
+        { name: 'Cassandra', value: 'cassandra' },
+        { name: 'Couchbase', value: 'couchbase' },
+        { name: 'Neo4j', value: 'neo4j' },
+        { name: 'Microservice', value: 'micro' },
+      ],
+      default: DATABASE_TYPE_DEFAULT_VALUE,
+      when: (answers: any) => answers[SAMPLE_GENERATION],
+    },
     {
       type: 'confirm',
       name: LOCAL_BLUEPRINT_OPTION,
