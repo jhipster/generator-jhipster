@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 import { mutateData } from '../../../../lib/utils/object.ts';
-import { getMainClassName } from '../../../java/support/util.ts';
 import { getDatabaseTypeData } from '../../../server/support/database.ts';
-import { hibernateSnakeCase } from '../../../server/support/string.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 
 export default class BootstrapGenerator extends SpringBootApplicationGenerator {
@@ -36,13 +34,6 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareForTemplates({ applicationDefaults }) {
-        applicationDefaults({
-          mainClass: ({ baseName }) => getMainClassName({ baseName }),
-          jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
-          imperativeOrReactive: ({ reactive }) => (reactive ? 'reactive' : 'imperative'),
-        });
-      },
       prepareSpringData({ application }) {
         mutateData(application, {
           springDataDescription: ({ databaseType, reactive }) => {

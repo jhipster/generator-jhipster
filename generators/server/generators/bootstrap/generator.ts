@@ -31,7 +31,6 @@ import {
   SERVER_TEST_SRC_DIR,
 } from '../../../generator-constants.js';
 import { getGradleLibsVersionsProperties } from '../../../gradle/support/index.ts';
-import { getMainClassName } from '../../../java/support/index.ts';
 import { getPomVersionProperties } from '../../../maven/support/index.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-data-relational/types.ts';
 import serverCommand from '../../command.ts';
@@ -139,9 +138,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     return this.asPreparingTaskGroup({
       prepareForTemplates({ applicationDefaults }) {
         applicationDefaults({
-          mainClass: ({ baseName }) => getMainClassName({ baseName }),
           jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
-          imperativeOrReactive: ({ reactive }) => (reactive ? 'reactive' : 'imperative'),
         });
       },
     });
