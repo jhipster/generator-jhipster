@@ -36,7 +36,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
       if (this.options.commandName === 'ci-cd') {
         const { backendType = 'Java' } = this.jhipsterConfig as any;
         if (['Java', 'SpringBoot'].includes(backendType)) {
-          const javaBootstrap = await this.dependsOnJHipster('jhipster:java:bootstrap');
+          const javaBootstrap = await this.dependsOnBootstrap('java');
           javaBootstrap.writeBootstrapFiles = false;
         }
       } else {

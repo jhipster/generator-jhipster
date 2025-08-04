@@ -30,7 +30,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('java');
       await this.dependsOnJHipster('jhipster:java:build-tool');
     }
   }

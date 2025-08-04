@@ -32,6 +32,7 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
+      await this.dependsOnBootstrap('spring-boot');
       await this.dependsOnJHipster('jhipster:java:domain');
     }
   }

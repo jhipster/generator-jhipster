@@ -97,7 +97,7 @@ export default class LiquibaseGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('java');
     }
   }
 

@@ -38,7 +38,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('java');
     }
   }
 

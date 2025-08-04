@@ -29,7 +29,7 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('spring-boot');
     }
   }
 
