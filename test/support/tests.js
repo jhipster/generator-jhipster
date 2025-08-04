@@ -185,7 +185,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
   if (typeof options === 'boolean') {
     options = { skipSbsBlueprint: options };
   }
-  const { skipSbsBlueprint = false, entity = false } = options;
+  const { skipSbsBlueprint = false, entity = false, bootstrapGenerator = false } = options;
 
   const generatorPath = getGenerator(generatorName);
   if (!existsSync(generatorPath)) {
@@ -246,9 +246,15 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
     it(`should compose with jhipster-foo:${generatorName} blueprint once`, () => {
       expect(runResult.getGeneratorComposeCount(`jhipster-foo:${generatorName}`)).toBe(1);
     });
-    it('should not call any priority', () => {
-      expect(spy.prioritiesSpy.callCount).toBe(0);
-    });
+    if (bootstrapGenerator) {
+      it('should call every priority', () => {
+        expect(spy.prioritiesSpy.callCount).toBe(spy.prioritiesCount);
+      });
+    } else {
+      it('should not call any priority', () => {
+        expect(spy.prioritiesSpy.callCount).toBe(0);
+      });
+    }
   });
   describe('with sbs blueprint', () => {
     let spy;

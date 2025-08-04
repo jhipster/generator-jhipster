@@ -28,7 +28,7 @@ export default class SpringWebsocketGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('java');
     }
   }
 

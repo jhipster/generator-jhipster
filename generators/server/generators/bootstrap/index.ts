@@ -16,19 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../base-application/index.ts';
-
-/**
- * @deprecated use jhipster:server:bootstrap instead
- */
-export default class BootstrapApplicationServerGenerator extends BaseApplicationGenerator {
-  customLifecycle = true;
-
-  async beforeQueue() {
-    if (!this.fromBlueprint) {
-      await this.composeWithBlueprints();
-    }
-
-    await this.dependsOnBootstrap('server');
-  }
-}
+export { default } from './generator.ts';

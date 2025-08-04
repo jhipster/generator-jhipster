@@ -33,6 +33,7 @@ import {
   checkJava,
   createEnumNeedleCallback,
   generatedAnnotationTransform,
+  getMainClassName,
   injectJavaConstructorParam,
   injectJavaConstructorSetter,
   injectJavaField,
@@ -57,7 +58,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
     if (!this.delegateToBlueprint) {
       const projectNameGenerator = await this.dependsOnJHipster('project-name');
       projectNameGenerator.javaApplication = true;
-      await this.dependsOnBootstrapApplicationServer();
+      await this.dependsOnBootstrap('server');
     }
   }
 
@@ -157,6 +158,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
       applicationDefaults({ application, applicationDefaults }) {
         (application as unknown as JavascriptApplication).addPrettierExtensions?.(['java']);
         applicationDefaults({
+          mainClass: ({ baseName }) => getMainClassName({ baseName }),
           useNpmWrapper: application => Boolean((application.clientFramework ?? 'no' !== 'no') && application.backendTypeJavaAny),
         });
         if (application.useNpmWrapper) {
@@ -205,6 +207,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
       },
       imperativeOrReactive({ applicationDefaults }) {
         applicationDefaults({
+          imperativeOrReactive: ({ reactive }) => (reactive ? 'reactive' : 'imperative'),
           optionalOrMono: ({ reactive }) => (reactive ? 'Mono' : 'Optional'),
           optionalOrMonoOfNullable: ({ reactive }) => (reactive ? 'Mono.justOrEmpty' : 'Optional.ofNullable'),
           optionalOrMonoClassPath: ({ reactive }) => (reactive ? 'reactor.core.publisher.Mono' : 'java.util.Optional'),

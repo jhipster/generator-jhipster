@@ -17,22 +17,22 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname } from 'node:path';
+import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
+import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
 
 import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const generator = basename(__dirname);
+const generator = `${basename(resolve(__dirname, '../../'))}:${basename(__dirname)}`;
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
-  describe('blueprint support', () => testBlueprintSupport(generator));
+  describe('blueprint support', () => testBlueprintSupport(generator, { bootstrapGenerator: true }));
 
   describe('with defaults options', () => {
     before(async () => {

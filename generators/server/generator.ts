@@ -70,7 +70,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplicationServer();
+      await this.dependsOnBootstrap('server');
       await this.dependsOnJHipster(GENERATOR_COMMON);
     }
   }

@@ -44,7 +44,6 @@ import {
   GENERATOR_FEIGN_CLIENT,
   GENERATOR_GATLING,
   GENERATOR_LANGUAGES,
-  GENERATOR_SERVER,
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_CLOUD_STREAM,
   GENERATOR_SPRING_DATA_CASSANDRA,
@@ -103,8 +102,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
-      await this.dependsOnJHipster(GENERATOR_SERVER);
+      await this.dependsOnBootstrap('spring-boot');
       await this.dependsOnJHipster('jhipster:java:domain');
       await this.dependsOnJHipster('jhipster:java:build-tool');
       await this.dependsOnJHipster('jhipster:java:server');
