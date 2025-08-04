@@ -33,12 +33,10 @@ import {
 import { getGradleLibsVersionsProperties } from '../../../gradle/support/index.ts';
 import { getMainClassName } from '../../../java/support/index.ts';
 import { getPomVersionProperties } from '../../../maven/support/index.ts';
-import type { Application as SpringBootApplication } from '../../../spring-boot/types.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-data-relational/types.ts';
 import serverCommand from '../../command.ts';
 import {
   addEntitiesOtherRelationships,
-  getDatabaseTypeData,
   getPrimaryKeyValue,
   hibernateSnakeCase,
   loadRequiredConfigDerivedProperties,
@@ -144,23 +142,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           mainClass: ({ baseName }) => getMainClassName({ baseName }),
           jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
           imperativeOrReactive: ({ reactive }) => (reactive ? 'reactive' : 'imperative'),
-        });
-      },
-      prepareSpringData({ application }) {
-        // TODO move to spring-data:bootstrap generator
-        mutateData(application as SpringBootApplication, {
-          springDataDescription: ({ databaseType, reactive }) => {
-            let springDataDatabase: string;
-            if (databaseType !== 'sql') {
-              springDataDatabase = getDatabaseTypeData(databaseType as string).name;
-              if (reactive) {
-                springDataDatabase += ' reactive';
-              }
-            } else {
-              springDataDatabase = reactive ? 'R2DBC' : 'JPA';
-            }
-            return `Spring Data ${springDataDatabase}`;
-          },
         });
       },
     });
