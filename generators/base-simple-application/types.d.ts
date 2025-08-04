@@ -1,11 +1,11 @@
 import type packageJson from '../../package.json';
 import type { Config as BaseConfig } from '../base/types.d.ts';
-import type { WriteContext } from '../base-core/api.js';
+import type { WriteContext } from '../base-core/api.ts';
 
-export type { Source } from '../base/types.js';
-export type { Options } from '../base/types.js';
+export type { Source } from '../base/types.ts';
+export type { Options } from '../base/types.ts';
 
-export type { Features } from '../base/types.js';
+export type { Features } from '../base/types.ts';
 
 export type Application = WriteContext & {
   jhipsterVersion: string;

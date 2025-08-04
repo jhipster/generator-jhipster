@@ -19,7 +19,7 @@
 
 import { databaseTypes } from '../../../lib/jhipster/index.ts';
 import { addOtherRelationship } from '../../base-application/support/relationship.ts';
-import type { Entity as BaseApplicationEntity } from '../../base-application/types.js';
+import type { Entity as BaseApplicationEntity } from '../../base-application/types.ts';
 import type { ValidationResult } from '../../base-core/api.d.ts';
 
 const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;

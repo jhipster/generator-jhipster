@@ -4,7 +4,7 @@ import type {
   ExportApplicationPropertiesFromCommand,
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
-} from './types.js';
+} from './types.ts';
 
 type AssertType<Expected extends true | false, _T2 extends Expected, _T3 extends Expected = Expected> = void;
 

@@ -18,4 +18,4 @@
  */
 export { default as command } from './command.ts';
 export { default } from './generator.ts';
-export type { Application, Config, Options, Source } from './types.js';
+export type { Application, Config, Options, Source } from './types.ts';

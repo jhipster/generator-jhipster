@@ -19,7 +19,7 @@
 import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
 import type CoreGenerator from '../base-core/generator.ts';
 
-import type ClientGenerator from './generator.js';
+import type ClientGenerator from './generator.ts';
 
 type Choice = { value: string; name: string };
 

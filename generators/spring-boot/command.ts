@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
 import { authenticationTypes } from '../../lib/jhipster/index.ts';
 import { createBase64Secret, createSecret } from '../../lib/utils/index.ts';

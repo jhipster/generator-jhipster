@@ -19,7 +19,7 @@
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { fieldTypes } from '../../../lib/jhipster/index.ts';
 import { fieldIsEnum } from '../../base-application/support/field-utils.ts';
-import type { PrimaryKey } from '../../base-application/types.js';
+import type { PrimaryKey } from '../../base-application/types.ts';
 
 const {
   BOOLEAN: TYPE_BOOLEAN,

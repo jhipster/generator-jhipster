@@ -20,7 +20,7 @@
 import type { CstNode, IToken } from 'chevrotain';
 
 import { getCstFromContent } from '../readers/jdl-reader.ts';
-import type { JDLRuntime } from '../types/runtime.js';
+import type { JDLRuntime } from '../types/runtime.ts';
 
 import { checkEntities } from './entity-linter.ts';
 import { checkEnums } from './enum-linter.ts';

@@ -21,11 +21,11 @@ import { join } from 'node:path';
 
 import { defaults } from 'lodash-es';
 
-import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.ts';
 import { deploymentOptions } from '../../lib/jhipster/index.ts';
 import { removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import BaseGenerator from '../base/index.ts';
-import type { GenericTask } from '../base-core/types.js';
+import type { GenericTask } from '../base-core/types.ts';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.ts';
 import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.ts';
@@ -36,7 +36,7 @@ import {
   CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY,
   CONTEXT_DATA_WORKSPACES_ROOT_KEY,
 } from './support/index.ts';
-import type { Tasks as WorkspacesTasks } from './tasks.js';
+import type { Tasks as WorkspacesTasks } from './tasks.ts';
 import type {
   Config as BaseWorkspacesConfig,
   Deployment as BaseDeployment,
@@ -44,7 +44,7 @@ import type {
   Options as BaseWorkspacesOptions,
   Source as BaseWorkspacesSource,
   WorkspacesApplication,
-} from './types.js';
+} from './types.ts';
 
 const { Options: DeploymentOptions } = deploymentOptions;
 

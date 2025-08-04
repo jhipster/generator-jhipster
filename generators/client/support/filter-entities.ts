@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { RelationshipWithEntity } from '../../base-application/types.js';
+import type { RelationshipWithEntity } from '../../base-application/types.ts';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.ts';
 
 export const isClientField = (field: ClientField) => !field.skipClient;

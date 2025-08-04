@@ -20,7 +20,7 @@
 import { lowerFirst } from 'lodash-es';
 
 import JDLField from '../../core/models/jdl-field.ts';
-import type { ParsedJDLEntityField } from '../../core/types/parsed.js';
+import type { ParsedJDLEntityField } from '../../core/types/parsed.ts';
 import { formatComment } from '../../core/utils/format-utils.ts';
 
 export default { convertField };

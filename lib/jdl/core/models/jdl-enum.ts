@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { ParsedJDLEnumValue } from '../types/parsed.js';
+import type { ParsedJDLEnumValue } from '../types/parsed.ts';
 import { merge } from '../utils/object-utils.ts';
 
 import JDLEnumValue from './jdl-enum-value.ts';

@@ -17,15 +17,15 @@
  * limitations under the License.
  */
 
-import type JDLApplicationConfigurationOption from '../../../core/models/jdl-application-configuration-option.js';
-import type JDLApplicationConfiguration from '../../../core/models/jdl-application-configuration.js';
-import type JDLApplication from '../../../core/models/jdl-application.js';
+import type JDLApplicationConfigurationOption from '../../../core/models/jdl-application-configuration-option.ts';
+import type JDLApplicationConfiguration from '../../../core/models/jdl-application-configuration.ts';
+import type JDLApplication from '../../../core/models/jdl-application.ts';
 import type {
   JDLJSONApplication,
   JDLJSONApplicationContent,
   PostProcessedJDLJSONApplication,
   RawJDLJSONApplication,
-} from '../../../core/types/exporter.js';
+} from '../../../core/types/exporter.ts';
 import { GENERATOR_NAME } from '../export-utils.ts';
 
 /**

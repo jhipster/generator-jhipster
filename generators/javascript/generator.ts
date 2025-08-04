@@ -27,7 +27,7 @@ import type {
   JavascriptSimpleApplication,
   Options as JavascriptOptions,
   Source as JavascriptSource,
-} from './types.js';
+} from './types.ts';
 
 /**
  * Utility class with types.

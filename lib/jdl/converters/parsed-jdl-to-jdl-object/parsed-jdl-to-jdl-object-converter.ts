@@ -20,20 +20,20 @@ import { lowerFirst } from 'lodash-es';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import { binaryOptions } from '../../core/built-in-options/index.ts';
-import type { JDLEntity } from '../../core/models/index.js';
-import type JDLApplication from '../../core/models/jdl-application.js';
+import type { JDLEntity } from '../../core/models/index.ts';
+import type JDLApplication from '../../core/models/jdl-application.ts';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
-import type JDLField from '../../core/models/jdl-field.js';
+import type JDLField from '../../core/models/jdl-field.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
-import type JDLValidation from '../../core/models/jdl-validation.js';
+import type JDLValidation from '../../core/models/jdl-validation.ts';
 import type {
   ParsedJDLAnnotation,
   ParsedJDLApplications,
   ParsedJDLEntity,
   ParsedJDLEntityField,
   ParsedJDLRoot,
-} from '../../core/types/parsed.js';
-import type { JDLRuntime } from '../../core/types/runtime.js';
+} from '../../core/types/parsed.ts';
+import type { JDLRuntime } from '../../core/types/runtime.ts';
 
 import { convertApplications } from './application-converter.ts';
 import { convertDeployments } from './deployment-converter.ts';

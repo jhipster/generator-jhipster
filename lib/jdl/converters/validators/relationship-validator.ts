@@ -19,7 +19,7 @@
 
 import { relationshipTypes } from '../../core/basic-types/index.ts';
 import { relationshipTypeExists } from '../../core/basic-types/relationship-types.ts';
-import type JDLRelationship from '../../core/models/jdl-relationship.js';
+import type JDLRelationship from '../../core/models/jdl-relationship.ts';
 
 import Validator from './validator.ts';
 

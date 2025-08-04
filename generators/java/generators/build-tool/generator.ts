@@ -18,10 +18,10 @@
  */
 import { buildToolTypes } from '../../../../lib/jhipster/index.ts';
 import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.ts';
-import type { MavenDependency } from '../../../maven/types.js';
+import type { MavenDependency } from '../../../maven/types.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 import { javaScopeToGradleScope } from '../../support/index.ts';
-import type { ConditionalJavaDefinition, JavaDependency, JavaNeedleOptions } from '../../types.js';
+import type { ConditionalJavaDefinition, JavaDependency, JavaNeedleOptions } from '../../types.ts';
 
 const { GRADLE, MAVEN } = buildToolTypes;
 

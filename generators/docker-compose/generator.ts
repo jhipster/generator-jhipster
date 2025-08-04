@@ -31,7 +31,7 @@ import type {
   Deployment as BaseDeployment,
   WorkspacesApplication,
   WorkspacesApplication as BaseWorkspacesApplication,
-} from '../base-workspaces/index.js';
+} from '../base-workspaces/index.ts';
 import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.ts';
 import {

@@ -1,4 +1,4 @@
-import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type {
   Config as BaseApplicationConfig,
   Entity as BaseApplicationEntity,

@@ -19,7 +19,7 @@
 
 import { GENERATOR_LIQUIBASE } from '../generator-list.ts';
 import { SpringBootApplicationGenerator } from '../spring-boot/generator.ts';
-import type { Source as SpringBootSource } from '../spring-boot/index.js';
+import type { Source as SpringBootSource } from '../spring-boot/index.ts';
 
 import cleanupTask from './cleanup.ts';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.ts';

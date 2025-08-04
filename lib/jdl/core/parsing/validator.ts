@@ -31,8 +31,8 @@ import {
   ALPHANUMERIC_SPACE,
   ALPHANUMERIC_UNDERSCORE,
 } from '../built-in-options/validation-patterns.ts';
-import type { JDLValidatorOptionType } from '../types/parsing.js';
-import type { JDLRuntime } from '../types/runtime.js';
+import type { JDLValidatorOptionType } from '../types/parsing.ts';
+import type { JDLRuntime } from '../types/runtime.ts';
 
 const CONSTANT_PATTERN = /^[A-Z_]+$/;
 const ENTITY_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;

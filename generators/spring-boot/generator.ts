@@ -34,9 +34,9 @@ import { mutateData } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
 import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';
-import type { Config as ClientConfig } from '../client/types.js';
-import type { Source as CommonSource } from '../common/types.js';
-import type { Entity as CypressEntity } from '../cypress/types.js';
+import type { Config as ClientConfig } from '../client/types.ts';
+import type { Source as CommonSource } from '../common/types.ts';
+import type { Entity as CypressEntity } from '../cypress/types.ts';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.js';
 import {
   GENERATOR_CUCUMBER,
@@ -62,8 +62,8 @@ import {
   getSpecificationBuildForType,
   insertContentIntoApplicationProperties,
 } from '../server/support/index.ts';
-import type { Config as SpringCacheConfig } from '../spring-cache/types.js';
-import type { Config as SpringCloudStreamConfig } from '../spring-cloud-stream/types.js';
+import type { Config as SpringCacheConfig } from '../spring-cache/types.ts';
+import type { Config as SpringCloudStreamConfig } from '../spring-cloud-stream/types.ts';
 
 import cleanupTask from './cleanup.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
@@ -75,7 +75,7 @@ import type {
   Entity as SpringBootEntity,
   Options as SpringBootOptions,
   Source as SpringBootSource,
-} from './types.js';
+} from './types.ts';
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;

@@ -18,7 +18,7 @@
  */
 
 import { clientFrameworkTypes, fieldTypes, validations } from '../../../lib/jhipster/index.ts';
-import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/types.js';
+import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/types.ts';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.d.ts';
 
 import { filterRelevantRelationships } from './template-utils.ts';

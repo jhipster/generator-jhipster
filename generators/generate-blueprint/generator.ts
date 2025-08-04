@@ -47,7 +47,7 @@ import type {
   Config as GenerateBlueprintConfig,
   Features as GenerateBlueprintFeatures,
   Options as GenerateBlueprintOptions,
-} from './types.js';
+} from './types.ts';
 
 const { GENERATOR_INIT } = GENERATOR_LIST;
 

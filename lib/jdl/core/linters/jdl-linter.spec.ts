@@ -25,11 +25,11 @@ import helpers from 'yeoman-test';
 
 import { createJDLLinterFromContent, getTestFile } from '../__test-support__/index.ts';
 
-import type EntityIssue from './issues/entity-issue.js';
-import type EnumIssue from './issues/enum-issue.js';
-import type Issues from './issues/issues.js';
-import type relationshipIssue from './issues/relationship-issue.js';
-import type { JDLLinter } from './jdl-linter.js';
+import type EntityIssue from './issues/entity-issue.ts';
+import type EnumIssue from './issues/enum-issue.ts';
+import type Issues from './issues/issues.ts';
+import type relationshipIssue from './issues/relationship-issue.ts';
+import type { JDLLinter } from './jdl-linter.ts';
 
 /**
  * Creates a new JDL linters from a JDL file.

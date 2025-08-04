@@ -32,7 +32,7 @@ import {
 } from '../java/support/index.ts';
 
 import { cleanupOldFiles } from './entity-cleanup.ts';
-import type { Application as SpringBootApplication, Entity as SpringBootEntity } from './types.js';
+import type { Application as SpringBootApplication, Entity as SpringBootEntity } from './types.ts';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;

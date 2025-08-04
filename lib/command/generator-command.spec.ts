@@ -5,7 +5,7 @@ import type { GeneratorMeta } from '@yeoman/types';
 import BaseApplicationGenerator from '../../generators/base-application/generator.ts';
 import { defaultHelpers as helpers, runResult } from '../testing/index.ts';
 
-import type { JHipsterCommandDefinition, JHipsterConfig } from './types.js';
+import type { JHipsterCommandDefinition, JHipsterConfig } from './types.ts';
 
 const notImplementedCallback = (methodName: string) => {
   return () => {

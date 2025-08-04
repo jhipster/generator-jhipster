@@ -19,7 +19,7 @@
 import { CommandBaseGenerator } from '../base/index.ts';
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../base/support/constants.ts';
 
-import type command from './command.js';
+import type command from './command.ts';
 import { getDefaultAppName } from './support/index.ts';
 import { validateProjectName } from './support/name-resolver.ts';
 

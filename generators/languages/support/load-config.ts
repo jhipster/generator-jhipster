@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Application as I18nApplication, Entity as LanguagesEntity } from '../types.js';
+import type { Application as I18nApplication, Entity as LanguagesEntity } from '../types.ts';
 
 import { type Language, findLanguageForTag, supportedLanguages as baseSupportedLanguages } from './languages.ts';
 

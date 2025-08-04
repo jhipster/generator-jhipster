@@ -24,9 +24,9 @@ import { isArray, lowerFirst, snakeCase, uniq, upperFirst } from 'lodash-es';
 import { APPLICATION_TYPE_GATEWAY } from '../../lib/core/application-types.ts';
 import { clientFrameworkTypes, databaseTypes, entityOptions, fieldTypes, reservedKeywords, validations } from '../../lib/jhipster/index.ts';
 import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
-import type { Field as BaseApplicationField } from '../base-application/types.js';
+import type { Field as BaseApplicationField } from '../base-application/types.ts';
 
-import type EntityGenerator from './generator.js';
+import type EntityGenerator from './generator.ts';
 import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.ts';
 
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;

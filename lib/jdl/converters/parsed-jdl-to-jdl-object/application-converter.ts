@@ -18,13 +18,13 @@
  */
 
 import { BASE_NAME_KEY } from '../../core/built-in-options/index.ts';
-import type AbstractJDLOption from '../../core/models/abstract-jdl-option.js';
+import type AbstractJDLOption from '../../core/models/abstract-jdl-option.ts';
 import { createJDLApplication } from '../../core/models/jdl-application-factory.ts';
-import type JDLApplication from '../../core/models/jdl-application.js';
-import type JDLBinaryOption from '../../core/models/jdl-binary-option.js';
-import type JDLUnaryOption from '../../core/models/jdl-unary-option.js';
-import type { ParsedJDLApplication } from '../../core/types/parsed.js';
-import type { JDLRuntime } from '../../core/types/runtime.js';
+import type JDLApplication from '../../core/models/jdl-application.ts';
+import type JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+import type JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
+import type { ParsedJDLApplication } from '../../core/types/parsed.ts';
+import type { JDLRuntime } from '../../core/types/runtime.ts';
 
 import { convertOptions } from './option-converter.ts';
 

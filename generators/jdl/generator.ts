@@ -26,7 +26,7 @@ import { type MemFsEditor, create as createMemFsEditor } from 'mem-fs-editor';
 import { downloadJdlFile } from '../../cli/download.mts';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { CLI_NAME } from '../../cli/utils.mjs';
-import type { ApplicationWithEntities } from '../../lib/jdl/jdl-importer.js';
+import type { ApplicationWithEntities } from '../../lib/jdl/jdl-importer.ts';
 import { createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
 import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
 import BaseGenerator from '../base/index.ts';
@@ -37,7 +37,7 @@ import { GENERATOR_APP, GENERATOR_ENTITIES, GENERATOR_WORKSPACES } from '../gene
 import type { Options as GitOptions } from '../git/types.d.ts';
 
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.ts';
-import type { Config as JdlConfig, Options as JdlOptions } from './types.js';
+import type { Config as JdlConfig, Options as JdlOptions } from './types.ts';
 
 /**
  * Add jdl extension to the file

@@ -1,15 +1,15 @@
-import type { DerivedPropertiesOnlyOf } from '../../lib/command/types.js';
-import type { FieldType } from '../../lib/jhipster/field-types.js';
-import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
-import type { Field as BaseField } from '../../lib/jhipster/types/field.js';
-import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.js';
+import type { DerivedPropertiesOnlyOf } from '../../lib/command/types.ts';
+import type { FieldType } from '../../lib/jhipster/field-types.ts';
+import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
+import type { Field as BaseField } from '../../lib/jhipster/types/field.ts';
+import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.ts';
 import type {
   Application as BaseSimpleApplicationApplication,
   Config as BaseSimpleApplicationConfig,
   Options as BaseSimpleApplicationOptions,
 } from '../base-simple-application/types.d.ts';
 
-import type { OptionWithDerivedProperties } from './internal/types/application-options.js';
+import type { OptionWithDerivedProperties } from './internal/types/application-options.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
 
 export type Config = BaseSimpleApplicationConfig & {
@@ -19,8 +19,8 @@ export type Config = BaseSimpleApplicationConfig & {
 
 export type Options = BaseSimpleApplicationOptions;
 
-export type { Features } from '../base-simple-application/types.js';
-export type { Source } from '../base-simple-application/types.js';
+export type { Features } from '../base-simple-application/types.ts';
+export type { Source } from '../base-simple-application/types.ts';
 
 type Property = {
   propertyName: string;

@@ -3,7 +3,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { glob } from 'glob';
 
-import type { JHipsterConfig, JHipsterConfigs } from './types.js';
+import type { JHipsterConfig, JHipsterConfigs } from './types.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

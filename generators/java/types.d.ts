@@ -1,6 +1,6 @@
 import type { RequireOneOrNone } from 'type-fest';
 
-import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.ts';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,
@@ -10,22 +10,22 @@ import type {
   Relationship as BaseApplicationRelationship,
   Source as BaseApplicationSource,
 } from '../base-application/types.d.ts';
-import type { EditFileCallback } from '../base-core/api.js';
+import type { EditFileCallback } from '../base-core/api.ts';
 import type { PropertiesFileKeyUpdate } from '../base-core/support/index.ts';
-import type { Application as GradleApplication, GradleNeedleOptions, Source as GradleSource } from '../gradle/types.js';
-import type { MavenDefinition, Source as MavenSource } from '../maven/types.js';
+import type { Application as GradleApplication, GradleNeedleOptions, Source as GradleSource } from '../gradle/types.ts';
+import type { MavenDefinition, Source as MavenSource } from '../maven/types.ts';
 
 import type {
   Application as JavaBootstrapApplication,
   Config as JavaBootstrapConfig,
   Options as JavaBootstrapOptions,
-} from './generators/bootstrap/types.js';
+} from './generators/bootstrap/types.ts';
 import type {
   Application as BuildToolApplication,
   Config as BuildToolConfig,
   Options as BuildToolOptions,
-} from './generators/build-tool/types.js';
-import type GraalvmCommand from './generators/graalvm/command.js';
+} from './generators/build-tool/types.ts';
+import type GraalvmCommand from './generators/graalvm/command.ts';
 import type { JavaAnnotation } from './support/add-java-annotation.ts';
 
 type Property = {

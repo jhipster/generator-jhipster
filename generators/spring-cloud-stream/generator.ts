@@ -23,7 +23,7 @@ import type {
   Config as SpringCloudConfig,
   Entity as SpringCloudEntity,
   Options as SpringCloudOptions,
-} from './types.js';
+} from './types.ts';
 
 export default class KafkaGenerator extends BaseApplicationGenerator<
   SpringCloudEntity,

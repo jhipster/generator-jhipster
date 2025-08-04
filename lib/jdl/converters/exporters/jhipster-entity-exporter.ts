@@ -21,8 +21,8 @@ import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.t
 import { removeFieldsWithNullishValues } from '../../../utils/object.ts';
 import { readEntityFile } from '../../../utils/yo-rc.ts';
 import type JDLJSONEntity from '../../core/basic-types/json-entity.ts';
-import type { JhipsterJSONJDLExporterWrapper } from '../../core/types/exporter.js';
-import type { JSONEntity } from '../../core/types/json-config.js';
+import type { JhipsterJSONJDLExporterWrapper } from '../../core/types/exporter.ts';
+import type { JSONEntity } from '../../core/types/json-config.ts';
 
 let configuration: JhipsterJSONJDLExporterWrapper = {
   entities: [],

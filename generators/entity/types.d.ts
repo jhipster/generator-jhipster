@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { ApplicationAll, EntityAll } from '../../lib/types/application-all.js';
-import type { ConfigAll, OptionsAll } from '../../lib/types/command-all.js';
-import type { Source as BaseApplicationSource } from '../base-application/types.js';
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { ApplicationAll, EntityAll } from '../../lib/types/application-all.ts';
+import type { ConfigAll, OptionsAll } from '../../lib/types/command-all.ts';
+import type { Source as BaseApplicationSource } from '../base-application/types.ts';
 
 import type command from './command.ts';
 

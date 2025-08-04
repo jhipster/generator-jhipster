@@ -19,7 +19,7 @@
 import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.ts';
 
 import { clientRootTemplatesBlock, clientSrcTemplatesBlock } from './support/files.ts';
-import type { Application as ClientApplication, Entity as ClientEntity } from './types.js';
+import type { Application as ClientApplication, Entity as ClientEntity } from './types.ts';
 
 export const files = asWriteFilesSection({
   common: [

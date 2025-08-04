@@ -19,7 +19,7 @@
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import deploymentOptions from '../../../jhipster/deployment-options.ts';
-import type JDLDeployment from '../../core/models/jdl-deployment.js';
+import type JDLDeployment from '../../core/models/jdl-deployment.ts';
 
 import Validator from './validator.ts';
 

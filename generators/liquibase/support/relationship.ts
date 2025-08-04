@@ -18,7 +18,7 @@
  */
 import { mutateData } from '../../../lib/utils/index.ts';
 import { getFKConstraintName, prepareRelationshipForDatabase } from '../../server/support/index.ts';
-import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Relationship as LiquibaseRelationship } from '../types.js';
+import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Relationship as LiquibaseRelationship } from '../types.ts';
 
 function relationshipBaseDataEquals(relationshipA: LiquibaseRelationship, relationshipB: LiquibaseRelationship) {
   return (

@@ -22,7 +22,7 @@ import { passthrough } from '@yeoman/transform';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';
 
-import type { GetWebappTranslationCallback } from '../../client/translation.js';
+import type { GetWebappTranslationCallback } from '../../client/translation.ts';
 import {
   type JHITranslateConverterOptions,
   createJhiTransformTranslateReplacer,

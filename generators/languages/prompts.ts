@@ -18,7 +18,7 @@
  */
 import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
 
-import type LanguagesGenerator from './generator.js';
+import type LanguagesGenerator from './generator.ts';
 import detectLanguage from './support/detect-language.ts';
 import { languagesAsChoices } from './support/languages.ts';
 

@@ -4,7 +4,7 @@ import type {
   ExportApplicationPropertiesFromCommand,
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
-} from '../../lib/command/types.js';
+} from '../../lib/command/types.ts';
 import type {
   Application as BaseApplicationApplication,
   Entity as BaseApplicationEntity,
@@ -18,10 +18,10 @@ import type {
   Source as BaseSimpleApplicationSource,
 } from '../base-simple-application/types.d.ts';
 
-import type JavascriptBootstrapCommand from './generators/bootstrap/command.js';
-import type EslintCommand from './generators/eslint/command.js';
-import type HuskyCommand from './generators/husky/command.js';
-import type PrettierCommand from './generators/prettier/command.js';
+import type JavascriptBootstrapCommand from './generators/bootstrap/command.ts';
+import type EslintCommand from './generators/eslint/command.ts';
+import type HuskyCommand from './generators/husky/command.ts';
+import type PrettierCommand from './generators/prettier/command.ts';
 
 export type Field = BaseApplicationField & {
   tsType?: string;

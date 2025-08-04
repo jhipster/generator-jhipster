@@ -18,7 +18,7 @@
  */
 
 import { asWritingTask } from '../base-application/support/task-type-inference.ts';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.ts';
 
 /**
  * Removes files that where generated in previous JHipster versions and therefore

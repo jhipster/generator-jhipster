@@ -19,12 +19,12 @@
 
 import fieldTypes from '../../../jhipster/field-types.ts';
 import { BASE_NAME_KEY, relationshipOptions } from '../../core/built-in-options/index.ts';
-import type JDLApplicationConfigurationOption from '../../core/models/jdl-application-configuration-option.js';
-import type JDLApplication from '../../core/models/jdl-application.js';
+import type JDLApplicationConfigurationOption from '../../core/models/jdl-application-configuration-option.ts';
+import type JDLApplication from '../../core/models/jdl-application.ts';
 import type JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
-import type JDLField from '../../core/models/jdl-field.js';
-import type JDLObject from '../../core/models/jdl-object.js';
-import type JDLRelationship from '../../core/models/jdl-relationship.js';
+import type JDLField from '../../core/models/jdl-field.ts';
+import type JDLObject from '../../core/models/jdl-object.ts';
+import type JDLRelationship from '../../core/models/jdl-relationship.ts';
 
 import BinaryOptionValidator from './binary-option-validator.ts';
 import DeploymentValidator from './deployment-validator.ts';

@@ -20,7 +20,7 @@ import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts'
 import { GENERATOR_GIT } from '../generator-list.ts';
 
 import { files, readme } from './files.ts';
-import type { Application as InitApplication, Config as InitConfig, Options as InitOptions } from './types.js';
+import type { Application as InitApplication, Config as InitConfig, Options as InitOptions } from './types.ts';
 
 export default class InitGenerator extends BaseSimpleApplicationGenerator<InitApplication, InitConfig, InitOptions> {
   generateReadme = true;

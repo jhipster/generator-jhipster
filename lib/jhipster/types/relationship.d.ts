@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { Property } from './property.js';
+import type { Property } from './property.ts';
 
 export type Relationship = Property & {
   relationshipName: string;

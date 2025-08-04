@@ -23,7 +23,7 @@ import { passthrough } from 'p-transform';
 import { Piscina } from 'piscina';
 import type { Options as PrettierOptions } from 'prettier';
 
-import type CoreGenerator from '../../base-core/index.js';
+import type CoreGenerator from '../../base-core/index.ts';
 
 const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
 export const isPrettierConfigFilePath = (filePath: string) => minimatch.match(filePath);

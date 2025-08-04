@@ -19,7 +19,7 @@
 
 import { merge } from '../utils/object-utils.ts';
 
-import type { RuleLevel } from './rule-levels.js';
+import type { RuleLevel } from './rule-levels.ts';
 import { INFO } from './rule-levels.ts';
 
 /**

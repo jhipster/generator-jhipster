@@ -1,4 +1,4 @@
-import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type { Entity as BaseApplicationEntity } from '../base-application/types.d.ts';
 import type {
   Application as SpringBootApplication,

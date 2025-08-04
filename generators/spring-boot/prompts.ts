@@ -24,10 +24,10 @@ import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MONOLITH } from '../../lib/c
 import { applicationOptions, authenticationTypes, cacheTypes, databaseTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.ts';
-import type { Config as SpringCacheConfig } from '../spring-cache/types.js';
-import type { Config as SpringDataRelationalConfig } from '../spring-data-relational/types.js';
+import type { Config as SpringCacheConfig } from '../spring-cache/types.ts';
+import type { Config as SpringDataRelationalConfig } from '../spring-data-relational/types.ts';
 
-import type SpringBootGenerator from './generator.js';
+import type SpringBootGenerator from './generator.ts';
 
 const { OptionNames } = applicationOptions;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;

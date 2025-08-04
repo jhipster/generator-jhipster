@@ -35,7 +35,7 @@ import type {
   Entity as CommonEntity,
   Options as CommonOptions,
   Source as CommonSource,
-} from './types.js';
+} from './types.ts';
 
 export default class CommonGenerator extends BaseApplicationGenerator<
   CommonEntity,

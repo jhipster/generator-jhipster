@@ -20,7 +20,7 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.ts';
-import type { ParsedJDLOption } from '../../core/types/parsed.js';
+import type { ParsedJDLOption } from '../../core/types/parsed.ts';
 
 import { convertOptions } from './option-converter.ts';
 

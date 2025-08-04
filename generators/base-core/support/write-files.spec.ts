@@ -18,7 +18,7 @@
  */
 import { describe, esmocha, expect, it } from 'esmocha';
 
-import type { EditFileCallback } from '../api.js';
+import type { EditFileCallback } from '../api.ts';
 
 import { joinCallbacks } from './write-files.ts';
 

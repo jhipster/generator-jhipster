@@ -6,7 +6,7 @@ import chalk from 'chalk';
 import { asPromptingTask } from '../base-application/support/index.ts';
 import { YO_RC_FILE } from '../generator-constants.js';
 
-import type BaseWorkspacesGenerator from './generator.js';
+import type BaseWorkspacesGenerator from './generator.ts';
 /**
  * Copyright 2013-2025 the original author or authors from the JHipster project.
  *

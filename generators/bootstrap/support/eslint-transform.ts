@@ -21,7 +21,7 @@ import { Minimatch } from 'minimatch';
 import { passthrough } from 'p-transform';
 import { Piscina } from 'piscina';
 
-import type BaseGenerator from '../../base-core/index.js';
+import type BaseGenerator from '../../base-core/index.ts';
 import { addLineNumbers } from '../internal/transform-utils.js';
 
 type PoolOptions = Exclude<ConstructorParameters<typeof Piscina>[0], undefined>;

@@ -51,7 +51,7 @@ import type {
   Options as KubernetesOptions,
   Source as KubernetesSource,
   WorkspacesApplication as KubernetesWorkspacesApplication,
-} from './types.js';
+} from './types.ts';
 
 const { MAVEN } = buildToolTypes;
 

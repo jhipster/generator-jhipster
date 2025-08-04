@@ -1,5 +1,5 @@
-import type { ApplicationAll, EntityAll } from '../lib/types/application-all.js';
-import type { ConfigAll, OptionsAll } from '../lib/types/command-all.js';
+import type { ApplicationAll, EntityAll } from '../lib/types/application-all.ts';
+import type { ConfigAll, OptionsAll } from '../lib/types/command-all.ts';
 import type { SourceAll } from '../lib/types/source-all.d.ts';
 
 import BaseApplicationGenerator from './base-application/index.ts';
@@ -30,7 +30,7 @@ export {
 
 export * from './type-utils.ts';
 
-export type { JHipsterCommandDefinition } from '../lib/command/index.js';
+export type { JHipsterCommandDefinition } from '../lib/command/index.ts';
 
 class BaseApplicationGeneratorAll extends BaseApplicationGenerator<
   EntityAll,

@@ -22,8 +22,8 @@ import { intersection } from 'lodash-es';
 import { stringHashCode } from '../../lib/utils/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
 import BaseApplicationGenerator from '../base-simple-application/index.ts';
-import type { Application as SpringBootApplication } from '../spring-boot/index.js';
-import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/index.js';
+import type { Application as SpringBootApplication } from '../spring-boot/index.ts';
+import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/index.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.ts';
 
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.ts';
@@ -34,7 +34,7 @@ import type {
   Config as DockerConfig,
   Options as DockerOptions,
   Source as DockerSource,
-} from './types.js';
+} from './types.ts';
 
 // Current implementation adds support for docker services and add docker services based on SpringBoot generated application.
 // Splitting this generator into bootstrap generator (only injects docker support) and jhipster(adds docker service based on spring-boot implementation) should be considered.

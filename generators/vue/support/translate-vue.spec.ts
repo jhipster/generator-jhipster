@@ -19,7 +19,7 @@
 import { describe, expect, it } from 'esmocha';
 import { inspect } from 'node:util';
 
-import type { GetWebappTranslationCallback } from '../../client/translation.js';
+import type { GetWebappTranslationCallback } from '../../client/translation.ts';
 
 import { removeDeclarations, replaceTranslations, replaceVueTranslations } from './translate-vue.ts';
 

@@ -1,6 +1,6 @@
 import { before, describe, expect, it } from 'esmocha';
 
-import type { ImportState } from '../jdl/jdl-importer.js';
+import type { ImportState } from '../jdl/jdl-importer.ts';
 import { createImporterFromContent } from '../jdl/jdl-importer.ts';
 
 import { lookupCommandsConfigs } from './lookup-commands-configs.ts';

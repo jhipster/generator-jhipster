@@ -1,5 +1,5 @@
-import type { Application as JavascriptApplication, Entity as JavascriptEntity } from '../javascript/types.js';
-export type { Field, Relationship } from '../javascript/types.js';
+import type { Application as JavascriptApplication, Entity as JavascriptEntity } from '../javascript/types.ts';
+export type { Field, Relationship } from '../javascript/types.ts';
 
 export type CypressProperties = {
   cypressAudit: boolean;

@@ -21,7 +21,7 @@ import { defaults } from 'lodash-es';
 import { Validations, databaseTypes, fieldTypes } from '../../lib/jhipster/index.ts';
 import type { ApplicationAll, EntityAll as ApplicationEntity, UserEntity } from '../../lib/types/application-all.d.ts';
 import { formatDateForChangelog } from '../base/support/timestamp.ts';
-import type BaseApplicationGenerator from '../base-application/generator.js';
+import type BaseApplicationGenerator from '../base-application/generator.ts';
 import { loadRequiredConfigIntoEntity } from '../base-application/support/index.ts';
 import type {
   Application as BaseApplicationApplication,

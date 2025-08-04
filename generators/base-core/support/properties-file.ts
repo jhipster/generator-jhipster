@@ -19,7 +19,7 @@
 import dotProperties from 'dot-properties';
 import sortKeys from 'sort-keys';
 
-import type { EditFileCallback } from '../api.js';
+import type { EditFileCallback } from '../api.ts';
 
 export type PropertiesFileKeyUpdate = {
   key: string;

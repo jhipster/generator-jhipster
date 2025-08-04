@@ -19,8 +19,8 @@
 
 import { databaseTypes, searchEngineTypes } from '../../../lib/jhipster/index.ts';
 import { mutateData } from '../../../lib/utils/object.ts';
-import type { RelationshipWithEntity } from '../../base-application/types.js';
-import type { DatabaseField, DatabaseRelationship } from '../../liquibase/types.js';
+import type { RelationshipWithEntity } from '../../base-application/types.ts';
+import type { DatabaseField, DatabaseRelationship } from '../../liquibase/types.ts';
 import type {
   Entity as SpringBootEntity,
   Field as SpringBootField,

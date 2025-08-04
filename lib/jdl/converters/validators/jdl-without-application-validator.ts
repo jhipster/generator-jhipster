@@ -19,9 +19,9 @@
 
 import fieldTypes from '../../../jhipster/field-types.ts';
 import { relationshipOptions } from '../../core/built-in-options/index.ts';
-import type JDLField from '../../core/models/jdl-field.js';
-import type JDLObject from '../../core/models/jdl-object.js';
-import type JDLRelationship from '../../core/models/jdl-relationship.js';
+import type JDLField from '../../core/models/jdl-field.ts';
+import type JDLObject from '../../core/models/jdl-object.ts';
+import type JDLRelationship from '../../core/models/jdl-relationship.ts';
 
 import EntityValidator from './entity-validator.ts';
 import EnumValidator from './enum-validator.ts';

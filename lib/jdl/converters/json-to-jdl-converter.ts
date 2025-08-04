@@ -21,15 +21,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import type { YoRcFileContent } from '../../constants/yeoman.ts';
-import type { YoRcJHipsterApplicationConfigValue, YoRcJHipsterApplicationContent } from '../../jhipster/types/yo-rc.js';
+import type { YoRcJHipsterApplicationConfigValue, YoRcJHipsterApplicationContent } from '../../jhipster/types/yo-rc.ts';
 import { removeFieldsWithNullishValues } from '../../utils/object.ts';
 import { YO_RC_CONFIG_KEY, readEntityFile, readYoRcFile } from '../../utils/yo-rc.ts';
-import type JDLApplication from '../core/models/jdl-application.js';
+import type JDLApplication from '../core/models/jdl-application.ts';
 import mergeJDLObjects from '../core/models/jdl-object-merger.ts';
 import JDLObject from '../core/models/jdl-object.ts';
-import type { RawJDLJSONApplication } from '../core/types/exporter.js';
-import type { JSONEntity } from '../core/types/json-config.js';
-import type { JDLRuntime } from '../core/types/runtime.js';
+import type { RawJDLJSONApplication } from '../core/types/exporter.ts';
+import type { JSONEntity } from '../core/types/json-config.ts';
+import type { JDLRuntime } from '../core/types/runtime.ts';
 import { doesDirectoryExist, doesFileExist } from '../core/utils/file-utils.ts';
 
 import exportJDLObject from './exporters/jdl-exporter.ts';

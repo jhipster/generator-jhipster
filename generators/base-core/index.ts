@@ -18,4 +18,4 @@
  */
 
 export { CommandCoreGenerator, default } from './generator.ts';
-export type { Config, Features, Options } from './types.js';
+export type { Config, Features, Options } from './types.ts';

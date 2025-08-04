@@ -18,7 +18,7 @@
  */
 import type { ReadonlyDeep } from 'type-fest';
 
-import type { JHipsterCommandDefinition } from '../lib/command/index.js';
+import type { JHipsterCommandDefinition } from '../lib/command/index.ts';
 
 function deepFreeze<const T>(obj: T): ReadonlyDeep<T> {
   if (obj && typeof obj === 'object' && !Object.isFrozen(obj)) {

@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-import type { JDLRuntime } from '../types/runtime.js';
+import type { JDLRuntime } from '../types/runtime.ts';
 
-import type AbstractJDLOption from './abstract-jdl-option.js';
+import type AbstractJDLOption from './abstract-jdl-option.ts';
 import createApplicationConfigurationFromObject, {
   createApplicationNamespaceConfigurationFromObject,
 } from './jdl-application-configuration-factory.ts';
-import type JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
-import type JDLApplicationConfiguration from './jdl-application-configuration.js';
+import type JDLApplicationConfigurationOption from './jdl-application-configuration-option.ts';
+import type JDLApplicationConfiguration from './jdl-application-configuration.ts';
 import JDLApplicationEntities from './jdl-application-entities.ts';
 import JDLOptions from './jdl-options.ts';
 

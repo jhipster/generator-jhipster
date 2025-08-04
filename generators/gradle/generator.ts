@@ -48,7 +48,7 @@ import type {
   GradleDependency,
   Options as GradleOptions,
   Source as GradleSource,
-} from './types.js';
+} from './types.ts';
 
 const { PRE_CONFLICTS_QUEUE } = QUEUES;
 

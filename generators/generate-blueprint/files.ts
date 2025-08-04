@@ -19,7 +19,7 @@
 import { asWriteFilesSection } from '../base-application/support/index.ts';
 
 import { LOCAL_BLUEPRINT_OPTION } from './constants.ts';
-import type { Application as GenerateBlueprintApplication, TemplateData } from './types.js';
+import type { Application as GenerateBlueprintApplication, TemplateData } from './types.ts';
 
 export const files = asWriteFilesSection<GenerateBlueprintApplication>({
   baseFiles: [

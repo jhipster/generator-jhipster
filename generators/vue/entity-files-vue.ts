@@ -18,7 +18,7 @@
  */
 import { asPostWritingEntitiesTask, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/index.ts';
 import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.ts';
-import type { Application as ClientApplication, Entity as ClientEntity, Source as ClientSource } from '../client/types.js';
+import type { Application as ClientApplication, Entity as ClientEntity, Source as ClientSource } from '../client/types.ts';
 
 export const entityFiles = asWriteFilesSection({
   client: [

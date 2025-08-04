@@ -36,7 +36,7 @@ import type {
   Options as ServerOptions,
   Relationship as ServerRelationship,
   Source as ServerSource,
-} from './types.js';
+} from './types.ts';
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;

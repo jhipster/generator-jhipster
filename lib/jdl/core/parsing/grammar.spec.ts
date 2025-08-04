@@ -26,7 +26,7 @@ import { relationshipTypes } from '../basic-types/index.ts';
 import { binaryOptions, unaryOptions, validations } from '../built-in-options/index.ts';
 import { parseFromContent as originalParseFromContent } from '../readers/jdl-reader.ts';
 import { createRuntime } from '../runtime.ts';
-import type { ParsedJDLOption } from '../types/parsed.js';
+import type { ParsedJDLOption } from '../types/parsed.ts';
 
 const runtime = createRuntime();
 const parseFromContent = (content: string) => originalParseFromContent(content, runtime);

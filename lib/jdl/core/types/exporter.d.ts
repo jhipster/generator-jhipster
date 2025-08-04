@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { YoRcJHipsterContent } from '../../../jhipster/types/yo-rc.js';
+import type { YoRcJHipsterContent } from '../../../jhipster/types/yo-rc.ts';
 import type JDLJSONEntity from '../basic-types/json-entity.ts';
 
 export type JDLJSONApplicationContent = Record<string, any>;

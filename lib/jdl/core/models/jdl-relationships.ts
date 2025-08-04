@@ -19,9 +19,9 @@
 
 import { relationshipTypes } from '../basic-types/index.ts';
 import { relationshipTypeExists } from '../basic-types/relationship-types.ts';
-import type { JDLRelationshipType } from '../basic-types/relationships.js';
+import type { JDLRelationshipType } from '../basic-types/relationships.ts';
 
-import type JDLRelationship from './jdl-relationship.js';
+import type JDLRelationship from './jdl-relationship.ts';
 
 export default class JDLRelationships {
   relationships: Record<JDLRelationshipType, Map<string, JDLRelationship>>;

@@ -20,7 +20,7 @@ import { passthrough } from '@yeoman/transform';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';
 
-import type { GetWebappTranslationCallback } from '../../client/translation.js';
+import type { GetWebappTranslationCallback } from '../../client/translation.ts';
 
 const TRANSLATE_IMPORT_1 = /import { ?[T|t]ranslate(?:, ?[T|t]ranslate)? ?} from 'react-jhipster';?/.source; // Translate imports
 const TRANSLATE_IMPORT_2 = / *[T|t]ranslate,|, ?[T|t]ranslate/.source; // Translate import

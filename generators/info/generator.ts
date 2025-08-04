@@ -23,9 +23,9 @@ import chalk from 'chalk';
 
 import JSONToJDLEntityConverter from '../../lib/jdl/converters/json-to-jdl-entity-converter.ts';
 import JSONToJDLOptionConverter from '../../lib/jdl/converters/json-to-jdl-option-converter.ts';
-import type { Entity } from '../../lib/jhipster/types/entity.js';
+import type { Entity } from '../../lib/jhipster/types/entity.ts';
 import { getEntitiesFromDir } from '../base-application/support/index.ts';
-import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/index.js';
+import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/index.ts';
 import BaseCoreGenerator from '../base-core/index.ts';
 import { JHIPSTER_CONFIG_DIR, YO_RC_FILE } from '../generator-constants.js';
 import { applicationsLookup } from '../workspaces/support/applications-lookup.ts';

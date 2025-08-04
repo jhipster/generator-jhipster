@@ -1,7 +1,7 @@
 import path from 'node:path';
 
 import { mutateData, normalizePathEnd } from '../../../lib/utils/index.ts';
-import type { Application as JavaApplication, Entity as JavaEntity } from '../types.js';
+import type { Application as JavaApplication, Entity as JavaEntity } from '../types.ts';
 
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.ts';
 

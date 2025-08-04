@@ -18,7 +18,7 @@
  */
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/needles.ts';
-import type { Source as CommonSource } from '../common/types.js';
+import type { Source as CommonSource } from '../common/types.ts';
 
 import cleanupTask from './cleanup.ts';
 import writeTask from './files.ts';
@@ -29,7 +29,7 @@ import type {
   Entity as SpringCacheEntity,
   Options as SpringCacheOptions,
   Source as SpringCacheSource,
-} from './types.js';
+} from './types.ts';
 
 export default class SpringCacheGenerator extends BaseApplicationGenerator<
   SpringCacheEntity,

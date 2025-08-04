@@ -18,7 +18,7 @@
  */
 import { fieldTypes } from '../../../lib/jhipster/index.ts';
 import { asPostPreparingEachEntityTask } from '../../base-application/support/task-type-inference.ts';
-import type { Application as LiquibaseApplication, Entity as LiquibaseEntity } from '../types.js';
+import type { Application as LiquibaseApplication, Entity as LiquibaseEntity } from '../types.ts';
 
 const { CommonDBTypes } = fieldTypes;
 const { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER } = CommonDBTypes;

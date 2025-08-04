@@ -20,7 +20,7 @@ import assert from 'node:assert';
 
 import { escapeRegExp, kebabCase } from 'lodash-es';
 
-import type { CascatedEditFileCallback, EditFileCallback } from '../api.js';
+import type { CascatedEditFileCallback, EditFileCallback } from '../api.ts';
 import type CoreGenerator from '../index.ts';
 
 import { joinCallbacks } from './write-files.ts';

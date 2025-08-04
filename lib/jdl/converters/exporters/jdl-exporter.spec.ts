@@ -26,7 +26,7 @@ import helpers from 'yeoman-test';
 import { JDLEntity } from '../../core/models/index.ts';
 import JDLApplication from '../../core/models/jdl-application.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
-import type { JDLJSONApplicationConfiguration } from '../../core/parsing/jdl-parsing-types.js';
+import type { JDLJSONApplicationConfiguration } from '../../core/parsing/jdl-parsing-types.ts';
 import { createRuntime } from '../../core/runtime.ts';
 
 import exportToJDL from './jdl-exporter.ts';

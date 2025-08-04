@@ -1,5 +1,5 @@
-import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/types.js';
-import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/types.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/types.ts';
+import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/types.ts';
 
 export type Source = {
   /* Dummy field to declare an empty type */

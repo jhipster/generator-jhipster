@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../../../lib/command/types.js';
+import type { JHipsterCommandDefinition } from '../../../../lib/command/types.ts';
 import { buildToolTypes } from '../../../../lib/jhipster/index.ts';
 import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.ts';
 

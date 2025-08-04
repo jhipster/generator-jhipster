@@ -4,13 +4,13 @@ import { join } from 'node:path';
 import BaseGenerator from '../../generators/base-core/index.ts';
 import { getPackageRoot } from '../../lib/index.ts';
 import { getGithubSamplesGroup } from '../../lib/testing/github-group.ts';
-import type { GitHubMatrixGroup } from '../../lib/testing/github-matrix.js';
+import type { GitHubMatrixGroup } from '../../lib/testing/github-matrix.ts';
 import { convertToGitHubMatrix } from '../../lib/testing/github-matrix.ts';
 import { getGithubOutputFile, setGithubTaskOutput } from '../../lib/testing/github.ts';
-import type { JHipsterGitHubInputMatrix, WorkflowSamples } from '../../lib/testing/workflow-samples.js';
+import type { JHipsterGitHubInputMatrix, WorkflowSamples } from '../../lib/testing/workflow-samples.ts';
 import { BUILD_JHIPSTER_BOM, JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from '../../test-integration/integration-test-constants.js';
 
-import type { eventNameChoices, workflowChoices } from './command.js';
+import type { eventNameChoices, workflowChoices } from './command.ts';
 import { devServerMatrix } from './samples/dev-server.ts';
 import { getGitChanges } from './support/git-changes.ts';
 

@@ -31,7 +31,7 @@ import { defaultLanguage } from '../languages/support/index.ts';
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.ts';
 import { writeFiles } from './files-angular.ts';
-import type { addItemToMenu } from './support/index.js';
+import type { addItemToMenu } from './support/index.ts';
 import {
   addEntitiesRoute,
   addIconImport,
@@ -47,7 +47,7 @@ import type {
   Entity as AngularEntity,
   Options as AngularOptions,
   Source as AngularSource,
-} from './types.js';
+} from './types.ts';
 
 const { ANGULAR } = clientFrameworkTypes;
 

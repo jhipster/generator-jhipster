@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../../../lib/command/types.js';
+import type { JHipsterCommandDefinition } from '../../../../lib/command/types.ts';
 
 const command = {
   configs: {

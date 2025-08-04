@@ -18,7 +18,7 @@
  */
 import sortKeys from 'sort-keys';
 
-import type { MavenDependency, MavenProfile } from '../types.js';
+import type { MavenDependency, MavenProfile } from '../types.ts';
 
 export type MavenProjectLike = {
   properties?: Record<string, any>;

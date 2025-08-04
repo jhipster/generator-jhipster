@@ -4,7 +4,7 @@ import { camelCase } from 'lodash-es';
 
 import { fieldTypes } from '../../../lib/jhipster/index.ts';
 import { isReservedTableName } from '../../../lib/jhipster/reserved-keywords.ts';
-import type { ApplicationAll } from '../../../lib/types/application-all.js';
+import type { ApplicationAll } from '../../../lib/types/application-all.ts';
 import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import {
   getJavaValueGeneratorForType,

@@ -1,4 +1,4 @@
-import type { JDLApplicationOptionType, JDLApplicationOptionTypeValue, JDLApplicationOptionValue } from '../types/parsing.js';
+import type { JDLApplicationOptionType, JDLApplicationOptionTypeValue, JDLApplicationOptionValue } from '../types/parsing.ts';
 
 export default class JDLApplicationDefinition {
   optionValues: Record<string, JDLApplicationOptionValue>;

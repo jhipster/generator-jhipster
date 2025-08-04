@@ -19,7 +19,7 @@
 
 import { osLocaleSync } from 'os-locale';
 
-import type { Language } from './languages.js';
+import type { Language } from './languages.ts';
 import { findLanguageForTag, supportedLanguages } from './languages.ts';
 
 const detectLanguage = (languages: readonly Language[] = supportedLanguages) => {

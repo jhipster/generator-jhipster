@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ApplicationWithEntities } from '../../../lib/jdl/jdl-importer.js';
+import type { ApplicationWithEntities } from '../../../lib/jdl/jdl-importer.ts';
 
 export const addApplicationIndex = (applicationsWithEntities: ApplicationWithEntities[]) => {
   applicationsWithEntities.forEach((applicationWithEntities, applicationIndex) => {

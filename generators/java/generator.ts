@@ -25,7 +25,7 @@ import type {
   Entity as JavaEntity,
   Options as JavaOptions,
   Source as JavaSource,
-} from './types.js';
+} from './types.ts';
 
 /**
  * Utility class with types.

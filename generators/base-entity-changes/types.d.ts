@@ -3,8 +3,8 @@ import type {
   Field as BaseApplicationField,
   Relationship as BaseApplicationRelationship,
   RelationshipWithEntity,
-} from '../base-application/types.js';
-export type { Application, Config, Features, Options, Relationship, Source } from '../base-application/types.js';
+} from '../base-application/types.ts';
+export type { Application, Config, Features, Options, Relationship, Source } from '../base-application/types.ts';
 
 export type Field = BaseApplicationField & {
   defaultValue?: any;

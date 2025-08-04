@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
+import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.ts';
 import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
 import type { Application as DockerApplication } from '../docker/types.d.ts';
 
-import type command from './command.js';
+import type command from './command.ts';
 
 type CICDApplicationProperties = ExportApplicationPropertiesFromCommand<typeof command> & {
   gitLabIndent?: string;

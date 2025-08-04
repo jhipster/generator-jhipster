@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type {
   Application as BaseSimpleApplicationApplication,
   Config as BaseSimpleApplicationConfig,
@@ -24,7 +24,7 @@ import type {
 } from '../base-simple-application/types.d.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
 
-import type command from './command.js';
+import type command from './command.ts';
 
 export type { Features } from '../base-simple-application/types.d.ts';
 

@@ -28,10 +28,10 @@ import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesC
 import { lookupCommandsConfigs } from '../../lib/command/lookup-commands-configs.ts';
 import { packageJson } from '../../lib/index.ts';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
-import type { ApplicationAll } from '../../lib/types/application-all.js';
+import type { ApplicationAll } from '../../lib/types/application-all.ts';
 import { mutateData, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
 import { loadDerivedAppConfig } from '../app/support/index.ts';
-import type { Entity as BaseApplicationEntity } from '../base-application/index.js';
+import type { Entity as BaseApplicationEntity } from '../base-application/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import {
   convertFieldBlobType,
@@ -57,8 +57,8 @@ import { JAVA_DOCKER_DIR, LOGIN_REGEX, RECOMMENDED_NODE_VERSION } from '../gener
 import { GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.ts';
 import { loadLanguagesConfig } from '../languages/support/index.ts';
 import { baseNameProperties } from '../project-name/support/index.ts';
-import type { Application as SpringBootApplication } from '../spring-boot/types.js';
-import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.js';
+import type { Application as SpringBootApplication } from '../spring-boot/types.ts';
+import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.ts';
 
 import { exportJDLTransform, importJDLTransform } from './support/index.ts';
 import type {
@@ -66,7 +66,7 @@ import type {
   Config as BootstrapApplicationBaseConfig,
   Entity as BootstrapApplicationBaseEntity,
   Options as BootstrapApplicationBaseOptions,
-} from './types.js';
+} from './types.ts';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.ts';
 
 export default class BootstrapApplicationBase extends BaseApplicationGenerator<

@@ -1,10 +1,10 @@
 import type { IsNever, Replace, RequireAtLeastOne, SetOptional, Simplify, TupleToUnion, ValueOf } from 'type-fest';
 import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
 
-import type { JHipsterNamedChoice } from '../core/types.js';
-import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
+import type { JHipsterNamedChoice } from '../core/types.ts';
+import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.ts';
 
-import type { MergeUnion } from './support/merge-union.js';
+import type { MergeUnion } from './support/merge-union.ts';
 
 type NormalizeValue<Input extends string> = Replace<Input, '[]', '', { all: true }>;
 

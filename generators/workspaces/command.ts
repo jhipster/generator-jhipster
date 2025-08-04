@@ -1,4 +1,4 @@
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { GENERATOR_APP, GENERATOR_GIT } from '../generator-list.ts';
 
 const command = {

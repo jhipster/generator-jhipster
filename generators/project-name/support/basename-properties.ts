@@ -2,7 +2,7 @@ import { kebabCase, startCase, upperFirst } from 'lodash-es';
 
 import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import { customCamelCase } from '../../../lib/utils/string-utils.ts';
-import type { Application as BaseSimpleApplication } from '../../base-simple-application/types.js';
+import type { Application as BaseSimpleApplication } from '../../base-simple-application/types.ts';
 import { getHipster } from '../internal/index.ts';
 
 export const baseNameProperties = {

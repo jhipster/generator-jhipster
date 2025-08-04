@@ -8,7 +8,7 @@ import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { buildClientSamples, defaultHelpers as helpers, entitiesClientSamples as entities, runResult } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../client/index.js';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import { GENERATOR_REACT } from '../generator-list.ts';
 

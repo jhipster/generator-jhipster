@@ -1,6 +1,6 @@
 import { camelCase, upperFirst } from 'lodash-es';
 
-import type { JHipsterChoices } from '../command/types.js';
+import type { JHipsterChoices } from '../command/types.ts';
 
 import { upperFirstCamelCase } from './string.ts';
 

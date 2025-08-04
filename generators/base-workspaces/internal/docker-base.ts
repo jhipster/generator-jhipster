@@ -24,7 +24,7 @@ import { buildToolTypes } from '../../../lib/jhipster/index.ts';
 import { normalizePathEnd } from '../../../lib/utils/index.ts';
 import type { BaseKubernetesGenerator } from '../../kubernetes/generator.ts';
 import { asPreparingWorkspacesTask } from '../support/task-type-inference.ts';
-import type { WorkspacesApplication } from '../types.js';
+import type { WorkspacesApplication } from '../types.ts';
 
 const { MAVEN } = buildToolTypes;
 

@@ -33,7 +33,7 @@ import {
   parseFromContent,
   parseFromFiles,
 } from './core/__test-support__/index.ts';
-import type { ApplicationWithEntities } from './jdl-importer.js';
+import type { ApplicationWithEntities } from './jdl-importer.ts';
 
 describe('jdl - integration tests', () => {
   beforeEach(async () => {

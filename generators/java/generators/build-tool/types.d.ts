@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../../../lib/command/types.js';
+import type { HandleCommandTypes } from '../../../../lib/command/types.ts';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,
   Entity as BaseApplicationEntity,
   Options as BaseApplicationOptions,
   Source as BaseApplicationSource,
-} from '../../../base-application/types.js';
+} from '../../../base-application/types.ts';
 
 import type command from './command.ts';
 

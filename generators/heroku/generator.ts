@@ -34,7 +34,7 @@ import type {
   Config as HerokuConfig,
   Entity as HerokuEntity,
   Options as HerokuOptions,
-} from './types.js';
+} from './types.ts';
 
 export default class HerokuGenerator extends BaseApplicationGenerator<
   HerokuEntity,

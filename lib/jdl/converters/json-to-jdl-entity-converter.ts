@@ -25,11 +25,11 @@ import { JDLEntity, JDLEnum } from '../core/models/index.ts';
 import JDLBinaryOption from '../core/models/jdl-binary-option.ts';
 import JDLField from '../core/models/jdl-field.ts';
 import JDLObject from '../core/models/jdl-object.ts';
-import type { JDLRelationshipModel, JDLRelationshipOptions, JDLSourceEntitySide } from '../core/models/jdl-relationship.js';
+import type { JDLRelationshipModel, JDLRelationshipOptions, JDLSourceEntitySide } from '../core/models/jdl-relationship.ts';
 import JDLRelationship from '../core/models/jdl-relationship.ts';
 import JDLUnaryOption from '../core/models/jdl-unary-option.ts';
 import JDLValidation from '../core/models/jdl-validation.ts';
-import type { JSONEntity, JSONField, JSONRelationship } from '../core/types/json-config.js';
+import type { JSONEntity, JSONField, JSONRelationship } from '../core/types/json-config.ts';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED } = unaryOptions;

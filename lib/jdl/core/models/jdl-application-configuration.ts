@@ -19,7 +19,7 @@
 
 import ApplicationOptions from '../../../jhipster/application-options.ts';
 
-import type JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
+import type JDLApplicationConfigurationOption from './jdl-application-configuration-option.ts';
 
 const { OptionNames } = ApplicationOptions;
 

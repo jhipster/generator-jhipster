@@ -24,7 +24,7 @@ import type {
   Entity as SpringCloudEntity,
   Options as SpringCloudOptions,
   Source as SpringCloudSource,
-} from '../../types.js';
+} from '../../types.ts';
 
 const WAIT_TIMEOUT = 3 * 60000;
 

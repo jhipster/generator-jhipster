@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Property } from './property.js';
+import type { Property } from './property.ts';
 
 type FieldEnum = {
   fieldValues: string;
