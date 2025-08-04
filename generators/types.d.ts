@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 // jhipster-needle-add-generator-with-bootstrap-start
-export type GeneratorsWithBootstrap = 'client' | 'java' | 'javascript' | 'kubernetes' | 'server' | 'spring-boot';
+export type GeneratorsWithBootstrap = 'client' | 'java' | 'javascript' | 'jdl' | 'kubernetes' | 'server' | 'spring-boot';
 // jhipster-needle-add-generator-with-bootstrap
 
 type GeneratorsByNamespace = {
@@ -97,6 +97,7 @@ type GeneratorsByNamespace = {
   'jhipster:javascript:prettier': import('./javascript/generators/prettier/generator.ts').default;
   jdl: import('./jdl/generator.ts').default;
   'jhipster:jdl': import('./jdl/generator.ts').default;
+  'jhipster:jdl:bootstrap': import('./jdl/generators/bootstrap/generator.ts').default;
   kubernetes: import('./kubernetes/generator.ts').default;
   'jhipster:kubernetes': import('./kubernetes/generator.ts').default;
   'kubernetes-helm': import('./kubernetes-helm/generator.ts').default;

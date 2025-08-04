@@ -83,6 +83,7 @@ const command = {
     'base-application',
     GENERATOR_BOOTSTRAP,
     GENERATOR_BOOTSTRAP_APPLICATION_BASE,
+    'jhipster:jdl:bootstrap',
     GENERATOR_COMMON,
     GENERATOR_SERVER,
     GENERATOR_CLIENT,

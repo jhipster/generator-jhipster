@@ -1,6 +1,7 @@
 import type { IsNever, Replace, RequireAtLeastOne, SetOptional, Simplify, TupleToUnion, ValueOf } from 'type-fest';
 import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
 
+import type GeneratorsByNamespace from '../../generators/types.ts';
 import type { JHipsterNamedChoice } from '../core/types.ts';
 import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.ts';
 
@@ -144,13 +145,13 @@ export type JHipsterCommandDefinition<ConfigContext = any> = {
    * Import options from a generator.
    * @example ['server', 'jhipster-blueprint:server']
    */
-  readonly import?: readonly string[];
+  readonly import?: readonly (keyof GeneratorsByNamespace | 'base' | 'base-application')[];
   /**
    * @experimental
    * Compose with generator.
    * @example ['server', 'jhipster-blueprint:server']
    */
-  readonly compose?: readonly string[];
+  readonly compose?: readonly (keyof GeneratorsByNamespace | 'base' | 'base-application')[];
   /**
    * Override options from the generator been blueprinted.
    */
