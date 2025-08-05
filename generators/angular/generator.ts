@@ -364,9 +364,6 @@ export default class AngularGenerator extends BaseApplicationGenerator<
               '@stomp/rx-stomp': nodeDependencies['@stomp/rx-stomp'],
               ...dependencies,
             },
-            devDependencies: {
-              '@types/sockjs-client': nodeDependencies['@types/sockjs-client'],
-            },
           });
         }
       },
