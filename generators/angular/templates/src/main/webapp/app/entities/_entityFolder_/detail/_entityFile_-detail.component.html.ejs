@@ -41,17 +41,17 @@ _%>
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
         @if (<%= entityInstance %>Ref.<%= fieldName %>) {
           <div>
-            <a (click)="openFile(<%= entityInstance %>Ref.<%= fieldName %><% if (!field.fieldValidationRequired) { %> ?? ''<% } %>, <%= entityInstance %>Ref.<%= fieldName %>ContentType)">
+            <a (click)="openFile(<%= entityInstance %>Ref.<%= fieldName %>, <%= entityInstance %>Ref.<%= fieldName %>ContentType)">
               <img [src]="'data:' + <%= entityInstance %>Ref.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>Ref.<%= fieldName %>" style="max-width: 100%;" alt="<%= entityInstance %>"/>
             </a>
-            {{ <%= entityInstance %>Ref.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>Ref.<%= fieldName %><% if (!field.fieldValidationRequired) { %> ?? ''<% } %>) }}
+            {{ <%= entityInstance %>Ref.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>Ref.<%= fieldName %>) }}
           </div>
         }
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
         @if (<%= entityInstance %>Ref.<%= fieldName %>) {
           <div>
-            <a (click)="openFile(<%= entityInstance %>Ref.<%= fieldName %><% if (!field.fieldValidationRequired) { %> ?? ''<% } %>, <%= entityInstance %>Ref.<%= fieldName %>ContentType)">__jhiTranslateTag__('entity.action.open')</a>
-            {{ <%= entityInstance %>Ref.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>Ref.<%= fieldName %><% if (!field.fieldValidationRequired) { %> ?? ''<% } %>) }}
+            <a (click)="openFile(<%= entityInstance %>Ref.<%= fieldName %>, <%= entityInstance %>Ref.<%= fieldName %>ContentType)">__jhiTranslateTag__('entity.action.open')</a>
+            {{ <%= entityInstance %>Ref.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>Ref.<%= fieldName %>) }}
           </div>
         }
     <%_ } else if (field.fieldTypeDuration) { _%>
