@@ -43,7 +43,6 @@
     "globals": "16.3.0",
     "globby": "14.1.0",
     "jest": "29.7.0",
-    "jest-date-mock": "1.0.10",
     "jest-junit": "16.0.0",
     "jest-preset-angular": "14.6.0",
     "jest-sonar": "0.2.16",
