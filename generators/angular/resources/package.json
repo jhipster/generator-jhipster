@@ -7,7 +7,6 @@
     "@ng-bootstrap/ng-bootstrap": "19.0.1",
     "@ngx-translate/core": "17.0.0",
     "@ngx-translate/http-loader": "17.0.0",
-    "@popperjs/core": "2.11.8",
     "@stomp/rx-stomp": "2.0.1",
     "bootstrap": "5.3.7",
     "bootswatch": "5.3.7",
