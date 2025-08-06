@@ -60,7 +60,6 @@ import { baseNameProperties } from '../project-name/support/index.ts';
 import type { Application as SpringBootApplication } from '../spring-boot/types.ts';
 import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.ts';
 
-import { exportJDLTransform, importJDLTransform } from './support/index.ts';
 import type {
   Application as BootstrapApplicationBaseApplication,
   Config as BootstrapApplicationBaseConfig,
@@ -85,28 +84,13 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
     }
 
     await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
+    await this.dependsOnBootstrap('jdl');
   }
 
   get initializing() {
     return this.asInitializingTaskGroup({
       displayLogo() {
         this.printDestinationInfo();
-      },
-      async jdlStore() {
-        if (this.jhipsterConfig.jdlStore) {
-          this.logger.warn('Storing configuration inside a JDL file is experimental');
-          this.logger.info(`Using JDL store ${this.jhipsterConfig.jdlStore}`);
-
-          const destinationPath = this.destinationPath();
-          const jdlStorePath = this.destinationPath(this.jhipsterConfig.jdlStore);
-          const { jdlDefinition } = this.options;
-
-          this.features.commitTransformFactory = () => exportJDLTransform({ destinationPath, jdlStorePath, jdlDefinition: jdlDefinition! });
-          await this.pipeline(
-            { refresh: true, pendingFiles: false },
-            importJDLTransform({ destinationPath, jdlStorePath, jdlDefinition: jdlDefinition! }),
-          );
-        }
       },
     });
   }
