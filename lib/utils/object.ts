@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { OmitIndexSignature, Simplify } from 'type-fest';
+import type { OmitIndexSignature, ReadonlyKeysOf, Simplify } from 'type-fest';
 
 const filterNullishValues = (value: unknown): boolean => value !== undefined && value !== null;
 
@@ -69,6 +69,21 @@ function filterValue<const T extends Record<string, any>>(
 export const pickFields = (source: Record<string | number, any>, fields: (string | number)[]) =>
   Object.fromEntries(fields.map(field => [field, source[field]]));
 
+export type MutateDataParam<T> = Simplify<
+  OmitIndexSignature<{
+    [Key in keyof (T & { __override__?: boolean })]?: Key extends '__override__'
+      ? boolean
+      : Key extends ReadonlyKeysOf<T>
+        ? never
+        : Key extends keyof T
+          ? // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+            T[Key] extends Function
+            ? (ctx: T) => T[Key]
+            : T[Key] | ((ctx: T) => T[Key])
+          : never;
+  }>
+>;
+
 /**
  * Mutation properties accepts:
  * - functions: receives the application and the return value is set at the application property.
@@ -84,21 +99,7 @@ export const pickFields = (source: Record<string | number, any>, fields: (string
  *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
  * );
  */
-export const mutateData = <const T extends Record<string | number, any>>(
-  context: T,
-  ...mutations: Simplify<
-    OmitIndexSignature<{
-      [Key in keyof (Partial<T> & { __override__?: boolean })]?: Key extends '__override__'
-        ? boolean
-        : Key extends keyof T
-          ? // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-            T[Key] extends Function
-            ? (ctx: T) => T[Key]
-            : T[Key] | ((ctx: T) => T[Key])
-          : never;
-    }>
-  >[]
-) => {
+export const mutateData = <const T extends Record<string | number, any>>(context: T, ...mutations: MutateDataParam<T>[]) => {
   for (const mutation of mutations) {
     const override = mutation.__override__;
     for (const [key, value] of Object.entries(mutation).filter(([key]) => key !== '__override__')) {
