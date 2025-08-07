@@ -22,6 +22,10 @@ import BaseCoreGenerator from '../../generators/base-core/index.ts';
 import { createNeedleCallback } from '../../generators/base-core/support/needles.ts';
 
 export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
+  async beforeQueue() {
+    await this.composeWith('jhipster:bootstrap');
+  }
+
   get [BaseCoreGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async writing() {
