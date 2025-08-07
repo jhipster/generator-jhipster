@@ -19,6 +19,20 @@ export type Application = WriteContext & {
   upperFirstCamelCaseBaseName: string;
   documentationArchiveUrl: string;
 
+  hipsterName?: string;
+  hipsterProductName?: string;
+  hipsterHomePageProductName?: string;
+  hipsterStackOverflowProductName?: string;
+  hipsterBugTrackerProductName?: string;
+  hipsterChatProductName?: string;
+  hipsterTwitterUsername?: string;
+  hipsterDocumentationLink?: string;
+  hipsterTwitterLink?: string;
+  hipsterProjectLink?: string;
+  hipsterStackoverflowLink?: string;
+  hipsterBugTrackerLink?: string;
+  hipsterChatLink?: string;
+
   projectVersion: string;
   projectDescription: string;
 

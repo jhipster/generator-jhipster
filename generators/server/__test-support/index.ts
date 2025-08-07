@@ -1,6 +1,5 @@
 import { databaseTypes, messageBrokerTypes } from '../../../lib/jhipster/index.ts';
 import {
-  GENERATOR_BOOTSTRAP,
   GENERATOR_JAVA,
   GENERATOR_PROJECT_NAME,
   GENERATOR_SERVER,
@@ -54,15 +53,17 @@ const shouldComposeWithDatabasetype = (databaseType: string, shouldCompose: bool
 export const shouldComposeWithCouchbase = (shouldCompose: boolean, runResultSupplier) =>
   shouldComposeWithDatabasetype(COUCHBASE, shouldCompose, runResultSupplier);
 
-export const filterBasicServerGenerators = (ns: string) =>
-  !ns.startsWith(`jhipster:${GENERATOR_BOOTSTRAP}`) &&
-  ![
-    `jhipster:${GENERATOR_PROJECT_NAME}`,
-    `jhipster:${GENERATOR_JAVA}`,
-    `jhipster:${GENERATOR_JAVA}:bootstrap`,
-    `jhipster:${GENERATOR_JAVA}:domain`,
-    `jhipster:${GENERATOR_SERVER}`,
-    `jhipster:${GENERATOR_SERVER}:bootstrap`,
-    `jhipster:${GENERATOR_SPRING_BOOT}`,
-    `jhipster:${GENERATOR_SPRING_BOOT}:bootstrap`,
-  ].includes(ns);
+export const filterBasicServerGenerators = (ns: string) => {
+  const [, generator, subGenerator] = ns.split(':');
+  return (
+    subGenerator !== 'bootstrap' &&
+    !generator.startsWith('bootstrap') &&
+    ![
+      `jhipster:${GENERATOR_PROJECT_NAME}`,
+      `jhipster:${GENERATOR_JAVA}`,
+      `jhipster:${GENERATOR_JAVA}:domain`,
+      `jhipster:${GENERATOR_SERVER}`,
+      `jhipster:${GENERATOR_SPRING_BOOT}`,
+    ].includes(ns)
+  );
+};

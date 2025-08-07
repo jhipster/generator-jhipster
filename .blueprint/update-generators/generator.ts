@@ -34,7 +34,7 @@ export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
 
         const contentToAdd = generators
           .map(([ns, meta]) => {
-            if (ns.startsWith('jhipster:base')) {
+            if (ns.startsWith('jhipster:base') && ns.split(':').length === 2) {
               // Base generators cannot be composed with.
               return [];
             }
