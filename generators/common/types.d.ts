@@ -81,7 +81,6 @@ export type Application<E extends BaseApplicationEntity = Entity> = JavascriptAp
   LanguagesApplication<E> & {
     srcMain: string;
     srcTest: string;
-    documentationUrl: string;
     anyEntityHasRelationshipWithUser: boolean;
 
     gatewayServicesApiAvailable?: boolean;

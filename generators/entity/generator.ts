@@ -101,7 +101,7 @@ export default class EntityGenerator extends BaseApplicationGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('app');
     }
   }
 

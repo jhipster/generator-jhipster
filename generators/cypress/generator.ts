@@ -41,7 +41,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
 
     if (!this.delegateToBlueprint) {
       // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('client');
     }
   }
 

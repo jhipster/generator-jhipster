@@ -25,7 +25,7 @@ export default class <%- generatorClass %>Generator extends BaseApplicationGener
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('app');
     }
   }
 

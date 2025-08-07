@@ -31,7 +31,7 @@ export default class PrettierGenerator extends JavascriptApplicationGenerator {
 
     if (!this.delegateToBlueprint) {
       if (!this.options.fromInit) {
-        await this.dependsOnBootstrapApplication();
+        await this.dependsOnBootstrap('client');
       }
       await this.dependsOnJHipster('jhipster:javascript:bootstrap');
     }
