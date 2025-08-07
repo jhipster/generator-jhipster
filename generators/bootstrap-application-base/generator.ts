@@ -53,10 +53,9 @@ import {
   stringifyApplicationData,
 } from '../base-application/support/index.ts';
 import { isWin32 } from '../base-core/support/index.ts';
-import { JAVA_DOCKER_DIR, LOGIN_REGEX, RECOMMENDED_NODE_VERSION } from '../generator-constants.js';
-import { GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.ts';
+import { JAVA_DOCKER_DIR, LOGIN_REGEX } from '../generator-constants.js';
+import { GENERATOR_COMMON } from '../generator-list.ts';
 import { loadLanguagesConfig } from '../languages/support/index.ts';
-import { baseNameProperties } from '../project-name/support/index.ts';
 import type { Application as SpringBootApplication } from '../spring-boot/types.ts';
 import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/types.ts';
 
@@ -83,8 +82,8 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
       throw new Error('Only sbs blueprint is supported');
     }
 
-    await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     await this.dependsOnBootstrap('jdl');
+    await this.dependsOnBootstrap('base-simple-application');
   }
 
   get initializing() {
@@ -99,26 +98,10 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
     return this.initializing;
   }
 
-  get configuring() {
-    return this.asConfiguringTaskGroup({
-      configuring() {
-        if (this.jhipsterConfig.baseName === undefined) {
-          this.jhipsterConfig.baseName = 'jhipster';
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.configuring;
-  }
-
   get [BaseApplicationGenerator.BOOTSTRAP_APPLICATION]() {
     return this.asBootstrapApplicationTaskGroup({
       loadConfig({ applicationDefaults }) {
-        applicationDefaults(removeFieldsWithNullishValues(this.config.getAll()) as any, {
-          nodeDependencies: {},
-          customizeTemplatePaths: [],
+        applicationDefaults({
           packageJsonScripts: {},
           clientPackageJsonScripts: {},
           testFrameworks: [],
@@ -140,15 +123,8 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
       },
       loadApplication({ application, control, applicationDefaults }) {
         applicationDefaults({
-          ...baseNameProperties,
-          nodeVersion: this.useVersionPlaceholders ? 'NODE_VERSION' : RECOMMENDED_NODE_VERSION,
-          jhipsterVersion: this.useVersionPlaceholders ? 'JHIPSTER_VERSION' : packageJson.version,
-          jhipsterPackageJson: packageJson,
-
           jhiPrefixCapitalized: ({ jhiPrefix }) => upperFirst(jhiPrefix),
           jhiPrefixDashed: ({ jhiPrefix }) => kebabCase(jhiPrefix),
-
-          projectDescription: ({ projectDescription, humanizedBaseName }) => projectDescription ?? `Description for ${humanizedBaseName}`,
 
           backendType: 'Java',
           temporaryDir: ({ backendType, buildTool }) => {
@@ -215,24 +191,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator<
 
         applicationDefaults({
           __override__: false,
-          nodePackageManager: 'npm',
-          nodePackageManagerCommand: ({ nodePackageManager }) => nodePackageManager,
           dockerServicesDir: JAVA_DOCKER_DIR,
           // TODO drop clientPackageManager
           clientPackageManager: ({ nodePackageManager }) => nodePackageManager,
-          hipsterName: 'Java Hipster',
-          hipsterProductName: 'JHipster',
-          hipsterHomePageProductName: 'JHipster',
-          hipsterStackOverflowProductName: 'JHipster',
-          hipsterBugTrackerProductName: 'JHipster',
-          hipsterChatProductName: 'JHipster',
-          hipsterTwitterUsername: '@jhipster',
-          hipsterDocumentationLink: 'https://www.jhipster.tech/',
-          hipsterTwitterLink: 'https://twitter.com/jhipster',
-          hipsterProjectLink: 'https://github.com/jhipster/generator-jhipster',
-          hipsterStackoverflowLink: 'https://stackoverflow.com/tags/jhipster/info',
-          hipsterBugTrackerLink: 'https://github.com/jhipster/generator-jhipster/issues?state=open',
-          hipsterChatLink: 'https://gitter.im/jhipster/generator-jhipster',
 
           backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
           backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,

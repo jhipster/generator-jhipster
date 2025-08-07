@@ -373,20 +373,6 @@ export type Application<E extends Entity> = BaseSimpleApplicationApplication &
     clientTestDir?: string;
     clientDistDir?: string;
 
-    hipsterName?: string;
-    hipsterProductName?: string;
-    hipsterHomePageProductName?: string;
-    hipsterStackOverflowProductName?: string;
-    hipsterBugTrackerProductName?: string;
-    hipsterChatProductName?: string;
-    hipsterTwitterUsername?: string;
-    hipsterDocumentationLink?: string;
-    hipsterTwitterLink?: string;
-    hipsterProjectLink?: string;
-    hipsterStackoverflowLink?: string;
-    hipsterBugTrackerLink?: string;
-    hipsterChatLink?: string;
-
     pages: string[];
 
     devServerPort: number;
