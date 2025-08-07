@@ -60,10 +60,6 @@ export const LOGIN_REGEX = '^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\
 // JS does not support atomic groups
 export const LOGIN_REGEX_JS = '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$';
 
-// documentation constants
-export const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
-export const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
-
 export const MAIN_DIR = 'src/main/';
 export const TEST_DIR = 'src/test/';
 

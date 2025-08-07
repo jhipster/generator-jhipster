@@ -331,6 +331,10 @@ export const jhipster7deprecatedProperties: MigrationProperty = {
     replacement: 'entityJpqlInstance property',
     get: ({ data }) => data.entityJpqlInstance,
   },
+  documentationUrl: {
+    replacement: 'hipsterDocumentationLink property',
+    get: ({ data }) => data.hipsterDocumentationLink,
+  },
 };
 
 const ejsBuiltInProperties: (string | symbol)[] = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
