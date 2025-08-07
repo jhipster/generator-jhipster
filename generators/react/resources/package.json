@@ -50,7 +50,7 @@
     "css-minimizer-webpack-plugin": "7.0.2",
     "eslint": "9.32.0",
     "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-prettier": "5.5.3",
+    "eslint-plugin-prettier": "5.5.4",
     "eslint-plugin-react": "7.37.5",
     "eslint-webpack-plugin": "5.0.2",
     "folder-hash": "4.1.1",
