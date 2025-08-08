@@ -16,26 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-
-const command = {
-  configs: {
-    baseName: {
-      description: 'Application base name',
-      cli: {
-        type: String,
-      },
-      scope: 'storage',
-    },
-    skipJhipsterDependencies: {
-      description: "Don't write jhipster dependencies to package.json.",
-      cli: {
-        type: Boolean,
-        env: 'JHI_SKIP_JHIPSTER_DEPENDENCIES',
-      },
-      scope: 'storage',
-    },
-  },
-} as const satisfies JHipsterCommandDefinition;
-
-export default command;
+export { default } from './generator.ts';
+export { default as command } from './command.ts';

@@ -20,7 +20,6 @@ import chalk from 'chalk';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { applicationTypesChoices } from '../../lib/core/application-types.ts';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.ts';
 
 const command = {
   configs: {
@@ -69,7 +68,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
+  import: ['jhipster:base-application:bootstrap', 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

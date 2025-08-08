@@ -1,10 +1,11 @@
 import { camelCase, upperFirst } from 'lodash-es';
-import BaseGenerator from '../../generators/base-core/index.js';
+import BaseCoreGenerator from '../../generators/base-core/index.js';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 
-export default class extends BaseGenerator {
+export default class extends BaseCoreGenerator {
   generatorNamespace!: string;
 
-  get [BaseGenerator.WRITING]() {
+  get [BaseCoreGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async writing() {
         const { generatorNamespace } = this;
@@ -29,6 +30,16 @@ export default class extends BaseGenerator {
             generatorRelativePath: devBlueprint ? '../../generators/' : '../'.repeat((namespaceParts.length - 1) * 2 + 1),
           },
         });
+      },
+    });
+  }
+
+  get [BaseCoreGenerator.END]() {
+    return this.asAnyTaskGroup({
+      async updateGenerators() {
+        const envBuilder = new EnvironmentBuilder(this.env);
+        await envBuilder.updateJHipsterGenerators();
+        await this.composeWithJHipster('@jhipster/jhipster-dev:update-generators');
       },
     });
   }
