@@ -24,7 +24,7 @@ import BaseApplicationGenerator from '../base-application/index.ts';
 import type { PropertiesFileLines } from '../base-core/support/index.ts';
 import { editPropertiesFileCallback } from '../base-core/support/index.ts';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.ts';
-import { JHIPSTER_DOCUMENTATION_URL, MAIN_DIR, TEST_DIR } from '../generator-constants.js';
+import { MAIN_DIR, TEST_DIR } from '../generator-constants.js';
 import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.ts';
 
 import command from './command.ts';
@@ -163,7 +163,6 @@ export default class CommonGenerator extends BaseApplicationGenerator<
         applicationDefaults({
           srcMain: MAIN_DIR,
           srcTest: TEST_DIR,
-          documentationUrl: JHIPSTER_DOCUMENTATION_URL,
         });
       },
       sonarSourceApi({ source }) {

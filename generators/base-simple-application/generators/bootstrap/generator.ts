@@ -96,6 +96,8 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
           hipsterBugTrackerLink: 'https://github.com/jhipster/generator-jhipster/issues?state=open',
           hipsterChatLink: 'https://gitter.im/jhipster/generator-jhipster',
           projectDescription: ({ projectDescription, humanizedBaseName }) => projectDescription ?? `Description for ${humanizedBaseName}`,
+          documentationArchiveUrl: ({ jhipsterVersion, hipsterDocumentationLink }) =>
+            `${hipsterDocumentationLink}documentation-archive/v${jhipsterVersion}`,
         });
       },
     });
