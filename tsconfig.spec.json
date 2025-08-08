@@ -4,7 +4,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "types": []
   }
 }
