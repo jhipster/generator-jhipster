@@ -139,6 +139,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "dockerContainers": Any<Object>,
   "dockerImage": undefined,
   "dockerServicesDir": "src/main/docker/",
+  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "domains": [
     "com.mycompany.myapp",
   ],

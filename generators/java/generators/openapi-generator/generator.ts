@@ -27,7 +27,7 @@ export default class OpenapiGeneratorGenerator extends JavaApplicationGenerator 
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('java');
       await this.dependsOnJHipster('jhipster:java:build-tool');
     }
   }

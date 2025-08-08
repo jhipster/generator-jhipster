@@ -4,6 +4,7 @@ exports[`helpers run using withJHipsterGenerators should register jhipster gener
 [
   "jhipster:angular",
   "jhipster:app",
+  "jhipster:app:bootstrap",
   "jhipster:base",
   "jhipster:base-application",
   "jhipster:base-core",
@@ -94,6 +95,7 @@ exports[`helpers runJHipster defaults should register jhipster generators namesp
 [
   "jhipster:angular",
   "jhipster:app",
+  "jhipster:app:bootstrap",
   "jhipster:base",
   "jhipster:base-application",
   "jhipster:base-core",
@@ -184,6 +186,7 @@ exports[`helpers runJHipster with useDefaultMocks should register jhipster gener
 [
   "jhipster:angular",
   "jhipster:app",
+  "jhipster:app:bootstrap",
   "jhipster:base",
   "jhipster:base-application",
   "jhipster:base-core",

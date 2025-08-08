@@ -202,6 +202,9 @@ export default class BaseApplicationGenerator<
     return getConfigWithDefaults(super.jhipsterConfigWithDefaults) as Config;
   }
 
+  /**
+   * @deprecated use dependsOnBootstrap('app')
+   */
   dependsOnBootstrapApplication(
     options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION]> | undefined,
   ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION]> {

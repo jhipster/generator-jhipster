@@ -81,7 +81,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<
       await this.composeWithBlueprints();
     }
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('app');
     }
   }
 
