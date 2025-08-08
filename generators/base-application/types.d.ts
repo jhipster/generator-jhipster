@@ -1,4 +1,4 @@
-import type { DerivedPropertiesOnlyOf } from '../../lib/command/types.ts';
+import type { DerivedPropertiesOnlyOf, HandleCommandTypes } from '../../lib/command/types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import type { Field as BaseField } from '../../lib/jhipster/types/field.ts';
@@ -7,17 +7,21 @@ import type {
   Application as BaseSimpleApplicationApplication,
   Config as BaseSimpleApplicationConfig,
   Options as BaseSimpleApplicationOptions,
-} from '../base-simple-application/types.d.ts';
+} from '../base-simple-application/types.ts';
 
+import type bootstrapCommand from './generators/bootstrap/command.ts';
 import type { OptionWithDerivedProperties } from './internal/types/application-options.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
 
-export type Config = BaseSimpleApplicationConfig & {
-  entities?: string[];
-  backendType?: string;
-};
+type Command = HandleCommandTypes<typeof bootstrapCommand>;
 
-export type Options = BaseSimpleApplicationOptions;
+export type Config = BaseSimpleApplicationConfig &
+  Command['Config'] & {
+    entities?: string[];
+    backendType?: string;
+  };
+
+export type Options = BaseSimpleApplicationOptions & Command['Options'];
 
 export type { Features } from '../base-simple-application/types.ts';
 export type { Source } from '../base-simple-application/types.ts';
@@ -359,7 +363,8 @@ type AuthenticationProperties<Entity> = OptionWithDerivedProperties<'authenticat
   Oauth2Application &
   SessionApplication;
 
-export type Application<E extends Entity> = BaseSimpleApplicationApplication &
+export type Application<E extends Entity> = Command['Application'] &
+  BaseSimpleApplicationApplication &
   ApplicationProperties &
   AuthenticationProperties<E> & {
     jhiPrefix: string;

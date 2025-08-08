@@ -16,9 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { JHipsterCommandDefinition } from '../../../../lib/command/types.ts';
 
-/*
- * Register generator-base at yeoman-environment
- */
-export { default } from './generator.ts';
-export type { Application, Config, Entity, Field, Options, Relationship, Source } from './types.ts';
+const command = {
+  configs: {
+    skipJhipsterDependencies: {
+      description: "Don't write jhipster dependencies to package.json.",
+      cli: {
+        type: Boolean,
+        env: 'JHI_SKIP_JHIPSTER_DEPENDENCIES',
+      },
+      scope: 'storage',
+    },
+  },
+  import: ['base', 'jhipster:project-name'],
+} as const satisfies JHipsterCommandDefinition;
+
+export default command;

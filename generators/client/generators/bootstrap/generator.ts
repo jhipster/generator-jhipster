@@ -37,7 +37,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
       throw new Error('Only sbs blueprint is supported');
     }
 
-    await this.dependsOnBootstrapApplicationBase();
+    await this.dependsOnBootstrap('common');
   }
 
   get loading() {

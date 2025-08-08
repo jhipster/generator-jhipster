@@ -145,13 +145,13 @@ export type JHipsterCommandDefinition<ConfigContext = any> = {
    * Import options from a generator.
    * @example ['server', 'jhipster-blueprint:server']
    */
-  readonly import?: readonly (keyof GeneratorsByNamespace | 'base' | 'base-application')[];
+  readonly import?: readonly (keyof GeneratorsByNamespace | 'base')[];
   /**
    * @experimental
    * Compose with generator.
    * @example ['server', 'jhipster-blueprint:server']
    */
-  readonly compose?: readonly (keyof GeneratorsByNamespace | 'base' | 'base-application')[];
+  readonly compose?: readonly (keyof GeneratorsByNamespace | 'base')[];
   /**
    * Override options from the generator been blueprinted.
    */

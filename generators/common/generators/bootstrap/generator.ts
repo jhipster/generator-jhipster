@@ -16,11 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../lib/command/types.ts';
+import BaseApplicationGenerator from '../../../base-application/index.ts';
 
-const command = {
-  configs: {},
-  import: ['base'],
-} as const satisfies JHipsterCommandDefinition;
+export default class BootstrapGenerator extends BaseApplicationGenerator {
+  customLifecycle = true;
 
-export default command;
+  async beforeQueue() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints();
+    }
+
+    await this.dependsOnBootstrap('base-application');
+  }
+}

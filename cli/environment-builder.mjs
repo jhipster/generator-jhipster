@@ -147,6 +147,11 @@ export default class EnvironmentBuilder {
       .join(',');
   }
 
+  async updateJHipsterGenerators() {
+    await this._lookupJHipster();
+    await this._lookupDevBlueprint();
+  }
+
   /**
    * @private
    * Lookup current jhipster generators.

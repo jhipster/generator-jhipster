@@ -4,10 +4,6 @@ import type { Config as AppConfig, Options as AppOptions } from '../../generator
 import type { Config as BaseConfig, Options as BaseOptions } from '../../generators/base/types.d.ts';
 import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../../generators/base-application/types.d.ts';
 import type { Config as BootstrapConfig, Options as BootstrapOptions } from '../../generators/bootstrap/types.d.ts';
-import type {
-  Config as BootstrapApplicationBaseConfig,
-  Options as BootstrapApplicationBaseOptions,
-} from '../../generators/bootstrap-application-base/types.d.ts';
 import type { Config as ClientConfig, Options as ClientOptions } from '../../generators/client/types.d.ts';
 import type { Config as GitConfig, Options as GitOptions } from '../../generators/git/types.d.ts';
 import type { Config as JavaConfig, Options as JavaOptions } from '../../generators/java/types.d.ts';
@@ -36,7 +32,6 @@ export type ConfigAll = Simplify<
     BaseConfig &
     BaseApplicationConfig &
     BootstrapConfig &
-    BootstrapApplicationBaseConfig &
     ClientConfig &
     GitConfig &
     JavaConfig &
@@ -62,7 +57,6 @@ export type OptionsAll = Simplify<
     BaseOptions &
     BaseApplicationOptions &
     BootstrapOptions &
-    BootstrapApplicationBaseOptions &
     ClientOptions &
     GitOptions &
     JavaOptions &

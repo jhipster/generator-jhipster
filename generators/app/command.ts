@@ -80,7 +80,6 @@ const command = {
   },
   import: [
     'base',
-    'base-application',
     GENERATOR_BOOTSTRAP,
     GENERATOR_BOOTSTRAP_APPLICATION_BASE,
     'jhipster:jdl:bootstrap',

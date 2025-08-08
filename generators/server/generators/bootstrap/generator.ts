@@ -64,7 +64,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
       throw new Error('Only sbs blueprint is supported');
     }
 
-    await this.dependsOnBootstrapApplicationBase();
+    await this.dependsOnBootstrap('common');
   }
 
   get loading() {

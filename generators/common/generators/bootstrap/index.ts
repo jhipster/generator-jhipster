@@ -16,23 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
-import type {
-  Application as CommonApplication,
-  Config as CommonConfig,
-  Entity as CommonEntity,
-  Options as CommonOptions,
-  Source as CommonSource,
-} from '../common/types.ts';
-
-import type command from './command.ts';
-
-type Command = HandleCommandTypes<typeof command>;
-
-export type Config = Command['Config'] & CommonConfig;
-
-export type Options = Command['Options'] & CommonOptions;
-
-export { CommonEntity as Entity, CommonSource as Source };
-
-export type Application<E extends CommonEntity = CommonEntity> = Command['Application'] & CommonApplication<E>;
+export { default } from './generator.ts';

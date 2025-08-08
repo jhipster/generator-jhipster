@@ -40,7 +40,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
           javaBootstrap.writeBootstrapFiles = false;
         }
       } else {
-        await this.dependsOnBootstrapApplicationBase();
+        await this.dependsOnBootstrap('base-application');
       }
     }
   }

@@ -27,7 +27,7 @@ export default class JavascriptBootstrapGenerator extends JavascriptApplicationG
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplicationBase();
+      await this.dependsOnBootstrap('base-application');
     }
   }
 

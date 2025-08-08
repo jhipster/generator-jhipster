@@ -101,6 +101,9 @@ export default class BaseSimpleApplicationGenerator<
     return configWithDefaults as Config;
   }
 
+  /**
+   * @deprecated use dependsOnBootstrap('common'), dependsOnBootstrap('base-application') or dependsOnBootstrap('base-simple-application')
+   */
   dependsOnBootstrapApplicationBase(
     options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_BASE]> | undefined,
   ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_BASE]> {
