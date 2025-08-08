@@ -73,10 +73,6 @@ export type WriteFileOptions<DataType, Generator = CoreGenerator> = {
       sections: WriteFileSection<DataType, Generator> & { _?: { transform?: (() => string)[] } };
     }
   | {
-      /** templates to be written */
-      templates: WriteFileTemplate<DataType, Generator>[];
-    }
-  | {
       /** blocks to be written */
       blocks: WriteFileBlock<DataType, Generator>[];
     }

@@ -957,7 +957,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       return targetFile;
     };
 
-    let parsedTemplates: RenderTemplateParam[];
+    let parsedTemplates: RenderTemplateParam[] = [];
     if ('sections' in options || 'blocks' in options) {
       const sectionTransform = 'sections' in options ? (options.sections._?.transform ?? []) : [];
 
@@ -1053,13 +1053,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         })
         .flat()
         .filter(template => template) as RenderTemplateParam[];
-    } else {
-      parsedTemplates = options.templates.map(template => {
-        if (typeof template === 'string') {
-          return { sourceFile: template, destinationFile: template };
-        }
-        return template;
-      }) as RenderTemplateParam[];
     }
 
     const files = (await Promise.all(parsedTemplates.map(template => renderTemplate(template)).filter(Boolean))) as string[];

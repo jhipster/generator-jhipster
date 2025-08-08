@@ -36,10 +36,14 @@ export async function addEnumerationFiles(
         webappEnumerationsDir: application.webappEnumerationsDir,
       };
       await this.writeFiles({
-        templates: [
+        blocks: [
           {
-            sourceFile: `${CLIENT_MAIN_SRC_DIR}app/entities/enumerations/enum.model.ts`,
-            destinationFile: `${application.webappEnumerationsDir}${enumFileName}.model.ts`,
+            templates: [
+              {
+                sourceFile: `${CLIENT_MAIN_SRC_DIR}app/entities/enumerations/enum.model.ts`,
+                destinationFile: `${application.webappEnumerationsDir}${enumFileName}.model.ts`,
+              },
+            ],
           },
         ],
         context: enumInfo,
