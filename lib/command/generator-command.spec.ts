@@ -34,7 +34,7 @@ class CommandGenerator extends BaseApplicationGenerator {
   }
 }
 
-const runDummyCli = (cliArgs: string, config: JHipsterConfig<any>) => {
+const runDummyCli = (cliArgs: string, config: JHipsterConfig) => {
   return helpers
     .runCli(cliArgs.startsWith('jdl ') ? cliArgs : `dummy ${cliArgs}`.trim(), {
       useEnvironmentBuilder: false,
