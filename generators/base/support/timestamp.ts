@@ -59,9 +59,6 @@ export function parseChangelog(changelogDate: string): Date {
   if (!changelogDate) {
     throw new Error('changelogDate is required.');
   }
-  if (typeof changelogDate !== 'string') {
-    throw new Error(`changelogDate ${changelogDate} must be a string.`);
-  }
   if (changelogDate.length !== 14) {
     throw new Error(`changelogDate ${changelogDate} is not a valid changelogDate.`);
   }
