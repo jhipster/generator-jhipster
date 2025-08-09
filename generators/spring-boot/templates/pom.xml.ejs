@@ -138,6 +138,41 @@
             <scope>test</scope>
         </dependency>
 <%_ } _%>
+<%_ if (devDatabaseTypeMariadb || prodDatabaseTypeMariadb) { _%>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mariadb</artifactId>
+            <scope>test</scope>
+        </dependency>
+<%_ } _%>
+<%_ if (devDatabaseTypeMssql || prodDatabaseTypeMssql) { _%>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mssqlserver</artifactId>
+            <scope>test</scope>
+        </dependency>
+<%_ } _%>
+<%_ if (devDatabaseTypeMysql || prodDatabaseTypeMysql) { _%>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mysql</artifactId>
+            <scope>test</scope>
+        </dependency>
+<%_ } _%>
+<%_ if (devDatabaseTypeOracle || prodDatabaseTypeOracle) { _%>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>oracle-xe</artifactId>
+            <scope>test</scope>
+        </dependency>
+<%_ } _%>
+<%_ if (devDatabaseTypePostgresql || prodDatabaseTypePostgresql) { _%>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+<%_ } _%>
         <dependency>
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>

@@ -110,10 +110,7 @@ export const getDatabaseTypeMavenDefinition: (
   const dependenciesForType: Record<string, DatabaseTypeDependencies> = {
     mariadb: {
       jdbc: {
-        dependencies: [
-          { inProfile, ...javaSqlDatabaseArtifacts.mariadb.jdbc },
-          { inProfile, ...javaSqlDatabaseArtifacts.mariadb.testContainer },
-        ],
+        dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.mariadb.jdbc }],
       },
       r2dbc: {
         dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.mariadb.r2dbc }],
@@ -121,10 +118,7 @@ export const getDatabaseTypeMavenDefinition: (
     },
     mssql: {
       jdbc: {
-        dependencies: [
-          { inProfile, ...javaSqlDatabaseArtifacts.mssql.jdbc },
-          { inProfile, ...javaSqlDatabaseArtifacts.mssql.testContainer },
-        ],
+        dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.mssql.jdbc }],
       },
       r2dbc: {
         dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.mssql.r2dbc }],
@@ -132,10 +126,7 @@ export const getDatabaseTypeMavenDefinition: (
     },
     mysql: {
       jdbc: {
-        dependencies: [
-          { inProfile, ...javaSqlDatabaseArtifacts.mysql.jdbc },
-          { inProfile, ...javaSqlDatabaseArtifacts.mysql.testContainer },
-        ],
+        dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.mysql.jdbc }],
       },
       r2dbc: {
         dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.mysql.r2dbc }],
@@ -143,19 +134,13 @@ export const getDatabaseTypeMavenDefinition: (
     },
     oracle: {
       jdbc: {
-        dependencies: [
-          { inProfile, ...javaSqlDatabaseArtifacts.oracle.jdbc },
-          { inProfile, ...javaSqlDatabaseArtifacts.oracle.testContainer },
-        ],
+        dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.oracle.jdbc }],
       },
       r2dbc: {},
     },
     postgresql: {
       jdbc: {
-        dependencies: [
-          { inProfile, ...javaSqlDatabaseArtifacts.postgresql.jdbc },
-          { inProfile, ...javaSqlDatabaseArtifacts.postgresql.testContainer },
-        ],
+        dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.postgresql.jdbc }],
       },
       r2dbc: {
         dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.postgresql.r2dbc }],
