@@ -1,0 +1,103 @@
+name: 'Generate Sample Configuration'
+description: 'Generate sample configuration and entities for testing'
+inputs:
+  sample-name:
+    description: 'Name of the sample to generate'
+    required: true
+  database-type:
+    description: 'Database type (sql, mongodb, cassandra, couchbase, neo4j, micro)'
+    required: false
+    default: 'sql'
+  extra-args:
+    description: 'Extra arguments for generation'
+    required: false
+    default: ''
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Prepare application directory'
+      shell: bash
+      run: |
+        mkdir -p "$JHI_FOLDER_APP"/.jhipster/
+        echo "Created directory: $JHI_FOLDER_APP"
+        
+    - name: 'Copy sample configuration'
+      shell: bash
+      run: |
+        if [[ -f "$JHI_SAMPLES/${{ inputs.sample-name }}/.yo-rc.json" ]]; then
+          cp -f "$JHI_SAMPLES/${{ inputs.sample-name }}/.yo-rc.json" "$JHI_FOLDER_APP"/
+          echo "Copied configuration for sample: ${{ inputs.sample-name }}"
+        else
+          echo "Error: Sample configuration not found for ${{ inputs.sample-name }}"
+          exit 1
+        fi
+        
+    - name: 'Generate entities based on database type'
+      shell: bash
+      run: |
+        case "${{ inputs.database-type }}" in
+          "mongodb"|"couchbase")
+            # MongoDB/Couchbase entities
+            for entity in DocumentBankAccount EmbeddedOperation Place Division FieldTestEntity FieldTestMapstructAndServiceClassEntity FieldTestServiceClassAndJpaFilteringEntity FieldTestServiceImplEntity FieldTestInfiniteScrollEntity FieldTestPaginationEntity EntityWithDTO EntityWithPaginationAndDTO EntityWithServiceClassAndPagination EntityWithServiceClassPaginationAndDTO EntityWithServiceImplAndDTO EntityWithServiceImplAndPagination EntityWithServiceImplPaginationAndDTO; do
+              if [[ -f "$JHI_ENTITY_SAMPLES/$entity.json" ]]; then
+                cp "$JHI_ENTITY_SAMPLES/$entity.json" "$JHI_FOLDER_APP"/.jhipster/
+                echo "Added entity: $entity"
+              fi
+            done
+            ;;
+          "neo4j")
+            # Neo4j entities
+            for entity in Album Track Genre Artist; do
+              if [[ -f "$JHI_ENTITY_SAMPLES/$entity.json" ]]; then
+                cp "$JHI_ENTITY_SAMPLES/$entity.json" "$JHI_FOLDER_APP"/.jhipster/
+                echo "Added entity: $entity"
+              fi
+            done
+            ;;
+          "cassandra")
+            # Cassandra entities
+            for entity in CassBankAccount FieldTestEntity FieldTestServiceImplEntity FieldTestMapstructAndServiceClassEntity FieldTestPaginationEntity; do
+              if [[ -f "$JHI_ENTITY_SAMPLES/$entity.json" ]]; then
+                cp "$JHI_ENTITY_SAMPLES/$entity.json" "$JHI_FOLDER_APP"/.jhipster/
+                echo "Added entity: $entity"
+              fi
+            done
+            ;;
+          "micro")
+            # Microservice entities
+            for entity in MicroserviceBankAccount MicroserviceOperation MicroserviceLabel FieldTestEntity FieldTestMapstructAndServiceClassEntity FieldTestServiceClassAndJpaFilteringEntity FieldTestServiceImplEntity FieldTestInfiniteScrollEntity FieldTestPaginationEntity; do
+              if [[ -f "$JHI_ENTITY_SAMPLES/$entity.json" ]]; then
+                cp "$JHI_ENTITY_SAMPLES/$entity.json" "$JHI_FOLDER_APP"/.jhipster/
+                echo "Added entity: $entity"
+              fi
+            done
+            ;;
+          "sqllight")
+            # SQL Light entities
+            for entity in BankAccount Label Operation; do
+              if [[ -f "$JHI_ENTITY_SAMPLES/$entity.json" ]]; then
+                cp "$JHI_ENTITY_SAMPLES/$entity.json" "$JHI_FOLDER_APP"/.jhipster/
+                echo "Added entity: $entity"
+              fi
+            done
+            ;;
+          "sqlfull"|"sql")
+            # SQL Full entities
+            for entity in BankAccount Label Operation Place Division FieldTestEntity FieldTestMapstructAndServiceClassEntity FieldTestServiceClassAndJpaFilteringEntity FieldTestServiceImplEntity FieldTestInfiniteScrollEntity FieldTestPaginationEntity FieldTestEnumWithValue TestEntity TestMapstruct TestServiceClass TestServiceImpl TestInfiniteScroll TestPagination TestManyToOne TestManyToMany TestManyRelPaginDTO TestOneToOne TestCustomTableName TestTwoRelationshipsSameEntity SuperMegaLargeTestEntity EntityWithDTO EntityWithPaginationAndDTO EntityWithServiceClassAndPagination EntityWithServiceClassPaginationAndDTO EntityWithServiceImplAndDTO EntityWithServiceImplAndPagination EntityWithServiceImplPaginationAndDTO MapsIdParentEntityWithoutDTO MapsIdChildEntityWithoutDTO MapsIdGrandchildEntityWithoutDTO MapsIdParentEntityWithDTO MapsIdChildEntityWithDTO MapsIdGrandchildEntityWithDTO MapsIdUserProfileWithDTO JpaFilteringRelationship JpaFilteringOtherSide; do
+              if [[ -f "$JHI_ENTITY_SAMPLES/$entity.json" ]]; then
+                cp "$JHI_ENTITY_SAMPLES/$entity.json" "$JHI_FOLDER_APP"/.jhipster/
+                echo "Added entity: $entity"
+              fi
+            done
+            ;;
+          *)
+            echo "Unknown database type: ${{ inputs.database-type }}"
+            exit 1
+            ;;
+        esac
+        
+    - name: 'List generated entities'
+      shell: bash
+      run: |
+        echo "Generated entities:"
+        ls -al "$JHI_FOLDER_APP"/.jhipster/ || true 
