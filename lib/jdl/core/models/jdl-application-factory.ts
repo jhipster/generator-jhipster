@@ -28,5 +28,3 @@ import JDLApplication from './jdl-application.ts';
 export function createJDLApplication(config: any, runtime: JDLRuntime, namespaceConfigs?: Record<string, Record<string, any>>) {
   return new JDLApplication({ config: { baseName: 'jhipster', ...config }, namespaceConfigs }, runtime);
 }
-
-export default createJDLApplication;
