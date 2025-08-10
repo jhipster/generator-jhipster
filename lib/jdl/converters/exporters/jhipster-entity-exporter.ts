@@ -66,7 +66,7 @@ function init(passedConfiguration: JhipsterJSONJDLExporterWrapper) {
 
 /**
  * Writes entities in a sub folder.
- * @param subFolder the folder (to create) in which the JHipster entity folder will be.
+ * @param applicationPath the folder (to create) in which the JHipster entity folder will be.
  */
 function updateEntities(applicationPath: string): JSONEntity[] {
   return configuration.entities.map((entity: JDLJSONEntity) => updateEntityToGenerateWithExistingOne(applicationPath, entity));
