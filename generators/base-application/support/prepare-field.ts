@@ -256,8 +256,7 @@ function generateFakeDataForField(
 }
 
 function _derivedProperties(field: CommonField) {
-  const fieldType = field.fieldType;
-  const fieldTypeBlobContent = field.fieldTypeBlobContent;
+  const { fieldType, fieldTypeBlobContent } = field;
   const validationRules = field.fieldValidate ? (field.fieldValidateRules ?? []) : [];
 
   applyDerivedPropertyOnly(field, 'fieldType', fieldType, Object.values(fieldTypesValues));
