@@ -44,8 +44,7 @@ let jdlObject: JDLObject;
 
 /**
  * Convert the passed entities (parsed from JSON files) to a JDL object.
- * @param params - an object containing the entities and relevant options.
- * @param params.entities - a Map having for keys the entity names and values the JSON entity files.
+ * @param entities - a Map having for keys the entity names and values the JSON entity files.
  * @return the parsed entities in the JDL form.
  */
 export function convertEntitiesToJDL(entities: Map<string, JSONEntity>): JDLObject {
