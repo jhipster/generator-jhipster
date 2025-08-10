@@ -39,7 +39,7 @@ import type {
 
 export default class CommonGenerator extends BaseApplicationGenerator<
   CommonEntity,
-  CommonApplication<CommonEntity>,
+  CommonApplication,
   CommonConfig,
   CommonOptions,
   CommonSource

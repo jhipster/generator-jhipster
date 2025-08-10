@@ -28,7 +28,7 @@ const {
   SUPPORTED_VALIDATION_RULES,
 } = validations;
 
-export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication<CommonEntity>> {
+export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
