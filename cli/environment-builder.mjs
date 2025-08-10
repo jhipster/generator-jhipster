@@ -59,7 +59,6 @@ export default class EnvironmentBuilder {
    * Creates a new EnvironmentBuilder with a new Environment.
    *
    * @param {Object} [options] - options passed to Environment.createEnv().
-   * @param [adapter] - adapter passed to Environment.createEnv().
    * @return {EnvironmentBuilder} envBuilder
    */
   static create(options = {}) {
