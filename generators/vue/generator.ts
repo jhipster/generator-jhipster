@@ -437,8 +437,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   generateEntityClientFieldDefaultValues(fields: ClientField[]): Record<string, string> {
     const defaultVariablesValues: Record<string, string> = {};
     fields.forEach(field => {
-      const fieldType = field.fieldType;
-      const fieldName = field.fieldName;
+      const { fieldType, fieldName } = field;
       if (fieldType === TYPE_BOOLEAN) {
         defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} ?? false;`;
       }

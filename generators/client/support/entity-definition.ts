@@ -79,8 +79,7 @@ const generateEntityClientFields = (
     }
   }
   fields.forEach(field => {
-    const fieldType = field.fieldType;
-    const fieldName = field.fieldName;
+    const { fieldType, fieldName } = field;
     const nullable = !field.id && (field as any).nullable;
     let tsType = 'any';
     if (field.fieldIsEnum) {
