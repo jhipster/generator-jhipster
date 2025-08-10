@@ -295,7 +295,6 @@ The entity ${entityName} is being created.
    * all variables should be set to dest,
    * all variables should be referred from context,
    * all methods should be called on generator,
-   * @param {any} dest - destination context to use default is context
    */
   _setupEntityOptions() {
     this.entityData.regenerate = this.options.regenerate;
