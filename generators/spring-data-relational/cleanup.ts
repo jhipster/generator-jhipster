@@ -24,7 +24,7 @@ import type { Application, Entity } from './types.ts';
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default asWritingTask<Entity, Application<Entity>>(function cleanupOldServerFilesTask({ application, control }) {
+export default asWritingTask<Entity, Application>(function cleanupOldServerFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('4.0.0')) {
     if (application.devDatabaseTypeH2Any) {
       this.removeFile(`${application.javaPackageSrcDir}domain/util/FixedH2Dialect.java`);
