@@ -199,8 +199,8 @@ _%>
     <div>
     <Row className="justify-content-center">
       <Col md="8">
-        <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%= entityClass %>CreateUpdateHeading">
-          <Translate contentKey="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClass %></Translate>
+        <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%- entityNameCapitalized %>CreateUpdateHeading">
+          <Translate contentKey="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%- entityNameCapitalized %></Translate>
         </h2>
       </Col>
     </Row>
