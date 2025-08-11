@@ -32,12 +32,7 @@ import type { ApplicationAll } from '../../../../lib/types/application-all.ts';
 import { mutateData, removeFieldsWithNullishValues } from '../../../../lib/utils/index.ts';
 import { loadDerivedAppConfig } from '../../../app/support/index.ts';
 import { isWin32 } from '../../../base-core/support/index.ts';
-import type {
-  Application as CommonApplication,
-  Config as CommonConfig,
-  Entity as CommonEntity,
-  Options as CommonOptions,
-} from '../../../common/types.ts';
+import type { Application as CommonApplication, Config as CommonConfig, Entity as CommonEntity } from '../../../common/types.ts';
 import { JAVA_DOCKER_DIR, LOGIN_REGEX } from '../../../generator-constants.js';
 import { GENERATOR_COMMON } from '../../../generator-list.ts';
 import { loadLanguagesConfig } from '../../../languages/support/index.ts';
@@ -61,7 +56,7 @@ import {
   stringifyApplicationData,
 } from '../../support/index.ts';
 
-export default class Common extends BaseApplicationGenerator<CommonEntity, CommonApplication<CommonEntity>, CommonConfig, CommonOptions> {
+export default class Common extends BaseApplicationGenerator<CommonEntity, CommonApplication, CommonConfig> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
