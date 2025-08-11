@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { camelCase, intersection, kebabCase, lowerFirst, sortedUniq, startCase, uniq, upperFirst } from 'lodash-es';
+import { intersection, kebabCase, lowerFirst, sortedUniq, startCase, uniq, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../../lib/core/application-types.ts';
@@ -24,19 +24,17 @@ import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.ts';
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.ts';
 import type { EntityAll, FieldAll } from '../../../lib/types/application-all.d.ts';
-import { getMicroserviceAppName, mutateData, normalizePathEnd, stringHashCode, upperFirstCamelCase } from '../../../lib/utils/index.ts';
+import { getMicroserviceAppName, mutateData, stringHashCode } from '../../../lib/utils/index.ts';
 import { parseChangelog } from '../../base/support/timestamp.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
-import type BaseGenerator from '../../base-core/index.ts';
 import { getTypescriptKeyType } from '../../client/support/index.ts';
 import type { Config as ClientConfig } from '../../client/types.ts';
-import type { Application as CommonApplication, Entity as CommonEntity } from '../../common/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { Config as SpringBootConfig } from '../../spring-boot/types.ts';
 import type { Config as SpringDataRelationalConfig } from '../../spring-data-relational/types.ts';
-import type { PrimaryKey } from '../types.ts';
+import type { Entity as BaseApplicationEntity, PrimaryKey } from '../types.ts';
 
 import { createFaker } from './faker.ts';
 import { fieldIsEnum } from './field-utils.ts';
@@ -99,15 +97,6 @@ const BASE_TEMPLATE_DATA = {
   },
 };
 
-function _derivedProperties(entityWithConfig: CommonEntity) {
-  const pagination = entityWithConfig.pagination;
-  mutateData(entityWithConfig, {
-    paginationPagination: pagination === 'pagination',
-    paginationInfiniteScroll: pagination === 'infinite-scroll',
-    paginationNo: pagination === 'no',
-  });
-}
-
 export const entityDefaultConfig = {
   pagination: binaryOptions.DefaultValues[binaryOptions.Options.PAGINATION],
   anyPropertyHasValidation: false,
@@ -127,31 +116,7 @@ export const entityDefaultConfig = {
   },
 };
 
-export function prepareServerEntity(entity: ServerEntity, application: CommonApplication) {
-  const { dtoSuffix = '' } = application;
-  const entitySuffix = entity.entitySuffix ?? application.entitySuffix;
-  mutateData(entity, {
-    __override__: false,
-    entityClass: ({ entityNameCapitalized }) => upperFirst(entityNameCapitalized),
-    entityClassPlural: ({ entityNamePlural }) => upperFirst(entityNamePlural),
-    entityTableName: ({ entityNameCapitalized }) => hibernateSnakeCase(entityNameCapitalized),
-
-    persistClass: ({ entityClass }) => `${entityClass}${entitySuffix ?? ''}`,
-    persistInstance: ({ entityInstance }) => `${entityInstance}${entitySuffix ?? ''}`,
-    // Even if dto is not used, we need to generate the dtoClass and dtoInstance is added to avoid errors in rendered relationships templates. The resulting class will not exist then.
-    dtoClass: ({ entityClass }) => `${entityClass}${dtoSuffix}`,
-    dtoInstance: ({ entityInstance }) => `${entityInstance}${dtoSuffix}`,
-
-    dtoMapstruct: ({ dto }) => dto === 'mapstruct' || dto === 'any',
-    dtoAny: ({ dto }) => dto && dto !== 'no',
-    restClass: ({ dtoAny, dtoClass, persistClass }) => (dtoAny ? dtoClass! : persistClass!),
-    restInstance: ({ dtoAny, dtoInstance, persistInstance }) => (dtoAny ? dtoInstance! : persistInstance!),
-  });
-}
-
-export default function prepareEntity(entityWithConfig: CommonEntity, generator: CoreGenerator, application: CommonApplication) {
-  const { applicationTypeMicroservice, microfrontend } = application;
-
+export default function prepareEntity(entityWithConfig: BaseApplicationEntity, generator: CoreGenerator) {
   const entityName = upperFirst(entityWithConfig.name);
   mutateData(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
@@ -161,11 +126,6 @@ export default function prepareEntity(entityWithConfig: CommonEntity, generator:
     } catch (error: unknown) {
       throw new Error(`Error parsing changelog date for entity ${entityName}: ${(error as Error).message}`, { cause: error });
     }
-  }
-
-  entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;
-  if (entityWithConfig.entityAngularJSSuffix && !entityWithConfig.entityAngularJSSuffix.startsWith('-')) {
-    entityWithConfig.entityAngularJSSuffix = `-${entityWithConfig.entityAngularJSSuffix}`;
   }
 
   entityWithConfig.useMicroserviceJson = entityWithConfig.useMicroserviceJson || entityWithConfig.microserviceName !== undefined;
@@ -188,51 +148,13 @@ export default function prepareEntity(entityWithConfig: CommonEntity, generator:
   });
 
   mutateData(entityWithConfig, {
-    // Implement i18n variant ex: 'male', 'female' when applied
-    entityI18nVariant: 'default',
     entityClassHumanized: ({ entityNameCapitalized }) => startCase(entityNameCapitalized),
     entityClassPluralHumanized: ({ entityNamePlural }) => startCase(entityNamePlural),
   });
 
   mutateData(entityWithConfig, {
     __override__: false,
-    entityFileName: data => kebabCase(data.entityNameCapitalized + upperFirst(data.entityAngularJSSuffix)),
-    entityAngularName: data => upperFirst(data.entityNameCapitalized) + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix!),
-    entityReactName: data => upperFirst(data.entityNameCapitalized) + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix!),
-    entityAngularNamePlural: data => pluralize(data.entityAngularName),
-    entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
-  });
-
-  entityWithConfig.entityFolderName = `${normalizePathEnd(entityWithConfig.clientRootFolder)}${entityWithConfig.entityFileName}`;
-  entityWithConfig.entityModelFileName = entityWithConfig.entityFolderName;
-  entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
-  entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
-
-  entityWithConfig.entityStateName = kebabCase(entityWithConfig.entityAngularName);
-  entityWithConfig.entityUrl = entityWithConfig.entityStateName;
-
-  entityWithConfig.entityTranslationKey = entityWithConfig.clientRootFolder
-    ? camelCase(`${entityWithConfig.clientRootFolder}-${entityWithConfig.entityInstance}`)
-    : entityWithConfig.entityInstance;
-  entityWithConfig.entityTranslationKeyMenu = camelCase(
-    entityWithConfig.clientRootFolder
-      ? `${entityWithConfig.clientRootFolder}-${entityWithConfig.entityStateName}`
-      : entityWithConfig.entityStateName,
-  );
-
-  mutateData(entityWithConfig, {
-    __override__: false,
-    i18nKeyPrefix: data => data.i18nKeyPrefix ?? `${application.frontendAppName}.${data.entityTranslationKey}`,
-    i18nAlertHeaderPrefix: data =>
-      (data.i18nAlertHeaderPrefix ?? data.microserviceAppName)
-        ? `${data.microserviceAppName}.${data.entityTranslationKey}`
-        : data.i18nKeyPrefix,
     hasRelationshipWithBuiltInUser: ({ relationships }) => relationships.some(relationship => relationship.otherEntity.builtInUser),
-    entityApi: ({ microserviceName }) => (microserviceName ? `services/${microserviceName.toLowerCase()}/` : ''),
-    entityPage: ({ microserviceName, entityFileName }) =>
-      microserviceName && microfrontend && applicationTypeMicroservice
-        ? `${microserviceName.toLowerCase()}/${entityFileName}`
-        : `${entityFileName}`,
   });
 
   entityWithConfig.generateFakeData = type => {
@@ -252,9 +174,6 @@ export default function prepareEntity(entityWithConfig: CommonEntity, generator:
     }
     return Object.fromEntries(fieldEntries);
   };
-  _derivedProperties(entityWithConfig);
-
-  prepareServerEntity(entityWithConfig as ServerEntity, application);
 
   return entityWithConfig;
 }
@@ -471,13 +390,9 @@ function fieldToId(field: FieldAll): any {
  * Copy required application config into entity.
  * Some entity features are related to the backend instead of the current app.
  * This allows to entities files based on the backend features.
- *
- * @param {Object} entity - entity to copy the config into.
- * @param {Object} config - config object.
- * @returns {Object} the entity parameter for chaining.
  */
 export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntity>>(
-  this: BaseGenerator | void,
+  this: CoreGenerator | void,
   entity: E,
   config: SpringBootConfig,
 ): E {
@@ -515,7 +430,7 @@ export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntit
   return entity;
 }
 
-export function preparePostEntityCommonDerivedProperties(entity: CommonEntity) {
+export function preparePostEntityCommonDerivedProperties(entity: BaseApplicationEntity) {
   const { fields } = entity;
   const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 
@@ -629,21 +544,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   entity.reactiveRegularEagerRelations = entity.reactiveEagerRelations.filter(rel => rel.id !== true);
 }
 
-export function preparePostEntitiesCommonDerivedProperties(entities: CommonEntity[]) {
-  for (const entity of entities) {
-    mutateData(entity, {
-      __override__: false,
-      restProperties: () => [
-        ...entity.fields,
-        ...entity.relationships.filter(
-          relationship => relationship.persistableRelationship || relationship.relationshipEagerLoad || relationship.otherEntity.embedded,
-        ),
-      ],
-    });
-  }
-}
-
-export async function addFakerToEntity(entityWithConfig: CommonEntity, nativeLanguage = 'en') {
+export async function addFakerToEntity(entityWithConfig: BaseApplicationEntity, nativeLanguage = 'en') {
   entityWithConfig.faker = entityWithConfig.faker || (await createFaker(nativeLanguage));
   entityWithConfig.resetFakerSeed = (suffix = '') =>
     entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));

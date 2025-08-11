@@ -32,7 +32,7 @@ import {
 import type { DerivedField } from '../base-application/types.ts';
 import BaseEntityChangesGenerator from '../base-entity-changes/index.ts';
 import type { BaseChangelog } from '../base-entity-changes/types.ts';
-import type { Application as CommonApplication, Entity as CommonEntity } from '../common/types.ts';
+import type { Entity as CommonEntity } from '../common/types.ts';
 import { prepareEntity as prepareEntityForServer } from '../java/support/index.ts';
 import type { MavenProperty } from '../maven/types.ts';
 import { getFKConstraintName, getUXConstraintName, prepareField as prepareServerFieldForTemplates } from '../server/support/index.ts';
@@ -193,7 +193,7 @@ export default class LiquibaseGenerator<
             const entity = databaseChangelog.previousEntity!;
             loadRequiredConfigIntoEntity(entity as unknown as ServerEntity, this.jhipsterConfigWithDefaults);
             // TODO fix types
-            prepareEntity(entity as unknown as CommonEntity, this, application as unknown as CommonApplication);
+            prepareEntity(entity as unknown as CommonEntity, this);
             // TODO fix types
             prepareEntityForServer(entity, application as any);
             if (!entity.embedded && !entity.primaryKey) {

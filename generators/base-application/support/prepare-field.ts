@@ -23,9 +23,10 @@ import { fieldTypes, validations } from '../../../lib/jhipster/index.ts';
 import { applyDerivedPropertyOnly, mutateData } from '../../../lib/utils/index.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import { getTypescriptType } from '../../client/support/index.ts';
-import type { Entity as CommonEntity, Field as CommonField } from '../../common/types.d.ts';
+import type { Field as CommonField } from '../../common/types.d.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import { isFieldEnumType } from '../internal/types/field-types.ts';
+import type { Entity as BaseApplicationEntity } from '../types.ts';
 
 import type { FakerWithRandexp } from './faker.ts';
 import { prepareProperty } from './prepare-property.ts';
@@ -288,7 +289,11 @@ function _derivedProperties(field: CommonField) {
   });
 }
 
-export function prepareCommonFieldForTemplates(entityWithConfig: CommonEntity, field: CommonField, generator: CoreGenerator): CommonField {
+export function prepareCommonFieldForTemplates(
+  entityWithConfig: BaseApplicationEntity,
+  field: CommonField,
+  generator: CoreGenerator,
+): CommonField {
   mutateData(field, {
     __override__: false,
     path: [field.fieldName],
@@ -297,7 +302,6 @@ export function prepareCommonFieldForTemplates(entityWithConfig: CommonEntity, f
     fieldNameCapitalized: ({ fieldName }) => upperFirst(fieldName),
     fieldNameUnderscored: ({ fieldName }) => snakeCase(fieldName),
     fieldNameHumanized: ({ fieldName }) => startCase(fieldName),
-    fieldTranslationKey: ({ fieldName }) => `${entityWithConfig.i18nKeyPrefix}.${fieldName}`,
     tsType: ({ fieldType }) => getTypescriptType(fieldType),
   });
 

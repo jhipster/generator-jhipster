@@ -106,12 +106,12 @@ const command = {
         description: 'Provide authentication type for the application when skipping server side generation',
         type: String,
       },
-      prompt: (gen: any, config: any) => ({
+      prompt: (gen: any, config) => ({
         type: 'list',
         message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
         choices: () =>
           gen.jhipsterConfigWithDefaults.applicationType !== APPLICATION_TYPE_MONOLITH
-            ? (config.choices as any).filter(({ value }: { value: any }) => value !== SESSION)
+            ? config.choices?.filter(choice => (typeof choice === 'string' ? choice : choice.value !== SESSION))
             : config.choices,
         default: () => gen.jhipsterConfigWithDefaults.authenticationType,
       }),

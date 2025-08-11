@@ -28,6 +28,7 @@ export type GeneratorsWithBootstrap =
   | 'javascript'
   | 'jdl'
   | 'kubernetes'
+  | 'languages'
   | 'server'
   | 'spring-boot';
 // jhipster-needle-add-generator-with-bootstrap
@@ -122,6 +123,7 @@ type GeneratorsByNamespace = {
   'jhipster:kubernetes:bootstrap': import('./kubernetes/generators/bootstrap/generator.ts').default;
   languages: import('./languages/generator.ts').default;
   'jhipster:languages': import('./languages/generator.ts').default;
+  'jhipster:languages:bootstrap': import('./languages/generators/bootstrap/generator.ts').default;
   liquibase: import('./liquibase/generator.ts').default;
   'jhipster:liquibase': import('./liquibase/generator.ts').default;
   maven: import('./maven/generator.ts').default;

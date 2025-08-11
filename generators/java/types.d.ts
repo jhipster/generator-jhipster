@@ -69,6 +69,8 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
   propertyJavaFilteredType?: string;
 
+  dtoSuffix?: string;
+
   dtoClass?: string;
   dtoInstance?: string;
 

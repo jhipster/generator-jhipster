@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+import { upperFirst } from 'lodash-es';
+
 import { mutateData, normalizePathEnd } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
@@ -136,6 +138,11 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      checkSuffix({ application }) {
+        if (application.entitySuffix === application.dtoSuffix) {
+          throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals!');
+        }
+      },
       prepareForTemplates({ applicationDefaults }) {
         applicationDefaults({
           jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
@@ -167,7 +174,25 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ entity }) {
+      prepareEntity({ application, entity }) {
+        mutateData(entity, {
+          entitySuffix: application.entitySuffix ?? '',
+          dtoSuffix: application.dtoSuffix ?? 'DTO',
+          entityClass: ({ entityNameCapitalized }) => upperFirst(entityNameCapitalized),
+          entityClassPlural: ({ entityNamePlural }) => upperFirst(entityNamePlural),
+          entityTableName: ({ entityNameCapitalized }) => hibernateSnakeCase(entityNameCapitalized),
+
+          persistClass: ({ entityClass, entitySuffix }) => `${entityClass}${entitySuffix ?? ''}`,
+          persistInstance: ({ entityInstance, entitySuffix }) => `${entityInstance}${entitySuffix ?? ''}`,
+          // Even if dto is not used, we need to generate the dtoClass and dtoInstance is added to avoid errors in rendered relationships templates. The resulting class will not exist then.
+          dtoClass: ({ entityClass, dtoSuffix }) => `${entityClass}${dtoSuffix ?? ''}`,
+          dtoInstance: ({ entityInstance, dtoSuffix }) => `${entityInstance}${dtoSuffix ?? ''}`,
+
+          dtoMapstruct: ({ dto }) => dto === 'mapstruct' || dto === 'any',
+          dtoAny: ({ dto }) => dto && dto !== 'no',
+          restClass: ({ dtoAny, dtoClass, persistClass }) => (dtoAny ? dtoClass! : persistClass!),
+          restInstance: ({ dtoAny, dtoInstance, persistInstance }) => (dtoAny ? dtoInstance! : persistInstance!),
+        });
         loadRequiredConfigDerivedProperties(entity);
       },
     });

@@ -27,7 +27,6 @@ import { createPrettierTransform } from '../bootstrap/support/prettier-support.t
 import { MAIN_DIR, TEST_DIR } from '../generator-constants.js';
 import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.ts';
 
-import command from './command.ts';
 import { writeFiles } from './files.ts';
 import type {
   Application as CommonApplication,
@@ -44,8 +43,6 @@ export default class CommonGenerator extends BaseApplicationGenerator<
   CommonOptions,
   CommonSource
 > {
-  command = command;
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -153,11 +150,6 @@ export default class CommonGenerator extends BaseApplicationGenerator<
   // Public API method used by the getter and also by Blueprints
   get preparing() {
     return this.asPreparingTaskGroup({
-      checkSuffix({ application }) {
-        if (application.entitySuffix === application.dtoSuffix) {
-          throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals!');
-        }
-      },
       setupConstants({ applicationDefaults }) {
         // Make constants available in templates
         applicationDefaults({
