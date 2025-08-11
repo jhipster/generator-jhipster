@@ -144,7 +144,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
 <%_ } _%>
 
-  it('<%= entityClassPlural %> menu should load <%= entityClassPlural %> page', () => {
+  it('<%= entityClassHumanized %> menu should load <%= entityClassHumanized %> page', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('<%= entityPage %>');
     cy.wait('@entitiesRequest').then(({ response }) => {
