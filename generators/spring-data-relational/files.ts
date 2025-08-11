@@ -136,7 +136,7 @@ export const serverFiles = mergeSections(
   addSectionsCondition(postgresFiles, context => context.prodDatabaseTypePostgresql),
 );
 
-export default asWritingTask<Entity, Application<Entity>>(async function writeSqlFiles({ application }) {
+export default asWritingTask<Entity, Application>(async function writeSqlFiles({ application }) {
   await this.writeFiles({
     sections: serverFiles,
     context: application,

@@ -26,19 +26,17 @@ import type {
   Source as BaseApplicationSource,
 } from '../types.ts';
 
-export function asWriteFilesSection<Data = ApplicationAll<EntityAll>>(section: WriteFileSection<Data>): WriteFileSection<Data> {
+export function asWriteFilesSection<Data = ApplicationAll>(section: WriteFileSection<Data>): WriteFileSection<Data> {
   return section;
 }
 
-export function asWriteFilesBlock<Data = ApplicationAll<EntityAll>>(block: WriteFileBlock<Data>[]): WriteFileBlock<Data>[];
-export function asWriteFilesBlock<Data = ApplicationAll<EntityAll>>(block: WriteFileBlock<Data>): WriteFileBlock<Data>;
+export function asWriteFilesBlock<Data = ApplicationAll>(block: WriteFileBlock<Data>[]): WriteFileBlock<Data>[];
+export function asWriteFilesBlock<Data = ApplicationAll>(block: WriteFileBlock<Data>): WriteFileBlock<Data>;
 export function asWriteFilesBlock(block: any): any {
   return block;
 }
 
-export function asWriteEntityFilesSection<Data = EntityAll & ApplicationAll<EntityAll>>(
-  section: WriteFileSection<Data>,
-): WriteFileSection<Data> {
+export function asWriteEntityFilesSection<Data = EntityAll & ApplicationAll>(section: WriteFileSection<Data>): WriteFileSection<Data> {
   return section;
 }
 

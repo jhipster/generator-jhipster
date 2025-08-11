@@ -30,13 +30,7 @@ export * from './type-utils.ts';
 
 export type { JHipsterCommandDefinition } from '../lib/command/index.ts';
 
-class BaseApplicationGeneratorAll extends BaseApplicationGenerator<
-  EntityAll,
-  ApplicationAll<EntityAll>,
-  ConfigAll,
-  OptionsAll,
-  SourceAll
-> {}
+class BaseApplicationGeneratorAll extends BaseApplicationGenerator<EntityAll, ApplicationAll, ConfigAll, OptionsAll, SourceAll> {}
 
 export { default as GeneratorBase } from './base/index.ts';
 export { default as GeneratorBaseCore } from './base-core/index.ts';
