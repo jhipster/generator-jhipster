@@ -336,7 +336,7 @@ The entity ${entityName} is being created.
     if (!/^([a-zA-Z0-9]*)$/.test(entityName)) {
       return 'The entity name must be alphanumeric only';
     }
-    if (/^[0-9].*$/.test(entityName)) {
+    if (/^\d.*$/.test(entityName)) {
       return 'The entity name cannot start with a number';
     }
     if (entityName === '') {

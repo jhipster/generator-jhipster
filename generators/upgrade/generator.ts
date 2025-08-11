@@ -337,7 +337,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
   async checkGitVersion(minVersion?: string): Promise<boolean> {
     try {
       const rawVersion = await this.createGit().raw('--version');
-      const gitVersion = String(rawVersion.match(/([0-9]+\.[0-9]+\.[0-9]+)/g));
+      const gitVersion = String(rawVersion.match(/(\d+\.\d+\.\d+)/g));
       if (minVersion) {
         return semver.gte(gitVersion, minVersion);
       }

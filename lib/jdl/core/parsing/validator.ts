@@ -38,8 +38,8 @@ const CONSTANT_PATTERN = /^[A-Z_]+$/;
 const ENTITY_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
 const TYPE_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
 const ENUM_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
-const ENUM_PROP_NAME_PATTERN = /^[A-Z][A-Za-z0-9_]*$/;
-const ENUM_PROP_VALUE_PATTERN = /^[A-Za-z][A-Za-z0-9_]*$/;
+const ENUM_PROP_NAME_PATTERN = /^[A-Z]\w*$/;
+const ENUM_PROP_VALUE_PATTERN = /^[A-Za-z]\w*$/;
 const METHOD_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
 
 // const PASSWORD_PATTERN = /^(.+)$/;

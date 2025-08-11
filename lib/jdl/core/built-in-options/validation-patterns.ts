@@ -22,4 +22,4 @@ export const ALPHANUMERIC = /^[A-Za-z][A-Za-z0-9]*$/;
 export const ALPHANUMERIC_DASH = /^[A-Za-z][A-Za-z0-9-]*$/;
 export const ALPHABETIC_DASH_LOWER = /^[a-z][a-z-]*$/;
 export const ALPHANUMERIC_SPACE = /^"?[A-Za-z][A-Za-z0-9- ]*"?$/;
-export const ALPHANUMERIC_UNDERSCORE = /^[A-Za-z][A-Za-z0-9_]*$/;
+export const ALPHANUMERIC_UNDERSCORE = /^[A-Za-z]\w*$/;
