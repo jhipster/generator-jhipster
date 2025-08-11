@@ -23,7 +23,6 @@ import { mutateData } from '../../../../lib/utils/object.ts';
 import { normalizePathEnd } from '../../../../lib/utils/path.ts';
 import { upperFirstCamelCase } from '../../../../lib/utils/string.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
-import { JAVA_DOCKER_DIR } from '../../../generator-constants.js';
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
@@ -61,7 +60,6 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
     return this.asPreparingTaskGroup({
       prepareApplication({ applicationDefaults }) {
         applicationDefaults({
-          dockerServicesDir: JAVA_DOCKER_DIR,
           authenticationUsesCsrf: ({ authenticationType }) => ['oauth2', 'session'].includes(authenticationType!),
           endpointPrefix: ({ applicationType, lowercaseBaseName }) =>
             applicationType === 'microservice' ? `services/${lowercaseBaseName}` : '',
@@ -114,8 +112,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
         mutateData(entity, {
           __override__: true,
           entityAngularJSSuffix: data => {
-            const entityAngularJSSuffix = data.entityAngularJSSuffix ?? data.angularJSSuffix;
-            return entityAngularJSSuffix.startsWith('-') ? entityAngularJSSuffix : `-${entityAngularJSSuffix}`;
+            const entityAngularJSSuffix = data.entityAngularJSSuffix ?? data.angularJSSuffix ?? '';
+            return entityAngularJSSuffix.startsWith('-') || !entityAngularJSSuffix ? entityAngularJSSuffix : `-${entityAngularJSSuffix}`;
           },
         });
 
