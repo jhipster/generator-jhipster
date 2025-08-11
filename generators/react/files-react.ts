@@ -303,7 +303,7 @@ export const files = asWriteFilesSection({
   ],
 });
 
-export const writeFiles = asWritingTask<ClientEntity, ClientApplication<ClientEntity>>(async function writeFiles({ application }) {
+export const writeFiles = asWritingTask<ClientEntity, ClientApplication>(async function writeFiles({ application }) {
   if (!application.clientFrameworkReact) return;
 
   await this.writeFiles({

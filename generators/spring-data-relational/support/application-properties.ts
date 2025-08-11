@@ -18,18 +18,14 @@
  */
 
 import { databaseTypes } from '../../../lib/jhipster/index.ts';
-import type { Application as SpringDataRelationalApplication, Entity as SpringDataRelationalEntity } from '../types.d.ts';
+import type { Application as SpringDataRelationalApplication } from '../types.d.ts';
 
 import { getDatabaseData } from './database-data.ts';
 import { getJdbcUrl, getR2dbcUrl } from './database-url.ts';
 
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_MEMORY, H2_DISK } = databaseTypes;
 
-export default function prepareSqlApplicationProperties({
-  application,
-}: {
-  application: SpringDataRelationalApplication<SpringDataRelationalEntity>;
-}) {
+export default function prepareSqlApplicationProperties({ application }: { application: SpringDataRelationalApplication }) {
   application.prodDatabaseTypeMariadb = application.prodDatabaseType === MARIADB;
   application.prodDatabaseTypeMssql = application.prodDatabaseType === MSSQL;
   application.prodDatabaseTypeMysql = application.prodDatabaseType === MYSQL;

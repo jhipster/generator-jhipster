@@ -54,7 +54,7 @@ const { PRE_CONFLICTS_QUEUE } = QUEUES;
 
 export default class GradleGenerator extends BaseApplicationGenerator<
   GradleEntity,
-  GradleApplication<GradleEntity>,
+  GradleApplication,
   GradleConfig,
   GradleOptions,
   GradleSource

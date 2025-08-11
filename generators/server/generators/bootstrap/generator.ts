@@ -50,7 +50,7 @@ import type {
   Options as ServerOptions,
 } from '../../types.ts';
 
-export default class ServerBootstrapGenerator extends BaseApplicationGenerator<ServerEntity, ServerApplication<ServerEntity>> {
+export default class ServerBootstrapGenerator extends BaseApplicationGenerator<ServerEntity, ServerApplication> {
   constructor(args: string | string[], opts: ServerOptions, features: ServerFeatures) {
     super(args, opts, { loadCommand: [serverCommand], ...features });
   }

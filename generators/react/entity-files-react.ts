@@ -52,10 +52,7 @@ export const reactFiles = asWriteFilesSection({
   ],
 });
 
-export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(async function ({
-  application,
-  entities,
-}) {
+export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication>(async function ({ application, entities }) {
   for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesForClient)(entities).filter(
     entity => !entity.builtInUser && !entity.embedded,
   )) {
@@ -66,7 +63,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientAppl
   }
 });
 
-export const postWriteEntitiesFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(async function ({
+export const postWriteEntitiesFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication>(async function ({
   application,
   entities,
   source,
@@ -77,7 +74,7 @@ export const postWriteEntitiesFiles = asPostWritingEntitiesTask<ClientEntity, Cl
   source.addEntitiesToClient({ application, entities: clientEntities });
 });
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(function cleanupEntitiesFiles({
+export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication>(function cleanupEntitiesFiles({
   application,
   control,
   entities,

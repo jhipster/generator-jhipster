@@ -30,13 +30,7 @@ import type {
 /**
  * Utility class with types.
  */
-export class JavaApplicationGenerator extends BaseApplicationGenerator<
-  JavaEntity,
-  JavaApplication<JavaEntity>,
-  JavaConfig,
-  JavaOptions,
-  JavaSource
-> {}
+export class JavaApplicationGenerator extends BaseApplicationGenerator<JavaEntity, JavaApplication, JavaConfig, JavaOptions, JavaSource> {}
 
 export default class JavaGenerator extends JavaApplicationGenerator {
   customLifecycle = true;

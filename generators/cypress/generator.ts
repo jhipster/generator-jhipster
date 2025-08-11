@@ -33,7 +33,7 @@ const { ANGULAR } = clientFrameworkTypes;
 
 const WAIT_TIMEOUT = 3 * 60000;
 
-export default class CypressGenerator extends BaseApplicationGenerator<CypressEntity, CypressApplication<CypressEntity>> {
+export default class CypressGenerator extends BaseApplicationGenerator<CypressEntity, CypressApplication> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

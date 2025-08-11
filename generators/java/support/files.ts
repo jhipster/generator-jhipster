@@ -50,7 +50,7 @@ export const moveToJavaPackageTestDir = (data: any, filePath: string) =>
 export const moveToSrcMainResourcesDir = (data: any, filePath: string) =>
   `${data.srcMainResources}${replaceEntityFilePathVariables(data, filePath) ?? ''}`;
 
-type JavaWriteFileData = JavaEntity & JavaApplication<JavaEntity>;
+type JavaWriteFileData = JavaEntity & JavaApplication;
 type JavaWriteFileBlock<Data = JavaWriteFileData> = WriteFileBlock<Data>;
 
 export function javaWriteFileSection<const Data = JavaWriteFileData>(section: WriteFileSection<Data>): WriteFileSection<Data> {

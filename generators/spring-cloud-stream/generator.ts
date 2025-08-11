@@ -27,7 +27,7 @@ import type {
 
 export default class KafkaGenerator extends BaseApplicationGenerator<
   SpringCloudEntity,
-  SpringCloudApplication<SpringCloudEntity>,
+  SpringCloudApplication,
   SpringCloudConfig,
   SpringCloudOptions
 > {

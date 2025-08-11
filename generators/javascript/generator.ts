@@ -44,7 +44,7 @@ export class JavascriptSimpleApplicationGenerator extends BaseSimpleApplicationG
  */
 export class JavascriptApplicationGenerator extends BaseApplicationGenerator<
   JavascriptEntity,
-  JavascriptApplication<JavascriptEntity>,
+  JavascriptApplication,
   JavascriptConfig,
   JavascriptOptions,
   JavascriptSource

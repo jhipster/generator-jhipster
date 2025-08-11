@@ -160,7 +160,7 @@ describe(`generator - ${clientFramework}`, () => {
         })
         .withTask(
           'postWriting',
-          asPostWritingTask<ClientEntity, ClientApplication<ClientEntity>>(({ application, source }) => {
+          asPostWritingTask<ClientEntity, ClientApplication>(({ application, source }) => {
             source.addEntitiesToClient({
               application,
               entities: [
