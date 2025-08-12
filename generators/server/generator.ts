@@ -72,7 +72,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('server');
       await this.dependsOnJHipster(GENERATOR_COMMON);
-      await this.dependsOnBootstrap('docker');
     }
   }
 

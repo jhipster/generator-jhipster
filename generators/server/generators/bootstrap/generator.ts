@@ -176,6 +176,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ application, entity }) {
         mutateData(entity, {
+          __override__: false,
           entitySuffix: application.entitySuffix ?? '',
           dtoSuffix: application.dtoSuffix ?? 'DTO',
           entityClass: ({ entityNameCapitalized }) => upperFirst(entityNameCapitalized),
