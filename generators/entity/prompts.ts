@@ -423,7 +423,7 @@ async function askForField(this: EntityGenerator) {
       type: 'input',
       name: 'fieldName',
       validate: input => {
-        if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+        if (!/^(\w*)$/.test(input)) {
           return 'Your field name cannot contain special characters';
         }
         if (input === '') {
@@ -490,7 +490,7 @@ async function askForField(this: EntityGenerator) {
         if (isReservedTableName(input, 'JAVA')) {
           return 'Your enum name cannot contain a Java reserved keyword';
         }
-        if (!/^[A-Za-z0-9_]*$/.test(input)) {
+        if (!/^\w*$/.test(input)) {
           return 'Your enum name cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
         }
         if (context.enums?.includes(input)) {
@@ -525,7 +525,7 @@ async function askForField(this: EntityGenerator) {
           return `Enum values cannot contain duplicates (typed values: ${input})`;
         }
         for (const enumValue of enums) {
-          if (/^[0-9].*/.test(enumValue)) {
+          if (/^\d.*/.test(enumValue)) {
             return `Enum value "${enumValue}" cannot start with a number`;
           }
           if (enumValue === '') {
@@ -751,7 +751,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
       type: 'input',
       name: 'relationshipName',
       validate: input => {
-        if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+        if (!/^(\w*)$/.test(input)) {
           return 'Your relationship cannot contain special characters';
         }
         if (input === '') {

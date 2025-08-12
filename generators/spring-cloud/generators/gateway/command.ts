@@ -29,7 +29,7 @@ const command = {
       jdl: {
         tokenType: 'quotedList',
         type: 'quotedList',
-        tokenValuePattern: /^"[A-Za-z][A-Za-z0-9_]*(?::[A-Za-z][A-Za-z0-9_]+(?::[0-9]+)?)?"$/,
+        tokenValuePattern: /^"[A-Za-z]\w*(?::[A-Za-z]\w+(?::\d+)?)?"$/,
       },
       scope: 'storage',
     },

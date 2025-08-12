@@ -317,7 +317,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
     const jhiTablePrefix = (entity as any).jhiTablePrefix;
     const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${entity.name}.json file and then run again 'jhipster entity ${entity.name}.'`;
 
-    if (!/^([a-zA-Z0-9_]*)$/.test(entityTableName)) {
+    if (!/^(\w*)$/.test(entityTableName)) {
       return `The table name cannot contain special characters.
 ${instructions}`;
     }

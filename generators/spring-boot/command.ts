@@ -55,7 +55,7 @@ const command = {
       prompt: gen => ({
         when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
         type: 'input',
-        validate: (input: string) => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
+        validate: (input: string) => (/^(\d*)$/.test(input) ? true : 'This is not a valid port number.'),
         message:
           'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
         default: () => gen.jhipsterConfigWithDefaults.serverPort,
