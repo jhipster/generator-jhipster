@@ -24,7 +24,7 @@ import type { Application as ClientApplication, Entity as ClientEntity } from '.
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default asWritingTask<ClientEntity, ClientApplication<ClientEntity>>(async function cleanupOldFilesTask({ application, control }) {
+export default asWritingTask<ClientEntity, ClientApplication>(async function cleanupOldFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('7.0.0-beta.0')) {
     this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.component.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.service.ts`);

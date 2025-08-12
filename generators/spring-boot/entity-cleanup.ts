@@ -28,7 +28,7 @@ import type { Application as SpringBootApplication, Entity as SpringBootEntity }
  * @param {Object} application
  * @param {Object} entity
  */
-export const cleanupOldFiles = asWritingEntitiesTask<SpringBootEntity, SpringBootApplication<SpringBootEntity>>(function cleanupOldFiles({
+export const cleanupOldFiles = asWritingEntitiesTask<SpringBootEntity, SpringBootApplication>(function cleanupOldFiles({
   application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch },
   control,
   entities,

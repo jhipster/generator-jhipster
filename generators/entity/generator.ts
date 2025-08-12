@@ -54,12 +54,7 @@ import type {
 
 const { isReservedClassName } = reservedKeywords;
 
-export default class EntityGenerator extends BaseApplicationGenerator<
-  EntityEntity,
-  EntityApplication<EntityEntity>,
-  EntityConfig,
-  EntityOptions
-> {
+export default class EntityGenerator extends BaseApplicationGenerator<EntityEntity, EntityApplication, EntityConfig, EntityOptions> {
   name!: string;
   application: any = {};
   microserviceConfig?: any;

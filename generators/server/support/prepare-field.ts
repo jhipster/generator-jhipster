@@ -52,7 +52,7 @@ export const prepareMapstructField = (entity: ServerEntity, field: SpringBootFie
 };
 
 export default function prepareField(
-  application: ServerApplication<ServerEntity>,
+  application: ServerApplication,
   entityWithConfig: ServerEntity,
   field: ServerField & LiquibaseField & SpringBootField & SpringDataRelationalField,
   generator: CoreGenerator,

@@ -56,7 +56,7 @@ const { NO: NO_SERVICE } = ServiceTypes;
 
 export default class JHipsterServerGenerator extends BaseApplicationGenerator<
   ServerEntity,
-  ServerApplication<ServerEntity>,
+  ServerApplication,
   ServerConfig,
   ServerOptions,
   ServerSource

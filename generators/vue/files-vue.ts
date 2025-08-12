@@ -289,14 +289,14 @@ export const entitiesFiles = {
   ],
 };
 
-export const writeFiles = asWritingTask<ClientEntity, ClientApplication<ClientEntity>>(async function writeFiles({ application }) {
+export const writeFiles = asWritingTask<ClientEntity, ClientApplication>(async function writeFiles({ application }) {
   await this.writeFiles({
     sections: vueFiles,
     context: application,
   });
 });
 
-export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(async function writeEntitiesFiles({
+export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication>(async function writeEntitiesFiles({
   application,
   entities,
 }) {

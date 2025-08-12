@@ -16,22 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Application as I18nApplication, Entity as LanguagesEntity } from '../types.ts';
+import type { Application as I18nApplication } from '../types.ts';
 
 import { type Language, findLanguageForTag, supportedLanguages as baseSupportedLanguages } from './languages.ts';
 
 /**
  * Load translation config into application
  */
-export default function loadConfig({
-  application,
-  config,
-  control,
-}: {
-  application: I18nApplication<LanguagesEntity>;
-  config: any;
-  control?: any;
-}) {
+export default function loadConfig({ application, config, control }: { application: I18nApplication; config: any; control?: any }) {
   const { supportedLanguages = baseSupportedLanguages } = control;
   application.enableTranslation = config.enableTranslation;
   application.nativeLanguage = config.nativeLanguage;

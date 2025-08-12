@@ -11,7 +11,7 @@ export function prepareRelationshipForDatabase({
   entity,
   relationship,
 }: {
-  application: ServerApplication<DatabaseEntity>;
+  application: ServerApplication;
   entity: DatabaseEntity;
   relationship: DatabaseRelationship;
 }) {

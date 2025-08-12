@@ -87,7 +87,7 @@ const { CUCUMBER, GATLING } = testFrameworkTypes;
 
 export class SpringBootApplicationGenerator extends BaseApplicationGenerator<
   SpringBootEntity,
-  SpringBootApplication<SpringBootEntity>,
+  SpringBootApplication,
   SpringBootConfig,
   SpringBootOptions,
   SpringBootSource

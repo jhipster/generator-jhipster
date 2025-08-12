@@ -33,7 +33,7 @@ import type {
 
 export default class SpringCacheGenerator extends BaseApplicationGenerator<
   SpringCacheEntity,
-  SpringCacneApplication<SpringCacheEntity>,
+  SpringCacneApplication,
   SpringCacheConfig,
   SpringCacheOptions,
   SpringCacheSource

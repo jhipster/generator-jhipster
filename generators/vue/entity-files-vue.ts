@@ -52,7 +52,7 @@ export const entityFiles = asWriteFilesSection({
   ],
 });
 
-export const writeEntityFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(async function writeEntityFiles({
+export const writeEntityFiles = asWritingEntitiesTask<ClientEntity, ClientApplication>(async function writeEntityFiles({
   application,
   entities,
 }) {
@@ -66,7 +66,7 @@ export const writeEntityFiles = asWritingEntitiesTask<ClientEntity, ClientApplic
   }
 });
 
-export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>, ClientSource>(
+export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication, ClientSource>(
   async function postWriteEntityFiles({ application, entities, source }) {
     source.addEntitiesToClient({
       application,
@@ -77,7 +77,7 @@ export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, Clie
   },
 );
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(function cleanupEntitiesFiles({
+export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication>(function cleanupEntitiesFiles({
   application,
   control,
   entities,

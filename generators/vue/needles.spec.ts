@@ -16,7 +16,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
       })
       .withTask(
         'postWriting',
-        asPostWritingTask<ClientEntity, ClientApplication<ClientEntity>>(function ({ application, source }) {
+        asPostWritingTask<ClientEntity, ClientApplication>(function ({ application, source }) {
           source.addEntitiesToClient({
             application,
             entities: [

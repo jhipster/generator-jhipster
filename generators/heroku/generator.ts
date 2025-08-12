@@ -36,12 +36,7 @@ import type {
   Options as HerokuOptions,
 } from './types.ts';
 
-export default class HerokuGenerator extends BaseApplicationGenerator<
-  HerokuEntity,
-  HerokuApplication<HerokuEntity>,
-  HerokuConfig,
-  HerokuOptions
-> {
+export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEntity, HerokuApplication, HerokuConfig, HerokuOptions> {
   hasHerokuCli!: boolean;
 
   herokuAppName!: string;

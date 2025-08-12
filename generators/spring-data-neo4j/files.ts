@@ -53,7 +53,7 @@ export const neo4jFiles = asWriteFilesSection<JavaApplication>({
   ],
 });
 
-export default asWritingTask<JavaEntity, JavaApplication<JavaEntity>>(async function writeFilesTask({ application }) {
+export default asWritingTask<JavaEntity, JavaApplication>(async function writeFilesTask({ application }) {
   await this.writeFiles({
     sections: neo4jFiles,
     context: application,

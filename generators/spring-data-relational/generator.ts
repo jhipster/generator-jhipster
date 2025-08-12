@@ -41,7 +41,7 @@ const { SQL } = databaseTypes;
 
 export default class SqlGenerator extends BaseApplicationGenerator<
   SpringDataRelationalEntity,
-  SpringDataRelationalApplication<SpringDataRelationalEntity>,
+  SpringDataRelationalApplication,
   SpringDataRelationalConfig,
   SpringDataRelationalOptions,
   SpringDataRelationalSource

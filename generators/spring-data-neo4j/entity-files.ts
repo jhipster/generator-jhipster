@@ -43,7 +43,7 @@ export const entityFiles = asWriteFilesSection({
 
 export function cleanupEntitiesTask() {}
 
-export default asWritingEntitiesTask<JavaEntity, JavaApplication<JavaEntity>>(async function writeEntitiesTask({ application, entities }) {
+export default asWritingEntitiesTask<JavaEntity, JavaApplication>(async function writeEntitiesTask({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {
     await this.writeFiles({
       sections: entityFiles,

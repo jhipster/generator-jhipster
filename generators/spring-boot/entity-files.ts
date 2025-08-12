@@ -206,18 +206,11 @@ export const serverFiles = javaWriteFileSection({
 
 export function writeFiles() {
   return {
-    cleanupOldServerFiles: asWritingEntitiesTask<SpringBootEntity, SpringBootApplication<SpringBootEntity>>(function ({
-      application,
-      control,
-      entities,
-    }) {
+    cleanupOldServerFiles: asWritingEntitiesTask<SpringBootEntity, SpringBootApplication>(function ({ application, control, entities }) {
       cleanupOldFiles.call(this, { application, entities, control });
     }),
 
-    writeServerFiles: asWritingEntitiesTask<SpringBootEntity, SpringBootApplication<SpringBootEntity>>(async function ({
-      application,
-      entities,
-    }) {
+    writeServerFiles: asWritingEntitiesTask<SpringBootEntity, SpringBootApplication>(async function ({ application, entities }) {
       const rootTemplatesPath = application.reactive
         ? ['reactive', '', '../../server/templates/', '../../java/generators/domain/templates/']
         : ['', '../../server/templates/', '../../java/generators/domain/templates/'];
