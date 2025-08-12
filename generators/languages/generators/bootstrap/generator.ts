@@ -80,6 +80,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
     return this.asPreparingEachEntityFieldTaskGroup({
       prepareField({ entity, field }) {
         mutateData(field, {
+          __override__: false,
           fieldTranslationKey: ({ fieldName }) => `${entity.i18nKeyPrefix}.${fieldName}`,
         });
       },
