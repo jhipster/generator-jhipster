@@ -85,4 +85,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
       },
     });
   }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
 }
