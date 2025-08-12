@@ -121,6 +121,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
           __override__: false,
           // Implement i18n variant ex: 'male', 'female' when applied
           entityI18nVariant: 'default',
+          clientRootFolder: '',
           entityFileName: data => kebabCase(data.entityNameCapitalized + upperFirst(data.entityAngularJSSuffix)),
           entityAngularName: data => upperFirst(data.entityNameCapitalized) + upperFirstCamelCase(data.entityAngularJSSuffix!),
           entityReactName: data => upperFirst(data.entityNameCapitalized) + upperFirstCamelCase(data.entityAngularJSSuffix!),

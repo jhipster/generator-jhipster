@@ -99,15 +99,13 @@ const BASE_TEMPLATE_DATA = {
 
 export const entityDefaultConfig = {
   pagination: binaryOptions.DefaultValues[binaryOptions.Options.PAGINATION],
-  anyPropertyHasValidation: false,
+  anyPropertyHasValidation: undefined,
   dto: binaryOptions.DefaultValues[binaryOptions.Options.DTO],
   service: binaryOptions.DefaultValues[binaryOptions.Options.SERVICE],
   jpaMetamodelFiltering: false,
   readOnly: false,
   embedded: false,
-  entityAngularJSSuffix: '',
   fluentMethods: true,
-  clientRootFolder: '',
   get fields() {
     return [];
   },
