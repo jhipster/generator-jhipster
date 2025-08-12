@@ -16,10 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as getTypescriptKeyType } from './types-utils.ts';
-export { default as generateEntityClientFields } from './entity-definition.ts';
-export * from './prepare-entity.ts';
-export * from './template-utils.ts';
-export * from './update-languages.ts';
-export * from './files.ts';
-export * from './filter-entities.ts';
+import { mutateData } from '../../../lib/utils/index.ts';
+import type { Entity as LanguageEntity, Field as LanguageField } from '../types.ts';
+
+export function prepareFieldForTemplates(entityWithConfig: LanguageEntity, field: LanguageField): LanguageField {
+  mutateData(field, {
+    __override__: false,
+    fieldTranslationKey: ({ fieldName }) => `${entityWithConfig.i18nKeyPrefix}.${fieldName}`,
+  });
+  return field;
+}

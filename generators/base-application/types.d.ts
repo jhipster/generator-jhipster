@@ -8,6 +8,7 @@ import type {
   Config as BaseSimpleApplicationConfig,
   Options as BaseSimpleApplicationOptions,
 } from '../base-simple-application/types.ts';
+import type { Field as LanguageField } from '../languages/types.ts';
 
 import type bootstrapCommand from './generators/bootstrap/command.ts';
 import type { OptionWithDerivedProperties } from './internal/types/application-options.ts';
@@ -39,13 +40,13 @@ type Property = {
 
 export type Field = Property &
   BaseField &
+  LanguageField &
   DerivedPropertiesOnlyOf<'fieldType', FieldType> & {
     path?: string[];
 
     fieldNameCapitalized?: string;
     fieldNameHumanized?: string;
     fieldNameUnderscored?: string;
-    fieldTranslationKey?: string;
 
     fieldApiDescription?: string;
 

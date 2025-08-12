@@ -18,6 +18,7 @@
  */
 import { packageJson } from '../../../../lib/index.ts';
 import { JavascriptApplicationGenerator } from '../../generator.ts';
+import { prepareFieldForTemplates } from '../../mutation/preparing.ts';
 import { isReservedTypescriptKeyword } from '../../support/reserved-words.ts';
 
 export default class JavascriptBootstrapGenerator extends JavascriptApplicationGenerator {
@@ -86,6 +87,9 @@ export default class JavascriptBootstrapGenerator extends JavascriptApplicationG
         if (isReservedTypescriptKeyword(field.fieldName)) {
           throw new Error(`The field name "${field.fieldName}" in entity "${entity.name}" is a reserved TypeScript keyword.`);
         }
+      },
+      prepareFieldsForTemplates({ field }) {
+        prepareFieldForTemplates(field);
       },
     });
   }

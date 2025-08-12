@@ -33,6 +33,7 @@ import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/inde
 
 import { writeEntityFiles } from './entity-files.ts';
 import { clientI18nFiles } from './files.ts';
+import { prepareFieldForTemplates } from './mutation/preparing.ts';
 import { askForLanguages, askI18n } from './prompts.ts';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.ts';
 import type { Language } from './support/languages.ts';
@@ -307,6 +308,18 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      prepareFieldsForTemplates({ entity, field }) {
+        prepareFieldForTemplates(entity, field);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
   get writingEntities() {
