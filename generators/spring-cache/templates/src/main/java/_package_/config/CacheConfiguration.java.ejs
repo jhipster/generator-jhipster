@@ -186,7 +186,7 @@ public class CacheConfiguration {
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
   <%_ if (cacheProviderEhcache) { _%>
-        JHipsterProperties.Cache.Ehcache ehcache = jHipsterProperties.getCache().getEhcache();
+        var ehcache = jHipsterProperties.getCache().getEhcache();
 
         jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
             CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class,
