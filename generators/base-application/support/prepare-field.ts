@@ -22,11 +22,9 @@ import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import { fieldTypes, validations } from '../../../lib/jhipster/index.ts';
 import { applyDerivedPropertyOnly, mutateData } from '../../../lib/utils/index.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
-import { getTypescriptType } from '../../client/support/index.ts';
-import type { Field as CommonField } from '../../common/types.d.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import { isFieldEnumType } from '../internal/types/field-types.ts';
-import type { Entity as BaseApplicationEntity } from '../types.ts';
+import type { Entity as BaseApplicationEntity, Field as BaseApplicationField } from '../types.d.ts';
 
 import type { FakerWithRandexp } from './faker.ts';
 import { prepareProperty } from './prepare-property.ts';
@@ -106,7 +104,7 @@ const fakeStringTemplateForFieldName = (columnName: string) => {
  */
 function generateFakeDataForField(
   this: CoreGenerator,
-  field: CommonField,
+  field: BaseApplicationField,
   faker: FakerWithRandexp,
   changelogDate: any,
   type: 'csv' | 'cypress' | 'json-serializable' | 'ts' = 'csv',
@@ -256,7 +254,7 @@ function generateFakeDataForField(
   return { data, originalData };
 }
 
-function _derivedProperties(field: CommonField) {
+function _derivedProperties(field: BaseApplicationField) {
   const { fieldType, fieldTypeBlobContent } = field;
   const validationRules = field.fieldValidate ? (field.fieldValidateRules ?? []) : [];
 
@@ -291,9 +289,9 @@ function _derivedProperties(field: CommonField) {
 
 export function prepareCommonFieldForTemplates(
   entityWithConfig: BaseApplicationEntity,
-  field: CommonField,
+  field: BaseApplicationField,
   generator: CoreGenerator,
-): CommonField {
+): BaseApplicationField {
   mutateData(field, {
     __override__: false,
     path: [field.fieldName],
@@ -302,7 +300,6 @@ export function prepareCommonFieldForTemplates(
     fieldNameCapitalized: ({ fieldName }) => upperFirst(fieldName),
     fieldNameUnderscored: ({ fieldName }) => snakeCase(fieldName),
     fieldNameHumanized: ({ fieldName }) => startCase(fieldName),
-    tsType: ({ fieldType }) => getTypescriptType(fieldType),
   });
 
   prepareProperty(field);

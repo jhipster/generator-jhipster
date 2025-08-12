@@ -17,3 +17,4 @@
  * limitations under the License.
  */
 export * from './reserved-words.ts';
+export { getTypescriptType } from './utils.ts';

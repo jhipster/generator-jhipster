@@ -4,6 +4,7 @@ import type {
   Config as BaseSimpleApplicationConfig,
   Options as BaseSimpleApplicationOptions,
 } from '../base-simple-application/types.ts';
+import type { Field as LanguageField } from '../languages/types.ts';
 
 import type { Entity } from './entity.ts';
 import type bootstrapCommand from './generators/bootstrap/command.ts';
