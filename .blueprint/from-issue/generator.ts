@@ -1,12 +1,12 @@
 import { join } from 'node:path';
 
-import BaseGenerator from '../../generators/base-core/index.js';
-import { getGithubIssue, setGithubTaskOutput, appendToSummary } from '../../lib/testing/github.js';
-import { prepareSample } from '../../lib/testing/sample-config.js';
-import { promptSamplesFolder } from '../support.mts';
-import { GENERATOR_APP, GENERATOR_JDL, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
-import { extractDataFromInfo, markdownDetails, type InfoData } from '../../generators/info/support/index.js';
 import EnvironmentBuilder from '../../cli/environment-builder.js';
+import BaseGenerator from '../../generators/base-core/index.ts';
+import { GENERATOR_APP, GENERATOR_JDL, GENERATOR_WORKSPACES } from '../../generators/generator-list.ts';
+import { type InfoData, extractDataFromInfo, markdownDetails } from '../../generators/info/support/index.ts';
+import { appendToSummary, getGithubIssue, setGithubTaskOutput } from '../../lib/testing/github.ts';
+import { prepareSample } from '../../lib/testing/sample-config.ts';
+import { promptSamplesFolder } from '../support.ts';
 
 const YO_RC_OUTPUT = 'yo-rc';
 const ENTITIES_JDL_OUTPUT = 'entities-jdl';

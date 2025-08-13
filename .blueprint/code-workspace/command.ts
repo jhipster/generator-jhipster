@@ -16,11 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { type JHipsterCommandDefinition } from '../../lib/command/index.js';
+import { type JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
 const command = {
   arguments: {},
-  configs: {},
+  configs: {
+    samplePath: {
+      cli: {
+        type: String,
+      },
+      description: 'Relative or absolute path',
+      scope: 'generator',
+    },
+  },
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

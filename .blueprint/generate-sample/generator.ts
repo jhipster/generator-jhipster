@@ -1,12 +1,15 @@
-import assert from 'assert';
-import { basename, extname, resolve } from 'path';
+import assert from 'node:assert';
+import { basename, extname, resolve } from 'node:path';
+
 import { transform } from '@yeoman/transform';
-import type { Config } from '../../generators/base-core/types.js';
-import BaseGenerator from '../../generators/base-core/index.js';
-import { packageJson } from '../../lib/index.js';
-import { promptSamplesFolder } from '../support.mts';
-import { GENERATOR_APP, GENERATOR_INFO, GENERATOR_JDL } from '../../generators/generator-list.js';
-import { entitiesByType, generateSample } from './support/index.js';
+
+import BaseGenerator from '../../generators/base-core/index.ts';
+import type { Config } from '../../generators/base-core/types.ts';
+import { GENERATOR_APP, GENERATOR_INFO, GENERATOR_JDL } from '../../generators/generator-list.ts';
+import { packageJson } from '../../lib/index.ts';
+import { promptSamplesFolder } from '../support.ts';
+
+import { entitiesByType, generateSample } from './support/index.ts';
 
 export default class extends BaseGenerator<Config & { entities: string[] }> {
   sampleName!: string;

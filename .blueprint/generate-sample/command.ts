@@ -18,9 +18,10 @@
  */
 import { join } from 'node:path';
 import process from 'node:process';
-import { defaultSamplesFolder } from '../constants.js';
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_APP, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
+
+import { GENERATOR_APP, GENERATOR_WORKSPACES } from '../../generators/generator-list.ts';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { defaultSamplesFolder } from '../constants.ts';
 
 const command = {
   arguments: {

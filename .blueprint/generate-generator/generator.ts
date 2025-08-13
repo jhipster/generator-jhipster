@@ -1,6 +1,7 @@
 import { camelCase, upperFirst } from 'lodash-es';
-import BaseCoreGenerator from '../../generators/base-core/index.js';
+
 import EnvironmentBuilder from '../../cli/environment-builder.js';
+import BaseCoreGenerator from '../../generators/base-core/index.ts';
 
 export default class extends BaseCoreGenerator {
   generatorNamespace!: string;

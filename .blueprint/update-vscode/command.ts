@@ -16,22 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+import { type JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
 const command = {
-  configs: {
-    generatorNamespace: {
-      argument: {
-        type: String,
-        required: true,
-      },
-      configure: (gen: any) => {
-        gen.generatorNamespace = gen.generatorNamespace.replaceAll(':', '/');
-      },
-      scope: 'generator',
-    },
-  },
-  import: [],
+  arguments: {},
+  configs: {},
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;
