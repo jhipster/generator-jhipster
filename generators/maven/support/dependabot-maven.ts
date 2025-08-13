@@ -20,14 +20,6 @@ import { XMLParser } from 'fast-xml-parser';
 
 import { defaultXmlParserOptions } from '../internal/xml-store.ts';
 
-/**
- * Extract properties from pom content
- * @param pomContent
- */
-export function getPomProperties(pomContent: string): Record<string, string> {
-  return new XMLParser(defaultXmlParserOptions).parse(pomContent).project.properties;
-}
-
 export type MavenPom = {
   project: {
     artifactId: string;
