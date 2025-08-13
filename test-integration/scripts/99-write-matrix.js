@@ -16,7 +16,7 @@ import {
 
 const MATRIX_FILE = 'matrix.json';
 
-let existing = {};
+let existing;
 try {
   existing = JSON.parse(readFileSync(MATRIX_FILE));
 } catch {
