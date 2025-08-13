@@ -69,7 +69,7 @@ describe(`generator - ${generator}`, () => {
           .withMockedJHipsterGenerators()
           .withMockedSource()
           .withJHipsterConfig(),
-      ).rejects.toThrowError(`The value 'foo' is not allowed for the option 'messageBroker'`);
+      ).rejects.toThrow(`The value 'foo' is not allowed for the option 'messageBroker'`);
     });
   });
 });

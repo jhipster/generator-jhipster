@@ -20,9 +20,9 @@ describe('github', () => {
     expect(parseIssue('12345')).toEqual({ issue: '12345' });
   });
   it('should not parse with missing repo', () => {
-    expect(() => parseIssue('jhipster/12345')).toThrowError('Invalid issue format: jhipster/12345');
+    expect(() => parseIssue('jhipster/12345')).toThrow('Invalid issue format: jhipster/12345');
   });
   it('should not parse with invalid issue number', () => {
-    expect(() => parseIssue('a')).toThrowError('Invalid issue format: a');
+    expect(() => parseIssue('a')).toThrow('Invalid issue format: a');
   });
 });

@@ -53,7 +53,7 @@ describe('Tracker Service', () => {
         },
       },
     });
-    expect(router.afterEach).toBeCalledTimes(1);
+    expect(router.afterEach).toHaveBeenCalledTimes(1);
   });
 
   it('Should call activate on authenticated', async () => {
@@ -70,7 +70,7 @@ describe('Tracker Service', () => {
     await wrapper.vm.$nextTick();
 
     // THEN
-    expect(mockStomp.activate).toBeCalledTimes(1);
+    expect(mockStomp.activate).toHaveBeenCalledTimes(1);
   });
 
   it('Should send activity on connected', async () => {
@@ -90,7 +90,7 @@ describe('Tracker Service', () => {
     await wrapper.vm.$nextTick();
 
     // THEN
-    expect(mockStomp.publish).toBeCalledTimes(1);
+    expect(mockStomp.publish).toHaveBeenCalledTimes(1);
     expect(mockStomp.publish).toHaveBeenCalledWith({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) });
   });
 
@@ -112,6 +112,6 @@ describe('Tracker Service', () => {
     await wrapper.vm.$nextTick();
 
     // THEN
-    expect(mockStomp.deactivate).toBeCalledTimes(1);
+    expect(mockStomp.deactivate).toHaveBeenCalledTimes(1);
   });
 });

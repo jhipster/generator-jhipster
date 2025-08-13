@@ -97,7 +97,7 @@ describe(`generator - ${generator}`, () => {
           .withMockedSource()
           .withSharedApplication({})
           .withJHipsterConfig({ reactive: false }),
-      ).rejects.toThrowError('Spring Cloud Gateway MVC support is experimental');
+      ).rejects.toThrow('Spring Cloud Gateway MVC support is experimental');
     });
   });
 

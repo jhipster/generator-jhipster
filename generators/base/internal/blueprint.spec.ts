@@ -53,13 +53,13 @@ describe('generator - base - internal - blueprint', () => {
     });
     describe('passing undefined', () => {
       it('throws an error', () => {
-        expect(() => mergeBlueprints(undefined as any)).toThrowError(/Only arrays are supported./);
+        expect(() => mergeBlueprints(undefined as any)).toThrow(/Only arrays are supported./);
       });
     });
     describe('passing array and undefined', () => {
       const argumentsToPass = [[], undefined];
       it('throws an error', () => {
-        expect(() => (mergeBlueprints as any)(...argumentsToPass)).toThrowError(/Only arrays are supported./);
+        expect(() => (mergeBlueprints as any)(...argumentsToPass)).toThrow(/Only arrays are supported./);
       });
     });
     describe('passing unique blueprints', () => {

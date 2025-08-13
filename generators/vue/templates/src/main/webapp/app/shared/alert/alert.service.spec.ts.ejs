@@ -30,7 +30,7 @@ describe('Alert Service test suite', () => {
     alertService.showError(message);
 
     // THEN
-    expect(toastStub).toBeCalledTimes(1);
+    expect(toastStub).toHaveBeenCalledTimes(1);
     expect(toastStub).toHaveBeenCalledWith({
       props: {
         body: message,
@@ -60,10 +60,10 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toBeCalledTimes(1);
+    expect(translationStub).toHaveBeenCalledTimes(1);
     expect(translationStub).toHaveBeenCalledWith(translationKey);
 <%_ } _%>
-    expect(toastStub).toBeCalledTimes(1);
+    expect(toastStub).toHaveBeenCalledTimes(1);
     expect(toastStub).toHaveBeenCalledWith({
       props: {
         body: expect.any(String),
@@ -105,7 +105,7 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toBeCalledTimes(2);
+    expect(translationStub).toHaveBeenCalledTimes(2);
     expect(translationStub).toHaveBeenCalledWith(translationKey, { entityName: 'DummyEntity' });
     expect(translationStub).toHaveBeenCalledWith('global.menu.entities.dummyEntity');
 <%_ } _%>
@@ -146,10 +146,10 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toBeCalledTimes(1);
+    expect(translationStub).toHaveBeenCalledTimes(1);
     expect(translationStub).toHaveBeenCalledWith(message);
 <%_ } _%>
-    expect(toastStub).toBeCalledTimes(1);
+    expect(toastStub).toHaveBeenCalledTimes(1);
     expect(toastStub).toHaveBeenCalledWith({
       props: {
         body: expect.any(String),
@@ -180,10 +180,10 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toBeCalledTimes(1);
+    expect(translationStub).toHaveBeenCalledTimes(1);
     expect(translationStub).toHaveBeenCalledWith(translationKey);
 <%_ } _%>
-    expect(toastStub).toBeCalledTimes(1);
+    expect(toastStub).toHaveBeenCalledTimes(1);
     expect(toastStub).toHaveBeenCalledWith({
       props: {
         body: expect.any(String),
@@ -214,10 +214,10 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toBeCalledTimes(1);
+    expect(translationStub).toHaveBeenCalledTimes(1);
     expect(translationStub).toHaveBeenCalledWith(message);
 <%_ } _%>
-    expect(toastStub).toBeCalledTimes(1);
+    expect(toastStub).toHaveBeenCalledTimes(1);
     expect(toastStub).toHaveBeenCalledWith({
       props: {
         body: expect.any(String),
