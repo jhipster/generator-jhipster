@@ -74,10 +74,10 @@ public class LoggingConfiguration {
 <%_ if (serviceDiscoveryConsul) { _%>
         consulRegistration.ifAvailable(it -> map.put("instance_id", it.getInstanceId()));
 <%_ } _%>
-        String customFields = mapper.writeValueAsString(map);
+        var customFields = mapper.writeValueAsString(map);
 
-        JHipsterProperties.Logging loggingProperties = jHipsterProperties.getLogging();
-        JHipsterProperties.Logging.Logstash logstashProperties = loggingProperties.getLogstash();
+        var loggingProperties = jHipsterProperties.getLogging();
+        var logstashProperties = loggingProperties.getLogstash();
 
         if (loggingProperties.isUseJsonFormat()) {
             addJsonConsoleAppender(context, customFields);

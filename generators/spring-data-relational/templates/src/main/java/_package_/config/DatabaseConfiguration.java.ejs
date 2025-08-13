@@ -125,7 +125,7 @@ public class DatabaseConfiguration {
     }
 
     private String getValidPortForH2() {
-        int port = Integer.parseInt(env.getProperty("server.port"));
+        var port = Integer.parseInt(env.getProperty("server.port"));
         if (port < 10000) {
             port = 10000 + port;
         } else {

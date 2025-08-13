@@ -207,7 +207,7 @@ public final class TestUtil {
      */
     public static FormattingConversionService createFormattingConversionService() {
         DefaultFormattingConversionService dfcs = new DefaultFormattingConversionService();
-        DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
+        var registrar = new DateTimeFormatterRegistrar();
         registrar.setUseIsoFormat(true);
         registrar.registerFormatters(dfcs);
         return dfcs;
