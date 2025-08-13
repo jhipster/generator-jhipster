@@ -181,7 +181,8 @@ describe(`generator - ${generator}`, () => {
       it('should prepare User', () => {
         const entity = runResult.entities!.User;
         expect(entity).toMatchInlineSnapshot(
-  expectedEntity(entity), `
+          expectedEntity(entity),
+          `
 {
   "adminEntity": undefined,
   "adminUserDto": "AdminUserDTO",
@@ -1042,12 +1043,14 @@ describe(`generator - ${generator}`, () => {
   "updatableEntity": true,
   "useMicroserviceJson": false,
 }
-`);
+`,
+        );
       });
       it('should prepare EntityA', () => {
         const entity = runResult.entities!.EntityA;
         expect(entity).toMatchInlineSnapshot(
-  expectedEntity(entity), `
+          expectedEntity(entity),
+          `
 {
   "adminEntity": undefined,
   "annotations": {
@@ -1479,7 +1482,8 @@ describe(`generator - ${generator}`, () => {
   "updatableEntity": true,
   "useMicroserviceJson": false,
 }
-`);
+`,
+        );
       });
     });
 
@@ -1542,7 +1546,8 @@ describe(`generator - ${generator}`, () => {
       it('should prepare EntityA', () => {
         const entity = runResult.entities!.EntityA;
         expect(entity).toMatchInlineSnapshot(
-  expectedEntity(entity), `
+          expectedEntity(entity),
+          `
 {
   "adminEntity": undefined,
   "angularJSSuffix": "js-suffix",
@@ -1820,7 +1825,8 @@ describe(`generator - ${generator}`, () => {
   "updatableEntity": false,
   "useMicroserviceJson": false,
 }
-`);
+`,
+        );
       });
     });
   });
