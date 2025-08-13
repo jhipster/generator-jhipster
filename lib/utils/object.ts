@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { OmitIndexSignature, ReadonlyKeysOf, Simplify } from 'type-fest';
+import type { OmitIndexSignature, ReadonlyKeysOf, RequiredKeysOf, SetRequired, Simplify } from 'type-fest';
 
 const filterNullishValues = (value: unknown): boolean => value !== undefined && value !== null;
 
@@ -83,6 +83,11 @@ export type MutateDataParam<T> = Simplify<
           : never;
   }>
 >;
+
+/**
+ * Utility to ensure required mutation properties are set.
+ */
+export type NewMutateDataProperties<D extends Record<string, any>, N extends Record<string, any>> = SetRequired<D, RequiredKeysOf<N>>;
 
 /**
  * Mutation properties accepts:

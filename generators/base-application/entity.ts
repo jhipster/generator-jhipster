@@ -6,7 +6,7 @@ import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import type { Field as BaseField } from '../../lib/jhipster/types/field.ts';
 import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.ts';
-import type { MutateDataParam } from '../../lib/utils/object.ts';
+import type { MutateDataParam, NewMutateDataProperties } from '../../lib/utils/object.ts';
 
 import type { FakerWithRandexp } from './support/faker.ts';
 
@@ -110,38 +110,42 @@ export type DerivedField<E extends Entity = Entity, F extends Field = Entity['fi
   derivedEntity: E;
 };
 
+type RelationshipNewProperties = DerivedPropertiesOnlyOf<
+  'relationship',
+  'LeftSide' | 'RightSide' | 'ManyToOne' | 'OneToMany' | 'OneToOne' | 'ManyToMany'
+> &
+  Property & {
+    relationshipNameCapitalized: string;
+    collection: boolean;
+
+    /**
+     * A persistable relationship means that the relationship will be updated in the database.
+     */
+    persistableRelationship?: boolean;
+
+    id?: boolean;
+    /** @deprecated */
+    ownerSide?: boolean;
+    relationshipEagerLoad?: boolean;
+    relationshipRequired?: boolean;
+
+    relationshipFieldName: string;
+    relationshipFieldNamePlural: string;
+    relationshipNamePlural: string;
+    relationshipNameHumanized: string;
+
+    relationshipIgnoreBackReference?: boolean;
+
+    relationshipValidate?: boolean;
+    relationshipValidateRules?: string[];
+  };
+
 /**
  * Represents a relationship with an otherRelationship.
  * Interface is used to allow `this` type in the otherRelationship.
  */
-export interface Relationship
-  extends Property,
-    BaseRelationship,
-    DerivedPropertiesOnlyOf<'relationship', 'LeftSide' | 'RightSide' | 'ManyToOne' | 'OneToMany' | 'OneToOne' | 'ManyToMany'> {
-  relationshipNameCapitalized: string;
+export interface Relationship extends RelationshipNewProperties, BaseRelationship {
   otherRelationship: this;
-  collection: boolean;
-
-  /**
-   * A persistable relationship means that the relationship will be updated in the database.
-   */
-  persistableRelationship: boolean;
-
-  id?: boolean;
-  /** @deprecated */
-  ownerSide?: boolean;
-  relationshipEagerLoad?: boolean;
-  relationshipRequired?: boolean;
-
-  relationshipFieldName?: string;
-  relationshipFieldNamePlural?: string;
-  relationshipNamePlural?: string;
-  relationshipNameHumanized?: string;
-
-  relationshipIgnoreBackReference?: boolean;
-
-  relationshipValidate?: boolean;
-  relationshipValidateRules?: string[];
 }
 
 export const mutateRelationship = {
@@ -164,7 +168,7 @@ export const mutateRelationship = {
     collection ? relationshipFieldNamePlural! : relationshipFieldName!,
 
   ...mutateProperty,
-} as const satisfies MutateDataParam<Relationship>;
+} as const satisfies NewMutateDataProperties<MutateDataParam<Relationship>, RelationshipNewProperties>;
 
 /**
  * Represents a relationship with an otherEntity, where the relationship is extended with the other entity.
