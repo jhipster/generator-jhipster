@@ -175,14 +175,13 @@ function checkForErrors(jdlObject: JDLObject) {
 }
 
 function importOnlyEntities(jdlObject: JDLObject, configuration: JDLApplicationConfiguration) {
-  let { applicationName, applicationType } = configuration;
+  let { applicationName } = configuration;
 
   let application = configuration.application;
   if (!application) {
     application = readCurrentPathYoRcFile();
   }
   if (application?.[GENERATOR_JHIPSTER]) {
-    applicationType ??= application[GENERATOR_JHIPSTER].applicationType;
     applicationName ??= application[GENERATOR_JHIPSTER].baseName;
   }
 
