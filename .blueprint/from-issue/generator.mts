@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import BaseGenerator from '../../generators/base-core/index.js';
 import { getGithubIssue, setGithubTaskOutput, appendToSummary } from '../../lib/testing/github.js';
 import { prepareSample } from '../../lib/testing/sample-config.js';
-import { promptSamplesFolder } from '../support.mjs';
+import { promptSamplesFolder } from '../support.mts';
 import { GENERATOR_APP, GENERATOR_JDL, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
 import { extractDataFromInfo, markdownDetails, type InfoData } from '../../generators/info/support/index.js';
 import EnvironmentBuilder from '../../cli/environment-builder.js';

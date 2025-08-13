@@ -4,7 +4,7 @@ import { transform } from '@yeoman/transform';
 import type { Config } from '../../generators/base-core/types.js';
 import BaseGenerator from '../../generators/base-core/index.js';
 import { packageJson } from '../../lib/index.js';
-import { promptSamplesFolder } from '../support.mjs';
+import { promptSamplesFolder } from '../support.mts';
 import { GENERATOR_APP, GENERATOR_INFO, GENERATOR_JDL } from '../../generators/generator-list.js';
 import { entitiesByType, generateSample } from './support/index.js';
 
