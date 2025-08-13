@@ -78,14 +78,14 @@
         <addColumn tableName="<%= entity.entityTableName %>">
             <%_
             for (relationship of addedRelationships) {
-                if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) { 
+                if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
                     for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) { _%>
                 <column name="<%= relationship.columnName %>_<%= otherEntityPkField.columnName %>" type="<%= otherEntityPkField.columnType %>"/>
                     <%_ } _%>
                 <%_ } _%>
             <%_ } _%>
         </addColumn>
-        <% } %>
+        <%_ } _%>
         <%_ const joinTableRelations = addedRelationships
                 .filter(rel => rel.shouldWriteJoinTable)
                 .filter(rel => !relationshipsToRecreateForeignKeysOnly.includes(rel));

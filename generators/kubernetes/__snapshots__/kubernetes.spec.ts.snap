@@ -97,7 +97,7 @@ kubectl scale deployment <app-name> --replicas <replica-count>
 The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using:
 
 \`\`\`
-kubectl set image deployment/<app-name>-app <app-name>=<new-image>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image> 
 \`\`\`
 
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
@@ -584,7 +584,7 @@ kubectl scale deployment <app-name> --replicas <replica-count>
 The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using:
 
 \`\`\`
-kubectl set image deployment/<app-name>-app <app-name>=<new-image>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image> 
 \`\`\`
 
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
@@ -1560,7 +1560,7 @@ kubectl scale deployment <app-name> --replicas <replica-count>
 The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using:
 
 \`\`\`
-kubectl set image deployment/<app-name>-app <app-name>=<new-image>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image> 
 \`\`\`
 
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
@@ -2274,7 +2274,7 @@ kubectl scale deployment <app-name> --replicas <replica-count>
 The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using:
 
 \`\`\`
-kubectl set image deployment/<app-name>-app <app-name>=<new-image>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image> 
 \`\`\`
 
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
@@ -2312,7 +2312,7 @@ When running the \`jhipster k8s\` generator, it will prompt for a root FQDN (ful
 It might take up to 15 minutes for the Let's Encrypt certificates to be issued. Use the following command to check the status:
 
 \`\`\`
-kubectl describe certificate keycloak-ssl
+kubectl describe certificate keycloak-ssl 
 \`\`\`
 
 You need to look for the following two events to determine success:
@@ -2348,7 +2348,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 The k8s sub-generator configures Let's Encrypt staging environment, which is not trusted by browsers and Java applications by default. In the Kubernetes descriptors, the staging CAs are added to the applications truststore and registry truststore. Note that cert-manager issues a temporary certificate first, but the applications and registry don't trust the ad-hoc CA, and will fail the startup until the Let's Encrypt certificate is ready and updated in the ingress service. You will see the application pod STATUS as Error and CrashLoopBackOff during the multiple startup attempts. You can check the certificate status with the following command:
 
 \`\`\`
-kubectl describe certificate keycloak-ssl
+kubectl describe certificate keycloak-ssl 
 \`\`\`
 ",
     "stateCleared": "modified",
@@ -2377,14 +2377,14 @@ metadata:
 spec:
   acme:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
-    email:
+    email: 
     privateKeySecretRef:
       name: letsencrypt-staging
     solvers:
     - http01:
         ingress:
             class: ingress-gce
-
+ 
 ",
     "stateCleared": "modified",
   },
@@ -3609,7 +3609,7 @@ data:
           "redirectUris": [
             "http://jhgate.default.example.com/*",
             "https://jhgate.default.example.com/*", "http://localhost:8080/*",
-            "https://localhost:8080/*","http://localhost:4200/*", "http://localhost:9000/*",
+            "https://localhost:8080/*","http://localhost:4200/*", "http://localhost:9000/*", 
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
             "dev.localhost.ionic:*"
@@ -3617,7 +3617,7 @@ data:
           "webOrigins": [
             "http://jhgate.default.example.com",
             "https://jhgate.default.example.com", "http://localhost:8080",
-            "https://localhost:8080","http://localhost:4200", "http://localhost:9000",
+            "https://localhost:8080","http://localhost:4200", "http://localhost:9000", 
             "http://localhost:8100",
             "http://127.0.0.1:8761"
           ],
@@ -5804,7 +5804,7 @@ kubectl scale deployment <app-name> --replicas <replica-count>
 The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using:
 
 \`\`\`
-kubectl set image deployment/<app-name>-app <app-name>=<new-image>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image> 
 \`\`\`
 
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
@@ -7056,7 +7056,7 @@ data:
           "redirectUris": [
             "http://jhgate.default.example.com/*",
             "https://jhgate.default.example.com/*", "http://localhost:8080/*",
-            "https://localhost:8080/*","http://localhost:4200/*", "http://localhost:9000/*",
+            "https://localhost:8080/*","http://localhost:4200/*", "http://localhost:9000/*", 
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
             "dev.localhost.ionic:*"
@@ -7064,7 +7064,7 @@ data:
           "webOrigins": [
             "http://jhgate.default.example.com",
             "https://jhgate.default.example.com", "http://localhost:8080",
-            "https://localhost:8080","http://localhost:4200", "http://localhost:9000",
+            "https://localhost:8080","http://localhost:4200", "http://localhost:9000", 
             "http://localhost:8100",
             "http://127.0.0.1:8761"
           ],
@@ -9265,7 +9265,7 @@ kubectl scale deployment <app-name> --replicas <replica-count>
 The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using:
 
 \`\`\`
-kubectl set image deployment/<app-name>-app <app-name>=<new-image>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image> 
 \`\`\`
 
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
@@ -10139,7 +10139,7 @@ kubectl scale deployment <app-name> --replicas <replica-count>
 The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using:
 
 \`\`\`
-kubectl set image deployment/<app-name>-app <app-name>=<new-image>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image> 
 \`\`\`
 
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
@@ -11244,7 +11244,7 @@ kubectl scale deployment <app-name> --replicas <replica-count>
 The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using:
 
 \`\`\`
-kubectl set image deployment/<app-name>-app <app-name>=<new-image>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image> 
 \`\`\`
 
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
@@ -13259,7 +13259,7 @@ kubectl scale deployment <app-name> --replicas <replica-count>
 The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using:
 
 \`\`\`
-kubectl set image deployment/<app-name>-app <app-name>=<new-image>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image> 
 \`\`\`
 
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
@@ -17886,7 +17886,7 @@ kubectl scale deployment <app-name> --replicas <replica-count>
 The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using:
 
 \`\`\`
-kubectl set image deployment/<app-name>-app <app-name>=<new-image>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image> 
 \`\`\`
 
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
