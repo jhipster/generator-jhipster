@@ -181,8 +181,7 @@ describe(`generator - ${generator}`, () => {
       it('should prepare User', () => {
         const entity = runResult.entities!.User;
         expect(entity).toMatchInlineSnapshot(
-          expectedEntity(entity),
-          `
+  expectedEntity(entity), `
 {
   "adminEntity": undefined,
   "adminUserDto": "AdminUserDTO",
@@ -372,6 +371,7 @@ describe(`generator - ${generator}`, () => {
       "fieldNameHumanized": "Login",
       "fieldNameUnderscored": "login",
       "fieldSupportsSortBy": true,
+      "fieldTranslationKey": "userManagement.login",
       "fieldType": "String",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
@@ -461,6 +461,7 @@ describe(`generator - ${generator}`, () => {
       "fieldNameHumanized": "First Name",
       "fieldNameUnderscored": "first_name",
       "fieldSupportsSortBy": true,
+      "fieldTranslationKey": "userManagement.firstName",
       "fieldType": "String",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
@@ -540,6 +541,7 @@ describe(`generator - ${generator}`, () => {
       "fieldNameHumanized": "Last Name",
       "fieldNameUnderscored": "last_name",
       "fieldSupportsSortBy": true,
+      "fieldTranslationKey": "userManagement.lastName",
       "fieldType": "String",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
@@ -619,6 +621,7 @@ describe(`generator - ${generator}`, () => {
       "fieldNameHumanized": "Email",
       "fieldNameUnderscored": "email",
       "fieldSupportsSortBy": true,
+      "fieldTranslationKey": "userManagement.email",
       "fieldType": "String",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
@@ -703,6 +706,7 @@ describe(`generator - ${generator}`, () => {
       "fieldNameHumanized": "Image Url",
       "fieldNameUnderscored": "image_url",
       "fieldSupportsSortBy": true,
+      "fieldTranslationKey": "userManagement.imageUrl",
       "fieldType": "String",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
@@ -783,6 +787,7 @@ describe(`generator - ${generator}`, () => {
       "fieldNameHumanized": "Activated",
       "fieldNameUnderscored": "activated",
       "fieldSupportsSortBy": true,
+      "fieldTranslationKey": "userManagement.activated",
       "fieldType": "Boolean",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
@@ -854,6 +859,7 @@ describe(`generator - ${generator}`, () => {
       "fieldNameHumanized": "Lang Key",
       "fieldNameUnderscored": "lang_key",
       "fieldSupportsSortBy": true,
+      "fieldTranslationKey": "userManagement.langKey",
       "fieldType": "String",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
@@ -1036,14 +1042,12 @@ describe(`generator - ${generator}`, () => {
   "updatableEntity": true,
   "useMicroserviceJson": false,
 }
-`,
-        );
+`);
       });
       it('should prepare EntityA', () => {
         const entity = runResult.entities!.EntityA;
         expect(entity).toMatchInlineSnapshot(
-          expectedEntity(entity),
-          `
+  expectedEntity(entity), `
 {
   "adminEntity": undefined,
   "annotations": {
@@ -1136,6 +1140,7 @@ describe(`generator - ${generator}`, () => {
       "fieldNameHumanized": "Id",
       "fieldNameUnderscored": "id",
       "fieldSupportsSortBy": true,
+      "fieldTranslationKey": "jhipsterApp.entityA.id",
       "fieldType": "UUID",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
@@ -1221,6 +1226,7 @@ describe(`generator - ${generator}`, () => {
       "fieldNameHumanized": "Name",
       "fieldNameUnderscored": "name",
       "fieldSupportsSortBy": true,
+      "fieldTranslationKey": "jhipsterApp.entityA.name",
       "fieldType": "String",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
@@ -1294,6 +1300,7 @@ describe(`generator - ${generator}`, () => {
       "fieldNameHumanized": "Details",
       "fieldNameUnderscored": "details",
       "fieldSupportsSortBy": false,
+      "fieldTranslationKey": "jhipsterApp.entityA.details",
       "fieldType": "String",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
@@ -1472,8 +1479,7 @@ describe(`generator - ${generator}`, () => {
   "updatableEntity": true,
   "useMicroserviceJson": false,
 }
-`,
-        );
+`);
       });
     });
 
@@ -1536,8 +1542,7 @@ describe(`generator - ${generator}`, () => {
       it('should prepare EntityA', () => {
         const entity = runResult.entities!.EntityA;
         expect(entity).toMatchInlineSnapshot(
-          expectedEntity(entity),
-          `
+  expectedEntity(entity), `
 {
   "adminEntity": undefined,
   "angularJSSuffix": "js-suffix",
@@ -1632,6 +1637,7 @@ describe(`generator - ${generator}`, () => {
       "fieldNameHumanized": "Id",
       "fieldNameUnderscored": "id",
       "fieldSupportsSortBy": true,
+      "fieldTranslationKey": "jhipsterApp.entityA.id",
       "fieldType": "UUID",
       "fieldTypeAnyBlob": false,
       "fieldTypeBigDecimal": false,
@@ -1814,8 +1820,7 @@ describe(`generator - ${generator}`, () => {
   "updatableEntity": false,
   "useMicroserviceJson": false,
 }
-`,
-        );
+`);
       });
     });
   });
