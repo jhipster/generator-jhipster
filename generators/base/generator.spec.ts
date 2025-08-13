@@ -92,10 +92,10 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should skip priorities', async () => {
-      expect(initializing).toBeCalled();
-      expect(prompting).not.toBeCalled();
-      expect(writing).not.toBeCalled();
-      expect(postWriting).not.toBeCalled();
+      expect(initializing).toHaveBeenCalled();
+      expect(prompting).not.toHaveBeenCalled();
+      expect(writing).not.toHaveBeenCalled();
+      expect(postWriting).not.toHaveBeenCalled();
     });
   });
 });

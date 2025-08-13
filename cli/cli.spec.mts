@@ -127,7 +127,7 @@ describe('cli', () => {
   });
 
   it('should return error on unknown command', () => {
-    expect(() => execaCommandSync(`${jhipsterCli} junkcmd`)).toThrowError(
+    expect(() => execaCommandSync(`${jhipsterCli} junkcmd`)).toThrow(
       expect.objectContaining({
         exitCode: 1,
         message: expect.stringContaining('is not a known command'),
@@ -397,7 +397,7 @@ describe('cli', () => {
         });
 
         it('should execute callback with error and print info', () => {
-          expect(() => execaCommandSync(`${jhipsterCli} foo --blueprints bar`)).toThrowError(
+          expect(() => execaCommandSync(`${jhipsterCli} foo --blueprints bar`)).toThrow(
             expect.objectContaining({
               exitCode: 1,
               stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-bar'),
@@ -417,7 +417,7 @@ describe('cli', () => {
         });
 
         it('should execute callback with error and print info', () => {
-          expect(() => execaCommandSync(`${jhipsterCli} foo --blueprints bar,baz`)).toThrowError(
+          expect(() => execaCommandSync(`${jhipsterCli} foo --blueprints bar,baz`)).toThrow(
             expect.objectContaining({
               exitCode: 1,
               stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-baz'),
