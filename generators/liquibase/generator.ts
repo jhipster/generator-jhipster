@@ -22,6 +22,11 @@ import { escape, min } from 'lodash-es';
 
 import { fieldTypes } from '../../lib/jhipster/index.ts';
 import type { EntityAll } from '../../lib/types/application-all.d.ts';
+import { mutateData } from '../../lib/utils/object.ts';
+import {
+  mutateRelationship as mutateBaseApplicationRelationship,
+  mutateRelationshipWithEntity as mutateBaseApplicationRelationshipWithEntity,
+} from '../base-application/entity.ts';
 import {
   loadRequiredConfigIntoEntity,
   prepareCommonFieldForTemplates,
@@ -213,6 +218,7 @@ export default class LiquibaseGenerator<
             // Prepare them.
             const entity = databaseChangelog.previousEntity!;
             for (const relationship of entity.relationships ?? []) {
+              mutateData(relationship, mutateBaseApplicationRelationship, mutateBaseApplicationRelationshipWithEntity);
               prepareRelationship.call(this, entity, relationship, true);
               prepareRelationshipForLiquibase({ application, entity, relationship });
             }
