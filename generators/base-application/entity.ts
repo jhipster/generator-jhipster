@@ -1,4 +1,4 @@
-import { capitalize, kebabCase, lowerFirst, snakeCase, startCase, upperFirst } from 'lodash-es';
+import { kebabCase, lowerFirst, snakeCase, startCase, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
 import type { DerivedPropertiesOnlyOf } from '../../lib/command/types.ts';
@@ -6,6 +6,7 @@ import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import type { Field as BaseField } from '../../lib/jhipster/types/field.ts';
 import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.ts';
+import { buildMutateDataForPropertyWithCustomPrefix } from '../../lib/utils/derived-property.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 
 import type { FakerWithRandexp } from './support/faker.ts';
@@ -150,13 +151,14 @@ export interface Relationship extends BaseApplicationAddedRelationshipProperties
 
 export const mutateRelationship = {
   __override__: false,
-  relationshipLeftSide: ({ relationshipSide }) => relationshipSide === 'left',
-  relationshipRightSide: ({ relationshipSide }) => relationshipSide === 'right',
+  ...buildMutateDataForPropertyWithCustomPrefix('relationshipSide', 'relationship', ['left', 'right'], 'Side'),
+  ...buildMutateDataForPropertyWithCustomPrefix('relationshipType', 'relationship', [
+    'one-to-one',
+    'one-to-many',
+    'many-to-one',
+    'many-to-many',
+  ]),
   collection: ({ relationshipType }) => relationshipType === 'one-to-many' || relationshipType === 'many-to-many',
-  relationshipOneToOne: ({ relationshipType }) => relationshipType === 'one-to-one',
-  relationshipOneToMany: ({ relationshipType }) => relationshipType === 'one-to-many',
-  relationshipManyToOne: ({ relationshipType }) => relationshipType === 'many-to-one',
-  relationshipManyToMany: ({ relationshipType }) => relationshipType === 'many-to-many',
 
   relationshipFieldName: ({ relationshipName }) => lowerFirst(relationshipName),
   relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName!),
@@ -315,7 +317,7 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
 export const mutateEntity = {
   __override__: false,
-  entityNameCapitalized: ({ name }) => capitalize(name),
+  entityNameCapitalized: ({ name }) => upperFirst(name),
   entityNamePlural: ({ name }) => pluralize(name),
   entityNamePluralizedAndSpinalCased: ({ entityNamePlural }) => kebabCase(entityNamePlural),
   entityInstance: ({ name }) => lowerFirst(name),
