@@ -20,8 +20,8 @@ import semver from 'semver';
 
 import { packageJson } from '../lib/index.ts';
 
-import { runJHipster } from './program.mts';
-import { done, logger } from './utils.mjs';
+import { runJHipster } from './program.ts';
+import { done, logger } from './utils.js';
 
 const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;

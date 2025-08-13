@@ -1,18 +1,19 @@
-/* eslint-disable no-unused-expressions, no-console */
-import assert from 'assert';
-import { fork } from 'child_process';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { after, before, it, describe, expect, resetAllMocks, esmocha } from 'esmocha';
-import { execaCommandSync } from 'execa';
-import type { GeneratorMeta } from '@yeoman/types';
-import type FullEnvironment from 'yeoman-environment';
-import { coerce } from 'semver';
+import { after, before, describe, esmocha, expect, it, resetAllMocks } from 'esmocha';
+import assert from 'node:assert';
+import { fork } from 'node:child_process';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import { defaultHelpers as helpers, createBlueprintFiles } from '../lib/testing/index.js';
-import { getCommand as actualGetCommonand } from './utils.mjs';
-import { createProgram } from './program.mjs';
-import type { CliCommand } from './types.js';
+import type { GeneratorMeta } from '@yeoman/types';
+import { execaCommandSync } from 'execa';
+import { coerce } from 'semver';
+import type FullEnvironment from 'yeoman-environment';
+
+import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/index.ts';
+
+import { createProgram } from './program.ts';
+import type { CliCommand } from './types.ts';
+import { getCommand as actualGetCommonand } from './utils.js';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {
@@ -96,8 +97,8 @@ describe('cli', () => {
   let argv;
 
   before(async () => {
-    await esmocha.mock('./utils.mjs', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} } as any);
-    const { buildJHipster } = await import('./program.mjs');
+    await esmocha.mock('./utils.js', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} } as any);
+    const { buildJHipster } = await import('./program.ts');
 
     mockCli = async (argv: string[], opts = {}) => {
       const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
@@ -141,7 +142,7 @@ describe('cli', () => {
       try {
         await mockCli(['jhipster', 'jhipster', 'entitt']);
         assert.fail();
-      } catch (error) {
+      } catch {
         expect(logger.verboseInfo).toHaveBeenCalledWith(expect.stringMatching('Did you mean'));
         expect(logger.verboseInfo).toHaveBeenCalledWith(expect.stringMatching('entity'));
       }
@@ -151,7 +152,7 @@ describe('cli', () => {
       try {
         await mockCli(['jhipster', 'jhipster', 'entitt']);
         assert.fail();
-      } catch (error) {
+      } catch {
         expect(logger.fatal).toHaveBeenCalledWith(expect.stringMatching('entitt'));
         expect(logger.fatal).toHaveBeenCalledWith(expect.stringMatching('is not a known command'));
       }
@@ -167,7 +168,7 @@ describe('cli', () => {
     beforeEach(async () => {
       getCommand.mockImplementation(actualGetCommonand as any);
 
-      const BaseGenerator = (await import('../generators/base/index.js')).default;
+      const BaseGenerator = (await import('../generators/base/index.ts')).default;
       env = (await helpers.createTestEnv()) as FullEnvironment;
       // @ts-expect-error
       generator = new (helpers.createDummyGenerator(BaseGenerator))({ env });

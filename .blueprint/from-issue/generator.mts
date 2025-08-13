@@ -6,7 +6,7 @@ import { prepareSample } from '../../lib/testing/sample-config.js';
 import { promptSamplesFolder } from '../support.mjs';
 import { GENERATOR_APP, GENERATOR_JDL, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
 import { extractDataFromInfo, markdownDetails, type InfoData } from '../../generators/info/support/index.js';
-import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import EnvironmentBuilder from '../../cli/environment-builder.js';
 
 const YO_RC_OUTPUT = 'yo-rc';
 const ENTITIES_JDL_OUTPUT = 'entities-jdl';

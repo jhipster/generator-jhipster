@@ -20,7 +20,7 @@ import { before, describe, esmocha, expect, it } from 'esmocha';
 import { basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import EnvironmentBuilder from '../../cli/environment-builder.js';
 import { defaultHelpers as helpers } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 

@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { writeFile } from 'fs/promises';
-import path from 'path';
-import { inspect } from 'util';
+import { writeFile } from 'node:fs/promises';
+import path from 'node:path';
+import { inspect } from 'node:util';
 
-import { packageJson } from '../lib/index.js';
-import { logger } from './utils.mjs';
+import { packageJson } from '../lib/index.ts';
+
+import { logger } from './utils.js';
 
 const downloadFile = async (url: string, filename: string): Promise<string> => {
   logger.verboseInfo(`Downloading file: ${url}`);
@@ -42,7 +43,7 @@ export const downloadJdlFile = async (jdlFile: string, { skipSampleRepository }:
     const urlObject = new URL(jdlFile);
     url = jdlFile;
     jdlFile = path.basename(urlObject.pathname);
-  } catch (_error) {
+  } catch {
     if (skipSampleRepository) {
       throw new Error(`Could not find ${jdlFile}, make sure the path is correct.`);
     }
