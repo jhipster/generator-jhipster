@@ -10,6 +10,10 @@ const [_nodeExec, _exec, ...args] = process.argv;
 console.error('jhipster', ...args);
 
 process.env.JHIPSTER_DEV_BLUEPRINT = true;
-Module.register(pathToFileURL(require.resolve('@node-loaders/esbuild/strict')).href);
+
+const [nodeMajor, nodeMinor] = process.versions.node.split('.').map(Number);
+if (nodeMajor < 24 && (nodeMajor !== 22 || nodeMinor < 18)) {
+  Module.register(pathToFileURL(require.resolve('@node-loaders/esbuild/strict')).href);
+}
 
 require('../cli/jhipster.cjs');

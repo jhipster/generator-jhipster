@@ -16,15 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable no-unused-expressions */
-import assert from 'assert';
-import fs from 'fs';
+
+import { after, before, beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import assert from 'node:assert';
+import fs from 'node:fs';
+
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { before, it, describe, after, expect as jestExpect, beforeEach } from 'esmocha';
-import { defaultHelpers as helpers, createBlueprintFiles } from '../lib/testing/index.js';
 
-import EnvironmentBuilder from './environment-builder.mjs';
+import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/index.ts';
+
+import EnvironmentBuilder from './environment-builder.js';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {

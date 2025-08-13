@@ -22,7 +22,7 @@ import { fileURLToPath } from 'node:url';
 
 import { snakeCase } from 'lodash-es';
 
-import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import EnvironmentBuilder from '../../cli/environment-builder.js';
 import { defaultHelpers as helpers } from '../../lib/testing/index.ts';
 import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.js';
 

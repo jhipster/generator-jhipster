@@ -30,7 +30,7 @@ import { mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal
 import { createJHipsterLogger, packageNameToNamespace } from '../lib/utils/index.ts';
 import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.ts';
 
-import { CLI_NAME, logger } from './utils.mjs';
+import { CLI_NAME, logger } from './utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

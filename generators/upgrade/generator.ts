@@ -24,7 +24,7 @@ import gitignore from 'parse-gitignore';
 import semver from 'semver';
 import { ResetMode } from 'simple-git';
 
-import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import EnvironmentBuilder from '../../cli/environment-builder.js';
 import { packageJson } from '../../lib/index.ts';
 import BaseGenerator from '../base/index.ts';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';

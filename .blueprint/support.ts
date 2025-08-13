@@ -1,5 +1,6 @@
-import CoreGenerator from '../generators/base-core/index.js';
-import { defaultSamplesFolder } from './constants.js';
+import type CoreGenerator from '../generators/base-core/index.ts';
+
+import { defaultSamplesFolder } from './constants.ts';
 
 export const samplesFolderConfig = 'samplesFolder';
 

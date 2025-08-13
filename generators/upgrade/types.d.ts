@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import type EnvironmentBuilder from '../../cli/environment-builder.js';
 import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type { Config as BaseConfig, Options as BaseOptions } from '../base/types.ts';
 

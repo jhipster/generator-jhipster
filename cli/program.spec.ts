@@ -1,9 +1,8 @@
-/* eslint-disable no-unused-expressions, no-console */
+import { beforeEach, describe, expect, it } from 'esmocha';
 
-import { describe, expect, it, beforeEach } from 'esmocha';
+import { defaultHelpers as helpers } from '../lib/testing/index.ts';
 
-import { defaultHelpers as helpers } from '../lib/testing/index.js';
-import { createProgram } from './program.mjs';
+import { createProgram } from './program.ts';
 
 describe('cli - program', () => {
   beforeEach(async () => {

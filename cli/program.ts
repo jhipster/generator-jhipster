@@ -17,26 +17,28 @@
  * limitations under the License.
  */
 
-import fs from 'fs';
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import didYouMean from 'didyoumean';
-import chalk from 'chalk';
-import type Environment from 'yeoman-environment';
-import type { BaseEnvironmentOptions, GeneratorMeta, LookupOptions } from '@yeoman/types';
+import fs from 'node:fs';
+import path, { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import { packageJson } from '../lib/index.js';
-import { packageNameToNamespace } from '../lib/utils/index.js';
-import baseCommand from '../generators/base/command.js';
-import { GENERATOR_APP, GENERATOR_BOOTSTRAP, GENERATOR_JDL } from '../generators/generator-list.js';
-import { extractArgumentsFromConfigs, type JHipsterCommandDefinition } from '../lib/command/index.js';
+import type { BaseEnvironmentOptions, GeneratorMeta, LookupOptions } from '@yeoman/types';
+import chalk from 'chalk';
+import didYouMean from 'didyoumean';
+import type Environment from 'yeoman-environment';
+
+import baseCommand from '../generators/base/command.ts';
+import { GENERATOR_APP, GENERATOR_BOOTSTRAP, GENERATOR_JDL } from '../generators/generator-list.ts';
+import { type JHipsterCommandDefinition, extractArgumentsFromConfigs } from '../lib/command/index.ts';
+import { packageJson } from '../lib/index.ts';
 import { buildJDLApplicationConfig } from '../lib/jdl-config/jhipster-jdl-config.ts';
-import logo from './logo.mjs';
-import EnvironmentBuilder from './environment-builder.mjs';
-import SUB_GENERATORS from './commands.mjs';
-import JHipsterCommand from './jhipster-command.mjs';
-import { CLI_NAME, done, getCommand, logger } from './utils.mjs';
-import type { CliCommand } from './types.js';
+import { packageNameToNamespace } from '../lib/utils/index.ts';
+
+import SUB_GENERATORS from './commands.ts';
+import EnvironmentBuilder from './environment-builder.js';
+import JHipsterCommand from './jhipster-command.js';
+import logo from './logo.js';
+import type { CliCommand } from './types.ts';
+import { CLI_NAME, done, getCommand, logger } from './utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -237,8 +239,17 @@ export const buildCommands = ({
   envBuilder,
   env,
   loadCommand = async key => {
-    const { default: command } = await import(`./${key}.mjs`);
-    return command;
+    try {
+      const { default: command } = await import(`./${key}.js`);
+      return command;
+    } catch (error) {
+      try {
+        const { default: command } = await import(`./${key}.mjs`);
+        return command;
+      } catch {
+        throw error;
+      }
+    }
   },
   defaultCommand = GENERATOR_APP,
   entrypointGenerator,

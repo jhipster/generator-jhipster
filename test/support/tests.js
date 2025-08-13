@@ -3,7 +3,7 @@ import { existsSync } from 'node:fs';
 
 import sinon from 'sinon';
 
-import { buildJHipster } from '../../cli/index.mts';
+import { buildJHipster } from '../../cli/index.ts';
 import { ENTITY_PRIORITY_NAMES, PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.ts';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../../generators/base-simple-application/support/constants.ts';
 import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';

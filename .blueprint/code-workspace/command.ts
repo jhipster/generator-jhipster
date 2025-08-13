@@ -16,25 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import semver from 'semver';
+import { type JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
-import { packageJson } from '../lib/index.ts';
+const command = {
+  arguments: {},
+  configs: {
+    samplePath: {
+      cli: {
+        type: String,
+      },
+      description: 'Relative or absolute path',
+      scope: 'generator',
+    },
+  },
+} as const satisfies JHipsterCommandDefinition;
 
-import { runJHipster } from './program.mts';
-import { done, logger } from './utils.mjs';
-
-const currentNodeVersion = process.versions.node;
-const minimumNodeVersion = packageJson.engines.node;
-
-if (!process.argv.includes('--skip-checks') && !semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
-  logger.fatal(
-    `You are running Node version ${currentNodeVersion}.\nJHipster requires Node version ${minimumNodeVersion}.\nPlease update your version of Node.`,
-  );
-}
-
-export default runJHipster().catch(done);
-
-process.on('unhandledRejection', up => {
-  logger.error('Unhandled promise rejection at:');
-  logger.fatal(up);
-});
+export default command;

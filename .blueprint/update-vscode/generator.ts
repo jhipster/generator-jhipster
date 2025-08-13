@@ -1,7 +1,8 @@
-import { join } from 'path';
-import BaseGenerator from '../../generators/base-core/index.js';
-import { getPackageRoot } from '../../lib/index.js';
-import { getWorkflowSamples } from '../generate-sample/support/get-workflow-samples.js';
+import { join } from 'node:path';
+
+import BaseGenerator from '../../generators/base-core/index.ts';
+import { getPackageRoot } from '../../lib/index.ts';
+import { getWorkflowSamples } from '../generate-sample/support/get-workflow-samples.ts';
 
 export default class extends BaseGenerator {
   get [BaseGenerator.WRITING]() {

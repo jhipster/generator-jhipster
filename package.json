@@ -41,8 +41,8 @@
       "default": "./dist/generators/index.js"
     },
     "./cli": {
-      "types": "./dist/cli/index.d.mts",
-      "default": "./dist/cli/index.mjs"
+      "types": "./dist/cli/index.d.ts",
+      "default": "./dist/cli/index.js"
     },
     "./package.json": "./package.json",
     "./eslint/recommended": {

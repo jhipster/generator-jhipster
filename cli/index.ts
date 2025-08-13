@@ -16,11 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { type JHipsterCommandDefinition } from '../../lib/command/index.js';
-
-const command = {
-  arguments: {},
-  configs: {},
-} as const satisfies JHipsterCommandDefinition;
-
-export default command;
+export { buildCommands, buildJHipster, createProgram, done, printJHipsterLogo, runJHipster } from './program.ts';
+export { logger } from './utils.js';
+export { default as EnvironmentBuilder } from './environment-builder.js';

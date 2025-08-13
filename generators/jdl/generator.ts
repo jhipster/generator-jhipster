@@ -23,9 +23,9 @@ import { upperFirst } from 'lodash-es';
 import { type Store as MemFs, create as createMemFs } from 'mem-fs';
 import { type MemFsEditor, create as createMemFsEditor } from 'mem-fs-editor';
 
-import { downloadJdlFile } from '../../cli/download.mts';
-import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-import { CLI_NAME } from '../../cli/utils.mjs';
+import { downloadJdlFile } from '../../cli/download.ts';
+import EnvironmentBuilder from '../../cli/environment-builder.js';
+import { CLI_NAME } from '../../cli/utils.js';
 import type { ApplicationWithEntities } from '../../lib/jdl/jdl-importer.ts';
 import { createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
 import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
