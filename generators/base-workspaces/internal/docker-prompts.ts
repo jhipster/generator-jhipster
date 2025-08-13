@@ -65,32 +65,6 @@ export const askForApplicationType = asPromptingTask(async function askForApplic
 });
 
 /**
- * Ask For Gateway Type
- */
-export const askForGatewayType = asPromptingTask(async function askForGatewayType(this: BaseKubernetesGenerator, { control }) {
-  if (!this.shouldAskForPrompts({ control })) return;
-  if (this.jhipsterConfigWithDefaults.deploymentApplicationType !== APPLICATION_TYPE_MICROSERVICE) return;
-
-  await this.prompt(
-    [
-      {
-        type: 'list',
-        name: 'gatewayType',
-        message: 'Which *type* of gateway would you like to use?',
-        choices: [
-          {
-            value: 'SpringCloudGateway',
-            name: 'JHipster gateway based on Spring Cloud Gateway',
-          },
-        ],
-        default: 'SpringCloudGateway',
-      },
-    ],
-    this.config,
-  );
-});
-
-/**
  * Ask For Path
  */
 export const askForPath = asPromptingTask(async function askForPath(this: BaseKubernetesGenerator, { control }) {
