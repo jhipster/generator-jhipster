@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - base-core editPropertiesFile passing sortFile option as false when properties file exists should append to an existing property 1`] = `
 {

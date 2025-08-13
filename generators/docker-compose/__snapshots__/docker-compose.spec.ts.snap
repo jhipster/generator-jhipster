@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - Docker Compose gateway and 1 microservice, with 1 couchbase cluster should match files snapshot 1`] = `
 {
@@ -129,7 +129,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   mscouchbase:
     image: mscouchbase
     environment:
@@ -169,7 +169,7 @@ jhipster:
     environment:
       - TYPE=MASTER
       - BUCKET=mscouchbase
-  
+
   consul:
     image: consul-placeholder
     ports:
@@ -316,7 +316,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   mscassandra:
     image: mscassandra
     environment:
@@ -365,7 +365,7 @@ jhipster:
       retries: 20
     labels:
       org.springframework.boot.ignore: true
-  
+
   consul:
     image: consul-placeholder
     ports:
@@ -567,7 +567,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -605,7 +605,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   mspsql:
     image: mspsql
     environment:
@@ -658,7 +658,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   msmongodb:
     image: msmongodb
     environment:
@@ -694,7 +694,7 @@ jhipster:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   msmariadb:
     image: msmariadb
     environment:
@@ -735,7 +735,7 @@ jhipster:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   consul:
     image: consul-placeholder
     ports:
@@ -944,7 +944,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -987,7 +987,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   mspsql:
     image: mspsql
     environment:
@@ -1045,7 +1045,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   mscouchbase:
     image: mscouchbase
     environment:
@@ -1087,7 +1087,7 @@ jhipster:
       interval: 5s
       timeout: 25s
       retries: 10
-  
+
   msmariadb:
     image: msmariadb
     environment:
@@ -1133,7 +1133,7 @@ jhipster:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   consul:
     image: consul-placeholder
     ports:
@@ -1363,7 +1363,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -1401,7 +1401,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   mspsql:
     image: mspsql
     environment:
@@ -1454,7 +1454,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   msmongodb:
     image: msmongodb
     environment:
@@ -1488,7 +1488,7 @@ jhipster:
   msmongodb-mongodb:
     image: mongodb-placeholder
     command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
-  
+
   consul:
     image: consul-placeholder
     ports:
@@ -1691,7 +1691,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -1729,7 +1729,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   mspsql:
     image: mspsql
     environment:
@@ -1782,7 +1782,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   mscouchbase:
     image: mscouchbase
     environment:
@@ -1819,7 +1819,7 @@ jhipster:
       interval: 5s
       timeout: 25s
       retries: 10
-  
+
   msmariadb:
     image: msmariadb
     environment:
@@ -1860,7 +1860,7 @@ jhipster:
       interval: 5s
       timeout: 5s
       retries: 10
-  
+
   consul:
     image: consul-placeholder
     ports:
@@ -2008,7 +2008,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -2046,7 +2046,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   consul:
     image: consul-placeholder
     ports:
@@ -2194,7 +2194,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -2232,7 +2232,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   consul:
     image: consul-placeholder
     ports:
@@ -2405,7 +2405,7 @@ management:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -2443,7 +2443,7 @@ management:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   consul:
     image: consul-placeholder
     ports:
@@ -2680,7 +2680,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   msmysql:
     image: msmysql
     environment:
@@ -2718,7 +2718,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   consul:
     image: consul-placeholder
     ports:
@@ -2850,7 +2850,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
 ",
     "stateCleared": "modified",
   },
@@ -2963,7 +2963,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   consul:
     image: consul-placeholder
     ports:
@@ -3093,7 +3093,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   consul:
     image: consul-placeholder
     ports:
@@ -3221,7 +3221,7 @@ jhipster:
       interval: 5s
       timeout: 10s
       retries: 10
-  
+
   consul:
     image: consul-placeholder
     ports:
@@ -3315,7 +3315,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       interval: 5s
       timeout: 5s
       retries: 40
-  
+
 ",
     "stateCleared": "modified",
   },
