@@ -20,5 +20,4 @@ export * from './constants.ts';
 export * from './languages.ts';
 export { default as generateDateTimeFormat } from './json/dates.ts';
 export { default as detectLanguage } from './detect-language.ts';
-export { default as loadLanguagesConfig } from './load-config.ts';
 export * from './translate.ts';

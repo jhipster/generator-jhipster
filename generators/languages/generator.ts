@@ -36,7 +36,7 @@ import { clientI18nFiles } from './files.ts';
 import { askForLanguages, askI18n } from './prompts.ts';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.ts';
 import type { Language } from './support/languages.ts';
-import { findLanguageForTag, supportedLanguages } from './support/languages.ts';
+import { findLanguageForTag } from './support/languages.ts';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.ts';
 import type {
   Application as LanguagesApplication,
@@ -73,13 +73,11 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      supportedLanguages.forEach(lang => {
-        this.supportedLanguages.set(lang.languageTag, lang);
-      });
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
+      await this.dependsOnBootstrap('languages');
       await this.dependsOnBootstrap('app');
     }
 
@@ -93,7 +91,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   }
 
   get supportedLanguages(): Map<string, Language> {
-    return this.getContextData<Map<string, Language>>(CONTEXT_DATA_SUPPORTED_LANGUAGES, { factory: () => new Map() });
+    return this.getContextData<Map<string, Language>>(CONTEXT_DATA_SUPPORTED_LANGUAGES);
   }
 
   // Public API method used by the getter and also by Blueprints

@@ -46,7 +46,7 @@ if (workaroundEntityCannotBeEmpty && sampleFields.length === 0) {
 }
 _%>
 
-describe('<%= entityClass %> e2e test', () => {
+describe('<%- entityNameCapitalized %> e2e test', () => {
 
   const <%= entityInstance %>PageUrl = '/<%= entityPage %>';
   const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityPage %>(\\?.*)?$');
@@ -144,7 +144,7 @@ describe('<%= entityClass %> e2e test', () => {
 
 <%_ } _%>
 
-  it('<%= entityClassPlural %> menu should load <%= entityClassPlural %> page', () => {
+  it('<%- entityNamePlural %> menu should load <%- entityNamePlural %> page', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('<%= entityPage %>');
     cy.wait('@entitiesRequest').then(({ response }) => {
@@ -154,11 +154,11 @@ describe('<%= entityClass %> e2e test', () => {
         cy.get(entityTableSelector).should('exist');
       }
     });;
-    cy.getEntityHeading('<%= entityClass %>').should('exist');
+    cy.getEntityHeading('<%- entityNameCapitalized %>').should('exist');
     cy.url().should('match', <%= entityInstance %>PageUrlPattern);
   });
 
-  describe('<%= entityClass %> page', () => {
+  describe('<%- entityNameCapitalized %> page', () => {
 <%_ if (!readOnly) { _%>
     describe('create button click', () => {
       beforeEach(() => {
@@ -166,10 +166,10 @@ describe('<%= entityClass %> e2e test', () => {
         cy.wait('@entitiesRequest');
       });
 
-      it('should load create <%= entityClass %> page', () => {
+      it('should load create <%- entityNameCapitalized %> page', () => {
         cy.get(entityCreateButtonSelector).click();
         cy.url().should('match', new RegExp('/<%= entityPage %>/new$'));
-        cy.getEntityCreateUpdateHeading('<%= entityClass %>');
+        cy.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
@@ -241,7 +241,7 @@ describe('<%= entityClass %> e2e test', () => {
       });
 <%_ } _%>
 
-      it('detail button click should load details <%= entityClass %> page', () => {
+      it('detail button click should load details <%- entityNameCapitalized %> page', () => {
         cy.get(entityDetailsButtonSelector).first().click();
         cy.getEntityDetailsHeading('<%= entityInstance %>');
         cy.get(entityDetailsBackButtonSelector).click();
@@ -252,9 +252,9 @@ describe('<%= entityClass %> e2e test', () => {
       });
 
 <%_ if (!readOnly && updatableEntity) { _%>
-      it('edit button click should load edit <%= entityClass %> page and go back', () => {
+      it('edit button click should load edit <%- entityNameCapitalized %> page and go back', () => {
         cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('<%= entityClass %>');
+        cy.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
@@ -264,9 +264,9 @@ describe('<%= entityClass %> e2e test', () => {
       });
 
       <% if (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) { %>// Reason: jpaMetamodelFiltering with required relationship missbehavior<% } %>
-      it<% if (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) { %>.skip<% } %>('edit button click should load edit <%= entityClass %> page and save', () => {
+      it<% if (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) { %>.skip<% } %>('edit button click should load edit <%- entityNameCapitalized %> page and save', () => {
         cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('<%= entityClass %>');
+        cy.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>');
         cy.get(entityCreateSaveButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response?.statusCode).to.equal(200);
@@ -277,7 +277,7 @@ describe('<%= entityClass %> e2e test', () => {
 <%_ } _%>
 <%_ if (!readOnly) { _%>
       <% if (skipCreateTest) { %>// Reason: cannot create a required entity with relationship with required relationships.<% } %>
-      it<%= skipCreateTest %>('last delete button click should delete instance of <%= entityClass %>', () => {
+      it<%= skipCreateTest %>('last delete button click should delete instance of <%- entityNameCapitalized %>', () => {
   <%_ if (clientFrameworkReact) { _%>
         cy.intercept('GET', '/<%= baseApi + entityApiUrl %>/*').as('dialogDeleteRequest');
   <%_ } _%>
@@ -303,15 +303,15 @@ describe('<%= entityClass %> e2e test', () => {
   });
 <%_ if (!readOnly) { _%>
 
-  describe('new <%= entityClass %> page', () => {
+  describe('new <%- entityNameCapitalized %> page', () => {
     beforeEach(() => {
       cy.visit(<%= entityInstance %>PageUrl);
       cy.get(entityCreateButtonSelector).click();
-      cy.getEntityCreateUpdateHeading('<%= entityClass %>');
+      cy.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>');
     });
 
     <% if (skipCreateTest) { %>// Reason: cannot create a required entity with relationship with required relationships.<% } %>
-    it<%= skipCreateTest %>('should create an instance of <%= entityClass %>', () => {
+    it<%= skipCreateTest %>('should create an instance of <%- entityNameCapitalized %>', () => {
   <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly).forEach((field) => {
     const fieldName = field.fieldName;
     const fieldIsEnum = field.fieldIsEnum;

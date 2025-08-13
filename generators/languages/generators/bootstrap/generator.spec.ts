@@ -21,7 +21,7 @@ import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
-import { shouldSupportFeatures } from '../../../../test/support/tests.js';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
 
 import Generator from './index.ts';
 
@@ -32,7 +32,7 @@ const generator = `${basename(resolve(__dirname, '../../'))}:${basename(__dirnam
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
-  // describe('blueprint support', () => testBlueprintSupport(generator));
+  describe('blueprint support', () => testBlueprintSupport(generator));
 
   describe('with defaults options', () => {
     before(async () => {

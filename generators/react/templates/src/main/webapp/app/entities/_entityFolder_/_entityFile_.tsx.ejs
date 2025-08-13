@@ -324,7 +324,7 @@ export const <%= entityReactName %> = () => {
 
   return (
     <div>
-      <h2 id="<%= entityFileName %>-heading" data-cy="<%= entityClass %>Heading">
+      <h2 id="<%= entityFileName %>-heading" data-cy="<%- entityNameCapitalized %>Heading">
         <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
         <div className="d-flex justify-content-end">
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>

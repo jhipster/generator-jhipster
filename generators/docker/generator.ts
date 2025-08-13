@@ -50,6 +50,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('base-application');
+      await this.dependsOnBootstrap('docker');
     }
   }
 

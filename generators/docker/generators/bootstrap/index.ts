@@ -16,4 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as checkNode } from './check-node.ts';
+export { default } from './generator.ts';

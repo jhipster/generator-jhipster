@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
+        <h2 id="page-heading" data-cy="<%- entityNameCapitalized %>Heading">
             <span id="<%= entityFileName %>">{{ t$('<%= i18nKeyPrefix %>.home.title') }}</span>
             <div class="d-flex justify-content-end">
                 <button class="btn btn-info me-2" @click="handleSyncList" :disabled="isFetching">

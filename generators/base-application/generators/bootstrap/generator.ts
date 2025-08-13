@@ -30,15 +30,13 @@ import { packageJson } from '../../../../lib/index.ts';
 import { getConfigWithDefaults } from '../../../../lib/jhipster/default-application-options.ts';
 import type { ApplicationAll } from '../../../../lib/types/application-all.ts';
 import { mutateData, removeFieldsWithNullishValues } from '../../../../lib/utils/index.ts';
-import { loadDerivedAppConfig } from '../../../app/support/index.ts';
+import { loadDerivedConfig } from '../../../base-core/internal/config-def.ts';
 import { isWin32 } from '../../../base-core/support/index.ts';
-import type { Application as CommonApplication, Config as CommonConfig, Entity as CommonEntity } from '../../../common/types.ts';
-import { JAVA_DOCKER_DIR, LOGIN_REGEX } from '../../../generator-constants.js';
+import { LOGIN_REGEX } from '../../../generator-constants.js';
 import { GENERATOR_COMMON } from '../../../generator-list.ts';
-import { loadLanguagesConfig } from '../../../languages/support/index.ts';
+import serverCommand from '../../../server/command.ts';
 import type { Application as SpringBootApplication } from '../../../spring-boot/types.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-data-relational/types.ts';
-import type { Entity as BaseApplicationEntity } from '../../index.ts';
 import BaseApplicationGenerator from '../../index.ts';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../internal/types/field-types.ts';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from '../../internal/utils.ts';
@@ -50,13 +48,23 @@ import {
   prepareCommonFieldForTemplates,
   prepareEntity as prepareEntityForTemplates,
   prepareEntityPrimaryKeyForTemplates,
-  preparePostEntitiesCommonDerivedProperties,
   preparePostEntityCommonDerivedProperties,
   prepareRelationship,
   stringifyApplicationData,
 } from '../../support/index.ts';
+import type {
+  Application as BaseApplicationApplication,
+  Config as BaseApplicationConfig,
+  Entity as BaseApplicationEntity,
+  Options as BaseApplicationOptions,
+} from '../../types.ts';
 
-export default class Common extends BaseApplicationGenerator<CommonEntity, CommonApplication, CommonConfig> {
+export default class BootstrapBaseApplicationGenerator extends BaseApplicationGenerator<
+  BaseApplicationEntity,
+  BaseApplicationApplication<BaseApplicationEntity>,
+  BaseApplicationConfig,
+  BaseApplicationOptions
+> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -68,6 +76,7 @@ export default class Common extends BaseApplicationGenerator<CommonEntity, Commo
 
     await this.dependsOnBootstrap('jdl');
     await this.dependsOnBootstrap('base-simple-application');
+    await this.dependsOnBootstrap('docker');
   }
 
   get initializing() {
@@ -86,13 +95,8 @@ export default class Common extends BaseApplicationGenerator<CommonEntity, Commo
     return this.asBootstrapApplicationTaskGroup({
       loadConfig({ applicationDefaults }) {
         applicationDefaults({
-          packageJsonScripts: {},
-          clientPackageJsonScripts: {},
           testFrameworks: [],
-          dockerContainers: {},
           user: undefined,
-          authenticationUsesCsrf: undefined,
-          gatewayRoutes: undefined,
         });
       },
     });
@@ -105,7 +109,10 @@ export default class Common extends BaseApplicationGenerator<CommonEntity, Commo
         applyDefaults ??= getConfigWithDefaults as any;
         applicationDefaults(applyDefaults!(application));
       },
-      loadApplication({ application, control, applicationDefaults }) {
+      serverConfig({ application }) {
+        loadDerivedConfig(serverCommand.configs, { application });
+      },
+      loadApplication({ applicationDefaults }) {
         applicationDefaults({
           jhiPrefixCapitalized: ({ jhiPrefix }) => upperFirst(jhiPrefix),
           jhiPrefixDashed: ({ jhiPrefix }) => kebabCase(jhiPrefix),
@@ -123,9 +130,11 @@ export default class Common extends BaseApplicationGenerator<CommonEntity, Commo
             }
             return 'dist/';
           },
-        });
 
-        loadLanguagesConfig({ application, config: this.jhipsterConfigWithDefaults, control });
+          authenticationTypeSession: data => data.authenticationType === 'session',
+          authenticationTypeJwt: data => data.authenticationType === 'jwt',
+          authenticationTypeOauth2: data => data.authenticationType === 'oauth2',
+        });
       },
       loadApplicationKeysForEjs({ application }) {
         mutateData(application as unknown as SpringBootApplication, {
@@ -171,52 +180,39 @@ export default class Common extends BaseApplicationGenerator<CommonEntity, Commo
         });
       },
       prepareApplication({ application, applicationDefaults }) {
-        loadDerivedAppConfig({ application });
+        if (application.microfrontends && application.microfrontends.length > 0) {
+          application.microfrontends.forEach(microfrontend => {
+            const { baseName } = microfrontend;
+            mutateData(microfrontend, {
+              lowercaseBaseName: baseName.toLowerCase(),
+              capitalizedBaseName: upperFirst(baseName),
+              endpointPrefix: `services/${baseName.toLowerCase()}`,
+            });
+          });
+        } else if (application.microfrontend) {
+          application.microfrontends = [];
+        }
+        application.microfrontend =
+          application.microfrontend ||
+          (application.applicationTypeMicroservice && !application.skipClient) ||
+          (application.applicationTypeGateway && application.microfrontends && application.microfrontends.length > 0);
+
+        if (application.microfrontend && application.applicationTypeMicroservice && !application.gatewayServerPort) {
+          application.gatewayServerPort = 8080;
+        }
 
         applicationDefaults({
           __override__: false,
-          dockerServicesDir: JAVA_DOCKER_DIR,
           // TODO drop clientPackageManager
           clientPackageManager: ({ nodePackageManager }) => nodePackageManager,
 
           backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
           backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
-          authenticationUsesCsrf: ({ authenticationType }) => ['oauth2', 'session'].includes(authenticationType!),
-          endpointPrefix: ({ applicationType, lowercaseBaseName }) =>
-            applicationType === 'microservice' ? `services/${lowercaseBaseName}` : '',
 
           loginRegex: LOGIN_REGEX,
 
           jwtSecretKey: undefined,
           gatewayServerPort: undefined,
-        });
-      },
-      userRelationship({ applicationDefaults }) {
-        applicationDefaults({
-          __override__: false,
-          anyEntityHasRelationshipWithUser: this.getExistingEntities().some(entity =>
-            (entity.definition.relationships ?? []).some(relationship => relationship.otherEntityName.toLowerCase() === 'user'),
-          ),
-        });
-      },
-      syncUserWithIdp({ application, applicationDefaults }) {
-        if (!application.backendTypeSpringBoot) return;
-
-        if (application.syncUserWithIdp === undefined && application.authenticationType === 'oauth2') {
-          applicationDefaults({
-            __override__: false,
-            syncUserWithIdp: data =>
-              data.databaseType !== 'no' && (data.applicationType === 'gateway' || data.anyEntityHasRelationshipWithUser),
-          });
-        } else if (application.syncUserWithIdp && application.authenticationType !== 'oauth2') {
-          throw new Error('syncUserWithIdp is only supported with oauth2 authenticationType');
-        }
-      },
-      userManagement({ applicationDefaults }) {
-        applicationDefaults({
-          generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => generateUserManagement || syncUserWithIdp,
-          generateBuiltInAuthorityEntity: ({ generateBuiltInUserEntity, databaseType }) =>
-            generateBuiltInUserEntity! && databaseType !== 'cassandra',
         });
       },
     });
@@ -407,7 +403,7 @@ export default class Common extends BaseApplicationGenerator<CommonEntity, Commo
     return this.asPreparingEachEntityTaskGroup({
       async preparingEachEntity({ application, entity }) {
         await addFakerToEntity(entity, application.nativeLanguage);
-        prepareEntityForTemplates(entity, this, application);
+        prepareEntityForTemplates(entity, this);
       },
       preparePrimaryKey({ entity, application }) {
         // If primaryKey doesn't exist, create it.
@@ -537,9 +533,6 @@ export default class Common extends BaseApplicationGenerator<CommonEntity, Commo
             }
           }),
         );
-      },
-      postPreparingEntities({ entities }) {
-        preparePostEntitiesCommonDerivedProperties(entities);
       },
       checkProperties({ entities }) {
         for (const entity of entities) {

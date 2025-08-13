@@ -72,9 +72,6 @@ describe(`generator - ${generator}`, () => {
 
       it('should match context snapshot', () => {
         expect(runResult.application).toMatchSnapshot({
-          user: expect.any(Object),
-          authority: expect.any(Object),
-          userManagement: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
           javaDependencies: expect.any(Object),
           dockerContainers: expect.any(Object),
