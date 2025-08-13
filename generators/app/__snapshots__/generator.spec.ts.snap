@@ -324,7 +324,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "devLiquibaseUrl": "jdbc:postgresql://localhost:5432/jhipster",
   "devR2dbcUrl": undefined,
   "devServerPort": 4200,
-  "devServerPortProxy": 9000,
+  "devServerPortProxy": undefined,
   "dockerContainers": {
     "apache/kafka-native": "apache-kafka-native-placeholder",
     "apachepulsar/pulsar": "apachepulsar-pulsar-placeholder",
@@ -975,7 +975,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "devLiquibaseUrl": "jdbc:postgresql://localhost:5432/jhipster",
   "devR2dbcUrl": "r2dbc:postgresql://localhost:5432/jhipster",
   "devServerPort": 4200,
-  "devServerPortProxy": 9000,
+  "devServerPortProxy": undefined,
   "dockerContainers": {
     "apache/kafka-native": "apache-kafka-native-placeholder",
     "apachepulsar/pulsar": "apachepulsar-pulsar-placeholder",

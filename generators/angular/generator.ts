@@ -190,7 +190,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
           };
         }
 
-        if (application.clientRootDir) {
+        if (application.clientRootDir && application.microfrontend) {
           // Overrides only works if added in root package.json
           this.packageJson.merge({
             overrides: {
@@ -337,7 +337,6 @@ export default class AngularGenerator extends BaseApplicationGenerator<
               : {},
             devDependencies: {
               '@angular-builders/custom-webpack': null,
-              'browser-sync-webpack-plugin': null,
               'copy-webpack-plugin': null,
               'webpack-bundle-analyzer': null,
               'webpack-merge': null,
@@ -345,10 +344,20 @@ export default class AngularGenerator extends BaseApplicationGenerator<
               ...(enableTranslation ? { 'folder-hash': null, 'merge-jsons-webpack-plugin': null } : {}),
             },
             overrides: {
-              'browser-sync': nodeDependencies['browser-sync'],
               webpack: nodeDependencies.webpack,
             },
           });
+
+          if (application.microfrontend) {
+            source.mergeClientPackageJson!({
+              devDependencies: {
+                'browser-sync-webpack-plugin': null,
+              },
+              overrides: {
+                'browser-sync': nodeDependencies['browser-sync'],
+              },
+            });
+          }
         }
       },
       addWebsocketDependencies({ application, source }) {
