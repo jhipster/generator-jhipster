@@ -71,17 +71,21 @@ export const pickFields = (source: Record<string | number, any>, fields: (string
 
 /**
  * Mutation properties accepts:
- * - functions: receives the application and the return value is set at the application property.
- * - non functions: application property will receive the property in case current value is undefined.
+ * - functions: receives the data and the return value is set at the data property.
+ * - non functions: data property will receive the property in case current value is undefined.
+ * - __override__ property: if set to false, functions will not override existing values.
  *
  * Applies each mutation object in order.
  *
+ * Note: if data property is expected to be a function, mutation should be a function that returns the desired function.
+ *
  * @example
- * // application = { prop: 'foo-bar', prop2: 'foo2' }
+ * // data = { prop: 'foo-bar', prop2: 'foo2', fn: () => 'fn' }
  * mutateData(
  *   data,
- *   { prop: 'foo', prop2: ({ prop }) => prop + 2 },
+ *   { prop: 'foo', prop2: ({ prop }) => prop + 2, fn: () => () => 'fn' },
  *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
+ *   { __override__: false, prop: () => 'won\'t override' },
  * );
  */
 export const mutateData = <const T extends Record<string | number, any>>(
