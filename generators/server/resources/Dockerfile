@@ -23,7 +23,7 @@ FROM mariadb:12.0.2
 FROM mongo:8.0.12
 LABEL ALIAS=mongodb
 
-FROM couchbase/server:7.6.6
+FROM couchbase/server:7.6.7
 LABEL ALIAS=couchbase
 
 FROM cassandra:5.0.2
