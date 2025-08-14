@@ -18,10 +18,11 @@ export const getGithubSamplesGroup = async (
   const warnings: string[] = [];
   let samples: GitHubMatrixGroup = {};
   const samplesFolderContent = await getGithubSamplesGroups(samplesGroupFolder, true);
-  if (samplesFolderContent.includes(`${group}.js`) || samplesFolderContent.includes(`${group}.ts`)) {
-    const jsGroup: { default: GitHubMatrixGroup } = await import(join(samplesGroupFolder, `${group}.js`));
+  const groupExt = ['js', 'ts', 'json'].find(ext => samplesFolderContent.includes(`${group}.${ext}`));
+  if (groupExt === 'js' || groupExt === 'ts') {
+    const jsGroup: { default: GitHubMatrixGroup } = await import(join(samplesGroupFolder, `${group}.${groupExt}`));
     samples = Object.fromEntries(Object.entries(jsGroup.default).map(([sample, value]) => [sample, { ...value, 'samples-group': group }]));
-  } else if (samplesFolderContent.includes(`${group}.json`)) {
+  } else if (groupExt === 'json') {
     const jsonFile = await readFile(join(samplesGroupFolder, `${group}.json`));
     samples = Object.fromEntries(
       Object.entries(JSON.parse(jsonFile.toString()) as GitHubMatrixGroup).map(([sample, value]) => [

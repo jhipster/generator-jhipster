@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - jdl --json-only option for two applications and entity jdl with valid jdl should write expected files 1`] = `
 {

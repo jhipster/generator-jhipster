@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
 {

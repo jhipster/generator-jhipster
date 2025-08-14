@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.mycompany-fix-Entity-Rest-skipCommitHook(true)-enableSwaggerCodegen:true-websocket(false)-skipUserManagement(false)-consul-enableHibernateCache(true)-h2Disk-caffeine should match generated files snapshot 1`] = `
 {

@@ -204,7 +204,7 @@
     "eslint-plugin-chai-friendly": "1.1.0",
     "eslint-plugin-n": "17.21.3",
     "eslint-plugin-prettier": "5.5.4",
-    "esmocha": "3.0.0",
+    "esmocha": "4.0.0",
     "jsdoc": "4.0.4",
     "mocha": "11.7.1",
     "prettier2": "npm:prettier@2.8.8",

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - app - --incremental-changelog entities with/without byte fields should create fake data testing with byte fields should create fake data file with required content 1`] = `
 {
@@ -357,7 +357,6 @@ exports[`generator - app - --incremental-changelog when adding a many-to-many re
     -->
     <changeSet id="20200102000100-1-add-relationships" author="jhipster">
 
-
         <createTable tableName="rel_one__another">
             <column name="another_another_id" type="bigint">
                 <constraints nullable="false"/>
@@ -528,7 +527,6 @@ exports[`generator - app - --incremental-changelog when adding a relationship sh
         <addColumn tableName="one">
                 <column name="another_another_id" type="bigint"/>
         </addColumn>
-        
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -692,7 +690,6 @@ exports[`generator - app - --incremental-changelog when adding a relationship wi
         <addColumn tableName="one">
                 <column name="another_another_id" type="bigint"/>
         </addColumn>
-        
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -1731,7 +1728,6 @@ exports[`generator - app - --incremental-changelog when modifying a relationship
         Added relationships to the entity One.
     -->
     <changeSet id="20200103000100-1-add-relationships" author="jhipster">
-
     </changeSet>
 
     <!--
@@ -1831,7 +1827,6 @@ exports[`generator - app - --incremental-changelog when modifying an existing re
         <addColumn tableName="one">
                 <column name="another_ent_another_id" type="bigint"/>
         </addColumn>
-        
     </changeSet>
 
     <!--
@@ -2135,7 +2130,6 @@ exports[`generator - app - --incremental-changelog when modifying default values
         <addColumn tableName="two">
                 <column name="one_uuid" type="\${uuidType}"/>
         </addColumn>
-        
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -2476,7 +2470,6 @@ exports[`generator - app - --incremental-changelog when modifying fields and rel
         <addColumn tableName="another">
                 <column name="one_one_id" type="bigint"/>
         </addColumn>
-        
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
