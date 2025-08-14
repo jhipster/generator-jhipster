@@ -193,10 +193,10 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (authenticationTypeOauth2) { _%>
     implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
 <%_ } _%>
-<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2) { _%>
+<%_ if (authenticationTypeSession) { _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
 <%_ } _%>
     testImplementation "org.springframework.boot:spring-boot-starter-test"

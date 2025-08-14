@@ -188,13 +188,13 @@
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeOauth2) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (authenticationTypeJwt || authenticationTypeSession) { _%>
+<%_ if (authenticationTypeSession) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
