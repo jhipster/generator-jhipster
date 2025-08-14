@@ -146,6 +146,7 @@ export default function prepareEntity(entityWithConfig: BaseApplicationEntity, g
   });
 
   mutateData(entityWithConfig, {
+    __override__: false,
     entityClassHumanized: ({ entityNameCapitalized }) => startCase(entityNameCapitalized),
     entityClassPluralHumanized: ({ entityNamePlural }) => startCase(entityNamePlural),
   });
