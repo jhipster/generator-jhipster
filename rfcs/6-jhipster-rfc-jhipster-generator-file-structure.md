@@ -78,7 +78,7 @@ The base generators will be organized into a specific package structure to ensur
 ├── generators/
 │   ├── base-<name>/
 │   │   ├── tasks.d.ts // optional
-│   │   ├── types.d.ts // optional
+│   │   ├── types-mutations.ts // optional
 │   │   ├── api.d.ts // optional
 │   │   ├── index.ts
 │   │   ├── generator.ts
@@ -92,7 +92,7 @@ This structure allows for a clear separation of concerns, with each base generat
 
 **tasks.d.ts**: This file defines the tasks that the base generator will declare. It includes the task names, descriptions, and any parameters required for each task as well as their orders and injected parameters.
 
-**types.d.ts**: This file defines the types used by the base generator, including any interfaces or type aliases that are specific to the base generator (Workspace, Application, Entities, Source template metadata, etc.). **RULE**: Types shouldn't contain any fields that are not directly related to the generator's functionality. They should be used to define the structure of the data that the base generator will work with, such as the application configuration or entity definitions. They can extend types from an upstream generator, and should not contain any business logic or methods.
+**types-mutations.ts**: This file defines the types and the mutation (from empty to fully hydrated object) used by the base generator, including any interfaces or type aliases that are specific to the base generator (Workspace, Application, Entities, Source template metadata, etc.). **RULE**: Types shouldn't contain any fields that are not directly related to the generator's functionality. They should be used to define the structure of the data that the base generator will work with, such as the application configuration or entity definitions. They can extend types from an upstream generator, and should not contain any business logic or methods.
 
 **api.d.ts**: This file defines the public API of the base generator, including any methods or properties that should be accessible to other generators. It serves as a contract for the base generator's functionality.
 
@@ -121,14 +121,12 @@ Feature generators will be organized in a similar way to base generators, but wi
 ├── generators/
 │   ├── <name>/
 │   │   ├── commands.d.ts // optional
-│   │   ├── types.d.ts // optional
+│   │   ├── types-mutations.ts // optional
 │   │   ├── index.ts
 │   │   ├── generator.ts
 │   │   ├── files.ts // optional
 │   │   ├── internal/ // optional
 │   │   │   ├── <any-internal-helper>.ts
-│   │   ├── mutation/ // optional
-│   │   │   ├── <any-task-step>.ts
 │   │   ├── support/ // optional
 │   │   │   ├── <any-helper>.ts
 │   │   ├── resources/ // optional
@@ -142,8 +140,6 @@ This structure allows for a clear organization of feature-specific files, with e
 **commands.d.ts**: This file defines the CLI commands that the feature generator will provide. It includes the command names, descriptions, configuration storage, and any parameters required for each command.
 
 **files.ts**: This file contains the file templates and their associated metadata that the feature generator will use to generate files in the target application. It includes the file names, templates, and any parameters required for each file. **RULE**: the list of file to generate should have contextual information (application, entities, etc.) injected in the file data and never use the generator as a context.
-
-**mutation/**: This directory contains the mutation files that define the tasks and steps that the feature generator will perform. Each file represents a specific task or step in the generation process (i.e. `preparing.ts`) , allowing for better organization and modularity. **RULE**: Mutation methods of jhipster core should call support/methods instead of the generators facade to lower the amount of generator LoCs.
 
 **resources/**: This directory contains any static resources required by the feature generator, such as configuration files, images, or other assets. These resources can be used by the generator during the generation process.
 
