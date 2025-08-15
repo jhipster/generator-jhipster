@@ -19,7 +19,7 @@ import type {
   Relationship as JavaRelationship,
   Source as JavaSource,
 } from '../java/types.ts';
-import type { Relationship as LanguagesRelationship } from '../languages/types.d.ts';
+import type { Relationship as LanguagesRelationship } from '../languages/types-mutations.ts';
 import type { DatabaseEntity } from '../liquibase/types.ts';
 
 import type Command from './command.ts';

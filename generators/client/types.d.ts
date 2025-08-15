@@ -21,7 +21,11 @@ import type {
   Source as JavascriptSource,
 } from '../javascript/types.ts';
 import type { Language } from '../languages/support/languages.ts';
-import type { Entity as LanguagesEntity, Field as LanguagesField, Relationship as LanguagesRelationship } from '../languages/types.d.ts';
+import type {
+  Entity as LanguagesEntity,
+  Field as LanguagesField,
+  Relationship as LanguagesRelationship,
+} from '../languages/types-mutations.ts';
 
 import type command from './command.ts';
 import type { GetWebappTranslationCallback } from './translation.ts';

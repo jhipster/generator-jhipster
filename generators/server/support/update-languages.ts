@@ -18,7 +18,11 @@
  */
 
 import { asPostWritingTask } from '../../base-application/support/task-type-inference.ts';
-import type { Application as LanguagesApplication, Entity as LanguagesEntity, Source as LanguagesSource } from '../../languages/types.ts';
+import type {
+  Application as LanguagesApplication,
+  Entity as LanguagesEntity,
+  Source as LanguagesSource,
+} from '../../languages/types-mutations.ts';
 
 /**
  * Update Languages In MailServiceIT

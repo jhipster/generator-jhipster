@@ -18,7 +18,7 @@
  */
 import type { Control } from '../../base/types.ts';
 import type BaseGenerator from '../../base-core/index.ts';
-import type { Application as LanguagesApplication } from '../../languages/types.d.ts';
+import type { Application as LanguagesApplication } from '../../languages/types-mutations.d.ts';
 import type { Application as ClientApplication } from '../types.d.ts';
 
 type UpdateLanguagesApplication = Pick<

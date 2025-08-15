@@ -93,6 +93,25 @@ export type MutateDataPropertiesWithRequiredProperties<D extends Record<string, 
 >;
 
 /**
+ * Utility to ensure required mutation properties are set.
+ */
+export type MutateDataRequiredProperties<D extends Record<string, any>, N extends Record<string, any>> = SetRequired<D, RequiredKeysOf<N>>;
+
+export type MutateDataParam<T> = Simplify<
+  OmitIndexSignature<{
+    [Key in keyof (T & { __override__?: boolean })]?: Key extends '__override__'
+      ? boolean
+      : Key extends ReadonlyKeysOf<T>
+        ? never
+        : Key extends keyof T
+          ? // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+            T[Key] extends Function
+            ? (ctx: T) => T[Key]
+            : T[Key] | ((ctx: T) => T[Key])
+          : never;
+  }>
+>;
+/**
  * Mutation properties accepts:
  * - functions: receives the data and the return value is set at the data property.
  * - non functions: data property will receive the property in case current value is undefined.

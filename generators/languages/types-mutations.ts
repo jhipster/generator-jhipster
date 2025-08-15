@@ -18,6 +18,7 @@
  */
 import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type { Field as BaseField } from '../../lib/jhipster/types/field.ts';
+import { mutateData } from '../../lib/utils/index.ts';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,
@@ -51,12 +52,19 @@ export type Application<E extends BaseApplicationEntity = BaseApplicationEntity>
     languagesDefinition: readonly Language[];
   };
 
-export { BaseApplicationRelationship as Relationship };
+export type { BaseApplicationRelationship as Relationship };
 
 export type Field = BaseField & {
   i18nKeyPrefix: string;
   fieldTranslationKey?: string;
 };
+
+export function mutateField(entityWithConfig: Entity, field: Field): void {
+  mutateData(field, {
+    __override__: false,
+    fieldTranslationKey: ({ fieldName }) => `${entityWithConfig.i18nKeyPrefix}.${fieldName}`,
+  });
+}
 
 export interface Entity<
   F extends BaseApplicationField = BaseApplicationField,
