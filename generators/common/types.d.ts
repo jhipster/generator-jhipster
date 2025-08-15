@@ -17,7 +17,7 @@ import type {
   Entity as JavascriptEntity,
   Field as JavascriptField,
   Relationship as JavascriptRelationship,
-} from '../javascript/types.ts';
+} from '../javascript/types-mutations.ts';
 import type {
   Application as LanguagesApplication,
   Config as LanguagesConfig,

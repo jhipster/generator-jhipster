@@ -7,7 +7,7 @@ import type { Config as BootstrapConfig, Options as BootstrapOptions } from '../
 import type { Config as ClientConfig, Options as ClientOptions } from '../../generators/client/types.d.ts';
 import type { Config as GitConfig, Options as GitOptions } from '../../generators/git/types.d.ts';
 import type { Config as JavaConfig, Options as JavaOptions } from '../../generators/java/types.d.ts';
-import type { Config as JavascriptConfig, Options as JavascriptOptions } from '../../generators/javascript/types.d.ts';
+import type { Config as JavascriptConfig, Options as JavascriptOptions } from '../../generators/javascript/types-mutations.ts';
 import type { Config as JdlBootstrapConfig, Options as JdlBootstrapOptions } from '../../generators/jdl/generators/bootstrap/types.d.ts';
 import type { Config as JdlConfig, Options as JdlOptions } from '../../generators/jdl/types.d.ts';
 import type { Config as LanguagesConfig, Options as LanguagesOptions } from '../../generators/languages/types-mutations.ts';

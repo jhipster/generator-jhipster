@@ -1,3 +1,4 @@
+import { snakeCase, startCase, upperFirst } from 'lodash-es';
 import type { Merge, PackageJson, Simplify } from 'type-fest';
 
 import type {
@@ -5,6 +6,7 @@ import type {
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
 } from '../../lib/command/types.ts';
+import type { MutateDataParam } from '../../lib/utils/index.ts';
 import type {
   Application as BaseApplicationApplication,
   Entity as BaseApplicationEntity,
@@ -22,12 +24,13 @@ import type JavascriptBootstrapCommand from './generators/bootstrap/command.ts';
 import type EslintCommand from './generators/eslint/command.ts';
 import type HuskyCommand from './generators/husky/command.ts';
 import type PrettierCommand from './generators/prettier/command.ts';
+import { getTypescriptType } from './support/index.ts';
 
 export type Field = BaseApplicationField & {
   tsType?: string;
 };
 
-export { BaseApplicationRelationship as Relationship };
+export type { BaseApplicationRelationship as Relationship };
 
 export type Config = BaseSimpleApplicationConfig &
   ExportStoragePropertiesFromCommand<typeof EslintCommand> &
@@ -107,3 +110,13 @@ export type JavascriptSimpleApplication = BaseSimpleApplicationApplication &
   };
 
 export type Application<E extends BaseApplicationEntity = Entity> = BaseApplicationApplication<E> & JavascriptSimpleApplication;
+
+export const mutateField = {
+  __override__: false,
+  path: ({ fieldName }) => [fieldName],
+  propertyName: ({ fieldName }) => fieldName,
+  fieldNameCapitalized: ({ fieldName }) => upperFirst(fieldName),
+  fieldNameUnderscored: ({ fieldName }) => snakeCase(fieldName),
+  fieldNameHumanized: ({ fieldName }) => startCase(fieldName),
+  tsType: ({ fieldType }) => getTypescriptType(fieldType),
+} as const satisfies MutateDataParam<Field>;
