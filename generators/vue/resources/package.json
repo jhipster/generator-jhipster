@@ -42,7 +42,7 @@
     "flush-promises": "1.0.2",
     "folder-hash": "4.1.1",
     "happy-dom": "18.0.1",
-    "html-webpack-plugin": "5.6.3",
+    "html-webpack-plugin": "5.6.4",
     "merge-jsons-webpack-plugin": "2.0.1",
     "mini-css-extract-plugin": "2.9.4",
     "numeral": "2.0.6",
