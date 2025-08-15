@@ -95,6 +95,8 @@ _%>
 <%_ if (cacheProviderInfinispan) { _%>
       - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
 <%_ } _%>
+      - THC_PORT=<%= serverPort %>
+      - THC_PATH=/management/health
 <%_ if (applicationTypeMonolith || applicationTypeGateway) { _%>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
@@ -102,7 +104,7 @@ _%>
       - 127.0.0.1:<%= serverPort %>:<%= serverPort %>
 <%_ } _%>
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:<%= serverPort %>/management/health']
+      test: ['CMD', '/workspace/health-check']
       interval: 5s
       timeout: 5s
       retries: 40
