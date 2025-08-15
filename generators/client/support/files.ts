@@ -1,6 +1,6 @@
 import type { WriteFileBlock } from '../../base-core/api.ts';
 import type CoreGenerator from '../../base-core/index.ts';
-import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../../generator-constants.js';
+import { CLIENT_MAIN_SRC_DIR } from '../../generator-constants.js';
 import type { Application as ClientApplication } from '../types.ts';
 
 export const replaceEntityFilePath = (data: any, filepath: string) =>
@@ -43,16 +43,6 @@ export function clientApplicationTemplatesBlock(blockOrRelativePath: string | Re
     srcPath: CLIENT_TEMPLATES_SRC_DIR,
     relativeToSrc: 'app/',
     destProperty: 'clientSrcDir',
-    blockOrRelativePath,
-  });
-}
-
-export function clientTestTemplatesBlock(blockOrRelativePath?: string): Pick<ClientFileBlock, 'path' | 'renameTo'>;
-export function clientTestTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): ClientFileBlock;
-export function clientTestTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): Partial<ClientFileBlock> {
-  return clientBlock({
-    srcPath: CLIENT_TEST_SRC_DIR,
-    destProperty: 'clientTestDir',
     blockOrRelativePath,
   });
 }
