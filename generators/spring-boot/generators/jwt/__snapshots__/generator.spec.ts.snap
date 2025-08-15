@@ -16,22 +16,18 @@ exports[`generator - spring-boot:jwt with defaults options should call source sn
       ],
     },
   ],
-}
-`;
-
-exports[`generator - spring-boot:jwt with defaults options should call source snapshot 2`] = `
-{
-  "addJavaDefinition": [
+  "mergePrettierConfig": [
     {
-      "dependencies": [
+      "overrides": [
         {
-          "artifactId": "spring-boot-starter-security",
-          "groupId": "org.springframework.boot",
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
         },
-        {
-          "artifactId": "spring-boot-starter-oauth2-resource-server",
-          "groupId": "org.springframework.boot",
-        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
       ],
     },
   ],
@@ -43,16 +39,37 @@ exports[`generator - spring-boot:jwt with defaults options should match files sn
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/web/rest/vm/LoginVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
@@ -73,21 +90,76 @@ exports[`generator - spring-boot:jwt with defaults options should match files sn
 }
 `;
 
-exports[`generator - spring-boot:jwt with defaults options should match files snapshot 2`] = `
+exports[`generator - spring-boot:jwt with reactive should call source snapshot 1`] = `
+{
+  "addJavaDefinition": [
+    {
+      "dependencies": [
+        {
+          "artifactId": "spring-boot-starter-security",
+          "groupId": "org.springframework.boot",
+        },
+        {
+          "artifactId": "spring-boot-starter-oauth2-resource-server",
+          "groupId": "org.springframework.boot",
+        },
+      ],
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
+}
+`;
+
+exports[`generator - spring-boot:jwt with reactive should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/web/rest/vm/LoginVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {

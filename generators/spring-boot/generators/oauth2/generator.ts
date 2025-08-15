@@ -16,12 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-simple-application/index.ts';
 import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.js';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../../../java/support/files.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 
-export default class JwtGenerator extends SpringBootApplicationGenerator {
+export default class Oauth2Generator extends SpringBootApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -37,42 +36,62 @@ export default class JwtGenerator extends SpringBootApplicationGenerator {
       async writing({ application }) {
         await this.writeFiles({
           sections: {
-            jwtBaseFiles: [
+            oauth2Files: [
               {
                 path: `${SERVER_MAIN_SRC_DIR}_package_/`,
                 renameTo: moveToJavaPackageSrcDir,
-                templates: ['config/SecurityJwtConfiguration.java', 'management/SecurityMetersService.java'],
+                templates: ['security/oauth2/AudienceValidator.java'],
               },
               {
                 path: `${SERVER_TEST_SRC_DIR}_package_/`,
                 renameTo: moveToJavaPackageTestDir,
-                templates: [
-                  'management/SecurityMetersServiceTests.java',
-                  'security/jwt/AuthenticationIntegrationTest.java',
-                  'security/jwt/JwtAuthenticationTestUtils.java',
-                  'security/jwt/TokenAuthenticationSecurityMetersIT.java',
-                  'security/jwt/TokenAuthenticationIT.java',
-                ],
+                templates: ['security/oauth2/AudienceValidatorTest.java', 'config/TestSecurityConfiguration.java'],
               },
               {
-                condition: data => data.generateInMemoryUserCredentials && !data.reactive,
+                condition: generator => generator.applicationTypeMonolith,
                 path: `${SERVER_MAIN_SRC_DIR}_package_/`,
                 renameTo: moveToJavaPackageSrcDir,
-                templates: ['config/SecurityInMemoryConfiguration.java'],
-              },
-            ],
-            entrypointFiles: [
-              {
-                condition: data => !data.generateAuthenticationApi,
-                path: `${SERVER_TEST_SRC_DIR}_package_/`,
-                renameTo: moveToJavaPackageTestDir,
-                templates: ['security/jwt/TestAuthenticationResource.java', 'web/rest/AuthenticateControllerIT.java'],
+                templates: ['config/OAuth2Configuration.java'],
               },
               {
                 condition: generator => generator.generateAuthenticationApi,
                 path: `${SERVER_MAIN_SRC_DIR}_package_/`,
                 renameTo: moveToJavaPackageSrcDir,
-                templates: ['web/rest/vm/LoginVM.java', 'web/rest/AuthenticateController.java'],
+                templates: ['web/rest/AuthInfoResource.java', data => `web/rest/LogoutResource_${data.imperativeOrReactive}.java`],
+              },
+              {
+                condition: generator => generator.generateAuthenticationApi,
+                path: SERVER_MAIN_SRC_DIR,
+                templates: [
+                  {
+                    file: generator =>
+                      `_package_/web/filter/${
+                        generator.reactive ? 'OAuth2ReactiveRefreshTokensWebFilter.java' : 'OAuth2RefreshTokensWebFilter.java'
+                      }`,
+                    renameTo: generator =>
+                      `${generator.packageFolder}web/filter/${
+                        generator.reactive ? 'OAuth2ReactiveRefreshTokensWebFilter.java' : 'OAuth2RefreshTokensWebFilter.java'
+                      }`,
+                  },
+                ],
+              },
+              {
+                condition: generator => generator.generateAuthenticationApi,
+                path: `${SERVER_TEST_SRC_DIR}_package_/`,
+                renameTo: moveToJavaPackageTestDir,
+                templates: ['test/util/OAuth2TestUtil.java', 'web/rest/LogoutResourceIT.java'],
+              },
+              {
+                condition: generator => !generator.reactive && generator.generateAuthenticationApi,
+                path: `${SERVER_MAIN_SRC_DIR}_package_/`,
+                renameTo: moveToJavaPackageSrcDir,
+                templates: ['security/oauth2/CustomClaimConverter.java'],
+              },
+              {
+                condition: generator => !generator.reactive && generator.generateAuthenticationApi,
+                path: `${SERVER_TEST_SRC_DIR}_package_/`,
+                renameTo: moveToJavaPackageTestDir,
+                templates: ['security/oauth2/CustomClaimConverterIT.java'],
               },
             ],
           },
@@ -82,7 +101,7 @@ export default class JwtGenerator extends SpringBootApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [SpringBootApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -91,7 +110,8 @@ export default class JwtGenerator extends SpringBootApplicationGenerator {
       dependencies({ source }) {
         source.addJavaDefinition!({
           dependencies: [
-            { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-security' },
+            { groupId: 'com.github.ben-manes.caffeine', artifactId: 'caffeine' },
+            { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-oauth2-client' },
             { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-oauth2-resource-server' },
           ],
         });
@@ -99,7 +119,7 @@ export default class JwtGenerator extends SpringBootApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [SpringBootApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }
