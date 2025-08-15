@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 import { packageJson } from '../../../../lib/index.ts';
+import { mutateData } from '../../../../lib/utils/index.ts';
 import { JavascriptApplicationGenerator } from '../../generator.ts';
-import { prepareFieldForTemplates } from '../../mutation/preparing.ts';
 import { isReservedTypescriptKeyword } from '../../support/reserved-words.ts';
+import { mutateField } from '../../types-mutations.ts';
 
 export default class JavascriptBootstrapGenerator extends JavascriptApplicationGenerator {
   async beforeQueue() {
@@ -89,7 +90,7 @@ export default class JavascriptBootstrapGenerator extends JavascriptApplicationG
         }
       },
       prepareFieldsForTemplates({ field }) {
-        prepareFieldForTemplates(field);
+        mutateData(field, mutateField);
       },
     });
   }

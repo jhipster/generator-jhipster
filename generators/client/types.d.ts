@@ -19,7 +19,7 @@ import type {
   Options as JavascriptOptions,
   Relationship as JavascriptRelationship,
   Source as JavascriptSource,
-} from '../javascript/types.ts';
+} from '../javascript/types-mutations.ts';
 import type { Language } from '../languages/support/languages.ts';
 import type {
   Entity as LanguagesEntity,
