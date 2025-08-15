@@ -16,16 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mutateData } from '../../../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from '../../support/constants.ts';
 import { type Language, findLanguageForTag, supportedLanguages } from '../../support/languages.ts';
-import type {
-  Application as LanguagesApplication,
-  Config as LanguagesConfig,
-  Entity as LanguagesEntity,
-  Options as LanguagesOptions,
-} from '../../types.ts';
+import {
+  type Application as LanguagesApplication,
+  type Config as LanguagesConfig,
+  type Entity as LanguagesEntity,
+  type Field,
+  type Options as LanguagesOptions,
+  mutateField,
+} from '../../types-mutations.ts';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator<
   LanguagesEntity,
@@ -60,10 +61,10 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
         application.nativeLanguageDefinition = nativeLanguageDefinition;
         if (application.enableTranslation) {
           application.languagesDefinition = application.languages
-            .map(lang => findLanguageForTag(lang, supportedLanguagesArray)!)
-            .filter(lang => lang);
+            .map((langTag: string) => findLanguageForTag(langTag, supportedLanguagesArray)!)
+            .filter((lang: Language) => lang);
           application.enableI18nRTL = (application.languagesDefinition ?? [application.nativeLanguageDefinition]).some(
-            language => language.rtl,
+            (lang: Language) => lang.rtl,
           );
         } else {
           application.enableI18nRTL = application.nativeLanguageDefinition.rtl;
@@ -79,10 +80,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       prepareField({ entity, field }) {
-        mutateData(field, {
-          __override__: false,
-          fieldTranslationKey: ({ fieldName }) => `${entity.i18nKeyPrefix}.${fieldName}`,
-        });
+        mutateField(entity, field as Field);
       },
     });
   }

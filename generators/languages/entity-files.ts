@@ -20,7 +20,7 @@ import { asWriteFilesSection, asWritingEntitiesTask, getEnumInfo } from '../base
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
 import type LanguagesGenerator from './generator.ts';
-import type { Application as LanguagesApplication, Entity as LanguagesEntity } from './types.ts';
+import type { Application as LanguagesApplication, Entity as LanguagesEntity } from './types-mutations.ts';
 
 /**
  * The default is to use a file path string. It implies use of the template method.

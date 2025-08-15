@@ -23,7 +23,7 @@ import type {
   Config as LanguagesConfig,
   Entity as LanguagesEntity,
   Options as LanguagesOptions,
-} from '../languages/types.ts';
+} from '../languages/types-mutations.ts';
 
 import type command from './command.ts';
 
