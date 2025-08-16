@@ -373,7 +373,7 @@ spring:
             client-id: web_app
             client-secret: web_app
     <%_ } _%>
-            scope: openid, profile, email, offline_access # last one for refresh tokens
+            scope: openid, profile, email<% if (typeof jhipsterConfig !== 'undefined' && jhipsterConfig.clientFramework === 'ionic') { %>, offline_access<% } %> # refresh tokens work without offline_access for regular web apps
   <%_ } _%>
   <%_ if (authenticationTypeJwt) { _%>
     oauth2:
