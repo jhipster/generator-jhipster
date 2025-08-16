@@ -17,22 +17,36 @@
 # limitations under the License.
 #
 
-name: 'Deprecated: Generate'
-description: 'Generate application for test-integration scripts'
+name: 'Generate Application'
+description: 'Generate JHipster application using new action-based approach'
 inputs:
+  sample-name:
+    description: 'Name of the sample to generate'
+    required: true
+  database-type:
+    description: 'Database type for entities'
+    required: false
+    default: 'sql'
   extra-args:
-    description: 'Extra arguments'
+    description: 'Extra arguments for generation'
     required: false
     default: ''
 runs:
   using: 'composite'
   steps:
-    - name: 'GENERATION: install executable'
-      run: $JHI_SCRIPTS/10-install-jhipster.sh
-      shell: bash
-    - name: 'GENERATION: generate config'
-      run: $JHI_SCRIPTS/11-generate-config.sh
-      shell: bash
-    - name: 'GENERATION: project'
-      run: $JHI_SCRIPTS/12-generate-project.sh ${{ inputs.extra-args }}
-      shell: bash
+    - name: 'Initialize environment'
+      uses: ./.github/actions/init-environment@v0
+      with:
+        generator-path: generator-jhipster
+        
+    - name: 'Generate sample configuration'
+      uses: ./.github/actions/generate-sample-config@v0
+      with:
+        sample-name: ${{ inputs.sample-name }}
+        database-type: ${{ inputs.database-type }}
+        
+    - name: 'Generate project'
+      uses: ./.github/actions/generate-project@v0
+      with:
+        sample-name: ${{ inputs.sample-name }}
+        extra-args: ${{ inputs.extra-args }}

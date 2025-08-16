@@ -221,6 +221,12 @@ export default class extends BaseSimpleApplicationGenerator<
       async writing({ application }) {
         application.sampleWritten = this.jhipsterConfig.sampleWritten;
         const { skipWorkflows, ignoreExistingGenerators } = this;
+        
+        // Generate sample configuration if requested
+        if (this.jhipsterConfig[SAMPLE_GENERATION]) {
+          await this.generateSampleConfiguration();
+        }
+        
         await this.writeFiles({
           sections: files,
           context: {
@@ -480,5 +486,99 @@ To begin to work:
     return /^[a-zA-Z0-9-]+$/.test(input)
       ? true
       : 'Your blueprint name is mandatory, cannot contain special characters or a blank space, using the default name instead';
+  }
+
+  async generateSampleConfiguration() {
+    const sampleName = this.jhipsterConfig[SAMPLE_NAME];
+    const databaseType = this.jhipsterConfig[DATABASE_TYPE];
+    
+    // Generate sample configuration
+    const sampleConfig = {
+      baseName: 'jhipsterSampleApplication',
+      databaseType,
+      packageName: 'tech.jhipster.sample',
+      packageFolder: 'tech/jhipster/sample',
+      jwtSecretKey: 'ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=',
+      creationTimestamp: Date.now(),
+    };
+
+    // Write sample configuration
+    await this.writeFiles({
+      sections: {
+        samples: {
+          [`samples/${sampleName}/.yo-rc.json`]: {
+            template: `samples/${sampleName}/.yo-rc.json.ejs`,
+            context: sampleConfig,
+          },
+        },
+      },
+      context: sampleConfig,
+    });
+
+    // Generate entities based on database type
+    await this.generateEntitiesForDatabase(databaseType);
+  }
+
+  async generateEntitiesForDatabase(databaseType: string) {
+    const entities = this.getEntitiesForDatabase(databaseType);
+    
+    for (const entity of entities) {
+      await this.writeFiles({
+        sections: {
+          entities: {
+            [`samples/.jhipster/${entity}.json`]: {
+              template: `samples/.jhipster/${entity}.json.ejs`,
+              context: { entity },
+            },
+          },
+        },
+        context: { entity },
+      });
+    }
+  }
+
+  getEntitiesForDatabase(databaseType: string): string[] {
+    switch (databaseType) {
+      case 'mongodb':
+      case 'couchbase':
+        return [
+          'DocumentBankAccount', 'EmbeddedOperation', 'Place', 'Division',
+          'FieldTestEntity', 'FieldTestMapstructAndServiceClassEntity', 'FieldTestServiceClassAndJpaFilteringEntity',
+          'FieldTestServiceImplEntity', 'FieldTestInfiniteScrollEntity', 'FieldTestPaginationEntity',
+          'EntityWithDTO', 'EntityWithPaginationAndDTO', 'EntityWithServiceClassAndPagination',
+          'EntityWithServiceClassPaginationAndDTO', 'EntityWithServiceImplAndDTO', 'EntityWithServiceImplAndPagination',
+          'EntityWithServiceImplPaginationAndDTO'
+        ];
+      case 'neo4j':
+        return ['Album', 'Track', 'Genre', 'Artist'];
+      case 'cassandra':
+        return ['CassBankAccount', 'FieldTestEntity', 'FieldTestServiceImplEntity', 'FieldTestMapstructAndServiceClassEntity', 'FieldTestPaginationEntity'];
+      case 'micro':
+        return [
+          'MicroserviceBankAccount', 'MicroserviceOperation', 'MicroserviceLabel',
+          'FieldTestEntity', 'FieldTestMapstructAndServiceClassEntity', 'FieldTestServiceClassAndJpaFilteringEntity',
+          'FieldTestServiceImplEntity', 'FieldTestInfiniteScrollEntity', 'FieldTestPaginationEntity'
+        ];
+      case 'sqllight':
+        return ['BankAccount', 'Label', 'Operation'];
+      case 'sqlfull':
+      case 'sql':
+        return [
+          'BankAccount', 'Label', 'Operation', 'Place', 'Division',
+          'FieldTestEntity', 'FieldTestMapstructAndServiceClassEntity', 'FieldTestServiceClassAndJpaFilteringEntity',
+          'FieldTestServiceImplEntity', 'FieldTestInfiniteScrollEntity', 'FieldTestPaginationEntity', 'FieldTestEnumWithValue',
+          'TestEntity', 'TestMapstruct', 'TestServiceClass', 'TestServiceImpl', 'TestInfiniteScroll', 'TestPagination',
+          'TestManyToOne', 'TestManyToMany', 'TestManyRelPaginDTO', 'TestOneToOne', 'TestCustomTableName',
+          'TestTwoRelationshipsSameEntity', 'SuperMegaLargeTestEntity',
+          'EntityWithDTO', 'EntityWithPaginationAndDTO', 'EntityWithServiceClassAndPagination',
+          'EntityWithServiceClassPaginationAndDTO', 'EntityWithServiceImplAndDTO', 'EntityWithServiceImplAndPagination',
+          'EntityWithServiceImplPaginationAndDTO',
+          'MapsIdParentEntityWithoutDTO', 'MapsIdChildEntityWithoutDTO', 'MapsIdGrandchildEntityWithoutDTO',
+          'MapsIdParentEntityWithDTO', 'MapsIdChildEntityWithDTO', 'MapsIdGrandchildEntityWithDTO', 'MapsIdUserProfileWithDTO',
+          'JpaFilteringRelationship', 'JpaFilteringOtherSide'
+        ];
+      default:
+        return [];
+    }
   }
 }
