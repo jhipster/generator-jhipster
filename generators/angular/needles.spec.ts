@@ -40,7 +40,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
 
   it('entity menu contains the entity added by needle api', () => {
     runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
+      `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.html`,
       `
             <li>
               <a class="dropdown-item" routerLink="/entityPage" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
