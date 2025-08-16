@@ -44,7 +44,7 @@ import type {
   Entity as LanguagesEntity,
   Options as LanguagesOptions,
   Source as LanguagesSource,
-} from './types.ts';
+} from './types-mutations.ts';
 
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 

@@ -25,7 +25,7 @@ import type {
 import type { Application as ClientApplication, Field as ClientField } from '../../generators/client/types.d.ts';
 import type { Application as DockerApplication } from '../../generators/docker/types.d.ts';
 import type { Application as GitApplication } from '../../generators/git/types.d.ts';
-import type { Application as I18nApplication } from '../../generators/languages/types.d.ts';
+import type { Application as I18nApplication } from '../../generators/languages/types-mutations.ts';
 import type {
   Application as LiqbuibaseApplication,
   Entity as LiquibaseEntity,

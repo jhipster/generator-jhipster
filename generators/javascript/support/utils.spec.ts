@@ -2,11 +2,11 @@ import { describe, expect, it } from 'esmocha';
 
 import { fieldTypes } from '../../../lib/jhipster/index.ts';
 
-import { getTypescriptType } from './types-utils.ts';
+import { getTypescriptType } from './utils.ts';
 
 const { CommonDBTypes } = fieldTypes;
 
-describe('generator - client - support - type-utils', () => {
+describe('generator - javascript - support - utils', () => {
   describe('getTypescriptType', () => {
     describe('when called with sql DB name', () => {
       it('return SQL', () => {

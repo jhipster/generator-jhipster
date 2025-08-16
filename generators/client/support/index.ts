@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as getTypescriptKeyType, getTypescriptType } from './types-utils.ts';
+export { default as getTypescriptKeyType } from './types-utils.ts';
 export { default as generateEntityClientFields } from './entity-definition.ts';
 export * from './prepare-entity.ts';
 export * from './template-utils.ts';

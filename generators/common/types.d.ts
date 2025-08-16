@@ -17,13 +17,13 @@ import type {
   Entity as JavascriptEntity,
   Field as JavascriptField,
   Relationship as JavascriptRelationship,
-} from '../javascript/types.ts';
+} from '../javascript/types-mutations.ts';
 import type {
   Application as LanguagesApplication,
   Config as LanguagesConfig,
   Entity as LanguagesEntity,
   Options as LanguagesOptions,
-} from '../languages/types.ts';
+} from '../languages/types-mutations.ts';
 
 import type command from './command.ts';
 
