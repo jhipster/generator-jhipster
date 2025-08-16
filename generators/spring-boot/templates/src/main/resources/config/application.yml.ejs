@@ -317,6 +317,9 @@ spring:
       # modify fetch size as necessary
       hibernate.jdbc.fetch_size: 150
       hibernate.criteria.literal_handling_mode: BIND
+      <%_ if (prodDatabaseTypeMysql) { _%>
+      hibernate.type.preferred_boolean_jdbc_type: TINYINT
+      <%_ } _%>
   <%_ } _%>
       hibernate.query.fail_on_pagination_over_collection_fetch: true
       hibernate.query.in_clause_parameter_padding: true
