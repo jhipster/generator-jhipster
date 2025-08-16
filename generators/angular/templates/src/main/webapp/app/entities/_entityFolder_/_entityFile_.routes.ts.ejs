@@ -25,7 +25,7 @@ import { ASC } from 'app/config/navigation.constants';
 const <%= entityInstance %>Route: Routes = [
   {
     path: '',
-    loadComponent: () => import('./list/<%= entityFileName %>.component').then(m => m.<%= entityAngularName %>Component),
+    loadComponent: () => import('./list/<%= entityFileName %>').then(m => m.<%= entityAngularName %>),
     data: {
 <%_ if (primaryKey.typeLong && primaryKey.autoGenerate) { _%>
       defaultSort: '<%- primaryKey.name %>,' + ASC,
@@ -38,7 +38,7 @@ const <%= entityInstance %>Route: Routes = [
   },
   {
     path: ':<%= primaryKey.name %>/view',
-    loadComponent: () => import('./detail/<%= entityFileName %>-detail.component').then(m => m.<%= entityAngularName %>DetailComponent),
+    loadComponent: () => import('./detail/<%= entityFileName %>-detail').then(m => m.<%= entityAngularName %>Detail),
     resolve: {
       <%= entityInstance %>: <%= entityAngularName %>Resolve
     },
@@ -52,7 +52,7 @@ const <%= entityInstance %>Route: Routes = [
 <%_ if (!readOnly) { _%>
   {
     path: 'new',
-    loadComponent: () => import('./update/<%= entityFileName %>-update.component').then(m => m.<%= entityAngularName %>UpdateComponent),
+    loadComponent: () => import('./update/<%= entityFileName %>-update').then(m => m.<%= entityAngularName %>Update),
     resolve: {
       <%= entityInstance %>: <%= entityAngularName %>Resolve
     },
@@ -67,7 +67,7 @@ const <%= entityInstance %>Route: Routes = [
 <%_ if (!readOnly && updatableEntity) { _%>
   {
     path: ':<%= primaryKey.name %>/edit',
-    loadComponent: () => import('./update/<%= entityFileName %>-update.component').then(m => m.<%= entityAngularName %>UpdateComponent),
+    loadComponent: () => import('./update/<%= entityFileName %>-update').then(m => m.<%= entityAngularName %>Update),
     resolve: {
       <%= entityInstance %>: <%= entityAngularName %>Resolve
     },

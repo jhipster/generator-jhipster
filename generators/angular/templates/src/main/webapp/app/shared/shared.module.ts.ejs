@@ -44,16 +44,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import FindLanguageFromKeyPipe from './language/find-language-from-key.pipe';
 import TranslateDirective from './language/translate.directive';
 <%_ } _%>
-import { AlertComponent } from './alert/alert.component';
-import { AlertErrorComponent } from './alert/alert-error.component';
+import { Alert } from './alert/alert';
+import { AlertError } from './alert/alert-error';
 
 /**
  * Application wide Module
  */
 @NgModule({
   imports: [
-    AlertComponent,
-    AlertErrorComponent,
+    Alert,
+    AlertError,
 <%_ if (enableTranslation) { _%>
     FindLanguageFromKeyPipe,
     TranslateDirective,
@@ -63,8 +63,8 @@ import { AlertErrorComponent } from './alert/alert-error.component';
     CommonModule,
     NgbModule,
     FontAwesomeModule,
-    AlertComponent,
-    AlertErrorComponent,
+    Alert,
+    AlertError,
 <%_ if (enableTranslation) { _%>
     TranslateModule,
     FindLanguageFromKeyPipe,
