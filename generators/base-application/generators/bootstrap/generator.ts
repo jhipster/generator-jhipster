@@ -37,6 +37,7 @@ import { GENERATOR_COMMON } from '../../../generator-list.ts';
 import serverCommand from '../../../server/command.ts';
 import type { Application as SpringBootApplication } from '../../../spring-boot/types.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-data-relational/types.ts';
+import { mutateRelationship, mutateRelationshipWithEntity } from '../../entity.ts';
 import BaseApplicationGenerator from '../../index.ts';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../internal/types/field-types.ts';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from '../../internal/utils.ts';
@@ -433,6 +434,14 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationshipsForTemplates({ entity, relationship }) {
+        const entityName = entity.name;
+        if (!relationship.otherEntity) {
+          throw new Error(
+            `Error at entity ${entityName}: could not find the entity of the relationship ${stringifyApplicationData(relationship)}`,
+          );
+        }
+        mutateData(relationship, mutateRelationship, mutateRelationshipWithEntity);
+
         prepareRelationship.call(this, entity, relationship);
       },
     });
