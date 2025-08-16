@@ -1,0 +1,143 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { RouterModule<%_ if (!databaseTypeCassandra) { _%>, ActivatedRoute, Router<%_ } _%> } from '@angular/router';
+import { HttpResponse<%_ if (!databaseTypeCassandra) { %>, HttpHeaders <% } %>} from '@angular/common/http';
+<%_ if (!databaseTypeCassandra) { _%>
+import { combineLatest } from 'rxjs';
+<%_ } _%>
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
+import SharedModule from 'app/shared/shared.module';
+<%_ if (!databaseTypeCassandra) { _%>
+import { SortDirective, SortByDirective, sortStateSignal, SortService, SortState } from 'app/shared/sort';
+import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
+import { SORT } from 'app/config/navigation.constants';
+import { ItemCount } from 'app/shared/pagination';
+<%_ } _%>
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/auth/account.model';
+import { UserManagementService } from '../service/user-management.service';
+import { User } from '../user-management.model';
+import UserManagementDeleteDialog from '../delete/user-management-delete-dialog';
+
+@Component({
+  selector: '<%= jhiPrefixDashed %>-user-mgmt',
+  templateUrl: './user-management.html',
+  imports: [
+    RouterModule,
+    SharedModule,
+<%_ if (!databaseTypeCassandra) { _%>
+    SortDirective,
+    SortByDirective,
+    ItemCount,
+<%_ } _%>
+  ],
+})
+export default class UserManagement implements OnInit {
+  currentAccount = inject(AccountService).trackCurrentAccount();
+  users = signal<User[] | null>(null);
+  isLoading = signal(false);
+<%_ if (!databaseTypeCassandra) { _%>
+  totalItems = signal(0);
+  itemsPerPage = ITEMS_PER_PAGE;
+  page!: number;
+  sortState = sortStateSignal({});
+<%_ } _%>
+
+  private readonly userService = inject(UserManagementService);
+<%_ if (!databaseTypeCassandra) { _%>
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly sortService = inject(SortService);
+<%_ } _%>
+  private readonly modalService = inject(NgbModal);
+
+  ngOnInit(): void {
+<%_ if (databaseTypeCassandra) { _%>
+    this.loadAll();
+<%_ } else { _%>
+    this.handleNavigation();
+<%_ } _%>
+  }
+
+  setActive(user: User, isActivated: boolean): void {
+    this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.loadAll());
+  }
+
+  trackIdentity(item: User): <%= user.primaryKey.tsType %> {
+    return item.id!;
+  }
+
+  deleteUser(user: User): void {
+    const modalRef = this.modalService.open(UserManagementDeleteDialog, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.user = user;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'deleted') {
+        this.loadAll();
+      }
+    });
+  }
+
+  loadAll(): void {
+    this.isLoading.set(true);
+    this.userService
+      .query(<% if (!databaseTypeCassandra) { %>{
+        page: this.page - 1,
+        size: this.itemsPerPage,
+        sort: this.sortService.buildSortParam(this.sortState(), 'id'),
+      }<% } %>)
+      .subscribe({
+        next: (res: HttpResponse<User[]>) => {
+          this.isLoading.set(false);
+          this.onSuccess(res.body<% if (!databaseTypeCassandra) { %>, res.headers<% } %>);
+        },
+        error: () => this.isLoading.set(false),
+      });
+  }
+
+<%_ if (!databaseTypeCassandra) { _%>
+  transition(sortState?: SortState): void {
+    this.router.navigate(['./'], {
+      relativeTo: this.activatedRoute.parent,
+      queryParams: {
+        page: this.page,
+        sort: this.sortService.buildSortParam(sortState ?? this.sortState()),
+      },
+    });
+  }
+
+  private handleNavigation(): void {
+    combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
+      const page = params.get('page');
+      this.page = +(page ?? 1);
+      this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data.defaultSort));
+      this.loadAll();
+    });
+  }
+<%_ } _%>
+
+  private onSuccess(users: User[] | null<% if (!databaseTypeCassandra) { %>, headers: HttpHeaders<% } %>): void {
+<%_ if (!databaseTypeCassandra) { _%>
+    this.totalItems.set(Number(headers.get('X-Total-Count')));
+<%_ } _%>
+    this.users.set(users);
+  }
+}

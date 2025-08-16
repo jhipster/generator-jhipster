@@ -1,0 +1,122 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+const tsKeyId = user.primaryKey.tsSampleValues[0];
+_%>
+jest.mock('app/core/auth/account.service');
+
+import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
+import { provideHttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
+
+import { UserManagementService } from '../service/user-management.service';
+import { User } from '../user-management.model';
+import { AccountService } from 'app/core/auth/account.service';
+
+import UserManagement from './user-management';
+
+describe('User Management Component', () => {
+  let comp: UserManagement;
+  let fixture: ComponentFixture<UserManagement>;
+  let service: UserManagementService;
+  let mockAccountService: AccountService;
+  const data = of({
+    defaultSort: 'id,asc',
+  });
+  const queryParamMap = of(
+    jest.requireActual('@angular/router').convertToParamMap({
+      page: '1',
+      size: '1',
+      sort: 'id,desc',
+    }),
+  );
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [UserManagement],
+      providers: [provideHttpClient(), { provide: ActivatedRoute, useValue: { data, queryParamMap } }, AccountService],
+    })
+      .overrideTemplate(UserManagement, '')
+      .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(UserManagement);
+    comp = fixture.componentInstance;
+    service = TestBed.inject(UserManagementService);
+    mockAccountService = TestBed.inject(AccountService);
+    mockAccountService.identity = jest.fn(() => of(null));
+  });
+
+  describe('OnInit', () => {
+    it('should call load all on init', inject(
+      [],
+      fakeAsync(() => {
+        // GIVEN
+        const headers = new HttpHeaders().append('link', 'link;link');
+        jest.spyOn(service, 'query').mockReturnValue(
+          of(
+            new HttpResponse({
+              body: [new User(<%- tsKeyId %>)],
+              headers,
+            }),
+          ),
+        );
+
+        // WHEN
+        comp.ngOnInit();
+        tick(); // simulate async
+
+        // THEN
+        expect(service.query).toHaveBeenCalled();
+        expect(comp.users()?.[0]).toEqual(expect.objectContaining({ id: <%- tsKeyId %> }));
+      })
+    ));
+  });
+
+  describe('setActive', () => {
+    it('should update user and call load all', inject(
+      [],
+      fakeAsync(() => {
+        // GIVEN
+        const headers = new HttpHeaders().append('link', 'link;link');
+        const user = new User(<%- tsKeyId %>);
+        jest.spyOn(service, 'query').mockReturnValue(
+          of(
+            new HttpResponse({
+              body: [user],
+              headers,
+            }),
+          ),
+        );
+        jest.spyOn(service, 'update').mockReturnValue(of(user));
+
+        // WHEN
+        comp.setActive(user, true);
+        tick(); // simulate async
+
+        // THEN
+        expect(service.update).toHaveBeenCalledWith({ ...user, activated: true });
+        expect(service.query).toHaveBeenCalled();
+        expect(comp.users()?.[0]).toEqual(expect.objectContaining({ id: <%- tsKeyId %> }));
+      })
+    ));
+  });
+});

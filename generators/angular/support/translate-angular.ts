@@ -312,7 +312,7 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
       }
     }
     // Translate html files and inline templates.
-    if (/(:?\.html|component\.ts)$/.test(filePath)) {
+    if (/(:?\.html|.ts)$/.test(filePath)) {
       content = htmlJhiTranslateReplacer(content);
       content = htmlJhiTranslateStringifyReplacer(content);
     }
