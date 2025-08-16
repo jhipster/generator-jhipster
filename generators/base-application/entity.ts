@@ -6,7 +6,7 @@ import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import type { Field as BaseField } from '../../lib/jhipster/types/field.ts';
 import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.ts';
-import type { MutateDataParam, NewMutateDataProperties } from '../../lib/utils/object.ts';
+import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 
 import type { FakerWithRandexp } from './support/faker.ts';
 
@@ -110,7 +110,7 @@ export type DerivedField<E extends Entity = Entity, F extends Field = Entity['fi
   derivedEntity: E;
 };
 
-type RelationshipNewProperties = DerivedPropertiesOnlyOf<
+type BaseApplicationAddedRelationshipProperties = DerivedPropertiesOnlyOf<
   'relationship',
   'LeftSide' | 'RightSide' | 'ManyToOne' | 'OneToMany' | 'OneToOne' | 'ManyToMany'
 > &
@@ -144,7 +144,7 @@ type RelationshipNewProperties = DerivedPropertiesOnlyOf<
  * Represents a relationship with an otherRelationship.
  * Interface is used to allow `this` type in the otherRelationship.
  */
-export interface Relationship extends RelationshipNewProperties, BaseRelationship {
+export interface Relationship extends BaseApplicationAddedRelationshipProperties, BaseRelationship {
   otherRelationship: this;
 }
 
@@ -168,7 +168,7 @@ export const mutateRelationship = {
     collection ? relationshipFieldNamePlural! : relationshipFieldName!,
 
   ...mutateProperty,
-} as const satisfies NewMutateDataProperties<MutateDataParam<Relationship>, RelationshipNewProperties>;
+} as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Relationship>, BaseApplicationAddedRelationshipProperties>;
 
 /**
  * Represents a relationship with an otherEntity, where the relationship is extended with the other entity.

@@ -87,7 +87,10 @@ export type MutateDataParam<T> = Simplify<
 /**
  * Utility to ensure required mutation properties are set.
  */
-export type NewMutateDataProperties<D extends Record<string, any>, N extends Record<string, any>> = SetRequired<D, RequiredKeysOf<N>>;
+export type MutateDataPropertiesWithRequiredProperties<D extends Record<string, any>, N extends Record<string, any>> = SetRequired<
+  D,
+  RequiredKeysOf<N>
+>;
 
 /**
  * Mutation properties accepts:
