@@ -30,8 +30,12 @@ version = "0.0.1-SNAPSHOT"
 
 description = ""
 
-sourceCompatibility=<%= javaVersion %>
-targetCompatibility=<%= javaVersion %>
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(<%= javaVersion %>)
+    }
+}
+
 assert System.properties["java.specification.version"] == <%- javaCompatibleVersions.map(ver => `"${ver}"`).join(' || '); %>
 
 ext {
@@ -117,7 +121,10 @@ test {
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
-    reports.html.required = false
+
+    reports {
+        html.required = false
+    }
     testLogging.exceptionFormat "full"
 <%_ if (reactive) { _%>
 
@@ -175,9 +182,7 @@ dependencies {
 <%_ } _%>
     implementation "jakarta.annotation:jakarta.annotation-api"
     implementation "org.apache.commons:commons-lang3"
-<%_ if (reactive) { _%>
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-<%_ } _%>
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
