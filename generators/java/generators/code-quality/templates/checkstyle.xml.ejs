@@ -31,6 +31,12 @@
         <property name="allowlist" value="^\Qhttp://maven.apache.org/POM/4.0.0&#10;^\Qhttp://www.w3.org/2001/XMLSchema-instance"/>
 <%_ } _%>
     </module>
+    <module name="TreeWalker">
+        <module name="MissingJavadocMethod">
+            <!-- Disable Javadoc requirement as we want to follow "clean code" guidelines and classes, methods and arguments names should be self-explanatory -->
+            <property name="allowMissingPropertyJavadoc" value="true"/>
+        </module>
+    </module>
     <!-- Allow suppression with comments
        // CHECKSTYLE:OFF
        ... ignored content ...
