@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`helpers run using withJHipsterGenerators should register jhipster generators namespaces 1`] = `
 [
@@ -77,6 +77,8 @@ exports[`helpers run using withJHipsterGenerators should register jhipster gener
   "jhipster:server:bootstrap",
   "jhipster:spring-boot",
   "jhipster:spring-boot:bootstrap",
+  "jhipster:spring-boot:jwt",
+  "jhipster:spring-boot:oauth2",
   "jhipster:spring-cache",
   "jhipster:spring-cloud-stream",
   "jhipster:spring-cloud-stream:kafka",
@@ -172,6 +174,8 @@ exports[`helpers runJHipster defaults should register jhipster generators namesp
   "jhipster:server:bootstrap",
   "jhipster:spring-boot",
   "jhipster:spring-boot:bootstrap",
+  "jhipster:spring-boot:jwt",
+  "jhipster:spring-boot:oauth2",
   "jhipster:spring-cache",
   "jhipster:spring-cloud-stream",
   "jhipster:spring-cloud-stream:kafka",
@@ -267,6 +271,8 @@ exports[`helpers runJHipster with useDefaultMocks should register jhipster gener
   "jhipster:server:bootstrap",
   "jhipster:spring-boot",
   "jhipster:spring-boot:bootstrap",
+  "jhipster:spring-boot:jwt",
+  "jhipster:spring-boot:oauth2",
   "jhipster:spring-cache",
   "jhipster:spring-cloud-stream",
   "jhipster:spring-cloud-stream:kafka",

@@ -476,9 +476,6 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
   "src/main/java/com/mycompany/myapp/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/OAuth2Configuration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -509,19 +506,7 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
   "src/main/java/com/mycompany/myapp/security/SpringSecurityAuditorAware.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/security/oauth2/AudienceValidator.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/security/oauth2/CustomClaimConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/security/oauth2/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/security/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/filter/OAuth2RefreshTokensWebFilter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/filter/SpaWebFilter.java": {
@@ -531,12 +516,6 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/AccountResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/AuthInfoResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/LogoutResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/errors/BadRequestAlertException.java": {
@@ -602,9 +581,6 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/TestSecurityConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": {
     "stateCleared": "modified",
   },
@@ -617,22 +593,10 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
   "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/oauth2/AudienceValidatorTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/security/oauth2/CustomClaimConverterIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/test/util/OAuth2TestUtil.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/web/rest/LogoutResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": {

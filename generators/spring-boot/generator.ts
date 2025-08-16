@@ -177,7 +177,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         await this.composeWithJHipster('jhipster:java:jib');
         await this.composeWithJHipster('jhipster:java:code-quality');
 
-        if (authenticationType === 'jwt') {
+        if (authenticationType === 'jwt' || authenticationType === 'oauth2') {
           await this.composeWithJHipster(`jhipster:spring-boot:${authenticationType}`);
         }
 
