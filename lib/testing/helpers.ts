@@ -24,6 +24,7 @@ import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../gen
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.js';
 import { GENERATOR_WORKSPACES } from '../../generators/generator-list.ts';
+import type GeneratorsByNamespace from '../../generators/types.ts';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.ts';
 import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
 import type { Entity } from '../jhipster/types/entity.ts';
@@ -98,13 +99,13 @@ const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 
 const toJHipsterNamespace = (ns: string) => (/^jhipster[:-]/.test(ns) ? ns : `jhipster:${ns}`);
 const generatorsDir = getSourceRoot('generators');
-const allGenerators = [
+const allGenerators: (keyof GeneratorsByNamespace)[] = [
   ...globSync('*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file)),
   ...globSync('*/generators/*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file).replace('/generators/', ':')),
 ]
   .map(gen => `jhipster:${gen}`)
-  .sort();
-const filterBootstrapGenerators = (gen: string): boolean =>
+  .sort() as (keyof GeneratorsByNamespace)[];
+const filterBootstrapGenerators = (gen: keyof GeneratorsByNamespace): boolean =>
   !gen.startsWith('jhipster:bootstrap-') && !gen.endsWith(':bootstrap') && gen !== 'jhipster:project-name';
 const composedGeneratorsToCheck = allGenerators
   .filter(filterBootstrapGenerators)
@@ -393,7 +394,11 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
    * // Mock every generator including bootstrap-*
    * withMockedJHipsterGenerators({ filter: () => true })
    */
-  withMockedJHipsterGenerators(options: string[] | { except?: string[]; filter?: (gen: string) => boolean } = {}): this {
+  withMockedJHipsterGenerators(
+    options:
+      | (keyof GeneratorsByNamespace)[]
+      | { except?: (keyof GeneratorsByNamespace)[]; filter?: (gen: keyof GeneratorsByNamespace) => boolean } = {},
+  ): this {
     const optionsObj = Array.isArray(options) ? { except: options } : options;
     const { except = [], filter = filterBootstrapGenerators } = optionsObj;
     const jhipsterExceptList = except.map(toJHipsterNamespace);
