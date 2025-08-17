@@ -12,7 +12,7 @@ const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
 
-const createClientProject = (options?: any) =>
+const createClientProject = (options?: Parameters<ReturnType<typeof basicHelpers.runJHipster>['withOptions']>[0]) =>
   basicHelpers
     .runJHipster('app')
     .withMockedGenerators(['jhipster:liquibase'])
