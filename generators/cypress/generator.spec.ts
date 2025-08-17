@@ -76,7 +76,8 @@ const entities = [
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    const GENERATOR_LIST: Record<string, string> = await import('../generator-list.ts');
+    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
@@ -108,7 +109,7 @@ describe(`generator - ${generator}`, () => {
           const adminUiRoutingTitle = generateAdminUi ? 'should generate admin routing' : 'should not generate admin routing';
           const cypressAdminRoot = clientRootDir ? `${clientRootDir}test/` : 'src/test/javascript/';
           it(adminUiRoutingTitle, () => {
-            const assertion = (...args) =>
+            const assertion = (...args: any[]) =>
               generateAdminUi ? (runResult.assertFileContent as any)(...args) : (runResult.assertNoFileContent as any)(...args);
 
             assertion(

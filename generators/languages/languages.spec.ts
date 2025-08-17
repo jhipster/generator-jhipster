@@ -12,7 +12,7 @@ const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
 
-const createClientProject = (options?) =>
+const createClientProject = (options?: any) =>
   basicHelpers
     .runJHipster('app')
     .withMockedGenerators(['jhipster:liquibase'])
@@ -21,7 +21,7 @@ const createClientProject = (options?) =>
       ...options,
     });
 
-const containsLanguageFiles = languageValue => {
+const containsLanguageFiles = (languageValue: string) => {
   it(`creates expected files for ${languageValue}`, () => {
     runResult.assertFile([
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/activate.json`,
@@ -59,7 +59,7 @@ const containsLanguageFiles = languageValue => {
   });
 };
 
-const noLanguageFiles = languageValue => {
+const noLanguageFiles = (languageValue: string) => {
   it(`should not create files for ${languageValue}`, () => {
     runResult.assertNoFile([
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/activate.json`,
@@ -86,7 +86,7 @@ const noLanguageFiles = languageValue => {
   });
 };
 
-const containsLanguageInVueStore = languageValue => {
+const containsLanguageInVueStore = (languageValue: string) => {
   it(`add language ${languageValue} into translation-store.ts`, () => {
     const langKey = languageValue.includes('-') ? `'${languageValue}'` : `${languageValue}`;
     runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/config/languages.ts`, `${langKey}: { name:`);

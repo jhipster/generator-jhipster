@@ -5,9 +5,11 @@ import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
 import ClientGenerator from './index.ts';
 
+type MockBlueprintSubGenConstructorParamsT = ConstructorParameters<typeof ClientGenerator>;
+
 const mockBlueprintSubGen: any = class extends ClientGenerator {
-  constructor(args, opts, features) {
-    super(args, opts, features);
+  constructor(...args: MockBlueprintSubGenConstructorParamsT) {
+    super(...args);
 
     if (!this.jhipsterContext) {
       throw new Error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');

@@ -22,7 +22,7 @@ const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 
 
 const testSamples = buildClientSamples(commonConfig);
 
-const clientAdminFiles = clientSrcDir => [
+const clientAdminFiles = (clientSrcDir: string) => [
   `${clientSrcDir}app/admin/configuration/configuration.component.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.component.spec.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.vue`,
@@ -52,7 +52,8 @@ const clientAdminFiles = clientSrcDir => [
 
 describe(`generator - ${clientFramework}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    const GENERATOR_LIST: Record<string, string> = await import('../generator-list.ts');
+    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));

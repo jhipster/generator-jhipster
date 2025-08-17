@@ -231,8 +231,8 @@ describe('generator - base - with blueprints disabled', () => {
 
 describe('generator - base - with blueprint with constructor error', () => {
   class BlueprintBlueprintedGenerator extends BaseGenerator {
-    constructor(args, opts, features) {
-      super(args, opts, features);
+    constructor(...args: ConstructorParameters<typeof BaseGenerator>) {
+      super(...args);
       throw new Error('blueprint with error');
     }
   }
@@ -344,7 +344,7 @@ describe('generator - base-blueprint', () => {
     return mockedPriorities;
   };
 
-  const createAllBlueprint = mockedPriorities => {
+  const createAllBlueprint = (mockedPriorities: ReturnType<typeof createPrioritiesFakes>) => {
     /**
      * @class
      * @extends {BaseGenerator}
@@ -491,6 +491,7 @@ describe('generator - base-blueprint', () => {
       before(() => {
         mockedPriorities = createPrioritiesFakes();
         mockBlueprintSubGen = createAllBlueprint(mockedPriorities);
+        // @ts-expect-error FIXME
         return helpers.run(mockBlueprintSubGen).withJHipsterGenerators({ useDefaultMocks: true });
       });
 
@@ -513,7 +514,7 @@ describe('generator - base-blueprint', () => {
       before(() => {
         mockedPriorities = createPrioritiesFakes();
         mockBlueprintSubGen = class extends createAllBlueprint(mockedPriorities) {
-          constructor(args, opts, features) {
+          constructor(args: any, opts: any, features: any) {
             super(args, opts, features);
             this.sbsBlueprint = true;
           }
@@ -546,6 +547,7 @@ describe('generator - base-blueprint', () => {
             return super.end;
           }
         };
+        // @ts-expect-error FIXME
         return helpers.run(mockBlueprintSubGen).withJHipsterGenerators({ useDefaultMocks: true });
       });
 

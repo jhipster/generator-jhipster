@@ -8,7 +8,7 @@ import { editPropertiesFileCallback } from './support/properties-file.ts';
 
 const BaseGenerator: any = Base.prototype;
 
-BaseGenerator.log = msg => {
+BaseGenerator.log = (msg: any) => {
   // eslint-disable-next-line no-console
   console.log(msg);
 };
@@ -17,7 +17,7 @@ BaseGenerator.logger = createJHipsterLogger();
 
 describe('generator - base-core', () => {
   describe('passing arguments', () => {
-    let Dummy;
+    let Dummy: typeof BaseGenerator;
     beforeEach(async () => {
       await helpers.prepareTemporaryDir();
       Dummy = helpers.createDummyGenerator(Base as any);

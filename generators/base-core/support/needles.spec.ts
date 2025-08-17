@@ -340,7 +340,9 @@ content to add2
 
   describe('createBaseNeedle', () => {
     const needles = { aNeedle: 'content to add' };
-    let generator;
+    let generator: {
+      editFile: ReturnType<typeof esmocha.fn>;
+    };
 
     beforeEach(() => {
       generator = {
@@ -373,10 +375,11 @@ content to add2
 
     it('should execute editFile if generator and filePath is passed', () => {
       const filePath = 'file.foo';
-      createBaseNeedle.call(generator as any, { filePath }, needles);
+      // @ts-expect-error FIXME
+      createBaseNeedle.call(generator, { filePath }, needles);
       expect(generator.editFile).toHaveBeenCalledTimes(1);
-      expect(generator.editFile.mock.lastCall[0]).toBe(filePath);
-      expect(typeof generator.editFile.mock.lastCall[1]).toBe('function');
+      expect(generator.editFile.mock.lastCall?.[0]).toBe(filePath);
+      expect(typeof generator.editFile.mock.lastCall?.[1]).toBe('function');
     });
   });
 });

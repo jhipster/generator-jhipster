@@ -36,7 +36,8 @@ const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    const GENERATOR_LIST: Record<string, string> = await import('../generator-list.ts');
+    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
 
@@ -89,7 +90,7 @@ describe(`generator - ${generator}`, () => {
     ).rejects.toThrow('You are on the upgrade branch, please switch to another branch before upgrading.');
   });
   describe('with createEnvBuilder option', async () => {
-    let createEnvBuilder;
+    let createEnvBuilder: any;
 
     before(async () => {
       createEnvBuilder = fn().mockReturnValue({ getEnvironment: () => ({ run: () => {} }) });
@@ -111,7 +112,7 @@ describe(`generator - ${generator}`, () => {
     });
   });
   describe('with createEnvBuilder and applyConfig options', async () => {
-    let createEnvBuilder;
+    let createEnvBuilder: any;
 
     before(async () => {
       createEnvBuilder = fn().mockReturnValue({ getEnvironment: () => ({ run: () => {} }) });

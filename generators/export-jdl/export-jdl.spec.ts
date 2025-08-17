@@ -374,7 +374,7 @@ describe('generator - export-jdl', () => {
     });
 
     it('should match snapshot', () => {
-      expect(runResult.getSnapshot(file => file.path.endsWith('.jdl'))).toMatchSnapshot();
+      expect(runResult.getSnapshot((file: any) => file.path.endsWith('.jdl'))).toMatchSnapshot();
     });
     it('creates the jdl file based on app name', () => {
       runResult.assertFile('standard.jdl');
@@ -392,7 +392,7 @@ describe('generator - export-jdl', () => {
     });
 
     it('should match snapshot', () => {
-      expect(runResult.getSnapshot(file => file.path.endsWith('.jdl'))).toMatchSnapshot();
+      expect(runResult.getSnapshot((file: any) => file.path.endsWith('.jdl'))).toMatchSnapshot();
     });
     it('creates the jdl file', () => {
       runResult.assertFile('custom-app.jdl');

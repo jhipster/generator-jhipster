@@ -11,7 +11,7 @@ describe('generator - base - internal - blueprint', () => {
       assert.deepStrictEqual(actual, expected);
     });
     it('returns a array if empty string', () => {
-      const expected = [];
+      const expected: any[] = [];
       const actual = parseBlueprints('');
       assert.deepStrictEqual(actual, expected);
     });
@@ -46,7 +46,7 @@ describe('generator - base - internal - blueprint', () => {
   describe('::mergeBlueprints', () => {
     describe('not passing arguments', () => {
       it('returns a empty array', () => {
-        const expected = [];
+        const expected: any[] = [];
         const actual = mergeBlueprints();
         assert.deepStrictEqual(actual, expected);
       });
