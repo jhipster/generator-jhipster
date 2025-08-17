@@ -21,7 +21,6 @@ import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { fieldTypes } from '../../../../lib/jhipster/index.ts';
-import type { Entity } from '../../../../lib/jhipster/types/entity.ts';
 import { defaultHelpers as helpers, result as runResult } from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../../../test/support/tests.js';
 
@@ -54,7 +53,7 @@ const expectedPrimaryKey = primaryKey => ({
   ids: primaryKey.ids.map(expectedPrimaryKeyId),
 });
 
-const expectedEntity = (entity: Entity) => ({
+const expectedEntity = (entity: any) => ({
   faker: expect.any(Object),
   generateFakeData: expect.any(Function),
   resetFakerSeed: expect.any(Function),
@@ -68,7 +67,7 @@ const expectedEntity = (entity: Entity) => ({
 
   fields: entity?.fields?.map(expectedField),
   relationships: expect.any(Array),
-  // primaryKey: expectedPrimaryKey(entity.primaryKey),
+  primaryKey: expectedPrimaryKey(entity.primaryKey),
   reactiveOtherEntities: expect.any(Set),
   reactiveUniqueEntityTypes: expect.any(Set),
 });
