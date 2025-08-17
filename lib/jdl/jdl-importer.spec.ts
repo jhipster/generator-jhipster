@@ -66,7 +66,7 @@ relationship OneToMany {
       });
     });
     describe('when not parsing applications', () => {
-      let returned;
+      let returned: Record<string, any>;
 
       before(() => {
         const importer = createImporterFromFiles([getTestFile('big_sample.jdl')], {
@@ -76,13 +76,13 @@ relationship OneToMany {
         });
         returned = importer.import();
         returned.exportedEntities = returned.exportedEntities
-          .sort((exportedEntityA, exportedEntityB) => {
+          .sort((exportedEntityA: any, exportedEntityB: any) => {
             if (exportedEntityA.entityTableName < exportedEntityB.entityTableName) {
               return -1;
             }
             return 1;
           })
-          .map(exportedEntity => {
+          .map((exportedEntity: any) => {
             exportedEntity.documentation = exportedEntity.documentation || '';
             return exportedEntity;
           });
@@ -93,7 +93,7 @@ relationship OneToMany {
       });
     });
     describe('when passing an existing application config', () => {
-      let importer;
+      let importer: ReturnType<typeof createImporterFromContent>;
 
       before(() => {
         importer = createImporterFromContent(
@@ -114,7 +114,7 @@ relationship OneToOne {
       });
     });
     describe('when parsing one JDL application and entities', () => {
-      let returned;
+      let returned: Record<string, any>;
 
       before(() => {
         const importer = createImporterFromFiles([getTestFile('application_with_entities.jdl')]);
@@ -127,18 +127,20 @@ relationship OneToOne {
         expect(returned.exportedDeployments).to.have.lengthOf(0);
       });
       it('should return the corresponding exportedApplicationsWithEntities', () => {
-        returned.exportedApplications.forEach(application => {
+        returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
           const entityNames = applicationConfig.entities || [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).to.be.eql(applicationWithEntities.config);
-          expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
-          expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(applicationWithEntities.entities);
+          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).to.be.eql(entityNames);
+          expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).to.be.eql(
+            applicationWithEntities.entities,
+          );
         });
       });
     });
     describe('when parsing two JDL applications with and without entities ', () => {
-      let returned;
+      let returned: Record<string, any>;
       const APPLICATION_NAMES = ['app1', 'app2'];
 
       before(() => {
@@ -157,18 +159,20 @@ relationship OneToOne {
         expect(returned.exportedApplicationsWithEntities[APPLICATION_NAMES[1]].entities).to.have.lengthOf(1);
       });
       it('should return the corresponding exportedApplicationsWithEntities', () => {
-        returned.exportedApplications.forEach(application => {
+        returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
           const entityNames = applicationConfig.entities || [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).to.be.eql(applicationWithEntities.config);
-          expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
-          expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(applicationWithEntities.entities);
+          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).to.be.eql(entityNames);
+          expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).to.be.eql(
+            applicationWithEntities.entities,
+          );
         });
       });
     });
     describe('when parsing one JDL application and entities passed as string', () => {
-      let returned;
+      let returned: Record<string, any>;
 
       before(() => {
         const importer = createImporterFromContent(
@@ -195,18 +199,20 @@ relationship OneToOne {
         expect(returned.exportedDeployments).to.have.lengthOf(0);
       });
       it('should return the corresponding exportedApplicationsWithEntities', () => {
-        returned.exportedApplications.forEach(application => {
+        returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
           const entityNames = applicationConfig.entities || [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).to.be.eql(applicationWithEntities.config);
-          expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
-          expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(applicationWithEntities.entities);
+          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).to.be.eql(entityNames);
+          expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).to.be.eql(
+            applicationWithEntities.entities,
+          );
         });
       });
     });
     describe('when parsing one JDL application and entities with entity and dto suffixes', () => {
-      let returned;
+      let returned: Record<string, any>;
 
       before(() => {
         const importer = createImporterFromFiles([getTestFile('application_with_entity_dto_suffixes.jdl')]);
@@ -219,13 +225,15 @@ relationship OneToOne {
       });
 
       it('should return the corresponding exportedApplicationsWithEntities', () => {
-        returned.exportedApplications.forEach(application => {
+        returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
           const entityNames = applicationConfig.entities || [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).to.be.eql(applicationWithEntities.config);
-          expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
-          expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(applicationWithEntities.entities);
+          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).to.be.eql(entityNames);
+          expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).to.be.eql(
+            applicationWithEntities.entities,
+          );
         });
       });
     });
@@ -242,7 +250,7 @@ relationship OneToOne {
       });
     });
     describe('when parsing multiple JDL files with applications and entities', () => {
-      let importState;
+      let importState: Record<string, any>;
       before(() => {
         const importer = createImporterFromFiles([getTestFile('integration', 'file1.jdl'), getTestFile('integration', 'file2.jdl')]);
         importState = importer.import();
@@ -254,20 +262,20 @@ relationship OneToOne {
       });
 
       it('should return the corresponding exportedApplicationsWithEntities', () => {
-        importState.exportedApplications.forEach(application => {
+        importState.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
           const entityNames = applicationConfig.entities || [];
           const applicationWithEntities = importState.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).to.be.eql(applicationWithEntities.config);
-          expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
-          expect(importState.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
+          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).to.be.eql(entityNames);
+          expect(importState.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).to.be.eql(
             applicationWithEntities.entities,
           );
         });
       });
     });
     describe("when choosing 'no' as database type", () => {
-      let importer;
+      let importer: ReturnType<typeof createImporterFromFiles>;
 
       before(() => {
         importer = createImporterFromFiles([getTestFile('simple.jdl')], {
@@ -282,7 +290,7 @@ relationship OneToOne {
       });
     });
     describe('when parsing a JDL with annotations', () => {
-      let returned;
+      let returned: Record<string, any>;
 
       before(() => {
         const importer = createImporterFromFiles([getTestFile('annotations.jdl')], {
@@ -310,7 +318,7 @@ relationship OneToOne {
       });
     });
     describe('when parsing a JDL with a pattern validation', () => {
-      let returned;
+      let returned: Record<string, any>;
 
       before(() => {
         const importer = createImporterFromFiles([getTestFile('regex_validation.jdl')], {
@@ -326,7 +334,7 @@ relationship OneToOne {
       });
     });
     describe('when parsing a JDL with a pattern validation containing a quote', () => {
-      let returned;
+      let returned: Record<string, any>;
 
       before(() => {
         const importer = createImporterFromFiles([getTestFile('pattern_validation_with_quote.jdl')], {
@@ -376,7 +384,7 @@ relationship OneToOne {
       });
     });
     describe('when parsing entities and enums with custom values', () => {
-      let importState;
+      let importState: Record<string, any>;
 
       before(() => {
         const importer = createImporterFromFiles([getTestFile('enum_with_values.jdl')], {
@@ -416,7 +424,7 @@ relationship ManyToMany {
 }
 `;
       describe('when passing without application config', () => {
-        let importer;
+        let importer: ReturnType<typeof createImporterFromContent>;
 
         before(() => {
           importer = createImporterFromContent(entities, {
@@ -430,7 +438,7 @@ relationship ManyToMany {
         });
       });
       describe('when parsing one JDL application and entities', () => {
-        let returned;
+        let returned: Record<string, any>;
 
         before(() => {
           const importer = createImporterFromContent(
@@ -452,13 +460,13 @@ ${entities}`,
           expect(returned.exportedDeployments).to.have.lengthOf(0);
         });
         it('should return the corresponding exportedApplicationsWithEntities', () => {
-          returned.exportedApplications.forEach(application => {
+          returned.exportedApplications.forEach((application: any) => {
             const applicationConfig = application['generator-jhipster'];
             const entityNames = applicationConfig.entities || [];
             const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
             expect(applicationConfig).to.be.eql(applicationWithEntities.config);
-            expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
-            expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
+            expect(applicationWithEntities.entities.map((entity: any) => entity.name)).to.be.eql(entityNames);
+            expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).to.be.eql(
               applicationWithEntities.entities,
             );
             jestExpect(applicationWithEntities.entities).toMatchSnapshot();
@@ -467,7 +475,7 @@ ${entities}`,
       });
     });
     describe('when importing a JDL application with blueprints', () => {
-      let importState;
+      let importState: Record<string, any>;
 
       before(() => {
         const importer = createImporterFromFiles([getTestFile('application_with_blueprints.jdl')]);
@@ -479,7 +487,7 @@ ${entities}`,
       });
     });
     describe('when choosing neo4j as database type', () => {
-      let importState;
+      let importState: Record<string, any>;
 
       before(() => {
         const content = `entity Person {
@@ -501,7 +509,7 @@ relationship OneToMany {
       });
     });
     describe('when having the use-options', () => {
-      let importState;
+      let importState: Record<string, any>;
 
       before(() => {
         const content = `application {
@@ -537,7 +545,7 @@ use mapstruct, elasticsearch for A, B except C`;
       });
     });
     describe('when parsing a JDL content with invalid tokens', () => {
-      let caughtError;
+      let caughtError: any;
 
       before(() => {
         const content = `application {
@@ -566,8 +574,8 @@ entity A
       });
     });
     describe('when parsing relationships with annotations and options', () => {
-      let relationshipOnSource;
-      let relationshipOnDestination;
+      let relationshipOnSource: any;
+      let relationshipOnDestination: any;
 
       before(() => {
         const content = `entity A

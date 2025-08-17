@@ -37,7 +37,7 @@ describe('jdl - AbstractJDLOption', () => {
       });
     });
     describe('when passing entity names', () => {
-      let result;
+      let result: Set<string>;
 
       before(() => {
         const option = new JDLBinaryOption({

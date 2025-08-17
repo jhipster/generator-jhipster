@@ -30,7 +30,7 @@ import JDLUnaryOption from './jdl-unary-option.ts';
 describe('jdl - JDLOptions', () => {
   describe('addOption', () => {
     describe('when passing an invalid option', () => {
-      let options;
+      let options: JDLOptions;
 
       before(() => {
         options = new JDLOptions();
@@ -38,14 +38,15 @@ describe('jdl - JDLOptions', () => {
 
       it('should fail', () => {
         expect(() => {
+          // @ts-ignore EXPECTED BEHAVIOR: This is a test for an invalid input.
           options.addOption(null);
         }).to.throw(/^Can't add nil option.$/);
       });
     });
     describe('when passing a valid option', () => {
-      let options;
-      let option1;
-      let option2;
+      let options: JDLOptions;
+      let option1: JDLUnaryOption;
+      let option2: JDLUnaryOption;
 
       before(() => {
         options = new JDLOptions();
@@ -95,7 +96,7 @@ describe('jdl - JDLOptions', () => {
       });
     });
     describe('with a valid input', () => {
-      let options;
+      let options: JDLOptions;
 
       before(() => {
         options = new JDLOptions();
@@ -114,7 +115,7 @@ describe('jdl - JDLOptions', () => {
     });
   });
   describe('size', () => {
-    let options;
+    let options: JDLOptions;
 
     before(() => {
       options = new JDLOptions();
@@ -133,7 +134,7 @@ describe('jdl - JDLOptions', () => {
     });
   });
   describe('forEach', () => {
-    let jdlOptions;
+    let jdlOptions: JDLOptions;
 
     before(() => {
       jdlOptions = new JDLOptions();
@@ -151,6 +152,7 @@ describe('jdl - JDLOptions', () => {
 
     describe('when not passing a function', () => {
       it('should not fail', () => {
+        // @ts-expect-error FIXME
         jdlOptions.forEach();
       });
     });
@@ -174,7 +176,7 @@ describe('jdl - JDLOptions', () => {
     });
   });
   describe('getOptionsForName', () => {
-    let jdlOptions;
+    let jdlOptions: JDLOptions;
 
     before(() => {
       jdlOptions = new JDLOptions();
@@ -186,6 +188,7 @@ describe('jdl - JDLOptions', () => {
 
     describe('when passing an invalid name', () => {
       it('should return an empty array', () => {
+        // @ts-expect-error FIXME
         expect(jdlOptions.getOptionsForName()).to.be.empty;
       });
     });
@@ -195,9 +198,9 @@ describe('jdl - JDLOptions', () => {
       });
     });
     describe('when checking for a present option', () => {
-      let option1;
-      let option2;
-      let option3;
+      let option1: JDLUnaryOption;
+      let option2: JDLBinaryOption;
+      let option3: JDLBinaryOption;
 
       before(() => {
         option1 = new JDLUnaryOption({

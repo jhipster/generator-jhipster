@@ -51,6 +51,8 @@ const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 
+type ConvertedEntity = Exclude<ReturnType<ReturnType<typeof convert>['get']>, never[] | undefined>[0] | undefined;
+
 describe('jdl - JDLWithApplicationsToJSONConverter', () => {
   const runtime = createRuntime();
 
@@ -66,7 +68,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
       });
     });
     describe('when passing a JDL object with two applications one with and one without entities', () => {
-      let result;
+      let result: ReturnType<typeof convert>;
 
       before(() => {
         const jdlObject = new JDLObject();
@@ -84,12 +86,14 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
 
       it('should return a map with two applications', () => {
         expect(result.size).to.equal(2);
+        // @ts-expect-error FIXME
         expect(result.get('app1').length).to.equal(0);
+        // @ts-expect-error FIXME
         expect(result.get('app2').length).to.equal(1);
       });
     });
     describe('when passing a JDL object without entities', () => {
-      let result;
+      let result: ReturnType<typeof convert>;
 
       before(() => {
         const jdlObject = new JDLObject();
@@ -106,8 +110,8 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
     });
     describe('when passing a JDL object with entities', () => {
       describe('with some of them being built-in entities', () => {
-        let builtInEntitiesAreConverted;
-        let customEntitiesAreConverted;
+        let builtInEntitiesAreConverted: boolean | undefined;
+        let customEntitiesAreConverted: boolean | undefined;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -143,7 +147,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
         });
       });
       describe('with no field, no option and no relationship', () => {
-        let convertedEntity;
+        let convertedEntity: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -189,7 +193,7 @@ JSONEntity {
         });
       });
       describe('with options', () => {
-        let convertedEntity;
+        let convertedEntity: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -298,8 +302,8 @@ JSONEntity {
         });
       });
       describe('when setting the DTO option without the service option', () => {
-        let convertedEntity;
-        let loggerSpy;
+        let convertedEntity: any;
+        let loggerSpy: ReturnType<typeof sinon.spy>;
 
         before(() => {
           loggerSpy = sinon.spy(logger, 'info');
@@ -363,8 +367,8 @@ JSONEntity {
         });
       });
       describe('when setting the filtering option without the service option', () => {
-        let convertedEntity;
-        let loggerSpy;
+        let convertedEntity: any;
+        let loggerSpy: ReturnType<typeof sinon.spy>;
 
         before(() => {
           loggerSpy = sinon.spy(logger, 'info');
@@ -427,7 +431,7 @@ JSONEntity {
         });
       });
       describe('when the searching option is set with exclusions', () => {
-        let convertedEntity;
+        let convertedEntity: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -483,7 +487,7 @@ JSONEntity {
       });
       describe('with fields', () => {
         describe('without validation, comment or option', () => {
-          let convertedEntity;
+          let convertedEntity: any;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -548,7 +552,7 @@ JSONEntity {
           });
         });
         describe('when having blobs', () => {
-          let convertedEntity;
+          let convertedEntity: ConvertedEntity;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -631,7 +635,7 @@ JSONEntity {
           });
         });
         describe('with field types being enums', () => {
-          let convertedEntity;
+          let convertedEntity: ConvertedEntity;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -689,7 +693,7 @@ JSONEntity {
           });
         });
         describe('with comments', () => {
-          let convertedEntity;
+          let convertedEntity: ConvertedEntity;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -747,7 +751,7 @@ JSONEntity {
           });
         });
         describe('with validations', () => {
-          let convertedEntity;
+          let convertedEntity: ConvertedEntity;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -889,7 +893,7 @@ JSONEntity {
           });
         });
         describe('with options', () => {
-          let convertedEntity;
+          let convertedEntity: ConvertedEntity;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -955,8 +959,8 @@ JSONEntity {
       });
       describe('with relationships', () => {
         describe('without options, required relationships or comments', () => {
-          let relationshipsForA;
-          let relationshipsForB;
+          let relationshipsForA: ReturnType<ReturnType<typeof convert>['get']>;
+          let relationshipsForB: ReturnType<ReturnType<typeof convert>['get']>;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -1001,8 +1005,8 @@ JSONEntity {
             jdlObject.addRelationship(oneToManyRelationship);
             jdlObject.addRelationship(manyToOneRelationship);
             const returned: any = convert(jdlObject);
-            relationshipsForA = returned.get('toto').find(entity => entity.name === 'A').relationships;
-            relationshipsForB = returned.get('toto').find(entity => entity.name === 'B').relationships;
+            relationshipsForA = returned.get('toto').find((entity: any) => entity.name === 'A').relationships;
+            relationshipsForB = returned.get('toto').find((entity: any) => entity.name === 'B').relationships;
           });
 
           it('should convert them', () => {
@@ -1074,7 +1078,7 @@ JSONEntity {
         });
         describe('with options', () => {
           describe('being custom options', () => {
-            let convertedRelationship;
+            let convertedRelationship: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1102,7 +1106,7 @@ JSONEntity {
               jdlObject.addApplication(application);
               jdlObject.addRelationship(oneToOneRelationship);
               const returned: any = convert(jdlObject);
-              convertedRelationship = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
+              convertedRelationship = returned.get('toto').find((entity: any) => entity.name === 'A').relationships[0];
             });
 
             it('should convert them', () => {
@@ -1121,7 +1125,7 @@ JSONEntity {
             });
           });
           describe('being regular options', () => {
-            let convertedRelationship;
+            let convertedRelationship: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1149,7 +1153,7 @@ JSONEntity {
               jdlObject.addApplication(application);
               jdlObject.addRelationship(oneToOneRelationship);
               const returned: any = convert(jdlObject);
-              convertedRelationship = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
+              convertedRelationship = returned.get('toto').find((entity: any) => entity.name === 'A').relationships[0];
             });
 
             it('should convert them', () => {
@@ -1167,8 +1171,8 @@ JSONEntity {
           });
         });
         describe('with required relationships', () => {
-          let relationshipsForA;
-          let relationshipsForB;
+          let relationshipsForA: any;
+          let relationshipsForB: any;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -1191,8 +1195,8 @@ JSONEntity {
             jdlObject.addApplication(application);
             jdlObject.addRelationship(oneToOneRelationship);
             const returned: any = convert(jdlObject);
-            relationshipsForA = returned.get('toto').find(entity => entity.name === 'A').relationships;
-            relationshipsForB = returned.get('toto').find(entity => entity.name === 'B').relationships;
+            relationshipsForA = returned.get('toto').find((entity: any) => entity.name === 'A').relationships;
+            relationshipsForB = returned.get('toto').find((entity: any) => entity.name === 'B').relationships;
           });
 
           it('should convert them', () => {
@@ -1223,8 +1227,8 @@ JSONEntity {
           });
         });
         describe('with comments', () => {
-          let relationshipsForA;
-          let relationshipsForB;
+          let relationshipsForA: any;
+          let relationshipsForB: any;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -1247,8 +1251,8 @@ JSONEntity {
             jdlObject.addApplication(application);
             jdlObject.addRelationship(oneToOneRelationship);
             const returned: any = convert(jdlObject);
-            relationshipsForA = returned.get('toto').find(entity => entity.name === 'A').relationships;
-            relationshipsForB = returned.get('toto').find(entity => entity.name === 'B').relationships;
+            relationshipsForA = returned.get('toto').find((entity: any) => entity.name === 'A').relationships;
+            relationshipsForB = returned.get('toto').find((entity: any) => entity.name === 'B').relationships;
           });
 
           it('should convert them', () => {
@@ -1280,8 +1284,8 @@ JSONEntity {
         });
         describe("when the injected field in the destination side isn't present", () => {
           describe('for a One-to-One relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1301,8 +1305,8 @@ JSONEntity {
               jdlObject.addApplication(application);
               jdlObject.addRelationship(oneToOneRelationship);
               const returned: any = convert(jdlObject);
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              relationshipFromSourceToDestination = returned.get('toto').find((entity: any) => entity.name === 'A').relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto').find((entity: any) => entity.name === 'B').relationships[0];
             });
 
             it('should add the relationship for the source entity', () => {
@@ -1320,8 +1324,8 @@ JSONEntity {
             });
           });
           describe('for a One-to-Many relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1341,8 +1345,8 @@ JSONEntity {
               jdlObject.addApplication(application);
               jdlObject.addRelationship(oneToManyRelationship);
               const returned: any = convert(jdlObject);
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              relationshipFromSourceToDestination = returned.get('toto').find((entity: any) => entity.name === 'A').relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto').find((entity: any) => entity.name === 'B').relationships[0];
             });
 
             it('should add the relationship for the source entity', () => {
@@ -1360,8 +1364,8 @@ JSONEntity {
             });
           });
           describe('for a Many-to-One relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1381,8 +1385,8 @@ JSONEntity {
               jdlObject.addApplication(application);
               jdlObject.addRelationship(manyToOneRelationship);
               const returned: any = convert(jdlObject);
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              relationshipFromSourceToDestination = returned.get('toto').find((entity: any) => entity.name === 'A').relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto').find((entity: any) => entity.name === 'B').relationships[0];
             });
 
             it('should add the relationship for the source entity', () => {
@@ -1400,8 +1404,8 @@ JSONEntity {
             });
           });
           describe('for a Many-to-Many relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1421,8 +1425,8 @@ JSONEntity {
               jdlObject.addApplication(application);
               jdlObject.addRelationship(manyToManyRelationship);
               const returned: any = convert(jdlObject);
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              relationshipFromSourceToDestination = returned.get('toto').find((entity: any) => entity.name === 'A').relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto').find((entity: any) => entity.name === 'B').relationships[0];
             });
 
             it('should add the relationship for the source entity', () => {
@@ -1442,8 +1446,8 @@ JSONEntity {
         });
         describe('when setting custom field for relationship mapping', () => {
           describe('for a One-to-One relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1464,8 +1468,8 @@ JSONEntity {
               jdlObject.addApplication(application);
               jdlObject.addRelationship(oneToOneRelationship);
               const returned: any = convert(jdlObject);
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              relationshipFromSourceToDestination = returned.get('toto').find((entity: any) => entity.name === 'A').relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto').find((entity: any) => entity.name === 'B').relationships[0];
             });
 
             it('should add it for the source entity', () => {
@@ -1494,8 +1498,8 @@ JSONEntity {
             });
           });
           describe('for a One-to-Many relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1516,8 +1520,8 @@ JSONEntity {
               jdlObject.addApplication(application);
               jdlObject.addRelationship(oneToManyRelationship);
               const returned: any = convert(jdlObject);
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              relationshipFromSourceToDestination = returned.get('toto').find((entity: any) => entity.name === 'A').relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto').find((entity: any) => entity.name === 'B').relationships[0];
             });
 
             it('should ignore it for the source entity', () => {
@@ -1546,8 +1550,8 @@ JSONEntity {
             });
           });
           describe('for a Many-to-One relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1568,8 +1572,8 @@ JSONEntity {
               jdlObject.addApplication(application);
               jdlObject.addRelationship(manyToOneRelationship);
               const returned: any = convert(jdlObject);
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              relationshipFromSourceToDestination = returned.get('toto').find((entity: any) => entity.name === 'A').relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto').find((entity: any) => entity.name === 'B').relationships[0];
             });
 
             it('should add it for the source entity', () => {
@@ -1598,8 +1602,8 @@ JSONEntity {
             });
           });
           describe('for a Many-to-Many relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1620,8 +1624,8 @@ JSONEntity {
               jdlObject.addApplication(application);
               jdlObject.addRelationship(manyToManyRelationship);
               const returned: any = convert(jdlObject);
-              relationshipFromSourceToDestination = returned.get('toto').find(entity => entity.name === 'A').relationships[0];
-              relationshipFromDestinationToSource = returned.get('toto').find(entity => entity.name === 'B').relationships[0];
+              relationshipFromSourceToDestination = returned.get('toto').find((entity: any) => entity.name === 'A').relationships[0];
+              relationshipFromDestinationToSource = returned.get('toto').find((entity: any) => entity.name === 'B').relationships[0];
             });
 
             it('should add it for the source entity', () => {
@@ -1652,8 +1656,8 @@ JSONEntity {
         });
       });
       describe('with application options', () => {
-        let convertedEntitiesForTataApplication;
-        let convertedEntitiesForTutuApplication;
+        let convertedEntitiesForTataApplication: ReturnType<ReturnType<typeof convert>['get']>;
+        let convertedEntitiesForTutuApplication: ReturnType<ReturnType<typeof convert>['get']>;
 
         before(() => {
           const jdlObject = new JDLObject();

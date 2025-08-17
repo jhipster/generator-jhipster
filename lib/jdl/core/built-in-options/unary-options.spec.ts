@@ -44,7 +44,7 @@ describe('jdl - UnaryOptions', () => {
       });
     });
     describe('when passing a function', () => {
-      let result;
+      let result: any[];
 
       before(() => {
         result = [];

@@ -32,7 +32,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
 
   describe('convert', () => {
     describe('when not passing any argument', () => {
-      let jdlObject;
+      let jdlObject: JDLObject;
 
       before(() => {
         // @ts-expect-error invalid argument
@@ -44,7 +44,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
       });
     });
     describe('when not passing a jdl object', () => {
-      let jdlObject;
+      let jdlObject: JDLObject;
 
       before(() => {
         jdlObject = convertApplicationsToJDL({
@@ -59,7 +59,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
       });
     });
     describe('when passing a jdl object', () => {
-      let jdlObject;
+      let jdlObject: JDLObject;
 
       before(() => {
         const previousJDLObject = new JDLObject();

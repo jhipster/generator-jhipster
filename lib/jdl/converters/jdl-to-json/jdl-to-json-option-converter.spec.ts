@@ -44,7 +44,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
     });
     describe('when passing a JDL option holder', () => {
       describe('when there is no option', () => {
-        let returned;
+        let returned: ReturnType<typeof convert>;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -56,7 +56,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         });
       });
       describe('with options', () => {
-        let convertedOptions;
+        let convertedOptions: ReturnType<typeof convert>['get'];
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -153,8 +153,8 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         });
       });
       describe('when setting the DTO option without the service option', () => {
-        let convertedOptions;
-        let loggerSpy;
+        let convertedOptions: ReturnType<typeof convert>['get'];
+        let loggerSpy: ReturnType<typeof sinon.spy>;
 
         before(() => {
           loggerSpy = sinon.spy(logger, 'info');
@@ -196,8 +196,8 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         });
       });
       describe('when setting the filtering option without the service option', () => {
-        let convertedOptions;
-        let loggerSpy;
+        let convertedOptions: ReturnType<typeof convert>['get'];
+        let loggerSpy: ReturnType<typeof sinon.spy>;
 
         before(() => {
           loggerSpy = sinon.spy(logger, 'info');
@@ -238,7 +238,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         });
       });
       describe('when the searching option is set with exclusions', () => {
-        let convertedOptions;
+        let convertedOptions: ReturnType<typeof convert>['get'];
 
         before(() => {
           const jdlObject = new JDLObject();

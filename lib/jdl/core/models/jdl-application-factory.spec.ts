@@ -31,7 +31,7 @@ const runtime = createRuntime();
 describe('jdl - JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {
     describe(`when passing a ${APPLICATION_TYPE_MICROSERVICE} config`, () => {
-      let application;
+      let application: ReturnType<typeof createJDLApplication>;
 
       before(() => {
         application = createJDLApplication({ applicationType: APPLICATION_TYPE_MICROSERVICE }, runtime);
@@ -42,7 +42,7 @@ describe('jdl - JDLApplicationFactory', () => {
       });
     });
     describe(`when passing a ${APPLICATION_TYPE_GATEWAY} config`, () => {
-      let application;
+      let application: ReturnType<typeof createJDLApplication>;
 
       before(() => {
         application = createJDLApplication({ applicationType: APPLICATION_TYPE_GATEWAY }, runtime);
@@ -53,7 +53,7 @@ describe('jdl - JDLApplicationFactory', () => {
       });
     });
     describe(`when passing a ${APPLICATION_TYPE_MONOLITH} config`, () => {
-      let application;
+      let application: ReturnType<typeof createJDLApplication>;
 
       before(() => {
         application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH }, runtime);

@@ -51,7 +51,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
     });
     describe('when passing valid arguments', () => {
       describe('when exporting deployments to JSON', () => {
-        let returned;
+        let returned: ReturnType<typeof exportDeployments>;
 
         beforeEach(() => {
           returned = exportDeployments({
@@ -72,7 +72,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
           expect(returned).to.have.lengthOf(2);
         });
         describe('for the first deployment', () => {
-          let content;
+          let content: any;
 
           beforeEach(() => {
             const data = fs.readFileSync(path.join('docker-compose', '.yo-rc.json'), { encoding: 'utf8' });
@@ -104,7 +104,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
           });
         });
         describe('for the second deployment', () => {
-          let content;
+          let content: any;
 
           beforeEach(() => {
             const data = fs.readFileSync(path.join('kubernetes', '.yo-rc.json'), { encoding: 'utf8' });

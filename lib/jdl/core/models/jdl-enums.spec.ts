@@ -26,7 +26,7 @@ import JDLEnums from './jdl-enums.ts';
 
 describe('jdl - JDLEnums', () => {
   describe('add', () => {
-    let jdlEnums;
+    let jdlEnums: JDLEnums;
 
     before(() => {
       jdlEnums = new JDLEnums();
@@ -42,6 +42,7 @@ describe('jdl - JDLEnums', () => {
     describe('when adding an invalid element', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-ignore EXPECTED BEHAVIOR: This is a test for an invalid element.
           jdlEnums.add();
         }).to.throw(/^Can't add a nil JDL enum to the JDL enums\.$/);
       });
@@ -55,7 +56,7 @@ describe('jdl - JDLEnums', () => {
     });
   });
   describe('get', () => {
-    let jdlEnums;
+    let jdlEnums: JDLEnums;
 
     before(() => {
       jdlEnums = new JDLEnums();
@@ -67,7 +68,7 @@ describe('jdl - JDLEnums', () => {
       });
     });
     describe('when fetching an existing enum', () => {
-      let jdlEnum;
+      let jdlEnum: JDLEnum;
 
       before(() => {
         jdlEnum = new JDLEnum({ name: 'A' });
@@ -80,7 +81,7 @@ describe('jdl - JDLEnums', () => {
     });
   });
   describe('has', () => {
-    let jdlEnums;
+    let jdlEnums: JDLEnums;
 
     before(() => {
       jdlEnums = new JDLEnums();
@@ -92,7 +93,7 @@ describe('jdl - JDLEnums', () => {
       });
     });
     describe('when fetching an existing enum', () => {
-      let jdlEnum;
+      let jdlEnum: JDLEnum;
 
       before(() => {
         jdlEnum = new JDLEnum({ name: 'A' });
@@ -105,7 +106,7 @@ describe('jdl - JDLEnums', () => {
     });
   });
   describe('forEach', () => {
-    let jdlEnums;
+    let jdlEnums: JDLEnums;
 
     before(() => {
       jdlEnums = new JDLEnums();
@@ -113,6 +114,7 @@ describe('jdl - JDLEnums', () => {
 
     describe('when not passing a function', () => {
       it('should not fail', () => {
+        // @ts-expect-error FIXME
         jdlEnums.forEach();
       });
     });
@@ -138,7 +140,7 @@ describe('jdl - JDLEnums', () => {
     });
   });
   describe('size', () => {
-    let jdlEnums;
+    let jdlEnums: JDLEnums;
 
     before(() => {
       jdlEnums = new JDLEnums();
@@ -175,7 +177,7 @@ describe('jdl - JDLEnums', () => {
     });
   });
   describe('toString', () => {
-    let jdlEnums;
+    let jdlEnums: JDLEnums;
 
     before(() => {
       jdlEnums = new JDLEnums();

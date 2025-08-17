@@ -33,7 +33,7 @@ const {
 describe('jdl - DefaultApplicationOptions', () => {
   describe('getConfigForMonolithApplication', () => {
     describe('without passing custom options', () => {
-      let options;
+      let options: ReturnType<typeof getConfigForMonolithApplication>;
 
       before(() => {
         options = getConfigForMonolithApplication();
@@ -94,7 +94,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when passing custom options', () => {
-      let options;
+      let options: ReturnType<typeof getConfigForMonolithApplication>;
 
       before(() => {
         options = getConfigForMonolithApplication({
@@ -110,7 +110,7 @@ describe('jdl - DefaultApplicationOptions', () => {
   });
   describe('getConfigForGatewayApplication', () => {
     describe('without passing custom options', () => {
-      let options;
+      let options: ReturnType<typeof getConfigForGatewayApplication>;
 
       before(() => {
         options = getConfigForGatewayApplication();
@@ -154,7 +154,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when the service discovery type option is no', () => {
-      let serviceDiscoveryTypeOption;
+      let serviceDiscoveryTypeOption: ReturnType<typeof getConfigForGatewayApplication>['serviceDiscoveryType'];
 
       before(() => {
         serviceDiscoveryTypeOption = getConfigForGatewayApplication({
@@ -167,7 +167,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when passing a custom client theme and no variant', () => {
-      let clientThemeVariantOption;
+      let clientThemeVariantOption: ReturnType<typeof getConfigForGatewayApplication>['clientThemeVariant'];
 
       before(() => {
         clientThemeVariantOption = getConfigForGatewayApplication({
@@ -180,7 +180,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when the authentication type is oauth2', () => {
-      let skipUserManagementOption;
+      let skipUserManagementOption: ReturnType<typeof getConfigForGatewayApplication>['skipUserManagement'];
 
       before(() => {
         skipUserManagementOption = getConfigForGatewayApplication({
@@ -193,7 +193,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when passing custom options', () => {
-      let options;
+      let options: ReturnType<typeof getConfigForGatewayApplication>;
 
       before(() => {
         options = getConfigForGatewayApplication({
@@ -209,7 +209,7 @@ describe('jdl - DefaultApplicationOptions', () => {
   });
   describe('getConfigForMicroserviceApplication', () => {
     describe('without passing custom options', () => {
-      let options;
+      let options: ReturnType<typeof getConfigForMicroserviceApplication>;
 
       before(() => {
         options = getConfigForMicroserviceApplication();
@@ -250,7 +250,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when the service discovery type option is no', () => {
-      let serviceDiscoveryTypeOption;
+      let serviceDiscoveryTypeOption: ReturnType<typeof getConfigForMicroserviceApplication>['serviceDiscoveryType'];
 
       before(() => {
         serviceDiscoveryTypeOption = getConfigForMicroserviceApplication({
@@ -263,7 +263,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when passing custom options', () => {
-      let options;
+      let options: ReturnType<typeof getConfigForMicroserviceApplication>;
 
       before(() => {
         options = getConfigForMicroserviceApplication({
@@ -302,7 +302,7 @@ describe('jdl - DefaultApplicationOptions', () => {
   });
   describe('getDefaultConfigForNewApplication', () => {
     describe('when not passing custom options', () => {
-      let options;
+      let options: ReturnType<typeof getDefaultConfigForNewApplication>;
 
       before(() => {
         options = getDefaultConfigForNewApplication();
@@ -352,7 +352,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when there is no package name option but only a package folder', () => {
-      let packageNameOption;
+      let packageNameOption: ReturnType<typeof getDefaultConfigForNewApplication>['packageName'];
 
       before(() => {
         packageNameOption = getDefaultConfigForNewApplication({
@@ -365,7 +365,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when the client framework option is angular', () => {
-      let clientFrameworkOption;
+      let clientFrameworkOption: ReturnType<typeof getDefaultConfigForNewApplication>['clientFramework'];
 
       before(() => {
         clientFrameworkOption = getDefaultConfigForNewApplication({
@@ -378,7 +378,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when the database type option is MongoDB', () => {
-      let enableHibernateCacheOption;
+      let enableHibernateCacheOption: ReturnType<typeof getDefaultConfigForNewApplication>['enableHibernateCache'];
 
       before(() => {
         const options = getDefaultConfigForNewApplication({
@@ -392,7 +392,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when the database type option is couchbase', () => {
-      let enableHibernateCacheOption;
+      let enableHibernateCacheOption: ReturnType<typeof getDefaultConfigForNewApplication>['enableHibernateCache'];
 
       before(() => {
         const options = getDefaultConfigForNewApplication({
@@ -406,7 +406,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when the database type option is cassandra', () => {
-      let enableHibernateCacheOption;
+      let enableHibernateCacheOption: ReturnType<typeof getDefaultConfigForNewApplication>['enableHibernateCache'];
 
       before(() => {
         const options = getDefaultConfigForNewApplication({
@@ -420,7 +420,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
     });
     describe('when the reactive option is set', () => {
-      let cacheProviderOption;
+      let cacheProviderOption: ReturnType<typeof getDefaultConfigForNewApplication>['cacheProvider'];
 
       before(() => {
         cacheProviderOption = getDefaultConfigForNewApplication({

@@ -19,6 +19,8 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
+import type JDLRelationship from '../../core/models/jdl-relationship.ts';
+
 import { convertRelationships } from './relationship-converter.ts';
 
 describe('jdl - RelationshipConverter', () => {
@@ -31,7 +33,7 @@ describe('jdl - RelationshipConverter', () => {
     });
     describe('when passing relationships', () => {
       describe('with all the fields', () => {
-        let convertedRelationships;
+        let convertedRelationships: JDLRelationship[];
 
         before(() => {
           convertedRelationships = convertRelationships(
@@ -94,7 +96,7 @@ describe('jdl - RelationshipConverter', () => {
         });
       });
       describe('when there is no injected field in both sides', () => {
-        let convertedRelationships;
+        let convertedRelationships: JDLRelationship[];
 
         before(() => {
           convertedRelationships = convertRelationships(

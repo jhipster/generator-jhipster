@@ -30,7 +30,7 @@ describe('jdl - ExportUtils', () => {
   });
   describe('writeConfigFile', () => {
     describe('when there is no .yo-rc.json file present', () => {
-      let exportedConfig;
+      let exportedConfig: any;
 
       beforeEach(() => {
         const config = {
@@ -53,7 +53,7 @@ describe('jdl - ExportUtils', () => {
       });
     });
     describe('when there is a .yo-rc.json file present', () => {
-      let exportedConfig;
+      let exportedConfig: any;
 
       beforeEach(() => {
         const existingConfig = {
@@ -95,7 +95,7 @@ describe('jdl - ExportUtils', () => {
     });
 
     describe('when there is a .yo-rc.json file present with creationTimestamp', () => {
-      let exportedConfig;
+      let exportedConfig: any;
 
       beforeEach(() => {
         const existingConfig = {
@@ -140,7 +140,7 @@ describe('jdl - ExportUtils', () => {
     });
 
     describe('when there is a .yo-rc.json file present without creationTimestamp', () => {
-      let exportedConfig;
+      let exportedConfig: any;
 
       beforeEach(() => {
         const existingConfig = {

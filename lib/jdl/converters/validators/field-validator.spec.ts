@@ -26,7 +26,7 @@ import JDLField from '../../core/models/jdl-field.ts';
 import FieldValidator from './field-validator.ts';
 
 describe('jdl - FieldValidator', () => {
-  let validator;
+  let validator: FieldValidator;
 
   before(() => {
     validator = new FieldValidator();
@@ -35,12 +35,13 @@ describe('jdl - FieldValidator', () => {
   describe('validate', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
+        // @ts-expect-error FIXME
         expect(() => validator.validate()).to.throw(/^No field\.$/);
       });
     });
     describe('when passing a field', () => {
       describe('with all its required attributes', () => {
-        let field;
+        let field: JDLField;
 
         before(() => {
           field = new JDLField({
@@ -55,6 +56,7 @@ describe('jdl - FieldValidator', () => {
       });
       describe('when not passing any attribute', () => {
         it('should fail', () => {
+          // @ts-expect-error FIXME
           expect(() => validator.validate({})).to.throw(/^The field attributes name, type were not found\.$/);
         });
       });

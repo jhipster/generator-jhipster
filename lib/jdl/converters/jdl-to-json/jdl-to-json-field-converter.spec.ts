@@ -46,7 +46,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
     });
     describe('when passing a JDL object', () => {
       describe('without validation, comment or option', () => {
-        let convertedField;
+        let convertedField: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -76,7 +76,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
       });
       describe('when having blobs', () => {
         describe('that are recognised', () => {
-          let convertedFields;
+          let convertedFields: ReturnType<ReturnType<typeof convert>['get']>;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -137,7 +137,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
       });
       describe('with field types being enums', () => {
-        let convertedField;
+        let convertedField: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -168,7 +168,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
       });
       describe('with field types being enums with comments', () => {
-        let convertedField;
+        let convertedField: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -208,7 +208,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
       });
       describe('with comments', () => {
-        let convertedField;
+        let convertedField: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -239,7 +239,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
       });
       describe('with validations', () => {
-        let convertedFields;
+        let convertedFields: ReturnType<ReturnType<typeof convert>['get']>;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -356,7 +356,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
       });
       describe('with options', () => {
-        let convertedField;
+        let convertedField: any;
 
         before(() => {
           const jdlObject = new JDLObject();

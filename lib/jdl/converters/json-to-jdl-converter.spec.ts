@@ -38,7 +38,7 @@ describe('jdl - JSONToJDLConverter', () => {
 
   describe('convertToJDL', () => {
     describe('when there is a yo-rc file in the passed directory', () => {
-      let jdlFileContent;
+      let jdlFileContent: string;
 
       describe('without entities', () => {
         beforeEach(async () => {
@@ -238,7 +238,7 @@ paginate Country with pager
       describe('with several JHipster apps', () => {
         let rootDir;
         let jdlFilename;
-        let jdlFileContent;
+        let jdlFileContent: string;
 
         beforeEach(() => {
           rootDir = getTestFile('json_to_jdl_converter', 'multi_apps');
@@ -368,7 +368,7 @@ noFluentMethod Region, Country, Location
       });
     });
     describe('when passing an output file', () => {
-      let file;
+      let file: string;
 
       beforeEach(async () => {
         file = 'exported.jdl';
@@ -393,7 +393,7 @@ noFluentMethod Region, Country, Location
   });
   describe('convertSingleContentToJDL', () => {
     describe('with microservices attribute', () => {
-      let jdl;
+      let jdl: string;
       beforeEach(() => {
         jdl = convertSingleContentToJDL(
           {

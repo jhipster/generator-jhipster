@@ -27,7 +27,7 @@ const { lexer: JDLLexer } = createRuntime();
 
 describe('jdl - JDLLexer', () => {
   describe('when passing a valid JDL input', () => {
-    let lexingResult;
+    let lexingResult: ReturnType<typeof JDLLexer.tokenize>;
 
     before(() => {
       const input = `
@@ -66,7 +66,7 @@ describe('jdl - JDLLexer', () => {
   });
 
   describe('when passing an invalid JDL input', () => {
-    let lexingResult;
+    let lexingResult: ReturnType<typeof JDLLexer.tokenize>;
 
     before(() => {
       const input = `

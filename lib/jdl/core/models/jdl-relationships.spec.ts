@@ -39,7 +39,7 @@ describe('jdl - JDLRelationships', () => {
       });
     });
     describe('when passing a valid relationship', () => {
-      let relationships;
+      let relationships: JDLRelationships;
 
       before(() => {
         relationships = new JDLRelationships();
@@ -90,8 +90,8 @@ describe('jdl - JDLRelationships', () => {
         });
       });
       describe('for an existing relationship', () => {
-        let relationships;
-        let relationship;
+        let relationships: JDLRelationships;
+        let relationship: JDLRelationship;
 
         before(() => {
           relationships = new JDLRelationships();
@@ -126,8 +126,8 @@ describe('jdl - JDLRelationships', () => {
         });
       });
       describe('for an existing relationship', () => {
-        let relationships;
-        let relationship;
+        let relationships: JDLRelationships;
+        let relationship: JDLRelationship;
 
         before(() => {
           relationships = new JDLRelationships();
@@ -162,8 +162,8 @@ describe('jdl - JDLRelationships', () => {
         });
       });
       describe('for an existing relationship', () => {
-        let relationships;
-        let relationship;
+        let relationships: JDLRelationships;
+        let relationship: JDLRelationship;
 
         before(() => {
           relationships = new JDLRelationships();
@@ -198,8 +198,8 @@ describe('jdl - JDLRelationships', () => {
         });
       });
       describe('for an existing relationship', () => {
-        let relationships;
-        let relationship;
+        let relationships: JDLRelationships;
+        let relationship: JDLRelationship;
 
         before(() => {
           relationships = new JDLRelationships();
@@ -234,8 +234,8 @@ describe('jdl - JDLRelationships', () => {
         });
       });
       describe('for an existing relationship', () => {
-        let relationships;
-        let relationship;
+        let relationships: JDLRelationships;
+        let relationship: JDLRelationship;
 
         before(() => {
           relationships = new JDLRelationships();
@@ -257,8 +257,8 @@ describe('jdl - JDLRelationships', () => {
   });
   describe('toArray', () => {
     let relationships;
-    let relationship1;
-    let relationship2;
+    let relationship1: JDLRelationship;
+    let relationship2: JDLRelationship;
     let array: any[] = [];
 
     before(() => {
@@ -291,7 +291,7 @@ describe('jdl - JDLRelationships', () => {
       });
     });
     describe('when there are OtO relationships', () => {
-      let relationships;
+      let relationships: JDLRelationships;
 
       before(() => {
         relationships = new JDLRelationships();
@@ -317,7 +317,7 @@ describe('jdl - JDLRelationships', () => {
       });
     });
     describe('when there are OtM relationships', () => {
-      let relationships;
+      let relationships: JDLRelationships;
 
       before(() => {
         relationships = new JDLRelationships();
@@ -343,7 +343,7 @@ describe('jdl - JDLRelationships', () => {
       });
     });
     describe('when there are MtO relationships', () => {
-      let relationships;
+      let relationships: JDLRelationships;
 
       before(() => {
         relationships = new JDLRelationships();
@@ -369,7 +369,7 @@ describe('jdl - JDLRelationships', () => {
       });
     });
     describe('when there are OtO relationships', () => {
-      let relationships;
+      let relationships: JDLRelationships;
 
       before(() => {
         relationships = new JDLRelationships();
@@ -390,7 +390,7 @@ describe('jdl - JDLRelationships', () => {
     });
   });
   describe('size', () => {
-    let relationships;
+    let relationships: JDLRelationships;
 
     before(() => {
       relationships = new JDLRelationships();
@@ -410,7 +410,7 @@ describe('jdl - JDLRelationships', () => {
     });
   });
   describe('forEach', () => {
-    let jdlRelationships;
+    let jdlRelationships: JDLRelationships;
 
     before(() => {
       jdlRelationships = new JDLRelationships();
@@ -418,6 +418,7 @@ describe('jdl - JDLRelationships', () => {
 
     describe('when not passing a function', () => {
       it('should not fail', () => {
+        // @ts-expect-error FIXME
         jdlRelationships.forEach();
       });
     });
@@ -471,9 +472,9 @@ describe('jdl - JDLRelationships', () => {
       });
     });
     describe('when having one relationship per type', () => {
-      let relationships;
-      let oneToOneRelationship;
-      let oneToManyRelationship;
+      let relationships: JDLRelationships;
+      let oneToOneRelationship: JDLRelationship;
+      let oneToManyRelationship: JDLRelationship;
 
       before(() => {
         relationships = new JDLRelationships();
@@ -505,9 +506,9 @@ relationship ${oneToManyRelationship.type} {
       });
     });
     describe('when having more than one relationship per type', () => {
-      let relationships;
-      let oneToOneRelationship1;
-      let oneToOneRelationship2;
+      let relationships: JDLRelationships;
+      let oneToOneRelationship1: JDLRelationship;
+      let oneToOneRelationship2: JDLRelationship;
 
       before(() => {
         relationships = new JDLRelationships();

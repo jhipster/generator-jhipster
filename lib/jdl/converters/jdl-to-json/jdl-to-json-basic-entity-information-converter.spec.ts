@@ -43,8 +43,8 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
     });
     describe('when passing JDL entities', () => {
       describe('with some of them being built-in entities', () => {
-        let builtInEntitiesAreConverted;
-        let customEntitiesAreConverted;
+        let builtInEntitiesAreConverted: boolean;
+        let customEntitiesAreConverted: boolean;
 
         before(() => {
           const entityA = new JDLEntity({
@@ -71,7 +71,7 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
         });
       });
       describe('with no field, no option and no relationship', () => {
-        let convertedEntity;
+        let convertedEntity: ReturnType<ReturnType<typeof convert>['get']>;
 
         before(() => {
           const entityA = new JDLEntity({

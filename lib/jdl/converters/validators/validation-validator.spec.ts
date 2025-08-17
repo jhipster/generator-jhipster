@@ -26,7 +26,7 @@ import JDLValidation from '../../core/models/jdl-validation.ts';
 import ValidationValidator from './validation-validator.ts';
 
 describe('jdl - ValidationValidator', () => {
-  let validator;
+  let validator: ValidationValidator;
 
   before(() => {
     validator = new ValidationValidator();
@@ -35,6 +35,7 @@ describe('jdl - ValidationValidator', () => {
   describe('validate', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
+        // @ts-expect-error FIXME
         expect(() => validator.validate()).to.throw(/^No validation\.$/);
       });
     });
@@ -46,11 +47,12 @@ describe('jdl - ValidationValidator', () => {
       });
       describe('without any of its required attributes', () => {
         it('should fail', () => {
+          // @ts-expect-error FIXME
           expect(() => validator.validate({})).to.throw(/^The validation attribute name was not found\.$/);
         });
       });
       describe('when passing an invalid name for a validation', () => {
-        let validation;
+        let validation: JDLValidation;
 
         before(() => {
           validation = new JDLValidation({
@@ -65,7 +67,7 @@ describe('jdl - ValidationValidator', () => {
         });
       });
       describe('when not passing a value when required', () => {
-        let validation;
+        let validation: JDLValidation;
 
         before(() => {
           validation = new JDLValidation({

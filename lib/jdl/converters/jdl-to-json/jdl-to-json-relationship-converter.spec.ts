@@ -46,8 +46,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
     });
     describe('when passing relationships and entity names', () => {
       describe('without options, required relationships or comments', () => {
-        let relationshipsForA;
-        let relationshipsForB;
+        let relationshipsForA: ReturnType<typeof convert>['get'];
+        let relationshipsForB: ReturnType<typeof convert>['get'];
 
         before(() => {
           const oneToOneRelationship = new JDLRelationship({
@@ -155,7 +155,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
       });
       describe('with options', () => {
         describe('being custom options', () => {
-          let convertedRelationship;
+          let convertedRelationship: ReturnType<typeof convert>['get'];
 
           before(() => {
             const oneToOneRelationship = new JDLRelationship({
@@ -192,7 +192,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
         describe('being regular options', () => {
-          let convertedRelationship;
+          let convertedRelationship: ReturnType<typeof convert>['get'];
 
           before(() => {
             const oneToOneRelationship = new JDLRelationship({
@@ -228,8 +228,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
         });
       });
       describe('with required relationships', () => {
-        let relationshipsForA;
-        let relationshipsForB;
+        let relationshipsForA: ReturnType<typeof convert>['get'];
+        let relationshipsForB: ReturnType<typeof convert>['get'];
 
         before(() => {
           const oneToOneRelationship = new JDLRelationship({
@@ -274,8 +274,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
         });
       });
       describe('with comments', () => {
-        let relationshipsForA;
-        let relationshipsForB;
+        let relationshipsForA: ReturnType<typeof convert>['get'];
+        let relationshipsForB: ReturnType<typeof convert>['get'];
 
         before(() => {
           const oneToOneRelationship = new JDLRelationship({
@@ -321,8 +321,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
       });
       describe("when the injected field in the destination side isn't present", () => {
         describe('for a One-to-One relationship', () => {
-          let relationshipFromSourceToDestination;
-          let relationshipFromDestinationToSource;
+          let relationshipFromSourceToDestination: ReturnType<typeof convert>['get'];
+          let relationshipFromDestinationToSource: ReturnType<typeof convert>['get'];
 
           before(() => {
             const oneToOneRelationship = new JDLRelationship({
@@ -351,8 +351,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
         describe('for a One-to-Many relationship', () => {
-          let relationshipFromSourceToDestination;
-          let relationshipFromDestinationToSource;
+          let relationshipFromSourceToDestination: ReturnType<typeof convert>['get'];
+          let relationshipFromDestinationToSource: ReturnType<typeof convert>['get'];
 
           before(() => {
             const oneToManyRelationship = new JDLRelationship({
@@ -381,8 +381,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
         describe('for a Many-to-One relationship', () => {
-          let relationshipFromSourceToDestination;
-          let relationshipFromDestinationToSource;
+          let relationshipFromSourceToDestination: ReturnType<typeof convert>['get'];
+          let relationshipFromDestinationToSource: ReturnType<typeof convert>['get'];
 
           before(() => {
             const manyToOneRelationship = new JDLRelationship({
@@ -411,8 +411,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
         describe('for a Many-to-Many relationship', () => {
-          let relationshipFromSourceToDestination;
-          let relationshipFromDestinationToSource;
+          let relationshipFromSourceToDestination: ReturnType<typeof convert>['get'];
+          let relationshipFromDestinationToSource: ReturnType<typeof convert>['get'];
 
           before(() => {
             const manyToManyRelationship = new JDLRelationship({
@@ -443,8 +443,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
       });
       describe("when the injected field in the source side isn't present", () => {
         describe('for a One-to-One relationship', () => {
-          let relationshipFromSourceToDestination;
-          let relationshipFromDestinationToSource;
+          let relationshipFromSourceToDestination: ReturnType<typeof convert>['get'];
+          let relationshipFromDestinationToSource: ReturnType<typeof convert>['get'];
 
           before(() => {
             const oneToOneRelationship = new JDLRelationship({
@@ -481,8 +481,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
         describe('for a One-to-Many relationship', () => {
-          let relationshipFromSourceToDestination;
-          let relationshipFromDestinationToSource;
+          let relationshipFromSourceToDestination: ReturnType<typeof convert>['get'];
+          let relationshipFromDestinationToSource: ReturnType<typeof convert>['get'];
 
           before(() => {
             const oneToManyRelationship = new JDLRelationship({
@@ -519,8 +519,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
         describe('for a Many-to-One relationship', () => {
-          let relationshipFromSourceToDestination;
-          let relationshipFromDestinationToSource;
+          let relationshipFromSourceToDestination: ReturnType<typeof convert>['get'];
+          let relationshipFromDestinationToSource: ReturnType<typeof convert>['get'];
 
           before(() => {
             const manyToOneRelationship = new JDLRelationship({
@@ -557,8 +557,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
         describe('for a Many-to-Many relationship', () => {
-          let relationshipFromSourceToDestination;
-          let relationshipFromDestinationToSource;
+          let relationshipFromSourceToDestination: ReturnType<typeof convert>['get'];
+          let relationshipFromDestinationToSource: ReturnType<typeof convert>['get'];
 
           before(() => {
             const manyToManyRelationship = new JDLRelationship({
@@ -597,8 +597,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
       });
       describe('when setting custom field for relationship mapping', () => {
         describe('for a One-to-One relationship', () => {
-          let relationshipFromSourceToDestination;
-          let relationshipFromDestinationToSource;
+          let relationshipFromSourceToDestination: ReturnType<typeof convert>['get'];
+          let relationshipFromDestinationToSource: ReturnType<typeof convert>['get'];
 
           before(() => {
             const oneToOneRelationship = new JDLRelationship({
@@ -639,8 +639,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
         describe('for a One-to-Many relationship', () => {
-          let relationshipFromSourceToDestination;
-          let relationshipFromDestinationToSource;
+          let relationshipFromSourceToDestination: ReturnType<typeof convert>['get'];
+          let relationshipFromDestinationToSource: ReturnType<typeof convert>['get'];
 
           before(() => {
             const oneToManyRelationship = new JDLRelationship({
@@ -681,8 +681,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
         describe('for a Many-to-One relationship', () => {
-          let relationshipFromSourceToDestination;
-          let relationshipFromDestinationToSource;
+          let relationshipFromSourceToDestination: ReturnType<typeof convert>['get'];
+          let relationshipFromDestinationToSource: ReturnType<typeof convert>['get'];
 
           before(() => {
             const manyToOneRelationship = new JDLRelationship({
@@ -723,8 +723,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
         describe('for a Many-to-Many relationship', () => {
-          let relationshipFromSourceToDestination;
-          let relationshipFromDestinationToSource;
+          let relationshipFromSourceToDestination: ReturnType<typeof convert>['get'];
+          let relationshipFromDestinationToSource: ReturnType<typeof convert>['get'];
 
           before(() => {
             const manyToManyRelationship = new JDLRelationship({

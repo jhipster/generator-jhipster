@@ -33,7 +33,7 @@ describe('jdl - FieldConverter', () => {
     });
     describe('when passing a parsed field', () => {
       describe('with all the attributes', () => {
-        let convertedField;
+        let convertedField: ReturnType<typeof convertField>;
 
         before(() => {
           convertedField = convertField({
@@ -56,7 +56,7 @@ JDLField {
         });
       });
       describe('with a capitalized name', () => {
-        let nameFromConvertedField;
+        let nameFromConvertedField: string;
 
         before(() => {
           const convertedField: JDLField = convertField({
@@ -72,7 +72,7 @@ JDLField {
         });
       });
       describe('with a comment', () => {
-        let commentFromConvertedField;
+        let commentFromConvertedField: ReturnType<typeof convertField>['comment'];
 
         before(() => {
           const convertedField = convertField({

@@ -55,7 +55,7 @@ describe('jdl - JDLRelationship', () => {
       });
     });
     describe('when passing valid args', () => {
-      let relationship;
+      let relationship: JDLRelationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -75,7 +75,7 @@ describe('jdl - JDLRelationship', () => {
     });
     describe('when passing an unidirectional one-to-many relationship', () => {
       describe('and disabling the conversion to a bidirectional relationship', () => {
-        let relationship;
+        let relationship: JDLRelationship;
 
         before(() => {
           relationship = new JDLRelationship({
@@ -93,7 +93,7 @@ describe('jdl - JDLRelationship', () => {
     });
     describe('when passing an unidirectional many-to-one relationship', () => {
       describe('and disabling the conversion to a bidirectional relationship', () => {
-        let relationship;
+        let relationship: JDLRelationship;
 
         before(() => {
           relationship = new JDLRelationship({
@@ -111,7 +111,7 @@ describe('jdl - JDLRelationship', () => {
     });
     describe('when passing an unidirectional many-to-one relationship', () => {
       describe('and disabling the conversion to a bidirectional relationship', () => {
-        let relationship;
+        let relationship: JDLRelationship;
 
         before(() => {
           relationship = new JDLRelationship({
@@ -129,7 +129,7 @@ describe('jdl - JDLRelationship', () => {
     });
     describe('when passing an unidirectional many-to-one relationship', () => {
       describe('and disabling the conversion to a bidirectional relationship', () => {
-        let relationship;
+        let relationship: JDLRelationship;
 
         before(() => {
           relationship = new JDLRelationship({
@@ -147,7 +147,7 @@ describe('jdl - JDLRelationship', () => {
     });
   });
   describe('getId', () => {
-    let relationship;
+    let relationship: JDLRelationship;
 
     before(() => {
       relationship = new JDLRelationship({
@@ -165,7 +165,7 @@ describe('jdl - JDLRelationship', () => {
     });
   });
   describe('hasGlobalOption', () => {
-    let relationship;
+    let relationship: JDLRelationship;
 
     before(() => {
       relationship = new JDLRelationship({
@@ -193,10 +193,11 @@ describe('jdl - JDLRelationship', () => {
     });
   });
   describe('forEachGlobalOption', () => {
-    let relationship;
-    let options;
+    let relationship: JDLRelationship;
+    let options: ConstructorParameters<typeof JDLRelationship>[0]['options'];
 
     before(() => {
+      // @ts-expect-error FIXME
       options = { global: { custom: 1, anotherCustom: 42 } };
       relationship = new JDLRelationship({
         from: 'A',
@@ -209,13 +210,14 @@ describe('jdl - JDLRelationship', () => {
 
     it('should loop over the function for each element', () => {
       relationship.forEachGlobalOption((optionName, optionValue) => {
+        // @ts-expect-error FIXME
         expect(optionValue).to.equal(options.global[optionName]);
       });
     });
   });
   describe('toString', () => {
     describe('without any comment', () => {
-      let relationship;
+      let relationship: JDLRelationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -235,7 +237,7 @@ describe('jdl - JDLRelationship', () => {
       });
     });
     describe('with comments for both sides', () => {
-      let relationship;
+      let relationship: JDLRelationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -264,7 +266,7 @@ describe('jdl - JDLRelationship', () => {
       });
     });
     describe('with a comment for the source side', () => {
-      let relationship;
+      let relationship: JDLRelationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -288,7 +290,7 @@ describe('jdl - JDLRelationship', () => {
       });
     });
     describe('with a comment for the destination side', () => {
-      let relationship;
+      let relationship: JDLRelationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -313,7 +315,7 @@ describe('jdl - JDLRelationship', () => {
       });
     });
     describe('with only one injected field', () => {
-      let relationship;
+      let relationship: JDLRelationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -333,7 +335,7 @@ describe('jdl - JDLRelationship', () => {
       });
     });
     describe('with both injected fields', () => {
-      let relationship;
+      let relationship: JDLRelationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -355,7 +357,7 @@ describe('jdl - JDLRelationship', () => {
     });
     describe('with options', () => {
       describe('being global', () => {
-        let relationship;
+        let relationship: JDLRelationship;
 
         before(() => {
           relationship = new JDLRelationship({
@@ -382,7 +384,7 @@ describe('jdl - JDLRelationship', () => {
         });
       });
       describe('being global, on the source and on the destination', () => {
-        let relationship;
+        let relationship: JDLRelationship;
 
         before(() => {
           relationship = new JDLRelationship({

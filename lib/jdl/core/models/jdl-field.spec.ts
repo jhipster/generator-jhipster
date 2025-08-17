@@ -58,7 +58,7 @@ describe('jdl - JDLField', () => {
     });
   });
   describe('addValidation', () => {
-    let field;
+    let field: JDLField;
 
     before(() => {
       field = new JDLField({
@@ -72,6 +72,7 @@ describe('jdl - JDLField', () => {
       describe('because it is null', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-ignore EXPECTED BEHAVIOR
             field.addValidation(null);
           }).to.throw(/^Can't add a nil JDL validation to the JDL field\.$/);
         });
@@ -95,7 +96,7 @@ describe('jdl - JDLField', () => {
   });
   describe('forEachValidation', () => {
     describe('when not passing a function', () => {
-      let field;
+      let field: JDLField;
 
       before(() => {
         field = new JDLField({
@@ -105,11 +106,12 @@ describe('jdl - JDLField', () => {
       });
 
       it('should fail', () => {
+        // @ts-expect-error FIXME
         expect(() => field.forEachValidation()).to.throw();
       });
     });
     describe('when passing a function', () => {
-      let result;
+      let result: string;
 
       before(() => {
         const field = new JDLField({
@@ -137,7 +139,7 @@ describe('jdl - JDLField', () => {
   describe('toString', () => {
     describe('without comment', () => {
       let args: any = {};
-      let field;
+      let field: JDLField;
 
       before(() => {
         args = {
@@ -153,7 +155,7 @@ describe('jdl - JDLField', () => {
     });
     describe('without any validation', () => {
       let args: any = {};
-      let field;
+      let field: JDLField;
 
       before(() => {
         args = {
@@ -170,7 +172,7 @@ describe('jdl - JDLField', () => {
     });
     describe('with everything', () => {
       let args: any = {};
-      let field;
+      let field: JDLField;
 
       before(() => {
         args = {
