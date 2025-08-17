@@ -109,9 +109,7 @@ function getConfigForClientApplication(options: ApplicationDefaults = {}): Appli
   if (clientFramework === NO_CLIENT_FRAMEWORK) {
     return options;
   }
-  if (options[OptionNames.MICROFRONTEND] === undefined) {
-    options[OptionNames.MICROFRONTEND] = Boolean(options[OptionNames.MICROFRONTENDS]?.length);
-  }
+  options[OptionNames.MICROFRONTEND] ??= Boolean(options[OptionNames.MICROFRONTENDS]?.length);
   if (!options[CLIENT_THEME]) {
     options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
   } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
@@ -166,19 +164,13 @@ function getConfigForCacheProvider(options: ApplicationDefaults = {}): Applicati
 }
 
 function getConfigForReactive(options: ApplicationDefaults = {}): ApplicationDefaults {
-  if (options[REACTIVE] === undefined) {
-    options[REACTIVE] = false;
-  }
+  options[REACTIVE] ??= false;
   return options;
 }
 
 function getConfigForTranslation(options: ApplicationDefaults = {}): ApplicationDefaults {
-  if (options[ENABLE_TRANSLATION] === undefined) {
-    options[ENABLE_TRANSLATION] = true;
-  }
-  if (options[NATIVE_LANGUAGE] === undefined) {
-    options[NATIVE_LANGUAGE] = 'en';
-  }
+  options[ENABLE_TRANSLATION] ??= true;
+  options[NATIVE_LANGUAGE] ??= 'en';
   if (options[ENABLE_TRANSLATION] && options[LANGUAGES] === undefined) {
     options[LANGUAGES] = [];
   }
@@ -186,16 +178,10 @@ function getConfigForTranslation(options: ApplicationDefaults = {}): Application
 }
 
 function getConfigForDatabaseType(options: ApplicationDefaults = {}): ApplicationDefaults {
-  if (options[DATABASE_TYPE] === undefined) {
-    options[DATABASE_TYPE] = SQL;
-  }
+  options[DATABASE_TYPE] ??= SQL;
   if (options[DATABASE_TYPE] === SQL) {
-    if (options[PROD_DATABASE_TYPE] === undefined) {
-      options[PROD_DATABASE_TYPE] = POSTGRESQL;
-    }
-    if (options[DEV_DATABASE_TYPE] === undefined) {
-      options[DEV_DATABASE_TYPE] = options[PROD_DATABASE_TYPE];
-    }
+    options[PROD_DATABASE_TYPE] ??= POSTGRESQL;
+    options[DEV_DATABASE_TYPE] ??= options[PROD_DATABASE_TYPE];
   }
   options.databaseMigration ??= options.databaseType === SQL ? 'liquibase' : 'no';
 
