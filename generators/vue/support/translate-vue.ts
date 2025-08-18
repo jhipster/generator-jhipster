@@ -143,9 +143,7 @@ export function replaceTranslations({
           // unwrap field
           field = field.substring(1, field.length - 1);
         }
-        if (value === undefined) {
-          value = field;
-        }
+        value ??= field;
         value = value.trim();
         if (/^\d+$/.test(value)) {
           // convert integer

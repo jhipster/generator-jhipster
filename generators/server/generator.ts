@@ -93,22 +93,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
     return this.asConfiguringEachEntityTaskGroup({
       configureMicroservice({ application, entityConfig }) {
         if (application.applicationTypeMicroservice) {
-          if (entityConfig.microserviceName === undefined) {
-            entityConfig.microserviceName = application.baseName;
-          }
-          if (entityConfig.clientRootFolder === undefined) {
-            entityConfig.clientRootFolder = entityConfig.microserviceName;
-          }
-          if (entityConfig.databaseType === undefined) {
-            entityConfig.databaseType = application.databaseType;
-          }
+          entityConfig.microserviceName ??= application.baseName;
+          entityConfig.clientRootFolder ??= entityConfig.microserviceName;
+          entityConfig.databaseType ??= application.databaseType;
         }
       },
       configureGateway({ application, entityConfig }) {
         if (application.applicationTypeGateway) {
-          if (entityConfig.databaseType === undefined) {
-            entityConfig.databaseType = application.databaseType;
-          }
+          entityConfig.databaseType ??= application.databaseType;
           if (entityConfig.clientRootFolder === undefined) {
             entityConfig.clientRootFolder = entityConfig.skipUiGrouping ? '' : entityConfig.microserviceName;
           }

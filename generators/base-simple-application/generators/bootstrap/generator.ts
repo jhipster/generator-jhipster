@@ -34,9 +34,7 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
   get configuring() {
     return this.asConfiguringTaskGroup({
       configuring() {
-        if (this.jhipsterConfig.baseName === undefined) {
-          this.jhipsterConfig.baseName = 'jhipster';
-        }
+        this.jhipsterConfig.baseName ??= 'jhipster';
       },
     });
   }

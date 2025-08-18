@@ -73,14 +73,12 @@ export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicat
 
 let defaultJDLApplicationConfig: JDLApplicationConfig;
 export const getDefaultJDLApplicationConfig = () => {
-  if (defaultJDLApplicationConfig === undefined) {
-    defaultJDLApplicationConfig = buildJDLApplicationConfig({
-      ...springCloudStreamCommand.configs,
-      ...springBootCommand.configs,
-      ...liquibaseCommand.configs,
-      ...gatewayCommand.configs,
-    });
-  }
+  defaultJDLApplicationConfig ??= buildJDLApplicationConfig({
+    ...springCloudStreamCommand.configs,
+    ...springBootCommand.configs,
+    ...liquibaseCommand.configs,
+    ...gatewayCommand.configs,
+  });
   return defaultJDLApplicationConfig;
 };
 
