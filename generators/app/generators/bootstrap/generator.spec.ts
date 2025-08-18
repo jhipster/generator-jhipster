@@ -53,7 +53,8 @@ const expectedPrimaryKey = primaryKey => ({
   ids: primaryKey.ids.map(expectedPrimaryKeyId),
 });
 
-const expectedEntity = (entity: any) => ({
+// @ts-expect-error FIXME
+const expectedEntity = entity => ({
   faker: expect.any(Object),
   generateFakeData: expect.any(Function),
   resetFakerSeed: expect.any(Function),
