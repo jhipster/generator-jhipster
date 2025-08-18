@@ -35,7 +35,7 @@ describe('jdl - EnumValidator', () => {
   describe('validate', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
-        // @ts-ignore EXPECTED BEHAVIOUR
+        // @ts-expect-error invalid api test
         expect(() => validator.validate()).to.throw(/^No enum\.$/);
       });
     });
@@ -55,7 +55,7 @@ describe('jdl - EnumValidator', () => {
       });
       describe('when not passing any attribute', () => {
         it('should fail', () => {
-          // @ts-ignore EXPECTED BEHAVIOUR
+          // @ts-expect-error invalid api test
           expect(() => validator.validate({})).to.throw(/^The enum attribute name was not found\.$/);
         });
       });

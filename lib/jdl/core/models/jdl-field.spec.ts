@@ -35,7 +35,7 @@ describe('jdl - JDLField', () => {
     describe('when not passing any argument', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore EXPECTED BEHAVIOUR
+          // @ts-expect-error invalid api test
           new JDLField();
         }).to.throw('The field name and type are mandatory to create a field.');
       });
@@ -43,7 +43,7 @@ describe('jdl - JDLField', () => {
     describe('when not passing the name', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore EXPECTED BEHAVIOUR
+          // @ts-expect-error invalid api test
           new JDLField({ name: null, type: 'String' });
         }).to.throw('The field name and type are mandatory to create a field.');
       });
@@ -51,7 +51,7 @@ describe('jdl - JDLField', () => {
     describe('when not passing the type', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore EXPECTED BEHAVIOUR
+          // @ts-expect-error invalid api test
           new JDLField({ name: 'abc', type: null });
         }).to.throw('The field name and type are mandatory to create a field.');
       });
@@ -106,7 +106,7 @@ describe('jdl - JDLField', () => {
       });
 
       it('should fail', () => {
-        // @ts-ignore EXPECTED BEHAVIOUR
+        // @ts-expect-error invalid api test
         expect(() => field.forEachValidation()).to.throw();
       });
     });

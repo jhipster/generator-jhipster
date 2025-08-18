@@ -33,7 +33,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
 
       it('should fail', () => {
-        // @ts-ignore EXPECTED BEHAVIOUR
+        // @ts-expect-error invalid api test
         expect(() => jdlApplicationEntities.add()).to.throw(/^An entity name has to be passed so as to be added\.$/);
       });
     });
@@ -82,7 +82,7 @@ describe('jdl - JDLApplicationEntities', () => {
 
       before(() => {
         jdlApplicationEntities = new JDLApplicationEntities(['A']);
-        // @ts-ignore EXPECTED BEHAVIOUR
+        // @ts-expect-error invalid api test
         jdlApplicationEntities.addEntityNames([undefined, null]);
       });
 
@@ -112,7 +112,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
 
       it('should not fail', () => {
-        // @ts-ignore EXPECTED BEHAVIOUR
+        // @ts-expect-error invalid api test
         expect(() => jdlApplicationEntities.forEach()).not.to.throw();
       });
     });

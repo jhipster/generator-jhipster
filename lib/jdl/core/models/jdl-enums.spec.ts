@@ -114,7 +114,7 @@ describe('jdl - JDLEnums', () => {
 
     describe('when not passing a function', () => {
       it('should not fail', () => {
-        // @ts-ignore EXPECTED BEHAVIOUR
+        // @ts-expect-error invalid api test
         jdlEnums.forEach();
       });
     });

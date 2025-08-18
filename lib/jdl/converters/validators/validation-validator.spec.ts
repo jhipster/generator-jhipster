@@ -35,7 +35,7 @@ describe('jdl - ValidationValidator', () => {
   describe('validate', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
-        // @ts-ignore EXPECTED BEHAVIOUR
+        // @ts-expect-error invalid api test
         expect(() => validator.validate()).to.throw(/^No validation\.$/);
       });
     });
@@ -47,7 +47,7 @@ describe('jdl - ValidationValidator', () => {
       });
       describe('without any of its required attributes', () => {
         it('should fail', () => {
-          // @ts-ignore EXPECTED BEHAVIOUR
+          // @ts-expect-error invalid api test
           expect(() => validator.validate({})).to.throw(/^The validation attribute name was not found\.$/);
         });
       });

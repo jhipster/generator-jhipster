@@ -35,12 +35,12 @@ describe('jdl - BinaryOptionValidator', () => {
   describe('validate', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
-        // @ts-ignore EXPECTED BEHAVIOUR
+        // @ts-expect-error invalid api test
         expect(() => validator.validate()).to.throw(/^No binary option\.$/);
       });
     });
     it('should fail', () => {
-      // @ts-ignore EXPECTED BEHAVIOUR
+      // @ts-expect-error invalid api test
       expect(() => validator.validate({})).to.throw(
         /^The binary option attributes name, entityNames, excludedNames, getType, value were not found\.$/,
       );
