@@ -35,7 +35,7 @@ describe('jdl - FieldValidator', () => {
   describe('validate', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(() => validator.validate()).to.throw(/^No field\.$/);
       });
     });
@@ -56,7 +56,7 @@ describe('jdl - FieldValidator', () => {
       });
       describe('when not passing any attribute', () => {
         it('should fail', () => {
-          // @ts-expect-error FIXME
+          // @ts-ignore EXPECTED BEHAVIOUR
           expect(() => validator.validate({})).to.throw(/^The field attributes name, type were not found\.$/);
         });
       });

@@ -34,10 +34,10 @@ const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
 
-const mockedGeneratorsNames = Object.fromEntries(
-  Object.entries(GENERATORS).map(([key, value]) => [key, `jhipster:${value}`])
-) as Record<keyof typeof GENERATORS, string>;
-
+const mockedGeneratorsNames = Object.fromEntries(Object.entries(GENERATORS).map(([key, value]) => [key, `jhipster:${value}`])) as Record<
+  keyof typeof GENERATORS,
+  string
+>;
 
 const {
   GENERATOR_APP: MOCKED_APP,
