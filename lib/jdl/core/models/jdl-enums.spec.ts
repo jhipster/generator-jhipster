@@ -42,7 +42,7 @@ describe('jdl - JDLEnums', () => {
     describe('when adding an invalid element', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore EXPECTED BEHAVIOR: This is a test for an invalid element.
+          // @ts-expect-error invalid api test
           jdlEnums.add();
         }).to.throw(/^Can't add a nil JDL enum to the JDL enums\.$/);
       });

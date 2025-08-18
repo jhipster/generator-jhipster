@@ -94,7 +94,7 @@ describe('jdl - JDLUnaryOption', () => {
 
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore EXPECTED BEHAVIOR
+          // @ts-expect-error invalid api test
           option.addEntityName(null);
         }).to.throw('An entity name has to be passed so as to be added to the option.');
       });
@@ -189,7 +189,7 @@ describe('jdl - JDLUnaryOption', () => {
 
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore EXPECTED BEHAVIOR
+          // @ts-expect-error invalid api test
           option.excludeEntityName(null);
         }).to.throw('An entity name has to be passed so as to be excluded from the option.');
       });

@@ -38,7 +38,7 @@ describe('jdl - JDLOptions', () => {
 
       it('should fail', () => {
         expect(() => {
-          // @ts-ignore EXPECTED BEHAVIOR: This is a test for an invalid input.
+          // @ts-expect-error invalid api test
           options.addOption(null);
         }).to.throw(/^Can't add nil option.$/);
       });

@@ -98,7 +98,7 @@ describe('jdl - JDLEntity', () => {
       describe('because it is nil', () => {
         it('should fail', () => {
           expect(() => {
-            // @ts-ignore EXPECTED BEHAVIOR
+            // @ts-expect-error invalid api test
             entity.addField(null);
           }).to.throw(/^Can't add nil field to the JDL entity\.$/);
         });

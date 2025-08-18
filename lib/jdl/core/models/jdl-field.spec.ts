@@ -72,7 +72,7 @@ describe('jdl - JDLField', () => {
       describe('because it is null', () => {
         it('should fail', () => {
           expect(() => {
-            // @ts-ignore EXPECTED BEHAVIOR
+            // @ts-expect-error invalid api test
             field.addValidation(null);
           }).to.throw(/^Can't add a nil JDL validation to the JDL field\.$/);
         });
