@@ -38,7 +38,7 @@ jobs:
       matrix: ${{ steps.build.outputs.matrix }}
       empty-matrix: ${{ steps.build.outputs.empty-matrix }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 1
       - uses: actions/setup-node@v4
@@ -63,7 +63,7 @@ jobs:
       # Install all tools and check configuration
       #----------------------------------------------------------------------
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: generator-jhipster
           fetch-depth: 2
