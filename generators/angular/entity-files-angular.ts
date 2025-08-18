@@ -189,5 +189,22 @@ export const cleanupEntitiesFiles = asWritingEntitiesTask<AngularEntity, Angular
       this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/${entityFileName}.module.ts`);
       this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/route/${entityFileName}-routing.module.ts`);
     }
+
+    if (control.isJhipsterVersionLessThan('8.12.0')) {
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/delete/${entityFileName}-delete-dialog.component.html`);
+      this.removeFile(
+        `${application.clientSrcDir}app/entities/${entityFolderName}/delete/${entityFileName}-delete-dialog.component.spec.ts`,
+      );
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/delete/${entityFileName}-delete-dialog.component.ts`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/detail/${entityFileName}-detail.component.html`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/detail/${entityFileName}-detail.component.spec.ts`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/detail/${entityFileName}-detail.component.ts`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/list/${entityFileName}.component.html`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/list/${entityFileName}.component.spec.ts`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/list/${entityFileName}.component.ts`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/update/${entityFileName}-update.component.html`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/update/${entityFileName}-update.component.spec.ts`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/update/${entityFileName}-update.component.ts`);
+    }
   }
 });
