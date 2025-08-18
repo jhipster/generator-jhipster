@@ -34,7 +34,7 @@ describe('jdl - TokenCreator', () => {
     });
     describe('when passing a config', () => {
       describe('with just a name', () => {
-        let token;
+        let token: ReturnType<typeof createTokenFromConfig>;
 
         before(() => {
           token = createTokenFromConfig({ name: 'MY_TOKEN' });
@@ -48,7 +48,7 @@ describe('jdl - TokenCreator', () => {
         });
       });
       describe('when the pattern is a keyword', () => {
-        let token;
+        let token: ReturnType<typeof createTokenFromConfig>;
 
         before(() => {
           token = createTokenFromConfig({ name: 'MY_TOKEN', pattern: 'keyword' });
@@ -62,7 +62,7 @@ describe('jdl - TokenCreator', () => {
         });
       });
       describe('if there is no label but a pattern', () => {
-        let token;
+        let token: ReturnType<typeof createTokenFromConfig>;
 
         before(() => {
           token = createTokenFromConfig({ name: 'MY_TOKEN', pattern: 'pattern' });

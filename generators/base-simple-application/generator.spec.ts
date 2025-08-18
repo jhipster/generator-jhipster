@@ -35,7 +35,7 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
 
   describe('EnvironmentBuilder', () => {
-    let envBuilder;
+    let envBuilder: EnvironmentBuilder;
     before(async () => {
       envBuilder = await EnvironmentBuilder.createDefaultBuilder();
     });

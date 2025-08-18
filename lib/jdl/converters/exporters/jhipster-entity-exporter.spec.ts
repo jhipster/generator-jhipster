@@ -52,8 +52,8 @@ describe('jdl - JHipsterEntityExporter', () => {
     });
     describe('when passing valid arguments', () => {
       describe('for only entities and a monolith app', () => {
-        let entities;
-        let returned;
+        let entities: Parameters<typeof exportEntities>[0]['entities'];
+        let returned: ReturnType<typeof exportEntities>;
 
         beforeEach(() => {
           entities = [
@@ -67,6 +67,7 @@ describe('jdl - JHipsterEntityExporter', () => {
                 },
               ],
               relationships: [],
+              // @ts-expect-error FIXME
               changelogDate: '42',
               documentation: '',
               entityTableName: 'a',
@@ -92,7 +93,7 @@ describe('jdl - JHipsterEntityExporter', () => {
         });
       });
       describe('when not exporting entities', () => {
-        let returned;
+        let returned: ReturnType<typeof exportEntities>;
 
         beforeEach(() => {
           returned = exportEntities({
@@ -111,8 +112,8 @@ describe('jdl - JHipsterEntityExporter', () => {
         });
       });
       describe('when exporting the same entity', () => {
-        let entities;
-        let returned;
+        let entities: Parameters<typeof exportEntities>[0]['entities'];
+        let returned: ReturnType<typeof exportEntities>;
 
         beforeEach(() => {
           entities = [
@@ -126,6 +127,7 @@ describe('jdl - JHipsterEntityExporter', () => {
                 },
               ],
               relationships: [],
+              // @ts-expect-error FIXME
               changelogDate: '42',
               documentation: '',
               entityTableName: 'a',
@@ -175,8 +177,8 @@ describe('jdl - JHipsterEntityExporter', () => {
       });
       describe('when passing an application name and application type', () => {
         describe('inside a monolith', () => {
-          let entities;
-          let returned;
+          let entities: Parameters<typeof exportEntities>[0]['entities'];
+          let returned: ReturnType<typeof exportEntities>;
 
           beforeEach(() => {
             entities = [
@@ -197,6 +199,7 @@ describe('jdl - JHipsterEntityExporter', () => {
                 service: SERVICE_CLASS,
                 jpaMetamodelFiltering: true,
                 fluentMethods: true,
+                // @ts-expect-error FIXME
                 applications: '*',
                 microserviceName: 'client',
               },
@@ -218,6 +221,7 @@ describe('jdl - JHipsterEntityExporter', () => {
                 service: SERVICE_CLASS,
                 jpaMetamodelFiltering: true,
                 fluentMethods: true,
+                // @ts-expect-error FIXME
                 applications: '*',
                 microserviceName: 'client',
               },
@@ -239,6 +243,7 @@ describe('jdl - JHipsterEntityExporter', () => {
                 service: SERVICE_CLASS,
                 jpaMetamodelFiltering: true,
                 fluentMethods: true,
+                // @ts-expect-error FIXME
                 applications: '*',
                 microserviceName: 'store',
               },
@@ -264,6 +269,7 @@ describe('jdl - JHipsterEntityExporter', () => {
                 service: SERVICE_CLASS,
                 jpaMetamodelFiltering: true,
                 fluentMethods: true,
+                // @ts-expect-error FIXME
                 applications: '*',
                 microserviceName: 'store',
               },
@@ -374,13 +380,14 @@ describe('jdl - JHipsterEntityExporter', () => {
         describe('inside a microservice', () => {
           describe('and when entities without the microservice option are passed', () => {
             let entities;
-            let returnedContent;
+            let returnedContent: ReturnType<typeof exportEntities>;
 
             beforeEach(() => {
               entities = [
                 {
                   fields: [],
                   relationships: [],
+                  // @ts-expect-error FIXME
                   changelogDate: '20180303092920',
                   entityTableName: 'a',
                   dto: NO_DTO,
@@ -488,7 +495,7 @@ describe('jdl - JHipsterEntityExporter', () => {
           });
           describe('and when microservice entities are passed', () => {
             let entities;
-            let returnedContent;
+            let returnedContent: ReturnType<typeof exportEntities>;
 
             beforeEach(() => {
               entities = [
@@ -537,6 +544,7 @@ describe('jdl - JHipsterEntityExporter', () => {
                 {
                   fields: [[Object]],
                   relationships: [[Object]],
+                  // @ts-expect-error FIXME
                   changelogDate: '20180303093009',
                   entityTableName: 'product',
                   dto: NO_DTO,

@@ -32,7 +32,7 @@ const { SKIP_CLIENT } = unaryOptions;
 describe('jdl - JSONToJDLOptionConverter', () => {
   describe('convertToServerOptions', () => {
     describe('when not passing any argument', () => {
-      let jdlObject;
+      let jdlObject: JDLObject;
 
       before(() => {
         // @ts-expect-error
@@ -44,7 +44,7 @@ describe('jdl - JSONToJDLOptionConverter', () => {
       });
     });
     describe('when passing a jdl object', () => {
-      let jdlObject;
+      let jdlObject: JDLObject;
 
       before(() => {
         const previousJDLObject = new JDLObject();

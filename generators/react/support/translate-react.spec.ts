@@ -24,7 +24,7 @@ import { createTranslationReplacer } from './translate-react.ts';
 
 describe('generator - react - transform', () => {
   describe('replaceReactTranslations', () => {
-    let replaceReactTranslations;
+    let replaceReactTranslations: ReturnType<typeof createTranslationReplacer>;
     beforeEach(() => {
       let value = 0;
       replaceReactTranslations = createTranslationReplacer(

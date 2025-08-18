@@ -11,6 +11,7 @@ import type FullEnvironment from 'yeoman-environment';
 
 import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/index.ts';
 
+import type JHipsterCommand from './jhipster-command.js';
 import { createProgram } from './program.ts';
 import type { CliCommand } from './types.ts';
 import { getCommand as actualGetCommonand } from './utils.js';
@@ -93,15 +94,20 @@ describe('cli', () => {
   const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.cjs');
   const logger = { verboseInfo: esmocha.fn(), warn: esmocha.fn(), fatal: esmocha.fn(), debug: esmocha.fn() };
   const getCommand = esmocha.fn();
-  let mockCli;
-  let argv;
+  let mockCli: (argv: string[], opts?: Record<string, any>) => Promise<JHipsterCommand>;
+  let argv: string[];
 
   before(async () => {
     await esmocha.mock('./utils.js', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} } as any);
     const { buildJHipster } = await import('./program.ts');
 
     mockCli = async (argv: string[], opts = {}) => {
-      const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
+      const program = await buildJHipster({
+        printLogo: () => {},
+        ...opts,
+        program: createProgram(),
+        loadCommand: (key: string) => opts[`./${key}`],
+      });
       return program.parseAsync(argv);
     };
   });
@@ -113,7 +119,7 @@ describe('cli', () => {
     await helpers.prepareTemporaryDir();
   });
   afterEach(() => {
-    argv = undefined;
+    argv = [];
     resetAllMocks();
   });
 
@@ -161,8 +167,8 @@ describe('cli', () => {
 
   describe('with mocked generator command', () => {
     const commands = { mocked: {} };
-    let generator;
-    let runArgs;
+    let generator: any;
+    let runArgs: any[];
     let env: FullEnvironment;
 
     beforeEach(async () => {
@@ -299,7 +305,7 @@ describe('cli', () => {
       commonTests();
 
       it('should forward argument and options', async () => {
-        const cb = (args, options) => {
+        const cb = (args: string[], options: Record<string, any>) => {
           expect(args).toEqual(['Foo']);
           expect(options.foo).toBe(true);
           expect(options.fooBar).toBe(true);
@@ -319,7 +325,7 @@ describe('cli', () => {
       commonTests();
 
       it('should forward argument and options', async () => {
-        const cb = (args, options) => {
+        const cb = (args: string[], options: Record<string, any>) => {
           expect(args).toEqual(['Foo']);
           expect(options.foo).toBe(false);
           expect(options.fooBar).toBe(false);
@@ -339,7 +345,7 @@ describe('cli', () => {
       commonTests();
 
       it('should forward argument and options', async () => {
-        const cb = (args, options) => {
+        const cb = (args: string[], options: Record<string, any>) => {
           expect(args).toEqual([['Foo', 'Bar']]);
           expect(options.foo).toBe(true);
           expect(options.fooBar).toBe(true);
@@ -358,7 +364,7 @@ describe('cli', () => {
       commonTests();
 
       it('should forward argument and options', async () => {
-        const cb = (args, options) => {
+        const cb = (args: string[], options: Record<string, any>) => {
           expect(args).toEqual([]);
           expect(options.foo).toBe(true);
           expect(options.fooBar).toBe(true);
@@ -378,7 +384,7 @@ describe('cli', () => {
       commonTests();
 
       it('should forward argument and options', async () => {
-        const cb = (args, options) => {
+        const cb = (args: string[], options: Record<string, any>) => {
           expect(options.useFoo).toBe(true);
           expect(options.useBar).toBe('foo');
         };
@@ -431,7 +437,7 @@ describe('cli', () => {
 
     describe('loading sharedOptions', () => {
       describe('using blueprint with sharedOptions', () => {
-        let stdout;
+        let stdout: string;
         beforeEach(async () => {
           await helpers
             .prepareTemporaryDir()
@@ -455,7 +461,7 @@ describe('cli', () => {
       });
 
       describe('using multiple blueprints with sharedOptions', () => {
-        let stdout;
+        let stdout: string;
         beforeEach(async () => {
           await helpers
             .prepareTemporaryDir()
@@ -482,7 +488,7 @@ describe('cli', () => {
     });
     describe('loading options', () => {
       describe('using blueprint with cli option', () => {
-        let stdout;
+        let stdout: string;
         beforeEach(async () => {
           await helpers
             .prepareTemporaryDir()
@@ -507,7 +513,7 @@ describe('cli', () => {
       });
 
       describe('using blueprint with custom generator option', () => {
-        let stdout;
+        let stdout: string;
         beforeEach(async () => {
           await helpers
             .prepareTemporaryDir()
@@ -532,7 +538,7 @@ describe('cli', () => {
       });
 
       describe('using blueprint with blueprinted generator option', () => {
-        let stdout;
+        let stdout: string;
         beforeEach(async () => {
           await helpers
             .prepareTemporaryDir()
@@ -580,8 +586,8 @@ describe('cli', () => {
   describe('jhipster run', () => {
     describe('running jhipster built-in generators', () => {
       describe('jhipster:app', () => {
-        let stdout;
-        let exitCode;
+        let stdout: string;
+        let exitCode: number | null;
         before(done => {
           const forked = fork(jhipsterCli, ['run', 'jhipster:app', '--help'], { stdio: 'pipe' });
           forked.on('exit', code => {
@@ -604,8 +610,8 @@ describe('cli', () => {
     });
     describe('custom generator', () => {
       describe('--help', () => {
-        let stdout;
-        let exitCode;
+        let stdout: string;
+        let exitCode: number | null;
         beforeEach(async () => {
           await helpers
             .prepareTemporaryDir()
@@ -633,8 +639,8 @@ describe('cli', () => {
         });
       });
       describe('running it', () => {
-        let stdout;
-        let exitCode;
+        let stdout: string;
+        let exitCode: number | null;
         beforeEach(async () => {
           await helpers
             .prepareTemporaryDir()
@@ -661,8 +667,8 @@ describe('cli', () => {
     });
     describe('non existing generator', () => {
       describe('--help', () => {
-        let stderr;
-        let exitCode;
+        let stderr: string;
+        let exitCode: number | null;
         before(done => {
           const tmpdir = process.cwd();
           const forked = fork(jhipsterCli, ['run', 'non-existing', '--help'], { stdio: 'pipe', cwd: tmpdir });

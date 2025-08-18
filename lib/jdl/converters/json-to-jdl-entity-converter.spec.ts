@@ -49,7 +49,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
       });
     });
     describe('when passing entities', () => {
-      let jdlObject;
+      let jdlObject: ReturnType<typeof convertEntitiesToJDL>;
 
       before(() => {
         const entities = new Map([
@@ -89,46 +89,51 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         });
         it('should parse enums', () => {
           const languageEnum = jdlObject.getEnum('Language');
+          if (!languageEnum) {
+            throw new Error('Language enum not found');
+          }
           expect(languageEnum.name).eq('Language');
           expect(languageEnum.values.has('FRENCH')).to.be.true;
-          expect(languageEnum.values.get('FRENCH').value).to.equal('french');
+          expect(languageEnum.values.get('FRENCH')?.value).to.equal('french');
           expect(languageEnum.values.has('ENGLISH')).to.be.true;
           expect(languageEnum.values.has('SPANISH')).to.be.true;
         });
         it('should parse options', () => {
           expect(
+            // @ts-expect-error FIXME
             jdlObject.getOptions().filter(option => option.name === DTO && option.value === MAPSTRUCT && option.entityNames.has('Employee'))
               .length,
           ).to.equal(1);
           expect(
-            jdlObject
-              .getOptions()
-              .filter(
-                option =>
-                  option.name === PAGINATION && option.value === pagination['INFINITE-SCROLL'] && option.entityNames.has('Employee'),
-              ).length,
+            jdlObject.getOptions().filter(
+              option =>
+                // @ts-expect-error FIXME
+                option.name === PAGINATION && option.value === pagination['INFINITE-SCROLL'] && option.entityNames.has('Employee'),
+            ).length,
           ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
+              // @ts-expect-error FIXME
               .filter(option => option.name === SERVICE && option.value === SERVICE_CLASS && option.entityNames.has('Employee')).length,
           ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
+              // @ts-expect-error FIXME
               .filter(option => option.name === SEARCH && option.value === ELASTICSEARCH && option.entityNames.has('Employee')).length,
           ).to.equal(1);
           expect(
-            jdlObject
-              .getOptions()
-              .filter(
-                option =>
-                  option.name === APPLICATION_TYPE_MICROSERVICE && option.value === 'mymicroservice' && option.entityNames.has('Employee'),
-              ).length,
+            jdlObject.getOptions().filter(
+              option =>
+                // @ts-expect-error FIXME
+                option.name === APPLICATION_TYPE_MICROSERVICE && option.value === 'mymicroservice' && option.entityNames.has('Employee'),
+            ).length,
           ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
+              // @ts-expect-error FIXME
               .filter(option => option.name === ANGULAR_SUFFIX && option.value === 'myentities' && option.entityNames.has('Employee'))
               .length,
           ).to.equal(1);
@@ -169,6 +174,9 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         });
         it('should parse comments in relationships for owner', () => {
           const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
+          if (!relationship) {
+            throw new Error('Relationship not found');
+          }
           expect(relationship.commentInFrom).to.equal('Another side of the same relationship');
           expect(relationship.commentInTo).to.equal('A relationship');
         });
@@ -184,11 +192,17 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         });
         it('should parse required relationships in owner', () => {
           const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
+          if (!relationship) {
+            throw new Error('Relationship not found');
+          }
           expect(relationship.isInjectedFieldInFromRequired).to.be.undefined;
           expect(relationship.isInjectedFieldInToRequired).to.be.true;
         });
         it('should parse required relationships in owned', () => {
           const relationship = jdlObject.relationships.getManyToMany('ManyToMany_Job{task(title)}_Task{job}');
+          if (!relationship) {
+            throw new Error('Relationship not found');
+          }
           expect(relationship.isInjectedFieldInToRequired).to.be.true;
           expect(relationship.isInjectedFieldInFromRequired).to.be.undefined;
         });
@@ -197,7 +211,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
       describe('when parsing entities with relationships to User', () => {
         describe('when skipUserManagement flag is not set', () => {
           describe('when there is no User.json entity', () => {
-            let jdlObject;
+            let jdlObject: ReturnType<typeof convertEntitiesToJDL>;
 
             before(() => {
               jdlObject = convertEntitiesToJDL(new Map([['Country', readJsonEntity('Country')]]));
@@ -209,7 +223,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           });
         });
         describe('without relationship', () => {
-          let jdlObject;
+          let jdlObject: ReturnType<typeof convertEntitiesToJDL>;
 
           before(() => {
             jdlObject = convertEntitiesToJDL(new Map([['CassBankAccount', readJsonEntity('CassBankAccount')]]));
@@ -224,14 +238,14 @@ describe('jdl - JSONToJDLEntityConverter', () => {
       describe('when parsing relationships with options', () => {
         describe('such as builtInEntity', () => {
           it('should accept it', () => {
-            expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}').options.global[BUILT_IN_ENTITY]).to.be
+            expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}')?.options.global[BUILT_IN_ENTITY]).to.be
               .true;
           });
         });
       });
     });
     describe('when parsing relationships including the User entity', () => {
-      let entities;
+      let entities: Map<string, any>;
 
       before(() => {
         entities = new Map([
@@ -249,7 +263,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
       });
     });
     describe('when parsing relationships including the Authority entity', () => {
-      let entities;
+      let entities: Map<string, any>;
 
       before(() => {
         entities = new Map([
@@ -269,6 +283,6 @@ describe('jdl - JSONToJDLEntityConverter', () => {
   });
 });
 
-function readJsonEntity(entityName) {
+function readJsonEntity(entityName: string) {
   return JSON.parse(fs.readFileSync(getTestFile('jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8').toString());
 }

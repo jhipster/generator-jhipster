@@ -85,10 +85,11 @@ describe('generator - base-application - support - prepareEntity', () => {
       });
 
       describe('with multiple @Id relationships and field', () => {
-        let entity1;
-        let entity2;
-        let entity3;
-        let entity4;
+        // FIXME: mock data
+        let entity1: any;
+        let entity2: any;
+        let entity3: any;
+        let entity4: any;
 
         beforeEach(() => {
           entity1 = {

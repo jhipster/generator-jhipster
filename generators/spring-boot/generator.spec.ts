@@ -19,7 +19,8 @@ const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    const GENERATOR_LIST: Record<string, string> = await import('../generator-list.ts');
+    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));

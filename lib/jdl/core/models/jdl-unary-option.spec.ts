@@ -30,13 +30,13 @@ describe('jdl - JDLUnaryOption', () => {
     describe('when passing no argument', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-expect-error
+          // @ts-expect-error invalid api test
           new JDLUnaryOption();
         }).to.throw("The option's name must be passed to create an option.");
       });
     });
     describe('when passing a name at least', () => {
-      let option;
+      let option: JDLUnaryOption;
 
       before(() => {
         option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
@@ -47,7 +47,7 @@ describe('jdl - JDLUnaryOption', () => {
       });
     });
     describe('when passing a list of entity names and excluded names with some of them being repeated', () => {
-      let option;
+      let option: JDLUnaryOption;
 
       before(() => {
         option = new JDLUnaryOption({
@@ -69,7 +69,7 @@ describe('jdl - JDLUnaryOption', () => {
     });
   });
   describe('setEntityNames', () => {
-    let option;
+    let option: JDLUnaryOption;
 
     before(() => {
       option = new JDLUnaryOption({
@@ -86,7 +86,7 @@ describe('jdl - JDLUnaryOption', () => {
   });
   describe('addEntityName', () => {
     describe('when passing a nil name', () => {
-      let option;
+      let option: JDLUnaryOption;
 
       before(() => {
         option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
@@ -94,12 +94,13 @@ describe('jdl - JDLUnaryOption', () => {
 
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error invalid api test
           option.addEntityName(null);
         }).to.throw('An entity name has to be passed so as to be added to the option.');
       });
     });
     describe("when passing a name that hasn't been added yet", () => {
-      let option;
+      let option: JDLUnaryOption;
 
       before(() => {
         option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
@@ -111,7 +112,7 @@ describe('jdl - JDLUnaryOption', () => {
       });
     });
     describe('when passing a name that has already been added', () => {
-      let option;
+      let option: JDLUnaryOption;
 
       before(() => {
         option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
@@ -124,7 +125,7 @@ describe('jdl - JDLUnaryOption', () => {
       });
     });
     describe('when passing an excluded name', () => {
-      let option;
+      let option: JDLUnaryOption;
 
       before(() => {
         option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
@@ -139,7 +140,7 @@ describe('jdl - JDLUnaryOption', () => {
     });
   });
   describe('addEntitiesFromAnotherOption', () => {
-    let option;
+    let option: JDLUnaryOption;
 
     before(() => {
       option = new JDLUnaryOption({
@@ -151,11 +152,12 @@ describe('jdl - JDLUnaryOption', () => {
 
     describe('when passing an invalid option', () => {
       it('should return false', () => {
+        // @ts-expect-error invalid api test
         expect(option.addEntitiesFromAnotherOption(null)).to.be.false;
       });
     });
     describe('when passing a valid option', () => {
-      let returned;
+      let returned: boolean;
 
       before(() => {
         const option2 = new JDLUnaryOption({
@@ -179,7 +181,7 @@ describe('jdl - JDLUnaryOption', () => {
   });
   describe('excludeEntityName', () => {
     describe('when passing a nil name', () => {
-      let option;
+      let option: JDLUnaryOption;
 
       before(() => {
         option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
@@ -187,12 +189,13 @@ describe('jdl - JDLUnaryOption', () => {
 
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error invalid api test
           option.excludeEntityName(null);
         }).to.throw('An entity name has to be passed so as to be excluded from the option.');
       });
     });
     describe("when passing a name that hasn't been excluded yet", () => {
-      let option;
+      let option: JDLUnaryOption;
 
       before(() => {
         option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
@@ -204,7 +207,7 @@ describe('jdl - JDLUnaryOption', () => {
       });
     });
     describe('when passing a name that has already been excluded', () => {
-      let option;
+      let option: JDLUnaryOption;
 
       before(() => {
         option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
@@ -217,7 +220,7 @@ describe('jdl - JDLUnaryOption', () => {
       });
     });
     describe('when passing an added name', () => {
-      let option;
+      let option: JDLUnaryOption;
 
       before(() => {
         option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
@@ -231,7 +234,7 @@ describe('jdl - JDLUnaryOption', () => {
     });
   });
   describe('toString', () => {
-    let option;
+    let option: JDLUnaryOption;
 
     before(() => {
       option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });

@@ -26,7 +26,7 @@ import { JDLEntity } from '../../core/models/index.ts';
 import EntityValidator from './entity-validator.ts';
 
 describe('jdl - EntityValidator', () => {
-  let validator;
+  let validator: EntityValidator;
 
   before(() => {
     validator = new EntityValidator();
@@ -35,6 +35,7 @@ describe('jdl - EntityValidator', () => {
   describe('validate', () => {
     describe('when not passing an entity', () => {
       it('should fail', () => {
+        // @ts-expect-error invalid api test
         expect(() => validator.validate()).to.throw(/^No entity\.$/);
       });
     });
@@ -52,6 +53,7 @@ describe('jdl - EntityValidator', () => {
       });
       describe('without any attribute', () => {
         it('should fail', () => {
+          // @ts-expect-error invalid api test
           expect(() => validator.validate({})).to.throw(/^The entity attribute name was not found\.$/);
         });
       });

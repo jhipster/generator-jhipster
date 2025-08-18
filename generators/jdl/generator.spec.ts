@@ -34,10 +34,10 @@ const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
 
-const mockedGeneratorsNames: typeof GENERATORS = {} as any;
-for (const key of Object.keys(GENERATORS)) {
-  mockedGeneratorsNames[key] = `jhipster:${GENERATORS[key]}`;
-}
+const mockedGeneratorsNames = Object.fromEntries(Object.entries(GENERATORS).map(([key, value]) => [key, `jhipster:${value}`])) as Record<
+  keyof typeof GENERATORS,
+  string
+>;
 
 const {
   GENERATOR_APP: MOCKED_APP,
@@ -49,7 +49,8 @@ const mockedGenerators = [MOCKED_APP, MOCKED_ENTITIES, MOCKED_DOCKER_COMPOSE, MO
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.ts'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+    const GENERATOR_LIST: Record<string, string> = await import('../generator-list.ts');
+    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
   });
   shouldSupportFeatures(Generator);
   describe('help', () => {

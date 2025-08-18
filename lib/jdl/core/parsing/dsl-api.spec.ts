@@ -31,7 +31,7 @@ describe('jdl - JDL DSL API', () => {
 
   describe('when wanting an AST', () => {
     describe('with a valid input', () => {
-      let ast;
+      let ast: any;
 
       before(() => {
         ast = parse('@service(serviceClass) entity A {@Id field String}', jdlRuntime);
@@ -58,7 +58,7 @@ describe('jdl - JDL DSL API', () => {
     });
 
     describe('with a lexing error', () => {
-      let parseInvalidToken;
+      let parseInvalidToken: () => any;
 
       before(() => {
         parseInvalidToken = () => parse('entity ± {', jdlRuntime);
@@ -75,7 +75,7 @@ describe('jdl - JDL DSL API', () => {
 
     describe('with a parsing error', () => {
       describe('with an unexpected token', () => {
-        let parseWrongClosingBraces;
+        let parseWrongClosingBraces: () => any;
 
         before(() => {
           parseWrongClosingBraces = () => parse('entity Person { ]', jdlRuntime);
@@ -91,7 +91,7 @@ describe('jdl - JDL DSL API', () => {
       });
 
       describe('with a missing token at EOF', () => {
-        let parseMissingClosingBraces;
+        let parseMissingClosingBraces: () => any;
 
         before(() => {
           parseMissingClosingBraces = () => parse('entity Person {', jdlRuntime);
@@ -121,7 +121,7 @@ describe('jdl - JDL DSL API', () => {
 
   describe('when wanting an auto-completion', () => {
     describe('with an empty text', () => {
-      let result;
+      let result: ReturnType<typeof getSyntacticAutoCompleteSuggestions>;
 
       before(() => {
         result = getSyntacticAutoCompleteSuggestions('', jdlRuntime);
@@ -145,7 +145,7 @@ describe('jdl - JDL DSL API', () => {
       });
     });
     describe('with a custom start rule', () => {
-      let result;
+      let result: ReturnType<typeof getSyntacticAutoCompleteSuggestions>;
 
       before(() => {
         const input = 'lastName string ';
@@ -160,7 +160,7 @@ describe('jdl - JDL DSL API', () => {
       });
     });
     describe('with a default start rule', () => {
-      let result;
+      let result: ReturnType<typeof getSyntacticAutoCompleteSuggestions>;
 
       before(() => {
         const input = 'entity person { lastName string ';

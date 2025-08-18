@@ -30,6 +30,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
+type T = ConstructorParameters<typeof MavenGenerator>;
+
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', () => {
     expect(GENERATOR_MAVEN).toBe(generator);
@@ -65,7 +67,7 @@ describe(`generator - ${generator}`, () => {
         .withGenerators([
           [
             class extends MavenGenerator {
-              constructor(args, options, features) {
+              constructor(args: T[0], options: T[1], features: T[2]) {
                 super(args, options, { ...features, sbsBlueprint: true });
               }
 

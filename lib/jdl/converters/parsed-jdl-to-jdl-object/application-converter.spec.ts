@@ -37,8 +37,8 @@ describe('jdl - ApplicationConverter', () => {
     });
     describe('when passing applications', () => {
       describe('with no application type', () => {
-        let convertedApplication;
-        let expectedApplication;
+        let convertedApplication: ReturnType<typeof convertApplications>;
+        let expectedApplication: ReturnType<typeof createJDLApplication>[];
 
         before(() => {
           convertedApplication = convertApplications([
@@ -67,8 +67,8 @@ describe('jdl - ApplicationConverter', () => {
       });
       describe('when passing a configuration object', () => {
         describe('with a creation timestamp', () => {
-          let convertedApplication;
-          let expectedApplication;
+          let convertedApplication: ReturnType<typeof convertApplications>;
+          let expectedApplication: ReturnType<typeof createJDLApplication>[];
 
           before(() => {
             convertedApplication = convertApplications([
@@ -101,8 +101,8 @@ describe('jdl - ApplicationConverter', () => {
         });
         describe('with blueprints', () => {
           describe("when there are blueprints without the 'generator-jhipster-' prefix", () => {
-            let convertedApplication;
-            let expectedApplication;
+            let convertedApplication: ReturnType<typeof convertApplications>;
+            let expectedApplication: ReturnType<typeof createJDLApplication>[];
 
             before(() => {
               convertedApplication = convertApplications([
@@ -136,8 +136,8 @@ describe('jdl - ApplicationConverter', () => {
         });
       });
       describe('when including all entities in an application', () => {
-        let convertedApplication;
-        let expectedApplication;
+        let convertedApplication: ReturnType<typeof convertApplications>;
+        let expectedApplication: ReturnType<typeof createJDLApplication>[];
 
         before(() => {
           convertedApplication = convertApplications([
@@ -166,7 +166,7 @@ describe('jdl - ApplicationConverter', () => {
       });
       describe('when including some entities in an application', () => {
         describe("if entities don't exist", () => {
-          let applicationsToConvert;
+          let applicationsToConvert: any[];
 
           before(() => {
             applicationsToConvert = [
@@ -189,8 +189,8 @@ describe('jdl - ApplicationConverter', () => {
         });
       });
       describe('when excluding entities in an application', () => {
-        let convertedApplication;
-        let expectedApplication;
+        let convertedApplication: ReturnType<typeof convertApplications>;
+        let expectedApplication: ReturnType<typeof createJDLApplication>[];
 
         before(() => {
           convertedApplication = convertApplications([
@@ -219,7 +219,7 @@ describe('jdl - ApplicationConverter', () => {
       });
       describe('when having entity options in an application', () => {
         describe('if the entity list does not contain some entities mentioned in options', () => {
-          let applicationsToConvert;
+          let applicationsToConvert: any[];
 
           before(() => {
             applicationsToConvert = [
@@ -248,7 +248,7 @@ describe('jdl - ApplicationConverter', () => {
           });
         });
         describe('if the entity list contains the entities mentioned in options', () => {
-          let convertedApplications;
+          let convertedApplications: ReturnType<typeof convertApplications>;
 
           before(() => {
             convertedApplications = convertApplications([

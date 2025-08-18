@@ -34,7 +34,7 @@ describe('jdl - JDLEnumValue', () => {
   });
   describe('toString', () => {
     describe('without a specified enum value', () => {
-      let enumValue;
+      let enumValue: JDLEnumValue;
 
       before(() => {
         enumValue = new JDLEnumValue('FRENCH');
@@ -45,7 +45,7 @@ describe('jdl - JDLEnumValue', () => {
       });
     });
     describe('with a specified enum value', () => {
-      let enumValue;
+      let enumValue: JDLEnumValue;
 
       before(() => {
         enumValue = new JDLEnumValue('FRENCH', 'frenchy');

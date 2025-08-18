@@ -5,8 +5,8 @@ import { GENERATOR_SERVER } from '../generator-list.ts';
 import { GeneratorBaseApplication } from '../index.ts';
 
 class mockBlueprintSubGen extends GeneratorBaseApplication {
-  constructor(args, opts, features) {
-    super(args, opts, features);
+  constructor(...args: ConstructorParameters<typeof GeneratorBaseApplication>) {
+    super(...args);
 
     this.sbsBlueprint = true;
   }

@@ -8,8 +8,14 @@ import ClientGenerator from './index.ts';
 
 const { ANGULAR, REACT } = clientFrameworkTypes;
 
+type MockBlueprintSubGenConstructorParamsT = ConstructorParameters<typeof ClientGenerator>;
+
 const mockBlueprintSubGen: any = class extends ClientGenerator {
-  constructor(args, opts, features) {
+  constructor(
+    args: MockBlueprintSubGenConstructorParamsT[0],
+    opts: MockBlueprintSubGenConstructorParamsT[1],
+    features: MockBlueprintSubGenConstructorParamsT[2],
+  ) {
     super(args, opts, { ...features, sbsBlueprint: true });
   }
 
@@ -23,7 +29,9 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
 };
 
 describe('needle API Webpack: JHipster client generator with blueprint', () => {
-  function generateAppWithClientFramework(clientFramework) {
+  function generateAppWithClientFramework(
+    clientFramework: Exclude<(typeof clientFrameworkTypes)[keyof typeof clientFrameworkTypes], 'svelte'>,
+  ) {
     return helpers
       .runJHipster('client')
       .withOptions({

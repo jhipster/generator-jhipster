@@ -19,6 +19,8 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
+import type { JDLEntity } from '../../core/models/index.ts';
+
 import { convertEntities } from './entity-converter.ts';
 
 describe('jdl - EntityConverter', () => {
@@ -30,7 +32,7 @@ describe('jdl - EntityConverter', () => {
       });
     });
     describe('when passing entities', () => {
-      let convertedEntities;
+      let convertedEntities: JDLEntity[];
 
       before(() => {
         convertedEntities = convertEntities(

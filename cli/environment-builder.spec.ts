@@ -103,7 +103,7 @@ const cliSharedBlueprintFiles = {
 
 describe('cli - EnvironmentBuilder', () => {
   describe('create', () => {
-    let envBuilder;
+    let envBuilder: any;
     before(async () => {
       await helpers.prepareTemporaryDir();
       envBuilder = EnvironmentBuilder.create();
@@ -149,13 +149,13 @@ describe('cli - EnvironmentBuilder', () => {
   });
 
   describe('_loadBlueprints', () => {
-    let envBuilder;
+    let envBuilder: EnvironmentBuilder;
     beforeEach(() => {
       // @ts-expect-error
       envBuilder = EnvironmentBuilder.create([])._loadBlueprints();
     });
     describe('when there is no .yo-rc.json', () => {
-      let blueprintsWithVersion;
+      let blueprintsWithVersion: typeof envBuilder._blueprintsWithVersion;
 
       before(async () => {
         await helpers.prepareTemporaryDir();
@@ -171,8 +171,8 @@ describe('cli - EnvironmentBuilder', () => {
     });
 
     describe('when blueprints were passed by command', () => {
-      let oldArgv;
-      let blueprintsWithVersion;
+      let oldArgv: string[];
+      let blueprintsWithVersion: typeof envBuilder._blueprintsWithVersion;
 
       before(async () => {
         await helpers.prepareTemporaryDir();
@@ -196,7 +196,7 @@ describe('cli - EnvironmentBuilder', () => {
     });
 
     describe('when there are no blueprints on .yo-rc.json', () => {
-      let blueprintsWithVersion;
+      let blueprintsWithVersion: typeof envBuilder._blueprintsWithVersion;
 
       before(async () => {
         await helpers.prepareTemporaryDir();
@@ -217,7 +217,7 @@ describe('cli - EnvironmentBuilder', () => {
     });
 
     describe('when there are blueprints on .yo-rc.json', () => {
-      let blueprintsWithVersion;
+      let blueprintsWithVersion: typeof envBuilder._blueprintsWithVersion;
 
       before(async () => {
         await helpers.prepareTemporaryDir();
@@ -244,8 +244,8 @@ describe('cli - EnvironmentBuilder', () => {
     });
 
     describe('when blueprints are defined in both command and .yo-rc.json', () => {
-      let oldArgv;
-      let blueprintsWithVersion;
+      let oldArgv: string[];
+      let blueprintsWithVersion: typeof envBuilder._blueprintsWithVersion;
 
       before(async () => {
         await helpers.prepareTemporaryDir();
@@ -281,7 +281,7 @@ describe('cli - EnvironmentBuilder', () => {
   });
 
   describe('_lookupBlueprints', () => {
-    let envBuilder;
+    let envBuilder: any;
     beforeEach(async () => {
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
       envBuilder = EnvironmentBuilder.create();
@@ -289,7 +289,7 @@ describe('cli - EnvironmentBuilder', () => {
       await envBuilder._lookupBlueprints({ localOnly: true });
     });
     describe('with multiple blueprints', () => {
-      let oldArgv;
+      let oldArgv: string[];
 
       before(async () => {
         await helpers
@@ -319,7 +319,7 @@ describe('cli - EnvironmentBuilder', () => {
   });
 
   describe('_loadSharedOptions', () => {
-    let envBuilder;
+    let envBuilder: any;
     beforeEach(async () => {
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
       // @ts-expect-error
@@ -327,7 +327,7 @@ describe('cli - EnvironmentBuilder', () => {
       await envBuilder._loadSharedOptions();
     });
     describe('with multiple blueprints', () => {
-      let oldArgv;
+      let oldArgv: string[];
 
       before(async () => {
         await helpers

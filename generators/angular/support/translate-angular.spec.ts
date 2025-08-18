@@ -25,12 +25,13 @@ import { createTranslationReplacer } from './translate-angular.ts';
 
 describe('generator - angular - transform', () => {
   describe('replaceAngularTranslations', () => {
-    let replaceAngularTranslations;
-    let enabledAngularTranslations;
+    let replaceAngularTranslations: ReturnType<typeof createTranslationReplacer>;
+    let enabledAngularTranslations: ReturnType<typeof createTranslationReplacer>;
 
     beforeEach(() => {
       let value = 0;
-      const testImpl = (key, data) => (key === 'blank' ? '' : `translated-value-${key}-${data ? `${inspect(data)}-` : ''}${value++}`);
+      const testImpl: GetWebappTranslationCallback = (key, data) =>
+        key === 'blank' ? '' : `translated-value-${key}-${data ? `${inspect(data)}-` : ''}${value++}`;
       replaceAngularTranslations = createTranslationReplacer(esmocha.fn<GetWebappTranslationCallback>().mockImplementation(testImpl), {
         jhiPrefix: 'jhi',
         enableTranslation: false,

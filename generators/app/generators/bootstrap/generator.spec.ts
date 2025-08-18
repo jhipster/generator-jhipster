@@ -45,6 +45,7 @@ const expectedPrimaryKeyId = () => ({
   field: expect.any(Object),
 });
 
+// @ts-expect-error FIXME
 const expectedPrimaryKey = primaryKey => ({
   ownFields: expect.any(Array),
   fields: expect.any(Array),
@@ -52,6 +53,7 @@ const expectedPrimaryKey = primaryKey => ({
   ids: primaryKey.ids.map(expectedPrimaryKeyId),
 });
 
+// @ts-expect-error FIXME
 const expectedEntity = entity => ({
   faker: expect.any(Object),
   generateFakeData: expect.any(Function),
@@ -64,7 +66,7 @@ const expectedEntity = entity => ({
 
   restProperties: expect.any(Array),
 
-  fields: entity.fields.map(expectedField),
+  fields: entity?.fields?.map(expectedField),
   relationships: expect.any(Array),
   primaryKey: expectedPrimaryKey(entity.primaryKey),
   reactiveOtherEntities: expect.any(Set),

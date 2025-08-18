@@ -51,7 +51,7 @@ describe('jdl - JDLExporter', () => {
     describe('when passing valid parameters', () => {
       describe('with a path', () => {
         const PATH = 'myPath.jdl';
-        let fileExistence;
+        let fileExistence: boolean;
         let jdlContent = '';
 
         beforeEach(() => {
@@ -76,7 +76,7 @@ describe('jdl - JDLExporter', () => {
       describe('without a path', () => {
         describe('exports entity', () => {
           const DEFAULT_PATH = 'app.jdl';
-          let fileExistence;
+          let fileExistence: boolean;
           let jdlContent = '';
 
           beforeEach(() => {
@@ -100,7 +100,7 @@ describe('jdl - JDLExporter', () => {
         });
         describe('exports application', () => {
           describe('with clientFramework no', () => {
-            let jdlObject;
+            let jdlObject: JDLObject;
             beforeEach(() => {
               jdlObject = new JDLObject();
               const jdlApplication: JDLJSONApplicationConfiguration = {

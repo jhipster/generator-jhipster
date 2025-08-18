@@ -68,7 +68,7 @@ describe('generator - server - support - needles', () => {
               return bar;
             }
         };`;
-        let snapshot;
+        let snapshot: ReturnType<typeof runResult.getSnapshot>;
 
         before(() => {
           const application = runResult.application!;
@@ -77,7 +77,7 @@ describe('generator - server - support - needles', () => {
             propertyGetter,
             propertyClass,
           });
-          snapshot = runResult.getSnapshot(file => fileRegexp.test(file.path));
+          snapshot = runResult.getSnapshot((file: any) => fileRegexp.test(file.path));
         });
 
         it('should match snapshot', () => {
@@ -130,7 +130,7 @@ public class ApplicationProperties {
             propertyGetter,
             propertyClass,
           });
-          expect(runResult.getSnapshot(file => fileRegexp.test(file.path))).toEqual(snapshot);
+          expect(runResult.getSnapshot((file: any) => fileRegexp.test(file.path))).toEqual(snapshot);
         });
 
         it('should not be add new content with prettier differences', () => {
@@ -138,7 +138,7 @@ public class ApplicationProperties {
           insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property: '  private   Foo   foo;',
           });
-          expect(runResult.getSnapshot(file => fileRegexp.test(file.path))).toEqual(snapshot);
+          expect(runResult.getSnapshot((file: any) => fileRegexp.test(file.path))).toEqual(snapshot);
         });
 
         it('should not be add new content with prettier differences and new lines', () => {
@@ -151,7 +151,7 @@ public class ApplicationProperties {
     };
 `,
           });
-          expect(runResult.getSnapshot(file => fileRegexp.test(file.path))).toEqual(snapshot);
+          expect(runResult.getSnapshot((file: any) => fileRegexp.test(file.path))).toEqual(snapshot);
         });
       });
     });

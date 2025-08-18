@@ -12,10 +12,10 @@ const expectedFiles = {
 };
 
 const getSinonRunResultCalls = () => {
-  return runResult.spawnStub!.getCalls().map(call => call.args);
+  return runResult.spawnStub!.getCalls().map((call: any) => call.args);
 };
 
-const createSpawnCommandReturn = (resolvedValue?, data?) =>
+const createSpawnCommandReturn = (resolvedValue?: any, data?: any) =>
   Object.assign(
     Promise.resolve({
       exitCode: 0,

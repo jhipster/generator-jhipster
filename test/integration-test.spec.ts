@@ -19,6 +19,7 @@
 import { before, describe, it } from 'esmocha';
 import assert from 'node:assert';
 import fs, { existsSync, writeFileSync } from 'node:fs';
+import type { PathOrFileDescriptor } from 'node:fs';
 import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -28,8 +29,8 @@ import { formatDateForChangelog } from '../generators/base/support/index.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../lib/core/application-types.ts';
 import { authenticationTypes } from '../lib/jhipster/index.ts';
 
-const writeJsonSync = (file, content) => writeFileSync(file, JSON.stringify(content, null, 2));
-const readJsonSync = file => JSON.parse(fs.readFileSync(file, 'utf-8'));
+const writeJsonSync = (file: PathOrFileDescriptor, content: any) => writeFileSync(file, JSON.stringify(content, null, 2));
+const readJsonSync = (file: PathOrFileDescriptor) => JSON.parse(fs.readFileSync(file, 'utf-8'));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -152,7 +153,7 @@ describe('integration-test', () => {
           if (config.skipClient || config.clientFramework === 'no') {
             const includesCypress = config.testFrameworks?.includes('cypress');
             if (fixSamples && includesCypress) {
-              config.testFrameworks = config.testFrameworks.filter(test => test !== 'cypress');
+              config.testFrameworks = config.testFrameworks.filter((test: string) => test !== 'cypress');
               writeConfig();
             } else {
               assert(!includesCypress);

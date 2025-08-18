@@ -1,4 +1,5 @@
 import { databaseTypes, messageBrokerTypes } from '../../../lib/jhipster/index.ts';
+import type { result } from '../../../lib/testing/index.ts';
 import {
   GENERATOR_JAVA,
   GENERATOR_PROJECT_NAME,
@@ -10,7 +11,9 @@ import {
 const { KAFKA, PULSAR } = messageBrokerTypes;
 const { SQL, COUCHBASE } = databaseTypes;
 
-export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {
+type RunResultSupplier = () => typeof result;
+
+export const shouldComposeWithLiquibase = (testSample: boolean | Record<string, unknown>, runResultSupplier: RunResultSupplier) => {
   const liquibaseEnabled = typeof testSample === 'boolean' ? testSample : testSample?.databaseType === SQL;
   if (liquibaseEnabled) {
     it('should compose with liquibase generator', () => {
@@ -23,7 +26,10 @@ export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {
   }
 };
 
-export const shouldComposeWithSpringCloudStream = (sampleConfig, runResultSupplier) => {
+export const shouldComposeWithSpringCloudStream = (
+  sampleConfig: boolean | Record<string, unknown>,
+  runResultSupplier: RunResultSupplier,
+) => {
   const pulsarEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === PULSAR;
   const kafkaEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === KAFKA;
   if (pulsarEnabled || kafkaEnabled) {
@@ -37,7 +43,7 @@ export const shouldComposeWithSpringCloudStream = (sampleConfig, runResultSuppli
   }
 };
 
-const shouldComposeWithDatabasetype = (databaseType: string, shouldCompose: boolean, runResultSupplier) => {
+const shouldComposeWithDatabasetype = (databaseType: string, shouldCompose: boolean, runResultSupplier: RunResultSupplier) => {
   const generator = databaseType;
   if (shouldCompose) {
     it(`should compose with ${generator} generator`, () => {
@@ -50,7 +56,7 @@ const shouldComposeWithDatabasetype = (databaseType: string, shouldCompose: bool
   }
 };
 
-export const shouldComposeWithCouchbase = (shouldCompose: boolean, runResultSupplier) =>
+export const shouldComposeWithCouchbase = (shouldCompose: boolean, runResultSupplier: RunResultSupplier) =>
   shouldComposeWithDatabasetype(COUCHBASE, shouldCompose, runResultSupplier);
 
 export const filterBasicServerGenerators = (ns: string) => {

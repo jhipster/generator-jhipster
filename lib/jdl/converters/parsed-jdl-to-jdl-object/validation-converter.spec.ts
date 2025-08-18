@@ -19,6 +19,8 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
+import type JDLValidation from '../../core/models/jdl-validation.ts';
+
 import { convertValidations } from './validation-converter.ts';
 
 describe('jdl - ValidationConverter', () => {
@@ -31,7 +33,7 @@ describe('jdl - ValidationConverter', () => {
     });
     describe('when passing validations', () => {
       describe('with all the attributes', () => {
-        let convertedJDLValidations;
+        let convertedJDLValidations: JDLValidation[];
 
         before(() => {
           convertedJDLValidations = convertValidations([{ key: 'min', value: 0 }], name => name);
@@ -49,7 +51,7 @@ describe('jdl - ValidationConverter', () => {
         });
       });
       describe('having for value a constant', () => {
-        let valueFromTheConvertedValidation;
+        let valueFromTheConvertedValidation: JDLValidation['value'];
 
         before(() => {
           const getConstantValue = () => 42;
@@ -63,7 +65,7 @@ describe('jdl - ValidationConverter', () => {
       });
       describe('having for name the pattern validation', () => {
         describe('with the pattern not having single quotes', () => {
-          let valueFromTheConvertedValidation;
+          let valueFromTheConvertedValidation: JDLValidation['value'];
 
           before(() => {
             const convertedJDLValidations = convertValidations(
@@ -83,7 +85,7 @@ describe('jdl - ValidationConverter', () => {
           });
         });
         describe('with the pattern having single quotes', () => {
-          let valueFromTheConvertedValidation;
+          let valueFromTheConvertedValidation: JDLValidation['value'];
 
           before(() => {
             const convertedJDLValidations = convertValidations(
@@ -104,7 +106,7 @@ describe('jdl - ValidationConverter', () => {
         });
       });
       describe('having one falsy element', () => {
-        let convertedJDLValidations;
+        let convertedJDLValidations: JDLValidation[];
 
         before(() => {
           // @ts-expect-error

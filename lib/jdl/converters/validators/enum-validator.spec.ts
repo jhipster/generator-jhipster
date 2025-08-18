@@ -26,7 +26,7 @@ import { JDLEnum } from '../../core/models/index.ts';
 import EnumValidator from './enum-validator.ts';
 
 describe('jdl - EnumValidator', () => {
-  let validator;
+  let validator: EnumValidator;
 
   before(() => {
     validator = new EnumValidator();
@@ -35,12 +35,13 @@ describe('jdl - EnumValidator', () => {
   describe('validate', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
+        // @ts-expect-error invalid api test
         expect(() => validator.validate()).to.throw(/^No enum\.$/);
       });
     });
     describe('when passing an enum', () => {
       describe('with all its required attributes', () => {
-        let jdlEnum;
+        let jdlEnum: JDLEnum;
 
         before(() => {
           jdlEnum = new JDLEnum({
@@ -54,6 +55,7 @@ describe('jdl - EnumValidator', () => {
       });
       describe('when not passing any attribute', () => {
         it('should fail', () => {
+          // @ts-expect-error invalid api test
           expect(() => validator.validate({})).to.throw(/^The enum attribute name was not found\.$/);
         });
       });

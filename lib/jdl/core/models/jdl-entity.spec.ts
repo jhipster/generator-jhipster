@@ -44,7 +44,7 @@ describe('jdl - JDLEntity', () => {
       });
     });
     describe('when not passing the table name', () => {
-      let entity;
+      let entity: JDLEntity;
 
       before(() => {
         entity = new JDLEntity({ name: 'Abc' });
@@ -55,7 +55,7 @@ describe('jdl - JDLEntity', () => {
       });
     });
     describe('when passing arguments', () => {
-      let entity;
+      let entity: JDLEntity;
       let args: any = {};
 
       before(() => {
@@ -85,7 +85,7 @@ describe('jdl - JDLEntity', () => {
     });
   });
   describe('addField', () => {
-    let entity;
+    let entity: JDLEntity;
 
     before(() => {
       entity = new JDLEntity({
@@ -98,13 +98,14 @@ describe('jdl - JDLEntity', () => {
       describe('because it is nil', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-expect-error invalid api test
             entity.addField(null);
           }).to.throw(/^Can't add nil field to the JDL entity\.$/);
         });
       });
     });
     describe('when adding a valid field', () => {
-      let validField;
+      let validField: JDLField;
 
       before(() => {
         validField = new JDLField({ name: 'myField', type: 'String' });
@@ -118,7 +119,7 @@ describe('jdl - JDLEntity', () => {
   });
   describe('addFields', () => {
     describe('when not passing fields', () => {
-      let entity;
+      let entity: JDLEntity;
 
       before(() => {
         entity = new JDLEntity({
@@ -132,7 +133,7 @@ describe('jdl - JDLEntity', () => {
       });
     });
     describe('when passing fields', () => {
-      let entity;
+      let entity: JDLEntity;
 
       before(() => {
         entity = new JDLEntity({
@@ -160,7 +161,7 @@ describe('jdl - JDLEntity', () => {
   });
   describe('forEachField', () => {
     describe('when not passing a function', () => {
-      let entity;
+      let entity: JDLEntity;
 
       before(() => {
         entity = new JDLEntity({
@@ -169,11 +170,12 @@ describe('jdl - JDLEntity', () => {
       });
 
       it('should fail', () => {
+        // @ts-expect-error FIXME
         expect(() => entity.forEachField()).to.throw();
       });
     });
     describe('when passing a function', () => {
-      let result;
+      let result: string;
 
       before(() => {
         const entity = new JDLEntity({
@@ -204,8 +206,8 @@ describe('jdl - JDLEntity', () => {
   });
   describe('toString', () => {
     describe('without a comment', () => {
-      let entity;
-      let args;
+      let entity: JDLEntity;
+      let args: Record<string, any>;
 
       before(() => {
         args = {
@@ -220,8 +222,8 @@ describe('jdl - JDLEntity', () => {
       });
     });
     describe('with a table name not equal to the name (snakecase)', () => {
-      let entity;
-      let args;
+      let entity: JDLEntity;
+      let args: Record<string, any>;
 
       before(() => {
         args = {
@@ -236,8 +238,8 @@ describe('jdl - JDLEntity', () => {
       });
     });
     describe('without fields', () => {
-      let entity;
-      let args;
+      let entity: JDLEntity;
+      let args: Record<string, any>;
 
       before(() => {
         args = {
@@ -258,9 +260,9 @@ entity ${args.name} (${args.tableName})`,
       });
     });
     describe('with fields', () => {
-      let entity;
-      let field1;
-      let field2;
+      let entity: JDLEntity;
+      let field1: JDLField;
+      let field2: JDLField;
 
       before(() => {
         entity = new JDLEntity({

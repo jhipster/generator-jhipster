@@ -41,8 +41,8 @@ describe('jdl - integration tests', () => {
   });
 
   describe('when parsing and exporting a JDL', () => {
-    let originalContent;
-    let writtenContent;
+    let originalContent: ReturnType<typeof parseFromConfigurationObject>;
+    let writtenContent: ReturnType<typeof parseFromConfigurationObject>;
 
     beforeEach(() => {
       originalContent = parseFromConfigurationObject({
