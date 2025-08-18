@@ -89,6 +89,8 @@ runs:
 
     # Run SonarQube analysis on the main branch or add an empty scan
     - name: 'Run SonarQube analysis on main branch'
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-matched-key
       shell: bash
       run: >-
@@ -97,13 +99,14 @@ runs:
         -Denforcer.skip=true
         -Dsonar.host.url=http://localhost:9000
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
-        -Dsonar.login=admin
-        -Dsonar.password=admin
+        -Dsonar.token=${{ env.SONAR_TOKEN }}
         -Dsonar.branch.name=main &&
         echo "::endgroup::"
       working-directory: ${{ inputs.sonar-project-key }}
 
     - name: Add an empty scan to sonar main branch
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       if: github.event_name == 'pull_request' && !steps.restore_cache.outputs.cache-matched-key
       shell: bash
       run: >-
@@ -113,8 +116,7 @@ runs:
         docker run --net=host -v ".:/usr/src" --rm sonarsource/sonar-scanner-cli
         -Dsonar.host.url=http://localhost:9000
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
-        -Dsonar.login=admin
-        -Dsonar.password=admin
+        -Dsonar.token=${{ env.SONAR_TOKEN }}
         -Dsonar.branch.name=main &&
         echo "::endgroup::"
       working-directory: ${{ inputs.sonar-project-key }}
@@ -142,6 +144,8 @@ runs:
 
     # Run SonarQube analysis on the PR changes
     - name: 'Run SonarQube analysis on PR changes'
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       if: github.event_name == 'pull_request'
       shell: bash
       run: >-
@@ -149,8 +153,7 @@ runs:
         ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
         -Dsonar.host.url=http://localhost:9000
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
-        -Dsonar.login=admin
-        -Dsonar.password=admin
+        -Dsonar.token=${{ env.SONAR_TOKEN }}
         -Dsonar.pullrequest.key=${{github.event.pull_request.number}}
         -Dsonar.pullrequest.branch=dev
         -Dsonar.pullrequest.base=main
