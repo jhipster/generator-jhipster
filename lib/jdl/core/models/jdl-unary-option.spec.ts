@@ -30,7 +30,7 @@ describe('jdl - JDLUnaryOption', () => {
     describe('when passing no argument', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-expect-error
+          // @ts-ignore EXPECTED BEHAVIOUR
           new JDLUnaryOption();
         }).to.throw("The option's name must be passed to create an option.");
       });
@@ -152,7 +152,7 @@ describe('jdl - JDLUnaryOption', () => {
 
     describe('when passing an invalid option', () => {
       it('should return false', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(option.addEntitiesFromAnotherOption(null)).to.be.false;
       });
     });

@@ -38,7 +38,7 @@ describe('jdl - DeploymentValidator', () => {
   describe('validate', () => {
     describe('when no deployment is passed', () => {
       it('should fail', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR 
         expect(() => validator.validate()).to.throw(/^No deployment\.$/);
       });
     });

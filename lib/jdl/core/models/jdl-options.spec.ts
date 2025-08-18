@@ -152,7 +152,7 @@ describe('jdl - JDLOptions', () => {
 
     describe('when not passing a function', () => {
       it('should not fail', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         jdlOptions.forEach();
       });
     });
@@ -188,7 +188,7 @@ describe('jdl - JDLOptions', () => {
 
     describe('when passing an invalid name', () => {
       it('should return an empty array', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(jdlOptions.getOptionsForName()).to.be.empty;
       });
     });

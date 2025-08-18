@@ -114,7 +114,7 @@ describe('jdl - JDLEnums', () => {
 
     describe('when not passing a function', () => {
       it('should not fail', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         jdlEnums.forEach();
       });
     });

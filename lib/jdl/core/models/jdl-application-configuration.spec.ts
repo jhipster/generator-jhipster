@@ -38,7 +38,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
 
       it('should return false', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(configuration.hasOption()).to.be.false;
       });
     });
@@ -75,7 +75,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
 
       it('should fail', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(() => configuration.getOption()).to.throw(/^An option name has to be passed to get the option\.$/);
       });
     });
@@ -114,7 +114,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
 
       it('should fail', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(() => configuration.setOption()).to.throw(/^An option has to be passed to set an option\.$/);
       });
     });
@@ -140,8 +140,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
 
       it('should replace its value', () => {
-        // @ts-expect-error FIXME
-        expect(createdConfiguration.getOption(OptionNames.BASE_NAME).getValue()).to.equal('application2');
+        expect(createdConfiguration.getOption(OptionNames.BASE_NAME)?.getValue()).to.equal('application2');
       });
     });
   });
@@ -154,7 +153,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
 
       it('should not do anything', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(() => configuration.forEachOption()).not.to.throw();
       });
     });

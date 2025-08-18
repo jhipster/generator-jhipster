@@ -40,7 +40,7 @@ describe('jdl - RelationshipValidator', () => {
   describe('validate', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
-        // @ts-expect-error
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(() => validator.validate()).to.throw(/^No relationship\.$/);
       });
     });

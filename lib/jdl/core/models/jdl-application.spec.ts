@@ -68,7 +68,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should fail', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(() => application.setConfigurationOption()).to.throw(/^An option has to be passed to set an option\.$/);
       });
     });
@@ -107,7 +107,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should fail', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(() => application.getConfigurationOptionValue()).to.throw(/^An option name has to be passed to get a value\.$/);
       });
     });
@@ -144,7 +144,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should not do anything', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(() => application.forEachConfigurationOption()).not.to.throw();
       });
     });
@@ -176,7 +176,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should fail', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(() => application.addEntityName()).to.throw(/^An entity name has to be passed so as to be added to the application\.$/);
       });
     });
@@ -315,7 +315,7 @@ describe('jdl - JDLApplication', () => {
 
     describe('when not passing a function', () => {
       it('does not fail', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         application.forEachEntityName();
       });
     });
@@ -347,7 +347,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should fail', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(() => application.addOption()).to.throw(/^Can't add a nil option\.$/);
       });
     });

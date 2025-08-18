@@ -35,7 +35,7 @@ describe('jdl - UnaryOptionValidator', () => {
   describe('validate', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR 
         expect(() => validator.validate()).to.throw(/^No unary option\.$/);
       });
     });
@@ -47,7 +47,7 @@ describe('jdl - UnaryOptionValidator', () => {
       });
       describe('without any of its required attributes', () => {
         it('should fail', () => {
-          // @ts-expect-error FIXME
+          // @ts-ignore EXPECTED BEHAVIOUR 
           expect(() => validator.validate({})).to.throw(
             /^The unary option attributes name, entityNames, excludedNames, getType were not found\.$/,
           );

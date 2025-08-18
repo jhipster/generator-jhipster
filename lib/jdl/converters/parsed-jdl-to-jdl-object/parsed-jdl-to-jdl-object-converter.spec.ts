@@ -269,10 +269,8 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('should be processed', () => {
-          // @ts-expect-error FIXME
-          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{user}_User').to).to.equal('User');
-          // @ts-expect-error FIXME
-          expect(jdlObject.relationships.getOneToOne('OneToOne_B{user}_User').to).to.equal('User');
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{user}_User')?.to).to.equal('User');
+          expect(jdlObject.relationships.getOneToOne('OneToOne_B{user}_User')?.to).to.equal('User');
         });
       });
       describe('with Authority entity as destination for a relationship', () => {
@@ -286,10 +284,8 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('is processed', () => {
-          // @ts-expect-error FIXME
-          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{authority}_Authority').to).to.equal('Authority');
-          // @ts-expect-error FIXME
-          expect(jdlObject.relationships.getOneToOne('OneToOne_B{authority}_Authority').to).to.equal('Authority');
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{authority}_Authority')?.to).to.equal('Authority');
+          expect(jdlObject.relationships.getOneToOne('OneToOne_B{authority}_Authority')?.to).to.equal('Authority');
         });
       });
       describe('with an invalid option', () => {
@@ -925,8 +921,7 @@ JDLDeployment {
         });
 
         it('should set it', () => {
-          // @ts-expect-error FIXME
-          expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B').options.global).to.deep.equal({
+          expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B')?.options.global).to.deep.equal({
             builtInEntity: true,
           });
         });

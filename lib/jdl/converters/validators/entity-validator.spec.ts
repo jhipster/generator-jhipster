@@ -35,7 +35,7 @@ describe('jdl - EntityValidator', () => {
   describe('validate', () => {
     describe('when not passing an entity', () => {
       it('should fail', () => {
-        // @ts-expect-error FIXME
+        // @ts-ignore EXPECTED BEHAVIOUR
         expect(() => validator.validate()).to.throw(/^No entity\.$/);
       });
     });
@@ -53,7 +53,7 @@ describe('jdl - EntityValidator', () => {
       });
       describe('without any attribute', () => {
         it('should fail', () => {
-          // @ts-expect-error FIXME
+          // @ts-ignore EXPECTED BEHAVIOUR
           expect(() => validator.validate({})).to.throw(/^The entity attribute name was not found\.$/);
         });
       });
