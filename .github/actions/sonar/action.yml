@@ -81,11 +81,21 @@ runs:
         echo "::endgroup::"
 
     # Create SonarQube project
-    - name: 'Create SonarQube project'
+    - name: 'Setup SonarQube'
       if: github.event_name == 'pull_request'
       shell: bash
       run: |
-        curl -s -u admin:admin -X POST "http://localhost:9000/api/projects/create?name=${{ inputs.sonar-project-key }}&project=${{ inputs.sonar-project-key }}" || true
+        SONAR_HOST_URL=http://localhost:9000
+        LOCAL_SONAR_LOGIN=admin
+        LOCAL_SONAR_PASSWORD=admin
+
+        SONAR_TOKEN=$(curl -s -u $LOCAL_SONAR_LOGIN:$LOCAL_SONAR_PASSWORD -X POST "$SONAR_HOST_URL/api/user_tokens/generate?login=$LOCAL_SONAR_LOGIN&name=token&type=USER_TOKEN" | jq -r '.token')
+
+        curl -s -u $SONAR_TOKEN: -X POST "$SONAR_HOST_URL/api/projects/create?name=${{ inputs.sonar-project-key }}&project=${{ inputs.sonar-project-key }}"
+        curl -s -u $SONAR_TOKEN: -X POST "$SONAR_HOST_URL/api/permissions/add_user?login=$LOCAL_SONAR_LOGIN&permission=scan"
+
+        echo "SONAR_HOST_URL=$SONAR_HOST_URL" >> $GITHUB_ENV
+        echo "SONAR_TOKEN=$SONAR_TOKEN" >> $GITHUB_ENV
 
     # Run SonarQube analysis on the main branch or add an empty scan
     - name: 'Run SonarQube analysis on main branch'
@@ -95,10 +105,7 @@ runs:
         echo "::group::Scanning main branch application" &&
         ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
         -Denforcer.skip=true
-        -Dsonar.host.url=http://localhost:9000
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
-        -Dsonar.login=admin
-        -Dsonar.password=admin
         -Dsonar.branch.name=main &&
         echo "::endgroup::"
       working-directory: ${{ inputs.sonar-project-key }}
@@ -110,11 +117,8 @@ runs:
         echo "::group::Scanning empty commit" &&
         git init &&
         git commit -m "Initial commit" --allow-empty &&
-        docker run --net=host -v ".:/usr/src" --rm sonarsource/sonar-scanner-cli
-        -Dsonar.host.url=http://localhost:9000
+        docker run --net=host -v ".:/usr/src" -e SONAR_HOST_URL -e SONAR_TOKEN --rm sonarsource/sonar-scanner-cli
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
-        -Dsonar.login=admin
-        -Dsonar.password=admin
         -Dsonar.branch.name=main &&
         echo "::endgroup::"
       working-directory: ${{ inputs.sonar-project-key }}
@@ -147,10 +151,7 @@ runs:
       run: >-
         echo "::group::Scanning PR application changes" &&
         ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
-        -Dsonar.host.url=http://localhost:9000
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
-        -Dsonar.login=admin
-        -Dsonar.password=admin
         -Dsonar.pullrequest.key=${{github.event.pull_request.number}}
         -Dsonar.pullrequest.branch=dev
         -Dsonar.pullrequest.base=main
@@ -164,7 +165,7 @@ runs:
       shell: bash
       run: |
         timeout 300s bash -c 'while :; do
-          response=$(curl -s -u admin:admin "http://localhost:9000/api/ce/component?component=${{ inputs.sonar-project-key }}")
+          response=$(curl -s -u $SONAR_TOKEN: "$SONAR_HOST_URL/api/ce/component?component=${{ inputs.sonar-project-key }}")
           queue_status=$(echo "$response" | jq -r ".queue[]?.status")
           current_status=$(echo "$response" | jq -r ".current.status")
 
@@ -188,14 +189,14 @@ runs:
       id: sonar_metrics
       shell: bash
       run: |
-        SONAR_RESPONSE=$(curl -s -u admin:admin \
-          "http://localhost:9000/api/measures/component?component=${{ inputs.sonar-project-key }}&pullRequest=${{ github.event.pull_request.number }}&metricKeys=new_bugs,new_vulnerabilities,new_code_smells,new_coverage,new_duplicated_lines_density,new_violations")
+        SONAR_RESPONSE=$(curl -s -u $SONAR_TOKEN: \
+          "$SONAR_HOST_URL/api/measures/component?component=${{ inputs.sonar-project-key }}&pullRequest=${{ github.event.pull_request.number }}&metricKeys=new_bugs,new_vulnerabilities,new_code_smells,new_coverage,new_duplicated_lines_density,new_violations")
         echo ":::group::PR SonarQube Analysis"
         echo "$SONAR_RESPONSE"
         echo "::endgroup::"
 
-        SONAR_RESPONSE_MAIN=$(curl -s -u admin:admin \
-          "http://localhost:9000/api/measures/component?component=${{ inputs.sonar-project-key }}&metricKeys=violations")
+        SONAR_RESPONSE_MAIN=$(curl -s -u $SONAR_TOKEN: \
+          "$SONAR_HOST_URL/api/measures/component?component=${{ inputs.sonar-project-key }}&metricKeys=violations")
         echo ":::group::SonarQube Analysis"
         echo "$SONAR_RESPONSE_MAIN"
         echo "::endgroup::"
@@ -244,8 +245,8 @@ runs:
             echo ""
             echo "<details><summary>Unresolved New Issues (click to expand)</summary>"
             echo ""
-            ISSUES=$(curl -s -u admin:admin \
-              "http://localhost:9000/api/issues/search?componentKeys=${{ inputs.sonar-project-key }}&resolved=false&pullRequest=${{ github.event.pull_request.number }}" | \
+            ISSUES=$(curl -s -u $SONAR_TOKEN: \
+              "$SONAR_HOST_URL/api/issues/search?componentKeys=${{ inputs.sonar-project-key }}&resolved=false&pullRequest=${{ github.event.pull_request.number }}" | \
               jq -r '.issues[] | "File: \(.component) Line: \(.line)\n  [\(.rule)] \(.message)\n"')
             echo "$ISSUES"
             echo "</details>"
