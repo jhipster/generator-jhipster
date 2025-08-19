@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { intersection, kebabCase, lowerFirst, sortedUniq, startCase, uniq, upperFirst } from 'lodash-es';
-import pluralize from 'pluralize';
+import { intersection, sortedUniq, uniq, upperFirst } from 'lodash-es';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../../lib/core/application-types.ts';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.ts';
@@ -34,6 +33,7 @@ import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/in
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { Config as SpringBootConfig } from '../../spring-boot/types.ts';
 import type { Config as SpringDataRelationalConfig } from '../../spring-data-relational/types.ts';
+import { mutateEntity } from '../entity.ts';
 import type { Entity as BaseApplicationEntity, PrimaryKey } from '../types.ts';
 
 import { createFaker } from './faker.ts';
@@ -136,20 +136,7 @@ export default function prepareEntity(entityWithConfig: BaseApplicationEntity, g
     entityWithConfig.skipServer = true;
   }
 
-  mutateData(entityWithConfig, {
-    entityNameCapitalized: entityName,
-    entityNamePlural: pluralize(entityName),
-    entityNamePluralizedAndSpinalCased: ({ entityNamePlural }) => kebabCase(entityNamePlural),
-    entityInstance: lowerFirst(entityName),
-    entityInstancePlural: ({ entityNamePlural }) => lowerFirst(entityNamePlural),
-    entityAuthority: entityWithConfig.adminEntity ? 'ROLE_ADMIN' : undefined,
-  });
-
-  mutateData(entityWithConfig, {
-    __override__: false,
-    entityClassHumanized: ({ entityNameCapitalized }) => startCase(entityNameCapitalized),
-    entityClassPluralHumanized: ({ entityNamePlural }) => startCase(entityNamePlural),
-  });
+  mutateData(entityWithConfig, mutateEntity);
 
   mutateData(entityWithConfig, {
     __override__: false,
@@ -546,6 +533,6 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
 export async function addFakerToEntity(entityWithConfig: BaseApplicationEntity, nativeLanguage = 'en') {
   entityWithConfig.faker = entityWithConfig.faker || (await createFaker(nativeLanguage));
   entityWithConfig.resetFakerSeed = (suffix = '') =>
-    entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
+    entityWithConfig.faker!.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
   entityWithConfig.resetFakerSeed();
 }

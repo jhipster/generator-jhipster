@@ -247,11 +247,11 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
         if (!application.backendTypeJavaAny) return;
         for (const entity of entities) {
           if (entity.primaryKey) {
-            entity.resetFakerSeed(`${application.baseName}post-prepare-server`);
+            entity.resetFakerSeed!(`${application.baseName}post-prepare-server`);
             entity.primaryKey.javaSampleValues ??= [
               getPrimaryKeyValue(entity.primaryKey, application.databaseType!, 1),
               getPrimaryKeyValue(entity.primaryKey, application.databaseType!, 2),
-              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, entity.faker.number.int({ min: 10, max: 100 })),
+              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, entity.faker!.number.int({ min: 10, max: 100 })),
             ];
           }
         }

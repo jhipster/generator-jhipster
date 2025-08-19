@@ -43,7 +43,7 @@ export const mutateMockedCompleteData = (...mutations: MutateDataParam<any>[]) =
       target[p] = value;
       return true;
     },
-    has: (_target: any, p: string | symbol) => {
+    has: (_target: any) => {
       return true;
     },
   });
