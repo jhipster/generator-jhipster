@@ -70,9 +70,7 @@ const replaceTranslationKeysWithText = (
       for (const interpolateMatch of interpolateMatches) {
         const field = interpolateMatch?.groups?.field;
         let value: string | number | undefined = interpolateMatch?.groups?.value;
-        if (value === undefined) {
-          value = key;
-        }
+        value ??= key;
         value = value.trim();
         if (/^\d+$/.test(value)) {
           // convert integer

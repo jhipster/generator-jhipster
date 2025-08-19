@@ -384,12 +384,10 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
             }
           }
           for (const relationship of entity.relationships) {
-            if (relationship.ownerSide === undefined) {
-              // ownerSide backward compatibility
-              relationship.ownerSide =
-                relationship.relationshipType === 'many-to-one' ||
-                (relationship.relationshipType !== 'one-to-many' && relationship.relationshipSide === 'left');
-            }
+            // ownerSide backward compatibility
+            relationship.ownerSide ??=
+              relationship.relationshipType === 'many-to-one' ||
+              (relationship.relationshipType !== 'one-to-many' && relationship.relationshipSide === 'left');
           }
         }
       },

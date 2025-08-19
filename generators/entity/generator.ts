@@ -225,9 +225,7 @@ The entity ${context.name} is being updated.
         const context = this.entityData;
         const entityName = context.name;
         if ([APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_GATEWAY].includes(application.applicationType!)) {
-          if (this.entityConfig.databaseType === undefined) {
-            this.entityConfig.databaseType = context.databaseType!;
-          }
+          this.entityConfig.databaseType ??= context.databaseType!;
         }
         context.useConfigurationFile = context.configurationFileExists || context.useConfigurationFile;
         if (context.configurationFileExists) {

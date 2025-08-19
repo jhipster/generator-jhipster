@@ -88,9 +88,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity }) {
         entity.relationships.forEach(relationship => {
-          if (relationship.persistableRelationship === undefined) {
-            relationship.persistableRelationship = true;
-          }
+          relationship.persistableRelationship ??= true;
         });
       },
     });

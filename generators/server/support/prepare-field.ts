@@ -70,9 +70,7 @@ export default function prepareField(
 
   const { reactive: entityReactive, prodDatabaseType: entityProdDatabaseType } = entityWithConfig as any;
   if (field.id && entityWithConfig.primaryKey) {
-    if (field.autoGenerate === undefined) {
-      field.autoGenerate = !entityWithConfig.primaryKey.composite && ([INTEGER, LONG, UUID] as string[]).includes(field.fieldType);
-    }
+    field.autoGenerate ??= !entityWithConfig.primaryKey.composite && ([INTEGER, LONG, UUID] as string[]).includes(field.fieldType);
 
     if (!field.autoGenerate) {
       field.liquibaseAutoIncrement = false;
