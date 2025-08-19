@@ -137,7 +137,7 @@
     "@yeoman/conflicter": "3.0.0",
     "@yeoman/namespace": "1.0.1",
     "@yeoman/transform": "2.1.0",
-    "@yeoman/types": "1.6.0",
+    "@yeoman/types": "1.7.1",
     "chalk": "5.6.0",
     "chevrotain": "11.0.3",
     "commander": "14.0.0",
@@ -179,7 +179,7 @@
     "typescript": "5.9.2",
     "typescript-eslint": "8.40.0",
     "yaml": "2.8.1",
-    "yeoman-environment": "5.0.0-beta.0",
+    "yeoman-environment": "5.0.0-beta.1",
     "yeoman-generator": "8.0.0-beta.5"
   },
   "devDependencies": {

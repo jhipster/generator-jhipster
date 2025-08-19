@@ -50,7 +50,7 @@ const runDummyCli = (cliArgs: string, config: JHipsterConfig) => {
       }
 
       const metaStore: Record<string, GeneratorMeta> = (env as any).store._meta;
-      metaStore['jhipster:dummy'] = {
+      const generatorMeta = {
         ...dummyMeta,
         namespace: 'jhipster:dummy',
         importModule: () =>
@@ -59,6 +59,8 @@ const runDummyCli = (cliArgs: string, config: JHipsterConfig) => {
           }),
         importGenerator: () => Promise.resolve(CommandGenerator as any),
       };
+      (CommandGenerator as any)._meta = generatorMeta;
+      metaStore['jhipster:dummy'] = generatorMeta;
       metaStore['jhipster:bootstrap'] = {
         ...dummyMeta,
         namespace: 'jhipster:bootstrap',
