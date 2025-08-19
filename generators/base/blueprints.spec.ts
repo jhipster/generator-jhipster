@@ -547,7 +547,6 @@ describe('generator - base-blueprint', () => {
             return super.end;
           }
         };
-        // @ts-expect-error FIXME
         return helpers.run(mockBlueprintSubGen).withJHipsterGenerators({ useDefaultMocks: true });
       });
 
