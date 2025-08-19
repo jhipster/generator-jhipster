@@ -31,12 +31,12 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
 const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./home/home.component'),
+    loadComponent: () => import('./home/home'),
     title: 'home.title',
   },
   {
     path: '',
-    loadComponent: () => import('./layouts/navbar/navbar.component'),
+    loadComponent: () => import('./layouts/navbar/navbar'),
     outlet: 'navbar',
   },
 <%_ if (!applicationTypeMicroservice) { _%>
@@ -58,7 +58,7 @@ const routes: Routes = [
 <%_ if (!authenticationTypeOauth2) { _%>
   {
     path: 'login',
-    loadComponent: () => import('./login/login.component'),
+    loadComponent: () => import('./login/login'),
     title: 'login.title',
   },
 <%_ } _%>

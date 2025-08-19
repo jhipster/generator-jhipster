@@ -29,42 +29,42 @@ const routes: Routes = [
 <%_ } _%>
   {
     path: 'docs',
-    loadComponent: () => import('./docs/docs.component'),
+    loadComponent: () => import('./docs/docs'),
     title: 'global.menu.admin.apidocs',
   },
 <%_ if (withAdminUi) { _%>
   {
     path: 'configuration',
-    loadComponent: () => import('./configuration/configuration.component'),
+    loadComponent: () => import('./configuration/configuration'),
     title: 'configuration.title',
   },
   {
     path: 'health',
-    loadComponent: () => import('./health/health.component'),
+    loadComponent: () => import('./health/health'),
     title: 'health.title',
   },
   {
     path: 'logs',
-    loadComponent: () => import('./logs/logs.component'),
+    loadComponent: () => import('./logs/logs'),
     title: 'logs.title',
   },
   {
     path: 'metrics',
-    loadComponent: () => import('./metrics/metrics.component'),
+    loadComponent: () => import('./metrics/metrics'),
     title: 'metrics.title',
   },
 <%_ } _%>
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   {
     path: 'gateway',
-    loadComponent: () => import('./gateway/gateway.component'),
+    loadComponent: () => import('./gateway/gateway'),
     title: 'gateway.title',
   },
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
   {
     path: 'tracker',
-    loadComponent: () => import('./tracker/tracker.component'),
+    loadComponent: () => import('./tracker/tracker'),
     title: 'tracker.title',
   },
 <%_ } _%>
