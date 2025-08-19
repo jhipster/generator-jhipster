@@ -70,6 +70,13 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
           {
             dependencies: [
               {
+                groupId: 'org.junit',
+                artifactId: 'junit-bom',
+                version: javaDependencies!['junit-bom'],
+                type: 'pom',
+                scope: 'import',
+              },
+              {
                 groupId: 'io.cucumber',
                 artifactId: 'cucumber-bom',
                 version: javaDependencies!['cucumber-bom'],
