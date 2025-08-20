@@ -5,9 +5,9 @@ dependencies {
 tasks.register('consoleLauncherTest', JavaExec) {
     dependsOn(testClasses)
     String cucumberReportsDir = file("$buildDir/reports/tests")
-    outputs.dir(reportsDir)
+    outputs.dir(cucumberReportsDir)
     classpath = sourceSets["test"].runtimeClasspath
-    main = "org.junit.platform.console.ConsoleLauncher"
+    mainClass = "org.junit.platform.console.ConsoleLauncher"
     args("--scan-classpath")
     args("--include-engine", "cucumber")
     args("--reports-dir", cucumberReportsDir)

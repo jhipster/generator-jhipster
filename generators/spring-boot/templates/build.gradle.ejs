@@ -30,8 +30,10 @@ version = "0.0.1-SNAPSHOT"
 
 description = ""
 
-sourceCompatibility=<%= javaVersion %>
-targetCompatibility=<%= javaVersion %>
+java {
+    sourceCompatibility = <%= javaVersion %>
+    targetCompatibility = <%= javaVersion %>
+}
 assert System.properties["java.specification.version"] == <%- javaCompatibleVersions.map(ver => `"${ver}"`).join(' || '); %>
 
 ext {
@@ -246,6 +248,7 @@ if (addSpringMilestoneRepository) { _%>
     implementation "org.springframework.retry:spring-retry"
 <%_ } _%>
     testImplementation "org.springframework.security:spring-security-test"
+    testImplementation "org.junit.platform:junit-platform-engine:${junitPlatformCommonsVersion}"
     // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 <%_ if (reactive) { _%>
     OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();

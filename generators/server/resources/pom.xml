@@ -9,6 +9,7 @@
     <properties>
         <!-- Dependency versions -->
         <archunit-junit5.version>1.4.1</archunit-junit5.version>
+        <junit-platform-commons.version>1.13.4</junit-platform-commons.version>
         <blockhound-junit-platform.version>1.0.13.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.11.0</commons-beanutils.version>
         <gatling.version>3.14.3</gatling.version>
