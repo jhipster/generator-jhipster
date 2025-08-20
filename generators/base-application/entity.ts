@@ -1,4 +1,4 @@
-import { lowerFirst, snakeCase, startCase, upperFirst } from 'lodash-es';
+import { kebabCase, lowerFirst, snakeCase, startCase, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
 import type { DerivedPropertiesOnlyOf } from '../../lib/command/types.ts';
@@ -6,6 +6,7 @@ import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import type { Field as BaseField } from '../../lib/jhipster/types/field.ts';
 import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.ts';
+import { buildMutateDataForPropertyWithCustomPrefix } from '../../lib/utils/derived-property.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 
 import type { FakerWithRandexp } from './support/faker.ts';
@@ -150,13 +151,14 @@ export interface Relationship extends BaseApplicationAddedRelationshipProperties
 
 export const mutateRelationship = {
   __override__: false,
-  relationshipLeftSide: ({ relationshipSide }) => relationshipSide === 'left',
-  relationshipRightSide: ({ relationshipSide }) => relationshipSide === 'right',
+  ...buildMutateDataForPropertyWithCustomPrefix('relationshipSide', 'relationship', ['left', 'right'], 'Side'),
+  ...buildMutateDataForPropertyWithCustomPrefix('relationshipType', 'relationship', [
+    'one-to-one',
+    'one-to-many',
+    'many-to-one',
+    'many-to-many',
+  ]),
   collection: ({ relationshipType }) => relationshipType === 'one-to-many' || relationshipType === 'many-to-many',
-  relationshipOneToOne: ({ relationshipType }) => relationshipType === 'one-to-one',
-  relationshipOneToMany: ({ relationshipType }) => relationshipType === 'one-to-many',
-  relationshipManyToOne: ({ relationshipType }) => relationshipType === 'many-to-one',
-  relationshipManyToMany: ({ relationshipType }) => relationshipType === 'many-to-many',
 
   relationshipFieldName: ({ relationshipName }) => lowerFirst(relationshipName),
   relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName!),
@@ -185,7 +187,8 @@ export const mutateRelationshipWithEntity = {
   otherEntityField: data => data.otherEntity?.primaryKey?.name,
   // let ownerSide true when type is 'many-to-one' for convenience.
   // means that this side should control the reference.
-  ownerSide: data => data.otherEntity.embedded || data.relationshipManyToOne || (data.relationshipLeftSide && !data.relationshipOneToMany),
+  ownerSide: data =>
+    Boolean(data.otherEntity.embedded || data.relationshipManyToOne || (data.relationshipLeftSide && !data.relationshipOneToMany)),
   persistableRelationship: ({ ownerSide }) => ownerSide!,
   otherEntityUser: ({ otherEntityName }) => otherEntityName.toLowerCase() === 'user',
 } satisfies MutateDataParam<RelationshipWithEntity<Relationship, Entity>>;
@@ -227,19 +230,7 @@ export type PrimaryKey<F extends Field = Field> = {
   ids: any[];
 };
 
-/**
- * Represents an entity with its relationships, where the relationships are extended with the other entity.
- * Interface is used to allow `this` type in the relationships.
- */
-export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
-  extends Omit<Required<BaseEntity<F>>, 'relationships'> {
-  relationships: RelationshipWithEntity<R, this>[];
-  otherRelationships: R[];
-
-  primaryKey?: PrimaryKey<F>;
-
-  changelogDateForRecent: any;
-
+type BaseApplicationAddedEntityProperties = {
   entityAuthority?: string;
   entityReadAuthority?: string;
 
@@ -263,43 +254,43 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   // TODO rename to entityNamePluralHumanized
   entityClassPluralHumanized: string;
 
-  resetFakerSeed(suffix?: string): void;
+  resetFakerSeed?(suffix?: string): void;
   generateFakeData?: (type?: any) => any;
-  faker: FakerWithRandexp;
+  faker?: FakerWithRandexp;
 
-  anyFieldIsBigDecimal: boolean;
+  anyFieldIsBigDecimal?: boolean;
   /**
    * Any file is of type Bytes or ByteBuffer
    */
-  anyFieldIsBlobDerived: boolean;
+  anyFieldIsBlobDerived?: boolean;
   /**
    * Any field is of type ZonedDateTime, Instant or LocalDate
    */
-  anyFieldIsDateDerived: boolean;
-  anyFieldIsDuration: boolean;
-  anyFieldIsInstant: boolean;
-  anyFieldIsLocalDate: boolean;
-  anyFieldIsLocalTime: boolean;
+  anyFieldIsDateDerived?: boolean;
+  anyFieldIsDuration?: boolean;
+  anyFieldIsInstant?: boolean;
+  anyFieldIsLocalDate?: boolean;
+  anyFieldIsLocalTime?: boolean;
   /**
    * Any field is of type ZonedDateTime or Instant
    */
-  anyFieldIsTimeDerived: boolean;
-  anyFieldIsUUID: boolean;
-  anyFieldIsZonedDateTime: boolean;
+  anyFieldIsTimeDerived?: boolean;
+  anyFieldIsUUID?: boolean;
+  anyFieldIsZonedDateTime?: boolean;
 
-  anyFieldHasDocumentation: boolean;
-  anyFieldHasImageContentType: boolean;
-  anyFieldHasTextContentType: boolean;
+  anyFieldHasDocumentation?: boolean;
+  anyFieldHasImageContentType?: boolean;
+  anyFieldHasTextContentType?: boolean;
   /**
    * Any field has image or any contentType
    */
-  anyFieldHasFileBasedContentType: boolean;
+  anyFieldHasFileBasedContentType?: boolean;
 
   /**
    * Any relationship is required or id
    */
-  anyRelationshipIsRequired: boolean;
-  hasRelationshipWithBuiltInUser: boolean;
+  anyRelationshipIsRequired?: boolean;
+  hasRelationshipWithBuiltInUser?: boolean;
 
   /** Properties from application required for entities published through gateways */
   useMicroserviceJson?: boolean;
@@ -307,4 +298,32 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   applicationType?: string;
   microfrontend?: boolean;
   skipUiGrouping?: boolean;
+};
+
+/**
+ * Represents an entity with its relationships, where the relationships are extended with the other entity.
+ * Interface is used to allow `this` type in the relationships.
+ */
+export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
+  extends BaseApplicationAddedEntityProperties,
+    Omit<Required<BaseEntity<F>>, 'relationships'> {
+  relationships: RelationshipWithEntity<R, this>[];
+  otherRelationships: R[];
+
+  primaryKey?: PrimaryKey<F>;
+
+  changelogDateForRecent: any;
 }
+
+export const mutateEntity = {
+  __override__: false,
+  entityNameCapitalized: ({ name }) => upperFirst(name),
+  entityNamePlural: ({ name }) => pluralize(name),
+  entityNamePluralizedAndSpinalCased: ({ entityNamePlural }) => kebabCase(entityNamePlural),
+  entityInstance: ({ name }) => lowerFirst(name),
+  entityInstancePlural: ({ entityNamePlural }) => lowerFirst(entityNamePlural),
+  entityAuthority: ({ adminEntity }) => (adminEntity ? 'ROLE_ADMIN' : undefined),
+
+  entityClassHumanized: ({ entityNameCapitalized }) => startCase(entityNameCapitalized),
+  entityClassPluralHumanized: ({ entityNamePlural }) => startCase(entityNamePlural),
+} as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, BaseApplicationAddedEntityProperties>;

@@ -336,7 +336,7 @@ export function prepareCommonFieldForTemplates(
     field.maxlength = field.fieldValidateRulesMaxlength || 255;
   }
 
-  const faker = entityWithConfig.faker;
+  const faker = entityWithConfig.faker!;
   field.generateFakeDataFromPattern = () => {
     // check if regex is valid. If not, issue warning and we skip fake data generation.
     try {

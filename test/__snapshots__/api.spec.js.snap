@@ -105,6 +105,8 @@ exports[`public api generator-jhipster/generators should match snapshot 2`] = `
   "getUnknownGitHubMatrixProperties",
   "matchWrittenConfig",
   "matchWrittenFiles",
+  "mutateMockedCompleteData",
+  "mutateMockedData",
   "parseIssue",
   "prepareSample",
   "resetDefaults",

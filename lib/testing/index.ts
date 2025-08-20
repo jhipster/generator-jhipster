@@ -5,6 +5,8 @@ export * from './github-group.ts';
 export * from './github-matrix.ts';
 export * from './sample-config.ts';
 
+export * from './mutate-data.ts';
+
 // test matrix
 export * from './support/application-samples.ts';
 export * from './support/client-samples.ts';

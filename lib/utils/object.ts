@@ -116,10 +116,10 @@ export const mutateData = <const T extends Record<string | number, any>>(context
     const override = mutation.__override__;
     for (const [key, value] of Object.entries(mutation).filter(([key]) => key !== '__override__')) {
       if (typeof value === 'function') {
-        if (override !== false || context[key] === undefined) {
+        if (override !== false || !(key in context) || context[key] === undefined) {
           (context as any)[key] = value(context);
         }
-      } else if (context[key] === undefined || override === true) {
+      } else if (!(key in context) || context[key] === undefined || override === true) {
         (context as any)[key] = value;
       }
     }

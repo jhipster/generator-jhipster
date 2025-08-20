@@ -30,23 +30,23 @@ export async function preparePostEntityClientDerivedProperties(entity: ClientEnt
   if (entity.builtInUser) {
     clientFields = clientFields.filter(field => ['id', 'login'].includes(field.fieldName));
   }
-  await entity.resetFakerSeed(`${SEED}-1`);
+  await entity.resetFakerSeed!(`${SEED}-1`);
   const options = { sep: `\n  ` };
   const fieldsWithPartialData = clientFields.filter(
-    field => field.id || field.fieldValidationRequired || (!field.transient && entity.faker.datatype.boolean()),
+    field => field.id || field.fieldValidationRequired || (!field.transient && entity.faker!.datatype.boolean()),
   );
   entity.tsSampleWithPartialData = stringifyTsEntity(generateTsTestEntityForFields(fieldsWithPartialData), options);
 
-  await entity.resetFakerSeed(`${SEED}-2`);
+  await entity.resetFakerSeed!(`${SEED}-2`);
   const fieldsWithRequiredData = clientFields.filter(field => field.id || field.fieldValidationRequired);
   entity.tsSampleWithRequiredData = stringifyTsEntity(generateTsTestEntityForFields(fieldsWithRequiredData), options);
 
-  await entity.resetFakerSeed(`${SEED}-3`);
+  await entity.resetFakerSeed!(`${SEED}-3`);
   const fieldsWithFullData = clientFields.filter(field => !field.transient);
   entity.tsSampleWithFullData = stringifyTsEntity(generateTsTestEntityForFields(fieldsWithFullData), options);
 
   if (entity.primaryKey) {
-    await entity.resetFakerSeed(`${SEED}-4`);
+    await entity.resetFakerSeed!(`${SEED}-4`);
     const fieldsWithNewData = clientFields.filter(field => !field.id && field.fieldValidationRequired);
     entity.tsSampleWithNewData = stringifyTsEntity(
       {
@@ -56,7 +56,7 @@ export async function preparePostEntityClientDerivedProperties(entity: ClientEnt
       options,
     );
 
-    await entity.resetFakerSeed(`${SEED}-5`);
+    await entity.resetFakerSeed!(`${SEED}-5`);
     mutateData(entity, {
       tsKeyType: getTypescriptKeyType(entity.primaryKey.type),
     });

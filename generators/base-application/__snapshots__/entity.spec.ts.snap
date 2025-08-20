@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`mutation object test expects mutateEntity to match snapshot 1`] = `
+{
+  "entityAuthority": "ROLE_ADMIN",
+  "entityClassHumanized": "Name",
+  "entityClassPluralHumanized": "Names",
+  "entityInstance": "name",
+  "entityInstancePlural": "names",
+  "entityNameCapitalized": "Name",
+  "entityNamePlural": "names",
+  "entityNamePluralizedAndSpinalCased": "names",
+}
+`;
+
+exports[`mutation object test expects mutateRelationship to match snapshot 1`] = `
+{
+  "collection": false,
+  "propertyName": "relationshipName",
+  "propertyNameCapitalized": "RelationshipName",
+  "propertyNameUpperSnakeCase": "RELATIONSHIP_NAME",
+  "relationshipFieldName": "relationshipName",
+  "relationshipFieldNamePlural": "relationshipNames",
+  "relationshipLeftSide": false,
+  "relationshipManyToMany": false,
+  "relationshipManyToOne": false,
+  "relationshipNameCapitalized": "RelationshipName",
+  "relationshipNameHumanized": "Relationship Name",
+  "relationshipNamePlural": "relationshipNames",
+  "relationshipOneToMany": false,
+  "relationshipOneToOne": false,
+  "relationshipRightSide": false,
+}
+`;
+
+exports[`mutation object test expects mutateRelationshipWithEntity to match snapshot 1`] = `
+{
+  "otherEntityField": undefined,
+  "otherEntityUser": false,
+  "ownerSide": true,
+  "persistableRelationship": true,
+}
+`;
