@@ -20,7 +20,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
+import { defaultHelpers as helpers, fromMatrix, result } from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
 
 import Generator from './index.ts';
@@ -30,48 +30,34 @@ const __dirname = dirname(__filename);
 
 const generator = `${basename(resolve(__dirname, '../../'))}:${basename(__dirname)}`;
 
+const samples = fromMatrix({ reactive: [false, true], skipUserManagement: [false, true] });
+
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  describe('with defaults options', () => {
-    before(async () => {
-      await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig();
-    });
+  for (const [name, config] of Object.entries(samples)) {
+    describe(name, () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedJHipsterGenerators()
+          .withMockedSource()
+          .withSharedApplication({})
+          .withJHipsterConfig(config);
+      });
 
-    it('should match files snapshot', () => {
-      expect(result.getStateSnapshot()).toMatchSnapshot();
-    });
+      it('should match files snapshot', () => {
+        expect(result.getStateSnapshot()).toMatchSnapshot();
+      });
 
-    it('should call source snapshot', () => {
-      expect(result.sourceCallsArg).toMatchSnapshot();
-    });
+      it('should call source snapshot', () => {
+        expect(result.sourceCallsArg).toMatchSnapshot();
+      });
 
-    it('should compose with generators', () => {
-      expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
+      it('should compose with generators', () => {
+        expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
+      });
     });
-  });
-
-  describe('with reactive', () => {
-    before(async () => {
-      await helpers
-        .runJHipster(generator)
-        .withMockedJHipsterGenerators()
-        .withMockedSource()
-        .withSharedApplication({})
-        .withJHipsterConfig({ reactive: true });
-    });
-
-    it('should match files snapshot', () => {
-      expect(result.getStateSnapshot()).toMatchSnapshot();
-    });
-
-    it('should call source snapshot', () => {
-      expect(result.sourceCallsArg).toMatchSnapshot();
-    });
-
-    it('should compose with generators', () => {
-      expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
-    });
-  });
+  }
 });
