@@ -29,7 +29,7 @@
   "devDependencies": {
     "@eslint/js": "9.33.0",
     "@module-federation/enhanced": "0.18.3",
-    "@module-federation/utilities": "3.1.65",
+    "@module-federation/utilities": "3.1.66",
     "@testing-library/react": "16.3.0",
     "@types/jest": "30.0.0",
     "@types/lodash": "4.17.20",
