@@ -161,6 +161,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
       async composing() {
         const {
           applicationType,
+          authenticationType,
           databaseType,
           graalvmSupport,
           searchEngine,
@@ -175,6 +176,10 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         await this.composeWithJHipster(GENERATOR_DOCKER);
         await this.composeWithJHipster('jhipster:java:jib');
         await this.composeWithJHipster('jhipster:java:code-quality');
+
+        if (authenticationType === 'jwt' || authenticationType === 'oauth2') {
+          await this.composeWithJHipster(`jhipster:spring-boot:${authenticationType}`);
+        }
 
         if (graalvmSupport) {
           await this.composeWithJHipster('jhipster:java:graalvm');

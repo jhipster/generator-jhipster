@@ -143,6 +143,8 @@ type GeneratorsByNamespace = {
   'spring-boot': import('./spring-boot/generator.ts').default;
   'jhipster:spring-boot': import('./spring-boot/generator.ts').default;
   'jhipster:spring-boot:bootstrap': import('./spring-boot/generators/bootstrap/generator.ts').default;
+  'jhipster:spring-boot:jwt': import('./spring-boot/generators/jwt/generator.ts').default;
+  'jhipster:spring-boot:oauth2': import('./spring-boot/generators/oauth2/generator.ts').default;
   'spring-cache': import('./spring-cache/generator.ts').default;
   'jhipster:spring-cache': import('./spring-cache/generator.ts').default;
   'spring-cloud-stream': import('./spring-cloud-stream/generator.ts').default;
