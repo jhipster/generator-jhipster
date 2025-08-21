@@ -110,3 +110,4 @@ export type Application<E extends Entity> = Command['Application'] &
   BaseSimpleApplicationApplication &
   ApplicationProperties &
   AuthenticationProperties<E> & {};
+

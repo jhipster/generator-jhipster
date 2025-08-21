@@ -146,8 +146,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
             source.addIconImport!({ icon: args.icon });
           }
         };
-
-        source.addLanguagesInFrontend = ({ languagesDefinition }) => {
+        source.addLanguageWithDefinition = ({ languagesDefinition }) => {
           if (application.clientBundlerExperimentalEsbuild) {
             this.editFile(
               `${application.i18nDir}index.ts`,
@@ -168,13 +167,11 @@ export default class AngularGenerator extends BaseApplicationGenerator<
             );
           }
         };
-
         source.addIconImport = args => {
           const iconsPath = `${application.clientSrcDir}app/config/font-awesome-icons.ts`;
           const ignoreNonExisting = this.ignoreNeedlesError && 'Icon imports not updated with icon';
           this.editFile(iconsPath, { ignoreNonExisting }, addIconImport(args));
         };
-
         if (application.clientBundlerWebpack) {
           source.addWebpackConfig = args => {
             const webpackPath = `${application.clientRootDir}webpack/webpack.custom.js`;
@@ -189,7 +186,6 @@ export default class AngularGenerator extends BaseApplicationGenerator<
             );
           };
         }
-
         if (application.clientRootDir) {
           // Overrides only works if added in root package.json
           this.packageJson.merge({
@@ -241,9 +237,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
               } else {
                 fieldDefaultValue = defaultValue;
               }
-
               fieldDefaultValue = String(fieldDefaultValue).replace(/'/g, "\\'");
-
               if (fieldTypeCharSequence) {
                 returnValue = `'${fieldDefaultValue}'`;
               } else if (fieldTypeTimed) {

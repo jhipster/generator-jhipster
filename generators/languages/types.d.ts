@@ -18,6 +18,8 @@
  */
 
 import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { Control } from '../base/types.ts';
+import type BaseApplicationGenerator from '../base-application/index.ts';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,
@@ -38,6 +40,15 @@ export type Options = BaseApplicationOptions & Omit<Command['Options'], 'languag
 
 export type Source = BaseApplicationSource & {
   addEntityTranslationKey: (arg: { translationKey: string; translationValue: string; language: string }) => void;
+  addLanguages: ({ languagesDefinition }: { languagesDefinition: readonly Language[] }) => void;
+  updateLanguagesClient: (
+    gen: BaseApplicationGenerator<any, any, any, any, any, any, any>,
+    { application, control, source }: { application: Application<any>; control: Control; source: Source },
+  ) => void;
+  updateLanguagesServer: (
+    gen: BaseApplicationGenerator<any, any, any, any, any, any, any>,
+    { application, control, source }: { application: Application<any>; control: Control; source: Source },
+  ) => void;
 };
 
 export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = BaseApplicationApplication<E> &

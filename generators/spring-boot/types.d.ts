@@ -11,6 +11,7 @@ import type {
   Relationship as JavaRelationship,
   Source as JavaSource,
 } from '../java/types.ts';
+import type { Source as LanguageSource } from '../languages/types.ts';
 import type { ApplicationPropertiesNeedles } from '../server/support/needles.ts';
 import type {
   Application as ServerApplication,
@@ -74,7 +75,8 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 }
 
 export type Source = JavaSource &
-  ServerSource & {
+  ServerSource &
+  LanguageSource & {
     addTestSpringFactory?({ key, value }: { key: string; value: string }): void;
     addLogbackLogEntry?({ file, name, level }: { file: string; name: string; level: string }): void;
     addIntegrationTestAnnotation?(annotation: JavaAnnotation): void;

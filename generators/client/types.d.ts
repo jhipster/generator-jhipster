@@ -9,6 +9,7 @@ import type {
 } from '../common/types.ts';
 import type { Config as JavascriptConfig, Options as JavascriptOptions, Source as JavascriptSource } from '../javascript/types.ts';
 import type { Language } from '../languages/support/languages.ts';
+import type { Source as LanguagesSources } from '../languages/types.d.ts';
 
 import type command from './command.ts';
 import type { Entity } from './entity.ts';
@@ -30,6 +31,9 @@ export type Application<E extends Entity = Entity> = Command['Application'] &
     clientWebappDir?: string;
     clientThemeNone?: boolean;
     clientThemeAny?: boolean;
+    clientRootDir: string;
+    clientSrcDir: string;
+    clientTestDir?: string;
     webappEnumerationsDir?: string;
     clientFrameworkBuiltIn?: boolean;
     frontendAppName?: string;
@@ -51,7 +55,8 @@ export type ClientResources = {
 };
 
 export type Source = JavascriptSource &
-  CommonSource & {
+  CommonSource &
+  LanguagesSources & {
     /**
      * Add style to css file.
      */
@@ -71,5 +76,5 @@ export type Source = JavascriptSource &
      * Add webpack config.
      */
     addWebpackConfig?(args: { config: string }): void;
-    addLanguagesInFrontend?(args: { languagesDefinition: readonly Language[] }): void;
+    addLanguageWithDefinition?(args: { languagesDefinition: readonly Language[] }): void;
   };
