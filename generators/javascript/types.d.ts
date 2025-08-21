@@ -6,12 +6,6 @@ import type {
   ExportStoragePropertiesFromCommand,
 } from '../../lib/command/types.ts';
 import type {
-  Application as BaseApplicationApplication,
-  Entity as BaseApplicationEntity,
-  Field as BaseApplicationField,
-  Relationship as BaseApplicationRelationship,
-} from '../base-application/types.d.ts';
-import type {
   Application as BaseSimpleApplicationApplication,
   Config as BaseSimpleApplicationConfig,
   Options as BaseSimpleApplicationOptions,
@@ -22,12 +16,6 @@ import type JavascriptBootstrapCommand from './generators/bootstrap/command.ts';
 import type EslintCommand from './generators/eslint/command.ts';
 import type HuskyCommand from './generators/husky/command.ts';
 import type PrettierCommand from './generators/prettier/command.ts';
-
-export type Field = BaseApplicationField & {
-  tsType?: string;
-};
-
-export { BaseApplicationRelationship as Relationship };
 
 export type Config = BaseSimpleApplicationConfig &
   ExportStoragePropertiesFromCommand<typeof EslintCommand> &
@@ -40,37 +28,6 @@ export type Options = BaseSimpleApplicationOptions &
   ExportGeneratorOptionsFromCommand<typeof HuskyCommand> &
   ExportGeneratorOptionsFromCommand<typeof JavascriptBootstrapCommand> &
   ExportGeneratorOptionsFromCommand<typeof PrettierCommand>;
-
-export interface Entity<F extends Field = Field, R extends BaseApplicationRelationship = BaseApplicationRelationship>
-  extends BaseApplicationEntity<F, R> {
-  entityFileName: string;
-  entityFolderName: string;
-  entityModelFileName: string;
-  entityPluralFileName: string;
-  entityServiceFileName: string;
-
-  /** Generate only the model at client side for relationships. */
-  entityClientModelOnly?: boolean;
-  entityAngularName: string;
-  entityAngularNamePlural: string;
-  entityReactName: string;
-  entityStateName: string;
-  entityUrl: string;
-  entityPage: string;
-
-  paginationPagination: boolean;
-  paginationInfiniteScroll: boolean;
-  paginationNo: boolean;
-
-  tsKeyType?: string;
-  tsSampleWithPartialData?: string;
-  tsSampleWithRequiredData?: string;
-  tsSampleWithFullData?: string;
-  tsSampleWithNewData?: string;
-  tsPrimaryKeySamples?: string[];
-
-  entityAngularJSSuffix?: string;
-}
 
 type DependencyValue = string | undefined | null;
 
@@ -89,7 +46,7 @@ export type Source = BaseSimpleApplicationSource & {
   ): void;
 };
 
-export type JavascriptSimpleApplication = BaseSimpleApplicationApplication &
+export type Application = BaseSimpleApplicationApplication &
   ExportApplicationPropertiesFromCommand<typeof EslintCommand> &
   ExportApplicationPropertiesFromCommand<typeof HuskyCommand> &
   ExportApplicationPropertiesFromCommand<typeof PrettierCommand> &
@@ -108,5 +65,3 @@ export type JavascriptSimpleApplication = BaseSimpleApplicationApplication &
     prettierFolders?: string;
     prettierExtensions?: string;
   };
-
-export type Application<E extends BaseApplicationEntity = Entity> = BaseApplicationApplication<E> & JavascriptSimpleApplication;

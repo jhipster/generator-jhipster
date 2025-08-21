@@ -16,17 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { FieldType } from '../../../../lib/jhipster/field-types.ts';
 import { getFrontendAppName, mutateData } from '../../../../lib/utils/index.ts';
 import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, LOGIN_REGEX_JS } from '../../../generator-constants.js';
 import clientCommand from '../../command.ts';
+import { mutateEntity, mutateField } from '../../entity.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
-import {
-  filterEntitiesForClient,
-  filterEntityPropertiesForClient,
-  getTypescriptType,
-  preparePostEntityClientDerivedProperties,
-} from '../../support/index.ts';
+import { filterEntitiesForClient, filterEntityPropertiesForClient, preparePostEntityClientDerivedProperties } from '../../support/index.ts';
 import type { Features as ClientFeatures, Options as ClientOptions } from '../../types.d.ts';
 
 export default class ClientBootstrap extends ClientApplicationGenerator {
@@ -95,13 +90,28 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
     return this.preparing;
   }
 
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      preparing({ application, entity }) {
+        mutateData(entity, mutateEntity, {
+          __override__: false,
+          entityPage: ({ microserviceName, entityFileName }) =>
+            microserviceName && application.microfrontend && application.applicationTypeMicroservice
+              ? `${microserviceName.toLowerCase()}/${entityFileName}`
+              : `${entityFileName}`,
+        });
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+  }
+
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       preparing({ field }) {
-        mutateData(field, {
-          __override__: false,
-          tsType: ({ fieldType, fieldIsEnum }) => (fieldIsEnum ? fieldType : getTypescriptType(fieldType as FieldType)),
-        });
+        mutateData(field, mutateField);
       },
     });
   }

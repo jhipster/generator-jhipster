@@ -45,7 +45,7 @@ export type Options = BaseApplicationOptions &
   LanguagesOptions &
   GitOptions;
 
-export type Application<E extends BaseApplicationEntity = Entity> = JavascriptApplication<E> &
+export type Application<E extends BaseApplicationEntity = Entity> = JavascriptApplication &
   Command['Application'] &
   AppCommand['Application'] &
   HuskyCommand['Application'] &

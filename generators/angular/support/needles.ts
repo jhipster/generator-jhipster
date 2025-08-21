@@ -146,7 +146,7 @@ export function addToEntitiesMenu<const E extends ClientEntity, const A extends 
         needle: entity.adminEntity ? 'jhipster-needle-add-element-to-admin-menu' : 'jhipster-needle-add-entity-to-menu',
         enableTranslation,
         icon: 'asterisk',
-        route: entity.entityPage,
+        route: entity.entityPage!,
         translationKey: `global.menu.entities.${entity.entityTranslationKeyMenu}`,
         name: entity.entityClassHumanized,
         jhiPrefix,
