@@ -28,21 +28,14 @@ plugins:
   },
   "package.json": {
     "contents": "{
-  "private": true,
-  "dependencies": {},
   "devDependencies": {
     "prettier": "PRETTIER_VERSION",
     "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION"
   },
-  "engines": {},
   "scripts": {
     "prettier:check": "prettier --check \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
     "prettier:format": "prettier --write \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\""
-  },
-  "name": "jhipster",
-  "version": "0.0.0",
-  "description": "Description for JHipster",
-  "license": "UNLICENSED"
+  }
 }
 ",
     "stateCleared": "modified",
@@ -78,21 +71,14 @@ plugins:
   },
   "package.json": {
     "contents": "{
-  "private": true,
-  "dependencies": {},
   "devDependencies": {
     "prettier": "PRETTIER_VERSION",
     "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION"
   },
-  "engines": {},
   "scripts": {
     "prettier-check": "prettier --check \\"{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}\\"",
     "prettier-format": "prettier --write \\"{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}\\""
-  },
-  "name": "jhipster",
-  "version": "0.0.0",
-  "description": "Description for JHipster",
-  "license": "UNLICENSED"
+  }
 }
 ",
     "stateCleared": "modified",
@@ -128,18 +114,10 @@ plugins:
   },
   "package.json": {
     "contents": "{
-  "private": true,
-  "dependencies": {},
   "devDependencies": {
     "prettier": "PRETTIER_VERSION",
     "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION"
-  },
-  "engines": {},
-  "scripts": {},
-  "name": "jhipster",
-  "version": "0.0.0",
-  "description": "Description for JHipster",
-  "license": "UNLICENSED"
+  }
 }
 ",
     "stateCleared": "modified",
@@ -175,21 +153,14 @@ plugins:
   },
   "package.json": {
     "contents": "{
-  "private": true,
-  "dependencies": {},
   "devDependencies": {
     "prettier": "PRETTIER_VERSION",
     "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION"
   },
-  "engines": {},
   "scripts": {
     "prettier:check": "prettier --check \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
     "prettier:format": "prettier --write \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\""
-  },
-  "name": "jhipster",
-  "version": "0.0.0",
-  "description": "Description for JHipster",
-  "license": "UNLICENSED"
+  }
 }
 ",
     "stateCleared": "modified",

@@ -7,23 +7,6 @@ exports[`generator - javascript:bootstrap customVersion-commonjs should match fi
   ".yo-rc.json": ObjectContaining {
     "contents": Any<String>,
   },
-  "package.json": {
-    "contents": "{
-  "private": true,
-  "dependencies": {},
-  "devDependencies": {},
-  "engines": {
-    "node": "customVersion"
-  },
-  "scripts": {},
-  "name": "dasherizedBaseName",
-  "version": "0.0.0",
-  "description": "projectDescription",
-  "license": "UNLICENSED"
-}
-",
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -34,22 +17,6 @@ exports[`generator - javascript:bootstrap packageJsonNodeEngine(false)-module sh
   ".yo-rc.json": ObjectContaining {
     "contents": Any<String>,
   },
-  "package.json": {
-    "contents": "{
-  "private": true,
-  "dependencies": {},
-  "devDependencies": {},
-  "engines": {},
-  "scripts": {},
-  "name": "dasherizedBaseName",
-  "version": "0.0.0",
-  "description": "projectDescription",
-  "license": "UNLICENSED",
-  "type": "module"
-}
-",
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -59,23 +26,6 @@ exports[`generator - javascript:bootstrap packageJsonNodeEngine(true) should mat
 {
   ".yo-rc.json": ObjectContaining {
     "contents": Any<String>,
-  },
-  "package.json": {
-    "contents": "{
-  "private": true,
-  "dependencies": {},
-  "devDependencies": {},
-  "engines": {
-    "node": "^20.17.0 || >=22.9.0"
-  },
-  "scripts": {},
-  "name": "dasherizedBaseName",
-  "version": "0.0.0",
-  "description": "projectDescription",
-  "license": "UNLICENSED"
-}
-",
-    "stateCleared": "modified",
   },
 }
 `;

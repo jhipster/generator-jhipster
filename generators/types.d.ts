@@ -109,6 +109,8 @@ type GeneratorsByNamespace = {
   'jhipster:java:node': import('./java/generators/node/generator.ts').default;
   'jhipster:java:openapi-generator': import('./java/generators/openapi-generator/generator.ts').default;
   'jhipster:java:server': import('./java/generators/server/generator.ts').default;
+  javascript: import('./javascript/generator.ts').default;
+  'jhipster:javascript': import('./javascript/generator.ts').default;
   'jhipster:javascript:bootstrap': import('./javascript/generators/bootstrap/generator.ts').default;
   'jhipster:javascript:eslint': import('./javascript/generators/eslint/generator.ts').default;
   'jhipster:javascript:husky': import('./javascript/generators/husky/generator.ts').default;

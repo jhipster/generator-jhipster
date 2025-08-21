@@ -39,8 +39,5 @@ exports[`generator - init with default config should write files and match snaps
   "README.md": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
 }
 `;

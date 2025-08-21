@@ -49,7 +49,8 @@ export default class CommonGenerator extends BaseApplicationGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('base-application');
+      await this.dependsOnBootstrap('common');
+      await this.dependsOnJHipster('javascript');
       await this.dependsOnJHipster(GENERATOR_GIT);
     }
   }
