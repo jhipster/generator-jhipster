@@ -38,7 +38,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
       await this.composeWithBlueprints();
     }
 
-    await this.dependsOnBootstrap('base-application');
+    await this.dependsOnBootstrap('javascript');
     await this.dependsOnBootstrap('languages');
   }
 
