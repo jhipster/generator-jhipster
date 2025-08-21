@@ -15,6 +15,57 @@ exports[`mutation object test expects mutateEntity to match snapshot 1`] = `
 }
 `;
 
+exports[`mutation object test expects mutateField to match snapshot 1`] = `
+{
+  "blobContentTypeAny": false,
+  "blobContentTypeImage": false,
+  "blobContentTypeText": false,
+  "fieldIsEnum": true,
+  "fieldNameCapitalized": "FieldName",
+  "fieldNameHumanized": "Field Name",
+  "fieldNameUnderscored": "field_name",
+  "fieldTypeAnyBlob": false,
+  "fieldTypeBigDecimal": false,
+  "fieldTypeBlob": false,
+  "fieldTypeBoolean": false,
+  "fieldTypeByte": false,
+  "fieldTypeByteBuffer": false,
+  "fieldTypeBytes": false,
+  "fieldTypeDouble": false,
+  "fieldTypeDuration": false,
+  "fieldTypeFloat": false,
+  "fieldTypeImageBlob": false,
+  "fieldTypeInstant": false,
+  "fieldTypeInteger": false,
+  "fieldTypeLocalDate": false,
+  "fieldTypeLocalTime": false,
+  "fieldTypeLong": false,
+  "fieldTypeString": false,
+  "fieldTypeTextBlob": false,
+  "fieldTypeUUID": false,
+  "fieldTypeZonedDateTime": false,
+  "fieldValidationMax": false,
+  "fieldValidationMaxBytes": false,
+  "fieldValidationMaxLength": false,
+  "fieldValidationMaxbytes": false,
+  "fieldValidationMaxlength": false,
+  "fieldValidationMin": false,
+  "fieldValidationMinBytes": false,
+  "fieldValidationMinLength": false,
+  "fieldValidationMinbytes": false,
+  "fieldValidationMinlength": false,
+  "fieldValidationPattern": false,
+  "fieldValidationRequired": false,
+  "fieldValidationUnique": false,
+  "path": [
+    "fieldName",
+  ],
+  "propertyName": "fieldName",
+  "propertyNameCapitalized": "FieldName",
+  "propertyNameUpperSnakeCase": "FIELD_NAME",
+}
+`;
+
 exports[`mutation object test expects mutateRelationship to match snapshot 1`] = `
 {
   "collection": false,
