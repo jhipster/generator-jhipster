@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - spring-boot:bootstrap bootstraping default config should prepare entities 1`] = `
+exports[`generator - server:bootstrap bootstraping default config should prepare entities 1`] = `
 {
   "AnotherSimple": {
     "adminEntity": undefined,
@@ -37,14 +37,10 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "dtoSuffix": "DTO",
     "eagerRelations": Any<Array>,
     "embedded": false,
-    "entityAbsoluteClass": "com.mycompany.myapp.domain.AnotherSimple",
-    "entityAbsoluteFolder": "com/mycompany/myapp/",
-    "entityAbsolutePackage": "com.mycompany.myapp",
     "entityAngularJSSuffix": "",
     "entityAngularName": "AnotherSimple",
     "entityAngularNamePlural": "AnotherSimples",
     "entityApi": "",
-    "entityApiDescription": undefined,
     "entityApiUrl": "another-simples",
     "entityAuthority": undefined,
     "entityClass": "AnotherSimple",
@@ -57,8 +53,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "entityI18nVariant": "default",
     "entityInstance": "anotherSimple",
     "entityInstancePlural": "anotherSimples",
-    "entityJavaPackageFolder": "",
-    "entityJavadoc": undefined,
     "entityModelFileName": "test-root/another-simple",
     "entityNameCapitalized": "AnotherSimple",
     "entityNamePlural": "AnotherSimples",
@@ -252,7 +246,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "i18nAlertHeaderPrefix": "undefined.testRootAnotherSimple",
     "i18nKeyPrefix": "undefined.testRootAnotherSimple",
     "implementsEagerLoadApis": false,
-    "importApiModelProperty": false,
     "isUsingMapsId": false,
     "jpaMetamodelFiltering": false,
     "mapsIdAssoc": undefined,
@@ -318,7 +311,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "relationships": [],
     "relationshipsByOtherEntity": Any<Object>,
     "relationshipsContainEagerLoad": false,
-    "relationshipsContainOtherSideIgnore": false,
     "requiresPersistableImplementation": false,
     "resetFakerSeed": Any<Function>,
     "restClass": "AnotherSimpleDTO",
@@ -371,14 +363,10 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "dtoSuffix": "DTO",
     "eagerRelations": Any<Array>,
     "embedded": false,
-    "entityAbsoluteClass": "com.mycompany.myapp.domain.Authority",
-    "entityAbsoluteFolder": "com/mycompany/myapp/",
-    "entityAbsolutePackage": "com.mycompany.myapp",
     "entityAngularJSSuffix": "",
     "entityAngularName": "Authority",
     "entityAngularNamePlural": "Authorities",
     "entityApi": "",
-    "entityApiDescription": undefined,
     "entityApiUrl": "authorities",
     "entityAuthority": "ROLE_ADMIN",
     "entityClass": "Authority",
@@ -392,8 +380,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "entityI18nVariant": "default",
     "entityInstance": "authority",
     "entityInstancePlural": "authorities",
-    "entityJavaPackageFolder": "",
-    "entityJavadoc": undefined,
     "entityModelFileName": "admin/authority",
     "entityNameCapitalized": "Authority",
     "entityNamePlural": "Authorities",
@@ -518,7 +504,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "i18nAlertHeaderPrefix": "undefined.adminAuthority",
     "i18nKeyPrefix": "undefined.adminAuthority",
     "implementsEagerLoadApis": false,
-    "importApiModelProperty": false,
     "isUsingMapsId": false,
     "jpaMetamodelFiltering": false,
     "mapsIdAssoc": undefined,
@@ -584,7 +569,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "relationships": [],
     "relationshipsByOtherEntity": Any<Object>,
     "relationshipsContainEagerLoad": false,
-    "relationshipsContainOtherSideIgnore": false,
     "requiresPersistableImplementation": true,
     "resetFakerSeed": Any<Function>,
     "restClass": "Authority",
@@ -638,14 +622,10 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "dtoSuffix": "DTO",
     "eagerRelations": Any<Array>,
     "embedded": false,
-    "entityAbsoluteClass": "com.mycompany.myapp.domain.Simple",
-    "entityAbsoluteFolder": "com/mycompany/myapp/",
-    "entityAbsolutePackage": "com.mycompany.myapp",
     "entityAngularJSSuffix": "",
     "entityAngularName": "Simple",
     "entityAngularNamePlural": "Simples",
     "entityApi": "",
-    "entityApiDescription": undefined,
     "entityApiUrl": "simples",
     "entityAuthority": undefined,
     "entityClass": "Simple",
@@ -658,8 +638,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "entityI18nVariant": "default",
     "entityInstance": "simple",
     "entityInstancePlural": "simples",
-    "entityJavaPackageFolder": "",
-    "entityJavadoc": undefined,
     "entityModelFileName": "simple",
     "entityNameCapitalized": "Simple",
     "entityNamePlural": "Simples",
@@ -853,7 +831,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "i18nAlertHeaderPrefix": "undefined.simple",
     "i18nKeyPrefix": "undefined.simple",
     "implementsEagerLoadApis": false,
-    "importApiModelProperty": false,
     "isUsingMapsId": false,
     "jpaMetamodelFiltering": true,
     "mapsIdAssoc": undefined,
@@ -919,7 +896,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "relationships": [],
     "relationshipsByOtherEntity": Any<Object>,
     "relationshipsContainEagerLoad": false,
-    "relationshipsContainOtherSideIgnore": false,
     "requiresPersistableImplementation": false,
     "resetFakerSeed": Any<Function>,
     "restClass": "Simple",
@@ -974,14 +950,10 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "dtoSuffix": "DTO",
     "eagerRelations": Any<Array>,
     "embedded": false,
-    "entityAbsoluteClass": "com.mycompany.myapp.domain.User",
-    "entityAbsoluteFolder": "com/mycompany/myapp/",
-    "entityAbsolutePackage": "com.mycompany.myapp",
     "entityAngularJSSuffix": "",
     "entityAngularName": "User",
     "entityAngularNamePlural": "Users",
     "entityApi": "",
-    "entityApiDescription": undefined,
     "entityApiUrl": "users",
     "entityAuthority": undefined,
     "entityClass": "User",
@@ -995,8 +967,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "entityI18nVariant": "default",
     "entityInstance": "user",
     "entityInstancePlural": "users",
-    "entityJavaPackageFolder": "",
-    "entityJavadoc": undefined,
     "entityModelFileName": "user",
     "entityNameCapitalized": "User",
     "entityNamePlural": "Users",
@@ -1691,7 +1661,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "i18nAlertHeaderPrefix": "userManagement",
     "i18nKeyPrefix": "userManagement",
     "implementsEagerLoadApis": false,
-    "importApiModelProperty": false,
     "isUsingMapsId": false,
     "jpaMetamodelFiltering": false,
     "mapsIdAssoc": undefined,
@@ -1757,7 +1726,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "relationships": [],
     "relationshipsByOtherEntity": Any<Object>,
     "relationshipsContainEagerLoad": false,
-    "relationshipsContainOtherSideIgnore": false,
     "requiresPersistableImplementation": false,
     "resetFakerSeed": Any<Function>,
     "restClass": "UserDTO",
@@ -1814,14 +1782,10 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "dtoSuffix": "DTO",
     "eagerRelations": Any<Array>,
     "embedded": false,
-    "entityAbsoluteClass": "com.mycompany.myapp.domain.UserManagement",
-    "entityAbsoluteFolder": "com/mycompany/myapp/",
-    "entityAbsolutePackage": "com.mycompany.myapp",
     "entityAngularJSSuffix": "",
     "entityAngularName": "UserManagement",
     "entityAngularNamePlural": "UserManagements",
     "entityApi": "",
-    "entityApiDescription": undefined,
     "entityApiUrl": "admin/users",
     "entityAuthority": "ROLE_ADMIN",
     "entityClass": "UserManagement",
@@ -1835,8 +1799,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "entityI18nVariant": "default",
     "entityInstance": "userManagement",
     "entityInstancePlural": "userManagements",
-    "entityJavaPackageFolder": "",
-    "entityJavadoc": undefined,
     "entityModelFileName": "admin/user-management",
     "entityNameCapitalized": "UserManagement",
     "entityNamePlural": "UserManagements",
@@ -2531,7 +2493,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
     "i18nAlertHeaderPrefix": "userManagement",
     "i18nKeyPrefix": "userManagement",
     "implementsEagerLoadApis": false,
-    "importApiModelProperty": false,
     "isUsingMapsId": false,
     "jpaMetamodelFiltering": false,
     "mapsIdAssoc": undefined,
@@ -2599,7 +2560,6 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
         "bagRelationship": false,
         "collection": true,
         "columnName": "authority",
-        "ignoreOtherSideProperty": false,
         "joinColumnNames": Any<Array>,
         "joinTable": undefined,
         "otherEntity": Any<Object>,
@@ -2621,20 +2581,17 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
         "relationshipManyToOne": false,
         "relationshipName": "authority",
         "relationshipNameCapitalized": "Authority",
-        "relationshipNameCapitalizedPlural": "Authorities",
         "relationshipNameHumanized": "Authority",
         "relationshipNamePlural": "authorities",
         "relationshipOneToMany": false,
         "relationshipOneToOne": false,
         "relationshipRightSide": false,
         "relationshipType": "many-to-many",
-        "relationshipUpdateBackReference": true,
         "shouldWriteJoinTable": false,
       },
     ],
     "relationshipsByOtherEntity": Any<Object>,
     "relationshipsContainEagerLoad": false,
-    "relationshipsContainOtherSideIgnore": false,
     "requiresPersistableImplementation": true,
     "resetFakerSeed": Any<Function>,
     "restClass": "UserManagementDTO",
@@ -2657,7 +2614,7 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
 }
 `;
 
-exports[`generator - spring-boot:bootstrap bootstraping default config should prepare entity names 1`] = `
+exports[`generator - server:bootstrap bootstraping default config should prepare entity names 1`] = `
 [
   "User",
   "UserManagement",
@@ -2665,44 +2622,4 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
   "Simple",
   "AnotherSimple",
 ]
-`;
-
-exports[`generator - spring-boot:bootstrap with defaults options should call source snapshot 1`] = `
-{
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
-}
-`;
-
-exports[`generator - spring-boot:bootstrap with defaults options should match files snapshot 1`] = `
-{
-  ".editorconfig.jhi.java": {
-    "stateCleared": "modified",
-  },
-  ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
-    "stateCleared": "modified",
-  },
-}
 `;

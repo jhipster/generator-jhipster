@@ -21,9 +21,10 @@ import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
+import { testBootstrapEntities } from '../../../../test/support/bootstrap-tests.ts';
 import { shouldSupportFeatures } from '../../../../test/support/tests.js';
 
-import Generator from './index.ts';
+import Generator from './generator.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -32,7 +33,7 @@ const generator = `${basename(resolve(__dirname, '../../'))}:${basename(__dirnam
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
-  // describe('blueprint support', () => testBlueprintSupport(generator));
+  // describe('blueprint support', () => testBlueprintSupport(generator, { bootstrapGenerator: true }));
 
   describe('with defaults options', () => {
     before(async () => {
@@ -51,4 +52,6 @@ describe(`generator - ${generator}`, () => {
       expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
     });
   });
+
+  testBootstrapEntities(generator);
 });

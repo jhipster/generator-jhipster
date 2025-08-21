@@ -17,12 +17,11 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname } from 'node:path';
+import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { snakeCase } from 'lodash-es';
-
 import { defaultHelpers as helpers, runResult } from '../../../../lib/testing/index.ts';
+import { testBootstrapEntities } from '../../../../test/support/bootstrap-tests.ts';
 import { shouldSupportFeatures } from '../../../../test/support/tests.js';
 
 import Generator from './generator.ts';
@@ -30,17 +29,9 @@ import Generator from './generator.ts';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const generator = basename(__dirname);
+const generator = `${basename(resolve(__dirname, '../../'))}:${basename(__dirname)}`;
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    const GENERATOR_LIST: Record<string, string> = await import('../../../generator-list.ts');
-    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
-  it('generator-list esm exports constant matches folder name', async () => {
-    const GENERATOR_LIST: Record<string, string> = await import('../../../generator-list.ts');
-    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
 
   describe('with', () => {
@@ -56,7 +47,8 @@ describe(`generator - ${generator}`, () => {
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
-    "creationTimestamp": 1577836800000
+    "creationTimestamp": 1577836800000,
+    "entities": []
   }
 }
 ",
@@ -67,4 +59,6 @@ describe(`generator - ${generator}`, () => {
       });
     });
   });
+
+  testBootstrapEntities(generator);
 });
