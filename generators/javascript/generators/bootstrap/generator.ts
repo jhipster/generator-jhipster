@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JavascriptApplicationGenerator } from '../../generator.ts';
+import { JavascriptSimpleApplicationGenerator } from '../../generator.ts';
 
-export default class JavascriptBootstrapGenerator extends JavascriptApplicationGenerator {
+export default class JavascriptBootstrapGenerator extends JavascriptSimpleApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -46,7 +46,7 @@ export default class JavascriptBootstrapGenerator extends JavascriptApplicationG
     });
   }
 
-  get [JavascriptApplicationGenerator.LOADING]() {
+  get [JavascriptSimpleApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -60,7 +60,7 @@ export default class JavascriptBootstrapGenerator extends JavascriptApplicationG
     });
   }
 
-  get [JavascriptApplicationGenerator.PREPARING]() {
+  get [JavascriptSimpleApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 }

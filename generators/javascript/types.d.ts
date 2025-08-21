@@ -104,6 +104,9 @@ export type JavascriptSimpleApplication = BaseSimpleApplicationApplication &
     clientPackageJsonScripts: Record<string, string>;
 
     addPrettierExtensions?: (extensions: string[]) => void;
+
+    prettierFolders?: string;
+    prettierExtensions?: string;
   };
 
 export type Application<E extends BaseApplicationEntity = Entity> = BaseApplicationApplication<E> & JavascriptSimpleApplication;

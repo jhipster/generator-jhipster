@@ -128,9 +128,6 @@ export type Application<E extends Entity> = Command['Application'] &
     backendTypeSpringBoot?: boolean;
     temporaryDir?: string;
 
-    prettierFolders?: string;
-    prettierExtensions?: string;
-
     loginRegex?: string;
     jsLoginRegex?: string;
 

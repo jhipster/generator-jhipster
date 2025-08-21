@@ -93,39 +93,6 @@ export default class CommonGenerator extends BaseApplicationGenerator<
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  get configuringEachEntity() {
-    return this.asConfiguringEachEntityTaskGroup({
-      migrateEntity({ entityConfig, entityStorage }) {
-        for (const field of entityConfig.fields!) {
-          if (field.javadoc) {
-            field.documentation ??= field.javadoc;
-            delete field.javadoc;
-          }
-          if (field.fieldTypeJavadoc) {
-            field.fieldTypeDocumentation ??= field.fieldTypeJavadoc;
-            delete field.fieldTypeJavadoc;
-          }
-        }
-        for (const relationship of entityConfig.relationships!) {
-          if (relationship.javadoc) {
-            relationship.documentation = relationship.javadoc;
-            delete relationship.javadoc;
-          }
-        }
-        if (entityConfig.javadoc) {
-          entityConfig.documentation = entityConfig.javadoc;
-          delete entityConfig.javadoc;
-        } else {
-          entityStorage.save();
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
-  }
-
   // Public API method used by the getter and also by Blueprints
   get loading() {
     return this.asLoadingTaskGroup({
@@ -212,6 +179,39 @@ export default class CommonGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get configuringEachEntity() {
+    return this.asConfiguringEachEntityTaskGroup({
+      migrateEntity({ entityConfig, entityStorage }) {
+        for (const field of entityConfig.fields!) {
+          if (field.javadoc) {
+            field.documentation ??= field.javadoc;
+            delete field.javadoc;
+          }
+          if (field.fieldTypeJavadoc) {
+            field.fieldTypeDocumentation ??= field.fieldTypeJavadoc;
+            delete field.fieldTypeJavadoc;
+          }
+        }
+        for (const relationship of entityConfig.relationships!) {
+          if (relationship.javadoc) {
+            relationship.documentation = relationship.javadoc;
+            delete relationship.javadoc;
+          }
+        }
+        if (entityConfig.javadoc) {
+          entityConfig.documentation = entityConfig.javadoc;
+          delete entityConfig.javadoc;
+        } else {
+          entityStorage.save();
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
   }
 
   get default() {

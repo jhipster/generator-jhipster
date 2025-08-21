@@ -17,19 +17,19 @@
  * limitations under the License.
  */
 import { asWritingTask } from '../../../../base-application/support/task-type-inference.ts';
+import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../../../base-application/types.d.ts';
 import { clientRootTemplatesBlock } from '../../../../client/support/files.ts';
-import type { Application as JavascriptApplication, Entity as JavascriptEntity } from '../../../types.d.ts';
 
-export const writeEslintClientRootConfigFile = asWritingTask<JavascriptEntity, JavascriptApplication>(async function writingEslintFile({
-  application,
-}) {
-  await this.writeFiles({
-    blocks: [
-      clientRootTemplatesBlock({
-        templates: [{ sourceFile: 'eslint.config.js.jhi', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi` }],
-      }),
-    ],
-    context: application,
-    rootTemplatesPath: this.fetchFromInstalledJHipster('javascript/generators/eslint/templates'),
-  });
-});
+export const writeEslintClientRootConfigFile = asWritingTask<BaseApplicationEntity, BaseApplicationApplication<BaseApplicationEntity>>(
+  async function writingEslintFile({ application }) {
+    await this.writeFiles({
+      blocks: [
+        clientRootTemplatesBlock({
+          templates: [{ sourceFile: 'eslint.config.js.jhi', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi` }],
+        }),
+      ],
+      context: application,
+      rootTemplatesPath: this.fetchFromInstalledJHipster('javascript/generators/eslint/templates'),
+    });
+  },
+);
