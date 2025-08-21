@@ -28,7 +28,6 @@ export * from './field-utils.ts';
 export { default as prepareEntity } from './prepare-entity.ts';
 export * from './prepare-entity.ts';
 export * from './prepare-field.ts';
-export * from './prepare-property.ts';
 export { default as prepareRelationship } from './prepare-relationship.ts';
 export * from './relationship.ts';
 export * from './task-type-inference.ts';

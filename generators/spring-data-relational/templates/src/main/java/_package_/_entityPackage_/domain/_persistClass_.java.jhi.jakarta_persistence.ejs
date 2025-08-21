@@ -52,15 +52,25 @@ import org.hibernate.type.SqlTypes;
   <%_ if (field.fieldTypeBytes) { _%>
     @Lob
   <%_ } _%>
-  <%_ if (field.fieldTypeTemporal || field.fieldTypeDuration) { _%>
-    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>"<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
-  <%_ } else if (field.fieldTypeBigDecimal) { _%>
-    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", precision = 21, scale = 2<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
-  <%_ } else if (field.fieldTypeUUID && (prodDatabaseTypeMysql || prodDatabaseTypeMariadb)) { _%>
+  <%_ if (field.fieldTypeUUID && (prodDatabaseTypeMysql || prodDatabaseTypeMariadb)) { _%>
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", length = 36<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
   <%_ } else { _%>
-    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>"<% if (field.fieldValidate === true) { %><% if (field.fieldValidationMaxLength) { %>, length = <%= field.fieldValidateRulesMaxlength %><% } %><% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %><% } %>)
+    @Column(
+      name = "<%- field.fieldNameAsDatabaseColumn %>"
+    <%_ if (field.fieldValidationMaxLength) { _%>
+      , length = <%= field.fieldValidateRulesMaxlength %>
+    <%_ } _%>
+    <%_ if (field.fieldTypeBigDecimal) { _%>
+      , precision = 21, scale = 2
+    <%_ } _%>
+    <%_ if (field.fieldValidationRequired) { %>
+      , nullable = false
+    <%_ } _%>
+    <%_ if (field.fieldValidationUnique) { %>
+      , unique = true
+    <%_ } _%>
+  )
   <%_ } _%>
 <&_ } -&>
 <%_ } -%>

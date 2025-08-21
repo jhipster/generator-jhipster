@@ -23,6 +23,7 @@ import { mutateData } from '../../../../lib/utils/object.ts';
 import { normalizePathEnd } from '../../../../lib/utils/path.ts';
 import { upperFirstCamelCase } from '../../../../lib/utils/string.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
+import { mutateField as commonMutateField } from '../../entity.ts';
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
@@ -157,6 +158,18 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.preparingEachEntity;
+  }
+
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      preparing({ field }) {
+        mutateData(field, commonMutateField);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
   get default() {

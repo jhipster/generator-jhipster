@@ -16,6 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { ValidationType } from '../../jdl/core/built-in-options/validations.ts';
+import type { FieldType } from '../field-types.ts';
+
 import type { Property } from './property.ts';
 
 type FieldEnum = {
@@ -32,10 +35,10 @@ export type Field = Partial<FieldEnum> &
   Partial<FieldBlob> &
   Property & {
     fieldName: string;
-    fieldType: string;
+    fieldType: FieldType | string;
     options?: Record<string, boolean | string | number>;
 
-    fieldValidateRules?: string[];
+    fieldValidateRules?: ValidationType[];
     fieldValidateRulesPattern?: string;
     fieldValidateRulesMaxlength?: number;
     fieldValidateRulesMax?: number;

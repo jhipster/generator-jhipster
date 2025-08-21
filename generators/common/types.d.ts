@@ -12,34 +12,19 @@ import type { Application as DockerApplication } from '../docker/types.ts';
 import type { Application as GitApplication, Config as GitConfig, Options as GitOptions } from '../git/types.ts';
 import type huskyCommand from '../javascript/generators/husky/command.ts';
 import type prettierCommand from '../javascript/generators/prettier/command.ts';
-import type {
-  Application as JavascriptApplication,
-  Entity as JavascriptEntity,
-  Field as JavascriptField,
-  Relationship as JavascriptRelationship,
-} from '../javascript/types.ts';
-import type {
-  Application as LanguagesApplication,
-  Config as LanguagesConfig,
-  Entity as LanguagesEntity,
-  Options as LanguagesOptions,
-} from '../languages/types.ts';
+import type { Application as JavascriptApplication } from '../javascript/types.ts';
+import type { Application as LanguagesApplication, Config as LanguagesConfig, Options as LanguagesOptions } from '../languages/types.ts';
 
 import type command from './command.ts';
+import type { Entity } from './entity.ts';
 
+export * from './entity.ts';
 export type { BaseApplicationFeatures as Features };
 
 type Command = HandleCommandTypes<typeof command>;
 type AppCommand = HandleCommandTypes<typeof appCommand>;
 type HuskyCommand = HandleCommandTypes<typeof huskyCommand>;
 type PrettierCommand = HandleCommandTypes<typeof prettierCommand>;
-
-export type Field = JavascriptField & {
-  fieldTypeTemporal?: boolean;
-  fieldTypeCharSequence?: boolean;
-  fieldTypeNumeric?: boolean;
-  fieldSupportsSortBy?: boolean;
-};
 
 export type Config = BaseApplicationConfig &
   Command['Config'] &
@@ -59,17 +44,6 @@ export type Options = BaseApplicationOptions &
   PrettierCommand['Options'] &
   LanguagesOptions &
   GitOptions;
-
-export interface Entity<F extends Field = Field, R extends JavascriptRelationship = JavascriptRelationship>
-  extends LanguagesEntity<F, R>,
-    JavascriptEntity<F, R> {
-  entityApiUrl: string;
-  entityApi: string;
-
-  restProperties?: (F | R)[];
-
-  uniqueEnums?: F[];
-}
 
 export type Application<E extends BaseApplicationEntity = Entity> = JavascriptApplication<E> &
   Command['Application'] &
@@ -106,5 +80,3 @@ export type Source = BaseApplicationSource & {
   ignoreSonarRule?: (rule: SonarRule) => void;
   addSonarProperties?: (properties: PropertiesFileKeyUpdate[]) => void;
 };
-
-export type { JavascriptRelationship as Relationship };

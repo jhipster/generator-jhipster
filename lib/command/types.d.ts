@@ -1,4 +1,4 @@
-import type { IsNever, Replace, RequireAtLeastOne, SetOptional, Simplify, TupleToUnion, ValueOf } from 'type-fest';
+import type { IsNever, PascalCase, Replace, RequireAtLeastOne, SetOptional, Simplify, TupleToUnion, ValueOf } from 'type-fest';
 import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
 
 import type GeneratorsByNamespace from '../../generators/types.ts';
@@ -7,10 +7,15 @@ import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.ts';
 
 import type { MergeUnion } from './support/merge-union.ts';
 
-type NormalizeValue<Input extends string> = Replace<Input, '[]', '', { all: true }>;
+type NormalizePropertyValue<Input extends string> = Replace<Replace<Input, '[]', ''>, '.', ''>;
+
+export type DerivedProperty<
+  Property extends string,
+  Value extends string,
+> = `${Property}${Uppercase<Value> extends Value ? Value : PascalCase<NormalizePropertyValue<Value>>}`;
 
 export type DerivedPropertiesOnlyOf<Property extends string, Choices extends string> = Simplify<{
-  [K in Choices as `${Property}${Capitalize<NormalizeValue<K>>}`]: boolean;
+  [K in Choices as `${Property}${Capitalize<NormalizePropertyValue<K>>}`]: boolean;
 }>;
 
 /*
@@ -22,7 +27,7 @@ export type DerivedPropertiesOnlyOf<Property extends string, Choices extends str
  */
 export type DerivedPropertiesOf<Property extends string, Choices extends string> = Simplify<
   {
-    [K in Choices as `${Property}${Capitalize<NormalizeValue<K>>}`]: boolean;
+    [K in Choices as `${Property}${Capitalize<NormalizePropertyValue<K>>}`]: boolean;
   } & Record<Property, Choices | undefined> &
     Record<`${Property}Any`, boolean>
 >;

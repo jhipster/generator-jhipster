@@ -21,7 +21,12 @@ import assert from 'node:assert';
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import { normalizePathEnd } from '../../../lib/utils/path.ts';
-import type { PrimaryKey, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../../base-application/types.ts';
+import type {
+  Field as BaseApplicationField,
+  PrimaryKey,
+  Relationship as BaseApplicationRelationship,
+  RelationshipWithEntity,
+} from '../../base-application/types.ts';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.ts';
 
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.ts';
@@ -76,7 +81,7 @@ export const generateEntityClientImports = (
  * @private
  * Generate Entity Client Enum Imports
  */
-export const generateEntityClientEnumImports = (fields: ClientField[], clientFramework: string): Map<string, string> => {
+export const generateEntityClientEnumImports = (fields: BaseApplicationField[], clientFramework: string): Map<string, string> => {
   const typeImports = new Map();
   const uniqueEnums: Record<string, string> = {};
   for (const field of fields) {
@@ -154,7 +159,7 @@ export const stringifyTsEntity = (data: Record<string, any>, options: { sep?: st
  * @deprecated
  * Generate a test entity, according to the type
  */
-export const generateTestEntity = (fields: ClientField[], index: 0 | 1 | 'random' = 'random') => {
+export const generateTestEntity = (fields: BaseApplicationField[], index: 0 | 1 | 'random' = 'random') => {
   const entries = fields
     .map(field => {
       if (index === 'random') {
