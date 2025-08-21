@@ -34,7 +34,7 @@ export type Config = JavascriptConfig & CommonConfig & Command['Config'];
 
 export type Options = JavascriptOptions & CommonOptions & Command['Options'];
 
-export interface Field extends JavascriptField, CommonField, LanguagesField {}
+export type Field = JavascriptField & CommonField & LanguagesField;
 
 export interface Relationship extends JavascriptRelationship, CommonRelationship, LanguagesRelationship {}
 

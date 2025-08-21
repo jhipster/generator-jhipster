@@ -10,7 +10,13 @@ describe('generator - client - support - type-utils', () => {
   describe('getTypescriptType', () => {
     describe('when called with sql DB name', () => {
       it('return SQL', () => {
-        expect(Object.fromEntries(Object.values(CommonDBTypes).map(dbType => [dbType, getTypescriptType(dbType)]))).toMatchInlineSnapshot(`
+        expect(
+          Object.fromEntries(
+            Object.values(CommonDBTypes)
+              .filter(dbType => dbType !== 'Enum')
+              .map(dbType => [dbType, getTypescriptType(dbType)]),
+          ),
+        ).toMatchInlineSnapshot(`
 {
   "AnyBlob": "string",
   "BigDecimal": "number",

@@ -18,7 +18,6 @@
  */
 import { capitalize } from 'lodash-es';
 
-import type { FieldType } from '../../../jhipster/field-types.ts';
 import { customCamelCase } from '../../../utils/string-utils.ts';
 import { validations } from '../../core/built-in-options/index.ts';
 import type { JDLEntity } from '../../core/models/index.ts';
@@ -55,7 +54,7 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
   jdlEntity.forEachField((jdlField: JDLField) => {
     let fieldData: JSONField = {
       fieldName: customCamelCase(jdlField.name),
-      fieldType: jdlField.type as FieldType,
+      fieldType: jdlField.type,
     };
     const comment = formatComment(jdlField.comment);
     if (comment) {

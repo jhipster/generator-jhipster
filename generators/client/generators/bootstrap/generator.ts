@@ -100,7 +100,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
       preparing({ field }) {
         mutateData(field, {
           __override__: false,
-          tsType: ({ fieldType, fieldIsEnum }) => (fieldIsEnum ? 'Enum' : getTypescriptType(fieldType as FieldType)),
+          tsType: ({ fieldType, fieldIsEnum }) => (fieldIsEnum ? fieldType : getTypescriptType(fieldType as FieldType)),
         });
       },
     });

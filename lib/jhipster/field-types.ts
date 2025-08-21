@@ -121,7 +121,6 @@ export const fieldTypesValues = {
   FLOAT: 'Float',
   DOUBLE: 'Double',
   UUID: 'UUID',
-  ENUM: 'Enum',
   BOOLEAN: 'Boolean',
   LOCAL_DATE: 'LocalDate',
   ZONED_DATE_TIME: 'ZonedDateTime',

@@ -30,7 +30,7 @@ export type Config = JavaConfig & ExportStoragePropertiesFromCommand<typeof Comm
 
 export type Options = JavaOptions & ExportGeneratorOptionsFromCommand<typeof Command>;
 
-export interface Field extends JavaField, CommonField {}
+export type Field = JavaField & CommonField;
 
 export interface Relationship extends JavaRelationship, LanguagesRelationship, CommonRelationship {
   relationshipApiDescription?: string;

@@ -207,9 +207,9 @@ export function prepareEntityPrimaryKeyForTemplates(
         fieldTranslationKey: 'global.field.id',
         autoGenerate: true,
       } as FieldAll;
-      entityWithConfig.fields.unshift(idField);
+      entityWithConfig.fields.unshift(idField!);
     }
-    idFields.push(idField);
+    idFields.push(idField!);
     idCount++;
   } else if (idRelationships.length > 0) {
     idRelationships.forEach(relationship => {

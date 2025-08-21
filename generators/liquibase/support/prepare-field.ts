@@ -47,7 +47,6 @@ const liquibaseFieldTypeByFieldType = {
   [fieldTypesValues.BYTES]: '${blobType}',
   [fieldTypesValues.STRING]: 'varchar',
   [fieldTypesValues.BOOLEAN]: 'boolean',
-  [fieldTypesValues.ENUM]: 'string',
   [fieldTypesValues.BYTE_BUFFER]: '${blobType}',
   [fieldTypesValues.BLOB]: '${blobType}',
   [fieldTypesValues.ANY_BLOB]: '${blobType}',
@@ -83,7 +82,6 @@ export const liquibaseLoadColumnTypeByFieldType = {
   '${blobType}': 'blob',
   '${clobType}': 'clob',
   varchar: 'string',
-  string: 'string',
   '${uuidType}': '${uuidType}',
 } as const satisfies Record<LiquibaseColumnType, string>;
 
@@ -93,15 +91,15 @@ function parseLiquibaseLoadColumnType(application: LiquibaseApplication<Liquibas
   const columnType = field.columnType!;
 
   if (field.fieldIsEnum) {
-    return liquibaseLoadColumnTypeByFieldType.string;
+    return liquibaseLoadColumnTypeByFieldType.varchar;
   }
 
   const { prodDatabaseType } = application;
   if (columnType === '${uuidType}' && (prodDatabaseType === MYSQL || prodDatabaseType === MARIADB)) {
-    return liquibaseLoadColumnTypeByFieldType.string;
+    return liquibaseLoadColumnTypeByFieldType.varchar;
   }
 
-  return liquibaseLoadColumnTypeByFieldType[columnType] ?? liquibaseLoadColumnTypeByFieldType.string;
+  return liquibaseLoadColumnTypeByFieldType[columnType] ?? liquibaseLoadColumnTypeByFieldType.varchar;
 }
 
 export default function prepareField(application: LiquibaseApplication<LiquibaseEntity>, field: LiquibaseField): LiquibaseField {

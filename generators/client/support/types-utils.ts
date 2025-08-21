@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { ValueOf } from 'type-fest';
+
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { fieldTypes } from '../../../lib/jhipster/index.ts';
 import type { PrimaryKey } from '../../base-application/types.ts';
@@ -46,7 +48,7 @@ const tsTypesByFieldType = {
 
   [TYPE_BOOLEAN]: 'boolean',
 
-  Enum: 'Enum',
+  // Enum: 'Enum',
   String: 'string',
   UUID: 'string',
   Blob: 'string',
@@ -93,8 +95,8 @@ const getTypescriptKeyType = (primaryKey: FieldType | PrimaryKey) => {
  * @private
  * Find type for Typescript
  */
-export const getTypescriptType = <const F extends FieldType>(fieldType: F): (typeof tsTypesByFieldType)[F] => {
-  return tsTypesByFieldType[fieldType] ?? 'enum';
+export const getTypescriptType = (fieldType: keyof typeof tsTypesByFieldType): ValueOf<typeof tsTypesByFieldType> => {
+  return tsTypesByFieldType[fieldType];
 };
 
 export default getTypescriptKeyType;

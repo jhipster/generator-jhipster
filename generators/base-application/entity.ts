@@ -42,7 +42,6 @@ type BaseApplicationAddedFieldProperties = DerivedPropertiesOnlyOf<'fieldType', 
 
     enumFileName?: string;
     enumValues?: { name: string; value: string }[];
-    fieldIsEnum?: boolean;
 
     // Validation
     fieldValidate?: boolean;
@@ -97,7 +96,19 @@ type BaseApplicationAddedFieldProperties = DerivedPropertiesOnlyOf<'fieldType', 
     builtIn?: boolean;
   };
 
-export type Field = Property & BaseField & BaseApplicationAddedFieldProperties;
+export type Field = Property &
+  Omit<BaseField, 'fieldType'> &
+  BaseApplicationAddedFieldProperties &
+  (
+    | {
+        fieldType: string;
+        fieldIsEnum: true;
+      }
+    | {
+        fieldType: FieldType;
+        fieldIsEnum: false;
+      }
+  );
 
 export const mutateField = {
   __override__: false,
