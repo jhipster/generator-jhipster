@@ -45,6 +45,9 @@ export const testBootstrapEntities = (generator: string) => {
       it('should prepare entity names', () => {
         expect(Object.keys(runResult.entities!)).toMatchSnapshot();
       });
+      it('should prepare application', () => {
+        expect(runResult.application).toMatchSnapshot(expectedNonRecursiveObject(runResult.application));
+      });
       it('should prepare entities', () => {
         const expected = Object.fromEntries(Object.entries(runResult.entities!).map(([name, entity]) => [name, expectedEntity(entity)]));
         expect(runResult.entities).toMatchSnapshot(expected);
