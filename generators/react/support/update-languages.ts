@@ -38,7 +38,7 @@ function updateLanguagesInWebpackReactTask(this: BaseGenerator, { application }:
   const { ignoreNeedlesError: ignoreNonExisting } = this;
   let newContent = 'groupBy: [\n';
   // prettier-ignore
-  languages?.forEach((language) => {
+  languages?.forEach((language: string) => {
       newContent += `                    { pattern: "./${this.relativeDir(clientRootDir, clientSrcDir)}i18n/${language}/*.json", fileName: "./i18n/${language}.json" },\n`;
           });
   newContent +=

@@ -59,7 +59,7 @@ function updateLanguagesInConfigTask(this: BaseGenerator, { application }: Updat
   const { ignoreNeedlesError: ignoreNonExisting } = this;
   // Add i18n config snippets for all languages
   let i18nConfig = 'const datetimeFormats: IntlDateTimeFormats = {\n';
-  languages?.forEach((ln, i) => {
+  languages?.forEach((ln: string, i: number) => {
     i18nConfig += generateDateTimeFormat(ln, i, languages.length);
   });
   i18nConfig += '  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object\n';
@@ -74,7 +74,7 @@ function updateLanguagesInWebpackTask(this: BaseGenerator, { application }: Upda
   const { clientSrcDir, languages } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = this;
   let newContent = 'groupBy: [\n';
-  languages?.forEach(language => {
+  languages?.forEach((language: string) => {
     newContent += `          { pattern: './${clientSrcDir}i18n/${language}/*.json', fileName: './i18n/${language}.json' },\n`;
   });
   newContent += '          // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n        ]';

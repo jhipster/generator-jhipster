@@ -10,20 +10,20 @@ import type {
 import type { PropertiesFileKeyUpdate } from '../base-core/support/index.ts';
 import type { Application as DockerApplication } from '../docker/types.ts';
 import type { Application as GitApplication, Config as GitConfig, Options as GitOptions } from '../git/types.ts';
-import type huskyCommand from '../javascript/generators/husky/command.ts';
-import type prettierCommand from '../javascript/generators/prettier/command.ts';
 import type {
   Application as JavascriptApplication,
   Entity as JavascriptEntity,
   Field as JavascriptField,
   Relationship as JavascriptRelationship,
-} from '../javascript/types-mutations.ts';
+} from '../javascript/entity.ts';
+import type huskyCommand from '../javascript/generators/husky/command.ts';
+import type prettierCommand from '../javascript/generators/prettier/command.ts';
 import type {
   Application as LanguagesApplication,
   Config as LanguagesConfig,
   Entity as LanguagesEntity,
   Options as LanguagesOptions,
-} from '../languages/types-mutations.ts';
+} from '../languages/entity.ts';
 
 import type command from './command.ts';
 

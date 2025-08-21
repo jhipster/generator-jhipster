@@ -8,6 +8,7 @@ import type { Field as BaseField } from '../../lib/jhipster/types/field.ts';
 import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.ts';
 import { buildMutateDataForPropertyWithCustomPrefix } from '../../lib/utils/derived-property.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import type { Field as LanguagesField } from '../languages/entity.ts';
 
 import type { FakerWithRandexp } from './support/faker.ts';
 
@@ -28,6 +29,7 @@ const mutateProperty = {
 } as const satisfies MutateDataParam<Property>;
 
 export type Field = Property &
+  LanguagesField &
   BaseField &
   DerivedPropertiesOnlyOf<'fieldType', FieldType> & {
     path?: string[];

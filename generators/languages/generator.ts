@@ -32,19 +32,19 @@ import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/
 import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/index.ts';
 
 import { writeEntityFiles } from './entity-files.ts';
-import { clientI18nFiles } from './files.ts';
-import { askForLanguages, askI18n } from './prompts.ts';
-import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.ts';
-import type { Language } from './support/languages.ts';
-import { findLanguageForTag } from './support/languages.ts';
-import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.ts';
 import type {
   Application as LanguagesApplication,
   Config as LanguagesConfig,
   Entity as LanguagesEntity,
   Options as LanguagesOptions,
   Source as LanguagesSource,
-} from './types-mutations.ts';
+} from './entity.ts';
+import { clientI18nFiles } from './files.ts';
+import { askForLanguages, askI18n } from './prompts.ts';
+import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.ts';
+import type { Language } from './support/languages.ts';
+import { findLanguageForTag } from './support/languages.ts';
+import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.ts';
 
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 

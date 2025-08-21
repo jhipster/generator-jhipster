@@ -25,7 +25,7 @@ import pluralize from 'pluralize';
 import { mutateData, normalizePathEnd } from '../../../../lib/utils/index.ts';
 import { editPropertiesFileCallback } from '../../../base-core/support/properties-file.ts';
 import { JAVA_COMPATIBLE_VERSIONS, JHIPSTER_DEPENDENCIES_VERSION } from '../../../generator-constants.js';
-import type { Application as JavascriptApplication, Source as JavascriptSource } from '../../../javascript/types-mutations.ts';
+import type { Application as JavascriptApplication, Source as JavascriptSource } from '../../../javascript/entity.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 import {
   addJavaAnnotation,

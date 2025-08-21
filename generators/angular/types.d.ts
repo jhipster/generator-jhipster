@@ -30,7 +30,7 @@ export type Field = ClientField & {
   defaultValue?: string;
 };
 
-export interface Entity<F extends Field = Field, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
+export type Entity<F extends Field = Field, R extends ClientRelationship = ClientRelationship> = ClientEntity<F, R> & {
   /**
    * @experimental to be replaced with a calculated property
    * Returns the typescript import section of enums referenced by all fields of the entity.
@@ -40,7 +40,7 @@ export interface Entity<F extends Field = Field, R extends ClientRelationship = 
   generateEntityClientEnumImports?: (fields: any) => Map<any, any>;
   entityAngularAuthorities?: string;
   entityAngularReadAuthorities?: string;
-}
+};
 
 export type Application<E extends Entity> = {
   /** @experimental to be replaced with needles */

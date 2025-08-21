@@ -18,9 +18,9 @@
  */
 import { packageJson } from '../../../../lib/index.ts';
 import { mutateData } from '../../../../lib/utils/index.ts';
+import { mutateField } from '../../entity.ts';
 import { JavascriptApplicationGenerator } from '../../generator.ts';
 import { isReservedTypescriptKeyword } from '../../support/reserved-words.ts';
-import { mutateField } from '../../types-mutations.ts';
 
 export default class JavascriptBootstrapGenerator extends JavascriptApplicationGenerator {
   async beforeQueue() {

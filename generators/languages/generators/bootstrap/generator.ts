@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../../../base-application/index.ts';
-import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from '../../support/constants.ts';
-import { type Language, findLanguageForTag, supportedLanguages } from '../../support/languages.ts';
 import {
   type Application as LanguagesApplication,
   type Config as LanguagesConfig,
@@ -26,7 +24,9 @@ import {
   type Field,
   type Options as LanguagesOptions,
   mutateField,
-} from '../../types-mutations.ts';
+} from '../../entity.ts';
+import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from '../../support/constants.ts';
+import { type Language, findLanguageForTag, supportedLanguages } from '../../support/languages.ts';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator<
   LanguagesEntity,

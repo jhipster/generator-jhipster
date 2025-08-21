@@ -18,7 +18,7 @@
  */
 import { asWritingTask } from '../../../../base-application/support/task-type-inference.ts';
 import { clientRootTemplatesBlock } from '../../../../client/support/files.ts';
-import type { Application as JavascriptApplication, Entity as JavascriptEntity } from '../../../types-mutations.ts';
+import type { Application as JavascriptApplication, Entity as JavascriptEntity } from '../../../entity.ts';
 
 export const writeEslintClientRootConfigFile = asWritingTask<JavascriptEntity, JavascriptApplication>(async function writingEslintFile({
   application,
