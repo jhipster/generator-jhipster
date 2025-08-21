@@ -25,7 +25,6 @@ describe('generator - client - support - type-utils', () => {
   "ByteBuffer": "string",
   "Double": "number",
   "Duration": "string",
-  "Enum": "Enum",
   "Float": "number",
   "ImageBlob": "string",
   "Instant": "dayjs.Dayjs",

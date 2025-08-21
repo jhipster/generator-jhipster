@@ -24,7 +24,6 @@ import { mutateData } from '../../../lib/utils/index.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import { mutateField } from '../entity.ts';
-import { isFieldEnumType } from '../internal/types/field-types.ts';
 import type { Entity as BaseApplicationEntity, Field as BaseApplicationField } from '../types.ts';
 
 import type { FakerWithRandexp } from './faker.ts';
@@ -252,9 +251,7 @@ export function prepareCommonFieldForTemplates(
   });
   const fieldType = field.fieldType;
 
-  const fieldIsEnum = isFieldEnumType(field);
-  field.fieldIsEnum = fieldIsEnum;
-  if (fieldIsEnum) {
+  if (field.fieldIsEnum) {
     if ((Object.values(fieldTypesValues) as string[]).includes(fieldType)) {
       throw new Error(`Field type '${fieldType}' is a reserved keyword and can't be used as an enum name.`);
     }

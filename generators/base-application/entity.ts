@@ -11,6 +11,7 @@ import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/
 import { buildMutateDataForProperty } from '../../lib/utils/derived-property.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 
+import { isFieldEnumType } from './internal/types/field-types.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
 
 type Property = {
@@ -112,6 +113,7 @@ export type Field = Property &
 
 export const mutateField = {
   __override__: false,
+  fieldIsEnum: data => isFieldEnumType(data),
   ...buildMutateDataForProperty('fieldType', Object.values(fieldTypesValues), { anyData: true }),
   fieldTypeBytes: ({ fieldTypeByte }) => fieldTypeByte,
   ...buildMutateDataForProperty('fieldTypeBlobContent', Object.values(BlobTypes), { prefix: 'blobContentType' }),
