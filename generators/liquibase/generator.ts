@@ -37,11 +37,12 @@ import {
 import type { DerivedField } from '../base-application/types.ts';
 import BaseEntityChangesGenerator from '../base-entity-changes/index.ts';
 import type { BaseChangelog } from '../base-entity-changes/types.ts';
-import type { Entity as CommonEntity } from '../common/types.ts';
+import { mutateField as commonMutateField } from '../common/entity.ts';
+import type { Entity as CommonEntity, Field as CommonField } from '../common/types.ts';
 import { prepareEntity as prepareEntityForServer } from '../java/support/index.ts';
 import type { MavenProperty } from '../maven/types.ts';
 import { getFKConstraintName, getUXConstraintName, prepareField as prepareServerFieldForTemplates } from '../server/support/index.ts';
-import type { Entity as ServerEntity, Field as CommonField } from '../server/types.ts';
+import type { Entity as ServerEntity } from '../server/types.ts';
 import type { Source as SpringBootSource } from '../spring-boot/index.ts';
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.ts';
 
@@ -205,7 +206,8 @@ export default class LiquibaseGenerator<
               prepareEntityPrimaryKeyForTemplates.call(this, { entity: entity as unknown as EntityAll, application });
             }
             for (const field of entity.fields ?? []) {
-              prepareCommonFieldForTemplates(entity as unknown as CommonEntity, field as unknown as CommonField, this);
+              prepareCommonFieldForTemplates(entity, field, this);
+              mutateData(field as CommonField, commonMutateField);
               prepareServerFieldForTemplates(application as any, entity as unknown as ServerEntity, field as any, this);
               prepareFieldForLiquibase(application, field);
             }

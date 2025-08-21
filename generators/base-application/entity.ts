@@ -3,12 +3,15 @@ import pluralize from 'pluralize';
 
 import type { DerivedPropertiesOnlyOf } from '../../lib/command/types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
+import { BlobTypes, fieldTypesValues } from '../../lib/jhipster/field-types.ts';
+import { type ValidationType, validationTypes } from '../../lib/jhipster/index.ts';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import type { Field as BaseField } from '../../lib/jhipster/types/field.ts';
 import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.ts';
-import { buildMutateDataForPropertyWithCustomPrefix } from '../../lib/utils/derived-property.ts';
+import { buildMutateDataForProperty } from '../../lib/utils/derived-property.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 
+import { isFieldEnumType } from './internal/types/field-types.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
 
 type Property = {
@@ -27,21 +30,19 @@ const mutateProperty = {
   propertyNameUpperSnakeCase: ({ propertyName }) => snakeCase(propertyName).toUpperCase(),
 } as const satisfies MutateDataParam<Property>;
 
-export type Field = Property &
-  BaseField &
-  DerivedPropertiesOnlyOf<'fieldType', FieldType> & {
+type BaseApplicationAddedFieldProperties = DerivedPropertiesOnlyOf<'fieldType', FieldType> &
+  DerivedPropertiesOnlyOf<'fieldValidation', ValidationType> & {
     path?: string[];
 
-    fieldNameCapitalized?: string;
-    fieldNameHumanized?: string;
-    fieldNameUnderscored?: string;
+    fieldNameCapitalized: string;
+    fieldNameHumanized: string;
+    fieldNameUnderscored: string;
     fieldTranslationKey?: string;
 
     fieldApiDescription?: string;
 
     enumFileName?: string;
     enumValues?: { name: string; value: string }[];
-    fieldIsEnum?: boolean;
 
     // Validation
     fieldValidate?: boolean;
@@ -80,30 +81,61 @@ export type Field = Property &
     fieldTypeBytes?: boolean;
     // Derived properties
     fieldTypeBinary?: boolean;
-    fieldTypeDuration?: boolean;
-    fieldTypeLocalDate?: boolean;
-    fieldTypeLocalTime?: boolean;
-    /** @deprecated */
-    fieldTypeTemporal: boolean;
-    /** @deprecated */
-    fieldTypeCharSequence: boolean;
-    /** @deprecated */
-    fieldTypeNumeric: boolean;
 
-    fieldValidationMin?: boolean;
-    fieldValidationMinLength?: boolean;
-    fieldValidationMax?: boolean;
-    fieldValidationMaxLength?: boolean;
-    fieldValidationPattern?: boolean;
-    fieldValidationUnique?: boolean;
-    fieldValidationMinBytes?: boolean;
-    fieldValidationMaxBytes?: boolean;
+    /** @deprecated */
+    fieldValidationMinLength: boolean;
+    /** @deprecated */
+    fieldValidationMaxLength: boolean;
+    /** @deprecated */
+    fieldValidationMinBytes: boolean;
+    /** @deprecated */
+    fieldValidationMaxBytes: boolean;
 
     relatedByOtherEntity?: boolean;
 
     enumInstance?: string;
     builtIn?: boolean;
   };
+
+export type Field = Property &
+  Omit<BaseField, 'fieldType'> &
+  BaseApplicationAddedFieldProperties &
+  (
+    | {
+        fieldType: string;
+        fieldIsEnum: true;
+      }
+    | {
+        fieldType: FieldType;
+        fieldIsEnum: false;
+      }
+  );
+
+export const mutateField = {
+  __override__: false,
+  fieldIsEnum: data => isFieldEnumType(data),
+  ...buildMutateDataForProperty('fieldType', Object.values(fieldTypesValues), { anyData: true }),
+  fieldTypeBytes: ({ fieldTypeByte }) => fieldTypeByte,
+  ...buildMutateDataForProperty('fieldTypeBlobContent', Object.values(BlobTypes), { prefix: 'blobContentType' }),
+
+  path: ({ fieldName }) => [fieldName],
+  propertyName: ({ fieldName }) => fieldName,
+  ...mutateProperty,
+
+  fieldNameCapitalized: ({ fieldName }) => upperFirst(fieldName),
+  fieldNameUnderscored: ({ fieldName }) => snakeCase(fieldName),
+  fieldNameHumanized: ({ fieldName }) => startCase(fieldName),
+
+  ...buildMutateDataForProperty('fieldValidateRules', Object.values(validationTypes), {
+    prefix: 'fieldValidation',
+    array: true,
+    valCheck: (data, value) => data.fieldValidateRules?.includes(value) ?? false,
+  }),
+  fieldValidationMaxLength: ({ fieldValidationMaxlength }) => fieldValidationMaxlength,
+  fieldValidationMinLength: ({ fieldValidationMinlength }) => fieldValidationMinlength,
+  fieldValidationMinBytes: ({ fieldValidationMinbytes }) => fieldValidationMinbytes,
+  fieldValidationMaxBytes: ({ fieldValidationMaxbytes }) => fieldValidationMaxbytes,
+} as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Field>, BaseApplicationAddedFieldProperties>;
 
 export type DerivedField<E extends Entity = Entity, F extends Field = Entity['fields'][number]> = F & {
   derived: true;
@@ -151,13 +183,10 @@ export interface Relationship extends BaseApplicationAddedRelationshipProperties
 
 export const mutateRelationship = {
   __override__: false,
-  ...buildMutateDataForPropertyWithCustomPrefix('relationshipSide', 'relationship', ['left', 'right'], 'Side'),
-  ...buildMutateDataForPropertyWithCustomPrefix('relationshipType', 'relationship', [
-    'one-to-one',
-    'one-to-many',
-    'many-to-one',
-    'many-to-many',
-  ]),
+  ...buildMutateDataForProperty('relationshipSide', ['left', 'right'], { prefix: 'relationship', suffix: 'Side' }),
+  ...buildMutateDataForProperty('relationshipType', ['one-to-one', 'one-to-many', 'many-to-one', 'many-to-many'], {
+    prefix: 'relationship',
+  }),
   collection: ({ relationshipType }) => relationshipType === 'one-to-many' || relationshipType === 'many-to-many',
 
   relationshipFieldName: ({ relationshipName }) => lowerFirst(relationshipName),
@@ -216,6 +245,7 @@ export type PrimaryKey<F extends Field = Field> = {
   typeString?: boolean;
   typeLong?: boolean;
   typeInteger?: boolean;
+  /** @deprecated replace with technology-specific implementation */
   typeNumeric?: boolean;
 
   derivedFields?: (F & {

@@ -189,7 +189,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
         const fields = entityConfig.fields;
         fields!.forEach(field => {
           // Migration from JodaTime to Java Time
-          if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
+          if ((field.fieldType as any) === 'DateTime' || (field.fieldType as any) === 'Date') {
             field.fieldType = INSTANT;
           }
 

@@ -1,7 +1,7 @@
 import { camelCase, upperFirst } from 'lodash-es';
-import type { CamelCase, Simplify } from 'type-fest';
+import type { Simplify } from 'type-fest';
 
-import type { JHipsterChoices } from '../command/types.ts';
+import type { DerivedProperty, JHipsterChoices } from '../command/types.ts';
 
 import { upperFirstCamelCase } from './string.ts';
 
@@ -12,11 +12,11 @@ export const derivedPropertyName = <const P extends string, const V extends stri
   property: P,
   value: V,
   suffix?: S,
-): `${CamelCase<P>}${Capitalize<CamelCase<V>>}${S}` => {
+): `${DerivedProperty<P, V>}${S}` => {
   const cleaned = value.replaceAll(/[^a-z0-9-]/gi, '');
   const valueProperty = cleaned.includes('-') ? upperFirstCamelCase(cleaned) : upperFirst(cleaned);
   const camelCaseProperty = camelCase(property);
-  return `${camelCaseProperty}${valueProperty}${suffix ?? ''}` as `${CamelCase<P>}${Capitalize<CamelCase<V>>}${S}`;
+  return `${camelCaseProperty}${valueProperty}${suffix ?? ''}` as `${DerivedProperty<P, V>}${S}`;
 };
 
 export const applyDerivedProperty = <const Prop extends string>(
@@ -48,47 +48,41 @@ export const applyDerivedProperty = <const Prop extends string>(
   }
 };
 
-export const applyDerivedPropertyOnly = (data: any, property: string, actualValue: any, possibleValues: string[]) => {
-  for (const value of possibleValues) {
-    const isProperty = Array.isArray(actualValue) ? actualValue.includes(value) : actualValue === value;
-    data[derivedPropertyName(property, value)] ??= isProperty;
-  }
-};
-
 export const buildMutateDataForProperty = <
   const P extends string,
   const Values extends string[],
-  const Data extends Partial<Record<P, Values[number]>>,
->(
-  property: P,
-  possibleValues: Values,
-): Simplify<
-  Data & {
-    [K in Values[number] as `${P}${Capitalize<K>}`]: (data: Simplify<Data>) => (typeof data)[P] extends K ? true : false;
-  }
-> => {
-  return Object.fromEntries(
-    possibleValues.map(value => [derivedPropertyName(property, value), (data: Data) => data[property] === value]),
-  ) as any;
-};
-
-export const buildMutateDataForPropertyWithCustomPrefix = <
-  const P extends string,
-  const Prefix extends string,
-  const Values extends string[],
+  const PropertyType = Values[number],
+  const Prefix extends string = P,
   const S extends string = '',
-  const Data extends Partial<Record<P, Values[number] | undefined>> = Simplify<Partial<Record<P, Values[number] | undefined>>>,
+  const IsAny extends boolean = false,
+  const IsArray extends boolean = false,
+  const Data extends Partial<
+    Record<P, IsArray extends true ? PropertyType[] : IsAny extends true ? any : PropertyType | undefined>
+  > = Simplify<Partial<Record<P, IsArray extends true ? PropertyType[] : IsAny extends true ? any : PropertyType | undefined>>>,
 >(
   property: P,
-  prefix: Prefix,
   possibleValues: Values,
-  suffix?: S,
+  {
+    prefix = property as unknown as Prefix,
+    suffix = '' as S,
+    array,
+    valCheck = array ? (data, value) => (data[property] as any)?.includes(value) ?? false : (data, value) => data[property] === value,
+  }: {
+    prefix?: Prefix;
+    suffix?: S;
+    /** Property is an array, check if the property includes the value instead of matching the value */
+    array?: IsArray;
+    /** Set callback argument as any to avoid type mismatch */
+    anyData?: IsAny;
+    /** Callback logic */
+    valCheck?: (data: Data, value: any) => boolean;
+  } = {},
 ): Simplify<
   Data & {
     [K in Values[number] as ReturnType<typeof derivedPropertyName<Prefix, K, S>>]: (data: Data) => boolean;
   }
 > => {
   return Object.fromEntries(
-    possibleValues.map(value => [derivedPropertyName(prefix, value, suffix), (data: Data) => data[property] === value]),
+    possibleValues.map(value => [derivedPropertyName(prefix, value, suffix), (data: Data) => valCheck(data, value)]),
   ) as any;
 };

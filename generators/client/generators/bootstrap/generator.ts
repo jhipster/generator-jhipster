@@ -16,11 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { getFrontendAppName } from '../../../../lib/utils/index.ts';
+import type { FieldType } from '../../../../lib/jhipster/field-types.ts';
+import { getFrontendAppName, mutateData } from '../../../../lib/utils/index.ts';
 import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, LOGIN_REGEX_JS } from '../../../generator-constants.js';
 import clientCommand from '../../command.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
-import { filterEntitiesForClient, filterEntityPropertiesForClient, preparePostEntityClientDerivedProperties } from '../../support/index.ts';
+import {
+  filterEntitiesForClient,
+  filterEntityPropertiesForClient,
+  getTypescriptType,
+  preparePostEntityClientDerivedProperties,
+} from '../../support/index.ts';
 import type { Features as ClientFeatures, Options as ClientOptions } from '../../types.d.ts';
 
 export default class ClientBootstrap extends ClientApplicationGenerator {
@@ -87,6 +93,21 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
 
   get [ClientApplicationGenerator.PREPARING]() {
     return this.preparing;
+  }
+
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      preparing({ field }) {
+        mutateData(field, {
+          __override__: false,
+          tsType: ({ fieldType, fieldIsEnum }) => (fieldIsEnum ? fieldType : getTypescriptType(fieldType as FieldType)),
+        });
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
   get default() {
