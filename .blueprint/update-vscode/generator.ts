@@ -5,6 +5,10 @@ import { getPackageRoot } from '../../lib/index.ts';
 import { getWorkflowSamples } from '../generate-sample/support/get-workflow-samples.ts';
 
 export default class extends BaseGenerator {
+  async beforeQueue() {
+    await this.composeWithJHipster('bootstrap');
+  }
+
   get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async generateVscodeLaunch() {
@@ -20,7 +24,8 @@ export default class extends BaseGenerator {
               internalConsoleOptions: 'neverOpen',
               name: 'update vscode launch.json',
               // eslint-disable-next-line no-template-curly-in-string
-              program: '${workspaceFolder}/bin/jhipster.cjs update-vscode',
+              program: '${workspaceFolder}/bin/jhipster.cjs',
+              args: ['update-vscode'],
               console: 'integratedTerminal',
             },
           ],
