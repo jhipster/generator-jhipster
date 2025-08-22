@@ -15,7 +15,7 @@ jobs:
           path: generator-jhipster-<%= baseName %>
       - uses: jhipster/actions/setup-runner@v0
         with:
-          node-version: 20
+          node-version: 24
           binary-dir: ${{ github.workspace }}/generator-jhipster-<%= baseName %>/cli/
       - uses: jhipster/actions/cache-npm-dependencies@v0
         with:
