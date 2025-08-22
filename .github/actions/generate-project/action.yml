@@ -1,0 +1,49 @@
+name: 'Generate Project'
+description: 'Generate JHipster project from configuration'
+inputs:
+  sample-name:
+    description: 'Name of the sample to generate'
+    required: true
+  extra-args:
+    description: 'Extra arguments for generation'
+    required: false
+    default: ''
+  skip-config:
+    description: 'Skip configuration file copy'
+    required: false
+    default: 'false'
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Prepare project directory'
+      shell: bash
+      run: |
+        mkdir -p "$JHI_FOLDER_APP"
+        cd "$JHI_FOLDER_APP"
+        echo "Working directory: $(pwd)"
+        
+    - name: 'Copy configuration if not skipped'
+      shell: bash
+      if: inputs.skip-config != 'true'
+      run: |
+        if [[ -f "$JHI_SAMPLES/${{ inputs.sample-name }}/.yo-rc.json" ]]; then
+          cp -f "$JHI_SAMPLES/${{ inputs.sample-name }}/.yo-rc.json" "$JHI_FOLDER_APP"/
+          echo "Copied configuration for sample: ${{ inputs.sample-name }}"
+        else
+          echo "Warning: Sample configuration not found for ${{ inputs.sample-name }}"
+        fi
+        
+    - name: 'Generate project with JHipster'
+      shell: bash
+      run: |
+        cd "$JHI_FOLDER_APP"
+        echo "Generating project with arguments: ${{ inputs.extra-args }}"
+        $JHI_CLI --force --no-insight --skip-checks --skip-jhipster-dependencies ${{ inputs.extra-args }}
+        
+    - name: 'Display generated project'
+      shell: bash
+      run: |
+        echo "Generated project structure:"
+        ls -al "$JHI_FOLDER_APP"
+        echo "Git log (if available):"
+        git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit || true 

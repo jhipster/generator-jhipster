@@ -1,0 +1,51 @@
+name: 'Initialize Environment'
+description: 'Initialize environment variables for JHipster testing'
+inputs:
+  generator-path:
+    description: 'Path to the generator'
+    required: false
+    default: 'generator-jhipster'
+  workspace:
+    description: 'GitHub workspace path'
+    required: false
+    default: '${{ github.workspace }}'
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Set environment variables'
+      shell: bash
+      run: |
+        # Set core paths
+        echo "JHI_HOME=${{ inputs.workspace }}/${{ inputs.generator-path }}" >> $GITHUB_ENV
+        echo "JHI_INTEG=${{ inputs.workspace }}/${{ inputs.generator-path }}/test-integration" >> $GITHUB_ENV
+        echo "JHI_SAMPLES=${{ inputs.workspace }}/${{ inputs.generator-path }}/test-integration/samples" >> $GITHUB_ENV
+        echo "JHI_JDL_SAMPLES=${{ inputs.workspace }}/${{ inputs.generator-path }}/test-integration/jdl-samples" >> $GITHUB_ENV
+        echo "JHI_FOLDER_APP=${{ inputs.workspace }}/app" >> $GITHUB_ENV
+        
+        # Set CLI
+        echo "JHI_CLI=jhipster" >> $GITHUB_ENV
+        
+        # Read versions from files
+        JHI_NODE_VERSION=$(cat ${{ inputs.workspace }}/${{ inputs.generator-path }}/generators/init/resources/.node-version)
+        echo "JHI_NODE_VERSION=$JHI_NODE_VERSION" >> $GITHUB_ENV
+        
+        JHI_NPM_VERSION=$(grep -o '"npm": "[^"]*"' ${{ inputs.workspace }}/${{ inputs.generator-path }}/generators/common/resources/package.json | cut -f4 -d '"')
+        echo "JHI_NPM_VERSION=$JHI_NPM_VERSION" >> $GITHUB_ENV
+        
+        JHI_VERSION=$(grep -o '"version": "[^"]*"' ${{ inputs.workspace }}/${{ inputs.generator-path }}/package.json | cut -f4 -d '"')
+        echo "JHI_VERSION=$JHI_VERSION" >> $GITHUB_ENV
+        
+        # Set entity samples path
+        if [[ -d "${{ inputs.workspace }}/${{ inputs.generator-path }}/test-integration/samples/.jhipster" ]]; then
+          echo "JHI_ENTITY_SAMPLES=${{ inputs.workspace }}/${{ inputs.generator-path }}/test-integration/samples/.jhipster" >> $GITHUB_ENV
+        else
+          echo "JHI_ENTITY_SAMPLES=${{ inputs.workspace }}/${{ inputs.generator-path }}/test-integration/samples/.jhipster" >> $GITHUB_ENV
+        fi
+        
+        echo "Environment variables set:"
+        echo "JHI_HOME: ${{ inputs.workspace }}/${{ inputs.generator-path }}"
+        echo "JHI_SAMPLES: ${{ inputs.workspace }}/${{ inputs.generator-path }}/test-integration/samples"
+        echo "JHI_FOLDER_APP: ${{ inputs.workspace }}/app"
+        echo "JHI_NODE_VERSION: $JHI_NODE_VERSION"
+        echo "JHI_NPM_VERSION: $JHI_NPM_VERSION"
+        echo "JHI_VERSION: $JHI_VERSION" 
