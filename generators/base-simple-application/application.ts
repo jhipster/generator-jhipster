@@ -22,7 +22,6 @@ import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from
 import packageJson from '../../package.json' with { type: 'json' };
 import type { WriteContext } from '../base-core/api.ts';
 import { RECOMMENDED_NODE_VERSION } from '../generator-constants.js';
-import { mutateApplication as projectNameMutateApplication } from '../project-name/application.ts';
 import type { ProjectNameAddedApplicationProperties } from '../project-name/application.ts';
 
 export type BaseSimpleApplicationAddedApplicationProperties = WriteContext & {
@@ -64,8 +63,6 @@ export const mutateApplication = {
   __override__: false,
 
   jhipsterVersion: packageJson.version,
-  ...projectNameMutateApplication,
-
   jhiPrefix: 'jhi',
   jhiPrefixCapitalized: ({ jhiPrefix }) => upperFirst(jhiPrefix),
   jhiPrefixDashed: ({ jhiPrefix }) => kebabCase(jhiPrefix),

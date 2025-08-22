@@ -17,6 +17,7 @@ export type ProjectNameAddedApplicationProperties = {
 };
 
 export const mutateApplication = {
+  __override__: false,
   baseName: 'JHipster',
   camelizedBaseName: ({ baseName }) => customCamelCase(baseName),
   capitalizedBaseName: ({ baseName }) => upperFirst(baseName),

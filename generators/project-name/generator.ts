@@ -42,6 +42,8 @@ export default class ProjectNameGenerator extends CommandBaseGenerator<typeof co
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
+
+    await this.dependsOnBootstrap('project-name');
   }
 
   get initializing() {
