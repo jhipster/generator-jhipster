@@ -30,6 +30,7 @@ export type GeneratorsWithBootstrap =
   | 'jdl'
   | 'kubernetes'
   | 'languages'
+  | 'project-name'
   | 'server'
   | 'spring-boot';
 // jhipster-needle-add-generator-with-bootstrap
@@ -137,6 +138,7 @@ type GeneratorsByNamespace = {
   'jhipster:maven:jib': import('./maven/generators/jib/generator.ts').default;
   'project-name': import('./project-name/generator.ts').default;
   'jhipster:project-name': import('./project-name/generator.ts').default;
+  'jhipster:project-name:bootstrap': import('./project-name/generators/bootstrap/generator.ts').default;
   react: import('./react/generator.ts').default;
   'jhipster:react': import('./react/generator.ts').default;
   server: import('./server/generator.ts').default;
