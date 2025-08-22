@@ -72,7 +72,7 @@ export function writeEntityFiles() {
       if (application.skipClient) return;
       const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage, 'en'])];
       entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
-      const { clientSrcDir, packageName, frontendAppName } = application;
+      const { i18nDir, clientSrcDir, packageName, frontendAppName } = application;
       await Promise.all(
         entities
           .map(entity =>
@@ -87,6 +87,7 @@ export function writeEntityFiles() {
                       lang,
                       frontendAppName,
                       packageName,
+                      i18nDir,
                       clientSrcDir,
                     },
                   }),
