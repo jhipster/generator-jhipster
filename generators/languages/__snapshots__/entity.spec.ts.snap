@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`mutation object test expects mutateEntity to match snapshot 1`] = `
+{
+  "entityI18nVariant": "default",
+  "entityTranslationKey": "clientRootFolderEntityInstance",
+  "entityTranslationKeyMenu": "clientRootFolderEntityNameKebabCase",
+}
+`;

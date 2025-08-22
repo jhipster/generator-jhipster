@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 import { packageJson } from '../../../../lib/index.ts';
-import { JavascriptApplicationGenerator } from '../../generator.ts';
+import { JavascriptSimpleApplicationGenerator } from '../../generator.ts';
 
-export default class PrettierGenerator extends JavascriptApplicationGenerator {
+export default class PrettierGenerator extends JavascriptSimpleApplicationGenerator {
   fromInit?: boolean;
   prettierConfigFile!: string;
   monorepositoryRoot?: boolean;
@@ -63,7 +63,7 @@ export default class PrettierGenerator extends JavascriptApplicationGenerator {
     });
   }
 
-  get [JavascriptApplicationGenerator.LOADING]() {
+  get [JavascriptSimpleApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -78,7 +78,7 @@ export default class PrettierGenerator extends JavascriptApplicationGenerator {
     });
   }
 
-  get [JavascriptApplicationGenerator.PREPARING]() {
+  get [JavascriptSimpleApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -96,7 +96,7 @@ export default class PrettierGenerator extends JavascriptApplicationGenerator {
     });
   }
 
-  get [JavascriptApplicationGenerator.WRITING]() {
+  get [JavascriptSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -140,7 +140,7 @@ export default class PrettierGenerator extends JavascriptApplicationGenerator {
     });
   }
 
-  get [JavascriptApplicationGenerator.POST_WRITING]() {
+  get [JavascriptSimpleApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

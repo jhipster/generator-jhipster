@@ -1,6 +1,6 @@
 import type {
+  Application as JavascriptApplication,
   Config as JavascriptConfig,
-  JavascriptSimpleApplication as JavascriptApplication,
   Options as JavascriptOptions,
 } from '../javascript/types.ts';
 

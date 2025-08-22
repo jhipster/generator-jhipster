@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`mutation object test expects mutateEntity to match snapshot 1`] = `
+{
+  "entityAngularJSSuffix": "-entityAngularJSSuffix",
+  "entityAngularName": "EntityNameCapitalizedEntityAngularJsSuffix",
+  "entityAngularNamePlural": "EntityNameCapitalizedEntityAngularJsSuffixes",
+  "entityFileName": "entity-name-capitalized-entity-angular-js-suffix",
+  "entityFolderName": "clientRootFolder/entity-name-capitalized-entity-angular-js-suffix",
+  "entityModelFileName": "clientRootFolder/entity-name-capitalized-entity-angular-js-suffix",
+  "entityPluralFileName": "entityNamePluralizedAndSpinalCased-entityAngularJSSuffix",
+  "entityReactName": "EntityNameCapitalizedEntityAngularJsSuffix",
+  "entityServiceFileName": "entity-name-capitalized-entity-angular-js-suffix",
+  "entityStateName": "entity-name-capitalized-entity-angular-js-suffix",
+  "entityTsName": "EntityNameCapitalizedEntityAngularJsSuffix",
+  "entityUrl": "entity-name-capitalized-entity-angular-js-suffix",
+}
+`;
+
+exports[`mutation object test expects mutateField to match snapshot 1`] = `
+{
+  "tsType": "fieldType",
+}
+`;

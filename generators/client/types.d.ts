@@ -3,30 +3,20 @@ import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
-  Entity as CommonEntity,
   Features as CommonFeatures,
-  Field as CommonField,
   Options as CommonOptions,
-  Relationship as CommonRelationship,
   Source as CommonSource,
 } from '../common/types.ts';
-import type { Application as CypressApplication } from '../cypress/types.ts';
-import type {
-  Application as JavascriptApplication,
-  Config as JavascriptConfig,
-  Entity as JavascriptEntity,
-  Field as JavascriptField,
-  Options as JavascriptOptions,
-  Relationship as JavascriptRelationship,
-  Source as JavascriptSource,
-} from '../javascript/types.ts';
+import type { Config as JavascriptConfig, Options as JavascriptOptions, Source as JavascriptSource } from '../javascript/types.ts';
 import type { Language } from '../languages/support/languages.ts';
-import type { Entity as LanguagesEntity, Field as LanguagesField, Relationship as LanguagesRelationship } from '../languages/types.d.ts';
 
 import type command from './command.ts';
+import type { Entity } from './entity.ts';
 import type { GetWebappTranslationCallback } from './translation.ts';
 
 type Command = HandleCommandTypes<typeof command>;
+
+export * from './entity.ts';
 
 export type { CommonFeatures as Features };
 
@@ -34,19 +24,8 @@ export type Config = JavascriptConfig & CommonConfig & Command['Config'];
 
 export type Options = JavascriptOptions & CommonOptions & Command['Options'];
 
-export type Field = JavascriptField & CommonField & LanguagesField;
-
-export interface Relationship extends JavascriptRelationship, CommonRelationship, LanguagesRelationship {}
-
-export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
-  extends JavascriptEntity<F, R>,
-    CommonEntity<F, R>,
-    LanguagesEntity<F, R> {}
-
 export type Application<E extends Entity = Entity> = Command['Application'] &
-  CommonApplication<E> &
-  JavascriptApplication<E> &
-  CypressApplication & {
+  CommonApplication<E> & {
     webappLoginRegExp: string;
     clientWebappDir?: string;
     clientThemeNone?: boolean;

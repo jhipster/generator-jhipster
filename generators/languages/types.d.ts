@@ -16,14 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,
   Entity as BaseApplicationEntity,
-  Field as BaseApplicationField,
   Options as BaseApplicationOptions,
-  Relationship as BaseApplicationRelationship,
   Source as BaseApplicationSource,
 } from '../base-application/types.d.ts';
 
@@ -50,16 +49,4 @@ export type Application<E extends BaseApplicationEntity = BaseApplicationEntity>
     languagesDefinition: readonly Language[];
   };
 
-export { BaseApplicationField as Field, BaseApplicationRelationship as Relationship };
-
-export interface Entity<
-  F extends BaseApplicationField = BaseApplicationField,
-  R extends BaseApplicationRelationship = BaseApplicationRelationship,
-> extends BaseApplicationEntity<F, R> {
-  entityTranslationKey: string;
-  entityTranslationKeyMenu: string;
-
-  entityI18nVariant: string;
-  i18nKeyPrefix: string;
-  i18nAlertHeaderPrefix: string;
-}
+export * from './entity.ts';

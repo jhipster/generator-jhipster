@@ -16,14 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { camelCase, kebabCase, upperFirst } from 'lodash-es';
-import pluralize from 'pluralize';
 
 import { mutateData } from '../../../../lib/utils/object.ts';
-import { normalizePathEnd } from '../../../../lib/utils/path.ts';
-import { upperFirstCamelCase } from '../../../../lib/utils/string.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
-import { mutateField as commonMutateField } from '../../entity.ts';
+import { mutateEntity as commonMutateEntity, mutateField as commonMutateField } from '../../entity.ts';
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
@@ -109,49 +105,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityFieldTaskGroup({
-      prepareEntity({ application, entity }) {
-        mutateData(entity, {
-          __override__: true,
-          entityAngularJSSuffix: data => {
-            const entityAngularJSSuffix = data.entityAngularJSSuffix ?? data.angularJSSuffix ?? '';
-            return entityAngularJSSuffix.startsWith('-') || !entityAngularJSSuffix ? entityAngularJSSuffix : `-${entityAngularJSSuffix}`;
-          },
-        });
-
-        mutateData(entity, {
-          __override__: false,
-          // Implement i18n variant ex: 'male', 'female' when applied
-          entityI18nVariant: 'default',
-          clientRootFolder: '',
-          entityFileName: data => kebabCase(data.entityNameCapitalized + upperFirst(data.entityAngularJSSuffix)),
-          entityAngularName: data => upperFirst(data.entityNameCapitalized) + upperFirstCamelCase(data.entityAngularJSSuffix!),
-          entityReactName: data => upperFirst(data.entityNameCapitalized) + upperFirstCamelCase(data.entityAngularJSSuffix!),
-          entityAngularNamePlural: data => pluralize(data.entityAngularName),
-          entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
-          entityFolderName: data => `${normalizePathEnd(data.clientRootFolder)}${data.entityFileName}`,
-          entityModelFileName: data => data.entityFolderName,
-          entityPluralFileName: data => `${data.entityNamePluralizedAndSpinalCased}${data.entityAngularJSSuffix}`,
-          entityServiceFileName: data => data.entityFileName,
-          entityStateName: data => kebabCase(data.entityAngularName),
-          entityUrl: data => data.entityStateName,
-          entityTranslationKey: data =>
-            data.clientRootFolder ? camelCase(`${data.clientRootFolder}-${data.entityInstance}`) : data.entityInstance,
-          entityTranslationKeyMenu: data =>
-            camelCase(data.clientRootFolder ? `${data.clientRootFolder}-${data.entityStateName}` : data.entityStateName),
-          i18nKeyPrefix: data => data.i18nKeyPrefix ?? `${application.frontendAppName}.${data.entityTranslationKey}`,
-          i18nAlertHeaderPrefix: data =>
-            (data.i18nAlertHeaderPrefix ?? data.microserviceAppName)
-              ? `${data.microserviceAppName}.${data.entityTranslationKey}`
-              : data.i18nKeyPrefix,
-          entityApi: ({ microserviceName }) => (microserviceName ? `services/${microserviceName.toLowerCase()}/` : ''),
-          entityPage: ({ microserviceName, entityFileName }) =>
-            microserviceName && application.microfrontend && application.applicationTypeMicroservice
-              ? `${microserviceName.toLowerCase()}/${entityFileName}`
-              : `${entityFileName}`,
-          paginationPagination: data => data.pagination === 'pagination',
-          paginationInfiniteScroll: data => data.pagination === 'infinite-scroll',
-          paginationNo: data => data.pagination === 'no',
-        });
+      prepareEntity({ entity }) {
+        mutateData(entity, commonMutateEntity);
       },
     });
   }

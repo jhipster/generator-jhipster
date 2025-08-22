@@ -17,8 +17,13 @@
  * limitations under the License.
  */
 import { CommonDBTypes, RelationalOnlyDBTypes } from '../../lib/jhipster/field-types.ts';
+import { buildMutateDataForProperty } from '../../lib/utils/derived-property.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
-import type { Entity as JavascriptEntity, Field as JavascriptField, Relationship as JavascriptRelationship } from '../javascript/types.ts';
+import type {
+  Entity as BaseApplicationEntity,
+  Field as BaseApplicationField,
+  Relationship as BaseApplicationRelationship,
+} from '../base-application/types.ts';
 import type { Entity as LanguagesEntity } from '../languages/types.ts';
 
 const { BIG_DECIMAL, DOUBLE, FLOAT, INSTANT, INTEGER, LOCAL_DATE, LONG, STRING, UUID, ZONED_DATE_TIME, TEXT_BLOB } = CommonDBTypes;
@@ -35,7 +40,7 @@ type CommonAddedFieldProperties = {
   fieldSupportsSortBy?: boolean;
 };
 
-export type Field = JavascriptField & CommonAddedFieldProperties;
+export type Field = BaseApplicationField & CommonAddedFieldProperties;
 
 export const mutateField = {
   __override__: false,
@@ -47,14 +52,28 @@ export const mutateField = {
   fieldTypeTemporal: ({ fieldType }) => fieldType === ZONED_DATE_TIME || fieldType === INSTANT || fieldType === LOCAL_DATE,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Field>, CommonAddedFieldProperties>;
 
-export type { JavascriptRelationship as Relationship };
+export type { BaseApplicationRelationship as Relationship };
 
-export interface Entity<F extends Field = Field, R extends JavascriptRelationship = JavascriptRelationship>
-  extends LanguagesEntity<F, R>,
-    JavascriptEntity<F, R> {
+type CommonAddedEntityProperties = {
   entityApiUrl: string;
   entityApi: string;
 
+  paginationPagination: boolean;
+  paginationInfiniteScroll: boolean;
+  paginationNo: boolean;
+};
+
+export const mutateEntity = {
+  __override__: false,
+  entityApi: ({ microserviceName }) => (microserviceName ? `services/${microserviceName.toLowerCase()}/` : ''),
+  entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
+  ...buildMutateDataForProperty('pagination', ['pagination', 'infinite-scroll', 'no']),
+} as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, CommonAddedEntityProperties>;
+
+export interface Entity<F extends Field = Field, R extends BaseApplicationRelationship = BaseApplicationRelationship>
+  extends LanguagesEntity<F, R>,
+    BaseApplicationEntity<F, R>,
+    CommonAddedEntityProperties {
   restProperties?: (F | R)[];
 
   uniqueEnums?: F[];

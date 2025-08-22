@@ -17,4 +17,4 @@
  * limitations under the License.
  */
 export { default } from './generator.ts';
-export type { Application, Config, Entity, Field, Options, Relationship, Source } from './types.ts';
+export type { Application, Config, Options, Source } from './types.ts';

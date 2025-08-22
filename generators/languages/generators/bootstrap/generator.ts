@@ -18,6 +18,7 @@
  */
 import { mutateData } from '../../../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
+import { mutateEntity as languagesMutateEntity } from '../../entity.ts';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from '../../support/constants.ts';
 import { type Language, findLanguageForTag, supportedLanguages } from '../../support/languages.ts';
 import type {
@@ -74,6 +75,24 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntity({ application, entity }) {
+        mutateData(entity, languagesMutateEntity, {
+          i18nKeyPrefix: data => data.i18nKeyPrefix ?? `${application.frontendAppName}.${data.entityTranslationKey}`,
+          i18nAlertHeaderPrefix: data =>
+            (data.i18nAlertHeaderPrefix ?? data.microserviceAppName)
+              ? `${data.microserviceAppName}.${data.entityTranslationKey}`
+              : data.i18nKeyPrefix,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get preparingEachEntityField() {

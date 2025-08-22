@@ -261,6 +261,7 @@ export type PrimaryKey<F extends Field = Field> = {
 };
 
 type BaseApplicationAddedEntityProperties = {
+  clientRootFolder: string;
   entityAuthority?: string;
   entityReadAuthority?: string;
 
@@ -274,6 +275,7 @@ type BaseApplicationAddedEntityProperties = {
   hasCyclicRequiredRelationship?: boolean;
 
   entityNameCapitalized: string;
+  entityNameKebabCase: string;
   entityNamePlural: string;
   entityNamePluralizedAndSpinalCased: string;
   entityInstancePlural: string;
@@ -347,7 +349,9 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
 export const mutateEntity = {
   __override__: false,
+  clientRootFolder: '',
   entityNameCapitalized: ({ name }) => upperFirst(name),
+  entityNameKebabCase: ({ name }) => kebabCase(name),
   entityNamePlural: ({ name }) => pluralize(name),
   entityNamePluralizedAndSpinalCased: ({ entityNamePlural }) => kebabCase(entityNamePlural),
   entityInstance: ({ name }) => lowerFirst(name),
