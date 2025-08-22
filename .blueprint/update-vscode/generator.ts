@@ -20,7 +20,7 @@ export default class extends BaseGenerator {
               internalConsoleOptions: 'neverOpen',
               name: 'update vscode launch.json',
               // eslint-disable-next-line no-template-curly-in-string
-              program: '${workspaceFolder}/test-integration/scripts/99-update-vscode.js',
+              program: '${workspaceFolder}/bin/jhipster.cjs update-vscode',
               console: 'integratedTerminal',
             },
           ],
