@@ -25,6 +25,7 @@ import { updateLanguagesTask as updateLanguagesInAngularTask } from '../angular/
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { QUEUES } from '../base-application/priorities.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
+import type { UpdateLanguagesApplication } from '../client/support/update-languages.ts';
 import type { Application as ClientApplication, Config as ClientConfig, Source as ClientSource } from '../client/types.ts';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
 import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/index.ts';
@@ -200,7 +201,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
         }
 
         source.addEntityTranslationKey = ({ translationKey, translationValue, language }) => {
-          this.mergeDestinationJson(`${application.clientSrcDir}i18n/${language}/global.json`, {
+          this.mergeDestinationJson(`${application.i18nDir}${language}/global.json`, {
             global: {
               menu: {
                 entities: {
@@ -224,14 +225,14 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
         if (application.skipClient) return;
         application.translations = application.translations ?? {};
         this.translationData = new TranslationData({ generator: this, translations: application.translations });
-        const { clientSrcDir, enableTranslation, nativeLanguage } = application;
+        const { i18nDir, enableTranslation, nativeLanguage } = application;
         const fallbackLanguage = 'en';
-        this.queueLoadLanguages({ clientSrcDir, enableTranslation, nativeLanguage, fallbackLanguage });
-        const filter = createTranslationsFilter({ clientSrcDir, nativeLanguage, fallbackLanguage });
+        this.queueLoadLanguages({ i18nDir, enableTranslation, nativeLanguage, fallbackLanguage });
+        const filter = createTranslationsFilter({ i18nDir, nativeLanguage, fallbackLanguage });
         const listener = (filePath: string): void => {
           if (filter(filePath)) {
             this.env.sharedFs.removeListener('change', listener);
-            this.queueLoadLanguages({ clientSrcDir, enableTranslation, nativeLanguage, fallbackLanguage });
+            this.queueLoadLanguages({ i18nDir, enableTranslation, nativeLanguage, fallbackLanguage });
           }
         };
         this.env.sharedFs.on('change', listener);
@@ -331,13 +332,13 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
 
         if (enableTranslation && !skipClient) {
           if (application.clientFrameworkAngular) {
-            updateLanguagesInAngularTask.call(this, { application, control });
+            updateLanguagesInAngularTask.call(this, { application: application as unknown as UpdateLanguagesApplication, control });
           }
           if (application.clientFrameworkReact) {
-            updateLanguagesInReact.call(this, { application, control });
+            updateLanguagesInReact.call(this, { application: application as unknown as UpdateLanguagesApplication, control });
           }
           if (application.clientFrameworkVue) {
-            updateLanguagesInVue.call(this, { application, control });
+            updateLanguagesInVue.call(this, { application: application as unknown as UpdateLanguagesApplication, control });
           }
         }
         if (
@@ -391,18 +392,18 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
 
   queueLoadLanguages({
     enableTranslation,
-    clientSrcDir,
+    i18nDir,
     nativeLanguage,
     fallbackLanguage = 'en',
   }: {
     enableTranslation: boolean;
-    clientSrcDir: string;
+    i18nDir: string;
     nativeLanguage: string;
     fallbackLanguage?: string;
   }) {
     this.queueTask({
       method: async () => {
-        const filter = createTranslationsFileFilter({ clientSrcDir, nativeLanguage, fallbackLanguage });
+        const filter = createTranslationsFileFilter({ i18nDir, nativeLanguage, fallbackLanguage });
         await this.pipeline(
           {
             name: 'loading translations',
@@ -411,7 +412,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
           },
           this.translationData.loadFromStreamTransform({
             enableTranslation,
-            clientSrcDir,
+            i18nDir,
             nativeLanguage,
             fallbackLanguage,
           }),

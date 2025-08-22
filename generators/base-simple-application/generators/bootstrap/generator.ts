@@ -16,10 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { packageJson } from '../../../../lib/index.ts';
 import { removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
-import { RECOMMENDED_NODE_VERSION } from '../../../generator-constants.js';
-import { baseNameProperties } from '../../../project-name/support/index.ts';
+import { mutateApplication } from '../../application.ts';
 import BaseSimpleApplicationGenerator from '../../index.ts';
 
 export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleApplicationGenerator {
@@ -58,50 +56,19 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
   get loading() {
     return this.asLoadingTaskGroup({
       loading({ applicationDefaults }) {
-        applicationDefaults({
-          jhipsterVersion: this.useVersionPlaceholders ? 'JHIPSTER_VERSION' : packageJson.version,
-          jhipsterPackageJson: packageJson,
-          nodeDependencies: {},
-          customizeTemplatePaths: [],
-        });
+        if (this.useVersionPlaceholders) {
+          applicationDefaults({
+            nodeVersion: 'NODE_VERSION',
+            jhipsterVersion: 'JHIPSTER_VERSION',
+          });
+        }
+
+        applicationDefaults(mutateApplication);
       },
     });
   }
 
   get [BaseSimpleApplicationGenerator.LOADING]() {
     return this.loading;
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      prepareApplication({ applicationDefaults }) {
-        applicationDefaults({
-          ...baseNameProperties,
-          nodeVersion: this.useVersionPlaceholders ? 'NODE_VERSION' : RECOMMENDED_NODE_VERSION,
-          nodePackageManager: 'npm',
-          nodePackageManagerCommand: ({ nodePackageManager }) => nodePackageManager,
-          hipsterName: 'Java Hipster',
-          hipsterProductName: 'JHipster',
-          hipsterHomePageProductName: 'JHipster',
-          hipsterStackOverflowProductName: 'JHipster',
-          hipsterBugTrackerProductName: 'JHipster',
-          hipsterChatProductName: 'JHipster',
-          hipsterTwitterUsername: '@jhipster',
-          hipsterDocumentationLink: 'https://www.jhipster.tech/',
-          hipsterTwitterLink: 'https://twitter.com/jhipster',
-          hipsterProjectLink: 'https://github.com/jhipster/generator-jhipster',
-          hipsterStackoverflowLink: 'https://stackoverflow.com/tags/jhipster/info',
-          hipsterBugTrackerLink: 'https://github.com/jhipster/generator-jhipster/issues?state=open',
-          hipsterChatLink: 'https://gitter.im/jhipster/generator-jhipster',
-          projectDescription: ({ projectDescription, humanizedBaseName }) => projectDescription ?? `Description for ${humanizedBaseName}`,
-          documentationArchiveUrl: ({ jhipsterVersion, hipsterDocumentationLink }) =>
-            `${hipsterDocumentationLink}documentation-archive/v${jhipsterVersion}`,
-        });
-      },
-    });
-  }
-
-  get [BaseSimpleApplicationGenerator.PREPARING]() {
-    return this.preparing;
   }
 }

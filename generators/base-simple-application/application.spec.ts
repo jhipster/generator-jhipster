@@ -16,22 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { passthrough } from '@yeoman/transform';
-import { Minimatch } from 'minimatch';
 
-export function convertVueTranslations(body: string) {
-  return body.replace(/\{\{\s*(\w+)\s*\}\}/g, '{ $1 }').replace(/([@|||$])/g, "{'$1'}");
-}
+import { expect } from 'esmocha';
 
-const convertTranslationsSupport = ({ i18nDir }: { i18nDir: string }) => {
-  const minimatch = new Minimatch(`**/${i18nDir}**/*.json`);
-  const isTranslationFile = (file: { path: string }) => minimatch.match(file.path);
-  const transform = passthrough(file => {
-    if (isTranslationFile(file)) {
-      file.contents = Buffer.from(convertVueTranslations(file.contents.toString()));
-    }
-  });
-  return { transform, isTranslationFile };
-};
+import { mutateMockedCompleteData, mutateMockedData } from '../../lib/testing/index.ts';
 
-export default convertTranslationsSupport;
+import * as entityData from './application.ts';
+
+describe('application mutation test', () => {
+  for (const [name, data] of Object.entries(entityData)) {
+    it(`expects ${name} to match snapshot`, () => {
+      expect(
+        mutateMockedData(
+          { jhipsterVersion: 'jhipsterVersion', jhipsterPackageJson: 'jhipsterPackageJson', nodeVersion: 'nodeVersion' },
+          data,
+        ),
+      ).toMatchSnapshot();
+    });
+    it(`expects ${name} to don't override existing properties`, () => {
+      expect(Object.keys(mutateMockedCompleteData(data))).toHaveLength(0);
+    });
+  }
+});

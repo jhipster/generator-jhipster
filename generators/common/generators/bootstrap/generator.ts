@@ -19,6 +19,7 @@
 
 import { mutateData } from '../../../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
+import { LOGIN_REGEX, MAIN_DIR, TEST_DIR } from '../../../generator-constants.js';
 import { mutateEntity as commonMutateEntity, mutateField as commonMutateField } from '../../entity.ts';
 import type {
   Application as CommonApplication,
@@ -36,6 +37,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
     }
 
     await this.dependsOnBootstrap('javascript');
+    await this.dependsOnBootstrap('base-application');
     await this.dependsOnBootstrap('languages');
   }
 
@@ -55,8 +57,43 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      setupConstants({ applicationDefaults }) {
+        // Make constants available in templates
+        applicationDefaults({
+          srcMain: MAIN_DIR,
+          srcTest: TEST_DIR,
+          // TODO drop clientPackageManager
+          clientPackageManager: ({ nodePackageManager }) => nodePackageManager,
+
+          loginRegex: LOGIN_REGEX,
+
+          jwtSecretKey: undefined,
+          gatewayServerPort: undefined,
+        });
+      },
       prepareApplication({ applicationDefaults }) {
         applicationDefaults({
+          backendType: 'Java',
+          backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
+          backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
+
+          temporaryDir: ({ backendType, buildTool }) => {
+            if (['Java'].includes(backendType!)) {
+              return buildTool === 'gradle' ? 'build/' : 'target/';
+            }
+            return 'temp/';
+          },
+          clientDistDir: ({ backendType, temporaryDir, buildTool }) => {
+            if (['Java'].includes(backendType!)) {
+              return `${temporaryDir}${buildTool === 'gradle' ? 'resources/main/' : 'classes/'}static/`;
+            }
+            return 'dist/';
+          },
+
+          authenticationTypeSession: data => data.authenticationType === 'session',
+          authenticationTypeJwt: data => data.authenticationType === 'jwt',
+          authenticationTypeOauth2: data => data.authenticationType === 'oauth2',
+
           authenticationUsesCsrf: ({ authenticationType }) => ['oauth2', 'session'].includes(authenticationType!),
           endpointPrefix: ({ applicationType, lowercaseBaseName }) =>
             applicationType === 'microservice' ? `services/${lowercaseBaseName}` : '',
@@ -142,6 +179,9 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
             ],
           });
         }
+      },
+      hasNonBuiltInEntity({ application, entities }) {
+        application.hasNonBuiltInEntity = entities.filter(e => !e.builtIn).length > 0;
       },
     });
   }

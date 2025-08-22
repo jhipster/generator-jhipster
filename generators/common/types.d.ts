@@ -64,6 +64,24 @@ export type Application<E extends BaseApplicationEntity = Entity> = JavascriptAp
     endpointPrefix?: string;
     authenticationUsesCsrf: boolean;
     gatewayRoutes?: { route: string; host: string; serverPort: string }[];
+
+    devServerPort: number;
+    serverPort: number;
+    backendType?: string;
+    backendTypeJavaAny?: boolean;
+    backendTypeSpringBoot?: boolean;
+    temporaryDir?: string;
+
+    loginRegex?: string;
+    jsLoginRegex?: string;
+
+    skipClient?: boolean;
+    skipServer?: boolean;
+
+    /**
+     * True if the application has at least one non-builtin entity.
+     */
+    hasNonBuiltInEntity?: boolean;
   };
 
 type SonarRule = {

@@ -21,9 +21,9 @@ import type BaseGenerator from '../../base-core/index.ts';
 import type { Application as LanguagesApplication } from '../../languages/types.d.ts';
 import type { Application as ClientApplication } from '../types.d.ts';
 
-type UpdateLanguagesApplication = Pick<
+export type UpdateLanguagesApplication = Pick<
   ClientApplication<any> & LanguagesApplication<any>,
-  'clientBundlerWebpack' | 'clientSrcDir' | 'clientRootDir' | 'enableTranslation' | 'languagesDefinition' | 'languages'
+  'clientBundlerWebpack' | 'i18nDir' | 'clientSrcDir' | 'clientRootDir' | 'enableTranslation' | 'languagesDefinition' | 'languages'
 >;
 
 export type UpdateClientLanguagesTaskParam = {

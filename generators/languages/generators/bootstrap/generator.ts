@@ -44,6 +44,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
     });
 
     await this.dependsOnBootstrap('base-application');
+    await this.dependsOnBootstrap('javascript');
   }
 
   get supportedLanguages(): Map<string, Language> {
@@ -52,6 +53,11 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
 
   get loading() {
     return this.asLoadingTaskGroup({
+      loading({ applicationDefaults }) {
+        applicationDefaults({
+          i18nDir: ({ clientSrcDir }) => `${clientSrcDir}i18n/`,
+        });
+      },
       loadLanguages({ application }) {
         const supportedLanguagesArray = [...this.supportedLanguages.values()];
         const nativeLanguageDefinition = findLanguageForTag(application.nativeLanguage, supportedLanguagesArray);

@@ -503,6 +503,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "hipsterTwitterLink": "https://twitter.com/jhipster",
   "hipsterTwitterUsername": "@jhipster",
   "humanizedBaseName": "JHipster",
+  "i18nDir": "src/main/webapp/i18n/",
   "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,
   "javaCompatibleVersions": [
@@ -1156,6 +1157,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "hipsterTwitterLink": "https://twitter.com/jhipster",
   "hipsterTwitterUsername": "@jhipster",
   "humanizedBaseName": "JHipster",
+  "i18nDir": "src/main/webapp/i18n/",
   "imperativeOrReactive": "reactive",
   "incrementalChangelog": undefined,
   "javaCompatibleVersions": [
@@ -1557,7 +1559,8 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "clientFrameworkVue": false,
   "clientPackageJsonScripts": {},
   "clientPackageManager": "npm",
-  "clientRootDir": undefined,
+  "clientRootDir": "",
+  "clientSrcDir": "src/main/webapp/",
   "clientTestFramework": undefined,
   "clientTestFrameworkName": undefined,
   "clientTestFrameworks": undefined,
@@ -1791,6 +1794,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "hipsterTwitterLink": "https://twitter.com/jhipster",
   "hipsterTwitterUsername": "@jhipster",
   "humanizedBaseName": "JHipster",
+  "i18nDir": "src/main/webapp/i18n/",
   "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,
   "javaCompatibleVersions": [
