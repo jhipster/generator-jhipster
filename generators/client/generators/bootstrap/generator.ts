@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { getFrontendAppName, mutateData } from '../../../../lib/utils/index.ts';
-import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, LOGIN_REGEX_JS } from '../../../generator-constants.js';
+import { CLIENT_TEST_SRC_DIR, LOGIN_REGEX_JS } from '../../../generator-constants.js';
 import clientCommand from '../../command.ts';
 import { mutateEntity, mutateField } from '../../entity.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
@@ -60,9 +60,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
       loadDefaults({ applicationDefaults }) {
         applicationDefaults({
           __override__: false,
-          clientRootDir: '',
           clientDistDir: 'dist/',
-          clientSrcDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`,
           clientTestDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'test/' : CLIENT_TEST_SRC_DIR}`,
           frontendAppName: ({ baseName }) => getFrontendAppName({ baseName }),
           microfrontend: application => {

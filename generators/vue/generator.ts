@@ -236,7 +236,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   get default() {
     return this.asDefaultTaskGroup({
       async queueTranslateTransform({ application }) {
-        const { enableTranslation, clientSrcDir, getWebappTranslation } = application;
+        const { i18nDir, enableTranslation, getWebappTranslation } = application;
 
         assert.ok(getWebappTranslation, 'getWebappTranslation is required');
 
@@ -249,7 +249,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }),
         );
         if (enableTranslation) {
-          const { transform, isTranslationFile } = convertTranslationsSupport({ clientSrcDir });
+          const { transform, isTranslationFile } = convertTranslationsSupport({ i18nDir });
           this.queueTransformStream(
             {
               name: 'converting vue translations',
@@ -384,14 +384,14 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         });
       },
       sonar({ application, source }) {
-        const { clientDistDir, clientSrcDir, temporaryDir } = application;
+        const { i18nDir, clientDistDir, clientSrcDir, temporaryDir } = application;
         source.addSonarProperties?.([
           { key: 'sonar.test.inclusions', value: `${clientSrcDir}app/**/*.spec.ts`, valueSep: ', ' },
           { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}/test-results/jest/TESTS-results-sonar.xml` },
           { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}/test-results/lcov.info` },
           {
             key: 'sonar.exclusions',
-            value: `${clientSrcDir}content/**/*.*, ${clientSrcDir}i18n/*.ts, ${clientDistDir}**/*.*`,
+            value: `${clientSrcDir}content/**/*.*, ${i18nDir}*.ts, ${clientDistDir}**/*.*`,
             valueSep: ', ',
           },
         ]);

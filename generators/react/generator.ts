@@ -308,14 +308,14 @@ ${comment}
         }
       },
       sonar({ application, source }) {
-        const { clientDistDir, clientSrcDir, temporaryDir } = application;
+        const { i18nDir, clientDistDir, clientSrcDir, temporaryDir } = application;
         source.addSonarProperties?.([
           { key: 'sonar.test.inclusions', value: `${clientSrcDir}app/**/*.spec.ts, ${clientSrcDir}app/**/*.spec.tsx`, valueSep: ', ' },
           { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}/test-results/jest/TESTS-results-sonar.xml` },
           { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}/test-results/lcov.info` },
           {
             key: 'sonar.exclusions',
-            value: `${clientSrcDir}content/**/*.*, ${clientSrcDir}i18n/*.ts, ${clientDistDir}**/*.*`,
+            value: `${clientSrcDir}content/**/*.*, ${i18nDir}*.ts, ${clientDistDir}**/*.*`,
             valueSep: ', ',
           },
         ]);

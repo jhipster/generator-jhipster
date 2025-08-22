@@ -120,7 +120,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
         applicationDefaults({
           javaVersion: this.useVersionPlaceholders ? 'JAVA_VERSION' : RECOMMENDED_JAVA_VERSION,
           packageInfoJavadocs: [],
-          javaNodeBuildPaths: [],
           javaProperties: {},
           javaManagedProperties: {},
           javaDependencies: ({ javaDependencies }) => ({

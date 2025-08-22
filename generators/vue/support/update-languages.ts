@@ -71,11 +71,11 @@ function updateLanguagesInConfigTask(this: BaseGenerator, { application }: Updat
 }
 
 function updateLanguagesInWebpackTask(this: BaseGenerator, { application }: UpdateClientLanguagesTaskParam) {
-  const { clientSrcDir, languages } = application;
+  const { i18nDir, languages } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = this;
   let newContent = 'groupBy: [\n';
   languages?.forEach(language => {
-    newContent += `          { pattern: './${clientSrcDir}i18n/${language}/*.json', fileName: './i18n/${language}.json' },\n`;
+    newContent += `          { pattern: './${i18nDir}${language}/*.json', fileName: './i18n/${language}.json' },\n`;
   });
   newContent += '          // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n        ]';
 

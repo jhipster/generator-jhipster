@@ -5,6 +5,7 @@ import type {
   Options as BaseSimpleApplicationOptions,
 } from '../base-simple-application/types.ts';
 
+import type { BaseApplicationAddedApplicationProperties } from './application.ts';
 import type { Entity } from './entity.ts';
 import type bootstrapCommand from './generators/bootstrap/command.ts';
 import type { OptionWithDerivedProperties } from './internal/types/application-options.ts';
@@ -105,49 +106,7 @@ type AuthenticationProperties<Entity> = OptionWithDerivedProperties<'authenticat
   SessionApplication;
 
 export type Application<E extends Entity> = Command['Application'] &
+  BaseApplicationAddedApplicationProperties &
   BaseSimpleApplicationApplication &
   ApplicationProperties &
-  AuthenticationProperties<E> & {
-    jhiPrefix: string;
-    jhiPrefixCapitalized: string;
-    jhiPrefixDashed: string;
-
-    javaNodeBuildPaths: string[];
-
-    clientRootDir: string;
-    clientSrcDir: string;
-    clientTestDir?: string;
-    clientDistDir?: string;
-
-    pages: string[];
-
-    devServerPort: number;
-    serverPort: number;
-    backendType?: string;
-    backendTypeJavaAny?: boolean;
-    backendTypeSpringBoot?: boolean;
-    temporaryDir?: string;
-
-    loginRegex?: string;
-    jsLoginRegex?: string;
-
-    entitySuffix: string;
-    dtoSuffix: string;
-
-    skipCommitHook: boolean;
-    fakerSeed?: string;
-
-    /* @deprecated use nodePackageManager */
-    clientPackageManager: string;
-
-    skipClient?: boolean;
-    skipServer?: boolean;
-
-    blueprints?: { name: string; version: string }[];
-    testFrameworks?: string[];
-
-    /**
-     * True if the application has at least one non-builtin entity.
-     */
-    hasNonBuiltInEntity?: boolean;
-  };
+  AuthenticationProperties<E> & {};

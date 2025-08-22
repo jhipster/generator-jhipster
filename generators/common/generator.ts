@@ -24,7 +24,6 @@ import BaseApplicationGenerator from '../base-application/index.ts';
 import type { PropertiesFileLines } from '../base-core/support/index.ts';
 import { editPropertiesFileCallback } from '../base-core/support/index.ts';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.ts';
-import { MAIN_DIR, TEST_DIR } from '../generator-constants.js';
 import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.ts';
 
 import { writeFiles } from './files.ts';
@@ -118,13 +117,6 @@ export default class CommonGenerator extends BaseApplicationGenerator<
   // Public API method used by the getter and also by Blueprints
   get preparing() {
     return this.asPreparingTaskGroup({
-      setupConstants({ applicationDefaults }) {
-        // Make constants available in templates
-        applicationDefaults({
-          srcMain: MAIN_DIR,
-          srcTest: TEST_DIR,
-        });
-      },
       sonarSourceApi({ source }) {
         source.ignoreSonarRule = ({ ruleId, ruleKey, resourceKey, comment }) => {
           this.editFile(

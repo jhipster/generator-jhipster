@@ -64,4 +64,7 @@ export type Application = BaseSimpleApplicationApplication &
 
     prettierFolders?: string;
     prettierExtensions?: string;
+
+    clientRootDir: string;
+    clientSrcDir: string;
   };

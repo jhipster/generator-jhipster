@@ -32,7 +32,7 @@ export const entityClientI18nFiles = asWriteFilesSection({
       templates: [
         {
           sourceFile: context => `entity/i18n/entity_${context.lang}.json.ejs`,
-          destinationFile: context => `${context.clientSrcDir}i18n/${context.lang}/${context.entityTranslationKey}.json`,
+          destinationFile: context => `${context.i18nDir}${context.lang}/${context.entityTranslationKey}.json`,
         },
       ],
     },
@@ -43,7 +43,7 @@ export const userTranslationfiles = asWriteFilesSection({
   userTranslationfiles: [
     {
       from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-      to: context => `${context.clientSrcDir}/i18n/${context.lang}/`,
+      to: context => `${context.i18nDir}${context.lang}/`,
       transform: false,
       templates: ['user-management.json'],
     },
@@ -56,7 +56,7 @@ export const enumClientI18nFiles = asWriteFilesSection({
       templates: [
         {
           sourceFile: 'entity/i18n/enum.json.ejs',
-          destinationFile: context => `${context.clientSrcDir}i18n/${context.lang}/${context.clientRootFolder}${context.enumInstance}.json`,
+          destinationFile: context => `${context.i18nDir}${context.lang}/${context.clientRootFolder}${context.enumInstance}.json`,
         },
       ],
     },
@@ -72,7 +72,7 @@ export function writeEntityFiles() {
       if (application.skipClient) return;
       const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage, 'en'])];
       entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
-      const { clientSrcDir, packageName, frontendAppName } = application;
+      const { i18nDir, clientSrcDir, packageName, frontendAppName } = application;
       await Promise.all(
         entities
           .map(entity =>
@@ -87,6 +87,7 @@ export function writeEntityFiles() {
                       lang,
                       frontendAppName,
                       packageName,
+                      i18nDir,
                       clientSrcDir,
                     },
                   }),
@@ -109,19 +110,19 @@ export function writeEntityFiles() {
       }
 
       // Copy each
-      const { baseName, clientSrcDir, frontendAppName } = application;
+      const { i18nDir, baseName, clientSrcDir, frontendAppName } = application;
       const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage, 'en'])];
       for (const entity of entitiesToWriteTranslationFor) {
         for (const lang of languagesToApply) {
           if (entity.builtInUserManagement) {
             await this.writeFiles({
               sections: userTranslationfiles,
-              context: { ...entity, baseName, clientSrcDir, frontendAppName, lang },
+              context: { ...entity, baseName, clientSrcDir, i18nDir, frontendAppName, lang },
             });
           } else {
             await this.writeFiles({
               sections: entityClientI18nFiles,
-              context: { ...entity, baseName, clientSrcDir, frontendAppName, lang },
+              context: { ...entity, baseName, clientSrcDir, i18nDir, frontendAppName, lang },
             });
           }
         }

@@ -26,18 +26,18 @@ import { Minimatch } from 'minimatch';
 import type CoreGenerator from '../base-core/generator.ts';
 
 export const createTranslationsFilter = ({
-  clientSrcDir,
+  i18nDir,
   nativeLanguage,
   fallbackLanguage,
 }: {
-  clientSrcDir: string;
+  i18nDir: string;
   nativeLanguage: string;
   fallbackLanguage?: string;
 }) => {
   const pattern =
     !fallbackLanguage || nativeLanguage === fallbackLanguage
-      ? `**/${clientSrcDir}i18n/${nativeLanguage}/*.json`
-      : `**/${clientSrcDir}i18n/{${nativeLanguage},${fallbackLanguage}}/*.json`;
+      ? `**/${i18nDir}${nativeLanguage}/*.json`
+      : `**/${i18nDir}{${nativeLanguage},${fallbackLanguage}}/*.json`;
   const minimatch = new Minimatch(pattern);
   return (filePath: string): boolean => minimatch.match(filePath);
 };
@@ -61,17 +61,17 @@ export default class TranslationData {
 
   loadFromStreamTransform({
     enableTranslation,
-    clientSrcDir,
+    i18nDir,
     nativeLanguage,
     fallbackLanguage = 'en',
   }: {
     enableTranslation: boolean;
-    clientSrcDir: string;
+    i18nDir: string;
     nativeLanguage: string;
     fallbackLanguage?: string;
   }) {
-    const filter = createTranslationsFileFilter({ clientSrcDir, nativeLanguage, fallbackLanguage });
-    const minimatchNative = new Minimatch(`**/${clientSrcDir}i18n/${nativeLanguage}/*.json`);
+    const filter = createTranslationsFileFilter({ i18nDir, nativeLanguage, fallbackLanguage });
+    const minimatchNative = new Minimatch(`**/${i18nDir}${nativeLanguage}/*.json`);
     return transform(file => {
       if (filter(file) && file.contents) {
         const contents = JSON.parse(file.contents.toString());

@@ -25,25 +25,25 @@ export const clientI18nFiles = asWriteFilesSection<LanguagesApplication>({
   clientI18nFiles: [
     {
       from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-      to: context => `${context.clientSrcDir}/i18n/${context.lang}/`,
+      to: context => `${context.i18nDir}${context.lang}/`,
       transform: false,
       templates: ['error.json', 'login.json', 'password.json', 'register.json', 'sessions.json', 'settings.json'],
     },
     {
       condition: ctx => ctx.clientFrameworkVue && ctx.enableTranslation && !ctx.microfrontend,
       path: `${CLIENT_MAIN_SRC_DIR}/i18n/`,
-      renameTo: context => `${context.clientSrcDir}/i18n/${context.lang}/${context.lang}.js`,
+      renameTo: context => `${context.i18nDir}${context.lang}/${context.lang}.js`,
       templates: ['index.js'],
     },
     {
       from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-      to: context => `${context.clientSrcDir}/i18n/${context.lang}/`,
+      to: context => `${context.i18nDir}${context.lang}/`,
       templates: ['activate.json', 'global.json', 'home.json', 'reset.json'],
     },
     {
       condition: context => context.withAdminUi,
       from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-      to: context => `${context.clientSrcDir}/i18n/${context.lang}/`,
+      to: context => `${context.i18nDir}${context.lang}/`,
       transform: false,
       templates: [
         'configuration.json',
@@ -58,14 +58,14 @@ export const clientI18nFiles = asWriteFilesSection<LanguagesApplication>({
     {
       condition: context => context.communicationSpringWebsocket,
       from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-      to: context => `${context.clientSrcDir}/i18n/${context.lang}/`,
+      to: context => `${context.i18nDir}${context.lang}/`,
       transform: false,
       templates: ['tracker.json'],
     },
     {
       condition: context => context.applicationTypeGateway,
       from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-      to: context => `${context.clientSrcDir}/i18n/${context.lang}/`,
+      to: context => `${context.i18nDir}${context.lang}/`,
       transform: false,
       templates: ['gateway.json'],
     },

@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { CLIENT_MAIN_SRC_DIR } from '../../../generator-constants.js';
 import { JavascriptSimpleApplicationGenerator } from '../../generator.ts';
 
 export default class JavascriptBootstrapGenerator extends JavascriptSimpleApplicationGenerator {
@@ -41,6 +42,9 @@ export default class JavascriptBootstrapGenerator extends JavascriptSimpleApplic
         applicationDefaults({
           cjsExtension: application.packageJsonTypeCommonjs ? '.js' : '.cjs',
           mjsExtension: application.packageJsonTypeModule ? '.js' : '.mjs',
+
+          clientRootDir: '',
+          clientSrcDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`,
         });
       },
     });
