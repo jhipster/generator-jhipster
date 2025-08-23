@@ -72,7 +72,7 @@ jobs:
         with:
           jhipster-bom-ref: main
       - run: jhipster.cjs generate-sample incremental-changelog-samples/liquibase-jdl-rename-field/app.jdl
-      - run: jhipster.cjs generate-sample --incremental-changelog incremental-changelog-samples/liquibase-jdl-rename-field-post/app.jdl
+      - run: jhipster.cjs generate-sample --incremental-changelog incremental-changelog-samples/liquibase-jdl-rename-field-post/app.jdl --force
       - name: 'GENERATION: incremental changes'
         run: |
           git add .
