@@ -19,7 +19,7 @@ about: Report a problem with JHipster itself.
 <!--
 To provide all information we need, you should run `jhipster info` in the project root folder (or workspaces root for microservices), and
 copy/paste the result here.
-`jhipster info` removes sentitive information like rememberKey, jwtSecretKey. Double check if there is any other sensitive info.
+`jhipster info` removes sensitive information like rememberKey, jwtSecretKey. Double check if there is any other sensitive info.
 -->
 
 Replace this line with your `jhipster info`.
