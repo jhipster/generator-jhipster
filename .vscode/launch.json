@@ -22,7 +22,7 @@
         "ng-webflux-psql-additional",
         "ng-webflux-gradle-session-h2mem-es",
         "ng-webflux-couchbase",
-        "ms-ng-consul-oauth2-mongodb-caffeine",
+        "ms-ng-oauth2-mongodb-caffeine",
         "mf-ng-eureka-jwt-psql-ehcache",
         "ms-mf-ng-consul-oauth2-neo4j"
       ]
@@ -46,6 +46,7 @@
       "description": "Sample to be generated",
       "options": [
         "vue-default",
+        "vue-default-additional",
         "vue-noi18n-mysql-ws-oauth2",
         "vue-fulli18n-mysql-es",
         "vue-gradle-h2mem-ws-session",
@@ -92,7 +93,8 @@
       "request": "launch",
       "internalConsoleOptions": "neverOpen",
       "name": "update vscode launch.json",
-      "program": "${workspaceFolder}/test-integration/scripts/99-update-vscode.js",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["update-vscode"],
       "console": "integratedTerminal"
     },
     {
