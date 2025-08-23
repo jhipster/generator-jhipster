@@ -27,7 +27,7 @@ const addJavaImportToContent = (content: string, identifier: string, { staticImp
     : content.replace(/(package [\w.]+;\n\n?)/, `$1${importStatement}\n`);
 };
 
-export function addJavaImport(indentifier: string, type?: JavaImportType): (content: string) => string;
+export function addJavaImport(identifier: string, type?: JavaImportType): (content: string) => string;
 export function addJavaImport(content: string, identifierOrType: string, type?: JavaImportType): string;
 export function addJavaImport(
   contentOrIdentifier: string,
