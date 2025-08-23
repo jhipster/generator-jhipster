@@ -36,8 +36,8 @@ export const applyChangesToFile = ({ templateFile, oldFileContents, newFileConte
     // maxEditLength: 3,
   });
   patch.hunks = patch.hunks
-    .map(({ lines, ...remainning }) => ({
-      ...remainning,
+    .map(({ lines, ...remaining }) => ({
+      ...remaining,
       lines: lines
         .map(line => (line === '-' ? ' ' : line.replace('-import', ' import').replace('+import', ' import')))
         .filter(line => line !== '+'),
