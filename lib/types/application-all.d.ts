@@ -37,7 +37,7 @@ import type { Relationship as ServerRelationship } from '../../generators/server
 import type { Application as SpringBootApplication, Entity as SpringBootEntity } from '../../generators/spring-boot/types.d.ts';
 import type { Application as SpringCacheApplication } from '../../generators/spring-cache/types.d.ts';
 import type { Application as SpringCloudApplication } from '../../generators/spring-cloud/types.d.ts';
-import type { Application as SpringCloudStreanApplication } from '../../generators/spring-cloud-stream/types.d.ts';
+import type { Application as SpringCloudStreamApplication } from '../../generators/spring-cloud-stream/types.d.ts';
 import type {
   Application as SpringDataRelationalApplication,
   Entity as SpringDataRelationalEntity,
@@ -104,7 +104,7 @@ export type ApplicationAll<E extends EntityAll = EntityAll> = BaseApplication<E>
   SpringBootApplication<E> &
   SpringDataRelationalApplication<E> &
   SpringCacheApplication<E> &
-  SpringCloudStreanApplication<E> &
+  SpringCloudStreamApplication<E> &
   SpringCloudApplication<E> &
   ClientApplication<E> &
   DockerApplication &
