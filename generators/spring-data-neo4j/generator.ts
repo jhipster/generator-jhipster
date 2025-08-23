@@ -73,7 +73,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
       async configuringEachEntity({ entityConfig }) {
         if (entityConfig.dto && entityConfig.dto !== 'no') {
           this.log.warn(
-            `The DTO option is not supported for Neo4j database. Neo4j persists the entire constellation, DTO causes the constelation to be incomplete. DTO is found in entity ${entityConfig.name}.`,
+            `The DTO option is not supported for Neo4j database. Neo4j persists the entire constellation, DTO causes the constellation to be incomplete. DTO is found in entity ${entityConfig.name}.`,
           );
         }
       },
@@ -104,7 +104,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
         entities.forEach(entity => {
           if (entity.relationships.some(relationship => relationship.otherEntity.builtInUser)) {
             this.log.warn(
-              `Relationship with User entity should be avoided for Neo4j database. Neo4j persists the entire constelation, related User entity will be updated causing security problems. Relationship with User entity is found in entity ${entity.name}.`,
+              `Relationship with User entity should be avoided for Neo4j database. Neo4j persists the entire constellation, related User entity will be updated causing security problems. Relationship with User entity is found in entity ${entity.name}.`,
             );
           }
         });
