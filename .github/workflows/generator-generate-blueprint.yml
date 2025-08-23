@@ -69,7 +69,7 @@ jobs:
           npm link generator-jhipster
           npm link
       - name: 'GENERATION: project'
-        run: jhipster-foo --defaults
+        run: jhipster-foo --defaults --client-test-frameworks cypress
         env:
           JHI_CLI: jhipster.cjs
       - name: 'GENERATION: jhipster info'
