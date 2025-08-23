@@ -27,7 +27,7 @@ import type { Application as DockerApplication } from '../../generators/docker/t
 import type { Application as GitApplication } from '../../generators/git/types.d.ts';
 import type { Application as I18nApplication } from '../../generators/languages/types.d.ts';
 import type {
-  Application as LiqbuibaseApplication,
+  Application as LiquibaseApplication,
   Entity as LiquibaseEntity,
   Field as LiquibaseField,
   Relationship as LiquibaseRelationship,
@@ -108,6 +108,6 @@ export type ApplicationAll<E extends EntityAll = EntityAll> = BaseApplication<E>
   SpringCloudApplication<E> &
   ClientApplication<E> &
   DockerApplication &
-  LiqbuibaseApplication<E> &
+  LiquibaseApplication<E> &
   GitApplication &
   ProjectNameApplication;
