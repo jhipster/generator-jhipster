@@ -24,7 +24,7 @@ copy/paste the result here.
 
 Replace this line with your `jhipster info`.
 
-- [ ] `jhipster info` output is mandatory for bug reports. This will allow us to use automated tests and genarate the broken sample using `jhipster from-issue` command.
+- [ ] `jhipster info` output is mandatory for bug reports. This will allow us to use automated tests and generate the broken sample using `jhipster from-issue` command.
 
 ##### **Motivation for or Use Case**
 
