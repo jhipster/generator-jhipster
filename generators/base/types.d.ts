@@ -11,7 +11,7 @@ export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]
 export type Control = {
   readonly existingProject: boolean;
   readonly jhipsterOldVersion: string | null;
-  readonly enviromentHasDockerCompose?: boolean;
+  readonly environmentHasDockerCompose?: boolean;
   readonly customizeRemoveFiles: ((file: string) => string | undefined)[];
   /**
    * Check if the JHipster version used to generate an existing project is less than the passed version argument

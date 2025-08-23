@@ -72,7 +72,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
       async checkDockerCompose({ control }) {
         if (this.skipChecks) return;
 
-        if (!control.enviromentHasDockerCompose) {
+        if (!control.environmentHasDockerCompose) {
           throw new Error(`Docker Compose V2 is not installed on your computer.
          Read https://docs.docker.com/compose/install/
 `);

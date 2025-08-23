@@ -54,7 +54,7 @@ type WithJHipsterGenerators = {
 
 type RunJHipster = WithJHipsterGenerators & {
   /**
-   * Use the EnviromentBuilder default preparation to create the environment.
+   * Use the EnvironmentBuilder default preparation to create the environment.
    * Includes local and dev blueprints.
    */
   useEnvironmentBuilder?: boolean;

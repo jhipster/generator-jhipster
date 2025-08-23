@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - spring-boot:bootstrap bootstraping default config should prepare application 1`] = `
+exports[`generator - spring-boot:bootstrap bootstrapping default config should prepare application 1`] = `
 {
   "addOpenapiGeneratorPlugin": undefined,
   "additionalSubGenerators": undefined,
@@ -279,7 +279,7 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
 }
 `;
 
-exports[`generator - spring-boot:bootstrap bootstraping default config should prepare entities 1`] = `
+exports[`generator - spring-boot:bootstrap bootstrapping default config should prepare entities 1`] = `
 {
   "AnotherSimple": {
     "adminEntity": undefined,
@@ -2926,7 +2926,7 @@ exports[`generator - spring-boot:bootstrap bootstraping default config should pr
 }
 `;
 
-exports[`generator - spring-boot:bootstrap bootstraping default config should prepare entity names 1`] = `
+exports[`generator - spring-boot:bootstrap bootstrapping default config should prepare entity names 1`] = `
 [
   "User",
   "UserManagement",

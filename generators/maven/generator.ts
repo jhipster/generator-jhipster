@@ -76,7 +76,7 @@ export default class MavenGenerator extends JavaApplicationGenerator {
       async verify({ application }) {
         assert.equal(application.buildTool, MAVEN);
       },
-      addSourceNeddles({ application, source }) {
+      addSourceNeedles({ application, source }) {
         const { javaProperties } = application;
         function createForEach<T>(callback: (arg: T) => any): (arg: T | T[]) => void {
           return (arg: T | T[]): void => {

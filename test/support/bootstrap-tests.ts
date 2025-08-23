@@ -36,7 +36,7 @@ const expectedEntity = (entity: any) => ({
 });
 
 export const testBootstrapEntities = (generator: string) => {
-  describe(`bootstraping`, () => {
+  describe(`bootstrapping`, () => {
     describe('default config', () => {
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig({}, entitiesSimple);

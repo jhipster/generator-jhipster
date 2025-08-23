@@ -119,7 +119,7 @@ export default class GradleGenerator extends BaseApplicationGenerator<
             !gradleDevelocityHost || gradleDevelocityHost.startsWith('https://') ? gradleDevelocityHost : `https://${gradleDevelocityHost}`,
         });
       },
-      addSourceNeddles({ application, source }) {
+      addSourceNeedles({ application, source }) {
         const { gradleBuildSrc } = application;
         source.applyFromGradle = script => this.editFile('build.gradle', applyFromGradleCallback(script));
         source.addGradleDependencies = (dependencies, options = {}) => {

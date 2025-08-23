@@ -149,7 +149,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
   get preparing() {
     return this.asPreparingTaskGroup({
       /**
-       * Avoid having undefined keys in the application object when redering ejs templates
+       * Avoid having undefined keys in the application object when rendering ejs templates
        */
       async loadApplicationKeys({ application }) {
         const { applyDefaults = getConfigWithDefaults, commandsConfigs = await lookupCommandsConfigs() } = this.options;
@@ -455,7 +455,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
   get default() {
     return this.asDefaultTaskGroup({
       /**
-       * Avoid having undefined keys in the application object when redering ejs templates
+       * Avoid having undefined keys in the application object when rendering ejs templates
        */
       async loadApplicationKeys({ application }) {
         if (this.options.commandsConfigs) {
