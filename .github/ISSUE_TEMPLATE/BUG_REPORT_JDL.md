@@ -31,7 +31,7 @@ about: Report a problem with JHipster itself.
   </details>
 -->
 
-- [ ] JDL is mandatory for bug reports. This will allow us to use automated tests and genarate the broken sample using `jhipster from-issue` command.
+- [ ] JDL is mandatory for bug reports. This will allow us to use automated tests and generate the broken sample using `jhipster from-issue` command.
 
 ##### **Motivation for or Use Case**
 
