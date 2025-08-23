@@ -804,7 +804,7 @@ ${classProperties
         const { buildToolExecutable } = application;
         this.log.ok('Spring Boot application generated successfully.');
 
-        if (application.dockerServices?.length && !control.enviromentHasDockerCompose) {
+        if (application.dockerServices?.length && !control.environmentHasDockerCompose) {
           const dockerComposeCommand = chalk.yellow.bold('docker compose');
           this.log('');
           this.log
