@@ -1,5 +1,6 @@
-import { cpSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
+
+import type { MemFsEditor } from 'mem-fs-editor';
 
 import { entitiesSamplesDir } from '../../constants.ts';
 
@@ -103,14 +104,13 @@ export const entitiesByType: Record<string, string[]> = {
   ],
 };
 
-export default function copyEntitySamples(dest: string, type: string) {
+export default function copyEntitySamples(memFs: MemFsEditor, dest: string, type: string) {
   if (type === 'mongodb' || type === 'couchbase') {
     type = 'document';
   }
   const entitiesFolder = join(dest, '.jhipster');
-  mkdirSync(entitiesFolder, { recursive: true });
   const entities = entitiesByType[type];
   for (const entity of entities) {
-    cpSync(join(entitiesSamplesDir, `${entity}.json`), join(entitiesFolder, `${entity}.json`));
+    memFs.copy(join(entitiesSamplesDir, `${entity}.json`), join(entitiesFolder, `${entity}.json`));
   }
 }

@@ -24,12 +24,13 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { defaultSamplesFolder } from '../constants.ts';
 
 const command = {
-  arguments: {
-    sampleName: {
-      type: String,
-    },
-  },
   configs: {
+    sampleName: {
+      argument: {
+        type: String,
+      },
+      scope: 'generator',
+    },
     entitiesSample: {
       cli: {
         type: String,
@@ -73,6 +74,13 @@ const command = {
         type: Boolean,
       },
       description: 'Treat sample arg as .yo-rc.json folder path',
+      scope: 'generator',
+    },
+    sampleOnly: {
+      cli: {
+        type: Boolean,
+      },
+      description: 'Copy sample to destination only',
       scope: 'generator',
     },
   },
