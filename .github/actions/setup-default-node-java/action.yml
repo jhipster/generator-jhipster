@@ -27,10 +27,9 @@ runs:
   using: composite
   steps:
     - run: |
-        source "${{ github.workspace }}/${{ inputs.generator-path }}/test-integration/scripts/00-init-env.sh"
-        echo "java-version=$JHI_JDK" >> $GITHUB_OUTPUT
-        echo "node-version=$JHI_NODE_VERSION" >> $GITHUB_OUTPUT
-        echo "npm-version=$JHI_NPM_VERSION" >> $GITHUB_OUTPUT
+        echo "java-version=$(grep -o "JAVA_VERSION = '[^']*'" ${{ github.workspace }}/${{ inputs.generator-path }}/generators/generator-constants.js | cut -f2 -d "'")" >> $GITHUB_OUTPUT
+        echo "node-version=$(cat ${{ github.workspace }}/${{ inputs.generator-path }}/generators/init/resources/.node-version)" >> $GITHUB_OUTPUT
+        echo "npm-version=$(grep -o '"npm": "[^"]*"' ${{ github.workspace }}/${{ inputs.generator-path }}/generators/common/resources/package.json | cut -f4 -d '"')" >> $GITHUB_OUTPUT
       shell: bash
       id: setup
     - uses: actions/setup-node@v4
