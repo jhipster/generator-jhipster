@@ -1,4 +1,3 @@
-import { snakeCase, startCase, upperFirst } from 'lodash-es';
 import type { Merge, PackageJson, Simplify } from 'type-fest';
 
 import type {
@@ -19,7 +18,6 @@ import type {
   Options as BaseSimpleApplicationOptions,
   Source as BaseSimpleApplicationSource,
 } from '../base-simple-application/types.d.ts';
-import type { Field as LanguagesField } from '../languages/entity.ts';
 
 import type JavascriptBootstrapCommand from './generators/bootstrap/command.ts';
 import type EslintCommand from './generators/eslint/command.ts';
@@ -27,10 +25,9 @@ import type HuskyCommand from './generators/husky/command.ts';
 import type PrettierCommand from './generators/prettier/command.ts';
 import { getTypescriptType } from './support/index.ts';
 
-export type Field = BaseApplicationField &
-  LanguagesField & {
-    tsType?: string;
-  };
+export type Field = BaseApplicationField & {
+  tsType?: string;
+};
 
 export type { BaseApplicationRelationship as Relationship };
 
@@ -115,10 +112,5 @@ export type Application<E extends BaseApplicationEntity = Entity> = BaseApplicat
 
 export const mutateField = {
   __override__: false,
-  path: ({ fieldName }: { fieldName: string }) => [fieldName],
-  propertyName: ({ fieldName }: { fieldName: string }) => fieldName,
-  fieldNameCapitalized: ({ fieldName }: { fieldName: string }) => upperFirst(fieldName),
-  fieldNameUnderscored: ({ fieldName }: { fieldName: string }) => snakeCase(fieldName),
-  fieldNameHumanized: ({ fieldName }: { fieldName: string }) => startCase(fieldName),
   tsType: ({ fieldType }: { fieldType: string }) => getTypescriptType(fieldType),
 } as const satisfies MutateDataParam<Field>;

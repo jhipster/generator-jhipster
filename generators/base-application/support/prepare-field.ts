@@ -294,12 +294,11 @@ export function prepareCommonFieldForTemplates(
 ): BaseApplicationField {
   mutateData(field, {
     __override__: false,
-    path: [field.fieldName],
-    propertyName: field.fieldName,
-
-    fieldNameCapitalized: ({ fieldName }) => upperFirst(fieldName),
-    fieldNameUnderscored: ({ fieldName }) => snakeCase(fieldName),
-    fieldNameHumanized: ({ fieldName }) => startCase(fieldName),
+    path: ({ fieldName }: { fieldName: string }) => [fieldName],
+    propertyName: ({ fieldName }: { fieldName: string }) => fieldName,
+    fieldNameCapitalized: ({ fieldName }: { fieldName: string }) => upperFirst(fieldName),
+    fieldNameUnderscored: ({ fieldName }: { fieldName: string }) => snakeCase(fieldName),
+    fieldNameHumanized: ({ fieldName }: { fieldName: string }) => startCase(fieldName),
   });
 
   prepareProperty(field);

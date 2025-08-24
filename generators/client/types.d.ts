@@ -20,7 +20,7 @@ import type {
   Relationship as JavascriptRelationship,
   Source as JavascriptSource,
 } from '../javascript/entity.ts';
-import type { Entity as LanguagesEntity, Relationship as LanguagesRelationship } from '../languages/entity.ts';
+import type { Entity as LanguagesEntity, Field as LanguagesField, Relationship as LanguagesRelationship } from '../languages/entity.ts';
 import type { Language } from '../languages/support/languages.ts';
 
 import type command from './command.ts';
@@ -34,7 +34,7 @@ export type Config = JavascriptConfig & CommonConfig & Command['Config'];
 
 export type Options = JavascriptOptions & CommonOptions & Command['Options'];
 
-export interface Field extends JavascriptField, CommonField {}
+export interface Field extends JavascriptField, CommonField, LanguagesField {}
 
 export interface Relationship extends JavascriptRelationship, CommonRelationship, LanguagesRelationship {}
 
