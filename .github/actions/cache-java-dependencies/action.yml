@@ -29,7 +29,9 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: ./generator-jhipster/.github/actions/setup-generator-jhipster-jit
+    - uses: jhipster/actions/setup-runner@v0
+      with:
+        binary-dir: ${{ github.workspace }}/generator-jhipster/bin
     - name: 'mvn: install JHipster'
       run: |
         echo "::group::jhipster-bom"
