@@ -217,7 +217,7 @@ jobs:
         with:
           sonar-project-key: ${{ matrix.sample }}
           application-dir: ${{ github.workspace }}/app
-          docker-compose-file: ${{ github.workspace }}/generator-jhipster/test-integration/sonar-pr/docker-compose.yml
+          docker-compose-file: ${{ github.workspace }}/generator-jhipster/.github/actions/sonar/docker-compose.yml
           comment-token: ${{ secrets.PAT_PR_ISSUES_TOKEN }}
 
   check-angular:
