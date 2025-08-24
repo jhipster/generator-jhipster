@@ -140,6 +140,7 @@ module.exports = async (env, options) => {
           APP_VERSION: JSON.stringify(config.version),
           SERVER_API_URL: JSON.stringify(config.serverApiUrl),
           __VUE_PROD_DEVTOOLS__: false,
+          __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
         }),
         new HtmlWebpackPlugin({
           base: '/',
