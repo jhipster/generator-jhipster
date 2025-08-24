@@ -26,7 +26,6 @@ import type { Application as AngularApplication, Entity as AngularEntity } from 
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { QUEUES } from '../base-application/priorities.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { UpdateLanguagesApplication } from '../client/support/update-languages.ts';
 import type { Application as ClientApplication, Config as ClientConfig, Source as ClientSource } from '../client/types.ts';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
 import { updateLanguagesTask as updateLanguagesInReactTask } from '../react/support/index.ts';

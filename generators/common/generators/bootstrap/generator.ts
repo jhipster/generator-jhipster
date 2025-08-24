@@ -35,11 +35,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
-<<<<<<< HEAD
 
     await this.dependsOnBootstrap('javascript');
-=======
->>>>>>> 4172f1c020 (move language interpretation method in preparing phase)
     await this.dependsOnBootstrap('base-application');
     await this.dependsOnBootstrap('languages');
   }
