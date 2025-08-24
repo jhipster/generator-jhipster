@@ -1,0 +1,311 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - generate-sample with daily-builds/ngx-oauth2 (daily-builds sample) should match matrix value 1`] = `
+{
+  ".jhipster/BankAccount.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Division.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithPaginationAndDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithServiceClassAndPagination.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithServiceClassPaginationAndDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithServiceImplAndDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithServiceImplAndPagination.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithServiceImplPaginationAndDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestEnumWithValue.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestInfiniteScrollEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestMapstructAndServiceClassEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestPaginationEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestServiceClassAndJpaFilteringEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestServiceImplEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/JpaFilteringOtherSide.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/JpaFilteringRelationship.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Label.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdChildEntityWithDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdChildEntityWithoutDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdGrandchildEntityWithDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdGrandchildEntityWithoutDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdParentEntityWithDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdParentEntityWithoutDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdUserProfileWithDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Operation.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Place.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SuperMegaLargeTestEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestCustomTableName.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestInfiniteScroll.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestManyRelPaginDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestManyToMany.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestManyToOne.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestMapstruct.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestOneToOne.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestPagination.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestServiceClass.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestServiceImpl.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestTwoRelationshipsSameEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - generate-sample with ng-default should match matrix value 1`] = `
+{
+  ".jhipster/BankAccount.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Division.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithPaginationAndDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithServiceClassAndPagination.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithServiceClassPaginationAndDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithServiceImplAndDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithServiceImplAndPagination.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithServiceImplPaginationAndDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestEnumWithValue.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestInfiniteScrollEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestMapstructAndServiceClassEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestPaginationEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestServiceClassAndJpaFilteringEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/FieldTestServiceImplEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/JpaFilteringOtherSide.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/JpaFilteringRelationship.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Label.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdChildEntityWithDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdChildEntityWithoutDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdGrandchildEntityWithDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdGrandchildEntityWithoutDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdParentEntityWithDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdParentEntityWithoutDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/MapsIdUserProfileWithDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Operation.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Place.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SuperMegaLargeTestEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestCustomTableName.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestInfiniteScroll.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestManyRelPaginDTO.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestManyToMany.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestManyToOne.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestMapstruct.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestOneToOne.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestPagination.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestServiceClass.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestServiceImpl.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/TestTwoRelationshipsSameEntity.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - generate-sample with ng-default-additional (star jdl-entity) should match matrix value 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "01-non-updatable-entity.jdl": {
+    "stateCleared": "modified",
+  },
+  "02-authority-relationship.jdl": {
+    "stateCleared": "modified",
+  },
+  "custom-domain.jdl": {
+    "stateCleared": "modified",
+  },
+  "custom-id.jdl": {
+    "stateCleared": "modified",
+  },
+  "cyclic.jdl": {
+    "stateCleared": "modified",
+  },
+  "entities.jdl": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - generate-sample with ng-webflux-psql-additional (specific jdl-samples) should match matrix value 1`] = `
+{
+  "custom-domain.jdl": {
+    "stateCleared": "modified",
+  },
+  "webflux-psql.jdl": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - generate-sample with vue-default-additional (specific jdl-entity) should match matrix value 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "custom-id.jdl": {
+    "stateCleared": "modified",
+  },
+}
+`;
