@@ -58,18 +58,9 @@ jobs:
         uses: actions/checkout@v5
         with:
           path: generator-jhipster
-      - name: 'SETUP: environment'
-        id: setup
-        uses: ./generator-jhipster/.github/actions/setup
-        with:
-          application-sample: ${{ matrix.app-type }}
-          entities-sample: ${{ matrix.entity }}
-          application-environment: ${{ matrix.environment }}
-          application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
+      - uses: ./generator-jhipster/.github/actions/setup-default-node-java
       - uses: jhipster/actions/setup-runner@v0
         with:
-          node-version: ${{ steps.setup.outputs.node-version }}
-          java-version: ${{ steps.setup.outputs.java-version }}
           maven-cache: true
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
       - run: npm ci --ignore-scripts
@@ -80,19 +71,8 @@ jobs:
       - uses: jhipster/actions/build-jhipster-bom@v0
         with:
           jhipster-bom-ref: main
-      - name: 'GENERATION: config'
-        run: $JHI_SCRIPTS/11-generate-config.sh
-      - name: 'GENERATION: project'
-        run: $JHI_SCRIPTS/12-generate-project.sh --force --creation-timestamp '2020-01-01'
-        env:
-          JHI_SAMPLES: ${{ github.workspace }}/generator-jhipster/test-integration/incremental-changelog-samples
-          JHI_CLI: jhipster.cjs
-      - name: 'GENERATION: incremental project'
-        run: $JHI_SCRIPTS/12-generate-project.sh --incremental-changelog --force
-        env:
-          JHI_SAMPLES: ${{ github.workspace }}/generator-jhipster/test-integration/incremental-changelog-samples
-          JHI_APP: ${{ matrix.app-type }}-post
-          JHI_CLI: jhipster.cjs
+      - run: jhipster.cjs generate-sample incremental-changelog-samples/liquibase-jdl-rename-field/app.jdl
+      - run: jhipster.cjs generate-sample --incremental-changelog incremental-changelog-samples/liquibase-jdl-rename-field-post/app.jdl --force
       - name: 'GENERATION: incremental changes'
         run: |
           git add .
