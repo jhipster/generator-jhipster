@@ -219,7 +219,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           this.log.info(`Generating ${this.applications.length} applications`);
           await this.composeWithJHipster(this.workspacesGenerator as 'workspaces', {
             generatorOptions: {
-              /** TODO types contains appsFolders which is not correcly handled, {@see file:../workspaces/command.ts} */
+              /** TODO types contains appsFolders which is not correctly handled, {@see file:../workspaces/command.ts} */
               workspacesFolders: this.applications.map(app => app.folder!),
               generateApplications: async () => this.runNonInteractive(this.applications, generatorOptions),
             } as any,
