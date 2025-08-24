@@ -632,15 +632,6 @@ ${classProperties
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      adjusts({ application, source }) {
-        const springBootVersion = application.springBootDependencies['spring-boot-dependencies'];
-        if (springBootVersion !== '3.5.4' && !springBootVersion.includes('-VERSION')) {
-          throw new Error('Spring Boot check workaround.');
-        }
-        source.addJavaDefinition?.({
-          versions: [{ name: 'spring-security', version: '6.4.8' }],
-        });
-      },
       addJHipsterBomDependencies({ application, source }) {
         const {
           applicationTypeGateway,
