@@ -185,7 +185,7 @@ export type ParseableCommand = {
   readonly configs?: ParseableConfigs;
 };
 
-/** Extract contructor return type, eg: Boolean, String */
+/** Extract constructor return type, eg: Boolean, String */
 type ConstructorReturn<T> = T extends new () => infer R ? R : undefined;
 type FilteredConfigScope = CommandConfigScope | undefined;
 
