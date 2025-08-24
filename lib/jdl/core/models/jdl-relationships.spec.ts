@@ -467,7 +467,7 @@ describe('jdl - JDLRelationships', () => {
   });
   describe('toString', () => {
     describe('when there is no relationship', () => {
-      it('should return an emptry string', () => {
+      it('should return an empty string', () => {
         expect(new JDLRelationships().toString()).to.equal('');
       });
     });

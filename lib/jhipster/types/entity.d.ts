@@ -6,7 +6,7 @@ type MicroserviceEntity = {
   databaseType?: string;
   // Some features requires backend reactive information like some cypress adjustments related to incompatible implementations.
   reactive?: boolean;
-  // Some databases have different bahavior in cypress tests.
+  // Some databases have different behavior in cypress tests.
   prodDatabaseType?: string;
   // Workaround different paths?
   clientFramework?: string;
