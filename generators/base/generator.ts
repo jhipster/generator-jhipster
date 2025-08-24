@@ -268,7 +268,7 @@ export default class BaseGenerator<
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
     let now = new Date();
-    // Miliseconds is ignored for changelogDate.
+    // Milliseconds is ignored for changelogDate.
     now.setMilliseconds(0);
     // Run reproducible timestamp when regenerating the project with reproducible option or an specific timestamp.
     if (reproducible || creationTimestamp) {
