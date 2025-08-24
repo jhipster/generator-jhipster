@@ -46,8 +46,8 @@ Also add the option `--skip-jhipster-dependencies` to generate the application i
 
 To put it in a nutshell, you need to:
 
-1.  Run `npm link` on the `generator-jhipster` project (link globally) or configure jit executable
-2.  Run `jhipster --skip-jhipster-dependencies` on the generated application folder
+1. Run `npm link` on the `generator-jhipster` project (link globally) or configure jit executable
+2. Run `jhipster --skip-jhipster-dependencies` on the generated application folder
 
 You can execute `jhipster --install-path` to check where JHipster is being executed from.
 
