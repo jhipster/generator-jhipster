@@ -219,40 +219,46 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
           }
         };
       },
-      updateLanguageAngular({ source }) {
-        source.updateLanguagesClient = (gen, { application, control }) => {
-          const { enableTranslation, clientFrameworkAngular, skipClient } = application;
-          if (!skipClient && enableTranslation && clientFrameworkAngular) {
+      updateLanguageAngular({ source, application }) {
+        const { enableTranslation, clientFrameworkAngular, skipClient } = application;
+        if ((skipClient === undefined || !skipClient) && enableTranslation && clientFrameworkAngular) {
+          source.updateLanguagesClient = (gen, { application, control }) => {
             const app = application as AngularApplication<AngularEntity>;
             updateLanguagesInAngularTask.call(gen, { application: app, control });
-          }
-        };
+          };
+        }
       },
-      updateLanguageReact({ source }) {
-        source.updateLanguagesClient = (gen, { application, control }) => {
-          const { enableTranslation, clientFrameworkReact, skipClient } = application;
-          if (!skipClient && enableTranslation && clientFrameworkReact) {
+      updateLanguageReact({ source, application }) {
+        const { enableTranslation, clientFrameworkReact, skipClient } = application;
+        if ((skipClient === undefined || !skipClient) && enableTranslation && clientFrameworkReact) {
+          source.updateLanguagesClient = (gen, { application, control }) => {
             const app = application as ClientApplication;
             updateLanguagesInReactTask.call(gen, { application: app, control });
-          }
-        };
+          };
+        }
       },
-      updateLanguageVue({ source }) {
-        source.updateLanguagesClient = (gen, { application, control }) => {
-          const { enableTranslation, clientFrameworkVue, skipClient } = application;
-          if (!skipClient && enableTranslation && clientFrameworkVue) {
+      updateLanguageVue({ source, application }) {
+        const { enableTranslation, clientFrameworkVue, skipClient } = application;
+        if ((skipClient === undefined || !skipClient) && enableTranslation && clientFrameworkVue) {
+          source.updateLanguagesClient = (gen, { application, control }) => {
             const app = application as ClientApplication;
             updateLanguagesInVueTask.call(gen, { application: app, control });
-          }
-        };
+          };
+        }
       },
-      updateLanguageServerSide({ source }) {
-        source.updateLanguagesServer = (gen, { application, control }) => {
-          const { enableTranslation, generateUserManagement, skipServer, backendTypeJavaAny, backendTypeSpringBoot } = application;
-          if (enableTranslation && generateUserManagement && !skipServer && backendTypeJavaAny && backendTypeSpringBoot) {
+      updateLanguageServerSide({ source, application }) {
+        const { enableTranslation, generateUserManagement, skipServer, backendTypeJavaAny, backendTypeSpringBoot } = application;
+        if (
+          (skipServer === undefined || !skipServer) &&
+          enableTranslation &&
+          generateUserManagement &&
+          backendTypeJavaAny &&
+          backendTypeSpringBoot
+        ) {
+          source.updateLanguagesServer = (gen, { application, control }) => {
             updateLanguagesInJavaTask.call(gen, { application, control, source });
-          }
-        };
+          };
+        }
       },
     });
   }
@@ -367,9 +373,15 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
       write({ application, control, source }) {
         if (this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)) return;
         const { languagesDefinition } = application;
-        source.addLanguages({ languagesDefinition });
-        source.updateLanguagesClient(this, { application, control, source });
-        source.updateLanguagesServer(this, { application, control, source });
+        if (source.addLanguages) {
+          source.addLanguages({ languagesDefinition });
+        }
+        if (source.updateLanguagesClient) {
+          source.updateLanguagesClient(this, { application, control, source });
+        }
+        if (source.updateLanguagesServer) {
+          source.updateLanguagesServer(this, { application, control, source });
+        }
       },
     });
   }
