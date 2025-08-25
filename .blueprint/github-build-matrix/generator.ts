@@ -8,11 +8,11 @@ import type { GitHubMatrixGroup } from '../../lib/testing/github-matrix.ts';
 import { convertToGitHubMatrix } from '../../lib/testing/github-matrix.ts';
 import { getGithubOutputFile, setGithubTaskOutput } from '../../lib/testing/github.ts';
 import type { JHipsterGitHubInputMatrix, WorkflowSamples } from '../../lib/testing/workflow-samples.ts';
-import { BUILD_JHIPSTER_BOM, JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from '../../test-integration/integration-test-constants.js';
 
 import type { eventNameChoices, workflowChoices } from './command.ts';
 import { devServerMatrix } from './samples/dev-server.ts';
 import { getGitChanges } from './support/git-changes.ts';
+import { BUILD_JHIPSTER_BOM, JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from './support/integration-test-constants.ts';
 
 export default class extends BaseGenerator {
   workflow!: (typeof workflowChoices)[number];

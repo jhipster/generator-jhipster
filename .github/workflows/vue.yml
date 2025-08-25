@@ -78,7 +78,6 @@ jobs:
     timeout-minutes: 50
     strategy:
       fail-fast: false
-      # Matrix available at https://github.com/jhipster/generator-jhipster/tree/main/test-integration/workflow-samples/
       matrix: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
     steps:
       #----------------------------------------------------------------------

@@ -4,7 +4,7 @@ import { getPackageRoot } from '../lib/index.ts';
 
 const packageRoot = getPackageRoot();
 export const defaultSamplesFolder = join(packageRoot, '../jhipster-samples');
-export const testIntegrationFolder = join(packageRoot, 'test-integration');
+export const testIntegrationFolder = join(packageRoot, '.blueprint/generate-sample/templates/test-integration');
 export const samplesFolder = join(testIntegrationFolder, 'samples');
 
 export const jhipsterBin = join(packageRoot, 'bin/jhipster.cjs');
