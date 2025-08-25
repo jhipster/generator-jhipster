@@ -2,12 +2,12 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import BaseGenerator from '../../generators/base-core/index.ts';
-import { getPackageRoot } from '../../lib/index.ts';
 import { getGithubSamplesGroup } from '../../lib/testing/github-group.ts';
 import type { GitHubMatrixGroup } from '../../lib/testing/github-matrix.ts';
 import { convertToGitHubMatrix } from '../../lib/testing/github-matrix.ts';
 import { getGithubOutputFile, setGithubTaskOutput } from '../../lib/testing/github.ts';
 import type { JHipsterGitHubInputMatrix, WorkflowSamples } from '../../lib/testing/workflow-samples.ts';
+import { testIntegrationFolder } from '../constants.ts';
 
 import type { eventNameChoices, workflowChoices } from './command.ts';
 import { devServerMatrix } from './samples/dev-server.ts';
@@ -65,7 +65,7 @@ export default class extends BaseGenerator {
 
           randomEnvironment = true;
           if (enableAnyTest || hasSonarPrChanges) {
-            const content = await readFile(join(getPackageRoot(), `test-integration/workflow-samples/${this.workflow}.json`));
+            const content = await readFile(join(testIntegrationFolder, `workflow-samples/${this.workflow}.json`));
             const parsed: WorkflowSamples = JSON.parse(content.toString());
             matrix = Object.fromEntries(
               parsed.include
