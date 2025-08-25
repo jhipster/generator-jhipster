@@ -18,6 +18,7 @@
  */
 import { mutateData } from '../../../../lib/utils/object.ts';
 import { getDatabaseTypeData } from '../../../server/support/database.ts';
+import { updateLanguagesTask as updateLanguagesInJavaTask } from '../../../server/support/index.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 
 export default class BootstrapGenerator extends SpringBootApplicationGenerator {
@@ -49,6 +50,14 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
             return `Spring Data ${springDataDatabase}`;
           },
         });
+      },
+      updateLanguageServerSide({ source, application }) {
+        const { enableTranslation, generateUserManagement } = application;
+        if (enableTranslation && generateUserManagement) {
+          source.updateLanguagesServer = (gen, { application, control }) => {
+            updateLanguagesInJavaTask.call(gen, { application, control, source });
+          };
+        }
       },
     });
   }
