@@ -21,6 +21,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBan, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { getUser, deleteUser } from './user-management.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -59,12 +60,12 @@ export const UserManagementDeleteDialog = () => {
       </ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={handleClose}>
-          <FontAwesomeIcon icon="ban" />
+          <FontAwesomeIcon icon={faBan} />
           &nbsp;
           <Translate contentKey="entity.action.cancel">Cancel</Translate>
         </Button>
         <Button color="danger" onClick={confirmDelete}>
-          <FontAwesomeIcon icon="trash" />
+          <FontAwesomeIcon icon={faTrash} />
           &nbsp;
           <Translate contentKey="entity.action.delete">Delete</Translate>
         </Button>
