@@ -105,7 +105,7 @@ public class <%= persistClass %>Asserts {
     <%_ } else { _%>
             .satisfies(a -> assertThat(a.get<%- field.fieldInJavaBeanMethod %>()).as("check <%- field.propertyName %>").isEqualTo(expected.get<%- field.fieldInJavaBeanMethod %>()))
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            .satisfies(a -> assertThat(a.get<%- field.fieldInJavaBeanMethod %>ContentType()).as("check <%- field.propertyName %> contenty type").isEqualTo(expected.get<%- field.fieldInJavaBeanMethod %>ContentType()))
+            .satisfies(a -> assertThat(a.get<%- field.fieldInJavaBeanMethod %>ContentType()).as("check <%- field.propertyName %> content type").isEqualTo(expected.get<%- field.fieldInJavaBeanMethod %>ContentType()))
       <%_ } -%>
     <%_ } -%>
   <%_ } -%>
