@@ -40,6 +40,6 @@ export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
     workspaces: hasPatternChanges('generators/{docker-compose,kubernetes*,workspaces}/**'),
     vue: hasPatternChanges('generators/vue/**'),
     vueWorkflow: hasClientWorkflowChanges('vue'),
-    sonarPr: hasPatternChanges('test-integration/sonar-pr/**'),
+    sonarPr: hasPatternChanges('.github/actions/sonar/**'),
   };
 };

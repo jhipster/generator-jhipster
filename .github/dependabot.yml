@@ -209,7 +209,7 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'docker'
-    directory: '/test-integration/sonar-pr/'
+    directory: '/.github/actions/sonar/'
     schedule:
       interval: 'daily'
       time: '00:30'
