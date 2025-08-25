@@ -98,7 +98,7 @@ describe('cli', () => {
   let argv: string[];
 
   before(async () => {
-    await esmocha.mock('./utils.js', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} } as any);
+    await esmocha.mock('./utils.ts', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} } as any);
     const { buildJHipster } = await import('./program.ts');
 
     mockCli = async (argv: string[], opts = {}) => {
