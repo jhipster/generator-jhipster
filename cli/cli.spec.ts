@@ -14,7 +14,7 @@ import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/
 import type JHipsterCommand from './jhipster-command.js';
 import { createProgram } from './program.ts';
 import type { CliCommand } from './types.ts';
-import { getCommand as actualGetCommonand } from './utils.js';
+import { getCommand as actualGetCommonand } from './utils.ts';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {

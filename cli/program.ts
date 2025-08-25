@@ -36,9 +36,9 @@ import { packageNameToNamespace } from '../lib/utils/index.ts';
 import SUB_GENERATORS from './commands.ts';
 import EnvironmentBuilder from './environment-builder.js';
 import JHipsterCommand from './jhipster-command.js';
-import logo from './logo.js';
+import logo from './logo.ts';
 import type { CliCommand } from './types.ts';
-import { CLI_NAME, done, getCommand, logger } from './utils.js';
+import { CLI_NAME, done, getCommand, logger } from './utils.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -374,7 +374,7 @@ export const buildCommands = ({
 
         if (cmdName === 'run') {
           return Promise.all(command.generatorNamespaces.map(generator => env.run(generator as any, options))).then(
-            results => silent || done(results.find(result => result)),
+            () => silent || done(),
             errors => silent || done(errors.find((error: any) => error)),
           );
         }
@@ -388,7 +388,7 @@ export const buildCommands = ({
         if (silent) {
           return promise;
         }
-        return promise.then(done, done);
+        return promise.then(() => done(), done);
       });
   });
 };
