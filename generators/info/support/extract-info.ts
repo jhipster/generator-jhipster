@@ -40,7 +40,7 @@ export const extractDataFromInfo = (info: string): InfoData => {
         jdlEntitiesDefinitions = body.trim();
         files.push({ filename: 'entities.jdl', content: jdlEntitiesDefinitions, type: 'entity-jdl' });
       } else if (title.includes('JDL definitions')) {
-        // JDL definitions can be be a placehoder
+        // JDL definitions can be be a placeholder
         if ((body.match(/application\s*\{/g) || []).length > 0) {
           const jdlCount = files.filter(file => file.type === 'jdl').length;
           files.push({ filename: jdlCount === 0 ? 'app.jdl' : `app-${jdlCount}.jdl`, content: body.trim(), type: 'jdl' });
