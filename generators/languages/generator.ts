@@ -215,7 +215,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
       updateLanguages({ source }) {
         source.addLanguages = ({ languagesDefinition }: { languagesDefinition: readonly Language[] }) => {
           if (languagesDefinition && languagesDefinition.length > 0) {
-            (source as unknown as ClientSource).addLanguageWithDefinition?.({ languagesDefinition });
+            (source as unknown as ClientSource).addLanguageToSelections?.({ languagesDefinition });
           }
         };
       },

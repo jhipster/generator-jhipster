@@ -146,7 +146,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
             source.addIconImport!({ icon: args.icon });
           }
         };
-        source.addLanguageWithDefinition = ({ languagesDefinition }) => {
+        source.addLanguageToSelections = ({ languagesDefinition }) => {
           if (application.clientBundlerExperimentalEsbuild) {
             this.editFile(
               `${application.i18nDir}index.ts`,

@@ -31,8 +31,6 @@ export type Application<E extends Entity = Entity> = Command['Application'] &
     clientWebappDir?: string;
     clientThemeNone?: boolean;
     clientThemeAny?: boolean;
-    clientRootDir: string;
-    clientSrcDir: string;
     clientTestDir?: string;
     webappEnumerationsDir?: string;
     clientFrameworkBuiltIn?: boolean;
@@ -76,5 +74,5 @@ export type Source = JavascriptSource &
      * Add webpack config.
      */
     addWebpackConfig?(args: { config: string }): void;
-    addLanguageWithDefinition?(args: { languagesDefinition: readonly Language[] }): void;
+    addLanguageToSelections?(args: { languagesDefinition: readonly Language[] }): void;
   };
