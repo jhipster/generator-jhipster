@@ -38,7 +38,7 @@ RUN \
        exit 1; \
        ;; \
   esac; \
-  JHI_NODE_VERSION="$(/home/jhipster/generator-jhipster/test-integration/scripts/99-print-node-version.sh)"; \
+  JHI_NODE_VERSION="$(cat /home/jhipster/generator-jhipster/generators/init/resources/.node-version)"; \
   wget https://nodejs.org/dist/v$JHI_NODE_VERSION/node-v$JHI_NODE_VERSION-linux-$ARCH.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # cleanup
