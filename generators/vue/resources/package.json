@@ -54,7 +54,7 @@
     "sass-loader": "16.0.5",
     "sinon": "21.0.0",
     "terser-webpack-plugin": "5.3.14",
-    "ts-loader": "9.5.2",
+    "ts-loader": "9.5.4",
     "typescript": "5.9.2",
     "typescript-eslint": "8.40.0",
     "vite": "7.1.3",
