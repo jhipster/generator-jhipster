@@ -14,7 +14,7 @@ import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/
 import type JHipsterCommand from './jhipster-command.js';
 import { createProgram } from './program.ts';
 import type { CliCommand } from './types.ts';
-import { getCommand as actualGetCommonand } from './utils.js';
+import { getCommand as actualGetCommonand } from './utils.ts';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {
@@ -98,7 +98,7 @@ describe('cli', () => {
   let argv: string[];
 
   before(async () => {
-    await esmocha.mock('./utils.js', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} } as any);
+    await esmocha.mock('./utils.ts', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} } as any);
     const { buildJHipster } = await import('./program.ts');
 
     mockCli = async (argv: string[], opts = {}) => {

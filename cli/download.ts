@@ -22,7 +22,7 @@ import { inspect } from 'node:util';
 
 import { packageJson } from '../lib/index.ts';
 
-import { logger } from './utils.js';
+import { logger } from './utils.ts';
 
 const downloadFile = async (url: string, filename: string): Promise<string> => {
   logger.verboseInfo(`Downloading file: ${url}`);

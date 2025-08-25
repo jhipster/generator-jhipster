@@ -21,7 +21,7 @@ import semver from 'semver';
 import { packageJson } from '../lib/index.ts';
 
 import { runJHipster } from './program.ts';
-import { done, logger } from './utils.js';
+import { done, logger } from './utils.ts';
 
 const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;
@@ -34,7 +34,7 @@ if (!process.argv.includes('--skip-checks') && !semver.satisfies(currentNodeVers
 
 export default runJHipster().catch(done);
 
-process.on('unhandledRejection', up => {
+process.on('unhandledRejection', (up: any) => {
   logger.error('Unhandled promise rejection at:');
-  logger.fatal(up);
+  logger.fatal(up.reason ?? up);
 });

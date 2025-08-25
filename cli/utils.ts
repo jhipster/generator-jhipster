@@ -19,7 +19,7 @@
 
 import chalk from 'chalk';
 
-import { CLI_LOGGER, createJHipsterLogger } from '../lib/utils/index.ts';
+import { CLI_LOGGER, type Logger, createJHipsterLogger } from '../lib/utils/index.ts';
 
 export const CLI_NAME = 'jhipster';
 export const GENERATOR_NAME = 'generator-jhipster';
@@ -33,7 +33,7 @@ export const logger = createJHipsterLogger({ namespace: CLI_LOGGER });
 /**
  *  Get options for the command
  */
-export const getCommand = (cmd, args = []) => {
+export const getCommand = (cmd: string, args: string[] | string[][] = []) => {
   let cmdArgs;
   if (args.length > 0) {
     logger.debug('Arguments found');
@@ -44,9 +44,9 @@ export const getCommand = (cmd, args = []) => {
   return `${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
 };
 
-export const doneFactory = (options = {}) => {
+export const doneFactory = (options: { successMsg?: string; sponsorMsg?: string; logger?: Logger } = {}) => {
   const { successMsg = SUCCESS_MESSAGE, sponsorMsg = SPONSOR_MESSAGE, logger: log = logger } = options;
-  return errorOrMsg => {
+  return (errorOrMsg?: Error | string) => {
     if (errorOrMsg instanceof Error) {
       log.error(`ERROR! ${errorOrMsg.message}`);
       log.log(errorOrMsg);

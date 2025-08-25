@@ -17,5 +17,5 @@
  * limitations under the License.
  */
 export { buildCommands, buildJHipster, createProgram, done, printJHipsterLogo, runJHipster } from './program.ts';
-export { logger } from './utils.js';
+export { logger } from './utils.ts';
 export { default as EnvironmentBuilder } from './environment-builder.js';
