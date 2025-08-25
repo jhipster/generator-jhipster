@@ -114,7 +114,7 @@ export const prompts = () => {
       default: CLI_OPTION_DEFAULT_VALUE,
     },
   ] as const;
-  // Inquirer doen't support readonly prompts, so we need to cast it
+  // Inquirer doesn't support readonly prompts, so we need to cast it
   return ret as WritableDeep<typeof ret>;
 };
 
@@ -153,6 +153,6 @@ export const subGeneratorPrompts = ({
       loop: false,
     },
   ] as const;
-  // Inquirer doen't support readonly prompts, so we need to cast it
+  // Inquirer doesn't support readonly prompts, so we need to cast it
   return prompts as WritableDeep<typeof prompts>;
 };
