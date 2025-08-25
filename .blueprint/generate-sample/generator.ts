@@ -57,7 +57,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         if (extname(this.sampleName) === '.jdl') {
           this.copyTemplate(`samples/${this.sampleName}`, this.sampleName);
         } else if (this.sampleYorcFolder) {
-          this.copyTemplate(`../../../test-integration/${this.sampleName}/.yo-rc.json`, '.yo-rc.json');
+          this.copyTemplate(`test-integration/${this.sampleName}/.yo-rc.json`, '.yo-rc.json');
           const entitiesFiles = entitiesByType[this.entitiesSample];
           if (entitiesFiles) {
             this.jhipsterConfig.entities = entitiesFiles;
@@ -65,7 +65,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
             this.copyTemplate(
               entitiesFiles.map(entity => `.jhipster/${entity}.json`),
               this.projectFolder,
-              { noGlob: true, fromBasePath: this.templatePath('../../../test-integration/samples/') },
+              { noGlob: true, fromBasePath: this.templatePath('test-integration/samples/') },
             );
           }
         } else {
