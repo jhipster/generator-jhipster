@@ -20,6 +20,7 @@ import React, { useState, useEffect } from 'react';
 import { Translate } from 'react-jhipster';
 import { Table, Badge, Col, Row, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSync, faEye } from '@fortawesome/free-solid-svg-icons';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import HealthModal from './health-modal';
@@ -63,7 +64,7 @@ export const HealthPage = () => {
       </h2>
       <p>
         <Button onClick={fetchSystemHealth} color={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
-          <FontAwesomeIcon icon="sync" />
+          <FontAwesomeIcon icon={faSync} />
           &nbsp;
           <Translate component="span" contentKey="health.refresh.button">
             Refresh
@@ -97,7 +98,7 @@ export const HealthPage = () => {
                     <td>
                       {data[configPropKey].details ? (
                         <a onClick={getSystemHealthInfo(configPropKey, data[configPropKey])}>
-                          <FontAwesomeIcon icon="eye" />
+                          <FontAwesomeIcon icon={faEye} />
                         </a>
                       ) : null}
                     </td>
