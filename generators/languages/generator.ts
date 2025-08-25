@@ -373,15 +373,9 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
       write({ application, control, source }) {
         if (this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)) return;
         const { languagesDefinition } = application;
-        if (source.addLanguages) {
-          source.addLanguages({ languagesDefinition });
-        }
-        if (source.updateLanguagesClient) {
-          source.updateLanguagesClient(this, { application, control, source });
-        }
-        if (source.updateLanguagesServer) {
-          source.updateLanguagesServer(this, { application, control, source });
-        }
+        source.addLanguages?.({ languagesDefinition });
+        source.updateLanguagesClient?.(this, { application, control, source });
+        source.updateLanguagesServer?.(this, { application, control, source });
       },
     });
   }
