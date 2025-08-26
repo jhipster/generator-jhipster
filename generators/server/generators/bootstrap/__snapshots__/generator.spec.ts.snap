@@ -2,6 +2,7 @@
 
 exports[`generator - server:bootstrap bootstrapping default config should prepare application 1`] = `
 {
+  "addLanguageCallbacks": Any<Array>,
   "addOpenapiGeneratorPlugin": undefined,
   "additionalSubGenerators": undefined,
   "anyEntityHasRelationshipWithUser": false,
@@ -250,6 +251,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "srcTestJavascript": "src/test/javascript/",
   "srcTestResources": "src/test/resources/",
   "subGenerators": undefined,
+  "supportedLanguages": Any<Array>,
   "syncUserWithIdp": undefined,
   "temporaryDir": "target/",
   "testFrameworks": Any<Array>,

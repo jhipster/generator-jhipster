@@ -35,6 +35,20 @@ const expectedEntity = (entity: any) => ({
   primaryKey: expectedPrimaryKey(entity.primaryKey),
 });
 
+export const testBootstrapApplication = (generator: string) => {
+  describe(`bootstrapping`, () => {
+    describe('default config', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({});
+      });
+
+      it('should prepare application', () => {
+        expect(runResult.application).toMatchSnapshot(expectedNonRecursiveObject(runResult.application));
+      });
+    });
+  });
+};
+
 export const testBootstrapEntities = (generator: string) => {
   describe(`bootstrapping`, () => {
     describe('default config', () => {

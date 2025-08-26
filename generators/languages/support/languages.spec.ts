@@ -12,8 +12,8 @@ describe('generator - languages - support', () => {
     describe('when called with languages array', () => {
       it('return languages pipe syntax', () => {
         expect(generateLanguagesWebappOptions(['en', 'fr'].map(lang => findLanguageForTag(lang)!))).toEqual([
-          "'en': { name: 'English' }",
-          "'fr': { name: 'Français' }",
+          "'en': { name: 'English' },",
+          "'fr': { name: 'Français' },",
         ]);
       });
     });

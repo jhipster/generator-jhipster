@@ -279,7 +279,7 @@ export const defaultLanguage = findLanguageForTag('en') as Required<Language>;
  * @param languages
  */
 export const generateLanguagesWebappOptions = (languages: readonly Language[]) =>
-  languages.map(language => `'${language.languageTag}': { name: '${language.displayName}'${language.rtl ? ', rtl: true' : ''} }`);
+  languages.map(language => `'${language.languageTag}': { name: '${language.displayName}'${language.rtl ? ', rtl: true' : ''} },`);
 
 type LanguageIdParts = { language: string; script?: string; country?: string; variant?: string };
 

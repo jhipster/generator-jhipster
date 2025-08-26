@@ -200,6 +200,7 @@ entity Bar
 
 exports[`generator - app with default config should match snapshot 1`] = `
 {
+  "addLanguageCallbacks": Any<Array>,
   "addOpenapiGeneratorPlugin": undefined,
   "addPrettierExtensions": [Function],
   "addSpringMilestoneRepository": false,
@@ -832,6 +833,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "srcTestJavascript": "src/test/javascript/",
   "srcTestResources": "src/test/resources/",
   "subGenerators": undefined,
+  "supportedLanguages": Any<Array>,
   "syncUserWithIdp": undefined,
   "temporaryDir": "target/",
   "testFrameworks": [],
@@ -852,6 +854,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
 
 exports[`generator - app with gateway should match snapshot 1`] = `
 {
+  "addLanguageCallbacks": Any<Array>,
   "addOpenapiGeneratorPlugin": undefined,
   "addPrettierExtensions": [Function],
   "addSpringMilestoneRepository": false,
@@ -1481,6 +1484,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "srcTestJavascript": "src/test/javascript/",
   "srcTestResources": "src/test/resources/",
   "subGenerators": undefined,
+  "supportedLanguages": Any<Array>,
   "syncUserWithIdp": undefined,
   "temporaryDir": "target/",
   "testFrameworks": [],
@@ -1501,6 +1505,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
 
 exports[`generator - app with microservice should match snapshot 1`] = `
 {
+  "addLanguageCallbacks": Any<Array>,
   "addOpenapiGeneratorPlugin": undefined,
   "addPrettierExtensions": [Function],
   "addSpringMilestoneRepository": false,
@@ -2052,6 +2057,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "srcTestJavascript": "src/test/javascript/",
   "srcTestResources": "src/test/resources/",
   "subGenerators": undefined,
+  "supportedLanguages": Any<Array>,
   "syncUserWithIdp": undefined,
   "temporaryDir": "target/",
   "testFrameworks": [],

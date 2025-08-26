@@ -16,6 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './needles.ts';
-export * from './reserved-keywords.ts';
-export * from './translate-angular.ts';
+
+import { expect } from 'esmocha';
+
+import { mutateMockedCompleteData, mutateMockedData } from '../../lib/testing/index.ts';
+
+import * as entityData from './application.ts';
+
+describe('application mutation test', () => {
+  for (const [name, data] of Object.entries(entityData)) {
+    it(`expects ${name} to match snapshot`, () => {
+      expect(mutateMockedData(data)).toMatchSnapshot({ supportedLanguages: expect.any(Array) });
+    });
+    it(`expects ${name} to don't override existing properties`, () => {
+      expect(Object.keys(mutateMockedCompleteData(data))).toHaveLength(0);
+    });
+  }
+});

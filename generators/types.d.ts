@@ -19,6 +19,7 @@
  */
 // jhipster-needle-add-generator-with-bootstrap-start
 export type GeneratorsWithBootstrap =
+  | 'angular'
   | 'app'
   | 'base-application'
   | 'base-simple-application'
@@ -39,6 +40,7 @@ type GeneratorsByNamespace = {
   // jhipster-needle-add-generator-by-namespace-start
   angular: import('./angular/generator.ts').default;
   'jhipster:angular': import('./angular/generator.ts').default;
+  'jhipster:angular:bootstrap': import('./angular/generators/bootstrap/generator.ts').default;
   app: import('./app/generator.ts').default;
   'jhipster:app': import('./app/generator.ts').default;
   'jhipster:app:bootstrap': import('./app/generators/bootstrap/generator.ts').default;

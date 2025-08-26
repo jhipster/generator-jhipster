@@ -21,7 +21,6 @@ import chalk from 'chalk';
 import { padEnd, startCase } from 'lodash-es';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
-import { updateLanguagesTask as updateLanguagesInAngularTask } from '../angular/support/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { QUEUES } from '../base-application/priorities.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
@@ -188,6 +187,21 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
+  get composing() {
+    return this.asComposingTaskGroup({
+      async bootstrap() {
+        // Make sure generators languages callbacks are correctly initialized.
+        if ((this.jhipsterConfigWithDefaults as ClientConfig).clientFramework === 'angular') {
+          await this.dependsOnBootstrap('angular');
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
   // Public API method used by the getter and also by Blueprints
   get preparing() {
     return this.asPreparingTaskGroup({
@@ -322,7 +336,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      write({ application, control, source }) {
+      updateLanguages({ application, control, source }) {
         if (this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)) return;
 
         const { enableTranslation, skipClient, languagesDefinition } = application;
@@ -331,9 +345,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
         }
 
         if (enableTranslation && !skipClient) {
-          if (application.clientFrameworkAngular) {
-            updateLanguagesInAngularTask.call(this, { application: application as unknown as UpdateLanguagesApplication, control });
-          }
           if (application.clientFrameworkReact) {
             updateLanguagesInReact.call(this, { application: application as unknown as UpdateLanguagesApplication, control });
           }
@@ -349,6 +360,11 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
           application.backendTypeSpringBoot
         ) {
           updateLanguagesInJava.call(this, { application, control, source });
+        }
+
+        const newLanguages = this.languagesToApply.map(lang => findLanguageForTag(lang, application.supportedLanguages)!);
+        for (const addLanguageCallback of application.addLanguageCallbacks) {
+          addLanguageCallback(newLanguages, application.languagesDefinition);
         }
       },
     });

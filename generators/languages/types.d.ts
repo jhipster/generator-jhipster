@@ -27,8 +27,8 @@ import type {
 } from '../base-application/types.d.ts';
 import type { Application as JavascriptApplication } from '../javascript/types.ts';
 
+import type { LanguagesAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
-import type { Language } from './support/languages.ts';
 
 type Command = HandleCommandTypes<typeof command>;
 
@@ -42,14 +42,7 @@ export type Source = BaseApplicationSource & {
 
 export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = BaseApplicationApplication<E> &
   JavascriptApplication &
-  Omit<Command['Application'], 'languages' | 'languagesDefinition'> & {
-    enableTranslation: boolean;
-    enableI18nRTL: boolean;
-    nativeLanguage: string;
-    nativeLanguageDefinition: Language;
-    languages: string[];
-    languagesDefinition: readonly Language[];
-    i18nDir: string;
-  };
+  Omit<Command['Application'], 'languages' | 'languagesDefinition'> &
+  LanguagesAddedApplicationProperties;
 
 export * from './entity.ts';

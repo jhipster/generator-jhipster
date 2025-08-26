@@ -51,19 +51,22 @@ import type {
 
 const { ANGULAR } = clientFrameworkTypes;
 
-export default class AngularGenerator extends BaseApplicationGenerator<
+export class AngularApplicationGenerator extends BaseApplicationGenerator<
   AngularEntity,
   AngularApplication<AngularEntity>,
   AngularConfig,
   AngularOptions,
   AngularSource
-> {
+> {}
+
+export default class AngularGenerator extends AngularApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
+      await this.dependsOnBootstrap('angular');
       await this.dependsOnJHipster(GENERATOR_CLIENT);
       await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     }
