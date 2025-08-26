@@ -33,8 +33,6 @@ on:
       - 'generators/react/**'
   pull_request:
     types: [closed, opened, synchronize, reopened]
-    branches:
-      - '*'
 env:
   FORCE_COLOR: 2
 jobs:
