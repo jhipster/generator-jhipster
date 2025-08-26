@@ -21,7 +21,7 @@ import assert from 'node:assert';
 import { escapeRegExp } from 'lodash-es';
 
 export type JavaClassName = { className: string };
-export type JavaContructorParam = JavaClassName & { param: string | string[] };
+export type JavaConstructorParam = JavaClassName & { param: string | string[] };
 export type JavaField = JavaClassName & { field: string | string[] };
 export type JavaContructorSetter = JavaClassName & { setter: string | string[] };
 
@@ -43,13 +43,13 @@ const findJavaConstructor = (content: string, className: string) => {
   };
 };
 
-export function injectJavaConstructorParam(options: JavaContructorParam): (content: string) => string;
-export function injectJavaConstructorParam(content: string, options: JavaContructorParam): string;
+export function injectJavaConstructorParam(options: JavaConstructorParam): (content: string) => string;
+export function injectJavaConstructorParam(content: string, options: JavaConstructorParam): string;
 export function injectJavaConstructorParam(
-  paramOrAnnotation: string | JavaContructorParam,
-  options?: JavaContructorParam,
+  paramOrAnnotation: string | JavaConstructorParam,
+  options?: JavaConstructorParam,
 ): string | ((content: string) => string) {
-  const injectJavaConstructorParamToContent = (content: string, opts: JavaContructorParam): string => {
+  const injectJavaConstructorParamToContent = (content: string, opts: JavaConstructorParam): string => {
     const { className } = opts;
     const paramSpec = Array.isArray(opts.param) ? opts.param : [opts.param];
     const { params: constructorParams, paramStartIndex, paramEndIndex } = findJavaConstructor(content, className);
