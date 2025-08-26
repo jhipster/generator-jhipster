@@ -149,7 +149,7 @@ describe('jdl - JDLField', () => {
         field = new JDLField(args);
       });
 
-      it('should stringifiy the fields', () => {
+      it('should stringify the fields', () => {
         expect(field.toString()).to.equal(`${args.name} ${args.type}`);
       });
     });
@@ -166,7 +166,7 @@ describe('jdl - JDLField', () => {
         field = new JDLField(args);
       });
 
-      it('should stringifiy the fields', () => {
+      it('should stringify the fields', () => {
         expect(field.toString()).to.equal(`/**\n * ${args.comment}\n */\n${args.name} ${args.type}`);
       });
     });
@@ -191,7 +191,7 @@ describe('jdl - JDLField', () => {
         field = new JDLField(args);
       });
 
-      it('should stringifiy the field', () => {
+      it('should stringify the field', () => {
         expect(field.toString()).to.equal(
           `/**\n * ${args.comment}\n */\n` +
             `${args.name} ${args.type} ${args.validations[0].name} ` +
