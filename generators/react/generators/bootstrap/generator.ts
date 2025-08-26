@@ -17,22 +17,20 @@
  * limitations under the License.
  */
 import { createNeedleCallback } from '../../../base-core/support/needles.ts';
+import { ClientApplicationGenerator } from '../../../client/generator.ts';
 import {
   createDayjsUpdateLanguagesEditFileCallback,
   createWebpackUpdateLanguagesNeedleCallback,
 } from '../../../client/support/update-languages.ts';
 import { generateLanguagesWebappOptions } from '../../../languages/support/languages.ts';
-import { AngularApplicationGenerator } from '../../generator.ts';
 
-export default class BootstrapGenerator extends AngularApplicationGenerator {
+export default class ReactBootstrapGenerator extends ClientApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('client');
-    }
+    await this.dependsOnBootstrap('client');
   }
 
   get preparing() {
@@ -44,8 +42,10 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
 
           const { ignoreNeedlesError: ignoreNonExisting } = this;
 
+          this.editFile(`${clientSrcDir}app/config/dayjs.ts`, createDayjsUpdateLanguagesEditFileCallback(allLanguages, true));
+
           this.editFile(
-            `${clientSrcDir}app/shared/language/find-language-from-key.pipe.ts`,
+            `${clientSrcDir}app/config/translation.ts`,
             { ignoreNonExisting },
             createNeedleCallback({
               contentToAdd: generateLanguagesWebappOptions(allLanguages),
@@ -54,47 +54,16 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
           );
 
           this.editFile(
-            `${clientSrcDir}app/config/language.constants.ts`,
+            `${clientRootDir}webpack/webpack.common.js`,
             { ignoreNonExisting },
-            createNeedleCallback({
-              contentToAdd: allLanguages.map(lang => `'${lang.languageTag}',`),
-              needle: 'jhipster-needle-i18n-language-constant',
-            }),
+            createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, i18nDir)),
           );
-
-          this.editFile(`${clientSrcDir}app/config/dayjs.ts`, createDayjsUpdateLanguagesEditFileCallback(allLanguages, false));
-
-          if (application.clientBundlerWebpack) {
-            this.editFile(
-              `${clientRootDir}webpack/webpack.custom.js`,
-              { ignoreNonExisting },
-              createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, i18nDir)),
-            );
-          } else if (application.clientBundlerExperimentalEsbuild) {
-            this.editFile(
-              `${application.i18nDir}index.ts`,
-              createNeedleCallback({
-                needle: 'i18n-language-loader',
-                contentToAdd: allLanguages.map(
-                  lang => `'${lang.languageTag}': async (): Promise<any> => import('i18n/${lang.languageTag}.json'),`,
-                ),
-              }),
-              createNeedleCallback({
-                needle: 'i18n-language-angular-loader',
-                contentToAdd: allLanguages
-                  .filter(lang => lang.angularLocale)
-                  .map(
-                    lang => `'${lang.languageTag}': async (): Promise<void> => import('@angular/common/locales/${lang.angularLocale}'),`,
-                  ),
-              }),
-            );
-          }
         });
       },
     });
   }
 
-  get [AngularApplicationGenerator.PREPARING]() {
+  get [ClientApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 }

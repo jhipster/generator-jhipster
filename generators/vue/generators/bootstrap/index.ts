@@ -16,5 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './translate-react.ts';
-export { default as translateReactFilesTransform } from './translate-react.ts';
+export { default } from './generator.ts';

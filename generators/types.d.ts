@@ -32,8 +32,10 @@ export type GeneratorsWithBootstrap =
   | 'kubernetes'
   | 'languages'
   | 'project-name'
+  | 'react'
   | 'server'
-  | 'spring-boot';
+  | 'spring-boot'
+  | 'vue';
 // jhipster-needle-add-generator-with-bootstrap
 
 type GeneratorsByNamespace = {
@@ -143,6 +145,7 @@ type GeneratorsByNamespace = {
   'jhipster:project-name:bootstrap': import('./project-name/generators/bootstrap/generator.ts').default;
   react: import('./react/generator.ts').default;
   'jhipster:react': import('./react/generator.ts').default;
+  'jhipster:react:bootstrap': import('./react/generators/bootstrap/generator.ts').default;
   server: import('./server/generator.ts').default;
   'jhipster:server': import('./server/generator.ts').default;
   'jhipster:server:bootstrap': import('./server/generators/bootstrap/generator.ts').default;
@@ -176,6 +179,7 @@ type GeneratorsByNamespace = {
   'jhipster:upgrade': import('./upgrade/generator.ts').default;
   vue: import('./vue/generator.ts').default;
   'jhipster:vue': import('./vue/generator.ts').default;
+  'jhipster:vue:bootstrap': import('./vue/generators/bootstrap/generator.ts').default;
   workspaces: import('./workspaces/generator.ts').default;
   'jhipster:workspaces': import('./workspaces/generator.ts').default;
   // jhipster-needle-add-generator-by-namespace - JHipster will add generators here

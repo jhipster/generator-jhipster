@@ -150,28 +150,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           }
         };
 
-        source.addLanguagesInFrontend = ({ languagesDefinition }) => {
-          if (application.clientBundlerExperimentalEsbuild) {
-            this.editFile(
-              `${application.i18nDir}index.ts`,
-              createNeedleCallback({
-                needle: 'i18n-language-loader',
-                contentToAdd: languagesDefinition.map(
-                  lang => `'${lang.languageTag}': async (): Promise<any> => import('i18n/${lang.languageTag}.json'),`,
-                ),
-              }),
-              createNeedleCallback({
-                needle: 'i18n-language-angular-loader',
-                contentToAdd: languagesDefinition
-                  .filter(lang => lang.angularLocale)
-                  .map(
-                    lang => `'${lang.languageTag}': async (): Promise<void> => import('@angular/common/locales/${lang.angularLocale}'),`,
-                  ),
-              }),
-            );
-          }
-        };
-
         source.addIconImport = args => {
           const iconsPath = `${application.clientSrcDir}app/config/font-awesome-icons.ts`;
           const ignoreNonExisting = this.ignoreNeedlesError && 'Icon imports not updated with icon';

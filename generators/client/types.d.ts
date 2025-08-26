@@ -8,7 +8,6 @@ import type {
   Source as CommonSource,
 } from '../common/types.ts';
 import type { Config as JavascriptConfig, Options as JavascriptOptions, Source as JavascriptSource } from '../javascript/types.ts';
-import type { Language } from '../languages/support/languages.ts';
 
 import type command from './command.ts';
 import type { Entity } from './entity.ts';
@@ -71,5 +70,4 @@ export type Source = JavascriptSource &
      * Add webpack config.
      */
     addWebpackConfig?(args: { config: string }): void;
-    addLanguagesInFrontend?(args: { languagesDefinition: readonly Language[] }): void;
   };

@@ -24,12 +24,8 @@ import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { QUEUES } from '../base-application/priorities.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { UpdateLanguagesApplication } from '../client/support/update-languages.ts';
-import type { Application as ClientApplication, Config as ClientConfig, Source as ClientSource } from '../client/types.ts';
+import type { Application as ClientApplication, Config as ClientConfig } from '../client/types.ts';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
-import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/index.ts';
-import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.ts';
-import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/index.ts';
 
 import { writeEntityFiles } from './entity-files.ts';
 import { clientI18nFiles } from './files.ts';
@@ -191,8 +187,12 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
     return this.asComposingTaskGroup({
       async bootstrap() {
         // Make sure generators languages callbacks are correctly initialized.
-        if ((this.jhipsterConfigWithDefaults as ClientConfig).clientFramework === 'angular') {
-          await this.dependsOnBootstrap('angular');
+        const { clientFramework, skipServer, backendType } = this.jhipsterConfigWithDefaults as ClientConfig;
+        if (clientFramework === 'angular' || clientFramework === 'react' || clientFramework === 'vue') {
+          await this.dependsOnBootstrap(clientFramework);
+        }
+        if (!skipServer && backendType === 'Java') {
+          await this.dependsOnBootstrap('spring-boot');
         }
       },
     });
@@ -336,31 +336,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      updateLanguages({ application, control, source }) {
+      updateLanguages({ application }) {
         if (this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)) return;
-
-        const { enableTranslation, skipClient, languagesDefinition } = application;
-        if (languagesDefinition && languagesDefinition.length > 0) {
-          (source as unknown as ClientSource).addLanguagesInFrontend?.({ languagesDefinition });
-        }
-
-        if (enableTranslation && !skipClient) {
-          if (application.clientFrameworkReact) {
-            updateLanguagesInReact.call(this, { application: application as unknown as UpdateLanguagesApplication, control });
-          }
-          if (application.clientFrameworkVue) {
-            updateLanguagesInVue.call(this, { application: application as unknown as UpdateLanguagesApplication, control });
-          }
-        }
-        if (
-          application.enableTranslation &&
-          application.generateUserManagement &&
-          !application.skipServer &&
-          application.backendTypeJavaAny &&
-          application.backendTypeSpringBoot
-        ) {
-          updateLanguagesInJava.call(this, { application, control, source });
-        }
 
         const newLanguages = this.languagesToApply.map(lang => findLanguageForTag(lang, application.supportedLanguages)!);
         for (const addLanguageCallback of application.addLanguageCallbacks) {

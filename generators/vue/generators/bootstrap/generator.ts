@@ -17,35 +17,35 @@
  * limitations under the License.
  */
 import { createNeedleCallback } from '../../../base-core/support/needles.ts';
+import { ClientApplicationGenerator } from '../../../client/generator.ts';
 import {
   createDayjsUpdateLanguagesEditFileCallback,
   createWebpackUpdateLanguagesNeedleCallback,
 } from '../../../client/support/update-languages.ts';
 import { generateLanguagesWebappOptions } from '../../../languages/support/languages.ts';
-import { AngularApplicationGenerator } from '../../generator.ts';
 
-export default class BootstrapGenerator extends AngularApplicationGenerator {
+export default class VueBootstrapGenerator extends ClientApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('client');
-    }
+    await this.dependsOnBootstrap('client');
   }
 
   get preparing() {
     return this.asPreparingTaskGroup({
       translations({ application }) {
         application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
-          const { enableTranslation, clientSrcDir, clientRootDir, i18nDir } = application;
+          const { enableTranslation, clientSrcDir, i18nDir, clientRootDir } = application;
           if (!enableTranslation) return;
 
           const { ignoreNeedlesError: ignoreNonExisting } = this;
 
+          this.editFile(`${clientSrcDir}app/shared/config/dayjs.ts`, createDayjsUpdateLanguagesEditFileCallback(allLanguages, true));
+
           this.editFile(
-            `${clientSrcDir}app/shared/language/find-language-from-key.pipe.ts`,
+            `${clientSrcDir}app/shared/config/languages.ts`,
             { ignoreNonExisting },
             createNeedleCallback({
               contentToAdd: generateLanguagesWebappOptions(allLanguages),
@@ -53,40 +53,26 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
             }),
           );
 
+          const generateDateTimeFormat = (language: string): string => `'${language}': {
+  short: { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' },
+  medium: { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short', hour: 'numeric', minute: 'numeric' },
+  long: { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long', hour: 'numeric', minute: 'numeric' },
+},`;
+
           this.editFile(
-            `${clientSrcDir}app/config/language.constants.ts`,
+            `${clientSrcDir}app/shared/config/config.ts`,
             { ignoreNonExisting },
             createNeedleCallback({
-              contentToAdd: allLanguages.map(lang => `'${lang.languageTag}',`),
-              needle: 'jhipster-needle-i18n-language-constant',
+              contentToAdd: allLanguages.map(lang => generateDateTimeFormat(lang.languageTag)),
+              needle: 'jhipster-needle-i18n-language-date-time-format',
             }),
           );
 
-          this.editFile(`${clientSrcDir}app/config/dayjs.ts`, createDayjsUpdateLanguagesEditFileCallback(allLanguages, false));
-
           if (application.clientBundlerWebpack) {
             this.editFile(
-              `${clientRootDir}webpack/webpack.custom.js`,
+              `${clientRootDir}webpack/webpack.common.js`,
               { ignoreNonExisting },
               createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, i18nDir)),
-            );
-          } else if (application.clientBundlerExperimentalEsbuild) {
-            this.editFile(
-              `${application.i18nDir}index.ts`,
-              createNeedleCallback({
-                needle: 'i18n-language-loader',
-                contentToAdd: allLanguages.map(
-                  lang => `'${lang.languageTag}': async (): Promise<any> => import('i18n/${lang.languageTag}.json'),`,
-                ),
-              }),
-              createNeedleCallback({
-                needle: 'i18n-language-angular-loader',
-                contentToAdd: allLanguages
-                  .filter(lang => lang.angularLocale)
-                  .map(
-                    lang => `'${lang.languageTag}': async (): Promise<void> => import('@angular/common/locales/${lang.angularLocale}'),`,
-                  ),
-              }),
             );
           }
         });
@@ -94,7 +80,7 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
     });
   }
 
-  get [AngularApplicationGenerator.PREPARING]() {
+  get [ClientApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 }

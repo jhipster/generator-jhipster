@@ -76,6 +76,7 @@ exports[`helpers run using withJHipsterGenerators should register jhipster gener
   "jhipster:project-name",
   "jhipster:project-name:bootstrap",
   "jhipster:react",
+  "jhipster:react:bootstrap",
   "jhipster:server",
   "jhipster:server:bootstrap",
   "jhipster:spring-boot",
@@ -96,6 +97,7 @@ exports[`helpers run using withJHipsterGenerators should register jhipster gener
   "jhipster:spring-websocket",
   "jhipster:upgrade",
   "jhipster:vue",
+  "jhipster:vue:bootstrap",
   "jhipster:workspaces",
 ]
 `;
@@ -176,6 +178,7 @@ exports[`helpers runJHipster defaults should register jhipster generators namesp
   "jhipster:project-name",
   "jhipster:project-name:bootstrap",
   "jhipster:react",
+  "jhipster:react:bootstrap",
   "jhipster:server",
   "jhipster:server:bootstrap",
   "jhipster:spring-boot",
@@ -196,6 +199,7 @@ exports[`helpers runJHipster defaults should register jhipster generators namesp
   "jhipster:spring-websocket",
   "jhipster:upgrade",
   "jhipster:vue",
+  "jhipster:vue:bootstrap",
   "jhipster:workspaces",
 ]
 `;
@@ -276,6 +280,7 @@ exports[`helpers runJHipster with useDefaultMocks should register jhipster gener
   "jhipster:project-name",
   "jhipster:project-name:bootstrap",
   "jhipster:react",
+  "jhipster:react:bootstrap",
   "jhipster:server",
   "jhipster:server:bootstrap",
   "jhipster:spring-boot",
@@ -296,6 +301,7 @@ exports[`helpers runJHipster with useDefaultMocks should register jhipster gener
   "jhipster:spring-websocket",
   "jhipster:upgrade",
   "jhipster:vue",
+  "jhipster:vue:bootstrap",
   "jhipster:workspaces",
 ]
 `;
