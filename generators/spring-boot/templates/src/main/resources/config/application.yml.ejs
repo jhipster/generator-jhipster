@@ -207,11 +207,15 @@ spring:
       <%_ } _%>
     <%_ } _%>
     gateway:
-    <%_ if (reactive) { _%>
       server:
+    <%_ if (reactive) { _%>
         webflux:
           default-filters:
             - <% if (authenticationTypeJwt) { %>JWTRelay<% } else { %>TokenRelay<% } %>
+    <%_ } else { _%>
+        webmvc:
+    <%_ } _%>
+    <%_ if (serviceDiscoveryAny) { _%>
           discovery:
             locator:
               enabled: true
@@ -222,14 +226,13 @@ spring:
                     pattern: "'/services/'+serviceId.toLowerCase()+'/**'"
               filters:
                 - StripPrefix=2
+    <%_ } _%>
+    <%_ if (reactive) { _%>
           httpclient:
             pool:
               max-connections: 1000
-          # See alternatives in https://github.com/spring-cloud/spring-cloud-gateway/issues/3818
-          trusted-proxies: '.*'
-    <%_ } else { _%>
-      server:
-        webmvc:
+    <%_ } _%>
+    <%_ if (!serviceDiscoveryAny) { _%>
           routes:
             - id: <%= lowercaseBaseName %>_route
               uri: lb://<%= lowercaseBaseName %>
@@ -243,14 +246,14 @@ spring:
               predicates:
                 - Path=/services/<%= ms.route %>/**
               filters:
-        <%_ if (authenticationTypeOauth2) { _%>
+        <%_ if (!reactive && authenticationTypeOauth2) { _%>
                 - TokenRelay
         <%_ } _%>
                 - StripPrefix=2
-                # X-Forwarded-Prefix not working when using MVC https://github.com/spring-cloud/spring-cloud-gateway/issues/3354, add manually
-                - AddRequestHeader=X-Forwarded-Prefix,/services/<%= ms.route %>
       <%_ } _%>
     <%_ } _%>
+          # See alternatives in https://github.com/spring-cloud/spring-cloud-gateway/issues/3818
+          trusted-proxies: '.*'
   <%_ } _%>
   <%_ if (messageBrokerKafka) { _%>
     function:

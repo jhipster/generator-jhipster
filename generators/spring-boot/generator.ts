@@ -791,14 +791,6 @@ ${classProperties
           comment: `Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes`,
         });
       },
-      log({ application, source }) {
-        if (application.applicationTypeGateway) {
-          source.addMainLog?.({ name: 'org.springframework.cloud.gateway', level: 'DEBUG' });
-        }
-        if (application.applicationTypeGateway || application.applicationTypeMicroservice) {
-          source.addMainLog?.({ name: 'org.springframework.security', level: 'DEBUG' });
-        }
-      },
     });
   }
 
