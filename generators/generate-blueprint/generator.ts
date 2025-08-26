@@ -197,7 +197,7 @@ export default class extends BaseSimpleApplicationGenerator<
       prepare({ application }) {
         const { cli, cliName, baseName } = application;
         application.githubRepository = this.jhipsterConfig.githubRepository ?? `jhipster/generator-jhipster-${baseName}`;
-        application.blueprintMjsExtension = application.js ? 'js' : 'mjs';
+        application.blueprintMjsExtension = 'js';
         if (cli) {
           application.cliName = cliName ?? `jhipster-${baseName}`;
         }
@@ -215,7 +215,7 @@ export default class extends BaseSimpleApplicationGenerator<
         await control.cleanupFiles({
           '8.5.1': ['.eslintrc.json'],
           '8.7.2': ['.eslintignore', 'vitest.test-setup.ts'],
-          '8.7.4': ['.blueprint/generate-sample/get-samples.mjs', '.blueprint/github-build-matrix/build-matrix.mjs'],
+          '8.7.4': ['.blueprint/generate-sample/get-samples.js', '.blueprint/github-build-matrix/build-matrix.js'],
         });
       },
       async writing({ application }) {
@@ -318,6 +318,7 @@ export default class extends BaseSimpleApplicationGenerator<
         );
         this.packageJson.merge({
           name: `generator-jhipster-${application.baseName}`,
+          type: 'module',
           keywords: ['yeoman-generator', 'jhipster-blueprint', BLUEPRINT_API_VERSION],
           files: defaultPublishedFiles,
           scripts: {

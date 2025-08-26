@@ -34,7 +34,7 @@ exports[`generator - javascript:bootstrap bootstrapping default config should pr
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
   "caret": undefined,
-  "cjsExtension": ".js",
+  "cjsExtension": ".cjs",
   "cli": undefined,
   "cliName": undefined,
   "clientBundler": "webpack",
@@ -154,7 +154,7 @@ exports[`generator - javascript:bootstrap bootstrapping default config should pr
   "messageBrokerPulsar": false,
   "microfrontend": false,
   "microfrontends": undefined,
-  "mjsExtension": ".mjs",
+  "mjsExtension": ".js",
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nodeDependencies": Any<Object>,
@@ -163,10 +163,7 @@ exports[`generator - javascript:bootstrap bootstrapping default config should pr
   "nodeVersion": "NODE_VERSION",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
-  "packageJsonType": "commonjs",
-  "packageJsonTypeAny": true,
-  "packageJsonTypeCommonjs": true,
-  "packageJsonTypeModule": false,
+  "packageJsonType": "module",
   "packageName": "com.mycompany.myapp",
   "pkType": undefined,
   "prettierTabWidth": undefined,
@@ -693,9 +690,9 @@ exports[`generator - javascript:bootstrap bootstrapping default config should pr
 ]
 `;
 
-exports[`generator - javascript:bootstrap customVersion-commonjs should call source snapshot 1`] = `{}`;
+exports[`generator - javascript:bootstrap customVersion-module should call source snapshot 1`] = `{}`;
 
-exports[`generator - javascript:bootstrap customVersion-commonjs should match files snapshot 1`] = `
+exports[`generator - javascript:bootstrap customVersion-module should match files snapshot 1`] = `
 {
   ".yo-rc.json": ObjectContaining {
     "contents": Any<String>,
@@ -713,9 +710,9 @@ exports[`generator - javascript:bootstrap packageJsonNodeEngine(false)-module sh
 }
 `;
 
-exports[`generator - javascript:bootstrap packageJsonNodeEngine(true) should call source snapshot 1`] = `{}`;
+exports[`generator - javascript:bootstrap packageJsonNodeEngine(true)-module should call source snapshot 1`] = `{}`;
 
-exports[`generator - javascript:bootstrap packageJsonNodeEngine(true) should match files snapshot 1`] = `
+exports[`generator - javascript:bootstrap packageJsonNodeEngine(true)-module should match files snapshot 1`] = `
 {
   ".yo-rc.json": ObjectContaining {
     "contents": Any<String>,

@@ -38,11 +38,10 @@ export default class JavascriptBootstrapGenerator extends JavascriptSimpleApplic
           this.fetchFromInstalledJHipster('javascript', 'resources', 'package.json'),
         );
       },
-      jsExtensions({ applicationDefaults, application }) {
+      jsExtensions({ applicationDefaults, application: _application }) {
         applicationDefaults({
-          cjsExtension: application.packageJsonTypeCommonjs ? '.js' : '.cjs',
-          mjsExtension: application.packageJsonTypeModule ? '.js' : '.mjs',
-
+          cjsExtension: '.cjs',
+          mjsExtension: '.js',
           clientRootDir: '',
           clientSrcDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`,
         });
