@@ -208,10 +208,10 @@ spring:
     <%_ } _%>
     gateway:
     <%_ if (reactive) { _%>
-      default-filters:
-        - <% if (authenticationTypeJwt) { %>JWTRelay<% } else { %>TokenRelay<% } %>
       server:
         webflux:
+          default-filters:
+            - <% if (authenticationTypeJwt) { %>JWTRelay<% } else { %>TokenRelay<% } %>
           discovery:
             locator:
               enabled: true
