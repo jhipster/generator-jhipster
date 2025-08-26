@@ -248,7 +248,7 @@ type ExplodeCommandChoicesNoInference<U extends ParseableConfigs> = {
       ? K extends infer StringKey
         ? StringKey extends string
           ? NormalizeChoices<RequiredChoices['choices']> extends infer NormalizedChoices
-            ? // @ts-expect-error Mapped typle type is loosy https://github.com/microsoft/TypeScript/issues/27995
+            ? // @ts-expect-error Mapped tuple type is loosy https://github.com/microsoft/TypeScript/issues/27995
               Simplify<DerivedPropertiesOf<StringKey, NormalizedChoices[number]>>
             : never
           : never
