@@ -146,6 +146,9 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
           value: `${application.packageName}.config.Neo4jTestContainersSpringContextCustomizerFactory`,
         });
       },
+      addLogs({ source }) {
+        source.addMainLog?.({ name: 'org.springframework.data.neo4j.cypher.unrecognized', level: 'ERROR' });
+      },
       addDependencies({ application, source }) {
         source.addJavaDefinitions?.(
           {

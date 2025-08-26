@@ -689,6 +689,10 @@ exports[`generator - spring-cache infinispan-gradle should match source calls 1`
             "groupId": "org.infinispan",
             "scope": "compile",
           },
+          {
+            "artifactId": "micrometer-registry-prometheus",
+            "groupId": "io.micrometer",
+          },
         ],
       },
       {
@@ -788,6 +792,10 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
             "artifactId": "infinispan-component-annotations",
             "groupId": "org.infinispan",
             "scope": "compile",
+          },
+          {
+            "artifactId": "micrometer-registry-prometheus",
+            "groupId": "io.micrometer",
           },
         ],
       },
