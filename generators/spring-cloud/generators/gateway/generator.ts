@@ -131,8 +131,6 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
         source.addJavaDependencies!([
           { groupId: 'org.springframework.cloud', artifactId: `spring-cloud-starter-gateway-server-${reactive ? 'webflux' : 'webmvc'}` },
         ]);
-        source.addMainLog?.({ name: 'org.springframework.cloud.gateway', level: 'DEBUG' });
-        source.addMainLog?.({ name: 'org.springframework.security', level: 'DEBUG' });
       },
     });
   }
