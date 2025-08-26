@@ -39,7 +39,7 @@ export const createDayjsUpdateLanguagesEditFileCallback =
     content.replace(
       /\/\/ jhipster-needle-i18n-language-dayjs-imports[\s\S]+?(?=\/\/ DAYJS CONFIGURATION)/g,
       `// jhipster-needle-i18n-language-dayjs-imports - JHipster will import languages from dayjs here
-${languagesDefinition.map(language => `import 'dayjs/${commonjs ? '' : 'esm/'}locale/${language.dayjsLocale}';`).join('\n')}
+${[...new Set(languagesDefinition.map(l => l.dayjsLocale))].map(dayjsLocale => `import 'dayjs/${commonjs ? '' : 'esm/'}locale/${dayjsLocale}';`).join('\n')}
 
 `,
     );
