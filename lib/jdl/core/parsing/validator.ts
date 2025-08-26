@@ -138,7 +138,6 @@ const deploymentConfigPropsValidations = {
 } as const;
 
 interface JDLCstVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
-  // eslint-disable-next-line @typescript-eslint/no-misused-new
   new (): JDLCstVisitor<IN, OUT>;
   constantDeclaration(context: any): void;
   entityDeclaration(context: any): void;

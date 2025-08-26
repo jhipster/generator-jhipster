@@ -76,8 +76,7 @@ export type MutateDataParam<T> = Simplify<
       : Key extends ReadonlyKeysOf<T>
         ? never
         : Key extends keyof T
-          ? // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-            T[Key] extends Function
+          ? T[Key] extends Function
             ? (ctx: T) => T[Key]
             : T[Key] | ((ctx: T) => T[Key])
           : never;
