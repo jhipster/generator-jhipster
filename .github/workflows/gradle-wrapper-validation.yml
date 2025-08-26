@@ -28,8 +28,6 @@ on:
       - 'dependabot/**'
   pull_request:
     types: [closed, opened, synchronize, reopened]
-    branches:
-      - '*'
 
 permissions:
   contents: read

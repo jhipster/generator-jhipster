@@ -40,8 +40,6 @@ on:
       - 'generators/*'
   pull_request:
     types: [closed, opened, synchronize, reopened]
-    branches:
-      - '*'
 jobs:
   build-matrix:
     runs-on: ubuntu-latest
