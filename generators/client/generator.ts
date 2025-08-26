@@ -98,7 +98,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
           this.jhipsterConfig.clientFramework = ANGULAR;
         }
       },
-
       configureDevServerPort() {
         if (this.jhipsterConfig.devServerPort !== undefined || this.jhipsterConfig.applicationIndex === undefined) return;
 
@@ -136,8 +135,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
         // TODO v8 rename to nodePackageManager;
         applicationDefaults({
           clientPackageManager: 'npm',
-          clientThemeNone: ({ clientTheme }) => !clientTheme || clientTheme === 'none',
-          clientThemeAny: ({ clientThemeNone }) => !clientThemeNone,
         });
       },
 
@@ -163,18 +160,19 @@ export default class ClientGenerator extends ClientApplicationGenerator {
           clientBundlerName: ctx => (ctx.clientBundlerExperimentalEsbuild ? 'esbuild' : startCase(ctx.clientBundler)),
           clientTestFramework: ctx => (ctx.clientFrameworkVue ? 'vitest' : 'jest'),
           clientTestFrameworkName: ctx => startCase(ctx.clientTestFramework),
+          clientThemeNone: ({ clientTheme }) => !clientTheme || clientTheme === 'none',
+          clientThemeAny: ({ clientThemeNone }) => !clientThemeNone,
         });
       },
+
       microservice({ application }) {
         if (application.applicationTypeMicroservice) {
           application.withAdminUi = false;
         }
       },
-
       prepareForTemplates({ application }) {
         application.webappLoginRegExp = LOGIN_REGEX_JS;
       },
-
       addExternalResource({ application, source }) {
         if (!application.clientFrameworkBuiltIn) {
           return;

@@ -47,12 +47,20 @@ import {
 } from '../../support/index.ts';
 import type {
   Application as ServerApplication,
+  Config as ServerConfig,
   Entity as ServerEntity,
   Features as ServerFeatures,
   Options as ServerOptions,
+  Source as ServerSource,
 } from '../../types.ts';
 
-export default class ServerBootstrapGenerator extends BaseApplicationGenerator<ServerEntity, ServerApplication> {
+export default class ServerBootstrapGenerator extends BaseApplicationGenerator<
+  ServerEntity,
+  ServerApplication,
+  ServerConfig,
+  ServerOptions,
+  ServerSource
+> {
   constructor(args: string | string[], opts: ServerOptions, features: ServerFeatures) {
     super(args, opts, { loadCommand: [serverCommand], ...features });
   }

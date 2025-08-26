@@ -22,15 +22,15 @@ import { padEnd, startCase } from 'lodash-es';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { updateLanguagesTask as updateLanguagesInAngularTask } from '../angular/support/index.ts';
+import type { Application as AngularApplication, Entity as AngularEntity } from '../angular/types.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { QUEUES } from '../base-application/priorities.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { UpdateLanguagesApplication } from '../client/support/update-languages.ts';
 import type { Application as ClientApplication, Config as ClientConfig, Source as ClientSource } from '../client/types.ts';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
-import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/index.ts';
-import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.ts';
-import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/index.ts';
+import { updateLanguagesTask as updateLanguagesInReactTask } from '../react/support/index.ts';
+// import { updateLanguagesTask as updateLanguagesInJavaTask } from '../server/support/index.ts';
+import { updateLanguagesTask as updateLanguagesInVueTask } from '../vue/support/index.ts';
 
 import { writeEntityFiles } from './entity-files.ts';
 import { clientI18nFiles } from './files.ts';
@@ -212,6 +212,55 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
           });
         };
       },
+      updateLanguages({ source }) {
+        source.addLanguages = ({ languagesDefinition }: { languagesDefinition: readonly Language[] }) => {
+          if (languagesDefinition && languagesDefinition.length > 0) {
+            (source as unknown as ClientSource).addLanguageToSelections?.({ languagesDefinition });
+          }
+        };
+      },
+      updateLanguageAngular({ source, application }) {
+        const { enableTranslation, clientFrameworkAngular, skipClient } = application;
+        if ((skipClient === undefined || !skipClient) && enableTranslation && clientFrameworkAngular) {
+          source.updateLanguagesClient = (gen, { application, control }) => {
+            const app = application as AngularApplication<AngularEntity>;
+            updateLanguagesInAngularTask.call(gen, { application: app, control });
+          };
+        }
+      },
+      updateLanguageReact({ source, application }) {
+        const { enableTranslation, clientFrameworkReact, skipClient } = application;
+        if ((skipClient === undefined || !skipClient) && enableTranslation && clientFrameworkReact) {
+          source.updateLanguagesClient = (gen, { application, control }) => {
+            const app = application as ClientApplication;
+            updateLanguagesInReactTask.call(gen, { application: app, control });
+          };
+        }
+      },
+      updateLanguageVue({ source, application }) {
+        const { enableTranslation, clientFrameworkVue, skipClient } = application;
+        if ((skipClient === undefined || !skipClient) && enableTranslation && clientFrameworkVue) {
+          source.updateLanguagesClient = (gen, { application, control }) => {
+            const app = application as ClientApplication;
+            updateLanguagesInVueTask.call(gen, { application: app, control });
+          };
+        }
+      },
+      /*
+      updateLanguageServerSide({ source, application }) {
+        const { enableTranslation, generateUserManagement, skipServer, backendTypeJavaAny, backendTypeSpringBoot } = application;
+        if (
+          (skipServer === undefined || !skipServer) &&
+          enableTranslation &&
+          generateUserManagement &&
+          backendTypeJavaAny &&
+          backendTypeSpringBoot
+        ) {
+          source.updateLanguagesServer = (gen, { application, control }) => {
+            updateLanguagesInJavaTask.call(gen, { application, control, source });
+          };
+        }
+      },*/
     });
   }
 
@@ -324,32 +373,10 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
     return this.asPostWritingTaskGroup({
       write({ application, control, source }) {
         if (this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)) return;
-
-        const { enableTranslation, skipClient, languagesDefinition } = application;
-        if (languagesDefinition && languagesDefinition.length > 0) {
-          (source as unknown as ClientSource).addLanguagesInFrontend?.({ languagesDefinition });
-        }
-
-        if (enableTranslation && !skipClient) {
-          if (application.clientFrameworkAngular) {
-            updateLanguagesInAngularTask.call(this, { application: application as unknown as UpdateLanguagesApplication, control });
-          }
-          if (application.clientFrameworkReact) {
-            updateLanguagesInReact.call(this, { application: application as unknown as UpdateLanguagesApplication, control });
-          }
-          if (application.clientFrameworkVue) {
-            updateLanguagesInVue.call(this, { application: application as unknown as UpdateLanguagesApplication, control });
-          }
-        }
-        if (
-          application.enableTranslation &&
-          application.generateUserManagement &&
-          !application.skipServer &&
-          application.backendTypeJavaAny &&
-          application.backendTypeSpringBoot
-        ) {
-          updateLanguagesInJava.call(this, { application, control, source });
-        }
+        const { languagesDefinition } = application;
+        source.addLanguages?.({ languagesDefinition });
+        source.updateLanguagesClient?.(this, { application, control, source });
+        source.updateLanguagesServer?.(this, { application, control, source });
       },
     });
   }
