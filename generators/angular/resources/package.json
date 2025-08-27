@@ -8,7 +8,7 @@
     "@ngx-translate/core": "17.0.0",
     "@ngx-translate/http-loader": "17.0.0",
     "@stomp/rx-stomp": "2.0.1",
-    "bootstrap": "5.3.7",
+    "bootstrap": "5.3.8",
     "bootswatch": "5.3.7",
     "ngx-cookie-service": "20.1.0",
     "ngx-infinite-scroll": "20.0.0",
