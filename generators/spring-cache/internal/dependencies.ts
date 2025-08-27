@@ -148,6 +148,10 @@ export const getCacheProviderMavenDefinition: (
             artifactId: 'infinispan-component-annotations',
             scope: 'compile',
           },
+          {
+            groupId: 'io.micrometer',
+            artifactId: 'micrometer-registry-prometheus',
+          },
         ],
       },
     },

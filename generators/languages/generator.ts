@@ -280,14 +280,14 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
       },
       async translateFile({ application }) {
         if (
-          !application.enableTranslation ||
           application.skipServer ||
           (!application.backendTypeSpringBoot && !this.writeJavaLanguageFiles) ||
           this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)
         )
           return;
+        const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage])];
         await Promise.all(
-          this.languagesToApply.map(async lang => {
+          languagesToApply.map(async lang => {
             const language = findLanguageForTag(lang)!;
             if (language.javaLocaleMessageSourceSuffix) {
               await this.writeFiles({
