@@ -787,12 +787,12 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     /* Build lookup order first has preference.
      * Example
      * rootTemplatesPath = ['reactive', 'common']
-     * jhipsterTemplatesFolders = ['/.../generator-jhispter-blueprint/server/templates', '/.../generator-jhispter/server/templates']
+     * jhipsterTemplatesFolders = ['/.../generator-jhipster-blueprint/server/templates', '/.../generator-jhipster/server/templates']
      *
-     * /.../generator-jhispter-blueprint/server/templates/reactive/templatePath
-     * /.../generator-jhispter-blueprint/server/templates/common/templatePath
-     * /.../generator-jhispter/server/templates/reactive/templatePath
-     * /.../generator-jhispter/server/templates/common/templatePath
+     * /.../generator-jhipster-blueprint/server/templates/reactive/templatePath
+     * /.../generator-jhipster-blueprint/server/templates/common/templatePath
+     * /.../generator-jhipster/server/templates/reactive/templatePath
+     * /.../generator-jhipster/server/templates/common/templatePath
      */
     let rootTemplatesAbsolutePath: string | string[];
     if (!rootTemplatesPath) {
