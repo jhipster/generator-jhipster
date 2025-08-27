@@ -548,7 +548,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           // Positional arguments already parsed or a single argument.
           argument = Array.isArray(positionalArguments) ? positionalArguments.shift() : positionalArguments;
         } else {
-          // Varags argument.
+          // Varargs argument.
           argument = positionalArguments;
           positionalArguments = [];
         }
