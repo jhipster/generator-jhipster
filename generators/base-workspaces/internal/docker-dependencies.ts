@@ -19,7 +19,8 @@
 import { mutateData } from '../../../lib/utils/object.ts';
 import type BaseCoreGenerator from '../../base-core/generator.ts';
 import { getDockerfileContainers } from '../../docker/utils.ts';
-import { dockerContainers } from '../../generator-constants.js';
+
+const ELASTICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 export function loadDockerDependenciesTask<const G extends BaseCoreGenerator>(
   this: G,
@@ -27,11 +28,18 @@ export function loadDockerDependenciesTask<const G extends BaseCoreGenerator>(
 ) {
   context.dockerContainers ??= {};
   const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile')) as string;
+  const springDependenciesPom = this.readTemplate(
+    this.jhipsterTemplatePath('../../spring-boot/resources/spring-boot-dependencies.pom'),
+  ) as string;
+  const result = springDependenciesPom.match(/elasticsearch-client.version>(?<version>.+)<\/elasticsearch-client.version>/);
+  const elasticsearchClientVersion = result!.groups!.version;
   mutateData(
     context.dockerContainers,
     this.prepareDependencies(
       {
-        ...dockerContainers,
+        elasticsearchTag: elasticsearchClientVersion,
+        elasticsearchImage: ELASTICSEARCH_IMAGE,
+        elasticsearch: `${ELASTICSEARCH_IMAGE}:${elasticsearchClientVersion}`,
         ...getDockerfileContainers(dockerfile),
       },
       'docker',

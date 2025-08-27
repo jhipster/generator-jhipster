@@ -39,21 +39,6 @@ export const RECOMMENDED_NODE_VERSION = readFileSync(
   'utf-8',
 ).trim();
 
-// The version should be coherent with the one from spring-data-elasticsearch project
-export const ELASTICSEARCH_TAG = '8.17.8';
-export const ELASTICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
-
-/**
- * @type {Record<string, string>}
- * Manually updated docker containers
- */
-export const dockerContainers = {
-  elasticsearchTag: ELASTICSEARCH_TAG,
-  elasticsearchImage: ELASTICSEARCH_IMAGE,
-  elasticsearch: `${ELASTICSEARCH_IMAGE}:${ELASTICSEARCH_TAG}`,
-};
-Object.freeze(dockerContainers);
-
 // all constants used throughout all generators
 
 export const LOGIN_REGEX = '^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$';
