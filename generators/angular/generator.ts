@@ -65,8 +65,8 @@ export default class AngularGenerator extends AngularApplicationGenerator {
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnBootstrap('angular');
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('angular');
       await this.dependsOnJHipster(GENERATOR_CLIENT);
       await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     }

@@ -30,9 +30,7 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('client');
-    }
+    await this.dependsOnBootstrap('client');
   }
 
   get preparing() {
