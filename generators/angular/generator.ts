@@ -65,8 +65,8 @@ export default class AngularGenerator extends AngularApplicationGenerator {
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnBootstrap('angular');
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('angular');
       await this.dependsOnJHipster(GENERATOR_CLIENT);
       await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     }
@@ -147,28 +147,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           );
           if (args.icon) {
             source.addIconImport!({ icon: args.icon });
-          }
-        };
-
-        source.addLanguagesInFrontend = ({ languagesDefinition }) => {
-          if (application.clientBundlerExperimentalEsbuild) {
-            this.editFile(
-              `${application.i18nDir}index.ts`,
-              createNeedleCallback({
-                needle: 'i18n-language-loader',
-                contentToAdd: languagesDefinition.map(
-                  lang => `'${lang.languageTag}': async (): Promise<any> => import('i18n/${lang.languageTag}.json'),`,
-                ),
-              }),
-              createNeedleCallback({
-                needle: 'i18n-language-angular-loader',
-                contentToAdd: languagesDefinition
-                  .filter(lang => lang.angularLocale)
-                  .map(
-                    lang => `'${lang.languageTag}': async (): Promise<void> => import('@angular/common/locales/${lang.angularLocale}'),`,
-                  ),
-              }),
-            );
           }
         };
 

@@ -16,48 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Control } from '../../base/types.ts';
 import type { EditFileCallback } from '../../base-core/api.ts';
-import type BaseGenerator from '../../base-core/index.ts';
+import { createNeedleCallback } from '../../base-core/support/needles.ts';
 import type { Language } from '../../languages/support/languages.ts';
-import type { Application as LanguagesApplication } from '../../languages/types.d.ts';
-import type { Application as ClientApplication } from '../types.d.ts';
 
-export type UpdateLanguagesApplication = Pick<
-  ClientApplication<any> & LanguagesApplication<any>,
-  'clientBundlerWebpack' | 'i18nDir' | 'clientSrcDir' | 'clientRootDir' | 'enableTranslation' | 'languagesDefinition' | 'languages'
->;
+export const createDayjsUpdateLanguagesEditFileCallback = (languagesDefinition: readonly Language[], commonjs = false): EditFileCallback =>
+  createNeedleCallback({
+    contentToAdd: [...new Set(languagesDefinition.map(l => l.dayjsLocale))].map(
+      dayjsLocale => `import 'dayjs/${commonjs ? '' : 'esm/'}locale/${dayjsLocale}';`,
+    ),
+    needle: 'jhipster-needle-i18n-language-dayjs-imports',
+  });
 
-export type UpdateClientLanguagesTaskParam = {
-  application: UpdateLanguagesApplication;
-  control?: Control;
-};
-
-export const createDayjsUpdateLanguagesEditFileCallback =
-  (languagesDefinition: readonly Language[], commonjs = false): EditFileCallback =>
-  content =>
-    content.replace(
-      /\/\/ jhipster-needle-i18n-language-dayjs-imports[\s\S]+?(?=\/\/ DAYJS CONFIGURATION)/g,
-      `// jhipster-needle-i18n-language-dayjs-imports - JHipster will import languages from dayjs here
-${[...new Set(languagesDefinition.map(l => l.dayjsLocale))].map(dayjsLocale => `import 'dayjs/${commonjs ? '' : 'esm/'}locale/${dayjsLocale}';`).join('\n')}
-
-`,
-    );
-
-/**
- * Update DayJS Locales.
- *
- * @param application
- * @param configurationFile
- * @param commonjs
- */
-export function updateLanguagesInDayjsConfigurationTask(
-  this: BaseGenerator,
-  { application }: UpdateClientLanguagesTaskParam,
-  { configurationFile, commonjs = false }: { configurationFile: string; commonjs?: boolean },
-): void {
-  const { languagesDefinition = [] } = application;
-  const { ignoreNeedlesError: ignoreNonExisting } = this;
-
-  this.editFile(configurationFile, { ignoreNonExisting }, createDayjsUpdateLanguagesEditFileCallback(languagesDefinition, commonjs));
-}
+export const createWebpackUpdateLanguagesNeedleCallback = (allLanguages: readonly Language[], i18nRelativeDir: string) =>
+  createNeedleCallback({
+    contentToAdd: allLanguages.map(
+      language => `{ pattern: './${i18nRelativeDir}${language.languageTag}/*.json', fileName: './i18n/${language.languageTag}.json' },`,
+    ),
+    needle: 'jhipster-needle-i18n-language-webpack',
+  });

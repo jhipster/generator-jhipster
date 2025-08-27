@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { mutateData } from '../../../../lib/utils/object.ts';
+import { createNeedleCallback } from '../../../base-core/support/needles.ts';
 import { getDatabaseTypeData } from '../../../server/support/database.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 
@@ -48,6 +49,25 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
             }
             return `Spring Data ${springDataDatabase}`;
           },
+        });
+      },
+      updateLanguages({ application }) {
+        application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
+          if (!application.enableTranslation || !application.generateUserManagement || !application.backendTypeSpringBoot) {
+            return;
+          }
+
+          const { javaPackageTestDir } = application;
+          const { ignoreNeedlesError: ignoreNonExisting } = this;
+
+          this.editFile(
+            `${javaPackageTestDir}/service/MailServiceIT.java`,
+            { ignoreNonExisting },
+            createNeedleCallback({
+              contentToAdd: allLanguages.map(language => `"${language.languageTag}"`).join(',\n'),
+              needle: 'jhipster-needle-i18n-language-constant',
+            }),
+          );
         });
       },
     });

@@ -19,4 +19,3 @@
 export { default as convertTranslationsSupport } from './convert-translation.ts';
 export * from './translate-vue.ts';
 export { default as translateVueFilesTransform } from './translate-vue.ts';
-export { default as updateLanguagesTask } from './update-languages.ts';

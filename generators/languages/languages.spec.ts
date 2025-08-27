@@ -15,7 +15,7 @@ const generator = basename(__dirname);
 const createClientProject = (options?: Parameters<ReturnType<typeof basicHelpers.runJHipster>['withOptions']>[0]) =>
   basicHelpers
     .runJHipster('app')
-    .withMockedGenerators(['jhipster:liquibase'])
+    .withMockedGenerators(['jhipster:server'])
     .withJHipsterConfig()
     .withOptions({
       ...options,
@@ -318,9 +318,15 @@ describe('generator - languages', () => {
           enableTranslation: true,
           nativeLanguage: 'en',
         });
-        await helpers.runJHipsterInApplication('jhipster:languages').withArguments(['fr', 'de']).withOptions({
-          baseName: 'jhipster',
-        });
+        await helpers
+          .runJHipsterInApplication('jhipster:languages')
+          .withArguments(['fr', 'de'])
+          .withOptions({
+            baseName: 'jhipster',
+          })
+          .withOptions({
+            commandName: 'languages',
+          });
       });
       it('creates expected configuration values', () => {
         runResult.assertJsonFileContent('.yo-rc.json', {
