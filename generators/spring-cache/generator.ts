@@ -24,7 +24,7 @@ import cleanupTask from './cleanup.ts';
 import writeTask from './files.ts';
 import { getCacheProviderMavenDefinition } from './internal/dependencies.ts';
 import type {
-  Application as SpringCacneApplication,
+  Application as SpringCacheApplication,
   Config as SpringCacheConfig,
   Entity as SpringCacheEntity,
   Options as SpringCacheOptions,
@@ -33,7 +33,7 @@ import type {
 
 export default class SpringCacheGenerator extends BaseApplicationGenerator<
   SpringCacheEntity,
-  SpringCacneApplication,
+  SpringCacheApplication,
   SpringCacheConfig,
   SpringCacheOptions,
   SpringCacheSource
