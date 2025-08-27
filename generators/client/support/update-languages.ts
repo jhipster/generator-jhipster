@@ -31,7 +31,7 @@ export const createDayjsUpdateLanguagesEditFileCallback = (languagesDefinition: 
 export const createWebpackUpdateLanguagesNeedleCallback = (allLanguages: readonly Language[], i18nRelativeDir: string) =>
   createNeedleCallback({
     contentToAdd: allLanguages.map(
-      language => `{ pattern: './${i18nRelativeDir}/${language.languageTag}/*.json', fileName: './i18n/${language.languageTag}.json' },`,
+      language => `{ pattern: './${i18nRelativeDir}${language.languageTag}/*.json', fileName: './i18n/${language.languageTag}.json' },`,
     ),
     needle: 'jhipster-needle-i18n-language-webpack',
   });
