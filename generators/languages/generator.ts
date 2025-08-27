@@ -186,10 +186,15 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   get composing() {
     return this.asComposingTaskGroup({
       async bootstrap() {
+        if (!this.languageCommand) return;
         // Make sure generators languages callbacks are correctly initialized.
-        const { clientFramework, skipServer, backendType } = this.jhipsterConfigWithDefaults as ClientConfig;
-        if (clientFramework === 'angular' || clientFramework === 'react' || clientFramework === 'vue') {
-          await this.dependsOnBootstrap(clientFramework);
+        const { clientFramework = 'no', skipServer, backendType } = this.jhipsterConfigWithDefaults as ClientConfig;
+        if (clientFramework !== 'no') {
+          try {
+            await this.dependsOnBootstrap(clientFramework);
+          } catch {
+            this.log.warn(`${clientFramework} bootstrap generator not found. Client languages may not be updated.`);
+          }
         }
         if (!skipServer && backendType === 'Java') {
           await this.dependsOnBootstrap('spring-boot');
