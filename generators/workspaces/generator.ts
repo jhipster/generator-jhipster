@@ -57,7 +57,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   get initializing() {
     return this.asInitializingTaskGroup({
       loadConfig() {
-        // Generate workspaces file if workspace option is passed, or if workspace option is ommitted and monorepository is enabled, or if regenerating.
+        // Generate workspaces file if workspace option is passed, or if workspace option is omitted and monorepository is enabled, or if regenerating.
         this.generateWorkspaces =
           (this.workspaces ?? (this.jhipsterConfig as GitConfig).monorepository) || Boolean(this.packageJson?.get('workspaces'));
 
