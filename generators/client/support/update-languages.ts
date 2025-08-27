@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 import type { Control } from '../../base/types.ts';
+import type { EditFileCallback } from '../../base-core/api.ts';
 import type BaseGenerator from '../../base-core/index.ts';
+import type { Language } from '../../languages/support/languages.ts';
 import type { Application as LanguagesApplication } from '../../languages/types.d.ts';
 import type { Application as ClientApplication } from '../types.d.ts';
 
@@ -31,6 +33,17 @@ export type UpdateClientLanguagesTaskParam = {
   control?: Control;
 };
 
+export const createDayjsUpdateLanguagesEditFileCallback =
+  (languagesDefinition: readonly Language[], commonjs = false): EditFileCallback =>
+  content =>
+    content.replace(
+      /\/\/ jhipster-needle-i18n-language-dayjs-imports[\s\S]+?(?=\/\/ DAYJS CONFIGURATION)/g,
+      `// jhipster-needle-i18n-language-dayjs-imports - JHipster will import languages from dayjs here
+${[...new Set(languagesDefinition.map(l => l.dayjsLocale))].map(dayjsLocale => `import 'dayjs/${commonjs ? '' : 'esm/'}locale/${dayjsLocale}';`).join('\n')}
+
+`,
+    );
+
 /**
  * Update DayJS Locales.
  *
@@ -38,7 +51,6 @@ export type UpdateClientLanguagesTaskParam = {
  * @param configurationFile
  * @param commonjs
  */
-
 export function updateLanguagesInDayjsConfigurationTask(
   this: BaseGenerator,
   { application }: UpdateClientLanguagesTaskParam,
@@ -47,13 +59,5 @@ export function updateLanguagesInDayjsConfigurationTask(
   const { languagesDefinition = [] } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = this;
 
-  const uniqueDayjsLocales = [...new Map(languagesDefinition.map(v => [v.dayjsLocale, v])).values()];
-  const newContent = uniqueDayjsLocales.reduce(
-    (content, language) => `${content}import 'dayjs/${commonjs ? '' : 'esm/'}locale/${language.dayjsLocale}'\n`,
-    '// jhipster-needle-i18n-language-dayjs-imports - JHipster will import languages from dayjs here\n',
-  );
-
-  this.editFile(configurationFile, { ignoreNonExisting }, content =>
-    content.replace(/\/\/ jhipster-needle-i18n-language-dayjs-imports[\s\S]+?(?=\/\/ DAYJS CONFIGURATION)/g, `${newContent}\n`),
-  );
+  this.editFile(configurationFile, { ignoreNonExisting }, createDayjsUpdateLanguagesEditFileCallback(languagesDefinition, commonjs));
 }

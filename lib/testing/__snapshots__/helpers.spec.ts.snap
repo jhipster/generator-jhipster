@@ -3,6 +3,7 @@
 exports[`helpers run using withJHipsterGenerators should register jhipster generators namespaces 1`] = `
 [
   "jhipster:angular",
+  "jhipster:angular:bootstrap",
   "jhipster:app",
   "jhipster:app:bootstrap",
   "jhipster:base",
@@ -102,6 +103,7 @@ exports[`helpers run using withJHipsterGenerators should register jhipster gener
 exports[`helpers runJHipster defaults should register jhipster generators namespaces 1`] = `
 [
   "jhipster:angular",
+  "jhipster:angular:bootstrap",
   "jhipster:app",
   "jhipster:app:bootstrap",
   "jhipster:base",
@@ -201,6 +203,7 @@ exports[`helpers runJHipster defaults should register jhipster generators namesp
 exports[`helpers runJHipster with useDefaultMocks should register jhipster generators namespaces 1`] = `
 [
   "jhipster:angular",
+  "jhipster:angular:bootstrap",
   "jhipster:app",
   "jhipster:app:bootstrap",
   "jhipster:base",

@@ -18,9 +18,10 @@
  */
 import { mutateData } from '../../../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
+import { mutateApplication as languagesMutateApplication } from '../../application.ts';
 import { mutateEntity as languagesMutateEntity } from '../../entity.ts';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from '../../support/constants.ts';
-import { type Language, findLanguageForTag, supportedLanguages } from '../../support/languages.ts';
+import { type Language, supportedLanguages } from '../../support/languages.ts';
 import type {
   Application as LanguagesApplication,
   Config as LanguagesConfig,
@@ -54,27 +55,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
   get loading() {
     return this.asLoadingTaskGroup({
       loading({ applicationDefaults }) {
-        applicationDefaults({
-          i18nDir: ({ clientSrcDir }) => `${clientSrcDir}i18n/`,
-        });
-      },
-      loadLanguages({ application }) {
-        const supportedLanguagesArray = [...this.supportedLanguages.values()];
-        const nativeLanguageDefinition = findLanguageForTag(application.nativeLanguage, supportedLanguagesArray);
-        if (!nativeLanguageDefinition) {
-          throw new Error(`Native language ${application.nativeLanguage} does not exist`);
-        }
-        application.nativeLanguageDefinition = nativeLanguageDefinition;
-        if (application.enableTranslation) {
-          application.languagesDefinition = application.languages
-            .map(lang => findLanguageForTag(lang, supportedLanguagesArray)!)
-            .filter(lang => lang);
-          application.enableI18nRTL = (application.languagesDefinition ?? [application.nativeLanguageDefinition]).some(
-            language => language.rtl,
-          );
-        } else {
-          application.enableI18nRTL = application.nativeLanguageDefinition.rtl;
-        }
+        applicationDefaults({ supportedLanguages: [...this.supportedLanguages.values()] }, languagesMutateApplication);
       },
     });
   }

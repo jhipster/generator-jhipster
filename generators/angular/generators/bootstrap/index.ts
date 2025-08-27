@@ -16,6 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './needles.ts';
-export * from './reserved-keywords.ts';
-export * from './translate-angular.ts';
+export { default } from './generator.ts';

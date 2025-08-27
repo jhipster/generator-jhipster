@@ -24,7 +24,7 @@ function updateLanguagesInPipeTask(this: BaseGenerator, { application }: UpdateC
   const { clientSrcDir, languagesDefinition = [] } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = this;
   const newContent = `{
-        ${generateLanguagesWebappOptions(languagesDefinition).join(',\n        ')}
+        ${generateLanguagesWebappOptions(languagesDefinition).join('\n        ')}
         // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
     };
 `;

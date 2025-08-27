@@ -58,6 +58,8 @@ describe(`generator - ${generator}`, () => {
           jhipsterPackageJson: expect.any(Object),
           springBootDependencies: expect.any(Object),
           translations: expect.any(Object),
+          addLanguageCallbacks: expect.any(Array),
+          supportedLanguages: expect.any(Array),
         });
       });
     });
@@ -81,6 +83,8 @@ describe(`generator - ${generator}`, () => {
           jwtSecretKey: expect.any(String),
           springBootDependencies: expect.any(Object),
           translations: expect.any(Object),
+          addLanguageCallbacks: expect.any(Array),
+          supportedLanguages: expect.any(Array),
         });
       });
     });
@@ -100,6 +104,8 @@ describe(`generator - ${generator}`, () => {
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
           springBootDependencies: expect.any(Object),
+          addLanguageCallbacks: expect.any(Array),
+          supportedLanguages: expect.any(Array),
         });
       });
     });

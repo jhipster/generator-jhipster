@@ -76,6 +76,8 @@ describe(`generator - ${generator}`, () => {
           jhipsterPackageJson: expect.any(Object),
           javaDependencies: expect.any(Object),
           dockerContainers: expect.any(Object),
+          addLanguageCallbacks: expect.any(Array),
+          supportedLanguages: expect.any(Array),
         });
       });
       it('should populate context', () => {
