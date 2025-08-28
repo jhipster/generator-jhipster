@@ -27,10 +27,8 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('java');
-      await this.dependsOnBootstrap('server');
-    }
+    await this.dependsOnBootstrap('java');
+    await this.dependsOnBootstrap('server');
   }
 
   get preparing() {

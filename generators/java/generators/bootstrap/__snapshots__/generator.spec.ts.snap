@@ -3,7 +3,7 @@
 exports[`generator - java:bootstrap bootstrapping default config should prepare application 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
-  "addOpenapiGeneratorPlugin": undefined,
+  "addOpenapiGeneratorPlugin": true,
   "additionalSubGenerators": undefined,
   "anyEntityHasRelationshipWithUser": false,
   "applicationType": "monolith",
@@ -139,6 +139,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "generateUserManagement": true,
   "githubRepository": undefined,
   "githubWorkflows": undefined,
+  "graalvmReachabilityMetadata": "GRAALVM_REACHABILITY_METADATA_VERSION",
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": true,
@@ -229,6 +230,8 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "projectDescription": "Description for JHipster",
   "projectVersion": "0.0.1-SNAPSHOT",
   "reactive": false,
+  "reactorBlock": "",
+  "reactorBlockOptional": "",
   "rememberMeKey": undefined,
   "routes": undefined,
   "sampleWritten": undefined,
@@ -275,7 +278,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "userManagement": Any<Object>,
   "websocket": "no",
   "withAdminUi": true,
-  "withGeneratedFlag": undefined,
+  "withGeneratedFlag": false,
   "wrapMono": Any<Function>,
 }
 `;

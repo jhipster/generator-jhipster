@@ -3,7 +3,7 @@
 exports[`generator - ci-cd cli with multiples values should match context snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
-  "addOpenapiGeneratorPlugin": undefined,
+  "addOpenapiGeneratorPlugin": true,
   "additionalSubGenerators": undefined,
   "anyEntityHasRelationshipWithUser": false,
   "applicationType": "monolith",
@@ -169,6 +169,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "gitLabIndent": "",
   "githubRepository": undefined,
   "githubWorkflows": undefined,
+  "graalvmReachabilityMetadata": "GRAALVM_REACHABILITY_METADATA_VERSION",
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": false,
@@ -323,6 +324,8 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "projectDescription": "Description for JHipster",
   "projectVersion": "0.0.1-SNAPSHOT",
   "reactive": false,
+  "reactorBlock": "",
+  "reactorBlockOptional": "",
   "rememberMeKey": undefined,
   "routes": undefined,
   "sampleWritten": undefined,
@@ -372,7 +375,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "user": undefined,
   "websocket": "no",
   "withAdminUi": true,
-  "withGeneratedFlag": undefined,
+  "withGeneratedFlag": false,
   "wrapMono": [Function],
 }
 `;

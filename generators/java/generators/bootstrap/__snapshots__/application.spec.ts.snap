@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
+{
+  "addOpenapiGeneratorPlugin": true,
+  "domains": [],
+  "entityPackages": [],
+  "graalvmReachabilityMetadata": Any<String>,
+  "imperativeOrReactive": "imperative",
+  "javaCompatibleVersions": Any<Array>,
+  "javaDependencies": {},
+  "javaIntegrationTestExclude": [],
+  "javaManagedProperties": {},
+  "javaPackageSrcDir": "src/main/java/packageName/",
+  "javaPackageTestDir": "src/test/java/packageName/",
+  "javaProperties": {},
+  "javaVersion": Any<String>,
+  "jhipsterDependenciesVersion": Any<String>,
+  "listOrFlux": "List",
+  "listOrFluxClassPath": "java.util.List",
+  "mainClass": "BaseNameApp",
+  "optionalOrMono": "Optional",
+  "optionalOrMonoClassPath": "java.util.Optional",
+  "optionalOrMonoOfNullable": "Optional.ofNullable",
+  "packageFolder": "packageName/",
+  "packageInfoJavadocs": [
+    {
+      "documentation": "Logging aspect.",
+      "packageName": "packageName.aop.logging",
+    },
+    {
+      "documentation": "Application management.",
+      "packageName": "packageName.management",
+    },
+    {
+      "documentation": "Webflux database column mapper.",
+      "packageName": "packageName.repository.rowmapper",
+    },
+    {
+      "documentation": "Application security utilities.",
+      "packageName": "packageName.security",
+    },
+    {
+      "documentation": "Data transfer objects for rest mapping.",
+      "packageName": "packageName.service.dto",
+    },
+    {
+      "documentation": "Data transfer objects mappers.",
+      "packageName": "packageName.service.mapper",
+    },
+    {
+      "documentation": "Request chain filters.",
+      "packageName": "packageName.web.filter",
+    },
+    {
+      "documentation": "Rest layer error handling.",
+      "packageName": "packageName.web.rest.errors",
+    },
+    {
+      "documentation": "Rest layer visual models.",
+      "packageName": "packageName.web.rest.vm",
+    },
+  ],
+  "reactive": false,
+  "reactorBlock": "",
+  "reactorBlockOptional": "",
+  "srcMainJava": "src/main/java/",
+  "srcMainResources": "src/main/resources/",
+  "srcMainWebapp": "src/main/webapp/",
+  "srcTestJava": "src/test/java/",
+  "srcTestJavascript": "src/test/javascript/",
+  "srcTestResources": "src/test/resources/",
+  "useNpmWrapper": false,
+  "withGeneratedFlag": false,
+  "wrapMono": [Function],
+}
+`;

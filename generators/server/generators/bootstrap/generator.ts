@@ -19,19 +19,10 @@
 
 import { upperFirst } from 'lodash-es';
 
-import { mutateData, normalizePathEnd } from '../../../../lib/utils/index.ts';
+import { mutateData } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
 import { loadDockerDependenciesTask } from '../../../base-workspaces/internal/docker-dependencies.ts';
-import {
-  CLIENT_MAIN_SRC_DIR,
-  CLIENT_TEST_SRC_DIR,
-  RECOMMENDED_JAVA_VERSION,
-  SERVER_MAIN_RES_DIR,
-  SERVER_MAIN_SRC_DIR,
-  SERVER_TEST_RES_DIR,
-  SERVER_TEST_SRC_DIR,
-} from '../../../generator-constants.js';
 import { getGradleLibsVersionsProperties } from '../../../gradle/support/index.ts';
 import { getPomVersionProperties } from '../../../maven/support/index.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-data-relational/types.ts';
@@ -77,21 +68,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           // this.cancelCancellableTasks();
         }
       },
-      properties({ application, applicationDefaults }) {
-        applicationDefaults({
-          __override__: true,
-          srcMainJava: SERVER_MAIN_SRC_DIR,
-          srcMainResources: SERVER_MAIN_RES_DIR,
-          srcMainWebapp: CLIENT_MAIN_SRC_DIR,
-          srcTestJava: SERVER_TEST_SRC_DIR,
-          srcTestResources: SERVER_TEST_RES_DIR,
-          srcTestJavascript: CLIENT_TEST_SRC_DIR,
-
-          packageFolder: ({ packageName }) => `${packageName!.replace(/\./g, '/')}/`,
-          javaPackageSrcDir: ({ srcMainJava, packageFolder }) => normalizePathEnd(`${srcMainJava}${packageFolder}`),
-          javaPackageTestDir: ({ srcTestJava, packageFolder }) => normalizePathEnd(`${srcTestJava}${packageFolder}`),
-        });
-
+      properties({ application }) {
         mutateData(application as unknown as SpringDataRelationalApplication, {
           devDatabaseTypeH2Any: ({ devDatabaseType }) => devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory',
           devJdbcUrl: undefined,
@@ -118,10 +95,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
         loadDockerDependenciesTask.call(this, { context: application });
 
         applicationDefaults({
-          javaVersion: this.useVersionPlaceholders ? 'JAVA_VERSION' : RECOMMENDED_JAVA_VERSION,
-          packageInfoJavadocs: [],
-          javaProperties: {},
-          javaManagedProperties: {},
           javaDependencies: ({ javaDependencies }) => ({
             ...applicationJavaDependencies,
             ...javaDependencies,
