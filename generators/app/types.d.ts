@@ -18,11 +18,21 @@
  */
 import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../base-application/types.ts';
+import type {
+  Application as CommonApplication,
+  Config as CommonConfig,
+  Entity as CommonEntity,
+  Field as CommonField,
+} from '../common/types.d.ts';
 
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
 
-export type Config = Command['Config'] & BaseApplicationConfig;
+export type Config = Command['Config'] & BaseApplicationConfig & CommonConfig;
 
 export type Options = Command['Options'] & BaseApplicationOptions;
+
+export type { CommonEntity as Entity };
+export type { CommonApplication as Application };
+export type { CommonField as Field };
