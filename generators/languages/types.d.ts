@@ -35,9 +35,7 @@ export type Config = BaseApplicationConfig & Command['Config'];
 
 export type Options = BaseApplicationOptions & Omit<Command['Options'], 'languages' | 'languagesDefinition'>;
 
-export type Source = BaseApplicationSource & {
-  addEntityTranslationKey: (arg: { translationKey: string; translationValue: string; language: string }) => void;
-};
+export type Source = BaseApplicationSource & {};
 
 export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = BaseApplicationApplication<E> &
   Omit<Command['Application'], 'languages' | 'languagesDefinition'> &

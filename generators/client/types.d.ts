@@ -70,4 +70,5 @@ export type Source = JavascriptSource &
      * Add webpack config.
      */
     addWebpackConfig?(args: { config: string }): void;
+    addEntityTranslationKey: (arg: { translationKey: string; translationValue: string; language: string }) => void;
   };
