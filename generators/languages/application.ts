@@ -30,8 +30,8 @@ export type LanguagesAddedApplicationProperties = {
   nativeLanguageDefinition: Language;
   languages: string[];
   languagesDefinition: readonly Language[];
-  languagesToGenerate?: string[];
-  languagesToGenerateDefinition?: readonly Language[];
+  languagesToGenerate: string[] | undefined;
+  languagesToGenerateDefinition: readonly Language[] | undefined;
   addLanguageCallbacks: ((mewLanguages: readonly Language[], allLanguages: readonly Language[]) => void)[];
 };
 
@@ -47,6 +47,8 @@ export const mutateApplication = {
   i18nDir: data => `${(data as unknown as JavascriptApplication).clientSrcDir}i18n/`,
   addLanguageCallbacks: () => [],
   enableI18nRTL: data => data.nativeLanguageDefinition.rtl || data.languagesDefinition.some(lang => lang.rtl),
+  languagesToGenerate: () => undefined,
+  languagesToGenerateDefinition: data => data.languagesToGenerate?.map?.(lang => findLanguageForTag(lang, data.supportedLanguages)!),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<LanguagesAddedApplicationProperties>,
   LanguagesAddedApplicationProperties
