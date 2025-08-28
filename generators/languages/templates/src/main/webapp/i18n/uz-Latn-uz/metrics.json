@@ -75,7 +75,15 @@
             "cachename": "Kesh nomi",
             "hits": "Mos keldi",
             "misses": "Mos kelmadi",
-            "evictions": "Tozalanganlar soni"
+            "gets": "Cache Gets",
+            "puts": "Cache Puts",
+            "removals": "Cache Removals",
+            "evictions": "Tozalanganlar soni",
+            "hitPercent": "Cache Hit %",
+            "missPercent": "Cache Miss %",
+            "averageGetTime": "Average get time (µs)",
+            "averagePutTime": "Average put time (µs)",
+            "averageRemoveTime": "Average remove time (µs)"
         },
         "datasource": {
             "usage": "Foydalanish",

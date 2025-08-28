@@ -75,7 +75,15 @@
             "cachename": "缓存名称",
             "hits": "缓存命中计数",
             "misses": "缓存遗漏计数",
-            "evictions": "收回计数"
+            "gets": "Cache Gets",
+            "puts": "Cache Puts",
+            "removals": "Cache Removals",
+            "evictions": "收回计数",
+            "hitPercent": "Cache Hit %",
+            "missPercent": "Cache Miss %",
+            "averageGetTime": "Average get time (µs)",
+            "averagePutTime": "Average put time (µs)",
+            "averageRemoveTime": "Average remove time (µs)"
         },
         "datasource": {
             "usage": "用法",

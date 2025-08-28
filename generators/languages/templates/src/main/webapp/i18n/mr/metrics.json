@@ -75,7 +75,15 @@
             "cachename": "कॅशे नाव",
             "hits": "हिट्स",
             "misses": "Misses",
-            "evictions": "जमा मोजणी"
+            "gets": "Cache Gets",
+            "puts": "Cache Puts",
+            "removals": "Cache Removals",
+            "evictions": "जमा मोजणी",
+            "hitPercent": "Cache Hit %",
+            "missPercent": "Cache Miss %",
+            "averageGetTime": "Average get time (µs)",
+            "averagePutTime": "Average put time (µs)",
+            "averageRemoveTime": "Average remove time (µs)"
         },
         "datasource": {
             "usage": "वापर",
