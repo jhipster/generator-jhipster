@@ -13,6 +13,7 @@ import type {
 import type { EditFileCallback } from '../base-core/api.ts';
 import type { PropertiesFileKeyUpdate } from '../base-core/support/index.ts';
 import type { Application as GradleApplication, GradleNeedleOptions, Source as GradleSource } from '../gradle/types.ts';
+import type { Application as LanguagesApplication } from '../languages/types.ts';
 import type { MavenDefinition, Source as MavenSource } from '../maven/types.ts';
 
 import type {
@@ -154,6 +155,7 @@ export type Application<E extends BaseApplicationEntity<BaseApplicationField, Ba
     BuildToolApplication &
     GradleApplication &
     SpringApplication &
+    LanguagesApplication &
     DatabaseApplication & {};
 
 export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };

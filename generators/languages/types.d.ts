@@ -25,7 +25,6 @@ import type {
   Options as BaseApplicationOptions,
   Source as BaseApplicationSource,
 } from '../base-application/types.d.ts';
-import type { Application as JavascriptApplication } from '../javascript/types.ts';
 
 import type { LanguagesAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
@@ -41,7 +40,6 @@ export type Source = BaseApplicationSource & {
 };
 
 export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = BaseApplicationApplication<E> &
-  JavascriptApplication &
   Omit<Command['Application'], 'languages' | 'languagesDefinition'> &
   LanguagesAddedApplicationProperties;
 

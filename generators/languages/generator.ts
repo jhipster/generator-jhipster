@@ -25,7 +25,6 @@ import BaseApplicationGenerator from '../base-application/index.ts';
 import { QUEUES } from '../base-application/priorities.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { Application as ClientApplication, Config as ClientConfig } from '../client/types.ts';
-import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
 
 import { writeEntityFiles } from './entity-files.ts';
 import { clientI18nFiles } from './files.ts';
@@ -196,7 +195,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
           }
         }
         if (!skipServer && backendType === 'Java') {
-          await this.dependsOnBootstrap('java');
+          await this.composeWithJHipster('jhipster:java:i18n');
         }
       },
     });
@@ -217,6 +216,10 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
             this.languagesToApply = [...new Set(this.languagesToApply || [])];
           }
         }
+        application.languagesToGenerate = this.languagesToApply;
+        application.languagesToGenerateDefinition = this.languagesToApply.map(
+          lang => findLanguageForTag(lang, application.supportedLanguages)!,
+        );
 
         source.addEntityTranslationKey = ({ translationKey, translationValue, language }) => {
           this.mergeDestinationJson(`${application.i18nDir}${language}/global.json`, {
@@ -280,46 +283,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
               },
             }),
           ),
-        );
-      },
-      async translateFile({ application }) {
-        if (
-          application.skipServer ||
-          (!application.backendTypeSpringBoot && !this.writeJavaLanguageFiles) ||
-          this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)
-        ) {
-          return;
-        }
-        const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage])];
-        await Promise.all(
-          languagesToApply.map(async lang => {
-            const language = findLanguageForTag(lang)!;
-            if (language.javaLocaleMessageSourceSuffix) {
-              await this.writeFiles({
-                sections: {
-                  serverI18nFiles: [
-                    {
-                      path: SERVER_MAIN_RES_DIR,
-                      renameTo: (data, filePath) => `${data.srcMainResources}${filePath}`,
-                      templates: [`i18n/messages_${language.javaLocaleMessageSourceSuffix}.properties`],
-                    },
-                  ],
-                  serverI18nTestFiles: [
-                    {
-                      path: SERVER_TEST_RES_DIR,
-                      renameTo: (data, filePath) => `${data.srcTestResources}${filePath}`,
-                      condition: data => !data.skipUserManagement,
-                      templates: [`i18n/messages_${language.javaLocaleMessageSourceSuffix}.properties`],
-                    },
-                  ],
-                },
-                context: {
-                  ...application,
-                  lang,
-                },
-              });
-            }
-          }),
         );
       },
     });
