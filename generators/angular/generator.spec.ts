@@ -114,6 +114,16 @@ describe(`generator - ${clientFramework}`, () => {
         runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_VUE/);
       });
 
+      it('should use ESM by default in package.json', () => {
+        runResult.assertFileContent(`${clientRootDir}package.json`, /"type": "module"/);
+      });
+
+      it('should not create files with .mjs extension', () => {
+        const generatedFiles = runResult.getStateSnapshot();
+        const mjsFiles = Object.keys(generatedFiles).filter(file => file.endsWith('.mjs'));
+        expect(mjsFiles).toHaveLength(0);
+      });
+
       describe('withAdminUi', () => {
         const { applicationType, withAdminUi, clientRootDir = '' } = sampleConfig;
         const clientSrcDir = `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`;

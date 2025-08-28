@@ -10,6 +10,7 @@ exports[`generator - javascript with defaults options should match files snapsho
   "package.json": {
     "contents": "{
   "private": true,
+  "type": "module",
   "dependencies": {},
   "devDependencies": {},
   "engines": {},

@@ -40,9 +40,9 @@
           "options": {
             "plugins": [
 <%_ if (enableTranslation) { _%>
-              "build-plugins/i18n-esbuild.mjs",
+              "build-plugins/i18n-esbuild.js",
 <%_ } _%>
-              "build-plugins/define-esbuild.mjs"
+              "build-plugins/define-esbuild.js"
             ],
             "outputPath": {
               "base": "<%= this.relativeDir(clientRootDir, clientDistDir) %>",
@@ -126,7 +126,7 @@
           "options": {
             "buildTarget": "<%= dasherizedBaseName %>:build:development",
             "open": true,
-            "proxyConfig": "proxy.config.mjs",
+            "proxyConfig": "proxy.config.js",
             "port": <%= devServerPort %>
           },
           "configurations": {

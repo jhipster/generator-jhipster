@@ -55,5 +55,15 @@ describe(`generator - ${generator}`, () => {
     it('should compose with generators', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`[]`);
     });
+
+    it('should use ESM by default in package.json', () => {
+      result.assertFileContent('package.json', /"type": "module"/);
+    });
+
+    it('should not create any .mjs files', () => {
+      const files = result.getSnapshot();
+      const mjsFiles = Object.keys(files).filter(filename => filename.endsWith('.mjs'));
+      expect(mjsFiles).toHaveLength(0);
+    });
   });
 });
