@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { HandleCommandTypes } from '../../lib/command/types.ts';
-import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../base-application/types.ts';
+import type { Options as BaseApplicationOptions } from '../base-application/types.ts';
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
@@ -29,7 +29,7 @@ import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
 
-export type Config = Command['Config'] & BaseApplicationConfig & CommonConfig;
+export type Config = Command['Config'] & CommonConfig;
 
 export type Options = Command['Options'] & BaseApplicationOptions;
 
