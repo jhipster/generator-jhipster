@@ -176,7 +176,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
     return this.asComposingTaskGroup({
       async bootstrap() {
         // Make sure generators languages callbacks are correctly initialized.
-        const { clientFramework = 'no', skipClient, skipServer, backendType = 'Java' } = this.jhipsterConfigWithDefaults as ClientConfig;
+        const { clientFramework = 'no', skipServer, backendType = 'Java' } = this.jhipsterConfigWithDefaults as ClientConfig;
         if (clientFramework !== 'no') {
           await this.composeWithJHipster('jhipster:client:i18n');
         }
@@ -191,7 +191,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  get preparing() {
+  get loading() {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application }) {
         if (application.enableTranslation) {
@@ -202,15 +202,12 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
           }
         }
         application.languagesToGenerate = this.languagesToApply;
-        application.languagesToGenerateDefinition = this.languagesToApply.map(
-          lang => findLanguageForTag(lang, application.supportedLanguages)!,
-        );
       },
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get postWriting() {
