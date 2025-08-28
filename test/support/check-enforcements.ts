@@ -45,7 +45,7 @@ const readDir = (dirPath: string) => {
 
 export default function checkEnforcements({ client }: { client?: boolean }, generator: string, ...generatorUsage: string[]) {
   describe('enforce some developments patterns', () => {
-    const allFiles = readDir(getGeneratorFolder(generator));
+    const allFiles = readDir(getGeneratorFolder(generator)).filter(file => !/i18n\/(.*)\.json\.ejs$/.test(file));
     allFiles
       .filter(file => !/\.spec\.[mc]?[jt]s(.snap)?$/.test(file))
       .forEach(file => {

@@ -51,6 +51,7 @@ export default class ReactGenerator extends ClientApplicationGenerator<
 
     await this.dependsOnBootstrap('react');
     if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster('jhipster:client:i18n');
       await this.dependsOnJHipster(GENERATOR_CLIENT);
       await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     }
