@@ -41,13 +41,13 @@ describe('jdl - JDLObjectMerger', () => {
   describe('mergeJDLObjects', () => {
     describe('when not passing the first object', () => {
       it('should fail', () => {
-        // @ts-expect-error invalid argment
+        // @ts-expect-error invalid argument
         expect(() => mergeJDLObjects(undefined, {})).to.throw(/^Can't merge nil JDL objects\.$/);
       });
     });
     describe('when not passing the second object', () => {
       it('should fail', () => {
-        // @ts-expect-error invalid argment
+        // @ts-expect-error invalid argument
         expect(() => mergeJDLObjects({}, undefined)).to.throw(/^Can't merge nil JDL objects\.$/);
       });
     });

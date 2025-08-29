@@ -102,7 +102,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
         result = convert(jdlObject);
       });
 
-      it('should return a map with no entiy', () => {
+      it('should return a map with no entity', () => {
         result.forEach(entities => {
           expect(entities.length).to.equal(0);
         });
