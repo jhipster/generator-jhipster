@@ -75,7 +75,15 @@
             "cachename": "Nome da cache",
             "hits": "Hits",
             "misses": "Misses",
-            "evictions": "Despejos"
+            "gets": "Cache Gets",
+            "puts": "Cache Puts",
+            "removals": "Cache Removals",
+            "evictions": "Despejos",
+            "hitPercent": "Cache Hit %",
+            "missPercent": "Cache Miss %",
+            "averageGetTime": "Average get time (µs)",
+            "averagePutTime": "Average put time (µs)",
+            "averageRemoveTime": "Average remove time (µs)"
         },
         "datasource": {
             "usage": "Utilização",

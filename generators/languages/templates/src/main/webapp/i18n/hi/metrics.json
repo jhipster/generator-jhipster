@@ -75,7 +75,15 @@
             "cachename": "Cache का नाम",
             "hits": "हिट्स कूल",
             "misses": "मिस",
-            "evictions": "बेदखली गणना"
+            "gets": "Cache Gets",
+            "puts": "Cache Puts",
+            "removals": "Cache Removals",
+            "evictions": "बेदखली गणना",
+            "hitPercent": "Cache Hit %",
+            "missPercent": "Cache Miss %",
+            "averageGetTime": "Average get time (µs)",
+            "averagePutTime": "Average put time (µs)",
+            "averageRemoveTime": "Average remove time (µs)"
         },
         "datasource": {
             "usage": "संपर्क जोड़नें पे पूल उपयोग",

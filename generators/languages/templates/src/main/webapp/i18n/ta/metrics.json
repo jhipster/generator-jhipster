@@ -75,7 +75,15 @@
             "cachename": "கேச் பெயர்",
             "hits": "அடிகள்",
             "misses": "தவறியது",
-            "evictions": "வெளியேற்றம் எண்ணிக்கை"
+            "gets": "Cache Gets",
+            "puts": "Cache Puts",
+            "removals": "Cache Removals",
+            "evictions": "வெளியேற்றம் எண்ணிக்கை",
+            "hitPercent": "Cache Hit %",
+            "missPercent": "Cache Miss %",
+            "averageGetTime": "Average get time (µs)",
+            "averagePutTime": "Average put time (µs)",
+            "averageRemoveTime": "Average remove time (µs)"
         },
         "datasource": {
             "usage": "பயன்பாடு",
