@@ -186,9 +186,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   get composing() {
     return this.asComposingTaskGroup({
       async bootstrap() {
-        if (!this.languageCommand) return;
         // Make sure generators languages callbacks are correctly initialized.
-        const { clientFramework = 'no', skipServer, backendType } = this.jhipsterConfigWithDefaults as ClientConfig;
+        const { clientFramework = 'no', skipServer, backendType = 'Java' } = this.jhipsterConfigWithDefaults as ClientConfig;
         if (clientFramework !== 'no') {
           try {
             await this.dependsOnBootstrap(clientFramework);
@@ -197,7 +196,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
           }
         }
         if (!skipServer && backendType === 'Java') {
-          await this.dependsOnBootstrap('spring-boot');
+          await this.dependsOnBootstrap('java');
         }
       },
     });
@@ -288,8 +287,9 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
           application.skipServer ||
           (!application.backendTypeSpringBoot && !this.writeJavaLanguageFiles) ||
           this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)
-        )
+        ) {
           return;
+        }
         const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage])];
         await Promise.all(
           languagesToApply.map(async lang => {

@@ -24,7 +24,7 @@ import pluralize from 'pluralize';
 
 import { mutateData, normalizePathEnd } from '../../../../lib/utils/index.ts';
 import { editPropertiesFileCallback } from '../../../base-core/support/properties-file.ts';
-import { JAVA_COMPATIBLE_VERSIONS, JHIPSTER_DEPENDENCIES_VERSION } from '../../../generator-constants.js';
+import { JAVA_COMPATIBLE_VERSIONS } from '../../../generator-constants.js';
 import type { Application as JavascriptApplication, Source as JavascriptSource } from '../../../javascript/types.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 import {
@@ -33,7 +33,6 @@ import {
   checkJava,
   createEnumNeedleCallback,
   generatedAnnotationTransform,
-  getMainClassName,
   injectJavaConstructorParam,
   injectJavaConstructorSetter,
   injectJavaField,
@@ -43,6 +42,8 @@ import {
   packageInfoTransform,
   prepareEntity,
 } from '../../support/index.ts';
+
+import { mutateApplication } from './application.ts';
 
 export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   packageInfoFile!: boolean;
@@ -107,41 +108,37 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   get loading() {
     return this.asLoadingTaskGroup({
       setupServerconsts({ applicationDefaults }) {
-        applicationDefaults({
-          __override__: false,
-          javaCompatibleVersions: JAVA_COMPATIBLE_VERSIONS,
-          projectVersion: application => {
-            if (this.projectVersion) {
-              this.log.info(`Using projectVersion: ${this.projectVersion}`);
-              return this.projectVersion;
-            }
-            return application.projectVersion ?? '0.0.1-SNAPSHOT';
+        applicationDefaults(
+          {
+            __override__: false,
+            javaVersion: this.useVersionPlaceholders ? 'JAVA_VERSION' : undefined,
+            projectVersion: application => {
+              if (this.projectVersion) {
+                this.log.info(`Using projectVersion: ${this.projectVersion}`);
+                return this.projectVersion;
+              }
+              return application.projectVersion ?? '0.0.1-SNAPSHOT';
+            },
+            jhipsterDependenciesVersion: application => {
+              if (this.useVersionPlaceholders) {
+                return 'JHIPSTER_DEPENDENCIES_VERSION';
+              } else if (this.jhipsterDependenciesVersion) {
+                this.log.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
+                return this.jhipsterDependenciesVersion;
+              }
+              return undefined;
+            },
+            graalvmReachabilityMetadata: () => (this.useVersionPlaceholders ? 'GRAALVM_REACHABILITY_METADATA_VERSION' : (undefined as any)),
+            useNpmWrapper: application => Boolean(application.clientFramework ?? 'no' !== 'no'),
           },
-          jhipsterDependenciesVersion: application => {
-            if (this.useVersionPlaceholders) {
-              return 'JHIPSTER_DEPENDENCIES_VERSION';
-            } else if (this.jhipsterDependenciesVersion) {
-              this.log.info(`Using jhipsterDependenciesVersion: ${application.jhipsterDependenciesVersion}`);
-              return this.jhipsterDependenciesVersion;
-            }
-            return JHIPSTER_DEPENDENCIES_VERSION;
+          {
+            __override__: true,
+            nodePackageManagerCommand: data => (data.useNpmWrapper ? './npmw' : data.nodePackageManagerCommand),
           },
-          javaIntegrationTestExclude: [],
-        });
+          mutateApplication,
+        );
       },
       loadEnvironmentVariables({ application }) {
-        application.packageInfoJavadocs?.push(
-          { packageName: `${application.packageName}.aop.logging`, documentation: 'Logging aspect.' },
-          { packageName: `${application.packageName}.management`, documentation: 'Application management.' },
-          { packageName: `${application.packageName}.repository.rowmapper`, documentation: 'Webflux database column mapper.' },
-          { packageName: `${application.packageName}.security`, documentation: 'Application security utilities.' },
-          { packageName: `${application.packageName}.service.dto`, documentation: 'Data transfer objects for rest mapping.' },
-          { packageName: `${application.packageName}.service.mapper`, documentation: 'Data transfer objects mappers.' },
-          { packageName: `${application.packageName}.web.filter`, documentation: 'Request chain filters.' },
-          { packageName: `${application.packageName}.web.rest.errors`, documentation: 'Rest layer error handling.' },
-          { packageName: `${application.packageName}.web.rest.vm`, documentation: 'Rest layer visual models.' },
-        );
-
         if (application.defaultPackaging === 'war') {
           this.log.info(`Using ${application.defaultPackaging} as default packaging`);
         }
@@ -155,15 +152,8 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      applicationDefaults({ application, applicationDefaults }) {
+      applicationDefaults({ application }) {
         (application as unknown as JavascriptApplication).addPrettierExtensions?.(['java']);
-        applicationDefaults({
-          mainClass: ({ baseName }) => getMainClassName({ baseName }),
-          useNpmWrapper: application => Boolean((application.clientFramework ?? 'no' !== 'no') && application.backendTypeJavaAny),
-        });
-        if (application.useNpmWrapper) {
-          application.nodePackageManagerCommand = './npmw';
-        }
       },
       prepareJavaApplication({ application, source }) {
         source.hasJavaProperty = (property: string) => application.javaProperties![property] !== undefined;
@@ -204,20 +194,6 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
       addItemsToJavaEnumFile({ source }) {
         source.addItemsToJavaEnumFile = (file: string, { enumName = basename(file, '.java'), enumValues }) =>
           this.editFile(file, createEnumNeedleCallback({ enumName, enumValues }));
-      },
-      imperativeOrReactive({ applicationDefaults }) {
-        applicationDefaults({
-          imperativeOrReactive: ({ reactive }) => (reactive ? 'reactive' : 'imperative'),
-          optionalOrMono: ({ reactive }) => (reactive ? 'Mono' : 'Optional'),
-          optionalOrMonoOfNullable: ({ reactive }) => (reactive ? 'Mono.justOrEmpty' : 'Optional.ofNullable'),
-          optionalOrMonoClassPath: ({ reactive }) => (reactive ? 'reactor.core.publisher.Mono' : 'java.util.Optional'),
-          wrapMono:
-            ctx =>
-            (className: string): string =>
-              ctx.reactive ? `Mono<${className}>` : className,
-          listOrFlux: ({ reactive }) => (reactive ? 'Flux' : 'List'),
-          listOrFluxClassPath: ({ reactive }) => (reactive ? 'reactor.core.publisher.Flux' : 'java.util.List'),
-        });
       },
     });
   }
@@ -282,8 +258,8 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
         const entityPackages = [
           ...new Set([application.packageName, ...entities.map(entity => entity.entityAbsolutePackage).filter(Boolean)]),
         ] as string[];
-        application.entityPackages = entityPackages;
-        application.domains = entityPackages;
+        application.entityPackages.push(...entityPackages);
+        application.domains.push(...entityPackages);
       },
       generatedAnnotation({ application }) {
         if (this.jhipsterConfig.withGeneratedFlag && application.backendTypeJavaAny) {

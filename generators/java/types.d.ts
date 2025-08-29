@@ -154,32 +154,7 @@ export type Application<E extends BaseApplicationEntity<BaseApplicationField, Ba
     BuildToolApplication &
     GradleApplication &
     SpringApplication &
-    DatabaseApplication & {
-      reactive?: boolean;
-      buildToolUnknown?: boolean;
-      buildToolExecutable: string;
-
-      prettierJava: boolean;
-
-      addOpenapiGeneratorPlugin: boolean;
-      useNpmWrapper: boolean;
-      graalvmReachabilityMetadata: string;
-
-      imperativeOrReactive: string;
-      optionalOrMono: string;
-      optionalOrMonoOfNullable: string;
-      listOrFlux: string;
-      optionalOrMonoClassPath: string;
-      wrapMono: (className: string) => string;
-      listOrFluxClassPath: string;
-      reactorBlock: string;
-      reactorBlockOptional: string;
-
-      domains: string[];
-      jhipsterDependenciesVersion?: string;
-
-      javaIntegrationTestExclude: string[];
-    };
+    DatabaseApplication & {};
 
 export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };
 

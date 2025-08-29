@@ -201,7 +201,7 @@ entity Bar
 exports[`generator - app with default config should match snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
-  "addOpenapiGeneratorPlugin": undefined,
+  "addOpenapiGeneratorPlugin": true,
   "addPrettierExtensions": [Function],
   "addSpringMilestoneRepository": false,
   "additionalSubGenerators": undefined,
@@ -486,6 +486,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "getWebappTranslation": [Function],
   "githubRepository": undefined,
   "githubWorkflows": undefined,
+  "graalvmReachabilityMetadata": "GRAALVM_REACHABILITY_METADATA_VERSION",
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": false,
@@ -847,7 +848,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": "no",
   "withAdminUi": true,
-  "withGeneratedFlag": undefined,
+  "withGeneratedFlag": false,
   "wrapMono": [Function],
 }
 `;
@@ -855,7 +856,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
 exports[`generator - app with gateway should match snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
-  "addOpenapiGeneratorPlugin": undefined,
+  "addOpenapiGeneratorPlugin": true,
   "addPrettierExtensions": [Function],
   "addSpringMilestoneRepository": false,
   "additionalSubGenerators": undefined,
@@ -1142,6 +1143,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "getWebappTranslation": [Function],
   "githubRepository": undefined,
   "githubWorkflows": undefined,
+  "graalvmReachabilityMetadata": "GRAALVM_REACHABILITY_METADATA_VERSION",
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": false,
@@ -1498,7 +1500,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": "no",
   "withAdminUi": true,
-  "withGeneratedFlag": undefined,
+  "withGeneratedFlag": false,
   "wrapMono": [Function],
 }
 `;
@@ -1506,7 +1508,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
 exports[`generator - app with microservice should match snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
-  "addOpenapiGeneratorPlugin": undefined,
+  "addOpenapiGeneratorPlugin": true,
   "addPrettierExtensions": [Function],
   "addSpringMilestoneRepository": false,
   "additionalSubGenerators": undefined,
@@ -1781,6 +1783,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "generateUserManagement": false,
   "githubRepository": undefined,
   "githubWorkflows": undefined,
+  "graalvmReachabilityMetadata": "GRAALVM_REACHABILITY_METADATA_VERSION",
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": false,
@@ -2067,7 +2070,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "user": undefined,
   "websocket": "no",
   "withAdminUi": false,
-  "withGeneratedFlag": undefined,
+  "withGeneratedFlag": false,
   "wrapMono": [Function],
 }
 `;

@@ -21,7 +21,7 @@ import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from
 import type { Application } from './types.ts';
 
 export type BaseApplicationAddedApplicationProperties = {
-  javaNodeBuildPaths: string[];
+  readonly javaNodeBuildPaths: string[];
 
   clientTestDir?: string;
   clientDistDir?: string;
@@ -35,8 +35,8 @@ export type BaseApplicationAddedApplicationProperties = {
   /* @deprecated use nodePackageManager */
   clientPackageManager?: string;
 
-  blueprints?: { name: string; version: string }[];
-  testFrameworks?: string[];
+  readonly blueprints?: { name: string; version: string }[];
+  readonly testFrameworks?: string[];
 };
 
 export const mutateApplication = {

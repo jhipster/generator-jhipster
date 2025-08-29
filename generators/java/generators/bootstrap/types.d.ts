@@ -25,6 +25,7 @@ import type {
   Source as BaseApplicationSource,
 } from '../../../base-application/types.ts';
 
+import type { BootstrapJavaAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
@@ -36,32 +37,5 @@ export type Options = Command['Options'] & BaseApplicationOptions;
 export { BaseApplicationEntity as Entity, BaseApplicationSource as Source };
 
 export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = Command['Application'] &
-  BaseApplicationApplication<E> & {
-    javaVersion: string;
-    javaCompatibleVersions: string[];
-    mainClass: string;
-
-    packageFolder: string;
-    entityPackages: string[];
-
-    srcMainJava: string;
-    srcMainResources: string;
-    srcMainWebapp: string;
-    srcTestJava: string;
-    srcTestResources: string;
-    srcTestJavascript: string;
-
-    javaPackageSrcDir: string;
-    javaPackageTestDir: string;
-
-    temporaryDir: string;
-
-    /** Java dependency versions */
-    javaDependencies: Record<string, string>;
-    /** Known properties that can be used */
-    javaProperties: Record<string, string | null>;
-    /** Known managed properties that can be used */
-    javaManagedProperties: Record<string, string | null>;
-    /** Pre-defined package JavaDocs */
-    packageInfoJavadocs: { packageName: string; documentation: string }[];
-  };
+  BaseApplicationApplication<E> &
+  BootstrapJavaAddedApplicationProperties;
