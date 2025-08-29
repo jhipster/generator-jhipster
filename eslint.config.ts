@@ -1,5 +1,5 @@
 import js from '@eslint/js';
-import { defineConfig } from 'eslint/config';
+import type { Linter } from 'eslint';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import chai from 'eslint-plugin-chai-friendly';
 import imports from 'eslint-plugin-import-x';
@@ -10,7 +10,7 @@ import ts from 'typescript-eslint';
 
 import jhipster from './lib/eslint/index.js';
 
-export default defineConfig(
+const config: Linter.Config[] = [
   {
     languageOptions: {
       ecmaVersion: 2022,
@@ -22,7 +22,7 @@ export default defineConfig(
   },
   { ignores: ['dist'] },
   js.configs.recommended,
-  jhipster.base,
+  jhipster.base as Linter.Config,
   {
     plugins: { n },
     rules: {
@@ -31,8 +31,10 @@ export default defineConfig(
   },
   {
     files: ['**/*.ts'],
-    extends: [...ts.configs.recommended, ...ts.configs.stylistic],
+    ...ts.configs.recommended[0],
+    ...ts.configs.stylistic[0],
     languageOptions: {
+      parser: ts.parser,
       parserOptions: {
         project: ['./tsconfig.spec.json'],
       },
@@ -45,6 +47,8 @@ export default defineConfig(
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-this-alias': 'off',
+      'no-redeclare': 'off',
+      'no-undef': 'off',
     },
   },
   {
@@ -52,10 +56,12 @@ export default defineConfig(
     rules: {
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
+      'no-undef': 'off',
     },
   },
   {
-    extends: [imports.flatConfigs.recommended, imports.flatConfigs.typescript],
+    ...(imports.flatConfigs.recommended as Linter.Config),
+    ...(imports.flatConfigs.typescript as Linter.Config),
     languageOptions: {
       // import plugin does not use ecmaVersion and sourceType from languageOptions object
       parserOptions: {
@@ -100,8 +106,10 @@ export default defineConfig(
     },
   },
   {
-    ...chai.configs.recommendedFlat,
+    ...(chai.configs.recommendedFlat as Linter.Config),
     files: ['jdl/**/*.spec.{js,ts}'],
   },
   prettier,
-);
+];
+
+export default config;

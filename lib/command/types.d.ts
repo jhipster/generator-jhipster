@@ -218,7 +218,6 @@ type GetType<C extends ParseableConfig> =
         ? C['internal']['type']
         : undefined;
 
-// eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
 type WrapperToPrimitive<T> = T extends Boolean ? boolean : T extends String ? string : T extends Number ? number : T;
 
 type GetChoiceValue<Choice extends string | { value: string }> = Choice extends string
