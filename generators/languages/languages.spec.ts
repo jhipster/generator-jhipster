@@ -3,7 +3,7 @@ import { basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
-import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.js';
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
 import { supportedLanguages } from './support/index.ts';
 
@@ -39,7 +39,7 @@ const containsLanguageFiles = (languageValue: string) => {
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/user-management.json`,
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/global.json`,
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/health.json`,
-      `${SERVER_MAIN_RES_DIR}i18n/messages_${languageValue.replace(/-/g, '_').replace(/_[a-z]+$/g, lang => lang.toUpperCase())}.properties`,
+      // `${SERVER_MAIN_RES_DIR}i18n/messages_${languageValue.replace(/-/g, '_').replace(/_[a-z]+$/g, lang => lang.toUpperCase())}.properties`,
     ]);
     runResult.assertNoFile([`${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/gateway.json`]);
   });
@@ -77,7 +77,7 @@ const noLanguageFiles = (languageValue: string) => {
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/user-management.json`,
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/global.json`,
       `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/health.json`,
-      `${SERVER_MAIN_RES_DIR}i18n/messages_${languageValue.replace(/-/g, '_').replace(/_[a-z]+$/g, lang => lang.toUpperCase())}.properties`,
+      // `${SERVER_MAIN_RES_DIR}i18n/messages_${languageValue.replace(/-/g, '_').replace(/_[a-z]+$/g, lang => lang.toUpperCase())}.properties`,
     ]);
     runResult.assertNoFile([`${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/gateway.json`]);
   });

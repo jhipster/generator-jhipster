@@ -182,6 +182,8 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "jwtSecretKey": undefined,
   "languages": Any<Array>,
   "languagesDefinition": Any<Array>,
+  "languagesToGenerate": undefined,
+  "languagesToGenerateDefinition": undefined,
   "listOrFlux": "List",
   "listOrFluxClassPath": "java.util.List",
   "localBlueprint": undefined,

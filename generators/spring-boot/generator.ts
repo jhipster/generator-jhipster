@@ -173,6 +173,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         const { cacheProvider } = this.jhipsterConfigWithDefaults as SpringCacheConfig;
         const { messageBroker } = this.jhipsterConfigWithDefaults as SpringCloudStreamConfig;
 
+        await this.composeWithJHipster('jhipster:java:i18n');
         await this.composeWithJHipster(GENERATOR_DOCKER);
         await this.composeWithJHipster('jhipster:java:jib');
         await this.composeWithJHipster('jhipster:java:code-quality');

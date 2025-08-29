@@ -175,6 +175,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   get composing() {
     return this.asComposingTaskGroup({
       async bootstrap() {
+        if (!this.languageCommand) return;
         // Make sure generators languages callbacks are correctly initialized.
         const { clientFramework = 'no', skipServer, backendType = 'Java' } = this.jhipsterConfigWithDefaults as ClientConfig;
         if (clientFramework !== 'no') {

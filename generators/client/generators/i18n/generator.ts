@@ -22,11 +22,13 @@ import BaseApplicationGenerator from '../../../base-application/generator.ts';
 import { QUEUES } from '../../../base-application/priorities.ts';
 import { getEnumInfo } from '../../../base-application/support/enum.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../../../generator-constants.js';
+import { type Language, findLanguageForTag } from '../../../languages/support/languages.ts';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from '../../../languages/translation-data.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
 
 export default class I18NGenerator extends ClientApplicationGenerator {
   translationData!: TranslationData;
+  languagesToGenerate!: readonly Language[];
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -94,6 +96,12 @@ export default class I18NGenerator extends ClientApplicationGenerator {
 
   get default() {
     return this.asDefaultTaskGroup({
+      languagesToGenerate({ application }) {
+        this.languagesToGenerate =
+          application.enableTranslation && application.languagesToGenerateDefinition
+            ? application.languagesToGenerateDefinition
+            : [...new Set([application.nativeLanguage, 'en'])].map(lang => findLanguageForTag(lang, application.supportedLanguages)!);
+      },
       async loadNativeLanguage({ application }) {
         application.translations = application.translations ?? {};
         this.translationData = new TranslationData({ generator: this, translations: application.translations });
@@ -122,12 +130,8 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   get writing() {
     return this.asWritingTaskGroup({
       async writeClientTranslations({ application }) {
-        const languagesToApply =
-          application.enableTranslation && application.languagesToGenerate
-            ? application.languagesToGenerate
-            : [...new Set([application.nativeLanguage, 'en'])];
         await Promise.all(
-          languagesToApply!.map(lang =>
+          this.languagesToGenerate!.map(({ languageTag }) =>
             this.writeFiles({
               sections: {
                 clientI18nFiles: [
@@ -181,7 +185,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
               },
               context: {
                 ...application,
-                lang,
+                lang: languageTag,
               },
             }),
           ),
@@ -204,12 +208,8 @@ export default class I18NGenerator extends ClientApplicationGenerator {
 
         // Copy each
         const { i18nDir, baseName, clientSrcDir, frontendAppName } = application;
-        const languagesToApply =
-          application.enableTranslation && application.languagesToGenerate
-            ? application.languagesToGenerate
-            : [...new Set([application.nativeLanguage, 'en'])];
         for (const entity of entitiesToWriteTranslationFor) {
-          for (const lang of languagesToApply) {
+          for (const { languageTag } of this.languagesToGenerate) {
             if (entity.builtInUserManagement) {
               await this.writeFiles({
                 blocks: [
@@ -220,7 +220,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                     templates: ['user-management.json'],
                   },
                 ],
-                context: { ...entity, baseName, clientSrcDir, i18nDir, frontendAppName, lang },
+                context: { ...entity, baseName, clientSrcDir, i18nDir, frontendAppName, lang: languageTag },
               });
             } else {
               await this.writeFiles({
@@ -236,7 +236,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                     },
                   ],
                 },
-                context: { ...entity, baseName, clientSrcDir, i18nDir, frontendAppName, lang },
+                context: { ...entity, baseName, clientSrcDir, i18nDir, frontendAppName, lang: languageTag },
               });
             }
           }
@@ -249,7 +249,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
               entity.fields
                 .map(field => {
                   if (!field.fieldIsEnum) return undefined;
-                  return languagesToApply.map(lang =>
+                  return this.languagesToGenerate.map(({ languageTag }) =>
                     this.writeFiles({
                       sections: {
                         enumBaseFiles: [
@@ -266,7 +266,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                       },
                       context: {
                         ...getEnumInfo(field, entity.clientRootFolder),
-                        lang,
+                        lang: languageTag,
                         frontendAppName,
                         i18nDir,
                         clientSrcDir,
@@ -288,15 +288,11 @@ export default class I18NGenerator extends ClientApplicationGenerator {
 
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
-      addEntities({ application, entities, source }) {
-        const languagesToApply =
-          application.enableTranslation && application.languagesToGenerate
-            ? application.languagesToGenerate
-            : [...new Set([application.nativeLanguage, 'en'])];
+      addEntities({ entities, source }) {
         for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtInUser)) {
-          for (const language of languagesToApply) {
+          for (const { languageTag } of this.languagesToGenerate) {
             source.addEntityTranslationKey?.({
-              language,
+              language: languageTag,
               translationKey: entity.entityTranslationKeyMenu,
               translationValue: entity.entityClassHumanized ?? startCase(entity.entityNameCapitalized),
             });

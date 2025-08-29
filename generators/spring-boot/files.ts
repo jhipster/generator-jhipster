@@ -132,11 +132,6 @@ const userManagementFiles = asWriteFilesSection<SpringBootApplication>({
         'templates/mail/testEmail.html',
       ],
     },
-    {
-      condition: generator => !generator.enableTranslation,
-      path: SERVER_TEST_RES_DIR,
-      templates: ['i18n/messages_en.properties'],
-    },
   ],
 });
 
@@ -204,7 +199,6 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
         'config/application-dev.yml',
         'config/application-tls.yml',
         'config/application-prod.yml',
-        'i18n/messages.properties',
       ],
     },
   ],

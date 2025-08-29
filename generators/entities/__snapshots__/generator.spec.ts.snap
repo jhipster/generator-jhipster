@@ -257,52 +257,10 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/main/webapp/app/entities/skip/update/skip-update.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/activate.json": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/i18n/en/bar.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/configuration.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/error.json": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/i18n/en/foo.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/global.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/health.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/home.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/login.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/logs.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/metrics.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/password.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/register.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/reset.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/sessions.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/settings.json": {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/skip.json": {
@@ -591,52 +549,10 @@ exports[`generator - entities regenerating some entities should match snapshot 1
   "src/main/webapp/app/entities/foo/update/foo-update.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/activate.json": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/i18n/en/bar.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/configuration.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/error.json": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/i18n/en/foo.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/global.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/health.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/home.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/login.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/logs.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/metrics.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/password.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/register.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/reset.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/sessions.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/settings.json": {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/user-management.json": {

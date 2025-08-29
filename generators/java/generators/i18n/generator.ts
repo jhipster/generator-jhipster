@@ -30,8 +30,30 @@ export default class I18NGenerator extends JavaApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
+      async requiredLanguageFiles({ application }) {
+        await this.writeFiles({
+          sections: {
+            serverI18nFiles: [
+              {
+                path: SERVER_MAIN_RES_DIR,
+                renameTo: data => `${data.srcMainResources}i18n/messages.properties`,
+                templates: [`i18n/messages_en.properties`],
+              },
+            ],
+            serverI18nTestFiles: [
+              {
+                path: SERVER_TEST_RES_DIR,
+                renameTo: (data, filePath) => `${data.srcTestResources}${filePath}`,
+                templates: [`i18n/messages_en.properties`],
+              },
+            ],
+          },
+          context: application,
+        });
+      },
       async writeI18nFiles({ application }) {
-        const { languagesToGenerateDefinition = [...new Set([application.nativeLanguageDefinition])] } = application;
+        if (!application.enableTranslation) return;
+        const { languagesToGenerateDefinition = [application.nativeLanguageDefinition] } = application;
         await Promise.all(
           languagesToGenerateDefinition.map(async language => {
             if (language.javaLocaleMessageSourceSuffix) {
@@ -53,10 +75,7 @@ export default class I18NGenerator extends JavaApplicationGenerator {
                     },
                   ],
                 },
-                context: {
-                  ...application,
-                  lang: language.languageTag,
-                },
+                context: application,
               });
             }
           }),

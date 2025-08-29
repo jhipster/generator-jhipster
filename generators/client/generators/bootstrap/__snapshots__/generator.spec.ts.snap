@@ -172,6 +172,8 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "jwtSecretKey": undefined,
   "languages": Any<Array>,
   "languagesDefinition": Any<Array>,
+  "languagesToGenerate": undefined,
+  "languagesToGenerateDefinition": undefined,
   "localBlueprint": undefined,
   "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
   "lowercaseBaseName": "jhipster",

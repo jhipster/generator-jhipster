@@ -125,9 +125,6 @@ exports[`generator - server composing databaseType option no with jwt should mat
   "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
-  "src/main/resources/i18n/messages.properties": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/logback-spring.xml": {
     "stateCleared": "modified",
   },
@@ -319,9 +316,6 @@ exports[`generator - server composing databaseType option no with oauth2 should 
   "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
-  "src/main/resources/i18n/messages.properties": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/logback-spring.xml": {
     "stateCleared": "modified",
   },
@@ -511,9 +505,6 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
