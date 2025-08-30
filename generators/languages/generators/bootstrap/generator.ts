@@ -52,16 +52,16 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
     return this.getContextData<Map<string, Language>>(CONTEXT_DATA_SUPPORTED_LANGUAGES, { factory: () => new Map() });
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      loading({ applicationDefaults }) {
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      preparing({ applicationDefaults }) {
         applicationDefaults({ supportedLanguages: [...this.supportedLanguages.values()] }, languagesMutateApplication);
       },
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get preparingEachEntity() {

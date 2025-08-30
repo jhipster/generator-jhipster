@@ -8,6 +8,8 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "i18nDir": "clientSrcDiri18n/",
   "languages": [],
   "languagesDefinition": [],
+  "languagesToGenerate": undefined,
+  "languagesToGenerateDefinition": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
     "angularLocale": "en",

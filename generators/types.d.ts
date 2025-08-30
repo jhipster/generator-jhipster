@@ -66,6 +66,7 @@ type GeneratorsByNamespace = {
   'jhipster:client': import('./client/generator.ts').default;
   'jhipster:client:bootstrap': import('./client/generators/bootstrap/generator.ts').default;
   'jhipster:client:common': import('./client/generators/common/generator.ts').default;
+  'jhipster:client:i18n': import('./client/generators/i18n/generator.ts').default;
   common: import('./common/generator.ts').default;
   'jhipster:common': import('./common/generator.ts').default;
   'jhipster:common:bootstrap': import('./common/generators/bootstrap/generator.ts').default;
@@ -110,6 +111,7 @@ type GeneratorsByNamespace = {
   'jhipster:java:code-quality': import('./java/generators/code-quality/generator.ts').default;
   'jhipster:java:domain': import('./java/generators/domain/generator.ts').default;
   'jhipster:java:graalvm': import('./java/generators/graalvm/generator.ts').default;
+  'jhipster:java:i18n': import('./java/generators/i18n/generator.ts').default;
   'jhipster:java:jib': import('./java/generators/jib/generator.ts').default;
   'jhipster:java:node': import('./java/generators/node/generator.ts').default;
   'jhipster:java:openapi-generator': import('./java/generators/openapi-generator/generator.ts').default;
