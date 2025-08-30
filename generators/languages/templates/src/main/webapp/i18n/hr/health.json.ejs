@@ -35,12 +35,15 @@
 <%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Microservice Refresh Scope",
-            "configServer": "Mikroservisni konfiguracijski server",
+            "clientConfigServer": "Mikroservisni konfiguracijski server",
             "hystrix": "Hystrix",
   <%_ if (serviceDiscoveryConsul) { _%>
             "consul": "Consul",<% } else if (reactive) { %>
             "reactiveDiscoveryClients": "Mikroservisni klijenti",
   <%_ } _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
+            "hazelcast": "Hazelcast",
 <%_ } _%>
             "diskSpace": "Prostor na disku",
             "mail": "E-pošta",
