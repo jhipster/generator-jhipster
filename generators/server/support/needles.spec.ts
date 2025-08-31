@@ -133,7 +133,7 @@ public class ApplicationProperties {
           expect(runResult.getSnapshot((file: any) => fileRegexp.test(file.path))).toEqual(snapshot);
         });
 
-        it('should not be add new content with prettier differences', () => {
+        it('should not add new content with prettier differences', () => {
           const application = runResult.application!;
           insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property: '  private   Foo   foo;',
