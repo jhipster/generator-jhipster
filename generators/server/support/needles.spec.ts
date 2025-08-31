@@ -123,7 +123,7 @@ public class ApplicationProperties {
 `);
         });
 
-        it('should not be add the content at second call', () => {
+        it('should not add the content at second call', () => {
           const application = runResult.application!;
           insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property,
