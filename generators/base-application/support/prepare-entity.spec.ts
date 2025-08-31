@@ -50,7 +50,7 @@ describe('generator - base-application - support - prepareEntity', () => {
           });
         });
 
-        it('should contains correct structure', () => {
+        it('should contain correct structure', () => {
           expect(entity.primaryKey).to.deep.include({
             name: 'id',
             nameCapitalized: 'Id',
