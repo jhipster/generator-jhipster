@@ -38,9 +38,18 @@ const __dirname = dirname(__filename);
 const { JWT, SESSION } = authenticationTypes;
 
 const fixSamples = process.argv.includes('--fix-samples');
-const itSamplesPath = path.join(__dirname, '..', 'test-integration', 'samples');
-const dailyBuildsSamplesPath = path.join(__dirname, '..', 'test-integration', 'daily-builds');
-const itEntitiesSamplesPath = path.join(__dirname, '..', 'test-integration', 'samples', '.jhipster');
+const itSamplesPath = path.join(__dirname, '..', '.blueprint', 'generate-sample', 'templates', 'test-integration', 'samples');
+const dailyBuildsSamplesPath = path.join(__dirname, '..', '.blueprint', 'generate-sample', 'templates', 'test-integration', 'daily-builds');
+const itEntitiesSamplesPath = path.join(
+  __dirname,
+  '..',
+  '.blueprint',
+  'generate-sample',
+  'templates',
+  'test-integration',
+  'samples',
+  '.jhipster',
+);
 const REMEMBER_ME_KEY = 'a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe';
 const JWT_SECRET_KEY =
   'ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=';
