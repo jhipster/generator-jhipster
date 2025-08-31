@@ -195,7 +195,7 @@ describe('integration-test', () => {
         }
         assert(entityJson.changelogDate);
       });
-      it(`${name} does not contains duplicate changelogDate`, () => {
+      it(`${name} does not contain duplicate changelogDate`, () => {
         if (fixSamples) {
           while (changelogDates.includes(entityJson.changelogDate)) {
             entityJson.changelogDate = formatDateForChangelog(new Date());
