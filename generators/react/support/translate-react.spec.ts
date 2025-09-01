@@ -164,7 +164,7 @@ export const Home = () => {
           )
         }
         <p>
-          <Translate contentKey="home.question">If you have any question on JHipster:</Translate>
+          <Translate contentKey="home.question">If you have any questions on JHipster:</Translate>
         </p>
 
         <ul>
