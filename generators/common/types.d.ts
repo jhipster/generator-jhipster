@@ -73,7 +73,6 @@ export type Application<E extends BaseApplicationEntity = Entity> = JavascriptAp
     temporaryDir?: string;
 
     loginRegex?: string;
-    jsLoginRegex?: string;
 
     skipClient?: boolean;
     skipServer?: boolean;

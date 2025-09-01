@@ -261,6 +261,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "clientFrameworkNo": false,
   "clientFrameworkReact": false,
   "clientFrameworkVue": false,
+  "clientI18nDir": "src/main/webapp/i18n/",
   "clientPackageJsonScripts": {},
   "clientPackageManager": "npm",
   "clientRootDir": "",
@@ -505,7 +506,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "hipsterTwitterLink": "https://twitter.com/jhipster",
   "hipsterTwitterUsername": "@jhipster",
   "humanizedBaseName": "JHipster",
-  "i18nDir": "src/main/webapp/i18n/",
   "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,
   "javaCompatibleVersions": [
@@ -602,7 +602,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
   "js": undefined,
-  "jsLoginRegex": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "jwtSecretKey": "SECRET--64",
   "languages": [
     "en",
@@ -931,6 +930,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "clientFrameworkNo": false,
   "clientFrameworkReact": false,
   "clientFrameworkVue": false,
+  "clientI18nDir": "src/main/webapp/i18n/",
   "clientPackageJsonScripts": {},
   "clientPackageManager": "npm",
   "clientRootDir": "",
@@ -1177,7 +1177,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "hipsterTwitterLink": "https://twitter.com/jhipster",
   "hipsterTwitterUsername": "@jhipster",
   "humanizedBaseName": "JHipster",
-  "i18nDir": "src/main/webapp/i18n/",
   "imperativeOrReactive": "reactive",
   "incrementalChangelog": undefined,
   "javaCompatibleVersions": [
@@ -1268,7 +1267,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
   "js": undefined,
-  "jsLoginRegex": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",
@@ -1584,7 +1582,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "clientBundler": undefined,
   "clientBundlerAny": false,
   "clientBundlerExperimentalEsbuild": false,
-  "clientBundlerName": undefined,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
   "clientDistDir": "target/classes/static/",
@@ -1598,8 +1595,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "clientPackageManager": "npm",
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
-  "clientTestFramework": undefined,
-  "clientTestFrameworkName": undefined,
   "clientTestFrameworks": undefined,
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
@@ -1832,7 +1827,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "hipsterTwitterLink": "https://twitter.com/jhipster",
   "hipsterTwitterUsername": "@jhipster",
   "humanizedBaseName": "JHipster",
-  "i18nDir": "src/main/webapp/i18n/",
   "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,
   "javaCompatibleVersions": [

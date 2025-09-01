@@ -37,7 +37,7 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
     return this.asPreparingTaskGroup({
       translations({ application }) {
         application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
-          const { enableTranslation, clientSrcDir, i18nDir, clientRootDir } = application;
+          const { enableTranslation, clientSrcDir, clientI18nDir, clientRootDir } = application;
           if (!enableTranslation) return;
 
           const { ignoreNeedlesError: ignoreNonExisting } = this;
@@ -72,7 +72,7 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
             this.editFile(
               `${clientRootDir}webpack/webpack.common.js`,
               { ignoreNonExisting },
-              createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, i18nDir)),
+              createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, clientI18nDir)),
             );
           }
         });

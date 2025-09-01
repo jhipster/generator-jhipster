@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { getFrontendAppName, mutateData } from '../../../../lib/utils/index.ts';
-import { CLIENT_TEST_SRC_DIR, LOGIN_REGEX_JS } from '../../../generator-constants.js';
+import { mutateData } from '../../../../lib/utils/index.ts';
+import { mutateApplication } from '../../application.ts';
 import clientCommand from '../../command.ts';
 import { mutateEntity, mutateField } from '../../entity.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';
@@ -58,23 +58,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       loadDefaults({ applicationDefaults }) {
-        applicationDefaults({
-          __override__: false,
-          clientDistDir: 'dist/',
-          clientTestDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'test/' : CLIENT_TEST_SRC_DIR}`,
-          frontendAppName: ({ baseName }) => getFrontendAppName({ baseName }),
-          microfrontend: application => {
-            if (application.applicationTypeMicroservice) {
-              return application.clientFrameworkAny ?? false;
-            }
-            if (application.applicationTypeGateway) {
-              return application.microfrontends && application.microfrontends.length > 0;
-            }
-            return false;
-          },
-          clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
-          jsLoginRegex: LOGIN_REGEX_JS,
-        });
+        applicationDefaults(mutateApplication);
       },
       prepareApplication({ applicationDefaults }) {
         applicationDefaults({

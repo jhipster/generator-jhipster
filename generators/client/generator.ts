@@ -16,12 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { startCase } from 'lodash-es';
 
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
-import { LOGIN_REGEX_JS } from '../generator-constants.js';
 import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS } from '../generator-list.ts';
 import { isReservedTypescriptKeyword } from '../javascript/support/reserved-words.ts';
 
@@ -136,8 +134,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
         // TODO v8 rename to nodePackageManager;
         applicationDefaults({
           clientPackageManager: 'npm',
-          clientThemeNone: ({ clientTheme }) => !clientTheme || clientTheme === 'none',
-          clientThemeAny: ({ clientThemeNone }) => !clientThemeNone,
         });
       },
 
@@ -158,23 +154,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get preparing() {
     return this.asPreparingTaskGroup({
-      preparing({ applicationDefaults }) {
-        applicationDefaults({
-          clientBundlerName: ctx => (ctx.clientBundlerExperimentalEsbuild ? 'esbuild' : startCase(ctx.clientBundler)),
-          clientTestFramework: ctx => (ctx.clientFrameworkVue ? 'vitest' : 'jest'),
-          clientTestFrameworkName: ctx => startCase(ctx.clientTestFramework),
-        });
-      },
-      microservice({ application }) {
-        if (application.applicationTypeMicroservice) {
-          application.withAdminUi = false;
-        }
-      },
-
-      prepareForTemplates({ application }) {
-        application.webappLoginRegExp = LOGIN_REGEX_JS;
-      },
-
       addExternalResource({ application, source }) {
         if (!application.clientFrameworkBuiltIn) {
           return;
