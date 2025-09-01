@@ -34,6 +34,9 @@ exports[`generator - java:i18n with defaults options should match files snapshot
   "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages_en.properties": {
     "stateCleared": "modified",
   },
