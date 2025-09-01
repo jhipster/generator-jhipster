@@ -158,7 +158,7 @@ describe('integration-test', () => {
             }
           }
         });
-        it('cypress should not added to skipClient and clientFrameworkNo', () => {
+        it('cypress should not be added to skipClient and clientFrameworkNo', () => {
           if (config.skipClient || config.clientFramework === 'no') {
             const includesCypress = config.testFrameworks?.includes('cypress');
             if (fixSamples && includesCypress) {
@@ -195,7 +195,7 @@ describe('integration-test', () => {
         }
         assert(entityJson.changelogDate);
       });
-      it(`${name} does not contains duplicate changelogDate`, () => {
+      it(`${name} does not contain duplicate changelogDate`, () => {
         if (fixSamples) {
           while (changelogDates.includes(entityJson.changelogDate)) {
             entityJson.changelogDate = formatDateForChangelog(new Date());

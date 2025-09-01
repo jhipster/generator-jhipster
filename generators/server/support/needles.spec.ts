@@ -123,7 +123,7 @@ public class ApplicationProperties {
 `);
         });
 
-        it('should not be add the content at second call', () => {
+        it('should not add the content at second call', () => {
           const application = runResult.application!;
           insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property,
@@ -133,7 +133,7 @@ public class ApplicationProperties {
           expect(runResult.getSnapshot((file: any) => fileRegexp.test(file.path))).toEqual(snapshot);
         });
 
-        it('should not be add new content with prettier differences', () => {
+        it('should not add new content with prettier differences', () => {
           const application = runResult.application!;
           insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property: '  private   Foo   foo;',
@@ -141,7 +141,7 @@ public class ApplicationProperties {
           expect(runResult.getSnapshot((file: any) => fileRegexp.test(file.path))).toEqual(snapshot);
         });
 
-        it('should not be add new content with prettier differences and new lines', () => {
+        it('should not add new content with prettier differences and new lines', () => {
           const application = runResult.application!;
           insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property: `  private Foo getFoo() {

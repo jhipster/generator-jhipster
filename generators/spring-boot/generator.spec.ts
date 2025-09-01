@@ -38,7 +38,7 @@ describe(`generator - ${generator}`, () => {
           asPostWritingTask(function ({ source }) {
             source.addTestSpringFactory!({ key: 'key', value: 'first.value' });
             source.addTestSpringFactory!({ key: 'key', value: 'second.value' });
-            // Existring value should not be added again
+            // Existing value should not be added again
             source.addTestSpringFactory!({ key: 'key', value: 'second.value' });
           }),
         );
