@@ -74,7 +74,7 @@ describe(`generator - ${clientFramework}`, () => {
           .withSharedApplication({ getWebappTranslation: () => 'translations' })
           .withMockedSource()
           .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
-          .withMockedGenerators(['jhipster:common', 'jhipster:languages']);
+          .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
       });
 
       it('should match generated files snapshot', () => {

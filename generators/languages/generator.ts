@@ -18,22 +18,17 @@
  */
 
 import chalk from 'chalk';
-import { padEnd, startCase } from 'lodash-es';
+import { padEnd } from 'lodash-es';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
-import { QUEUES } from '../base-application/priorities.ts';
-import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { Application as ClientApplication, Config as ClientConfig } from '../client/types.ts';
-import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
+import { PRIORITY_NAMES } from '../base-application/priorities.ts';
+import type { Config as ClientConfig } from '../client/types.ts';
 
-import { writeEntityFiles } from './entity-files.ts';
-import { clientI18nFiles } from './files.ts';
 import { askForLanguages, askI18n } from './prompts.ts';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.ts';
 import type { Language } from './support/languages.ts';
 import { findLanguageForTag } from './support/languages.ts';
-import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.ts';
 import type {
   Application as LanguagesApplication,
   Config as LanguagesConfig,
@@ -56,7 +51,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
 > {
   askForMoreLanguages!: boolean;
   askForNativeLanguage!: boolean;
-  translationData!: TranslationData;
   languages?: string[];
   /**
    * Languages to be generated.
@@ -149,11 +143,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   // Public API method used by the getter and also by Blueprints
   get configuring() {
     return this.asConfiguringTaskGroup({
-      migrateLanguages({ control }) {
-        if (control.isJhipsterVersionLessThan('7.10.0')) {
-          this.migrateLanguages({ in: 'id' });
-        }
-      },
       defaults() {
         const { nativeLanguage, enableTranslation } = this.jhipsterConfigWithDefaults;
         const isLanguageConfigured = Boolean(this.jhipsterConfig.nativeLanguage);
@@ -186,17 +175,14 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   get composing() {
     return this.asComposingTaskGroup({
       async bootstrap() {
+        if (!this.languageCommand) return;
         // Make sure generators languages callbacks are correctly initialized.
         const { clientFramework = 'no', skipServer, backendType = 'Java' } = this.jhipsterConfigWithDefaults as ClientConfig;
         if (clientFramework !== 'no') {
-          try {
-            await this.dependsOnBootstrap(clientFramework);
-          } catch {
-            this.log.warn(`${clientFramework} bootstrap generator not found. Client languages may not be updated.`);
-          }
+          await this.composeWithJHipster('jhipster:client:i18n');
         }
         if (!skipServer && backendType === 'Java') {
-          await this.dependsOnBootstrap('java');
+          await this.composeWithJHipster('jhipster:java:i18n');
         }
       },
     });
@@ -206,10 +192,9 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  // Public API method used by the getter and also by Blueprints
-  get preparing() {
+  get loading() {
     return this.asPreparingTaskGroup({
-      prepareForTemplates({ application, source }) {
+      prepareForTemplates({ application }) {
         if (application.enableTranslation) {
           if (!this.languageCommand || this.regenerateLanguages) {
             this.languagesToApply = application.languages;
@@ -217,126 +202,13 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
             this.languagesToApply = [...new Set(this.languagesToApply || [])];
           }
         }
-
-        source.addEntityTranslationKey = ({ translationKey, translationValue, language }) => {
-          this.mergeDestinationJson(`${application.i18nDir}${language}/global.json`, {
-            global: {
-              menu: {
-                entities: {
-                  [translationKey]: translationValue,
-                },
-              },
-            },
-          });
-        };
+        application.languagesToGenerate = this.languagesToApply;
       },
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
-  }
-
-  get default() {
-    return this.asDefaultTaskGroup({
-      async loadNativeLanguage({ application }) {
-        if (application.skipClient) return;
-        application.translations = application.translations ?? {};
-        this.translationData = new TranslationData({ generator: this, translations: application.translations });
-        const { i18nDir, enableTranslation, nativeLanguage } = application;
-        const fallbackLanguage = 'en';
-        this.queueLoadLanguages({ i18nDir, enableTranslation, nativeLanguage, fallbackLanguage });
-        const filter = createTranslationsFilter({ i18nDir, nativeLanguage, fallbackLanguage });
-        const listener = (filePath: string): void => {
-          if (filter(filePath)) {
-            this.env.sharedFs.removeListener('change', listener);
-            this.queueLoadLanguages({ i18nDir, enableTranslation, nativeLanguage, fallbackLanguage });
-          }
-        };
-        this.env.sharedFs.on('change', listener);
-
-        (application as ClientApplication).getWebappTranslation = (...args) => this.translationData.getClientTranslation(...args);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get writing() {
-    return this.asWritingTaskGroup({
-      async writeClientTranslations({ application }) {
-        if (application.skipClient) return;
-        const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage, 'en'])];
-        await Promise.all(
-          languagesToApply.map(lang =>
-            this.writeFiles({
-              sections: clientI18nFiles,
-              context: {
-                ...application,
-                lang,
-              },
-            }),
-          ),
-        );
-      },
-      async translateFile({ application }) {
-        if (
-          application.skipServer ||
-          (!application.backendTypeSpringBoot && !this.writeJavaLanguageFiles) ||
-          this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)
-        ) {
-          return;
-        }
-        const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage])];
-        await Promise.all(
-          languagesToApply.map(async lang => {
-            const language = findLanguageForTag(lang)!;
-            if (language.javaLocaleMessageSourceSuffix) {
-              await this.writeFiles({
-                sections: {
-                  serverI18nFiles: [
-                    {
-                      path: SERVER_MAIN_RES_DIR,
-                      renameTo: (data, filePath) => `${data.srcMainResources}${filePath}`,
-                      templates: [`i18n/messages_${language.javaLocaleMessageSourceSuffix}.properties`],
-                    },
-                  ],
-                  serverI18nTestFiles: [
-                    {
-                      path: SERVER_TEST_RES_DIR,
-                      renameTo: (data, filePath) => `${data.srcTestResources}${filePath}`,
-                      condition: data => !data.skipUserManagement,
-                      templates: [`i18n/messages_${language.javaLocaleMessageSourceSuffix}.properties`],
-                    },
-                  ],
-                },
-                context: {
-                  ...application,
-                  lang,
-                },
-              });
-            }
-          }),
-        );
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  get writingEntities() {
-    return this.asWritingEntitiesTaskGroup({
-      ...writeEntityFiles(),
-    });
-  }
-
-  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get postWriting() {
@@ -344,9 +216,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
       updateLanguages({ application }) {
         if (this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)) return;
 
-        const newLanguages = this.languagesToApply.map(lang => findLanguageForTag(lang, application.supportedLanguages)!);
         for (const addLanguageCallback of application.addLanguageCallbacks) {
-          addLanguageCallback(newLanguages, application.languagesDefinition);
+          addLanguageCallback(application.languagesToGenerateDefinition!, application.languagesDefinition);
         }
       },
     });
@@ -354,71 +225,5 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
-  }
-
-  get postWritingEntities() {
-    return this.asPostWritingEntitiesTaskGroup({
-      addEntities({ application, entities, source }) {
-        if (application.skipClient) return;
-        const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage, 'en'])];
-        for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtInUser)) {
-          for (const language of languagesToApply) {
-            source.addEntityTranslationKey?.({
-              language,
-              translationKey: entity.entityTranslationKeyMenu,
-              translationValue: entity.entityClassHumanized ?? startCase(entity.entityNameCapitalized),
-            });
-          }
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
-  }
-
-  migrateLanguages(languagesToMigrate: Record<string, string>) {
-    const { languages, nativeLanguage } = this.jhipsterConfig;
-    if (languagesToMigrate[nativeLanguage!]) {
-      this.jhipsterConfig.nativeLanguage = languagesToMigrate[nativeLanguage!];
-    }
-    if (languages?.some(lang => languagesToMigrate[lang as string])) {
-      this.jhipsterConfig.languages = languages.map(lang => languagesToMigrate[lang as string] ?? lang);
-    }
-  }
-
-  queueLoadLanguages({
-    enableTranslation,
-    i18nDir,
-    nativeLanguage,
-    fallbackLanguage = 'en',
-  }: {
-    enableTranslation: boolean;
-    i18nDir: string;
-    nativeLanguage: string;
-    fallbackLanguage?: string;
-  }) {
-    this.queueTask({
-      method: async () => {
-        const filter = createTranslationsFileFilter({ i18nDir, nativeLanguage, fallbackLanguage });
-        await this.pipeline(
-          {
-            name: 'loading translations',
-            filter: file => file.path.startsWith(this.destinationPath()) && filter(file),
-            refresh: true,
-          },
-          this.translationData.loadFromStreamTransform({
-            enableTranslation,
-            i18nDir,
-            nativeLanguage,
-            fallbackLanguage,
-          }),
-        );
-      },
-      taskName: 'loadingTranslations',
-      queueName: QUEUES.LOADING_TRANSLATIONS_QUEUE,
-      once: true,
-    });
   }
 }

@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - java:i18n with defaults options should call source snapshot 1`] = `
+{
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
+}
+`;
+
+exports[`generator - java:i18n with defaults options should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages_en.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_en.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;

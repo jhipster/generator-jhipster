@@ -219,6 +219,8 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "jwtSecretKey": undefined,
   "languages": [],
   "languagesDefinition": [],
+  "languagesToGenerate": undefined,
+  "languagesToGenerateDefinition": undefined,
   "listOrFlux": "List",
   "listOrFluxClassPath": "java.util.List",
   "localBlueprint": undefined,

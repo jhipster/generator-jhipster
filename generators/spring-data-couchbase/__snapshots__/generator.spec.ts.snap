@@ -311,9 +311,6 @@ exports[`generator - couchbase gateway-jwt-gradle-enableTranslation(true)-com.my
   "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
-  "src/main/resources/i18n/messages.properties": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/logback-spring.xml": {
     "stateCleared": "modified",
   },
@@ -664,9 +661,6 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
   "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
-  "src/main/resources/i18n/messages.properties": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/logback-spring.xml": {
     "stateCleared": "modified",
   },
@@ -987,9 +981,6 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
   "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
-  "src/main/resources/i18n/messages.properties": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/logback-spring.xml": {
     "stateCleared": "modified",
   },
@@ -1308,9 +1299,6 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1714,9 +1702,6 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
-  "src/main/resources/i18n/messages.properties": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/logback-spring.xml": {
     "stateCleared": "modified",
   },
@@ -1856,9 +1841,6 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/resources/config/bootstrap.yml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/i18n/messages_en.properties": {
     "stateCleared": "modified",
   },
   "src/test/resources/junit-platform.properties": {
@@ -2101,9 +2083,6 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2412,9 +2391,6 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2753,9 +2729,6 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -3168,9 +3141,6 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
-  "src/main/resources/i18n/messages.properties": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/logback-spring.xml": {
     "stateCleared": "modified",
   },
@@ -3307,9 +3277,6 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/i18n/messages_en.properties": {
     "stateCleared": "modified",
   },
   "src/test/resources/junit-platform.properties": {
@@ -3558,9 +3525,6 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {

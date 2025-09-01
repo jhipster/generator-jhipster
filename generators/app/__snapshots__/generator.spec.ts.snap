@@ -619,6 +619,21 @@ exports[`generator - app with default config should match snapshot 1`] = `
       "rtl": false,
     },
   ],
+  "languagesToGenerate": [
+    "en",
+  ],
+  "languagesToGenerateDefinition": [
+    {
+      "angularLocale": "en",
+      "dayjsLocale": "en",
+      "displayName": "English",
+      "fakerjsLocale": "en",
+      "javaLocaleMessageSourceSuffix": "en",
+      "languageTag": "en",
+      "name": "English",
+      "rtl": false,
+    },
+  ],
   "liquibaseAddH2Properties": false,
   "liquibaseDefaultSchemaName": "",
   "listOrFlux": "List",
@@ -1270,6 +1285,21 @@ exports[`generator - app with gateway should match snapshot 1`] = `
       "rtl": false,
     },
   ],
+  "languagesToGenerate": [
+    "en",
+  ],
+  "languagesToGenerateDefinition": [
+    {
+      "angularLocale": "en",
+      "dayjsLocale": "en",
+      "displayName": "English",
+      "fakerjsLocale": "en",
+      "javaLocaleMessageSourceSuffix": "en",
+      "languageTag": "en",
+      "name": "English",
+      "rtl": false,
+    },
+  ],
   "liquibaseAddH2Properties": false,
   "liquibaseDefaultSchemaName": "",
   "listOrFlux": "Flux",
@@ -1895,6 +1925,21 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "en",
   ],
   "languagesDefinition": [
+    {
+      "angularLocale": "en",
+      "dayjsLocale": "en",
+      "displayName": "English",
+      "fakerjsLocale": "en",
+      "javaLocaleMessageSourceSuffix": "en",
+      "languageTag": "en",
+      "name": "English",
+      "rtl": false,
+    },
+  ],
+  "languagesToGenerate": [
+    "en",
+  ],
+  "languagesToGenerateDefinition": [
     {
       "angularLocale": "en",
       "dayjsLocale": "en",

@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import type { Application as JavascriptApplication } from '../javascript/types.ts';
 
 import { type Language, findLanguageForTag, supportedLanguages } from './support/languages.ts';
 
@@ -29,6 +30,8 @@ export type LanguagesAddedApplicationProperties = {
   nativeLanguageDefinition: Language;
   languages: string[];
   languagesDefinition: readonly Language[];
+  languagesToGenerate: string[] | undefined;
+  languagesToGenerateDefinition: readonly Language[] | undefined;
   addLanguageCallbacks: ((mewLanguages: readonly Language[], allLanguages: readonly Language[]) => void)[];
 };
 
@@ -40,10 +43,13 @@ export const mutateApplication = {
   nativeLanguageDefinition: ({ nativeLanguage, supportedLanguages }) => findLanguageForTag(nativeLanguage, supportedLanguages)!,
   languages: () => [],
   languagesDefinition: data => data.languages.map(lang => findLanguageForTag(lang, data.supportedLanguages)!).filter(lang => lang),
-  i18nDir: ({ clientSrcDir }) => `${clientSrcDir}i18n/`,
+  // TODO rename to clientI18nDir and move to client
+  i18nDir: data => `${(data as unknown as JavascriptApplication).clientSrcDir}i18n/`,
   addLanguageCallbacks: () => [],
   enableI18nRTL: data => data.nativeLanguageDefinition.rtl || data.languagesDefinition.some(lang => lang.rtl),
+  languagesToGenerate: () => undefined,
+  languagesToGenerateDefinition: data => data.languagesToGenerate?.map?.(lang => findLanguageForTag(lang, data.supportedLanguages)!),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
-  MutateDataParam<LanguagesAddedApplicationProperties & { clientSrcDir: string }>,
+  MutateDataParam<LanguagesAddedApplicationProperties>,
   LanguagesAddedApplicationProperties
 >;

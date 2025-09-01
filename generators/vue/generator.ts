@@ -51,6 +51,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
 
     await this.dependsOnBootstrap('vue');
     if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster('jhipster:client:i18n');
       await this.dependsOnJHipster(GENERATOR_CLIENT);
       await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     }
