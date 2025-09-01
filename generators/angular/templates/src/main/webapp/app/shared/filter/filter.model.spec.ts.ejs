@@ -27,7 +27,7 @@ describe('FilterModel Tests', () => {
     });
 
     describe('removeValue', () => {
-      it('removes the exiting value and return true', () => {
+      it('removes the existing value and return true', () => {
         const ret = filterOption.removeValue('bar');
         expect(filterOption.values).toMatchObject(['bar2']);
         expect(ret).toBe(true);
