@@ -19,7 +19,7 @@ describe('FilterModel Tests', () => {
         expect(filterOption.values).toMatchObject(['bar', 'bar2', 'bar3', 'bar4']);
         expect(ret).toBe(true);
       });
-      it("doesn't adds duplicated values and return false", () => {
+      it("doesn't add duplicated values and return false", () => {
         const ret = filterOption.addValue('bar', 'bar2');
         expect(filterOption.values).toMatchObject(['bar', 'bar2']);
         expect(ret).toBe(false);
