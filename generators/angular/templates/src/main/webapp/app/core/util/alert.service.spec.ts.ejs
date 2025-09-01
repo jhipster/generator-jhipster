@@ -240,7 +240,7 @@ describe('Alert service test', () => {
       );
     }));
 
-    it('should produce a error message', inject([AlertService], (service: AlertService) => {
+    it('should produce an error message', inject([AlertService], (service: AlertService) => {
       expect(service.addAlert({ type: 'danger', message: 'Hello Jhipster' })).toEqual(
         expect.objectContaining({
           type: 'danger',
