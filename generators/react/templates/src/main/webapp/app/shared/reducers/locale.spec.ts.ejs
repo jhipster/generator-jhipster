@@ -108,7 +108,7 @@ describe('Locale reducer tests', () => {
         axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
       });
 
-      it("doesn't dispatches loaded action", async () => {
+      it("doesn't dispatch loaded action", async () => {
         const getState = jest.fn(() => ({
           locale: { currentLocale: defaultLocale, sourcePrefixes: [sourcePrefix], loadedLocales: [], loadedKeys: [] },
         }));
