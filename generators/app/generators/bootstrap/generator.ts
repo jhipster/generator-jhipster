@@ -21,7 +21,6 @@ import assert from 'node:assert';
 import { validations } from '../../../../lib/jhipster/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { stringifyApplicationData } from '../../../base-application/support/index.ts';
-import { GENERATOR_CLIENT, GENERATOR_SERVER } from '../../../generator-list.ts';
 import type { Application, Entity, Field } from '../../types.d.ts';
 
 const {
@@ -39,8 +38,8 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
       throw new Error('Only sbs blueprint is supported');
     }
 
-    await this.dependsOnBootstrap(GENERATOR_CLIENT);
-    await this.dependsOnBootstrap(GENERATOR_SERVER);
+    await this.dependsOnBootstrap('client');
+    await this.dependsOnBootstrap('server');
   }
 
   get preparing() {
