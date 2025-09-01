@@ -188,7 +188,7 @@ export default asWritingTask(async function cleanupTask(this, taskParam) {
       application.searchEngineCouchbase ||
       application.databaseTypeNeo4j
     ) {
-      // The condition is too complated, delete and recreate.
+      // The condition is too complicated, delete and recreate.
       this.removeFile(`${application.srcTestResources}META-INF/spring.factories`);
       this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
     }
