@@ -270,7 +270,7 @@ export default class BaseGenerator<
     let now = new Date();
     // Milliseconds is ignored for changelogDate.
     now.setMilliseconds(0);
-    // Run reproducible timestamp when regenerating the project with reproducible option or an specific timestamp.
+    // Run reproducible timestamp when regenerating the project with reproducible option or a specific timestamp.
     if (reproducible || creationTimestamp) {
       now = this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, {
         factory: () => {
