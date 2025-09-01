@@ -32,7 +32,7 @@ describe('FilterModel Tests', () => {
         expect(filterOption.values).toMatchObject(['bar2']);
         expect(ret).toBe(true);
       });
-      it("doesn't removes the value and return false", () => {
+      it("doesn't remove the value and return false", () => {
         const ret = filterOption.removeValue('foo');
         expect(filterOption.values).toMatchObject(['bar', 'bar2']);
         expect(ret).toBe(false);
