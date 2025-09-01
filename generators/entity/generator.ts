@@ -190,7 +190,7 @@ export default class EntityGenerator extends BaseApplicationGenerator<EntityEnti
 The entity ${context.name} is being updated.
 `);
             try {
-              // We are generating a entity from a microservice.
+              // We are generating an entity from a microservice.
               // Load it directly into our entity configuration.
               this.microserviceConfig = this.fs.readJSON(context.microserviceFileName);
               if (this.microserviceConfig) {
