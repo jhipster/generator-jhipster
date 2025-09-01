@@ -99,7 +99,7 @@ export default class JHipsterCommand extends Command {
       return super.addOption(option);
     }
     if (option.negate) {
-      // Add a affirmative option for negative boolean options.
+      // Add an affirmative option for negative boolean options.
       // Should be done before, because commander adds a non working affirmative by itself.
       super.addOption(new Option(option.long.replace(/^--no-/, '--')).hideHelp());
     }
