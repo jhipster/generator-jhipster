@@ -317,11 +317,11 @@ export const buildCommands = ({
           await addCommandRootGeneratorOptions(command, generatorMeta);
 
           // Add bootstrap options, may be dropped if every generator is migrated to new structure and correctly depends on bootstrap.
-          const boostrapGen = [GENERATOR_BOOTSTRAP, generator];
+          const bootstrapGen = [GENERATOR_BOOTSTRAP, generator];
           if (cmdName === GENERATOR_JDL) {
-            boostrapGen.push(entrypointGenerator ?? GENERATOR_APP);
+            bootstrapGen.push(entrypointGenerator ?? GENERATOR_APP);
           }
-          const allDependencies = await buildAllDependencies(boostrapGen, {
+          const allDependencies = await buildAllDependencies(bootstrapGen, {
             env,
             blueprintNamespaces: envBuilder?.getBlueprintsNamespaces(),
           });
