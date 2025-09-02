@@ -3,11 +3,9 @@
     "applicationType": "monolith",
     "authenticationType": "oauth2",
     "baseName": "sampleOauth2Infinispan",
-    "blueprints": [],
     "buildTool": "maven",
     "cacheProvider": "infinispan",
     "clientFramework": "angular",
-    "clientPackageManager": "npm",
     "clientTheme": "none",
     "creationTimestamp": 1596513172471,
     "databaseType": "sql",
@@ -17,15 +15,12 @@
     "enableTranslation": false,
     "entitySuffix": "",
     "jhiPrefix": "myPrefix",
-    "messageBroker": "no",
-    "otherModules": [],
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "mariadb",
     "searchEngine": "no",
     "serverPort": "8080",
     "serviceDiscoveryType": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["gatling", "cypress"]
   }
 }

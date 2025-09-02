@@ -6,7 +6,6 @@
     "buildTool": "maven",
     "cacheProvider": "ehcache",
     "ci": true,
-    "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
@@ -14,7 +13,6 @@
     "jhiPrefix": "jhi",
     "jwtSecretKey": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
     "languages": ["en", "fr"],
-    "messageBroker": false,
     "nativeLanguage": "en",
     "packageFolder": "io/github/jhipster/app",
     "packageName": "io.github.jhipster.app",
@@ -23,8 +21,7 @@
     "serverPort": "8081",
     "serviceDiscoveryType": "consul",
     "skipClient": true,
-    "skipUserManagement": true,
-    "testFrameworks": ["gatling"],
-    "websocket": false
+
+    "testFrameworks": ["gatling"]
   }
 }

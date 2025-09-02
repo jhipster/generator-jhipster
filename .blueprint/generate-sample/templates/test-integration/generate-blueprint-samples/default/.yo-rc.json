@@ -206,7 +206,6 @@
         "sbs": false
       }
     },
-    "jhipsterVersion": "7.5.0",
     "mainGenerator": "generate-blueprint",
     "prettierDefaultIndent": 2,
     "projectName": "CiTest",

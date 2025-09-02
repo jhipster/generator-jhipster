@@ -3,18 +3,15 @@
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "baseName": "jhipster",
-    "blueprints": [],
     "buildTool": "maven",
     "cacheProvider": "ehcache",
     "clientFramework": "vue",
-    "clientPackageManager": "npm",
     "clientTheme": "none",
     "clientThemeVariant": "primary",
     "creationTimestamp": 1594459281773,
     "databaseType": "sql",
     "devDatabaseType": "mysql",
     "dtoSuffix": "DTO",
-    "enableSwaggerCodegen": false,
     "enableTranslation": true,
     "entitySuffix": "",
     "jhiPrefix": "",
@@ -70,9 +67,7 @@
       "vi",
       "az-Latn-az"
     ],
-    "messageBroker": "no",
     "nativeLanguage": "en",
-    "otherModules": [],
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "mysql",
@@ -81,12 +76,6 @@
     "serverPort": "8080",
     "serverSideOptions": ["searchEngine:elasticsearch"],
     "serviceDiscoveryType": "no",
-    "skipCheckLengthOfIdentifier": false,
-    "skipClient": false,
-    "skipFakeData": false,
-    "skipServer": false,
-    "skipUserManagement": false,
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["gatling", "cypress"]
   }
 }

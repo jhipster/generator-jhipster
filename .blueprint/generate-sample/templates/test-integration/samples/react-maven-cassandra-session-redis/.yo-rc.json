@@ -3,11 +3,9 @@
     "applicationType": "monolith",
     "authenticationType": "session",
     "baseName": "sampleReactCassandraSessionRedis",
-    "blueprints": [],
     "buildTool": "maven",
     "cacheProvider": "redis",
     "clientFramework": "react",
-    "clientPackageManager": "npm",
     "clientTheme": "none",
     "clientThemeVariant": "",
     "creationTimestamp": 1596513172471,
@@ -16,14 +14,11 @@
     "dtoSuffix": "DTO",
     "embeddableLaunchScript": false,
     "enableHibernateCache": false,
-    "enableSwaggerCodegen": false,
     "enableTranslation": true,
     "entitySuffix": "",
     "jhiPrefix": "jhi",
     "languages": ["en", "fr"],
-    "messageBroker": "no",
     "nativeLanguage": "en",
-    "otherModules": [],
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "cassandra",
@@ -31,7 +26,6 @@
     "searchEngine": "no",
     "serverPort": "8080",
     "serviceDiscoveryType": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["gatling", "cypress"]
   }
 }

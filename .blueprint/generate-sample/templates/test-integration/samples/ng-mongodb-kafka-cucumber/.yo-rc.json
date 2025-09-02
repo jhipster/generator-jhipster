@@ -3,11 +3,9 @@
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "baseName": "sampleMongoKafka",
-    "blueprints": [],
     "buildTool": "maven",
     "cacheProvider": "ehcache",
     "clientFramework": "angular",
-    "clientPackageManager": "npm",
     "clientTheme": "none",
     "creationTimestamp": 1596513172471,
     "databaseType": "mongodb",
@@ -22,14 +20,12 @@
     "languages": ["en", "fr"],
     "messageBroker": "kafka",
     "nativeLanguage": "en",
-    "otherModules": [],
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "mongodb",
     "searchEngine": "no",
     "serverPort": "8080",
     "serviceDiscoveryType": "no",
-    "testFrameworks": ["gatling", "cucumber", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["gatling", "cucumber", "cypress"]
   }
 }

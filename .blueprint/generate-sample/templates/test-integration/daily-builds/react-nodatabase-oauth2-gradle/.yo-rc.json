@@ -6,7 +6,6 @@
     "buildTool": "gradle",
     "cacheProvider": "ehcache",
     "clientFramework": "react",
-    "clientPackageManager": "npm",
     "clientTheme": "none",
     "clientThemeVariant": "",
     "creationTimestamp": 1596513172471,
@@ -14,24 +13,18 @@
     "devDatabaseType": "no",
     "dtoSuffix": "DTO",
     "enableHibernateCache": false,
-    "enableSwaggerCodegen": false,
     "enableTranslation": true,
     "entitySuffix": "",
     "jhiPrefix": "jhi",
     "jwtSecretKey": "MjUzZGQzZjQwOWY3ZmEzYjBkOTQ5ZDc2ZmNhYjYyZDVhMjMzNmI3MGJkMTQyOTA3YzQzZWRiYjk0ODlhMmM2MDg1MDU3ODdkNGEzNzAzYTZlYjMxYWM4ZjM2MTY4ZjlmNjJjNDJiNGE2ZDUyNWQ1YTRjNzk5YzY5OTMxOGRjZTI=",
     "languages": ["en"],
-    "messageBroker": false,
     "nativeLanguage": "en",
-    "otherModules": [],
     "packageFolder": "com/mycompany/myapp",
     "packageName": "com.mycompany.myapp",
     "prodDatabaseType": "no",
     "promptValues": { "nativeLanguage": "en", "packageName": "com.mycompany.myapp" },
     "searchEngine": false,
     "serverPort": "8080",
-    "serviceDiscoveryType": false,
-    "testFrameworks": ["cypress"],
-    "useSass": true,
-    "websocket": false
+    "testFrameworks": ["cypress"]
   }
 }
