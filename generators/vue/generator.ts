@@ -101,8 +101,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
         applicationDefaults({
           __override__: true,
           eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
-          clientWebappDir: app => `${app.clientSrcDir}app/`,
-          webappEnumerationsDir: app => `${app.clientWebappDir}shared/model/enumerations/`,
+          webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
         });
       },
       async javaNodeBuildPaths({ application }) {
@@ -238,7 +237,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   get default() {
     return this.asDefaultTaskGroup({
       async queueTranslateTransform({ application }) {
-        const { i18nDir, enableTranslation, getWebappTranslation } = application;
+        const { clientI18nDir, enableTranslation, getWebappTranslation } = application;
 
         assert.ok(getWebappTranslation, 'getWebappTranslation is required');
 
@@ -251,7 +250,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }),
         );
         if (enableTranslation) {
-          const { transform, isTranslationFile } = convertTranslationsSupport({ i18nDir });
+          const { transform, isTranslationFile } = convertTranslationsSupport({ clientI18nDir });
           this.queueTransformStream(
             {
               name: 'converting vue translations',
@@ -386,14 +385,14 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         });
       },
       sonar({ application, source }) {
-        const { i18nDir, clientDistDir, clientSrcDir, temporaryDir } = application;
+        const { clientI18nDir, clientDistDir, clientSrcDir, temporaryDir } = application;
         source.addSonarProperties?.([
           { key: 'sonar.test.inclusions', value: `${clientSrcDir}app/**/*.spec.ts`, valueSep: ', ' },
           { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}/test-results/jest/TESTS-results-sonar.xml` },
           { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}/test-results/lcov.info` },
           {
             key: 'sonar.exclusions',
-            value: `${clientSrcDir}content/**/*.*, ${i18nDir}*.ts, ${clientDistDir}**/*.*`,
+            value: `${clientSrcDir}content/**/*.*, ${clientI18nDir}*.ts, ${clientDistDir}**/*.*`,
             valueSep: ', ',
           },
         ]);

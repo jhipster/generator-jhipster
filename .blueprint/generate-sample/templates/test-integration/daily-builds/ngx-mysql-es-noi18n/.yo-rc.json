@@ -7,23 +7,18 @@
     "cacheProvider": "ehcache",
     "ci": true,
     "clientFramework": "angular",
-    "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,
     "databaseType": "sql",
     "devDatabaseType": "mysql",
     "enableTranslation": false,
     "jhiPrefix": "jhi",
     "jwtSecretKey": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
-    "messageBroker": false,
     "packageFolder": "io/github/jhipster/app",
     "packageName": "io.github.jhipster.app",
     "prodDatabaseType": "mysql",
     "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "searchEngine": "elasticsearch",
     "serverPort": "8080",
-    "serviceDiscoveryType": false,
-    "testFrameworks": ["gatling", "cypress"],
-    "useSass": true,
-    "websocket": false
+    "testFrameworks": ["gatling", "cypress"]
   }
 }

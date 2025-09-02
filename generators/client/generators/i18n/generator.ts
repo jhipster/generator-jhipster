@@ -76,7 +76,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application, source }) {
         source.addEntityTranslationKey = ({ translationKey, translationValue, language }) => {
-          this.mergeDestinationJson(`${application.i18nDir}${language}/global.json`, {
+          this.mergeDestinationJson(`${application.clientI18nDir}${language}/global.json`, {
             global: {
               menu: {
                 entities: {
@@ -105,14 +105,14 @@ export default class I18NGenerator extends ClientApplicationGenerator {
       async loadNativeLanguage({ application }) {
         application.translations = application.translations ?? {};
         this.translationData = new TranslationData({ generator: this, translations: application.translations });
-        const { i18nDir, enableTranslation, nativeLanguage } = application;
+        const { clientI18nDir, enableTranslation, nativeLanguage } = application;
         const fallbackLanguage = 'en';
-        this.queueLoadLanguages({ i18nDir, enableTranslation, nativeLanguage, fallbackLanguage });
-        const filter = createTranslationsFilter({ i18nDir, nativeLanguage, fallbackLanguage });
+        this.queueLoadLanguages({ clientI18nDir, enableTranslation, nativeLanguage, fallbackLanguage });
+        const filter = createTranslationsFilter({ clientI18nDir, nativeLanguage, fallbackLanguage });
         const listener = (filePath: string): void => {
           if (filter(filePath)) {
             this.env.sharedFs.removeListener('change', listener);
-            this.queueLoadLanguages({ i18nDir, enableTranslation, nativeLanguage, fallbackLanguage });
+            this.queueLoadLanguages({ clientI18nDir, enableTranslation, nativeLanguage, fallbackLanguage });
           }
         };
         this.env.sharedFs.on('change', listener);
@@ -137,25 +137,25 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                 clientI18nFiles: [
                   {
                     from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.i18nDir}${context.lang}/`,
+                    to: context => `${context.clientI18nDir}${context.lang}/`,
                     transform: false,
                     templates: ['error.json', 'login.json', 'password.json', 'register.json', 'sessions.json', 'settings.json'],
                   },
                   {
                     condition: ctx => ctx.clientFrameworkVue && ctx.enableTranslation && !ctx.microfrontend,
                     path: `${CLIENT_MAIN_SRC_DIR}/i18n/`,
-                    renameTo: context => `${context.i18nDir}${context.lang}/${context.lang}.js`,
+                    renameTo: context => `${context.clientI18nDir}${context.lang}/${context.lang}.js`,
                     templates: ['index.js'],
                   },
                   {
                     from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.i18nDir}${context.lang}/`,
+                    to: context => `${context.clientI18nDir}${context.lang}/`,
                     templates: ['activate.json', 'global.json', 'home.json', 'reset.json'],
                   },
                   {
                     condition: context => context.withAdminUi,
                     from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.i18nDir}${context.lang}/`,
+                    to: context => `${context.clientI18nDir}${context.lang}/`,
                     transform: false,
                     templates: [
                       'configuration.json',
@@ -170,14 +170,14 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                   {
                     condition: context => context.communicationSpringWebsocket,
                     from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.i18nDir}${context.lang}/`,
+                    to: context => `${context.clientI18nDir}${context.lang}/`,
                     transform: false,
                     templates: ['tracker.json'],
                   },
                   {
                     condition: context => context.applicationTypeGateway,
                     from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.i18nDir}${context.lang}/`,
+                    to: context => `${context.clientI18nDir}${context.lang}/`,
                     transform: false,
                     templates: ['gateway.json'],
                   },
@@ -207,7 +207,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
         }
 
         // Copy each
-        const { i18nDir, baseName, clientSrcDir, frontendAppName } = application;
+        const { clientI18nDir, baseName, clientSrcDir, frontendAppName } = application;
         for (const entity of entitiesToWriteTranslationFor) {
           for (const { languageTag } of this.languagesToGenerate) {
             if (entity.builtInUserManagement) {
@@ -215,12 +215,12 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                 blocks: [
                   {
                     from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.i18nDir}${context.lang}/`,
+                    to: context => `${context.clientI18nDir}${context.lang}/`,
                     transform: false,
                     templates: ['user-management.json'],
                   },
                 ],
-                context: { ...entity, baseName, clientSrcDir, i18nDir, frontendAppName, lang: languageTag },
+                context: { ...entity, baseName, clientSrcDir, clientI18nDir, frontendAppName, lang: languageTag },
               });
             } else {
               await this.writeFiles({
@@ -230,13 +230,13 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                       templates: [
                         {
                           sourceFile: context => `entity/i18n/entity_${context.lang}.json.ejs`,
-                          destinationFile: context => `${context.i18nDir}${context.lang}/${context.entityTranslationKey}.json`,
+                          destinationFile: context => `${context.clientI18nDir}${context.lang}/${context.entityTranslationKey}.json`,
                         },
                       ],
                     },
                   ],
                 },
-                context: { ...entity, baseName, clientSrcDir, i18nDir, frontendAppName, lang: languageTag },
+                context: { ...entity, baseName, clientSrcDir, clientI18nDir, frontendAppName, lang: languageTag },
               });
             }
           }
@@ -258,7 +258,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                               {
                                 sourceFile: 'entity/i18n/enum.json.ejs',
                                 destinationFile: context =>
-                                  `${context.i18nDir}${context.lang}/${context.clientRootFolder}${context.enumInstance}.json`,
+                                  `${context.clientI18nDir}${context.lang}/${context.clientRootFolder}${context.enumInstance}.json`,
                               },
                             ],
                           },
@@ -268,7 +268,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                         ...getEnumInfo(field, entity.clientRootFolder),
                         lang: languageTag,
                         frontendAppName,
-                        i18nDir,
+                        clientI18nDir,
                         clientSrcDir,
                       },
                     }),
@@ -318,18 +318,18 @@ export default class I18NGenerator extends ClientApplicationGenerator {
 
   queueLoadLanguages({
     enableTranslation,
-    i18nDir,
+    clientI18nDir,
     nativeLanguage,
     fallbackLanguage = 'en',
   }: {
     enableTranslation: boolean;
-    i18nDir: string;
+    clientI18nDir: string;
     nativeLanguage: string;
     fallbackLanguage?: string;
   }) {
     this.queueTask({
       method: async () => {
-        const filter = createTranslationsFileFilter({ i18nDir, nativeLanguage, fallbackLanguage });
+        const filter = createTranslationsFileFilter({ clientI18nDir, nativeLanguage, fallbackLanguage });
         await this.pipeline(
           {
             name: 'loading translations',
@@ -338,7 +338,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
           },
           this.translationData.loadFromStreamTransform({
             enableTranslation,
-            i18nDir,
+            clientI18nDir,
             nativeLanguage,
             fallbackLanguage,
           }),

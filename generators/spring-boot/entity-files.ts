@@ -147,19 +147,19 @@ const userDtoFiles = javaWriteFileSection({
   domain: [
     {
       ...javaMainPackageTemplatesBlock(),
-      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/User.java', `/${data.user.persistClass}.java`),
+      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/User.java', `/${data.user!.persistClass}.java`),
       templates: ['domain/User.java'],
     },
   ],
   dto: [
     {
       ...javaMainPackageTemplatesBlock(),
-      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/UserDTO.java', `/${data.user.dtoClass}.java`),
+      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/UserDTO.java', `/${data.user!.dtoClass}.java`),
       templates: ['service/dto/UserDTO.java'],
     },
     {
       ...javaMainPackageTemplatesBlock(),
-      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/AdminUserDTO.java', `/${data.user.adminUserDto}.java`),
+      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/AdminUserDTO.java', `/${data.user!.adminUserDto}.java`),
       templates: ['service/dto/AdminUserDTO.java'],
     },
     {

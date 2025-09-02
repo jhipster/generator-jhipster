@@ -18,9 +18,46 @@
  */
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 
-import type { Application } from './types.ts';
+import type { Application, Entity } from './types.ts';
 
-export type BaseApplicationAddedApplicationProperties = {
+type UserManagementProperties<Entity> = {
+  authenticationTypeUsesRemoteAuthorization: boolean;
+  skipUserManagement: boolean;
+  generateAuthenticationApi: boolean;
+  generateUserManagement: boolean;
+  generateBuiltInUserEntity?: boolean;
+  generateBuiltInAuthorityEntity: boolean;
+  generateInMemoryUserCredentials?: boolean;
+  user?: Entity & { adminUserDto?: string };
+  userManagement?: Entity;
+  authority?: Entity;
+  anyEntityHasRelationshipWithUser?: boolean;
+};
+
+export const mutateUserManagementApplication = {
+  __override__: false,
+
+  generateAuthenticationApi: data => data.applicationType !== 'microservice',
+  authenticationTypeUsesRemoteAuthorization: data => data.authenticationType === 'oauth2',
+  skipUserManagement: data =>
+    !data.generateAuthenticationApi || data.authenticationTypeUsesRemoteAuthorization || data.databaseType === 'no',
+  generateUserManagement: data => !data.skipUserManagement && data.generateAuthenticationApi,
+  generateInMemoryUserCredentials: data =>
+    data.generateAuthenticationApi && data.skipUserManagement && !data.authenticationTypeUsesRemoteAuthorization,
+
+  syncUserWithIdp: data =>
+    Boolean(
+      (data.backendType ?? 'Java') === 'Java' &&
+        data.authenticationType === 'oauth2' &&
+        data.databaseType !== 'no' &&
+        (data.applicationType === 'gateway' || data.anyEntityHasRelationshipWithUser),
+    ),
+  generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => Boolean(generateUserManagement || syncUserWithIdp),
+  generateBuiltInAuthorityEntity: ({ generateBuiltInUserEntity, databaseType }) =>
+    Boolean(generateBuiltInUserEntity! && databaseType !== 'cassandra'),
+} as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Application<any>>, UserManagementProperties<Entity>>;
+
+export type BaseApplicationAddedApplicationProperties<E extends Entity> = UserManagementProperties<E> & {
   readonly javaNodeBuildPaths: string[];
 
   clientTestDir?: string;
@@ -40,12 +77,12 @@ export type BaseApplicationAddedApplicationProperties = {
 };
 
 export const mutateApplication = {
-  __override__: false,
+  ...mutateUserManagementApplication,
 
   javaNodeBuildPaths: () => [],
   entitySuffix: '',
   dtoSuffix: 'DTO',
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<Application<any>>,
-  BaseApplicationAddedApplicationProperties
+  BaseApplicationAddedApplicationProperties<Entity>
 >;

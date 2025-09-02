@@ -47,38 +47,6 @@ type ApplicationProperties = OptionWithDerivedProperties<'applicationType', ['mo
   GatewayApplication &
   MicroservicesArchitectureApplication;
 
-/* ApplicationType End */
-
-/* AuthenticationType Start */
-/*
-Deterministic option causes types to be too complex
-type UserManagement =
-  | {
-      skipUserManagement: true;
-      generateUserManagement: false;
-      generateBuiltInUserEntity?: false;
-      generateBuiltInAuthorityEntity: false;
-    }
-  | {
-      skipUserManagement: false;
-      generateBuiltInUserEntity?: boolean;
-      generateUserManagement: true;
-      user: any;
-      userManagement: any;
-      generateBuiltInAuthorityEntity: boolean;
-      authority: any;
-    };
-    */
-type UserManagement<Entity> = {
-  skipUserManagement: boolean;
-  generateUserManagement: boolean;
-  generateBuiltInUserEntity?: boolean;
-  generateBuiltInAuthorityEntity: boolean;
-  user: Entity & { adminUserDto?: string };
-  userManagement: Entity;
-  authority: Entity;
-};
-
 type JwtApplication = {
   jwtSecretKey: string;
 };
@@ -99,14 +67,13 @@ type AuthenticationType = DeterministicOptionWithDerivedProperties<
   [JwtApplication, Oauth2Application, SessionApplication]
 >;
 */
-type AuthenticationProperties<Entity> = OptionWithDerivedProperties<'authenticationType', ['jwt', 'oauth2', 'session']> &
-  UserManagement<Entity> &
+type AuthenticationProperties = OptionWithDerivedProperties<'authenticationType', ['jwt', 'oauth2', 'session']> &
   JwtApplication &
   Oauth2Application &
   SessionApplication;
 
 export type Application<E extends Entity> = Command['Application'] &
-  BaseApplicationAddedApplicationProperties &
+  BaseApplicationAddedApplicationProperties<E> &
   BaseSimpleApplicationApplication &
   ApplicationProperties &
-  AuthenticationProperties<E> & {};
+  AuthenticationProperties & {};

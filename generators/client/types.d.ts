@@ -9,9 +9,9 @@ import type {
 } from '../common/types.ts';
 import type { Config as JavascriptConfig, Options as JavascriptOptions, Source as JavascriptSource } from '../javascript/types.ts';
 
+import type { ClientAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
 import type { Entity } from './entity.ts';
-import type { GetWebappTranslationCallback } from './translation.ts';
 
 type Command = HandleCommandTypes<typeof command>;
 
@@ -23,20 +23,7 @@ export type Config = JavascriptConfig & CommonConfig & Command['Config'];
 
 export type Options = JavascriptOptions & CommonOptions & Command['Options'];
 
-export type Application<E extends Entity = Entity> = Command['Application'] &
-  CommonApplication<E> & {
-    webappLoginRegExp: string;
-    clientWebappDir?: string;
-    clientThemeNone?: boolean;
-    clientThemeAny?: boolean;
-    webappEnumerationsDir?: string;
-    clientFrameworkBuiltIn?: boolean;
-    frontendAppName?: string;
-    filterEntitiesForClient?: <const E extends Entity>(entity: E[]) => E[];
-    filterEntitiesAndPropertiesForClient?: <const E extends Entity>(entity: E[]) => E[];
-    filterEntityPropertiesForClient?: <const E extends Entity>(entity: E) => E;
-    getWebappTranslation?: GetWebappTranslationCallback;
-  };
+export type Application<E extends Entity = Entity> = Command['Application'] & CommonApplication<E> & ClientAddedApplicationProperties & {};
 
 export type ClientResources = {
   /**

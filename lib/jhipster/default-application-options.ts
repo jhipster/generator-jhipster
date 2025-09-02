@@ -183,6 +183,9 @@ function getConfigForDatabaseType(options: ApplicationDefaults = {}): Applicatio
     options[PROD_DATABASE_TYPE] ??= POSTGRESQL;
     options[DEV_DATABASE_TYPE] ??= options[PROD_DATABASE_TYPE];
   }
+  if (options[DATABASE_TYPE] === 'no') {
+    options[SKIP_USER_MANAGEMENT] = true;
+  }
   options.databaseMigration ??= options.databaseType === SQL ? 'liquibase' : 'no';
 
   return options;

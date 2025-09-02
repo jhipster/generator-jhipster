@@ -17,14 +17,12 @@
  * limitations under the License.
  */
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
-import type { Application as JavascriptApplication } from '../javascript/types.ts';
 
 import { type Language, findLanguageForTag, supportedLanguages } from './support/languages.ts';
 
 export type LanguagesAddedApplicationProperties = {
   supportedLanguages: Language[];
   enableTranslation: boolean;
-  i18nDir: string;
   enableI18nRTL: boolean;
   nativeLanguage: string;
   nativeLanguageDefinition: Language;
@@ -43,8 +41,6 @@ export const mutateApplication = {
   nativeLanguageDefinition: ({ nativeLanguage, supportedLanguages }) => findLanguageForTag(nativeLanguage, supportedLanguages)!,
   languages: () => [],
   languagesDefinition: data => data.languages.map(lang => findLanguageForTag(lang, data.supportedLanguages)!).filter(lang => lang),
-  // TODO rename to clientI18nDir and move to client
-  i18nDir: data => `${(data as unknown as JavascriptApplication).clientSrcDir}i18n/`,
   addLanguageCallbacks: () => [],
   enableI18nRTL: data => data.nativeLanguageDefinition.rtl || data.languagesDefinition.some(lang => lang.rtl),
   languagesToGenerate: () => undefined,

@@ -37,7 +37,7 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
     return this.asPreparingTaskGroup({
       translations({ application }) {
         application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
-          const { enableTranslation, clientSrcDir, clientRootDir, i18nDir } = application;
+          const { enableTranslation, clientSrcDir, clientRootDir, clientI18nDir } = application;
           if (!enableTranslation) return;
 
           const { ignoreNeedlesError: ignoreNonExisting } = this;
@@ -66,11 +66,11 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
             this.editFile(
               `${clientRootDir}webpack/webpack.custom.js`,
               { ignoreNonExisting },
-              createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, i18nDir)),
+              createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, clientI18nDir)),
             );
           } else if (application.clientBundlerExperimentalEsbuild) {
             this.editFile(
-              `${application.i18nDir}index.ts`,
+              `${application.clientI18nDir}index.ts`,
               createNeedleCallback({
                 needle: 'i18n-language-loader',
                 contentToAdd: allLanguages.map(

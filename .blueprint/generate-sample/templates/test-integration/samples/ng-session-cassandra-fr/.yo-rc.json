@@ -6,7 +6,6 @@
     "buildTool": "maven",
     "cacheProvider": "no",
     "clientFramework": "angular",
-    "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,
     "databaseType": "cassandra",
     "devDatabaseType": "cassandra",
@@ -14,7 +13,6 @@
     "enableTranslation": true,
     "jhiPrefix": "jhi",
     "languages": ["en", "fr"],
-    "messageBroker": "no",
     "nativeLanguage": "fr",
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
@@ -23,7 +21,6 @@
     "searchEngine": "no",
     "serverPort": "8080",
     "serviceDiscoveryType": "no",
-    "testFrameworks": ["gatling"],
-    "websocket": "no"
+    "testFrameworks": ["gatling"]
   }
 }

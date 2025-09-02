@@ -3,11 +3,9 @@
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "baseName": "jhipsterSampleApplication",
-    "blueprints": [],
     "buildTool": "maven",
     "cacheProvider": "ehcache",
     "clientFramework": "angular",
-    "clientPackageManager": "npm",
     "clientTheme": "none",
     "creationTimestamp": 1596513172471,
     "cypressCoverage": true,
@@ -70,16 +68,13 @@
       "vi",
       "az-Latn-az"
     ],
-    "messageBroker": "no",
     "nativeLanguage": "en",
-    "otherModules": [],
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "postgresql",
     "searchEngine": "no",
     "serverPort": "8080",
     "serviceDiscoveryType": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["gatling", "cypress"]
   }
 }

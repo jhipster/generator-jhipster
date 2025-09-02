@@ -3,12 +3,10 @@
     "applicationType": "monolith",
     "authenticationType": "oauth2",
     "baseName": "sampleWebfluxMongodbOauth2",
-    "blueprints": [],
     "buildTool": "gradle",
     "cacheProvider": "no",
     "clientBundler": "experimentalEsbuild",
     "clientFramework": "angular",
-    "clientPackageManager": "npm",
     "clientTheme": "none",
     "creationTimestamp": 1580314672693,
     "databaseType": "mongodb",
@@ -19,11 +17,8 @@
     "enableTranslation": true,
     "entitySuffix": "",
     "jhiPrefix": "jhi",
-    "jhipsterVersion": "6.6.0",
     "languages": ["en", "fr"],
-    "messageBroker": "no",
     "nativeLanguage": "en",
-    "otherModules": [],
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "mongodb",
@@ -31,7 +26,6 @@
     "searchEngine": "no",
     "serverPort": "8080",
     "serviceDiscoveryType": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["gatling", "cypress"]
   }
 }

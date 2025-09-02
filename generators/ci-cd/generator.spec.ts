@@ -78,6 +78,9 @@ describe(`generator - ${generator}`, () => {
           dockerContainers: expect.any(Object),
           addLanguageCallbacks: expect.any(Array),
           supportedLanguages: expect.any(Array),
+          user: expect.any(Object),
+          authority: expect.any(Object),
+          userManagement: expect.any(Object),
         });
       });
       it('should populate context', () => {

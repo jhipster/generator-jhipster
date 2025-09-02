@@ -6,13 +6,11 @@
     "buildTool": "maven",
     "cacheProvider": "infinispan",
     "clientFramework": "angular",
-    "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "enableTranslation": false,
     "jhiPrefix": "myPrefix",
-    "messageBroker": "no",
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",
     "prodDatabaseType": "mariadb",
@@ -20,7 +18,6 @@
     "searchEngine": "no",
     "serverPort": "8080",
     "serviceDiscoveryType": "no",
-    "testFrameworks": ["gatling", "cypress"],
-    "websocket": "no"
+    "testFrameworks": ["gatling", "cypress"]
   }
 }

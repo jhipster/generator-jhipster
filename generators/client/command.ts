@@ -87,18 +87,6 @@ const command = {
       choices: ['webpack', 'vite', 'experimentalEsbuild'],
       scope: 'storage',
     },
-    clientBundlerName: {
-      cli: { type: String, hide: true },
-      scope: 'storage',
-    },
-    clientTestFramework: {
-      cli: { type: String, hide: true },
-      scope: 'storage',
-    },
-    clientTestFrameworkName: {
-      cli: { type: String, hide: true },
-      scope: 'storage',
-    },
     devServerPort: {
       cli: {
         type: Number,

@@ -7,14 +7,12 @@
     "cacheProvider": "ehcache",
     "ci": true,
     "clientFramework": "angular",
-    "clientPackageManager": "npm",
     "creationTimestamp": 1596513172471,
     "databaseType": "sql",
     "devDatabaseType": "mysql",
     "enableTranslation": true,
     "jhiPrefix": "jhi",
     "languages": ["en"],
-    "messageBroker": false,
     "nativeLanguage": "en",
     "packageFolder": "io/github/jhipster/app",
     "packageName": "io.github.jhipster.app",
@@ -22,9 +20,6 @@
     "rememberMeKey": "a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe",
     "searchEngine": false,
     "serverPort": "8080",
-    "serviceDiscoveryType": false,
-    "testFrameworks": ["gatling", "cypress"],
-    "useSass": false,
-    "websocket": false
+    "testFrameworks": ["gatling", "cypress"]
   }
 }
