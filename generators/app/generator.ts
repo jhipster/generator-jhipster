@@ -68,6 +68,11 @@ export default class AppGenerator extends BaseApplicationGenerator<Entity, Appli
 
   get configuring() {
     return this.asConfiguringTaskGroup({
+      setup() {
+        if (this.jhipsterConfig.applicationType === 'microservice') {
+          this.jhipsterConfig.skipUserManagement = true;
+        }
+      },
       fixConfig() {
         if (this.jhipsterConfig.jhiPrefix) {
           this.jhipsterConfig.jhiPrefix = camelCase(this.jhipsterConfig.jhiPrefix);
