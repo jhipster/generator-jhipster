@@ -20,7 +20,6 @@
 import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
-import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import type { Application as CommonApplication, Config as CommonConfig, Entity as CommonEntity } from '../common/types.ts';
 import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_SERVER } from '../generator-list.ts';
@@ -69,11 +68,6 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      setup() {
-        if (this.jhipsterConfig.applicationType === APPLICATION_TYPE_MICROSERVICE) {
-          this.jhipsterConfig.skipUserManagement = true;
-        }
-      },
       fixConfig() {
         if (this.jhipsterConfig.jhiPrefix) {
           this.jhipsterConfig.jhiPrefix = camelCase(this.jhipsterConfig.jhiPrefix);

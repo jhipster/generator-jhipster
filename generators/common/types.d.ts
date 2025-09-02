@@ -15,6 +15,7 @@ import type prettierCommand from '../javascript/generators/prettier/command.ts';
 import type { Application as JavascriptApplication } from '../javascript/types.ts';
 import type { Application as LanguagesApplication, Config as LanguagesConfig, Options as LanguagesOptions } from '../languages/types.ts';
 
+import type { CommonAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
 import type { Entity } from './entity.ts';
 
@@ -52,36 +53,8 @@ export type Application<E extends BaseApplicationEntity = Entity> = JavascriptAp
   PrettierCommand['Application'] &
   GitApplication<E> &
   DockerApplication &
-  LanguagesApplication<E> & {
-    srcMain: string;
-    srcTest: string;
-    anyEntityHasRelationshipWithUser: boolean;
-
-    gatewayServicesApiAvailable?: boolean;
-    generateAuthenticationApi?: boolean;
-    generateInMemoryUserCredentials?: boolean;
-
-    endpointPrefix?: string;
-    authenticationUsesCsrf: boolean;
-    gatewayRoutes?: { route: string; host: string; serverPort: string }[];
-
-    devServerPort: number;
-    serverPort: number;
-    backendType?: string;
-    backendTypeJavaAny?: boolean;
-    backendTypeSpringBoot?: boolean;
-    temporaryDir?: string;
-
-    loginRegex?: string;
-
-    skipClient?: boolean;
-    skipServer?: boolean;
-
-    /**
-     * True if the application has at least one non-builtin entity.
-     */
-    hasNonBuiltInEntity?: boolean;
-  };
+  LanguagesApplication<E> &
+  CommonAddedApplicationProperties;
 
 type SonarRule = {
   /** Custom rule ID */

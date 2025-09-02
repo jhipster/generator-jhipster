@@ -114,7 +114,14 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
         loadDerivedConfig(serverCommand.configs, { application });
       },
       loadApplication({ applicationDefaults }) {
-        applicationDefaults(mutateApplication);
+        applicationDefaults(
+          {
+            anyEntityHasRelationshipWithUser: this.getExistingEntities().some(entity =>
+              (entity.definition.relationships ?? []).some(relationship => relationship.otherEntityName.toLowerCase() === 'user'),
+            ),
+          },
+          mutateApplication,
+        );
       },
       loadApplicationKeysForEjs({ application }) {
         mutateData(application as unknown as SpringBootApplication, {

@@ -124,8 +124,6 @@ const command = {
         const { jwtSecretKey, rememberMeKey, authenticationType, applicationType } = gen.jhipsterConfigWithDefaults;
         if (authenticationType === SESSION && !rememberMeKey) {
           gen.jhipsterConfig.rememberMeKey = createSecret();
-        } else if (authenticationType === OAUTH2 && gen.jhipsterConfig.skipUserManagement === undefined) {
-          gen.jhipsterConfig.skipUserManagement = true;
         } else if (
           jwtSecretKey === undefined &&
           (authenticationType === JWT || applicationType === APPLICATION_TYPE_MICROSERVICE || applicationType === APPLICATION_TYPE_GATEWAY)
