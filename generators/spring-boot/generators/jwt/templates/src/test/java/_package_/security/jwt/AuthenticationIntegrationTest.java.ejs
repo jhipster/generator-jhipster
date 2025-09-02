@@ -12,6 +12,9 @@ import <%= packageName %>.management.SecurityMetersService;
 <%_ if (!applicationTypeMicroservice) { _%>
 import <%= packageName %>.web.rest.AuthenticateController;
 <%_ } _%>
+<%_ if (reactive && generateBuiltInUserEntity) { _%>
+import <%= packageName %>.repository.UserRepository;
+<%_ } _%>
 
 import tech.jhipster.config.JHipsterProperties;
 
@@ -19,6 +22,8 @@ import tech.jhipster.config.JHipsterProperties;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 <%_ } else { _%>
 import org.springframework.boot.test.context.SpringBootTest;
@@ -69,6 +74,12 @@ import org.springframework.boot.test.context.SpringBootTest;
         JwtAuthenticationTestUtils.class
     }
 )
+<%_ } _%>
+<%_ if (reactive) { %>
+@MockitoBean(types = ReactiveUserDetailsService.class)
+<%_ } _%>
+<%_ if (reactive && generateBuiltInUserEntity) { _%>
+@MockitoBean(types = UserRepository.class)
 <%_ } _%>
 public @interface AuthenticationIntegrationTest {
 

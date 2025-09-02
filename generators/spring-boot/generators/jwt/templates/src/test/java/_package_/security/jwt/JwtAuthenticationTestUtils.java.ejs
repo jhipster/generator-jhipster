@@ -23,13 +23,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 <%_ if (!reactive) { _%>
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 <%_ } _%>
-<%_ if (reactive && generateBuiltInUserEntity) { _%>
-import <%= packageName %>.repository.UserRepository;
-<%_ } _%>
-<%_ if (reactive) { _%>
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
-<%_ } _%>
 
 public class JwtAuthenticationTestUtils {
 <%_ if (!reactive) { _%>
@@ -53,17 +46,6 @@ public class JwtAuthenticationTestUtils {
     private MeterRegistry meterRegistry() {
         return new SimpleMeterRegistry();
     }
-<%_ if (reactive) { _%>
-
-    // TODO switch to MockitoSpyBean https://github.com/spring-projects/spring-framework/issues/33941
-    @MockBean
-    private ReactiveUserDetailsService userDetailsService;
-<%_ } _%>
-<%_ if (reactive && generateBuiltInUserEntity) { _%>
-
-    @MockBean
-    private UserRepository userRepository;
-<%_ } _%>
 
     public static String createValidToken(String jwtKey) {
         return createValidTokenForUser(jwtKey, "anonymous");
