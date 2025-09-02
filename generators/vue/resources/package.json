@@ -6,7 +6,7 @@
     "@stomp/rx-stomp": "2.0.1",
     "@vuelidate/core": "2.0.3",
     "@vuelidate/validators": "2.0.4",
-    "@vueuse/core": "13.8.0",
+    "@vueuse/core": "13.9.0",
     "axios": "1.11.0",
     "bootstrap": "5.3.7",
     "bootstrap-vue-next": "0.30.5",
