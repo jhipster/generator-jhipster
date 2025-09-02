@@ -21,6 +21,7 @@ import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from
 import type { Application, Entity } from './types.ts';
 
 type UserManagementProperties<Entity> = {
+  authenticationTypeUsesRemoteAuthorization: boolean;
   skipUserManagement: boolean;
   generateAuthenticationApi: boolean;
   generateUserManagement: boolean;
@@ -36,10 +37,13 @@ type UserManagementProperties<Entity> = {
 export const mutateUserManagementApplication = {
   __override__: false,
 
-  skipUserManagement: data => data.applicationType === 'microservice' || data.authenticationType === 'oauth2' || data.databaseType === 'no',
   generateAuthenticationApi: data => data.applicationType !== 'microservice',
+  authenticationTypeUsesRemoteAuthorization: data => data.authenticationType === 'oauth2',
+  skipUserManagement: data =>
+    !data.generateAuthenticationApi || data.authenticationTypeUsesRemoteAuthorization || data.databaseType === 'no',
   generateUserManagement: data => !data.skipUserManagement && data.generateAuthenticationApi,
-  generateInMemoryUserCredentials: data => !data.generateUserManagement && data.authenticationType !== 'oauth2',
+  generateInMemoryUserCredentials: data =>
+    data.generateAuthenticationApi && data.skipUserManagement && !data.authenticationTypeUsesRemoteAuthorization,
 
   syncUserWithIdp: data =>
     Boolean(

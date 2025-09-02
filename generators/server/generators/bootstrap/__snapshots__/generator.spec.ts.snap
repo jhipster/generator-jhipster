@@ -17,6 +17,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "authenticationTypeJwt": true,
   "authenticationTypeOauth2": false,
   "authenticationTypeSession": false,
+  "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
   "authority": Any<Object>,
   "autoCrlf": undefined,

@@ -16,6 +16,7 @@ exports[`generator - javascript:bootstrap bootstrapping default config should pr
   "authenticationTypeJwt": true,
   "authenticationTypeOauth2": false,
   "authenticationTypeSession": false,
+  "authenticationTypeUsesRemoteAuthorization": false,
   "authority": Any<Object>,
   "autoCrlf": undefined,
   "baseName": "jhipster",
