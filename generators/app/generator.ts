@@ -20,23 +20,22 @@
 import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
-import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
-import type { Application as CommonApplication, Config as CommonConfig, Entity as CommonEntity } from '../common/types.ts';
-import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_SERVER } from '../generator-list.ts';
+import { GENERATOR_APP, GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_SERVER } from '../generator-list.ts';
 import { getDefaultAppName } from '../project-name/support/index.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { checkNode } from './support/index.ts';
+import type { Application, Config, Entity } from './types.d.ts';
 
-export default class AppGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication, CommonConfig> {
+export default class AppGenerator extends BaseApplicationGenerator<Entity, Application, Config> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('app');
+      await this.dependsOnBootstrap(GENERATOR_APP);
     }
   }
 
@@ -70,7 +69,7 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
   get configuring() {
     return this.asConfiguringTaskGroup({
       setup() {
-        if (this.jhipsterConfig.applicationType === APPLICATION_TYPE_MICROSERVICE) {
+        if (this.jhipsterConfig.applicationType === 'microservice') {
           this.jhipsterConfig.skipUserManagement = true;
         }
       },

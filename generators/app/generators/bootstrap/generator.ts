@@ -21,14 +21,14 @@ import assert from 'node:assert';
 import { validations } from '../../../../lib/jhipster/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { stringifyApplicationData } from '../../../base-application/support/index.ts';
-import type { Application as CommonApplication, Entity as CommonEntity, Field as CommonField } from '../../../common/types.ts';
+import type { Application, Entity, Field } from '../../types.d.ts';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
   SUPPORTED_VALIDATION_RULES,
 } = validations;
 
-export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication> {
+export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<Entity, Application> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -63,7 +63,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
         if (!application.skipServer) {
           prettierExtensions = `${prettierExtensions},java`;
         }
-
         applicationDefaults({
           // TODO remove prettierExtensions, moved to prettier generator
           prettierExtensions,
@@ -83,7 +82,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           entityConfig.name = entityName;
         }
 
-        entityConfig.fields!.forEach((field: CommonField) => {
+        entityConfig.fields!.forEach((field: Field) => {
           const { fieldName, fieldType, fieldValidateRules } = field;
 
           assert(fieldName, `fieldName is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
