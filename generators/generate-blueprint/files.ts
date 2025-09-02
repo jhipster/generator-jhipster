@@ -34,10 +34,10 @@ export const files = asWriteFilesSection<GenerateBlueprintApplication>({
         'tsconfig.json',
         'vitest.config.ts',
         'vitest.test-setup.ts',
-        '.blueprint/cli/commands.mjs',
-        '.blueprint/generate-sample/command.mjs',
-        '.blueprint/generate-sample/generator.mjs',
-        '.blueprint/generate-sample/index.mjs',
+        '.blueprint/cli/commands.js',
+        '.blueprint/generate-sample/command.js',
+        '.blueprint/generate-sample/generator.js',
+        '.blueprint/generate-sample/index.js',
         // Always write cli for devBlueprint usage
         'cli/cli.cjs',
         { sourceFile: 'cli/cli-customizations.cjs', override: false },
@@ -46,10 +46,10 @@ export const files = asWriteFilesSection<GenerateBlueprintApplication>({
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows,
       templates: [
-        '.blueprint/github-build-matrix/command.mjs',
-        '.blueprint/github-build-matrix/generator.mjs',
-        '.blueprint/github-build-matrix/generator.spec.mjs',
-        '.blueprint/github-build-matrix/index.mjs',
+        '.blueprint/github-build-matrix/command.js',
+        '.blueprint/github-build-matrix/generator.js',
+        '.blueprint/github-build-matrix/generator.spec.js',
+        '.blueprint/github-build-matrix/index.js',
       ],
     },
     {
@@ -73,21 +73,21 @@ export const generatorFiles = asWriteFilesSection<TemplateData>({
       path: 'generators/generator',
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator.replaceAll(':', '/generators/')}`,
       templates: [
-        { sourceFile: 'index.mjs', destinationFile: ctx => `index.${ctx.blueprintMjsExtension}` },
+        { sourceFile: 'index.js', destinationFile: _ctx => `index.js` },
         {
-          sourceFile: 'command.mjs',
-          destinationFile: ctx => `command.${ctx.blueprintMjsExtension}`,
+          sourceFile: 'command.js',
+          destinationFile: _ctx => `command.js`,
           override: data => !data.ignoreExistingGenerators,
         },
         {
-          sourceFile: 'generator.mjs.jhi',
-          destinationFile: ctx => `generator.${ctx.blueprintMjsExtension}.jhi`,
+          sourceFile: 'generator.js.jhi',
+          destinationFile: _ctx => `generator.js.jhi`,
           override: data => !data.ignoreExistingGenerators,
         },
         {
           condition: data => !data.generator.startsWith('entity') && !data.application[LOCAL_BLUEPRINT_OPTION],
-          sourceFile: 'generator.spec.mjs',
-          destinationFile: data => `generator.spec.${data.blueprintMjsExtension}`,
+          sourceFile: 'generator.spec.js',
+          destinationFile: _data => `generator.spec.js`,
           override: data => !data.ignoreExistingGenerators,
         },
       ],

@@ -244,7 +244,7 @@ export const buildCommands = ({
       return command;
     } catch (error) {
       try {
-        const { default: command } = await import(`./${key}.mjs`);
+        const { default: command } = await import(`./${key}.cjs`);
         return command;
       } catch {
         throw error;

@@ -20,7 +20,7 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/.postcssrc.js": {
     "stateCleared": "modified",
   },
-  "clientRoot/eslint.config.mjs": {
+  "clientRoot/eslint.config.js": {
     "stateCleared": "modified",
   },
   "clientRoot/package.json": {
@@ -531,7 +531,7 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/.postcssrc.js": {
     "stateCleared": "modified",
   },
-  "clientRoot/eslint.config.mjs": {
+  "clientRoot/eslint.config.js": {
     "stateCleared": "modified",
   },
   "clientRoot/package.json": {
@@ -1114,7 +1114,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/.postcssrc.js": {
     "stateCleared": "modified",
   },
-  "clientRoot/eslint.config.mjs": {
+  "clientRoot/eslint.config.js": {
     "stateCleared": "modified",
   },
   "clientRoot/module-federation.config.cjs": {
@@ -1660,7 +1660,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "eslint.config.js": {
     "stateCleared": "modified",
   },
   "module-federation.config.cjs": {
@@ -2205,7 +2205,7 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "eslint.config.js": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -2872,7 +2872,7 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "eslint.config.js": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -3359,7 +3359,7 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "eslint.config.js": {
     "stateCleared": "modified",
   },
   "package.json": {

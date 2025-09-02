@@ -37,7 +37,7 @@ describe(`generator - ${generator}`, () => {
 
   for (const [name, config] of Object.entries(
     extendMatrix(fromMatrix({ packageJsonNodeEngine: [true, false, 'customVersion'] }), {
-      packageJsonType: [undefined, 'commonjs', 'module'],
+      packageJsonType: ['module'],
     }),
   )) {
     describe(name, () => {

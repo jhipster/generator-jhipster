@@ -12,7 +12,8 @@ describe('allows customizing JDL definitions', () => {
     await helpers
       .prepareTemporaryDir()
       .withFiles({
-        '.blueprint/app/index.mjs': `export const command = {
+        '.blueprint/package.json': JSON.stringify({ type: 'module' }),
+        '.blueprint/app/index.js': `export const command = {
   configs: {
     fooConfig: {
       jdl: {

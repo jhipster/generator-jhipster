@@ -97,7 +97,7 @@ export default class ReactGenerator extends ClientApplicationGenerator<
 
         applicationDefaults({
           __override__: true,
-          eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
+          eslintConfigFile: _app => `eslint.config.js`,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
         });
       },

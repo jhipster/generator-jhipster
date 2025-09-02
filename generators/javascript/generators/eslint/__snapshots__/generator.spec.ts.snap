@@ -7,7 +7,7 @@ exports[`generator - javascript:eslint with defaults options should match files 
   ".yo-rc.json": ObjectContaining {
     "contents": Any<String>,
   },
-  "eslint.config.mjs": {
+  "eslint.config.js": {
     "contents": "import globals from 'globals';
 import prettier from 'eslint-plugin-prettier/recommended';
 // jhipster-needle-eslint-add-import - JHipster will add additional import here

@@ -99,7 +99,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
       applicationDefauts({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
-          eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
+          eslintConfigFile: _app => `eslint.config.js`,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
           angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!,
         });

@@ -294,7 +294,10 @@ describe('generator - base - local blueprint', () => {
     before(async () => {
       await helpers
         .runJHipster(BLUEPRINT_NS, { useEnvironmentBuilder: true })
-        .withFiles({ '.blueprint/app/index.mjs': BLUEPRINT_CONTENTS })
+        .withFiles({
+          '.blueprint/app/index.js': BLUEPRINT_CONTENTS,
+          '.blueprint/package.json': { type: 'module' },
+        })
         .commitFiles()
         .withJHipsterConfig();
     });
@@ -302,7 +305,10 @@ describe('generator - base - local blueprint', () => {
     it('creates expected default files', () => {
       expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
 {
-  ".blueprint/app/index.mjs": {
+  ".blueprint/app/index.js": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/package.json": {
     "stateCleared": "modified",
   },
   ".yo-rc.json": {

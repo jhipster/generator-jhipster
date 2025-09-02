@@ -100,7 +100,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
       applicationDefauts({ applicationDefaults }) {
         applicationDefaults({
           __override__: true,
-          eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
+          eslintConfigFile: _app => `eslint.config.js`,
           clientWebappDir: app => `${app.clientSrcDir}app/`,
           webappEnumerationsDir: app => `${app.clientWebappDir}shared/model/enumerations/`,
         });
