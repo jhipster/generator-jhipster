@@ -12,7 +12,6 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "applicationTypeMicroservice": false,
   "applicationTypeMonolith": true,
   "appsFolders": undefined,
-  "authenticationApiWithUserManagement": true,
   "authenticationType": "jwt",
   "authenticationTypeAny": true,
   "authenticationTypeJwt": true,

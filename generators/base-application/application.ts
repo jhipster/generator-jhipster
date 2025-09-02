@@ -23,7 +23,6 @@ import type { Application, Entity } from './types.ts';
 type UserManagementProperties<Entity> = {
   skipUserManagement: boolean;
   generateAuthenticationApi: boolean;
-  authenticationApiWithUserManagement: boolean;
   generateUserManagement: boolean;
   generateBuiltInUserEntity?: boolean;
   generateBuiltInAuthorityEntity: boolean;
@@ -37,15 +36,18 @@ type UserManagementProperties<Entity> = {
 export const mutateUserManagementApplication = {
   __override__: false,
 
-  skipUserManagement: data => {
-    return data.applicationTypeMicroservice || data.authenticationTypeOauth2 || data.databaseType === 'no';
-  },
-  generateAuthenticationApi: data => Boolean(data.applicationTypeMonolith || data.applicationTypeGateway),
-  authenticationApiWithUserManagement: data => Boolean(!data.authenticationTypeOauth2 && data.generateAuthenticationApi),
-  generateUserManagement: data =>
-    Boolean(!data.skipUserManagement && data.databaseType !== 'no' && data.authenticationApiWithUserManagement),
-  generateInMemoryUserCredentials: data => Boolean(!data.generateUserManagement && data.authenticationApiWithUserManagement),
+  skipUserManagement: data => data.applicationType === 'microservice' || data.authenticationType === 'oauth2' || data.databaseType === 'no',
+  generateAuthenticationApi: data => data.applicationType !== 'microservice',
+  generateUserManagement: data => !data.skipUserManagement && data.generateAuthenticationApi,
+  generateInMemoryUserCredentials: data => !data.generateUserManagement && data.authenticationType !== 'oauth2',
 
+  syncUserWithIdp: data =>
+    Boolean(
+      (data.backendType ?? 'Java') === 'Java' &&
+        data.authenticationType === 'oauth2' &&
+        data.databaseType !== 'no' &&
+        (data.applicationType === 'gateway' || data.anyEntityHasRelationshipWithUser),
+    ),
   generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => Boolean(generateUserManagement || syncUserWithIdp),
   generateBuiltInAuthorityEntity: ({ generateBuiltInUserEntity, databaseType }) =>
     Boolean(generateBuiltInUserEntity! && databaseType !== 'cassandra'),

@@ -241,7 +241,7 @@ exports[`generator - react:bootstrap bootstrapping default config should prepare
   "srcTest": "src/test/",
   "subGenerators": undefined,
   "supportedLanguages": Any<Array>,
-  "syncUserWithIdp": undefined,
+  "syncUserWithIdp": false,
   "temporaryDir": "target/",
   "testFrameworks": Any<Array>,
   "typescriptEslint": undefined,

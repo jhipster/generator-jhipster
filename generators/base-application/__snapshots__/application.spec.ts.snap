@@ -4,6 +4,25 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
 {
   "dtoSuffix": "DTO",
   "entitySuffix": "",
+  "generateAuthenticationApi": true,
+  "generateBuiltInAuthorityEntity": true,
+  "generateBuiltInUserEntity": true,
+  "generateInMemoryUserCredentials": false,
+  "generateUserManagement": true,
   "javaNodeBuildPaths": [],
+  "skipUserManagement": false,
+  "syncUserWithIdp": false,
+}
+`;
+
+exports[`application mutation test expects mutateUserManagementApplication to match snapshot 1`] = `
+{
+  "generateAuthenticationApi": true,
+  "generateBuiltInAuthorityEntity": true,
+  "generateBuiltInUserEntity": true,
+  "generateInMemoryUserCredentials": false,
+  "generateUserManagement": true,
+  "skipUserManagement": false,
+  "syncUserWithIdp": false,
 }
 `;

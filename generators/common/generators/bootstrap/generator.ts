@@ -63,10 +63,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
           gatewayServerPort: undefined,
         });
       },
-      syncUserWithIdp({ application, applicationDefaults }) {
-        if (application.authenticationType === 'oauth2') {
-          applicationDefaults({});
-        }
+      syncUserWithIdp({ application }) {
         if (application.syncUserWithIdp && application.authenticationType !== 'oauth2') {
           throw new Error('syncUserWithIdp is only supported with oauth2 authenticationType');
         }

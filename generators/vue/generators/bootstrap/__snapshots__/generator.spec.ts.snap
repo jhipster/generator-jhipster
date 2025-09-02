@@ -241,7 +241,7 @@ exports[`generator - vue:bootstrap bootstrapping default config should prepare a
   "srcTest": "src/test/",
   "subGenerators": undefined,
   "supportedLanguages": Any<Array>,
-  "syncUserWithIdp": undefined,
+  "syncUserWithIdp": false,
   "temporaryDir": "target/",
   "testFrameworks": Any<Array>,
   "typescriptEslint": undefined,

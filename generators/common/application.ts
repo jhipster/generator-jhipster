@@ -83,12 +83,4 @@ export const mutateApplication = {
 
   devServerPort: 9060,
   serverPort: ({ applicationTypeMicroservice }) => (applicationTypeMicroservice ? 8081 : 8080),
-
-  syncUserWithIdp: data =>
-    Boolean(
-      data.backendTypeSpringBoot &&
-        data.authenticationType === 'oauth2' &&
-        data.databaseType !== 'no' &&
-        (data.applicationType === 'gateway' || data.anyEntityHasRelationshipWithUser),
-    ),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<CommonApplication>, CommonAddedApplicationProperties>;

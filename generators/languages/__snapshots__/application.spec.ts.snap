@@ -5,7 +5,6 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "addLanguageCallbacks": [],
   "enableI18nRTL": false,
   "enableTranslation": false,
-  "i18nDir": "clientSrcDiri18n/",
   "languages": [],
   "languagesDefinition": [],
   "languagesToGenerate": undefined,
