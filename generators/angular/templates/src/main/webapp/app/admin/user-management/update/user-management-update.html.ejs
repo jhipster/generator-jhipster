@@ -128,7 +128,7 @@
       </div>
 <%_ if (enableTranslation) { _%>
 
-    @if (languages && languages.length > 0) {
+    @if (languages.length) {
       <div class="mb-3">
         <label class="form-label" for="langKey">__jhiTranslateTag__('userManagement.langKey')</label>
         <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
