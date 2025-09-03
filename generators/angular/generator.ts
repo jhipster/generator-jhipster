@@ -25,7 +25,7 @@ import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.ts';
-import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.ts';
+import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 import { defaultLanguage } from '../languages/support/index.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';

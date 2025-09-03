@@ -27,7 +27,7 @@ export type GeneratorsWithBootstrap =
   | 'common'
   | 'docker'
   | 'java'
-  | 'javascript'
+  | 'javascript-simple-application'
   | 'jdl'
   | 'kubernetes'
   | 'languages'
@@ -116,12 +116,12 @@ type GeneratorsByNamespace = {
   'jhipster:java:node': import('./java/generators/node/generator.ts').default;
   'jhipster:java:openapi-generator': import('./java/generators/openapi-generator/generator.ts').default;
   'jhipster:java:server': import('./java/generators/server/generator.ts').default;
-  javascript: import('./javascript/generator.ts').default;
-  'jhipster:javascript': import('./javascript/generator.ts').default;
-  'jhipster:javascript:bootstrap': import('./javascript/generators/bootstrap/generator.ts').default;
-  'jhipster:javascript:eslint': import('./javascript/generators/eslint/generator.ts').default;
-  'jhipster:javascript:husky': import('./javascript/generators/husky/generator.ts').default;
-  'jhipster:javascript:prettier': import('./javascript/generators/prettier/generator.ts').default;
+  'javascript-simple-application': import('./javascript-simple-application/generator.ts').default;
+  'jhipster:javascript-simple-application': import('./javascript-simple-application/generator.ts').default;
+  'jhipster:javascript-simple-application:bootstrap': import('./javascript-simple-application/generators/bootstrap/generator.ts').default;
+  'jhipster:javascript-simple-application:eslint': import('./javascript-simple-application/generators/eslint/generator.ts').default;
+  'jhipster:javascript-simple-application:husky': import('./javascript-simple-application/generators/husky/generator.ts').default;
+  'jhipster:javascript-simple-application:prettier': import('./javascript-simple-application/generators/prettier/generator.ts').default;
   jdl: import('./jdl/generator.ts').default;
   'jhipster:jdl': import('./jdl/generator.ts').default;
   'jhipster:jdl:bootstrap': import('./jdl/generators/bootstrap/generator.ts').default;

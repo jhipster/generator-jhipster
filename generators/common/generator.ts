@@ -49,7 +49,7 @@ export default class CommonGenerator extends BaseApplicationGenerator<
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('common');
-      await this.dependsOnJHipster('javascript');
+      await this.dependsOnJHipster('javascript-simple-application');
       await this.dependsOnJHipster(GENERATOR_GIT);
     }
   }
@@ -80,9 +80,9 @@ export default class CommonGenerator extends BaseApplicationGenerator<
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        await this.composeWithJHipster('jhipster:javascript:prettier');
+        await this.composeWithJHipster('jhipster:javascript-simple-application:prettier');
         if (!this.jhipsterConfig.skipCommitHook) {
-          await this.composeWithJHipster('jhipster:javascript:husky');
+          await this.composeWithJHipster('jhipster:javascript-simple-application:husky');
         }
       },
     });

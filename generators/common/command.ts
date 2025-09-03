@@ -68,7 +68,11 @@ const command = {
       scope: 'storage',
     },
   },
-  import: ['jhipster:base-application:bootstrap', 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
+  import: [
+    'jhipster:base-application:bootstrap',
+    'jhipster:javascript-simple-application:prettier',
+    'jhipster:javascript-simple-application:husky',
+  ],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

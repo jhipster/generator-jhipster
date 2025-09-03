@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - javascript:bootstrap bootstrapping default config should prepare application 1`] = `
+exports[`generator - javascript-simple-application:bootstrap bootstrapping default config should prepare application 1`] = `
 {
   "addOpenapiGeneratorPlugin": undefined,
   "additionalSubGenerators": undefined,
@@ -223,7 +223,7 @@ exports[`generator - javascript:bootstrap bootstrapping default config should pr
 }
 `;
 
-exports[`generator - javascript:bootstrap bootstrapping default config should prepare entities 1`] = `
+exports[`generator - javascript-simple-application:bootstrap bootstrapping default config should prepare entities 1`] = `
 {
   "AnotherSimple": {
     "adminEntity": undefined,
@@ -2221,7 +2221,7 @@ exports[`generator - javascript:bootstrap bootstrapping default config should pr
 }
 `;
 
-exports[`generator - javascript:bootstrap bootstrapping default config should prepare entity names 1`] = `
+exports[`generator - javascript-simple-application:bootstrap bootstrapping default config should prepare entity names 1`] = `
 [
   "User",
   "UserManagement",
@@ -2231,9 +2231,9 @@ exports[`generator - javascript:bootstrap bootstrapping default config should pr
 ]
 `;
 
-exports[`generator - javascript:bootstrap customVersion-commonjs should call source snapshot 1`] = `{}`;
+exports[`generator - javascript-simple-application:bootstrap customVersion-commonjs should call source snapshot 1`] = `{}`;
 
-exports[`generator - javascript:bootstrap customVersion-commonjs should match files snapshot 1`] = `
+exports[`generator - javascript-simple-application:bootstrap customVersion-commonjs should match files snapshot 1`] = `
 {
   ".yo-rc.json": ObjectContaining {
     "contents": Any<String>,
@@ -2241,9 +2241,9 @@ exports[`generator - javascript:bootstrap customVersion-commonjs should match fi
 }
 `;
 
-exports[`generator - javascript:bootstrap packageJsonNodeEngine(false)-module should call source snapshot 1`] = `{}`;
+exports[`generator - javascript-simple-application:bootstrap packageJsonNodeEngine(false)-module should call source snapshot 1`] = `{}`;
 
-exports[`generator - javascript:bootstrap packageJsonNodeEngine(false)-module should match files snapshot 1`] = `
+exports[`generator - javascript-simple-application:bootstrap packageJsonNodeEngine(false)-module should match files snapshot 1`] = `
 {
   ".yo-rc.json": ObjectContaining {
     "contents": Any<String>,
@@ -2251,9 +2251,9 @@ exports[`generator - javascript:bootstrap packageJsonNodeEngine(false)-module sh
 }
 `;
 
-exports[`generator - javascript:bootstrap packageJsonNodeEngine(true) should call source snapshot 1`] = `{}`;
+exports[`generator - javascript-simple-application:bootstrap packageJsonNodeEngine(true) should call source snapshot 1`] = `{}`;
 
-exports[`generator - javascript:bootstrap packageJsonNodeEngine(true) should match files snapshot 1`] = `
+exports[`generator - javascript-simple-application:bootstrap packageJsonNodeEngine(true) should match files snapshot 1`] = `
 {
   ".yo-rc.json": ObjectContaining {
     "contents": Any<String>,

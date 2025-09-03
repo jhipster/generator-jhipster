@@ -45,7 +45,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
     });
 
     await this.dependsOnBootstrap('base-application');
-    await this.dependsOnBootstrap('javascript');
+    await this.dependsOnBootstrap('javascript-simple-application');
   }
 
   get supportedLanguages(): Map<string, Language> {

@@ -26,7 +26,7 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:javascript:bootstrap');
+      await this.dependsOnJHipster('jhipster:javascript-simple-application:bootstrap');
     }
   }
 
@@ -35,7 +35,7 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
       loadNodeDependencies({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster('javascript', 'resources', 'package.json'),
+          this.fetchFromInstalledJHipster('javascript-simple-application', 'resources', 'package.json'),
         );
       },
     });

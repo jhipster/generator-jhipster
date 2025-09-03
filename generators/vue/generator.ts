@@ -32,7 +32,7 @@ import {
 } from '../client/support/index.ts';
 import type { Field as ClientField } from '../client/types.ts';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_VUE } from '../generator-list.ts';
-import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.ts';
+import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.ts';

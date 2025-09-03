@@ -19,7 +19,7 @@
 
 import { angularReservedKeywords } from '../../generators/angular/support/reserved-keywords.ts';
 import { javaReservedKeywords } from '../../generators/java/support/reserved-keywords.ts';
-import { typescriptReservedKeywords } from '../../generators/javascript/support/reserved-words.ts';
+import { typescriptReservedKeywords } from '../../generators/javascript-simple-application/support/reserved-words.ts';
 import { cassandraReservedKeywords } from '../../generators/spring-data-cassandra/support/reserved-keywords.ts';
 import { couchbaseReservedKeywords } from '../../generators/spring-data-couchbase/support/reserved-keywords.ts';
 import { neo4jReservedKeywords } from '../../generators/spring-data-neo4j/support/reserved-keywords.ts';
