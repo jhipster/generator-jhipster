@@ -208,6 +208,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "prodDatabaseUsername": undefined,
   "prodJdbcUrl": undefined,
   "projectDescription": "Description for JHipster",
+  "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
   "routes": undefined,

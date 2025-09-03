@@ -29,11 +29,11 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnBootstrap('javascript-simple-application');
     if (!this.delegateToBlueprint) {
       if (!this.options.fromInit) {
         await this.dependsOnBootstrap('client');
       }
-      await this.dependsOnJHipster('jhipster:javascript-simple-application:bootstrap');
     }
   }
 

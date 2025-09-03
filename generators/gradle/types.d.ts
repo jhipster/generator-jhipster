@@ -2,18 +2,17 @@ import type { RequireOneOrNone } from 'type-fest';
 
 import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type {
-  Application as JavaBootstrapApplication,
-  Config as JavaBootstrapConfig,
-  Entity as JavaBootstrapEntity,
-  Options as JavaBootstrapOptions,
-  Source as JavaBootstrapSource,
-} from '../java/generators/bootstrap/types.d.ts';
-import type {
   Application as BuildToolApplication,
   Config as BuildToolConfig,
   Options as BuildToolOptions,
   Source as BuildToolSource,
 } from '../java/generators/build-tool/types.d.ts';
+import type {
+  Application as JavaBootstrapApplication,
+  Config as JavaBootstrapConfig,
+  Options as JavaBootstrapOptions,
+  Source as JavaBootstrapSource,
+} from '../java-simple-application/types.ts';
 
 import type GradleCommand from './command.ts';
 
@@ -78,15 +77,13 @@ export type Source = JavaBootstrapSource &
 
 type Command = HandleCommandTypes<typeof GradleCommand>;
 
-export { JavaBootstrapEntity as Entity };
-
 export type Config = Command['Config'] & JavaBootstrapConfig & BuildToolConfig;
 
 export type Options = Command['Options'] & JavaBootstrapOptions & BuildToolOptions;
 
-export type Application<E extends JavaBootstrapEntity = JavaBootstrapEntity> = Command['Application'] &
-  JavaBootstrapApplication<E> &
-  BuildToolApplication<E> & {
+export type Application = Command['Application'] &
+  JavaBootstrapApplication &
+  BuildToolApplication & {
     gradleVersion?: string;
     gradleBuildSrc?: string;
     enableGradleDevelocity?: boolean;

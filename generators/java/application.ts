@@ -16,19 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingTask } from '../base-application/support/task-type-inference.ts';
+import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 
-import type { Application as GradleApplication, Entity as GradleEntity } from './types.ts';
+import type { Application as JavaApplication } from './types.ts';
 
-/**
- * Removes server files that where generated in previous JHipster versions and therefore
- * need to be removed.
- */
-export default asWritingTask<GradleEntity, GradleApplication>(function cleanupOldServerFilesTask({ control }) {
-  if (control.isJhipsterVersionLessThan('5.0.0')) {
-    this.removeFile('gradle/mapstruct.gradle');
-  }
-  if (control.isJhipsterVersionLessThan('5.2.2')) {
-    this.removeFile('gradle/liquibase.gradle');
-  }
-});
+export type JavaAddedApplicationProperties = {
+  useNpmWrapper: boolean;
+};
+
+export const mutateApplication = {
+  __override__: false,
+
+  useNpmWrapper: false,
+} as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<JavaApplication>, JavaAddedApplicationProperties>;

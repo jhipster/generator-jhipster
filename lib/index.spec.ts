@@ -69,6 +69,8 @@ describe('getGeneratorNamespaces', () => {
   "info",
   "init",
   "java",
+  "java-simple-application",
+  "java-simple-application:bootstrap",
   "java:bootstrap",
   "java:build-tool",
   "java:code-quality",

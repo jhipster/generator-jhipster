@@ -23,11 +23,5 @@ exports[`generator - maven:jib with defaults options should match files snapshot
   "pom.xml": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
-    "stateCleared": "modified",
-  },
 }
 `;

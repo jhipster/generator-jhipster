@@ -16,26 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../../../lib/command/types.ts';
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type {
-  Application as BaseApplicationApplication,
-  Config as BaseApplicationConfig,
-  Entity as BaseApplicationEntity,
-  Options as BaseApplicationOptions,
-  Source as BaseApplicationSource,
-} from '../../../base-application/types.ts';
+  Application as BaseSimpleApplicationApplication,
+  Config as BaseSimpleApplicationConfig,
+  Options as BaseSimpleApplicationOptions,
+  Source as BaseSimpleApplicationSource,
+} from '../base-simple-application/types.ts';
 
-import type { BootstrapJavaAddedApplicationProperties } from './application.ts';
+import type { JavaSimpleApplicationAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
 
-export type Config = Command['Config'] & BaseApplicationConfig;
+export type Config = Command['Config'] & BaseSimpleApplicationConfig;
 
-export type Options = Command['Options'] & BaseApplicationOptions;
+export type Options = Command['Options'] & BaseSimpleApplicationOptions;
 
-export { BaseApplicationEntity as Entity, BaseApplicationSource as Source };
+export { BaseSimpleApplicationSource as Source };
 
-export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = Command['Application'] &
-  BaseApplicationApplication<E> &
-  BootstrapJavaAddedApplicationProperties;
+export type Application = Command['Application'] & BaseSimpleApplicationApplication & JavaSimpleApplicationAddedApplicationProperties;

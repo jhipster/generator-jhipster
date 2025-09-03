@@ -21,7 +21,7 @@ import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { defaultHelpers as helpers, extendMatrix, fromMatrix, result } from '../../../../lib/testing/index.ts';
-import { testBootstrapEntities } from '../../../../test/support/bootstrap-tests.ts';
+import { testBootstrapApplication } from '../../../../test/support/bootstrap-tests.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
 
 import Generator from './generator.ts';
@@ -65,5 +65,5 @@ describe(`generator - ${generator}`, () => {
     });
   }
 
-  testBootstrapEntities(generator);
+  testBootstrapApplication(generator);
 });

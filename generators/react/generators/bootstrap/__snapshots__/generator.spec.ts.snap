@@ -211,6 +211,7 @@ exports[`generator - react:bootstrap bootstrapping default config should prepare
   "prodDatabaseTypeOracle": false,
   "prodDatabaseTypePostgresql": true,
   "projectDescription": "Description for JHipster",
+  "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
   "routes": undefined,

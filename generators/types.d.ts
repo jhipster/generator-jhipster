@@ -26,6 +26,7 @@ export type GeneratorsWithBootstrap =
   | 'client'
   | 'common'
   | 'docker'
+  | 'java-simple-application'
   | 'java'
   | 'javascript-simple-application'
   | 'jdl'
@@ -106,6 +107,9 @@ type GeneratorsByNamespace = {
   'jhipster:init': import('./init/generator.ts').default;
   java: import('./java/generator.ts').default;
   'jhipster:java': import('./java/generator.ts').default;
+  'java-simple-application': import('./java-simple-application/generator.ts').default;
+  'jhipster:java-simple-application': import('./java-simple-application/generator.ts').default;
+  'jhipster:java-simple-application:bootstrap': import('./java-simple-application/generators/bootstrap/generator.ts').default;
   'jhipster:java:bootstrap': import('./java/generators/bootstrap/generator.ts').default;
   'jhipster:java:build-tool': import('./java/generators/build-tool/generator.ts').default;
   'jhipster:java:code-quality': import('./java/generators/code-quality/generator.ts').default;

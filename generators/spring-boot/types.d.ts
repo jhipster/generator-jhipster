@@ -147,7 +147,7 @@ type ApplicationNature = { reactive: boolean };
 
 export type Application<E extends BaseApplicationEntity = Entity> = Command['Application'] &
   ServerApplication<E> &
-  GradleApplication<E> &
+  GradleApplication &
   ApplicationNature &
   SearchEngine &
   DatabaseTypeApplication & {

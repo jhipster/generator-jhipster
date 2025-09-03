@@ -60,21 +60,6 @@ exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(fal
       },
     ],
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -87,15 +72,6 @@ exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(fal
 exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/swagger/api.yml": {
@@ -179,21 +155,6 @@ exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(tru
       },
     ],
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -209,15 +170,6 @@ exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(tru
     "stateCleared": "modified",
   },
   "buildSrc/src/main/groovy/jhipster.openapi-generator-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/swagger/api.yml": {
@@ -286,21 +238,6 @@ exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(fals
       },
     ],
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -313,15 +250,6 @@ exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(fals
 exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(false) should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/swagger/api.yml": {
@@ -390,21 +318,6 @@ exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true
       },
     ],
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -417,15 +330,6 @@ exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true
 exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true) should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/swagger/api.yml": {

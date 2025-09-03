@@ -54,7 +54,7 @@ describe(`generator - ${generator}`, () => {
 
     it('should write enum files', () => {
       result.assertFile('src/main/java/com/mycompany/myapp/domain/enumeration/MyEnum.java');
-      expect(Object.keys(result.getStateSnapshot('**/enumeration/**')).length).toBe(2);
+      expect(Object.keys(result.getStateSnapshot('**/enumeration/**')).length).toBe(1);
     });
 
     it('should generate enum javadoc', () => {

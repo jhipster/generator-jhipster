@@ -16,11 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../lib/command/types.ts';
 
-const command = {
-  configs: {},
-  import: ['jhipster:java-simple-application', 'jhipster:java:domain', 'jhipster:java:build-tool'],
-} as const satisfies JHipsterCommandDefinition;
+import { expect } from 'esmocha';
 
-export default command;
+import { mutateMockedCompleteData, mutateMockedData } from '../../lib/testing/index.ts';
+
+import * as entityData from './application.ts';
+
+describe('application mutation test', () => {
+  for (const [name, data] of Object.entries(entityData)) {
+    it(`expects ${name} to match snapshot`, () => {
+      expect(mutateMockedData(data)).toMatchSnapshot();
+    });
+    it(`expects ${name} to don't override existing properties`, () => {
+      expect(Object.keys(mutateMockedCompleteData(data))).toHaveLength(0);
+    });
+  }
+});

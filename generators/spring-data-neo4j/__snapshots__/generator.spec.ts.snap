@@ -35,22 +35,13 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
   "settings.gradle": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/JhipsterApp.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/ApplicationProperties.java": {
@@ -92,12 +83,6 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
   "src/main/java/com/mycompany/config/neo4j/Neo4jMigrations.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/config/neo4j/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
@@ -113,12 +98,6 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
   "src/main/java/com/mycompany/domain/User.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -131,9 +110,6 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
   "src/main/java/com/mycompany/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
@@ -144,9 +120,6 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/UserNotActivatedException.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/security/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
@@ -179,13 +152,7 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
   "src/main/java/com/mycompany/service/dto/UserRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/service/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/service/impl/AnotherSimpleServiceImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/mapper/AnotherSimpleMapper.java": {
@@ -197,16 +164,7 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
   "src/main/java/com/mycompany/service/mapper/UserMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/web/filter/SpaWebFilter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/AccountResource.java": {
@@ -248,19 +206,10 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
   "src/main/java/com/mycompany/web/rest/errors/LoginAlreadyUsedException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/web/rest/vm/KeyAndPasswordVM.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -469,16 +418,10 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/ApplicationWebXml.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/JhipsterApp.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
@@ -517,9 +460,6 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
@@ -529,19 +469,10 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
@@ -550,34 +481,19 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/security/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
@@ -596,12 +512,6 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -765,16 +675,10 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "settings.gradle": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/JhipsterApp.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/ApplicationProperties.java": {
@@ -819,9 +723,6 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
@@ -831,19 +732,10 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
@@ -852,34 +744,19 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/security/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/service/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/service/impl/AnotherSimpleServiceImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/mapper/EntityMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/AnotherSimpleResource.java": {
@@ -898,12 +775,6 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/FieldErrorVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -1073,16 +944,10 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
   "settings.gradle": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/JhipsterApp.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/ApplicationProperties.java": {
@@ -1124,9 +989,6 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
@@ -1136,19 +998,10 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
@@ -1157,34 +1010,19 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
   "src/main/java/com/mycompany/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/security/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/service/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/service/impl/AnotherSimpleServiceImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/mapper/EntityMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/AnotherSimpleResource.java": {
@@ -1203,12 +1041,6 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/FieldErrorVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -1354,25 +1186,16 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
   "pom.xml": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/JhipsterApp.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
@@ -1414,12 +1237,6 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/main/java/tech/jhipster/config/neo4j/Neo4jMigrations.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/neo4j/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
@@ -1435,12 +1252,6 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -1453,9 +1264,6 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/main/java/tech/jhipster/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
@@ -1466,9 +1274,6 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/UserNotActivatedException.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
@@ -1501,13 +1306,7 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
@@ -1519,16 +1318,7 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
@@ -1570,19 +1360,10 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -1812,22 +1593,13 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
   "settings.gradle": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/JhipsterApp.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/ApplicationProperties.java": {
@@ -1866,9 +1638,6 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
@@ -1878,19 +1647,10 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
@@ -1899,22 +1659,13 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "src/main/java/com/mycompany/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/security/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/service/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/service/impl/AnotherSimpleServiceImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/mapper/AnotherSimpleMapper.java": {
@@ -1923,16 +1674,7 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "src/main/java/com/mycompany/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/web/filter/SpaWebFilter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/AccountResource.java": {
@@ -1954,12 +1696,6 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/FieldErrorVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -2102,25 +1838,16 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
   "pom.xml": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/JhipsterApp.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
@@ -2159,9 +1886,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
@@ -2171,19 +1895,10 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
@@ -2192,22 +1907,13 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
   "src/main/java/tech/jhipster/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/security/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
@@ -2216,16 +1922,7 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
   "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
@@ -2247,12 +1944,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -2416,22 +2107,13 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
   "settings.gradle": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/JhipsterApp.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/ApplicationProperties.java": {
@@ -2473,9 +2155,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
@@ -2485,19 +2164,10 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
@@ -2506,22 +2176,13 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "src/main/java/com/mycompany/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/security/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/service/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/service/impl/AnotherSimpleServiceImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/mapper/AnotherSimpleMapper.java": {
@@ -2530,16 +2191,7 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "src/main/java/com/mycompany/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/web/filter/SpaWebFilter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/AccountResource.java": {
@@ -2561,12 +2213,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/FieldErrorVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -2718,25 +2364,16 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
   "pom.xml": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/JhipsterApp.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
@@ -2778,12 +2415,6 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/config/neo4j/Neo4jMigrations.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/neo4j/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
@@ -2802,12 +2433,6 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -2823,9 +2448,6 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
@@ -2839,9 +2461,6 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/UserNotActivatedException.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
@@ -2874,13 +2493,7 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
@@ -2892,16 +2505,7 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
@@ -2943,19 +2547,10 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -3176,22 +2771,13 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
   "settings.gradle": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/JhipsterApp.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/ApplicationProperties.java": {
@@ -3230,9 +2816,6 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
@@ -3242,19 +2825,10 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
@@ -3263,22 +2837,13 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/security/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/service/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/service/impl/AnotherSimpleServiceImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/mapper/AnotherSimpleMapper.java": {
@@ -3287,16 +2852,7 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/web/filter/SpaWebFilter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/AccountResource.java": {
@@ -3318,12 +2874,6 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/FieldErrorVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/errors/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {

@@ -26,12 +26,6 @@ exports[`generator - gradle with empty configuration should generate only gradle
   "gradlew.bat": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -59,12 +53,6 @@ exports[`generator - gradle with valid configuration should generate only gradle
     "stateCleared": "modified",
   },
   "gradlew.bat": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
 }

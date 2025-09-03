@@ -5,28 +5,13 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/domain/Authority.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/domain/AuthorityCallback.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
@@ -38,16 +23,10 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
   "src/main/java/com/mycompany/repository/UserSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/rowmapper/UserRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -319,21 +298,6 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -342,28 +306,13 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/domain/Authority.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/domain/AuthorityCallback.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
@@ -375,16 +324,10 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
   "src/main/java/com/mycompany/repository/UserSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/rowmapper/UserRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -628,21 +571,6 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -651,28 +579,13 @@ exports[`generator - sql gateway-jwt-postgresql-gradle-enableTranslation(true)-c
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/domain/Authority.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/domain/AuthorityCallback.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
@@ -684,16 +597,10 @@ exports[`generator - sql gateway-jwt-postgresql-gradle-enableTranslation(true)-c
   "src/main/java/com/mycompany/repository/UserSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/rowmapper/UserRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -965,21 +872,6 @@ exports[`generator - sql gateway-jwt-postgresql-gradle-enableTranslation(true)-c
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -988,16 +880,7 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/domain/Authority.java": {
@@ -1009,12 +892,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
   "src/main/java/com/mycompany/domain/UserEntityCallback.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
@@ -1024,16 +901,10 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
   "src/main/java/com/mycompany/repository/UserSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/rowmapper/UserRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -1305,21 +1176,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -1328,16 +1184,7 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/domain/Authority.java": {
@@ -1349,12 +1196,6 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
   "src/main/java/com/mycompany/domain/UserEntityCallback.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
@@ -1364,16 +1205,10 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
   "src/main/java/com/mycompany/repository/UserSqlHelper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/rowmapper/UserRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -1645,21 +1480,6 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -1668,31 +1488,13 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
@@ -1899,21 +1701,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -1922,31 +1709,13 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
@@ -2153,21 +1922,6 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -2176,19 +1930,7 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -2422,21 +2164,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -2445,31 +2172,13 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
@@ -2676,21 +2385,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -2699,19 +2393,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -2921,21 +2603,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -2944,31 +2611,13 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
@@ -3160,21 +2809,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -3183,19 +2817,7 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -3429,21 +3051,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -3452,31 +3059,13 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
@@ -3683,21 +3272,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -3706,19 +3280,7 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
@@ -3913,21 +3475,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -3936,31 +3483,13 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -4223,21 +3752,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -4246,19 +3760,7 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
@@ -4453,21 +3955,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -4476,31 +3963,13 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -4763,21 +4232,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -4786,31 +4240,13 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -5073,21 +4509,6 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -5096,31 +4517,13 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -5355,21 +4758,6 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -5378,31 +4766,13 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -5665,21 +5035,6 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -5688,31 +5043,13 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -5955,21 +5292,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -5978,31 +5300,13 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
@@ -6209,21 +5513,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -6232,31 +5521,13 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -6499,21 +5770,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -6522,31 +5778,13 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
@@ -6753,21 +5991,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -6776,31 +5999,13 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -7043,21 +6248,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -7066,31 +6256,13 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
@@ -7297,21 +6469,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -7320,31 +6477,13 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -7563,21 +6702,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -7586,31 +6710,13 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
@@ -7802,21 +6908,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -7825,31 +6916,13 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -8092,21 +7165,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -8115,31 +7173,13 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
@@ -8346,21 +7386,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -8369,19 +7394,7 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
@@ -8576,21 +7589,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -8599,31 +7597,13 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -8886,21 +7866,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -8909,19 +7874,7 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
@@ -9116,21 +8069,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -9139,31 +8077,13 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -9426,21 +8346,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -9449,19 +8354,7 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
@@ -9656,21 +8549,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -9679,31 +8557,13 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -9966,21 +8826,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -9989,19 +8834,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
@@ -10185,21 +9018,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -10208,31 +9026,13 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -10467,21 +9267,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -10490,19 +9275,7 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
@@ -10697,21 +9470,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -10720,31 +9478,13 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -11007,21 +9747,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -11030,31 +9755,13 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -11297,21 +10004,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -11320,31 +10012,13 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -11607,21 +10281,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -11630,31 +10289,13 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -11897,21 +10538,6 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -11920,31 +10546,13 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -12207,21 +10815,6 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -12230,31 +10823,13 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -12497,21 +11072,6 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -12520,31 +11080,13 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -12807,21 +11349,6 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -12830,31 +11357,13 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -13073,21 +11582,6 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -13096,31 +11590,13 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -13355,21 +11831,6 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -13378,31 +11839,13 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -13645,21 +12088,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
       "ruleKey": "squid:S3437",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -13668,31 +12096,13 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -13953,21 +12363,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
-    },
-  ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
     },
   ],
 }

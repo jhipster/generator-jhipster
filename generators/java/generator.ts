@@ -40,8 +40,7 @@ export default class JavaGenerator extends JavaApplicationGenerator {
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:domain');
-    }
+    await this.dependsOnBootstrap('java');
+    await this.dependsOnJHipster('java-simple-application');
   }
 }

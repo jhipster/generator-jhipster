@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition, PromptSpec } from '../../../../lib/command/index.ts';
+import type { JHipsterCommandDefinition, PromptSpec } from '../../lib/command/index.ts';
 
 const command = {
   configs: {
@@ -66,7 +66,7 @@ const command = {
         type: String,
         env: 'JHI_PROJECT_VERSION',
       },
-      scope: 'generator',
+      scope: 'storage',
     },
     jhipsterDependenciesVersion: {
       description: 'jhipster-dependencies version to use, this option is not persisted',
