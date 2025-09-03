@@ -30,7 +30,6 @@ import BaseGenerator from '../base/index.ts';
 import type { Features as BaseFeatures, Options as BaseOptions } from '../base/types.d.ts';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.ts';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
-import { GENERATOR_UPGRADE } from '../generator-list.ts';
 
 import {
   autoCrlfTransform,
@@ -69,7 +68,7 @@ export default class BootstrapGenerator extends BaseGenerator {
   async beforeQueue() {
     // Force npm override later if needed
     (this.env as any).options.nodePackageManager = 'npm';
-    this.upgradeCommand = this.options.commandName === GENERATOR_UPGRADE;
+    this.upgradeCommand = this.options.commandName === 'upgrade';
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

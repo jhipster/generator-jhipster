@@ -23,7 +23,6 @@ import type CoreGenerator from '../../generators/base-core/generator.ts';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../generators/base-simple-application/support/constants.ts';
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.js';
-import { GENERATOR_WORKSPACES } from '../../generators/generator-list.ts';
 import type GeneratorsByNamespace from '../../generators/types.ts';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.ts';
 import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
@@ -673,7 +672,7 @@ class JHipsterTest extends YeomanTest {
   }
 
   generateDeploymentWorkspaces(commonConfig?: Record<string, unknown>) {
-    return this.runJHipster(GENERATOR_WORKSPACES)
+    return this.runJHipster('workspaces')
       .withWorkspacesCommonConfig(commonConfig ?? {})
       .withOptions({
         generateWorkspaces: true,

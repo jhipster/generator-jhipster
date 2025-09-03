@@ -23,7 +23,6 @@ import { mutateData } from '../../lib/utils/index.ts';
 import BaseGenerator from '../base/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
 import { BOOTSTRAP_APPLICATION, CUSTOM_PRIORITIES } from './priorities.ts';
@@ -105,9 +104,9 @@ export default class BaseSimpleApplicationGenerator<
    * @deprecated use dependsOnBootstrap('common'), dependsOnBootstrap('base-application') or dependsOnBootstrap('base-simple-application')
    */
   dependsOnBootstrapApplicationBase(
-    options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_BASE]> | undefined,
-  ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_BASE]> {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE, options);
+    options?: ComposeOptions<GeneratorsByNamespace['jhipster:base-application:bootstrap']> | undefined,
+  ): Promise<GeneratorsByNamespace['jhipster:base-application:bootstrap']> {
+    return this.dependsOnJHipster('jhipster:base-application:bootstrap', options);
   }
 
   getArgsForPriority(priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES]): any {

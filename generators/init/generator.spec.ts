@@ -22,7 +22,6 @@ import { fileURLToPath } from 'node:url';
 
 import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
 import { basicTests, getCommandHelpOutput, testBlueprintSupport } from '../../test/support/tests.js';
-import { GENERATOR_INIT } from '../generator-list.ts';
 
 import { defaultConfig, requiredConfig } from './config.ts';
 
@@ -32,9 +31,6 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', () => {
-    expect(GENERATOR_INIT).toBe(generator);
-  });
   basicTests({
     generatorNamespace: generator,
     requiredConfig,
@@ -51,7 +47,7 @@ describe(`generator - ${generator}`, () => {
     describe('default config', () => {
       before(async () => {
         await helpers
-          .runJHipster('init')
+          .runJHipster(generator)
           .withMockedJHipsterGenerators(['bootstrap'])
           .withSharedApplication({ projectDescription: 'projectDescription', prettierTabWidth: 'prettierTabWidth' })
           .withJHipsterConfig();

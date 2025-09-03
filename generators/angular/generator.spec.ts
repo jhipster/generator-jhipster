@@ -2,13 +2,10 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { snakeCase } from 'lodash-es';
-
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { buildClientSamples, defaultHelpers as helpers, entitiesClientSamples as entities, runResult } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { GENERATOR_ANGULAR } from '../generator-list.ts';
 
 import Generator from './index.ts';
 
@@ -71,14 +68,10 @@ const clientAdminFiles = (clientSrcDir: string) => [
 ];
 
 describe(`generator - ${clientFramework}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    const generatorList: Record<string, string> = await import('../generator-list.ts');
-    await expect(generatorList[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  checkEnforcements({ client: true }, GENERATOR_ANGULAR);
+  checkEnforcements({ client: true }, generator);
 
   it('samples matrix should match snapshot', () => {
     expect(testSamples).toMatchSnapshot();

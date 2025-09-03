@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.ts';
 
 import { getDBTypeFromDBValue } from './support/database.ts';
 
@@ -81,7 +80,7 @@ const command = {
       scope: 'none',
     },
   },
-  import: [GENERATOR_COMMON, GENERATOR_SPRING_BOOT],
+  import: ['common', 'spring-boot'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

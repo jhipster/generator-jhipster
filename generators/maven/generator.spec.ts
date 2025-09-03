@@ -22,7 +22,6 @@ import { fileURLToPath } from 'node:url';
 
 import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { GENERATOR_MAVEN } from '../generator-list.ts';
 
 import MavenGenerator from './generator.ts';
 
@@ -33,9 +32,6 @@ const generator = basename(__dirname);
 type T = ConstructorParameters<typeof MavenGenerator>;
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', () => {
-    expect(GENERATOR_MAVEN).toBe(generator);
-  });
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with valid configuration', () => {
     before(async () => {
@@ -60,7 +56,7 @@ describe(`generator - ${generator}`, () => {
   describe('needles', () => {
     before(async () => {
       await helpers
-        .runJHipster(GENERATOR_MAVEN)
+        .runJHipster(generator)
         .withJHipsterConfig({
           blueprints: [{ name: 'blueprint' }],
         })

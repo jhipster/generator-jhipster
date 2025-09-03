@@ -20,12 +20,9 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { snakeCase } from 'lodash-es';
-
 import { basicHelpers, defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
-import { GENERATOR_COMMON } from '../generator-list.ts';
 
 import Generator from './index.ts';
 
@@ -37,13 +34,9 @@ const generator = basename(__dirname);
 const mockedGenerators = ['jhipster:git'];
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    const generatorList: Record<string, string> = await import('../generator-list.ts');
-    await expect(generatorList[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
-  checkEnforcements({ client: true }, GENERATOR_COMMON);
+  checkEnforcements({ client: true }, generator);
 
   describe('source apis', () => {
     describe('ignoreSonarRule', () => {

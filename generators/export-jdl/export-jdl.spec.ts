@@ -1,7 +1,8 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { GENERATOR_EXPORT_JDL } from '../generator-list.ts';
+
+const GENERATOR_EXPORT_JDL = 'export-jdl';
 
 const files = {
   '.jhipster/Country.json': {

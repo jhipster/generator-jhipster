@@ -24,7 +24,6 @@ import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, searchEngin
 import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { stringifyApplicationData } from '../base-application/support/index.ts';
-import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.ts';
 import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.ts';
 
 import { hibernateSnakeCase } from './support/index.ts';
@@ -71,7 +70,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('server');
-      await this.dependsOnJHipster(GENERATOR_COMMON);
+      await this.dependsOnJHipster('common');
     }
   }
 
@@ -79,7 +78,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
     return this.asComposingTaskGroup({
       async composeBackendType() {
         if (!this.jhipsterConfig.backendType || ['spring-boot', 'java'].includes(this.jhipsterConfig.backendType.toLowerCase())) {
-          await this.composeWithJHipster(GENERATOR_SPRING_BOOT);
+          await this.composeWithJHipster('spring-boot');
         }
       },
     });

@@ -19,8 +19,8 @@
 import chalk from 'chalk';
 import type { WritableDeep } from 'type-fest';
 
+import { getGeneratorNamespaces } from '../../lib/index.ts';
 import { PRIORITY_NAMES_LIST } from '../base-application/priorities.ts';
-import * as GENERATOR_LIST from '../generator-list.ts';
 
 const prioritiesForSub = (_subGen: string) => PRIORITY_NAMES_LIST;
 
@@ -71,11 +71,11 @@ const allSubGeneratorConfig = (subGenerator: string) => ({
 
 export const allGeneratorsConfig = () => ({
   ...requiredConfig,
-  [SUB_GENERATORS]: Object.values(GENERATOR_LIST),
+  [SUB_GENERATORS]: getGeneratorNamespaces(),
   [ADDITIONAL_SUB_GENERATORS]: '',
   [DYNAMIC]: false,
   [JS]: true,
-  generators: Object.fromEntries(Object.values(GENERATOR_LIST).map(subGenerator => [subGenerator, allSubGeneratorConfig(subGenerator)])),
+  generators: Object.fromEntries(getGeneratorNamespaces().map(subGenerator => [subGenerator, allSubGeneratorConfig(subGenerator)])),
 });
 
 export const prompts = () => {
@@ -91,7 +91,7 @@ export const prompts = () => {
       type: 'checkbox',
       name: SUB_GENERATORS,
       message: 'Which sub-generators do you want to override?',
-      choices: Object.values(GENERATOR_LIST),
+      choices: getGeneratorNamespaces(),
       pageSize: 30,
       loop: false,
     },

@@ -10,8 +10,9 @@ import {
   extendMatrix,
   runResult,
 } from '../../lib/testing/index.ts';
-import { GENERATOR_SERVER } from '../generator-list.ts';
 import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
+
+const GENERATOR_SERVER = 'server';
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };

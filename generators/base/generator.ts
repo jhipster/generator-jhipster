@@ -34,7 +34,6 @@ import CoreGenerator from '../base-core/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import { GENERATOR_BOOTSTRAP } from '../generator-list.ts';
 
 import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.ts';
 import {
@@ -123,7 +122,7 @@ export default class BaseGenerator<
 
     if (jhipsterBootstrap) {
       // jhipster:bootstrap is always required. Run it once the environment starts.
-      this.env.queueTask('environment:run', async () => this.composeWithJHipster(GENERATOR_BOOTSTRAP).then(), {
+      this.env.queueTask('environment:run', async () => this.composeWithJHipster('bootstrap').then(), {
         once: 'queueJhipsterBootstrap',
         startQueue: false,
       });

@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { GENERATOR_APP } from '../generator-list.ts';
 
 const command = {
   configs: {
@@ -45,7 +44,7 @@ const command = {
       scope: 'generator',
     },
   },
-  import: [GENERATOR_APP],
+  import: ['app'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

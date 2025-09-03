@@ -22,7 +22,6 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
 import { authenticationTypes } from '../../lib/jhipster/index.ts';
 import { createBase64Secret, createSecret } from '../../lib/utils/index.ts';
-import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.ts';
 
 const { OAUTH2, SESSION, JWT } = authenticationTypes;
 
@@ -221,14 +220,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: [
-    GENERATOR_JAVA,
-    GENERATOR_LIQUIBASE,
-    GENERATOR_SPRING_DATA_RELATIONAL,
-    'jhipster:spring-cloud:gateway',
-    'spring-cache',
-    'spring-cloud-stream',
-  ],
+  import: ['java', 'liquibase', 'spring-data-relational', 'jhipster:spring-cloud:gateway', 'spring-cache', 'spring-cloud-stream'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

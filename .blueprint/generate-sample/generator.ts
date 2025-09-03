@@ -5,9 +5,12 @@ import { globSync } from 'tinyglobby';
 
 import BaseGenerator from '../../generators/base-core/index.ts';
 import type { Config } from '../../generators/base-core/types.ts';
-import { GENERATOR_APP, GENERATOR_INFO, GENERATOR_JDL } from '../../generators/generator-list.ts';
 import { packageJson } from '../../lib/index.ts';
 import { promptSamplesFolder } from '../support.ts';
+
+const GENERATOR_JDL = 'jdl';
+const GENERATOR_APP = 'app';
+const GENERATOR_INFO = 'info';
 
 import { entitiesByType, generateSample } from './support/index.ts';
 

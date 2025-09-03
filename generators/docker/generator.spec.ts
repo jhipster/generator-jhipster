@@ -20,8 +20,6 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { snakeCase } from 'lodash-es';
-
 import { cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.ts';
 import {
   buildSamplesFromMatrix,
@@ -76,10 +74,6 @@ matrix = extendFilteredMatrix(matrix, ({ reactive }) => !reactive, {
 const testSamples = buildSamplesFromMatrix(matrix);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    const GENERATOR_LIST: Record<string, string> = await import('../generator-list.ts');
-    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
 
   Object.entries(testSamples).forEach(([name, sampleConfig]) => {

@@ -23,7 +23,6 @@ import { fileURLToPath } from 'node:url';
 
 import { runResult, skipPrettierHelpers as helpers } from '../../lib/testing/index.ts';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { GENERATOR_GIT } from '../generator-list.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,9 +30,6 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', () => {
-    expect(GENERATOR_GIT).toBe(generator);
-  });
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with', () => {
     describe('default config', () => {

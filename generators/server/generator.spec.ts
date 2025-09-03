@@ -20,11 +20,8 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { snakeCase } from 'lodash-es';
-
 import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
-import { GENERATOR_SERVER, GENERATOR_SPRING_BOOT } from '../generator-list.ts';
 
 import { filterBasicServerGenerators, shouldComposeWithCouchbase, shouldComposeWithSpringCloudStream } from './__test-support/index.ts';
 import Generator from './index.ts';
@@ -35,13 +32,9 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    const GENERATOR_LIST: Record<string, string> = await import('../generator-list.ts');
-    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
-  checkEnforcements({}, GENERATOR_SERVER, GENERATOR_SPRING_BOOT);
+  checkEnforcements({}, generator, 'spring-boot');
 
   describe('composing', () => {
     describe('messageBroker option', () => {
@@ -161,7 +154,7 @@ describe(`generator - ${generator}`, () => {
   describe('with entities', () => {
     before(async () => {
       await helpers
-        .runJHipster(GENERATOR_SERVER)
+        .runJHipster(generator)
         .withMockedSource({ except: ['addTestSpringFactory'] })
         .withJHipsterConfig({ skipClient: true }, [
           { name: 'Foo', changelogDate: '20160926101210', fields: [{ fieldName: 'name', fieldType: 'String' }] },

@@ -28,7 +28,6 @@ import BaseGenerator from '../base/index.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.ts';
 import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
-import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.ts';
 
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.ts';
 import {
@@ -165,7 +164,7 @@ export default abstract class BaseWorkspacesGenerator<
   async bootstrapApplications() {
     const resolvedApplicationFolders = this.resolveApplicationFolders();
     for (const [_appFolder, resolvedFolder] of Object.entries(resolvedApplicationFolders)) {
-      await this.composeWithJHipster(GENERATOR_BOOTSTRAP_APPLICATION, {
+      await this.composeWithJHipster('jhipster:base-application:bootstrap', {
         generatorOptions: { destinationRoot: resolvedFolder, reproducible: true },
       });
     }

@@ -20,8 +20,6 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { snakeCase } from 'lodash-es';
-
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import {
   AuthenticationTypeMatrix,
@@ -32,7 +30,6 @@ import {
   runResult,
 } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
-import { GENERATOR_CYPRESS } from '../generator-list.ts';
 
 import Generator from './generator.ts';
 
@@ -75,13 +72,9 @@ const entities = [
 ];
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    const GENERATOR_LIST: Record<string, string> = await import('../generator-list.ts');
-    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
-  checkEnforcements({ client: true }, GENERATOR_CYPRESS);
+  checkEnforcements({ client: true }, generator);
 
   it('samples matrix should match snapshot', () => {
     expect(e2eSamples).toMatchSnapshot();

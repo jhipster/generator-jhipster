@@ -5,8 +5,8 @@ import sinon from 'sinon';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import { GENERATOR_HEROKU } from '../generator-list.ts';
 
+const GENERATOR_HEROKU = 'heroku';
 const expectedFiles = {
   monolith: ['Procfile', `${SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`, `${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`],
 };

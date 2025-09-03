@@ -22,7 +22,6 @@ import assert from 'node:assert';
 import { databaseTypes } from '../../lib/jhipster/index.ts';
 import { isReservedTableName } from '../../lib/jhipster/reserved-keywords.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
-import { GENERATOR_LIQUIBASE } from '../generator-list.ts';
 
 import cleanupTask from './cleanup.ts';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.ts';
@@ -36,6 +35,8 @@ import type {
   Options as SpringDataRelationalOptions,
   Source as SpringDataRelationalSource,
 } from './types.ts';
+
+const GENERATOR_LIQUIBASE = 'liquibase';
 
 const { SQL } = databaseTypes;
 

@@ -23,16 +23,12 @@ import { fileURLToPath } from 'node:url';
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { testBlueprintSupport } from '../../test/support/tests.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import { GENERATOR_GRADLE } from '../generator-list.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', () => {
-    expect(GENERATOR_GRADLE).toBe(generator);
-  });
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with valid configuration', () => {
     before(async () => {

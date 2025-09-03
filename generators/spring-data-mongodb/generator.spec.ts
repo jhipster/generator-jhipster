@@ -20,8 +20,6 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { snakeCase } from 'lodash-es';
-
 import { databaseTypes } from '../../lib/jhipster/index.ts';
 import {
   buildSamplesFromMatrix,
@@ -51,10 +49,6 @@ const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en',
 const testSamples = buildSamplesFromMatrix(buildServerMatrix(), { commonConfig });
 
 describe(`generator - ${databaseType}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    const GENERATOR_LIST: Record<string, string> = await import('../generator-list.ts');
-    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 

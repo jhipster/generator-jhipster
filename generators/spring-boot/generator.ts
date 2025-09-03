@@ -38,22 +38,6 @@ import type { Config as ClientConfig, Entity as ClientEntity } from '../client/t
 import type { Source as CommonSource } from '../common/types.ts';
 import type { Entity as CypressEntity } from '../cypress/types.ts';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.js';
-import {
-  GENERATOR_CUCUMBER,
-  GENERATOR_DOCKER,
-  GENERATOR_FEIGN_CLIENT,
-  GENERATOR_GATLING,
-  GENERATOR_LANGUAGES,
-  GENERATOR_SPRING_CACHE,
-  GENERATOR_SPRING_CLOUD_STREAM,
-  GENERATOR_SPRING_DATA_CASSANDRA,
-  GENERATOR_SPRING_DATA_COUCHBASE,
-  GENERATOR_SPRING_DATA_ELASTICSEARCH,
-  GENERATOR_SPRING_DATA_MONGODB,
-  GENERATOR_SPRING_DATA_NEO4J,
-  GENERATOR_SPRING_DATA_RELATIONAL,
-  GENERATOR_SPRING_WEBSOCKET,
-} from '../generator-list.ts';
 import { addJavaImport, generateKeyStore, javaBeanCase } from '../java/support/index.ts';
 import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.ts';
 import {
@@ -174,7 +158,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         const { messageBroker } = this.jhipsterConfigWithDefaults as SpringCloudStreamConfig;
 
         await this.composeWithJHipster('jhipster:java:i18n');
-        await this.composeWithJHipster(GENERATOR_DOCKER);
+        await this.composeWithJHipster('docker');
         await this.composeWithJHipster('jhipster:java:jib');
         await this.composeWithJHipster('jhipster:java:code-quality');
 
@@ -195,37 +179,37 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         }
 
         if (testFrameworks?.includes(CUCUMBER)) {
-          await this.composeWithJHipster(GENERATOR_CUCUMBER);
+          await this.composeWithJHipster('cucumber');
         }
         if (testFrameworks?.includes(GATLING)) {
-          await this.composeWithJHipster(GENERATOR_GATLING);
+          await this.composeWithJHipster('gatling');
         }
         if (feignClient) {
-          await this.composeWithJHipster(GENERATOR_FEIGN_CLIENT);
+          await this.composeWithJHipster('feign-client');
         }
 
         if (databaseType === SQL) {
-          await this.composeWithJHipster(GENERATOR_SPRING_DATA_RELATIONAL);
+          await this.composeWithJHipster('spring-data-relational');
         } else if (databaseType === CASSANDRA) {
-          await this.composeWithJHipster(GENERATOR_SPRING_DATA_CASSANDRA);
+          await this.composeWithJHipster('spring-data-cassandra');
         } else if (databaseType === COUCHBASE) {
-          await this.composeWithJHipster(GENERATOR_SPRING_DATA_COUCHBASE);
+          await this.composeWithJHipster('spring-data-couchbase');
         } else if (databaseType === MONGODB) {
-          await this.composeWithJHipster(GENERATOR_SPRING_DATA_MONGODB);
+          await this.composeWithJHipster('spring-data-mongodb');
         } else if (databaseType === NEO4J) {
-          await this.composeWithJHipster(GENERATOR_SPRING_DATA_NEO4J);
+          await this.composeWithJHipster('spring-data-neo4j');
         }
         if (messageBroker === KAFKA || messageBroker === PULSAR) {
-          await this.composeWithJHipster(GENERATOR_SPRING_CLOUD_STREAM);
+          await this.composeWithJHipster('spring-cloud-stream');
         }
         if (searchEngine === ELASTICSEARCH) {
-          await this.composeWithJHipster(GENERATOR_SPRING_DATA_ELASTICSEARCH);
+          await this.composeWithJHipster('spring-data-elasticsearch');
         }
         if (websocket === SPRING_WEBSOCKET) {
-          await this.composeWithJHipster(GENERATOR_SPRING_WEBSOCKET);
+          await this.composeWithJHipster('spring-websocket');
         }
         if (([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS] as string[]).includes(cacheProvider!)) {
-          await this.composeWithJHipster(GENERATOR_SPRING_CACHE);
+          await this.composeWithJHipster('spring-cache');
         }
       },
     });
@@ -246,7 +230,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
       },
       async composeLanguages() {
         if (this.jhipsterConfigWithDefaults.enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES);
+          await this.composeWithJHipster('languages');
         }
       },
     });

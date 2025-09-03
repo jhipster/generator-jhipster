@@ -11,13 +11,14 @@ import {
   runResult,
 } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { GENERATOR_SERVER } from '../generator-list.ts';
 import {
   filterBasicServerGenerators,
   shouldComposeWithLiquibase,
   shouldComposeWithSpringCloudStream,
 } from '../server/__test-support/index.ts';
 import Generator from '../server/index.ts';
+
+const GENERATOR_SERVER = 'server';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -30,9 +31,6 @@ const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en',
 const testSamples = buildSamplesFromMatrix(buildServerMatrix(), { commonConfig });
 
 describe(`generator - ${databaseType}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.ts')).GENERATOR_SPRING_DATA_NEO4J).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 

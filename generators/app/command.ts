@@ -17,16 +17,6 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import {
-  GENERATOR_BOOTSTRAP,
-  GENERATOR_BOOTSTRAP_APPLICATION_BASE,
-  GENERATOR_CLIENT,
-  GENERATOR_COMMON,
-  GENERATOR_CYPRESS,
-  GENERATOR_GIT,
-  GENERATOR_LANGUAGES,
-  GENERATOR_SERVER,
-} from '../generator-list.ts';
 
 const command = {
   configs: {
@@ -80,15 +70,15 @@ const command = {
   },
   import: [
     'base',
-    GENERATOR_BOOTSTRAP,
-    GENERATOR_BOOTSTRAP_APPLICATION_BASE,
+    'bootstrap',
+    'bootstrap-application-base',
     'jhipster:jdl:bootstrap',
-    GENERATOR_COMMON,
-    GENERATOR_SERVER,
-    GENERATOR_CLIENT,
-    GENERATOR_GIT,
-    GENERATOR_CYPRESS,
-    GENERATOR_LANGUAGES,
+    'common',
+    'server',
+    'client',
+    'git',
+    'cypress',
+    'languages',
   ],
 } as const satisfies JHipsterCommandDefinition;
 
