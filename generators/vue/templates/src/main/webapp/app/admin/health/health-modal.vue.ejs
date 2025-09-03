@@ -19,7 +19,7 @@
         </table>
       </div>
     </div>
-    <div v-if="currentHealth && currentHealth.error">
+    <div v-if="currentHealth?.error">
       <h4>{{ t$('health.details.error') }}</h4>
       <pre>{{ currentHealth.error }}</pre>
     </div>
