@@ -174,7 +174,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: ['git'],
+  import: ['init'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;
