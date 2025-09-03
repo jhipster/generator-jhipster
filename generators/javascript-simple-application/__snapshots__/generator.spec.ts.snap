@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - javascript with defaults options should call source snapshot 1`] = `{}`;
+exports[`generator - javascript-simple-application with defaults options should call source snapshot 1`] = `{}`;
 
-exports[`generator - javascript with defaults options should match files snapshot 1`] = `
+exports[`generator - javascript-simple-application with defaults options should match files snapshot 1`] = `
 {
   ".yo-rc.json": ObjectContaining {
     "contents": Any<String>,

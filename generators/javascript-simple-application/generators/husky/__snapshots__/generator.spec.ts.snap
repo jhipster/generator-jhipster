@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - javascript:husky skipCommitHook(false) should call source snapshot 1`] = `{}`;
+exports[`generator - javascript-simple-application:husky skipCommitHook(false) should call source snapshot 1`] = `{}`;
 
-exports[`generator - javascript:husky skipCommitHook(false) should match files snapshot 1`] = `
+exports[`generator - javascript-simple-application:husky skipCommitHook(false) should match files snapshot 1`] = `
 {
   ".husky/pre-commit": {
     "contents": "if [ -z "$(which lint-staged)" ]; then
@@ -40,9 +40,9 @@ lint-staged
 }
 `;
 
-exports[`generator - javascript:husky skipCommitHook(true) should call source snapshot 1`] = `{}`;
+exports[`generator - javascript-simple-application:husky skipCommitHook(true) should call source snapshot 1`] = `{}`;
 
-exports[`generator - javascript:husky skipCommitHook(true) should match files snapshot 1`] = `
+exports[`generator - javascript-simple-application:husky skipCommitHook(true) should match files snapshot 1`] = `
 {
   ".yo-rc.json": ObjectContaining {
     "contents": Any<String>,

@@ -30,7 +30,7 @@ import {
 } from '../client/support/index.ts';
 import type { Entity as ClientEntity, Field as ClientField } from '../client/types.ts';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.ts';
-import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.ts';
+import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.ts';

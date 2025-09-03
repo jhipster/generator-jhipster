@@ -55,7 +55,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with generators', () => {
-        expect(result.getComposedGenerators()).toMatchObject(['jhipster:javascript:prettier'] as any);
+        expect(result.getComposedGenerators()).toMatchObject(['jhipster:javascript-simple-application:prettier'] as any);
       });
     });
   }

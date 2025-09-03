@@ -31,7 +31,7 @@ export default class InitGenerator extends BaseSimpleApplicationGenerator<InitAp
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:javascript:bootstrap');
+      await this.dependsOnJHipster('jhipster:javascript-simple-application:bootstrap');
     }
   }
 
@@ -40,9 +40,9 @@ export default class InitGenerator extends BaseSimpleApplicationGenerator<InitAp
       async compose() {
         await this.composeWithJHipster(GENERATOR_GIT);
         const generatorOptions = { fromInit: true };
-        await this.composeWithJHipster('jhipster:javascript:prettier', { generatorOptions });
-        await this.composeWithJHipster('jhipster:javascript:husky', { generatorOptions });
-        await this.composeWithJHipster('jhipster:javascript:eslint', { generatorOptions });
+        await this.composeWithJHipster('jhipster:javascript-simple-application:prettier', { generatorOptions });
+        await this.composeWithJHipster('jhipster:javascript-simple-application:husky', { generatorOptions });
+        await this.composeWithJHipster('jhipster:javascript-simple-application:eslint', { generatorOptions });
       },
     });
   }

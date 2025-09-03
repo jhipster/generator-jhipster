@@ -7,7 +7,11 @@ import type {
   Options as CommonOptions,
   Source as CommonSource,
 } from '../common/types.ts';
-import type { Config as JavascriptConfig, Options as JavascriptOptions, Source as JavascriptSource } from '../javascript/types.ts';
+import type {
+  Config as JavascriptConfig,
+  Options as JavascriptOptions,
+  Source as JavascriptSource,
+} from '../javascript-simple-application/types.ts';
 
 import type { ClientAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';

@@ -29,7 +29,7 @@ export const writeEslintClientRootConfigFile = asWritingTask<BaseApplicationEnti
         }),
       ],
       context: application,
-      rootTemplatesPath: this.fetchFromInstalledJHipster('javascript/generators/eslint/templates'),
+      rootTemplatesPath: this.fetchFromInstalledJHipster('javascript-simple-application/generators/eslint/templates'),
     });
   },
 );

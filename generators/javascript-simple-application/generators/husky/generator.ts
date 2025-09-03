@@ -25,7 +25,7 @@ export default class HuskyGenerator extends JavascriptSimpleApplicationGenerator
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:javascript:prettier');
+      await this.dependsOnJHipster('jhipster:javascript-simple-application:prettier');
     }
   }
 

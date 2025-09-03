@@ -64,9 +64,9 @@ describe(`generator - ${generator}`, () => {
         expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:git",
-  "jhipster:javascript:eslint",
-  "jhipster:javascript:husky",
-  "jhipster:javascript:prettier",
+  "jhipster:javascript-simple-application:eslint",
+  "jhipster:javascript-simple-application:husky",
+  "jhipster:javascript-simple-application:prettier",
 ]
 `);
       });

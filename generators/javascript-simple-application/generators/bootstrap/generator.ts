@@ -35,7 +35,7 @@ export default class JavascriptBootstrapGenerator extends JavascriptSimpleApplic
       loadNodeDependencies({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster('javascript', 'resources', 'package.json'),
+          this.fetchFromInstalledJHipster('javascript-simple-application', 'resources', 'package.json'),
         );
       },
       jsExtensions({ applicationDefaults, application }) {

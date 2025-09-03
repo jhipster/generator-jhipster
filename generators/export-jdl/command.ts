@@ -31,7 +31,11 @@ const command = {
       },
     },
   },
-  import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
+  import: [
+    GENERATOR_BOOTSTRAP_APPLICATION_BASE,
+    'jhipster:javascript-simple-application:prettier',
+    'jhipster:javascript-simple-application:husky',
+  ],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

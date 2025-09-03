@@ -33,7 +33,7 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
       if (!this.options.fromInit) {
         await this.dependsOnBootstrap('client');
       }
-      await this.dependsOnJHipster('jhipster:javascript:bootstrap');
+      await this.dependsOnJHipster('jhipster:javascript-simple-application:bootstrap');
     }
   }
 
