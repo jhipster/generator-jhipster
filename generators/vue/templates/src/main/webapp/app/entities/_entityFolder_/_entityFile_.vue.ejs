@@ -37,7 +37,7 @@
         </div>
 <%_ } _%>
         <br/>
-        <div class="alert alert-warning" v-if="!isFetching && <%= entityInstancePlural %> && <%= entityInstancePlural %>.length === 0">
+        <div class="alert alert-warning" v-if="!isFetching && <%= entityInstancePlural %>?.length === 0">
             <span>{{ t$('<%= i18nKeyPrefix %>.home.notFound') }}</span>
         </div>
         <div class="table-responsive" v-if="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
