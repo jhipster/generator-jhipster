@@ -37,10 +37,10 @@
         </div>
 <%_ } _%>
         <br/>
-        <div class="alert alert-warning" v-if="!isFetching && <%= entityInstancePlural %> && <%= entityInstancePlural %>.length === 0">
+        <div class="alert alert-warning" v-if="!isFetching && <%= entityInstancePlural %>?.length === 0">
             <span>{{ t$('<%= i18nKeyPrefix %>.home.notFound') }}</span>
         </div>
-        <div class="table-responsive" v-if="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
+        <div class="table-responsive" v-if="<%= entityInstancePlural %>?.length > 0">
             <table class="table table-striped" aria-describedby="<%= entityInstancePlural %>">
                 <thead>
                 <tr>
@@ -183,7 +183,7 @@ _%>
 <%_ } _%>
 <%_ if (!databaseTypeCassandra) { _%>
   <%_ if (paginationPagination) { _%>
-        <div v-show="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length > 0">
+        <div v-show="<%=entityInstancePlural %>?.length > 0">
             <div class="d-flex justify-content-center">
                 <jhi-item-count :page="page" :total="queryCount" :items-per-page="itemsPerPage"></jhi-item-count>
             </div>
