@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { MetricsModalThreads } from './metrics-modal-threads';
@@ -31,7 +30,7 @@ describe('MetricsModalThreads', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [MetricsModalThreads],
-      providers: [provideHttpClient(), NgbActiveModal],
+      providers: [NgbActiveModal],
     })
       .overrideTemplate(MetricsModalThreads, '')
       .compileComponents();
