@@ -1,6 +1,6 @@
 <template>
   <div class="modal-body pad">
-    <div v-if="currentHealth && currentHealth.details">
+    <div v-if="currentHealth?.details">
       <h5>{{ t$('health.details.properties') }}</h5>
       <div class="table-responsive">
         <table class="table table-striped" aria-describedby="Health">
@@ -19,7 +19,7 @@
         </table>
       </div>
     </div>
-    <div v-if="currentHealth && currentHealth.error">
+    <div v-if="currentHealth?.error">
       <h4>{{ t$('health.details.error') }}</h4>
       <pre>{{ currentHealth.error }}</pre>
     </div>

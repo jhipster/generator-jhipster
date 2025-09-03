@@ -93,7 +93,7 @@
       </b-modal>
     </div>
 <%_ if (!databaseTypeCassandra) { _%>
-    <div v-show="users && users.length > 0">
+    <div v-show="users?.length > 0">
       <div class="d-flex justify-content-center">
         <jhi-item-count :page="page" :total="queryCount" :items-per-page="itemsPerPage"></jhi-item-count>
       </div>
