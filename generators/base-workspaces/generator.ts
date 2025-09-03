@@ -164,7 +164,7 @@ export default abstract class BaseWorkspacesGenerator<
   async bootstrapApplications() {
     const resolvedApplicationFolders = this.resolveApplicationFolders();
     for (const [_appFolder, resolvedFolder] of Object.entries(resolvedApplicationFolders)) {
-      await this.composeWithJHipster('jhipster:base-application:bootstrap', {
+      await this.composeWithJHipster('jhipster:app:bootstrap', {
         generatorOptions: { destinationRoot: resolvedFolder, reproducible: true },
       });
     }
