@@ -47,7 +47,7 @@ export class DataUtils {
    * Method to open file
    */
   openFile(data: string, contentType: string | null | undefined): void {
-    contentType = contentType ?? '';
+    contentType ??= '';
 
     const byteCharacters = Buffer.from(data, 'base64').toString('binary');
     const byteNumbers = new Array(byteCharacters.length);
