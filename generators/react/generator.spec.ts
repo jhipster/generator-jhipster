@@ -164,7 +164,7 @@ describe(`generator - ${clientFramework}`, () => {
                   entityInstance: 'entityInstance',
                   entityFolderName: 'entityFolderName',
                   entityFileName: 'entityFileName',
-                  entityClassHumanized: 'Router Name',
+                  entityNameHumanized: 'Router Name',
                 } as ClientEntity,
               ],
             });

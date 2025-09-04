@@ -20,29 +20,29 @@
     "<%= frontendAppName %>": {
       "<%= entityTranslationKey %>" : {
         "home": {
-          "title": "<%= entityClassPluralHumanized %>",
+          "title": "<%= entityNamePluralHumanized %>",
           "refreshListLabel": "רענן רשימה",
   <%_ if (!readOnly) { _%>
-          "createLabel": "צור חדש <%= entityClassHumanized %>",
-          "createOrEditLabel": "צור או ערוך <%= entityClassHumanized %>",
+          "createLabel": "צור חדש <%= entityNameHumanized %>",
+          "createOrEditLabel": "צור או ערוך <%= entityNameHumanized %>",
   <%_ } _%>
   <%_ if (locals.searchEngineAny) { _%>
-          "search": "חפש <%= entityClassHumanized %>",
+          "search": "חפש <%= entityNameHumanized %>",
   <%_ } _%>
-          "notFound": "לא נמצאו <%= entityClassPluralHumanized %>"
+          "notFound": "לא נמצאו <%= entityNamePluralHumanized %>"
         },
   <%_ if (!microserviceAppName && !readOnly) { _%>
-        "created": "<%= entityClassHumanized %> חדש נוצר עם מזהה {{ param }}",
-        "updated": "<%= entityClassHumanized %> עודכן עם מזהה {{ param }}",
-        "deleted": "<%= entityClassHumanized %> נמחק עם מזהה {{ param }}",
+        "created": "<%= entityNameHumanized %> חדש נוצר עם מזהה {{ param }}",
+        "updated": "<%= entityNameHumanized %> עודכן עם מזהה {{ param }}",
+        "deleted": "<%= entityNameHumanized %> נמחק עם מזהה {{ param }}",
   <%_ } _%>
   <%_ if (!readOnly) { _%>
         "delete": {
-          "question": "האם אתה בטוח שברצונך למחוק את <%= entityClassHumanized %> {{ id }}?"
+          "question": "האם אתה בטוח שברצונך למחוק את <%= entityNameHumanized %> {{ id }}?"
         },
   <%_ } _%>
         "detail": {
-          "title": "<%= entityClassHumanized %>"
+          "title": "<%= entityNameHumanized %>"
         }
   <%_ for (const field of fields) { -%>
         ,
@@ -68,9 +68,9 @@
     ,
     "<%= microserviceAppName %>": {
       "<%= entityTranslationKey %>": {
-        "created": "<%= entityClassHumanized %> חדש נוצר עם מזהה {{ param }}",
-        "updated": "<%= entityClassHumanized %> עודכן עם מזהה {{ param }}",
-        "deleted": "<%= entityClassHumanized %> נמחק עם מזהה {{ param }}"
+        "created": "<%= entityNameHumanized %> חדש נוצר עם מזהה {{ param }}",
+        "updated": "<%= entityNameHumanized %> עודכן עם מזהה {{ param }}",
+        "deleted": "<%= entityNameHumanized %> נמחק עם מזהה {{ param }}"
       }
     }
   <%_ } _%>

@@ -21,29 +21,29 @@ let helpBlocks = 0; %>
     "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPluralHumanized %>",
+                "title": "<%= entityNamePluralHumanized %>",
                 "refreshListLabel": "تحديث القائمة",
 <%_ if (!readOnly) { _%>
-                "createLabel": "إنشاء <%= entityClassHumanized %> جديد",
-                "createOrEditLabel": "إنشاء أو تعديل <%= entityClassHumanized %>",
+                "createLabel": "إنشاء <%= entityNameHumanized %> جديد",
+                "createOrEditLabel": "إنشاء أو تعديل <%= entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "البحث عن <%= entityClassHumanized %>",
+                "search": "البحث عن <%= entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "لم يتم العثور على <%= entityClassPluralHumanized %>"
+                "notFound": "لم يتم العثور على <%= entityNamePluralHumanized %>"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "<%= entityClassHumanized %> جديد تم إنشاؤه بالمعرف {{ param }}",
-            "updated": "<%= entityClassHumanized %> تم تحديثه بالمعرف {{ param }}",
-            "deleted": "<%= entityClassHumanized %> تم حذفه بالمعرف {{ param }}",
+            "created": "<%= entityNameHumanized %> جديد تم إنشاؤه بالمعرف {{ param }}",
+            "updated": "<%= entityNameHumanized %> تم تحديثه بالمعرف {{ param }}",
+            "deleted": "<%= entityNameHumanized %> تم حذفه بالمعرف {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "هل أنت متأكد أنك تريد حذف <%= entityClassHumanized %> {{ id }}؟"
+                "question": "هل أنت متأكد أنك تريد حذف <%= entityNameHumanized %> {{ id }}؟"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%= entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "<%= entityClassHumanized %> جديد تم إنشاؤه بالمعرف {{ param }}",
-            "updated": "<%= entityClassHumanized %> تم تحديثه بالمعرف {{ param }}",
-            "deleted": "<%= entityClassHumanized %> تم حذفه بالمعرف {{ param }}"
+            "created": "<%= entityNameHumanized %> جديد تم إنشاؤه بالمعرف {{ param }}",
+            "updated": "<%= entityNameHumanized %> تم تحديثه بالمعرف {{ param }}",
+            "deleted": "<%= entityNameHumanized %> تم حذفه بالمعرف {{ param }}"
         }
     }
 <%_ } _%>

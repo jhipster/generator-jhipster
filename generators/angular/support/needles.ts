@@ -148,7 +148,7 @@ export function addToEntitiesMenu<const E extends ClientEntity, const A extends 
         icon: 'asterisk',
         route: entity.entityPage!,
         translationKey: `global.menu.entities.${entity.entityTranslationKeyMenu}`,
-        name: entity.entityClassHumanized,
+        name: entity.entityNameHumanized,
         jhiPrefix,
       });
     }),

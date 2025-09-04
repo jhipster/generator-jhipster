@@ -24,26 +24,26 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassPlural %>",
                 "refreshListLabel": "リストの更新",
 <%_ if (!readOnly) { _%>
-                "createLabel": "<%= entityClassHumanized %> の作成",
-                "createOrEditLabel": "<%= entityClassHumanized %>の作成または編集",
+                "createLabel": "<%= entityNameHumanized %> の作成",
+                "createOrEditLabel": "<%= entityNameHumanized %>の作成または編集",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "<%= entityClassHumanized %> の検索",
+                "search": "<%= entityNameHumanized %> の検索",
 <%_ } _%>
-                "notFound": "<%= entityClassPluralHumanized %> が見つかりません。"
+                "notFound": "<%= entityNamePluralHumanized %> が見つかりません。"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "新しい <%= entityClassHumanized %> がID {{ param }} で作成されました。",
-            "updated": "ID {{ param }} の <%= entityClassHumanized %> が更新されました。",
-            "deleted": "ID {{ param }} の <%= entityClassHumanized %> が削除されました。",
+            "created": "新しい <%= entityNameHumanized %> がID {{ param }} で作成されました。",
+            "updated": "ID {{ param }} の <%= entityNameHumanized %> が更新されました。",
+            "deleted": "ID {{ param }} の <%= entityNameHumanized %> が削除されました。",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "<%= entityClassHumanized %> {{ id }}を削除してもよろしいですか？"
+                "question": "<%= entityNameHumanized %> {{ id }}を削除してもよろしいですか？"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%= entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "新しい <%= entityClassHumanized %> がID {{ param }} で作成されました。",
-            "updated": "ID {{ param }} の <%= entityClassHumanized %> が更新されました。",
-            "deleted": "ID {{ param }} の <%= entityClassHumanized %> が削除されました。"
+            "created": "新しい <%= entityNameHumanized %> がID {{ param }} で作成されました。",
+            "updated": "ID {{ param }} の <%= entityNameHumanized %> が更新されました。",
+            "deleted": "ID {{ param }} の <%= entityNameHumanized %> が削除されました。"
         }
     }
 <%_ } _%>

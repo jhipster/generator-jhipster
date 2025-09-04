@@ -21,29 +21,29 @@ let helpBlocks = 0; %>
     "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPluralHumanized %>",
+                "title": "<%= entityNamePluralHumanized %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "สร้าง <%= entityClassHumanized %>",
-                "createOrEditLabel": "สร้างหรือแก้ไข <%= entityClassHumanized %>",
+                "createLabel": "สร้าง <%= entityNameHumanized %>",
+                "createOrEditLabel": "สร้างหรือแก้ไข <%= entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "ค้นหา <%= entityClassHumanized %>",
+                "search": "ค้นหา <%= entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "No <%= entityClassPluralHumanized %> found"
+                "notFound": "No <%= entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "<%= entityClassHumanized %> ถูกสร้างด้วย {{ param }}",
-            "updated": "<%= entityClassHumanized %> ถูกแก้ไขด้วย {{ param }}",
-            "deleted": "<%= entityClassHumanized %> ถูกลบด้วย {{ param }}",
+            "created": "<%= entityNameHumanized %> ถูกสร้างด้วย {{ param }}",
+            "updated": "<%= entityNameHumanized %> ถูกแก้ไขด้วย {{ param }}",
+            "deleted": "<%= entityNameHumanized %> ถูกลบด้วย {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "คุณต้องการที่จะลบ <%= entityClassHumanized %> {{ id }}?"
+                "question": "คุณต้องการที่จะลบ <%= entityNameHumanized %> {{ id }}?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%= entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "<%= entityClassHumanized %> ถูกสร้างด้วย {{ param }}",
-            "updated": "<%= entityClassHumanized %> ถูกแก้ไขด้วย {{ param }}",
-            "deleted": "<%= entityClassHumanized %> ถูกลบด้วย {{ param }}"
+            "created": "<%= entityNameHumanized %> ถูกสร้างด้วย {{ param }}",
+            "updated": "<%= entityNameHumanized %> ถูกแก้ไขด้วย {{ param }}",
+            "deleted": "<%= entityNameHumanized %> ถูกลบด้วย {{ param }}"
         }
     }
 <%_ } _%>

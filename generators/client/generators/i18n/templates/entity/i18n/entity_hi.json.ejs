@@ -24,26 +24,26 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassPlural %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "नया <%= entityClassHumanized %> बनाएँ",
-                "createOrEditLabel": "<%= entityClassHumanized %> बनाएँ या संपादित करें",
+                "createLabel": "नया <%= entityNameHumanized %> बनाएँ",
+                "createOrEditLabel": "<%= entityNameHumanized %> बनाएँ या संपादित करें",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "<%= entityClassHumanized %> खोजें",
+                "search": "<%= entityNameHumanized %> खोजें",
 <%_ } _%>
-                "notFound": "No <%= entityClassPluralHumanized %> found"
+                "notFound": "No <%= entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "एक नया <%= entityClassHumanized %> [identifier: {{ param }}] तैयार है",
-            "updated": "एक <%= entityClassHumanized %> [identifier: {{ param }}] का अद्यतन हुआ है",
-            "deleted": "<%= entityClassHumanized %> [identifier: {{ param }}] हटा दिया है",
+            "created": "एक नया <%= entityNameHumanized %> [identifier: {{ param }}] तैयार है",
+            "updated": "एक <%= entityNameHumanized %> [identifier: {{ param }}] का अद्यतन हुआ है",
+            "deleted": "<%= entityNameHumanized %> [identifier: {{ param }}] हटा दिया है",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "<%= entityClassHumanized %> [id: {{ id }}] हटाने की पुष्टि करें"
+                "question": "<%= entityNameHumanized %> [id: {{ id }}] हटाने की पुष्टि करें"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%= entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "एक नया <%= entityClassHumanized %> [identifier: {{ param }}] तैयार है",
-            "updated": "एक <%= entityClassHumanized %> [identifier: {{ param }}] का अद्यतन हुआ है",
-            "deleted": "<%= entityClassHumanized %> [identifier: {{ param }}] हटा दिया है"
+            "created": "एक नया <%= entityNameHumanized %> [identifier: {{ param }}] तैयार है",
+            "updated": "एक <%= entityNameHumanized %> [identifier: {{ param }}] का अद्यतन हुआ है",
+            "deleted": "<%= entityNameHumanized %> [identifier: {{ param }}] हटा दिया है"
         }
     }
 <%_ } _%>

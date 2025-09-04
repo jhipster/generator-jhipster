@@ -331,6 +331,14 @@ export const jhipster7deprecatedProperties: MigrationProperty = {
     replacement: 'entityJpqlInstance property',
     get: ({ data }) => data.entityJpqlInstance,
   },
+  entityClassHumanized: {
+    replacement: 'entityNameHumanized property',
+    get: ({ data }) => data.entityNameHumanized,
+  },
+  entityClassPluralHumanized: {
+    replacement: 'entityNamePluralHumanized property',
+    get: ({ data }) => data.entityNamePluralHumanized,
+  },
   documentationUrl: {
     replacement: 'hipsterDocumentationLink property',
     get: ({ data }) => data.hipsterDocumentationLink,

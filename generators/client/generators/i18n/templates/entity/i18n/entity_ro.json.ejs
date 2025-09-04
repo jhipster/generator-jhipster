@@ -21,29 +21,29 @@ let helpBlocks = 0; %>
     "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPluralHumanized  %>",
+                "title": "<%= entityNamePluralHumanized  %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Creeare o nouă entitate <%= entityClassHumanized %>",
-                "createOrEditLabel": "Creeare sau editare <%= entityClassHumanized %>",
+                "createLabel": "Creeare o nouă entitate <%= entityNameHumanized %>",
+                "createOrEditLabel": "Creeare sau editare <%= entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Căutare după <%= entityClassHumanized %>",
+                "search": "Căutare după <%= entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "No <%= entityClassPluralHumanized %> found"
+                "notFound": "No <%= entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "A fost creată o nouă entitate <%= entityClassHumanized %> cu identificatorul {{ param }}",
-            "updated": "<%= entityClassHumanized %> cu identificatorul {{ param }} a fost actualizată",
-            "deleted": "<%= entityClassHumanized %> cu identificatorul {{ param }} a fost ștearsă",
+            "created": "A fost creată o nouă entitate <%= entityNameHumanized %> cu identificatorul {{ param }}",
+            "updated": "<%= entityNameHumanized %> cu identificatorul {{ param }} a fost actualizată",
+            "deleted": "<%= entityNameHumanized %> cu identificatorul {{ param }} a fost ștearsă",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Sunteți sigur că doriți să ștergeți <%= entityClassHumanized %> {{ id }}?"
+                "question": "Sunteți sigur că doriți să ștergeți <%= entityNameHumanized %> {{ id }}?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%= entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "A fost creată o nouă entitate <%= entityClassHumanized %> cu identificatorul {{ param }}",
-            "updated": "Entitatea <%= entityClassHumanized %> cu identificatorul {{ param }} a fost actualizată",
-            "deleted": "Entitatea <%= entityClassHumanized %> cu identificatorul {{ param }} a fost ștearsă"
+            "created": "A fost creată o nouă entitate <%= entityNameHumanized %> cu identificatorul {{ param }}",
+            "updated": "Entitatea <%= entityNameHumanized %> cu identificatorul {{ param }} a fost actualizată",
+            "deleted": "Entitatea <%= entityNameHumanized %> cu identificatorul {{ param }} a fost ștearsă"
         }
     }
 <%_ } _%>

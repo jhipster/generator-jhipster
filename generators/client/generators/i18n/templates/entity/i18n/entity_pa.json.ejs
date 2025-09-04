@@ -21,29 +21,29 @@ let helpBlocks = 0; %>
     "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPluralHumanized %>",
+                "title": "<%= entityNamePluralHumanized %>",
                 "refreshListLabel": "ਸੂਚੀ ਤਾਜ਼ਾ ਕਰੋ",
 <%_ if (!readOnly) { _%>
-                "createLabel": "ਇੱਕ ਨਵਾਂ <%= entityClassHumanized %> ਬਣਾਓ",
-                "createOrEditLabel": "ਇੱਕ <%= entityClassHumanized %> ਬਣਾਓ ਜਾਂ ਸੰਪਾਦਿਤ ਕਰੋ",
+                "createLabel": "ਇੱਕ ਨਵਾਂ <%= entityNameHumanized %> ਬਣਾਓ",
+                "createOrEditLabel": "ਇੱਕ <%= entityNameHumanized %> ਬਣਾਓ ਜਾਂ ਸੰਪਾਦਿਤ ਕਰੋ",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "<%= entityClassHumanized %> ਲਈ ਖੋਜ",
+                "search": "<%= entityNameHumanized %> ਲਈ ਖੋਜ",
 <%_ } _%>
-                "notFound": "ਕੋਈ <%= entityClassPluralHumanized %> ਨਹੀਂ ਮਿਲਿਆ"
+                "notFound": "ਕੋਈ <%= entityNamePluralHumanized %> ਨਹੀਂ ਮਿਲਿਆ"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "ਇੱਕ ਨਵਾਂ <%= entityClassHumanized %> ਪਛਾਣਕਰਤਾ {{ param }} ਨਾਲ ਬਣਾਇਆ ਗਿਆ ਹੈ",
-            "updated": "ਇੱਕ <%= entityClassHumanized %> ਪਛਾਣਕਰਤਾ {{ param }} ਨਾਲ ਅਪਡੇਟ ਕੀਤਾ ਗਿਆ ਹੈ",
-            "deleted": "ਇੱਕ <%= entityClassHumanized %> ਪਛਾਣਕਰਤਾ {{ param }} ਨਾਲ ਮਿਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ",
+            "created": "ਇੱਕ ਨਵਾਂ <%= entityNameHumanized %> ਪਛਾਣਕਰਤਾ {{ param }} ਨਾਲ ਬਣਾਇਆ ਗਿਆ ਹੈ",
+            "updated": "ਇੱਕ <%= entityNameHumanized %> ਪਛਾਣਕਰਤਾ {{ param }} ਨਾਲ ਅਪਡੇਟ ਕੀਤਾ ਗਿਆ ਹੈ",
+            "deleted": "ਇੱਕ <%= entityNameHumanized %> ਪਛਾਣਕਰਤਾ {{ param }} ਨਾਲ ਮਿਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "ਕੀ ਤੁਸੀਂ ਨਿਸ਼ਚਤ ਰੂਪ ਤੋਂ <%= entityClassHumanized %> {{ id }} ਨੂੰ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
+                "question": "ਕੀ ਤੁਸੀਂ ਨਿਸ਼ਚਤ ਰੂਪ ਤੋਂ <%= entityNameHumanized %> {{ id }} ਨੂੰ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%= entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "ਇੱਕ ਨਵਾਂ <%= entityClassHumanized %> ਪਛਾਣਕਰਤਾ  {{ param }} ਨਾਲ ਬਣਾਇਆ ਗਿਆ ਹੈ",
-            "updated": "ਇੱਕ <%= entityClassHumanized %> ਪਛਾਣਕਰਤਾ  {{ param }} ਨਾਲ ਅਪਡੇਟ ਕੀਤਾ ਗਿਆ ਹੈ",
-            "deleted": "ਇੱਕ <%= entityClassHumanized %> ਪਛਾਣਕਰਤਾ  {{ param }} ਨਾਲ ਮਿਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ"
+            "created": "ਇੱਕ ਨਵਾਂ <%= entityNameHumanized %> ਪਛਾਣਕਰਤਾ  {{ param }} ਨਾਲ ਬਣਾਇਆ ਗਿਆ ਹੈ",
+            "updated": "ਇੱਕ <%= entityNameHumanized %> ਪਛਾਣਕਰਤਾ  {{ param }} ਨਾਲ ਅਪਡੇਟ ਕੀਤਾ ਗਿਆ ਹੈ",
+            "deleted": "ਇੱਕ <%= entityNameHumanized %> ਪਛਾਣਕਰਤਾ  {{ param }} ਨਾਲ ਮਿਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ"
         }
     }
 <%_ } _%>
