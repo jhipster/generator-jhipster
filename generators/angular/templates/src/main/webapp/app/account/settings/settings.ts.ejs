@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
@@ -33,7 +33,7 @@ const initialAccount: Account = {} as Account;
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-settings',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  imports: [SharedModule, ReactiveFormsModule],
   templateUrl: './settings.html',
 })
 export default class Settings implements OnInit {
