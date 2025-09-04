@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormGroup, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
@@ -39,7 +39,7 @@ const newUser: IUser = {
 @Component({
   selector: '<%= jhiPrefixDashed %>-user-mgmt-update',
   templateUrl: './user-management-update.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  imports: [SharedModule, ReactiveFormsModule],
 })
 export default class UserManagementUpdate implements OnInit {
 <%_ if (enableTranslation) { _%>
