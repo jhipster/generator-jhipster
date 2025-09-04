@@ -31,11 +31,8 @@ describe('Alert Component', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [Alert],
       providers: [AlertService],
-    })
-      .overrideTemplate(Alert, '')
-      .compileComponents();
+    });
   }));
 
   beforeEach(() => {

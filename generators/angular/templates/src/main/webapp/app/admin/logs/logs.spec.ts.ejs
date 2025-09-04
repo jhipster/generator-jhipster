@@ -36,11 +36,8 @@ describe('Logs', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [Logs],
         providers: [provideHttpClient(), provideHttpClientTesting(), LogsService<%= applicationTypeGateway && gatewayServicesApiAvailable ? ', GatewayRoutesService' : '' %>],
-      })
-        .overrideTemplate(Logs, '')
-        .compileComponents();
+      });
     })
   );
 

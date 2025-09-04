@@ -18,6 +18,9 @@
 -%>
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { provideHttpClient, HttpErrorResponse } from '@angular/common/http';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { of, throwError } from 'rxjs';
 
 import Health from './health';
@@ -31,11 +34,11 @@ describe('Health', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [Health],
+<%_ if (enableTranslation) { _%>
+      imports: [TranslateModule.forRoot()],
+<%_ } _%>
       providers: [provideHttpClient()],
-    })
-      .overrideTemplate(Health, '')
-      .compileComponents();
+    });
   }));
 
   beforeEach(() => {

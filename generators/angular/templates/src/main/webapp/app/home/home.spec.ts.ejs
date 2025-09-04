@@ -25,6 +25,9 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 <%_ if (!authenticationTypeOauth2) { _%>
 import { Router } from '@angular/router';
 <%_ } _%>
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { of<% if (!authenticationTypeOauth2) { %>, Subject<% } %> } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -58,18 +61,14 @@ describe('Home Component', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [
-          Home
-        ],
+        <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
         providers: [
           AccountService,
 <%_ if (authenticationTypeOauth2) { _%>
           LoginService
 <%_ } _%>
         ],
-      })
-        .overrideTemplate(Home, '')
-        .compileComponents();
+      });
     })
   );
 

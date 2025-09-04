@@ -22,6 +22,11 @@ _%>
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { of } from 'rxjs';
 
 import { Authority } from 'app/config/authority.constants';
@@ -30,9 +35,9 @@ import { User } from '../user-management.model';
 import UserManagementDetail from './user-management-detail';
 
 describe('User Management Detail Component', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [UserManagementDetail],
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
       providers: [
         provideRouter(
           [
@@ -57,9 +62,10 @@ describe('User Management Detail Component', () => {
           withComponentInputBinding(),
         ),
       ],
-    })
-      .overrideTemplate(UserManagementDetail, '')
-      .compileComponents();
+    });
+
+    const library = TestBed.inject(FaIconLibrary);
+    library.addIcons(faArrowLeft);
   });
 
   describe('Construct', () => {

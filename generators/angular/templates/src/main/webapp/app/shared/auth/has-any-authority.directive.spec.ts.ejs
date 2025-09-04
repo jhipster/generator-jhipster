@@ -44,7 +44,7 @@ describe('HasAnyAuthorityDirective tests', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [TestHasAnyAuthorityDirective<%_ if (enableTranslation) { _%>, TranslateModule.forRoot()<%_ } _%>],
+      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
       providers: [provideHttpClient(), AccountService],
     });
   }));

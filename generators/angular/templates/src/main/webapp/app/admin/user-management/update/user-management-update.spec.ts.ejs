@@ -23,6 +23,9 @@ import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from
 import { provideHttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { of } from 'rxjs';
 
 import { Authority } from 'app/config/authority.constants';
@@ -38,7 +41,7 @@ describe('User Management Update Component', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [UserManagementUpdate],
+      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
       providers: [
         provideHttpClient(),
         FormBuilder,
@@ -49,9 +52,7 @@ describe('User Management Update Component', () => {
           },
         },
       ],
-    })
-      .overrideTemplate(UserManagementUpdate, '')
-      .compileComponents();
+    });
   }));
 
   beforeEach(() => {

@@ -19,6 +19,9 @@
 import { TestBed, waitForAsync, tick, fakeAsync, inject } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { of, throwError } from 'rxjs';
 
 import { ActivateService } from './activate.service';
@@ -29,7 +32,7 @@ describe('Activate', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [Activate],
+      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
       providers: [
         provideHttpClient(),
         {
@@ -37,9 +40,7 @@ describe('Activate', () => {
           useValue: { queryParams: of({ key: 'ABC123' }) },
         },
       ],
-    })
-      .overrideTemplate(Activate, '')
-      .compileComponents();
+    });
   }));
 
   beforeEach(() => {

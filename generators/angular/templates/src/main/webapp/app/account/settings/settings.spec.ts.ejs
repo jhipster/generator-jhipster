@@ -48,16 +48,11 @@ describe('Settings', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [
 <%_ if (enableTranslation) { _%>
-          TranslateModule.forRoot(),
+        imports: [TranslateModule.forRoot()],
 <%_ } _%>
-          Settings,
-        ],
         providers: [FormBuilder, AccountService],
-      })
-        .overrideTemplate(Settings, '')
-        .compileComponents();
+      });
     })
   );
 

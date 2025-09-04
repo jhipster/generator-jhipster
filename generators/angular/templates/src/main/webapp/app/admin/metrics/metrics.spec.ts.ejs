@@ -19,6 +19,9 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { of } from 'rxjs';
 
 import Metrics from './metrics';
@@ -33,11 +36,9 @@ describe('Metrics', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [Metrics],
+      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
       providers: [provideHttpClient()],
-    })
-      .overrideTemplate(Metrics, '')
-      .compileComponents();
+    });
   }));
 
   beforeEach(() => {

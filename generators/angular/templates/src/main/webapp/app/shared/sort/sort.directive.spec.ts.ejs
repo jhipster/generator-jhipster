@@ -46,9 +46,6 @@ describe('Directive: SortDirective', () => {
   let tableRow: DebugElement;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestSortDirective],
-    });
     fixture = TestBed.createComponent(TestSortDirective);
     component = fixture.componentInstance;
     tableRow = fixture.debugElement.query(By.directive(SortDirective));

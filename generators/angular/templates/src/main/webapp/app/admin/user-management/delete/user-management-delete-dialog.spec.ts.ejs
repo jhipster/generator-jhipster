@@ -35,11 +35,8 @@ describe('User Management Delete Component', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [UserManagementDeleteDialog],
       providers: [provideHttpClient(), NgbActiveModal],
-    })
-      .overrideTemplate(UserManagementDeleteDialog, '')
-      .compileComponents();
+    });
   }));
 
   beforeEach(() => {

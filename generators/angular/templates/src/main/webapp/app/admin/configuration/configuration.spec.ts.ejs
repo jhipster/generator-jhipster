@@ -31,11 +31,8 @@ describe('Configuration', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [Configuration],
       providers: [provideHttpClient(), ConfigurationService],
-    })
-      .overrideTemplate(Configuration, '')
-      .compileComponents();
+    });
   }));
 
   beforeEach(() => {

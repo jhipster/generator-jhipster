@@ -18,6 +18,7 @@
 -%>
 import { ComponentFixture, TestBed, waitForAsync, inject, tick, fakeAsync } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 <%_ if (enableTranslation) { _%>
@@ -36,16 +37,18 @@ describe('Register', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [
 <%_ if (enableTranslation) { _%>
-          TranslateModule.forRoot(),
+        imports: [TranslateModule.forRoot()],
 <%_ } _%>
-          Register,
+        providers: [
+          provideHttpClient(),
+          FormBuilder,
+          {
+            provide: ActivatedRoute,
+            useValue: {}
+          }
         ],
-        providers: [provideHttpClient(), FormBuilder],
-      })
-        .overrideTemplate(Register, '')
-        .compileComponents();
+      });
     })
   );
 

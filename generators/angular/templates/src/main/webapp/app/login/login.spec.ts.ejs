@@ -22,7 +22,10 @@ jest.mock('app/login/login.service');
 import { ElementRef, signal } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { Router, Navigation } from '@angular/router';
+import { ActivatedRoute, Router, Navigation } from '@angular/router';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { of, throwError } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -39,8 +42,14 @@ describe('Login', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [Login],
+<%_ if (enableTranslation) { _%>
+      imports: [TranslateModule.forRoot()],
+<%_ } _%>
       providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {}
+        },
         FormBuilder,
         AccountService,
         {
@@ -50,9 +59,7 @@ describe('Login', () => {
           },
         },
       ],
-    })
-      .overrideTemplate(Login, '')
-      .compileComponents();
+    });
   }));
 
   beforeEach(() => {

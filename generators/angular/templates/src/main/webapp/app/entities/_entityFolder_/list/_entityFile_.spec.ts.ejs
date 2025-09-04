@@ -30,6 +30,9 @@ import {
 } from '@angular/core/testing';
 import { provideHttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import {
   of,
 <%_ if (!readOnly) { _%>
@@ -56,9 +59,7 @@ describe('<%= entityAngularName %> Management Component', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [
-              <%= entityAngularName %>,
-            ],
+            <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
             providers: [
                 provideHttpClient(),
                 {
@@ -91,9 +92,7 @@ describe('<%= entityAngularName %> Management Component', () => {
                     }
                 }
             ]
-        })
-        .overrideTemplate(<%= entityAngularName %>, '')
-        .compileComponents();
+        });
 
         fixture = TestBed.createComponent(<%= entityAngularName %>);
         comp = fixture.componentInstance;

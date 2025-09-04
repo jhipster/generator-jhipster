@@ -14,11 +14,8 @@ describe('Page Ribbon Component', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [PageRibbon],
       providers: [provideHttpClient()],
-    })
-      .overrideTemplate(PageRibbon, '')
-      .compileComponents();
+    });
   }));
 
   beforeEach(() => {

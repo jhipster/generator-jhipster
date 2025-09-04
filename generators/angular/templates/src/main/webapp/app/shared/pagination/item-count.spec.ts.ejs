@@ -37,14 +37,13 @@ describe('ItemCount test', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [
-          ItemCount,
 <%_ if (enableTranslation) { _%>
+        imports: [
           TranslateModule.forRoot(),
           TranslateDirective,
-<%_ } _%>
         ],
-      }).compileComponents();
+<%_ } _%>
+      });
     })
   );
 
