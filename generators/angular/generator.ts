@@ -102,7 +102,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
           angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!,
         });
-        application.addPrettierExtensions?.(['html', 'css', 'scss']);
+        application.prettierExtensions.push('html', 'css', 'scss');
       },
       async javaNodeBuildPaths({ application }) {
         application.javaNodeBuildPaths?.push('angular.json', 'tsconfig.json', 'tsconfig.app.json');

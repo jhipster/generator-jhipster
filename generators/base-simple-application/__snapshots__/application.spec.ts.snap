@@ -22,9 +22,6 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "jhiPrefixDashed": "jhi",
   "jhipsterPackageJson": "jhipsterPackageJson",
   "jhipsterVersion": "jhipsterVersion",
-  "nodeDependencies": {},
-  "nodePackageManager": "npm",
-  "nodePackageManagerCommand": "npm",
   "nodeVersion": "nodeVersion",
   "projectDescription": "projectDescription",
 }

@@ -1,9 +1,9 @@
 import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type {
-  Application as BaseSimpleApplicationApplication,
-  Config as BaseSimpleApplicationConfig,
-  Options as BaseSimpleApplicationOptions,
-} from '../base-simple-application/types.ts';
+  Application as JavascriptSimpleApplicationApplication,
+  Config as JavascriptSimpleApplicationConfig,
+  Options as JavascriptSimpleApplicationOptions,
+} from '../javascript-simple-application/types.ts';
 
 import type { BaseApplicationAddedApplicationProperties } from './application.ts';
 import type { Entity } from './entity.ts';
@@ -14,13 +14,13 @@ export type * from './entity.ts';
 
 type Command = HandleCommandTypes<typeof bootstrapCommand>;
 
-export type Config = BaseSimpleApplicationConfig &
+export type Config = JavascriptSimpleApplicationConfig &
   Command['Config'] & {
     entities?: string[];
     backendType?: string;
   };
 
-export type Options = BaseSimpleApplicationOptions & Command['Options'];
+export type Options = JavascriptSimpleApplicationOptions & Command['Options'];
 
 export type { Features } from '../base-simple-application/types.ts';
 export type { Source } from '../base-simple-application/types.ts';
@@ -74,6 +74,6 @@ type AuthenticationProperties = OptionWithDerivedProperties<'authenticationType'
 
 export type Application<E extends Entity> = Command['Application'] &
   BaseApplicationAddedApplicationProperties<E> &
-  BaseSimpleApplicationApplication &
+  JavascriptSimpleApplicationApplication &
   ApplicationProperties &
   AuthenticationProperties & {};

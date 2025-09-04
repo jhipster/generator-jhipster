@@ -48,7 +48,6 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
   get preparing() {
     return this.asPreparingTaskGroup({
       source({ application, source }) {
-        application.eslintConfigFile = `eslint.config.${application.packageJsonType === 'module' ? 'js' : 'mjs'}`;
         source.addEslintConfig = ({ import: importToAdd, config }) =>
           this.editFile(
             application.eslintConfigFile!,

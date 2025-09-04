@@ -117,7 +117,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
         }
       },
       prepareForTemplates({ application, source }) {
-        application.addPrettierExtensions?.(['html', 'vue', 'css', 'scss']);
+        application.prettierExtensions.push('html', 'vue', 'css', 'scss');
 
         source.addWebpackConfig = args => {
           if (!application.clientBundlerWebpack) {

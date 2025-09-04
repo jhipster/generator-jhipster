@@ -59,7 +59,6 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
       loading({ applicationDefaults }) {
         if (this.useVersionPlaceholders) {
           applicationDefaults({
-            nodeVersion: 'NODE_VERSION',
             jhipsterVersion: 'JHIPSTER_VERSION',
           });
         }

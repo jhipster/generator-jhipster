@@ -72,7 +72,7 @@ export default class extends BaseSimpleApplicationGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('base-simple-application');
+      await this.dependsOnBootstrap('javascript-simple-application');
     }
   }
 

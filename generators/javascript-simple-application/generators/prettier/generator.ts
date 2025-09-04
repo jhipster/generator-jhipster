@@ -46,20 +46,6 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
           'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
         });
       },
-      loadDefaults({ application, applicationDefaults }) {
-        applicationDefaults({
-          prettierFolders: ',**/',
-          prettierExtensions: 'md,json,yml,js,cjs,mjs,ts,cts,mts',
-        });
-
-        application.addPrettierExtensions = (extensions: string[]) => {
-          const currentExtensions = application.prettierExtensions!.split(',');
-          const extensionsToAdd = extensions.filter(ext => !currentExtensions.includes(ext));
-          if (extensionsToAdd.length > 0) {
-            application.prettierExtensions = `${application.prettierExtensions},${extensionsToAdd.join(',')}`;
-          }
-        };
-      },
     });
   }
 
@@ -123,8 +109,8 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
           const folders = ['', 'src/**/', ...(clientBundlerWebpack ? ['webpack/'] : []), '.blueprint/**/'];
           this.packageJson.merge({
             scripts: {
-              'prettier:check': `prettier --check "{${folders.join(',')}}*.{${prettierExtensions}}"`,
-              'prettier:format': `prettier --write "{${folders.join(',')}}*.{${prettierExtensions}}"`,
+              'prettier:check': `prettier --check "{${folders.join(',')}}*.{${prettierExtensions.join(',')}}"`,
+              'prettier:format': `prettier --write "{${folders.join(',')}}*.{${prettierExtensions.join(',')}}"`,
             },
           });
         }
