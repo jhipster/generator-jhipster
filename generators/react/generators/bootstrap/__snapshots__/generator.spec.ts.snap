@@ -61,7 +61,6 @@ exports[`generator - react:bootstrap bootstrapping default config should prepare
   "clientFrameworkVue": false,
   "clientI18nDir": "src/main/webapp/i18n/",
   "clientPackageJsonScripts": Any<Object>,
-  "clientPackageManager": "npm",
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",

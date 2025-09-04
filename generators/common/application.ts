@@ -53,8 +53,6 @@ export const mutateApplication = {
   __override__: false,
   srcMain: MAIN_DIR,
   srcTest: TEST_DIR,
-  // TODO drop clientPackageManager
-  clientPackageManager: ({ nodePackageManager }) => nodePackageManager,
 
   loginRegex: LOGIN_REGEX,
   backendType: 'Java',

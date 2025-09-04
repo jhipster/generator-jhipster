@@ -68,16 +68,16 @@
           <h1>An error has occurred :-(</h1>
           <h2>Usual error causes</h2>
           <ol>
-            <li>You started the application from an IDE and you didn't run <code style="color:red"><%= clientPackageManager %> start</code> or <code style="color:red"><%= clientPackageManager %> run webapp:build</code>.</li>
-            <li>You had a network error while running <code style="color:red"><%= clientPackageManager %> install</code>. If you are behind a corporate proxy, it is likely that this error was caused by your proxy. Have a look at the JHipster error logs, you will probably have the cause of the error.</li>
+            <li>You started the application from an IDE and you didn't run <code style="color:red"><%- nodePackageManager %> start</code> or <code style="color:red"><%- nodePackageManager %> run webapp:build</code>.</li>
+            <li>You had a network error while running <code style="color:red"><%- nodePackageManager %> install</code>. If you are behind a corporate proxy, it is likely that this error was caused by your proxy. Have a look at the JHipster error logs, you will probably have the cause of the error.</li>
             <li>You installed a Node.js version that doesn't work with JHipster: please use an LTS (long-term support) version, as it's the only version we support.</li>
           </ol>
           <h2>Building the client side code again</h2>
           <p>If you want to go fast, run <code style="color:red"><%- nodePackageManagerCommand %> run app:start</code> to build and run everything.</p>
           <p>If you want to have more control, so you can debug your issue more easily, you should follow the following steps:</p>
           <ol>
-            <li>Install npm dependencies with the command <code style="color:red"><%= clientPackageManager %> install</code></li>
-            <li>Build the client with the command <code style="color:red"><%= clientPackageManager %> run webapp:build</code> or <code style="color:red"><%= clientPackageManager %> start</code></li>
+            <li>Install npm dependencies with the command <code style="color:red"><%- nodePackageManager %> install</code></li>
+            <li>Build the client with the command <code style="color:red"><%- nodePackageManager %> run webapp:build</code> or <code style="color:red"><%- nodePackageManager %> start</code></li>
             <li>Start the server with <code style="color:red"><%- nodePackageManagerCommand %> run app:start</code> or using your IDE</li>
           </ol>
 

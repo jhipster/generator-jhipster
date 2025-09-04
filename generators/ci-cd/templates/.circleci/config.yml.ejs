@@ -83,11 +83,11 @@ jobs:
             <%_ } _%>
             - run:
                 name: Backend tests
-                command: <%= clientPackageManager %> run ci:backend:test
+                command: <%- nodePackageManager %> run ci:backend:test
             <%_ if (!skipClient) { _%>
             - run:
                 name: Run Front End Tests
-                command: <%= clientPackageManager %> run ci:frontend:test
+                command: <%- nodePackageManager %> run ci:frontend:test
             <%_ } _%>
             <%_ if (buildToolMaven) { _%>
                 <%_ if (ciCdIntegrationsHeroku) { _%>
@@ -106,18 +106,18 @@ jobs:
                 const commented = '# '; _%>
             <%= commented %>- run:
             <%= commented %>    name: 'E2E: Package'
-            <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:package
+            <%= commented %>    command: <%- nodePackageManager %> run ci:e2e:package
             <%= commented %>- run:
             <%= commented %>    name: 'E2E: Prepare'
-            <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:prepare
+            <%= commented %>    command: <%- nodePackageManager %> run ci:e2e:prepare
             <%= commented %>- run:
             <%= commented %>    name: 'E2E: Run'
-            <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:run
+            <%= commented %>    command: <%- nodePackageManager %> run ci:e2e:run
             <%_ if(cypressTests) { _%>
             <%= commented %>    environment:
             <%= commented %>      CYPRESS_ENABLE_RECORD: <%= ciCdIntegrationsCypressDashboard %>
             <%_ } _%>
             <%= commented %>- run:
             <%= commented %>    name: 'E2E: Teardown'
-            <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:teardown
+            <%= commented %>    command: <%- nodePackageManager %> run ci:e2e:teardown
             <%_ } _%>

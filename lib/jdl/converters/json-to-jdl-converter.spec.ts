@@ -71,7 +71,7 @@ describe('jdl - JSONToJDLConverter', () => {
                 entitySuffix: '',
                 dtoSuffix: 'DTO',
                 enableTranslation: false,
-                clientPackageManager: 'npm',
+                nodePackageManager: 'npm',
                 skipClient: true,
                 nativeLanguage: 'en',
                 skipUserManagement: true,
@@ -84,39 +84,39 @@ describe('jdl - JSONToJDLConverter', () => {
 
         it('should write a JDL file with the application', () => {
           jestExpect(jdlFileContent).toMatchInlineSnapshot(`
-            "application {
-              config {
-                applicationType microservice
-                authenticationType jwt
-                baseName truc
-                blueprints [generator-jhipster-vuejs, generator-jhipster-dotnetcore]
-                buildTool maven
-                cacheProvider hazelcast
-                clientPackageManager npm
-                databaseType sql
-                devDatabaseType h2Disk
-                dtoSuffix DTO
-                enableHibernateCache true
-                enableSwaggerCodegen false
-                enableTranslation false
-                jhiPrefix jhi
-                jhipsterVersion "6.0.1"
-                jwtSecretKey "HIDDEN"
-                messageBroker no
-                nativeLanguage en
-                packageName com.mycompany.myapp
-                prodDatabaseType mysql
-                searchEngine no
-                serverPort 8081
-                serviceDiscoveryType eureka
-                skipClient true
-                skipUserManagement true
-                testFrameworks []
-                websocket no
-              }
-            }
-            "
-          `);
+"application {
+  config {
+    applicationType microservice
+    authenticationType jwt
+    baseName truc
+    blueprints [generator-jhipster-vuejs, generator-jhipster-dotnetcore]
+    buildTool maven
+    cacheProvider hazelcast
+    databaseType sql
+    devDatabaseType h2Disk
+    dtoSuffix DTO
+    enableHibernateCache true
+    enableSwaggerCodegen false
+    enableTranslation false
+    jhiPrefix jhi
+    jhipsterVersion "6.0.1"
+    jwtSecretKey "HIDDEN"
+    messageBroker no
+    nativeLanguage en
+    nodePackageManager npm
+    packageName com.mycompany.myapp
+    prodDatabaseType mysql
+    searchEngine no
+    serverPort 8081
+    serviceDiscoveryType eureka
+    skipClient true
+    skipUserManagement true
+    testFrameworks []
+    websocket no
+  }
+}
+"
+`);
         });
       });
 
@@ -136,7 +136,6 @@ describe('jdl - JSONToJDLConverter', () => {
     baseName truc
     buildTool maven
     cacheProvider hazelcast
-    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
@@ -148,6 +147,7 @@ describe('jdl - JSONToJDLConverter', () => {
     jwtSecretKey "HIDDEN"
     messageBroker no
     nativeLanguage en
+    nodePackageManager npm
     packageName com.mycompany.myapp
     prodDatabaseType mysql
     searchEngine no
@@ -256,7 +256,6 @@ paginate Country with pager
     baseName app1
     buildTool maven
     cacheProvider hazelcast
-    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
@@ -268,6 +267,7 @@ paginate Country with pager
     jwtSecretKey "HIDDEN"
     messageBroker no
     nativeLanguage en
+    nodePackageManager npm
     packageName com.mycompany.app1
     prodDatabaseType mysql
     searchEngine no
@@ -288,7 +288,6 @@ application {
     baseName app2
     buildTool maven
     cacheProvider hazelcast
-    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
@@ -300,6 +299,7 @@ application {
     jwtSecretKey "HIDDEN"
     messageBroker no
     nativeLanguage en
+    nodePackageManager npm
     packageName com.mycompany.app2
     prodDatabaseType mysql
     searchEngine no
@@ -320,7 +320,6 @@ application {
     baseName app3
     buildTool maven
     cacheProvider hazelcast
-    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
@@ -332,6 +331,7 @@ application {
     jwtSecretKey "HIDDEN"
     messageBroker no
     nativeLanguage en
+    nodePackageManager npm
     packageName com.mycompany.app3
     prodDatabaseType mysql
     searchEngine no

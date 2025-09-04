@@ -76,7 +76,7 @@ const optionNames = {
   BUILD_TOOL: 'buildTool',
   CACHE_PROVIDER: 'cacheProvider',
   CLIENT_FRAMEWORK: 'clientFramework',
-  CLIENT_PACKAGE_MANAGER: 'clientPackageManager',
+  NODE_PACKAGE_MANAGER: 'nodePackageManager',
   CLIENT_THEME: 'clientTheme',
   CLIENT_THEME_VARIANT: 'clientThemeVariant',
   WITH_ADMIN_UI: 'withAdminUi',
@@ -155,7 +155,7 @@ export const jhipsterOptionValues = {
     [SVELTE]: SVELTE,
     [NO]: NO,
   },
-  [optionNames.CLIENT_PACKAGE_MANAGER]: {
+  [optionNames.NODE_PACKAGE_MANAGER]: {
     npm: 'npm',
   },
   [optionNames.CLIENT_THEME]: 'none',
@@ -243,7 +243,7 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.BUILD_TOOL]: { type: ApplicationOptionTypes.STRING },
   [optionNames.CACHE_PROVIDER]: { type: ApplicationOptionTypes.STRING },
   [optionNames.CLIENT_FRAMEWORK]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.CLIENT_PACKAGE_MANAGER]: { type: ApplicationOptionTypes.STRING },
+  [optionNames.NODE_PACKAGE_MANAGER]: { type: ApplicationOptionTypes.STRING },
   [optionNames.CLIENT_THEME]: { type: ApplicationOptionTypes.STRING },
   [optionNames.CLIENT_THEME_VARIANT]: { type: ApplicationOptionTypes.STRING },
   [optionNames.CREATION_TIMESTAMP]: { type: ApplicationOptionTypes.INTEGER },

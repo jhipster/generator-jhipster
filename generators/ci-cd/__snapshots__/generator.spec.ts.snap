@@ -83,7 +83,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "clientFrameworkReact": false,
   "clientFrameworkVue": false,
   "clientPackageJsonScripts": {},
-  "clientPackageManager": "npm",
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestFrameworks": undefined,

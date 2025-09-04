@@ -82,7 +82,7 @@ node {
 <%= indent %>           sh "npm install"
 <%= indent %>           sh "npm test"
         <%_ } else { _%>
-<%= indent %>            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run test'"
+<%= indent %>            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%- nodePackageManager %> -Dfrontend.<%- nodePackageManager %>.arguments='run test'"
         <%_ } _%>
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
@@ -112,7 +112,7 @@ node {
 
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('npm install') {
-<%= indent %>        sh "./gradlew <%= clientPackageManager %>_install -PnodeInstall --no-daemon"
+<%= indent %>        sh "./gradlew <%- nodePackageManager %>_install -PnodeInstall --no-daemon"
 <%= indent %>    }
     <%_ } _%>
     <%_ if (ciCdIntegrationsSnyk) { _%>
@@ -142,7 +142,7 @@ node {
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
-<%= indent %>            sh "./gradlew <%= clientPackageManager %>_run_test -PnodeInstall --no-daemon"
+<%= indent %>            sh "./gradlew <%- nodePackageManager %>_run_test -PnodeInstall --no-daemon"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {

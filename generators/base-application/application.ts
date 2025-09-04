@@ -69,9 +69,6 @@ export type BaseApplicationAddedApplicationProperties<E extends Entity> = UserMa
   skipCommitHook?: boolean;
   fakerSeed?: string;
 
-  /* @deprecated use nodePackageManager */
-  clientPackageManager?: string;
-
   readonly blueprints?: { name: string; version: string }[];
   readonly testFrameworks?: string[];
 };

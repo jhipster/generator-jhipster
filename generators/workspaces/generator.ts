@@ -152,16 +152,16 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   get loadingWorkspaces() {
     return this.asDefaultTaskGroup({
       configurePackageManager({ applications }) {
-        if (this.workspacesConfig.clientPackageManager || !this.generateWorkspaces) return;
+        if (this.workspacesConfig.nodePackageManager || !this.generateWorkspaces) return;
 
-        this.workspacesConfig.clientPackageManager =
-          this.options.clientPackageManager ?? applications.find(app => app.clientPackageManager)?.clientPackageManager ?? 'npm';
+        this.workspacesConfig.nodePackageManager =
+          this.options.nodePackageManager ?? applications.find(app => app.nodePackageManager)?.nodePackageManager ?? 'npm';
       },
       async loadConfig() {
         if (!this.generateWorkspaces) return;
 
         this.dockerCompose = this.workspacesConfig.dockerCompose;
-        (this.env as any).options.nodePackageManager = this.workspacesConfig.clientPackageManager;
+        (this.env as any).options.nodePackageManager = this.workspacesConfig.nodePackageManager;
       },
     });
   }

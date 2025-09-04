@@ -48,6 +48,24 @@ export default class JavascriptGenerator extends JavascriptSimpleApplicationGene
     }
   }
 
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      migrate() {
+        // @ts-expect-error migrate removed config
+        const { clientPackageManager } = this.jhipsterConfig;
+        if (clientPackageManager) {
+          this.jhipsterConfig.nodePackageManager ??= clientPackageManager;
+          // @ts-expect-error migrate removed config
+          this.jhipsterConfig.clientPackageManager = undefined;
+        }
+      },
+    });
+  }
+
+  get [JavascriptSimpleApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {

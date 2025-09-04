@@ -86,10 +86,10 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     msg: 'clientThemeVariant property',
   },
   WITH_ADMIN_UI: { type: 'BOOLEAN' },
-  CLIENT_PACKAGE_MANAGER: {
+  NODE_PACKAGE_MANAGER: {
     type: 'NAME',
     pattern: ALPHANUMERIC,
-    msg: 'clientPackageManager property',
+    msg: 'nodePackageManager property',
   },
   CREATION_TIMESTAMP: {
     type: 'INTEGER',

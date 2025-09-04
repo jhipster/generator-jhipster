@@ -49,7 +49,7 @@ before_script:
     <%_ } _%>
     - export GRADLE_USER_HOME=`pwd`/.gradle
     <%_ if (!skipClient) { _%>
-    - ./gradlew <%= clientPackageManager %>_install -PnodeInstall --no-daemon
+    - ./gradlew <%- nodePackageManager %>_install -PnodeInstall --no-daemon
     <%_ } _%>
 nohttp:
     stage: check
@@ -119,7 +119,7 @@ gradle-integration-test:
 frontend-test:
     stage: test
     script:
-        - ./gradlew <%= clientPackageManager %>_run_test -PnodeInstall --no-daemon
+        - ./gradlew <%- nodePackageManager %>_run_test -PnodeInstall --no-daemon
     artifacts:
         reports:
             junit: build/test-results/TESTS-results-jest.xml
@@ -184,7 +184,7 @@ before_script:
     <%_ if (!skipClient) { _%>
         <%_ if (!insideDocker) { _%>
     - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm -Dmaven.repo.local=$MAVEN_USER_HOME
-    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dmaven.repo.local=$MAVEN_USER_HOME
+    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%- nodePackageManager %> -Dmaven.repo.local=$MAVEN_USER_HOME
         <%_ } _%>
     <%_ } _%>
 
@@ -250,7 +250,7 @@ frontend-test:
         - npm install
         - npm test
         <%_ } else { _%>
-        - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run test' -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%- nodePackageManager %> -Dfrontend.<%- nodePackageManager %>.arguments='run test' -Dmaven.repo.local=$MAVEN_USER_HOME
         <%_ } _%>
     artifacts:
         reports:
@@ -317,8 +317,8 @@ stages:
 webapp-build:
     stage: build
     script:
-        - <%= clientPackageManager %> install
-        - <%= clientPackageManager %> run webapp:build
+        - <%- nodePackageManager %> install
+        - <%- nodePackageManager %> run webapp:build
     artifacts:
         paths:
             - build/
@@ -327,7 +327,7 @@ webapp-test:
     dependencies:
         - webapp-build
     script:
-        - <%= clientPackageManager %> run webapp:test
+        - <%- nodePackageManager %> run webapp:test
     artifacts:
         reports:
             junit: build/test-results/TESTS-results-jest.xml
@@ -349,7 +349,7 @@ sonar-analyze:
 webapp-prod:
     stage: packaging
     script:
-        - <%= clientPackageManager %> run webapp:prod
+        - <%- nodePackageManager %> run webapp:prod
         # - add cmd to zip the app folder build/resources/main/static
     artifacts:
         paths:

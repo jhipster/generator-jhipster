@@ -335,6 +335,10 @@ export const jhipster7deprecatedProperties: MigrationProperty = {
     replacement: 'hipsterDocumentationLink property',
     get: ({ data }) => data.hipsterDocumentationLink,
   },
+  clientPackageManager: {
+    replacement: 'nodePackageManager property',
+    get: ({ data }) => data.nodePackageManager,
+  },
 };
 
 const ejsBuiltInProperties: (string | symbol)[] = ['__append', '__line', 'escapeFn', 'include', 'undefined'];

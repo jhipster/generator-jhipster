@@ -18,11 +18,14 @@
  */
 import { basename } from 'node:path';
 
+import { mutateData } from '../../../../lib/utils/object.ts';
 import { editPropertiesFileCallback } from '../../../base-core/support/properties-file.ts';
+import { getGradleLibsVersionsProperties } from '../../../gradle/support/dependabot-gradle.ts';
 import { addJavaAnnotation, addJavaImport } from '../../../java/support/add-java-annotation.ts';
 import { createEnumNeedleCallback } from '../../../java/support/java-enum.ts';
 import { injectJavaConstructorParam, injectJavaConstructorSetter, injectJavaField } from '../../../java/support/java-file-edit.ts';
 import type { Application as JavascriptApplication } from '../../../javascript-simple-application/types.ts';
+import { getPomVersionProperties } from '../../../maven/support/dependabot-maven.ts';
 import { mutateApplication } from '../../application.ts';
 import { JavaSimpleApplicationGenerator } from '../../generator.ts';
 
@@ -58,6 +61,21 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
         if (application.defaultPackaging === 'war') {
           this.log.info(`Using ${application.defaultPackaging} as default packaging`);
         }
+      },
+      async loadJavaDependencies({ application }) {
+        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/pom.xml'))?.toString();
+        const gradleLibsVersions = this.readTemplate(
+          this.jhipsterTemplatePath('../../server/resources/gradle/libs.versions.toml'),
+        )?.toString();
+        const applicationJavaDependencies = this.prepareDependencies(
+          {
+            ...getPomVersionProperties(pomFile!),
+            ...getGradleLibsVersionsProperties(gradleLibsVersions!),
+          },
+          'java',
+        );
+
+        mutateData(application.javaDependencies, applicationJavaDependencies);
       },
     });
   }
