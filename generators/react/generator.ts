@@ -92,7 +92,7 @@ export default class ReactGenerator extends ClientApplicationGenerator<
   get preparing() {
     return this.asPreparingTaskGroup({
       applicationDefauts({ application, applicationDefaults }) {
-        application.addPrettierExtensions?.(['html', 'tsx', 'css', 'scss']);
+        application.prettierExtensions.push('html', 'tsx', 'css', 'scss');
 
         applicationDefaults({
           __override__: true,

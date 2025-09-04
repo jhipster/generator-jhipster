@@ -21,7 +21,6 @@ import { kebabCase, upperFirst } from 'lodash-es';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 import packageJson from '../../package.json' with { type: 'json' };
 import type { WriteContext } from '../base-core/api.ts';
-import { RECOMMENDED_NODE_VERSION } from '../generator-constants.js';
 import type { ProjectNameAddedApplicationProperties } from '../project-name/application.ts';
 
 export type BaseSimpleApplicationAddedApplicationProperties = WriteContext & {
@@ -49,13 +48,6 @@ export type BaseSimpleApplicationAddedApplicationProperties = WriteContext & {
   projectVersion?: string;
   projectDescription: string;
 
-  skipJhipsterDependencies?: boolean;
-
-  nodeVersion: string;
-  nodePackageManager: string;
-  nodePackageManagerCommand: string;
-  nodeDependencies: Record<string, string>;
-
   jhipsterPackageJson: typeof packageJson;
 };
 
@@ -67,10 +59,6 @@ export const mutateApplication = {
   jhiPrefixCapitalized: ({ jhiPrefix }) => upperFirst(jhiPrefix),
   jhiPrefixDashed: ({ jhiPrefix }) => kebabCase(jhiPrefix),
 
-  nodeVersion: RECOMMENDED_NODE_VERSION,
-  nodePackageManager: 'npm',
-  nodePackageManagerCommand: ({ nodePackageManager }) => nodePackageManager,
-  nodeDependencies: () => ({}),
   customizeTemplatePaths: () => [],
 
   hipsterName: 'Java Hipster',

@@ -29,13 +29,14 @@ import {
   matchMainJavaFiles,
   packageInfoTransform,
 } from '../java/support/index.ts';
+import type { Source as JavascriptSource } from '../javascript-simple-application/types.ts';
+
 import type {
   Application as JavaSimpleApplicationApplication,
   Config as JavaSimpleApplicationConfig,
   Options as JavaSimpleApplicationOptions,
   Source as JavaSimpleApplicationSource,
-} from '../java/types.ts';
-import type { Source as JavascriptSource } from '../javascript-simple-application/types.ts';
+} from './types.ts';
 
 /**
  * Utility class with types.

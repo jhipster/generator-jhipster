@@ -45,8 +45,6 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
     return this.asBootstrapApplicationTaskGroup({
       loadConfig({ applicationDefaults }) {
         applicationDefaults({
-          packageJsonScripts: {},
-          clientPackageJsonScripts: {},
           dockerContainers: {},
           authenticationUsesCsrf: undefined,
           gatewayRoutes: undefined,

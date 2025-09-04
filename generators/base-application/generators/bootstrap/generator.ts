@@ -75,7 +75,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
     }
 
     await this.dependsOnBootstrap('jdl');
-    await this.dependsOnBootstrap('base-simple-application');
+    await this.dependsOnBootstrap('javascript-simple-application');
     await this.dependsOnBootstrap('docker');
   }
 

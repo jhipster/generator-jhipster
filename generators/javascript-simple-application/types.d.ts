@@ -12,6 +12,7 @@ import type {
   Source as BaseSimpleApplicationSource,
 } from '../base-simple-application/types.d.ts';
 
+import type { JavascriptSimpleApplicationAddedApplicationProperties } from './application.ts';
 import type JavascriptBootstrapCommand from './generators/bootstrap/command.ts';
 import type EslintCommand from './generators/eslint/command.ts';
 import type HuskyCommand from './generators/husky/command.ts';
@@ -47,24 +48,8 @@ export type Source = BaseSimpleApplicationSource & {
 };
 
 export type Application = BaseSimpleApplicationApplication &
+  JavascriptSimpleApplicationAddedApplicationProperties &
   ExportApplicationPropertiesFromCommand<typeof EslintCommand> &
   ExportApplicationPropertiesFromCommand<typeof HuskyCommand> &
   ExportApplicationPropertiesFromCommand<typeof PrettierCommand> &
-  ExportApplicationPropertiesFromCommand<typeof JavascriptBootstrapCommand> & {
-    packageJsonNodeEngine?: boolean | string;
-    eslintConfigFile?: string;
-    cjsExtension?: string;
-    mjsExtension?: string;
-    /** Root package.json scripts */
-    packageJsonScripts: Record<string, string>;
-    /** Root package.json scripts */
-    clientPackageJsonScripts: Record<string, string>;
-
-    addPrettierExtensions?: (extensions: string[]) => void;
-
-    prettierFolders?: string;
-    prettierExtensions?: string;
-
-    clientRootDir: string;
-    clientSrcDir: string;
-  };
+  ExportApplicationPropertiesFromCommand<typeof JavascriptBootstrapCommand> & {};

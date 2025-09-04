@@ -44,25 +44,9 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      preparing({ application, applicationDefaults }) {
+      preparing({ applicationDefaults }) {
         applicationDefaults({
           gatewayServicesApiAvailable: undefined,
-        });
-
-        let prettierExtensions = 'md,json,yml,html';
-        if (application.clientFrameworkAny) {
-          prettierExtensions = `${prettierExtensions},cjs,mjs,js,ts,tsx,css,scss`;
-          if (application.clientFrameworkVue) {
-            prettierExtensions = `${prettierExtensions},vue`;
-          }
-        }
-        if (!application.skipServer) {
-          prettierExtensions = `${prettierExtensions},java`;
-        }
-
-        applicationDefaults({
-          // TODO remove prettierExtensions, moved to prettier generator
-          prettierExtensions,
         });
       },
     });

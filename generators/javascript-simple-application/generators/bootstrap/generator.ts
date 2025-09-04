@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CLIENT_MAIN_SRC_DIR } from '../../../generator-constants.js';
+import { mutateApplication } from '../../application.ts';
 import { JavascriptSimpleApplicationGenerator } from '../../generator.ts';
 
 export default class JavascriptBootstrapGenerator extends JavascriptSimpleApplicationGenerator {
@@ -38,14 +38,13 @@ export default class JavascriptBootstrapGenerator extends JavascriptSimpleApplic
           this.fetchFromInstalledJHipster('javascript-simple-application', 'resources', 'package.json'),
         );
       },
-      jsExtensions({ applicationDefaults, application }) {
-        applicationDefaults({
-          cjsExtension: application.packageJsonTypeCommonjs ? '.js' : '.cjs',
-          mjsExtension: application.packageJsonTypeModule ? '.js' : '.mjs',
-
-          clientRootDir: '',
-          clientSrcDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`,
-        });
+      jsExtensions({ applicationDefaults }) {
+        if (this.useVersionPlaceholders) {
+          applicationDefaults({
+            nodeVersion: 'NODE_VERSION',
+          });
+        }
+        applicationDefaults(mutateApplication);
       },
     });
   }
