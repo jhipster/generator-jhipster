@@ -123,7 +123,7 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
      * @return the matching {@link Specification} of the entity.
      */
     protected Specification<<%= persistClass %>> createSpecification(<%= criteria %> criteria) {
-        Specification<<%= persistClass %>> specification = Specification.where(null);
+        Specification<<%= persistClass %>> specification = Specification.unrestricted();
         if (criteria != null) {
             // This has to be called first, because the distinct method returns null
             specification = Specification.allOf(
