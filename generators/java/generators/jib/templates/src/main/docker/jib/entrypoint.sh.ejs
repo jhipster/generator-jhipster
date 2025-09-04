@@ -38,4 +38,4 @@ file_env 'SPRING_LIQUIBASE_PASSWORD'
 <%_ } _%>
 file_env 'JHIPSTER_REGISTRY_PASSWORD'
 
-exec java ${JAVA_OPTS} -noverify -XX:+AlwaysPreTouch -Djava.security.egd=file:/dev/urandom -cp /app/resources:/app/classes:/app/libs/* ...
+exec java ${JAVA_OPTS} -noverify -XX:+AlwaysPreTouch -Djava.security.egd=file:/dev/urandom -cp /app/resources:/app/classes:/app/libs/* "<%= packageName %>.<%= mainClass %>"  "$@"
