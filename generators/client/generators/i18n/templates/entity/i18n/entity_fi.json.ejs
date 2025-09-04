@@ -21,29 +21,29 @@ let helpBlocks = 0; %>
     "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPluralHumanized %>",
+                "title": "<%= entityNamePluralHumanized %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Luo <%= entityClassHumanized %>",
-                "createOrEditLabel": "Luo tai muokkaa <%= entityClassHumanized %>",
+                "createLabel": "Luo <%= entityNameHumanized %>",
+                "createOrEditLabel": "Luo tai muokkaa <%= entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Etsi <%= entityClassHumanized %>",
+                "search": "Etsi <%= entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "<%= entityClassHumanized %> ei löytynyt"
+                "notFound": "<%= entityNameHumanized %> ei löytynyt"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "Uusi <%= entityClassHumanized %> on luotu, id: {{ param }}",
-            "updated": "<%= entityClassHumanized %> on päivitetty, id: {{ param }}",
-            "deleted": "<%= entityClassHumanized %> on päivitetty, id: {{ param }}",
+            "created": "Uusi <%= entityNameHumanized %> on luotu, id: {{ param }}",
+            "updated": "<%= entityNameHumanized %> on päivitetty, id: {{ param }}",
+            "deleted": "<%= entityNameHumanized %> on päivitetty, id: {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Haluatko varmasti poistaa <%= entityClassHumanized %> {{ id }}?"
+                "question": "Haluatko varmasti poistaa <%= entityNameHumanized %> {{ id }}?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%= entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "Uusi <%= entityClassHumanized %> on luotu, id: {{ param }}",
-            "updated": "<%= entityClassHumanized %> on päivitetty, id: {{ param }}",
-            "deleted": "<%= entityClassHumanized %> on poistettu, id: {{ param }}"
+            "created": "Uusi <%= entityNameHumanized %> on luotu, id: {{ param }}",
+            "updated": "<%= entityNameHumanized %> on päivitetty, id: {{ param }}",
+            "deleted": "<%= entityNameHumanized %> on poistettu, id: {{ param }}"
         }
     }
 <%_ } _%>

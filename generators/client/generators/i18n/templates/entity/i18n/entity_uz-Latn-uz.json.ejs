@@ -21,29 +21,29 @@ let helpBlocks = 0; %>
     "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPluralHumanized  %>",
+                "title": "<%= entityNamePluralHumanized  %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Yangi <%= entityClassHumanized %> qo`shish",
-                "createOrEditLabel": "<%= entityClassHumanized %>ni tahrirlash",
+                "createLabel": "Yangi <%= entityNameHumanized %> qo`shish",
+                "createOrEditLabel": "<%= entityNameHumanized %>ni tahrirlash",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "<%= entityClassHumanized %>ni izlash",
+                "search": "<%= entityNameHumanized %>ni izlash",
 <%_ } _%>
-                "notFound": "No <%= entityClassPluralHumanized %> found"
+                "notFound": "No <%= entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "<%= entityClassHumanized %> {{ param }} bilan qo`shildi",
-            "updated": "{{ param }}- <%= entityClassHumanized %> saqlandi",
-            "deleted": "{{ param }}- <%= entityClassHumanized %> o`chirildi",
+            "created": "<%= entityNameHumanized %> {{ param }} bilan qo`shildi",
+            "updated": "{{ param }}- <%= entityNameHumanized %> saqlandi",
+            "deleted": "{{ param }}- <%= entityNameHumanized %> o`chirildi",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "{{ id }}- <%= entityClassHumanized %>ni o`chirmoqchimisiz? "
+                "question": "{{ id }}- <%= entityNameHumanized %>ni o`chirmoqchimisiz? "
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%= entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "<%= entityClassHumanized %> {{ param }} bilan qo`shildi",
-            "updated": "{{ param }}- <%= entityClassHumanized %> saqlandi",
-            "deleted": "{{ param }}- <%= entityClassHumanized %> o`chirildi"
+            "created": "<%= entityNameHumanized %> {{ param }} bilan qo`shildi",
+            "updated": "{{ param }}- <%= entityNameHumanized %> saqlandi",
+            "deleted": "{{ param }}- <%= entityNameHumanized %> o`chirildi"
         }
     }
 <%_ } _%>

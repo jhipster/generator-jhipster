@@ -21,29 +21,29 @@ let helpBlocks = 0; %>
     "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPluralHumanized %>",
+                "title": "<%= entityNamePluralHumanized %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Kreirati <%= entityClassHumanized %>",
-                "createOrEditLabel": "Kreirati ili urediti <%= entityClassHumanized %>",
+                "createLabel": "Kreirati <%= entityNameHumanized %>",
+                "createOrEditLabel": "Kreirati ili urediti <%= entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Tražiti <%= entityClassHumanized %>",
+                "search": "Tražiti <%= entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "Nije nađeno <%= entityClassPluralHumanized %>"
+                "notFound": "Nije nađeno <%= entityNamePluralHumanized %>"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "Kreiran je <%= entityClassHumanized %> sa identifikatorom {{ param }}",
-            "updated": "Ažuriran je <%= entityClassHumanized %> sa identifikatorom {{ param }}",
-            "deleted": "Obrisan je <%= entityClassHumanized %> sa identifikatorom {{ param }}",
+            "created": "Kreiran je <%= entityNameHumanized %> sa identifikatorom {{ param }}",
+            "updated": "Ažuriran je <%= entityNameHumanized %> sa identifikatorom {{ param }}",
+            "deleted": "Obrisan je <%= entityNameHumanized %> sa identifikatorom {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Da li ste sigurni da želite obrisati <%= entityClassHumanized %> {{ id }}?"
+                "question": "Da li ste sigurni da želite obrisati <%= entityNameHumanized %> {{ id }}?"
             },
             <%_ } _%>
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%= entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "Kreiran je <%= entityClassHumanized %> sa identifikatorom {{ param }}",
-            "updated": "Ažuriran je <%= entityClassHumanized %> sa identifikatorom {{ param }}",
-            "deleted": "Obrisan je <%= entityClassHumanized %> sa identifikatorom {{ param }}"
+            "created": "Kreiran je <%= entityNameHumanized %> sa identifikatorom {{ param }}",
+            "updated": "Ažuriran je <%= entityNameHumanized %> sa identifikatorom {{ param }}",
+            "deleted": "Obrisan je <%= entityNameHumanized %> sa identifikatorom {{ param }}"
         }
     }
 <%_ } _%>

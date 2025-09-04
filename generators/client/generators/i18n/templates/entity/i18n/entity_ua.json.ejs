@@ -21,29 +21,29 @@ let helpBlocks = 0; %>
     "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPluralHumanized  %>",
+                "title": "<%= entityNamePluralHumanized  %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Створити новий <%= entityClassHumanized %>",
-                "createOrEditLabel": "Створити чи редагувати <%= entityClassHumanized %>",
+                "createLabel": "Створити новий <%= entityNameHumanized %>",
+                "createOrEditLabel": "Створити чи редагувати <%= entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Знайти <%= entityClassHumanized %>",
+                "search": "Знайти <%= entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "No <%= entityClassPluralHumanized %> found"
+                "notFound": "No <%= entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "Новий <%= entityClassHumanized %> створений з ідентифікатором {{ param }}",
-            "updated": "<%= entityClassHumanized %> оновлений з ідентифікатором {{ param }}",
-            "deleted": "<%= entityClassHumanized %> видалений з ідентифікатором {{ param }}",
+            "created": "Новий <%= entityNameHumanized %> створений з ідентифікатором {{ param }}",
+            "updated": "<%= entityNameHumanized %> оновлений з ідентифікатором {{ param }}",
+            "deleted": "<%= entityNameHumanized %> видалений з ідентифікатором {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Ви впевнені, що хочете видалити <%= entityClassHumanized %> {{ id }}?"
+                "question": "Ви впевнені, що хочете видалити <%= entityNameHumanized %> {{ id }}?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%= entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "Новий <%= entityClassHumanized %> створений з ідентифікатором {{ param }}",
-            "updated": "<%= entityClassHumanized %> оновлений з ідентифікатором {{ param }}",
-            "deleted": "<%= entityClassHumanized %> видалений з ідентифікатором {{ param }}"
+            "created": "Новий <%= entityNameHumanized %> створений з ідентифікатором {{ param }}",
+            "updated": "<%= entityNameHumanized %> оновлений з ідентифікатором {{ param }}",
+            "deleted": "<%= entityNameHumanized %> видалений з ідентифікатором {{ param }}"
         }
     }
 <%_ } _%>

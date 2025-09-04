@@ -281,10 +281,8 @@ type BaseApplicationAddedEntityProperties = {
   entityInstancePlural: string;
   entityInstance: string;
 
-  // TODO rename to entityNameHumanized
-  entityClassHumanized: string;
-  // TODO rename to entityNamePluralHumanized
-  entityClassPluralHumanized: string;
+  entityNameHumanized: string;
+  entityNamePluralHumanized: string;
 
   resetFakerSeed?(suffix?: string): void;
   generateFakeData?: (type?: any) => any;
@@ -358,6 +356,6 @@ export const mutateEntity = {
   entityInstancePlural: ({ entityNamePlural }) => lowerFirst(entityNamePlural),
   entityAuthority: ({ adminEntity }) => (adminEntity ? 'ROLE_ADMIN' : undefined),
 
-  entityClassHumanized: ({ entityNameCapitalized }) => startCase(entityNameCapitalized),
-  entityClassPluralHumanized: ({ entityNamePlural }) => startCase(entityNamePlural),
+  entityNameHumanized: ({ entityNameCapitalized }) => startCase(entityNameCapitalized),
+  entityNamePluralHumanized: ({ entityNamePlural }) => startCase(entityNamePlural),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, BaseApplicationAddedEntityProperties>;

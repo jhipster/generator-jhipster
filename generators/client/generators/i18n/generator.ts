@@ -294,7 +294,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
             source.addEntityTranslationKey?.({
               language: languageTag,
               translationKey: entity.entityTranslationKeyMenu,
-              translationValue: entity.entityClassHumanized ?? startCase(entity.entityNameCapitalized),
+              translationValue: entity.entityNameHumanized ?? startCase(entity.entityNameCapitalized),
             });
           }
         }

@@ -21,29 +21,29 @@ let helpBlocks = 0; %>
     "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPluralHumanized %>",
+                "title": "<%= entityNamePluralHumanized %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Δημιουργήστε ένα νέο <%= entityClassHumanized %>",
-                "createOrEditLabel": "Δημιουργήστε η επεξεργαστείτε ένα <%= entityClassHumanized %>",
+                "createLabel": "Δημιουργήστε ένα νέο <%= entityNameHumanized %>",
+                "createOrEditLabel": "Δημιουργήστε η επεξεργαστείτε ένα <%= entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Αναζήτηση για <%= entityClassHumanized %>",
+                "search": "Αναζήτηση για <%= entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "No <%= entityClassPluralHumanized %> found"
+                "notFound": "No <%= entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "Ένα νέο <%= entityClassHumanized %> έχει δημιουργηθεί με αναγνωριστικό {{ param }}",
-            "updated": "Ένα <%= entityClassHumanized %> έχει ενημερωθεί με αναγνωριστικό {{ param }}",
-            "deleted": "Ένα <%= entityClassHumanized %> έχει διαγραφτεί με αναγνωριστικό {{ param }}",
+            "created": "Ένα νέο <%= entityNameHumanized %> έχει δημιουργηθεί με αναγνωριστικό {{ param }}",
+            "updated": "Ένα <%= entityNameHumanized %> έχει ενημερωθεί με αναγνωριστικό {{ param }}",
+            "deleted": "Ένα <%= entityNameHumanized %> έχει διαγραφτεί με αναγνωριστικό {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Είστε βέβαιοι όταν θέλετε να διαγράψετε το ακόλουθο <%= entityClassHumanized %> {{ id }};"
+                "question": "Είστε βέβαιοι όταν θέλετε να διαγράψετε το ακόλουθο <%= entityNameHumanized %> {{ id }};"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%= entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "Ένα νέο <%= entityClassHumanized %> έχει δημιουργηθεί με αναγνωριστικό {{ param }}",
-            "updated": "Ένα <%= entityClassHumanized %> έχει ενημερωθεί με αναγνωριστικό {{ param }}",
-            "deleted": "Ένα <%= entityClassHumanized %> έχει διαγραφτεί με αναγνωριστικό {{ param }}"
+            "created": "Ένα νέο <%= entityNameHumanized %> έχει δημιουργηθεί με αναγνωριστικό {{ param }}",
+            "updated": "Ένα <%= entityNameHumanized %> έχει ενημερωθεί με αναγνωριστικό {{ param }}",
+            "deleted": "Ένα <%= entityNameHumanized %> έχει διαγραφτεί με αναγνωριστικό {{ param }}"
         }
     }
 <%_ } _%>

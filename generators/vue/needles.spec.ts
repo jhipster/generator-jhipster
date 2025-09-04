@@ -28,7 +28,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
                 entityUrl: 'entityUrl',
                 microserviceName: 'microserviceName',
                 entityPage: 'routerName',
-                entityClassHumanized: 'Router Name',
+                entityNameHumanized: 'Router Name',
               } as ClientEntity,
             ],
           });

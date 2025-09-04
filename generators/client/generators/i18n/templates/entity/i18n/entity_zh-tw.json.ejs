@@ -21,29 +21,29 @@ let helpBlocks = 0; %>
     "<%= frontendAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPluralHumanized  %>",
+                "title": "<%= entityNamePluralHumanized  %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "建立一筆新的 <%= entityClassHumanized %>",
-                "createOrEditLabel": "建立或編輯 <%= entityClassHumanized %>",
+                "createLabel": "建立一筆新的 <%= entityNameHumanized %>",
+                "createOrEditLabel": "建立或編輯 <%= entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "搜尋 <%= entityClassHumanized %>",
+                "search": "搜尋 <%= entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "No <%= entityClassPluralHumanized %> found"
+                "notFound": "No <%= entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "新的 <%= entityClassHumanized %> 建立成功，識別碼為 {{ param }}",
-            "updated": "識別碼為 {{ param }} 的 <%= entityClassHumanized %> 更新成功",
-            "deleted": "識別碼為 {{ param }} 的 <%= entityClassHumanized %> 刪除成功",
+            "created": "新的 <%= entityNameHumanized %> 建立成功，識別碼為 {{ param }}",
+            "updated": "識別碼為 {{ param }} 的 <%= entityNameHumanized %> 更新成功",
+            "deleted": "識別碼為 {{ param }} 的 <%= entityNameHumanized %> 刪除成功",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "您確定要刪除 <%= entityClassHumanized %> {{ id }} 嗎?"
+                "question": "您確定要刪除 <%= entityNameHumanized %> {{ id }} 嗎?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%= entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "新的 <%= entityClassHumanized %> 建立成功，識別碼為 {{ param }}",
-            "updated": "識別碼為 {{ param }} 的 <%= entityClassHumanized %> 更新成功",
-            "deleted": "識別碼為 {{ param }} 的 <%= entityClassHumanized %> 刪除成功"
+            "created": "新的 <%= entityNameHumanized %> 建立成功，識別碼為 {{ param }}",
+            "updated": "識別碼為 {{ param }} 的 <%= entityNameHumanized %> 更新成功",
+            "deleted": "識別碼為 {{ param }} 的 <%= entityNameHumanized %> 刪除成功"
         }
     }
 <%_ } _%>

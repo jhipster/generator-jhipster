@@ -24,26 +24,26 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassPlural %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Egy új <%= entityClassHumanized %> létrehozása",
-                "createOrEditLabel": "Hozzon létre, vagy módosítson <%= entityClassHumanized %>t",
+                "createLabel": "Egy új <%= entityNameHumanized %> létrehozása",
+                "createOrEditLabel": "Hozzon létre, vagy módosítson <%= entityNameHumanized %>t",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "<%= entityClassHumanized %> keresése",
+                "search": "<%= entityNameHumanized %> keresése",
 <%_ } _%>
-                "notFound": "No <%= entityClassPluralHumanized %> found"
+                "notFound": "No <%= entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "Egy új <%= entityClassHumanized %> lett létrehozva {{ param }} azonosítóval",
-            "updated": "A <%= entityClassHumanized %> módosítva lett {{ param }} azonosítóval",
-            "deleted": "A <%= entityClassHumanized %> törölve lett {{ param }} azonosítóval",
+            "created": "Egy új <%= entityNameHumanized %> lett létrehozva {{ param }} azonosítóval",
+            "updated": "A <%= entityNameHumanized %> módosítva lett {{ param }} azonosítóval",
+            "deleted": "A <%= entityNameHumanized %> törölve lett {{ param }} azonosítóval",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Biztos benne, hogy törölni szeretné az <%= entityClassHumanized %>t {{ id }} azonosítóval?"
+                "question": "Biztos benne, hogy törölni szeretné az <%= entityNameHumanized %>t {{ id }} azonosítóval?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%= entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
@@ -60,9 +60,9 @@ let helpBlocks = 0; %>
 <%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "Egy új <%= entityClassHumanized %> lett létrehozva {{ param }} azonosítóval",
-            "updated": "A <%= entityClassHumanized %> módosítva lett {{ param }} azonosítóval",
-            "deleted": "A <%= entityClassHumanized %> törölve lett {{ param }} azonosítóval"
+            "created": "Egy új <%= entityNameHumanized %> lett létrehozva {{ param }} azonosítóval",
+            "updated": "A <%= entityNameHumanized %> módosítva lett {{ param }} azonosítóval",
+            "deleted": "A <%= entityNameHumanized %> törölve lett {{ param }} azonosítóval"
         }
     }
 <%_ } _%>
