@@ -189,7 +189,7 @@
     "@types/normalize-path": "^3.0.2",
     "@types/npmcli__arborist": "^6.3.1",
     "@types/pluralize": "0.0.33",
-    "@types/semver": "7.7.0",
+    "@types/semver": "7.7.1",
     "@types/sinon-chai": "4.0.0",
     "chai": "6.0.1",
     "cpy-cli": "6.0.0",
