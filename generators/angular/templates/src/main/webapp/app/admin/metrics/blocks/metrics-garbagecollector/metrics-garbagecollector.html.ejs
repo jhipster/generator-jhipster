@@ -19,70 +19,66 @@
 <h3 id="garbageCollectorMetrics">__jhiTranslateTag__('metrics.jvm.gc.title')</h3>
 
 <div class="row">
+  @if (garbageCollectorMetrics(); as garbageCollectorMetricsRef) {
   <div class="col-md-4">
-    @if (garbageCollectorMetrics(); as garbageCollectorMetricsRef) {
-      <div>
+    <div>
+      <span>
+        GC Live Data Size/GC Max Data Size ({{ garbageCollectorMetricsRef['jvm.gc.live.data.size'] / 1048576 | number: '1.0-0' }}M /
+        {{ garbageCollectorMetricsRef['jvm.gc.max.data.size'] / 1048576 | number: '1.0-0' }}M)
+      </span>
+
+      <ngb-progressbar
+        [max]="garbageCollectorMetricsRef['jvm.gc.max.data.size']"
+        [value]="garbageCollectorMetricsRef['jvm.gc.live.data.size']"
+        [striped]="true"
+        [animated]="false"
+        type="success"
+      >
         <span>
-          GC Live Data Size/GC Max Data Size ({{ garbageCollectorMetricsRef['jvm.gc.live.data.size'] / 1048576 | number: '1.0-0' }}M /
-          {{ garbageCollectorMetricsRef['jvm.gc.max.data.size'] / 1048576 | number: '1.0-0' }}M)
+          {{
+            (100 * garbageCollectorMetricsRef['jvm.gc.live.data.size']) / garbageCollectorMetricsRef['jvm.gc.max.data.size']
+              | number: '1.0-2'
+          }}%
         </span>
-
-        <ngb-progressbar
-          [max]="garbageCollectorMetricsRef['jvm.gc.max.data.size']"
-          [value]="garbageCollectorMetricsRef['jvm.gc.live.data.size']"
-          [striped]="true"
-          [animated]="false"
-          type="success"
-        >
-          <span>
-            {{
-              (100 * garbageCollectorMetricsRef['jvm.gc.live.data.size']) / garbageCollectorMetricsRef['jvm.gc.max.data.size']
-                | number: '1.0-2'
-            }}%
-          </span>
-        </ngb-progressbar>
-      </div>
-    }
+      </ngb-progressbar>
+    </div>
   </div>
 
   <div class="col-md-4">
-    @if (garbageCollectorMetrics(); as garbageCollectorMetricsRef) {
-      <div>
+    <div>
+      <span>
+        GC Memory Promoted/GC Memory Allocated ({{ garbageCollectorMetricsRef['jvm.gc.memory.promoted'] / 1048576 | number: '1.0-0' }}M /
+        {{ garbageCollectorMetricsRef['jvm.gc.memory.allocated'] / 1048576 | number: '1.0-0' }}M)
+      </span>
+
+      <ngb-progressbar
+        [max]="garbageCollectorMetricsRef['jvm.gc.memory.allocated']"
+        [value]="garbageCollectorMetricsRef['jvm.gc.memory.promoted']"
+        [striped]="true"
+        [animated]="false"
+        type="success"
+      >
         <span>
-          GC Memory Promoted/GC Memory Allocated ({{ garbageCollectorMetricsRef['jvm.gc.memory.promoted'] / 1048576 | number: '1.0-0' }}M /
-          {{ garbageCollectorMetricsRef['jvm.gc.memory.allocated'] / 1048576 | number: '1.0-0' }}M)
+          {{
+            (100 * garbageCollectorMetricsRef['jvm.gc.memory.promoted']) / garbageCollectorMetricsRef['jvm.gc.memory.allocated']
+              | number: '1.0-2'
+          }}%
         </span>
-
-        <ngb-progressbar
-          [max]="garbageCollectorMetricsRef['jvm.gc.memory.allocated']"
-          [value]="garbageCollectorMetricsRef['jvm.gc.memory.promoted']"
-          [striped]="true"
-          [animated]="false"
-          type="success"
-        >
-          <span>
-            {{
-              (100 * garbageCollectorMetricsRef['jvm.gc.memory.promoted']) / garbageCollectorMetricsRef['jvm.gc.memory.allocated']
-                | number: '1.0-2'
-            }}%
-          </span>
-        </ngb-progressbar>
-      </div>
-    }
+      </ngb-progressbar>
+    </div>
   </div>
 
   <div class="col-md-4">
-    @if (garbageCollectorMetrics(); as garbageCollectorMetricsRef) {
-      <div class="row">
-        <div class="col-md-9">Classes loaded</div>
-        <div class="col-md-3 text-end">{{ garbageCollectorMetricsRef.classesLoaded }}</div>
-      </div>
-      <div class="row">
-        <div class="col-md-9">Classes unloaded</div>
-        <div class="col-md-3 text-end">{{ garbageCollectorMetricsRef.classesUnloaded }}</div>
-      </div>
-    }
+    <div class="row">
+      <div class="col-md-9">Classes loaded</div>
+      <div class="col-md-3 text-end">{{ garbageCollectorMetricsRef.classesLoaded }}</div>
+    </div>
+    <div class="row">
+      <div class="col-md-9">Classes unloaded</div>
+      <div class="col-md-3 text-end">{{ garbageCollectorMetricsRef.classesUnloaded }}</div>
+    </div>
   </div>
+  }
 
   @if (!updating() && garbageCollectorMetrics()) {
     <div class="table-responsive">
