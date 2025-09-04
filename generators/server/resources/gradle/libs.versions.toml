@@ -24,7 +24,7 @@ jib-maven-plugin = { module = 'com.google.cloud.tools:jib-maven-plugin', version
 jib-spring-boot-extension-maven = { module = 'com.google.cloud.tools:jib-spring-boot-extension-maven', version = '0.1.0' }
 
 [plugins]
-gradle-git-properties = { id = 'com.gorylenko.gradle-git-properties', version = '2.5.2' }
+gradle-git-properties = { id = 'com.gorylenko.gradle-git-properties', version = '2.5.3' }
 
 node-gradle = { id = 'com.github.node-gradle.node', version = '7.1.0' }
 
