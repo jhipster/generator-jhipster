@@ -4,13 +4,13 @@ exports[`mutation object test expects mutateEntity to match snapshot 1`] = `
 {
   "clientRootFolder": "",
   "entityAuthority": "ROLE_ADMIN",
-  "entityClassHumanized": "Name",
-  "entityClassPluralHumanized": "Names",
   "entityInstance": "name",
   "entityInstancePlural": "names",
   "entityNameCapitalized": "Name",
+  "entityNameHumanized": "Name",
   "entityNameKebabCase": "name",
   "entityNamePlural": "names",
+  "entityNamePluralHumanized": "Names",
   "entityNamePluralizedAndSpinalCased": "names",
 }
 `;
