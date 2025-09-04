@@ -10,7 +10,8 @@ import {
   testFrameworkTypes,
 } from '../../lib/jhipster/index.ts';
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { GENERATOR_APP } from '../generator-list.ts';
+
+const GENERATOR_APP = 'app';
 
 const { H2_DISK, MYSQL, SQL } = databaseTypes;
 const { EHCACHE } = cacheTypes;

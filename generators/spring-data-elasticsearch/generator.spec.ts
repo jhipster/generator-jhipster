@@ -20,8 +20,6 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { snakeCase } from 'lodash-es';
-
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import { authenticationTypes, databaseTypes, searchEngineTypes } from '../../lib/jhipster/index.ts';
 import {
@@ -60,10 +58,6 @@ samples = extendMatrix(samples, {
 const testSamples = buildSamplesFromMatrix(samples, { commonConfig });
 
 describe('generator - elasticsearch', () => {
-  it('generator-list constant matches folder name', async () => {
-    const GENERATOR_LIST: Record<string, string> = await import('../generator-list.ts');
-    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 

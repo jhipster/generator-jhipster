@@ -24,7 +24,6 @@ import BaseApplicationGenerator from '../base-application/index.ts';
 import type { PropertiesFileLines } from '../base-core/support/index.ts';
 import { editPropertiesFileCallback } from '../base-core/support/index.ts';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.ts';
-import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.ts';
 
 import { writeFiles } from './files.ts';
 import type {
@@ -50,7 +49,7 @@ export default class CommonGenerator extends BaseApplicationGenerator<
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('common');
       await this.dependsOnJHipster('javascript-simple-application');
-      await this.dependsOnJHipster(GENERATOR_GIT);
+      await this.dependsOnJHipster('git');
     }
   }
 
@@ -98,7 +97,7 @@ export default class CommonGenerator extends BaseApplicationGenerator<
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json'),
+          this.fetchFromInstalledJHipster('common', 'resources', 'package.json'),
         );
       },
 

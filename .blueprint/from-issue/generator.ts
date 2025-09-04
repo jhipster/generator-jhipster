@@ -2,7 +2,6 @@ import { join } from 'node:path';
 
 import EnvironmentBuilder from '../../cli/environment-builder.js';
 import BaseGenerator from '../../generators/base-core/index.ts';
-import { GENERATOR_APP, GENERATOR_JDL, GENERATOR_WORKSPACES } from '../../generators/generator-list.ts';
 import { type InfoData, extractDataFromInfo, markdownDetails } from '../../generators/info/support/index.ts';
 import { appendToSummary, getGithubIssue, setGithubTaskOutput } from '../../lib/testing/github.ts';
 import { prepareSample } from '../../lib/testing/sample-config.ts';
@@ -111,7 +110,7 @@ export default class extends BaseGenerator {
           if (jdlEntitiesDefinitions) {
             try {
               await EnvironmentBuilder.run(
-                [`jhipster:${GENERATOR_JDL}`],
+                [`jhipster:jdl`],
                 { ...generatorOptions, inline: jdlEntitiesDefinitions, jsonOnly: true },
                 envOptions,
               );
@@ -122,7 +121,7 @@ export default class extends BaseGenerator {
           }
           if (yoRcContent) {
             await EnvironmentBuilder.run(
-              [`jhipster:${workspacesFolders ? GENERATOR_WORKSPACES : GENERATOR_APP}`],
+              [`jhipster:${workspacesFolders ? 'workspaces' : 'app'}`],
               { ...generatorOptions, ...(workspacesFolders ? { workspacesFolders, generateApplications: true } : {}) },
               envOptions,
             );
@@ -130,11 +129,7 @@ export default class extends BaseGenerator {
             const workspaceOpts = jdlApplications > 1 ? { workspaces: true, monorepository: true } : {};
             const diffs: string[] = [];
             for (const file of files.filter(file => file.type === 'jdl')) {
-              await EnvironmentBuilder.run(
-                [`jhipster:${GENERATOR_JDL}`],
-                { ...generatorOptions, ...workspaceOpts, inline: file.content },
-                envOptions,
-              );
+              await EnvironmentBuilder.run([`jhipster:jdl`], { ...generatorOptions, ...workspaceOpts, inline: file.content }, envOptions);
               const git = this.createGit();
               const status = await git.status();
               if (!status.isClean()) {

@@ -41,6 +41,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/angular/generator.spec.js": {
     "stateCleared": "modified",
   },
+  "generators/angular/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/angular/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/angular/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/angular/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/angular/generators/bootstrap/templates/template-file-angular:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/angular/index.js": {
     "stateCleared": "modified",
   },
@@ -56,6 +71,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/app/generator.spec.js": {
     "stateCleared": "modified",
   },
+  "generators/app/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/app/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/app/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/app/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/app/generators/bootstrap/templates/template-file-app:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/app/index.js": {
     "stateCleared": "modified",
   },
@@ -69,6 +99,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/base-application/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/bootstrap/templates/template-file-base-application:bootstrap.ejs": {
     "stateCleared": "modified",
   },
   "generators/base-application/index.js": {
@@ -105,6 +150,36 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/base-entity-changes/templates/template-file-base-entity-changes.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-simple-application/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-simple-application/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-simple-application/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-simple-application/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-simple-application/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-simple-application/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-simple-application/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-simple-application/generators/bootstrap/templates/template-file-base-simple-application:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-simple-application/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-simple-application/templates/template-file-base-simple-application.ejs": {
     "stateCleared": "modified",
   },
   "generators/base-workspaces/command.js": {
@@ -251,6 +326,51 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/client/generator.spec.js": {
     "stateCleared": "modified",
   },
+  "generators/client/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/bootstrap/templates/template-file-client:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/common/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/common/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/common/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/common/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/common/templates/template-file-client:common.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/i18n/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/i18n/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/i18n/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/i18n/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/i18n/templates/template-file-client:i18n.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/client/index.js": {
     "stateCleared": "modified",
   },
@@ -264,6 +384,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/common/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/common/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/common/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/common/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/common/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/common/generators/bootstrap/templates/template-file-common:bootstrap.ejs": {
     "stateCleared": "modified",
   },
   "generators/common/index.js": {
@@ -324,6 +459,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/docker/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/docker/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/docker/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/docker/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/docker/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/docker/generators/bootstrap/templates/template-file-docker:bootstrap.ejs": {
     "stateCleared": "modified",
   },
   "generators/docker/index.js": {
@@ -443,6 +593,51 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/gradle/generator.spec.js": {
     "stateCleared": "modified",
   },
+  "generators/gradle/generators/code-quality/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/code-quality/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/code-quality/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/code-quality/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/code-quality/templates/template-file-gradle:code-quality.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/jib/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/jib/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/jib/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/jib/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/jib/templates/template-file-gradle:jib.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/node-gradle/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/node-gradle/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/node-gradle/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/node-gradle/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generators/node-gradle/templates/template-file-gradle:node-gradle.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/gradle/index.js": {
     "stateCleared": "modified",
   },
@@ -503,10 +698,235 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/java/generator.spec.js": {
     "stateCleared": "modified",
   },
+  "generators/java/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/bootstrap/templates/template-file-java:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/build-tool/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/build-tool/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/build-tool/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/build-tool/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/build-tool/templates/template-file-java:build-tool.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/code-quality/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/code-quality/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/code-quality/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/code-quality/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/code-quality/templates/template-file-java:code-quality.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/domain/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/domain/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/domain/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/domain/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/domain/templates/template-file-java:domain.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/graalvm/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/graalvm/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/graalvm/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/graalvm/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/graalvm/templates/template-file-java:graalvm.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/i18n/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/i18n/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/i18n/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/i18n/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/i18n/templates/template-file-java:i18n.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/jib/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/jib/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/jib/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/jib/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/jib/templates/template-file-java:jib.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/node/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/node/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/node/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/node/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/node/templates/template-file-java:node.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/openapi-generator/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/openapi-generator/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/openapi-generator/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/openapi-generator/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/openapi-generator/templates/template-file-java:openapi-generator.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/server/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/server/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/server/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/server/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/server/templates/template-file-java:server.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/java/index.js": {
     "stateCleared": "modified",
   },
   "generators/java/templates/template-file-java.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/bootstrap/templates/template-file-javascript-simple-application:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/eslint/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/eslint/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/eslint/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/eslint/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/eslint/templates/template-file-javascript-simple-application:eslint.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/husky/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/husky/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/husky/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/husky/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/husky/templates/template-file-javascript-simple-application:husky.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/prettier/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/prettier/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/prettier/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/prettier/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/generators/prettier/templates/template-file-javascript-simple-application:prettier.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/javascript-simple-application/templates/template-file-javascript-simple-application.ejs": {
     "stateCleared": "modified",
   },
   "generators/jdl/command.js": {
@@ -516,6 +936,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/jdl/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/jdl/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/jdl/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/jdl/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/jdl/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/jdl/generators/bootstrap/templates/template-file-jdl:bootstrap.ejs": {
     "stateCleared": "modified",
   },
   "generators/jdl/index.js": {
@@ -563,6 +998,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/kubernetes/generator.spec.js": {
     "stateCleared": "modified",
   },
+  "generators/kubernetes/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/bootstrap/templates/template-file-kubernetes:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/kubernetes/index.js": {
     "stateCleared": "modified",
   },
@@ -576,6 +1026,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/languages/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/languages/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/languages/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/languages/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/languages/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/languages/generators/bootstrap/templates/template-file-languages:bootstrap.ejs": {
     "stateCleared": "modified",
   },
   "generators/languages/index.js": {
@@ -608,6 +1073,51 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/maven/generator.spec.js": {
     "stateCleared": "modified",
   },
+  "generators/maven/generators/code-quality/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/code-quality/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/code-quality/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/code-quality/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/code-quality/templates/template-file-maven:code-quality.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/frontend-plugin/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/frontend-plugin/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/frontend-plugin/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/frontend-plugin/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/frontend-plugin/templates/template-file-maven:frontend-plugin.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/jib/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/jib/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/jib/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/jib/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generators/jib/templates/template-file-maven:jib.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/maven/index.js": {
     "stateCleared": "modified",
   },
@@ -621,6 +1131,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/project-name/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/project-name/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/project-name/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/project-name/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/project-name/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/project-name/generators/bootstrap/templates/template-file-project-name:bootstrap.ejs": {
     "stateCleared": "modified",
   },
   "generators/project-name/index.js": {
@@ -638,6 +1163,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/react/generator.spec.js": {
     "stateCleared": "modified",
   },
+  "generators/react/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/react/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/react/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/react/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/react/generators/bootstrap/templates/template-file-react:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/react/index.js": {
     "stateCleared": "modified",
   },
@@ -653,6 +1193,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/server/generator.spec.js": {
     "stateCleared": "modified",
   },
+  "generators/server/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/server/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/server/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/server/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/server/generators/bootstrap/templates/template-file-server:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/server/index.js": {
     "stateCleared": "modified",
   },
@@ -666,6 +1221,51 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-boot/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/bootstrap/templates/template-file-spring-boot:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/jwt/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/jwt/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/jwt/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/jwt/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/jwt/templates/template-file-spring-boot:jwt.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/oauth2/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/oauth2/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/oauth2/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/oauth2/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/oauth2/templates/template-file-spring-boot:oauth2.ejs": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/index.js": {
@@ -698,10 +1298,55 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/spring-cloud-stream/generator.spec.js": {
     "stateCleared": "modified",
   },
+  "generators/spring-cloud-stream/generators/kafka/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud-stream/generators/kafka/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud-stream/generators/kafka/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud-stream/generators/kafka/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud-stream/generators/kafka/templates/template-file-spring-cloud-stream:kafka.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud-stream/generators/pulsar/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud-stream/generators/pulsar/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud-stream/generators/pulsar/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud-stream/generators/pulsar/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud-stream/generators/pulsar/templates/template-file-spring-cloud-stream:pulsar.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/spring-cloud-stream/index.js": {
     "stateCleared": "modified",
   },
   "generators/spring-cloud-stream/templates/template-file-spring-cloud-stream.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/gateway/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/gateway/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/gateway/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/gateway/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/gateway/templates/template-file-spring-cloud:gateway.ejs": {
     "stateCleared": "modified",
   },
   "generators/spring-data-cassandra/command.js": {
@@ -831,6 +1476,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/vue/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/vue/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/vue/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/vue/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/vue/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/vue/generators/bootstrap/templates/template-file-vue:bootstrap.ejs": {
     "stateCleared": "modified",
   },
   "generators/vue/index.js": {

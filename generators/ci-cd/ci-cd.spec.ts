@@ -1,7 +1,6 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { GENERATOR_CI_CD } from '../generator-list.ts';
 
 const expectedFiles = {
   travis: ['.travis.yml'],
@@ -34,7 +33,7 @@ describe('generator - CI-CD', () => {
     describe('Jenkins: Maven Angular NPM', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['jenkins'],
@@ -58,7 +57,7 @@ describe('generator - CI-CD', () => {
     describe('Jenkins: Gradle Angular NPM', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['jenkins'],
@@ -82,7 +81,7 @@ describe('generator - CI-CD', () => {
     describe('Jenkins: Maven Angular NPM with full options', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
@@ -115,7 +114,7 @@ describe('generator - CI-CD', () => {
     describe('Jenkins: Maven Angular NPM inside Docker', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
@@ -152,7 +151,7 @@ describe('generator - CI-CD', () => {
     describe('GitLab CI: Maven Angular NPM', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['gitlab'],
@@ -176,7 +175,7 @@ describe('generator - CI-CD', () => {
     describe('GitLab CI: Gradle Angular NPM', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['gitlab'],
@@ -199,7 +198,7 @@ describe('generator - CI-CD', () => {
     describe('GitLab CI: npm skip server', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(skipServerSample)
           .withAnswers({
             ciCd: ['gitlab'],
@@ -220,7 +219,7 @@ describe('generator - CI-CD', () => {
     describe('GitLab CI: Maven Angular NPM with full options', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
@@ -253,7 +252,7 @@ describe('generator - CI-CD', () => {
     describe('GitLab CI: Maven Angular NPM inside Docker', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
@@ -285,7 +284,7 @@ describe('generator - CI-CD', () => {
     });
     describe('GitLab CI: Maven Angular Yarn inside Docker Autoconfigure', () => {
       before(async () => {
-        await helpers.runJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['gitlab']).withAnswers({
+        await helpers.runJHipster('ci-cd').withJHipsterConfig(mavenSample).withArguments(['gitlab']).withAnswers({
           insideDocker: true,
         });
       });
@@ -311,7 +310,7 @@ describe('generator - CI-CD', () => {
     describe('Travis CI: Maven Angular NPM', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['travis'],
@@ -332,7 +331,7 @@ describe('generator - CI-CD', () => {
     describe('Travis CI: Gradle Angular NPM', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['travis'],
@@ -357,7 +356,7 @@ describe('generator - CI-CD', () => {
     describe('Travis CI: Maven Angular NPM with full options', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
@@ -398,7 +397,7 @@ describe('generator - CI-CD', () => {
     describe('Azure Pipelines: Maven Angular NPM', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['azure'],
@@ -421,7 +420,7 @@ describe('generator - CI-CD', () => {
     describe('Azure Pipelines: Gradle Angular NPM', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['azure'],
@@ -442,7 +441,7 @@ describe('generator - CI-CD', () => {
     describe('Azure Pipelines: Maven Angular NPM with Snyk', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['azure'],
@@ -462,7 +461,7 @@ describe('generator - CI-CD', () => {
     describe('Azure Pipelines: Gradle Angular NPM with Snyk', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['azure'],
@@ -481,7 +480,7 @@ describe('generator - CI-CD', () => {
     });
     describe('Azure Pipelines: autoconfigure', () => {
       before(async () => {
-        await helpers.runJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['azure']);
+        await helpers.runJHipster('ci-cd').withJHipsterConfig(mavenSample).withArguments(['azure']);
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -499,7 +498,7 @@ describe('generator - CI-CD', () => {
     describe('GitHub Actions: Maven Angular NPM', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['github'],
@@ -516,7 +515,7 @@ describe('generator - CI-CD', () => {
     describe('GitHub Actions: Gradle Angular NPM', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['github'],
@@ -533,7 +532,7 @@ describe('generator - CI-CD', () => {
     describe('GitHub Actions: Maven Angular NPM with full options', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
@@ -572,7 +571,7 @@ describe('generator - CI-CD', () => {
     describe('GitHub Actions: Gradle Angular NPM with full options', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['github'],
@@ -602,7 +601,7 @@ describe('generator - CI-CD', () => {
     });
     describe('GitHub Actions: autoconfigure', () => {
       before(async () => {
-        await helpers.runJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['github']);
+        await helpers.runJHipster('ci-cd').withJHipsterConfig(mavenSample).withArguments(['github']);
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -620,7 +619,7 @@ describe('generator - CI-CD', () => {
     describe('Circle CI: Maven Angular NPM', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['circle'],
@@ -644,7 +643,7 @@ describe('generator - CI-CD', () => {
     describe('Circle CI: Gradle Angular NPM', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['circle'],
@@ -668,7 +667,7 @@ describe('generator - CI-CD', () => {
     describe('Circle CI: Maven with Snyk', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['circle'],
@@ -688,7 +687,7 @@ describe('generator - CI-CD', () => {
     describe('Circle CI: Gradle with Snyk', () => {
       before(async () => {
         await helpers
-          .runJHipster(GENERATOR_CI_CD)
+          .runJHipster('ci-cd')
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['circle'],

@@ -21,7 +21,6 @@ import { existsSync } from 'node:fs';
 
 import { packageJson } from '../../lib/index.ts';
 import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
-import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENERATOR_REACT } from '../generator-list.ts';
 import type { Config as GitConfig, Options as GitOptions } from '../git/types.d.ts';
 import type { Config as ProjectNameConfig } from '../project-name/types.d.ts';
 
@@ -46,7 +45,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
+      await this.dependsOnJHipster('bootstrap-workspaces');
     }
   }
 
@@ -96,7 +95,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
     return this.asComposingTaskGroup({
       async composeGit() {
         if ((this.options as GitOptions).monorepository || (this.jhipsterConfig as GitConfig).monorepository) {
-          await this.composeWithJHipster(GENERATOR_GIT);
+          await this.composeWithJHipster('git');
           await this.composeWithJHipster('jhipster:javascript-simple-application:prettier', {
             generatorOptions: { monorepositoryRoot: true },
           });
@@ -213,7 +212,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
           const {
             dependencies: { rxjs },
             devDependencies: { webpack: webpackVersion, 'browser-sync': browserSyncVersion },
-          } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json'));
+          } = this.fs.readJSON(this.fetchFromInstalledJHipster('angular', 'resources', 'package.json'));
 
           this.packageJson.merge({
             devDependencies: {
@@ -229,7 +228,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         if (applications.some(app => app.clientFrameworkReact)) {
           const {
             devDependencies: { 'browser-sync': browserSyncVersion },
-          } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_REACT, 'resources', 'package.json'));
+          } = this.fs.readJSON(this.fetchFromInstalledJHipster('react', 'resources', 'package.json'));
 
           this.packageJson.merge({
             overrides: {

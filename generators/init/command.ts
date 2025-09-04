@@ -17,13 +17,12 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { GENERATOR_PROJECT_NAME } from '../generator-list.ts';
 
 const command = {
   configs: {},
   import: [
     'jhipster:git',
-    GENERATOR_PROJECT_NAME,
+    'jhipster:project-name',
     'jhipster:javascript-simple-application:prettier',
     'jhipster:javascript-simple-application:husky',
   ],

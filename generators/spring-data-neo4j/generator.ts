@@ -17,13 +17,14 @@
  * limitations under the License.
  */
 
-import { GENERATOR_LIQUIBASE } from '../generator-list.ts';
 import { SpringBootApplicationGenerator } from '../spring-boot/generator.ts';
 import type { Source as SpringBootSource } from '../spring-boot/index.ts';
 
 import cleanupTask from './cleanup.ts';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.ts';
 import writeTask from './files.ts';
+
+const GENERATOR_LIQUIBASE = 'liquibase';
 
 export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {

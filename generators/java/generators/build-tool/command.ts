@@ -18,7 +18,6 @@
  */
 import type { JHipsterCommandDefinition } from '../../../../lib/command/types.ts';
 import { buildToolTypes } from '../../../../lib/jhipster/index.ts';
-import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.ts';
 
 const { GRADLE, MAVEN } = buildToolTypes;
 
@@ -42,7 +41,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: [GENERATOR_GRADLE, GENERATOR_MAVEN],
+  import: ['gradle', 'maven'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

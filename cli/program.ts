@@ -27,7 +27,6 @@ import didYouMean from 'didyoumean';
 import type Environment from 'yeoman-environment';
 
 import baseCommand from '../generators/base/command.ts';
-import { GENERATOR_APP, GENERATOR_BOOTSTRAP, GENERATOR_JDL } from '../generators/generator-list.ts';
 import { type JHipsterCommandDefinition, extractArgumentsFromConfigs } from '../lib/command/index.ts';
 import { packageJson } from '../lib/index.ts';
 import { buildJDLApplicationConfig } from '../lib/jdl-config/jhipster-jdl-config.ts';
@@ -39,6 +38,10 @@ import JHipsterCommand from './jhipster-command.js';
 import logo from './logo.ts';
 import type { CliCommand } from './types.ts';
 import { CLI_NAME, done, getCommand, logger } from './utils.ts';
+
+const GENERATOR_APP = 'app';
+const GENERATOR_JDL = 'jdl';
+const GENERATOR_BOOTSTRAP = 'bootstrap';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

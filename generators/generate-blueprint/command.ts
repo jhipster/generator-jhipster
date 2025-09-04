@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { GENERATOR_INIT } from '../generator-list.ts';
 
 import {
   ADDITIONAL_SUB_GENERATORS,
@@ -175,7 +174,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: [GENERATOR_INIT],
+  import: ['init'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

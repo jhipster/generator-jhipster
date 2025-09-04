@@ -2,15 +2,12 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { snakeCase } from 'lodash-es';
-
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { buildClientSamples, defaultHelpers as helpers, entitiesClientSamples as entities, runResult } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from '../client/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { GENERATOR_REACT } from '../generator-list.ts';
 
 import Generator from './index.ts';
 
@@ -33,13 +30,9 @@ const clientAdminFiles = (clientSrcDir: string) => [
 ];
 
 describe(`generator - ${clientFramework}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    const GENERATOR_LIST: Record<string, string> = await import('../generator-list.ts');
-    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
-  checkEnforcements({ client: true }, GENERATOR_REACT);
+  checkEnforcements({ client: true }, generator);
 
   it('samples matrix should match snapshot', () => {
     expect(testSamples).toMatchSnapshot();
@@ -124,7 +117,7 @@ describe(`generator - ${clientFramework}`, () => {
   describe('addClientStyle needle api', () => {
     before(async () => {
       await helpers
-        .runJHipster('react')
+        .runJHipster(generator)
         .withJHipsterConfig({
           clientFramework: 'react',
           skipServer: true,
@@ -153,7 +146,7 @@ describe(`generator - ${clientFramework}`, () => {
   describe('addEntitiesToClient needle api', () => {
     before(async () => {
       await helpers
-        .runJHipster('react')
+        .runJHipster(generator)
         .withJHipsterConfig({
           clientFramework: 'react',
           enableTranslation: false,

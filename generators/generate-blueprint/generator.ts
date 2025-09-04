@@ -22,10 +22,10 @@ import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 import type { Storage } from 'yeoman-generator';
 
+import { getGeneratorNamespaces } from '../../lib/index.ts';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
 import { BLUEPRINT_API_VERSION } from '../generator-constants.js';
-import * as GENERATOR_LIST from '../generator-list.ts';
 
 import {
   DYNAMIC,
@@ -48,8 +48,6 @@ import type {
   Features as GenerateBlueprintFeatures,
   Options as GenerateBlueprintOptions,
 } from './types.ts';
-
-const { GENERATOR_INIT } = GENERATOR_LIST;
 
 const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spec.?(c|m)js'];
 
@@ -158,7 +156,7 @@ export default class extends BaseSimpleApplicationGenerator<
     return this.asComposingTaskGroup({
       async compose() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
-        const initGenerator = await this.composeWithJHipster(GENERATOR_INIT, { generatorOptions: { packageJsonType: 'module' } });
+        const initGenerator = await this.composeWithJHipster('init', { generatorOptions: { packageJsonType: 'module' } });
         initGenerator.generateReadme = false;
       },
     });
@@ -244,7 +242,7 @@ export default class extends BaseSimpleApplicationGenerator<
               constant: `${snakeCase(priority).toUpperCase()}`,
             }),
           );
-          const customGenerator = !Object.values(GENERATOR_LIST).includes(generator as any);
+          const customGenerator = !getGeneratorNamespaces().includes(generator);
           const jhipsterGenerator = customGenerator || subGeneratorConfig.sbs ? 'base-application' : generator;
           const subTemplateData = {
             ...application,

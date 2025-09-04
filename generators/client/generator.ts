@@ -20,7 +20,6 @@
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
-import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS } from '../generator-list.ts';
 import { isReservedTypescriptKeyword } from '../javascript-simple-application/support/reserved-words.ts';
 
 import { addEnumerationFiles } from './entity-files.ts';
@@ -59,7 +58,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('client');
-      await this.dependsOnJHipster(GENERATOR_COMMON);
+      await this.dependsOnJHipster('common');
     }
   }
 
@@ -118,7 +117,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
           await this.composeWithJHipster(clientFramework!);
         }
         if (Array.isArray(testFrameworks) && testFrameworks.includes(CYPRESS)) {
-          await this.composeWithJHipster(GENERATOR_CYPRESS);
+          await this.composeWithJHipster('cypress');
         }
       },
     });
@@ -141,7 +140,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
         // Load common client package.json into packageJson
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_CLIENT, 'resources', 'package.json'),
+          this.fetchFromInstalledJHipster('client', 'resources', 'package.json'),
         );
       },
     });

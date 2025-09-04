@@ -2,8 +2,6 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { snakeCase } from 'lodash-es';
-
 import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.ts';
 import {
   buildSamplesFromMatrix,
@@ -14,7 +12,6 @@ import {
   runResult,
 } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { GENERATOR_SERVER } from '../generator-list.ts';
 import Generator from '../server/index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -60,11 +57,9 @@ sqlSamples = extendFilteredMatrix(sqlSamples, ({ reactive }) => !reactive, {
 
 const testSamples = buildSamplesFromMatrix(sqlSamples, { commonConfig });
 
+const GENERATOR_SERVER = 'server';
+
 describe(`generator - ${databaseType}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    const GENERATOR_LIST: Record<string, string> = await import('../generator-list.ts');
-    await expect(GENERATOR_LIST[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 

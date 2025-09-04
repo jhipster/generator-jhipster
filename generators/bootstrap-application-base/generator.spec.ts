@@ -20,8 +20,6 @@ import { before, beforeEach, describe, expect, it } from 'esmocha';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { snakeCase } from 'lodash-es';
-
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { basicTests, shouldSupportFeatures } from '../../test/support/tests.js';
 import { parseChangelog } from '../base/support/timestamp.ts';
@@ -35,10 +33,6 @@ const generator = basename(__dirname);
 const generatorPath = join(__dirname, 'index.ts');
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    const generatorList: Record<string, string> = await import('../generator-list.ts');
-    await expect(generatorList[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   basicTests({
     requiredConfig: {},

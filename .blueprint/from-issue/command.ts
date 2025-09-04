@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { GENERATOR_APP, GENERATOR_WORKSPACES } from '../../generators/generator-list.ts';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { parseIssue } from '../../lib/testing/github.ts';
 
@@ -73,7 +72,7 @@ const command = {
       scope: 'generator',
     },
   },
-  import: [GENERATOR_APP, GENERATOR_WORKSPACES],
+  import: ['jhipster:app', 'jhipster:workspaces'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

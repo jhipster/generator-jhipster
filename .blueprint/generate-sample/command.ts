@@ -19,7 +19,6 @@
 import { join } from 'node:path';
 import process from 'node:process';
 
-import { GENERATOR_APP, GENERATOR_WORKSPACES } from '../../generators/generator-list.ts';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { defaultSamplesFolder } from '../constants.ts';
 
@@ -84,7 +83,7 @@ const command = {
       scope: 'generator',
     },
   },
-  import: [GENERATOR_APP, GENERATOR_WORKSPACES],
+  import: ['app', 'workspaces'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

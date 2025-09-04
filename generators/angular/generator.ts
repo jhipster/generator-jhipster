@@ -24,7 +24,6 @@ import { mutateData } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
-import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.ts';
 import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 import { defaultLanguage } from '../languages/support/index.ts';
 
@@ -68,8 +67,8 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     await this.dependsOnBootstrap('angular');
     if (!this.delegateToBlueprint) {
       await this.dependsOnJHipster('jhipster:client:i18n');
-      await this.dependsOnJHipster(GENERATOR_CLIENT);
-      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
+      await this.dependsOnJHipster('client');
+      await this.dependsOnJHipster('languages');
     }
   }
 
@@ -78,7 +77,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json'),
+          this.fetchFromInstalledJHipster('angular', 'resources', 'package.json'),
         );
       },
       applicationDefauts({ applicationDefaults }) {

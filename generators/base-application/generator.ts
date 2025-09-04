@@ -27,11 +27,6 @@ import BaseGenerator from '../base-simple-application/index.ts';
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.ts';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-simple-application/support/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import {
-  GENERATOR_BOOTSTRAP_APPLICATION,
-  GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
-  GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
-} from '../generator-list.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
@@ -206,27 +201,27 @@ export default class BaseApplicationGenerator<
    * @deprecated use dependsOnBootstrap('app')
    */
   dependsOnBootstrapApplication(
-    options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION]> | undefined,
-  ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION]> {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION, options);
+    options?: ComposeOptions<GeneratorsByNamespace['jhipster:base-application:bootstrap']> | undefined,
+  ): Promise<GeneratorsByNamespace['jhipster:base-application:bootstrap']> {
+    return this.dependsOnJHipster('jhipster:base-application:bootstrap', options);
   }
 
   /**
    * @deprecated use dependsOnBootstrap('server')
    */
   dependsOnBootstrapApplicationServer(
-    options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_SERVER]> | undefined,
-  ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_SERVER]> {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER, options);
+    options?: ComposeOptions<GeneratorsByNamespace['jhipster:server:bootstrap']> | undefined,
+  ): Promise<GeneratorsByNamespace['jhipster:server:bootstrap']> {
+    return this.dependsOnJHipster('jhipster:server:bootstrap', options);
   }
 
   /**
    * @deprecated use dependsOnBootstrap('client')
    */
   dependsOnBootstrapApplicationClient(
-    options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_CLIENT]> | undefined,
-  ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_CLIENT]> {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, options);
+    options?: ComposeOptions<GeneratorsByNamespace['jhipster:client:bootstrap']> | undefined,
+  ): Promise<GeneratorsByNamespace['jhipster:client:bootstrap']> {
+    return this.dependsOnJHipster('jhipster:client:bootstrap', options);
   }
 
   /**

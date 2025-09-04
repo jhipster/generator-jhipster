@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
-import { GENERATOR_GIT } from '../generator-list.ts';
 
 import { files, readme } from './files.ts';
 import type { Application as InitApplication, Config as InitConfig, Options as InitOptions } from './types.ts';
@@ -38,7 +37,7 @@ export default class InitGenerator extends BaseSimpleApplicationGenerator<InitAp
   get composing() {
     return this.asComposingTaskGroup({
       async compose() {
-        await this.composeWithJHipster(GENERATOR_GIT);
+        await this.composeWithJHipster('git');
         const generatorOptions = { fromInit: true };
         await this.composeWithJHipster('jhipster:javascript-simple-application:prettier', { generatorOptions });
         await this.composeWithJHipster('jhipster:javascript-simple-application:husky', { generatorOptions });

@@ -29,7 +29,6 @@ import { reservedKeywords } from '../../lib/jhipster/index.ts';
 import type { Features } from '../base/types.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { GENERATOR_ENTITIES } from '../generator-list.ts';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.ts';
 
 import {
@@ -258,7 +257,7 @@ The entity ${entityName} is being created.
       askForPagination,
       async composeEntities() {
         // We need to compose with others entities to update relationships.
-        await this.composeWithJHipster(GENERATOR_ENTITIES, {
+        await this.composeWithJHipster('entities', {
           generatorArgs: this.options.singleEntity ? [this.entityData.name] : [],
         });
       },

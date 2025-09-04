@@ -1,7 +1,8 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { GENERATOR_KUBERNETES_KNATIVE } from '../generator-list.ts';
+
+const GENERATOR_KUBERNETES_KNATIVE = 'kubernetes-knative';
 
 const expectedFiles = {
   eurekaregistry: [

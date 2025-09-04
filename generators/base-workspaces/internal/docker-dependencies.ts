@@ -27,9 +27,9 @@ export function loadDockerDependenciesTask<const G extends BaseCoreGenerator>(
   { context }: { context: { dockerContainers?: Record<string, string> } },
 ) {
   context.dockerContainers ??= {};
-  const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile')) as string;
+  const dockerfile = this.readTemplate(this.fetchFromInstalledJHipster('server/resources/Dockerfile')) as string;
   const springDependenciesPom = this.readTemplate(
-    this.jhipsterTemplatePath('../../spring-boot/resources/spring-boot-dependencies.pom'),
+    this.fetchFromInstalledJHipster('spring-boot/resources/spring-boot-dependencies.pom'),
   ) as string;
   const result = springDependenciesPom.match(/elasticsearch-client.version>(?<version>.+)<\/elasticsearch-client.version>/);
   const elasticsearchClientVersion = result!.groups!.version;

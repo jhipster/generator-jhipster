@@ -18,7 +18,6 @@
  */
 import type { Source as CommonSource } from '../../../common/types.d.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
-import { GENERATOR_GRADLE } from '../../../generator-list.ts';
 import { JavaApplicationGenerator } from '../../../java/generator.ts';
 
 export default class CodeQualityGenerator extends JavaApplicationGenerator {
@@ -29,7 +28,7 @@ export default class CodeQualityGenerator extends JavaApplicationGenerator {
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('java');
-      await this.dependsOnJHipster(GENERATOR_GRADLE);
+      await this.dependsOnJHipster('gradle');
     }
   }
 

@@ -3,7 +3,8 @@ import { before, describe, expect, it } from 'esmocha';
 import { APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
 import monitoringTypes from '../../lib/jhipster/monitoring-types.ts';
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.ts';
+
+const GENERATOR_DOCKER_COMPOSE = 'docker-compose';
 
 const { PROMETHEUS } = monitoringTypes;
 

@@ -33,7 +33,6 @@ import BaseGenerator from '../base/index.ts';
 import { normalizeBlueprintName } from '../base/internal/blueprint.ts';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.ts';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { GENERATOR_APP, GENERATOR_ENTITIES, GENERATOR_WORKSPACES } from '../generator-list.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
 
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.ts';
@@ -55,9 +54,9 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
   jdlFiles?: string[];
   inline?: string;
   jdlContents: string[] = [];
-  entrypointGenerator = `${CLI_NAME}:${GENERATOR_APP}`;
-  entitiesGenerator = GENERATOR_ENTITIES;
-  workspacesGenerator = GENERATOR_WORKSPACES;
+  entrypointGenerator = `${CLI_NAME}:app`;
+  entitiesGenerator = 'entities';
+  workspacesGenerator = 'workspaces';
 
   interactive?: boolean;
   jsonOnly?: boolean;

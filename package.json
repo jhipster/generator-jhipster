@@ -53,10 +53,6 @@
       "types": "./dist/lib/eslint/index.d.ts",
       "default": "./dist/lib/eslint/index.js"
     },
-    "./generators": {
-      "types": "./dist/generators/generator-list.d.ts",
-      "default": "./dist/generators/generator-list.js"
-    },
     "./generators/*": {
       "types": "./dist/generators/*/index.d.ts",
       "default": "./dist/generators/*/index.js"

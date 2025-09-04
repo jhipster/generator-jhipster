@@ -29,7 +29,6 @@ import {
   generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.ts';
 import type { Entity as ClientEntity, Field as ClientField } from '../client/types.ts';
-import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.ts';
 import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
@@ -52,8 +51,8 @@ export default class ReactGenerator extends ClientApplicationGenerator<
     await this.dependsOnBootstrap('react');
     if (!this.delegateToBlueprint) {
       await this.dependsOnJHipster('jhipster:client:i18n');
-      await this.dependsOnJHipster(GENERATOR_CLIENT);
-      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
+      await this.dependsOnJHipster('client');
+      await this.dependsOnJHipster('languages');
     }
   }
 
@@ -74,7 +73,7 @@ export default class ReactGenerator extends ClientApplicationGenerator<
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_REACT, 'resources', 'package.json'),
+          this.fetchFromInstalledJHipster('react', 'resources', 'package.json'),
         );
       },
       applicationDefauts({ applicationDefaults }) {

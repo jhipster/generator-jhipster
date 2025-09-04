@@ -1,12 +1,5 @@
 import { databaseTypes, messageBrokerTypes } from '../../../lib/jhipster/index.ts';
 import type { result } from '../../../lib/testing/index.ts';
-import {
-  GENERATOR_JAVA,
-  GENERATOR_PROJECT_NAME,
-  GENERATOR_SERVER,
-  GENERATOR_SPRING_BOOT,
-  GENERATOR_SPRING_CLOUD_STREAM,
-} from '../../generator-list.ts';
 
 const { KAFKA, PULSAR } = messageBrokerTypes;
 const { SQL, COUCHBASE } = databaseTypes;
@@ -33,12 +26,12 @@ export const shouldComposeWithSpringCloudStream = (
   const pulsarEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === PULSAR;
   const kafkaEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === KAFKA;
   if (pulsarEnabled || kafkaEnabled) {
-    it(`should compose with ${GENERATOR_SPRING_CLOUD_STREAM} generator`, () => {
-      runResultSupplier().assertGeneratorComposedOnce(`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`);
+    it(`should compose with spring-cloud-stream generator`, () => {
+      runResultSupplier().assertGeneratorComposedOnce(`jhipster:spring-cloud-stream`);
     });
   } else {
-    it(`should not compose with ${GENERATOR_SPRING_CLOUD_STREAM} generator`, () => {
-      runResultSupplier().assertGeneratorNotComposed(`jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`);
+    it(`should not compose with spring-cloud-stream generator`, () => {
+      runResultSupplier().assertGeneratorNotComposed(`jhipster:spring-cloud-stream`);
     });
   }
 };
@@ -64,12 +57,6 @@ export const filterBasicServerGenerators = (ns: string) => {
   return (
     subGenerator !== 'bootstrap' &&
     !generator.startsWith('bootstrap') &&
-    ![
-      `jhipster:${GENERATOR_PROJECT_NAME}`,
-      `jhipster:${GENERATOR_JAVA}`,
-      `jhipster:${GENERATOR_JAVA}:domain`,
-      `jhipster:${GENERATOR_SERVER}`,
-      `jhipster:${GENERATOR_SPRING_BOOT}`,
-    ].includes(ns)
+    ![`jhipster:project-name`, `jhipster:java`, `jhipster:java:domain`, `jhipster:server`, `jhipster:spring-boot`].includes(ns)
   );
 };

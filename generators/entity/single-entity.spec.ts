@@ -2,7 +2,8 @@ import { before, describe, expect, it } from 'esmocha';
 
 import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
-import { GENERATOR_ENTITY } from '../generator-list.ts';
+
+const GENERATOR_ENTITY = 'entity';
 
 const entityFoo = { name: 'Foo', changelogDate: '20160926101210' };
 const entityBar = { name: 'Bar', changelogDate: '20160926101211' };

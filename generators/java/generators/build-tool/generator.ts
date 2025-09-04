@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import { buildToolTypes } from '../../../../lib/jhipster/index.ts';
-import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.ts';
 import type { MavenDependency } from '../../../maven/types.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 import { javaScopeToGradleScope } from '../../support/index.ts';
@@ -42,9 +41,9 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
         const { buildTool } = this.jhipsterConfigWithDefaults;
 
         if (buildTool === GRADLE) {
-          await this.composeWithJHipster(GENERATOR_GRADLE);
+          await this.composeWithJHipster('gradle');
         } else if (buildTool === MAVEN) {
-          await this.composeWithJHipster(GENERATOR_MAVEN);
+          await this.composeWithJHipster('maven');
         } else {
           throw new Error(`Build tool ${buildTool} is not supported`);
         }
