@@ -104,11 +104,10 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loading({ applicationDefaults }) {
-        applicationDefaults({
-          __override__: false,
-          jhipsterDependenciesVersion: this.jhipsterDependenciesVersion,
-        });
+      loading({ application }) {
+        if (this.jhipsterDependenciesVersion) {
+          application.jhipsterDependenciesVersion = this.jhipsterDependenciesVersion;
+        }
       },
     });
   }

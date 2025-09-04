@@ -151,7 +151,6 @@ export type Application<E extends BaseApplicationEntity = Entity> = Command['App
   ApplicationNature &
   SearchEngine &
   DatabaseTypeApplication & {
-    jhipsterDependenciesVersion: string;
     springBootDependencies: Record<string, string>;
 
     addSpringMilestoneRepository: boolean;
