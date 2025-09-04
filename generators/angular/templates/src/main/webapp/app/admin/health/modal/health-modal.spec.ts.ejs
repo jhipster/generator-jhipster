@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import HealthModal from './health-modal';
@@ -12,7 +11,7 @@ describe('HealthModal', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [HealthModal],
-      providers: [provideHttpClient(), NgbActiveModal],
+      providers: [NgbActiveModal],
     })
       .overrideTemplate(HealthModal, '')
       .compileComponents();

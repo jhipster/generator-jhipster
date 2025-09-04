@@ -19,7 +19,6 @@
 jest.mock('app/core/auth/account.service');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { throwError, of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
@@ -55,7 +54,7 @@ describe('Settings', () => {
 <%_ } _%>
           Settings,
         ],
-        providers: [provideHttpClient(), FormBuilder, AccountService],
+        providers: [FormBuilder, AccountService],
       })
         .overrideTemplate(Settings, '')
         .compileComponents();
