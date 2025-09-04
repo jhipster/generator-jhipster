@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 
@@ -37,7 +36,7 @@ describe('Logs', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         imports: [Logs],
-        providers: [provideHttpClient(), provideHttpClientTesting(), LogsService<%= applicationTypeGateway && gatewayServicesApiAvailable ? ', GatewayRoutesService' : '' %>],
+        providers: [provideHttpClient(), LogsService<%= applicationTypeGateway && gatewayServicesApiAvailable ? ', GatewayRoutesService' : '' %>],
       })
         .overrideTemplate(Logs, '')
         .compileComponents();
