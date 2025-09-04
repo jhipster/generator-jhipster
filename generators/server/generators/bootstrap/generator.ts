@@ -23,8 +23,6 @@ import { mutateData } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
 import { loadDockerDependenciesTask } from '../../../base-workspaces/internal/docker-dependencies.ts';
-import { getGradleLibsVersionsProperties } from '../../../gradle/support/index.ts';
-import { getPomVersionProperties } from '../../../maven/support/index.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-data-relational/types.ts';
 import serverCommand from '../../command.ts';
 import {
@@ -79,23 +77,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           prodDatabasePassword: undefined,
         });
       },
-      async loadApplication({ application, applicationDefaults }) {
-        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/pom.xml'))?.toString();
-        const gradleLibsVersions = this.readTemplate(
-          this.jhipsterTemplatePath('../../server/resources/gradle/libs.versions.toml'),
-        )?.toString();
-        const applicationJavaDependencies = this.prepareDependencies(
-          {
-            ...getPomVersionProperties(pomFile!),
-            ...getGradleLibsVersionsProperties(gradleLibsVersions!),
-          },
-          'java',
-        );
-
+      async loadDockerDependencies({ application }) {
         loadDockerDependenciesTask.call(this, { context: application });
-
-        applicationDefaults({ javaDependencies: {} });
-        mutateData(application.javaDependencies, applicationJavaDependencies);
       },
     });
   }

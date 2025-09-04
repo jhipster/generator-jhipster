@@ -100,29 +100,29 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
+    "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
     "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "start": "ng serve<% if (!microfrontend) { %> --hmr<% } %>",
-    "start-tls": "<%= clientPackageManager %> run webapp:dev-ssl",
+    "start-tls": "<%- nodePackageManager %> run webapp:dev-ssl",
 <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
 <%_ } _%>
-    "serve": "<%= clientPackageManager %> run start --",
-    "build": "<%= clientPackageManager %> run webapp:prod --",
-    "pretest": "<%= clientPackageManager %> run lint",
+    "serve": "<%- nodePackageManager %> run start --",
+    "build": "<%- nodePackageManager %> run webapp:prod --",
+    "pretest": "<%- nodePackageManager %> run lint",
     "test": "ng test --coverage --log-heap-usage -w=2",
-    "test:watch": "<%= clientPackageManager %> run test -- --watch",
+    "test:watch": "<%- nodePackageManager %> run test -- --watch",
     "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
-    "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev",
+    "webapp:build": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:dev",
     "webapp:build:dev": "ng build --configuration development",
     "webapp:build:prod": "ng build --configuration production",
     "webapp:dev": "ng serve",
     "webapp:dev-verbose": "ng serve --verbose",
     "webapp:dev-ssl": "ng serve --ssl",
-    "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod",
-    "webapp:test": "<%= clientPackageManager %> run test --"
+    "webapp:prod": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:prod",
+    "webapp:test": "<%- nodePackageManager %> run test --"
   }
 }

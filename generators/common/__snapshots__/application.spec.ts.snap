@@ -10,7 +10,6 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
   "clientDistDir": "target/classes/static/",
-  "clientPackageManager": "nodePackageManager",
   "devServerPort": 9060,
   "endpointPrefix": "",
   "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",

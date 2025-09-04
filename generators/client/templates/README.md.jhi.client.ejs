@@ -33,9 +33,9 @@ let clientPackageMngrAddDev = 'install --save-dev --save-exact';
 -%>
 <&_ if (fragment.developmentSection) { -&>
 <%_ if (locals.useNpmWrapper) { _%>
-The build system will install automatically the recommended version of Node and <%= clientPackageManager %>.
+The build system will install automatically the recommended version of Node and <%- nodePackageManager %>.
 
-We provide a wrapper to launch <%= clientPackageManager %>.
+We provide a wrapper to launch <%- nodePackageManager %>.
 <%_ } else { _%>
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
@@ -50,7 +50,7 @@ You will only need to run this command when dependencies change in [package.json
 <%= nodePackageManagerCommand %> install
 ```
 
-We use <%= clientPackageManager %> scripts and <&- fragments.customCliSection(' ') &>[<%= clientBundlerName %>][] as our build system.
+We use <%- nodePackageManager %> scripts and <&- fragments.customCliSection(' ') &>[<%= clientBundlerName %>][] as our build system.
 
   <%_ if (cacheProviderRedis || cacheProviderHazelcast || cacheProviderMemcached) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.

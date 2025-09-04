@@ -307,14 +307,14 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addPackageJsonScripts({ application, source }) {
-        const { clientBundlerVite, clientBundlerWebpack, clientPackageManager } = application;
+        const { clientBundlerVite, clientBundlerWebpack, nodePackageManager } = application;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
             scripts: {
-              'webapp:build:dev': `${clientPackageManager} run vite-build`,
-              'webapp:build:prod': `${clientPackageManager} run vite-build`,
-              'webapp:dev': `${clientPackageManager} run vite-serve`,
-              'webapp:serve': `${clientPackageManager} run vite-serve`,
+              'webapp:build:dev': `${nodePackageManager} run vite-build`,
+              'webapp:build:prod': `${nodePackageManager} run vite-build`,
+              'webapp:dev': `${nodePackageManager} run vite-serve`,
+              'webapp:serve': `${nodePackageManager} run vite-serve`,
               'vite-serve': 'vite',
               'vite-build': 'vite build',
             },
@@ -322,9 +322,9 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         } else if (clientBundlerWebpack) {
           source.mergeClientPackageJson!({
             scripts: {
-              'webapp:build:dev': `${clientPackageManager} run webpack -- --mode development --env stats=minimal`,
-              'webapp:build:prod': `${clientPackageManager} run webpack -- --mode production --env stats=minimal`,
-              'webapp:dev': `${clientPackageManager} run webpack-dev-server -- --mode development --env stats=normal`,
+              'webapp:build:dev': `${nodePackageManager} run webpack -- --mode development --env stats=minimal`,
+              'webapp:build:prod': `${nodePackageManager} run webpack -- --mode production --env stats=minimal`,
+              'webapp:dev': `${nodePackageManager} run webpack-dev-server -- --mode development --env stats=normal`,
               'webpack-dev-server': 'webpack serve --config webpack/webpack.common.js',
               webpack: 'webpack --config webpack/webpack.common.js',
             },

@@ -58,7 +58,6 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
   "clientFrameworkReact": false,
   "clientFrameworkVue": false,
   "clientPackageJsonScripts": Any<Object>,
-  "clientPackageManager": "npm",
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestFrameworks": undefined,

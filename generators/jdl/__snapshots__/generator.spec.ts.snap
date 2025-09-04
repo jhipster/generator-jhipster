@@ -188,7 +188,7 @@ Options:
   --disable-blueprints                     Disable blueprints support
   -d, --debug                              Enable debugger
   --reproducible                           Try to reproduce changelog
-  --client-package-manager <value>         Force an unsupported client package manager
+  --node-package-manager <value>           Force an unsupported client package manager
   --ignore-errors                          Don't fail on prettier errors.
   --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
   --jdl-store <value>                      JDL store

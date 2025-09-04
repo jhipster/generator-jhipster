@@ -85,7 +85,7 @@ const command = {
       },
       scope: 'generator',
     },
-    clientPackageManager: {
+    nodePackageManager: {
       description: 'Force an unsupported client package manager',
       cli: {
         type: String,

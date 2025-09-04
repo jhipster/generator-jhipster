@@ -129,13 +129,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadProperties({ applicationDefaults }) {
-        // TODO v8 rename to nodePackageManager;
-        applicationDefaults({
-          clientPackageManager: 'npm',
-        });
-      },
-
       loadPackageJson({ application }) {
         // Load common client package.json into packageJson
         this.loadNodeDependenciesFromPackageJson(

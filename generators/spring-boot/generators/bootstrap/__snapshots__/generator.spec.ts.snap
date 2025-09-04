@@ -58,7 +58,6 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "clientFrameworkReact": false,
   "clientFrameworkVue": false,
   "clientPackageJsonScripts": Any<Object>,
-  "clientPackageManager": "npm",
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestFrameworks": undefined,
