@@ -16,11 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../lib/command/types.ts';
-
-const command = {
-  configs: {},
-  import: ['jhipster:java-simple-application', 'jhipster:java:domain', 'jhipster:java:build-tool'],
-} as const satisfies JHipsterCommandDefinition;
-
-export default command;
+export { default } from './generator.ts';
+export { default as command } from './command.ts';

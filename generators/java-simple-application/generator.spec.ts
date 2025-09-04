@@ -17,25 +17,24 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname, resolve } from 'node:path';
+import { basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
-import { testBootstrapEntities } from '../../../../test/support/bootstrap-tests.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
+import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 
-import Generator from './generator.ts';
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const generator = `${basename(resolve(__dirname, '../../'))}:${basename(__dirname)}`;
+const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  describe('with default config', () => {
+  describe('with defaults options', () => {
     before(async () => {
       await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig();
     });
@@ -53,5 +52,9 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  testBootstrapEntities(generator);
+  it('packageName with reserved keyword', async () => {
+    await expect(helpers.runJHipster(generator).withJHipsterConfig({ packageName: 'com.public.myapp' })).rejects.toThrow(
+      'The package name "com.public.myapp" contains a reserved Java keyword "public".',
+    );
+  });
 });

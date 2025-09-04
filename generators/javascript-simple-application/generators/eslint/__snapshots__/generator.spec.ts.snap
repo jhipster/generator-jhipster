@@ -21,11 +21,7 @@ export default [
     },
   },
   // jhipster-needle-eslint-add-config - JHipster will add additional config here
-  {
-    // Html templates require some work
-    ignores: ['**/*.html'],
-    extends: [prettier],
-  },
+  prettier,
 ];
 ",
     "stateCleared": "modified",

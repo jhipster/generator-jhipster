@@ -94,12 +94,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
         loadDockerDependenciesTask.call(this, { context: application });
 
-        applicationDefaults({
-          javaDependencies: ({ javaDependencies }) => ({
-            ...applicationJavaDependencies,
-            ...javaDependencies,
-          }),
-        });
+        applicationDefaults({ javaDependencies: {} });
+        mutateData(application.javaDependencies, applicationJavaDependencies);
       },
     });
   }

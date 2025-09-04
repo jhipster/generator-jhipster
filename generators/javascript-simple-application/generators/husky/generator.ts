@@ -24,6 +24,7 @@ export default class HuskyGenerator extends JavascriptSimpleApplicationGenerator
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnBootstrap('javascript-simple-application');
     if (!this.delegateToBlueprint) {
       await this.dependsOnJHipster('jhipster:javascript-simple-application:prettier');
     }

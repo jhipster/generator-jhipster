@@ -83,21 +83,6 @@ exports[`generator - spring-cloud-stream:kafka with defaults options should call
       "value": "com.mycompany.myapp.config.KafkaTestContainersSpringContextCustomizerFactory",
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -106,28 +91,13 @@ exports[`generator - spring-cloud-stream:kafka with defaults options should matc
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/broker/KafkaConsumer.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/broker/KafkaProducer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/broker/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/JhipsterKafkaResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/EmbeddedKafka.java": {

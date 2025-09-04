@@ -212,6 +212,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "prodDatabaseTypeOracle": false,
   "prodDatabaseTypePostgresql": true,
   "projectDescription": "Description for JHipster",
+  "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
   "routes": undefined,

@@ -20,10 +20,9 @@ import type { HandleCommandTypes } from '../../../../lib/command/types.ts';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,
-  Entity as BaseApplicationEntity,
   Options as BaseApplicationOptions,
   Source as BaseApplicationSource,
-} from '../../../base-application/types.ts';
+} from '../../../base-simple-application/types.ts';
 
 import type command from './command.ts';
 
@@ -33,6 +32,6 @@ export type Config = Command['Config'] & BaseApplicationConfig;
 
 export type Options = Command['Options'] & BaseApplicationOptions;
 
-export { BaseApplicationEntity as Entity, BaseApplicationSource as Source };
+export { BaseApplicationSource as Source };
 
-export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = Command['Application'] & BaseApplicationApplication<E>;
+export type Application = Command['Application'] & BaseApplicationApplication;

@@ -211,6 +211,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "prodDatabaseTypeOracle": false,
   "prodDatabaseTypePostgresql": true,
   "projectDescription": "Description for JHipster",
+  "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
   "routes": undefined,

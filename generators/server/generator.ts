@@ -60,9 +60,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
   ServerOptions,
   ServerSource
 > {
-  jhipsterDependenciesVersion!: string;
-  projectVersion!: string;
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

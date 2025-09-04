@@ -19,7 +19,7 @@
 
 import { expect } from 'esmocha';
 
-import { mutateMockedCompleteData, mutateMockedData } from '../../../../lib/testing/index.ts';
+import { mutateMockedCompleteData, mutateMockedData } from '../../lib/testing/index.ts';
 
 import * as entityData from './application.ts';
 

@@ -13,14 +13,15 @@ import type {
 import type { EditFileCallback } from '../base-core/api.ts';
 import type { PropertiesFileKeyUpdate } from '../base-core/support/index.ts';
 import type { Application as GradleApplication, GradleNeedleOptions, Source as GradleSource } from '../gradle/types.ts';
+import type {
+  Application as JavaSimpleApplicationApplication,
+  Config as JavaSimpleApplicationConfig,
+  Options as JavaSimpleApplicationOptions,
+} from '../java-simple-application/types.ts';
 import type { Application as LanguagesApplication } from '../languages/types.ts';
 import type { MavenDefinition, Source as MavenSource } from '../maven/types.ts';
 
-import type {
-  Application as JavaBootstrapApplication,
-  Config as JavaBootstrapConfig,
-  Options as JavaBootstrapOptions,
-} from './generators/bootstrap/types.ts';
+import type { JavaAddedApplicationProperties } from './application.ts';
 import type {
   Application as BuildToolApplication,
   Config as BuildToolConfig,
@@ -132,12 +133,12 @@ export type JavaDefinition = {
 export type JavaNeedleOptions = GradleNeedleOptions;
 
 export type Config = BaseApplicationConfig &
-  JavaBootstrapConfig &
+  JavaSimpleApplicationConfig &
   BuildToolConfig &
   ExportStoragePropertiesFromCommand<typeof GraalvmCommand>;
 
 export type Options = BaseApplicationOptions &
-  JavaBootstrapOptions &
+  JavaSimpleApplicationOptions &
   BuildToolOptions &
   ExportGeneratorOptionsFromCommand<typeof GraalvmCommand>;
 
@@ -151,7 +152,8 @@ type SpringApplication = {
 
 export type Application<E extends BaseApplicationEntity<BaseApplicationField, BaseApplicationRelationship> = Entity<Field, Relationship>> =
   BaseApplicationApplication<E> &
-    JavaBootstrapApplication &
+    JavaSimpleApplicationApplication &
+    JavaAddedApplicationProperties &
     BuildToolApplication &
     GradleApplication &
     SpringApplication &

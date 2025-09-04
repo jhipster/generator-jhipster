@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../../../lib/utils/object.ts';
-import { normalizePathEnd } from '../../../../lib/utils/path.ts';
+import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import { normalizePathEnd } from '../../lib/utils/path.ts';
 import {
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
@@ -28,13 +28,13 @@ import {
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_RES_DIR,
   SERVER_TEST_SRC_DIR,
-} from '../../../generator-constants.js';
-import { getMainClassName } from '../../support/util.ts';
-import { GRAALVM_REACHABILITY_METADATA } from '../graalvm/internal/constants.ts';
+} from '../generator-constants.js';
+import { GRAALVM_REACHABILITY_METADATA } from '../java/generators/graalvm/internal/constants.ts';
+import { getMainClassName } from '../java/support/util.ts';
 
 import type { Application } from './types.ts';
 
-export type BootstrapJavaAddedApplicationProperties = {
+export type JavaSimpleApplicationAddedApplicationProperties = {
   javaVersion: string;
   readonly javaCompatibleVersions: string[];
   mainClass: string;
@@ -68,7 +68,6 @@ export type BootstrapJavaAddedApplicationProperties = {
   buildToolExecutable?: string;
 
   addOpenapiGeneratorPlugin: boolean;
-  useNpmWrapper: boolean;
   graalvmReachabilityMetadata: string;
 
   imperativeOrReactive: string;
@@ -94,6 +93,7 @@ export const mutateApplication = {
   javaCompatibleVersions: () => [...JAVA_COMPATIBLE_VERSIONS],
   mainClass: ({ baseName }) => getMainClassName({ baseName }),
 
+  packageName: 'com.mycompany.myapp',
   packageFolder: ({ packageName }) => `${packageName!.replace(/\./g, '/')}/`,
   entityPackages: () => [],
 
@@ -125,7 +125,6 @@ export const mutateApplication = {
   reactive: false,
 
   addOpenapiGeneratorPlugin: true,
-  useNpmWrapper: false,
 
   imperativeOrReactive: ({ reactive }) => (reactive ? 'reactive' : 'imperative'),
   optionalOrMono: ({ reactive }) => (reactive ? 'Mono' : 'Optional'),
@@ -146,4 +145,7 @@ export const mutateApplication = {
   javaIntegrationTestExclude: () => [],
   withGeneratedFlag: false,
   graalvmReachabilityMetadata: GRAALVM_REACHABILITY_METADATA,
-} as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Application<any>>, BootstrapJavaAddedApplicationProperties>;
+} as const satisfies MutateDataPropertiesWithRequiredProperties<
+  MutateDataParam<Application>,
+  JavaSimpleApplicationAddedApplicationProperties
+>;
