@@ -38,9 +38,7 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint) {
-      await this.composeWithJHipster('jhipster:bootstrap-workspaces');
-    }
+    await this.dependsOnBootstrap('base-workspaces');
   }
 
   get initializing() {

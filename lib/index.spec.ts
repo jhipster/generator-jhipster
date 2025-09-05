@@ -36,6 +36,7 @@ describe('getGeneratorNamespaces', () => {
   "base-simple-application",
   "base-simple-application:bootstrap",
   "base-workspaces",
+  "base-workspaces:bootstrap",
   "bootstrap",
   "bootstrap-application",
   "bootstrap-application-base",
