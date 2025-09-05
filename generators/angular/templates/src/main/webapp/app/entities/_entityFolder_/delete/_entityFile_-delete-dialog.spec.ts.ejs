@@ -38,11 +38,8 @@ describe('<%= entityAngularName %> Management Delete Component', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [<%= entityAngularName %>DeleteDialog],
             providers: [provideHttpClient(), NgbActiveModal]
-        })
-        .overrideTemplate(<%= entityAngularName %>DeleteDialog, '')
-        .compileComponents();
+        });
         fixture = TestBed.createComponent(<%= entityAngularName %>DeleteDialog);
         comp = fixture.componentInstance;
         service = TestBed.inject(<%= entityAngularName %>Service);

@@ -21,6 +21,7 @@ jest.mock('app/login/login.service');
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
@@ -53,16 +54,19 @@ describe('Navbar Component', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [
-          Navbar,
 <%_ if (enableTranslation) { _%>
-          TranslateModule.forRoot(),
+        imports: [TranslateModule.forRoot()],
 <%_ } _%>
+        providers: [
+          {
+            provide: ActivatedRoute,
+            useValue: {}
+          },
+          provideHttpClient(),
+          provideHttpClientTesting(),
+          LoginService
         ],
-        providers: [provideHttpClient(), provideHttpClientTesting(), LoginService],
-      })
-        .overrideTemplate(Navbar, '')
-        .compileComponents();
+      });
     })
   );
 

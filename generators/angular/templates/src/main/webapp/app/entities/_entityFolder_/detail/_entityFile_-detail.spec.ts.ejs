@@ -23,6 +23,11 @@ _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faArrowLeft, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { of } from 'rxjs';
 
 <%_ if (anyFieldIsBlobDerived) { _%>
@@ -38,9 +43,9 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
   let dataUtils: DataUtils;
 <%_ } _%>
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [<%= entityAngularName %>Detail],
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
       providers: [
         provideRouter(
           [
@@ -53,9 +58,10 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
           withComponentInputBinding()
         ),
       ],
-    })
-      .overrideTemplate(<%= entityAngularName %>Detail, '')
-      .compileComponents();
+    });
+    const library = TestBed.inject(FaIconLibrary);
+    library.addIcons(faArrowLeft);
+    library.addIcons(faPencilAlt);
 <%_ if (anyFieldIsBlobDerived) { _%>
     dataUtils = TestBed.inject(DataUtils);
     jest.spyOn(window, 'open').mockImplementation(() => null);

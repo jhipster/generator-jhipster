@@ -18,6 +18,9 @@
 -%>
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 
 import { MetricsModalThreads } from './metrics-modal-threads';
 import { ThreadState } from '../../metrics.model';
@@ -29,11 +32,9 @@ describe('MetricsModalThreads', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [MetricsModalThreads],
+      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
       providers: [NgbActiveModal],
-    })
-      .overrideTemplate(MetricsModalThreads, '')
-      .compileComponents();
+    });
   }));
 
   beforeEach(() => {

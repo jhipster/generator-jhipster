@@ -43,12 +43,9 @@ describe('Alert Error Component', () => {
 <%_ if (enableTranslation) { _%>
           TranslateModule.forRoot(),
 <%_ } _%>
-          AlertError,
         ],
         providers: [EventManager, AlertService],
-      })
-        .overrideTemplate(AlertError, '')
-        .compileComponents();
+      });
     })
   );
 

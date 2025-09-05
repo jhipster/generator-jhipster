@@ -58,10 +58,7 @@ describe('Directive: SortByDirective', () => {
   let fixture: ComponentFixture<TestSortByDirective>;
   let tableHead: DebugElement;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TestSortByDirective],
-    }).compileComponents();
+  beforeEach(() => {
     fixture = TestBed.createComponent(TestSortByDirective);
     component = fixture.componentInstance;
     tableHead = fixture.debugElement.query(By.directive(SortByDirective));

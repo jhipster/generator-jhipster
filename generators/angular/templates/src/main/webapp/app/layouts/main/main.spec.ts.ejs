@@ -22,6 +22,7 @@ import { waitForAsync, ComponentFixture, TestBed, fakeAsync, tick } from '@angul
 import { Router, TitleStrategy } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
+import { provideHttpClient } from '@angular/common/http';
 import { Component, NgZone } from '@angular/core';
 import { of, Subject } from 'rxjs';
 <%_ if (enableTranslation) { _%>
@@ -58,13 +59,11 @@ describe('Main', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [
 <%_ if (enableTranslation) { _%>
-          TranslateModule.forRoot(),
+        imports: [TranslateModule.forRoot()],
 <%_ } _%>
-          Main,
-        ],
         providers: [
+          provideHttpClient(),
           Title,
 <%_ if (enableI18nRTL) { _%>
           FindLanguageFromKeyPipe,
@@ -72,9 +71,7 @@ describe('Main', () => {
           AccountService,
           { provide: TitleStrategy, useClass: AppPageTitleStrategy },
         ],
-      })
-        .overrideTemplate(Main, '')
-        .compileComponents();
+      });
     })
   );
 
