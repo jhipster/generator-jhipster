@@ -81,7 +81,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
           this.fetchFromInstalledJHipster('vue', 'resources', 'package.json'),
         );
       },
-      applicationDefauts({ applicationDefaults }) {
+      applicationDefaults({ applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           typescriptEslint: true,
@@ -96,7 +96,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      applicationDefauts({ applicationDefaults }) {
+      applicationDefaults({ applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,

@@ -352,7 +352,7 @@ export const jhipster7deprecatedProperties: MigrationProperty = {
 const ejsBuiltInProperties: (string | symbol)[] = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
 const javascriptBuiltInProperties: (string | symbol)[] = ['parseInt', 'Boolean', 'JSON', 'Object', 'toString'];
 
-const getPropertBuilder =
+const getPropertyBuilder =
   ({ log = (msg: any) => console.log(msg) } = {}) =>
   (context: HandledContext, prop: string | symbol) => {
     if (typeof prop === 'symbol') {
@@ -398,7 +398,7 @@ const getPropertBuilder =
   };
 
 const createHandler = ({ log }: Handler = { log: msg => console.log(msg) }): ProxyHandler<HandledContext> => {
-  const getProperty = getPropertBuilder({ log });
+  const getProperty = getPropertyBuilder({ log });
   return {
     ...Object.fromEntries(
       [

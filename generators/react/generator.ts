@@ -76,7 +76,7 @@ export default class ReactGenerator extends ClientApplicationGenerator<
           this.fetchFromInstalledJHipster('react', 'resources', 'package.json'),
         );
       },
-      applicationDefauts({ applicationDefaults }) {
+      applicationDefaults({ applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           typescriptEslint: true,
@@ -91,7 +91,7 @@ export default class ReactGenerator extends ClientApplicationGenerator<
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      applicationDefauts({ application, applicationDefaults }) {
+      applicationDefaults({ application, applicationDefaults }) {
         application.prettierExtensions.push('html', 'tsx', 'css', 'scss');
 
         applicationDefaults({

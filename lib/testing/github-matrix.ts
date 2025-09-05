@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { JAVA_COMPATIBLE_VERSIONS, RECOMMENDED_JAVA_VERSION, RECOMMENDED_NODE_VERSION } from '../../generators/generator-constants.js';
 import { getSourceRoot } from '../index.ts';
 
-const knwonGitHubMatrixProperties = [
+const knownGitHubMatrixProperties = [
   'os',
   'node-version',
   'java-version',
@@ -40,7 +40,7 @@ export type GitHubMatrixOutput = {
 };
 
 export const getUnknownGitHubMatrixProperties = (matrix: Partial<GitHubMatrix>): string[] =>
-  Object.keys(matrix).filter(key => !knwonGitHubMatrixProperties.includes(key));
+  Object.keys(matrix).filter(key => !knownGitHubMatrixProperties.includes(key));
 
 export const getUnknownGitHubMatrixGroupProperties = (matrixRecord: GitHubMatrixGroup): string[] => {
   let unknownProperties: string[] = [];

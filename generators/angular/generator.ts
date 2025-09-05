@@ -80,7 +80,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           this.fetchFromInstalledJHipster('angular', 'resources', 'package.json'),
         );
       },
-      applicationDefauts({ applicationDefaults }) {
+      applicationDefaults({ applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           typescriptEslint: true,
@@ -95,7 +95,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      applicationDefauts({ application, applicationDefaults }) {
+      applicationDefaults({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,

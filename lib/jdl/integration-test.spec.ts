@@ -87,7 +87,7 @@ entity A
         convertedJdl = jdlObject.toString();
       });
 
-      it('stringfied JDL should match original jdl', () => {
+      it('stringified JDL should match original jdl', () => {
         jestExpect(convertedJdl).toEqual(expectedJdl);
       });
       it('should result matching', () => {

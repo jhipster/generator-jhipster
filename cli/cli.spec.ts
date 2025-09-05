@@ -14,7 +14,7 @@ import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/
 import type JHipsterCommand from './jhipster-command.js';
 import { createProgram } from './program.ts';
 import type { CliCommand } from './types.ts';
-import { getCommand as actualGetCommonand } from './utils.ts';
+import { getCommand as actualGetCommand } from './utils.ts';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {
@@ -172,7 +172,7 @@ describe('cli', () => {
     let env: FullEnvironment;
 
     beforeEach(async () => {
-      getCommand.mockImplementation(actualGetCommonand as any);
+      getCommand.mockImplementation(actualGetCommand as any);
 
       const BaseGenerator = (await import('../generators/base/index.ts')).default;
       env = (await helpers.createTestEnv()) as FullEnvironment;

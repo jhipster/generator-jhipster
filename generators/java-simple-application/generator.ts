@@ -79,9 +79,9 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
     return this.asConfiguringTaskGroup({
       checkConfig() {
         const { packageName } = this.jhipsterConfigWithDefaults;
-        const reservedKeywork = packageName!.split('.').find(isReservedJavaKeyword);
-        if (reservedKeywork) {
-          throw new Error(`The package name "${packageName}" contains a reserved Java keyword "${reservedKeywork}".`);
+        const reservedKeyword = packageName!.split('.').find(isReservedJavaKeyword);
+        if (reservedKeyword) {
+          throw new Error(`The package name "${packageName}" contains a reserved Java keyword "${reservedKeyword}".`);
         }
       },
       fixConfig() {

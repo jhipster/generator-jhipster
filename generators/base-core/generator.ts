@@ -41,11 +41,11 @@ import type {
   JHipsterArguments,
   JHipsterCommandDefinition,
   JHipsterConfigs,
-  ParseableCommand,
+  ParsableCommand,
 } from '../../lib/command/index.ts';
 import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.ts';
 import { packageJson } from '../../lib/index.ts';
-import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
+import { CRLF, LF, type Logger, hasCrlf, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
 import baseCommand from '../base/command.ts';
 import { dockerPlaceholderGenerator } from '../docker/utils.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
@@ -1129,7 +1129,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     const writeCallback = (...callbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this> => {
       const { autoCrlf = this.jhipsterConfigWithDefaults.autoCrlf, assertModified } = actualOptions;
       try {
-        const fileHasCrlf = autoCrlf && hasCrlr(newContent);
+        const fileHasCrlf = autoCrlf && hasCrlf(newContent);
         newContent = joinCallbacks(...callbacks).call(this, fileHasCrlf ? normalizeLineEndings(newContent, LF) : newContent, filePath);
         if (assertModified && originalContent === newContent) {
           const errorMessage = `${chalk.yellow('Fail to modify ')}${filePath}.`;
@@ -1324,7 +1324,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 }
 
 export class CommandCoreGenerator<
-  Command extends ParseableCommand,
+  Command extends ParsableCommand,
   AdditionalOptions = unknown,
   AdditionalFeatures = unknown,
 > extends CoreGenerator<

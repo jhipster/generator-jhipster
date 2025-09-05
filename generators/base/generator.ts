@@ -27,7 +27,7 @@ import { union } from 'lodash-es';
 import semver, { lt as semverLessThan } from 'semver';
 import type { PackageJson } from 'type-fest';
 
-import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.ts';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
 import { packageJson } from '../../lib/index.ts';
 import { packageNameToNamespace } from '../../lib/utils/index.ts';
 import CoreGenerator from '../base-core/index.ts';
@@ -716,7 +716,7 @@ export default class BaseGenerator<
 
     if (!this.skipChecks) {
       const namespaces = blueprints.map(blueprint => packageNameToNamespace(blueprint.name));
-      // Verify if the blueprints hava been registered.
+      // Verify if the blueprints have been registered.
       const missing = namespaces.filter(namespace => !this.env.isPackageRegistered(namespace));
       if (missing && missing.length > 0) {
         throw new Error(`Some blueprints were not found ${missing}, you should install them manually`);
@@ -848,7 +848,7 @@ export default class BaseGenerator<
 }
 
 export class CommandBaseGenerator<
-  Command extends ParseableCommand,
+  Command extends ParsableCommand,
   AdditionalOptions = unknown,
   AdditionalFeatures = unknown,
 > extends BaseGenerator<

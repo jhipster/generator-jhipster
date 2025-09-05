@@ -115,7 +115,7 @@ const _applicationOptions = {
 } satisfies ApplicationOptions;
 
 const _applicationOptionsError = {
-  // @ts-expect-error unknow field
+  // @ts-expect-error unknown field
   foo: 'bar',
 } satisfies ApplicationOptions;
 

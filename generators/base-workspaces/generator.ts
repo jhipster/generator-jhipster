@@ -21,7 +21,7 @@ import { join } from 'node:path';
 
 import { defaults } from 'lodash-es';
 
-import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.ts';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
 import { deploymentOptions } from '../../lib/jhipster/index.ts';
 import { removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import BaseGenerator from '../base/index.ts';
@@ -238,7 +238,7 @@ export default abstract class BaseWorkspacesGenerator<
   }
 }
 
-export class CommandBaseWorkspacesGenerator<Command extends ParseableCommand, AdditionalOptions = unknown> extends BaseWorkspacesGenerator<
+export class CommandBaseWorkspacesGenerator<Command extends ParsableCommand, AdditionalOptions = unknown> extends BaseWorkspacesGenerator<
   BaseDeployment,
   WorkspacesApplication,
   BaseWorkspacesConfig & ExportStoragePropertiesFromCommand<Command>,
