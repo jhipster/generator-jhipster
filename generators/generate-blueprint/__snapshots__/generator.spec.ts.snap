@@ -191,6 +191,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/base-workspaces/generator.spec.js": {
     "stateCleared": "modified",
   },
+  "generators/base-workspaces/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-workspaces/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-workspaces/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-workspaces/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/base-workspaces/generators/bootstrap/templates/template-file-base-workspaces:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/base-workspaces/index.js": {
     "stateCleared": "modified",
   },

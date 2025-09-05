@@ -23,6 +23,7 @@ export type GeneratorsWithBootstrap =
   | 'app'
   | 'base-application'
   | 'base-simple-application'
+  | 'base-workspaces'
   | 'client'
   | 'common'
   | 'docker'
@@ -49,6 +50,7 @@ type GeneratorsByNamespace = {
   'jhipster:app:bootstrap': import('./app/generators/bootstrap/generator.ts').default;
   'jhipster:base-application:bootstrap': import('./base-application/generators/bootstrap/generator.ts').default;
   'jhipster:base-simple-application:bootstrap': import('./base-simple-application/generators/bootstrap/generator.ts').default;
+  'jhipster:base-workspaces:bootstrap': import('./base-workspaces/generators/bootstrap/generator.ts').default;
   bootstrap: import('./bootstrap/generator.ts').default;
   'jhipster:bootstrap': import('./bootstrap/generator.ts').default;
   'bootstrap-application': import('./bootstrap-application/generator.ts').default;

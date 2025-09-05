@@ -16,15 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
-
-/**
- * @deprecated use jhipster:workspaces:bootstrap instead
- */
-export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerator {
-  customLifecycle = true;
-
-  async beforeQueue() {
-    await this.dependsOnBootstrap('base-workspaces');
-  }
-}
+export { default } from './generator.ts';
