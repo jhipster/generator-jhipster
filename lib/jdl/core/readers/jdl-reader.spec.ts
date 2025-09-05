@@ -87,13 +87,13 @@ describe('jdl - JDLReader', () => {
       });
       describe('when passing a JDL file with a syntax error', () => {
         beforeEach(() => {
-          fs.writeFileSync('test_file.jdl', 'enity A');
+          fs.writeFileSync('test_file.jdl', 'entity A');
         });
 
         it('should fail', () => {
           expect(() => {
             parseFromFiles(['test_file.jdl']);
-          }).to.throw(/but found: 'enity'/);
+          }).to.throw(/but found: 'entity'/);
         });
       });
       describe('when reading a single JDL file', () => {

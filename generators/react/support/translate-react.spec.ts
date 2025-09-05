@@ -50,7 +50,7 @@ home.subtitle-translated-value-0
 `);
         });
 
-        it('should replace multine Translate tag with contentKey coming first', () => {
+        it('should replace multiline Translate tag with contentKey coming first', () => {
           const body = `
 <Translate contentKey="sessions.title" interpolate={{ username: account.login }}>
 Active sessions for [<strong>{account.login}</strong>]
@@ -63,7 +63,7 @@ sessions.title-{&quot;username&quot;:&quot;{account.login}&quot;}-translated-val
 `);
         });
 
-        it('should replace multine Translate tag with interpolate coming first', () => {
+        it('should replace multiline Translate tag with interpolate coming first', () => {
           const body = `
 <Translate interpolate={{ username: account.login }} contentKey="sessions.title">
 Active sessions for [<strong>{account.login}</strong>]

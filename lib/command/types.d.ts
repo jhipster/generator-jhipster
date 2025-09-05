@@ -170,7 +170,7 @@ export type JHipsterCommandDefinition<ConfigContext = any> = {
 /**
  * A simplified version of the `JHipsterCommandDefinition` type for types parsing.
  */
-type ParseableConfig = {
+type ParsableConfig = {
   readonly type?: CliSpecType;
   readonly cli?: {
     readonly type: CliSpecType;
@@ -178,11 +178,11 @@ type ParseableConfig = {
   readonly choices?: JHipsterChoices;
 } & ScopedConfig;
 
-type ParseableConfigs = Record<string, ParseableConfig>;
+type ParsableConfigs = Record<string, ParsableConfig>;
 
-export type ParseableCommand = {
-  readonly options?: ParseableConfigs;
-  readonly configs?: ParseableConfigs;
+export type ParsableCommand = {
+  readonly options?: ParsableConfigs;
+  readonly configs?: ParsableConfigs;
 };
 
 /** Extract constructor return type, eg: Boolean, String */
@@ -190,9 +190,9 @@ type ConstructorReturn<T> = T extends new () => infer R ? R : undefined;
 type FilteredConfigScope = CommandConfigScope | undefined;
 
 /** Filter Options/Config by scope */
-type FilterScope<D extends ParseableConfig, S extends FilteredConfigScope> = D extends Record<'scope', S> ? D : never;
+type FilterScope<D extends ParsableConfig, S extends FilteredConfigScope> = D extends Record<'scope', S> ? D : never;
 
-type FilterCommandScope<D extends ParseableConfigs, S extends FilteredConfigScope> = {
+type FilterCommandScope<D extends ParsableConfigs, S extends FilteredConfigScope> = {
   [K in keyof D as IsNever<FilterScope<D[K], S>> extends true ? never : K]: D[K];
 };
 
@@ -205,11 +205,11 @@ type FilterCommandScope<D extends ParseableConfigs, S extends FilteredConfigScop
  * }>
  * ```
  */
-type MergeConfigsOptions<D extends ParseableCommand, S extends FilteredConfigScope> = Simplify<
-  D extends { configs: ParseableConfigs } ? { [K in keyof FilterCommandScope<D['configs'], S>]: D['configs'][K] } : object
+type MergeConfigsOptions<D extends ParsableCommand, S extends FilteredConfigScope> = Simplify<
+  D extends { configs: ParsableConfigs } ? { [K in keyof FilterCommandScope<D['configs'], S>]: D['configs'][K] } : object
 >;
 
-type GetType<C extends ParseableConfig> =
+type GetType<C extends ParsableConfig> =
   C extends Record<'type', CliSpecType>
     ? C['type']
     : C extends Record<'cli', Record<'type', CliSpecType>>
@@ -241,13 +241,13 @@ type NormalizeChoices<Choices extends readonly [...(string | { value: string })[
  * type ExplodedCommandChoices = ExplodeCommandChoicesNoInference<{ clientFramework: { choices: ['angular', 'no'], scope: 'storage' }, clientTestFramework: { choices: ['cypress', 'no'], scope: 'storage' } }>
  * ```
  */
-type ExplodeCommandChoicesNoInference<U extends ParseableConfigs> = {
+type ExplodeCommandChoicesNoInference<U extends ParsableConfigs> = {
   [K in keyof U]: U[K] extends infer RequiredChoices
     ? RequiredChoices extends { choices: any }
       ? K extends infer StringKey
         ? StringKey extends string
           ? NormalizeChoices<RequiredChoices['choices']> extends infer NormalizedChoices
-            ? // @ts-expect-error Mapped tuple type is loosy https://github.com/microsoft/TypeScript/issues/27995
+            ? // @ts-expect-error Mapped tuple type is loose https://github.com/microsoft/TypeScript/issues/27995
               Simplify<DerivedPropertiesOf<StringKey, NormalizedChoices[number]>>
             : never
           : never
@@ -256,7 +256,7 @@ type ExplodeCommandChoicesNoInference<U extends ParseableConfigs> = {
     : never;
 };
 
-type PrepareConfigsWithType<U extends ParseableConfigs> = Simplify<{
+type PrepareConfigsWithType<U extends ParsableConfigs> = Simplify<{
   -readonly [K in keyof U]?: U[K] extends Record<'choices', JHipsterChoices>
     ? TupleToUnion<NormalizeChoices<U[K]['choices']>>
     : WrapperToPrimitive<ConstructorReturn<GetType<U[K]>>> extends infer T
@@ -277,7 +277,7 @@ type OnlyChoices<D, C extends boolean> = D extends { choices: JHipsterChoices } 
  * type ConfigsWithChoice = OnlyConfigsWithChoice<{ clientFramework: { choices: ['angular', 'no'], scope: 'storage' }, clientTestFramework: { choices: ['cypress', 'no'], scope: 'storage' } }>
  * ```
  */
-type OnlyConfigsWithChoice<D extends ParseableConfigs, C extends boolean> = {
+type OnlyConfigsWithChoice<D extends ParsableConfigs, C extends boolean> = {
   [K in keyof D as OnlyChoices<D[K], C> extends never ? never : K]: D[K];
 };
 
@@ -287,9 +287,9 @@ type OnlyConfigsWithChoice<D extends ParseableConfigs, C extends boolean> = {
  * type Prop = ExportApplicationPropertiesFromCommand<{ configs: { clientFramework: { choices: ['angular', 'no'], scope: 'storage' }, bar: { scope: 'storage' } } }>;
  * ```
  */
-export type ExportApplicationPropertiesFromCommand<C extends ParseableCommand> =
+export type ExportApplicationPropertiesFromCommand<C extends ParsableCommand> =
   MergeConfigsOptions<C, 'storage' | 'context'> extends infer Merged
-    ? Merged extends ParseableConfigs
+    ? Merged extends ParsableConfigs
       ? // Add value inference to properties with choices
         // ? PrepareConfigsWithType<OnlyConfigsWithChoice<F, false>> & ValueOf<ExplodeCommandChoicesWithInference<OnlyConfigsWithChoice<F, true>>>
         Simplify<
@@ -299,20 +299,20 @@ export type ExportApplicationPropertiesFromCommand<C extends ParseableCommand> =
       : never
     : never;
 
-type ExportScopedPropertiesFromCommand<C extends ParseableCommand, S extends FilteredConfigScope> =
+type ExportScopedPropertiesFromCommand<C extends ParsableCommand, S extends FilteredConfigScope> =
   MergeConfigsOptions<C, S> extends infer Merged
-    ? Merged extends ParseableConfigs
+    ? Merged extends ParsableConfigs
       ? PrepareConfigsWithType<Merged>
       : Record<string, never>
     : Record<string, never>;
 
-export type ExportStoragePropertiesFromCommand<C extends ParseableCommand> = ExportScopedPropertiesFromCommand<C, 'storage'>;
+export type ExportStoragePropertiesFromCommand<C extends ParsableCommand> = ExportScopedPropertiesFromCommand<C, 'storage'>;
 
-export type ExportGeneratorOptionsFromCommand<C extends ParseableCommand> = ExportScopedPropertiesFromCommand<C, any>;
+export type ExportGeneratorOptionsFromCommand<C extends ParsableCommand> = ExportScopedPropertiesFromCommand<C, any>;
 
-export type ExportGeneratorPropertiesFromCommand<C extends ParseableCommand> = Readonly<ExportScopedPropertiesFromCommand<C, 'generator'>>;
+export type ExportGeneratorPropertiesFromCommand<C extends ParsableCommand> = Readonly<ExportScopedPropertiesFromCommand<C, 'generator'>>;
 
-export type HandleCommandTypes<C1 extends ParseableCommand> = Record<'Config', ExportStoragePropertiesFromCommand<C1>> &
+export type HandleCommandTypes<C1 extends ParsableCommand> = Record<'Config', ExportStoragePropertiesFromCommand<C1>> &
   Record<'Options', ExportGeneratorOptionsFromCommand<C1>> &
   Record<'Generator', ExportGeneratorPropertiesFromCommand<C1>> &
   Record<'Application', ExportApplicationPropertiesFromCommand<C1>>;

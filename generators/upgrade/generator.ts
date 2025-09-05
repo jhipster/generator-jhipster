@@ -36,7 +36,7 @@ import type { Config as UpgradeConfig, Options as UpgradeOptions } from './types
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 const DEFAULT_CLI_OPTIONS = '--force --skip-install --skip-git --ignore-errors --no-insight --skip-checks';
-const DEFAULT_NON_INTERATIVE_OPTIONS = {
+const DEFAULT_NON_INTERACTIVE_OPTIONS = {
   skipInstall: true,
   skipGit: true,
   skipChecks: true,
@@ -323,7 +323,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
     const sharedFs = inherit ? this.env.sharedFs : undefined;
     const inheritedOptions = inherit ? this.options : {};
     const envOptions = { sharedFs, adapter };
-    const generatorOptions = { ...inheritedOptions, ...DEFAULT_NON_INTERATIVE_OPTIONS };
+    const generatorOptions = { ...inheritedOptions, ...DEFAULT_NON_INTERACTIVE_OPTIONS };
 
     const envBuilder = await this.createEnvBuilder(envOptions);
     const env = envBuilder.getEnvironment();

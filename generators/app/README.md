@@ -114,7 +114,7 @@ relationship ManyToOne {
 
 ##### Eager loading relationships
 
-Appliable to SQL/spring-data-relational with partial support at MongoDb/spring-data-mongodb.
+Applicable to SQL/spring-data-relational with partial support at MongoDb/spring-data-mongodb.
 Neo4j eager loads every relationship by default.
 
 JHipster UI uses only the id and `otherEntityFieldName` properties, by default only fields used by the UI will be fetched.

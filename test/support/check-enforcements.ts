@@ -64,9 +64,9 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
                   [' Java ', ' <%= backendType %> '],
                 ]
               : []),
-          ].forEach(([notSpected, replacement]) => {
-            const regex = new RegExp(notSpected, 'g');
-            const regexSeparator = new RegExp(`${notSpected}/`, 'g');
+          ].forEach(([notExpected, replacement]) => {
+            const regex = new RegExp(notExpected, 'g');
+            const regexSeparator = new RegExp(`${notExpected}/`, 'g');
             before(() => {
               if (!fixEnforcements || !replacement) return;
               if (file.endsWith('.ejs')) {
@@ -80,8 +80,8 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
                 }
               }
             });
-            it(`should not contain ${notSpected}`, () => {
-              assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
+            it(`should not contain ${notExpected}`, () => {
+              assert(!regex.test(content), `file ${file} should not contain ${notExpected}`);
             });
           });
         });

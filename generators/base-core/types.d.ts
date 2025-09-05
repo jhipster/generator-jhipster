@@ -45,7 +45,7 @@ export type Options = YeomanOptions & {
   /** @experimental */
   commandsConfigs?: JHipsterConfigs;
 
-  /** boostrap options */
+  /** bootstrap options */
   applyDefaults?: <const T = any>(data: T) => T;
 };
 

@@ -26,7 +26,7 @@ export const LF = '\n';
  * @param str
  * @returns
  */
-export const hasCrlr = (str?: string): boolean => Boolean(str?.includes(CRLF));
+export const hasCrlf = (str?: string): boolean => Boolean(str?.includes(CRLF));
 
 /**
  * Replace line endings with the specified one.

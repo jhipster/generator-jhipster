@@ -384,7 +384,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
 
   /**
    * Mock every built-in generators except the ones in the except and bootstrap-* generators.
-   * Note: Boostrap generator is mocked by default.
+   * Note: Bootstrap generator is mocked by default.
    * @example
    * withMockedJHipsterGenerators({ except: ['jhipster:bootstrap'] })
    * @example
