@@ -19,7 +19,7 @@
 package <%= entityAbsolutePackage %>.web.rest;
 
 import static <%= entityAbsolutePackage %>.domain.<%= persistClass %>Asserts.*;
-import static <%= packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
+import static <%= packageName %>.TestUtil.createUpdateProxyForBean;
 <%_
 var filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
@@ -57,7 +57,7 @@ if (databaseTypeSql && !reactive) {
 
 _%>
 <%_ if (entityAbsolutePackage !== packageName) { _%>
-import <%= packageName %>.web.rest.TestUtil;
+import <%= packageName %>.TestUtil;
 <% } %>
 import <%= packageName %>.IntegrationTest;
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
@@ -212,10 +212,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 <%_ } _%>
 
 <%_ if (anyFieldIsBigDecimal) { _%>
-import static <%= packageName %>.web.rest.TestUtil.sameNumber;
+import static <%= packageName %>.TestUtil.sameNumber;
 <%_ } _%>
 <%_ if (anyFieldIsZonedDateTime) { _%>
-import static <%= packageName %>.web.rest.TestUtil.sameInstant;
+import static <%= packageName %>.TestUtil.sameInstant;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
