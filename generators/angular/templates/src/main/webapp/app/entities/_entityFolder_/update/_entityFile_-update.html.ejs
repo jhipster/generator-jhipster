@@ -77,7 +77,7 @@ _%>
                             <button type="button" (click)="editForm.patchValue({ <%= fieldName %>: undefined, <%= fieldName %>ContentType: undefined });"
                                     class="btn btn-secondary btn-xs pull-end">
       <%_ } _%>
-                                  <fa-icon icon="times"></fa-icon>
+                                  <fa-icon icon="times" />
                             </button>
                         </div>
                     }
@@ -87,7 +87,7 @@ _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
                     <div class="input-group">
                         <input id="field_<%= fieldName %>" data-cy="<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" ngbDatepicker #<%= fieldName %>Dp="ngbDatepicker" formControlName="<%= fieldName %>"<% if (readonly) { %> [readonly]="true"<% } %>/>
-                        <button type="button" class="btn btn-secondary" (click)="<%= fieldName %>Dp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+                        <button type="button" class="btn btn-secondary" (click)="<%= fieldName %>Dp.toggle()"><fa-icon icon="calendar-alt" /></button>
                     </div>
     <%_ } else if (field.fieldTypeTimed) { _%>
                     <div class="d-flex">
@@ -213,11 +213,11 @@ _%>
 
             <div>
                 <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>__jhiTranslateTag__('entity.action.cancel')</span>
+                    <fa-icon icon="ban" />&nbsp;<span>__jhiTranslateTag__('entity.action.cancel')</span>
                 </button>
 
                 <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon icon="save"></fa-icon>&nbsp;<span>__jhiTranslateTag__('entity.action.save')</span>
+                    <fa-icon icon="save" />&nbsp;<span>__jhiTranslateTag__('entity.action.save')</span>
                 </button>
             </div>
         </form>

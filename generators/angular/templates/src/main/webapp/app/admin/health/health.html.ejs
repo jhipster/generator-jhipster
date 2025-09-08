@@ -21,7 +21,7 @@
     <span id="health-page-heading" data-cy="healthPageHeading">__jhiTranslateTag__('health.title')</span>
 
     <button class="btn btn-primary float-end" (click)="refresh()">
-      <fa-icon icon="sync"></fa-icon> <span>__jhiTranslateTag__('health.refresh.button')</span>
+      <fa-icon icon="sync" /> <span>__jhiTranslateTag__('health.refresh.button')</span>
     </button>
   </h2>
 
@@ -53,7 +53,7 @@
           @if (componentHealth.value!.details) {
             <a class="hand"
               (click)="showHealth({ key: componentHealth.key, value: componentHealth.value! })">
-              <fa-icon icon="eye"></fa-icon>
+              <fa-icon icon="eye" />
             </a>
           }
           </td>

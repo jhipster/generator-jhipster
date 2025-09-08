@@ -22,11 +22,11 @@
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading()">
-        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined"></fa-icon>
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
         <span>__jhiTranslateTag__('userManagement.home.refreshListLabel')</span>
       </button>
       <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
-        <fa-icon icon="plus"></fa-icon> <span>__jhiTranslateTag__('userManagement.home.createLabel')</span>
+        <fa-icon icon="plus" /> <span>__jhiTranslateTag__('userManagement.home.createLabel')</span>
       </button>
     </div>
   </h2>
@@ -41,30 +41,30 @@
       <thead>
         <tr<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="transition($event)"<% } %>>
           <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="id"<% } %>>
-            <span>__jhiTranslateTag__('global.field.id')</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+            <span>__jhiTranslateTag__('global.field.id')</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort" /><% } %>
           </th>
           <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="login"<% } %>>
-            <span>__jhiTranslateTag__('userManagement.login')</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+            <span>__jhiTranslateTag__('userManagement.login')</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort" /><% } %>
           </th>
           <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="email"<% } %>>
-            <span>__jhiTranslateTag__('userManagement.email')</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+            <span>__jhiTranslateTag__('userManagement.email')</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort" /><% } %>
           </th>
           <th scope="col"></th>
 <%_ if (enableTranslation) { _%>
           <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="langKey"<% } %>>
-            <span>__jhiTranslateTag__('userManagement.langKey')</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
+            <span>__jhiTranslateTag__('userManagement.langKey')</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort" /><% } %>
           </th>
 <%_ } _%>
           <th scope="col"><span>__jhiTranslateTag__('userManagement.profiles')</span></th>
 <%_ if (!databaseTypeCassandra) { _%>
           <th scope="col" <%= jhiPrefix %>SortBy="createdDate">
-            <span>__jhiTranslateTag__('userManagement.createdDate')</span> <fa-icon icon="sort"></fa-icon>
+            <span>__jhiTranslateTag__('userManagement.createdDate')</span> <fa-icon icon="sort" />
           </th>
           <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedBy">
-            <span>__jhiTranslateTag__('userManagement.lastModifiedBy')</span> <fa-icon icon="sort"></fa-icon>
+            <span>__jhiTranslateTag__('userManagement.lastModifiedBy')</span> <fa-icon icon="sort" />
           </th>
           <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedDate">
-            <span>__jhiTranslateTag__('userManagement.lastModifiedDate')</span> <fa-icon icon="sort"></fa-icon>
+            <span>__jhiTranslateTag__('userManagement.lastModifiedDate')</span> <fa-icon icon="sort" />
           </th>
 <%_ } _%>
           <th scope="col"></th>
@@ -108,12 +108,12 @@
           <td class="text-end">
             <div class="btn-group">
               <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm">
-                <fa-icon icon="eye"></fa-icon>
+                <fa-icon icon="eye" />
                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.view')</span>
               </button>
 
               <button type="submit" [routerLink]="['./', user.login, 'edit']" queryParamsHandling="merge" class="btn btn-primary btn-sm">
-                <fa-icon icon="pencil-alt"></fa-icon>
+                <fa-icon icon="pencil-alt" />
                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.edit')</span>
               </button>
 
@@ -123,7 +123,7 @@
                 class="btn btn-danger btn-sm"
                 [disabled]="!currentAccount() || currentAccount()?.login === user.login"
               >
-                <fa-icon icon="times"></fa-icon>
+                <fa-icon icon="times" />
                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.delete')</span>
               </button>
             </div>
@@ -149,7 +149,7 @@
         [rotate]="true"
         [boundaryLinks]="true"
         (pageChange)="transition()"
-      ></ngb-pagination>
+      />
     </div>
   </div>
 <%_ } _%>

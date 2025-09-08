@@ -101,7 +101,7 @@ export function addItemToMenu({
   const contentToAdd = `
         <li>
           <a class="dropdown-item" ${routerLink} routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-            <fa-icon icon="${icon}" [fixedWidth]="true"></fa-icon>
+            <fa-icon icon="${icon}" [fixedWidth]="true" />
             <span${enableTranslation ? ` ${jhiPrefix}Translate="${translationKey}"` : ''}>${name}</span>
           </a>
         </li>`;

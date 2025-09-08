@@ -49,13 +49,12 @@ import { sampleWithRequiredData } from '../<%= entityFileName %>.test-samples';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>';
-import SpyInstance = jest.SpyInstance;
 
 describe('<%= entityAngularName %> Management Component', () => {
     let comp: <%= entityAngularName %>;
     let fixture: ComponentFixture<<%= entityAngularName %>>;
     let service: <%= entityAngularName %>Service;
-    let routerNavigateSpy: SpyInstance<Promise<boolean>>;
+    let routerNavigateSpy: jest.SpyInstance<Promise<boolean>>;
 
     beforeEach(() => {
         TestBed.configureTestingModule({

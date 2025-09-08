@@ -112,14 +112,14 @@ _%>
           (click)="previousState()"
           class="btn btn-info"
           data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>__jhiTranslateTag__('entity.action.back')</span>
+        <fa-icon icon="arrow-left" />&nbsp;<span>__jhiTranslateTag__('entity.action.back')</span>
       </button>
 <%_ if (!readOnly && updatableEntity) { _%>
 
       <button type="button"
           [routerLink]="['/<%= entityPage %>', <%= entityInstance %>Ref.<%= primaryKey.name %>, 'edit']"
           class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>__jhiTranslateTag__('entity.action.edit')</span>
+        <fa-icon icon="pencil-alt" />&nbsp;<span>__jhiTranslateTag__('entity.action.edit')</span>
       </button>
 <%_ } _%>
     </div>
