@@ -22,13 +22,13 @@
 
         <div class="d-flex justify-content-end">
             <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
-                <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+                <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined" />
                 <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.refreshListLabel')</span>
             </button>
             <%_ if (!readOnly) { _%>
 
             <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityPage %>/new']">
-                <fa-icon icon="plus"></fa-icon>
+                <fa-icon icon="plus" />
                 <span <% if (searchEngineAny) { %>class="hidden-sm-down" <% } %>>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.createLabel')</span>
             </button>
             <%_ } _%>
@@ -47,12 +47,12 @@
                 <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="__jhiTranslatePipe__('<%= i18nKeyPrefix %>.home.search')">
 
                 <button class="btn btn-info" (click)="search(currentSearch)">
-                    <fa-icon icon="search"></fa-icon>
+                    <fa-icon icon="search" />
                 </button>
 
             @if (currentSearch) {
                 <button class="btn btn-danger" (click)="search('')">
-                    <fa-icon icon="trash-alt"></fa-icon>
+                    <fa-icon icon="trash-alt" />
                 </button>
             }
             </div>
@@ -81,7 +81,7 @@ _%>
                             <span>__jhiTranslateTag__('<%- field.fieldTranslationKey %>')</span>
   <%_ if (fieldSupportsSortBy) { _%>
                         <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>@if (!currentSearch) {<% } %>
-                            <fa-icon class="p-1" icon="sort"></fa-icon>
+                            <fa-icon class="p-1" icon="sort" />
                         <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>}<% } %>
   <%_ } _%>
                         </div>
@@ -96,7 +96,7 @@ _%>
                         <div class="d-flex">
                             <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.<%- relationship.relationshipName %>')</span>
     <%_ if (relatedFieldSupportsSortBy) { _%>
-                            <fa-icon class="p-1" icon="sort"></fa-icon>
+                            <fa-icon class="p-1" icon="sort" />
     <%_ } _%>
                         </div>
                     </th>
@@ -187,21 +187,21 @@ _%>
                                     [queryParams]="{ 'filter[<%= relationship.otherEntityRelationshipName %>Id.in]': <%= entityInstance %>.<%= primaryKey.name %> }"
                                     class="btn btn-info btn-sm"
                                     data-cy="filterOtherEntityButton">
-                                <fa-icon icon="eye"></fa-icon>
+                                <fa-icon icon="eye" />
                                 <span class="d-none d-md-inline">__jhiTranslateTagPipe__('entity.action.show', { "otherEntity": "<%= otherEntityTranslationKey %>" })</span>
                             </button>
     <%_ } _%>
 <%_ } _%>
                             <a [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'view']"
                                class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                                <fa-icon icon="eye"></fa-icon>
+                                <fa-icon icon="eye" />
                                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.view')</span>
                             </a>
 <%_ if (!readOnly && updatableEntity) { _%>
 
                             <a [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
                                class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <fa-icon icon="pencil-alt" />
                                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.edit')</span>
                             </a>
 <%_ } _%>
@@ -210,7 +210,7 @@ _%>
                             <button type="submit" (click)="delete(<%= entityInstance %>)"
                                     class="btn btn-danger btn-sm"
                                     data-cy="entityDeleteButton">
-                                <fa-icon icon="times"></fa-icon>
+                                <fa-icon icon="times" />
                                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.delete')</span>
                             </button>
 <%_ } _%>
@@ -230,7 +230,7 @@ _%>
         </div>
 
         <div class="d-flex justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [page]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="navigateToPage($event)"></ngb-pagination>
+            <ngb-pagination [collectionSize]="totalItems" [page]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="navigateToPage($event)" />
         </div>
     </div>
 }
