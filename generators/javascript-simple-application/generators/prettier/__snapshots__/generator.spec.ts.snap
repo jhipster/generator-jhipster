@@ -33,8 +33,8 @@ plugins:
     "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION"
   },
   "scripts": {
-    "prettier:check": "prettier --check \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
-    "prettier:format": "prettier --write \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\""
+    "prettier:check": "prettier --check \\"{,src/**/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
+    "prettier:format": "prettier --write \\"{,src/**/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\""
   }
 }
 ",
@@ -158,8 +158,8 @@ plugins:
     "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION"
   },
   "scripts": {
-    "prettier:check": "prettier --check \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
-    "prettier:format": "prettier --write \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\""
+    "prettier:check": "prettier --check \\"{,src/**/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
+    "prettier:format": "prettier --write \\"{,src/**/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\""
   }
 }
 ",
