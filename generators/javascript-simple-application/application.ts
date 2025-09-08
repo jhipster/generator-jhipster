@@ -38,7 +38,7 @@ export type JavascriptSimpleApplicationAddedApplicationProperties = {
   /** Root package.json scripts */
   clientPackageJsonScripts: Record<string, string>;
 
-  prettierFolders: string;
+  prettierFolders: string[];
   prettierExtensions: string[];
 
   clientRootDir: string;
@@ -62,7 +62,7 @@ export const mutateApplication = {
   packageJsonScripts: () => ({}),
   clientPackageJsonScripts: () => ({}),
 
-  prettierFolders: ',**/',
+  prettierFolders: () => [],
   prettierExtensions: () => 'md,json,yml,js,cjs,mjs,ts,cts,mts'.split(','),
 
   eslintConfigFile: data => `eslint.config.${data.packageJsonType === 'module' ? 'js' : 'mjs'}`,

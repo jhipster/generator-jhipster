@@ -203,7 +203,7 @@ exports[`generator - react:bootstrap bootstrapping default config should prepare
   "packageName": "com.mycompany.myapp",
   "pkType": undefined,
   "prettierExtensions": Any<Array>,
-  "prettierFolders": ",**/",
+  "prettierFolders": Any<Array>,
   "prettierTabWidth": undefined,
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeAny": true,

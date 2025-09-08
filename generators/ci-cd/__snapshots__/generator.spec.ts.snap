@@ -322,7 +322,9 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
     "mts",
     "java",
   ],
-  "prettierFolders": ",**/",
+  "prettierFolders": [
+    "src/**/",
+  ],
   "prettierTabWidth": undefined,
   "prodDatabasePassword": undefined,
   "prodDatabaseType": "postgresql",

@@ -42,7 +42,7 @@ describe(`generator - ${generator}`, () => {
           .withMockedJHipsterGenerators()
           .withMockedSource()
           .withMockedNodeDependencies()
-          .withSharedApplication({ prettierExtensions: ['PRETTIER_EXTENSIONS'], prettierFolders: 'PRETTIER_FOLDERS' })
+          .withSharedApplication({ prettierExtensions: ['PRETTIER_EXTENSIONS'], prettierFolders: ['PRETTIER_FOLDERS'] })
           .withJHipsterConfig(config);
       });
 

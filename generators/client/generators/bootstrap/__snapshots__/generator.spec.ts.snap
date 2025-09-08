@@ -204,7 +204,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "packageName": "com.mycompany.myapp",
   "pkType": undefined,
   "prettierExtensions": Any<Array>,
-  "prettierFolders": ",**/",
+  "prettierFolders": Any<Array>,
   "prettierTabWidth": undefined,
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeAny": true,

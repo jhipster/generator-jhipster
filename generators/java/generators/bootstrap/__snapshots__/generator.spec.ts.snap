@@ -216,7 +216,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "packageName": "com.mycompany.myapp",
   "pkType": undefined,
   "prettierExtensions": Any<Array>,
-  "prettierFolders": ",**/",
+  "prettierFolders": Any<Array>,
   "prettierTabWidth": undefined,
   "prodDatabasePassword": undefined,
   "prodDatabaseType": "postgresql",

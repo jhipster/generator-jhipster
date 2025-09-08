@@ -106,11 +106,11 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
             },
           });
         } else if (clientFrameworkBuiltIn || clientFrameworkNo) {
-          const folders = ['', 'src/**/', ...(clientBundlerWebpack ? ['webpack/'] : []), '.blueprint/**/'];
+          const prettierFolders = [...new Set(['', '.blueprint/**/', ...application.prettierFolders])];
           this.packageJson.merge({
             scripts: {
-              'prettier:check': `prettier --check "{${folders.join(',')}}*.{${prettierExtensions.join(',')}}"`,
-              'prettier:format': `prettier --write "{${folders.join(',')}}*.{${prettierExtensions.join(',')}}"`,
+              'prettier:check': `prettier --check "{${prettierFolders.join(',')}}*.{${prettierExtensions.join(',')}}"`,
+              'prettier:format': `prettier --write "{${prettierFolders.join(',')}}*.{${prettierExtensions.join(',')}}"`,
             },
           });
         }

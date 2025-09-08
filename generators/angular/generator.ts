@@ -24,6 +24,7 @@ import { mutateData } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
+import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 import { defaultLanguage } from '../languages/support/index.ts';
 
@@ -121,6 +122,10 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!,
         });
         application.prettierExtensions.push('html', 'css', 'scss');
+        application.prettierFolders.push(application.clientBundlerWebpack ? 'webpack/' : 'build-plugins/');
+        if (application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
+          application.prettierFolders.push(application.clientSrcDir);
+        }
       },
       async javaNodeBuildPaths({ application }) {
         application.javaNodeBuildPaths?.push('angular.json', 'tsconfig.json', 'tsconfig.app.json');

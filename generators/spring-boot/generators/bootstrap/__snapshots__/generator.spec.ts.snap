@@ -216,7 +216,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "packageName": "com.mycompany.myapp",
   "pkType": undefined,
   "prettierExtensions": Any<Array>,
-  "prettierFolders": ",**/",
+  "prettierFolders": Any<Array>,
   "prettierTabWidth": undefined,
   "prodDatabasePassword": undefined,
   "prodDatabaseType": "postgresql",
