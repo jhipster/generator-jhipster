@@ -72,6 +72,24 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     }
   }
 
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      migrateWebpackAndEsbuild({ control }) {
+        if (control.isJhipsterVersionLessThan('9.0.0-beta.0')) {
+          this.jhipsterConfig.clientBundler ??= 'webpack';
+        }
+        // @ts-expect-error renamed option
+        if (this.jhipsterConfig.clientBundler === 'experimentalEsbuild') {
+          this.jhipsterConfig.clientBundler = 'esbuild';
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
   get loading() {
     return this.asLoadingTaskGroup({
       loadPackageJson({ application }) {
