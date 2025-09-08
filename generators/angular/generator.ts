@@ -108,7 +108,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         application.javaNodeBuildPaths?.push('angular.json', 'tsconfig.json', 'tsconfig.app.json');
         if (application.clientBundlerWebpack) {
           application.javaNodeBuildPaths?.push('webpack/');
-        } else if (application.clientBundlerExperimentalEsbuild) {
+        } else if (application.clientBundlerEsbuild) {
           application.javaNodeBuildPaths?.push('build-plugins/');
           if (application.enableI18nRTL) {
             application.javaNodeBuildPaths?.push('postcss.conf.json');
@@ -299,8 +299,8 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       clientBundler({ application, source }) {
-        const { clientBundlerExperimentalEsbuild, enableTranslation, nodeDependencies } = application;
-        if (clientBundlerExperimentalEsbuild) {
+        const { clientBundlerEsbuild, enableTranslation, nodeDependencies } = application;
+        if (clientBundlerEsbuild) {
           source.mergeClientPackageJson!({
             devDependencies: {
               '@angular-builders/custom-esbuild': null,

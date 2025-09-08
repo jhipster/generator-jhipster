@@ -68,7 +68,7 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
               { ignoreNonExisting },
               createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, clientI18nDir)),
             );
-          } else if (application.clientBundlerExperimentalEsbuild) {
+          } else if (application.clientBundlerEsbuild) {
             this.editFile(
               `${application.clientI18nDir}index.ts`,
               createNeedleCallback({
