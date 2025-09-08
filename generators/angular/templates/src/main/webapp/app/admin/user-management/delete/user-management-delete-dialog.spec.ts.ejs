@@ -16,8 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-jest.mock('@ng-bootstrap/ng-bootstrap');
-
 import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -52,6 +50,7 @@ describe('User Management Delete Component', () => {
       fakeAsync(() => {
         // GIVEN
         jest.spyOn(service, 'delete').mockReturnValue(of({}));
+        jest.spyOn(mockActiveModal, 'close');
 
         // WHEN
         comp.confirmDelete('user');

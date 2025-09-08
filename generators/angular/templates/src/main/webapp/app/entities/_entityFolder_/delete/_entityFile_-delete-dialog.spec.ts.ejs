@@ -19,8 +19,6 @@
 <%_
 const tsKeyId = primaryKey.tsSampleValues[0];
 _%>
-jest.mock('@ng-bootstrap/ng-bootstrap');
-
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 import { provideHttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
@@ -52,6 +50,7 @@ describe('<%= entityAngularName %> Management Delete Component', () => {
                 fakeAsync(() => {
                     // GIVEN
                     jest.spyOn(service, 'delete').mockReturnValue(of(new HttpResponse({ body: {} })));
+                    jest.spyOn(mockActiveModal, 'close');
 
                     // WHEN
                     comp.confirmDelete(<%- tsKeyId %>);
@@ -67,6 +66,8 @@ describe('<%= entityAngularName %> Management Delete Component', () => {
         it('should not call delete service on clear', () => {
             // GIVEN
             jest.spyOn(service, 'delete');
+            jest.spyOn(mockActiveModal, 'close');
+            jest.spyOn(mockActiveModal, 'dismiss');
 
             // WHEN
             comp.cancel();
