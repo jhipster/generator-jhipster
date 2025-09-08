@@ -29,7 +29,7 @@ import { Observable } from 'rxjs';
 import { finalize<% if (relationships.some(rel => rel.persistableRelationship)) { %>, map<% } %> } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { <%= entityAngularName %>FormService, <%= entityAngularName %>FormGroup } from './<%= entityFileName %>-form.service';
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
@@ -57,7 +57,7 @@ import { <%- importedType %> } from '<%- importedPath %>';
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-update',
     templateUrl: './<%= entityFileName %>-update.html',
-    imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    imports: [SharedModule, ReactiveFormsModule],
 })
 export class <%= entityAngularName %>Update implements OnInit {
     isSaving = false;
