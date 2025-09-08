@@ -1,4 +1,5 @@
-'use strict';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const sass = require('sass');
 
@@ -85,7 +86,7 @@ const vueLoaderConfig = production => ({
   hotReload: config.dev.hotReload,
 });
 
-module.exports = {
+export default {
   cssLoaders,
   styleLoaders,
   vueLoaderConfig,

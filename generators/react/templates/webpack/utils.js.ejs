@@ -16,14 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 const path = require('path');
-
 const tsconfig = require('../tsconfig.json');
 
-module.exports = {
-  root,
-  mapTypescriptAliasToWebpackAlias,
-};
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const _root = path.resolve(__dirname, '..');
 
@@ -55,3 +56,8 @@ function mapTypescriptAliasToWebpackAlias(alias = {}) {
     }, webpackAliases);
   return webpackAliases;
 }
+
+export default {
+  root,
+  mapTypescriptAliasToWebpackAlias,
+};

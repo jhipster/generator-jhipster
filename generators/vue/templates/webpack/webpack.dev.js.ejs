@@ -16,13 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-'use strict';
+import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const require = createRequire(import.meta.url);
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 const { styleLoaders } = require('./vue.utils');
-const config = require('./config');
+const config = require('./config.js');
 
-module.exports = (env, options) => {
+export default (env, options) => {
   const devConfig = {
     module: {
       rules: styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true }),

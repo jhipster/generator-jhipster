@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
@@ -28,7 +30,7 @@ const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } _%>
 const utils = require('./utils.js');
-const environment = require('./environment');
+const environment = require('./environment.js');
 
 const getTsLoaderRule = () => {
   return [
@@ -51,7 +53,7 @@ const getTsLoaderRule = () => {
   ];
 };
 
-module.exports = async options => {
+export default async options => {
   const development = options.env === 'development';
 <%_ if (enableTranslation) { _%>
   const languagesHash = await hashElement(path.resolve(__dirname, '../<%= this.relativeDir(clientRootDir, clientSrcDir) %>i18n'), {

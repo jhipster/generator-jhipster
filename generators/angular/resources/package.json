@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "dependencies": {
     "@angular/common": "20.2.4",
     "@fortawesome/angular-fontawesome": "3.0.0",

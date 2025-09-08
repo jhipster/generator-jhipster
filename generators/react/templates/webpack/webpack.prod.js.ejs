@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge').merge;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
