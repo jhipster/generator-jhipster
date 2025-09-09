@@ -45,8 +45,7 @@ describe('User Management Delete Component', () => {
   });
 
   describe('confirmDelete', () => {
-    it('should call delete service on confirmDelete', inject(
-      [],
+    it('should call delete service on confirmDelete',
       fakeAsync(() => {
         // GIVEN
         jest.spyOn(service, 'delete').mockReturnValue(of({}));
@@ -60,6 +59,6 @@ describe('User Management Delete Component', () => {
         expect(service.delete).toHaveBeenCalledWith('user');
         expect(mockActiveModal.close).toHaveBeenCalledWith('deleted');
       }),
-    ));
+    );
   });
 });
