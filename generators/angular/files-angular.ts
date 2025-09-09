@@ -61,7 +61,7 @@ export const files = asWriteFilesSection({
       condition: ctx => ctx.clientBundlerExperimentalEsbuild,
       templates: [
         { sourceFile: 'angular.json.esbuild', destinationFile: 'angular.json' },
-        'proxy.config.mjs',
+        'proxy.config.js',
         'build-plugins/define-esbuild.mjs',
       ],
     }),
