@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component, inject, signal, OnInit<% if (microfrontend && enableTranslation && applicationTypeGateway) { %>, createNgModule, Injector<% } %> } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
@@ -45,7 +45,8 @@ import NavbarItem from './navbar-item.model';
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
   imports: [
-    RouterModule,
+    RouterLink,
+    RouterLinkActive,
     SharedModule,
     HasAnyAuthorityDirective,
 <%_ if (enableTranslation) { _%>

@@ -33,7 +33,7 @@ import { Component, computed, effect, NgZone, inject, OnInit, signal, WritableSi
 <%_ if (!paginationNo) { _%>
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
-import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
 import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Observable, Subscription, tap } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -88,7 +88,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
     templateUrl: './<%= entityFileName %>.html',
     imports: [
-      RouterModule,
+      RouterLink,
 <%_ if (searchEngine) { _%>
       FormsModule,
 <%_ } _%>
