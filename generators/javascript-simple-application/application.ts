@@ -62,7 +62,7 @@ export const mutateApplication = {
   packageJsonScripts: () => ({}),
   clientPackageJsonScripts: () => ({}),
 
-  prettierFolders: () => [],
+  prettierFolders: () => ['', '.blueprint/**/'],
   prettierExtensions: () => 'md,json,yml,js,cjs,mjs,ts,cts,mts'.split(','),
 
   eslintConfigFile: data => `eslint.config.${data.packageJsonType === 'module' ? 'js' : 'mjs'}`,

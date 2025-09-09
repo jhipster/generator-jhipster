@@ -323,6 +323,8 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
     "java",
   ],
   "prettierFolders": [
+    "",
+    ".blueprint/**/",
     "src/**/",
   ],
   "prettierTabWidth": undefined,

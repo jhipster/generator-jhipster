@@ -802,6 +802,8 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "scss",
   ],
   "prettierFolders": [
+    "",
+    ".blueprint/**/",
     "src/**/",
     "build-plugins/",
   ],
@@ -1483,6 +1485,8 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "scss",
   ],
   "prettierFolders": [
+    "",
+    ".blueprint/**/",
     "src/**/",
     "build-plugins/",
   ],
@@ -2083,6 +2087,8 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "java",
   ],
   "prettierFolders": [
+    "",
+    ".blueprint/**/",
     "src/**/",
   ],
   "prettierTabWidth": 2,

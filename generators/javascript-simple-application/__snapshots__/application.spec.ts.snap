@@ -26,6 +26,9 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
     "cts",
     "mts",
   ],
-  "prettierFolders": [],
+  "prettierFolders": [
+    "",
+    ".blueprint/**/",
+  ],
 }
 `;
