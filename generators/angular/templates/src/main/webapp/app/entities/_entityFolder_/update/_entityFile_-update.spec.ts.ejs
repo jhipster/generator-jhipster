@@ -27,7 +27,6 @@ const testEntityPrimaryKey1 = tsPrimaryKeySamples[1];
 _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient, HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
@@ -61,7 +60,6 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
             providers: [
               provideHttpClient(),
-              FormBuilder,
               {
                 provide: ActivatedRoute,
                 useValue: {

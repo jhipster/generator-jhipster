@@ -21,7 +21,6 @@ jest.mock('app/login/login.service');
 
 import { ElementRef, signal } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router, Navigation } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
@@ -50,7 +49,6 @@ describe('Login', () => {
           provide: ActivatedRoute,
           useValue: {}
         },
-        FormBuilder,
         AccountService,
         {
           provide: LoginService,
