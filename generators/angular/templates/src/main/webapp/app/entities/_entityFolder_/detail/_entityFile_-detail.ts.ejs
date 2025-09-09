@@ -17,7 +17,9 @@
  limitations under the License.
 -%>
 import { Component, <% if (anyFieldIsBlobDerived) { %>inject, <% } %>input } from '@angular/core';
-import { RouterModule } from '@angular/router';
+<%_ if (entityFileName != 'authority') { _%>
+import { RouterLink } from '@angular/router';
+<%_ } _%>
 
 import SharedModule from 'app/shared/shared.module';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
@@ -31,7 +33,9 @@ import { DataUtils } from 'app/core/util/data-util.service';
     templateUrl: './<%= entityFileName %>-detail.html',
     imports: [
       SharedModule,
-      RouterModule,
+<%_ if (entityFileName != 'authority') { _%>
+      RouterLink,
+<%_ } _%>
 <%_ if (anyFieldIsDuration) { _%>
       DurationPipe,
 <%_ } _%>

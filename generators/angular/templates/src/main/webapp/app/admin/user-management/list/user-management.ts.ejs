@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterModule<%_ if (!databaseTypeCassandra) { _%>, ActivatedRoute, Router<%_ } _%> } from '@angular/router';
+import { RouterLink<%_ if (!databaseTypeCassandra) { _%>, ActivatedRoute, Router<%_ } _%> } from '@angular/router';
 import { HttpResponse<%_ if (!databaseTypeCassandra) { %>, HttpHeaders <% } %>} from '@angular/common/http';
 <%_ if (!databaseTypeCassandra) { _%>
 import { combineLatest } from 'rxjs';
@@ -41,7 +41,7 @@ import UserManagementDeleteDialog from '../delete/user-management-delete-dialog'
   selector: '<%= jhiPrefixDashed %>-user-mgmt',
   templateUrl: './user-management.html',
   imports: [
-    RouterModule,
+    RouterLink,
     SharedModule,
 <%_ if (!databaseTypeCassandra) { _%>
     SortDirective,

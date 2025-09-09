@@ -18,7 +18,7 @@
 -%>
 import { Component, AfterViewInit, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
@@ -31,7 +31,7 @@ import PasswordStrengthBar from '../password/password-strength-bar/password-stre
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-register',
-  imports: [SharedModule, RouterModule, ReactiveFormsModule, PasswordStrengthBar],
+  imports: [SharedModule, RouterLink, ReactiveFormsModule, PasswordStrengthBar],
   templateUrl: './register.html',
 })
 export default class Register implements AfterViewInit {
