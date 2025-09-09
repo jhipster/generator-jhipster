@@ -122,7 +122,7 @@ function getConfigForClientApplication(options: ApplicationDefaults = {}): Appli
     options.clientBundler ??= 'webpack';
     options.devServerPort ??= 9060;
   } else if (clientFramework === 'angular') {
-    options.clientBundler ??= options.microfrontend ? 'webpack' : 'esbuild';
+    options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'esbuild';
     options.devServerPort ??= 4200;
   } else {
     options.devServerPort ??= 9060;
