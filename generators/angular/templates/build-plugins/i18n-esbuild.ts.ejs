@@ -1,13 +1,11 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 import deepmerge from 'deepmerge';
 import type { Plugin } from 'esbuild';
 import { hashElement } from 'folder-hash';
 import { globby } from 'globby';
 
-const __dirname = fileURLToPath(new URL('..', import.meta.url));
 const i18nSourceDir = join(__dirname, '<%- this.relativeDir(clientRootDir, clientI18nDir) %>');
 
 export const prepareLanguage = async (language: string) => {
