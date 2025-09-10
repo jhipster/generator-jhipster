@@ -247,6 +247,13 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         );
         jdlObject.addOption(
           new JDLBinaryOption({
+            name: binaryOptions.Options.DTO,
+            value: 'simple', // <-- your added type
+            entityNames: ['X', 'Y'],
+          }),
+        );
+        jdlObject.addOption(
+          new JDLBinaryOption({
             name: binaryOptions.Options.SERVICE,
             value: binaryOptions.Values.service.SERVICE_CLASS,
             excludedNames: ['C'],

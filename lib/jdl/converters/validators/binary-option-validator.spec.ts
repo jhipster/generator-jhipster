@@ -50,6 +50,11 @@ describe('jdl - BinaryOptionValidator', () => {
         it('should not fail', () => {
           expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'mapstruct' }))).not.to.throw();
         });
+        it('should allow dto simple', () => {
+          expect(() =>
+            validator.validate(new JDLBinaryOption({ name: 'dto', value: 'simple' }))
+          ).not.to.throw();
+        });
       });
       describe('with an invalid value', () => {
         it('should fail', () => {
