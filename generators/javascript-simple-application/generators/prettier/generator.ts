@@ -89,8 +89,7 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addPrettierDependencies({ application }) {
-        const { clientBundlerWebpack, clientFrameworkBuiltIn, clientFrameworkNo, monorepository, nodeDependencies, prettierExtensions } =
-          application;
+        const { clientFrameworkBuiltIn, clientFrameworkNo, monorepository, nodeDependencies, prettierExtensions } = application;
         this.packageJson.merge({
           devDependencies: {
             prettier: nodeDependencies.prettier,

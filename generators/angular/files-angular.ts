@@ -62,12 +62,12 @@ export const files = asWriteFilesSection({
       templates: [
         { sourceFile: 'angular.json.esbuild', destinationFile: 'angular.json' },
         'proxy.config.mjs',
-        'build-plugins/define-esbuild.mjs',
+        'build-plugins/define-esbuild.ts',
       ],
     }),
     clientRootTemplatesBlock({
       condition: ctx => ctx.clientBundlerEsbuild && ctx.enableTranslation,
-      templates: ['build-plugins/i18n-esbuild.mjs'],
+      templates: ['build-plugins/i18n-esbuild.ts'],
     }),
     clientSrcTemplatesBlock({
       condition: ctx => ctx.clientBundlerEsbuild && ctx.enableTranslation,

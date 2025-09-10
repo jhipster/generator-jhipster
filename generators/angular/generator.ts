@@ -329,7 +329,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
               '@angular-builders/custom-esbuild': null,
               '@angular/build': null,
               globby: null,
-              ...(enableTranslation ? { 'folder-hash': null, deepmerge: null } : {}),
+              ...(enableTranslation ? { '@types/folder-hash': null, 'folder-hash': null, deepmerge: null } : {}),
             },
           });
         } else {
@@ -386,6 +386,17 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             valueSep: ', ',
           },
         ]);
+      },
+      async cleanup({ control, application }) {
+        await control.cleanupFiles({
+          '9.0.0-beta.0': [
+            [
+              application.clientBundlerEsbuild!,
+              `${application.clientRootDir}build-plugins/define-esbuild.mjs`,
+              `${application.clientRootDir}build-plugins/i18n-esbuild.mjs`,
+            ],
+          ],
+        });
       },
     });
   }

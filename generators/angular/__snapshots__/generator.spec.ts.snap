@@ -20,7 +20,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/angular.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/build-plugins/define-esbuild.mjs": {
+  "clientRoot/build-plugins/define-esbuild.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/eslint.config.mjs": {
@@ -745,10 +745,10 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/angular.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/build-plugins/define-esbuild.mjs": {
+  "clientRoot/build-plugins/define-esbuild.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/build-plugins/i18n-esbuild.mjs": {
+  "clientRoot/build-plugins/i18n-esbuild.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/eslint.config.mjs": {
@@ -1672,6 +1672,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
       "devDependencies": {
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
+        "@types/folder-hash": null,
         "deepmerge": null,
         "folder-hash": null,
         "globby": null,
@@ -3157,10 +3158,10 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "angular.json": {
     "stateCleared": "modified",
   },
-  "build-plugins/define-esbuild.mjs": {
+  "build-plugins/define-esbuild.ts": {
     "stateCleared": "modified",
   },
-  "build-plugins/i18n-esbuild.mjs": {
+  "build-plugins/i18n-esbuild.ts": {
     "stateCleared": "modified",
   },
   "eslint.config.mjs": {
@@ -4252,6 +4253,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       "devDependencies": {
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
+        "@types/folder-hash": null,
         "deepmerge": null,
         "folder-hash": null,
         "globby": null,
@@ -4281,7 +4283,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "angular.json": {
     "stateCleared": "modified",
   },
-  "build-plugins/define-esbuild.mjs": {
+  "build-plugins/define-esbuild.ts": {
     "stateCleared": "modified",
   },
   "eslint.config.mjs": {
@@ -4976,7 +4978,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "angular.json": {
     "stateCleared": "modified",
   },
-  "build-plugins/define-esbuild.mjs": {
+  "build-plugins/define-esbuild.ts": {
     "stateCleared": "modified",
   },
   "eslint.config.mjs": {

@@ -1,14 +1,16 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { globby } from 'globby';
+import type { Plugin } from 'esbuild';
+
 import deepmerge from 'deepmerge';
 import { hashElement } from 'folder-hash';
+import { globby } from 'globby';
 
 const __dirname = fileURLToPath(new URL('..', import.meta.url));
 const i18nSourceDir = join(__dirname, '<%- this.relativeDir(clientRootDir, clientI18nDir) %>');
 
-export const prepareLanguage = async language => {
+export const prepareLanguage = async (language: string) => {
   const files = await globby('*.json', { cwd: join(i18nSourceDir, language) });
   let merged = {};
   for (const file of files) {
@@ -18,7 +20,6 @@ export const prepareLanguage = async language => {
   return merged;
 };
 
-/** @type {import('esbuild').Plugin} */
 export default {
   name: 'copy:i18n',
   async setup(build) {
@@ -39,11 +40,11 @@ export default {
 
     build.onLoad({ filter: /^i18n\//, namespace: 'i18n-json' }, async ({ path }) => {
       const match = /^i18n\/(?<lang>.*)\.json/.exec(path);
-      const data = await prepareLanguage(match?.groups?.lang);
+      const data = await prepareLanguage(match!.groups!.lang);
       return {
         contents: JSON.stringify(data),
         loader: 'json',
       };
     });
   },
-};
+} satisfies Plugin;

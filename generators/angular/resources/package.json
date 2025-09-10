@@ -26,6 +26,7 @@
     "@angular/build": "20.2.2",
     "@angular/cli": "20.2.2",
     "@eslint/js": "9.35.0",
+    "@types/folder-hash": "4.0.4",
     "@types/jest": "29.5.14",
     "@types/node": "20.19.13",
     "@types/sockjs-client": "1.5.4",
