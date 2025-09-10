@@ -122,8 +122,9 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!,
         });
         application.prettierExtensions.push('html', 'css', 'scss');
-        application.prettierFolders.push(application.clientBundlerWebpack ? 'webpack/' : 'build-plugins/');
-        if (application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
+        application.prettierFolders.push(application.clientBundlerWebpack ? 'webpack/**/' : 'build-plugins/**/');
+        if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
+          // When we have a Java backend, 'src/**' is already added
           application.prettierFolders.push(`${application.clientSrcDir}**/`);
         }
       },

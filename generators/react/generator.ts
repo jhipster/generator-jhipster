@@ -97,7 +97,8 @@ export default class ReactGenerator extends ClientApplicationGenerator<
         if (application.clientBundlerWebpack) {
           application.prettierFolders.push('webpack/');
         }
-        if (application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
+        if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
+          // When we have a Java backend, 'src/**' is already added
           application.prettierFolders.push(`${application.clientSrcDir}**/`);
         }
 
