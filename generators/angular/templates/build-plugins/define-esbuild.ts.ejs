@@ -1,7 +1,8 @@
-import type { Plugin } from 'esbuild';
+import path from 'node:path';
+
 import type { ApplicationBuilderOptions } from '@angular-devkit/build-angular';
 import type { Target } from '@angular-devkit/architect';
-import path from 'node:path';
+import type { Plugin } from 'esbuild';
 
 export default (builderOptions: ApplicationBuilderOptions, _target: Target): Plugin => {
   for (const asset of builderOptions.assets?.filter(asset => typeof asset === 'object') ?? []) {

@@ -76,7 +76,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   get configuring() {
     return this.asConfiguringTaskGroup({
       migrateWebpackAndEsbuild({ control }) {
-        if (control.isJhipsterVersionLessThan('9.0.0-beta.0')) {
+        if (control.isJhipsterVersionLessThan('9.0.0-alpha.0')) {
           this.jhipsterConfig.clientBundler ??= 'webpack';
         }
         // @ts-expect-error renamed option
@@ -389,7 +389,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
       },
       async cleanup({ control, application }) {
         await control.cleanupFiles({
-          '9.0.0-beta.0': [
+          '9.0.0-alpha.0': [
             [
               application.clientBundlerEsbuild!,
               `${application.clientRootDir}build-plugins/define-esbuild.mjs`,

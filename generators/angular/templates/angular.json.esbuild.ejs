@@ -40,9 +40,9 @@
           "options": {
             "plugins": [
 <%_ if (enableTranslation) { _%>
-              "build-plugins/i18n-esbuild.mjs",
+              "build-plugins/i18n-esbuild.ts",
 <%_ } _%>
-              "build-plugins/define-esbuild.mjs"
+              "build-plugins/define-esbuild.ts"
             ],
             "outputPath": {
               "base": "<%= this.relativeDir(clientRootDir, clientDistDir) %>",

@@ -10,6 +10,7 @@ const [_nodeExec, _exec, ...args] = process.argv;
 console.error('jhipster', ...args);
 
 process.env.JHIPSTER_DEV_BLUEPRINT = true;
+process.env.JHI_SKIP_JHIPSTER_DEPENDENCIES = true;
 
 const [nodeMajor, nodeMinor] = process.versions.node.split('.').map(Number);
 if (nodeMajor < 24 && (nodeMajor !== 22 || nodeMinor < 18)) {
