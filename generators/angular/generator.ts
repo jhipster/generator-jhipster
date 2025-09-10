@@ -124,7 +124,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         application.prettierExtensions.push('html', 'css', 'scss');
         application.prettierFolders.push(application.clientBundlerWebpack ? 'webpack/' : 'build-plugins/');
         if (application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
-          application.prettierFolders.push(application.clientSrcDir);
+          application.prettierFolders.push(`${application.clientSrcDir}**/`);
         }
       },
       async javaNodeBuildPaths({ application }) {

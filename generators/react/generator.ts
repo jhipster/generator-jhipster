@@ -29,6 +29,7 @@ import {
   generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.ts';
 import type { Entity as ClientEntity, Field as ClientField } from '../client/types.ts';
+import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
@@ -93,6 +94,12 @@ export default class ReactGenerator extends ClientApplicationGenerator<
     return this.asPreparingTaskGroup({
       applicationDefaults({ application, applicationDefaults }) {
         application.prettierExtensions.push('html', 'tsx', 'css', 'scss');
+        if (application.clientBundlerWebpack) {
+          application.prettierFolders.push('webpack/');
+        }
+        if (application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
+          application.prettierFolders.push(`${application.clientSrcDir}**/`);
+        }
 
         applicationDefaults({
           __override__: true,
