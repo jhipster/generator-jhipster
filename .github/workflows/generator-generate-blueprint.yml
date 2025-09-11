@@ -65,7 +65,7 @@ jobs:
           mkdir generator-jhipster-foo
           cd generator-jhipster-foo
           cp ${{ github.workspace }}/generator-jhipster/.blueprint/generate-sample/templates/test-integration/generate-blueprint-samples/default/.yo-rc.json .
-          jhipster.cjs generate-blueprint --force --link-jhipster-dependency --generate-snapshots --skip-install
+          jhipster.cjs generate-blueprint --force --link-jhipster-dependency --generate-snapshots
           npm link generator-jhipster
           npm link
       - name: 'GENERATION: project'
