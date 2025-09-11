@@ -1,7 +1,6 @@
 import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-
 const require = createRequire(import.meta.url);
 const path = require('path');
 const { merge } = require('webpack-merge');
@@ -58,7 +57,7 @@ export default async (env, options) => {
       },
       devServer: {
 <%_ if (microfrontend) { _%>
-        hot: config.dev.hotReload,
+        hot: config.dev?.hotReload ?? false,
 <%_ } _%>
         static: {
           directory: './<%= this.relativeDir(clientRootDir, clientDistDir) %>',

@@ -30,8 +30,8 @@ const sass = require('sass');
 <%_ if (enableI18nRTL) { _%>
 const postcssRTLCSS = require('postcss-rtlcss');
 <%_ } _%>
-const utils = require('./utils.js');
-const commonConfig = require('./webpack.common.js');
+import utils from './utils.js';
+import commonConfig from './webpack.common.js';
 
 // ESM equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);

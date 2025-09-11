@@ -18,19 +18,24 @@
 -%>
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-const path = require('path');
-const webpack = require('webpack');
-const { merge } = require('webpack-merge');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const ESLintPlugin = require('eslint-webpack-plugin');
+import path from 'path';
+import {dirname} from 'path';
+import {fileURLToPath} from 'url';
+import webpack from 'webpack';
+import { merge } from 'webpack-merge';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import ESLintPlugin from 'eslint-webpack-plugin';
 <%_ if (enableTranslation) { _%>
 const { hashElement } = require('folder-hash');
-const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
+import MergeJsonWebpackPlugin from 'merge-jsons-webpack-plugin';
 <%_ } _%>
-const utils = require('./utils.js');
-const environment = require('./environment.js');
+import utils from './utils.js';
+import environment from './environment.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const getTsLoaderRule = () => {
   return [

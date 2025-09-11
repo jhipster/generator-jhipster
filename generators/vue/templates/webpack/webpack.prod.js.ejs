@@ -19,15 +19,14 @@
 import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { styleLoaders } from './vue.utils.js';
+import config from './config.js';
 
 const require = createRequire(import.meta.url);
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-
-const { styleLoaders } = require('./vue.utils');
-const config = require('./config.js');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
