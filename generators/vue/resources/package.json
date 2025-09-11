@@ -10,7 +10,7 @@
     "axios": "1.11.0",
     "bootstrap": "5.3.7",
     "bootstrap-vue-next": "0.40.1",
-    "bootswatch": "5.3.7",
+    "bootswatch": "5.3.8",
     "deepmerge": "4.3.1",
     "js-cookie": "3.0.5",
     "pinia": "3.0.3",
