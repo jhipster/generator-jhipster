@@ -112,7 +112,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "devServerPortProxy": 9000,
   "dockerContainers": Any<Object>,
   "dockerServicesDir": "src/main/docker/",
-  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
+  "documentationArchiveUrl": "https://www.jhipster.tech/",
   "domains": Any<Array>,
   "dtoSuffix": "DTO",
   "dynamic": undefined,
