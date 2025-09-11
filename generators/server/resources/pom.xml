@@ -9,7 +9,7 @@
     <properties>
         <!-- Dependency versions -->
         <archunit-junit5.version>1.4.1</archunit-junit5.version>
-        <blockhound-junit-platform.version>1.0.13.RELEASE</blockhound-junit-platform.version>
+        <blockhound-junit-platform.version>1.0.14.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.11.0</commons-beanutils.version>
         <gatling.version>3.14.3</gatling.version>
         <jackson-databind-nullable.version>0.2.7</jackson-databind-nullable.version>
