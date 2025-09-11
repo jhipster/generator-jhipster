@@ -4,12 +4,12 @@ import { join } from 'node:path';
 import deepmerge from 'deepmerge';
 import type { Plugin } from 'esbuild';
 import { hashElement } from 'folder-hash';
-import { globby } from 'globby';
+import { glob } from 'tinyglobby';
 
 const i18nSourceDir = join(__dirname, '../<%- this.relativeDir(clientRootDir, clientI18nDir) %>');
 
 export const prepareLanguage = async (language: string) => {
-  const files = await globby('*.json', { cwd: join(i18nSourceDir, language) });
+  const files = await glob('*.json', { cwd: join(i18nSourceDir, language) });
   let merged = {};
   for (const file of files) {
     const sourceFile = join(i18nSourceDir, language, file);
