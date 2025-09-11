@@ -1,6 +1,6 @@
 [libraries]
 # caffeine
-typesafe = { module = 'com.typesafe:config', version = '1.4.4' }
+typesafe = { module = 'com.typesafe:config', version = '1.4.5' }
 
 # hazelcast
 hazelcast-hibernate53 = { module = 'com.hazelcast:hazelcast-hibernate53', version = '5.2.0' }
