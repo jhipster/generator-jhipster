@@ -24,6 +24,7 @@ import { mutateData } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
+import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 import { defaultLanguage } from '../languages/support/index.ts';
 
@@ -72,6 +73,24 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     }
   }
 
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      migrateWebpackAndEsbuild({ control }) {
+        if (control.isJhipsterVersionLessThan('9.0.0-alpha.0')) {
+          this.jhipsterConfig.clientBundler ??= 'webpack';
+        }
+        // @ts-expect-error renamed option
+        if (this.jhipsterConfig.clientBundler === 'experimentalEsbuild') {
+          this.jhipsterConfig.clientBundler = 'esbuild';
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
   get loading() {
     return this.asLoadingTaskGroup({
       loadPackageJson({ application }) {
@@ -103,12 +122,17 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!,
         });
         application.prettierExtensions.push('html', 'css', 'scss');
+        application.prettierFolders.push(application.clientBundlerWebpack ? 'webpack/**/' : 'build-plugins/**/');
+        if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
+          // When we have a java backend, 'src/**' is already added by java:bootstrap
+          application.prettierFolders.push(`${application.clientSrcDir}**/`);
+        }
       },
       async javaNodeBuildPaths({ application }) {
         application.javaNodeBuildPaths?.push('angular.json', 'tsconfig.json', 'tsconfig.app.json');
         if (application.clientBundlerWebpack) {
           application.javaNodeBuildPaths?.push('webpack/');
-        } else if (application.clientBundlerExperimentalEsbuild) {
+        } else if (application.clientBundlerEsbuild) {
           application.javaNodeBuildPaths?.push('build-plugins/');
           if (application.enableI18nRTL) {
             application.javaNodeBuildPaths?.push('postcss.conf.json');
@@ -299,14 +323,14 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       clientBundler({ application, source }) {
-        const { clientBundlerExperimentalEsbuild, enableTranslation, nodeDependencies } = application;
-        if (clientBundlerExperimentalEsbuild) {
+        const { clientBundlerEsbuild, enableTranslation, nodeDependencies } = application;
+        if (clientBundlerEsbuild) {
           source.mergeClientPackageJson!({
             devDependencies: {
               '@angular-builders/custom-esbuild': null,
               '@angular/build': null,
               globby: null,
-              ...(enableTranslation ? { 'folder-hash': null, deepmerge: null } : {}),
+              ...(enableTranslation ? { '@types/folder-hash': null, 'folder-hash': null, deepmerge: null } : {}),
             },
           });
         } else {
@@ -363,6 +387,17 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             valueSep: ', ',
           },
         ]);
+      },
+      async cleanup({ control, application }) {
+        await control.cleanupFiles({
+          '9.0.0-alpha.0': [
+            [
+              application.clientBundlerEsbuild!,
+              `${application.clientRootDir}build-plugins/define-esbuild.mjs`,
+              `${application.clientRootDir}build-plugins/i18n-esbuild.mjs`,
+            ],
+          ],
+        });
       },
     });
   }

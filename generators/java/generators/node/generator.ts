@@ -126,7 +126,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
 
         const npmCommand = isWin32 ? 'npmw' : './npmw';
         try {
-          await this.spawn(npmCommand, ['install'], { preferLocal: true });
+          await this.spawn(npmCommand, ['install'], { preferLocal: true, stdio: 'inherit' });
         } catch (error: unknown) {
           this.log.error(
             chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${(error as ExecaError).shortMessage})`),

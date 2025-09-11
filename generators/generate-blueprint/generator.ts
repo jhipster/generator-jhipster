@@ -22,7 +22,7 @@ import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 import type { Storage } from 'yeoman-generator';
 
-import { getGeneratorNamespaces } from '../../lib/index.ts';
+import { getGeneratorNamespaces, getPackageRoot } from '../../lib/index.ts';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
 import { BLUEPRINT_API_VERSION } from '../generator-constants.js';
@@ -30,7 +30,6 @@ import { BLUEPRINT_API_VERSION } from '../generator-constants.js';
 import {
   DYNAMIC,
   GENERATE_SNAPSHOTS,
-  LINK_JHIPSTER_DEPENDENCY,
   LOCAL_BLUEPRINT_OPTION,
   PRIORITIES,
   WRITTEN,
@@ -358,7 +357,9 @@ export default class extends BaseSimpleApplicationGenerator<
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { jhipsterPackageJson } = application;
         const exactDependency = {
-          'generator-jhipster': `${jhipsterPackageJson.version}`,
+          'generator-jhipster': this.options.linkJhipsterDependency
+            ? `file:${this.relativeDir(this.destinationRoot(), getPackageRoot())}`
+            : `${jhipsterPackageJson.version}`,
         };
         const caretDependency = {
           'generator-jhipster': `^${jhipsterPackageJson.version}`,
@@ -397,11 +398,6 @@ export default class extends BaseSimpleApplicationGenerator<
           await rm(this.destinationPath('package-lock.json'), { force: true });
           await rm(this.destinationPath('node_modules'), { force: true, recursive: true });
           await this.spawn('npm', ['install'], { stdio: 'inherit' });
-        }
-
-        if (this.options[LINK_JHIPSTER_DEPENDENCY]) {
-          this.log.verboseInfo('Linking generator-jhipster');
-          await this.spawn('npm', ['link', 'generator-jhipster'], { stdio: 'inherit' });
         }
 
         if (generateSnapshots) {

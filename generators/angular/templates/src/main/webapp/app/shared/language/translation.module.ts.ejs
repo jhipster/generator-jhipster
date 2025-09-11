@@ -51,7 +51,7 @@ export class LazyTranslationModule {
 @NgModule({
   imports: [
     TranslateModule.forRoot({
-      <%_ if (clientBundlerExperimentalEsbuild) { _%>
+      <%_ if (clientBundlerEsbuild) { _%>
       loader: {
         provide: TranslateLoader,
         useFactory: translatePartialLoader,

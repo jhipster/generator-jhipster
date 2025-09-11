@@ -62,7 +62,7 @@ export const mutateApplication = {
   clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
   clientThemeNone: ({ clientTheme }) => !clientTheme || clientTheme === 'none',
   clientThemeAny: ({ clientThemeNone }) => !clientThemeNone,
-  clientBundlerName: ctx => (ctx.clientBundlerExperimentalEsbuild ? 'esbuild' : startCase(ctx.clientBundler)),
+  clientBundlerName: ctx => (ctx.clientBundlerEsbuild ? 'esbuild' : startCase(ctx.clientBundler)),
   clientTestFramework: ctx => (ctx.clientFrameworkVue ? 'vitest' : 'jest'),
   clientTestFrameworkName: ctx => startCase(ctx.clientTestFramework),
   withAdminUi: ctx => ctx.applicationTypeMicroservice,

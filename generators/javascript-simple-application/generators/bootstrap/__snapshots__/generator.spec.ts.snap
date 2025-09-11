@@ -47,7 +47,7 @@ exports[`generator - javascript-simple-application:bootstrap bootstrapping defau
   "packageJsonTypeCommonjs": true,
   "packageJsonTypeModule": false,
   "prettierExtensions": Any<Array>,
-  "prettierFolders": ",**/",
+  "prettierFolders": Any<Array>,
   "projectDescription": "Description for JHipster",
   "skipJhipsterDependencies": undefined,
   "upperFirstCamelCaseBaseName": "Jhipster",

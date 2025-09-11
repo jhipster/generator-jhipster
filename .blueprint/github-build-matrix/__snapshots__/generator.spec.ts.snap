@@ -41,7 +41,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-default",
       "jdl-entity": "*",
       "generatorOptions": {
-        "clientBundler": "experimentalEsbuild"
+        "clientBundler": "esbuild"
       },
       "workspaces": "false",
       "build-jhipster-bom": true,
@@ -438,7 +438,7 @@ exports[`generator - github-build-matrix with devserver should match matrix valu
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
-      "args": "--sample-yorc-folder --entities-sample sqllight --client-bundler experimentalEsbuild",
+      "args": "--sample-yorc-folder --entities-sample sqllight --client-bundler esbuild",
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"

@@ -37,7 +37,9 @@ describe(`generator - ${generator}`, () => {
 
   describe('with default config', () => {
     before(async () => {
-      await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig();
+      await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig({
+        skipClient: true,
+      });
     });
 
     it('should match files snapshot', () => {
