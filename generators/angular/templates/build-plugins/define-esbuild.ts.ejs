@@ -1,0 +1,27 @@
+import path from 'node:path';
+
+import type { ApplicationBuilderOptions } from '@angular-devkit/build-angular';
+import type { Target } from '@angular-devkit/architect';
+import type { Plugin } from 'esbuild';
+
+export default (builderOptions: ApplicationBuilderOptions, _target: Target): Plugin => {
+  for (const asset of builderOptions.assets?.filter(asset => typeof asset === 'object') ?? []) {
+    if (asset.input.startsWith('node_modules/')) {
+      // Replace with resolved path to avoid issues when building.
+      if (asset.input.startsWith('node_modules/axios/')) {
+        asset.input = path.join(path.dirname(require.resolve('axios/package.json')), 'dist');
+      } else if (asset.input.startsWith('node_modules/swagger-ui-dist/')) {
+        // https://github.com/swagger-api/swagger-ui/blob/v4.6.1/swagger-ui-dist-package/README.md
+        asset.input = require('swagger-ui-dist').getAbsoluteFSPath();
+      }
+    }
+  }
+
+  builderOptions.define ??= {};
+  builderOptions.define.__VERSION__ = JSON.stringify(process.env.APP_VERSION ?? 'unknown');
+
+  return {
+    name: 'define:vars',
+    setup(_build) {},
+  };
+};

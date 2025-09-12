@@ -184,7 +184,7 @@ public class SecurityConfiguration {
                     .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
   <%_ if (clientBundlerVite) { _%>
                     .requestMatchers("/assets/**").permitAll()
-  <%_ } else if (clientBundlerExperimentalEsbuild) { _%>
+  <%_ } else if (clientBundlerEsbuild) { _%>
                     .requestMatchers("/content/**").permitAll()
                     .requestMatchers("/resources/**").permitAll()
   <%_ } else { _%>

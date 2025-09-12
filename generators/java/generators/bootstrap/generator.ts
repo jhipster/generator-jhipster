@@ -42,7 +42,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      setupServerconsts({ applicationDefaults }) {
+      loading({ application, applicationDefaults }) {
         applicationDefaults(
           {
             __override__: false,
@@ -54,6 +54,9 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
           },
           mutateApplication,
         );
+        if (application.prettierFolders && !application.prettierFolders.includes('src/**/')) {
+          application.prettierFolders.push('src/**/');
+        }
       },
     });
   }

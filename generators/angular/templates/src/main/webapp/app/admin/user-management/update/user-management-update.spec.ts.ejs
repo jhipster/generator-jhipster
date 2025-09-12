@@ -21,7 +21,6 @@ const tsKeyId = user.primaryKey.tsSampleValues[0];
 _%>
 import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
@@ -44,7 +43,6 @@ describe('User Management Update Component', () => {
       <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
       providers: [
         provideHttpClient(),
-        FormBuilder,
         {
           provide: ActivatedRoute,
           useValue: {

@@ -6,12 +6,12 @@
     "@cypress/code-coverage": "3.14.6",
     "babel-loader": "10.0.0",
     "babel-plugin-istanbul": "7.0.1",
-    "cypress": "15.1.0",
+    "cypress": "15.2.0",
     "cypress-audit": "1.1.0",
     "eslint-plugin-cypress": "5.1.1",
     "lighthouse": "12.8.2",
     "nyc": "17.1.0",
-    "swagger-ui-dist": "5.28.1"
+    "swagger-ui-dist": "5.29.0"
   },
   "packageManager": "npm@11"
 }

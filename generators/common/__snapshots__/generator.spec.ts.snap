@@ -81,7 +81,7 @@ lint-staged
   },
   ".lintstagedrc.cjs": {
     "contents": "module.exports = {
-  '{,**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}': ['prettier --write'],
+  '{,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}': ['prettier --write'],
 };
 ",
     "stateCleared": "modified",
@@ -100,6 +100,10 @@ tabWidth: 2
 useTabs: false
 arrowParens: avoid
 bracketSameLine: false
+overrides:
+  - files: "*.html"
+    options:
+      parser: angular
 plugins:
   - prettier-plugin-packagejson
 ",
@@ -163,8 +167,8 @@ This application was generated using JHipster JHIPSTER_VERSION, you can find doc
   },
   "engines": {},
   "scripts": {
-    "prettier:check": "prettier --check \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
-    "prettier:format": "prettier --write \\"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
+    "prettier:check": "prettier --check \\"{,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
+    "prettier:format": "prettier --write \\"{,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}\\"",
     "prepare": "husky"
   },
   "name": "jhipster",

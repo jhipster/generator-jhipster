@@ -83,7 +83,7 @@ const command = {
         type: String,
         hide: true,
       },
-      choices: ['webpack', 'vite', 'experimentalEsbuild'],
+      choices: ['webpack', 'vite', 'esbuild'],
       scope: 'storage',
     },
     devServerPort: {

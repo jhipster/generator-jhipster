@@ -31,6 +31,7 @@ import {
   generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.ts';
 import type { Field as ClientField } from '../client/types.ts';
+import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
@@ -96,12 +97,20 @@ export default class VueGenerator extends ClientApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      applicationDefaults({ applicationDefaults }) {
+      applicationDefaults({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
         });
+
+        if (application.clientBundlerWebpack) {
+          application.prettierFolders.push('webpack/');
+        }
+        if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
+          // When we have a java backend, 'src/**' is already added by java:bootstrap
+          application.prettierFolders.push(`${application.clientSrcDir}**/`);
+        }
       },
       async javaNodeBuildPaths({ application }) {
         const { clientBundlerVite, clientBundlerWebpack, microfrontend, javaNodeBuildPaths } = application;

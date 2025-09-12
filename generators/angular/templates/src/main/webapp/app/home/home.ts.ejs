@@ -21,7 +21,7 @@ import {
 <%_ if (!authenticationTypeOauth2) { _%>
   Router,
 <%_ } _%>
-  RouterModule,
+  RouterLink,
 } from '@angular/router';
 <%_ if (!authenticationTypeOauth2) { _%>
 import { Subject } from 'rxjs';
@@ -39,7 +39,7 @@ import { Account } from 'app/core/auth/account.model';
   selector: '<%= jhiPrefixDashed %>-home',
   templateUrl: './home.html',
   styleUrl: './home.scss',
-  imports: [SharedModule, RouterModule],
+  imports: [SharedModule, RouterLink],
 })
 export default class Home implements OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> {
   account = signal<Account | null>(null);

@@ -17,5 +17,5 @@
  limitations under the License.
 -%>
 module.exports = {
-  '{<%= prettierFolders %>}*.{<%= prettierExtensions.join(',') %>}': ['prettier --write'],
+  '{<%= prettierFolders.join(',') %>}*.{<%= prettierExtensions.join(',') %>}': ['prettier --write'],
 };

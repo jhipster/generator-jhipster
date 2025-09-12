@@ -13,7 +13,7 @@
       "app-sample": "ng-default",
       "jdl-entity": "*",
       "generatorOptions": {
-        "clientBundler": "experimentalEsbuild"
+        "clientBundler": "esbuild"
       }
     },
     {
