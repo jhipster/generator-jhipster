@@ -25,11 +25,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-default-additional-esbuild (n[2]/j[0])",
+      "job-name": "ng-default-additional-webpack (n[1]/j[1])",
       "sample": "ng-default-additional",
       "os": "ubuntu-latest",
-      "node-version": "[2]",
-      "java-version": "[0]",
+      "node-version": "[1]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -41,7 +41,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-default",
       "jdl-entity": "*",
       "generatorOptions": {
-        "clientBundler": "esbuild"
+        "clientBundler": "webpack"
       },
       "workspaces": "false",
       "build-jhipster-bom": true,
@@ -226,11 +226,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-webflux-mongodb-esbuild (n[1]/j[3])",
+      "job-name": "ng-webflux-mongodb (n[2]/j[2])",
       "sample": "ng-webflux-mongodb",
       "os": "ubuntu-latest",
-      "node-version": "[1]",
-      "java-version": "[3]",
+      "node-version": "[2]",
+      "java-version": "[2]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -246,11 +246,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-webflux-gradle-mongodb-oauth2-esbuild (n[1]/j[3])",
+      "job-name": "ng-webflux-gradle-mongodb-oauth2-webpack (n[0]/j[0])",
       "sample": "ng-webflux-gradle-mongodb-oauth2",
       "os": "ubuntu-latest",
-      "node-version": "[1]",
-      "java-version": "[3]",
+      "node-version": "[0]",
+      "java-version": "[0]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -267,11 +267,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-webflux-psql-default (n[2]/j[3])",
+      "job-name": "ng-webflux-psql-default-webpack (n[0]/j[1])",
       "sample": "ng-webflux-psql-default",
       "os": "ubuntu-latest",
-      "node-version": "[2]",
-      "java-version": "[3]",
+      "node-version": "[0]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -306,11 +306,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-webflux-gradle-session-h2mem-es-esbuild (n[1]/j[3])",
+      "job-name": "ng-webflux-gradle-session-h2mem-es-webpack (n[2]/j[1])",
       "sample": "ng-webflux-gradle-session-h2mem-es",
       "os": "ubuntu-latest",
-      "node-version": "[1]",
-      "java-version": "[3]",
+      "node-version": "[2]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",

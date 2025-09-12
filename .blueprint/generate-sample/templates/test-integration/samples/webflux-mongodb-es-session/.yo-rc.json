@@ -5,7 +5,6 @@
     "baseName": "sampleWebfluxMongodbEsSession",
     "buildTool": "maven",
     "cacheProvider": "no",
-    "clientBundler": "esbuild",
     "clientFramework": "angular",
     "creationTimestamp": 1596513172471,
     "databaseType": "mongodb",

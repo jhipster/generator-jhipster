@@ -5,7 +5,7 @@
     "baseName": "sampleWebfluxMongodbOauth2",
     "buildTool": "gradle",
     "cacheProvider": "no",
-    "clientBundler": "esbuild",
+    "clientBundler": "webpack",
     "clientFramework": "angular",
     "clientTheme": "none",
     "creationTimestamp": 1580314672693,
