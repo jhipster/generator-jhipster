@@ -5,7 +5,7 @@
     "baseName": "sampleWebfluxH2mem",
     "buildTool": "gradle",
     "cacheProvider": "no",
-    "clientBundler": "esbuild",
+    "clientBundler": "webpack",
     "clientFramework": "angular",
     "creationTimestamp": 1596513272473,
     "databaseType": "sql",
