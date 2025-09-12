@@ -329,7 +329,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             devDependencies: {
               '@angular-builders/custom-esbuild': null,
               '@angular/build': null,
-              globby: null,
+              tinyglobby: null,
               ...(enableTranslation ? { '@types/folder-hash': null, 'folder-hash': null, deepmerge: null } : {}),
             },
           });
