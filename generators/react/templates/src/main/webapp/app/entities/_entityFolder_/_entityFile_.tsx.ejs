@@ -368,7 +368,7 @@ export const <%= entityReactName %> = () => {
                         loader={<div className="loader">Loading ...</div>}>
 <%_ } _%>
         {
-          <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ?(
+          <%= entityInstance %>List?.length > 0 ?(
             <Table responsive>
               <thead>
                 <tr>
