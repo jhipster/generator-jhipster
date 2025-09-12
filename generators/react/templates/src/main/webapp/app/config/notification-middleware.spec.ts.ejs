@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 
-import { createStore, applyMiddleware } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 import * as toastify from 'react-toastify'; // synthetic default import doesn't work here due to mocking.
 import sinon from 'sinon';
 <%_ if (enableTranslation) { _%>
@@ -27,7 +27,7 @@ import { TranslatorContext } from 'react-jhipster';
 import notificationMiddleware from './notification-middleware';
 
 describe('Notification Middleware', () => {
-  let store;
+  let store: ReturnType<typeof makeStore>;
 
   const SUCCESS_TYPE = 'SUCCESS/fulfilled';
   const ERROR_TYPE = 'ERROR/rejected';
@@ -170,7 +170,11 @@ describe('Notification Middleware', () => {
     },
   };
 
-  const makeStore = () => applyMiddleware(notificationMiddleware)(createStore)(() => null);
+  const makeStore = () =>
+  configureStore({
+    reducer: (state = {}) => state,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(notificationMiddleware),
+  });
 
 <%_ if (enableTranslation) { _%>
   beforeAll(() => {
