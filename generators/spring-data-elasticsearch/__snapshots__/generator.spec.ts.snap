@@ -1,6 +1,754 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mongodb-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch gateway-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-enableSwaggerCodegen(false)-skipUserManagement(false)-eureka-sql-elasticsearch should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/ApplicationWebXml.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/ElasticsearchConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/EurekaWorkaroundConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/repository/search/EntityWithCustomIdSearchRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AbstractAuditingEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/Authority.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/domain/UserEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/search/AnotherSimpleSearchRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/search/SimpleSearchRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/search/UserSearchRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/DomainUserDetailsService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/SpringSecurityAuditorAware.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/security/UserNotActivatedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/EmailAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/InvalidPasswordException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/MailService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UserService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/UsernameAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/PasswordChangeDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AuthorityResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/UserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/EmailAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/InvalidPasswordException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/LoginAlreadyUsedException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/errors/QuerySyntaxException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/KeyAndPasswordVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/vm/ManagedUserVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/activationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/creationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/mail/passwordResetEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/ElasticsearchTestConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/ElasticsearchTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/EmbeddedElasticsearch.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/StaticResourcesWebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityAsserts.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityAsserts.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AuthorityAsserts.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityAsserts.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/MailServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/UserServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/criteria/SimpleCriteriaTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AuthorityResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/activationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/creationEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/passwordResetEmail.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/templates/mail/testEmail.html": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - elasticsearch gateway-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen(true)-skipUserManagement(true)-consul-neo4j-elasticsearch should match generated files snapshot 1`] = `
+{
+  ".devcontainer/Dockerfile": {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/AnotherSimple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/EntityWithCustomId.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "build.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_dev.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/war.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/JhipsterApp.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/ApplicationProperties.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/AsyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/Constants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/ElasticsearchConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/OpenApiConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/ReactorConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/WebConfigurer.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/custom/domain/EntityWithCustomId.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/custom/repository/search/EntityWithCustomIdSearchRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/custom/web/rest/EntityWithCustomIdResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/domain/AbstractAuditingEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/domain/AnotherSimple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/domain/Simple.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/search/AnotherSimpleSearchRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/search/SimpleSearchRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/security/SecurityUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/service/impl/AnotherSimpleServiceImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/service/mapper/AnotherSimpleMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/service/mapper/EntityMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/filter/SpaWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/AccountResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/errors/ElasticsearchExceptionMapper.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/errors/ErrorConstants.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/errors/ExceptionTranslator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/errors/FieldErrorVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/errors/QuerySyntaxException.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/banner.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-dev.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-tls.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/logback-spring.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/templates/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/IntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/config/ElasticsearchTestConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/config/ElasticsearchTestContainer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/config/EmbeddedElasticsearch.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/config/TestContainersSpringContextCustomizerFactory.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/custom/domain/EntityWithCustomIdAsserts.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/custom/domain/EntityWithCustomIdTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/custom/domain/EntityWithCustomIdTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/custom/web/rest/EntityWithCustomIdResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/AnotherSimpleAsserts.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/AnotherSimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/SimpleAsserts.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/SimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/SimpleTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/service/dto/AnotherSimpleRestTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/service/mapper/AnotherSimpleMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/filter/SpaWebFilterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/filter/SpaWebFilterTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/AccountResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/WithUnauthenticatedMockUser.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/errors/ElasticsearchExceptionMapperTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/META-INF/spring.factories": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - elasticsearch gateway-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen(false)-serviceDiscoveryType(no)-mongodb-elasticsearch should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -125,40 +873,19 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/security/DomainUserDetailsService.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/security/SecurityUtils.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/security/UserNotActivatedException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/service/EmailAlreadyUsedException.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/InvalidPasswordException.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/MailService.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/service/UserService.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/UsernameAlreadyUsedException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/dto/AdminUserRest.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/service/dto/PasswordChangeDTO.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/dto/UserRest.java": {
@@ -194,16 +921,10 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/web/rest/UserResource.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/ElasticsearchExceptionMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/errors/EmailAlreadyUsedException.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/errors/ErrorConstants.java": {
@@ -215,19 +936,7 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/main/java/com/mycompany/web/rest/errors/FieldErrorVM.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/web/rest/errors/InvalidPasswordException.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/errors/LoginAlreadyUsedException.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/web/rest/errors/QuerySyntaxException.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/vm/KeyAndPasswordVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/vm/ManagedUserVM.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -252,15 +961,6 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
     "stateCleared": "modified",
   },
   "src/main/resources/templates/error.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/activationEmail.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/creationEmail.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/templates/mail/passwordResetEmail.html": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/IntegrationTest.java": {
@@ -332,13 +1032,7 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/test/java/com/mycompany/domain/SimpleTestSamples.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/security/DomainUserDetailsServiceIT.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/service/UserServiceIT.java": {
@@ -407,22 +1101,10 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
-  "src/test/resources/templates/mail/activationEmail.html": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/creationEmail.html": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/passwordResetEmail.html": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/templates/mail/testEmail.html": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
-exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-sql-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-sql-elasticsearch should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -727,7 +1409,7 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
 }
 `;
 
-exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-neo4j-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen(true)-skipUserManagement(true)-eureka-neo4j-elasticsearch should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -810,6 +1492,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/main/java/com/mycompany/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/OpenApiConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/ReactorConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1047,7 +1732,7 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
 }
 `;
 
-exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-consul-mongodb-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen(false)-consul-mongodb-elasticsearch should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -1364,7 +2049,7 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
 }
 `;
 
-exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-cassandra-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen(true)-spring-websocket-skipUserManagement(false)-consul-cassandra-elasticsearch should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -1424,6 +2109,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/OpenApiConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
@@ -1780,7 +2468,7 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
 }
 `;
 
-exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen(false)-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -2103,7 +2791,7 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
 }
 `;
 
-exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-sql-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen(false)-serviceDiscoveryType(no)-sql-elasticsearch should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -2426,7 +3114,7 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
 }
 `;
 
-exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen(true)-eureka-neo4j-elasticsearch should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -2504,6 +3192,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/OpenApiConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/ReactorConfiguration.java": {
@@ -2761,7 +3452,7 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
 }
 `;
 
-exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-sql-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-sql-elasticsearch should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -3213,7 +3904,7 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
 }
 `;
 
-exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-neo4j-elasticsearch should match generated files snapshot 1`] = `
+exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen(true)-skipUserManagement(true)-consul-neo4j-elasticsearch should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -3288,6 +3979,9 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/LoggingConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/OpenApiConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/ReactorConfiguration.java": {
@@ -3547,37 +4241,14 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
 
 exports[`generator - elasticsearch samples matrix should match snapshot 1`] = `
 {
-  "gateway-jwt-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mongodb-elasticsearch": {
+  "gateway-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-enableSwaggerCodegen(false)-skipUserManagement(false)-eureka-sql-elasticsearch": {
     "applicationType": "gateway",
     "authenticationType": "jwt",
     "baseName": "jhipster",
-    "buildTool": "gradle",
-    "databaseType": "mongodb",
-    "dtoSuffix": "Rest",
-    "enableTranslation": true,
-    "entitySuffix": "",
-    "jhiPrefix": "fix",
-    "languages": [
-      "fr",
-      "en",
-    ],
-    "nativeLanguage": "en",
-    "packageName": "com.mycompany",
-    "searchEngine": "elasticsearch",
-    "serverSideOptions": [],
-    "serviceDiscoveryType": "no",
-    "skipCommitHook": true,
-    "skipUserManagement": false,
-    "testFrameworks": [],
-    "websocket": false,
-  },
-  "gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-cassandra-elasticsearch": {
-    "applicationType": "gateway",
-    "authenticationType": "oauth2",
-    "baseName": "jhipster",
     "buildTool": "maven",
-    "databaseType": "cassandra",
+    "databaseType": "sql",
     "dtoSuffix": "DTO",
+    "enableSwaggerCodegen": false,
     "enableTranslation": false,
     "entitySuffix": "Entity",
     "jhiPrefix": "jhi",
@@ -3587,24 +4258,97 @@ exports[`generator - elasticsearch samples matrix should match snapshot 1`] = `
     ],
     "nativeLanguage": "en",
     "packageName": "tech.jhipster",
+    "reactive": false,
     "searchEngine": "elasticsearch",
-    "serverSideOptions": [
-      "enableSwaggerCodegen:true",
+    "serviceDiscoveryType": "eureka",
+    "skipCommitHook": true,
+    "skipUserManagement": false,
+    "testFrameworks": [],
+    "websocket": undefined,
+  },
+  "gateway-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen(true)-skipUserManagement(true)-consul-neo4j-elasticsearch": {
+    "applicationType": "gateway",
+    "authenticationType": "jwt",
+    "baseName": "jhipster",
+    "buildTool": "gradle",
+    "databaseType": "neo4j",
+    "dtoSuffix": "Rest",
+    "enableSwaggerCodegen": true,
+    "enableTranslation": true,
+    "entitySuffix": "",
+    "jhiPrefix": "fix",
+    "languages": [
+      "fr",
+      "en",
     ],
+    "nativeLanguage": "en",
+    "packageName": "com.mycompany",
+    "reactive": true,
+    "searchEngine": "elasticsearch",
+    "serviceDiscoveryType": "consul",
+    "skipCommitHook": false,
+    "skipUserManagement": true,
+    "testFrameworks": [
+      "cucumber",
+    ],
+  },
+  "gateway-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen(true)-spring-websocket-consul-cassandra-elasticsearch": {
+    "applicationType": "gateway",
+    "authenticationType": "oauth2",
+    "baseName": "jhipster",
+    "buildTool": "maven",
+    "databaseType": "cassandra",
+    "dtoSuffix": "DTO",
+    "enableSwaggerCodegen": true,
+    "enableTranslation": false,
+    "entitySuffix": "Entity",
+    "jhiPrefix": "jhi",
+    "languages": [
+      "fr",
+      "en",
+    ],
+    "nativeLanguage": "en",
+    "packageName": "tech.jhipster",
+    "reactive": false,
+    "searchEngine": "elasticsearch",
     "serviceDiscoveryType": "consul",
     "skipCommitHook": false,
     "testFrameworks": [
       "cucumber",
     ],
-    "websocket": true,
+    "websocket": "spring-websocket",
   },
-  "microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-sql-elasticsearch": {
+  "gateway-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen(false)-serviceDiscoveryType(no)-mongodb-elasticsearch": {
+    "applicationType": "gateway",
+    "authenticationType": "oauth2",
+    "baseName": "jhipster",
+    "buildTool": "gradle",
+    "databaseType": "mongodb",
+    "dtoSuffix": "Rest",
+    "enableSwaggerCodegen": false,
+    "enableTranslation": true,
+    "entitySuffix": "",
+    "jhiPrefix": "fix",
+    "languages": [
+      "fr",
+      "en",
+    ],
+    "nativeLanguage": "en",
+    "packageName": "com.mycompany",
+    "reactive": true,
+    "searchEngine": "elasticsearch",
+    "serviceDiscoveryType": "no",
+    "skipCommitHook": true,
+    "testFrameworks": [],
+  },
+  "microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-sql-elasticsearch": {
     "applicationType": "microservice",
     "authenticationType": "jwt",
     "baseName": "jhipster",
     "buildTool": "maven",
     "databaseType": "sql",
     "dtoSuffix": "DTO",
+    "enableSwaggerCodegen": false,
     "enableTranslation": false,
     "entitySuffix": "Entity",
     "jhiPrefix": "jhi",
@@ -3616,22 +4360,22 @@ exports[`generator - elasticsearch samples matrix should match snapshot 1`] = `
     "packageName": "tech.jhipster",
     "reactive": false,
     "searchEngine": "elasticsearch",
-    "serverSideOptions": [],
     "serviceDiscoveryType": "no",
     "skipCommitHook": false,
     "skipUserManagement": false,
     "testFrameworks": [
       "cucumber",
     ],
-    "websocket": false,
+    "websocket": undefined,
   },
-  "microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-neo4j-elasticsearch": {
+  "microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen(true)-skipUserManagement(true)-eureka-neo4j-elasticsearch": {
     "applicationType": "microservice",
     "authenticationType": "jwt",
     "baseName": "jhipster",
     "buildTool": "gradle",
     "databaseType": "neo4j",
     "dtoSuffix": "Rest",
+    "enableSwaggerCodegen": true,
     "enableTranslation": true,
     "entitySuffix": "",
     "jhiPrefix": "fix",
@@ -3643,21 +4387,19 @@ exports[`generator - elasticsearch samples matrix should match snapshot 1`] = `
     "packageName": "com.mycompany",
     "reactive": true,
     "searchEngine": "elasticsearch",
-    "serverSideOptions": [
-      "enableSwaggerCodegen:true",
-    ],
     "serviceDiscoveryType": "eureka",
     "skipCommitHook": true,
     "skipUserManagement": true,
     "testFrameworks": [],
   },
-  "microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-cassandra-elasticsearch": {
+  "microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen(true)-spring-websocket-eureka-cassandra-elasticsearch": {
     "applicationType": "microservice",
     "authenticationType": "oauth2",
     "baseName": "jhipster",
     "buildTool": "maven",
     "databaseType": "cassandra",
     "dtoSuffix": "DTO",
+    "enableSwaggerCodegen": true,
     "enableTranslation": false,
     "entitySuffix": "Entity",
     "jhiPrefix": "jhi",
@@ -3669,23 +4411,21 @@ exports[`generator - elasticsearch samples matrix should match snapshot 1`] = `
     "packageName": "tech.jhipster",
     "reactive": false,
     "searchEngine": "elasticsearch",
-    "serverSideOptions": [
-      "enableSwaggerCodegen:true",
-    ],
     "serviceDiscoveryType": "eureka",
     "skipCommitHook": false,
     "testFrameworks": [
       "gatling",
     ],
-    "websocket": true,
+    "websocket": "spring-websocket",
   },
-  "microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-consul-mongodb-elasticsearch": {
+  "microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen(false)-consul-mongodb-elasticsearch": {
     "applicationType": "microservice",
     "authenticationType": "oauth2",
     "baseName": "jhipster",
     "buildTool": "gradle",
     "databaseType": "mongodb",
     "dtoSuffix": "Rest",
+    "enableSwaggerCodegen": false,
     "enableTranslation": true,
     "entitySuffix": "",
     "jhiPrefix": "fix",
@@ -3697,20 +4437,20 @@ exports[`generator - elasticsearch samples matrix should match snapshot 1`] = `
     "packageName": "com.mycompany",
     "reactive": true,
     "searchEngine": "elasticsearch",
-    "serverSideOptions": [],
     "serviceDiscoveryType": "consul",
     "skipCommitHook": true,
     "testFrameworks": [
       "gatling",
     ],
   },
-  "monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-cassandra-elasticsearch": {
+  "monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen(true)-spring-websocket-skipUserManagement(false)-consul-cassandra-elasticsearch": {
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "baseName": "jhipster",
     "buildTool": "maven",
     "databaseType": "cassandra",
     "dtoSuffix": "DTO",
+    "enableSwaggerCodegen": true,
     "enableTranslation": false,
     "entitySuffix": "Entity",
     "jhiPrefix": "jhi",
@@ -3722,22 +4462,20 @@ exports[`generator - elasticsearch samples matrix should match snapshot 1`] = `
     "packageName": "tech.jhipster",
     "reactive": false,
     "searchEngine": "elasticsearch",
-    "serverSideOptions": [
-      "enableSwaggerCodegen:true",
-    ],
     "serviceDiscoveryType": "consul",
     "skipCommitHook": false,
     "skipUserManagement": false,
     "testFrameworks": [],
-    "websocket": true,
+    "websocket": "spring-websocket",
   },
-  "monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch": {
+  "monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen(false)-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch": {
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "baseName": "jhipster",
     "buildTool": "gradle",
     "databaseType": "mongodb",
     "dtoSuffix": "Rest",
+    "enableSwaggerCodegen": false,
     "enableTranslation": true,
     "entitySuffix": "",
     "jhiPrefix": "fix",
@@ -3749,7 +4487,6 @@ exports[`generator - elasticsearch samples matrix should match snapshot 1`] = `
     "packageName": "com.mycompany",
     "reactive": true,
     "searchEngine": "elasticsearch",
-    "serverSideOptions": [],
     "serviceDiscoveryType": "no",
     "skipCommitHook": true,
     "skipUserManagement": true,
@@ -3757,13 +4494,14 @@ exports[`generator - elasticsearch samples matrix should match snapshot 1`] = `
       "cucumber",
     ],
   },
-  "monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-sql-elasticsearch": {
+  "monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen(false)-serviceDiscoveryType(no)-sql-elasticsearch": {
     "applicationType": "monolith",
     "authenticationType": "oauth2",
     "baseName": "jhipster",
     "buildTool": "maven",
     "databaseType": "sql",
     "dtoSuffix": "DTO",
+    "enableSwaggerCodegen": false,
     "enableTranslation": false,
     "entitySuffix": "Entity",
     "jhiPrefix": "jhi",
@@ -3775,19 +4513,19 @@ exports[`generator - elasticsearch samples matrix should match snapshot 1`] = `
     "packageName": "tech.jhipster",
     "reactive": false,
     "searchEngine": "elasticsearch",
-    "serverSideOptions": [],
     "serviceDiscoveryType": "no",
     "skipCommitHook": false,
     "testFrameworks": [],
-    "websocket": false,
+    "websocket": undefined,
   },
-  "monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch": {
+  "monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen(true)-eureka-neo4j-elasticsearch": {
     "applicationType": "monolith",
     "authenticationType": "oauth2",
     "baseName": "jhipster",
     "buildTool": "gradle",
     "databaseType": "neo4j",
     "dtoSuffix": "Rest",
+    "enableSwaggerCodegen": true,
     "enableTranslation": true,
     "entitySuffix": "",
     "jhiPrefix": "fix",
@@ -3799,22 +4537,20 @@ exports[`generator - elasticsearch samples matrix should match snapshot 1`] = `
     "packageName": "com.mycompany",
     "reactive": true,
     "searchEngine": "elasticsearch",
-    "serverSideOptions": [
-      "enableSwaggerCodegen:true",
-    ],
     "serviceDiscoveryType": "eureka",
     "skipCommitHook": true,
     "testFrameworks": [
       "cucumber",
     ],
   },
-  "monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-sql-elasticsearch": {
+  "monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-sql-elasticsearch": {
     "applicationType": "monolith",
     "authenticationType": "session",
     "baseName": "jhipster",
     "buildTool": "maven",
     "databaseType": "sql",
     "dtoSuffix": "DTO",
+    "enableSwaggerCodegen": false,
     "enableTranslation": false,
     "entitySuffix": "Entity",
     "jhiPrefix": "jhi",
@@ -3826,22 +4562,22 @@ exports[`generator - elasticsearch samples matrix should match snapshot 1`] = `
     "packageName": "tech.jhipster",
     "reactive": false,
     "searchEngine": "elasticsearch",
-    "serverSideOptions": [],
     "serviceDiscoveryType": "no",
     "skipCommitHook": false,
     "skipUserManagement": false,
     "testFrameworks": [
       "gatling",
     ],
-    "websocket": false,
+    "websocket": undefined,
   },
-  "monolith-session-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-neo4j-elasticsearch": {
+  "monolith-session-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen(true)-skipUserManagement(true)-consul-neo4j-elasticsearch": {
     "applicationType": "monolith",
     "authenticationType": "session",
     "baseName": "jhipster",
     "buildTool": "gradle",
     "databaseType": "neo4j",
     "dtoSuffix": "Rest",
+    "enableSwaggerCodegen": true,
     "enableTranslation": true,
     "entitySuffix": "",
     "jhiPrefix": "fix",
@@ -3853,9 +4589,6 @@ exports[`generator - elasticsearch samples matrix should match snapshot 1`] = `
     "packageName": "com.mycompany",
     "reactive": true,
     "searchEngine": "elasticsearch",
-    "serverSideOptions": [
-      "enableSwaggerCodegen:true",
-    ],
     "serviceDiscoveryType": "consul",
     "skipCommitHook": true,
     "skipUserManagement": true,

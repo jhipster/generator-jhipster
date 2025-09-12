@@ -1,4 +1,4 @@
-import { MatrixGateway, MatrixMicroservice, MatrixMonolith } from './application-samples.ts';
+import { MatrixGateway, MatrixMicroservice, MatrixMonolith, ReactiveMatrix } from './application-samples.ts';
 import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix, fromMatrix } from './matrix-utils.ts';
 
 export const buildServerMatrix = (matrix: Record<string, unknown> = {}) => {
@@ -6,16 +6,17 @@ export const buildServerMatrix = (matrix: Record<string, unknown> = {}) => {
     ...fromMatrix({
       ...MatrixMonolith,
       ...matrix,
-      reactive: [false, true],
+      ...ReactiveMatrix,
     }),
     ...fromMatrix({
       ...MatrixMicroservice,
       ...matrix,
-      reactive: [false, true],
+      ...ReactiveMatrix,
     }),
     ...fromMatrix({
       ...MatrixGateway,
       ...matrix,
+      ...ReactiveMatrix,
     }),
   };
 
@@ -28,11 +29,11 @@ export const buildServerMatrix = (matrix: Record<string, unknown> = {}) => {
     dtoSuffix: ['DTO', 'Rest'],
     skipCommitHook: [false, true],
     testFrameworks: [[], ['gatling'], ['cucumber']],
-    serverSideOptions: [[], ['enableSwaggerCodegen:true']],
+    enableSwaggerCodegen: [false, true],
   });
 
   serverMatrix = extendFilteredMatrix(serverMatrix, sample => !sample.reactive, {
-    websocket: [false, true],
+    websocket: [undefined, 'spring-websocket'],
   });
 
   serverMatrix = extendFilteredMatrix(serverMatrix, sample => sample.authenticationType !== 'oauth2', {

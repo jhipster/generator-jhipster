@@ -87,7 +87,7 @@ describe(`generator - ${clientFramework}`, () => {
       });
 
       describe('withAdminUi', () => {
-        const { applicationType, withAdminUi } = sampleConfig;
+        const { applicationType, withAdminUi, enableTranslation } = sampleConfig;
         const clientSrcDir = `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`;
         const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
@@ -138,25 +138,27 @@ describe(`generator - ${clientFramework}`, () => {
       meta: { authorities: [Authority.ADMIN] }
     },`,
             );
-            assertion(
-              `${clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
-              '<b-dropdown-item to="/admin/metrics" active-class="active">\n' +
-                '            <font-awesome-icon icon="tachometer-alt" />\n' +
-                "            <span>{{ t$('global.menu.admin.metrics') }}</span>\n" +
-                '          </b-dropdown-item>\n' +
-                '          <b-dropdown-item to="/admin/health" active-class="active">\n' +
-                '            <font-awesome-icon icon="heart" />\n' +
-                "            <span>{{ t$('global.menu.admin.health') }}</span>\n" +
-                '          </b-dropdown-item>\n' +
-                '          <b-dropdown-item to="/admin/configuration" active-class="active">\n' +
-                '            <font-awesome-icon icon="cogs" />\n' +
-                "            <span>{{ t$('global.menu.admin.configuration') }}</span>\n" +
-                '          </b-dropdown-item>\n' +
-                '          <b-dropdown-item to="/admin/logs" active-class="active">\n' +
-                '            <font-awesome-icon icon="tasks" />\n' +
-                "            <span>{{ t$('global.menu.admin.logs') }}</span>\n" +
-                '          </b-dropdown-item>',
-            );
+            if (enableTranslation) {
+              assertion(
+                `${clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
+                '<b-dropdown-item to="/admin/metrics" active-class="active">\n' +
+                  '            <font-awesome-icon icon="tachometer-alt" />\n' +
+                  "            <span>{{ t$('global.menu.admin.metrics') }}</span>\n" +
+                  '          </b-dropdown-item>\n' +
+                  '          <b-dropdown-item to="/admin/health" active-class="active">\n' +
+                  '            <font-awesome-icon icon="heart" />\n' +
+                  "            <span>{{ t$('global.menu.admin.health') }}</span>\n" +
+                  '          </b-dropdown-item>\n' +
+                  '          <b-dropdown-item to="/admin/configuration" active-class="active">\n' +
+                  '            <font-awesome-icon icon="cogs" />\n' +
+                  "            <span>{{ t$('global.menu.admin.configuration') }}</span>\n" +
+                  '          </b-dropdown-item>\n' +
+                  '          <b-dropdown-item to="/admin/logs" active-class="active">\n' +
+                  '            <font-awesome-icon icon="tasks" />\n' +
+                  "            <span>{{ t$('global.menu.admin.logs') }}</span>\n" +
+                  '          </b-dropdown-item>',
+              );
+            }
           });
         }
       });

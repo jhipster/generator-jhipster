@@ -71,7 +71,7 @@ describe(`generator - ${clientFramework}`, () => {
       });
 
       describe('withAdminUi', () => {
-        const { applicationType, withAdminUi } = sampleConfig;
+        const { applicationType, withAdminUi, enableTranslation } = sampleConfig;
         const clientSrcDir = `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`;
         const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
@@ -101,13 +101,15 @@ describe(`generator - ${clientFramework}`, () => {
                 '  },',
             );
 
-            assertion(
-              `${clientSrcDir}app/shared/layout/menus/admin.tsx`,
-              '    <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>\n' +
-                '    <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>\n' +
-                '    <MenuItem icon="cogs" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>\n' +
-                '    <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>',
-            );
+            if (enableTranslation) {
+              assertion(
+                `${clientSrcDir}app/shared/layout/menus/admin.tsx`,
+                '    <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>\n' +
+                  '    <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>\n' +
+                  '    <MenuItem icon="cogs" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>\n' +
+                  '    <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>',
+              );
+            }
           });
         }
       });
