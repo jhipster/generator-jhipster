@@ -12,7 +12,7 @@ exports[`generator - javascript-simple-application:bootstrap bootstrapping defau
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
   "dasherizedBaseName": "jhipster",
-  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
+  "documentationArchiveUrl": "https://www.jhipster.tech/",
   "eslintConfigFile": "eslint.config.mjs",
   "hipster": "jhipster_family_member_3",
   "hipsterBugTrackerLink": "https://github.com/jhipster/generator-jhipster/issues?state=open",
