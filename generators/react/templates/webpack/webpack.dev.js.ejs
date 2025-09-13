@@ -16,7 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const webpackMerge = require('webpack-merge').merge;
+import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const require = createRequire(import.meta.url);
+const { merge: webpackMerge } = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
@@ -25,13 +30,16 @@ const sass = require('sass');
 <%_ if (enableI18nRTL) { _%>
 const postcssRTLCSS = require('postcss-rtlcss');
 <%_ } _%>
+import utils from './utils.js';
+import commonConfig from './webpack.common.js';
 
-const utils = require('./utils.js');
-const commonConfig = require('./webpack.common.js');
+// ESM equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const ENV = 'development';
 
-module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }), {
+export default async (options) => webpackMerge(await commonConfig({ env: ENV }), {
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
