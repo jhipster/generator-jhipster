@@ -182,22 +182,22 @@ export const UserManagement = () => {
 <%_ } _%>
               <td>
                 {user.authorities
-                  ? user.authorities.map((authority, j) => (
+                  && user.authorities.map((authority, j) => (
                       <div key={`user-auth-${i}-${j}`}>
                         <Badge color="info">{authority}</Badge>
                       </div>
                     ))
-                  : null}
+                  }
               </td>
 <%_ if (!databaseTypeCassandra) { _%>
               <td>
-                {user.createdDate ? <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid /> : null}
+                {user.createdDate && <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />}
               </td>
               <td>{user.lastModifiedBy}</td>
               <td>
-                {user.lastModifiedDate ? (
+                {user.lastModifiedDate && (
                   <TextFormat value={user.lastModifiedDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />
-                ) : null}
+                )}
               </td>
 <%_ } _%>
               <td className="text-end">

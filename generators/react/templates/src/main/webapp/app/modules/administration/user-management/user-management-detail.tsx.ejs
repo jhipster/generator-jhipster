@@ -79,7 +79,7 @@ export const UserManagementDetail = () => {
           <dd>
             <ul className="list-unstyled">
               {
-                user.authorities ? (
+                user.authorities && (
                   user.authorities.map(
                     (authority, i) => (
                       <li key={`user-auth-${i}`}>
@@ -88,7 +88,7 @@ export const UserManagementDetail = () => {
                     )
                   )
                 )
-                : null}
+              }
             </ul>
           </dd>
         </dl>

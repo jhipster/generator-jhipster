@@ -81,7 +81,7 @@ export const UserManagementUpdate = () => {
         <Col md="8">
         { loading ? <p>Loading...</p>
         : <ValidatedForm onSubmit={saveUser} defaultValues={user}>
-          {user.id ? (
+          {user.id && (
             <ValidatedField
               type="text"
               name="id"
@@ -90,7 +90,7 @@ export const UserManagementUpdate = () => {
               label={translate('global.field.id')}
               validate={{ required: true }}
             />
-          ) : null}
+          )}
           <ValidatedField
             type="text"
             name="login"
