@@ -96,17 +96,12 @@ return merge(
         use: getTsLoaderRule(options.env),
         include: [utils.root('./<%= this.relativeDir(clientRootDir, clientSrcDir) %>app')],
         exclude: [utils.root('node_modules')]
-      }
-      /*
-       ,
-       Disabled due to https://github.com/jhipster/generator-jhipster/issues/16116
-       Can be enabled with @reduxjs/toolkit@>1.6.1
+      },
       {
         enforce: 'pre',
         test: /\.jsx?$/,
         loader: 'source-map-loader'
       }
-      */
     ]
   },
   stats: {
