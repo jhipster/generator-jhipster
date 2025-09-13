@@ -79,8 +79,12 @@ describe('User management reducer tests', () => {
 
       const result = await getUsers(arg)(dispatch, getState, extra);
 
-      const pendingAction = dispatch.mock.calls[0][0];
-      expect(pendingAction.meta.requestStatus).toBe('pending');
+      expect(dispatch).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: getUsers.pending.type,
+          meta: expect.objectContaining({ requestStatus: 'pending' }),
+        }),
+      );
       expect(getUsers.fulfilled.match(result)).toBe(true);
     });
 
@@ -89,8 +93,12 @@ describe('User management reducer tests', () => {
 
       const result = await getUsers(arg)(dispatch, getState, extra);
 
-      const pendingAction = dispatch.mock.calls[0][0];
-      expect(pendingAction.meta.requestStatus).toBe('pending');
+      expect(dispatch).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: getUsers.pending.type,
+          meta: expect.objectContaining({ requestStatus: 'pending' }),
+        }),
+      );
       expect(getUsers.fulfilled.match(result)).toBe(true);
     });
   });
