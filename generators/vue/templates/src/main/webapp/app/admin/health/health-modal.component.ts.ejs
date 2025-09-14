@@ -7,7 +7,10 @@ import HealthService from './health.service';
 export default defineComponent({
   name: '<%=jhiPrefixCapitalized%>HealthModal',
   props: {
-    currentHealth: {},
+    currentHealth: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   setup() {
     const healthService = inject('healthService', () => new HealthService(), true);
