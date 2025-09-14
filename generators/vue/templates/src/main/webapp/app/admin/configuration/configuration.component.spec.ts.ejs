@@ -18,7 +18,13 @@ describe('Configuration Component', () => {
     axiosStub.get.resolves({
       data: { contexts: [{ beans: [{ prefix: 'A' }, { prefix: 'B' }] }], propertySources: [{ properties: { key1: { value: 'value' } } }] },
     });
-    const wrapper = shallowMount(Configuration);
+    const wrapper = shallowMount(Configuration, {
+      global: {
+        stubs: {
+          'jhi-sort-indicator': true,
+        },
+      },
+    });
     configuration = wrapper.vm;
   });
 
