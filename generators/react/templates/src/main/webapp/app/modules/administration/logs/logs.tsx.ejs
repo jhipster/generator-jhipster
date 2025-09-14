@@ -36,7 +36,7 @@ export const LogsPage = () => {
 
   const changeFilter = evt => setFilter(evt.target.value);
 
-  const getClassName = (level, check, className) => (level === check ? `btn btn-sm btn-${className}` : 'btn btn-sm btn-light');
+  const getClassName = (level, check, className) => `btn btn-sm btn-${level === check ? className : 'light'}`;
 
   const filterFn = l => l.name.toUpperCase().includes(filter.toUpperCase());
 
