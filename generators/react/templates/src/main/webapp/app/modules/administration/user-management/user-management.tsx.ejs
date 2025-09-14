@@ -228,7 +228,7 @@ export const UserManagement = () => {
         </tbody>
       </Table>
 <%_ if (!databaseTypeCassandra) { _%>
-        { totalItems ? (<div className={ users?.length > 0 ? '' : 'd-none' }>
+        { totalItems && (<div className={ users?.length > 0 ? '' : 'd-none' }>
           <div className="justify-content-center d-flex">
             <JhiItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} <% { if (enableTranslation) { %>i18nEnabled<% }} %> />
           </div>
@@ -241,7 +241,7 @@ export const UserManagement = () => {
               totalItems={totalItems}
             />
           </div>
-        </div>) : '' }
+        </div>)}
 <%_ } _%>
     </div>
   );
