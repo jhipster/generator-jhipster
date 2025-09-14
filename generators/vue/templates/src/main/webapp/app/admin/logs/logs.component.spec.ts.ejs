@@ -16,7 +16,15 @@ describe('Logs Component', () => {
 
   beforeEach(() => {
     axiosStub.get.resolves({});
-    const wrapper = shallowMount(Logs);
+    const wrapper = shallowMount(Logs, {
+      global: {
+        stubs: {
+          'jhi-sort-indicator': true,
+          BButton: true,
+          BButtonGroup: true,
+        },
+      },
+    });
     logs = wrapper.vm;
   });
 
