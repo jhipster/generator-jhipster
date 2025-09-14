@@ -208,14 +208,13 @@ _%>
       <Col md="8">
         { loading ? <p>Loading...</p> :
         <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity} >
-          { !isNew ?
+          { !isNew &&
             <ValidatedField
               name="<%= primaryKey.fields[0].fieldName %>" required readOnly
               id="<%= entityFileName %>-<%= primaryKey.fields[0].fieldName %>"
               label={translate('<%= primaryKey.fields[0].fieldTranslationKey %>')}
               validate={{ required: true }}
             />
-            : null
           }
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldType = field.fieldType;

@@ -89,21 +89,21 @@ export const HealthPage = () => {
             </thead>
             <tbody>
               {Object.keys(data).map((configPropKey, configPropIndex) =>
-                configPropKey !== 'status' ? (
+                configPropKey !== 'status' && (
                   <tr key={configPropIndex}>
                     <td>{configPropKey}</td>
                     <td>
                       <Badge color={getBadgeType(data[configPropKey].status)}>{data[configPropKey].status}</Badge>
                     </td>
                     <td>
-                      {data[configPropKey].details ? (
+                      {data[configPropKey].details && (
                         <a onClick={getSystemHealthInfo(configPropKey, data[configPropKey])}>
                           <FontAwesomeIcon icon={faEye} />
                         </a>
-                      ) : null}
+                      )}
                     </td>
                   </tr>
-                ) : null,
+                ),
               )}
             </tbody>
           </Table>

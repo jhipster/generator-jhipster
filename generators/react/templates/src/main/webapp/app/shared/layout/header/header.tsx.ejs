@@ -59,7 +59,7 @@ const Header = (props: IHeaderProps) => {
   }
 <%_ } _%>
 
-  const renderDevRibbon = () => !props.isInProduction ? (
+  const renderDevRibbon = () => !props.isInProduction && (
     <div className="ribbon dev">
       <a href="">
 <%_ if (enableTranslation) { _%>
@@ -69,7 +69,7 @@ const Header = (props: IHeaderProps) => {
 <%_ } _%>
       </a>
     </div>
-  ) : null;
+  );
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
