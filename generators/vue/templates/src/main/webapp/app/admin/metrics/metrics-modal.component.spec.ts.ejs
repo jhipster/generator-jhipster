@@ -50,8 +50,8 @@ describe('Metrics Component', () => {
       expect(metricsModal.getBadgeClass('BLOCKED')).toBe('bg-danger');
     });
 
-    it('should return undefined for anything else', () => {
-      expect(metricsModal.getBadgeClass('')).toBe(undefined);
+    it('should return an empty string for anything else', () => {
+      expect(metricsModal.getBadgeClass('')).toBe('');
     });
   });
 });
