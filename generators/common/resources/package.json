@@ -2,7 +2,7 @@
   "devDependencies": {
     "concurrently": "9.2.1",
     "npm": "11.6.0",
-    "wait-on": "8.0.4"
+    "wait-on": "8.0.5"
   },
   "packageManager": "npm@11"
 }
