@@ -48,7 +48,7 @@
     "merge-jsons-webpack-plugin": "2.0.1",
     "postcss-rtlcss": "5.7.1",
     "rimraf": "5.0.8",
-    "tinyglobby": "0.2.14",
+    "tinyglobby": "0.2.15",
     "ts-jest": "29.4.1",
     "typescript": "5.9.2",
     "typescript-eslint": "8.43.0",
