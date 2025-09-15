@@ -90,8 +90,7 @@ describe('Tracker Service', () => {
     await wrapper.vm.$nextTick();
 
     // THEN
-    expect(mockStomp.publish).toHaveBeenCalledTimes(1);
-    expect(mockStomp.publish).toHaveBeenCalledWith({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) });
+    expect(mockStomp.publish).toHaveBeenCalledExactlyOnceWith({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) });
   });
 
   it('Should disconnect on logout', async () => {

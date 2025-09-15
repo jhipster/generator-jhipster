@@ -30,8 +30,7 @@ describe('Alert Service test suite', () => {
     alertService.showError(message);
 
     // THEN
-    expect(toastStub).toHaveBeenCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith({
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith({
       props: {
         body: message,
         pos: 'top-center',
@@ -60,11 +59,9 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toHaveBeenCalledTimes(1);
-    expect(translationStub).toHaveBeenCalledWith(translationKey);
+    expect(translationStub).toHaveBeenCalledExactlyOnceWith(translationKey);
 <%_ } _%>
-    expect(toastStub).toHaveBeenCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith({
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith({
       props: {
         body: expect.any(String),
         pos: 'top-center',
@@ -146,11 +143,9 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toHaveBeenCalledTimes(1);
-    expect(translationStub).toHaveBeenCalledWith(message);
+    expect(translationStub).toHaveBeenCalledExactlyOnceWith(message);
 <%_ } _%>
-    expect(toastStub).toHaveBeenCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith({
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith({
       props: {
         body: expect.any(String),
         pos: 'top-center',
@@ -180,11 +175,9 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toHaveBeenCalledTimes(1);
-    expect(translationStub).toHaveBeenCalledWith(translationKey);
+    expect(translationStub).toHaveBeenCalledExactlyOnceWith(translationKey);
 <%_ } _%>
-    expect(toastStub).toHaveBeenCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith({
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith({
       props: {
         body: expect.any(String),
         pos: 'top-center',
@@ -214,11 +207,9 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toHaveBeenCalledTimes(1);
-    expect(translationStub).toHaveBeenCalledWith(message);
+    expect(translationStub).toHaveBeenCalledExactlyOnceWith(message);
 <%_ } _%>
-    expect(toastStub).toHaveBeenCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith({
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith({
       props: {
         body: expect.any(String),
         pos: 'top-center',
