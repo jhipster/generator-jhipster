@@ -1,5 +1,7 @@
+import type { ConfigAll } from '../../types/command-all.ts';
+
 import { MatrixMicroserviceGateway, MatrixMonolith } from './application-samples.ts';
-import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix, fromMatrix } from './matrix-utils.ts';
+import { type Matrix, buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix, fromMatrix } from './matrix-utils.ts';
 
 const CLIENT_ADDITIONAL_CONFIG_MATRIX = {
   withAdminUi: [false, true],
@@ -9,10 +11,10 @@ const CLIENT_ADDITIONAL_CONFIG_MATRIX = {
   websocket: [false, true],
 };
 
-export const buildClientSamples = (commonConfig?: Record<string, unknown>): Record<string, Record<string, unknown>> => {
+export const buildClientSamples = (commonConfig?: ConfigAll): Matrix => {
   let clientMatrix = {
-    ...fromMatrix(MatrixMonolith),
-    ...fromMatrix(MatrixMicroserviceGateway),
+    ...fromMatrix<ConfigAll>(MatrixMonolith),
+    ...fromMatrix<ConfigAll>(MatrixMicroserviceGateway),
   };
 
   clientMatrix = extendFilteredMatrix(clientMatrix, sample => sample.authenticationType !== 'oauth2', {

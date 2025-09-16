@@ -15,7 +15,7 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 const { ANGULAR: clientFramework } = clientFrameworkTypes;
-const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
+const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr' as const, 'en' as const] };
 
 const testSamples = buildClientSamples(commonConfig);
 

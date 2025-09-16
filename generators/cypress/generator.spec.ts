@@ -21,14 +21,8 @@ import { basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
-import {
-  AuthenticationTypeMatrix,
-  type Matrix,
-  defaultHelpers as helpers,
-  extendMatrix,
-  fromMatrix,
-  runResult,
-} from '../../lib/testing/index.ts';
+import { AuthenticationTypeMatrix, defaultHelpers as helpers, extendMatrix, fromMatrix, runResult } from '../../lib/testing/index.ts';
+import type { ConfigAll } from '../../lib/types/command-all.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 
 import Generator from './generator.ts';
@@ -41,7 +35,7 @@ const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
 
-const e2eMatrix = extendMatrix(
+const e2eMatrix = extendMatrix<ConfigAll>(
   fromMatrix({
     ...AuthenticationTypeMatrix,
     cypressAudit: [false, true],
@@ -54,7 +48,7 @@ const e2eMatrix = extendMatrix(
   },
 );
 
-const e2eSamples: Matrix = Object.fromEntries(
+const e2eSamples = Object.fromEntries(
   Object.entries(e2eMatrix).map(([name, sample]) => [
     name,
     {

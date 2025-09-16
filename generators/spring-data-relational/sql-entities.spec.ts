@@ -18,9 +18,7 @@ const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 
-let sqlSamples = buildServerMatrix();
-
-sqlSamples = extendMatrix(sqlSamples, {
+let sqlSamples = extendMatrix(buildServerMatrix(), {
   prodDatabaseType: [POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE],
   enableHibernateCache: [false, true],
 });

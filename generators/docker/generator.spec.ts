@@ -55,6 +55,7 @@ matrix = extendMatrix(matrix, {
 
 Object.entries(matrix).forEach(([_name, config]) => {
   if (NO_SQL.includes(config.prodDatabaseType as string)) {
+    // @ts-expect-error use prodDatabaseType for no-sql databases to simplify the matrix
     config.databaseType = config.prodDatabaseType;
     delete config.prodDatabaseType;
   }

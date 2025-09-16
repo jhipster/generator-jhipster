@@ -40,6 +40,6 @@ export default Object.fromEntries(
       'cmd-e2e': 'npm run ci:e2e:dev',
       args: 'jdl',
       jdl: convertOptionsToJDL(value as MatrixSample),
-    } as MatrixSample,
+    },
   ]),
 ) satisfies GitHubMatrixGroup;
