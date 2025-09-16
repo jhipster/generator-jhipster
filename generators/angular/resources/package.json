@@ -51,7 +51,7 @@
     "tinyglobby": "0.2.15",
     "ts-jest": "29.4.1",
     "typescript": "5.9.2",
-    "typescript-eslint": "8.43.0",
+    "typescript-eslint": "8.44.0",
     "webpack": "5.101.3",
     "webpack-bundle-analyzer": "4.10.2",
     "webpack-merge": "6.0.1",
