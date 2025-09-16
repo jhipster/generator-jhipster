@@ -36,11 +36,11 @@ import type { Application } from './types.ts';
 
 export type JavaSimpleApplicationAddedApplicationProperties = {
   javaVersion: string;
-  readonly javaCompatibleVersions: string[];
+  javaCompatibleVersions: string[];
   mainClass: string;
 
   packageFolder: string;
-  readonly entityPackages: string[];
+  entityPackages: string[];
 
   srcMainJava: string;
   srcMainResources: string;
@@ -55,13 +55,13 @@ export type JavaSimpleApplicationAddedApplicationProperties = {
   temporaryDir?: string;
 
   /** Java dependency versions */
-  readonly javaDependencies: Record<string, string>;
+  javaDependencies: Record<string, string>;
   /** Known properties that can be used */
-  readonly javaProperties: Record<string, string | null>;
+  javaProperties: Record<string, string | null>;
   /** Known managed properties that can be used */
-  readonly javaManagedProperties: Record<string, string | null>;
+  javaManagedProperties: Record<string, string | null>;
   /** Pre-defined package JavaDocs */
-  readonly packageInfoJavadocs: { packageName: string; documentation: string }[];
+  packageInfoJavadocs: { packageName: string; documentation: string }[];
 
   reactive: boolean;
   buildToolUnknown?: boolean;
@@ -80,10 +80,10 @@ export type JavaSimpleApplicationAddedApplicationProperties = {
   reactorBlock: string;
   reactorBlockOptional: string;
 
-  readonly domains: string[];
+  domains: string[];
   jhipsterDependenciesVersion?: string;
 
-  readonly javaIntegrationTestExclude: string[];
+  javaIntegrationTestExclude: string[];
 };
 
 export const mutateApplication = {

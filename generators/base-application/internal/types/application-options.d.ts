@@ -1,4 +1,4 @@
-import type { StringKeyOf, UnionToIntersection } from 'type-fest';
+import type { KeyAsString, UnionToIntersection } from 'type-fest';
 
 // Values<{ a: string, b: number }> = string | number
 type Values<T> = T[keyof T];
@@ -38,7 +38,7 @@ export type OptionWithDerivedProperties<N extends string, T extends string[]> = 
 
 // KeyToArray<{ foo: ['foo'], foo2: ['foo'] }> = [{foo: { foo: 'foo', fooFoo: true }}, {foo2: { foo2: 'foo', foo2Foo: true }}]
 type OptionBoxByName<D extends Record<string, string[]>> = {
-  [K in StringKeyOf<D>]: OptionWithDerivedProperties<K, D[K]>;
+  [K in KeyAsString<D>]: OptionWithDerivedProperties<K, D[K]>;
 };
 
 // OptionsWithDerivedProperties<{ aProperty: ['foo', 'bar'], oProperty: ['foo', 'bar'] }> =  { aProperty: 'foo' | 'bar'; aPropertyFoo: boolean; aPropertyBar: boolean;  } &  { oProperty: 'foo' | 'bar'; oPropertyFoo: boolean; oPropertyBar: boolean;  }

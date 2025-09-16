@@ -58,7 +58,7 @@ export const mutateUserManagementApplication = {
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Application<any>>, UserManagementProperties<Entity>>;
 
 export type BaseApplicationAddedApplicationProperties<E extends Entity> = UserManagementProperties<E> & {
-  readonly javaNodeBuildPaths: string[];
+  javaNodeBuildPaths: string[];
 
   clientTestDir?: string;
   clientDistDir?: string;
@@ -69,14 +69,14 @@ export type BaseApplicationAddedApplicationProperties<E extends Entity> = UserMa
   skipCommitHook?: boolean;
   fakerSeed?: string;
 
-  readonly blueprints?: { name: string; version: string }[];
-  readonly testFrameworks?: string[];
+  blueprints?: { name: string; version: string }[];
+  testFrameworks?: string[];
 };
 
 export const mutateApplication = {
   ...mutateUserManagementApplication,
 
-  javaNodeBuildPaths: () => [],
+  javaNodeBuildPaths: (): string[] => [],
   entitySuffix: '',
   dtoSuffix: 'DTO',
 } as const satisfies MutateDataPropertiesWithRequiredProperties<

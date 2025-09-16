@@ -69,7 +69,7 @@ function filterValue<const T extends Record<string, any>>(
 export const pickFields = (source: Record<string | number, any>, fields: (string | number)[]) =>
   Object.fromEntries(fields.map(field => [field, source[field]]));
 
-export type MutateDataParam<T> = Simplify<
+export type MutateDataParam<T extends object> = Simplify<
   OmitIndexSignature<{
     [Key in keyof (T & { __override__?: boolean })]?: Key extends '__override__'
       ? boolean
