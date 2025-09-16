@@ -8,7 +8,7 @@
     "types": ["node"],
 
     /* Modules */
-    "module": "node18" /* Specify what module code is generated. */,
+    "module": "nodenext" /* Specify what module code is generated. */,
     "rootDir": "./" /* Specify the root folder within your source files. */,
     "resolveJsonModule": true,
 
