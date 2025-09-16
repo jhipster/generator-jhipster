@@ -5,18 +5,16 @@ import { vitest } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import { type RouteLocation, type Router } from 'vue-router';
+import { type RouteLocation } from 'vue-router';
 
 import AlertService from '@/shared/alert/alert.service';
 import UserManagementView from './user-management-view.vue';
 import { Authority } from '@/shared/security/authority';
 
 let route: Partial<RouteLocation>;
-let router: Router;
 
 vitest.mock('vue-router', () => ({
   useRoute: () => route,
-  useRouter: () => router,
 }));
 
 const axiosStub = {
