@@ -53,7 +53,7 @@ describe('Tracker Service', () => {
         },
       },
     });
-    expect(router.afterEach).toHaveBeenCalledTimes(1);
+    expect(router.afterEach).toHaveBeenCalledOnce();
   });
 
   it('Should call activate on authenticated', async () => {
@@ -70,7 +70,7 @@ describe('Tracker Service', () => {
     await wrapper.vm.$nextTick();
 
     // THEN
-    expect(mockStomp.activate).toHaveBeenCalledTimes(1);
+    expect(mockStomp.activate).toHaveBeenCalledOnce();
   });
 
   it('Should send activity on connected', async () => {
@@ -90,8 +90,7 @@ describe('Tracker Service', () => {
     await wrapper.vm.$nextTick();
 
     // THEN
-    expect(mockStomp.publish).toHaveBeenCalledTimes(1);
-    expect(mockStomp.publish).toHaveBeenCalledWith({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) });
+    expect(mockStomp.publish).toHaveBeenCalledExactlyOnceWith({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) });
   });
 
   it('Should disconnect on logout', async () => {
@@ -112,6 +111,6 @@ describe('Tracker Service', () => {
     await wrapper.vm.$nextTick();
 
     // THEN
-    expect(mockStomp.deactivate).toHaveBeenCalledTimes(1);
+    expect(mockStomp.deactivate).toHaveBeenCalledOnce();
   });
 });
