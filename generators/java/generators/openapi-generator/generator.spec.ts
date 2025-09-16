@@ -34,7 +34,9 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  for (const [name, config] of Object.entries(fromMatrix({ buildTool: ['maven', 'gradle'], addOpenapiGeneratorPlugin: [true, false] }))) {
+  for (const [name, config] of Object.entries(
+    fromMatrix({ buildTool: ['maven' as const, 'gradle' as const], addOpenapiGeneratorPlugin: [true, false] }),
+  )) {
     describe(name, () => {
       before(async () => {
         await helpers

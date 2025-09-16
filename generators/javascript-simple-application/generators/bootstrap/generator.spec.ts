@@ -21,6 +21,7 @@ import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { defaultHelpers as helpers, extendMatrix, fromMatrix, result } from '../../../../lib/testing/index.ts';
+import type { ConfigAll } from '../../../../lib/types/command-all.ts';
 import { testBootstrapApplication } from '../../../../test/support/bootstrap-tests.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
 
@@ -36,7 +37,7 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   for (const [name, config] of Object.entries(
-    extendMatrix(fromMatrix({ packageJsonNodeEngine: [true, false, 'customVersion'] }), {
+    extendMatrix(fromMatrix<ConfigAll>({ packageJsonNodeEngine: [true, false, 'customVersion'] }), {
       packageJsonType: [undefined, 'commonjs', 'module'],
     }),
   )) {
