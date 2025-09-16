@@ -6,6 +6,10 @@ export const AuthenticationTypeMatrix = {
   authenticationType: [OAUTH2, JWT, SESSION],
 };
 
+export const ReactiveMatrix = {
+  reactive: [false, true],
+};
+
 export const MatrixMonolith = {
   applicationType: [APPLICATION_TYPE_MONOLITH],
   ...AuthenticationTypeMatrix,

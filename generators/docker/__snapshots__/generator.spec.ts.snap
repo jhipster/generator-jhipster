@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - docker gateway-jwt-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(no)-redis should match app.yml snapshot 1`] = `
+exports[`generator - docker gateway-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-enableSwaggerCodegen(false)-skipUserManagement(false)-eureka-mongodb-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(no)-redis should match app.yml snapshot 1`] = `
 {
   "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -12,11 +12,9 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - SPRING_CLOUD_CONSUL_HOST=consul
-      - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_R2DBC_URL=r2dbc:mysql://mariadb:3306/jhipster?useLegacyDatetimeCode=false
-      - SPRING_LIQUIBASE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false
-      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/jhipster
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
@@ -29,33 +27,25 @@ services:
       timeout: 5s
       retries: 40
     depends_on:
-      mariadb:
+      mongodb:
         condition: service_healthy
-      elasticsearch:
+      jhipster-registry:
         condition: service_healthy
-  mariadb:
+  mongodb:
     extends:
-      file: ./mariadb.yml
-      service: mariadb
-  elasticsearch:
+      file: ./mongodb.yml
+      service: mongodb
+  jhipster-registry:
     extends:
-      file: ./elasticsearch.yml
-      service: elasticsearch
-  consul:
-    extends:
-      file: ./consul.yml
-      service: consul
-  consul-config-loader:
-    extends:
-      file: ./consul.yml
-      service: consul-config-loader
+      file: ./jhipster-registry.yml
+      service: jhipster-registry
 ",
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`generator - docker gateway-jwt-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(no)-redis should match generated files snapshot 1`] = `
+exports[`generator - docker gateway-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-enableSwaggerCodegen(false)-skipUserManagement(false)-eureka-mongodb-searchEngine(no)-eureka-enableSwaggerCodegen(false)-messageBroker(no)-redis should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -69,19 +59,10 @@ exports[`generator - docker gateway-jwt-gradle-enableTranslation(true)-com.mycom
   "src/main/docker/central-server-config/README.md": {
     "stateCleared": "modified",
   },
-  "src/main/docker/central-server-config/application.yml": {
+  "src/main/docker/central-server-config/docker-config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/config/git2consul.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/config/mariadb/my.cnf": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/consul.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/elasticsearch.yml": {
+  "src/main/docker/central-server-config/localhost-config/application.yml": {
     "stateCleared": "modified",
   },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
@@ -96,7 +77,19 @@ exports[`generator - docker gateway-jwt-gradle-enableTranslation(true)-com.mycom
   "src/main/docker/jhipster-control-center.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/mariadb.yml": {
+  "src/main/docker/jhipster-registry.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/mongodb-cluster.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/mongodb.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/mongodb/MongoDB.Dockerfile": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/mongodb/scripts/init_replicaset.js": {
     "stateCleared": "modified",
   },
   "src/main/docker/monitoring.yml": {
@@ -117,7 +110,134 @@ exports[`generator - docker gateway-jwt-gradle-enableTranslation(true)-com.mycom
 }
 `;
 
-exports[`generator - docker gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-pulsar-hazelcast should match app.yml snapshot 1`] = `
+exports[`generator - docker gateway-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen(true)-skipUserManagement(true)-consul-mysql-elasticsearch-eureka-enableSwaggerCodegen(true)-pulsar should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
+    "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: jhipster
+services:
+  app:
+    image: jhipster
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://admin:$\${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_R2DBC_URL=r2dbc:mysql://mysql:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://mysql:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+      - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
+      - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
+    ports:
+      - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 40
+    depends_on:
+      mysql:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      jhipster-registry:
+        condition: service_healthy
+  mysql:
+    extends:
+      file: ./mysql.yml
+      service: mysql
+  elasticsearch:
+    extends:
+      file: ./elasticsearch.yml
+      service: elasticsearch
+  pulsar:
+    extends:
+      file: ./pulsar.yml
+      service: pulsar
+  jhipster-registry:
+    extends:
+      file: ./jhipster-registry.yml
+      service: jhipster-registry
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - docker gateway-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen(true)-skipUserManagement(true)-consul-mysql-elasticsearch-eureka-enableSwaggerCodegen(true)-pulsar should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/docker-config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/localhost-config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/config/mysql/my.cnf": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/elasticsearch.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-registry.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/mysql.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/pulsar.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/swagger-editor.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - docker gateway-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen(true)-spring-websocket-consul-neo4j-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-pulsar-hazelcast should match app.yml snapshot 1`] = `
 {
   "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -169,7 +289,7 @@ services:
 }
 `;
 
-exports[`generator - docker gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-neo4j-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-pulsar-hazelcast should match generated files snapshot 1`] = `
+exports[`generator - docker gateway-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen(true)-spring-websocket-consul-neo4j-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-pulsar-hazelcast should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -228,7 +348,142 @@ exports[`generator - docker gateway-oauth2-maven-enableTranslation(false)-tech.j
 }
 `;
 
-exports[`generator - docker microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-cacheProvider(no) should match app.yml snapshot 1`] = `
+exports[`generator - docker gateway-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(no) should match app.yml snapshot 1`] = `
+{
+  "src/main/docker/app.yml": {
+    "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: jhipster
+services:
+  app:
+    image: jhipster
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
+      - SPRING_R2DBC_URL=r2dbc:mysql://mariadb:3306/jhipster?useLegacyDatetimeCode=false
+      - SPRING_LIQUIBASE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+    ports:
+      - 127.0.0.1:8080:8080
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 40
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+  mariadb:
+    extends:
+      file: ./mariadb.yml
+      service: mariadb
+  elasticsearch:
+    extends:
+      file: ./elasticsearch.yml
+      service: elasticsearch
+  keycloak:
+    extends:
+      file: ./keycloak.yml
+      service: keycloak
+  consul:
+    extends:
+      file: ./consul.yml
+      service: consul
+  consul-config-loader:
+    extends:
+      file: ./consul.yml
+      service: consul-config-loader
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - docker gateway-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen(false)-serviceDiscoveryType(no)-mariadb-elasticsearch-consul-enableSwaggerCodegen(false)-messageBroker(no) should match generated files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/app.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/README.md": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/config/git2consul.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/config/mariadb/my.cnf": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/consul.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/elasticsearch.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/JVM.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/dashboards/dashboard.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/grafana/provisioning/datasources/datasource.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-control-center.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/keycloak.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/mariadb.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/monitoring.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/prometheus/prometheus.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/jhipster-realm.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/realm-config/keycloak-health-check.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/services.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/sonar.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - docker microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-cacheProvider(no) should match app.yml snapshot 1`] = `
 {
   "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -262,7 +517,7 @@ services:
 }
 `;
 
-exports[`generator - docker microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-cacheProvider(no) should match generated files snapshot 1`] = `
+exports[`generator - docker microservice-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-oracle-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-kafka-cacheProvider(no) should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -309,7 +564,7 @@ exports[`generator - docker microservice-jwt-reactive(false)-maven-enableTransla
 }
 `;
 
-exports[`generator - docker microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match app.yml snapshot 1`] = `
+exports[`generator - docker microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen(true)-skipUserManagement(true)-eureka-postgresql-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match app.yml snapshot 1`] = `
 {
   "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -367,7 +622,7 @@ services:
 }
 `;
 
-exports[`generator - docker microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-postgresql-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match generated files snapshot 1`] = `
+exports[`generator - docker microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen(true)-skipUserManagement(true)-eureka-postgresql-elasticsearch-consul-enableSwaggerCodegen(false)-kafka should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -429,7 +684,7 @@ exports[`generator - docker microservice-jwt-reactive(true)-gradle-enableTransla
 }
 `;
 
-exports[`generator - docker microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(no)-memcached should match app.yml snapshot 1`] = `
+exports[`generator - docker microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen(true)-spring-websocket-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(no)-memcached should match app.yml snapshot 1`] = `
 {
   "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -479,7 +734,7 @@ services:
 }
 `;
 
-exports[`generator - docker microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(no)-memcached should match generated files snapshot 1`] = `
+exports[`generator - docker microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen(true)-spring-websocket-eureka-mssql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(true)-messageBroker(no)-memcached should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -538,7 +793,7 @@ exports[`generator - docker microservice-oauth2-reactive(false)-maven-enableTran
 }
 `;
 
-exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-pulsar should match app.yml snapshot 1`] = `
+exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen(false)-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-pulsar should match app.yml snapshot 1`] = `
 {
   "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -612,7 +867,7 @@ services:
 }
 `;
 
-exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-pulsar should match generated files snapshot 1`] = `
+exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen(false)-consul-cassandra-elasticsearch-consul-enableSwaggerCodegen(false)-pulsar should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -698,7 +953,7 @@ exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTran
 }
 `;
 
-exports[`generator - docker monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
+exports[`generator - docker monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen(true)-spring-websocket-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match app.yml snapshot 1`] = `
 {
   "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -741,7 +996,7 @@ services:
 }
 `;
 
-exports[`generator - docker monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen:true-websocket(true)-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
+exports[`generator - docker monolith-jwt-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen(true)-spring-websocket-skipUserManagement(false)-consul-mariadb-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-kafka-hazelcast should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -791,7 +1046,7 @@ exports[`generator - docker monolith-jwt-reactive(false)-maven-enableTranslation
 }
 `;
 
-exports[`generator - docker monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
+exports[`generator - docker monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen(false)-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match app.yml snapshot 1`] = `
 {
   "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -850,7 +1105,7 @@ services:
 }
 `;
 
-exports[`generator - docker monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
+exports[`generator - docker monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen(false)-skipUserManagement(true)-serviceDiscoveryType(no)-mongodb-elasticsearch-consul-enableSwaggerCodegen(true)-kafka should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -924,7 +1179,7 @@ exports[`generator - docker monolith-jwt-reactive(true)-gradle-enableTranslation
 }
 `;
 
-exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match app.yml snapshot 1`] = `
+exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match app.yml snapshot 1`] = `
 {
   "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -971,7 +1226,7 @@ services:
 }
 `;
 
-exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-websocket(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match generated files snapshot 1`] = `
+exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen(false)-serviceDiscoveryType(no)-postgresql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-messageBroker(no)-cacheProvider(no) should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -1021,7 +1276,7 @@ exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslat
 }
 `;
 
-exports[`generator - docker monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-pulsar should match app.yml snapshot 1`] = `
+exports[`generator - docker monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen(true)-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-pulsar should match app.yml snapshot 1`] = `
 {
   "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -1090,7 +1345,7 @@ services:
 }
 `;
 
-exports[`generator - docker monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-pulsar should match generated files snapshot 1`] = `
+exports[`generator - docker monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen(true)-eureka-neo4j-elasticsearch-consul-enableSwaggerCodegen(true)-pulsar should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -1164,7 +1419,7 @@ exports[`generator - docker monolith-oauth2-reactive(true)-gradle-enableTranslat
 }
 `;
 
-exports[`generator - docker monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-pulsar-redis should match app.yml snapshot 1`] = `
+exports[`generator - docker monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-pulsar-redis should match app.yml snapshot 1`] = `
 {
   "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -1214,7 +1469,7 @@ services:
 }
 `;
 
-exports[`generator - docker monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-pulsar-redis should match generated files snapshot 1`] = `
+exports[`generator - docker monolith-session-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-mysql-searchEngine(no)-serviceDiscoveryType(no)-enableSwaggerCodegen(false)-pulsar-redis should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -1273,7 +1528,7 @@ exports[`generator - docker monolith-session-reactive(false)-maven-enableTransla
 }
 `;
 
-exports[`generator - docker monolith-session-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(no) should match app.yml snapshot 1`] = `
+exports[`generator - docker monolith-session-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen(true)-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(no) should match app.yml snapshot 1`] = `
 {
   "src/main/docker/app.yml": {
     "contents": "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
@@ -1329,7 +1584,7 @@ services:
 }
 `;
 
-exports[`generator - docker monolith-session-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(no) should match generated files snapshot 1`] = `
+exports[`generator - docker monolith-session-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen(true)-skipUserManagement(true)-consul-couchbase-elasticsearch-consul-enableSwaggerCodegen(true)-messageBroker(no) should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
