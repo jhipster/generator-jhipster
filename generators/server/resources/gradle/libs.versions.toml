@@ -7,7 +7,7 @@ feign-reactor-bom = { module = 'com.playtika.reactivefeign:feign-reactor-bom', v
 
 # Cucumber
 testng = { module = 'org.testng:testng', version = '7.11.0' }
-cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.23.0' }
+cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.28.2' }
 
 mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.5.1' }
 
