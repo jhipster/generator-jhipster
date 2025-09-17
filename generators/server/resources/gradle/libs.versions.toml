@@ -36,7 +36,7 @@ spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '7.2.1' }
 
 gradle-modernizer-plugin = { id = 'com.github.andygoossens.gradle-modernizer-plugin', version = '1.11.0' }
 
-gradle-develocity = { id = 'com.gradle.develocity', version = '4.1.1' }
+gradle-develocity = { id = 'com.gradle.develocity', version = '4.2' }
 
 common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.4.0' }
 
