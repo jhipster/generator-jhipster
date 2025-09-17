@@ -34,7 +34,14 @@ export default class BinaryOptionValidator extends OptionValidator {
 }
 
 function checkForInvalidValue(jdlOption: JDLBinaryOption) {
-  if (!!jdlOption.value && !BinaryOptions.exists(jdlOption.name, jdlOption.value)) {
+  if (
+    jdlOption.name === 'dto' &&
+    ![BinaryOptions.Values.dto.MAPSTRUCT, 'simple'].includes(jdlOption.value)
+  ) {
+    throw new Error(`The '${jdlOption.name}' option is not valid for value '${jdlOption.value}'.`);
+  }
+  if (jdlOption.name !== 'dto' && !BinaryOptions.exists(jdlOption.name, jdlOption.value)) {
     throw new Error(`The '${jdlOption.name}' option is not valid for value '${jdlOption.value}'.`);
   }
 }
+
