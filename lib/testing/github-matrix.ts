@@ -2,7 +2,12 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { JAVA_COMPATIBLE_VERSIONS, RECOMMENDED_JAVA_VERSION, RECOMMENDED_NODE_VERSION } from '../../generators/generator-constants.js';
+import {
+  JAVA_COMPATIBLE_VERSIONS,
+  RECOMMENDED_JAVA_VERSION,
+  RECOMMENDED_NODE_VERSION,
+  SUPPORTED_NODE_VERSIONS,
+} from '../../generators/generator-constants.js';
 import { getSourceRoot } from '../index.ts';
 
 const knownGitHubMatrixProperties = [
@@ -78,7 +83,7 @@ const randomEnvironmentMatrix = (key: string, options: RandomEnvironmentOptions)
   const {
     useVersionPlaceholders,
     javaVersions = [RECOMMENDED_JAVA_VERSION, ...JAVA_COMPATIBLE_VERSIONS],
-    nodeVersions = [RECOMMENDED_NODE_VERSION, '20', '22'],
+    nodeVersions = [RECOMMENDED_NODE_VERSION, ...SUPPORTED_NODE_VERSIONS],
   } = options;
   const javaVersion = randomReproducibleValue(`java-${key}`, javaVersions, { useVersionPlaceholders });
   const nodeVersion = randomReproducibleValue(`node-${key}`, nodeVersions, { useVersionPlaceholders });
