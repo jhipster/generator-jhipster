@@ -17,12 +17,16 @@
  limitations under the License.
 -%>
 import { Component, inject, signal, OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> } from '@angular/core';
+<%_ if (generateUserManagement || !authenticationTypeOauth2) { _%>
 import {
 <%_ if (!authenticationTypeOauth2) { _%>
   Router,
 <%_ } _%>
+<%_ if (generateUserManagement) { _%>
   RouterLink,
+<%_ } _%>
 } from '@angular/router';
+<%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -39,7 +43,7 @@ import { Account } from 'app/core/auth/account.model';
   selector: '<%= jhiPrefixDashed %>-home',
   templateUrl: './home.html',
   styleUrl: './home.scss',
-  imports: [SharedModule, RouterLink],
+  imports: [SharedModule<%_ if (generateUserManagement) { _%>, RouterLink<%_ } _%>],
 })
 export default class Home implements OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> {
   account = signal<Account | null>(null);
