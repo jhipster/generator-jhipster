@@ -7,7 +7,7 @@
     "@ng-bootstrap/ng-bootstrap": "19.0.1",
     "@ngx-translate/core": "17.0.0",
     "@ngx-translate/http-loader": "17.0.0",
-    "@stomp/rx-stomp": "2.0.1",
+    "@stomp/rx-stomp": "2.1.0",
     "bootstrap": "5.3.8",
     "bootswatch": "5.3.8",
     "ngx-cookie-service": "20.1.0",
