@@ -313,7 +313,7 @@ describe('MetricsModalThreads', () => {
   describe('dismiss', () => {
     it('should call dismiss function for modal on dismiss', () => {
       // GIVEN
-      jest.spyOn(mockActiveModal, 'dismiss').mockReturnValue(undefined);
+      jest.spyOn(mockActiveModal, 'dismiss');
 
       // WHEN
       comp.dismiss();
