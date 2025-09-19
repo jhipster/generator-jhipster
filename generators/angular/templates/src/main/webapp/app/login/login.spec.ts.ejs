@@ -73,7 +73,6 @@ describe('Login', () => {
     it('should call accountService.identity on Init', () => {
       // GIVEN
       mockAccountService.identity = jest.fn(() => of(null));
-      mockAccountService.getAuthenticationState = jest.fn(() => of(null));
 
       // WHEN
       comp.ngOnInit();
@@ -96,7 +95,6 @@ describe('Login', () => {
     it('should navigate to home page on Init if authenticated=true', () => {
       // GIVEN
       mockAccountService.identity = jest.fn(() => of(null));
-      mockAccountService.getAuthenticationState = jest.fn(() => of(null));
       mockAccountService.isAuthenticated = () => true;
 
       // WHEN

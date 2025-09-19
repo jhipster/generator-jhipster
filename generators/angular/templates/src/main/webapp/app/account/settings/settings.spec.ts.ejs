@@ -60,7 +60,6 @@ describe('Settings', () => {
     comp = fixture.componentInstance;
     mockAccountService = TestBed.inject(AccountService);
     mockAccountService.identity = jest.fn(() => of(account));
-    mockAccountService.getAuthenticationState = jest.fn(() => of(account));
   });
 
   it('should send the current identity upon save', () => {
