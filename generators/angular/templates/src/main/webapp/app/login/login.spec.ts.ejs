@@ -64,7 +64,7 @@ describe('Login', () => {
     fixture = TestBed.createComponent(Login);
     comp = fixture.componentInstance;
     mockRouter = TestBed.inject(Router);
-    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    jest.spyOn(mockRouter, 'navigate');
     mockLoginService = TestBed.inject(LoginService);
     mockAccountService = TestBed.inject(AccountService);
   });

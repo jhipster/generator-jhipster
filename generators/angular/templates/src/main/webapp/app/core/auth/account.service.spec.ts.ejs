@@ -23,8 +23,7 @@ import { provideHttpClientTesting, HttpTestingController } from '@angular/common
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
-import { InterpolatableTranslationObject, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { of } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { Account } from 'app/core/auth/account.model';
@@ -84,11 +83,11 @@ describe('Account Service', () => {
     httpMock = TestBed.inject(HttpTestingController);
     mockStorageService = TestBed.inject(StateStorageService);
     mockRouter = TestBed.inject(Router);
-    jest.spyOn(mockRouter, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
+    jest.spyOn(mockRouter, 'navigateByUrl');
 <%_ if (enableTranslation) { _%>
 
     mockTranslateService = TestBed.inject(TranslateService);
-    jest.spyOn(mockTranslateService, 'use').mockImplementation(() => of({} as InterpolatableTranslationObject));
+    jest.spyOn(mockTranslateService, 'use');
 <%_ } _%>
   });
 
