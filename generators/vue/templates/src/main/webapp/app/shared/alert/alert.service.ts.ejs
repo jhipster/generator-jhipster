@@ -1,18 +1,18 @@
-import { type BToastProps, useToastController } from 'bootstrap-vue-next';
+import { type BToastProps, useToast } from 'bootstrap-vue-next';
 <%_ if (enableTranslation) { _%>
 import { type Composer, useI18n } from 'vue-i18n';
 <%_ } _%>
 
 export const useAlertService = () => {
-  const toastController = useToastController();
-  if (!toastController) {
+  const toast = useToast();
+  if (!toast) {
     throw new Error('BootstrapVue toast component was not found');
   }
 <%_ if (enableTranslation) { _%>
   const i18n = useI18n();
 <%_ } _%>
   return new AlertService({
-    toastController,
+    toast,
 <%_ if (enableTranslation) { _%>
     i18n,
 <%_ } _%>
@@ -20,30 +20,30 @@ export const useAlertService = () => {
 };
 
 export default class AlertService {
-  private toastController: ReturnType<typeof useToastController>;
+  private toast: ReturnType<typeof useToast>;
 <%_ if (enableTranslation) { _%>
   private i18n: Composer;
 <%_ } _%>
 
   constructor({
-    toastController,
+    toast,
 <%_ if (enableTranslation) { _%>
     i18n,
 <%_ } _%>
   }: {
-    toastController: ReturnType<typeof useToastController>;
+    toast: ReturnType<typeof useToast>;
 <%_ if (enableTranslation) { _%>
     i18n: Composer,
 <%_ } _%>
   }) {
-    this.toastController = toastController;
+    this.toast = toast;
 <%_ if (enableTranslation) { _%>
     this.i18n = i18n;
 <%_ } _%>
   }
 
   showInfo(toastMessage: string, props: BToastProps = {}) {
-    this.toastController.show!({
+    this.toast.show!({
       props: {
         pos: 'top-center',
         title: 'Info',
