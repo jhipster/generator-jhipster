@@ -77,7 +77,6 @@ describe('Home Component', () => {
     comp = fixture.componentInstance;
     mockAccountService = TestBed.inject(AccountService);
     mockAccountService.identity = jest.fn(() => of(null));
-    mockAccountService.getAuthenticationState = jest.fn(() => of(null));
 <%_ if (!authenticationTypeOauth2) { _%>
 
     mockRouter = TestBed.inject(Router);

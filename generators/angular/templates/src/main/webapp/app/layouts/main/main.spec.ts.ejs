@@ -87,7 +87,6 @@ describe('Main', () => {
 <%_ } _%>
     mockAccountService = TestBed.inject(AccountService);
     mockAccountService.identity = jest.fn(() => of(null));
-    mockAccountService.getAuthenticationState = jest.fn(() => of(null));
     ngZone = TestBed.inject(NgZone);
     router = TestBed.inject(Router);
     document = TestBed.inject(DOCUMENT);
