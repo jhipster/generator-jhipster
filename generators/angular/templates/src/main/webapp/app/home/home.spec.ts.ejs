@@ -80,7 +80,7 @@ describe('Home Component', () => {
 <%_ if (!authenticationTypeOauth2) { _%>
 
     mockRouter = TestBed.inject(Router);
-    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    jest.spyOn(mockRouter, 'navigate');
 
 <%_ } else { _%>
     mockLoginService = TestBed.inject(LoginService);
