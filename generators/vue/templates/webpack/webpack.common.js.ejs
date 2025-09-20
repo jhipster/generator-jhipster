@@ -1,4 +1,7 @@
-'use strict';
+import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const require = createRequire(import.meta.url);
 const path = require('path');
 const { merge } = require('webpack-merge');
 const { VueLoaderPlugin } = require('vue-loader');
@@ -10,14 +13,17 @@ const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } _%>
 
 const { DefinePlugin } = require('webpack');
-const { vueLoaderConfig } = require('./vue.utils');
-const config = require('./config');
+const { vueLoaderConfig } = require('./vue.utils.js');
+const config = require('./config.js');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 function resolve(dir = '') {
   return path.join(__dirname, '..', dir);
 }
 
-module.exports = async (env, options) => {
+export default async (env, options) => {
   const development = options.mode === 'development';
 <%_ if (enableTranslation) { _%>
   const languagesHash = await hashElement(resolve('<%= this.relativeDir(clientRootDir, clientSrcDir) %>i18n'), {
@@ -51,7 +57,7 @@ module.exports = async (env, options) => {
       },
       devServer: {
 <%_ if (microfrontend) { _%>
-        hot: config.dev.hotReload,
+        hot: config.dev?.hotReload ?? false,
 <%_ } _%>
         static: {
           directory: './<%= this.relativeDir(clientRootDir, clientDistDir) %>',
