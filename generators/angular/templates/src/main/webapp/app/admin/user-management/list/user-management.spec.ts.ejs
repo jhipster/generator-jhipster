@@ -22,7 +22,6 @@ _%>
 
 import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
 import { provideHttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
@@ -60,8 +59,8 @@ describe('User Management Component', () => {
         {
           provide: AccountService,
           useValue: {
-            identity: jest.fn(() => of(null)),
-            trackCurrentAccount: jest.fn(() => signal(null)),
+            identity: jest.fn(),
+            trackCurrentAccount: jest.fn(),
           },
         },
       ],

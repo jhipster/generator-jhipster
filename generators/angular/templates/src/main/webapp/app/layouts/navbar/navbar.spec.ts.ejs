@@ -62,13 +62,7 @@ describe('Navbar Component', () => {
           },
           provideHttpClient(),
           provideHttpClientTesting(),
-          {
-            provide: LoginService,
-            useValue: {
-              login: jest.fn(() => of({})),
-              logout: jest.fn(),
-            },
-          },
+          LoginService,
         ],
       });
     })

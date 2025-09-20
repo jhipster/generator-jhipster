@@ -70,7 +70,7 @@ describe('Main', () => {
           {
             provide: AccountService,
             useValue: {
-              identity: jest.fn(() => of(null)),
+              identity: jest.fn(),
             },
           },
         ],

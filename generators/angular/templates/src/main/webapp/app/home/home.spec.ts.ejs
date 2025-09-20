@@ -61,8 +61,7 @@ describe('Home Component', () => {
           {
             provide: AccountService,
             useValue: {
-              identity: jest.fn(() => of(null)),
-              getAuthenticationState: jest.fn(() => of(null)),
+              identity: jest.fn(),
             },
           },
 <%_ if (authenticationTypeOauth2) { _%>

@@ -52,8 +52,7 @@ describe('Settings', () => {
           {
             provide: AccountService,
             useValue: {
-              identity: jest.fn(() => of(account)),
-              save: jest.fn(),
+              identity: jest.fn(),
               authenticate: jest.fn(),
             },
           },

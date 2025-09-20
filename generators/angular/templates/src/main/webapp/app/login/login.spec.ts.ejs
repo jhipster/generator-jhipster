@@ -49,7 +49,7 @@ describe('Login', () => {
         {
           provide: AccountService,
           useValue: {
-            identity: jest.fn(() => of(null)),
+            identity: jest.fn(),
             isAuthenticated: jest.fn(() => false),
           },
         },
