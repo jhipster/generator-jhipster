@@ -30,8 +30,12 @@ version = "0.0.1-SNAPSHOT"
 
 description = ""
 
-sourceCompatibility=<%= javaVersion %>
-targetCompatibility=<%= javaVersion %>
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(<%= javaVersion %>)
+    }
+}
+
 assert System.properties["java.specification.version"] == <%- javaCompatibleVersions.map(ver => `"${ver}"`).join(' || '); %>
 
 ext {
@@ -117,7 +121,10 @@ test {
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
-    reports.html.required = false
+
+    reports {
+        html.required = false
+    }
     testLogging.exceptionFormat "full"
 <%_ if (reactive) { _%>
 
