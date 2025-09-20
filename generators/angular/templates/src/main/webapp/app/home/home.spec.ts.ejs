@@ -16,10 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (authenticationTypeOauth2) { _%>
-jest.mock('app/login/login.service');
-<%_ } _%>
-
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 <%_ if (!authenticationTypeOauth2) { _%>
 import { Router } from '@angular/router';
@@ -70,7 +66,13 @@ describe('Home Component', () => {
             },
           },
 <%_ if (authenticationTypeOauth2) { _%>
-          LoginService
+          {
+            provide: LoginService,
+            useValue: {
+              login: jest.fn(() => of({})),
+              logout: jest.fn(),
+            },
+          },
 <%_ } _%>
         ],
       });
