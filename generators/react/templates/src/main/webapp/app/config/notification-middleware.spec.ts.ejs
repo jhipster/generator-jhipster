@@ -186,6 +186,8 @@ describe('Notification Middleware', () => {
     store = makeStore();
     sinon.spy(toastify.toast, 'error');
     sinon.spy(toastify.toast, 'success');
+    // ignore console errors
+    jest.spyOn(window.console, 'error').mockImplementation();
   });
 
   afterEach(() => {
