@@ -76,8 +76,7 @@ export const mutateApplication = {
   hipsterChatLink: 'https://gitter.im/jhipster/generator-jhipster',
 
   projectDescription: ({ projectDescription, humanizedBaseName }) => projectDescription ?? `Description for ${humanizedBaseName}`,
-  documentationArchiveUrl: ({ jhipsterVersion, hipsterDocumentationLink }) =>
-    `${hipsterDocumentationLink}documentation-archive/v${jhipsterVersion}`,
+  documentationArchiveUrl: ({ hipsterDocumentationLink }) => `${hipsterDocumentationLink}`,
 
   jhipsterPackageJson: packageJson,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
