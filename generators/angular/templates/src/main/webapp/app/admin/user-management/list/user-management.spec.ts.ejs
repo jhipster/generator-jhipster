@@ -19,10 +19,10 @@
 <%_
 const tsKeyId = user.primaryKey.tsSampleValues[0];
 _%>
-jest.mock('app/core/auth/account.service');
 
 import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
 import { provideHttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
@@ -54,7 +54,17 @@ describe('User Management Component', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
-      providers: [provideHttpClient(), { provide: ActivatedRoute, useValue: { data, queryParamMap } }, AccountService],
+      providers: [
+        provideHttpClient(),
+        { provide: ActivatedRoute, useValue: { data, queryParamMap } },
+        {
+          provide: AccountService,
+          useValue: {
+            identity: jest.fn(() => of(null)),
+            trackCurrentAccount: jest.fn(() => signal(null)),
+          },
+        },
+      ],
     });
   }));
 

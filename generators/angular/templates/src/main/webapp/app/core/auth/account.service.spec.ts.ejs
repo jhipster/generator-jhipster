@@ -16,8 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-jest.mock('app/core/auth/state-storage.service');
-
 import { Router } from '@angular/router';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
@@ -72,7 +70,20 @@ describe('Account Service', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        StateStorageService,
+        {
+          provide: StateStorageService,
+          useValue: {
+            storeUrl: jest.fn(),
+            getUrl: jest.fn(() => null),
+            clearUrl: jest.fn(),
+            storeAuthenticationToken: jest.fn(),
+            getAuthenticationToken: jest.fn(() => null),
+            clearAuthenticationToken: jest.fn(),
+            storeLocale: jest.fn(),
+            getLocale: jest.fn(() => null),
+            clearLocale: jest.fn(),
+          },
+        },
       ],
     });
 

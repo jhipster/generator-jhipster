@@ -16,9 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-jest.mock('app/core/auth/account.service');
-jest.mock('app/login/login.service');
-
 import { ElementRef, signal } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute, Router, Navigation } from '@angular/router';
@@ -49,7 +46,13 @@ describe('Login', () => {
           provide: ActivatedRoute,
           useValue: {}
         },
-        AccountService,
+        {
+          provide: AccountService,
+          useValue: {
+            identity: jest.fn(() => of(null)),
+            isAuthenticated: jest.fn(() => false),
+          },
+        },
         {
           provide: LoginService,
           useValue: {

@@ -16,8 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-jest.mock('app/core/auth/account.service');
-
 import { Component, ElementRef, WritableSignal, signal, viewChild } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed, waitForAsync } from '@angular/core/testing';
@@ -45,7 +43,16 @@ describe('HasAnyAuthorityDirective tests', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
-      providers: [provideHttpClient(), AccountService],
+      providers: [
+        provideHttpClient(),
+        {
+          provide: AccountService,
+          useValue: {
+            hasAnyAuthority: jest.fn(),
+            trackCurrentAccount: jest.fn(),
+          },
+        },
+      ],
     });
   }));
 

@@ -16,8 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-jest.mock('app/core/util/alert.service');
-
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AlertService } from 'app/core/util/alert.service';
@@ -31,7 +29,15 @@ describe('Alert Component', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      providers: [AlertService],
+      providers: [
+        {
+          provide: AlertService,
+          useValue: {
+            get: jest.fn(),
+            clear: jest.fn(),
+          },
+        },
+      ],
     });
   }));
 

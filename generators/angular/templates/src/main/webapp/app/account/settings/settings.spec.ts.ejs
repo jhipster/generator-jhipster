@@ -16,8 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-jest.mock('app/core/auth/account.service');
-
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { throwError, of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
@@ -50,7 +48,16 @@ describe('Settings', () => {
 <%_ if (enableTranslation) { _%>
         imports: [TranslateModule.forRoot()],
 <%_ } _%>
-        providers: [AccountService],
+        providers: [
+          {
+            provide: AccountService,
+            useValue: {
+              identity: jest.fn(() => of(account)),
+              save: jest.fn(),
+              authenticate: jest.fn(),
+            },
+          },
+        ],
       });
     })
   );
