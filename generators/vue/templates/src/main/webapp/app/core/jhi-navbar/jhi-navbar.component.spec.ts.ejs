@@ -151,11 +151,11 @@ describe('JhiNavbar', () => {
   });
 
   it('should determine active route', async () => {
-    await router.push('/toto');
+    await router.push('/forbidden');
 
     expect(jhiNavbar.subIsActive('/titi')).toBeFalsy();
-    expect(jhiNavbar.subIsActive('/toto')).toBeTruthy();
-    expect(jhiNavbar.subIsActive(['/toto', 'toto'])).toBeTruthy();
+    expect(jhiNavbar.subIsActive('/forbidden')).toBeTruthy();
+    expect(jhiNavbar.subIsActive(['/forbidden', 'forbidden'])).toBeTruthy();
   });
 
 <%_ if (enableTranslation) { _%>
