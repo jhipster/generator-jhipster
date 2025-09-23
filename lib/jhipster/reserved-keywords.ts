@@ -37,8 +37,6 @@ const clientFrameworks = applicationOptions.OptionValues[applicationOptions.Opti
 const ReservedWords = {
   JHIPSTER: JHipsterReservedKeywords,
   ANGULAR: angularReservedKeywords,
-  // TODO: Remove react from the object if there are no reserve keywords for react.
-  REACT: [],
   JAVA: javaReservedKeywords,
   TYPESCRIPT: typescriptReservedKeywords,
   MYSQL: mysqlReservedKeywords,
@@ -100,7 +98,6 @@ export default {
   isReservedPaginationWords,
   JHIPSTER: ReservedWords.JHIPSTER,
   ANGULAR: ReservedWords.ANGULAR,
-  REACT: ReservedWords.REACT,
   JAVA: ReservedWords.JAVA,
   TYPESCRIPT: ReservedWords.TYPESCRIPT,
   MYSQL: ReservedWords.MYSQL,
