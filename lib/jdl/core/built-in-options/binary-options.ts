@@ -64,6 +64,7 @@ function getOptionName(optionValue: string): string | undefined {
 
 const OptionValues = {
   mapstruct: 'MAPSTRUCT',
+  SIMPLE: 'simple',
   serviceClass: 'SERVICE_CLASS',
   serviceImpl: 'SERVICE_IMPL',
   pagination: 'PAGINATION',
