@@ -84,7 +84,7 @@ export type <%= entityAngularName %>FormGroup = FormGroup<<%= entityAngularName 
 
 @Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>FormService {
-  create<%= entityAngularName %>FormGroup(<%= entityInstance %>: <%= entityAngularName %>FormGroupInput = { <%= primaryKey.name %>: null }): <%= entityAngularName %>FormGroup {
+  create<%= entityAngularName %>FormGroup(<%= entityInstance %>?: <%= entityAngularName %>FormGroupInput): <%= entityAngularName %>FormGroup {
     const <%= entityInstance %>RawValue =
 <%_ if (anyFieldIsTimeDerived) { _%>
       this.convert<%= entityAngularName %>To<%= entityAngularName %>RawValue(
@@ -92,10 +92,10 @@ export class <%= entityAngularName %>FormService {
 <%_ if (containDefaultProperties) { _%>
         {
           ...this.getFormDefaults(),
-          ...<%= entityInstance %>,
+          ...<%= entityInstance %> ?? { <%= primaryKey.name %>: null },
         }
 <%_ } else { _%>
-        <%= entityInstance %>
+        <%= entityInstance %> ?? { <%= primaryKey.name %>: null }
 <%_ } _%>
 <%_ if (anyFieldIsTimeDerived) { _%>
       )
