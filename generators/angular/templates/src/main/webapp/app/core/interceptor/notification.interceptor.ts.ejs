@@ -41,7 +41,7 @@ export class NotificationInterceptor implements HttpInterceptor {
               alert = event.headers.get(headerKey);
 <%_ if (enableTranslation) { _%>
             } else if (headerKey.toLowerCase().endsWith('app-params')) {
-              alertParams = decodeURIComponent(event.headers.get(headerKey)!.replace(/\+/g, ' '));
+              alertParams = decodeURIComponent(event.headers.get(headerKey)!.replaceAll(/\+/g, ' '));
 <%_ } _%>
             }
           }
