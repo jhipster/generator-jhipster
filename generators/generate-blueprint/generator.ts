@@ -61,7 +61,7 @@ export default class extends BaseSimpleApplicationGenerator<
   gitDependency!: string;
   allGenerators!: boolean;
 
-  constructor(args: string | string[], options: GenerateBlueprintOptions, features: GenerateBlueprintFeatures) {
+  constructor(args?: string[], options?: GenerateBlueprintOptions, features?: GenerateBlueprintFeatures) {
     super(args, options, { storeJHipsterVersion: true, ...features });
   }
 

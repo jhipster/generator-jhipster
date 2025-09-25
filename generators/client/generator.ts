@@ -47,8 +47,8 @@ export class ClientApplicationGenerator<
 > extends BaseApplicationGenerator<Entity, Application, Config, Options, Source> {}
 
 export default class ClientGenerator extends ClientApplicationGenerator {
-  constructor(args: string | string[], opts: ClientOptions, features: ClientFeatures) {
-    super(args, opts, { skipLoadCommand: true, ...features });
+  constructor(args?: string[], options?: ClientOptions, features?: ClientFeatures) {
+    super(args, options, { skipLoadCommand: true, ...features });
   }
 
   async beforeQueue() {

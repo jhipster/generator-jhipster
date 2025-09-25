@@ -61,7 +61,7 @@ export default class BootstrapGenerator extends BaseGenerator {
   prettierOptions: PrettierOptions = { plugins: [] };
   refreshOnCommit = false;
 
-  constructor(args: string | string[], options: BaseOptions, features: BaseFeatures) {
+  constructor(args?: string[], options?: BaseOptions, features?: BaseFeatures) {
     super(args, options, { uniqueGlobally: true, customCommitTask: () => this.commitTask(), ...features });
   }
 
