@@ -61,7 +61,7 @@ export default class ItemCount {
   second = computed(() => {
     const params = this.params();
     if (params?.page && params.totalItems !== undefined && params.itemsPerPage) {
-      return params.page * params.itemsPerPage < params.totalItems ? params.page * params.itemsPerPage : params.totalItems;
+      return Math.min(params.page * params.itemsPerPage, params.totalItems);
     }
     return undefined;
   });
