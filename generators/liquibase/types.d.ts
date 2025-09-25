@@ -7,6 +7,7 @@ import type {
 import type {
   Config as BaseEntityChangesConfig,
   Entity as BaseEntityChangesEntity,
+  Features as BaseEntityChangesFeatures,
   Field as BaseEntityChangesField,
   Options as BaseEntityChangesOptions,
   Relationship as BaseEntityChangesRelationship,
@@ -16,6 +17,8 @@ import type { Application as JavaApplication, Entity as JavaEntity, Field as Jav
 
 import type command from './command.ts';
 import type { LiquibaseColumnType, LiquibaseLoadColumnType } from './support/prepare-field.ts';
+
+export type Features = BaseEntityChangesFeatures;
 
 type Command = HandleCommandTypes<typeof command>;
 
