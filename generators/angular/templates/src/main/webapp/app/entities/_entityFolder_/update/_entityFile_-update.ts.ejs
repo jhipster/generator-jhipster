@@ -160,12 +160,12 @@ _%>
         this.isSaving = true;
         const <%= entityInstance %> = this.<%= entityInstance %>FormService.get<%= entityAngularName %>(this.editForm);
 <%_ if (updatableEntity) { _%>
-        if (<%= entityInstance %>.<%= primaryKey.name %> !== null) {
-            this.subscribeToSaveResponse(this.<%= entityInstance %>Service.update(<%= entityInstance %>));
-        } else {
+        if (<%= entityInstance %>.<%= primaryKey.name %> === null) {
 <%_ } _%>
             this.subscribeToSaveResponse(this.<%= entityInstance %>Service.create(<%= entityInstance %>));
 <%_ if (updatableEntity) { _%>
+        } else {
+            this.subscribeToSaveResponse(this.<%= entityInstance %>Service.update(<%= entityInstance %>));
         }
 <%_ } _%>
     }
