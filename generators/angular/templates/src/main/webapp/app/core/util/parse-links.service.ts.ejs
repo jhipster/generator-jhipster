@@ -69,7 +69,7 @@ export class ParseLinks {
     const links: Record<string, number> = {};
     for (const [name, queryParams] of Object.entries(sections)) {
       if (queryParams?.page !== undefined) {
-        links[name] = parseInt(queryParams.page, 10);
+        links[name] = Number.parseInt(queryParams.page, 10);
       }
     }
     return links;
