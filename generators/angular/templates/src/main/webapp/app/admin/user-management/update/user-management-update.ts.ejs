@@ -93,13 +93,13 @@ export default class UserManagementUpdate implements OnInit {
   save(): void {
     this.isSaving.set(true);
     const user = this.editForm.getRawValue();
-    if (user.id !== null) {
-      this.userService.update(user).subscribe({
+    if (user.id === null) {
+      this.userService.create(user).subscribe({
         next: () => this.onSaveSuccess(),
         error: () => this.onSaveError(),
       });
     } else {
-      this.userService.create(user).subscribe({
+      this.userService.update(user).subscribe({
         next: () => this.onSaveSuccess(),
         error: () => this.onSaveError(),
       });
