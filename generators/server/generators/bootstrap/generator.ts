@@ -42,8 +42,8 @@ import type {
 } from '../../types.ts';
 
 export default class ServerBootstrapGenerator extends BaseApplicationGenerator<ServerEntity, ServerApplication> {
-  constructor(args?: string[], options?: ServerOptions, features?: ServerFeatures) {
-    super(args, options, { loadCommand: [serverCommand], ...features });
+  constructor(args: string | string[], opts: ServerOptions, features: ServerFeatures) {
+    super(args, opts, { loadCommand: [serverCommand], ...features });
   }
 
   async beforeQueue() {

@@ -72,8 +72,8 @@ export default class BaseSimpleApplicationGenerator<
 > extends BaseGenerator<Config, Options, Source, Features, Tasks> {
   static BOOTSTRAP_APPLICATION = BaseSimpleApplicationGenerator.asPriority(BOOTSTRAP_APPLICATION);
 
-  constructor(args?: string[], options?: Options, features?: Features) {
-    super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features } as Features);
+  constructor(args: string | string[], options: Options, features: Features) {
+    super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features });
 
     if (this.options.help) {
       return;

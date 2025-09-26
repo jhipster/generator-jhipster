@@ -37,10 +37,10 @@ const isInfoCommand = (commandName: string): true | undefined => commandName ===
 export default class InfoGenerator extends BaseCoreGenerator<
   CoreConfig & { appsFolders?: string[]; baseName?: string; packages?: string[] }
 > {
-  constructor(args?: string[], options?: CoreOptions, features?: CoreFeatures) {
+  constructor(args: string | string[], options: CoreOptions, features: CoreFeatures) {
     super(args, options, {
-      customInstallTask: isInfoCommand(options!.commandName),
-      customCommitTask: isInfoCommand(options!.commandName),
+      customInstallTask: isInfoCommand(options.commandName),
+      customCommitTask: isInfoCommand(options.commandName),
       ...features,
     });
   }

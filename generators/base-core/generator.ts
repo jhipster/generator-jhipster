@@ -165,7 +165,7 @@ export default class CoreGenerator<
   declare log: Logger;
   declare _meta?: GeneratorMeta;
 
-  constructor(args?: string[], options?: Options, features?: Features) {
+  constructor(args: string | string[], options: Options, features: Features) {
     super(args, options, {
       skipParseOptions: true,
       tasksMatchingPriority: true,

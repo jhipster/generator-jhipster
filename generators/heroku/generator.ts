@@ -48,7 +48,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
   herokuSkipBuild!: boolean;
   dynoSize!: string;
 
-  constructor(args?: string[], options?: any, features?: any) {
+  constructor(args: string | string[], options: any, features: any) {
     super(args, options, features);
 
     this.option('skip-build', {

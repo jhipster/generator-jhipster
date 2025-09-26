@@ -147,8 +147,8 @@ export default class BaseApplicationGenerator<
 
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
-  constructor(args?: string[], options?: Options, features?: Features) {
-    super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features } as Features);
+  constructor(args: string | string[], options: Options, features: Features) {
+    super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features });
 
     if (this.options.help) {
       return;

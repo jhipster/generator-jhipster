@@ -85,7 +85,7 @@ export default class EntityGenerator extends BaseApplicationGenerator<EntityEnti
     existingEnum?: boolean;
   };
 
-  constructor(args?: string[], options?: EntityOptions, features?: Features) {
+  constructor(args: string | string[], options: EntityOptions, features: Features) {
     super(args, options, { unique: 'argument', ...features });
   }
 

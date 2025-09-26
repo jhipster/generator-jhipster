@@ -25,8 +25,8 @@ import { filterEntitiesForClient, filterEntityPropertiesForClient, preparePostEn
 import type { Features as ClientFeatures, Options as ClientOptions } from '../../types.d.ts';
 
 export default class ClientBootstrap extends ClientApplicationGenerator {
-  constructor(args?: string[], options?: ClientOptions, features?: ClientFeatures) {
-    super(args, options, { loadCommand: [clientCommand], ...features });
+  constructor(args: string | string[], opts: ClientOptions, features: ClientFeatures) {
+    super(args, opts, { loadCommand: [clientCommand], ...features });
   }
 
   async beforeQueue() {

@@ -72,9 +72,9 @@ export default class BaseGenerator<
   blueprintConfig?: Record<string, any>;
   jhipsterContext?: any;
 
-  constructor(args?: string[], options?: Options, features?: Features) {
+  constructor(args: string | string[], options: Options, features: Features) {
     const { jhipsterContext, ...opts } = options ?? {};
-    super(args, opts as Options, { blueprintSupport: true, ...features } as Features);
+    super(args, opts as Options, { blueprintSupport: true, ...features });
 
     if (this.options.help) {
       return;

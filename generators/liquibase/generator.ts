@@ -65,7 +65,6 @@ import type {
   Application as LiquibaseApplication,
   Config as LiquibaseConfig,
   Entity as LiquibaseEntity,
-  Features as LiquibaseFeatures,
   Field as LiquibaseField,
   Options as LiquibaseOptions,
   Source as LiquibaseSource,
@@ -78,14 +77,14 @@ const {
 export default class LiquibaseGenerator<
   Entity extends LiquibaseEntity = LiquibaseEntity<LiquibaseField>,
   Application extends LiquibaseApplication<Entity> = LiquibaseApplication<Entity>,
-> extends BaseEntityChangesGenerator<Entity, Application, LiquibaseConfig, LiquibaseOptions, LiquibaseSource, LiquibaseFeatures> {
+> extends BaseEntityChangesGenerator<Entity, Application, LiquibaseConfig, LiquibaseOptions, LiquibaseSource> {
   recreateInitialChangelog: boolean;
   numberOfRows: number;
   databaseChangelogs: BaseChangelog<Entity>[] = [];
   injectBuildTool = true;
   injectLogs = true;
 
-  constructor(args?: string[], options?: LiquibaseOptions, features?: LiquibaseFeatures) {
+  constructor(args: any, options: any, features: any) {
     super(args, options, { skipParseOptions: false, ...features });
 
     this.argument('entities', {
