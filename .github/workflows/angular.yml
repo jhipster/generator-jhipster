@@ -35,6 +35,7 @@ on:
     types: [closed, opened, synchronize, reopened]
 env:
   FORCE_COLOR: 2
+  _JAVA_OPTIONS: -Djava.net.preferIPv4Stack=true
 jobs:
   build-matrix:
     runs-on: ubuntu-latest
