@@ -54,7 +54,7 @@ const NPM_VERSION = JSON.parse(readFileSync(join(getSourceRoot(), 'generators/co
   .npm;
 
 export const defaultGithubEnvironment = {
-  os: 'ubuntu-latest',
+  os: 'ubuntu-22.04',
   'node-version': RECOMMENDED_NODE_VERSION,
   'java-version': RECOMMENDED_JAVA_VERSION,
   'npm-version': NPM_VERSION,
