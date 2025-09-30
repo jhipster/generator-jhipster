@@ -32,6 +32,7 @@ runs:
     - uses: jhipster/actions/setup-runner@v0
       with:
         binary-dir: ${{ github.workspace }}/generator-jhipster/bin
+        npm-cache: false
     - name: 'mvn: install JHipster'
       run: |
         echo "::group::jhipster-bom"
