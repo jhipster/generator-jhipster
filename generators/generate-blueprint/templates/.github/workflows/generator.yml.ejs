@@ -26,8 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: <%= githubActions['actions/checkout'] %>
+      - uses: <%= githubActions['actions/setup-node'] %>
         with:
           node-version: <%- nodeVersion.split('.', 2)[0] %>
           cache: 'npm'

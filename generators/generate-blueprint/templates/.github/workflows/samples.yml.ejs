@@ -23,8 +23,8 @@ jobs:
     outputs:
       matrix: ${{ steps.build.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: <%= githubActions['actions/checkout'] %>
+      - uses: <%= githubActions['actions/setup-node'] %>
         with:
           node-version: <%- nodeVersion.split('.', 2)[0] %>
       - id: build
@@ -43,11 +43,11 @@ jobs:
       fail-fast: false
       matrix: ${{fromJson(needs.build-matrix.outputs.matrix)}}
     steps:
-      - uses: actions/checkout@v4
+      - uses: <%= githubActions['actions/checkout'] %>
         with:
           path: generator-jhipster-<%= baseName %>
           fetch-depth: 2
-      - uses: jhipster/actions/setup-runner@v0
+      - uses: <%= githubActions['jhipster/actions/setup-runner'] %>
         with:
           java-version: ${{ matrix.java-version }}
           node-version: ${{ matrix.node-version }}
@@ -57,7 +57,7 @@ jobs:
       - run: npm install
         working-directory: ${{ github.workspace }}/generator-jhipster-<%= baseName %>
       - run: cli.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
-      - uses: jhipster/actions/compare-sample@v0
+      - uses: <%= githubActions['jhipster/actions/compare-sample'] %>
         id: compare
         if: >-
           github.event.pull_request &&
@@ -78,7 +78,7 @@ jobs:
         if: steps.compare.outputs.equals != 'true'
         id: e2e
       - name: Store backend test failure logs
-        uses: actions/upload-artifact@v4
+        uses: <%= githubActions['actions/upload-artifact'] %>
         if: always() && steps.backend.outcome == 'failure'
         with:
           name: log-${{ matrix.job-name || matrix.sample }}
@@ -86,14 +86,14 @@ jobs:
             ${{ github.workspace }}/app/build/test-results/**/*.xml
             ${{ github.workspace }}/app/target/surefire-reports
       - name: Store cypress screenshots
-        uses: actions/upload-artifact@v4
+        uses: <%= githubActions['actions/upload-artifact'] %>
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.job-name || matrix.sample }}
           path: ${{ github.workspace }}/app/**/cypress/screenshots
       - name: Dump docker logs
         if: always()
-        uses: jwalton/gh-docker-logs@v2
+        uses: <%= githubActions['jwalton/gh-docker-logs'] %>
   check-samples:
     permissions:
       contents: none

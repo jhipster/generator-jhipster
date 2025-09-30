@@ -264,6 +264,61 @@ updates:
       - 'theme: CI builds'
       - 'skip-changelog'
 
+  - package-ecosystem: 'github-actions'
+    directory: '/.github/actions/build-cache/'
+    schedule:
+      interval: 'weekly'
+      time: '00:30'
+    open-pull-requests-limit: 10
+    labels:
+      - 'theme: github_actions'
+      - 'theme: CI builds'
+      - 'skip-changelog'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/.github/actions/cache-java-dependencies/'
+    schedule:
+      interval: 'weekly'
+      time: '00:30'
+    open-pull-requests-limit: 10
+    labels:
+      - 'theme: github_actions'
+      - 'theme: CI builds'
+      - 'skip-changelog'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/.github/actions/setup-default-node-java/'
+    schedule:
+      interval: 'weekly'
+      time: '00:30'
+    open-pull-requests-limit: 10
+    labels:
+      - 'theme: github_actions'
+      - 'theme: CI builds'
+      - 'skip-changelog'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/.github/actions/sonar/'
+    schedule:
+      interval: 'weekly'
+      time: '00:30'
+    open-pull-requests-limit: 10
+    labels:
+      - 'theme: github_actions'
+      - 'theme: CI builds'
+      - 'skip-changelog'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/generators/ci-cd/generators/bootstrap/resources/dependabot/'
+    schedule:
+      interval: 'weekly'
+      time: '00:30'
+    open-pull-requests-limit: 10
+    labels:
+      - 'theme: github_actions'
+      - 'theme: CI builds'
+      - 'skip-changelog'
+
   - package-ecosystem: 'gradle'
     directory: '/generators/java/generators/graalvm/resources/'
     schedule:

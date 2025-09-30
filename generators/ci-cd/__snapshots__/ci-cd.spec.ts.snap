@@ -961,7 +961,7 @@ jobs:
         name: "Gradle Wrapper Validation"
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@VERSION
             - uses: gradle/wrapper-validation-action@v1
     pipeline:
         name: sampleMysql pipeline
@@ -975,11 +975,11 @@ jobs:
             JHI_DISABLE_WEBPACK_LOGS: true
             NG_CLI_ANALYTICS: false
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout@VERSION
+            - uses: actions/setup-node@VERSION
               with:
                   node-version: NODE_VERSION
-            - uses: actions/setup-java@v4
+            - uses: actions/setup-java@VERSION
               with:
                   distribution: 'temurin'
                   java-version: JAVA_VERSION
@@ -1036,7 +1036,7 @@ jobs:
         name: "Gradle Wrapper Validation"
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@VERSION
             - uses: gradle/wrapper-validation-action@v1
     pipeline:
         name: sampleMysql pipeline
@@ -1050,11 +1050,11 @@ jobs:
             JHI_DISABLE_WEBPACK_LOGS: true
             NG_CLI_ANALYTICS: false
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout@VERSION
+            - uses: actions/setup-node@VERSION
               with:
                   node-version: NODE_VERSION
-            - uses: actions/setup-java@v4
+            - uses: actions/setup-java@VERSION
               with:
                   distribution: 'temurin'
                   java-version: JAVA_VERSION
@@ -1202,11 +1202,11 @@ jobs:
             JHI_DISABLE_WEBPACK_LOGS: true
             NG_CLI_ANALYTICS: false
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout@VERSION
+            - uses: actions/setup-node@VERSION
               with:
                   node-version: NODE_VERSION
-            - uses: actions/setup-java@v4
+            - uses: actions/setup-java@VERSION
               with:
                   distribution: 'temurin'
                   java-version: JAVA_VERSION
@@ -1271,11 +1271,11 @@ jobs:
             JHI_DISABLE_WEBPACK_LOGS: true
             NG_CLI_ANALYTICS: false
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout@VERSION
+            - uses: actions/setup-node@VERSION
               with:
                   node-version: NODE_VERSION
-            - uses: actions/setup-java@v4
+            - uses: actions/setup-java@VERSION
               with:
                   distribution: 'temurin'
                   java-version: JAVA_VERSION
@@ -1442,11 +1442,11 @@ jobs:
             JHI_DISABLE_WEBPACK_LOGS: true
             NG_CLI_ANALYTICS: false
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout@VERSION
+            - uses: actions/setup-node@VERSION
               with:
                   node-version: NODE_VERSION
-            - uses: actions/setup-java@v4
+            - uses: actions/setup-java@VERSION
               with:
                   distribution: 'temurin'
                   java-version: JAVA_VERSION

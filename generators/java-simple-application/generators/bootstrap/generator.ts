@@ -63,9 +63,9 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
         }
       },
       async loadJavaDependencies({ application }) {
-        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/pom.xml'))?.toString();
+        const pomFile = this.readTemplate(this.fetchFromInstalledJHipster('server/resources/pom.xml'))?.toString();
         const gradleLibsVersions = this.readTemplate(
-          this.jhipsterTemplatePath('../../server/resources/gradle/libs.versions.toml'),
+          this.fetchFromInstalledJHipster('server/resources/gradle/libs.versions.toml'),
         )?.toString();
         const applicationJavaDependencies = this.prepareDependencies(
           {

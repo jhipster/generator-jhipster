@@ -24,6 +24,7 @@ export type GeneratorsWithBootstrap =
   | 'base-application'
   | 'base-simple-application'
   | 'base-workspaces'
+  | 'ci-cd'
   | 'client'
   | 'common'
   | 'docker'
@@ -65,6 +66,7 @@ type GeneratorsByNamespace = {
   'jhipster:bootstrap-workspaces': import('./bootstrap-workspaces/generator.ts').default;
   'ci-cd': import('./ci-cd/generator.ts').default;
   'jhipster:ci-cd': import('./ci-cd/generator.ts').default;
+  'jhipster:ci-cd:bootstrap': import('./ci-cd/generators/bootstrap/generator.ts').default;
   client: import('./client/generator.ts').default;
   'jhipster:client': import('./client/generator.ts').default;
   'jhipster:client:bootstrap': import('./client/generators/bootstrap/generator.ts').default;

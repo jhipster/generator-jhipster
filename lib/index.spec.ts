@@ -44,6 +44,7 @@ describe('getGeneratorNamespaces', () => {
   "bootstrap-application-server",
   "bootstrap-workspaces",
   "ci-cd",
+  "ci-cd:bootstrap",
   "client",
   "client:bootstrap",
   "client:common",

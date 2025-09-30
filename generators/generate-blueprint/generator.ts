@@ -70,6 +70,8 @@ export default class extends BaseSimpleApplicationGenerator<
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnBootstrap('ci-cd');
+
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('javascript-simple-application');
     }

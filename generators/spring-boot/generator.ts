@@ -274,7 +274,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
             'spring-boot-dependencies': "'SPRING-BOOT-VERSION'",
           };
         } else {
-          const pomFile = this.readTemplate(this.jhipsterTemplatePath('../resources/spring-boot-dependencies.pom'))!.toString();
+          const pomFile = this.readJHipsterResource('spring-boot-dependencies.pom')!;
           const pom = parseMavenPom(pomFile);
           application.springBootDependencies = this.prepareDependencies(getPomVersionProperties(pom), 'java');
           application.javaDependencies!['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
