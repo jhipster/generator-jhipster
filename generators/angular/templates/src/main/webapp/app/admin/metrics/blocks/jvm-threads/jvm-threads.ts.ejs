@@ -40,17 +40,20 @@ export class JvmThreads {
       threadDumpBlocked: 0,
     };
 
-    this.threads()?.forEach(thread => {
-      if (thread.threadState === ThreadState.Runnable) {
-        stats.threadDumpRunnable += 1;
-      } else if (thread.threadState === ThreadState.Waiting) {
-        stats.threadDumpWaiting += 1;
-      } else if (thread.threadState === ThreadState.TimedWaiting) {
-        stats.threadDumpTimedWaiting += 1;
-      } else if (thread.threadState === ThreadState.Blocked) {
-        stats.threadDumpBlocked += 1;
+    const threads = this.threads();
+    if (threads) {
+      for (const thread of threads) {
+        if (thread.threadState === ThreadState.Runnable) {
+          stats.threadDumpRunnable += 1;
+        } else if (thread.threadState === ThreadState.Waiting) {
+          stats.threadDumpWaiting += 1;
+        } else if (thread.threadState === ThreadState.TimedWaiting) {
+          stats.threadDumpTimedWaiting += 1;
+        } else if (thread.threadState === ThreadState.Blocked) {
+          stats.threadDumpBlocked += 1;
+        }
       }
-    });
+    }
 
     stats.threadDumpAll = stats.threadDumpRunnable + stats.threadDumpWaiting + stats.threadDumpTimedWaiting + stats.threadDumpBlocked;
 
