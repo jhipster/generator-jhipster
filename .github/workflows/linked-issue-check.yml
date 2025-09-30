@@ -63,7 +63,7 @@ jobs:
           path: generator-jhipster
           fetch-depth: 2
       - uses: ./generator-jhipster/.github/actions/setup-default-node-java
-      - uses: jhipster/actions/setup-runner@v0
+      - uses: jhipster/actions/setup-runner@v1
         with:
           maven-cache: true
           gradle-cache: true
@@ -85,7 +85,7 @@ jobs:
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
-      - uses: jhipster/actions/build-jhipster-bom@v0
+      - uses: jhipster/actions/build-jhipster-bom@v1
         if: steps.project.outputs.contains-sample != 'false'
         with:
           jhipster-bom-ref: main

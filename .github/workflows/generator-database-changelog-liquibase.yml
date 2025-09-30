@@ -59,7 +59,7 @@ jobs:
         with:
           path: generator-jhipster
       - uses: ./generator-jhipster/.github/actions/setup-default-node-java
-      - uses: jhipster/actions/setup-runner@v0
+      - uses: jhipster/actions/setup-runner@v1
         with:
           maven-cache: true
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
@@ -68,7 +68,7 @@ jobs:
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - uses: jhipster/actions/build-jhipster-bom@v0
+      - uses: jhipster/actions/build-jhipster-bom@v1
         with:
           jhipster-bom-ref: main
       - run: jhipster.cjs generate-sample incremental-changelog-samples/liquibase-jdl-rename-field/app.jdl --skip-jhipster-dependencies

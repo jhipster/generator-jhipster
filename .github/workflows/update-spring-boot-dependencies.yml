@@ -51,7 +51,7 @@ jobs:
         with:
           ref: ${{ inputs.destBranch }}
           fetch-depth: 0
-      - uses: jhipster/actions/setup-git@v0
+      - uses: jhipster/actions/setup-git@v1
       - name: Download spring-boot-dependencies bom
         run: |
           wget -O spring-boot-dependencies.pom ${{ inputs.repository }}/org/springframework/boot/spring-boot-dependencies/${{ inputs.springBootVersion }}/spring-boot-dependencies-${{ inputs.springBootVersion }}.pom
